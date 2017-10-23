@@ -1,23 +1,56 @@
 # README
 
+## System environment
+```
+install git:
+add-apt-repository ppa:git-core/ppa
+apt update
+apt install git
+
+install nodejs:
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+install rvm and ruby:
+https://github.com/rvm/ubuntu_rvm
+
+install bundle:
+gem install bundle
+
+# need postgresql for rails project
+install pg dep:
+sudo apt-get install libpq-dev
+
+# need `yarn` for webpack
+install yarn
+npm install --global yarn
+
+# need `chromedriver` for spec/feature_helper.rb
+install chromedriver
+sudo apt-get install chromium-chromedriver
+
+```
+
 ## Setup
 
 ```
-# need `yarn` for webpack
-# need `chromedriver` for spec/feature_helper.rb
-brew install yarn chromedriver
-bundle install  
-  
-# initialize the application to replace `railsbase` occurences to your project name
-#   RailsBase               => MyProjectName
-#   railsbase || rails_base => my_project_name
-sh initscript.sh MyProjectName
-  
-# setup Database 
-rake db:setup
-  
+# install rails external libraries
+bundle install -j4
+
+# install react of webpacker external library 
+bundle exec rails webpacker:install:react
+
 # install webpack components
 yarn install
+
+# create database
+rake db:create
+
+# migrate db oject to database
+rake db:migrate
+
+# init db data
+rake db:seed
 ```
 
 ## Javascript
