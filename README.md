@@ -1,6 +1,6 @@
 # README
 
-## System environment
+## Setup system environment
 ```
 install git:
 add-apt-repository ppa:git-core/ppa
