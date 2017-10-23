@@ -11,6 +11,8 @@ html(lang="en")
     = stylesheet_link_tag     'admin', media: 'all', 'data-turbolinks-track' => 'reload'
     = javascript_include_tag  'admin', 'data-turbolinks-track' => 'reload'
 
+    / our js and css goes here, app/webpack/{javascripts,styles}
+    = javascript_pack_tag 'admin'
     / in dev, webpack already put styles into `javascript_pack_tag`
     = stylesheet_pack_tag 'admin' unless Rails.env.development?
 
@@ -56,3 +58,5 @@ html(lang="en")
       .u-contain
         |&copy; #{Time.current.year} SP Digital Ltd. All Rights Reserved
 
+    // our js and css goes here, app/webpack/{javascripts,styles}
+    /= javascript_pack_tag 'admin'

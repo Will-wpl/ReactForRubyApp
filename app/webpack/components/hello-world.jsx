@@ -1,18 +1,50 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-const html = <h1>Hello, world!</h1>;
 
+
+// function Welcome(props) {
+//     return <h1>Hello, {props.name}</h1>;
+// }
+
+class Welcome extends React.Component {
+    componentDidMount() {
+        console.log('componentDidMount');
+    }
+    componentWillUnmount() {
+        console.log('componentWillUnmount');
+    }
+    render() {
+        return <h1>Hello, {this.props.name}</h1>;
+    }
+}
+
+const element = <Welcome name="Mark" />;
 function run() {
     ReactDOM.render(
-        html,
+        element,
         document.getElementById('root')
     );
 }
 
-const loadedStates = ['complete', 'loaded', 'interactive'];
+/*
+const element = (<h1>Hello, world!</h1>);
+function run() {
+    ReactDOM.render(
+        element,
+        document.getElementById('root')
+    );
+}
+*/
 
+
+const loadedStates = [
+'complete',
+'loaded',
+'interactive'
+];
 if (loadedStates.includes(document.readyState) && document.body) {
     run();
 } else {
     window.addEventListener('DOMContentLoaded', run, false);
 }
+
