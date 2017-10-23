@@ -11,5 +11,6 @@ import "./javascripts/shared.js";
 import "./styles/app.scss";
 
 import "atlas/src/index.js";
+import "components/hello-world";
 
 console.log("Hello World from Webpacker - App.js");
