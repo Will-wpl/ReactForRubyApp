@@ -127,3 +127,8 @@ If you wnat to debug by rubymine, can do:
 - In terminal run : `./bin/webpack-dev-server --hot`
 - In menu click : Run -> Debug -> Development:reverse-auction
 - http://localhost:3000
+
+## For CSI dev team
+
+If you want to install front end package, can do:
+yarn add package-name
