@@ -131,4 +131,4 @@ If you wnat to debug by rubymine, can do:
 ## For CSI dev team
 
 If you want to install front end package, can do:
-yarn add package-name
+- yarn add package-name
