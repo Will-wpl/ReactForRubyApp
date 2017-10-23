@@ -1,0 +1,15 @@
+.page-header
+  .u-pull-right
+    = link_to edit_admin_user_path(@user), class: "lm--button lm--button--warning" do
+      = icon "edit", t("views.actions.edit")
+    ' &nbsp;
+    = link_to admin_user_path(@user), class: 'lm--button lm--button-danger', method: :delete, data: { confirm: t('views.confirm'), disable_with: t('views.disable_with') } do
+      = icon 'trash', t('views.actions.destroy')
+  h1= page_title(model: User.model_name.human)
+
+dl.lm--dl--inline
+  - @user.attributes.each do |name, value|
+    dt.attribute-label.col-sm-2
+      = t("labels.user.#{name}", default: name.titleize)
+    dd.attribute-data.push-sm-2
+      = value

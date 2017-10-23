@@ -1,0 +1,42 @@
+en:
+  home:
+    index:
+      title: 'Home'
+
+  admin_home:
+    index:
+      title: 'Home'
+
+  admin_users:
+    index:
+      title: 'Users'
+    new:
+      title: 'New User'
+    show:
+      title: 'View User'
+    edit:
+      title: 'Edit User'
+
+  devise_sessions:
+    new:
+      title: 'Log In'
+
+  devise_registrations:
+    new:
+      title: 'Sign Up'
+    edit:
+      title: 'Manage Account'
+
+  devise_passwords:
+    new:
+      title: 'Forgot Password'
+    edit:
+      title: 'Change Password'
+
+  devise_confirmations:
+    new:
+      title: 'Confirm Account'
+  
+  devise_unlocks:
+    new:
+      title: 'Unlock Account'

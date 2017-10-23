@@ -1,0 +1,17 @@
+.u-text-center.u-mb3
+  = image_tag 'logo-railsbase.svg', alt: 'railsbase-logo', class: 'devise-logo'
+
+.u-grid
+  .col-sm-12.col-md-4.u-mha
+
+    = simple_form_for(resource, as: resource_name, url: password_path(resource_name),
+      html: { method: :put },  wrapper: :vertical_form, defaults: { label: false }) do |f|
+
+      = f.input :reset_password_token, as: :hidden
+      = f.full_error :reset_password_token, class: 'alert alert-danger'
+
+      = f.input :password, autofocus: true
+      = f.input :password_confirmation
+
+      .lm--formItem
+        = f.button :submit, 'Change My Password', class: 'lm--button--primary u-block', data: { disable_with: t('views.disable_with') }

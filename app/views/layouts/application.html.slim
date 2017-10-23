@@ -1,0 +1,59 @@
+doctype 5
+html(lang="en")
+  head
+    title= page_title
+
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+
+    / legacy support for external gems that uses sprockets; don't put our stuff here
+    = stylesheet_link_tag     'application', media: 'all', 'data-turbolinks-track' => 'reload'
+    = javascript_include_tag  'application', 'data-turbolinks-track' => 'reload'
+
+    / our js and css goes here, app/webpack/{javascripts,styles}
+    = javascript_pack_tag 'app'
+    / in dev, webpack already put styles into `javascript_pack_tag`
+    = stylesheet_pack_tag 'app' unless Rails.env.development?
+
+    = favicon_link_tag 'favicon.ico', rel: 'shortcut icon'
+
+    = csrf_meta_tags
+
+  body class=page_class
+
+    header.lm--header
+      nav.lm--header-nav
+        div class="lm--header-logo"
+          a href="/" class="u-hidden@small"
+            = image_tag 'logo-railsbase.svg', alt: 'railsbase-logo'
+          a href="/" class="u-visible@small"
+            = image_tag 'logo-railsbase-small.svg', alt: 'railsbase-logo'
+
+        ul.lm--header-menu.lm--header-menu--secondary
+          - if user_signed_in?
+            li.lm--header-item
+              .lm--dropdown[data={dropdown:''}]
+                button.lm--header-link[data={'dropdown-trigger':''}]
+                  i class="lm--icon-profile" aria-hidden="true"
+                ul.lm--dropdown-menu
+                  li
+                    = link_to 'Manage Account', edit_user_registration_path, class: 'lm--dropdown-link'
+                  li
+                    = link_to 'Log Out', destroy_user_session_path, method: :delete, class: 'lm--dropdown-link'
+          - else
+            = link_to 'Log In', new_user_session_path, class: 'lm--button lm--button--text'
+
+    .content
+      .u-contain
+        - if breadcrumbs.present?
+          ol.lm--breadcrumb
+            = render_breadcrumbs tag: :li, separator: " "
+
+        = flash_messages
+
+        = yield
+
+    footer.lm--footer
+      .u-contain
+        |&copy; #{Time.current.year} SP Digital Ltd. All Rights Reserved

@@ -1,0 +1,15 @@
+.u-text-center.u-mb3
+  = image_tag 'logo-railsbase.svg', alt: 'railsbase-logo', class: 'devise-logo'
+
+.u-grid
+  .col-sm-12.col-md-4.u-mha
+
+    = simple_form_for(resource, as: resource_name, url: confirmation_path(resource_name),
+      html: { method: :post }, wrapper: :vertical_form, defaults: { label: false }) do |f|
+
+      = f.full_error :confirmation_token, class: 'alert alert-danger'
+
+      = f.input :email, autofocus: true
+
+      .lm--formItem
+        = f.button :submit, 'Send Confirmation Instructions', class: 'lm--button--primary u-block', data: { disable_with: t('views.disable_with') }

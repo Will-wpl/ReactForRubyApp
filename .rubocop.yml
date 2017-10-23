@@ -1,0 +1,41 @@
+AllCops:
+  Exclude:
+    - 'db/schema.rb'
+    - 'tmp/**/*'
+    - 'db/**/*'
+    - 'lib/templates/**/*'
+    - 'lib/generators/**/*'
+
+Documentation:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 120
+  Exclude:
+    - 'db/migrate/*'
+    - 'db/**'
+    - 'config/initializers/*.rb'
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Metrics/ModuleLength:
+  Exclude:
+    - 'config/initializers/*.rb'
+    - 'config/environments/*.rb'
+    - 'spec/**/*.rb'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'config/initializers/*.rb'
+    - 'config/environments/*.rb'
+    - 'spec/**/*.rb'
+
+# Disable this check, but just be aware of:
+# - https://gist.github.com/gshaw/4adbebcba6ac954636e9
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/NumericPredicate:
+  Enabled: false
+

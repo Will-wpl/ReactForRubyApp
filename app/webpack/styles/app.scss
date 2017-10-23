@@ -1,0 +1,21 @@
+@import 'shared';
+
+.devise-logo {
+  margin-top: 150px;
+  width: 215px;
+}
+
+.devise_registrations.new,
+.devise_confirmations,
+.devise_sessions,
+.devise_passwords,
+.devise_unlocks
+ {
+  header {
+    display:none;
+  }
+
+  footer {
+    text-align: center;
+  }
+}

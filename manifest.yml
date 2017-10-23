@@ -1,0 +1,18 @@
+---
+instances: 1
+domain: apps.vpcf-qa.in.spdigital.io
+env:
+  HTTPS_PROXY: http://proxy.singaporepower.com.sg:8080
+  HTTP_PROXY: http://proxy.singaporepower.com.sg:8080
+  https_proxy: http://proxy.singaporepower.com.sg:8080
+  http_proxy: http://proxy.singaporepower.com.sg:8080
+  no_proxy: .in.spdigital.io
+applications:
+  - name: <app_name>
+    buildpack: ruby_buildpack_v1_6_37
+    host: <app_name>
+    command: source cf.sh
+    memory: 1024M
+    disk_quota: 512M
+    services:
+      - <app_name>-db

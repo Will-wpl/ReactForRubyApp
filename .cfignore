@@ -18,13 +18,3 @@
 
 .env
 vendor/bundle
-
-/erd.pdf
-/public/packs
-/node_modules
-public/packs-test
-config/database.yml
-
-\.idea/
-
-tmp/

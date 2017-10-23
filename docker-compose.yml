@@ -1,0 +1,32 @@
+version: '3'
+services:
+  web:
+    build: .
+    image: rails_base_web
+    depends_on:
+      - rails_base_database_server
+      - chrome_driver_selenium
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+      - "8080:8080"
+  rails_base_database_server:
+    image: postgres:9.3
+    volumes:
+      - rails_base_db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres_user
+      - POSTGRES_PASSWORD=sibeisecret
+  chrome_driver_selenium:
+    image: selenium/standalone-chrome:3.4
+    container_name: chrome-browser
+    volumes:
+      - /dev/shm:/dev/shm
+    ports:
+      - "4445:4445"
+volumes:
+  rails_base_db_data:
+    external: true
