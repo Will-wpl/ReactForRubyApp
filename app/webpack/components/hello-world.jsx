@@ -26,17 +26,6 @@ function run() {
     );
 }
 
-/*
-const element = (<h1>Hello, world!</h1>);
-function run() {
-    ReactDOM.render(
-        element,
-        document.getElementById('root')
-    );
-}
-*/
-
-
 const loadedStates = [
 'complete',
 'loaded',

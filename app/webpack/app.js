@@ -12,5 +12,50 @@ import "./styles/app.scss";
 
 import "atlas/src/index.js";
 import "components/hello-world";
+import "components/chat-channel";
 
-console.log("Hello World from Webpacker - App.js");
+ActionCable = require('actioncable')
+
+const cable = ActionCable.createConsumer('ws://localhost:3000/cable')
+
+const chat = cable.subscriptions.create({
+    channel: 'ChatChannel',
+    room: 'a'
+}, {
+    connected: function () {
+        console.log('-----message client connected ------------')
+    },
+    disconnected: function () {
+        console.log('-----message client disconnected ------------')
+    },
+    received: function (data) {
+        console.log("received" + data.body)
+    },
+    buy: function (msg) {
+        return this.perform('buy', {message: msg});
+    }
+    // normal channel code goes here...
+});
+
+$(function () {
+    chat.buy('hello 1024')
+})
+
+// import ChatRoom from "components/chat-channel";
+// function run() {
+//     ReactDOM.render(
+//         React.createElement(ChatRoom),
+//         document.getElementById('chat_room')
+//     );
+// }
+//
+// const loadedStates = [
+//     'complete',
+//     'loaded',
+//     'interactive'
+// ];
+// if (loadedStates.includes(document.readyState) && document.body) {
+//     run();
+// } else {
+//     window.addEventListener('DOMContentLoaded', run, false);
+// }

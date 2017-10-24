@@ -72,11 +72,11 @@ For Prettier, no configuration is given and we are using the default options pro
 
 **Generating Scaffold for Public Resource**
 
-`rails g my_scaffold MODEL_NAME FIELD:TYPE [FIELD:TYPE..]`
+`rails g rails_base_scaffold MODEL_NAME FIELD:TYPE [FIELD:TYPE..]`
 
 **Generating Scaffold for Admin Resource**
 
-`rails g my_scaffold MODEL_NAME FIELD:TYPE [FIELD:TYPE..] --model-name=MODEL_NAME --admin=true`
+`rails g rails_base_scaffold MODEL_NAME FIELD:TYPE [FIELD:TYPE..] --model-name=MODEL_NAME --admin=true`
 
 ## WebPack
 
