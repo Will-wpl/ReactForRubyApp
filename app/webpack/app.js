@@ -24,12 +24,13 @@ const chat = cable.subscriptions.create({
 }, {
     connected: function () {
         console.log('-----message client connected ------------')
+        chat.buy('hello 1024');
     },
     disconnected: function () {
         console.log('-----message client disconnected ------------')
     },
     received: function (data) {
-        console.log("received" + data.body)
+        console.log("received : " + data.message)
     },
     buy: function (msg) {
         return this.perform('buy', {message: msg});
@@ -38,7 +39,7 @@ const chat = cable.subscriptions.create({
 });
 
 $(function () {
-    chat.buy('hello 1024')
+    // chat.buy('hello 1024')
 })
 
 // import ChatRoom from "components/chat-channel";
