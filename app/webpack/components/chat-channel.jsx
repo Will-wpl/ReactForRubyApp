@@ -54,10 +54,13 @@ class ChatRoom extends Component {
 }
 
 function run() {
-    ReactDOM.render(
-        React.createElement(ChatRoom),
-        document.getElementById('chat_room')
-    );
+    const domNode = document.getElementById('chat_room');
+    if(domNode !== undefined){
+        ReactDOM.render(
+            React.createElement(ChatRoom),
+            domNode
+        );
+    }
 }
 
 const loadedStates = [

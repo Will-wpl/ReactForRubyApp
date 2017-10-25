@@ -20,10 +20,13 @@ class Welcome extends React.Component {
 
 const element = <Welcome name="Mark" />;
 function run() {
-    ReactDOM.render(
-        element,
-        document.getElementById('root')
-    );
+    const domNode = document.getElementById('root');
+    if(domNode !== undefined){
+        ReactDOM.render(
+            element,
+            domNode
+        );
+    }
 }
 
 const loadedStates = [
@@ -31,6 +34,7 @@ const loadedStates = [
 'loaded',
 'interactive'
 ];
+
 if (loadedStates.includes(document.readyState) && document.body) {
     run();
 } else {
