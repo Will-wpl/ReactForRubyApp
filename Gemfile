@@ -18,7 +18,6 @@ gem 'sass-rails'
 gem 'slim-rails'
 
 gem 'jquery-rails'
-gem 'turbolinks'
 gem 'uglifier'
 
 gem 'font-awesome-sass'

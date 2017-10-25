@@ -10,7 +10,7 @@
         th Name
         th Email
         th Current Sign In At
-        th Admin
+        th Roles
         th
     tbody
       - @users.each do |user|
@@ -18,7 +18,7 @@
           td[data-label="Name"]= user.name
           td[data-label="Email"]= user.email
           td[data-label="Current Sign In At"]= user.current_sign_in_at ? local_time(user.current_sign_in_at) : 'Not Signed In'
-          td[data-label="Admin"]= user.has_role? :admin
+          td[data-label="Roles"]= user.roles.pluck(:name).join(', ')
           td.u-text-right.lm--table-actions
             = link_to admin_user_path(user), class: "lm--button lm--button--text lm--button--small lm--button--success" do
               span.lm--icon-eye

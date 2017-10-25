@@ -7,10 +7,10 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
+import "atlas/src/index.js";
 import "./javascripts/shared.js";
 import "./styles/app.scss";
 
-import "atlas/src/index.js";
 import "components/hello-world";
 import "components/chat-channel";
 

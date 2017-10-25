@@ -8,8 +8,8 @@ html(lang="en")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
 
     / legacy support for external gems that uses sprockets; don't put our stuff here
-    = stylesheet_link_tag     'admin', media: 'all', 'data-turbolinks-track' => 'reload'
-    = javascript_include_tag  'admin', 'data-turbolinks-track' => 'reload'
+    = stylesheet_link_tag     'admin', media: 'all'
+    = javascript_include_tag  'admin'
 
     / our js and css goes here, app/webpack/{javascripts,styles}
     = javascript_pack_tag 'admin'

@@ -5,7 +5,7 @@
     = f.input :email
     = f.input :password
     = f.input :password_confirmation
-    = f.input :role, collection: User::ROLES, disabled: f.object == current_user
+    = f.association :roles, as: :check_boxes, disabled: f.object == current_user
 
     .form-action.u-mt3
       .lm--formItem-right.lm--formItem-right-push

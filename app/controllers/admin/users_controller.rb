@@ -13,7 +13,7 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def create
-    @user = User.new(model_params)
+    @user = User.new model_params
 
     if @user.save
       redirect_to [:admin, @user], notice: "#{User.model_name.human} was successfully created."
@@ -55,7 +55,7 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def model_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation, :role)
+    params.require(:user).permit(:name, :email, :password, :password_confirmation, role_ids: [])
   end
 
   def set_users_breadcrumbs

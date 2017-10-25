@@ -29,7 +29,7 @@ RSpec.describe Admin::UsersController, type: :controller do
     end
 
     context 'success' do
-      let(:params) { attributes_for(:user).merge!(role: :admin) }
+      let(:params) { attributes_for(:user).merge!(role_ids: Role.where(name: :admin).pluck(:id)) }
 
       it 'creates new user' do
         expect { do_request }.to change(User, :count).by(1)
@@ -37,6 +37,8 @@ RSpec.describe Admin::UsersController, type: :controller do
         params.except(:password, :password_confirmation).each do |attr, value|
           expect(User.last.send(attr)).to eq value
         end
+
+        expect(User.last.roles.pluck(:name)).to eq ['admin']
       end
 
       it 'redirects' do
