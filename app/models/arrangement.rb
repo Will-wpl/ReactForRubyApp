@@ -4,8 +4,8 @@ class Arrangement < ApplicationRecord
   # Includes
 
   # Associations
-  belongs_to :users
-  belongs_to :auctions
+  belongs_to :user
+  belongs_to :auction
   # accepts_nested_attributes
 
   # Validations

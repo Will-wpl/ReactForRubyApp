@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171026083033) do
+ActiveRecord::Schema.define(version: 20171026102505) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(version: 20171026083033) do
     t.string "briefing_pack_doc_url"
     t.bigint "user_id"
     t.bigint "auction_id"
+    t.string "accept_status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["auction_id"], name: "index_arrangements_on_auction_id"
@@ -76,6 +77,7 @@ ActiveRecord::Schema.define(version: 20171026083033) do
     t.inet "last_sign_in_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "login_status"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
