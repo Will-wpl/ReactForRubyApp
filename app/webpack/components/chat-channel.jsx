@@ -55,7 +55,7 @@ class ChatRoom extends Component {
 
 function run() {
     const domNode = document.getElementById('chat_room');
-    if(domNode !== undefined){
+    if(domNode !== null){
         ReactDOM.render(
             React.createElement(ChatRoom),
             domNode

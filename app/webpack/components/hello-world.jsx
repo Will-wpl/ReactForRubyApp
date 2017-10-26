@@ -21,7 +21,7 @@ class Welcome extends React.Component {
 const element = <Welcome name="Mark" />;
 function run() {
     const domNode = document.getElementById('root');
-    if(domNode !== undefined){
+    if(domNode !== null){
         ReactDOM.render(
             element,
             domNode
