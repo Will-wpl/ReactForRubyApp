@@ -1,0 +1,11 @@
+//var modal css by will
+#modal_main{ position: absolute; transition: 0.8s all;
+  width:300px; height:150px; background-color: rgba(0, 0, 0, 0.6);
+  top:50%; left:50%; margin: -75px 0px 0px -150px;
+  h4{
+    height: 32px; line-height: 32px; width: 100%; margin: 0 auto;
+    span{ float: left; padding-left: 10px;}
+    a{ float: right; padding-right: 10px;}
+  }
+  .modal_detail{ width:90%; margin: 10px auto; line-height: 22px;}
+}
