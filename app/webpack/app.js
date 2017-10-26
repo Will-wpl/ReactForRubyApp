@@ -38,9 +38,6 @@ const chat = cable.subscriptions.create({
     // normal channel code goes here...
 });
 
-$(function () {
-    // chat.buy('hello 1024')
-})
 
 // import ChatRoom from "components/chat-channel";
 // function run() {
