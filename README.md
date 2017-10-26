@@ -43,7 +43,6 @@ bundle exec rails webpacker:install:react
 # install webpack components
 yarn install
 
-
 # create database - if db not exsit
 rake db:create
 
