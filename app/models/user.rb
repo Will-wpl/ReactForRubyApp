@@ -15,6 +15,9 @@ class User < ApplicationRecord
 
   # Associations
 
+  has_many :arrangements
+  has_many :auctions , :through => :arrangements
+
   # accepts_nested_attributes
 
   # Validations
