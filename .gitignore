@@ -17,7 +17,7 @@
 .byebug_history
 
 .env
-# vendor/bundle
+vendor/bundle
 
 /erd.pdf
 /public/packs
