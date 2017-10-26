@@ -14,7 +14,9 @@ class Admin::ArrangementsController < Admin::BaseController
 
   def create
     @arrangement = Arrangement.new(model_params)
-
+    # adminUser = User.find_by_name('mark')
+    # auction = Auction.first
+    @arrangement.user
     if @arrangement.save
       redirect_to [:admin, @arrangement], notice: "#{Arrangement.model_name.human} was successfully created."
     else
