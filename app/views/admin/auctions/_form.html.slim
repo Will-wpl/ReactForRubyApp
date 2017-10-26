@@ -1,0 +1,21 @@
+= simple_form_for [:admin, @auction] do |f|
+
+  = f.input :name
+  = f.input :start_datetime
+  = f.input :contract_period_start_date
+  = f.input :contract_period_end_date
+  = f.input :duration
+  = f.input :reserve_price
+
+  .form-action.form-group
+    .form-left-offset.form-right
+      - if f.object.new_record?
+        => f.button :button, class: "btn btn-primary", data: { disable_with: t("views.disable_with") } do
+          = icon "check-square-o", t("views.forms.create", model: f.object.class.model_name.human.titleize)
+        = " or "
+        = link_to t(".cancel", default: t("views.actions.cancel")), admin_auctions_path
+      - else
+        => f.button :button, class: "btn btn-primary", data: { disable_with: t("views.disable_with") } do
+          = icon "check-square-o", t("views.forms.update", model: f.object.class.model_name.human.titleize)
+        = " or "
+        = link_to t(".cancel", default: t("views.actions.cancel")), admin_auction_path(f.object)

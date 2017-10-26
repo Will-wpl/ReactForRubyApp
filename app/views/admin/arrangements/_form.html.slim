@@ -1,0 +1,29 @@
+= simple_form_for [:admin, @arrangement] do |f|
+
+  = f.input :main_name
+  = f.input :main_email_address
+  = f.input :main_mobile_number
+  = f.input :main_office_number
+  = f.input :alternative_name
+  = f.input :alternative_email_address
+  = f.input :alternative_mobile_number
+  = f.input :alternative_office_number
+  = f.input :lt_peak
+  = f.input :lt_off_peak
+  = f.input :hts_peak
+  = f.input :hts_off_peak
+  = f.input :htl_peak
+  = f.input :htl_off_peak
+
+  .form-action.form-group
+    .form-left-offset.form-right
+      - if f.object.new_record?
+        => f.button :button, class: "btn btn-primary", data: { disable_with: t("views.disable_with") } do
+          = icon "check-square-o", t("views.forms.create", model: f.object.class.model_name.human.titleize)
+        = " or "
+        = link_to t(".cancel", default: t("views.actions.cancel")), admin_arrangements_path
+      - else
+        => f.button :button, class: "btn btn-primary", data: { disable_with: t("views.disable_with") } do
+          = icon "check-square-o", t("views.forms.update", model: f.object.class.model_name.human.titleize)
+        = " or "
+        = link_to t(".cancel", default: t("views.actions.cancel")), admin_arrangement_path(f.object)

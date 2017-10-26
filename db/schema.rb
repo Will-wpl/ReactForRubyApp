@@ -10,10 +10,46 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170415171604) do
+ActiveRecord::Schema.define(version: 20171026083033) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "arrangements", force: :cascade do |t|
+    t.string "main_name", null: false
+    t.string "main_email_address", null: false
+    t.string "main_mobile_number", null: false
+    t.string "main_office_number", null: false
+    t.string "alternative_name"
+    t.string "alternative_email_address"
+    t.string "alternative_mobile_number"
+    t.string "alternative_office_number"
+    t.decimal "lt_peak", precision: 5, scale: 4, null: false
+    t.decimal "lt_off_peak", precision: 5, scale: 4, null: false
+    t.decimal "hts_peak", precision: 5, scale: 4, null: false
+    t.decimal "hts_off_peak", precision: 5, scale: 4, null: false
+    t.decimal "htl_peak", precision: 5, scale: 4, null: false
+    t.decimal "htl_off_peak", precision: 5, scale: 4, null: false
+    t.string "specifications_doc_url"
+    t.string "briefing_pack_doc_url"
+    t.bigint "user_id"
+    t.bigint "auction_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["auction_id"], name: "index_arrangements_on_auction_id"
+    t.index ["user_id"], name: "index_arrangements_on_user_id"
+  end
+
+  create_table "auctions", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "start_datetime", null: false
+    t.date "contract_period_start_date", null: false
+    t.date "contract_period_end_date", null: false
+    t.integer "duration", null: false
+    t.decimal "reserve_price", precision: 5, scale: 4, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "roles", id: :serial, force: :cascade do |t|
     t.string "name"
