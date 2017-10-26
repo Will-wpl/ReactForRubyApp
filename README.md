@@ -43,13 +43,14 @@ bundle exec rails webpacker:install:react
 # install webpack components
 yarn install
 
-# create database
+
+# create database - if db not exsit
 rake db:create
 
-# migrate db oject to database
+# migrate db oject to database - if db not exsit
 rake db:migrate
 
-# init db data
+# init db data - if db not exsit
 rake db:seed
 ```
 
