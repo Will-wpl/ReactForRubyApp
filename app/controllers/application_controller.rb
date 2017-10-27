@@ -29,12 +29,18 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def after_sign_in_path_for(resource_or_scope)
+  def after_sign_in_path_for(user)
+    roleName = current_user.roles.first.name
+    if roleName == 'admin'
+      stored_location_for(resource) || admin_home_index_path
+    elsif roleName == 'retailer'
+      stored_location_for(resource) || home_index_path
+    else
     
-    stored_location_for(resource) || home_index_path
+    end
   end
 
-  def after_sign_out_path_for(resource_or_scope)
+  def after_sign_out_path_for(user)
     root_url
   end
 end

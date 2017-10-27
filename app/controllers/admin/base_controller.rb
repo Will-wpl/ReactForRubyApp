@@ -4,6 +4,7 @@ class Admin::BaseController < ApplicationController
   layout 'admin'
 
   private
+
   def admin_required
     head :unauthorized unless current_user && current_user.has_role?(:admin)
   end
