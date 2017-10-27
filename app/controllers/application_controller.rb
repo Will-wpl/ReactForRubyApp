@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
-
+  before_action :authenticate_user!
   before_action :basic_authenticate
   before_action :configure_permitted_parameters, if: :devise_controller?
 
@@ -27,5 +27,14 @@ class ApplicationController < ActionController::Base
     when 'edit', 'update'
       add_breadcrumb 'Edit'
     end
+  end
+
+  def after_sign_in_path_for(resource_or_scope)
+    
+    stored_location_for(resource) || home_index_path
+  end
+
+  def after_sign_out_path_for(resource_or_scope)
+    root_url
   end
 end
