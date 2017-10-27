@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
   namespace :admin do
+    resources :auction_histories
+  end
+  namespace :admin do
     resources :auction_events
   end
   namespace :admin do
