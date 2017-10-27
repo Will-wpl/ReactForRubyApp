@@ -29,7 +29,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def after_sign_in_path_for(user)
+  def after_sign_in_path_for(resource)
     roleName = current_user.roles.first.name
     if roleName == 'admin'
       stored_location_for(resource) || admin_home_index_path
@@ -40,7 +40,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def after_sign_out_path_for(user)
+  def after_sign_out_path_for(resource)
     root_url
   end
 end
