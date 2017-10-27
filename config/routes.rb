@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
   namespace :admin do
+    resources :auction_events
+  end
+  namespace :admin do
     resources :arrangements
   end
   namespace :admin do
