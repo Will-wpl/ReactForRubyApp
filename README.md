@@ -132,3 +132,14 @@ If you wnat to debug by rubymine, can do:
 
 If you want to install front end package, can do:
 - yarn add package-name
+
+## Routes for front-end
+### Admin pages
+
+Admin Home Page
+- Path: views/admin/home/index.html.slim
+- URL: /admin/home
+
+Admin Create Auction Page
+- Path: views/admin/auctions/new.html.slim
+- URL: /admin/auctions/new

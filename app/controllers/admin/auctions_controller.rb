@@ -53,7 +53,7 @@ class Admin::AuctionsController < Admin::BaseController
     end
 
     def set_auctions_breadcrumbs
-      add_breadcrumb 'Home', root_path
+      add_breadcrumb 'Home', admin_home_index_path
       add_breadcrumb Auction.model_name.human.pluralize, admin_auctions_path
       add_breadcrumb @auction.name_was, admin_auction_path(@auction) if @auction.try(:persisted?)
     end
