@@ -22,4 +22,8 @@ Rails.application.routes.draw do
     resources :arrangements
     resources :auctions
   end
+
+  namespace :retailer do
+    resources :home, only: :index
+  end
 end
