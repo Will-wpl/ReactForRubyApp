@@ -1,4 +1,6 @@
 class AuctionEvent < ApplicationRecord
+  belongs_to :auction
+  belongs_to :user
   # Extends
 
   # Includes
