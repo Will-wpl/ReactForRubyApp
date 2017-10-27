@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171027025122) do
+ActiveRecord::Schema.define(version: 20171027031718) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +47,10 @@ ActiveRecord::Schema.define(version: 20171027025122) do
     t.text "auction_what"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.bigint "auction_id"
+    t.index ["auction_id"], name: "index_auction_events_on_auction_id"
+    t.index ["user_id"], name: "index_auction_events_on_user_id"
   end
 
   create_table "auctions", force: :cascade do |t|
@@ -98,4 +102,8 @@ ActiveRecord::Schema.define(version: 20171027025122) do
     t.index ["user_id"], name: "index_users_roles_on_user_id"
   end
 
+  add_foreign_key "arrangements", "auctions"
+  add_foreign_key "arrangements", "users"
+  add_foreign_key "auction_events", "auctions"
+  add_foreign_key "auction_events", "users"
 end
