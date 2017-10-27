@@ -13,7 +13,8 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    get '/' => 'admin/home#index'
+    # get '/' => 'admin/home#index'
+    resources :home, only: :index
     resources :users
     resources :auction_results
     resources :auction_histories
