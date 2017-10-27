@@ -34,7 +34,7 @@ class ApplicationController < ActionController::Base
     if roleName == 'admin'
       stored_location_for(resource) || admin_home_index_path
     elsif roleName == 'retailer'
-      stored_location_for(resource) || home_index_path
+      stored_location_for(resource) || retailer_home_index_path
     else
     
     end
