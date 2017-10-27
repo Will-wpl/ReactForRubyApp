@@ -1,14 +1,12 @@
-class Auction < ApplicationRecord
+class AuctionResult < ApplicationRecord
   # Extends
 
   # Includes
 
   # Associations
-  has_many :arrangements
-  has_many :users , :through => :arrangements
-  has_many :auction_histories
-  has_many :auction_events
-  has_one :auction_results
+  belongs_to :user
+  belongs_to :auction
+
   # accepts_nested_attributes
 
   # Validations
