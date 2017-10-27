@@ -6,6 +6,8 @@ class Auction < ApplicationRecord
   # Associations
   has_many :arrangements
   has_many :users , :through => :arrangements
+  has_many :auction_histories
+  has_many :auction_events
   # accepts_nested_attributes
 
   # Validations

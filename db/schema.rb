@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171027031718) do
+ActiveRecord::Schema.define(version: 20171027045933) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,24 @@ ActiveRecord::Schema.define(version: 20171027031718) do
     t.index ["user_id"], name: "index_auction_events_on_user_id"
   end
 
+  create_table "auction_histories", force: :cascade do |t|
+    t.decimal "average_price"
+    t.decimal "lt_peak"
+    t.decimal "lt_off_peak"
+    t.decimal "hts_peak"
+    t.decimal "hts_off_peak"
+    t.decimal "htl_peak"
+    t.decimal "htl_off_peak"
+    t.datetime "bid_time"
+    t.bigint "user_id"
+    t.bigint "auction_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "total_award_sum"
+    t.index ["auction_id"], name: "index_auction_histories_on_auction_id"
+    t.index ["user_id"], name: "index_auction_histories_on_user_id"
+  end
+
   create_table "auctions", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "start_datetime", null: false
@@ -62,6 +80,9 @@ ActiveRecord::Schema.define(version: 20171027031718) do
     t.decimal "reserve_price", precision: 5, scale: 4, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "actual_begin_time"
+    t.datetime "actual_end_time"
+    t.decimal "total_volume"
   end
 
   create_table "roles", id: :serial, force: :cascade do |t|
@@ -90,6 +111,7 @@ ActiveRecord::Schema.define(version: 20171027031718) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "login_status"
+    t.string "company_name"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -106,4 +128,6 @@ ActiveRecord::Schema.define(version: 20171027031718) do
   add_foreign_key "arrangements", "users"
   add_foreign_key "auction_events", "auctions"
   add_foreign_key "auction_events", "users"
+  add_foreign_key "auction_histories", "auctions"
+  add_foreign_key "auction_histories", "users"
 end
