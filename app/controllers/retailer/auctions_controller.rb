@@ -1,4 +1,4 @@
-class Retailer::AuctionsController < ApplicationController
+class Retailer::AuctionsController < Retailer::BaseController
     def live
         
     end
