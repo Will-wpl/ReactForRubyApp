@@ -20,10 +20,26 @@ Rails.application.routes.draw do
     resources :auction_histories
     resources :auction_events
     resources :arrangements
-    resources :auctions
+    resources :auctions do
+      member do
+        get 'upcoming'
+        get 'online'
+        get 'dashboard'
+        post 'publish'
+        post 'hold'
+        post 'confirm'
+      end
+    end
   end
 
   namespace :retailer do
     resources :home, only: :index
+    resources :arrangements
+    resources :auctions do
+      member do
+        get 'live'
+        get 'finish'
+      end
+    end
   end
 end

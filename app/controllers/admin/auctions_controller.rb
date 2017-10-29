@@ -3,6 +3,7 @@ class Admin::AuctionsController < Admin::BaseController
 
   before_action :set_auctions_breadcrumbs
   before_action :set_action_breadcrumbs
+  skip_before_action :verify_authenticity_token, :except => [:publish]
 
   def index
     @auctions = Auction.all.order(created_at: :desc).page(params[:page])
@@ -40,6 +41,38 @@ class Admin::AuctionsController < Admin::BaseController
     @auction.destroy
 
     redirect_to admin_auctions_path, notice: "#{Auction.model_name.human} was successfully destroyed."
+  end
+
+  # GET upcoming page
+  def upcoming
+  end
+
+  # GET online page
+  def online
+  end
+
+  # GET dashbard page
+  def dashboard
+    
+  end
+
+  # POST publish auction
+  def publish
+    @u = params
+    p 'hello'
+  end
+
+  # POST hold auction
+  def hold
+  end
+
+  # POST extend time
+  def delay
+    
+  end
+
+  # POST comfirm
+  def comfirm
   end
 
   private
