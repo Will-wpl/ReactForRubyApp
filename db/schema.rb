@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171027052158) do
+ActiveRecord::Schema.define(version: 20171029105738) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,6 +67,7 @@ ActiveRecord::Schema.define(version: 20171027052158) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "total_award_sum"
+    t.integer "ranking"
     t.index ["auction_id"], name: "index_auction_histories_on_auction_id"
     t.index ["user_id"], name: "index_auction_histories_on_user_id"
   end
@@ -106,6 +107,8 @@ ActiveRecord::Schema.define(version: 20171027052158) do
     t.datetime "actual_begin_time"
     t.datetime "actual_end_time"
     t.decimal "total_volume"
+    t.string "publish_status"
+    t.string "published_gid"
   end
 
   create_table "roles", id: :serial, force: :cascade do |t|
