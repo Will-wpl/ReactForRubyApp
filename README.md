@@ -161,3 +161,4 @@ Retailer Home Page
 
 Retailer Manage Upcoming Auction Page
 - Path:
+- URL:
