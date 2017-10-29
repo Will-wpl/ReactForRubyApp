@@ -34,6 +34,25 @@ if Arrangement.count == 0
                      user_id: 2,
                      auction_id: 2,
                      )
+
+  p result
+end
+
+if Arrangement.count == 1
+  result = Arrangement.create(main_name: 'brian',
+                              main_email_address: 'brian@example.com',
+                              main_mobile_number: '87654321',
+                              main_office_number: '12345678',
+                              lt_peak: 0.1231,
+                              lt_off_peak: 0.2121,
+                              hts_peak: 0.2121,
+                              hts_off_peak: 0.3212,
+                              htl_peak: 0.1111,
+                              htl_off_peak: 0.3332,
+                              user_id: 2,
+                              auction_id: 2,
+  )
+
   p result
 end
 
