@@ -158,3 +158,7 @@ Admin Create Auction Page
 Retailer Home Page
 - Path:
 - URL:
+
+Retailer Manage Upcoming Auction Page
+- Path:
+- URL:
