@@ -143,3 +143,18 @@ Admin Home Page
 Admin Create Auction Page
 - Path: views/admin/auctions/new.html.slim
 - URL: /admin/auctions/new
+
+
+
+
+
+
+
+
+
+
+### Retailer pages
+
+Retailer Home Page
+- Path:
+- URL:
