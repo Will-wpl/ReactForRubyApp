@@ -3,7 +3,7 @@ class Admin::AuctionsController < Admin::BaseController
 
   before_action :set_auctions_breadcrumbs
   before_action :set_action_breadcrumbs
-  skip_before_action :verify_authenticity_token, :except => [:publish]
+  # skip_before_action :verify_authenticity_token, :except => [:publish]
 
   def index
     @auctions = Auction.all.order(created_at: :desc).page(params[:page])
