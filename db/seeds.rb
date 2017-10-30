@@ -32,7 +32,7 @@ if Arrangement.count == 0
                      htl_peak: 0.1111,
                      htl_off_peak: 0.3332,
                      user_id: 2,
-                     auction_id: 2,
+                     auction_id: 1,
                      )
 
   p result
@@ -50,7 +50,7 @@ if Arrangement.count == 1
                               htl_peak: 0.1111,
                               htl_off_peak: 0.3332,
                               user_id: 2,
-                              auction_id: 2,
+                              auction_id: 1,
   )
 
   p result
