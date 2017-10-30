@@ -58,8 +58,9 @@ class Admin::AuctionsController < Admin::BaseController
 
   # POST publish auction
   def publish
-    @u = params
-    p 'hello'
+    @hello = params['hello']
+    render json: @hello , status: 200
+    
   end
 
   # POST hold auction
