@@ -1,0 +1,5 @@
+.admin_btn{ 
+    width:420px; margin:10rem auto; position: relative;
+    a{ display: block;  width: 100%; background:#00b0b2 url(../../btn_ico.png) no-repeat right; font-size: 16px; margin-bottom:26px; padding: 1.35rem 1rem 1.35rem; }
+    a.begin_auction{ position: absolute; width: auto; background: #DF5C28; top:0px; right:-150px; }
+}

@@ -1,1 +1,26 @@
 @import 'shared';
+.createRaMain{
+    width:100%; position: relative;
+    .createRa{ 
+        width:600px; margin:20px; overflow: hidden; padding-bottom: 30px; 
+        *{ color: #fff; font-size: 12px;}
+        h2{ margin-top: 20px; text-align: left; font-size: 22px;}
+        dl{ 
+            text-align: left; margin-top: 40px;
+            dd{
+                height:55px; line-height: 25px; overflow:hidden;
+                span{font-size: 13px;  text-align: right;}
+                input{background: none; width:100%; outline: none; border:none; border:1px solid #fff; height:28px;}
+                abbr.error-block{color:#ff2626;}
+                b{ 
+                    font-weight: normal; font-size: 12px; text-align:center; display: block
+                }
+                b.textLeft{text-align: left;}
+            }
+            dd.u-grid{margin: 0;}
+        }
+    }
+    .createRa_btn{position: absolute; right:30px;
+        button{ margin: 0 10px;}
+    }
+}
