@@ -19,3 +19,30 @@
     text-align: center;
   }
 }
+
+
+//retailer manage coming
+.link_file{line-height: 40px; text-decoration: underline;}
+abbr[title]{color: #fe0000; text-decoration: none;}
+.retailer_btn{ 
+  text-align: center; width: 100%; margin: 25px auto;
+  button{ display: inline-block; margin: 0px 10px;}
+}
+.retailer_fill{
+   width: 100%;
+   thead{
+     tr{ background: #00394A;
+      th{ height: 40px; border-right:1px solid #314657;}
+    }
+   }
+   tbody{
+     tr{
+       td{border:1px solid #314657; text-align: center; height: 40px;
+        input{
+          width: 60px; display: inline-block; padding: 2px; margin-left: 5px;
+        }
+      }
+       
+     }
+   }
+}
