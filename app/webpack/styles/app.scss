@@ -19,3 +19,56 @@
     text-align: center;
   }
 }
+
+
+//retailer manage coming
+.link_file{line-height: 40px; text-decoration: underline;}
+abbr[title]{color: #fe0000; text-decoration: none;}
+.retailer_btn{ 
+  text-align: center; width: 100%; margin: 25px auto;
+  button{ display: inline-block; margin: 0px 10px;}
+}
+.retailer_fill{
+   width: 100%;
+   thead{
+     tr{ background: #00394A;
+      th{ height: 40px; border-right:1px solid #314657;}
+    }
+   }
+   tbody{
+     tr{
+       td{border:1px solid #314657; text-align: center; height: 40px;
+        input{
+          width: 60px; display: inline-block; padding: 2px; margin-left: 5px;
+        }
+      }
+       
+     }
+   }
+}
+
+
+//retailer liveing
+.live_show{
+  width: 480px; margin: 60px auto;
+  border-radius: 0px 0px 5px 5px; overflow: hidden; 
+  .live_show_top{ background: url()}
+  p{ background: #00afb1; width: 100%; line-height: 32px; font-size: 18px; padding: 20px; text-align: center}
+}
+
+
+//time_cuntdown
+.time_cuntdown{ width: 100%; padding:12px; background: #90bf33; min-height: 132px; color:#fff;
+  p{font-size:20px; line-height: 30px;}
+  .Countdown{
+    font-size:20px; line-height: 30px; margin-top: 10px;
+    abbr{float: left; line-height: 60px;}
+  }
+  #countdown_timer {
+    width:300px; overflow: hidden; display:inline-block;
+      span{
+        width: 25%; float: left; text-align: center; font-size:14px !important;
+        font{ font-size:35px; display: block;}
+      }
+  }
+ }
