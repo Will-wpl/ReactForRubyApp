@@ -14,8 +14,8 @@ class Admin::AuctionsController < Admin::BaseController
 
   # GET auction by AJAX
   def getAuction
-    @auciton = Auction.first
-    render json: @auction ,status: :ok
+    @auction = Auction.first
+    render json: @auction
   end
 
   def create
@@ -65,7 +65,7 @@ class Admin::AuctionsController < Admin::BaseController
   def publish
     @hello = params['hello']
     render json: @hello , status: 200
-    
+
   end
 
   # POST hold auction
