@@ -123,10 +123,15 @@ If you want to use one command, can do:
 
 - `foreman start -f Procfile.dev`
 
-If you wnat to debug by rubymine, can do:
+If you want to debug by rubymine, can do:
 - In terminal run : `./bin/webpack-dev-server --hot`
 - In menu click : Run -> Debug -> Development:reverse-auction
 - http://localhost:3000
+
+
+If you want to unit test, can do:
+bundle exec rspec spec/controllers/admin/auctions_controller_spec.rb
+
 
 ## For CSI dev team
 
@@ -156,8 +161,8 @@ Admin Create Auction Page
 ### Retailer pages
 
 Retailer Home Page
-- Path:
-- URL:
+- Path: views/retailer/home/index.html.slim
+- URL: /retailer/home
 
 Retailer Manage Upcoming Auction Page
 - Path:

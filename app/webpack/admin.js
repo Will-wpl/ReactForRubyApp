@@ -30,11 +30,7 @@ $(function() {
     });
     
     $.ajax({
-        url: '/admin/auctions/getAuction',
-        data: {
-            a: "hello",
-            b: "world"
-        },
+        url: '/admin/auctions/obtain',
         success: (data) => {
             console.log(data);
         },

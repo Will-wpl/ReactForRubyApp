@@ -30,7 +30,8 @@ Rails.application.routes.draw do
         post 'confirm'
       end
       collection do
-        get 'getAuction'
+        get 'obtain'
+        post 'save'
       end
     end
   end
