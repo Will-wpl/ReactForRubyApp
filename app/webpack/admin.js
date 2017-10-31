@@ -10,18 +10,31 @@ $.ajax({
     type: "POST",
     url: '/admin/auctions/2/publish',
     data: {
-        hello:{
-            a : "hello",
-            b : "world"
+        hello: {
+            a: "hello",
+            b: "world"
         }
     },
     success: (data) => {
         console.log(data);
     },
-    dataType: 'json'
+    dataType: 'json',
+    beforeSend: function (xhr) {
+        xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
+    }
     // beforeSend(xhr) {
     //     xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
     // }
-  });
+});
 
-
+$.ajax({
+    url: '/admin/auctions/getAuction',
+    data: {
+        a: "hello",
+        b: "world"
+    },
+    success: (data) => {
+        console.log(data);
+    },
+    dataType: 'json'
+});

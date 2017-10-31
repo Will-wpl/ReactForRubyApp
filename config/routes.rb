@@ -29,6 +29,9 @@ Rails.application.routes.draw do
         post 'hold'
         post 'confirm'
       end
+      collection do
+        get 'getAuction'
+      end
     end
   end
 
