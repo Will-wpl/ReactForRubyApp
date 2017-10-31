@@ -14,6 +14,7 @@ import "./styles/app.scss";
 import "components/hello-world";
 import "components/chat-channel";
 import "components/retailer-manage-coming";
+import "components/retailer-live";
 
 ActionCable = require('actioncable')
 

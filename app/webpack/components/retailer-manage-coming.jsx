@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
+import {TimeCuntDown} from './time-cuntdown';
 
 export class RetailerManage extends Component {
     constructor(props){
@@ -7,6 +8,8 @@ export class RetailerManage extends Component {
     }
     render () {
         return (
+            <div>
+            <TimeCuntDown />
             <div className="u-grid">
                 <div className="col-sm-12 col-md-6 push-md-3">
                     <h3 className="u-mt3 u-mb1">Section A:Information on Reverse Auction</h3>
@@ -110,6 +113,7 @@ export class RetailerManage extends Component {
                         <button className="lm--button lm--button--primary">Accept Participation</button>
                     </div>
                 </div>
+            </div>
             </div>
         )
     }

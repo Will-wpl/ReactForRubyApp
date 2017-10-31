@@ -46,3 +46,29 @@ abbr[title]{color: #fe0000; text-decoration: none;}
      }
    }
 }
+
+
+//retailer liveing
+.live_show{
+  width: 480px; margin: 60px auto;
+  border-radius: 0px 0px 5px 5px; overflow: hidden; 
+  .live_show_top{ background: url()}
+  p{ background: #00afb1; width: 100%; line-height: 32px; font-size: 18px; padding: 20px; text-align: center}
+}
+
+
+//time_cuntdown
+.time_cuntdown{ width: 100%; padding:12px; background: #90bf33; min-height: 132px; color:#fff;
+  p{font-size:20px; line-height: 30px;}
+  .Countdown{
+    font-size:20px; line-height: 30px; margin-top: 10px;
+    abbr{float: left; line-height: 60px;}
+  }
+  #countdown_timer {
+    width:300px; overflow: hidden; display:inline-block;
+      span{
+        width: 25%; float: left; text-align: center; font-size:15px !important;
+        font{ font-size:25px; display: block;}
+      }
+  }
+ }
