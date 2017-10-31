@@ -4,7 +4,7 @@ RSpec.describe Admin::AuctionsController, type: :controller do
 
   before {sign_in create(:user, :with_admin)}
 
-  describe "auction management" do
+  describe "#obtain" do
     def do_request
       post :save, params: {auction: params}
     end
@@ -29,7 +29,7 @@ RSpec.describe Admin::AuctionsController, type: :controller do
       end
     end
 
-    it "get an auction" do
+    it "got an auction" do
       get :obtain
 
       expect(response.content_type).to eq("application/json")
@@ -37,7 +37,7 @@ RSpec.describe Admin::AuctionsController, type: :controller do
     end
   end
 
-  describe "auction management" do
+  describe "#publish" do
 
     it "publish an auction" do
       post :publish, params: {id: 1, hello: {a: 'hello', b: 'world'}}
@@ -47,12 +47,12 @@ RSpec.describe Admin::AuctionsController, type: :controller do
     end
   end
 
-  describe "auction management" do
+  describe "save" do
     def do_request
       post :save, params: {auction: params}
     end
 
-    context 'creates new auction' do
+    context 'create new auction' do
       # let(:params) {attributes_for(:auction)}
       let(:params) {create(:auction)}
       it 'success' do
