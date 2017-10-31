@@ -1,14 +1,15 @@
 @import 'shared';
 .createRaMain{
     margin: 0px auto;
-    width:100%; position: relative;
+    width:100%; position: relative; padding-bottom: 60px;
     .creatRa{
         margin: 30px auto;
+        .react-datepicker__input-container,.react-datepicker-wrapper{width:100%;}
         dd{
             margin-bottom: 20px;
             label{line-height: 44px;}
             b{ 
-                font-weight: normal; font-size: 12px; text-align:center; display: block
+                font-weight: normal; font-size: 18px; text-align:center; display: block
             }
             b.textLeft{text-align: left;}
             input{
@@ -25,7 +26,7 @@
               }
         }
     }
-    .createRa_btn{position: absolute; right:0px;
+    .createRa_btn{position: absolute; right:0px; bottom:0px;
         button{ margin: 0 10px;}
     }
 }
