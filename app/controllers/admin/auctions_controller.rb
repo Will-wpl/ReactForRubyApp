@@ -10,7 +10,12 @@ class Admin::AuctionsController < Admin::BaseController
   end
 
   def new
-    @auction = Auction.new
+  end
+
+  # GET auction by AJAX
+  def getAuction
+    @auciton = Auction.first
+    render json: @auction ,status: :ok
   end
 
   def create
