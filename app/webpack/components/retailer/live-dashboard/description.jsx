@@ -4,16 +4,16 @@ export default class Description extends Component {
 
     render() {
         return (
-            <div className="row">
-                <div className="col-sm-6">
-                    <img src="" alt="rankinglogo" />
+            <div className="user_form u-grid">
+                <div className="col-sm-6 col-md-6">
+                    <img src="/assets/char1.png" alt="rankinglogo" width="120" />
                 </div>
-                <div className="col-sm-6">
-                    <div className="row">
-                        <div className="col-sm-3">
-                            <img src="" alt="userlogo" />
+                <div className="col-sm-6 col-md-6">
+                    <div className="u-grid user_info">
+                        <div className="col-sm-5">
+                            <img src="/assets/user1.png" alt="userlogo" />
                         </div>
-                        <div className="col-sm-9">
+                        <div className="col-sm-7">
                             <h2>TOP2</h2>
                             <label>My Ranking</label>
                         </div>

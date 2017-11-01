@@ -21,7 +21,7 @@ export default class LiveHomePage extends Component {
                     <div className="col-sm-12 col-md-5 u-cell"><Description /></div>
                     <div className="col-sm-12 col-md-7 u-cell"><Ranking initialData={data} /></div>
                 </div>
-                <div className="u-grid">
+                <div className="u-grid u-mt2">
                     <div className="col-sm-12 col-md-5 u-cell"><BidForm /></div>
                     <div className="col-sm-12 col-md-7 u-cell"><BidHistory /></div>
                 </div>

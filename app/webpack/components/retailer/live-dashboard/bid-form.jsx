@@ -31,7 +31,7 @@ export default class BidForm extends Component {
                         </tr>
                     </tbody>
                 </table>
-                <button>Submit</button>
+                <button className="lm--button lm--button--primary u-mt2 fright">Submit</button>
             </form>
         );
     }
