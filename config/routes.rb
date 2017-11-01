@@ -31,7 +31,6 @@ Rails.application.routes.draw do
       end
       collection do
         get 'obtain'
-        post 'save'
       end
     end
   end
