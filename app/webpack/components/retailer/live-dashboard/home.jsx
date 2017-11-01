@@ -16,14 +16,14 @@ export default class LiveHomePage extends Component {
             , { time: '2017-01-01 10:04:00', ranking: 8 }]
         return (
             <div>
-                <LiveCountdown />
-                <div className="row">
-                    <div className="col-sm-4"><Description /></div>
-                    <div className="col-sm-8"><Ranking initialData={data} /></div>
+                {/* <LiveCountdown /> */}
+                <div className="u-grid">
+                    <div className="col-sm-12 col-md-5 u-cell"><Description /></div>
+                    <div className="col-sm-12 col-md-7 u-cell"><Ranking initialData={data} /></div>
                 </div>
-                <div className="row">
-                    <div className="col-sm-4"><BidForm /></div>
-                    <div className="col-sm-8"><BidHistory /></div>
+                <div className="u-grid">
+                    <div className="col-sm-12 col-md-5 u-cell"><BidForm /></div>
+                    <div className="col-sm-12 col-md-7 u-cell"><BidHistory /></div>
                 </div>
             </div>
         );
