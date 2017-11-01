@@ -1,16 +1,24 @@
 class Admin::AuctionsController < Admin::BaseController
-  before_action :set_auction, only: [:show, :edit, :update, :destroy]
+  before_action :set_auction, only: [:show, :edit, :update, :destroy, :publish]
 
   before_action :set_auctions_breadcrumbs
   before_action :set_action_breadcrumbs
 
-  def index
-    @auctions = Auction.all.order(created_at: :desc).page(params[:page])
-  end
+  # def index
+  #   @auctions = Auction.all.order(created_at: :desc).page(params[:page])
+  # end
 
   # GET create auction page
-  def new
-  end
+  def new; end
+
+  # GET upcoming page
+  def upcoming; end
+
+  # GET online page
+  def online; end
+
+  # GET dashbard page
+  def dashboard; end
 
   # GET auction info by ajax
   def obtain
@@ -23,7 +31,7 @@ class Admin::AuctionsController < Admin::BaseController
 
   end
 
-
+  # POST create auction by ajax
   def create
     @auction = Auction.new(model_params)
     if @auction.save
@@ -33,6 +41,7 @@ class Admin::AuctionsController < Admin::BaseController
     end
   end
 
+  # PATCH update auction by ajax
   def update
     if @auction.update(model_params)
       render json: @auction ,status: 200
@@ -41,25 +50,28 @@ class Admin::AuctionsController < Admin::BaseController
     end
   end
 
-  # POST saveOrUpdate auction info by ajax
-  # def save
-  #   # @auction = model_params['id'] == nil ? Auction.new(model_params) : Auction.update(model_params)
-  #   if model_params['id'] == nil
-  #     @auction = Auction.new(model_params)
-  #     if @auction.save
-  #       render json: @auction, status: 201
-  #     else
-  #       render json: 'error code ', status: 500
-  #     end
-  #   else
-  #     @auction = Auction.find(model_params['id'])
-  #     if @auction.update(model_params)
-  #       render json: @auction ,status: 200
-  #     else
-  #       render json: 'error code ', status: 500
-  #     end
-  #   end
-  # end
+  # PUT publish auction by ajax
+  def publish
+    if @auction.update(publish_status: params[:publish_status])
+      render json: '@auction published', status: 200
+    else
+      render json: 'error code ', status: 500
+    end
+
+  end
+
+  # POST hold auction
+  def hold
+  end
+
+  # POST extend time
+  def delay
+
+  end
+
+  # POST comfirm
+  def comfirm
+  end
 
   # default create
   # def create
@@ -91,39 +103,6 @@ class Admin::AuctionsController < Admin::BaseController
 
   #   redirect_to admin_auctions_path, notice: "#{Auction.model_name.human} was successfully destroyed."
   # end
-
-  # GET upcoming page
-  def upcoming
-  end
-
-  # GET online page
-  def online
-  end
-
-  # GET dashbard page
-  def dashboard
-
-  end
-
-  # POST publish auction
-  def publish
-    @hello = params['hello']
-    render json: @hello, status: 200
-
-  end
-
-  # POST hold auction
-  def hold
-  end
-
-  # POST extend time
-  def delay
-
-  end
-
-  # POST comfirm
-  def comfirm
-  end
 
   private
 
