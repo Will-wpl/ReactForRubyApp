@@ -5,10 +5,10 @@ export default class BidHistory extends Component {
     render() {
         return (
             <form>
-                <h5>My Bid History</h5>
-                <table>
-                    <thead><h5>Bid Price</h5></thead>
-                    <tbody>
+                <h3>My Bid History</h3>
+                <table className="retailer_fill">
+                    <thead>
+                        <tr><th colSpan="8" className="table_title">Bid Price</th></tr>
                         <tr>
                             <th>S/N</th>
                             <th>Time</th>
@@ -19,6 +19,8 @@ export default class BidHistory extends Component {
                             <th>HLT(Off-Peak)</th>
                             <th>HLT(Peak)</th>
                         </tr>
+                        </thead>
+                    <tbody>
                         <tr>
                             <td>1</td>
                             <td>10:00:00</td>

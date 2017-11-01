@@ -31,3 +31,39 @@
     }
 }
 
+
+//bidders Status of retailers
+.bidderStatus{ 
+     overflow: hidden; text-align: left;
+     *{color:#fff; font-size: 12px;}
+     h4{ margin: 10px auto; width: 80%;}
+     .color_show{ 
+         width: 80%; margin: 0 auto; display:block; text-align: center;
+         label{ 
+             margin:0 15px;
+             span{display: inline-block; width:10px; height: 10px; background: #54BD1B; margin-right: 5px;}
+             span.yellow{background: #FFEA91;}
+             span.red{background: #FFA8A7;}
+             dfn{font-style: normal; font-size: 12px;}
+         }
+    }
+    .bidders_list{
+        width: 80%; margin: 10px auto; height:368px; overflow-y: auto;
+        li{ width: 100%; height: 32px; line-height: 32px; 
+            margin-bottom: 5px; 
+            background: #183243; overflow: hidden;
+            span{
+                text-indent: 20px; border-right: 1px solid #485A68;
+                abbr{
+                    display:block; width:70%; height: 25px; margin: 3px auto;
+                }
+                abbr.green{ background:#54BD1B; }
+                abbr.green{ background:#FFA8A7; }
+                abbr.green{ background:#FFEA91; }
+                abbr.online{ background: url("../images/green.png") no-repeat center;}
+                abbr.outline{background: url("../images/red.png") no-repeat center;}
+                abbr.holding{background: url("../images/Yellow.png") no-repeat center;}
+            }
+        }
+    }
+}
