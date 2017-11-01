@@ -1,9 +1,11 @@
 $(function () {
 
-    auctionObtain();
+    // auctionObtain();
     // auctionCreate();
     // auctionUpdate();
-    //auctionPublish();
+    // auctionPublish();
+    // arrangementList();
+    // arrangementUserDetail();
     function auctionObtain() {
         $.ajax({
             type: "GET",
@@ -89,27 +91,30 @@ $(function () {
         });
     }
 
+    function arrangementList(){
+        $.ajax({
+            type: "GET",
+            url: '/admin/arrangements/list',
+            data: { auction_id: 1 },
+            success: (data) => {
+                console.log('arrangementsList');
+                console.log(data);
+            },
+            dataType: 'json'
+        });
+    }
 
-    // $.ajax({
-    //     type: "POST",
-    //     url: '/admin/auctions/2/publish',
-    //     data: {
-    //         hello: {
-    //             a: "hello",
-    //             b: "world"
-    //         }
-    //     },
-    //     success: (data) => {
-    //         console.log(data);
-    //     },
-    //     dataType: 'json',
-    //     // beforeSend: function (xhr) {
-    //     //     xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
-    //     //     //jquery 
-    //     // },
-    //     beforeSend: $.rails.CSRFProtection
-    //     //jquery ujs
-    // });
-
+    function arrangementUserDetail(){
+        $.ajax({
+            type: "GET",
+            url: '/admin/arrangements/detail',
+            data: { id: 2 },
+            success: (data) => {
+                console.log('arrangementsUserDetail');
+                console.log(data);
+            },
+            dataType: 'json'
+        });
+    }
 
 });

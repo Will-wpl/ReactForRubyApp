@@ -19,4 +19,6 @@ class Arrangement < ApplicationRecord
   # Custom
 
   # Methods (class methods before instance methods)
+
+  Arrangement
 end
