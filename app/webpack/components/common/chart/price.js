@@ -39,8 +39,16 @@ export default class Price extends Component {
                 data: []
             };
             this.props.initialData.forEach((timePrice) => {
-                let dataArr = [].concat(timePrice.time).concat(timePrice.ranking);
-                tmp.data.push(dataArr)
+                // let dataArr = [].concat(timePrice.time).concat(timePrice.ranking);
+                // tmp.data.push(dataArr)
+                let d = {
+                    symbol: 'triangle',
+                    symbolSize: 15,
+                    showSymbol: true,
+                    value: []
+                }
+                d.value = [].concat(timePrice.time).concat(timePrice.ranking);
+                tmp.data.push(d)
             });
             option.series.push(tmp);
             this.setState({ option: option });
@@ -62,6 +70,15 @@ export default class Price extends Component {
 
 function getTemplate() {
     return {
+        calculable: true,
+        dataZoom: {
+            show: true,
+            realtime: true,
+            label: {
+                show: false
+            },
+            showDetail: false
+        },
         grid: {
             top: '2%',
             left: '10%',
@@ -91,12 +108,17 @@ function getTemplate() {
             type: 'time',
             boundaryGap: false,
             axisLabel: {
-                formatter: (value, index) => {
-                    return '';
-                }
+                // formatter: (value, index) => {
+                //     return '';
+                // }
             },
             axisTick: {
                 show: false
+            },
+            axisLine: {
+                lineStyle: {
+                    color: 'white'
+                }
             }
         },
         yAxis: {
@@ -111,6 +133,11 @@ function getTemplate() {
             },
             max: function (value) {
                 return 1;
+            },
+            axisLine: {
+                lineStyle: {
+                    color: 'white'
+                }
             }
         },
         series: []
