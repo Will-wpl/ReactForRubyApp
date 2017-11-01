@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
-import {TimeCuntDown} from './time-cuntdown';
+import {TimeCuntDown} from '../shared/time-cuntdown';
 
 export class RetailerManage extends Component {
     constructor(props){
