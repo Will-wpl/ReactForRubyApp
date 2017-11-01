@@ -4,8 +4,20 @@ class Admin::ArrangementsController < Admin::BaseController
   before_action :set_arrangements_breadcrumbs
   before_action :set_action_breadcrumbs
 
+  # GET arrangement list by auction_id
+  def list
+    @arrangementsList = Arrangement.select('users.company_name ,arrangements.id , arrangements.accept_status , arrangements.auction_id , arrangements.user_id ').joins(:user).where('auction_id': params[:auction_id]).order(:accept_status)
+    render json: @arrangementsList, status: 200
+  end
+
+  # GET user arrangement detail info by auction_id and user_id
+  def detail
+    @arrangement = Arrangement.find(params[:id])
+    render json: @arrangement, status: 200
+  end
+
   def index
-    @arrangements = Arrangement.all.order(created_at: :desc).page(params[:page])
+    @arrangements = Arrangement.order(created_at: :desc).page(params[:page])
   end
 
   def new

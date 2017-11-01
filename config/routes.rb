@@ -19,7 +19,12 @@ Rails.application.routes.draw do
     resources :auction_results
     resources :auction_histories
     resources :auction_events
-    resources :arrangements
+    resources :arrangements do
+      collection do
+        get 'list'
+        get 'detail'
+      end
+    end
     resources :auctions do
       member do
         get 'upcoming'
