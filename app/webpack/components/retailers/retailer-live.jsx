@@ -4,13 +4,17 @@ import {TimeCuntDown} from '../shared/time-cuntdown';
 export class RetailerLive extends Component {
     constructor(props){
         super(props);
+        this.state={
+            modal:"live_show",
+            holdOrend:"live_hold"
+        }
     }
     render () {
         return (
             <div>
             <TimeCuntDown />
-            <div className="live_show">
-                <div className="live_show_top"></div>
+            <div className={this.state.modal} id="live_modal">
+                <div className={this.state.holdOrend}></div>
                 <p>
                 Please standy,bidding will<br></br>
                 commence soon<br></br>
