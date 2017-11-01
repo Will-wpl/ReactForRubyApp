@@ -25,8 +25,8 @@ Rails.application.routes.draw do
         get 'upcoming'
         get 'online'
         get 'dashboard'
-        post 'publish'
-        post 'hold'
+        put 'publish'
+        put 'hold'
         post 'confirm'
       end
       collection do
