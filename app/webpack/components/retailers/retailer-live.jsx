@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import {TimeCuntDown} from '../shared/time-cuntdown';
+import LiveHomePage from '../retailer/live-dashboard/home'
 export class RetailerLive extends Component {
     constructor(props){
         super(props);
@@ -21,6 +22,7 @@ export class RetailerLive extends Component {
                 Page will automatically refresh when<br></br>reverse auction commences
                 </p>
             </div>
+            <LiveHomePage/>
             </div>
         )
     }
