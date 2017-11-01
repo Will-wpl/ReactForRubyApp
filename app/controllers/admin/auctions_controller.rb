@@ -4,9 +4,9 @@ class Admin::AuctionsController < Admin::BaseController
   before_action :set_auctions_breadcrumbs
   before_action :set_action_breadcrumbs
 
-  # def index
-  #   @auctions = Auction.all.order(created_at: :desc).page(params[:page])
-  # end
+  def index
+    @auctions = Auction.all.order(created_at: :desc).page(params[:page])
+  end
 
   # GET create auction page
   def new
@@ -23,25 +23,43 @@ class Admin::AuctionsController < Admin::BaseController
 
   end
 
-  # POST saveOrUpdate auction info by ajax
-  def save
-    # @auction = model_params['id'] == nil ? Auction.new(model_params) : Auction.update(model_params)
-    if model_params['id'] == nil
-      @auction = Auction.new(model_params)
-      if @auction.save
-        render json: @auction, status: 201
-      else
-        render json: 'error code ', status: 500
-      end
+
+  def create
+    @auction = Auction.new(model_params)
+    if @auction.save
+      render json: @auction, status: 201
     else
-      @auction = Auction.find(model_params['id'])
-      if @auction.update(model_params)
-        render json: @auction ,status: 201
-      else
-        render json: 'error code ', status: 500
-      end
+      render json: 'error code ', status: 500
     end
   end
+
+  def update
+    if @auction.update(model_params)
+      render json: @auction ,status: 200
+    else
+      render json: 'error code ', status: 500
+    end
+  end
+
+  # POST saveOrUpdate auction info by ajax
+  # def save
+  #   # @auction = model_params['id'] == nil ? Auction.new(model_params) : Auction.update(model_params)
+  #   if model_params['id'] == nil
+  #     @auction = Auction.new(model_params)
+  #     if @auction.save
+  #       render json: @auction, status: 201
+  #     else
+  #       render json: 'error code ', status: 500
+  #     end
+  #   else
+  #     @auction = Auction.find(model_params['id'])
+  #     if @auction.update(model_params)
+  #       render json: @auction ,status: 200
+  #     else
+  #       render json: 'error code ', status: 500
+  #     end
+  #   end
+  # end
 
   # default create
   # def create
@@ -56,10 +74,10 @@ class Admin::AuctionsController < Admin::BaseController
 
   # def show
   # end
-
+  #
   # def edit
   # end
-
+  #
   # def update
   #   if @auction.update(model_params)
   #     redirect_to [:admin, @auction], notice: "#{Auction.model_name.human} was successfully updated."

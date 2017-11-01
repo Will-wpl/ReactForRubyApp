@@ -6,7 +6,7 @@ RSpec.describe Admin::AuctionsController, type: :controller do
 
   describe "#obtain" do
     def do_request
-      post :save, params: {auction: params}
+      post :create, params: {auction: params}
     end
 
     context 'not auction' do
@@ -47,27 +47,55 @@ RSpec.describe Admin::AuctionsController, type: :controller do
     end
   end
 
-  describe "save" do
+  describe "#create" do
     def do_request
-      post :save, params: {auction: params}
+      post :create, params: { auction: params }
     end
-
     context 'create new auction' do
-      # let(:params) {attributes_for(:auction)}
-      let(:params) {create(:auction)}
+      let(:params) { attributes_for(:auction) }
       it 'success' do
-        expect {do_request}.to change(Auction, :count).by(1)
-      end
-    end
-
-    context 'update exsit auction' do
-      let(:params) {create(:auction)}
-      before { do_request }
-      let(:params) { Hash(id: :auction.id, name: :auction.name + '-modified') }
-      before { do_request }
-      it 'success' do
-        it { expect(Auction.last.name).to match '-modified' }
+        expect { do_request }.to change(Auction, :count).by(1)
       end
     end
   end
+
+  describe "#update" do
+    let(:auction) { create(:auction) }
+    def do_request
+      patch :update, params: {id: auction.id, auction: params }
+    end
+
+    context 'success' do
+      let(:params) { Hash(id: auction.id, name: auction.name + '-modified') }
+
+      before { do_request }
+
+      it { expect(Auction.last.name).to match '-modified' }
+    end
+  end
+
+  # describe "save" do
+  #   let(:auction) { create(:auction) }
+  #
+  #   def do_request
+  #     post :save, params: { auction: params }
+  #   end
+  #
+  #   # context 'create new auction' do
+  #   #   let(:params) {attributes_for(:auction)}
+  #   #   # let(:params) { create(:auction) }
+  #   #   it 'success' do
+  #   #     expect { do_request }.to change(Auction, :count).by(1)
+  #   #   end
+  #   # end
+  #
+  #   context 'update exsit auction' do
+  #
+  #     let(:params) { Hash(name: :auction.name + '-modified') }
+  #     before { do_request }
+  #     it 'success' do
+  #       it { expect(Auction.last.name).to match '-modified' }
+  #     end
+  #   end
+  # end
 end
