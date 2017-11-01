@@ -39,11 +39,18 @@ export default class Ranking extends Component {
                 data: []
             };
             this.props.initialData.forEach((timeRanking) => {
-                let dataArr = [].concat(timeRanking.time).concat(timeRanking.ranking);
-                tmp.data.push(dataArr)
+                // let dataArr = [].concat(timeRanking.time).concat(timeRanking.ranking);
+                // tmp.data.push(dataArr)
+                let d = {
+                    symbol: 'triangle',
+                    symbolSize: 15,
+                    showSymbol: true,
+                    value: []
+                }
+                d.value = [].concat(timeRanking.time).concat(timeRanking.ranking);
+                tmp.data.push(d)
             });
             option.series.push(tmp);
-            console.log(option);
             this.setState({ option: option });
         }
 
@@ -80,7 +87,7 @@ function getTemplate() {
             formatter: (params) => {
                 let result = `<div class="tooltip top">
                                 <div class="tooltip-arrow" style="border-top-color:${params.color}"></div>
-                                <div class="tooltip-inner" style="background-color:${params.color}">${params.data[1]}</div>
+                                <div class="tooltip-inner" style="background-color:${params.color}">${params.value[1]}</div>
                             </div>`;
                 return result;
             }
