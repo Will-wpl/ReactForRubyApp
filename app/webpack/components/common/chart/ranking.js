@@ -61,7 +61,7 @@ export default class Ranking extends Component {
             <ReactEcharts
                 option={this.state.option}
                 notMerge={true}
-                style={{ height: '350px', width: '100%' }}
+                style={{ height: '300px', width: '100%' }}
                 className='react_for_echarts' />
         );
     }
