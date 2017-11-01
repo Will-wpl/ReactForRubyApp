@@ -69,6 +69,15 @@ export default class Ranking extends Component {
 
 function getTemplate() {
     return {
+        calculable: true,
+        dataZoom: {
+            show: true,
+            realtime: true,
+            label: {
+                show: false
+            },
+            showDetail: false
+        },
         grid: {
             top: '2%',
             left: '10%',
@@ -98,12 +107,17 @@ function getTemplate() {
             type: 'time',
             boundaryGap: false,
             axisLabel: {
-                formatter: (value, index) => {
-                    return '';
-                }
+                // formatter: (value, index) => {
+                //     return '';
+                // }
             },
             axisTick: {
                 show: false
+            },
+            axisLine: {
+                lineStyle: {
+                    color: 'white'
+                }
             }
         },
         yAxis: {
@@ -118,6 +132,11 @@ function getTemplate() {
             },
             max: function (value) {
                 return 10;
+            },
+            axisLine: {
+                lineStyle: {
+                    color: 'white'
+                }
             }
         },
         series: []
