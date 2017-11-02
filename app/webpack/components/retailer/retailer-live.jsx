@@ -30,7 +30,7 @@ export class RetailerLive extends Component {
         }else{
             return (
                 <div>
-                    <DuringCountDown />
+                    <DuringCountDown admin_hold="hide" retailer_hold="show" />
                     <LiveHomePage/>
                 </div>
             )
