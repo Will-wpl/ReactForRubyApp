@@ -2,19 +2,22 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import {CreateNewRA} from './create-new-ra';
 import {BidderStatus} from './admin_shared/bidders-status';
-
+import {TimeCuntDown} from '../shared/time-cuntdown';
 export class AdminManagePublishedRa extends Component {
     constructor(props, context){
         super(props);
     }
     render () {
         return (
-            <div className="u-grid">
-                <div className="col-sm-12 col-md-7">
-                    <CreateNewRA />
-                </div>
-                <div className="col-sm-12 col-md-5">
-                    <BidderStatus />
+            <div>
+                <TimeCuntDown />
+                <div className="u-grid u-mt3">
+                    <div className="col-sm-12 col-md-7">
+                        <CreateNewRA left_name="Manage Upcoming Reverse Auction" />
+                    </div>
+                    <div className="col-sm-12 col-md-5">
+                        <BidderStatus />
+                    </div>
                 </div>
             </div>
         )
