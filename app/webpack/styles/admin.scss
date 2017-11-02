@@ -23,6 +23,8 @@
                 border: 1px solid #5d7789;
                 border-radius: 0.3125rem;
               }
+              input.date_ico{background:url("../images/date.png") no-repeat right;}
+              input.time_ico{background:url("../images/time.png") no-repeat right;}
         }
     }
     .createRa_btn{position: absolute; right:0px; bottom:0px;
