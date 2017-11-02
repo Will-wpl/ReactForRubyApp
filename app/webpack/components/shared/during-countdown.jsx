@@ -4,18 +4,20 @@ export class DuringCountDown extends Component {
     constructor(props){
         super(props);
         this.state = {
-            interval:1000
+            interval:1000,
+            retailer_hold:"show",
+            admin_hold:"hide"
         }
     } 
     componentDidMount() {
         setInterval(() => {
-            this.ShowCountDown(2017,11,2,'countdown_timer');
+            this.ShowCountDown(2017,11,2,9,20,'during_countdown_timer');
         }, this.state.interval);
     }
-    ShowCountDown(year,month,day,obj) 
+    ShowCountDown(year,month,day,hours,minutes,obj) 
     { 
         var now = new Date(); 
-        var endDate = new Date(year, month-1, day); 
+        var endDate = new Date(year, month-1, day, hours, minutes); 
         var leftTime=endDate.getTime()-now.getTime(); 
         var leftsecond = parseInt(leftTime/1000); 
         var day=Math.floor(leftsecond/(60*60*24)); 
@@ -32,8 +34,9 @@ export class DuringCountDown extends Component {
                 <p>SP Reverse Auction on 1 Dec 2017,10:00AM</p>
                 <div className="Countdown">
                     <abbr>Countdown Timer:</abbr>
-                    <ol id="countdown_timer"></ol>
-                    <div className="admin_hold"><span>Extend Time:</span><input type="tel" className="fill_hold"/><span>Min</span><input type="submit" className="hold_submit" value="Submit"/></div>
+                    <ol id="during_countdown_timer"></ol>
+                    <div id="admin_hold" className={this.state.admin_hold}><span>Extend Time:</span><input type="tel" className="fill_hold"/><span>Min</span><input type="submit" className="hold_submit" value="Submit"/></div>
+                    <div id="retailer_hold" className={this.state.retailer_hold}><b>Admin has extended auction duration by 2 minuties</b></div>
                 </div>
             </div>
         )

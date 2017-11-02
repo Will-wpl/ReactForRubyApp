@@ -6,7 +6,7 @@ export default class BidForm extends Component {
         return (
             <form>
                 <h3>Enter My Bids</h3>
-                <table className="retailer_fill">
+                <table className="retailer_fill u-mt2">
                     <thead>
                         <tr>
                             <th></th>

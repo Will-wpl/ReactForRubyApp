@@ -34,12 +34,12 @@ export class BidderStatus extends Component {
         return (
             <div className="u-grid bidderStatus">
                 <div className="col-sm-12 col-md-12">
-                <h4>Bidders Status of Acceptance</h4>
+                <h3>Bidders Status of Acceptance</h3>
                 <ul className="bidders_list">
                     {
                         this.state.list_data.map((item,index) => {
                         return(
-                            <li key={index}>
+                            <li key={index} className="u-grid">
                                 <span className="col-md-7">{item.name}</span>
                                 <span className="col-md-3"><abbr className={item.color}></abbr></span>
                                 <span className="col-md-2" onClick={this.showDetail.bind(this,item.message)}>Details</span>     

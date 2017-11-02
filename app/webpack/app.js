@@ -10,8 +10,8 @@
 import "atlas/src/index.js";
 import "./javascripts/shared.js";
 import "./styles/app.scss";
-import "components/retailers/retailer-manage-coming";
-import "components/retailers/retailer-live";
+import "components/retailer/retailer-manage-coming";
+import "components/retailer/retailer-live";
 
 ActionCable = require('actioncable')
 
