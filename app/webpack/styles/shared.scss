@@ -17,7 +17,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
      tr{
        td{border:1px solid #314657; text-align: center; height: 40px;
         input{
-          width: 60px; display: inline-block; border:1px solid #fff; margin-left: 5px; background: none;
+          width: 60px; display: inline-block; padding:2px; border:1px solid #fff; margin-left: 5px; background: none;
         }
       }   
      }
@@ -32,20 +32,29 @@ abbr[title]{color: #fe0000; text-decoration: none;}
     font-size:20px; line-height: 30px; margin-top: 10px;
     abbr{float: left; line-height: 60px;}
   }
-  #countdown_timer {
+  #countdown_timer,#during_countdown_timer{
     width:300px; overflow: hidden; float: left;
       span{
         width: 25%; float: left; text-align: center; font-size:14px !important;
         font{ font-size:35px; display: block;}
       }
   }
+  #during_countdown_timer{
+    width: 200px;
+    span{
+      width: 50%;
+    }
+  }
  }
  .during{
   background:#fbb136; color: #000;
+  .show{ display: block;}
+  .hide{ display: none;}
   p{color: #000;}
-  .admin_hold{
+  #admin_hold,#retailer_hold{
     float: left; line-height: 60px; width: 380px;
     span,input{display: inline-block;}
+    b{ font-size: 14px; color:#fff; background: #E60013; padding: 4px;}
     .fill_hold{ width:60px; background: #fff; color:#000; margin:0px 10px; border:1px solid #000; text-indent: 10px; padding: 0px; height: 26px;}
     .hold_submit{ background: #22ad38; border:none; margin-left: 10px; color:#fff; padding: 3px 10px; border-radius: 5px;}
   }

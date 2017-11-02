@@ -9,7 +9,7 @@ export class TimeCuntDown extends Component {
     } 
     componentDidMount() {
         setInterval(() => {
-            this.ShowCountDown(2017,11,2,'countdown_timer');
+            this.ShowCountDown(2018,1,12,'countdown_timer');
         }, this.state.interval);
     }
     ShowCountDown(year,month,day,obj) 

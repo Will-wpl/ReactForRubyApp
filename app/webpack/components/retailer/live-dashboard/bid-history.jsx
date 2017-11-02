@@ -6,7 +6,7 @@ export default class BidHistory extends Component {
         return (
             <form>
                 <h3>My Bid History</h3>
-                <table className="retailer_fill">
+                <table className="retailer_fill u-mt2">
                     <thead>
                         <tr><th colSpan="8" className="table_title">Bid Price</th></tr>
                         <tr>

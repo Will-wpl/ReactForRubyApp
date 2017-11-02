@@ -17,13 +17,13 @@ export default class LiveHomePage extends Component {
         return (
             <div>
                 {/* <LiveCountdown /> */}
-                <div className="u-grid">
-                    <div className="col-sm-12 col-md-5 u-cell"><Description /></div>
-                    <div className="col-sm-12 col-md-7 u-cell"><Ranking initialData={data} /></div>
+                <div className="u-grid u-mt2">
+                    <div className="col-sm-12 col-md-5 u-cell"><div className="col-sm-12 col-md-10 push-md-1"><Description /></div></div>
+                    <div className="col-sm-12 col-md-7 u-cell"><div className="col-sm-12 col-md-10 push-md-1"><Ranking initialData={data} /></div></div>
                 </div>
                 <div className="u-grid u-mt2">
-                    <div className="col-sm-12 col-md-5 u-cell"><BidForm /></div>
-                    <div className="col-sm-12 col-md-7 u-cell"><BidHistory /></div>
+                    <div className="col-sm-12 col-md-5 u-cell"><div className="col-sm-12 col-md-10 push-md-1"><BidForm /></div></div>
+                    <div className="col-sm-12 col-md-7 u-cell"><div className="col-sm-12 col-md-10 push-md-1"><BidHistory /></div></div>
                 </div>
             </div>
         );

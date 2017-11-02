@@ -26,7 +26,7 @@ export class RetailsOnlineStatus extends Component {
                     {
                         this.state.list_data.map((item,index) => {
                         return(
-                            <li key={index}>
+                            <li key={index} className="u-grid">
                                 <span className="col-md-9">{item.name}</span>
                                 <span className="col-md-3"><abbr className={item.status}></abbr></span>
                             </li>
