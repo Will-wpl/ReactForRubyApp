@@ -15,6 +15,7 @@ export class CreateNewRA extends Component {
             endDate:"",ra_time_end_error:"",
             ra_duration:"",ra_duration_error:"",
             ra_price:"",ra_price_error:"",
+            left_name:this.props.left_name
         };
         this.starttimeChange = this.starttimeChange.bind(this);
         this.endtimeChange = this.endtimeChange.bind(this);
@@ -42,10 +43,25 @@ export class CreateNewRA extends Component {
         })
     }
     render () {
+        let left_name ="";
+        let btn_html ="";
+        if(this.props.left_name == undefined){
+            left_name = "Create New Reverse Auction";
+                btn_html = <div className="createRa_btn">
+                                <button className="lm--button lm--button--primary">Save</button>
+                                <button className="lm--button lm--button--primary">Delete</button>
+                                <button className="lm--button lm--button--primary">Publish</button>
+                            </div>
+        }else{
+            left_name = this.props.left_name;
+            btn_html = <div className="createRa_btn">
+                            <button className="lm--button lm--button--primary">Edit</button>
+                        </div>
+        }
         return (
             <div className="createRaMain">
             <div>
-                <h2>Creat New Reverse Auction</h2>
+                <h2>{left_name}</h2>
                 <form action="" ref="CreatRaForm" method="post">
                 <dl className="vw-block vw-block-cols creatRa">
                     <dd className="lm--formItem lm--formItem--inline string optional">
@@ -100,11 +116,7 @@ export class CreateNewRA extends Component {
                     <dd className="lm--formItem lm--formItem--inline string optional"><span className="lm--formItem-left lm--formItem-label string optional">Extension :</span><label className="lm--formItem-right lm--formItem-control"><b className="textLeft">Manual</b></label></dd>
                     <dd className="lm--formItem lm--formItem--inline string optional"><span className="lm--formItem-left lm--formItem-label string optional">Average price :</span><label className="lm--formItem-right lm--formItem-control"><b className="textLeft">Weighted Average</b></label></dd>
                 </dl>
-                <div className="createRa_btn">
-                    <button className="lm--button lm--button--primary">Save</button>
-                    <button className="lm--button lm--button--primary">Delete</button>
-                    <button className="lm--button lm--button--primary">Publish</button>
-                </div>
+                {btn_html}
                 </form>
             </div>
             </div>

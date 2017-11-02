@@ -65,6 +65,10 @@
                 abbr.outline{background: url("../images/red.png") no-repeat center;}
                 abbr.holding{background: url("../images/Yellow.png") no-repeat center;}
             }
+            span:last-child{
+                border:none;
+                cursor: pointer;
+            }
         }
     }
 }

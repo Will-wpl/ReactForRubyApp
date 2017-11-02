@@ -67,8 +67,8 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 .modal_hide{ opacity: 0; z-index: -1;}
 .modal_show{ opacity: 1; z-index: 10;}
 #modal_main{ position: absolute; transition: 0.8s all;
-  width:320px; height:150px; background-color: rgba(0, 0, 0, 0.6);
-  top:50%; left:50%; margin: -75px 0px 0px -150px;
+  width:420px; min-height:200px; background-color: rgba(0, 0, 0, 0.6);
+  top:25%; left:50%; margin: -100px 0px 0px -210px;
   h4{
     height: 32px; line-height: 32px; width: 100%; margin: 0 auto;
     span{ float: left; padding-left: 5px;}
