@@ -21,13 +21,13 @@ export default class RetailerRanking extends Component {
             {"name":"Senoko","price":"$ 0.0739/kWh"},
             {"name":"Senoko","price":"$ 0.0739/kWh"},
             {"name":"Senoko","price":"$ 0.0739/kWh"}
-        ],
+        ]
     }
 }
   render() {
     return (
       <div className="retailrank_main">
-      <h4>Retailer Ranking</h4>
+      <h3>Retailer Ranking</h3>
       <div className="retailrank_box">
       <table className="retailer_fill" cellPadding="0" cellSpacing="0">
         <thead>
@@ -39,7 +39,7 @@ export default class RetailerRanking extends Component {
           </thead>
           <tbody>
             {
-              this.state.list_Data.map((item,index)=>{
+              this.state.list_data.map((item,index)=>{
                 return(
                   <tr key={index}><td>{index+1}</td><td>{item.name}</td><td>{item.price}</td></tr>
                 )
