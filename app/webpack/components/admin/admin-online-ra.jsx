@@ -181,7 +181,7 @@ export class AdminOnlineRa extends Component {
                                 <CheckboxList list={this.state.users} onCheckeds={this.filterPrice.bind(this)}/>
                             </div>
                         </div>
-                        <div className="u-grid">
+                        <div className="u-grid u-mt2">
                             <div className="col-sm-9">
                                 <Ranking initialData={data} ref="rankingChart" />
                             </div>
