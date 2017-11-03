@@ -8,21 +8,37 @@ export default class Price extends Component {
         this.state = { option: getTemplate() };
     }
 
-    filterData(ids) {
+    filterData(ids, realtimeData) {
         let option = getTemplate();
         if (ids.length > 0) {
-            ids.forEach(id => {
-                let result = this.props.data.find(element => {
-                    return element.id === id;
+            ids.forEach(idColor => {
+                let result = realtimeData.find(element => {
+                    return element.id === idColor.id;
                 });
                 if (result) {
                     let tmp = {
                         type: 'line',
-                        data: []
+                        data: [],
+                        itemStyle: {
+                            normal: {
+                                color: idColor.color,
+                                lineStyle: {
+                                    color: idColor.color
+                                }
+                            }
+                        }
                     };
                     result.data.forEach((timePrice) => {
-                        let dataArr = [].concat(timePrice.time).concat(timePrice.price);
-                        tmp.data.push(dataArr)
+                        // let dataArr = [].concat(timePrice.time).concat(timePrice.price);
+                        // tmp.data.push(dataArr)
+                        let d = {
+                            symbol: 'triangle',
+                            symbolSize: 15,
+                            showSymbol: true,
+                            value: []
+                        };
+                        d.value = [].concat(timePrice.time).concat(timePrice.price);
+                        tmp.data.push(d);
                     });
                     option.series.push(tmp);
                 }
@@ -36,18 +52,24 @@ export default class Price extends Component {
             let option = getTemplate();
             let tmp = {
                 type: 'line',
-                data: []
+                data: [],
+                itemStyle: {
+                    normal: {
+                        color: '#e5e816',
+                        lineStyle: {
+                            color: '#e5e816'
+                        }
+                    }
+                }
             };
             this.props.initialData.forEach((timePrice) => {
-                // let dataArr = [].concat(timePrice.time).concat(timePrice.ranking);
-                // tmp.data.push(dataArr)
                 let d = {
                     symbol: 'triangle',
                     symbolSize: 15,
                     showSymbol: true,
                     value: []
                 }
-                d.value = [].concat(timePrice.time).concat(timePrice.ranking);
+                d.value = [].concat(timePrice.time).concat(timePrice.price);
                 tmp.data.push(d)
             });
             option.series.push(tmp);
