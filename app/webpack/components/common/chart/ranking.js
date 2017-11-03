@@ -113,12 +113,17 @@ function getTemplate() {
             triggerOn: 'mousemove|click',
             backgroundColor: 'transparent',
             position: (point, params, dom, rect, size) => {
-                return [point[0] - 28, point[1] - 50];
+                return [point[0] - dom.scrollWidth / 2, point[1] - dom.scrollHeight - 16];
             },
             formatter: (params) => {
                 let result = `<div class="tooltip top">
                                 <div class="tooltip-arrow" style="border-top-color:${params.color}"></div>
-                                <div class="tooltip-inner" style="background-color:${params.color};color:black">${params.value[1]}</div>
+                                <div class="tooltip-inner" style="background-color:${params.color};color:black">
+                                    <strong>asdfasdf</strong>
+                                    <div>fdasdfasdfasdfasdfasdffffffdasdfasdfasdfasdfasdfffff</div>
+                                    <div>fdasdfasdfasdfasdfasdf</div>
+                                    <div>${params.value[1]}</div>
+                                </div>
                             </div>`;
                 return result;
             }
