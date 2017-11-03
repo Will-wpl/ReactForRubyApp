@@ -4,8 +4,9 @@ $(function () {
     // auctionCreate();
     // auctionUpdate();
     // auctionPublish();
-    arrangementList();
-    // arrangementUserDetail();
+    // arrangementList();
+    // arrangementDetail();
+    arrangementUpdate();
     function auctionObtain() {
         $.ajax({
             type: "GET",
@@ -104,7 +105,7 @@ $(function () {
         });
     }
 
-    function arrangementUserDetail(){
+    function arrangementDetail(){
         $.ajax({
             type: "GET",
             url: '/api/arrangements/2',
@@ -113,6 +114,39 @@ $(function () {
                 console.log(data);
             },
             dataType: 'json'
+        });
+    }
+
+    function arrangementUpdate(){
+        $.ajax({
+            type: "PATCH",
+            dataType: 'json',
+            beforeSend: $.rails.CSRFProtection,
+            url: '/api/arrangements/2',
+            data: {
+                arrangement: {
+                    "id": 2,
+                    "main_name": "hello",
+                    "main_email_address": "",
+                    "main_mobile_number": "",
+                    "main_office_number": "",
+                    "alternative_name": null,
+                    "alternative_email_address": null,
+                    "alternative_mobile_number": null,
+                    "alternative_office_number": null,
+                    "lt_peak": null,
+                    "lt_off_peak": null,
+                    "hts_peak": null,
+                    "hts_off_peak": null,
+                    "htl_peak": null,
+                    "htl_off_peak": null,
+                    "accept_status": "2"
+                }
+            },
+            success: (data) => {
+                console.log('auctionUpdate');
+                console.log(data);
+            }
         });
     }
 
