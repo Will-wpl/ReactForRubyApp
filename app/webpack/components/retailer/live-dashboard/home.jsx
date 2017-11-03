@@ -5,7 +5,7 @@ import Description from './description';
 import Ranking from '../../common/chart/ranking';
 import BidForm from './bid-form';
 import BidHistory from './bid-history';
-import {findUpLimit, getRandomColor} from '../../common/util';
+import {findUpLimit, getRandomColor} from '../../../javascripts/componentService/util';
 
 export default class LiveHomePage extends Component {
 
