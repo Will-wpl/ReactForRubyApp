@@ -8,21 +8,36 @@ export default class Ranking extends Component {
         this.state = { option: getTemplate() };
     }
 
-    filterData(ids) {
+    filterData(ids, realtimeData) {
         let option = getTemplate();
         if (ids.length > 0) {
-            ids.forEach(id => {
-                let result = this.props.data.find(element => {
-                    return element.id === id;
+            ids.forEach(idColor => {
+                let result = realtimeData.find(element => {
+                    return element.id === idColor.id;
                 });
                 if (result) {
+                    console.log(result);
                     let tmp = {
                         type: 'line',
-                        data: []
+                        data: [],
+                        itemStyle: {
+                            normal: {
+                                color: idColor.color,
+                                lineStyle: {
+                                    color: idColor.color
+                                }
+                            }
+                        }
                     };
                     result.data.forEach((timeRanking) => {
-                        let dataArr = [].concat(timeRanking.time).concat(timeRanking.ranking);
-                        tmp.data.push(dataArr)
+                        let d = {
+                            symbol: 'triangle',
+                            symbolSize: 15,
+                            showSymbol: true,
+                            value: []
+                        };
+                        d.value = [].concat(timeRanking.time).concat(timeRanking.ranking);
+                        tmp.data.push(d);
                     });
                     option.series.push(tmp);
                 }
@@ -34,23 +49,31 @@ export default class Ranking extends Component {
     componentDidMount() {
         if (this.props.initialData) {
             let option = getTemplate();
-            let tmp = {
-                type: 'line',
-                data: []
-            };
-            this.props.initialData.forEach((timeRanking) => {
-                // let dataArr = [].concat(timeRanking.time).concat(timeRanking.ranking);
-                // tmp.data.push(dataArr)
-                let d = {
-                    symbol: 'triangle',
-                    symbolSize: 15,
-                    showSymbol: true,
-                    value: []
-                }
-                d.value = [].concat(timeRanking.time).concat(timeRanking.ranking);
-                tmp.data.push(d)
+            this.props.initialData.forEach((element) => {
+                let tmp = {
+                    type: 'line',
+                    data: [],
+                    itemStyle: {
+                        normal: {
+                            color: '#e5e816',
+                            lineStyle: {
+                                color: '#e5e816'
+                            }
+                        }
+                    }
+                };
+                element.data.forEach((timeRanking) => {
+                    let d = {
+                        symbol: 'triangle',
+                        symbolSize: 15,
+                        showSymbol: true,
+                        value: []
+                    };
+                    d.value = [].concat(timeRanking.time).concat(timeRanking.ranking);
+                    tmp.data.push(d);
+                })
+                option.series.push(tmp);
             });
-            option.series.push(tmp);
             this.setState({ option: option });
         }
 
@@ -90,7 +113,6 @@ function getTemplate() {
             triggerOn: 'mousemove|click',
             backgroundColor: 'transparent',
             position: (point, params, dom, rect, size) => {
-                // 固定在顶部
                 return [point[0] - 28, point[1] - 50];
             },
             formatter: (params) => {
