@@ -8,51 +8,113 @@ if User.count == 0
   @admin.add_role :admin
   Role.create(name: 'retailer')
   Role.create(name: 'buyer')
+
+  @mark = User.create(name: 'mark',
+                      email: 'mark@example.com',
+                      password: 'password',
+                      password_confirmation: 'password',
+                      company_name:'TEST_1')
+  @mark.add_role :retailer
+
+  @brian = User.create(name: 'brian',
+                       email: 'brian@example.com',
+                       password: 'password',
+                       password_confirmation: 'password',
+                       company_name:'TEST_2')
+  @brian.add_role :retailer
+
+  @jason = User.create(name: 'jason',
+                       email: 'jason@example.com',
+                       password: 'password',
+                       password_confirmation: 'password',
+                       company_name:'TEST_3')
+  @jason.add_role :retailer
+
+  @will = User.create(name: 'will',
+                      email: 'will@example.com',
+                      password: 'password',
+                      password_confirmation: 'password',
+                      company_name:'TEST_4')
+  @will.add_role :retailer
+
+  @judy = User.create(name: 'judy',
+                      email: 'judy@example.com',
+                      password: 'password',
+                      password_confirmation: 'password',
+                      company_name:'TEST_5')
+  @judy.add_role :retailer
 end
 
 if Auction.count == 0
   Auction.create(name: 'SP Reverse Auction',
-                 start_datetime: DateTime.new(2017, 12, 1,
-                                              10, 0, 0),
-                 contract_period_start_date: Date.new(2018, 1, 1),
-                 contract_period_end_date: Date.new(2018, 6, 30),
-                 duration: 10,
-                 reserve_price: 0.1477)
+                 start_datetime: nil,
+                 contract_period_start_date: nil,
+                 contract_period_end_date: nil,
+                 duration: nil,
+                 reserve_price: nil)
 end
 
 if Arrangement.count == 0
-  result = Arrangement.create(main_name: 'mark',
-                     main_email_address: 'mark@example.com',
-                     main_mobile_number: '87654321',
-                     main_office_number: '12345678',
-                     lt_peak: 0.1231,
-                     lt_off_peak: 0.2121,
-                     hts_peak: 0.2121,
-                     hts_off_peak: 0.3212,
-                     htl_peak: 0.1111,
-                     htl_off_peak: 0.3332,
+  Arrangement.create(main_name: '',
+                     main_email_address: '',
+                     main_mobile_number: '',
+                     main_office_number: '',
+                     lt_peak: nil,
+                     lt_off_peak: nil,
+                     hts_peak: nil,
+                     hts_off_peak: nil,
+                     htl_peak: nil,
+                     htl_off_peak: nil,
                      user_id: 2,
-                     auction_id: 1,
-                     )
-
-  p result
+                     auction_id: 1)
+  Arrangement.create(main_name: '',
+                     main_email_address: '',
+                     main_mobile_number: '',
+                     main_office_number: '',
+                     lt_peak: nil,
+                     lt_off_peak: nil,
+                     hts_peak: nil,
+                     hts_off_peak: nil,
+                     htl_peak: nil,
+                     htl_off_peak: nil,
+                     user_id: 3,
+                     auction_id: 1)
+  Arrangement.create(main_name: '',
+                     main_email_address: '',
+                     main_mobile_number: '',
+                     main_office_number: '',
+                     lt_peak: nil,
+                     lt_off_peak: nil,
+                     hts_peak: nil,
+                     hts_off_peak: nil,
+                     htl_peak: nil,
+                     htl_off_peak: nil,
+                     user_id: 4,
+                     auction_id: 1)
+  Arrangement.create(main_name: '',
+                     main_email_address: '',
+                     main_mobile_number: '',
+                     main_office_number: '',
+                     lt_peak: nil,
+                     lt_off_peak: nil,
+                     hts_peak: nil,
+                     hts_off_peak: nil,
+                     htl_peak: nil,
+                     htl_off_peak: nil,
+                     user_id: 5,
+                     auction_id: 1)
+  Arrangement.create(main_name: '',
+                     main_email_address: '',
+                     main_mobile_number: '',
+                     main_office_number: '',
+                     lt_peak: nil,
+                     lt_off_peak: nil,
+                     hts_peak: nil,
+                     hts_off_peak: nil,
+                     htl_peak: nil,
+                     htl_off_peak: nil,
+                     user_id: 6,
+                     auction_id: 1)
 end
 
-if Arrangement.count == 1
-  result = Arrangement.create(main_name: 'brian',
-                              main_email_address: 'brian@example.com',
-                              main_mobile_number: '87654321',
-                              main_office_number: '12345678',
-                              lt_peak: 0.1231,
-                              lt_off_peak: 0.2121,
-                              hts_peak: 0.2121,
-                              hts_off_peak: 0.3212,
-                              htl_peak: 0.1111,
-                              htl_off_peak: 0.3332,
-                              user_id: 2,
-                              auction_id: 1,
-  )
-
-  p result
-end
 
