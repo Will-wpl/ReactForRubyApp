@@ -25,8 +25,8 @@ export default class WinnerPrice extends Component {
   render() {
     return (
       <div className="winnerPrice_main">
-        <h2 className={this.state.showOrhide}><span className={this.state.statusColor}>{this.state.showStatus}</span></h2>
-        <h4>Summary of Lowest Bidder</h4>
+        <h2 className={this.props.showOrhide}><span className={this.props.statusColor}>Status : {this.props.showStatus}</span></h2>
+        <h4 className="u-mt1">Summary of Lowest Bidder</h4>
         <ul>
           <li><span>Lowest Price Bidder:</span><span>{this.state.listData.name}</span></li>
           <li><span>Winning Price:</span><span>{this.state.listData.price}</span></li>
