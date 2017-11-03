@@ -16,7 +16,6 @@ export default class Ranking extends Component {
                     return element.id === idColor.id;
                 });
                 if (result) {
-                    console.log(result);
                     let tmp = {
                         type: 'line',
                         data: [],
