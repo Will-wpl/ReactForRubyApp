@@ -6,7 +6,8 @@ $(function () {
     // auctionPublish();
     // arrangementList();
     // arrangementDetail();
-    arrangementUpdate();
+    // arrangementUpdate();
+    aucitonLink();
     function auctionObtain() {
         $.ajax({
             type: "GET",
@@ -83,7 +84,7 @@ $(function () {
             beforeSend: $.rails.CSRFProtection,
             url: '/api/auctions/1/publish',
             data: {
-                publish_status: 'true'
+                publish_status: '0'
             },
             success: (data) => {
                 console.log('auctionUpdate');
@@ -150,4 +151,15 @@ $(function () {
         });
     }
 
+    function aucitonLink(){
+        $.ajax({
+            type: "GET",
+            url: '/api/auctions/link',
+            success: (data) => {
+                console.log('auctionLink');
+                console.log(data);
+            },
+            dataType: 'json'
+        });
+    }
 });

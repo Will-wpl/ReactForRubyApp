@@ -25,7 +25,7 @@ Rails.application.routes.draw do
       end
       collection do
         get 'obtain'
-        get 'links'
+        get 'link'
       end
     end
   end
