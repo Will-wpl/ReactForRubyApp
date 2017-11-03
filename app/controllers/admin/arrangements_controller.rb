@@ -4,64 +4,47 @@ class Admin::ArrangementsController < Admin::BaseController
   before_action :set_arrangements_breadcrumbs
   before_action :set_action_breadcrumbs
 
-  # GET arrangement list by auction_id
-  # accept_status ['0','1','2'] '0':reject '1':accept '2':pending
-  def list
-    query = Arrangement.select('users.company_name ,arrangements.id , arrangements.accept_status , arrangements.auction_id , arrangements.user_id ').joins(:user).order(:accept_status)
-    if params[:accept_status] == nil
-      @arrangementsList = query.where('auction_id': params[:auction_id])
-    else
-        @arrangementsList = query.where('auction_id = :auction_id and accept_status = :accept_status ', {auction_id: params[:auction_id], accept_status: params[:accept_status]})
-    end
-    # @arrangementsList = Arrangement.select('users.company_name ,arrangements.id , arrangements.accept_status , arrangements.auction_id , arrangements.user_id ').joins(:user).where('auction_id': params[:auction_id]).order(:accept_status)
-    render json: @arrangementsList, status: 200
-  end
 
-  # GET user arrangement detail info by auction_id and user_id
-  def detail
-    @arrangement = Arrangement.find(params[:id])
-    render json: @arrangement, status: 200
-  end
 
-  def index
-    @arrangements = Arrangement.order(created_at: :desc).page(params[:page])
-  end
+  # def index
+  #   @arrangements = Arrangement.order(created_at: :desc).page(params[:page])
+  # end
+  #
+  # def new
+  #   @arrangement = Arrangement.new
+  # end
+  #
+  # def create
+  #   @arrangement = Arrangement.new(model_params)
+  #   # adminUser = User.find_by_name('mark')
+  #   # auction = Auction.first
+  #   @arrangement.user
+  #   if @arrangement.save
+  #     redirect_to [:admin, @arrangement], notice: "#{Arrangement.model_name.human} was successfully created."
+  #   else
+  #     render :new
+  #   end
+  # end
+  #
+  # def show
+  # end
+  #
+  # def edit
+  # end
 
-  def new
-    @arrangement = Arrangement.new
-  end
-
-  def create
-    @arrangement = Arrangement.new(model_params)
-    # adminUser = User.find_by_name('mark')
-    # auction = Auction.first
-    @arrangement.user
-    if @arrangement.save
-      redirect_to [:admin, @arrangement], notice: "#{Arrangement.model_name.human} was successfully created."
-    else
-      render :new
-    end
-  end
-
-  def show
-  end
-
-  def edit
-  end
-
-  def update
-    if @arrangement.update(model_params)
-      redirect_to [:admin, @arrangement], notice: "#{Arrangement.model_name.human} was successfully updated."
-    else
-      render :edit
-    end
-  end
-
-  def destroy
-    @arrangement.destroy
-
-    redirect_to admin_arrangements_path, notice: "#{Arrangement.model_name.human} was successfully destroyed."
-  end
+  # def update
+  #   if @arrangement.update(model_params)
+  #     redirect_to [:admin, @arrangement], notice: "#{Arrangement.model_name.human} was successfully updated."
+  #   else
+  #     render :edit
+  #   end
+  # end
+  #
+  # def destroy
+  #   @arrangement.destroy
+  #
+  #   redirect_to admin_arrangements_path, notice: "#{Arrangement.model_name.human} was successfully destroyed."
+  # end
 
   private
 

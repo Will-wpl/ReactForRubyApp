@@ -4,12 +4,12 @@ $(function () {
     // auctionCreate();
     // auctionUpdate();
     // auctionPublish();
-    // arrangementList();
+    arrangementList();
     // arrangementUserDetail();
     function auctionObtain() {
         $.ajax({
             type: "GET",
-            url: '/admin/auctions/obtain',
+            url: '/api/auctions/obtain',
             success: (data) => {
                 console.log('auctionObtain');
                 console.log(data);
@@ -23,7 +23,7 @@ $(function () {
             type: "POST",
             dataType: 'json',
             beforeSend: $.rails.CSRFProtection,
-            url: '/admin/auctions',
+            url: '/api/auctions',
             data: {
                 auction: {
                     actual_begin_time: null,
@@ -51,7 +51,7 @@ $(function () {
             type: "PATCH",
             dataType: 'json',
             beforeSend: $.rails.CSRFProtection,
-            url: '/admin/auctions/1',
+            url: '/api/auctions/1',
             data: {
                 auction: {
                     id: 1,
@@ -80,7 +80,7 @@ $(function () {
             type: "PUT",
             dataType: 'json',
             beforeSend: $.rails.CSRFProtection,
-            url: '/admin/auctions/1/publish',
+            url: '/api/auctions/1/publish',
             data: {
                 publish_status: 'true'
             },
@@ -94,8 +94,8 @@ $(function () {
     function arrangementList(){
         $.ajax({
             type: "GET",
-            url: '/admin/arrangements/list',
-            data: { auction_id: 1 },
+            url: '/api/arrangements/list',
+            data: { auction_id: 1, accept_status: '1'},
             success: (data) => {
                 console.log('arrangementsList');
                 console.log(data);
@@ -107,7 +107,7 @@ $(function () {
     function arrangementUserDetail(){
         $.ajax({
             type: "GET",
-            url: '/admin/arrangements/detail',
+            url: '/api/arrangements/detail',
             data: { id: 2 },
             success: (data) => {
                 console.log('arrangementsUserDetail');
