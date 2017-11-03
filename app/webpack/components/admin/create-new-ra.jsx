@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import DatePicker from 'react-datepicker';
 import moment from 'moment'; 
 import 'react-datepicker/dist/react-datepicker.css';
-import {create} from '../../javascripts/http';
+import {createRa} from '../../javascripts/componentService/admin/service';
 import {Modal} from '../shared/show-modal';
 
 export class CreateNewRA extends Component {
@@ -54,7 +54,7 @@ export class CreateNewRA extends Component {
     checkSuccess(event,obj){
         event.preventDefault();
         if(this.state.btn_type == "save"){
-            create('/admin/auctions', {
+            createRa({
                 auction: {
                     actual_begin_time: null,
                     actual_end_time: null,
@@ -69,7 +69,7 @@ export class CreateNewRA extends Component {
                     total_volume: null,text:""
                 }
             }).then(res => {
-                console.log(res);
+                sessionStorage.setItem('raInfo', JSON.stringify(res));
                 this.setState({text:"Create Auction Success"})
                 this.refs.Modal.showModal();
                 setTimeout(() => {
