@@ -65,6 +65,7 @@ if Arrangement.count == 0
                      hts_off_peak: nil,
                      htl_peak: nil,
                      htl_off_peak: nil,
+                     accept_status: '2',
                      user_id: 2,
                      auction_id: 1)
   Arrangement.create(main_name: '',
@@ -77,6 +78,7 @@ if Arrangement.count == 0
                      hts_off_peak: nil,
                      htl_peak: nil,
                      htl_off_peak: nil,
+                     accept_status: '2',
                      user_id: 3,
                      auction_id: 1)
   Arrangement.create(main_name: '',
@@ -89,6 +91,7 @@ if Arrangement.count == 0
                      hts_off_peak: nil,
                      htl_peak: nil,
                      htl_off_peak: nil,
+                     accept_status: '2',
                      user_id: 4,
                      auction_id: 1)
   Arrangement.create(main_name: '',
@@ -101,6 +104,7 @@ if Arrangement.count == 0
                      hts_off_peak: nil,
                      htl_peak: nil,
                      htl_off_peak: nil,
+                     accept_status: '2',
                      user_id: 5,
                      auction_id: 1)
   Arrangement.create(main_name: '',
@@ -113,6 +117,7 @@ if Arrangement.count == 0
                      hts_off_peak: nil,
                      htl_peak: nil,
                      htl_off_peak: nil,
+                     accept_status: '2',
                      user_id: 6,
                      auction_id: 1)
 end
