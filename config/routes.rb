@@ -25,6 +25,7 @@ Rails.application.routes.draw do
       end
       collection do
         get 'obtain'
+        get 'links'
       end
     end
   end
@@ -39,9 +40,16 @@ Rails.application.routes.draw do
     resources :arrangements
     resources :auctions do
       member do
-        get 'upcoming'
-        get 'online'
-        get 'dashboard'
+        get 'upcoming' # published and pre-auction page
+        get 'online' # published and pre-auciton page to retailer online status page
+        get 'dashboard' # live page
+        get 'confirm' # confirm or void auction page
+        get 'result' # auciton result page
+        get 'report' # auciton report page
+        get 'log' # auction activity log page
+      end
+      collection do
+        get 'empty' # no published auction page
       end
     end
   end
