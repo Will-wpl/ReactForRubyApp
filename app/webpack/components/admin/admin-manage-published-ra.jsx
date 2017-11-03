@@ -6,6 +6,7 @@ import {TimeCuntDown} from '../shared/time-cuntdown';
 export class AdminManagePublishedRa extends Component {
     constructor(props, context){
         super(props);
+        //this.user_info=sessionStorage.getItem('raInfo');
     }
     render () {
         return (
