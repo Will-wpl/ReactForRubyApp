@@ -104,7 +104,7 @@ function getTemplate() {
         grid: {
             top: '2%',
             left: '10%',
-            right: '1%',
+            right: '2%',
             bottom: '3%',
             containLabel: true
         },
