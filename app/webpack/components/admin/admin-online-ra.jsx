@@ -153,17 +153,17 @@ export class AdminOnlineRa extends Component {
                 <DuringCountDown admin_hold="show" retailer_hold="hide" />
                 <div className="u-grid u-mt3">
                     <div className="col-sm-12 col-md-7">
-                        <div className="u-grid u-mt3">
+                        <div className="u-grid u-mt2">
                             <div className="col-sm-9">
                             </div>
-                            <div className="col-sm-3">
+                            <div className="col-sm-2 push-md-1">
                             </div>
                         </div>
-                        <div className="u-grid u-mt3">
+                        <div className="u-grid">
                             <div className="col-sm-9">
                                 <Ranking initialData={data} ref="rankingChart"/>
                             </div>
-                            <div className="col-sm-3">
+                            <div className="col-sm-2 push-md-1">
                                 <CheckboxList list={this.state.users} onCheckeds={this.filterRanking.bind(this)}/>
                             </div>
                         </div>
