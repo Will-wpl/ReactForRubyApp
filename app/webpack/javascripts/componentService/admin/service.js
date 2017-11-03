@@ -5,5 +5,9 @@ export const getArrangements = (status) => {
 }
 
 export const createRa = (params) => {
-    return create('/api/auctions', params);
+    return update('/api/auctions', params);
+}
+
+export const getAuctionInVersionOne = () => {
+    return get('/api/auctions/obtain');
 }
