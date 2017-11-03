@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171030095933) do
+ActiveRecord::Schema.define(version: 20171103054716) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -110,6 +110,12 @@ ActiveRecord::Schema.define(version: 20171030095933) do
     t.decimal "total_volume"
     t.string "publish_status"
     t.string "published_gid"
+    t.decimal "total_lt_peak"
+    t.decimal "total_lt_off_peak"
+    t.decimal "total_hts_peak"
+    t.decimal "total_hts_off_peak"
+    t.decimal "total_htl_peak"
+    t.decimal "total_htl_off_peak"
   end
 
   create_table "roles", id: :serial, force: :cascade do |t|
