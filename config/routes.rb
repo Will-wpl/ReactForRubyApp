@@ -12,13 +12,7 @@ Rails.application.routes.draw do
     match 'log_out', to: 'devise/sessions#destroy', as: :destroy_user_session, via: Devise.mappings[:user].sign_out_via
   end
 
-  namespace :admin do
-    # get '/' => 'admin/home#index'
-    resources :home, only: :index
-    resources :users
-    resources :auction_results
-    resources :auction_histories
-    resources :auction_events
+  namespace :api do
     resources :arrangements do
       collection do
         get 'list'
@@ -27,15 +21,29 @@ Rails.application.routes.draw do
     end
     resources :auctions do
       member do
-        get 'upcoming'
-        get 'online'
-        get 'dashboard'
         put 'publish'
         put 'hold'
         post 'confirm'
       end
       collection do
         get 'obtain'
+      end
+    end
+  end
+
+  namespace :admin do
+    # get '/' => 'admin/home#index'
+    resources :home, only: :index
+    resources :users
+    resources :auction_results
+    resources :auction_histories
+    resources :auction_events
+    resources :arrangements
+    resources :auctions do
+      member do
+        get 'upcoming'
+        get 'online'
+        get 'dashboard'
       end
     end
   end
