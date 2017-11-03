@@ -94,8 +94,8 @@ $(function () {
     function arrangementList(){
         $.ajax({
             type: "GET",
-            url: '/api/arrangements/list',
-            data: { auction_id: 1, accept_status: '1'},
+            url: '/api/arrangements',
+            data: { auction_id: 1, accept_status: '2'},
             success: (data) => {
                 console.log('arrangementsList');
                 console.log(data);
@@ -107,8 +107,7 @@ $(function () {
     function arrangementUserDetail(){
         $.ajax({
             type: "GET",
-            url: '/api/arrangements/detail',
-            data: { id: 2 },
+            url: '/api/arrangements/2',
             success: (data) => {
                 console.log('arrangementsUserDetail');
                 console.log(data);
