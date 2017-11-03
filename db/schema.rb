@@ -24,12 +24,12 @@ ActiveRecord::Schema.define(version: 20171030095933) do
     t.string "alternative_email_address"
     t.string "alternative_mobile_number"
     t.string "alternative_office_number"
-    t.decimal "lt_peak", precision: 5, scale: 4, null: false
-    t.decimal "lt_off_peak", precision: 5, scale: 4, null: false
-    t.decimal "hts_peak", precision: 5, scale: 4, null: false
-    t.decimal "hts_off_peak", precision: 5, scale: 4, null: false
-    t.decimal "htl_peak", precision: 5, scale: 4, null: false
-    t.decimal "htl_off_peak", precision: 5, scale: 4, null: false
+    t.decimal "lt_peak", precision: 5, scale: 4
+    t.decimal "lt_off_peak", precision: 5, scale: 4
+    t.decimal "hts_peak", precision: 5, scale: 4
+    t.decimal "hts_off_peak", precision: 5, scale: 4
+    t.decimal "htl_peak", precision: 5, scale: 4
+    t.decimal "htl_off_peak", precision: 5, scale: 4
     t.string "specifications_doc_url"
     t.string "briefing_pack_doc_url"
     t.bigint "user_id"
@@ -97,12 +97,12 @@ ActiveRecord::Schema.define(version: 20171030095933) do
   end
 
   create_table "auctions", force: :cascade do |t|
-    t.string "name", null: false
-    t.datetime "start_datetime", null: false
-    t.date "contract_period_start_date", null: false
-    t.date "contract_period_end_date", null: false
-    t.integer "duration", null: false
-    t.decimal "reserve_price", precision: 5, scale: 4, null: false
+    t.string "name"
+    t.datetime "start_datetime"
+    t.date "contract_period_start_date"
+    t.date "contract_period_end_date"
+    t.integer "duration"
+    t.decimal "reserve_price", precision: 5, scale: 4
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "actual_begin_time"
