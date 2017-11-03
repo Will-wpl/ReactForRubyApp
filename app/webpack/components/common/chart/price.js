@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import ReactEcharts from 'echarts-for-react';
 
 export default class Price extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { option: getTemplate() };
+        this.state = {option: getTemplate()};
     }
 
     filterData(ids, realtimeData) {
@@ -44,7 +44,7 @@ export default class Price extends Component {
                 }
             }, this);
         }
-        this.setState({ option: option });
+        this.setState({option: option});
     }
 
     componentDidMount() {
@@ -73,7 +73,7 @@ export default class Price extends Component {
                 tmp.data.push(d)
             });
             option.series.push(tmp);
-            this.setState({ option: option });
+            this.setState({option: option});
         }
 
     }
@@ -83,8 +83,8 @@ export default class Price extends Component {
             <ReactEcharts
                 option={this.state.option}
                 notMerge={true}
-                style={{ height: '280px', width: '100%' }}
-                className='react_for_echarts' />
+                style={{height: '280px', width: '100%'}}
+                className='react_for_echarts'/>
 
         );
     }
@@ -113,18 +113,23 @@ function getTemplate() {
             triggerOn: 'mousemove|click',
             backgroundColor: 'transparent',
             position: (point, params, dom, rect, size) => {
-                return [point[0] - 28, point[1] - 50];
+                return [point[0] - dom.scrollWidth / 2, point[1] - dom.scrollHeight - 16];
             },
             formatter: (params) => {
                 let result = `<div class="tooltip top">
                                 <div class="tooltip-arrow" style="border-top-color:${params.color}"></div>
-                                <div class="tooltip-inner" style="background-color:${params.color};color:black">${params.value[1]}</div>
+                                <div class="tooltip-inner" style="background-color:${params.color};color:black">
+                                    <strong>asdfasdf</strong>
+                                    <div>fdasdfasdfasdfasdfasdffffffdasdfasdfasdfasdfasdfffff</div>
+                                    <div>fdasdfasdfasdfasdfasdf</div>
+                                    <div>${params.value[1]}</div>
+                                </div>
                             </div>`;
                 return result;
             }
         },
         xAxis: {
-            splitLine: { show: false },
+            splitLine: {show: false},
             show: true,
             type: 'time',
             boundaryGap: false,
@@ -143,7 +148,7 @@ function getTemplate() {
             }
         },
         yAxis: {
-            splitLine: { show: false },
+            splitLine: {show: false},
             type: 'value',
             name: '$/kwh',
             nameLocation: 'middle',
