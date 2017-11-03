@@ -4,12 +4,11 @@ class Admin::AuctionsController < Admin::BaseController
   before_action :set_auctions_breadcrumbs
   before_action :set_action_breadcrumbs
 
-  # def index
-  #   @auctions = Auction.all.order(created_at: :desc).page(params[:page])
-  # end
-
   # GET create auction page
   def new; end
+
+  # GET empty page
+  def empty; end
 
   # GET upcoming page
   def upcoming; end
@@ -19,6 +18,18 @@ class Admin::AuctionsController < Admin::BaseController
 
   # GET dashbard page
   def dashboard; end
+
+  # GET confirm page
+  def confirm; end
+
+  # GET result page
+  def result; end
+
+  # GET report page
+  def report; end
+
+  # GET log page
+  def log; end
 
 
   # default create
