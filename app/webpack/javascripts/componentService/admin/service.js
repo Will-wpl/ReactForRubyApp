@@ -7,3 +7,7 @@ export const getArrangements = (status) => {
 export const createRa = (params) => {
     return update('/api/auctions', params);
 }
+
+export const getAuctionInVersionOne = () => {
+    return get('/api/auctions/obtain');
+}
