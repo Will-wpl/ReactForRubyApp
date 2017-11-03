@@ -15,8 +15,6 @@ Rails.application.routes.draw do
   namespace :api do
     resources :arrangements do
       collection do
-        get 'list'
-        get 'detail'
       end
     end
     resources :auctions do

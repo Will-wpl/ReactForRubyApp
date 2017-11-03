@@ -3,7 +3,7 @@ class Api::ArrangementsController < ApplicationController
 
 # GET arrangement list by auction_id
 # accept_status ['0','1','2'] '0':reject '1':accept '2':pending
-  def list
+  def index
     query = Arrangement.select('users.company_name ,arrangements.id , arrangements.accept_status , arrangements.auction_id , arrangements.user_id ').joins(:user).order(:accept_status)
     if params[:accept_status] == nil
       @arrangementsList = query.where('auction_id': params[:auction_id])
@@ -14,9 +14,8 @@ class Api::ArrangementsController < ApplicationController
     render json: @arrangementsList, status: 200
   end
 
-# GET user arrangement detail info by auction_id and user_id
-  def detail
-    @arrangement = Arrangement.find(params[:id])
+# GET user arrangement detail info by arrangementId
+  def show
     render json: @arrangement, status: 200
   end
 
