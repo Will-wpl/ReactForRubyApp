@@ -91,7 +91,6 @@ function getTemplate() {
             triggerOn: 'mousemove|click',
             backgroundColor: 'transparent',
             position: (point, params, dom, rect, size) => {
-                // 固定在顶部
                 return [point[0] - 28, point[1] - 50];
             },
             formatter: (params) => {
