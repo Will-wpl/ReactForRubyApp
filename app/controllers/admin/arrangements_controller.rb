@@ -5,6 +5,7 @@ class Admin::ArrangementsController < Admin::BaseController
   before_action :set_action_breadcrumbs
 
   # GET arrangement list by auction_id
+  # accept_status ['0','1','2'] '0':reject '1':accept '2':pending
   def list
     @arrangementsList = Arrangement.select('users.company_name ,arrangements.id , arrangements.accept_status , arrangements.auction_id , arrangements.user_id ').joins(:user).where('auction_id': params[:auction_id]).order(:accept_status)
     render json: @arrangementsList, status: 200
