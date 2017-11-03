@@ -4,14 +4,18 @@ import {DuringCountDown} from '../shared/during-countdown';
 import RetailerRanking from './admin_shared/ranking';
 import ReservePrice from './admin_shared/reserveprice';
 import Ranking from '../common/chart/ranking';
+import Price from '../common/chart/price';
 import CheckboxList from '../common/chart/list-checkbox';
 export class AdminOnlineRa extends Component {
     constructor(props, context){
         super(props);
-        this.state = {users:[], rankinglist:[]};
+        this.state = {users:[], rankinglist:[], pricelist:[]};
     }
     filterRanking(ids) {
         this.refs.rankingChart.filterData(ids, this.state.rankinglist);
+    }
+    filterPrice(ids) {
+        this.refs.priceChart.filterData(ids, this.state.pricelist);
     }
     componentDidMount() {
         let users = [{
@@ -138,6 +142,22 @@ export class AdminOnlineRa extends Component {
                 , { time: '2017-01-01 10:04:00', ranking: 1 }]
         }];
         this.setState({rankinglist:rankinglist});
+        let pricelist = [{
+            id: 1,
+            data: [{ time: '2017-01-01 10:00:00', price: 0.1535 }
+                , { time: '2017-01-01 10:01:00', price: 0.1000 }
+                , { time: '2017-01-01 10:02:00', price: 0.2000 }
+                , { time: '2017-01-01 10:03:00', price: 0.3000 }
+                , { time: '2017-01-01 10:04:00', price: 0.4000 }]
+        }, {
+            id: 2,
+            data: [{ time: '2017-01-01 10:00:00', price: 0.1000 }
+                , { time: '2017-01-01 10:01:00', price: 0.2000 }
+                , { time: '2017-01-01 10:02:00', price: 0.3000 }
+                , { time: '2017-01-01 10:03:00', price: 0.4000 }
+                , { time: '2017-01-01 10:04:00', price: 0.5000 }]
+        }];
+        this.setState({pricelist: pricelist});
     }
     render () {
         let data = [{
@@ -155,13 +175,15 @@ export class AdminOnlineRa extends Component {
                     <div className="col-sm-12 col-md-7">
                         <div className="u-grid u-mt2">
                             <div className="col-sm-9">
+                                <Price ref="priceChart"/>
                             </div>
                             <div className="col-sm-2 push-md-1">
+                                <CheckboxList list={this.state.users} onCheckeds={this.filterPrice.bind(this)}/>
                             </div>
                         </div>
                         <div className="u-grid">
                             <div className="col-sm-9">
-                                <Ranking initialData={data} ref="rankingChart"/>
+                                <Ranking initialData={data} ref="rankingChart" />
                             </div>
                             <div className="col-sm-2 push-md-1">
                                 <CheckboxList list={this.state.users} onCheckeds={this.filterRanking.bind(this)}/>
