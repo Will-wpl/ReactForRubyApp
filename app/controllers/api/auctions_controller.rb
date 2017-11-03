@@ -9,7 +9,25 @@ class Api::AuctionsController < ApplicationController
       @auction = Auction.first
       render json: @auction, status: 200
     end
+  end
 
+  # GET manage route link by ajax
+  def link
+    @auction = Auction.first
+    if @auction.publish_status != '1'
+      render json: { url: '/admin/auctions/empty' }, status: 200
+    elsif @auction.publish_status == '1' and Time.now < @auction.actual_begin_time
+      link = set_link(@auction.id, 'upcoming')
+      render json: { url: link }, status: 200
+    elsif @auction.publish_status == '1' and @auction.actual_begin_time < Time.now < @auction.actual_end_time
+      link = set_link(@auction.id, 'dashboard')
+      render json: { url: link }, status: 200
+    elsif @auction.publish_status == '1' and @auction.actual_end_time < Time.now
+      link = set_link(@auction.id, 'result')
+      render json: { url: link }, status: 200
+    else
+      render json: nil, status: 200
+    end
   end
 
   # POST create auction by ajax
@@ -38,7 +56,6 @@ class Api::AuctionsController < ApplicationController
     else
       render json: 'error code ', status: 500
     end
-
   end
 
   # POST hold auction
@@ -62,6 +79,10 @@ class Api::AuctionsController < ApplicationController
 
   def model_params
     params.require(:auction).permit(:name, :start_datetime, :contract_period_start_date, :contract_period_end_date, :duration, :reserve_price)
+  end
+
+  def set_link (auctionId, addr)
+    return "/admin/auctions/#{auctionId}/#{addr}"
   end
 
 end
