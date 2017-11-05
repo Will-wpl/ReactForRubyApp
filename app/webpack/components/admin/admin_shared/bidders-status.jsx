@@ -34,7 +34,7 @@ export class BidderStatus extends Component {
         return (
             <div className="u-grid bidderStatus">
                 <div className="col-sm-12 col-md-12">
-                <h3>Bidders Status of Acceptance</h3>
+                <h3>Bidders Status of Submission</h3>
                 <ul className="bidders_list">
                     {
                         this.state.list_data.map((item,index) => {
@@ -48,9 +48,10 @@ export class BidderStatus extends Component {
                     }
                 </ul>
                 <div className="color_show">
-                    <label><span className="green"></span><dfn>Accepled</dfn></label>
+                    <label><span className="green"></span><dfn>Submitted</dfn></label>
                     <label><span className="yellow"></span><dfn>Pending</dfn></label>
-                    <label><span className="red"></span><dfn>Rejected</dfn></label>
+                    {/*Displaying in Future Iteration */}
+                    {/*<label><span className="red"></span><dfn>Rejected</dfn></label>*/}
                 </div>
                 </div>
                 <Modal text={this.state.text} ref="Modal" />
