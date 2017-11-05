@@ -7,7 +7,9 @@ $(function () {
     // arrangementList();
     // arrangementDetail();
     // arrangementUpdate();
-    aucitonLink();
+    // aucitonLink();
+    auctionTimer();
+    // auctionHold();
     function auctionObtain() {
         $.ajax({
             type: "GET",
@@ -48,6 +50,29 @@ $(function () {
         });
     }
 
+    var auction = {
+        "id": 1,
+        "name": "SP Reverse Auction",
+        "start_datetime": "2017-12-01T12:00:00.000Z",
+        "contract_period_start_date": "2018-01-01",
+        "contract_period_end_date": "2018-06-30",
+        "duration": 20,
+        "reserve_price": "0.1477",
+        "created_at": "2017-11-03T06:41:08.406Z",
+        "updated_at": "2017-11-05T06:06:04.782Z",
+        "actual_begin_time": null,
+        "actual_end_time": null,
+        "total_volume": null,
+        "publish_status": null,
+        "published_gid": null,
+        "total_lt_peak": null,
+        "total_lt_off_peak": null,
+        "total_hts_peak": null,
+        "total_hts_off_peak": null,
+        "total_htl_peak": null,
+        "total_htl_off_peak": null,
+        "hold_status": false
+    };
     function auctionUpdate() {
         $.ajax({
             type: "PATCH",
@@ -61,13 +86,15 @@ $(function () {
                     actual_end_time: null,
                     contract_period_end_date: "2018-06-30",
                     contract_period_start_date: "2018-01-01",
-                    duration: 11,
+                    duration: 20,
                     name: "SP Reverse Auction",
                     publish_status: null,
                     published_gid: null,
                     reserve_price: "0.1477",
                     start_datetime: "2017-12-01T12:00:00.000Z",
                     total_volume: null
+                    // please follow auction object
+
                 }
             },
             success: (data) => {
@@ -160,6 +187,34 @@ $(function () {
                 console.log(data);
             },
             dataType: 'json'
+        });
+    }
+
+    function auctionTimer(){
+        $.ajax({
+            type: "GET",
+            url: '/api/auctions/1/timer',
+            success: (data) => {
+                console.log('auctionTimer');
+                console.log(data);
+            },
+            dataType: 'json'
+        });
+    }
+
+    function auctionHold(){
+        $.ajax({
+            type: "PUT",
+            dataType: 'json',
+            beforeSend: $.rails.CSRFProtection,
+            url: '/api/auctions/1/hold',
+            data: {
+                hold_status: true
+            },
+            success: (data) => {
+                console.log('auctionUpdate');
+                console.log(data);
+            }
         });
     }
 });

@@ -1,5 +1,5 @@
 class Api::AuctionsController < ApplicationController
-  before_action :set_auction, only: [:update, :publish, :timer]
+  before_action :set_auction, only: [:update, :publish, :timer, :hold]
 
   # GET auction info by ajax
   def obtain
@@ -16,13 +16,13 @@ class Api::AuctionsController < ApplicationController
     @auction = Auction.first
     if @auction.publish_status != '1'
       render json: { url: '/admin/auctions/empty' }, status: 200
-    elsif @auction.publish_status == '1' and Time.now < @auction.actual_begin_time
+    elsif @auction.publish_status == '1' && Time.now < @auction.actual_begin_time
       link = set_link(@auction.id, 'upcoming')
       render json: { url: link }, status: 200
-    elsif @auction.publish_status == '1' and @auction.actual_begin_time < Time.now < @auction.actual_end_time
+    elsif @auction.publish_status == '1' && @auction.actual_begin_time < Time.now < @auction.actual_end_time
       link = set_link(@auction.id, 'dashboard')
       render json: { url: link }, status: 200
-    elsif @auction.publish_status == '1' and @auction.actual_end_time < Time.now
+    elsif @auction.publish_status == '1' && @auction.actual_end_time < Time.now
       link = set_link(@auction.id, 'result')
       render json: { url: link }, status: 200
     else
@@ -43,7 +43,7 @@ class Api::AuctionsController < ApplicationController
   # PATCH update auction by ajax
   def update
     if @auction.update(model_params)
-      render json: @auction ,status: 200
+      render json: @auction,status: 200
     else
       render json: 'error code ', status: 500
     end
@@ -58,8 +58,29 @@ class Api::AuctionsController < ApplicationController
     end
   end
 
-  # POST hold auction
+  # POST hold auction for long pulling
   def hold
+    hold_status = params[:hold_status] == "true"? true : false
+    # click hold
+    if hold_status
+      if @auction.update(hold_status: hold_status)
+        render json: { hold_status: true, forward: false }, status: 200
+      end
+    elsif !hold_status && Time.now < @auction.actual_begin_time
+      if @auction.update(hold_status: hold_status)
+        render json: { hold_status: false, forward: false }, status: 200
+      end
+    elsif !hold_status && Time.now > @auction.actual_begin_time
+      if @auction.update(hold_status: hold_status, actual_begin_time: Time.now, actual_end_time: Time.now + 60 * @auction.duration )
+        link = set_link(@auction.id, 'dashboard')
+        render json: { hold_status: false, forward: true }, status: 200
+      end
+    end
+  end
+
+  # GET current time by ajax
+  def timer
+    render json: { current_time: Time.now, hold_status: @auction.hold_status, actual_begin_time: @auction.actual_begin_time, actual_end_time: @auction.actual_end_time }, status: 200
   end
 
   # POST extend time
@@ -69,11 +90,6 @@ class Api::AuctionsController < ApplicationController
 
   # POST comfirm
   def comfirm
-  end
-
-  # GET current time by ajax
-  def timer
-    render json: {currentTime: Time.now, beginTime: @auction.actual_begin_time}, status: 200
   end
 
   def onliner
@@ -87,7 +103,8 @@ class Api::AuctionsController < ApplicationController
   end
 
   def model_params
-    params.require(:auction).permit(:name, :start_datetime, :contract_period_start_date, :contract_period_end_date, :duration, :reserve_price)
+    params.require(:auction).permit(:name, :start_datetime, :contract_period_start_date, :contract_period_end_date, :duration, :reserve_price, :actual_begin_time, :actual_end_time, :total_volume, :publish_status, :published_gid,
+                                    :total_lt_peak, :total_lt_off_peak, :total_hts_peak, :total_hts_off_peak, :total_htl_peak, :total_htl_off_peak, :hold_status)
   end
 
   def set_link(auctionId, addr)
