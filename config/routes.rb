@@ -60,9 +60,10 @@ Rails.application.routes.draw do
     resources :arrangements
     resources :auctions do
       member do
-        get 'upcoming'
-        get 'live'
-        get 'finish'
+        get 'upcoming' # upcoming auction page
+        get 'live' # standby and live page
+        get 'finish' # finished "thank you" page
+        get 'result' # view post ra page
       end
     end
   end
