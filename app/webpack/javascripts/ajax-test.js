@@ -92,7 +92,9 @@ $(function () {
                     published_gid: null,
                     reserve_price: "0.1477",
                     start_datetime: "2017-12-01T12:00:00.000Z",
-                    total_volume: null
+                    total_volume: null,
+                    actual_begin_time: "2017-12-01T12:00:00.000Z",
+                    actual_end_time: "2017-12-01T12:20:00.000Z"
                     // please follow auction object
 
                 }

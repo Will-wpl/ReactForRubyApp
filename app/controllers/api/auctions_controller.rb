@@ -43,6 +43,8 @@ class Api::AuctionsController < ApplicationController
   # PATCH update auction by ajax
   def update
     if @auction.update(model_params)
+      # $redis.sadd(@auction.id , @auction.to_json)
+      # $redis.set(@auction.id, @auction.to_json)
       render json: @auction,status: 200
     else
       render json: 'error code ', status: 500
