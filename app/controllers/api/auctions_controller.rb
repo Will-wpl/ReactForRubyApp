@@ -1,5 +1,5 @@
 class Api::AuctionsController < ApplicationController
-  before_action :set_auction, only: [:update, :publish]
+  before_action :set_auction, only: [:update, :publish, :timer]
 
   # GET auction info by ajax
   def obtain
@@ -71,6 +71,15 @@ class Api::AuctionsController < ApplicationController
   def comfirm
   end
 
+  # GET current time by ajax
+  def timer
+    render json: {currentTime: Time.now, beginTime: @auction.actual_begin_time}, status: 200
+  end
+
+  def onliner
+
+  end
+
   private
 
   def set_auction
@@ -81,8 +90,8 @@ class Api::AuctionsController < ApplicationController
     params.require(:auction).permit(:name, :start_datetime, :contract_period_start_date, :contract_period_end_date, :duration, :reserve_price)
   end
 
-  def set_link (auctionId, addr)
-    return "/admin/auctions/#{auctionId}/#{addr}"
+  def set_link(auctionId, addr)
+    "/admin/auctions/#{auctionId}/#{addr}"
   end
 
 end
