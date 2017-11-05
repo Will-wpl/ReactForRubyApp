@@ -7,7 +7,7 @@ export class BidderStatus extends Component {
         this.state={
             list_data:[
                 {"name":"Keppel","color":"green","message":"1"},
-                {"name":"Keppel","color":"red","message":"2"},
+                {"name":"Keppel","color":"yellow","message":"2"},
                 {"name":"Keppel","color":"yellow","message":"3"},
                 {"name":"Keppel","color":"green","message":"4"},
                 {"name":"Keppel","color":"green","message":"5"},
