@@ -44,7 +44,7 @@ gem 'rubocop', require: false
 gem 'foreman', require: false
 
 # Use Redis adapter to run Action Cable in production
-# gem "redis", "~> 3.0"
+gem 'redis'
 
 # Workaround with application in proxy calling external services
 gem 'no_proxy_fix'
