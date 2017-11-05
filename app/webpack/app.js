@@ -17,22 +17,23 @@ ActionCable = require('actioncable')
 
 const cable = ActionCable.createConsumer('ws://localhost:3000/cable')
 
-const chat = cable.subscriptions.create({
-    channel: 'ChatChannel',
-    room: 'a'
+const auction = cable.subscriptions.create({
+    channel: 'AuctionChannel',
+    auction_id: '1',
+    user_id: '2'
 }, {
     connected: function () {
         console.log('-----message client connected ------------')
-        chat.buy('hello 1024');
+        auction.checkIn({user_id: 2});
     },
     disconnected: function () {
         console.log('-----message client disconnected ------------')
     },
     received: function (data) {
-        console.log("received : " + data.message)
+        console.log("received : " + data.user_id)
     },
-    buy: function (msg) {
-        return this.perform('buy', {message: msg});
+    checkIn: function (params) {
+        return this.perform('check_in', params);
     }
     // normal channel code goes here...
 });
