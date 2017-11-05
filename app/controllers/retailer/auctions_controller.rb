@@ -1,9 +1,11 @@
 class Retailer::AuctionsController < Retailer::BaseController
-    def live
-        
-    end
 
-    def finish
+    # GET upcoming page
+    def upcoming; end
 
-    end
+    # GET live page
+    def live; end
+
+    # GET finish page
+    def finish; end
 end

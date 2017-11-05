@@ -19,6 +19,7 @@ Rails.application.routes.draw do
     end
     resources :auctions do
       member do
+        get 'timer'
         put 'publish'
         put 'hold'
         post 'confirm'
@@ -59,6 +60,7 @@ Rails.application.routes.draw do
     resources :arrangements
     resources :auctions do
       member do
+        get 'upcoming'
         get 'live'
         get 'finish'
       end
