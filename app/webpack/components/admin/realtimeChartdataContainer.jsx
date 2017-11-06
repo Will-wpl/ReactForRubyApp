@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {createWebsocket} from '../../javascripts/componentService/admin/service';
 
 export default class RealtimeChartStateHoc extends Component {
     constructor(props) {
@@ -6,6 +7,7 @@ export default class RealtimeChartStateHoc extends Component {
         this.ids = [];
         this.list = [];
         this.state = {data: []};
+
     }
 
     updateIndentifications(ids) {
@@ -30,6 +32,15 @@ export default class RealtimeChartStateHoc extends Component {
     }
 
     componentDidMount() {
+        let ws = createWebsocket(1);
+        console.log(ws)
+        ws.onConnected(() => {
+            console.log('---message client connected ---');
+        }).onDisconnected(() => {
+            console.log('---message client disconnected ----')
+        }).onReceivedData(data => {
+            console.log('---message client received data ---', data);
+        })
         let list = [{
             id: 1,
             data: [{time: '2017-01-01 10:00:00', ranking: 1}
@@ -75,7 +86,7 @@ export default class RealtimeChartStateHoc extends Component {
         }];
         setTimeout(() => {
             this.list = list;
-            this.filterData();
+            // this.filterData();
         }, 4000);
     }
 

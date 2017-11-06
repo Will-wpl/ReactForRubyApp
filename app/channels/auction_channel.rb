@@ -10,7 +10,8 @@ class AuctionChannel < ApplicationCable::Channel
   end
 
   def check_in
-    update_check_params('on')
+    update_check_params('on-live')
+    ActionCable.server.broadcast "auction_#{params[:auction_id]}", 'hello-world'
   end
 
   private

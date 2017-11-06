@@ -3,10 +3,32 @@ import ReactDOM from 'react-dom';
 import {CreateNewRA} from './create-new-ra';
 import {BidderStatus} from './admin_shared/bidders-status';
 import {TimeCuntDown} from '../shared/time-cuntdown';
+import {getAuctionInVersionOne,getBidderStatus} from '../../javascripts/componentService/admin/service';
 export class AdminManagePublishedRa extends Component {
     constructor(props, context){
         super(props);
-        //this.user_info=sessionStorage.getItem('raInfo');
+        this.state={
+            id:"",
+            dataList:[]
+        }
+    }
+    componentWillMount(){
+        getAuctionInVersionOne().then(res => {
+            //console.log(res);
+            getBidderStatus({auction_id:res.id}).then(res => {
+                console.log(res);
+                this.setState({
+                    dataList:res,
+                })
+            }, error => {
+                console.log(error);
+            })
+        }, error => {
+            console.log(error);
+        })
+    }
+    componentDidMount() {
+
     }
     render () {
         return (
@@ -17,7 +39,12 @@ export class AdminManagePublishedRa extends Component {
                         <CreateNewRA left_name="Manage Upcoming Reverse Auction" />
                     </div>
                     <div className="col-sm-12 col-md-5">
-                        <BidderStatus />
+                        <BidderStatus dataList={this.state.dataList} />
+                        <div className="createRaMain w_8">
+                        <div className="createRa_btn">
+                                <a className="lm--button lm--button--primary">Commence</a>
+                        </div>
+                        </div>
                     </div>
                 </div>
             </div>
