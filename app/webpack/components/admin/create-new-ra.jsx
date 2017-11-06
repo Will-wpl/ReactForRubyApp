@@ -30,16 +30,21 @@ export class CreateNewRA extends Component {
     }
     componentDidMount() {
         getAuctionInVersionOne().then(res => {
+            if(res.duration == null){
+                this.setState({id:res.id});
+            }else{
+                this.setState({
+                    id:res.id,
+                    name:res.name,
+                    start_datetime:moment(res.start_datetime),
+                    startDate:moment(res.contract_period_start_date),
+                    endDate:moment(res.contract_period_end_date),
+                    duration:res.duration,
+                    reserve_price:res.reserve_price
+                });
+            }
             //console.log(res);
-            this.setState({
-                id:res.id,
-                name:res.name,
-                start_datetime:moment(res.start_datetime),
-                startDate:moment(res.contract_period_start_date),
-                endDate:moment(res.contract_period_end_date),
-                duration:res.duration,
-                reserve_price:res.reserve_price
-            })
+            
         }, error => {
             console.log(error);
         })
