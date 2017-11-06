@@ -31,6 +31,7 @@ html(lang="en")
 
         ul.lm--header-menu.lm--header-menu--secondary
           - if user_signed_in?
+            hidden id='user_id'  value= current_user.id
             li.lm--header-item
               .lm--dropdown[data={dropdown:''}]
                 button.lm--header-link[data={'dropdown-trigger':''}]
@@ -44,7 +45,7 @@ html(lang="en")
           - else
             = link_to 'Log In', new_user_session_path, class: 'lm--button lm--button--text'
 
-    hidden id='user_id'  value= current_user.id
+    
 
     .content
       .u-contain
