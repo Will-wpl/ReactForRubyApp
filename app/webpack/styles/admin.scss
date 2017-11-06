@@ -29,6 +29,8 @@
         }
     }
     .createRa_btn{position: absolute; right:0px; bottom:0px;
+        .show{display:inline-block;}
+        .hide{ display: none;}
         button{ margin: 0 10px;}
     }
 }
@@ -50,7 +52,7 @@
          }
     }
     .bidders_list{
-        width: 80%; margin: 10px auto; overflow-y: auto;
+        width: 80%; margin: 10px auto; overflow-y: auto; font-size: 12px;
         li{ width: 100%; height: 32px; line-height: 32px; 
             margin-bottom: 5px; 
             background: #183243; overflow: hidden;
@@ -59,17 +61,18 @@
                 abbr{
                     display:block; width:60%; height: 20px; margin: 6px auto;
                 }
-                abbr.green{ background:#54BD1B; }
-                abbr.red{ background:red; }
-                abbr.yellow{ background:yellow; }
+                abbr.color1{ background:#54BD1B; }
+                abbr.color0{ background:red; }
+                abbr.color2{ background:yellow; }
                 abbr.online{ background: url("../images/green.png") no-repeat center;}
                 abbr.outline{background: url("../images/red.png") no-repeat center;}
                 abbr.holding{background: url("../images/Yellow.png") no-repeat center;}
             }
             span:last-child{
-                border:none;
+                border:none; text-align: center; text-indent: 0px;
                 cursor: pointer;
             }
         }
     }
 }
+.w_8{ width: 80%;}

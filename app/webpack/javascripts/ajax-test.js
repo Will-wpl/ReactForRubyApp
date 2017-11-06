@@ -82,8 +82,6 @@ $(function () {
             data: {
                 auction: {
                     id: 1,
-                    actual_begin_time: null,
-                    actual_end_time: null,
                     contract_period_end_date: "2018-06-30",
                     contract_period_start_date: "2018-01-01",
                     duration: 20,
