@@ -22,9 +22,9 @@ class AuctionHistory < ApplicationRecord
 
   # Methods (class methods before instance methods)
 
-  def self.save_update_init_auction_histories(arrangement)
-    @auction = Auction.find(arrangement.auction_id)
-    @histories = AuctionHistory.where('auction_id = ? and user_id = ?', arrangement.auction_id , arrangement.user_id)
+  def self.save_update_init_auction_histories(calculate_dto)
+    @auction = Auction.find(calculate_dto.auction_id)
+    @histories = AuctionHistory.where('auction_id = ? and user_id = ?', calculate_dto.auction_id , calculate_dto.user_id)
     total_volume = Auction.set_total_volume(
         @auction.total_lt_peak,@auction.total_lt_off_peak,
         @auction.total_hts_peak,@auction.total_hts_off_peak,
@@ -32,16 +32,16 @@ class AuctionHistory < ApplicationRecord
     total_award_sum = set_total_award_sum(@auction.total_lt_peak,@auction.total_lt_off_peak,
                                           @auction.total_hts_peak,@auction.total_hts_off_peak,
                                           @auction.total_htl_peak, @auction.total_htl_off_peak,
-                                          arrangement.lt_peak,arrangement.lt_off_peak,arrangement.hts_peak,arrangement.hts_off_peak, arrangement.htl_peak,arrangement.htl_off_peak)
+                                          calculate_dto.lt_peak,calculate_dto.lt_off_peak,calculate_dto.hts_peak,calculate_dto.hts_off_peak, calculate_dto.htl_peak,calculate_dto.htl_off_peak)
     average_price = set_average_price(total_award_sum, total_volume)
     if @histories.count == 0
-      @history = AuctionHistory.new(lt_peak: arrangement.lt_peak, lt_off_peak: arrangement.lt_off_peak, hts_peak: arrangement.hts_peak, hts_off_peak: arrangement.hts_off_peak, htl_peak: arrangement.htl_peak, htl_off_peak: arrangement.htl_off_peak, bid_time: Time.now,
-                                  user_id: arrangement.user_id, auction_id: arrangement.auction_id, average_price: average_price, total_award_sum: total_award_sum)
+      @history = AuctionHistory.new(lt_peak: calculate_dto.lt_peak, lt_off_peak: calculate_dto.lt_off_peak, hts_peak: calculate_dto.hts_peak, hts_off_peak: calculate_dto.hts_off_peak, htl_peak: calculate_dto.htl_peak, htl_off_peak: calculate_dto.htl_off_peak, bid_time: Time.now,
+                                  user_id: calculate_dto.user_id, auction_id: calculate_dto.auction_id, average_price: average_price, total_award_sum: total_award_sum)
       @history.save
     else
       @history = @histories.first
-      @history.update(lt_peak: arrangement.lt_peak, lt_off_peak: arrangement.lt_off_peak, hts_peak: arrangement.hts_peak, hts_off_peak: arrangement.hts_off_peak, htl_peak: arrangement.htl_peak, htl_off_peak: arrangement.htl_off_peak, bid_time: Time.now,
-                      user_id: arrangement.user_id, auction_id: arrangement.auction_id, average_price: average_price, total_award_sum: total_award_sum)
+      @history.update(lt_peak: calculate_dto.lt_peak, lt_off_peak: calculate_dto.lt_off_peak, hts_peak: calculate_dto.hts_peak, hts_off_peak: calculate_dto.hts_off_peak, htl_peak: calculate_dto.htl_peak, htl_off_peak: calculate_dto.htl_off_peak, bid_time: Time.now,
+                      user_id: calculate_dto.user_id, auction_id: calculate_dto.auction_id, average_price: average_price, total_award_sum: total_award_sum)
     end
   end
 
