@@ -1,13 +1,25 @@
-import {get, create} from '../../../javascripts/http';
+import {get,create,update} from '../../../javascripts/http';
 
 export const getArrangements = (status) => {
     return get('/api/arrangements', { auction_id: 1, accept_status: status });
 }
 
 export const createRa = (params) => {
-    return update('/api/auctions', params);
+    return update('/api/auctions/'+params.auction.id, params);
 }
 
 export const getAuctionInVersionOne = () => {
     return get('/api/auctions/obtain');
+}
+
+export const retailManageComing = (params) => {
+    return update('/api/arrangements/'+params.arrangement.id, params);
+}
+
+export const raPublish = (params) => {
+    return update('/api/auctions/'+params.id+'/publish', params.pagedata);
+}
+
+export const getBidderStatus = (params) => {
+    return get('/api/arrangements',params);
 }
