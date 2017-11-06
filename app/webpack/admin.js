@@ -6,5 +6,6 @@ import "components/admin/create-new-ra";
 import "components/admin/admin-manage-published-ra";
 import "components/admin/admin-online-ra";
 import "components/admin/admin_dashboard";
+import "components/admin/online-status-list";
 import "./javascripts/ajax-test.js";
 console.log("Admin Webpacker");

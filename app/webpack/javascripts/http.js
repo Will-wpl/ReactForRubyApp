@@ -60,6 +60,29 @@ export const update = (path, body, method = 'PATCH') => {
 
 }
 
+
+export const put = (path, body, method = 'PUT') => {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: method,
+            dataType: 'json',
+            beforeSend: $.rails.CSRFProtection,
+            url: path,
+            data: body,
+            success: (data) => {
+                console.log('update successfully');
+                resolve(data);
+            },
+            error: (data) => {
+                console.log('fail to update');
+                reject(data);
+            }
+        });
+    })
+
+}
+
+
 export const Ws = class {
     ActionCable = require('actioncable');
     sockHandler;

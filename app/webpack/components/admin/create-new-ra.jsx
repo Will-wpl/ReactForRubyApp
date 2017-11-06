@@ -10,18 +10,19 @@ export class CreateNewRA extends Component {
     constructor(props, context){
         super(props, context);
         this.state = {
-            name:"",ra_name_error:"",
-            start_datetime:"",ra_date_error:"",
-            startDate:"",ra_time_start_error:"",
-            endDate:"",ra_time_end_error:"",
-            duration:"",ra_duration_error:"",
-            reserve_price:"",ra_price_error:"",
+            name:"",
+            start_datetime:"",
+            startDate:"",
+            endDate:"",
+            duration:"",
+            reserve_price:"",
             left_name:this.props.left_name,
             btn_type:"",text:"",id:"",
             edit_btn:"lm--button lm--button--primary show",
             edit_change:"lm--button lm--button--primary hide",
-            disabled:""
+            disabled:"",comfirm:false
         };
+        this.auction = {};
         this.starttimeChange = this.starttimeChange.bind(this);
         this.endtimeChange = this.endtimeChange.bind(this);
         this.dateChange = this.dateChange.bind(this);
@@ -37,6 +38,7 @@ export class CreateNewRA extends Component {
             if(res.duration == null){
                 this.setState({id:res.id});
             }else{
+                this.auction = res;
                 this.setState({
                     id:res.id,
                     name:res.name,
@@ -111,78 +113,91 @@ export class CreateNewRA extends Component {
             disabled:"disabled"
         })
     }
+
+    setAuction(){
+        this.auction.contract_period_end_date= this.state.endDate.format().split("T")[0];
+        this.auction.contract_period_start_date= this.state.startDate.format().split("T")[0];
+        this.auction.duration= this.refs.duration.value;
+        this.auction.name= this.refs.name.value;
+        this.auction.reserve_price= this.refs.reserve_price.value;
+        this.auction.start_datetime= this.state.start_datetime.format();
+        // this.auction.actual_begin_time  TBD
+        // this.auction.actual_end_time  TBD
+        return this.auction;
+    }
+
+    removeAuction(){
+        this.auction.contract_period_end_date= null;
+        this.auction.contract_period_start_date= null;
+        this.auction.duration= null;
+        this.auction.name= null;
+        this.auction.reserve_price= null;
+        this.auction.start_datetime= null;
+        this.auction.publish_status= null;
+        this.auction.published_gid= null;
+        this.auction.reserve_price= null;
+        this.auction.start_datetime= null;
+        this.auction.total_volume= null;
+        return this.auction;
+    }
     checkSuccess(event,obj){
         event.preventDefault();
         if(this.state.btn_type == "save"){
-            createRa({
-                            auction: {
-                                id:this.state.id,
-                                actual_begin_time: null,
-                                actual_end_time: null,
-                                contract_period_end_date: this.state.endDate.format().split("T")[0],
-                                contract_period_start_date: this.state.startDate.format().split("T")[0],
-                                duration: this.refs.duration.value,
-                                name: this.refs.name.value,
-                                publish_status: null,
-                                published_gid: null,
-                                reserve_price: this.refs.reserve_price.value,
-                                start_datetime: this.state.start_datetime.format(),
-                                total_volume: null
-                            }                      
-                    }).then(res => {
+            createRa({auction: this.setAuction()}).then(res => {
+                            this.auction = res;
                             this.refs.Modal.showModal();
                             this.setState({
                                 text:"Save Auction Success"
                             });
-                            sessionStorage.setItem("raInfo",JSON.stringify(res));
-                            setTimeout(() => {
-                                window.location.href="http://localhost:3000/admin/home"
-                            },3000);
+                            // sessionStorage.setItem("raInfo",JSON.stringify(res));
+                            // setTimeout(() => {
+                            //     window.location.href="http://localhost:3000/admin/home"
+                            // },3000);
                         }, error => {
                             console.log(error);
                         })
         }
         if(this.state.btn_type == "delete"){
-            createRa({
-                auction: {
-                    id:this.state.id,
-                    actual_begin_time: null,
-                    actual_end_time: null,
-                    contract_period_end_date: null,
-                    contract_period_start_date: null,
-                    duration: null,
-                    name: null,
-                    publish_status: null,
-                    published_gid: null,
-                    reserve_price: null,
-                    start_datetime: null,
-                    total_volume: null
-                }                      
-        }).then(res => {
-                this.refs.Modal.showModal();
-                this.setState({
-                    text:"Delete Auction Success"
-                });
-                sessionStorage.removeItem("raInfo");
-                // setTimeout(() => {
-                //     window.location.href="http://localhost:3000/admin/home"
-                // },3000);
-            }, error => {
-                console.log(error);
-            })
+            this.setState({
+                id:this.state.id,
+                name:"",
+                start_datetime:"",
+                startDate:"",
+                endDate:"",
+                duration:"",
+                reserve_price:""
+            });
+            this.refs.Modal.showModal("comfirm");
+            this.setState({text:"Comfirm delete?"});
+            // if(this.state.comfirm){
+                createRa({ auction: this.removeAuction()}).then(res => {
+                    this.auction = res;
+                    this.refs.Modal.showModal();
+                    this.setState({
+                        text:"Delete Auction Success"
+                    });
+                    sessionStorage.removeItem("raInfo");
+                    // setTimeout(() => {
+                    //     window.location.href="http://localhost:3000/admin/home"
+                    // },3000);
+                }, error => {
+                    console.log(error);
+                })
+            // }
         }
         if(this.state.btn_type == "publish"){
             raPublish({
                 pagedata:{publish_status: '0'},
                 id:this.state.id
             }).then(res => {
+                    this.auction = res;
                     this.refs.Modal.showModal();
                     this.setState({
                         text:"Publish Auction Success"
                     });
-                    // setTimeout(() => {
-                    //     window.location.href="http://localhost:3000/admin/home"
-                    // },3000);
+                    setTimeout(() => {
+                         window.location.href="http://localhost:3000/admin/home"
+                     },5000);
                 }, error => {
                     console.log(error);
                 })
@@ -223,7 +238,7 @@ export class CreateNewRA extends Component {
                     <dd className="lm--formItem lm--formItem--inline string optional">
                         <span className="lm--formItem-left lm--formItem-label string optional">Time of Reverse Auction :</span>
                         <label className="lm--formItem-right lm--formItem-control">
-                        <DatePicker selected={this.state.start_datetime} disabled={this.state.disabled} ref="start_datetime" name="start_datetime" showTimeSelect dateFormat="YYYY-MM-DD HH:mm" timeFormat="HH:mm" timeIntervals={10}  className="time_ico"  onChange = {this.timeChange} minDate={moment()} maxDate={moment().add(30, "days")} title="Time must not be in the past."  required aria-required="true"/>
+                        <DatePicker selected={this.state.start_datetime} disabled={this.state.disabled} ref="start_datetime" name="start_datetime" showTimeSelect dateFormat="YYYY-MM-DD HH:mm" timeFormat="HH:mm" timeIntervals={1}  className="time_ico"  onChange = {this.timeChange} minDate={moment()} maxDate={moment().add(30, "days")} title="Time must not be in the past."  required aria-required="true"/>
                         <abbr ref="ra_duration_error" className="col">(SGT)</abbr>
                         </label>
                     </dd>
