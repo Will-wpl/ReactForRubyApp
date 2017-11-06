@@ -35,20 +35,20 @@ export class CreateNewRA extends Component {
             })
         }
         getAuctionInVersionOne().then(res => {
-            if(res.duration == null){
-                this.setState({id:res.id});
-            }else{
-                this.auction = res;
+            this.auction = res;
+            // if(res.duration == null){
+            //     this.setState({id:res.id});
+            // }else{
                 this.setState({
                     id:res.id,
-                    name:res.name,
-                    start_datetime:moment(res.start_datetime),
-                    startDate:moment(res.contract_period_start_date),
-                    endDate:moment(res.contract_period_end_date),
-                    duration:res.duration,
-                    reserve_price:res.reserve_price
+                    name:res.name == null ? '' : res.name,
+                    start_datetime: res.start_datetime == null ? '' : moment(res.start_datetime),
+                    startDate: res.contract_period_start_date == null ? '' :  moment(res.contract_period_start_date),
+                    endDate:res.contract_period_end_date == null ? '' : moment(res.contract_period_end_date),
+                    duration:res.duration== null ? '' : res.duration,
+                    reserve_price:res.reserve_price== null ? '' : res.reserve_price
                 });
-            }
+            // }
             //console.log(res);
             
         }, error => {
@@ -115,6 +115,7 @@ export class CreateNewRA extends Component {
     }
 
     setAuction(){
+        // this.auction.id=this.state.id;
         this.auction.contract_period_end_date= this.state.endDate.format().split("T")[0];
         this.auction.contract_period_start_date= this.state.startDate.format().split("T")[0];
         this.auction.duration= this.refs.duration.value;
@@ -140,6 +141,33 @@ export class CreateNewRA extends Component {
         this.auction.total_volume= null;
         return this.auction;
     }
+    delete(){
+        this.setState({
+            id:this.state.id,
+            name:"",
+            start_datetime:"",
+            startDate:"",
+            endDate:"",
+            duration:"",
+            reserve_price:""
+        });
+        this.refs.Modal.showModal("comfirm");
+        this.setState({text:"Comfirm delete?"});
+        // if(this.state.comfirm){
+            createRa({ auction: this.removeAuction()}).then(res => {
+                this.auction = res;
+                this.refs.Modal.showModal();
+                this.setState({
+                    text:this.auction.name + " has been successfully deleted."
+                });
+                sessionStorage.removeItem("raInfo");
+                // setTimeout(() => {
+                //     window.location.href="http://localhost:3000/admin/home"
+                // },3000);
+            }, error => {
+                console.log(error);
+            })
+    }
     checkSuccess(event,obj){
         event.preventDefault();
         if(this.state.btn_type == "save"){
@@ -147,7 +175,7 @@ export class CreateNewRA extends Component {
                             this.auction = res;
                             this.refs.Modal.showModal();
                             this.setState({
-                                text:"Save Auction Success"
+                                text:this.auction.name + "has been successfully saved "
                             });
                             // sessionStorage.setItem("raInfo",JSON.stringify(res));
                             // setTimeout(() => {
@@ -158,31 +186,7 @@ export class CreateNewRA extends Component {
                         })
         }
         if(this.state.btn_type == "delete"){
-            this.setState({
-                id:this.state.id,
-                name:"",
-                start_datetime:"",
-                startDate:"",
-                endDate:"",
-                duration:"",
-                reserve_price:""
-            });
-            this.refs.Modal.showModal("comfirm");
-            this.setState({text:"Comfirm delete?"});
-            // if(this.state.comfirm){
-                createRa({ auction: this.removeAuction()}).then(res => {
-                    this.auction = res;
-                    this.refs.Modal.showModal();
-                    this.setState({
-                        text:"Delete Auction Success"
-                    });
-                    sessionStorage.removeItem("raInfo");
-                    // setTimeout(() => {
-                    //     window.location.href="http://localhost:3000/admin/home"
-                    // },3000);
-                }, error => {
-                    console.log(error);
-                })
+            
             // }
         }
         if(this.state.btn_type == "publish"){
@@ -211,7 +215,7 @@ export class CreateNewRA extends Component {
             left_name = "Create New Reverse Auction";
                 btn_html = <div className="createRa_btn">
                                 <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'save')}>Save</button>
-                                <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'delete')}>Delete</button>
+                                <a className="lm--button lm--button--primary" onClick={this.delete.bind(this)}>Delete</a>
                                 <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'publish')}>Publish</button>
                             </div>
         }else{//edit
@@ -223,27 +227,27 @@ export class CreateNewRA extends Component {
                         </div>
         }
         return (
-            <div className="createRaMain">
-            <div>
+            <div className="createRaMain u-grid">
+            <div className="col-sm-12 col-md-6 push-md-3">
                 <h2>{left_name}</h2>
                 <form action="" ref="CreatRaForm" method="post" id="CreatRaForm" onSubmit={this.checkSuccess.bind(this)}>
                 <dl className="vw-block vw-block-cols creatRa">
                     <dd className="lm--formItem lm--formItem--inline string optional">
-                        <span className="lm--formItem-left lm--formItem-label string optional">Name of Reverse Auction :</span>
+                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Name of Reverse Auction :</span>
                         <label className="lm--formItem-right lm--formItem-control">
                             <input type="test" value={this.state.name} onChange={this.doName.bind(this)} disabled={this.state.disabled} ref="name" name="name" maxLength="150" className="string optional" title="The length for Name of RA must not be longer than 150 characters." required aria-required="true"></input>
                             {/* <abbr className="error-block" ref="ra_name_error">{this.state.ra_name_error}</abbr> */}
                         </label>
                     </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
-                        <span className="lm--formItem-left lm--formItem-label string optional">Time of Reverse Auction :</span>
+                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Time of Reverse Auction :</span>
                         <label className="lm--formItem-right lm--formItem-control">
                         <DatePicker selected={this.state.start_datetime} disabled={this.state.disabled} ref="start_datetime" name="start_datetime" showTimeSelect dateFormat="YYYY-MM-DD HH:mm" timeFormat="HH:mm" timeIntervals={1}  className="time_ico"  onChange = {this.timeChange} minDate={moment()} maxDate={moment().add(30, "days")} title="Time must not be in the past."  required aria-required="true"/>
                         <abbr ref="ra_duration_error" className="col">(SGT)</abbr>
                         </label>
                     </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
-                        <span className="lm--formItem-left lm--formItem-label string optional">Reverse Auction Contract Period :</span>
+                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Reverse Auction Contract Period :</span>
                         <label className="col"><DatePicker disabled={this.state.disabled} required aria-required="true" ref="contract_period_start_date" name="contract_period_start_date" className="date_ico" dateFormat="YYYY-MM-DD" selected={this.state.startDate} selectsStart startDate={this.state.startDate} endDate={this.state.endDate} onChange = {this.starttimeChange}/>
                         {/* <abbr className="error-block"  ref="ra_time_start_error">{this.state.ra_time_start_error}</abbr> */}
                         </label>
@@ -257,20 +261,20 @@ export class CreateNewRA extends Component {
                         <span className="lm--formItem-left lm--formItem-label string optional">Reverse Auction Paramters</span>
                     </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
-                        <span className="lm--formItem-left lm--formItem-label string optional">Duration :</span>
+                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Duration :</span>
                         <label className="lm--formItem-right lm--formItem-control">
                             <input type="test" ref="duration" onChange={this.doDuration.bind(this)} value={this.state.duration} disabled={this.state.disabled} name="duration" maxLength="50" required aria-required="true" pattern="^[0-9]*[1-9][0-9]*$" title="Duration must be an integer."></input>
                             <abbr ref="ra_duration_error" className="col">minutes</abbr>
                         </label>
                         </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
-                        <span className="lm--formItem-left lm--formItem-label string optional">Reverse Price :</span>
+                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Reverse Price :</span>
                         <label className="lm--formItem-right lm--formItem-control">
                             <input type="test" ref="reserve_price" onChange={this.doPrice.bind(this)} value={this.state.reserve_price} disabled={this.state.disabled} name="reserve_price" maxLength="50" required aria-required="true" pattern="^\d+(\.\d{4})$" title="Reserve Price must be a number with 4 decimal places, e.g. $0.0891/kWh." ></input>
-                            <abbr ref="ra_duration_error" className="col">kWh</abbr>
+                            <abbr ref="ra_duration_error" className="col">/kWh</abbr>
                         </label>
                     </dd>
-                    <dd className="lm--formItem lm--formItem--inline string optional"><span className="lm--formItem-left lm--formItem-label string optional">Extension :</span><label className="lm--formItem-right lm--formItem-control"><b className="textLeft">Manual</b></label></dd>
+                    <dd className="lm--formItem lm--formItem--inline string optional"><span className="lm--formItem-left lm--formItem-label string optional">Time Extension :</span><label className="lm--formItem-right lm--formItem-control"><b className="textLeft">Manual</b></label></dd>
                     <dd className="lm--formItem lm--formItem--inline string optional"><span className="lm--formItem-left lm--formItem-label string optional">Average price :</span><label className="lm--formItem-right lm--formItem-control"><b className="textLeft">Weighted Average</b></label></dd>
                 </dl>
                 {btn_html}
