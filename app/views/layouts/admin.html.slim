@@ -21,7 +21,6 @@ html(lang="en")
     = csrf_meta_tags
 
   body class=page_class
-
     header.lm--header
       nav.lm--header-nav
         div class="lm--header-logo"
@@ -44,6 +43,8 @@ html(lang="en")
                     = link_to 'Log Out', destroy_user_session_path, method: :delete, class: 'lm--dropdown-link'
           - else
             = link_to 'Log In', new_user_session_path, class: 'lm--button lm--button--text'
+
+    hidden id='user_id'  value= current_user.id
 
     .content
       .u-contain
