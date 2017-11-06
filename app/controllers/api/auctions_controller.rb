@@ -1,5 +1,4 @@
 class Api::AuctionsController < ApplicationController
-  require 'bigdecimal'
   before_action :set_auction, only: [:update, :publish, :timer, :hold]
 
   # GET auction info by ajax
@@ -43,8 +42,9 @@ class Api::AuctionsController < ApplicationController
 
   # PATCH update auction by ajax
   def update
-    params[:auction]['total_volume'] = set_total_volume(model_params[:total_lt_peak],model_params[:total_lt_off_peak],model_params[:total_hts_peak],model_params[:total_hts_off_peak],model_params[:total_htl_peak],model_params[:total_htl_off_peak])
+    params[:auction]['total_volume'] = Auction.set_total_volume(model_params[:total_lt_peak],model_params[:total_lt_off_peak],model_params[:total_hts_peak],model_params[:total_hts_off_peak],model_params[:total_htl_peak],model_params[:total_htl_off_peak])
     if @auction.update(model_params)
+
       # $redis.sadd(@auction.id , @auction.to_json)
       # $redis.set(@auction.id, @auction.to_json)
       render json: @auction, status: 200
@@ -115,8 +115,6 @@ class Api::AuctionsController < ApplicationController
     "/admin/auctions/#{auctionId}/#{addr}"
   end
 
-  def set_total_volume(c1, c2, c3, c4, c5, c6)
-    BigDecimal.new(c1) +  BigDecimal.new(c2) +  BigDecimal.new(c3) +  BigDecimal.new(c4) +  BigDecimal.new(c5) +  BigDecimal.new(c6)
-  end
+
 
 end
