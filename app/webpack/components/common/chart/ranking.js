@@ -8,41 +8,34 @@ export default class Ranking extends Component {
         this.state = { option: getTemplate() };
     }
 
-    filterData(ids, realtimeData) {
+    getChartOption() {
         let option = getTemplate();
-        if (ids.length > 0) {
-            ids.forEach(idColor => {
-                let result = realtimeData.find(element => {
-                    return element.id === idColor.id;
-                });
-                if (result) {
-                    let tmp = {
-                        type: 'line',
-                        data: [],
-                        itemStyle: {
-                            normal: {
-                                color: idColor.color,
-                                lineStyle: {
-                                    color: idColor.color
-                                }
-                            }
+        this.props.data.forEach(element => {
+            let tmp = {
+                type: 'line',
+                data: [],
+                itemStyle: {
+                    normal: {
+                        color: element.color,
+                        lineStyle: {
+                            color: element.color
                         }
-                    };
-                    result.data.forEach((timeRanking) => {
-                        let d = {
-                            symbol: 'triangle',
-                            symbolSize: 15,
-                            showSymbol: true,
-                            value: []
-                        };
-                        d.value = [].concat(timeRanking.time).concat(timeRanking.ranking);
-                        tmp.data.push(d);
-                    });
-                    option.series.push(tmp);
+                    }
                 }
-            }, this);
-        }
-        this.setState({ option: option });
+            };
+            element.data.forEach((timeRanking) => {
+                let d = {
+                    symbol: 'triangle',
+                    symbolSize: 15,
+                    showSymbol: true,
+                    value: []
+                };
+                d.value = [].concat(timeRanking.time).concat(timeRanking.ranking);
+                tmp.data.push(d);
+            });
+            option.series.push(tmp);
+        });
+        return option;
     }
 
     componentDidMount() {
@@ -81,7 +74,7 @@ export default class Ranking extends Component {
     render() {
         return (
             <ReactEcharts
-                option={this.state.option}
+                option={this.getChartOption()}
                 notMerge={true}
                 style={{ height: '280px', width: '100%' }}
                 className='react_for_echarts' />
@@ -156,7 +149,7 @@ function getTemplate() {
             axisTick: {
                 show: false
             },
-            max: function (value) {
+            max: (value) => {
                 return 10;
             },
             axisLine: {
