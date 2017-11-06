@@ -1,4 +1,4 @@
-require "date"
+require 'date'
 if User.count == 0
   @admin = User.create(name: 'admin',
                        email: 'admin@example.com',
@@ -13,35 +13,35 @@ if User.count == 0
                       email: 'mark@example.com',
                       password: 'password',
                       password_confirmation: 'password',
-                      company_name:'TEST_1')
+                      company_name: 'TEST_1')
   @mark.add_role :retailer
 
   @brian = User.create(name: 'brian',
                        email: 'brian@example.com',
                        password: 'password',
                        password_confirmation: 'password',
-                       company_name:'TEST_2')
+                       company_name: 'TEST_2')
   @brian.add_role :retailer
 
   @jason = User.create(name: 'jason',
                        email: 'jason@example.com',
                        password: 'password',
                        password_confirmation: 'password',
-                       company_name:'TEST_3')
+                       company_name: 'TEST_3')
   @jason.add_role :retailer
 
   @will = User.create(name: 'will',
                       email: 'will@example.com',
                       password: 'password',
                       password_confirmation: 'password',
-                      company_name:'TEST_4')
+                      company_name: 'TEST_4')
   @will.add_role :retailer
 
   @judy = User.create(name: 'judy',
                       email: 'judy@example.com',
                       password: 'password',
                       password_confirmation: 'password',
-                      company_name:'TEST_5')
+                      company_name: 'TEST_5')
   @judy.add_role :retailer
 end
 
@@ -51,7 +51,14 @@ if Auction.count == 0
                  contract_period_start_date: nil,
                  contract_period_end_date: nil,
                  duration: nil,
-                 reserve_price: nil)
+                 reserve_price: nil,
+                 total_volume: 60_000,
+                 total_lt_peak: 10_000,
+                 total_lt_off_peak: 10_000,
+                 total_hts_peak: 10_000,
+                 total_hts_off_peak: 10_000,
+                 total_htl_peak: 10_000,
+                 total_htl_off_peak: 10_000)
 end
 
 if Arrangement.count == 0
@@ -121,5 +128,3 @@ if Arrangement.count == 0
                      user_id: 6,
                      auction_id: 1)
 end
-
-
