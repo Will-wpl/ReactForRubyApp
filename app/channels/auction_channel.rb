@@ -18,8 +18,10 @@ class AuctionChannel < ApplicationCable::Channel
 
   end
 
-  def set_bid
-
+  def set_bid(data)
+    puts params[:lt_peak]
+    calculate_dto = CalculateDto.new(data['lt_peak'] ,data['lt_off_peak'],data['hts_peak'],data['hts_off_peak'], data['htl_peak'], data['htl_off_peak'], params[:auction_id], params[:user_id])
+    set_price(calculate_dto)
   end
 
   private
@@ -30,5 +32,6 @@ class AuctionChannel < ApplicationCable::Channel
   end
 
   def set_price(calculate_dto)
+    puts calculate_dto.lt_peak
   end
 end
