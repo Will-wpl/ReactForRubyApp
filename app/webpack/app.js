@@ -22,18 +22,22 @@ const auction = cable.subscriptions.create({
     auction_id: '1',
     user_id: '2'
 }, {
-    connected: function () {
+    connected () {
         console.log('-----message client connected ------------')
         auction.checkIn({user_id: 2});
+        auction.setBid({lt_peak:0.1, lt_off_peak: 0.1 , hts_peak:0.1,hts_off_peak:0.1,htl_peak:0.2,htl_off_peak:0.3});
     },
-    disconnected: function () {
+    disconnected () {
         console.log('-----message client disconnected ------------')
     },
-    received: function (data) {
+    received (data) {
         console.log("received : " + data.user_id)
     },
-    checkIn: function (params) {
+    checkIn (params) {
         return this.perform('check_in', params);
+    },
+    setBid (params){
+        return this.perform('set_bid', params);
     }
     // normal channel code goes here...
 });
