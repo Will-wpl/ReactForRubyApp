@@ -2,17 +2,65 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import {TimeCuntDown} from '../shared/time-cuntdown';
 //import {DuringCountDown} from '../shared/during-countdown';
+import {createRa,getAuctionInVersionOne,retailManageComing} from '../../javascripts/componentService/admin/service';
+import {Modal} from '../shared/show-modal';
 
 export class RetailerManage extends Component {
     constructor(props){
         super(props);
+        this.state={
+            id:"",
+            text:""
+        }
+        this.checkSuccess = this.checkSuccess.bind(this);
+    }
+    componentDidMount() {
+        getAuctionInVersionOne().then(res => {
+            //console.log(res);
+            this.setState({id:res.id})
+        }, error => {
+            console.log(error);
+        })
+    }
+    checkSuccess(){
+        event.preventDefault();
+        retailManageComing({
+            arrangement: {
+                "id": this.state.id,
+                "main_name": this.refs.main_name.value,
+                "main_email_address": this.refs.main_email_address.value,
+                "main_mobile_number": this.refs.main_mobile_number.value,
+                "main_office_number": this.refs.main_office_number.value,
+                "alternative_name": this.refs.alternative_name.value,
+                "alternative_email_address": this.refs.alternative_email_address.value,
+                "alternative_mobile_number": this.refs.alternative_mobile_number.value,
+                "alternative_office_number": this.refs.alternative_office_number.value,
+                "lt_peak": this.refs.lt_peak.value,
+                "lt_off_peak": this.refs.lt_off_peak.value,
+                "hts_peak": this.refs.hts_peak.value,
+                "hts_off_peak": this.refs.hts_off_peak.value,
+                "htl_peak": this.refs.htl_peak.value,
+                "htl_off_peak": this.refs.htl_off_peak.value,
+                "accept_status": "2"
+            }
+        }).then(res => {
+                this.refs.Modal.showModal();
+                this.setState({
+                    text:"Submit Success"
+                });
+                setTimeout(() => {
+                    window.location.href="http://localhost:3000/admin/home"
+                },3000);
+            }, error => {
+                console.log(error);
+            })
     }
     render () {
         return (
             <div>
             <TimeCuntDown />
             {/* <DuringCountDown /> */}
-            <form method="post" action="">
+            <form method="post" action="" onSubmit={this.checkSuccess}>
             <div className="u-grid">
                 <div className="col-sm-12 col-md-6 push-md-3">
                     <h3 className="u-mt3 u-mb1">Section A:Information on Reverse Auction</h3>
@@ -39,7 +87,7 @@ export class RetailerManage extends Component {
                         <abbr title="required">*</abbr> Name:
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="retailer_name" maxLength="150" required aria-required="true" title="The length must not be longer than 150 characters and must not contain numbers"></input>
+                            <input type="text" name="main_name" ref="main_name" maxLength="150" required aria-required="true" title="The length must not be longer than 150 characters and must not contain numbers"></input>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -47,7 +95,7 @@ export class RetailerManage extends Component {
                         <abbr title="required">*</abbr> Email Address:
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="retailer_email" maxLength="50" required aria-required="true" pattern="^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$" title="Email must have @."></input>
+                            <input type="text" name="main_email_address" ref="main_email_address" maxLength="50" required aria-required="true" pattern="^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$" title="Email must have @."></input>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -55,7 +103,7 @@ export class RetailerManage extends Component {
                         <abbr title="required">*</abbr> Mobile Number: (+65)
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="retailer_mobile" maxLength="50" required aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
+                            <input type="text" name="main_mobile_number" ref="main_mobile_number" maxLength="50" required aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -63,7 +111,7 @@ export class RetailerManage extends Component {
                         <abbr title="required">*</abbr> Office Number: (+65)
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="retailer_Office" maxLength="50" required aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
+                            <input type="text" name="main_office_number" ref="main_office_number" maxLength="50" required aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
                         </div>
                     </div>
                     <h4 className="lm--formItem lm--formItem--inline string">Alternative Contact Person on Actual Bidding Day:</h4>
@@ -72,7 +120,7 @@ export class RetailerManage extends Component {
                         Name:
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="retailer_name_n" maxLength="50"></input>
+                            <input type="text" name="alternative_name" ref="alternative_name" maxLength="50"></input>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -80,7 +128,7 @@ export class RetailerManage extends Component {
                         Email Address:
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="retailer_email_n" maxLength="50"></input>
+                            <input type="text" name="alternative_email_address" ref="alternative_email_address" maxLength="50"></input>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -88,7 +136,7 @@ export class RetailerManage extends Component {
                         Mobile Number: (+65)
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="retailer_mobile_n" maxLength="50"></input>
+                            <input type="text" name="alternative_mobile_number" ref="alternative_mobile_number" maxLength="50"></input>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -96,7 +144,7 @@ export class RetailerManage extends Component {
                         Office Number: (+65)
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="retailer_Office_n" maxLength="50"></input>
+                            <input type="text" name="alternative_office_number" ref="alternative_office_number" maxLength="50"></input>
                         </div>
                     </div>
                     <h3 className="u-mt3 u-mb1"><abbr title="required">*</abbr>Section C:Starting Bid Price</h3>
@@ -108,20 +156,20 @@ export class RetailerManage extends Component {
                             <tbody>
                                 <tr>
                                     <td>Peak</td>
-                                    <td>$ 0.<input type="tel" className="col" name="peak_lt" required aria-required="true" pattern="^(\d{4})$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="tel" className="col" name="lt_peak" ref="lt_peak" required aria-required="true" pattern="^(\d{4})$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td>
-                                    <td>$ 0.<input type="tel" name="peak_ht_small" required aria-required="true" pattern="^(\d{4})$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="tel" name="hts_peak" ref="hts_peak" required aria-required="true" pattern="^(\d{4})$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td>
-                                    <td>$ 0.<input type="tel" name="peak_ht_large" required aria-required="true" pattern="^(\d{4})$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="tel" name="htl_peak" ref="htl_peak" required aria-required="true" pattern="^(\d{4})$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Off-Peak</td>
-                                    <td>$ 0.<input type="tel" name="offpeak_lt"></input>
+                                    <td>$ 0.<input type="tel" name="lt_off_peak" ref="lt_off_peak"></input>
                                     </td>
-                                    <td>$ 0.<input type="tel" name="offpeak_ht_small" required aria-required="true" pattern="^(\d{4})$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="tel" name="hts_off_peak" ref="hts_off_peak" required aria-required="true" pattern="^(\d{4})$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td>
-                                    <td>$ 0.<input type="tel" name="offpeak_ht_large" required aria-required="true" pattern="^(\d{4})$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="tel" name="htl_off_peak" ref="htl_off_peak" required aria-required="true" pattern="^(\d{4})$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td>
                                 </tr>
                             </tbody>
@@ -134,6 +182,7 @@ export class RetailerManage extends Component {
                 </div>
             </div>
             </form>
+            <Modal text={this.state.text} ref="Modal" />
             </div>
         )
     }
