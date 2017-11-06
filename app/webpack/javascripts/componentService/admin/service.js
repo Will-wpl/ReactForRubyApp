@@ -1,4 +1,4 @@
-import {get, create} from '../../../javascripts/http';
+import {get,update, create,put} from '../../../javascripts/http';
 
 export const getArrangements = (status) => {
     return get('/api/arrangements', { auction_id: 1, accept_status: status });
@@ -17,7 +17,7 @@ export const retailManageComing = (params) => {
 }
 
 export const raPublish = (params) => {
-    return update('/api/auctions/'+params.id+'/publish', params.pagedata);
+    return put('/api/auctions/'+params.id+'/publish', params.pagedata);
 }
 
 export const getBidderStatus = (params) => {

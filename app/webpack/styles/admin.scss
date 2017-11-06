@@ -64,9 +64,9 @@
                 abbr.color1{ background:#54BD1B; }
                 abbr.color0{ background:red; }
                 abbr.color2{ background:yellow; }
-                abbr.online{ background: url("../images/green.png") no-repeat center;}
-                abbr.outline{background: url("../images/red.png") no-repeat center;}
-                abbr.holding{background: url("../images/Yellow.png") no-repeat center;}
+                abbr.status1{ background: url("../images/green.png") no-repeat center;}
+                abbr.status0{background: url("../images/red.png") no-repeat center;}
+                abbr.status2{background: url("../images/Yellow.png") no-repeat center;}
             }
             span:last-child{
                 border:none; text-align: center; text-indent: 0px;
@@ -75,4 +75,7 @@
         }
     }
 }
+.ros_tab{ width: 80%; overflow: hidden; margin: 0px auto;}
+.ros_tab li{font-size: 12px; color:#fff; line-height: 24px; text-align: left;}
 .w_8{ width: 80%;}
+.fright{float: right;}
