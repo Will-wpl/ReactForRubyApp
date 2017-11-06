@@ -40,6 +40,11 @@ export class AdminManagePublishedRa extends Component {
                     </div>
                     <div className="col-sm-12 col-md-5">
                         <BidderStatus dataList={this.state.dataList} />
+                        <div className="createRaMain w_8">
+                        <div className="createRa_btn">
+                                <a className="lm--button lm--button--primary">Commence</a>
+                        </div>
+                        </div>
                     </div>
                 </div>
             </div>

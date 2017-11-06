@@ -61,9 +61,9 @@
                 abbr{
                     display:block; width:60%; height: 20px; margin: 6px auto;
                 }
-                abbr.color2{ background:#54BD1B; }
+                abbr.color1{ background:#54BD1B; }
                 abbr.color0{ background:red; }
-                abbr.color1{ background:yellow; }
+                abbr.color2{ background:yellow; }
                 abbr.online{ background: url("../images/green.png") no-repeat center;}
                 abbr.outline{background: url("../images/red.png") no-repeat center;}
                 abbr.holding{background: url("../images/Yellow.png") no-repeat center;}
@@ -75,3 +75,4 @@
         }
     }
 }
+.w_8{ width: 80%;}
