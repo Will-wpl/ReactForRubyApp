@@ -22,13 +22,17 @@ export class CreateNewRA extends Component {
             edit_change:"lm--button lm--button--primary hide",
             disabled:""
         };
-
         this.starttimeChange = this.starttimeChange.bind(this);
         this.endtimeChange = this.endtimeChange.bind(this);
         this.dateChange = this.dateChange.bind(this);
         this.timeChange = this.timeChange.bind(this);
     }
     componentDidMount() {
+        if(this.props.left_name != undefined){
+            this.setState({
+                disabled:"disabled"
+            })
+        }
         getAuctionInVersionOne().then(res => {
             if(res.duration == null){
                 this.setState({id:res.id});
