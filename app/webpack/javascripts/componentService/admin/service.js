@@ -23,3 +23,7 @@ export const raPublish = (params) => {
 export const getBidderStatus = (params) => {
     return get('/api/arrangements',params);
 }
+
+export const createWebsocket = (auction, methods = {}) => {
+    return new Ws(window.location.port, auction);
+}
