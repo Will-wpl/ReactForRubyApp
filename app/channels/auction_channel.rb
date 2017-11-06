@@ -6,11 +6,11 @@ class AuctionChannel < ApplicationCable::Channel
 
   def unsubscribed
     # Any cleanup needed when channel is unsubscribed
-    update_check_params('off-live')
+    update_check_params('off')
   end
 
   def check_in
-    update_check_params('on-live')
+    update_check_params('on')
   end
 
   private
