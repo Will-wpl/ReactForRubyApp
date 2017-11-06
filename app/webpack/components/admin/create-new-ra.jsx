@@ -20,7 +20,7 @@ export class CreateNewRA extends Component {
             btn_type:"",text:"",id:"",
             edit_btn:"lm--button lm--button--primary show",
             edit_change:"lm--button lm--button--primary hide",
-            disabled:"disabled"
+            disabled:""
         };
 
         this.starttimeChange = this.starttimeChange.bind(this);
