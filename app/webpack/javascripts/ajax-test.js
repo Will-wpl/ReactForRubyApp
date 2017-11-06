@@ -6,9 +6,9 @@ $(function () {
     // auctionPublish();
     // arrangementList();
     // arrangementDetail();
-    // arrangementUpdate();
+    arrangementUpdate();
     // aucitonLink();
-    auctionTimer();
+    // auctionTimer();
     // auctionHold();
     function auctionObtain() {
         $.ajax({
@@ -82,8 +82,6 @@ $(function () {
             data: {
                 auction: {
                     id: 1,
-                    actual_begin_time: null,
-                    actual_end_time: null,
                     contract_period_end_date: "2018-06-30",
                     contract_period_start_date: "2018-01-01",
                     duration: 20,
@@ -94,7 +92,14 @@ $(function () {
                     start_datetime: "2017-12-01T12:00:00.000Z",
                     total_volume: null,
                     actual_begin_time: "2017-12-01T12:00:00.000Z",
-                    actual_end_time: "2017-12-01T12:20:00.000Z"
+                    actual_end_time: "2017-12-01T12:20:00.000Z",
+                    total_volume: null,
+                    total_lt_peak: 10000,
+                    total_lt_off_peak: 10000,
+                    total_hts_peak: 10000,
+                    total_hts_off_peak: 10000,
+                    total_htl_peak: 10000,
+                    total_htl_off_peak: 10000,
                     // please follow auction object
 
                 }
@@ -152,11 +157,11 @@ $(function () {
             type: "PATCH",
             dataType: 'json',
             beforeSend: $.rails.CSRFProtection,
-            url: '/api/arrangements/2',
+            url: '/api/arrangements/3',
             data: {
                 arrangement: {
-                    "id": 2,
-                    "main_name": "hello",
+                    "id": 3,
+                    "main_name": "hello2",
                     "main_email_address": "",
                     "main_mobile_number": "",
                     "main_office_number": "",
@@ -164,12 +169,12 @@ $(function () {
                     "alternative_email_address": null,
                     "alternative_mobile_number": null,
                     "alternative_office_number": null,
-                    "lt_peak": null,
-                    "lt_off_peak": null,
-                    "hts_peak": null,
-                    "hts_off_peak": null,
-                    "htl_peak": null,
-                    "htl_off_peak": null,
+                    "lt_peak": 0.13,
+                    "lt_off_peak": 0.12,
+                    "hts_peak": 0.13,
+                    "hts_off_peak": 0.18,
+                    "htl_peak": 0.11,
+                    "htl_off_peak": 0.12,
                     "accept_status": "2"
                 }
             },
