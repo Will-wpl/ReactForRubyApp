@@ -56,7 +56,7 @@ class Api::AuctionsController < ApplicationController
   # PUT publish auction by ajax
   def publish
     if @auction.update(publish_status: params[:publish_status])
-      render json: '@auction published', status: 200
+      render json: @auction, status: 200
     else
       render json: 'error code ', status: 500
     end
