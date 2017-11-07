@@ -23,7 +23,8 @@ export class AdminManagePublishedRa extends Component {
                     live_modal:"live_hide",
                     live_modal_do:"live_show"
                 })
-            }else{
+            }
+            if(this.auction.publish_status == ""){
                 this.setState({
                     live_modal:"live_show",
                     live_modal_do:"live_hide"
