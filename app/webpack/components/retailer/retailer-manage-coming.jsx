@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import {TimeCuntDown} from '../shared/time-cuntdown';
 //import {DuringCountDown} from '../shared/during-countdown';
-import {createRa,getRetailerAuctionInVersionOne,retailManageComing} from '../../javascripts/componentService/admin/service';
+import {createRa,getAuctionInVersionOne,getRetailerAuctionInVersionOne,retailManageComing} from '../../javascripts/componentService/admin/service';
 import {Modal} from '../shared/show-modal';
 import {getLoginUserId} from '../../javascripts/componentService/util'
 
@@ -11,9 +11,26 @@ export class RetailerManage extends Component {
         super(props);
         this.state={
             id:"",
-            text:"",
-            type:""
+            text:"",holdOrend:"live_hold",
+            type:"",live_modal:"",live_modal_do:""
         }
+    }
+    componentWillMount(){
+        getAuctionInVersionOne().then(res=>{
+            if(res.publish_status == 0){
+                this.setState({
+                    live_modal:"live_show",
+                    live_modal_do:"live_hide"
+                })
+            }else{
+                this.setState({
+                    live_modal:"live_hide",
+                    live_modal_do:"live_show"
+                })
+            }
+        }, error => {
+            console.log(error);
+        })
     }
     componentDidMount() {
         let auction_id = window.location.href.split("auctions/")[1];
@@ -81,6 +98,15 @@ export class RetailerManage extends Component {
     render () {
         return (
             <div>
+            <div id="live_modal" className={this.state.live_modal}>
+                <div className={this.state.holdOrend}></div>
+                <p>
+                Please standy,bidding will<br></br>
+                commence soon<br></br>
+                Page will automatically refresh when<br></br>reverse auction commences
+                </p>
+            </div>
+            <div className={this.state.live_modal_do}>
             <TimeCuntDown />
             {/* <DuringCountDown /> */}
             <form onSubmit={this.checkSuccess.bind(this)}>
@@ -206,6 +232,7 @@ export class RetailerManage extends Component {
             </div>
             </form>
             <Modal text={this.state.text} ref="Modal" />
+            </div>
             </div>
         )
     }
