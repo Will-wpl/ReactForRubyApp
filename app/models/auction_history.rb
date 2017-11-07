@@ -22,7 +22,7 @@ class AuctionHistory < ApplicationRecord
 
   # Methods (class methods before instance methods)
 
-  def self.save_update_init_auction_histories(calculate_dto)
+  def self.save_update_sort_init_auction_histories(calculate_dto)
     @auction = Auction.find(calculate_dto.auction_id)
     @histories = AuctionHistory.where('auction_id = ? and user_id = ?', calculate_dto.auction_id , calculate_dto.user_id)
     total_volume = Auction.set_total_volume(
@@ -70,10 +70,16 @@ class AuctionHistory < ApplicationRecord
     BigDecimal.new(total_award_sum) / BigDecimal.new(total_volume)
   end
 
-  private
-
   def self.find_sort_update_auction_histories(auction_id)
     histories = find_bidder_histories(auction_id)
     sort_update_auction_histories(histories)
+  end
+
+  def self.find_clone_sort_update_auction_histories(auction_id)
+    histories = find_bidder_histories(auction_id)
+  end
+
+  def self.find_bidder_retailer_histories(auction_id)
+    @histories = AuctionHistory.where('auction_id = ? and is_bidder = ?', auction_id, true)
   end
 end
