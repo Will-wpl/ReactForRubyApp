@@ -82,6 +82,10 @@ export default class Ranking extends Component {
     }
 }
 
+Ranking.defaultProps = {
+    data: []
+}
+
 function getTemplate() {
     return {
         calculable: true,
