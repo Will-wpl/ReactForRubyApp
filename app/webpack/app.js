@@ -24,14 +24,14 @@ const auction = cable.subscriptions.create({
 }, {
     connected () {
         console.log('-----message client connected ------------')
-        auction.checkIn({user_id: 2});
-        auction.setBid({lt_peak:0.1, lt_off_peak: 0.1 , hts_peak:0.1,hts_off_peak:0.1,htl_peak:0.2,htl_off_peak:0.3});
+        // auction.checkIn({user_id: 2});
+        // auction.setBid({lt_peak:'0.020', lt_off_peak: '0.1000' , hts_peak:'0.1000',hts_off_peak:'0.0898',htl_peak:'0.1000',htl_off_peak:'0.1000'});
     },
     disconnected () {
         console.log('-----message client disconnected ------------')
     },
     received (data) {
-        console.log("received : " + data.user_id)
+        console.log(data)
     },
     checkIn (params) {
         return this.perform('check_in', params);
