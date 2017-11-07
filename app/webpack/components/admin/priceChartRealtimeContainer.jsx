@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {createWebsocket} from '../../javascripts/componentService/admin/service';
-import Ranking from '../common/chart/ranking';
+import Price from '../common/chart/price';
 
-export default class RankingRealtimeHoc extends Component {
+export default class PriceRealtimeHoc extends Component {
     constructor(props) {
         super(props);
         this.ids = [];
@@ -93,7 +93,7 @@ export default class RankingRealtimeHoc extends Component {
 
     render() {
         return (
-            <div><Ranking data={this.state.data}/></div>
+            <div><Price data={this.state.data}/></div>
             // <div>
             //     {
             //         React.Children.map(this.props.children

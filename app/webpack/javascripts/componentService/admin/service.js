@@ -1,4 +1,4 @@
-import {get,update, create,put} from '../../../javascripts/http';
+import {get, create, Ws} from '../../../javascripts/http';
 
 export const getArrangements = (status) => {
     return get('/api/arrangements', { auction_id: 1, accept_status: status });
