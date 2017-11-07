@@ -9,7 +9,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
    width: 100%; font-size: 12px;
    thead{
      tr{ background: #00394A;
-      th{ height: 40px; border-right:1px solid #314657;}
+      th{ height: 40px; border-right:1px solid #314657; font-size: 14px;}
       th.table_title{border-bottom:1px solid #314657;}
     }
    }
@@ -122,5 +122,6 @@ abbr[title]{color: #fe0000; text-decoration: none;}
   .live_end{ background: url("../images/thank you_end.png") no-repeat; width: 100%; height:126px; }
   p{ background: #00afb1; width: 100%; line-height: 32px; font-size: 18px; padding: 20px; text-align: center}
 }
+.font13{ font-size: 14px;}
 .live_show{display: block;}
 .live_hide{display: none;}

@@ -19,13 +19,14 @@ export class RetailerManage extends Component {
         getAuctionInVersionOne().then(res=>{
             if(res.publish_status == 0){
                 this.setState({
-                    live_modal:"live_show",
-                    live_modal_do:"live_hide"
-                })
-            }else{
-                this.setState({
                     live_modal:"live_hide",
                     live_modal_do:"live_show"
+                })
+            }
+            if(res.publish_status == ""){
+                this.setState({
+                    live_modal:"live_show",
+                    live_modal_do:"live_hide"
                 })
             }
         }, error => {
@@ -86,7 +87,7 @@ export class RetailerManage extends Component {
         }).then(res => {
                 this.refs.Modal.showModal();
                 this.setState({
-                    text:"Submit Success"
+                    text:"Your details have been successfully submitted."
                 });
                 setTimeout(() => {
                     window.location.href="/retailer/home"
@@ -197,6 +198,7 @@ export class RetailerManage extends Component {
                         </div>
                     </div>
                     <h3 className="u-mt3 u-mb1"><abbr title="required">*</abbr>Section C:Starting Bid Price</h3>
+                    <h4 className="u-mt1 u-mb1 font13">Important: Please note that this will be your starting bid price for the reverse auction. Your price submission during the live reverse auction must be lower than your starting bid price.</h4>
                     <div className="lm--formItem lm--formItem--inline string">
                         <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                             <thead>
