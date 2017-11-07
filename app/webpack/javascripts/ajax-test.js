@@ -10,7 +10,7 @@ $(function () {
     // aucitonLink();
     // auctionTimer();
     // auctionHold();
-    auctionHistoriesList();
+    // auctionHistoriesList();
     function auctionObtain() {
         $.ajax({
             type: "GET",
@@ -158,11 +158,11 @@ $(function () {
             type: "PATCH",
             dataType: 'json',
             beforeSend: $.rails.CSRFProtection,
-            url: '/api/arrangements/3',
+            url: '/api/arrangements/5',
             data: {
                 arrangement: {
-                    "id": 3,
-                    "main_name": "hello",
+                    "id": 5,
+                    "main_name": "hello1",
                     "main_email_address": "",
                     "main_mobile_number": "",
                     "main_office_number": "",
@@ -171,10 +171,10 @@ $(function () {
                     "alternative_mobile_number": null,
                     "alternative_office_number": null,
                     "lt_peak": 0.15,
-                    "lt_off_peak": 0.12,
-                    "hts_peak": 0.11,
+                    "lt_off_peak": 0.32,
+                    "hts_peak": 0.01,
                     "hts_off_peak": 0.16,
-                    "htl_peak": 0.11,
+                    "htl_peak": 0.18,
                     "htl_off_peak": 0.11,
                     "accept_status": "2"
                 }

@@ -10,7 +10,7 @@ export class AdminManagePublishedRa extends Component {
         this.state={
             id:"",
             live_modal:"",live_modal_do:"",
-            holdOrend:"live_hold",
+            //holdOrend:"live_hold",
             dataList:[]
         }
         this.auction = {};
