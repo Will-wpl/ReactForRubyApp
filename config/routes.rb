@@ -30,7 +30,11 @@ Rails.application.routes.draw do
         get 'link'
       end
     end
-    resource :auction_histories
+    resource :auction_histories do
+      collection do
+        get 'list'
+      end
+    end
   end
 
   namespace :admin do
