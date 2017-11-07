@@ -23,8 +23,8 @@ class Api::ArrangementsController < ApplicationController
     if @arrangement.update(model_params)
       calculate_dto = CalculateDto.new(@arrangement.lt_peak ,@arrangement.lt_off_peak,@arrangement.hts_peak,@arrangement.hts_off_peak, @arrangement.htl_peak, @arrangement.htl_off_peak, @arrangement.auction_id, @arrangement.user_id)
       AuctionHistory.save_update_init_auction_histories(calculate_dto)
-      histories = AuctionHistory.where(:'auction_id' => @arrangement.auction_id)
-      AuctionHistory.sort_auction_histories(histories)
+      # histories = AuctionHistory.where(:'auction_id' => @arrangement.auction_id)
+      # AuctionHistory.sort_auction_histories(histories)
       render json: @arrangement ,status: 200
     else
       render json: 'error code ', status: 500
