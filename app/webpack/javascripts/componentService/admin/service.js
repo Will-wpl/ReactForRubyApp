@@ -31,3 +31,7 @@ export const getBidderStatus = (params) => {
 export const createWebsocket = (auction, methods = {}) => {
     return new Ws(window.location.port, auction);
 }
+
+export const arrangementDetail = (params) => {
+    return get('/api/arrangements/'+params);
+}

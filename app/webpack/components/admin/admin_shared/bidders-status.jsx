@@ -1,22 +1,27 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import {Modal} from '../../shared/show-modal';
+import {arrangementDetail} from '../../../javascripts/componentService/admin/service';
 export class BidderStatus extends Component {
     constructor(props){
         super(props);
         this.state={
             text:"message",
+            showDetail:{},
             modalshowhide:"modal_hide"
         }
     }
-    showDetail(message,obj){
-        this.setState({
-            text:"user:"+message,
+    showDetail(id,obj){
+        arrangementDetail(id).then(res=>{
+            this.setState({
+                showDetail:res,
+            })
+            this.refs.Modal.showModal();
+        },error=>{
+
         })
-        this.refs.Modal.showModal();
     }
     render () {
-
         return (
             <div className="u-grid bidderStatus">
                 <div className="col-sm-12 col-md-12">
@@ -40,7 +45,7 @@ export class BidderStatus extends Component {
                     {/*<label><span className="red"></span><dfn>Rejected</dfn></label>*/}
                 </div>
                 </div>
-                <Modal text={this.state.text} ref="Modal" />
+                <Modal showdetail={this.state.showDetail} ref="Modal" />
             </div>
         )
     }

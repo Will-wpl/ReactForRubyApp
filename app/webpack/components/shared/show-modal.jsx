@@ -34,7 +34,17 @@ export class Modal extends React.Component{
         })
     }
     render(){
-        let btn_html ='';
+        let showDetail = '';
+        if(this.props.showdetail){
+            showDetail = <ul>
+                            <li>name:{this.props.showdetail.main_name}</li>
+                            <li>email:{this.props.showdetail.main_email_address}</li>
+                            <li>mobile:{this.props.showdetail.main_mobile_number}</li>
+                            <li>office:{this.props.showdetail.main_office_number}</li>
+                        </ul>
+        }
+        
+        let btn_html = '';
         if(this.state.type == "default"){
             btn_html = <div className="modal_btn"><a onClick={this.closeModal.bind(this)}>OK</a></div>;
         }else{
@@ -43,7 +53,7 @@ export class Modal extends React.Component{
         return(
             <div id="modal_main" className={this.state.modalshowhide}>
                 <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
-                <div className="modal_detail">{this.props.text}</div>
+                <div className="modal_detail">{this.props.text}{showDetail}</div>
                 {btn_html}
             </div>
         )
