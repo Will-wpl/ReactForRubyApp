@@ -2,22 +2,58 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import {TimeCuntDown} from '../shared/time-cuntdown';
 //import {DuringCountDown} from '../shared/during-countdown';
-import {createRa,getAuctionInVersionOne,retailManageComing} from '../../javascripts/componentService/admin/service';
+import {createRa,getAuctionInVersionOne,getRetailerAuctionInVersionOne,retailManageComing} from '../../javascripts/componentService/admin/service';
 import {Modal} from '../shared/show-modal';
+import {getLoginUserId} from '../../javascripts/componentService/util'
 
 export class RetailerManage extends Component {
     constructor(props){
         super(props);
         this.state={
             id:"",
-            text:"",
-            type:""
+            text:"",holdOrend:"live_hold",
+            type:"",live_modal:"",live_modal_do:""
         }
     }
+    componentWillMount(){
+        getAuctionInVersionOne().then(res=>{
+            if(res.publish_status == 0){
+                this.setState({
+                    live_modal:"live_hide",
+                    live_modal_do:"live_show"
+                })
+            }
+            if(res.publish_status == ""){
+                this.setState({
+                    live_modal:"live_show",
+                    live_modal_do:"live_hide"
+                })
+            }
+        }, error => {
+            console.log(error);
+        })
+    }
     componentDidMount() {
-        getAuctionInVersionOne().then(res => {
-            //console.log(res);
+        let auction_id = window.location.href.split("auctions/")[1];
+        auction_id = auction_id.split("/upcoming")[0];
+        let user_id = getLoginUserId();
+        getRetailerAuctionInVersionOne({ auction_id: auction_id, user_id: user_id}).then(res => {
+            console.log(res);
             this.setState({id:res.id})
+            this.refs.main_name.value = res.main_name;
+            this.refs.main_email_address.value = res.main_email_address;
+            this.refs.main_mobile_number.value = res.main_mobile_number;
+            this.refs.main_office_number.value = res.main_office_number;
+            this.refs.alternative_name.value = res.alternative_name;
+            this.refs.alternative_email_address.value = res.alternative_email_address;
+            this.refs.alternative_mobile_number.value = res.alternative_mobile_number;
+            this.refs.alternative_office_number.value = res.alternative_office_number;
+            this.refs.lt_peak.value = res.lt_peak*10000;
+            this.refs.lt_off_peak.value = res.lt_off_peak*10000;
+            this.refs.hts_peak.value = res.hts_peak*10000;
+            this.refs.hts_off_peak.value = res.hts_off_peak*10000;
+            this.refs.htl_peak.value = res.htl_peak*10000;
+            this.refs.htl_off_peak.value = res.htl_off_peak*10000;
         }, error => {
             console.log(error);
         })
@@ -40,18 +76,18 @@ export class RetailerManage extends Component {
                 "alternative_email_address": this.refs.alternative_email_address.value,
                 "alternative_mobile_number": this.refs.alternative_mobile_number.value,
                 "alternative_office_number": this.refs.alternative_office_number.value,
-                "lt_peak": this.refs.lt_peak.value,
-                "lt_off_peak": this.refs.lt_off_peak.value,
-                "hts_peak": this.refs.hts_peak.value,
-                "hts_off_peak": this.refs.hts_off_peak.value,
-                "htl_peak": this.refs.htl_peak.value,
-                "htl_off_peak": this.refs.htl_off_peak.value,
+                "lt_peak": this.refs.lt_peak.value/10000,
+                "lt_off_peak": this.refs.lt_off_peak.value/10000,
+                "hts_peak": this.refs.hts_peak.value/10000,
+                "hts_off_peak": this.refs.hts_off_peak.value/10000,
+                "htl_peak": this.refs.htl_peak.value/10000,
+                "htl_off_peak": this.refs.htl_off_peak.value/10000,
                 "accept_status": "2"
             }
         }).then(res => {
                 this.refs.Modal.showModal();
                 this.setState({
-                    text:"Submit Success"
+                    text:"Your details have been successfully submitted."
                 });
                 setTimeout(() => {
                     window.location.href="/retailer/home"
@@ -63,6 +99,15 @@ export class RetailerManage extends Component {
     render () {
         return (
             <div>
+            <div id="live_modal" className={this.state.live_modal}>
+                <div className={this.state.holdOrend}></div>
+                <p>
+                Please standy,bidding will<br></br>
+                commence soon<br></br>
+                Page will automatically refresh when<br></br>reverse auction commences
+                </p>
+            </div>
+            <div className={this.state.live_modal_do}>
             <TimeCuntDown />
             {/* <DuringCountDown /> */}
             <form onSubmit={this.checkSuccess.bind(this)}>
@@ -153,6 +198,7 @@ export class RetailerManage extends Component {
                         </div>
                     </div>
                     <h3 className="u-mt3 u-mb1"><abbr title="required">*</abbr>Section C:Starting Bid Price</h3>
+                    <h4 className="u-mt1 u-mb1 font13">Important: Please note that this will be your starting bid price for the reverse auction. Your price submission during the live reverse auction must be lower than your starting bid price.</h4>
                     <div className="lm--formItem lm--formItem--inline string">
                         <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                             <thead>
@@ -161,20 +207,20 @@ export class RetailerManage extends Component {
                             <tbody>
                                 <tr>
                                     <td>Peak</td>
-                                    <td>$ 0.<input type="tel" className="col" name="lt_peak" ref="lt_peak"  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="tel" className="col" name="lt_peak" ref="lt_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td>
-                                    <td>$ 0.<input type="tel" name="hts_peak" ref="hts_peak"  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="tel" name="hts_peak" ref="hts_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td>
-                                    <td>$ 0.<input type="tel" name="htl_peak" ref="htl_peak"  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="tel" name="htl_peak" ref="htl_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Off-Peak</td>
-                                    <td>$ 0.<input type="tel" name="lt_off_peak" ref="lt_off_peak" aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="tel" name="lt_off_peak" ref="lt_off_peak" required aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td>
-                                    <td>$ 0.<input type="tel" name="hts_off_peak" ref="hts_off_peak"  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
-                                    </td>
-                                    <td>$ 0.<input type="tel" name="htl_off_peak" ref="htl_off_peak"  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="tel" name="hts_off_peak" ref="hts_off_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    </td> 
+                                    <td>$ 0.<input type="tel" name="htl_off_peak" ref="htl_off_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td>
                                 </tr>
                             </tbody>
@@ -188,6 +234,7 @@ export class RetailerManage extends Component {
             </div>
             </form>
             <Modal text={this.state.text} ref="Modal" />
+            </div>
             </div>
         )
     }

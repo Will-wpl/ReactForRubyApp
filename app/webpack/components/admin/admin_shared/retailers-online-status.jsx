@@ -26,8 +26,8 @@ export class RetailsOnlineStatus extends Component {
                         this.props.list_data.map((item,index) => {
                         return(
                             <li key={index} className="u-grid">
-                                <span className="col-md-9">{item.company_name}</span>
-                                <span className="col-md-3"><abbr className={"status"+item.accept_status}></abbr></span>
+                                <span className="col-sm-9 col-md-9">{item.company_name}</span>
+                                <span className="col-sm-3 col-md-3"><abbr className={item.login_status}></abbr></span>
                             </li>
                             )
                         })

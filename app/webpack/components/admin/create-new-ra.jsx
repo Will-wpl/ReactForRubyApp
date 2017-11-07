@@ -196,30 +196,31 @@ export class CreateNewRA extends Component {
                             this.setState({
                                 text:this.auction.name + " has been successfully saved "
                             });
-                            // sessionStorage.setItem("raInfo",JSON.stringify(res));
-                            // setTimeout(() => {
-                            //     window.location.href="http://localhost:3000/admin/home"
-                            // },3000);
                         }, error => {
                             console.log(error);
                         })
         }
         if(this.state.btn_type == "publish"){
-            raPublish({
-                pagedata:{publish_status: '0'},
-                id:this.state.id
-            }).then(res => {
-                    this.auction = res;
-                    this.refs.Modal.showModal();
-                    this.setState({
-                        text:this.auction.name+" has been successfully published. Please go to 'Manage Published Upcoming Reverse Auction' for further actions."
-                    });
-                    setTimeout(() => {
-                         window.location.href="http://localhost:3000/admin/home"
-                     },5000);
-                }, error => {
-                    console.log(error);
-                })
+            createRa({auction: this.setAuction()}).then(res => {
+                this.auction = res;
+                raPublish({
+                    pagedata:{publish_status: '0'},
+                    id:this.state.id
+                }).then(res => {
+                        this.auction = res;
+                        this.refs.Modal.showModal();
+                        this.setState({
+                            text:this.auction.name+" has been successfully published. Please go to 'Manage Published Upcoming Reverse Auction' for further actions."
+                        });
+                        setTimeout(() => {
+                             window.location.href="http://localhost:3000/admin/home"
+                         },5000);
+                    }, error => {
+                        console.log(error);
+                    })
+            }, error => {
+                console.log(error);
+            })
         }
     }
     render () {
@@ -296,17 +297,17 @@ export class CreateNewRA extends Component {
                         <span className="lm--formItem-left lm--formItem-label string optional">Reverse Auction Paramters</span>
                     </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
-                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Duration :</span>
+                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Duration (minutes):</span>
                         <label className="lm--formItem-right lm--formItem-control">
                             <input type="test" ref="duration" onChange={this.doDuration.bind(this)} value={this.state.duration} disabled={this.state.disabled} name="duration" maxLength="50" required aria-required="true" pattern="^[0-9]*[1-9][0-9]*$" title="Duration must be an integer."></input>
-                            <abbr ref="ra_duration_error" className="col">minutes</abbr>
+                            <abbr ref="ra_duration_error" className="col"></abbr>
                         </label>
                         </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
-                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Reverse Price :</span>
+                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Reverse Price ($/kWh):</span>
                         <label className="lm--formItem-right lm--formItem-control">
                             <input type="test" ref="reserve_price" onChange={this.doPrice.bind(this)} value={this.state.reserve_price} disabled={this.state.disabled} name="reserve_price" maxLength="50" required aria-required="true" pattern="^\d+(\.\d{4})$" title="Reserve Price must be a number with 4 decimal places, e.g. $0.0891/kWh." ></input>
-                            <abbr ref="ra_duration_error" className="col">/kWh</abbr>
+                            <abbr ref="ra_duration_error" className="col"></abbr>
                         </label>
                     </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional"><span className="lm--formItem-left lm--formItem-label string optional">Time Extension :</span><label className="lm--formItem-right lm--formItem-control"><b className="textLeft">Manual</b></label></dd>
@@ -316,6 +317,9 @@ export class CreateNewRA extends Component {
                 </form>
                 <Modal text={this.state.text} dodelete={this.delete.bind(this)} ref="Modal" />
             </div>
+            </div>
+            <div className="createRaMain u-grid">
+            <a className="lm--button lm--button--primary u-mt3" href="/admin/home" >Back to Homepage</a>
             </div>
             </div>
         )
