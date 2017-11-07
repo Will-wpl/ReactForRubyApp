@@ -113,7 +113,6 @@ export class CreateNewRA extends Component {
             disabled:"disabled"
         })
     }
-
     setAuction(){
         // this.auction.id=this.state.id;
         this.auction.contract_period_end_date= this.state.endDate.format().split("T")[0];
@@ -141,26 +140,27 @@ export class CreateNewRA extends Component {
         this.auction.total_volume= null;
         return this.auction;
     }
-    delete(){
-        this.setState({
-            id:this.state.id,
-            name:"",
-            start_datetime:"",
-            startDate:"",
-            endDate:"",
-            duration:"",
-            reserve_price:""
-        });
+    showDelete(){
         this.refs.Modal.showModal("comfirm");
         this.setState({text:"Comfirm delete?"});
-        // if(this.state.comfirm){
+    }
+    delete(){
             createRa({ auction: this.removeAuction()}).then(res => {
-                this.auction = res;
                 this.refs.Modal.showModal();
                 this.setState({
-                    text:this.auction.name + " has been successfully deleted."
+                    text:this.state.name + " has been successfully deleted."
                 });
-                sessionStorage.removeItem("raInfo");
+                this.auction = res;
+                this.setState({
+                    id:this.state.id,
+                    name:"",
+                    start_datetime:"",
+                    startDate:"",
+                    endDate:"",
+                    duration:"",
+                    reserve_price:""
+                });
+                //sessionStorage.removeItem("raInfo");
                 // setTimeout(() => {
                 //     window.location.href="http://localhost:3000/admin/home"
                 // },3000);
@@ -211,14 +211,17 @@ export class CreateNewRA extends Component {
         let left_name ="";
         let btn_html ="";
         let sStorage = {};
+        let styleType = "";
         if(this.props.left_name == undefined){//Create New Ra
+            styleType = "col-sm-12 col-md-8 push-md-2";
             left_name = "Create New Reverse Auction";
                 btn_html = <div className="createRa_btn">
                                 <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'save')}>Save</button>
-                                <a className="lm--button lm--button--primary" onClick={this.delete.bind(this)}>Delete</a>
+                                <a className="lm--button lm--button--primary" onClick={this.showDelete.bind(this)}>Delete</a>
                                 <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'publish')}>Publish</button>
                             </div>
         }else{//edit
+            styleType = "col-sm-12 col-md-12";
             left_name = this.props.left_name;
             btn_html = <div className="createRa_btn">
                             <a className={this.state.edit_btn} onClick={this.edit.bind(this)}>Edit</a>
@@ -228,7 +231,7 @@ export class CreateNewRA extends Component {
         }
         return (
             <div className="createRaMain u-grid">
-            <div className="col-sm-12 col-md-6 push-md-3">
+            <div className={styleType}>
                 <h2>{left_name}</h2>
                 <form action="" ref="CreatRaForm" method="post" id="CreatRaForm" onSubmit={this.checkSuccess.bind(this)}>
                 <dl className="vw-block vw-block-cols creatRa">
@@ -279,7 +282,7 @@ export class CreateNewRA extends Component {
                 </dl>
                 {btn_html}
                 </form>
-                <Modal text={this.state.text} ref="Modal" />
+                <Modal text={this.state.text} dodelete={this.delete.bind(this)} ref="Modal" />
             </div>
             </div>
         )
