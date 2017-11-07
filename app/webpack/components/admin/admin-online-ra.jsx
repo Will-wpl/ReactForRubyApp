@@ -3,12 +3,11 @@ import ReactDOM from 'react-dom';
 import {DuringCountDown} from '../shared/during-countdown';
 import RetailerRanking from './admin_shared/ranking';
 import ReservePrice from './admin_shared/reserveprice';
-import Ranking from '../common/chart/ranking';
-import Price from '../common/chart/price';
 import CheckboxList from '../common/chart/list-checkbox';
 import {getArrangements} from '../../javascripts/componentService/admin/service';
 import {ACCEPT_STATUS} from '../../javascripts/componentService/constant';
-import RealtimeChartStateHoc from './realtimeChartdataContainer';
+import RankingRealtimeHoc from './rankingChartRealtimeContainer';
+import PriceRealtimeHoc from './priceChartRealtimeContainer';
 
 export class AdminOnlineRa extends Component {
     constructor(props, context){
@@ -36,9 +35,7 @@ export class AdminOnlineRa extends Component {
                     <div className="col-sm-12 col-md-7">
                         <div className="u-grid u-mt2">
                             <div className="col-sm-9">
-                                <RealtimeChartStateHoc ref="priceChart">
-                                    <Price />
-                                </RealtimeChartStateHoc>
+                                <PriceRealtimeHoc ref="priceChart" />
                             </div>
                             <div className="col-sm-2 push-md-1">
                                 <CheckboxList list={this.state.users} onCheckeds={this.updatePriceOnUsersSelected.bind(this)}/>
@@ -46,9 +43,7 @@ export class AdminOnlineRa extends Component {
                         </div>
                         <div className="u-grid u-mt2">
                             <div className="col-sm-9">
-                                <RealtimeChartStateHoc ref="rankingChart">
-                                    <Ranking />
-                                </RealtimeChartStateHoc>
+                                <RankingRealtimeHoc ref="rankingChart" />
                             </div>
                             <div className="col-sm-2 push-md-1">
                                 <CheckboxList list={this.state.users} onCheckeds={this.updateRankingOnUsersSelected.bind(this)}/>
