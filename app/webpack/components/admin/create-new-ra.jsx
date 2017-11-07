@@ -140,8 +140,8 @@ export class CreateNewRA extends Component {
         this.auction.name= this.refs.name.value;
         this.auction.reserve_price= this.refs.reserve_price.value;
         this.auction.start_datetime= this.state.start_datetime.format();
-        // this.auction.actual_begin_time  TBD
-        // this.auction.actual_end_time  TBD
+        this.auction.actual_begin_time=this.state.start_datetime.format();
+        this.auction.actual_end_time=this.state.start_datetime.add(this.refs.duration.value,'minutes').format();
         return this.auction;
     }
 
@@ -241,7 +241,7 @@ export class CreateNewRA extends Component {
             btn_html = <div className="createRa_btn">
                             <a className={this.state.edit_btn} onClick={this.edit.bind(this)}>Edit</a>
                             <button className={this.state.edit_change} onClick={this.auctionCreate.bind(this,'save')}>Save</button>
-                            <button className={this.state.edit_change} onClick={this.Cancel.bind(this)}>Cancel</button>
+                            <a className={this.state.edit_change} onClick={this.Cancel.bind(this)}>Cancel</a>
                         </div>
         }
         return (
