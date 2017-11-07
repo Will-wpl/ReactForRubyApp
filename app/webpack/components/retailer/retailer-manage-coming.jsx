@@ -102,9 +102,7 @@ export class RetailerManage extends Component {
             <div id="live_modal" className={this.state.live_modal}>
                 <div className={this.state.holdOrend}></div>
                 <p>
-                Please standy,bidding will<br></br>
-                commence soon<br></br>
-                Page will automatically refresh when<br></br>reverse auction commences
+                There is no upcoming reverse auction published.
                 </p>
             </div>
             <div className={this.state.live_modal_do}>
