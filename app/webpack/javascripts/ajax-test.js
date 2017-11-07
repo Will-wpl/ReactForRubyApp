@@ -6,10 +6,11 @@ $(function () {
     // auctionPublish();
     // arrangementList();
     // arrangementDetail();
-    arrangementUpdate();
+    // arrangementUpdate();
     // aucitonLink();
     // auctionTimer();
     // auctionHold();
+    auctionHistoriesList();
     function auctionObtain() {
         $.ajax({
             type: "GET",
@@ -161,7 +162,7 @@ $(function () {
             data: {
                 arrangement: {
                     "id": 3,
-                    "main_name": "hello2",
+                    "main_name": "hello",
                     "main_email_address": "",
                     "main_mobile_number": "",
                     "main_office_number": "",
@@ -169,12 +170,12 @@ $(function () {
                     "alternative_email_address": null,
                     "alternative_mobile_number": null,
                     "alternative_office_number": null,
-                    "lt_peak": 0.13,
+                    "lt_peak": 0.15,
                     "lt_off_peak": 0.12,
-                    "hts_peak": 0.13,
-                    "hts_off_peak": 0.18,
+                    "hts_peak": 0.11,
+                    "hts_off_peak": 0.16,
                     "htl_peak": 0.11,
-                    "htl_off_peak": 0.12,
+                    "htl_off_peak": 0.11,
                     "accept_status": "2"
                 }
             },
@@ -222,6 +223,19 @@ $(function () {
                 console.log('auctionUpdate');
                 console.log(data);
             }
+        });
+    }
+
+    function auctionHistoriesList(){
+        $.ajax({
+            type: "GET",
+            url: '/api/auction_histories',
+            data: { auction_id: 1, user_id: '3'},
+            success: (data) => {
+                console.log('auction_histories list');
+                console.log(data);
+            },
+            dataType: 'json'
         });
     }
 });
