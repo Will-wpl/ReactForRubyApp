@@ -141,7 +141,7 @@ export class CreateNewRA extends Component {
         this.auction.reserve_price= this.refs.reserve_price.value;
         this.auction.start_datetime= this.state.start_datetime.format();
         this.auction.actual_begin_time=this.state.start_datetime.format();
-        this.auction.actual_end_time=this.state.start_datetime.add(this.refs.duration.value,'minutes').format();
+        this.auction.actual_end_time = moment(this.refs.start_datetime.value).add(this.refs.duration.value,'minutes').format();
         return this.auction;
     }
 
@@ -190,6 +190,8 @@ export class CreateNewRA extends Component {
     checkSuccess(event,obj){
         event.preventDefault();
         if(this.state.btn_type == "save"){
+            this.setAuction();
+            //return;
             createRa({auction: this.setAuction()}).then(res => {
                             this.auction = res;
                             this.refs.Modal.showModal();

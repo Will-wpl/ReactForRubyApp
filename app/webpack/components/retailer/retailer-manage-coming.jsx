@@ -11,7 +11,7 @@ export class RetailerManage extends Component {
         super(props);
         this.state={
             id:"",
-            text:"",holdOrend:"live_hold",
+            text:"",
             type:"",live_modal:"",live_modal_do:""
         }
     }
@@ -207,20 +207,20 @@ export class RetailerManage extends Component {
                             <tbody>
                                 <tr>
                                     <td>Peak</td>
-                                    <td>$ 0.<input type="tel" className="col" name="lt_peak" ref="lt_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="text" maxLength="4" className="col" name="lt_peak" ref="lt_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td>
-                                    <td>$ 0.<input type="tel" name="hts_peak" ref="hts_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="text" maxLength="4" name="hts_peak" ref="hts_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td>
-                                    <td>$ 0.<input type="tel" name="htl_peak" ref="htl_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="text" maxLength="4" name="htl_peak" ref="htl_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Off-Peak</td>
-                                    <td>$ 0.<input type="tel" name="lt_off_peak" ref="lt_off_peak" required aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="text" maxLength="4" name="lt_off_peak" ref="lt_off_peak" required aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td>
-                                    <td>$ 0.<input type="tel" name="hts_off_peak" ref="hts_off_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="text" maxLength="4" name="hts_off_peak" ref="hts_off_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td> 
-                                    <td>$ 0.<input type="tel" name="htl_off_peak" ref="htl_off_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="text" maxLength="4" name="htl_off_peak" ref="htl_off_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td>
                                 </tr>
                             </tbody>
