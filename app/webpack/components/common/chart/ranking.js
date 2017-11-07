@@ -25,12 +25,12 @@ export default class Ranking extends Component {
                 }
             };
             element.data.forEach((timeRanking) => {
-                let d = {
+                let d = timeRanking.needMark ? {
                     symbol: 'triangle',
                     symbolSize: 15,
                     showSymbol: true,
                     value: []
-                };
+                } : {value: []};
                 d.value = [].concat(timeRanking.time).concat(timeRanking.ranking);
                 tmp.data.push(d);
             });
