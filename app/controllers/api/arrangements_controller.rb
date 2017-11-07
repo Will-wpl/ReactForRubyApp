@@ -21,7 +21,10 @@ class Api::ArrangementsController < ApplicationController
   # PATCH update arrangement detail info
   def update
     if @arrangement.update(model_params)
-      sort_auction_histories(@arrangement.auction_id , @arrangement.user_id)
+      calculate_dto = CalculateDto.new(@arrangement.lt_peak ,@arrangement.lt_off_peak,@arrangement.hts_peak,@arrangement.hts_off_peak, @arrangement.htl_peak, @arrangement.htl_off_peak, @arrangement.auction_id, @arrangement.user_id)
+      AuctionHistory.save_update_init_auction_histories(calculate_dto)
+      histories = AuctionHistory.where(:'auction_id' => @arrangement.auction_id)
+      AuctionHistory.sort_auction_histories(histories)
       render json: @arrangement ,status: 200
     else
       render json: 'error code ', status: 500
@@ -37,5 +40,6 @@ class Api::ArrangementsController < ApplicationController
   def model_params
     params.require(:arrangement).permit(:main_name, :main_email_address, :main_mobile_number, :main_office_number, :alternative_name, :alternative_email_address, :alternative_mobile_number, :alternative_office_number, :lt_peak, :lt_off_peak, :hts_peak, :hts_off_peak, :htl_peak, :htl_off_peak, :accept_status)
   end
+
 
 end
