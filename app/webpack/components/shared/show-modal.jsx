@@ -36,13 +36,13 @@ export class Modal extends React.Component{
     render(){
         let btn_html ='';
         if(this.state.type == "default"){
-            btn_html = <div className="modal_btn"><a onClick={this.closeModal.bind(this)}>OK</a><a onClick={this.closeModal.bind(this)}>close</a></div>;
+            btn_html = <div className="modal_btn"><a onClick={this.closeModal.bind(this)}>OK</a></div>;
         }else{
-            btn_html = <div className="modal_btn"><a onClick={this.Accept.bind(this)}>OK</a><a onClick={this.closeModal.bind(this)}>close</a></div>;
+            btn_html = <div className="modal_btn"><a onClick={this.Accept.bind(this)}>Yes</a><a onClick={this.closeModal.bind(this)}>No</a></div>;
         }
         return(
             <div id="modal_main" className={this.state.modalshowhide}>
-                <h4><span>Warm tips</span><a onClick={this.closeModal.bind(this)}>X</a></h4>
+                <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
                 <div className="modal_detail">{this.props.text}</div>
                 {btn_html}
             </div>

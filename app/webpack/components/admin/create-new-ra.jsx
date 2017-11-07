@@ -161,7 +161,7 @@ export class CreateNewRA extends Component {
     }
     showDelete(){
         this.refs.Modal.showModal("comfirm");
-        this.setState({text:"Comfirm delete?"});
+        this.setState({text:"Are you sure you want to delete?"});
     }
     delete(){
             createRa({ auction: this.removeAuction()}).then(res => {
@@ -194,7 +194,7 @@ export class CreateNewRA extends Component {
                             this.auction = res;
                             this.refs.Modal.showModal();
                             this.setState({
-                                text:this.auction.name + "has been successfully saved "
+                                text:this.auction.name + " has been successfully saved "
                             });
                             // sessionStorage.setItem("raInfo",JSON.stringify(res));
                             // setTimeout(() => {
@@ -212,7 +212,7 @@ export class CreateNewRA extends Component {
                     this.auction = res;
                     this.refs.Modal.showModal();
                     this.setState({
-                        text:"Publish Auction Success"
+                        text:this.auction.name+" has been successfully published. Please go to 'Manage Published Upcoming Reverse Auction' for further actions."
                     });
                     setTimeout(() => {
                          window.location.href="http://localhost:3000/admin/home"
