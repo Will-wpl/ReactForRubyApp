@@ -20,6 +20,7 @@ class Api::ArrangementsController < ApplicationController
 
   def obtain
     @arrangement = Arrangement.where('auction_id = ? and user_id = ?', params[:auction_id], params[:user_id]).first
+    render json: @arrangement, status: 200
   end
 
   # PATCH update arrangement detail info
