@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import ReactEcharts from 'echarts-for-react';
+import moment from 'moment';
 
 export default class Price extends Component {
 
@@ -129,9 +130,9 @@ function getTemplate() {
             type: 'time',
             boundaryGap: false,
             axisLabel: {
-                // formatter: (value, index) => {
-                //     return '';
-                // }
+                formatter: (value, index) => {
+                    return moment(value).format('HH:mm:ss');
+                }
             },
             axisTick: {
                 show: false

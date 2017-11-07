@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactEcharts from 'echarts-for-react';
+import moment from 'moment';
 
 export default class Ranking extends Component {
 
@@ -36,39 +37,6 @@ export default class Ranking extends Component {
             option.series.push(tmp);
         });
         return option;
-    }
-
-    componentDidMount() {
-        if (this.props.initialData) {
-            let option = getTemplate();
-            this.props.initialData.forEach((element) => {
-                let tmp = {
-                    type: 'line',
-                    data: [],
-                    itemStyle: {
-                        normal: {
-                            color: '#e5e816',
-                            lineStyle: {
-                                color: '#e5e816'
-                            }
-                        }
-                    }
-                };
-                element.data.forEach((timeRanking) => {
-                    let d = {
-                        symbol: 'triangle',
-                        symbolSize: 15,
-                        showSymbol: true,
-                        value: []
-                    };
-                    d.value = [].concat(timeRanking.time).concat(timeRanking.ranking);
-                    tmp.data.push(d);
-                })
-                option.series.push(tmp);
-            });
-            this.setState({ option: option });
-        }
-
     }
 
     render() {
@@ -130,9 +98,9 @@ function getTemplate() {
             type: 'time',
             boundaryGap: false,
             axisLabel: {
-                // formatter: (value, index) => {
-                //     return '';
-                // }
+                formatter: (value, index) => {
+                    return moment(value).format('HH:mm:ss');
+                }
             },
             axisTick: {
                 show: false
