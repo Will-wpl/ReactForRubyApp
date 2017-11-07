@@ -82,7 +82,7 @@ export class RetailerManage extends Component {
                 "hts_off_peak": this.refs.hts_off_peak.value/10000,
                 "htl_peak": this.refs.htl_peak.value/10000,
                 "htl_off_peak": this.refs.htl_off_peak.value/10000,
-                "accept_status": "2"
+                "accept_status": "1"   // '0':reject '1':accept '2':pending
             }
         }).then(res => {
                 this.refs.Modal.showModal();
