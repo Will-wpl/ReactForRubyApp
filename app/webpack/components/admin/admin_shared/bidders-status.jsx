@@ -16,7 +16,6 @@ export class BidderStatus extends Component {
             this.setState({
                 showDetail:res,
             })
-            console.log(this.state.showDetail);
             this.refs.Modal.showModal();
         },error=>{
 
