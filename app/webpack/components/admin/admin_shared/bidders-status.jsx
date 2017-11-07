@@ -26,9 +26,9 @@ export class BidderStatus extends Component {
                         this.props.dataList.map((item,index) => {
                         return(
                             <li key={index} className="u-grid">
-                                <span className="col-md-7">{item.company_name}</span>
-                                <span className="col-md-3"><abbr className={'color'+item.accept_status}></abbr></span>
-                                <span className="col-md-2" onClick={this.showDetail.bind(this,item.id)}>Details</span>     
+                                <span className="col-sm-7 col-md-7">{item.company_name}</span>
+                                <span className="col-sm-3 col-md-3"><abbr className={'color'+item.accept_status}></abbr></span>
+                                <span className="col-sm-2 col-md-2" onClick={this.showDetail.bind(this,item.id)}>Details</span>     
                             </li>)
                         })
                     }
