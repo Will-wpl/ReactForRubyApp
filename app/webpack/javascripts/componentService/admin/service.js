@@ -12,6 +12,10 @@ export const getAuctionInVersionOne = () => {
     return get('/api/auctions/obtain');
 }
 
+export const getRetailerAuctionInVersionOne = (params) => {
+    return get('/api/arrangements/obtain',params);
+}
+
 export const retailManageComing = (params) => {
     return update('/api/arrangements/'+params.arrangement.id, params);
 }
