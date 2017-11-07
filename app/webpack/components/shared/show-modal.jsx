@@ -36,11 +36,11 @@ export class Modal extends React.Component{
     render(){
         let showDetail = '';
         if(this.props.showdetail){
-            showDetail = <ul>
-                            <li>name:{this.props.showdetail.main_name}</li>
-                            <li>email:{this.props.showdetail.main_email_address}</li>
-                            <li>mobile:{this.props.showdetail.main_mobile_number}</li>
-                            <li>office:{this.props.showdetail.main_office_number}</li>
+            showDetail = <ul className="showdetail">
+                            <li>Name : {this.props.showdetail.main_name}</li>
+                            <li>Email : {this.props.showdetail.main_email_address}</li>
+                            <li>Mobile : {this.props.showdetail.main_mobile_number}</li>
+                            <li>Office : {this.props.showdetail.main_office_number}</li>
                         </ul>
         }
         
