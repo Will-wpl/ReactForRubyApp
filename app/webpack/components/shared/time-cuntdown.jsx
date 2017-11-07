@@ -1,38 +1,77 @@
-import React, { Component, PropTypes } from 'react'
-import ReactDOM from 'react-dom';
+import React, {Component} from 'react';
+import {getAuctionTimeRule} from '../../javascripts/componentService/common/service';
+import moment from 'moment';
+
+const ACTUAL_BEGIN_TIME = 'actual_begin_time';
+// const ACTUAL_END_TIME = 'actual_end_time';
+const ACTUAL_CURRENT_TIME = 'current_time';
+const HOLD_STATUS = 'hold_status';
+
 export class TimeCuntDown extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state = {
-            interval:1000
-        }
-    } 
-    componentDidMount() {
-        setInterval(() => {
-            this.ShowCountDown(2018,1,12,'countdown_timer');
-        }, this.state.interval);
+        this.state = {day: 0, hour: 0, minute: 0, second: 0}
     }
-    ShowCountDown(year,month,day,obj) 
-    { 
-        var now = new Date(); 
-        var endDate = new Date(year, month-1, day); 
-        var leftTime=endDate.getTime()-now.getTime(); 
-        var leftsecond = parseInt(leftTime/1000); 
-        var day=Math.floor(leftsecond/(60*60*24)); 
-        var hour=Math.floor((leftsecond-day*24*60*60)/3600); 
-        var minute=Math.floor((leftsecond-day*24*60*60-hour*3600)/60); 
-        var second=Math.floor(leftsecond-day*24*60*60-hour*3600-minute*60); 
-        var cc = document.getElementById(obj); 
-        cc.innerHTML = '<span><font>'+day+'</font>DAYS</span>'+
-                        '<span><font>'+hour+'</font>HOURS</span>'+
-                        '<span><font>'+minute+'</font>MINUTES</span>'+  
-                        '<span><font>'+second+'</font>SECONDS</span>'; 
-    } 
-    render () {
+
+    componentDidMount() {
+        this.getAuctionTime();
+        this.interval = setInterval(() => {
+            this.getAuctionTime();
+        }, 1000);
+        //test
+        // setTimeout(() => {
+        //     clearInterval(this.interval);
+        //     setTimeout(() => {
+        //         this.props.countDownOver();
+        //     }, 1000)
+        // }, 2000)
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
+    getAuctionTime() {
+        getAuctionTimeRule(1).then(res => {
+            let isOver = this.isCountDownOver(moment(res[ACTUAL_BEGIN_TIME]).toDate().getTime()
+                , moment(res[ACTUAL_CURRENT_TIME]).toDate().getTime());
+            if (isOver) {
+                if (!res[HOLD_STATUS]) {
+                    clearInterval(this.interval);
+                    this.props.countDownOver();
+                }
+            }
+        }, error => {
+            console.log('whoops dam it')
+        })
+    }
+
+    isCountDownOver(startSeq, nowSeq) {
+        let divider = parseInt((startSeq - nowSeq) / 1000);
+        let day = Math.floor(divider / (60 * 60 * 24));
+        let hour = Math.floor((divider - day * 24 * 60 * 60) / 3600);
+        let minute = Math.floor((divider - day * 24 * 60 * 60 - hour * 3600) / 60);
+        let second = Math.floor(divider - day * 24 * 60 * 60 - hour * 3600 - minute * 60);
+        let left = day || hour || minute || second;
+        if (left <= 0) {
+            return true;
+        }
+        this.setState({day: day, hour: hour, minute: minute, second: second});
+        return false;
+    }
+
+    render() {
         return (
             <div className="time_cuntdown">
                 <p>SP Reverse Auction on 1 Dec 2017,10:00AM</p>
-                <div className="Countdown"><abbr>Countdown Timer:</abbr><ol id="countdown_timer"></ol></div>
+                <div className="Countdown"><abbr>Countdown Timer:</abbr>
+                    <ol id="countdown_timer">
+                        <span><font>{this.state.day}</font>DAYS</span>
+                        <span><font>{this.state.hour}</font>HOURS</span>
+                        <span><font>{this.state.minute}</font>MINUTES</span>
+                        <span><font>{this.state.second}</font>SECONDS</span>
+                    </ol>
+                </div>
             </div>
         )
     }

@@ -81,6 +81,10 @@ export default class Price extends Component {
     }
 }
 
+Price.defaultProps = {
+    data: []
+}
+
 function getTemplate() {
     return {
         calculable: true,

@@ -66,15 +66,17 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 //var modal css by will
 .modal_hide{ opacity: 0; z-index: -1;}
 .modal_show{ opacity: 1; z-index: 10;}
-#modal_main{ position: absolute; transition: 0.8s all;
-  width:420px; min-height:200px; background-color: rgba(0, 0, 0, 0.6);
-  top:25%; left:50%; margin: -100px 0px 0px -210px;
+#modal_main{ position: absolute; transition: 0.8s all; font-size: 12px;
+  width:420px; min-height:200px; background-color: rgba(0, 0, 0, 0.8); border-radius: 10px; box-shadow: 0px 0px 10px #ccc; 
+  top:50%; left:50%; margin: -100px 0px 0px -210px;
   h4{
-    height: 32px; line-height: 32px; width: 100%; margin: 0 auto;
-    span{ float: left; padding-left: 5px;}
-    a{ float: right; padding-right: 5px;}
+    height: 32px; line-height: 32px; width: 100%; margin: 0 auto; font-size: 13px;
+    span{ float: left; padding-left:15px;}
+    a{ float: right; padding-right:15px;}
   }
-  .modal_detail{ width:90%; margin: 10px auto; line-height: 22px;}
+  .modal_detail{ width:90%; margin: 10px auto; line-height: 22px; font-size: 16px;}
+  .modal_btn{ position: absolute; right:0px; bottom: 10px;}
+  .modal_btn a{ width: 60px; padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; margin: 0px 10px;}
 }
 .u-contain{overflow:hidden;}
 
@@ -109,3 +111,16 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 .checkitem{ list-style: none; line-height:22px;
   img{ margin-right:10px;}
 }
+
+
+
+//retailer liveing
+#live_modal{
+  width: 480px; margin: 60px auto;
+  border-radius: 0px 0px 5px 5px; overflow: hidden; 
+  .live_hold{ background: url("../images/count_down.png") no-repeat; width: 100%; height:126px; }
+  .live_end{ background: url("../images/thank you_end.png") no-repeat; width: 100%; height:126px; }
+  p{ background: #00afb1; width: 100%; line-height: 32px; font-size: 18px; padding: 20px; text-align: center}
+}
+.live_show{display: block;}
+.live_hide{display: none;}
