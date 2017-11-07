@@ -4,7 +4,7 @@ import Description from './description';
 import Ranking from '../../common/chart/ranking';
 import BidForm from './bid-form';
 import BidHistory from './bid-history';
-import {findUpLimit, getRandomColor, getLoginUserId} from '../../../javascripts/componentService/util';
+import {getLoginUserId} from '../../../javascripts/componentService/util';
 import {getAuctionHistorys} from '../../../javascripts/componentService/retailer/service';
 import moment from 'moment';
 
@@ -40,7 +40,8 @@ export default class LiveHomePage extends Component {
             let chartDataTpl = {id: 0, data: [], color: '#e5e816'};
             copy.forEach(history => {
                 chartDataTpl.id = history.user_id;
-                chartDataTpl.data.push({time: moment(history.bid_time).format('YYYY-MM-DD HH:mm:ss'), ranking: history.ranking})
+                chartDataTpl.data.push({time: moment(history.bid_time).format('YYYY-MM-DD HH:mm:ss')
+                    , ranking: history.ranking, needMark: history.is_bidder})
             });
             let last = histories[histories.length - 1];
             this.setState({

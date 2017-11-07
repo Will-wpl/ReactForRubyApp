@@ -25,49 +25,18 @@ export default class Price extends Component {
                 }
             };
             element.data.forEach((timePrice) => {
-                let d = {
+                let d = timePrice.needMark ? {
                     symbol: 'triangle',
                     symbolSize: 15,
                     showSymbol: true,
                     value: []
-                };
+                } : {value: []};
                 d.value = [].concat(timePrice.time).concat(timePrice.price);
                 tmp.data.push(d);
             });
             option.series.push(tmp);
         });
         return option;
-    }
-
-    componentDidMount() {
-        if (this.props.initialData) {
-            let option = getTemplate();
-            let tmp = {
-                type: 'line',
-                data: [],
-                itemStyle: {
-                    normal: {
-                        color: '#e5e816',
-                        lineStyle: {
-                            color: '#e5e816'
-                        }
-                    }
-                }
-            };
-            this.props.initialData.forEach((timePrice) => {
-                let d = {
-                    symbol: 'triangle',
-                    symbolSize: 15,
-                    showSymbol: true,
-                    value: []
-                }
-                d.value = [].concat(timePrice.time).concat(timePrice.price);
-                tmp.data.push(d)
-            });
-            option.series.push(tmp);
-            this.setState({option: option});
-        }
-
     }
 
     render() {
