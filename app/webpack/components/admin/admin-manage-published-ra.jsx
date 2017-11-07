@@ -9,11 +9,26 @@ export class AdminManagePublishedRa extends Component {
         super(props);
         this.state={
             id:"",
+            live_modal:"",live_modal_do:"",
+            holdOrend:"live_hold",
             dataList:[]
         }
+        this.auction = {};
     }
-    componentWillMount(){
+    componentDidMount(){
         getAuctionInVersionOne().then(res => {
+            this.auction = res;
+            if(this.auction.publish_status == 0){
+                this.setState({
+                    live_modal:"live_hide",
+                    live_modal_do:"live_show"
+                })
+            }else{
+                this.setState({
+                    live_modal:"live_show",
+                    live_modal_do:"live_hide"
+                })
+            }
             //console.log(res);
             getBidderStatus({auction_id:res.id}).then(res => {
                 console.log(res);
@@ -27,12 +42,21 @@ export class AdminManagePublishedRa extends Component {
             console.log(error);
         })
     }
-    componentDidMount() {
+    componentWillMount(){
 
     }
     render () {
         return (
             <div>
+                <div className={this.state.live_modal} id="live_modal">
+                    <div className={this.state.holdOrend}></div>
+                    <p>
+                    Please standy,bidding will<br></br>
+                    commence soon<br></br>
+                    Page will automatically refresh when<br></br>reverse auction commences
+                    </p>
+                </div>
+                <div className={this.state.live_modal_do}>
                 <TimeCuntDown />
                 <div className="u-grid u-mt3">
                     <div className="col-sm-12 col-md-7">
@@ -46,6 +70,7 @@ export class AdminManagePublishedRa extends Component {
                         </div>
                         </div>
                     </div>
+                </div>
                 </div>
             </div>
         )

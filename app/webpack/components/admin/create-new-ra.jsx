@@ -20,8 +20,8 @@ export class CreateNewRA extends Component {
             btn_type:"",text:"",id:"",
             edit_btn:"lm--button lm--button--primary show",
             edit_change:"lm--button lm--button--primary hide",
-            disabled:"",comfirm:false
-        };
+            disabled:"",live_modal:"",live_modal_do:"",holdOrend:"live_hold"
+        }
         this.auction = {};
         this.starttimeChange = this.starttimeChange.bind(this);
         this.endtimeChange = this.endtimeChange.bind(this);
@@ -29,16 +29,35 @@ export class CreateNewRA extends Component {
         this.timeChange = this.timeChange.bind(this);
     }
     componentDidMount() {
-        if(this.props.left_name != undefined){
+        if(this.props.left_name){//eidt
             this.setState({
-                disabled:"disabled"
+                disabled:"disabled",
+                live_modal:"live_hide"
             })
+            this.doGetData();
+        }else{//create
+            this.doGetData("create")
         }
+    }
+    doGetData(type){
         getAuctionInVersionOne().then(res => {
             this.auction = res;
-            // if(res.duration == null){
-            //     this.setState({id:res.id});
-            // }else{
+            if(type == "create"){
+                // if(this.auction.publish_status == 0){
+                //     this.setState({
+                //         live_modal:"live_show",
+                //         live_modal_do:"live_hide",
+                //     })
+                // }else{
+                    this.setState({
+                        live_modal:"live_hide",
+                        live_modal_do:"live_show",
+                     })
+                // }               
+            }
+            if(res.duration == null){
+                this.setState({id:res.id})
+            }else{
                 this.setState({
                     id:res.id,
                     name:res.name == null ? '' : res.name,
@@ -51,8 +70,7 @@ export class CreateNewRA extends Component {
             // }
             //console.log(res);
             
-        }, error => {
-            console.log(error);
+            };
         })
     }
     doName(e){
@@ -112,6 +130,7 @@ export class CreateNewRA extends Component {
             edit_change:"lm--button lm--button--primary hide",
             disabled:"disabled"
         })
+        this.doGetData();
     }
     setAuction(){
         // this.auction.id=this.state.id;
@@ -185,10 +204,6 @@ export class CreateNewRA extends Component {
                             console.log(error);
                         })
         }
-        if(this.state.btn_type == "delete"){
-            
-            // }
-        }
         if(this.state.btn_type == "publish"){
             raPublish({
                 pagedata:{publish_status: '0'},
@@ -230,7 +245,24 @@ export class CreateNewRA extends Component {
                         </div>
         }
         return (
-            <div className="createRaMain u-grid">
+            <div>
+                <div id="live_modal" className={this.state.live_modal}>
+                        <div className={this.state.holdOrend}></div>
+                        <p>
+                        Please standy,bidding will<br></br>
+                        commence soon<br></br>
+                        Page will automatically refresh when<br></br>reverse auction commences
+                        </p>
+                    </div>
+            <div className={"createRaMain u-grid "+this.state.live_modal_do}>
+                {/* <div id="live_modal">
+                        <div className={this.state.holdOrend}></div>
+                        <p>
+                        Please standy,bidding will<br></br>
+                        commence soon<br></br>
+                        Page will automatically refresh when<br></br>reverse auction commences
+                        </p>
+                    </div> */}
             <div className={styleType}>
                 <h2>{left_name}</h2>
                 <form action="" ref="CreatRaForm" method="post" id="CreatRaForm" onSubmit={this.checkSuccess.bind(this)}>
@@ -243,7 +275,7 @@ export class CreateNewRA extends Component {
                         </label>
                     </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
-                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Time of Reverse Auction :</span>
+                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Date/Time of Reverse Auction :</span>
                         <label className="lm--formItem-right lm--formItem-control">
                         <DatePicker selected={this.state.start_datetime} disabled={this.state.disabled} ref="start_datetime" name="start_datetime" showTimeSelect dateFormat="YYYY-MM-DD HH:mm" timeFormat="HH:mm" timeIntervals={1}  className="time_ico"  onChange = {this.timeChange} minDate={moment()} maxDate={moment().add(30, "days")} title="Time must not be in the past."  required aria-required="true"/>
                         <abbr ref="ra_duration_error" className="col">(SGT)</abbr>
@@ -283,6 +315,7 @@ export class CreateNewRA extends Component {
                 {btn_html}
                 </form>
                 <Modal text={this.state.text} dodelete={this.delete.bind(this)} ref="Modal" />
+            </div>
             </div>
             </div>
         )
