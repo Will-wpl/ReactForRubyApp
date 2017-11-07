@@ -196,30 +196,31 @@ export class CreateNewRA extends Component {
                             this.setState({
                                 text:this.auction.name + " has been successfully saved "
                             });
-                            // sessionStorage.setItem("raInfo",JSON.stringify(res));
-                            // setTimeout(() => {
-                            //     window.location.href="http://localhost:3000/admin/home"
-                            // },3000);
                         }, error => {
                             console.log(error);
                         })
         }
         if(this.state.btn_type == "publish"){
-            raPublish({
-                pagedata:{publish_status: '0'},
-                id:this.state.id
-            }).then(res => {
-                    this.auction = res;
-                    this.refs.Modal.showModal();
-                    this.setState({
-                        text:this.auction.name+" has been successfully published. Please go to 'Manage Published Upcoming Reverse Auction' for further actions."
-                    });
-                    setTimeout(() => {
-                         window.location.href="http://localhost:3000/admin/home"
-                     },5000);
-                }, error => {
-                    console.log(error);
-                })
+            createRa({auction: this.setAuction()}).then(res => {
+                this.auction = res;
+                raPublish({
+                    pagedata:{publish_status: '0'},
+                    id:this.state.id
+                }).then(res => {
+                        this.auction = res;
+                        this.refs.Modal.showModal();
+                        this.setState({
+                            text:this.auction.name+" has been successfully published. Please go to 'Manage Published Upcoming Reverse Auction' for further actions."
+                        });
+                        setTimeout(() => {
+                             window.location.href="http://localhost:3000/admin/home"
+                         },5000);
+                    }, error => {
+                        console.log(error);
+                    })
+            }, error => {
+                console.log(error);
+            })
         }
     }
     render () {
@@ -316,6 +317,9 @@ export class CreateNewRA extends Component {
                 </form>
                 <Modal text={this.state.text} dodelete={this.delete.bind(this)} ref="Modal" />
             </div>
+            </div>
+            <div className="createRaMain u-grid">
+            <a className="lm--button lm--button--primary u-mt3 push-md-1" href="/admin/home" >Back to Homepage</a>
             </div>
             </div>
         )
