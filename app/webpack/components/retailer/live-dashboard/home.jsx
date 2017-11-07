@@ -6,6 +6,7 @@ import BidForm from './bid-form';
 import BidHistory from './bid-history';
 import {getLoginUserId} from '../../../javascripts/componentService/util';
 import {getAuctionHistorys} from '../../../javascripts/componentService/retailer/service';
+import {createWebsocket} from '../../../javascripts/componentService/common/service';
 import moment from 'moment';
 
 export default class LiveHomePage extends Component {
@@ -19,9 +20,23 @@ export default class LiveHomePage extends Component {
         getAuctionHistorys(1, getLoginUserId()).then(res => {
             console.log(res);
             this.makeup(res);
+            this.createSocket();
         }, error => {
             console.log(error);
+            this.createSocket();
         });
+    }
+
+    createSocket() {
+        this.ws = createWebsocket(1);
+        console.log(this.ws)
+        this.ws.onConnected(() => {
+            console.log('---message client connected ---');
+        }).onDisconnected(() => {
+            console.log('---message client disconnected ----')
+        }).onReceivedData(data => {
+            console.log('---message client received data ---', data);
+        })
     }
 
     makeup(res) {
@@ -54,6 +69,13 @@ export default class LiveHomePage extends Component {
         }
     }
 
+    onBidFormSubmit(configs) {
+        console.log({lt_peak:`${configs[0]}`, lt_off_peak: `${configs[1]}`
+            , hts_peak:`${configs[2]}`,hts_off_peak:`${configs[3]}`,htl_peak:`${configs[4]}`,htl_off_peak:`${configs[5]}`});
+        this.ws.sendMessage('set_bid', {lt_peak:`${configs[0]}`, lt_off_peak: `${configs[1]}`
+            , hts_peak:`${configs[2]}`,hts_off_peak:`${configs[3]}`,htl_peak:`${configs[4]}`,htl_off_peak:`${configs[5]}`})
+    }
+
     render() {
         let data = [{
             id: 1,
@@ -75,7 +97,7 @@ export default class LiveHomePage extends Component {
                 </div>
                 <div className="u-grid u-mt2">
                     <div className="col-sm-12 col-md-5 u-cell">
-                        <div className="col-sm-12 col-md-10 push-md-1"><BidForm data={this.state.priceConfig}/></div>
+                        <div className="col-sm-12 col-md-10 push-md-1"><BidForm data={this.state.priceConfig} onSubmit={this.onBidFormSubmit.bind(this)}/></div>
                     </div>
                     <div className="col-sm-12 col-md-7 u-cell">
                         <div className="col-sm-12 col-md-10 push-md-1"><BidHistory data={this.state.histories}/></div>
