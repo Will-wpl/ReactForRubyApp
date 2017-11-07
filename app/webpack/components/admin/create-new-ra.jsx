@@ -319,7 +319,7 @@ export class CreateNewRA extends Component {
             </div>
             </div>
             <div className="createRaMain u-grid">
-            <a className="lm--button lm--button--primary u-mt3 push-md-1" href="/admin/home" >Back to Homepage</a>
+            <a className="lm--button lm--button--primary u-mt3" href="/admin/home" >Back to Homepage</a>
             </div>
             </div>
         )

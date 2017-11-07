@@ -25,13 +25,13 @@ export class OnlineStatusMain extends Component {
                     data_online=[],
                     data_pedding=[]
                 for(let i=0; i<this.state.dataList.length; i++){
-                    if(this.state.dataList[i].accept_status == 0){
+                    if(this.state.dataList[i].login_status == "off"){
                         data_outline.push(this.state.dataList[i]);
                     }
-                    if(this.state.dataList[i].accept_status == 1){
+                    if(this.state.dataList[i].login_status == "on"){
                         data_online.push(this.state.dataList[i]);
                     }
-                    if(this.state.dataList[i].accept_status == 2){
+                    if(this.state.dataList[i].login_status == "other"){
                         data_pedding.push(this.state.dataList[i]);
                     }
                 }
@@ -51,8 +51,9 @@ export class OnlineStatusMain extends Component {
         return (
             <div className="onlineStatusMain">
                 <div className="u-grid">
-                    <div className="u-grid col-sm-12 col-md-10 push-md-1">
-                    <h4 className="col-sm-12 col-md-12 u-mb3">Bidders Status of Acceptance</h4>
+                    <div className="col-sm-12 col-md-10 push-md-1">
+                    <h3 className="col-sm-12 col-md-12 u-mb3">Online Status of Retailers</h3>
+                    <div className="u-grid u-mt2">
                         <div className="col-sm-12 col-md-4">
                             <RetailsOnlineStatus list_data={this.state.data_online} />
                         </div>
@@ -63,12 +64,13 @@ export class OnlineStatusMain extends Component {
                             <RetailsOnlineStatus list_data={this.state.data_outline} />
                         </div>
                     </div>
-                    <div className="u-grid col-sm-12 col-md-10 push-md-1 u-mt3">
+                    </div>
+                    <div className="col-sm-12 col-md-10 push-md-1 u-mt3">
                         <div className="col-sm-12 col-md-5">
                             <ul className="ros_tab">
-                                <li>Retailer has logged in and is located in the 'start bidding' page</li>
-                                <li>Retailer has logged in but not located in the 'start bidding' page</li>
-                                <li>Retailer has logout</li>
+                                <li className="on">Retailer has logged in and is located in the 'start bidding' page</li>
+                                <li className="other">Retailer has logged in but not located in the 'start bidding' page</li>
+                                <li className="off">Retailer has logout</li>
                             </ul>
                         </div>
                     </div>
@@ -76,6 +78,9 @@ export class OnlineStatusMain extends Component {
                         <button className="lm--button lm--button--primary fright">Hold</button>
                     </div>
                 </div>
+                <div className="createRaMain u-grid">
+            <a className="lm--button lm--button--primary u-mt3" href="/retailer/home" >Back to Homepage</a>
+            </div>
             </div>
         )}
     }
