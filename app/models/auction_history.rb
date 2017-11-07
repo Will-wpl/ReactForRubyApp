@@ -38,23 +38,25 @@ class AuctionHistory < ApplicationRecord
       @history = AuctionHistory.new(lt_peak: calculate_dto.lt_peak, lt_off_peak: calculate_dto.lt_off_peak, hts_peak: calculate_dto.hts_peak, hts_off_peak: calculate_dto.hts_off_peak, htl_peak: calculate_dto.htl_peak, htl_off_peak: calculate_dto.htl_off_peak, bid_time: Time.now,
                                   user_id: calculate_dto.user_id, auction_id: calculate_dto.auction_id, average_price: average_price, total_award_sum: total_award_sum, is_bidder: true)
       if @history.save
-        histories = AuctionHistory.where(auction_id: calculate_dto.auction_id)
-        sort_update_auction_histories(histories)
+        find_sort_update_auction_histories(calculate_dto.auction_id)
       end
     else
       @history = @histories.first
       if @history.update(lt_peak: calculate_dto.lt_peak, lt_off_peak: calculate_dto.lt_off_peak, hts_peak: calculate_dto.hts_peak, hts_off_peak: calculate_dto.hts_off_peak, htl_peak: calculate_dto.htl_peak, htl_off_peak: calculate_dto.htl_off_peak, bid_time: Time.now,
                       user_id: calculate_dto.user_id, auction_id: calculate_dto.auction_id, average_price: average_price, total_award_sum: total_award_sum, is_bidder: true)
-        histories = AuctionHistory.where(auction_id: calculate_dto.auction_id)
-        sort_update_auction_histories(histories)
+        find_sort_update_auction_histories(calculate_dto.auction_id)
       end
     end
   end
 
+  def self.find_bidder_histories(auction_id)
+    @histories = AuctionHistory.where('auction_id = ? and is_bidder = ?', auction_id, true)
+  end
+
   def self.sort_update_auction_histories(histories)
     # code here
-    @histories = histories.order(total_award_sum: :asc)
-    @histories.each_with_index { |history, index|
+    histories = histories.order(total_award_sum: :asc, bid_time: :asc)
+    histories.each_with_index { |history, index|
       # puts history, index
       history.update(ranking: index + 1)
     }
@@ -68,4 +70,10 @@ class AuctionHistory < ApplicationRecord
     BigDecimal.new(total_award_sum) / BigDecimal.new(total_volume)
   end
 
+  private
+
+  def self.find_sort_update_auction_histories(auction_id)
+    histories = find_bidder_histories(auction_id)
+    sort_update_auction_histories(histories)
+  end
 end
