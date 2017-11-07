@@ -1,13 +1,21 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import LiveCountdown from './countdown-timer';
 import Description from './description';
 import Ranking from '../../common/chart/ranking';
 import BidForm from './bid-form';
 import BidHistory from './bid-history';
-import {findUpLimit, getRandomColor} from '../../../javascripts/componentService/util';
+import {findUpLimit, getRandomColor, getLoginUserId} from '../../../javascripts/componentService/util';
+import {getAuctionHistorys} from '../../../javascripts/componentService/retailer/service';
 
 export default class LiveHomePage extends Component {
+
+    componentDidMount() {
+        getAuctionHistorys(1, getLoginUserId()).then(res => {
+            console.log(res);
+        }, error => {
+            console.log(error);
+        });
+    }
 
     render() {
         let data = [{
