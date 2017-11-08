@@ -49,11 +49,11 @@ export class CreateNewRA extends Component {
             //             live_modal_do:"live_hide",
             //         })
             //     }else{
-                    this.setState({
-                        live_modal:"live_hide",
-                        live_modal_do:"live_show",
-                     })
-                //}               
+            //         this.setState({
+            //             live_modal:"live_hide",
+            //             live_modal_do:"live_show",
+            //          })
+            // }               
             if(res.duration == null){
                 this.setState({id:res.id})
             }else{
@@ -310,16 +310,16 @@ export class CreateNewRA extends Component {
         }
         return (
             <div>
-                <div id="live_modal" className={this.state.live_modal}>
-                    <div className={this.state.holdOrend}></div>
-                    <p>
+                {/* <div id="live_modal" className={this.state.live_modal}>
+                        <div className={this.state.holdOrend}></div>
+                        <p>
                         Please standy,bidding will<br></br>
                         commence soon<br></br>
                         Page will automatically refresh when<br></br>reverse auction commences
                         </p>
-                </div>
-                <div className={"createRaMain u-grid " + this.state.live_modal_do}>
-                    {/* <div id="live_modal">
+                    </div> */}
+            <div className={"createRaMain u-grid "+this.state.live_modal_do}>
+                {/* <div id="live_modal">
                         <div className={this.state.holdOrend}></div>
                         <p>
                         Please standy,bidding will<br></br>
