@@ -1,6 +1,6 @@
 $(function () {
 
-    auctionObtain();
+    // auctionObtain();
     // auctionCreate();
     // auctionUpdate();
     // auctionPublish();
@@ -11,6 +11,7 @@ $(function () {
     // auctionTimer();
     // auctionHold();
     // auctionHistoriesList();
+    // auctionHistoriesAllList();
     function auctionObtain() {
         $.ajax({
             type: "GET",
@@ -233,6 +234,19 @@ $(function () {
             data: { auction_id: 1, user_id: '3'},
             success: (data) => {
                 console.log('auction_histories list');
+                console.log(data);
+            },
+            dataType: 'json'
+        });
+    }
+
+    function auctionHistoriesAllList(){
+        $.ajax({
+            type: "GET",
+            url: '/api/auction_histories/list',
+            data: { auction_id: 1},
+            success: (data) => {
+                console.log('auction_histories all list');
                 console.log(data);
             },
             dataType: 'json'
