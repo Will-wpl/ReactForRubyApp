@@ -36,6 +36,7 @@ Rails.application.routes.draw do
     resource :auction_histories do
       collection do
         get 'list'
+        get 'last'
       end
     end
   end
