@@ -12,6 +12,7 @@ import "./javascripts/shared.js";
 import "./styles/app.scss";
 import "components/retailer/retailer-manage-coming";
 import "components/retailer/retailer-live";
+import "components/retailer/retailer-finish"
 
 ActionCable = require('actioncable')
 

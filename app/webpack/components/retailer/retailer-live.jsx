@@ -42,7 +42,7 @@ export class RetailerLive extends Component {
     }
 
     goToFinish() {
-
+        window.location.href=`/retailer/auctions/${auction.id}/finish`
     }
 
     render() {
@@ -62,7 +62,7 @@ export class RetailerLive extends Component {
             <div>
                 <DuringCountDown auction={this.auction} countDownOver={this.goToFinish.bind(this)}>
                     <div id="retailer_hold">
-                        <b>Admin has extended auction duration by 2 minutes</b>
+                        <b>Admin has extended auction duration by 2 minuties</b>
                     </div>
                 </DuringCountDown>
                 <LiveHomePage auction={this.auction}/>
