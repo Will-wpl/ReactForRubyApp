@@ -1,0 +1,19 @@
+= simple_form_for [:admin, @acution_extend_time] do |f|
+
+  = f.input :extend_time
+  = f.input :current_time
+  = f.input :actual_begin_time
+  = f.input :actual_end_time
+
+  .form-action.form-group
+    .form-left-offset.form-right
+      - if f.object.new_record?
+        => f.button :button, class: "btn btn-primary", data: { disable_with: t("views.disable_with") } do
+          = icon "check-square-o", t("views.forms.create", model: f.object.class.model_name.human.titleize)
+        = " or "
+        = link_to t(".cancel", default: t("views.actions.cancel")), admin_acution_extend_times_path
+      - else
+        => f.button :button, class: "btn btn-primary", data: { disable_with: t("views.disable_with") } do
+          = icon "check-square-o", t("views.forms.update", model: f.object.class.model_name.human.titleize)
+        = " or "
+        = link_to t(".cancel", default: t("views.actions.cancel")), admin_acution_extend_time_path(f.object)
