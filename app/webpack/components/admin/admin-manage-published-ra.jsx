@@ -18,7 +18,7 @@ export class AdminManagePublishedRa extends Component {
     componentDidMount(){
         getAuctionInVersionOne().then(res => {
             this.auction = res;
-            if(this.auction.publish_status == 0){
+            if(this.auction.publish_status == 1){
                 this.setState({
                     live_modal:"live_hide",
                     live_modal_do:"live_show"
