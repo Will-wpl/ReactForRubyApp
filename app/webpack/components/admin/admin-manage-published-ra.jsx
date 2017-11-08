@@ -23,8 +23,7 @@ export class AdminManagePublishedRa extends Component {
                     live_modal:"live_hide",
                     live_modal_do:"live_show"
                 })
-            }
-            if(this.auction.publish_status == ""){
+            }else{
                 this.setState({
                     live_modal:"live_show",
                     live_modal_do:"live_hide"
@@ -32,7 +31,7 @@ export class AdminManagePublishedRa extends Component {
             }
             //console.log(res);
             getBidderStatus({auction_id:res.id}).then(res => {
-                console.log(res);
+                //console.log(res);
                 this.setState({
                     dataList:res,
                 })

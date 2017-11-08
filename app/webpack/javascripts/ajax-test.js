@@ -1,6 +1,6 @@
 $(function () {
 
-    // auctionObtain();
+    auctionObtain();
     // auctionCreate();
     // auctionUpdate();
     // auctionPublish();

@@ -66,16 +66,16 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 //var modal css by will
 .modal_hide{ opacity: 0; z-index: -1;}
 .modal_show{ opacity: 1; z-index: 10;}
-#modal_main{ position: absolute; transition: 0.8s all; font-size: 12px;
+#modal_main{ position: fixed; transition: 0.8s all; font-size: 12px;
   width:420px; min-height:200px; background-color: rgba(0, 0, 0, 0.8); border-radius: 10px; box-shadow: 0px 0px 10px #ccc; 
-  top:50%; left:50%; margin: -100px 0px 0px -210px;
+  top:35%; left:50%; margin: -100px 0px 0px -210px;
   h4{
     height: 32px; line-height: 32px; width: 100%; margin: 0 auto; font-size: 13px;
     span{ float: left; padding-left:15px;}
     a{ float: right; padding-right:15px;}
   }
-  .modal_detail{ width:90%; min-height: 112px; margin: 10px auto; line-height: 22px; font-size: 16px;}
-  .modal_btn{ width:100%; margin: 10px auto;}
+  .modal_detail{ width:90%; min-height: 112px; margin:0px auto; line-height: 22px; font-size: 16px;}
+  .modal_btn{ width:100%; margin: 10px auto; overflow: hidden;}
   .modal_btn a{ width: 60px; float:right; margin-right: 10px;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; margin: 0px 10px;}
 }
 .u-contain{overflow:hidden;}
@@ -129,5 +129,6 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 
 .showdetail{
   width: 100%; overflow:hidden;
-  li{ list-style: none; text-indent: 15px; line-height:28px; font-size:14px;}
+  li{ list-style: none; line-height:28px; font-size:14px;}
+  ol{ margin: 20px auto 0px auto;}
 }

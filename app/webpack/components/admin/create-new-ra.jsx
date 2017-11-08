@@ -65,7 +65,7 @@ export class CreateNewRA extends Component {
                     startDate: res.contract_period_start_date == null ? '' :  moment(res.contract_period_start_date),
                     endDate:res.contract_period_end_date == null ? '' : moment(res.contract_period_end_date),
                     duration:res.duration== null ? '' : res.duration,
-                    reserve_price:res.reserve_price== null ? '' : res.reserve_price
+                    reserve_price:res.reserve_price== null ? '' : this.padZero(res.reserve_price,'4')
                 });
             // }
             //console.log(res);
@@ -73,6 +73,14 @@ export class CreateNewRA extends Component {
             };
         })
     }
+    padZero(num, n) { 
+        let len = num.toString().split('.')[1].length; 
+        while(len < n) { 
+        num = num+"0"; 
+        len++; 
+        } 
+        return num; 
+    } 
     doName(e){
         let obj = e.target.value;
         this.setState({
@@ -190,7 +198,6 @@ export class CreateNewRA extends Component {
     checkSuccess(event,obj){
         event.preventDefault();
         if(this.state.btn_type == "save"){
-            this.setAuction();
             //return;
             createRa({auction: this.setAuction()}).then(res => {
                             this.auction = res;
@@ -201,6 +208,13 @@ export class CreateNewRA extends Component {
                         }, error => {
                             console.log(error);
                         })
+            if(this.props.left_name){
+                this.setState({
+                    edit_btn:"lm--button lm--button--primary show",
+                    edit_change:"lm--button lm--button--primary hide",
+                    disabled:"disabled"
+                })
+            }
         }
         if(this.state.btn_type == "publish"){
             createRa({auction: this.setAuction()}).then(res => {
@@ -214,9 +228,9 @@ export class CreateNewRA extends Component {
                         this.setState({
                             text:this.auction.name+" has been successfully published. Please go to 'Manage Published Upcoming Reverse Auction' for further actions."
                         });
-                        setTimeout(() => {
-                             window.location.href="http://localhost:3000/admin/home"
-                         },5000);
+                        // setTimeout(() => {
+                        //      window.location.href="/admin/home"
+                        //  },5000);
                     }, error => {
                         console.log(error);
                     })

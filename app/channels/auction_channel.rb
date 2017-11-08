@@ -11,7 +11,7 @@ class AuctionChannel < ApplicationCable::Channel
 
   def check_in
     update_check_params('on-live')
-    ActionCable.server.broadcast "auction_#{params[:auction_id]}", 'hello-world'
+    ActionCable.server.broadcast "auction_#{params[:auction_id]}"
   end
 
   def extend_time(data)
