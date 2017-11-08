@@ -19,7 +19,7 @@ class Api::AuctionsController < ApplicationController
     elsif @auction.publish_status == '1' && Time.now < @auction.actual_begin_time
       link = set_link(@auction.id, 'upcoming')
       render json: {url: link}, status: 200
-    elsif @auction.publish_status == '1' && @auction.actual_begin_time < Time.now < @auction.actual_end_time
+    elsif @auction.publish_status == '1' && @auction.actual_begin_time < Time.now && Time.now < @auction.actual_end_time
       link = set_link(@auction.id, 'dashboard')
       render json: {url: link}, status: 200
     elsif @auction.publish_status == '1' && @auction.actual_end_time < Time.now

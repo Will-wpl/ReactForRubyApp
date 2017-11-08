@@ -132,3 +132,6 @@ abbr[title]{color: #fe0000; text-decoration: none;}
   li{ list-style: none; line-height:28px; font-size:14px;}
   ol{ margin: 20px auto 0px auto;}
 }
+.react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list{
+  padding-right: 0px !important;
+}
