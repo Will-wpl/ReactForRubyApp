@@ -26,7 +26,7 @@ const auction = cable.subscriptions.create({
     connected () {
         console.log('-----message client connected ------------')
         // auction.checkIn({user_id: 2});
-        // auction.setBid({lt_peak:'0.020', lt_off_peak: '0.1000' , hts_peak:'0.1000',hts_off_peak:'0.0898',htl_peak:'0.1000',htl_off_peak:'0.1000'});
+        // auction.setBid({lt_peak:'0.020', lt_off_peak: '0.1000' , hts_peak:'0.1000',hts_off_peak:'0.0893',htl_peak:'0.1000',htl_off_peak:'0.1000'});
         // auction.extendTime({extend_time : '5'});
     },
     disconnected () {
