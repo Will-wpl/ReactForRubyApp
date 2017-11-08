@@ -75,6 +75,10 @@ Rails.application.routes.draw do
         get 'finish' # finished "thank you" page
         get 'result' # view post ra page
       end
+      collection do
+        get 'empty' # no published auction page
+        get 'goto'
+      end
     end
   end
 end
