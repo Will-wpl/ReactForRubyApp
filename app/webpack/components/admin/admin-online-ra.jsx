@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react'
+import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom';
 import {DuringCountDown} from '../shared/during-countdown';
 import RetailerRanking from './admin_shared/ranking';
@@ -10,49 +10,61 @@ import RankingRealtimeHoc from './rankingChartRealtimeContainer';
 import PriceRealtimeHoc from './priceChartRealtimeContainer';
 
 export class AdminOnlineRa extends Component {
-    constructor(props, context){
+    constructor(props, context) {
         super(props);
-        this.state = {users:[]};
+        this.state = {users: []};
     }
+
     updateRankingOnUsersSelected(ids) {
         this.refs.rankingChart.updateIndentifications(ids);
     }
+
     updatePriceOnUsersSelected(ids) {
         this.refs.priceChart.updateIndentifications(ids);
     }
+
     componentDidMount() {
         getArrangements(ACCEPT_STATUS.PENDING).then(res => {
-            this.setState({users:res});
+            this.setState({users: res});
         }, error => {
             console.log(error);
         });
     }
-    render () {
+
+    render() {
         return (
             <div>
-                <DuringCountDown admin_hold="show" retailer_hold="hide" />
+                {/*<DuringCountDown admin_hold="show" retailer_hold="hide" />*/}
+                <DuringCountDown>
+                    <div id="admin_hold">
+                        <span>Extend Time:</span><input type="tel" className="fill_hold"/><span>Min</span>
+                        <input type="submit" className="hold_submit" value="Submit"/>
+                    </div>
+                </DuringCountDown>
                 <div className="u-grid u-mt3">
                     <div className="col-sm-12 col-md-7">
                         <div className="u-grid u-mt2">
                             <div className="col-sm-9">
-                                <PriceRealtimeHoc ref="priceChart" />
+                                <PriceRealtimeHoc ref="priceChart"/>
                             </div>
                             <div className="col-sm-2 push-md-1">
-                                <CheckboxList list={this.state.users} onCheckeds={this.updatePriceOnUsersSelected.bind(this)}/>
+                                <CheckboxList list={this.state.users}
+                                              onCheckeds={this.updatePriceOnUsersSelected.bind(this)}/>
                             </div>
                         </div>
                         <div className="u-grid u-mt2">
                             <div className="col-sm-9">
-                                <RankingRealtimeHoc ref="rankingChart" />
+                                <RankingRealtimeHoc ref="rankingChart"/>
                             </div>
                             <div className="col-sm-2 push-md-1">
-                                <CheckboxList list={this.state.users} onCheckeds={this.updateRankingOnUsersSelected.bind(this)}/>
+                                <CheckboxList list={this.state.users}
+                                              onCheckeds={this.updateRankingOnUsersSelected.bind(this)}/>
                             </div>
                         </div>
                     </div>
                     <div className="col-sm-12 col-md-5">
-                        <ReservePrice />
-                        <RetailerRanking />
+                        <ReservePrice/>
+                        <RetailerRanking/>
                     </div>
                 </div>
             </div>
@@ -62,7 +74,7 @@ export class AdminOnlineRa extends Component {
 
 function run() {
     const domNode = document.getElementById('AdminOnlineRa');
-    if(domNode !== null){
+    if (domNode !== null) {
         ReactDOM.render(
             React.createElement(AdminOnlineRa),
             domNode
