@@ -1,0 +1,31 @@
+.page-header
+  .pull-right
+    = link_to icon("plus", t("views.actions.new", model: AuctionExtendTime.model_name.human)), new_admin_auction_extend_time_path, class: "btn btn-primary"
+  h1= page_title(model: AuctionExtendTime.model_name.human.pluralize)
+
+table.table.table-hover
+  thead
+    tr
+      th id
+      th
+  tbody
+    - @auction_extend_times.each do |auction_extend_time|
+      tr
+        td= link_to auction_extend_time.id, admin_auction_extend_time_path(auction_extend_time)
+        td.text-right
+          = link_to admin_auction_extend_time_path(auction_extend_time), class: "btn btn-success btn-sm" do
+            = icon "eye", t("views.actions.show")
+          ' &nbsp;
+          = link_to edit_admin_auction_extend_time_path(auction_extend_time), class: "btn btn-warning btn-sm" do
+            = icon "edit", t("views.actions.edit")
+          ' &nbsp;
+          = link_to admin_auction_extend_time_path(auction_extend_time), class: "btn btn-danger btn-sm", method: :delete, data: { confirm: t('views.confirm'), disable_with: t('views.disable_with') } do
+            = icon "trash", t("views.actions.destroy")
+
+hr
+
+.row
+  .col-sm-6
+    = page_entries_info @auction_extend_times, entry_name: AuctionExtendTime.model_name.human
+  .col-sm-6
+    = paginate(@auction_extend_times)
