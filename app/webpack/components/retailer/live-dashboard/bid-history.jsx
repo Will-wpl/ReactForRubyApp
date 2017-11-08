@@ -26,12 +26,12 @@ export default class BidHistory extends Component {
                     <tr>
                         <th>S/N</th>
                         <th>Time</th>
-                        <th>LT(Off-Peak)</th>
-                        <th>LT(Peak)</th>
-                        <th>HTS(Off-Peak)</th>
-                        <th>HTS(Peak)</th>
-                        <th>HLT(Off-Peak)</th>
-                        <th>HLT(Peak)</th>
+                        <th>LT (Off-Peak)</th>
+                        <th>LT (Peak)</th>
+                        <th>HTS (Off-Peak)</th>
+                        <th>HTS (Peak)</th>
+                        <th>HTL (Off-Peak)</th>
+                        <th>HTL (Peak)</th>
                     </tr>
                     </thead>
                     <tbody>
