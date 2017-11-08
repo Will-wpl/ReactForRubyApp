@@ -6,11 +6,11 @@ export default class Ranking extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { option: getTemplate() };
+        this.state = { option: getTemplate(this.props) };
     }
 
     getChartOption() {
-        let option = getTemplate();
+        let option = getTemplate(this.props);
         this.props.data.forEach(element => {
             let tmp = {
                 type: 'line',
@@ -54,7 +54,7 @@ Ranking.defaultProps = {
     data: []
 }
 
-function getTemplate() {
+const getTemplate = (props) => {
     return {
         calculable: true,
         dataZoom: {
@@ -80,13 +80,17 @@ function getTemplate() {
                 return [point[0] - dom.scrollWidth / 2, point[1] - dom.scrollHeight - 16];
             },
             formatter: (params) => {
+                let content = `${params.value[1]}`;
+                if (props && params.seriesIndex < props.data.length) {
+                    let template = props.data[params.seriesIndex].template;
+                    if (template) {
+                        content = `${template}${params.value[1]}`;
+                    }
+                }
                 let result = `<div class="tooltip top">
                                 <div class="tooltip-arrow" style="border-top-color:${params.color}"></div>
                                 <div class="tooltip-inner" style="background-color:${params.color};color:black">
-                                    <strong>asdfasdf</strong>
-                                    <div>fdasdfasdfasdfasdfasdffffffdasdfasdfasdfasdfasdfffff</div>
-                                    <div>fdasdfasdfasdfasdfasdf</div>
-                                    <div>${params.value[1]}</div>
+                                    <strong style="white-space: nowrap">${content}</strong>
                                 </div>
                             </div>`;
                 return result;
