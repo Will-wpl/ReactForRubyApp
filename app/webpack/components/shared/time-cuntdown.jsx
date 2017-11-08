@@ -13,10 +13,6 @@ export class TimeCuntDown extends Component {
     }
 
     componentDidMount() {
-        this.getAuctionTime();
-        this.interval = setInterval(() => {
-            this.getAuctionTime();
-        }, 1000);
         //test
         setTimeout(() => {
             clearInterval(this.interval);
@@ -28,25 +24,37 @@ export class TimeCuntDown extends Component {
         }, 2000)
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.getAuctionTime(nextProps.auction);
+        if (this.interval) {
+            clearInterval(this.interval);
+        }
+        this.interval = setInterval(() => {
+            this.getAuctionTime(nextProps.auction);
+        }, 1000);
+    }
+
     componentWillUnmount() {
         clearInterval(this.interval);
     }
 
-    getAuctionTime() {
-        getAuctionTimeRule(1).then(res => {
-            let isOver = this.isCountDownOver(moment(res[ACTUAL_BEGIN_TIME]).toDate().getTime()
-                , moment(res[ACTUAL_CURRENT_TIME]).toDate().getTime());
-            if (isOver) {
-                if (!res[HOLD_STATUS]) {
-                    clearInterval(this.interval);
-                    if (this.props.countDownOver) {
-                        this.props.countDownOver();
+    getAuctionTime(auction) {
+        if (auction) {
+            getAuctionTimeRule(auction.id).then(res => {
+                let isOver = this.isCountDownOver(moment(res[ACTUAL_BEGIN_TIME]).toDate().getTime()
+                    , moment(res[ACTUAL_CURRENT_TIME]).toDate().getTime());
+                if (isOver) {
+                    if (!res[HOLD_STATUS]) {
+                        clearInterval(this.interval);
+                        if (this.props.countDownOver) {
+                            this.props.countDownOver();
+                        }
                     }
                 }
-            }
-        }, error => {
-            console.log('whoops dam it')
-        })
+            }, error => {
+                console.log('whoops dam it')
+            })
+        }
     }
 
     isCountDownOver(startSeq, nowSeq) {
@@ -66,7 +74,7 @@ export class TimeCuntDown extends Component {
     render() {
         return (
             <div className="time_cuntdown">
-                <p>SP Reverse Auction on 1 Dec 2017,10:00AM</p>
+                <p>{this.props.title}</p>
                 <div className="Countdown"><abbr>Countdown Timer:</abbr>
                     <ol id="countdown_timer">
                         <span><font>{this.state.day}</font>DAYS</span>
@@ -78,4 +86,8 @@ export class TimeCuntDown extends Component {
             </div>
         )
     }
+}
+
+TimeCuntDown.defaultProps = {
+    title:'SP Reverse Auction'
 }
