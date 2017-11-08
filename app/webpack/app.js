@@ -14,11 +14,11 @@ import "components/retailer/retailer-manage-coming";
 import "components/retailer/retailer-live";
 import "components/retailer/retailer-finish"
 
-ActionCable = require('actioncable')
+// ActionCable = require('actioncable')
 
-const cable = ActionCable.createConsumer('ws://localhost:3000/cable')
+// const cable = ActionCable.createConsumer()
 
-const auction = cable.subscriptions.create({
+const auction = ActionCable.createConsumer().subscriptions.create({
     channel: 'AuctionChannel',
     auction_id: '1',
     user_id: '2'
