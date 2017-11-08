@@ -25,7 +25,11 @@ export class RetailerLive extends Component {
             </div>
         ) : (
             <div>
-                <DuringCountDown admin_hold="hide" retailer_hold="show"/>
+                <DuringCountDown>
+                    <div id="retailer_hold">
+                        <b>Admin has extended auction duration by 2 minuties</b>
+                    </div>
+                </DuringCountDown>
                 <LiveHomePage/>
             </div>
         );
