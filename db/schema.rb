@@ -10,23 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171108025732) do
+ActiveRecord::Schema.define(version: 20171105045109) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "acution_extend_times", force: :cascade do |t|
-    t.datetime "extend_time"
-    t.datetime "current_time"
-    t.datetime "actual_begin_time"
-    t.datetime "actual_end_time"
-    t.bigint "user_id"
-    t.bigint "auction_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["auction_id"], name: "index_acution_extend_times_on_auction_id"
-    t.index ["user_id"], name: "index_acution_extend_times_on_user_id"
-  end
 
   create_table "arrangements", force: :cascade do |t|
     t.string "main_name", null: false
