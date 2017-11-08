@@ -16,18 +16,22 @@ class Api::AuctionHistoriesController < ApplicationController
     @arrangements.each do |arrangement|
       hash[arrangement.user_id] = Array.new
     end
-    @histories.each do |history|
-      hash[history.user_id].push(history)
-    end
+    if !@arrangements.empty? && !@histories.empty?
+      @histories.each do |history|
+        hash[history.user_id].push(history)
+      end
 
-    hash.each do |key, value|
-      history = HistoriesDto.new
-      history.id = key
-      history.data = value
-      list.push(history)
-    end
+      hash.each do |key, value|
+        history = HistoriesDto.new
+        history.id = key
+        history.data = value
+        list.push(history)
+      end
 
-    render json: list, status: 200
+      render json: list, status: 200
+    else
+      render json: {}, status: 200
+    end
   end
 
   # get comfirm winner infomation by auction_id
