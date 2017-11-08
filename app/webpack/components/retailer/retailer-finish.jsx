@@ -13,9 +13,9 @@ export class RetailerFinish extends Component {
             <div id="live_modal">
                 <div className={this.state.holdOrend}></div>
                 <p>
-                The Reverse Auction has ended<br></br>
-                Thank you for your participation!<br>
-                You will be contacted separately<br></br>
+                The Reverse Auction has ended<br/>
+                Thank you for your participation!<br/>
+                You will be contacted separately<br/>
                 on the Reverse Auction results
                 </p>
             </div>
