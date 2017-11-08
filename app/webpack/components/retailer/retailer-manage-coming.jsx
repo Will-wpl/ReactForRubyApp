@@ -210,7 +210,7 @@ export class RetailerManage extends Component {
                     <div className="lm--formItem lm--formItem--inline string">
                         <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                             <thead>
-                                <tr><th></th><th>LT</th><th>HT(Small)</th><th>HT(Large)</th></tr>
+                                <tr><th></th><th>LT</th><th>HT (Small)</th><th>HT (Large)</th></tr>
                             </thead>
                             <tbody>
                                 <tr>
