@@ -289,63 +289,58 @@ export class CreateNewRA extends Component {
                         Page will automatically refresh when<br></br>reverse auction commences
                         </p>
                     </div> */}
-                    <div className={styleType}>
-                        <h2>{left_name}</h2>
-                        <form action="" ref="CreatRaForm" method="post" id="CreatRaForm" onSubmit={this.checkSuccess.bind(this)}>
-                            <dl className="vw-block vw-block-cols creatRa">
-                                <dd className="lm--formItem lm--formItem--inline string optional">
-                                    <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Name of Reverse Auction :</span>
-                                    <label className="lm--formItem-right lm--formItem-control">
-                                        <input type="test" value={this.state.name} onChange={this.doName.bind(this)} disabled={this.state.disabled} ref="name" name="name" maxLength="150" className="string optional" title="The length for Name of RA must not be longer than 150 characters." required aria-required="true"></input>
-                                        {/* <abbr className="error-block" ref="ra_name_error">{this.state.ra_name_error}</abbr> */}
-                                    </label>
-                                </dd>
-                                <dd className="lm--formItem lm--formItem--inline string optional">
-                                    <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Date/Time of Reverse Auction :</span>
-                                    <label className="lm--formItem-right lm--formItem-control">
-                                        <DatePicker selected={this.state.start_datetime} disabled={this.state.disabled} ref="start_datetime" name="start_datetime" showTimeSelect dateFormat="YYYY-MM-DD HH:mm" timeFormat="HH:mm" timeIntervals={1} className="time_ico" onChange={this.timeChange} minDate={moment()} maxDate={moment().add(30, "days")} title="Time must not be in the past." required aria-required="true" />
-                                        <abbr ref="ra_duration_error" className="col">(SGT)</abbr>
-                                    </label>
-                                </dd>
-                                <dd className="lm--formItem lm--formItem--inline string optional">
-                                    <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Reverse Auction Contract Period :</span>
-                                    <label className="col"><DatePicker disabled={this.state.disabled} required aria-required="true" ref="contract_period_start_date" name="contract_period_start_date" className="date_ico" dateFormat="YYYY-MM-DD" selected={this.state.startDate} selectsStart startDate={this.state.startDate} endDate={this.state.endDate} onChange={this.starttimeChange} />
-                                        {/* <abbr className="error-block"  ref="ra_time_start_error">{this.state.ra_time_start_error}</abbr> */}
-                                    </label>
-                                    <label className="col"><b>to</b></label>
-                                    <label className="col"><DatePicker disabled={this.state.disabled} required aria-required="true" ref="contract_period_end_date" name="contract_period_end_date" className="date_ico" dateFormat="YYYY-MM-DD" selected={this.state.endDate} selectsEnd startDate={this.state.startDate} endDate={this.state.endDate} onChange={this.endtimeChange} />
-                                        {/* <abbr className="error-block" ref="ra_time_end_error">{this.state.ra_time_end_error}</abbr> */}
-                                    </label>
-                                </dd>
-                                <dd></dd>
-                                <dd className="lm--formItem lm--formItem--inline string optional">
-                                    <span className="lm--formItem-left lm--formItem-label string optional">Reverse Auction Paramters</span>
-                                </dd>
-                                <dd className="lm--formItem lm--formItem--inline string optional">
-                                    <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Duration (minutes):</span>
-                                    <label className="lm--formItem-right lm--formItem-control">
-                                        <input type="test" ref="duration" onChange={this.doDuration.bind(this)} value={this.state.duration} disabled={this.state.disabled} name="duration" maxLength="50" required aria-required="true" pattern="^[0-9]*[1-9][0-9]*$" title="Duration must be an integer."></input>
-                                        <abbr ref="ra_duration_error" className="col"></abbr>
-                                    </label>
-                                </dd>
-                                <dd className="lm--formItem lm--formItem--inline string optional">
-                                    <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Reverse Price ($/kWh):</span>
-                                    <label className="lm--formItem-right lm--formItem-control">
-                                        <input type="test" ref="reserve_price" onChange={this.doPrice.bind(this)} value={this.state.reserve_price} disabled={this.state.disabled} name="reserve_price" maxLength="50" required aria-required="true" pattern="^\d+(\.\d{4})$" title="Reserve Price must be a number with 4 decimal places, e.g. $0.0891/kWh." ></input>
-                                        <abbr ref="ra_duration_error" className="col"></abbr>
-                                    </label>
-                                </dd>
-                                <dd className="lm--formItem lm--formItem--inline string optional"><span className="lm--formItem-left lm--formItem-label string optional">Time Extension :</span><label className="lm--formItem-right lm--formItem-control"><b className="textLeft">Manual</b></label></dd>
-                                <dd className="lm--formItem lm--formItem--inline string optional"><span className="lm--formItem-left lm--formItem-label string optional">Average price :</span><label className="lm--formItem-right lm--formItem-control"><b className="textLeft">Weighted Average</b></label></dd>
-                            </dl>
-                            {btn_html}
-                        </form>
-                        <Modal text={this.state.text} dodelete={this.delete.bind(this)} ref="Modal" />
-                    </div>
-                </div>
-                <div className="createRaMain u-grid">
-                    <a className="lm--button lm--button--primary u-mt3" href="/admin/home" >Back to Homepage</a>
-                </div>
+            <div className={styleType}>
+                <h2>{left_name}</h2>
+                <form action="" ref="CreatRaForm" method="post" id="CreatRaForm" onSubmit={this.checkSuccess.bind(this)}>
+                <dl className="vw-block vw-block-cols creatRa">
+                    <dd className="lm--formItem lm--formItem--inline string optional">
+                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Name of Reverse Auction :</span>
+                        <label className="lm--formItem-right lm--formItem-control">
+                            <input type="test" value={this.state.name} onChange={this.doName.bind(this)} disabled={this.state.disabled} ref="name" name="name" maxLength="150" className="string optional" title="The length for Name of RA must not be longer than 150 characters." required aria-required="true"></input>
+                            {/* <abbr className="error-block" ref="ra_name_error">{this.state.ra_name_error}</abbr> */}
+                        </label>
+                    </dd>
+                    <dd className="lm--formItem lm--formItem--inline string optional">
+                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Date/Time of Reverse Auction :</span>
+                        <label className="lm--formItem-right lm--formItem-control">
+                        <DatePicker selected={this.state.start_datetime} disabled={this.state.disabled} ref="start_datetime" name="start_datetime" showTimeSelect dateFormat="YYYY-MM-DD HH:mm" timeFormat="HH:mm" timeIntervals={5}  className="time_ico"  onChange = {this.timeChange} minDate={moment()} maxDate={moment().add(30, "days")} title="Time must not be in the past."  required aria-required="true"/>
+                        <abbr ref="ra_duration_error" className="col">(SGT)</abbr>
+                        </label>
+                    </dd>
+                    <dd className="lm--formItem lm--formItem--inline string optional">
+                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Reverse Auction Contract Period :</span>
+                        <label className="col"><DatePicker disabled={this.state.disabled} required aria-required="true" ref="contract_period_start_date" name="contract_period_start_date" className="date_ico" dateFormat="YYYY-MM-DD" selected={this.state.startDate} selectsStart startDate={this.state.startDate} endDate={this.state.endDate} onChange = {this.starttimeChange}/>
+                        {/* <abbr className="error-block"  ref="ra_time_start_error">{this.state.ra_time_start_error}</abbr> */}
+                        </label>
+                        <label className="col"><b>to</b></label>
+                        <label className="col"><DatePicker disabled={this.state.disabled} required aria-required="true" ref="contract_period_end_date" name="contract_period_end_date" className="date_ico" dateFormat="YYYY-MM-DD" selected={this.state.endDate} selectsEnd startDate={this.state.startDate} endDate={this.state.endDate}  onChange = {this.endtimeChange}/>
+                        {/* <abbr className="error-block" ref="ra_time_end_error">{this.state.ra_time_end_error}</abbr> */}
+                        </label>
+                    </dd>
+                    <dd></dd>
+                    <dd className="lm--formItem lm--formItem--inline string optional">
+                        <span className="lm--formItem-left lm--formItem-label string optional">Reverse Auction Parameters</span>
+                    </dd>
+                    <dd className="lm--formItem lm--formItem--inline string optional">
+                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Duration (minutes):</span>
+                        <label className="lm--formItem-right lm--formItem-control">
+                            <input type="test" ref="duration" onChange={this.doDuration.bind(this)} value={this.state.duration} disabled={this.state.disabled} name="duration" maxLength="50" required aria-required="true" pattern="^[0-9]*[1-9][0-9]*$" title="Duration must be an integer."></input>
+                            <abbr ref="ra_duration_error" className="col"></abbr>
+                        </label>
+                        </dd>
+                    <dd className="lm--formItem lm--formItem--inline string optional">
+                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Reserve Price ($/kWh):</span>
+                        <label className="lm--formItem-right lm--formItem-control">
+                            <input type="test" ref="reserve_price" onChange={this.doPrice.bind(this)} value={this.state.reserve_price} disabled={this.state.disabled} name="reserve_price" maxLength="50" required aria-required="true" pattern="^\d+(\.\d{4})$" title="Reserve Price must be a number with 4 decimal places, e.g. $0.0891/kWh." ></input>
+                            <abbr ref="ra_duration_error" className="col"></abbr>
+                        </label>
+                    </dd>
+                    <dd className="lm--formItem lm--formItem--inline string optional"><span className="lm--formItem-left lm--formItem-label string optional">Time Extension :</span><label className="lm--formItem-right lm--formItem-control"><b className="textLeft">Manual</b></label></dd>
+                    <dd className="lm--formItem lm--formItem--inline string optional"><span className="lm--formItem-left lm--formItem-label string optional">Average price :</span><label className="lm--formItem-right lm--formItem-control"><b className="textLeft">Weighted Average</b></label></dd>
+                </dl>
+                {btn_html}
+                </form>
+                <Modal text={this.state.text} dodelete={this.delete.bind(this)} ref="Modal" />
             </div>
         )
     }
