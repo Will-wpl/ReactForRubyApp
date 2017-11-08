@@ -146,6 +146,15 @@ export const Ws = class {
             auction_id: `${auction}`,
             user_id: `${user}`
         }, mixin);
+        this.tryReconnect(1000)
+    }
+
+    tryReconnect(time) {
+        setTimeout(() => {
+            if (!this.connected) {
+                cable.connection.reopen();
+            }
+        }, time)
     }
 
     onConnected(callback) {
