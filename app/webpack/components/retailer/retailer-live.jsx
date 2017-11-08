@@ -38,7 +38,7 @@ export class RetailerLive extends Component {
             <div>
                 <DuringCountDown auction={this.auction}>
                     <div id="retailer_hold">
-                        <b>Admin has extended auction duration by 2 minuties</b>
+                        <b>Admin has extended auction duration by 2 minutes</b>
                     </div>
                 </DuringCountDown>
                 <LiveHomePage auction={this.auction}/>
