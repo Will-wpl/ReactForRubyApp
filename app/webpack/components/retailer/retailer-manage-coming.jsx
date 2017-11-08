@@ -89,9 +89,9 @@ export class RetailerManage extends Component {
                 this.setState({
                     text:"Your details have been successfully submitted."
                 });
-                setTimeout(() => {
-                    window.location.href="/retailer/home"
-                },3000);
+                // setTimeout(() => {
+                //     window.location.href="/retailer/home"
+                // },3000);
             }, error => {
                 console.log(error);
             })
