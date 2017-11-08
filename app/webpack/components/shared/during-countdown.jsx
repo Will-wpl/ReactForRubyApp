@@ -71,8 +71,11 @@ export class DuringCountDown extends Component {
                         <span><font>{this.state.minute}</font>MINUTES</span>
                         <span><font>{this.state.second}</font>SECONDS</span>
                     </ol>
-                    <div id="admin_hold" className={this.props.admin_hold}><span>Extend Time:</span><input type="tel" className="fill_hold"/><span>Min</span><input type="submit" className="hold_submit" value="Submit"/></div>
-                    <div id="retailer_hold" className={this.props.retailer_hold}><b>Admin has extended auction duration by 2 minuties</b></div>
+                    {
+                        this.props.children
+                    }
+                    {/*<div id="admin_hold" className={this.props.admin_hold}><span>Extend Time:</span><input type="tel" className="fill_hold"/><span>Min</span><input type="submit" className="hold_submit" value="Submit"/></div>*/}
+                    {/*<div id="retailer_hold" className={this.props.retailer_hold}><b>Admin has extended auction duration by 2 minuties</b></div>*/}
                 </div>
             </div>
         )

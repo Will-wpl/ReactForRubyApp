@@ -12,7 +12,7 @@ export default class BidForm extends Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState({configs:nextProps.data.map(element => {
-            return parseFloat(element).toFixed(4) * 10000;
+            return parseFloat(element).toFixed(4).substring(2);
         })});
     }
 
@@ -64,19 +64,19 @@ export default class BidForm extends Component {
                     </tr>
                     </thead>
                     <tbody>
-
                     <tr>
                         <td>Peak</td>
-                        <td>$0.<input type="number" value={this.state.configs[0]} onChange={this.onInputChanged.bind(this, 0)}/></td>
-                        <td>$0.<input type="number" value={this.state.configs[2]} onChange={this.onInputChanged.bind(this, 2)}/></td>
-                        <td>$0.<input type="number" value={this.state.configs[4]} onChange={this.onInputChanged.bind(this, 4)}/></td>
-                    </tr>
-                    <tr>
-                        <td>Off-Peak</td>
                         <td>$0.<input type="number" value={this.state.configs[1]} onChange={this.onInputChanged.bind(this, 1)}/></td>
                         <td>$0.<input type="number" value={this.state.configs[3]} onChange={this.onInputChanged.bind(this, 3)}/></td>
                         <td>$0.<input type="number" value={this.state.configs[5]} onChange={this.onInputChanged.bind(this, 5)}/></td>
                     </tr>
+                    <tr>
+                        <td>Off-Peak</td>
+                        <td>$0.<input type="number" value={this.state.configs[0]} onChange={this.onInputChanged.bind(this, 0)}/></td>
+                        <td>$0.<input type="number" value={this.state.configs[2]} onChange={this.onInputChanged.bind(this, 2)}/></td>
+                        <td>$0.<input type="number" value={this.state.configs[4]} onChange={this.onInputChanged.bind(this, 4)}/></td>
+                    </tr>
+
                     </tbody>
                 </table>
                 <button type="button" className="lm--button lm--button--primary u-mt2 fright" onClick={this.onSubmit.bind(this)}>Submit</button>
