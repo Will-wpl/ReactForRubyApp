@@ -2,7 +2,9 @@ import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom';
 import {TimeCuntDown} from '../shared/time-cuntdown';
 import {DuringCountDown} from '../shared/during-countdown';
-import LiveHomePage from './live-dashboard/home'
+import LiveHomePage from './live-dashboard/home';
+import {getAuction} from '../../javascripts/componentService/common/service';
+import moment from 'moment';
 
 export class RetailerLive extends Component {
     constructor(props) {
@@ -10,10 +12,19 @@ export class RetailerLive extends Component {
         this.state = {showLive: false}
     }
 
+    componentDidMount() {
+        getAuction().then(auction => {
+            this.auction = auction;
+            console.log(this.auction);
+            this.timerTitle = auction ? `${auction.name} on ${moment(auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
+            this.forceUpdate();
+        })
+    }
+
     render() {
         return !this.state.showLive ? (
             <div>
-                <TimeCuntDown countDownOver={() => this.setState({showLive: true})}/>
+                <TimeCuntDown countDownOver={() => this.setState({showLive: true})} title={this.timerTitle} auction={this.auction}/>
                 <div className={'live_show'} id="live_modal">
                     <div className={'live_hold'}></div>
                     <p>
@@ -25,12 +36,12 @@ export class RetailerLive extends Component {
             </div>
         ) : (
             <div>
-                <DuringCountDown>
+                <DuringCountDown auction={this.auction}>
                     <div id="retailer_hold">
                         <b>Admin has extended auction duration by 2 minuties</b>
                     </div>
                 </DuringCountDown>
-                <LiveHomePage/>
+                <LiveHomePage auction={this.auction}/>
             </div>
         );
     }

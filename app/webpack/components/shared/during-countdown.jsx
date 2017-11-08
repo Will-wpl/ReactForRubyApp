@@ -11,9 +11,9 @@ export class DuringCountDown extends Component {
         this.state = {minute: 0, second: 0}
     }
     componentDidMount() {
-        this.getAuctionTime();
+        this.getAuctionTime(this.props.auction);
         this.interval = setInterval(() => {
-            this.getAuctionTime();
+            this.getAuctionTime(this.props.auction);
         }, 1000);
         //test
         // setTimeout(() => {
@@ -30,21 +30,24 @@ export class DuringCountDown extends Component {
         clearInterval(this.interval);
     }
 
-    getAuctionTime() {
-        getAuctionTimeRule(1).then(res => {
-            let isOver = this.isCountDownOver(moment(res[ACTUAL_END_TIME]).toDate().getTime()
-                , moment(res[ACTUAL_CURRENT_TIME]).toDate().getTime());
-            if (isOver) {
-                if (!res[HOLD_STATUS]) {
-                    clearInterval(this.interval);
-                    if (this.props.countDownOver) {
-                        this.props.countDownOver();
+    getAuctionTime(auction) {
+        if (auction) {
+            getAuctionTimeRule(auction.id).then(res => {
+                let isOver = this.isCountDownOver(moment(res[ACTUAL_END_TIME]).toDate().getTime()
+                    , moment(res[ACTUAL_CURRENT_TIME]).toDate().getTime());
+                if (isOver) {
+                    if (!res[HOLD_STATUS]) {
+                        clearInterval(this.interval);
+                        if (this.props.countDownOver) {
+                            this.props.countDownOver();
+                        }
                     }
                 }
-            }
-        }, error => {
-            console.log('whoops dam it')
-        })
+            }, error => {
+                console.log('whoops dam it')
+            })
+        }
+
     }
 
     isCountDownOver(startSeq, nowSeq) {
@@ -64,7 +67,7 @@ export class DuringCountDown extends Component {
     render () {
         return (
             <div className="time_cuntdown during">
-                <p>SP Reverse Auction on 1 Dec 2017,10:00AM</p>
+                <p>{this.props.title}</p>
                 <div className="Countdown">
                     <abbr>Countdown Timer:</abbr>
                     <ol id="during_countdown_timer">
@@ -74,10 +77,16 @@ export class DuringCountDown extends Component {
                     {
                         this.props.children
                     }
-                    {/*<div id="admin_hold" className={this.props.admin_hold}><span>Extend Time:</span><input type="tel" className="fill_hold"/><span>Min</span><input type="submit" className="hold_submit" value="Submit"/></div>*/}
-                    {/*<div id="retailer_hold" className={this.props.retailer_hold}><b>Admin has extended auction duration by 2 minuties</b></div>*/}
                 </div>
             </div>
         )
     }
+}
+
+DuringCountDown.defaultProps = {
+    title:'Reverse Auction has commenced. Please start bidding.'
+}
+
+DuringCountDown.defaultState = {
+
 }
