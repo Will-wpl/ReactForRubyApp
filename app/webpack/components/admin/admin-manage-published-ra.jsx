@@ -18,13 +18,12 @@ export class AdminManagePublishedRa extends Component {
     componentDidMount(){
         getAuctionInVersionOne().then(res => {
             this.auction = res;
-            if(this.auction.publish_status == 0){
+            if(this.auction.publish_status == 1){
                 this.setState({
                     live_modal:"live_hide",
                     live_modal_do:"live_show"
                 })
-            }
-            if(this.auction.publish_status == ""){
+            }else{
                 this.setState({
                     live_modal:"live_show",
                     live_modal_do:"live_hide"
@@ -32,7 +31,7 @@ export class AdminManagePublishedRa extends Component {
             }
             //console.log(res);
             getBidderStatus({auction_id:res.id}).then(res => {
-                console.log(res);
+                //console.log(res);
                 this.setState({
                     dataList:res,
                 })
@@ -65,7 +64,7 @@ export class AdminManagePublishedRa extends Component {
                         <BidderStatus dataList={this.state.dataList} />
                         <div className="createRaMain w_8">
                         <div className="createRa_btn">
-                                <a href="http://localhost:3000/admin/auctions/2/online" className="lm--button lm--button--primary">Commence</a>
+                                <a href="/admin/auctions/2/online" className="lm--button lm--button--primary">Commence</a>
                         </div>
                         </div>
                     </div>

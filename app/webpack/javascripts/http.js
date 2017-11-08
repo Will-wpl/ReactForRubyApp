@@ -1,4 +1,4 @@
-
+import {getLoginUserId} from './componentService/util'
 export const get = (path, params = {}) => {
     return new Promise((resolve, reject) => {
         $.ajax({
@@ -6,7 +6,7 @@ export const get = (path, params = {}) => {
             url: path,
             data: params,
             success: (data) => {
-                console.log('get successfully');
+                // console.log('get successfully');
                 resolve(data);
             },
             error: (data) => {
@@ -92,7 +92,7 @@ export const Ws = class {
     receiveDataCall;
     constructor(port, auction, methods = {}) {
         this.cable = ActionCable.createConsumer(`ws://localhost:${port}/cable`);
-        let user = document.getElementById('user_id');
+        let user = getLoginUserId();
         let mixin = {
             connected: () => {
                 this.sockHandler.checkIn({user_id: user});
