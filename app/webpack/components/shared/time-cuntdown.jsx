@@ -14,14 +14,14 @@ export class TimeCuntDown extends Component {
 
     componentDidMount() {
         //test
-        // setTimeout(() => {
-        //     clearInterval(this.interval);
-        //     setTimeout(() => {
-        //         if (this.props.countDownOver) {
-        //             this.props.countDownOver();
-        //         }
-        //     }, 1000)
-        // }, 2000)
+        setTimeout(() => {
+            clearInterval(this.interval);
+            setTimeout(() => {
+                if (this.props.countDownOver) {
+                    this.props.countDownOver();
+                }
+            }, 1000)
+        }, 2000)
     }
 
     componentWillReceiveProps(nextProps) {
