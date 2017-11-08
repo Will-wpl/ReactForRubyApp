@@ -58,7 +58,8 @@ if Auction.count == 0
                  total_hts_peak: 37_452,
                  total_hts_off_peak: 56_046,
                  total_htl_peak: 1_983_720,
-                 total_htl_off_peak: 791_712)
+                 total_htl_off_peak: 791_712,
+                 publish_status: '0')
 end
 
 if Arrangement.count == 0
