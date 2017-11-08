@@ -18,17 +18,17 @@ export class AdminManagePublishedRa extends Component {
     componentDidMount(){
         getAuctionInVersionOne().then(res => {
             this.auction = res;
-            if(this.auction.publish_status == 1){
-                this.setState({
-                    live_modal:"live_hide",
-                    live_modal_do:"live_show"
-                })
-            }else{
-                this.setState({
-                    live_modal:"live_show",
-                    live_modal_do:"live_hide"
-                })
-            }
+            // if(this.auction.publish_status == 1){
+            //     this.setState({
+            //         live_modal:"live_hide",
+            //         live_modal_do:"live_show"
+            //     })
+            // }else{
+            //     this.setState({
+            //         live_modal:"live_show",
+            //         live_modal_do:"live_hide"
+            //     })
+            // }
             //console.log(res);
             getBidderStatus({auction_id:res.id}).then(res => {
                 //console.log(res);
@@ -48,12 +48,12 @@ export class AdminManagePublishedRa extends Component {
     render () {
         return (
             <div>
-                <div className={this.state.live_modal} id="live_modal">
+                {/* <div className={this.state.live_modal} id="live_modal">
                     <div className={this.state.holdOrend}></div>
                     <p>
                     There is no upcoming reverse auction published.
                     </p>
-                </div>
+                </div> */}
                 <div className={this.state.live_modal_do}>
                 <TimeCuntDown />
                 <div className="u-grid u-mt3">

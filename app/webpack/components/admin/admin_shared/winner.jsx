@@ -16,8 +16,8 @@ export default class WinnerPrice extends Component {
             "Period":"19 Oct 2018 to 30 Jun 2018",
             "sum":"$674,475.67(Forecasted)",
             "winnerPricetable":[
-                {"peak":"Peak","lt":"$ 0.XXXX","ht_small":"$ 0.XXXX","ht_large":"$ 0.XXXX"},
-                {"peak":"Off-Peak","lt":"$ 0.XXXX","ht_small":"$ 0.XXXX","ht_large":"$ 0.XXXX"}
+                {"peak":"Peak (7am-7pm)","lt":"$ 0.XXXX","ht_small":"$ 0.XXXX","ht_large":"$ 0.XXXX"},
+                {"peak":"Off-Peak (7pm-7am)","lt":"$ 0.XXXX","ht_small":"$ 0.XXXX","ht_large":"$ 0.XXXX"}
             ]
         }
     }

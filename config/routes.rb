@@ -36,6 +36,7 @@ Rails.application.routes.draw do
     resource :auction_histories do
       collection do
         get 'list'
+        get 'last'
       end
     end
   end
@@ -60,6 +61,7 @@ Rails.application.routes.draw do
       end
       collection do
         get 'empty' # no published auction page
+        get 'goto'
       end
     end
   end
@@ -73,6 +75,10 @@ Rails.application.routes.draw do
         get 'live' # standby and live page
         get 'finish' # finished "thank you" page
         get 'result' # view post ra page
+      end
+      collection do
+        get 'empty' # no published auction page
+        get 'goto'
       end
     end
   end

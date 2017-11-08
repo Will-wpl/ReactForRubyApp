@@ -49,11 +49,11 @@ export class CreateNewRA extends Component {
             //             live_modal_do:"live_hide",
             //         })
             //     }else{
-                    this.setState({
-                        live_modal:"live_hide",
-                        live_modal_do:"live_show",
-                     })
-                //}               
+            //         this.setState({
+            //             live_modal:"live_hide",
+            //             live_modal_do:"live_show",
+            //          })
+            // }               
             if(res.duration == null){
                 this.setState({id:res.id})
             }else{
@@ -99,35 +99,45 @@ export class CreateNewRA extends Component {
         })
     }
     starttimeChange(data) {
+        if(this.state.endDate != ''){
         let selectDay = new Date(data.format());
-        let endDay = new Date(this.state.endDate.format());
-        if (selectDay < endDay) {
+                let endDay = new Date(this.state.endDate.format());
+                if (selectDay < endDay) {
+                    this.setState({
+                        startDate: data
+                    })
+                } else {
+                    this.setState({
+                        startDate: this.state.endDate,
+                        endDate: data
+                    });
+                }
+        }else{
             this.setState({
                 startDate: data
-            })
-        } else {
-            this.setState({
-                startDate: this.state.endDate
-            });
-            this.setState({
-                endDate: data
             })
         }
+        
     }
     endtimeChange(data) {
-        let selectDay = new Date(data.format());
-        let startDay = new Date(this.state.startDate.format());
-        if (selectDay > startDay) {
+        if(this.state.startDate != ''){
+            let selectDay = new Date(data.format());
+            let startDay = new Date(this.state.startDate.format());
+            if (selectDay > startDay) {
+                this.setState({
+                    endDate: data
+                })
+            } else {
+                this.setState({
+                    startDate: data,
+                    endDate: this.state.startDate
+                });
+            }
+        }else{
             this.setState({
                 endDate: data
             })
-        } else {
-            this.setState({
-                startDate: data
-            });
-            this.setState({
-                endDate: this.state.startDate
-            })
+            
         }
     }
     dateChange(data){
@@ -283,14 +293,14 @@ export class CreateNewRA extends Component {
         }
         return (
             <div>
-                <div id="live_modal" className={this.state.live_modal}>
+                {/* <div id="live_modal" className={this.state.live_modal}>
                         <div className={this.state.holdOrend}></div>
                         <p>
                         Please standy,bidding will<br></br>
                         commence soon<br></br>
                         Page will automatically refresh when<br></br>reverse auction commences
                         </p>
-                    </div>
+                    </div> */}
             <div className={"createRaMain u-grid "+this.state.live_modal_do}>
                 {/* <div id="live_modal">
                         <div className={this.state.holdOrend}></div>
@@ -314,7 +324,7 @@ export class CreateNewRA extends Component {
                     <dd className="lm--formItem lm--formItem--inline string optional">
                         <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Date/Time of Reverse Auction :</span>
                         <label className="lm--formItem-right lm--formItem-control">
-                        <DatePicker selected={this.state.start_datetime} disabled={this.state.disabled} ref="start_datetime" name="start_datetime" showTimeSelect dateFormat="YYYY-MM-DD HH:mm" timeFormat="HH:mm" timeIntervals={5}  className="time_ico"  onChange = {this.timeChange} minDate={moment()} maxDate={moment().add(30, "days")} title="Time must not be in the past."  required aria-required="true"/>
+                        <DatePicker selected={this.state.start_datetime} disabled={this.state.disabled} ref="start_datetime" name="start_datetime" showTimeSelect dateFormat="YYYY-MM-DD HH:mm" timeFormat="HH:mm" timeIntervals={1}  className="time_ico"  onChange = {this.timeChange} minDate={moment()} maxDate={moment().add(30, "days")} title="Time must not be in the past."  required aria-required="true"/>
                         <abbr ref="ra_duration_error" className="col">(SGT)</abbr>
                         </label>
                     </dd>
@@ -330,7 +340,7 @@ export class CreateNewRA extends Component {
                     </dd>
                     <dd></dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
-                        <span className="lm--formItem-left lm--formItem-label string optional">Reverse Auction Parameters</span>
+                        <span className="lm--formItem-left lm--formItem-label string optional">Reverse Auction Paramters</span>
                     </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
                         <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Duration (minutes):</span>
@@ -340,7 +350,7 @@ export class CreateNewRA extends Component {
                         </label>
                         </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
-                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Reserve Price ($/kWh):</span>
+                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Reverse Price ($/kWh):</span>
                         <label className="lm--formItem-right lm--formItem-control">
                             <input type="test" ref="reserve_price" onChange={this.doPrice.bind(this)} value={this.state.reserve_price} disabled={this.state.disabled} name="reserve_price" maxLength="50" required aria-required="true" pattern="^\d+(\.\d{4})$" title="Reserve Price must be a number with 4 decimal places, e.g. $0.0891/kWh." ></input>
                             <abbr ref="ra_duration_error" className="col"></abbr>

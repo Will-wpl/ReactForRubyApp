@@ -1,5 +1,6 @@
 class AuctionHistory < ApplicationRecord
   require 'bigdecimal'
+  require 'securerandom'
   # Extends
 
   # Includes
@@ -80,10 +81,11 @@ class AuctionHistory < ApplicationRecord
     # histories = AuctionHistory.find_by_sql("select a.* from auction_histories a, (select id , bid_time , min(average_price) from auction_histories where auction_id = :auction_id and is_bidder = :is_bidder group by user_id) b where b.id == a.id order by average_price asc, bid_time asc", {auction_id: auction_id, is_bidder: true})
     histories = AuctionHistory.find_by_sql ['select a.* from auction_histories a inner join users on users.id = a.user_id, (select min(auction_id) as auction_id , user_id, min(average_price) as price from auction_histories where auction_id = ? and is_bidder = true group by user_id) b where b.auction_id = a.auction_id and b.user_id = a.user_id and b.price = a.average_price and a.is_bidder = true order by average_price asc, bid_time asc', auction_id]
     ids = []
+    flag = SecureRandom.uuid
     histories.each_with_index do |history, index|
       # puts history, index
       if history.id == current_history_id
-        ids.push(history.id) if history.update(ranking: index + 1)
+        ids.push(history.id) if history.update(ranking: index + 1, flag: flag)
         # update
       else
         # save
@@ -101,6 +103,7 @@ class AuctionHistory < ApplicationRecord
         history_new.bid_time = history.bid_time
         history_new.total_award_sum = history.total_award_sum
         history_new.is_bidder = false
+        history_new.flag = flag
         ids.push(history_new.id) if history_new.save
       end
     end

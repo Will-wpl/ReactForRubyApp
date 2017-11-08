@@ -65,13 +65,13 @@ export default class BidForm extends Component {
                     </thead>
                     <tbody>
                     <tr>
-                        <td>Peak</td>
+                        <td>Peak (7am-7pm)</td>
                         <td>$0.<input type="number" value={this.state.configs[1]} onChange={this.onInputChanged.bind(this, 1)}/></td>
                         <td>$0.<input type="number" value={this.state.configs[3]} onChange={this.onInputChanged.bind(this, 3)}/></td>
                         <td>$0.<input type="number" value={this.state.configs[5]} onChange={this.onInputChanged.bind(this, 5)}/></td>
                     </tr>
                     <tr>
-                        <td>Off-Peak</td>
+                        <td>Off-Peak (7pm-7am)</td>
                         <td>$0.<input type="number" value={this.state.configs[0]} onChange={this.onInputChanged.bind(this, 0)}/></td>
                         <td>$0.<input type="number" value={this.state.configs[2]} onChange={this.onInputChanged.bind(this, 2)}/></td>
                         <td>$0.<input type="number" value={this.state.configs[4]} onChange={this.onInputChanged.bind(this, 4)}/></td>
