@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import CheckboxListItem from './list-checkbox-item';
-import {findUpLimit, getRandomColor} from '../../../javascripts/componentService/util';
+// import {findUpLimit, getRandomColor} from '../../../javascripts/componentService/util';
 
 export default class CheckboxList extends Component {
 
@@ -24,11 +24,16 @@ export default class CheckboxList extends Component {
     render() {
         let checkItems;
         if (this.props.list) {
-            let limit = findUpLimit(this.props.list.length);
+            // let limit = findUpLimit(this.props.list.length);
+            // checkItems = this.props.list.map((obj, index) => {
+            //     let color = getRandomColor((index + 1) * 1.0 / limit);
+            //     return (
+            //         <CheckboxListItem key={obj.user_id} id={obj.user_id} display={obj.company_name} color={color} onCheck={this.makeCheckeds.bind(this)}/>
+            //     );
+            // })
             checkItems = this.props.list.map((obj, index) => {
-                let color = getRandomColor((index + 1) * 1.0 / limit);
                 return (
-                    <CheckboxListItem key={obj.user_id} id={obj.user_id} display={obj.company_name} color={color} onCheck={this.makeCheckeds.bind(this)}/>
+                    <CheckboxListItem key={obj.user_id} id={obj.user_id} display={obj.company_name} color={obj.color} onCheck={this.makeCheckeds.bind(this)}/>
                 );
             })
         }

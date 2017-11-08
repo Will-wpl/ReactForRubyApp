@@ -79,7 +79,7 @@ export class OnlineStatusMain extends Component {
                     </div>
                 </div>
                 <div className="createRaMain u-grid">
-            <a className="lm--button lm--button--primary u-mt3" href="/retailer/home" >Back to Homepage</a>
+            <a className="lm--button lm--button--primary u-mt3" href="/admin/home" >Back to Homepage</a>
             </div>
             </div>
         )}

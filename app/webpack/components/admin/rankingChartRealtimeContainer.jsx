@@ -33,15 +33,15 @@ export default class RankingRealtimeHoc extends Component {
     }
 
     componentDidMount() {
-        let ws = createWebsocket(1);
-        console.log(ws)
-        ws.onConnected(() => {
-            console.log('---message client connected ---');
-        }).onDisconnected(() => {
-            console.log('---message client disconnected ----')
-        }).onReceivedData(data => {
-            console.log('---message client received data ---', data);
-        })
+        // let ws = createWebsocket(1);
+        // console.log(ws)
+        // ws.onConnected(() => {
+        //     console.log('---message client connected ---');
+        // }).onDisconnected(() => {
+        //     console.log('---message client disconnected ----')
+        // }).onReceivedData(data => {
+        //     console.log('---message client received data ---', data);
+        // })
         let list = [{
             id: 1,
             data: [{time: '2017-01-01 10:00:00', ranking: 1}
