@@ -3,9 +3,11 @@ import ReactDOM from 'react-dom';
 import {TimeCuntDown} from '../shared/time-cuntdown';
 import {DuringCountDown} from '../shared/during-countdown';
 import LiveHomePage from './live-dashboard/home';
-import {getAuction} from '../../javascripts/componentService/common/service';
+import {getAuction, getAuctionTimeRule} from '../../javascripts/componentService/common/service';
 import moment from 'moment';
 
+const ACTUAL_END_TIME = 'actual_end_time';
+const ACTUAL_CURRENT_TIME = 'current_time';
 export class RetailerLive extends Component {
     constructor(props) {
         super(props);
@@ -16,9 +18,31 @@ export class RetailerLive extends Component {
         getAuction().then(auction => {
             this.auction = auction;
             console.log(this.auction);
-            this.timerTitle = auction ? `${auction.name} on ${moment(auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
-            this.forceUpdate();
+            // this.timerTitle = auction ? `${auction.name} on ${moment(auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
+            // this.forceUpdate();
+            getAuctionTimeRule(this.auction.id).then(res => {
+                let divider = parseInt((moment(res[ACTUAL_END_TIME]).toDate().getTime()
+                    - moment(res[ACTUAL_CURRENT_TIME]).toDate().getTime()) / 1000);
+                let day = Math.floor(divider / (60 * 60 * 24));
+                let hour = Math.floor((divider - day * 24 * 60 * 60) / 3600);
+                let minute = Math.floor((divider - day * 24 * 60 * 60 - hour * 3600) / 60);
+                let second = Math.floor(divider - day * 24 * 60 * 60 - hour * 3600 - minute * 60);
+                let left = day || hour || minute || second;
+                if (left <= 0) {
+                    this.goToFinish();
+                } else {
+                    this.timerTitle = auction ? `${auction.name} on ${moment(auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
+                    this.forceUpdate();
+                }
+            }, error => {
+                this.timerTitle = auction ? `${auction.name} on ${moment(auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
+                this.forceUpdate();
+            })
         })
+    }
+
+    goToFinish() {
+
     }
 
     render() {
