@@ -20,7 +20,7 @@ export class CreateNewRA extends Component {
             btn_type:"",text:"",id:"",
             edit_btn:"lm--button lm--button--primary show",
             edit_change:"lm--button lm--button--primary hide",
-            disabled:"",live_modal:"",live_modal_do:"",holdOrend:"live_hold"
+            disabled:"",live_modal:"",live_modal_do:"",holdOrend:""
         }
         this.auction = {};
         this.starttimeChange = this.starttimeChange.bind(this);
@@ -42,19 +42,18 @@ export class CreateNewRA extends Component {
     doGetData(type){
         getAuctionInVersionOne().then(res => {
             this.auction = res;
-            if(type == "create"){
-                // if(this.auction.publish_status == 0){
-                //     this.setState({
-                //         live_modal:"live_show",
-                //         live_modal_do:"live_hide",
-                //     })
-                // }else{
+            // if(type == "create"){
+            //     if(this.auction.publish_status == 1){
+            //         this.setState({
+            //             live_modal:"live_show",
+            //             live_modal_do:"live_hide",
+            //         })
+            //     }else{
                     this.setState({
                         live_modal:"live_hide",
                         live_modal_do:"live_show",
                      })
-                // }               
-            }
+                //}               
             if(res.duration == null){
                 this.setState({id:res.id})
             }else{
@@ -65,7 +64,7 @@ export class CreateNewRA extends Component {
                     startDate: res.contract_period_start_date == null ? '' :  moment(res.contract_period_start_date),
                     endDate:res.contract_period_end_date == null ? '' : moment(res.contract_period_end_date),
                     duration:res.duration== null ? '' : res.duration,
-                    reserve_price:res.reserve_price== null ? '' : res.reserve_price
+                    reserve_price:res.reserve_price== null ? '' : this.padZero(res.reserve_price,'4')
                 });
             // }
             //console.log(res);
@@ -73,6 +72,14 @@ export class CreateNewRA extends Component {
             };
         })
     }
+    padZero(num, n) { 
+        let len = num.toString().split('.')[1].length; 
+        while(len < n) { 
+        num = num+"0"; 
+        len++; 
+        } 
+        return num; 
+    } 
     doName(e){
         let obj = e.target.value;
         this.setState({
@@ -173,7 +180,7 @@ export class CreateNewRA extends Component {
         this.auction.name= null;
         this.auction.reserve_price= null;
         this.auction.start_datetime= null;
-        this.auction.publish_status= null;
+        this.auction.publish_status= 0;
         this.auction.published_gid= null;
         this.auction.reserve_price= null;
         this.auction.start_datetime= null;
@@ -211,7 +218,6 @@ export class CreateNewRA extends Component {
     checkSuccess(event,obj){
         event.preventDefault();
         if(this.state.btn_type == "save"){
-            this.setAuction();
             //return;
             createRa({auction: this.setAuction()}).then(res => {
                             this.auction = res;
@@ -222,12 +228,19 @@ export class CreateNewRA extends Component {
                         }, error => {
                             console.log(error);
                         })
+            if(this.props.left_name){
+                this.setState({
+                    edit_btn:"lm--button lm--button--primary show",
+                    edit_change:"lm--button lm--button--primary hide",
+                    disabled:"disabled"
+                })
+            }
         }
         if(this.state.btn_type == "publish"){
             createRa({auction: this.setAuction()}).then(res => {
                 this.auction = res;
                 raPublish({
-                    pagedata:{publish_status: '0'},
+                    pagedata:{publish_status: '1'},
                     id:this.state.id
                 }).then(res => {
                         this.auction = res;
@@ -235,9 +248,9 @@ export class CreateNewRA extends Component {
                         this.setState({
                             text:this.auction.name+" has been successfully published. Please go to 'Manage Published Upcoming Reverse Auction' for further actions."
                         });
-                        setTimeout(() => {
-                             window.location.href="http://localhost:3000/admin/home"
-                         },5000);
+                        // setTimeout(() => {
+                        //      window.location.href="/admin/home"
+                        //  },5000);
                     }, error => {
                         console.log(error);
                     })
@@ -301,7 +314,7 @@ export class CreateNewRA extends Component {
                     <dd className="lm--formItem lm--formItem--inline string optional">
                         <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Date/Time of Reverse Auction :</span>
                         <label className="lm--formItem-right lm--formItem-control">
-                        <DatePicker selected={this.state.start_datetime} disabled={this.state.disabled} ref="start_datetime" name="start_datetime" showTimeSelect dateFormat="YYYY-MM-DD HH:mm" timeFormat="HH:mm" timeIntervals={5}  className="time_ico"  onChange = {this.timeChange} minDate={moment()} maxDate={moment().add(30, "days")} title="Time must not be in the past."  required aria-required="true"/>
+                        <DatePicker selected={this.state.start_datetime} disabled={this.state.disabled} ref="start_datetime" name="start_datetime" showTimeSelect dateFormat="YYYY-MM-DD HH:mm" timeFormat="HH:mm" timeIntervals={1}  className="time_ico"  onChange = {this.timeChange} minDate={moment()} maxDate={moment().add(30, "days")} title="Time must not be in the past."  required aria-required="true"/>
                         <abbr ref="ra_duration_error" className="col">(SGT)</abbr>
                         </label>
                     </dd>
@@ -317,7 +330,7 @@ export class CreateNewRA extends Component {
                     </dd>
                     <dd></dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
-                        <span className="lm--formItem-left lm--formItem-label string optional">Reverse Auction Parameters</span>
+                        <span className="lm--formItem-left lm--formItem-label string optional">Reverse Auction Paramters</span>
                     </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
                         <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Duration (minutes):</span>
@@ -327,7 +340,7 @@ export class CreateNewRA extends Component {
                         </label>
                         </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
-                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Reserve Price ($/kWh):</span>
+                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Reverse Price ($/kWh):</span>
                         <label className="lm--formItem-right lm--formItem-control">
                             <input type="test" ref="reserve_price" onChange={this.doPrice.bind(this)} value={this.state.reserve_price} disabled={this.state.disabled} name="reserve_price" maxLength="50" required aria-required="true" pattern="^\d+(\.\d{4})$" title="Reserve Price must be a number with 4 decimal places, e.g. $0.0891/kWh." ></input>
                             <abbr ref="ra_duration_error" className="col"></abbr>
