@@ -99,35 +99,45 @@ export class CreateNewRA extends Component {
         })
     }
     starttimeChange(data) {
+        if(this.state.endDate != ''){
         let selectDay = new Date(data.format());
-        let endDay = new Date(this.state.endDate.format());
-        if (selectDay < endDay) {
+                let endDay = new Date(this.state.endDate.format());
+                if (selectDay < endDay) {
+                    this.setState({
+                        startDate: data
+                    })
+                } else {
+                    this.setState({
+                        startDate: this.state.endDate,
+                        endDate: data
+                    });
+                }
+        }else{
             this.setState({
                 startDate: data
-            })
-        } else {
-            this.setState({
-                startDate: this.state.endDate
-            });
-            this.setState({
-                endDate: data
             })
         }
+        
     }
     endtimeChange(data) {
-        let selectDay = new Date(data.format());
-        let startDay = new Date(this.state.startDate.format());
-        if (selectDay > startDay) {
+        if(this.state.startDate != ''){
+            let selectDay = new Date(data.format());
+            let startDay = new Date(this.state.startDate.format());
+            if (selectDay > startDay) {
+                this.setState({
+                    endDate: data
+                })
+            } else {
+                this.setState({
+                    startDate: data,
+                    endDate: this.state.startDate
+                });
+            }
+        }else{
             this.setState({
                 endDate: data
             })
-        } else {
-            this.setState({
-                startDate: data
-            });
-            this.setState({
-                endDate: this.state.startDate
-            })
+            
         }
     }
     dateChange(data){
