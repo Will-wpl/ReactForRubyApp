@@ -1,5 +1,5 @@
 class Api::AuctionsController < ApplicationController
-  before_action :set_auction, only: [:update, :publish, :timer, :hold]
+  before_action :set_auction, only: [:update, :publish, :timer, :hold, :confrim]
 
   # GET auction info by ajax
   def obtain
@@ -92,11 +92,40 @@ class Api::AuctionsController < ApplicationController
 
   end
 
-  # POST comfirm
-  def comfirm
-  end
+  # POST confirm
+  def confirm
+    status = params[:status]
+    result = AuctionResult.new
+    if status == 'void'
+      result.auction_id = params[:id]
+      result.status = 'void'
+    else
+      history = AuctionHistory.where('auction_id = ? and user_id = ? and is_bidder = true ', params[:id], params[:user_id]).order(bid_time: :desc).first
+      user = User.find(params[:user_id])
+      result.reserve_price = @auction.reserve_price
+      result.lowest_average_price = history.average_price
+      result.status = 'winner'
+      result.lowest_price_bidder = user.company_name
+      result.contract_period_start_date = @auction.contract_period_start_date
+      result.contract_period_end_date = @auction.contract_period_end_date
+      result.total_volume = @auction.total_volume
+      result.total_award_sum = history.total_award_sum
+      result.lt_peak = history.lt_peak
+      result.lt_off_peak = history.lt_off_peak
+      result.hts_peak = history.hts_peak
+      result.hts_off_peak = history.hts_off_peak
+      result.htl_peak = history.htl_peak
+      result.htl_off_peak = history.htl_off_peak
+      result.user_id = params[:user_id]
 
-  def onliner
+      if result.save
+        render json: result
+      end
+
+    end
+
+
+    AuctionResult
 
   end
 
