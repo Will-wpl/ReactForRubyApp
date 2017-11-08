@@ -65,7 +65,7 @@ export class CreateNewRA extends Component {
                     startDate: res.contract_period_start_date == null ? '' :  moment(res.contract_period_start_date),
                     endDate:res.contract_period_end_date == null ? '' : moment(res.contract_period_end_date),
                     duration:res.duration== null ? '' : res.duration,
-                    reserve_price:res.reserve_price== null ? '' : res.reserve_price
+                    reserve_price:res.reserve_price== null ? '' : this.padZero(res.reserve_price,'4')
                 });
             // }
             //console.log(res);
@@ -73,6 +73,14 @@ export class CreateNewRA extends Component {
             };
         })
     }
+    padZero(num, n) { 
+        let len = num.toString().split('.')[1].length; 
+        while(len < n) { 
+        num = num+"0"; 
+        len++; 
+        } 
+        return num; 
+    } 
     doName(e){
         let obj = e.target.value;
         this.setState({

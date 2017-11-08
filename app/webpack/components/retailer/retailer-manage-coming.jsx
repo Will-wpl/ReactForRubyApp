@@ -48,12 +48,12 @@ export class RetailerManage extends Component {
             this.refs.alternative_email_address.value = res.alternative_email_address;
             this.refs.alternative_mobile_number.value = res.alternative_mobile_number;
             this.refs.alternative_office_number.value = res.alternative_office_number;
-            this.refs.lt_peak.value = res.lt_peak == null ? '' : res.lt_peak*10000;
-            this.refs.lt_off_peak.value = res.lt_off_peak == null ? '' : res.lt_off_peak*10000;
-            this.refs.hts_peak.value = res.hts_peak == null ? '' : res.hts_peak*10000;
-            this.refs.hts_off_peak.value = res.hts_off_peak == null ? '' : res.hts_off_peak*10000;
-            this.refs.htl_peak.value = res.htl_peak == null ? '' : res.htl_peak*10000;
-            this.refs.htl_off_peak.value = res.htl_off_peak == null ? '' : res.htl_off_peak*10000;
+            this.refs.lt_peak.value = res.lt_peak == null ? '' : this.padZero(res.lt_peak,4).toString().split('.')[1];
+            this.refs.lt_off_peak.value = res.lt_off_peak == null ? '' : this.padZero(res.lt_off_peak,4).toString().split('.')[1];
+            this.refs.hts_peak.value = res.hts_peak == null ? '' : this.padZero(res.hts_peak,4).toString().split('.')[1];
+            this.refs.hts_off_peak.value = res.hts_off_peak == null ? '' : this.padZero(res.hts_off_peak,4).toString().split('.')[1];
+            this.refs.htl_peak.value = res.htl_peak == null ? '' : this.padZero(res.htl_peak,4).toString().split('.')[1];
+            this.refs.htl_off_peak.value = res.htl_off_peak == null ? '' : this.padZero(res.htl_off_peak,4).toString().split('.')[1];
         }, error => {
             console.log(error);
         })
@@ -63,6 +63,14 @@ export class RetailerManage extends Component {
             type:type
         })
     }
+    padZero(num, n) { 
+        let len = num.toString().split('.')[1].length; 
+        while(len < n) { 
+        num = num+"0"; 
+        len++; 
+        } 
+        return num; 
+    } 
     checkSuccess(event,obj){
         event.preventDefault();
         retailManageComing({
@@ -76,12 +84,12 @@ export class RetailerManage extends Component {
                 "alternative_email_address": this.refs.alternative_email_address.value,
                 "alternative_mobile_number": this.refs.alternative_mobile_number.value,
                 "alternative_office_number": this.refs.alternative_office_number.value,
-                "lt_peak": this.refs.lt_peak.value/10000,
-                "lt_off_peak": this.refs.lt_off_peak.value/10000,
-                "hts_peak": this.refs.hts_peak.value/10000,
-                "hts_off_peak": this.refs.hts_off_peak.value/10000,
-                "htl_peak": this.refs.htl_peak.value/10000,
-                "htl_off_peak": this.refs.htl_off_peak.value/10000,
+                "lt_peak": parseFloat("0."+this.refs.lt_peak.value),
+                "lt_off_peak": parseFloat("0."+this.refs.lt_off_peak.value),
+                "hts_peak": parseFloat("0."+this.refs.hts_peak.value),
+                "hts_off_peak": parseFloat("0."+this.refs.hts_off_peak.value),
+                "htl_peak": parseFloat("0."+this.refs.htl_peak.value),
+                "htl_off_peak": parseFloat("0."+this.refs.htl_off_peak.value),
                 "accept_status": "1"   // '0':reject '1':accept '2':pending
             }
         }).then(res => {
