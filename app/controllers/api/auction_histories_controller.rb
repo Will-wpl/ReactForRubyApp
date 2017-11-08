@@ -10,7 +10,7 @@ class Api::AuctionHistoriesController < ApplicationController
   def list
     @histories = AuctionHistory.select('users.name, users.company_name, auction_histories.*').joins(:user).where('auction_id = ?', params[:auction_id]).order(bid_time: :asc)
     # @users = Auction.find(params[:auction_id]).users
-    @arrangements = Arrangement.where('auction_id = ? and accept_status = 1', params[:auction_id])
+    @arrangements = Arrangement.where("auction_id = ? and accept_status = '1'", params[:auction_id])
     hash = Hash.new
     list = Array.new
     @arrangements.each do |arrangement|
