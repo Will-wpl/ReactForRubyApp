@@ -22,7 +22,7 @@ class Retailer::AuctionsController < Retailer::BaseController
       redirect_to empty_retailer_auctions_path
     elsif @auction.publish_status == '1' && Time.now < @auction.actual_begin_time
       redirect_to upcoming_retailer_auction_path(@auction.id)
-    elsif @auction.publish_status == '1' && @auction.actual_begin_time < Time.now < @auction.actual_end_time
+    elsif @auction.publish_status == '1' && @auction.actual_begin_time < Time.now && Time.now < @auction.actual_end_time
       redirect_to live_retailer_auction_path(@auction.id)
     elsif @auction.publish_status == '1' && @auction.actual_end_time < Time.now
       redirect_to finish_retailer_auction_path(@auction.id)
