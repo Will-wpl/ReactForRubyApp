@@ -12,6 +12,7 @@ $(function () {
     // auctionHold();
     // auctionHistoriesList();
     // auctionHistoriesAllList();
+    // auctionHistorieslastInfo()
     function auctionObtain() {
         $.ajax({
             type: "GET",
@@ -247,6 +248,32 @@ $(function () {
             data: { auction_id: 1},
             success: (data) => {
                 console.log('auction_histories all list');
+                console.log(data);
+            },
+            dataType: 'json'
+        });
+    }
+
+    function auctionHistorieslastInfo(){
+        $.ajax({
+            type: "GET",
+            url: '/api/auction_histories/last',
+            data: { auction_id: 1},
+            success: (data) => {
+                console.log('auction_histories last info');
+                console.log(data);
+            },
+            dataType: 'json'
+        });
+    }
+
+    function auctionConfirm(){
+        $.ajax({
+            type: "POST",
+            url: '/api/auctions/1/confirm', //1 is auction_id
+            data: { user_id: 2 , status: 'win'},//win void
+            success: (data) => {
+                console.log('auction_histories last info');
                 console.log(data);
             },
             dataType: 'json'
