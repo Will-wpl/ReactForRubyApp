@@ -156,24 +156,3 @@ export default class LiveHomePage extends Component {
         );
     }
 }
-
-function runes() {
-    const domNode = document.getElementById('retailerlive1');
-    if (domNode !== null) {
-        ReactDOM.render(
-            React.createElement(LiveHomePage),
-            domNode
-        );
-    }
-}
-
-const loadedStates = [
-    'complete',
-    'loaded',
-    'interactive'
-];
-if (loadedStates.includes(document.readyState) && document.body) {
-    runes();
-} else {
-    window.addEventListener('DOMContentLoaded', runes, false);
-}
