@@ -60,7 +60,7 @@ export class RetailerLive extends Component {
             </div>
         ) : (
             <div>
-                <DuringCountDown auction={this.auction}>
+                <DuringCountDown auction={this.auction} countDownOver={this.goToFinish.bind(this)}>
                     <div id="retailer_hold">
                         <b>Admin has extended auction duration by 2 minuties</b>
                     </div>
