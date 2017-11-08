@@ -14,7 +14,7 @@ class AuctionChannel < ApplicationCable::Channel
   end
 
   def extend_time
-
+    
   end
 
   def set_bid(data)
