@@ -82,48 +82,70 @@ export const put = (path, body, method = 'PUT') => {
 
 }
 
+ActionCable = require('actioncable');
+const cable = ActionCable.createConsumer(`ws://localhost:${window.location.port}/cable`);
+// ActionCable.startDebugging();
+export const createWS = (auction, methods = {}) => {
+    let user = getLoginUserId();
+    console.log(auction, cable);
+    let handler = cable.subscriptions.create({
+        channel: 'AuctionChannel',
+        auction_id: auction.toString(),
+        user_id:user.toString()
+    }, {
+        connected() {
+            console.log('---message client connected ---');
+            handler.perform('check_in', {user_id: user});
+        },
+        disconnected() {
 
+        },
+        received(data) {
+            console.log('---message client received data ---', data);
+        }
+    });
+    return handler;
+}
 export const Ws = class {
-    ActionCable = require('actioncable');
     sockHandler;
-    cable;
     connectedCall;
     disconnectedCall;
     receiveDataCall;
-    constructor(port, auction, methods = {}) {
-        this.cable = ActionCable.createConsumer(`ws://localhost:${port}/cable`);
+    connected = false;
+    cache = [];
+    constructor(auction) {
         let user = getLoginUserId();
         let mixin = {
             connected: () => {
-                this.sockHandler.checkIn({user_id: user});
+                this.sockHandler.perform('check_in', {user_id: `${user}`});
                 if (this.connectedCall) {
                     this.connectedCall();
+                }
+                this.connected = true;
+                if(this.cache.length > 0){
+                    this.cache.forEach(element => {
+                        this.sockHandler.perform(element.action, element.data);
+                    })
+                    this.cache.splice(0, this.cache.length);
                 }
             },
             disconnected: () => {
                 if (this.disconnectedCall) {
                     this.disconnectedCall();
                 }
+                this.connected = false;
             },
             received:(data) => {
                 if (this.receiveDataCall) {
                     this.receiveDataCall(data);
                 }
-            },
-            checkIn: (params) => {
-                return this.sockHandler.perform('check_in', params);
             }
-            // normal channel code goes here...
         };
-        for (let method in methods) {
-            mixin[method] = methods[method];
-        }
-        this.sockHandler = this.cable.subscriptions.create({
+        this.sockHandler = cable.subscriptions.create({
             channel: 'AuctionChannel',
-            auction_id: auction,
-            user_id: user
+            auction_id: `${auction}`,
+            user_id: `${user}`
         }, mixin);
-
     }
 
     onConnected(callback) {
@@ -142,11 +164,21 @@ export const Ws = class {
     }
 
     sendMessage(action, data) {
+        console.log('send', data);
+        if (!this.connected) {
+            cable.connection.reopen();
+            this.cache.push({action,data})
+            return;
+        }
         this.sockHandler.perform(action, data);
     }
 
-    close() {
-        this.cable.subscriptions.remove(this.sockHandler);
+    stopConnect() {
+        cable.subscriptions.remove(this.sockHandler);
+        cable.disconnect();
+        if (this.cache.length > 0) {
+            this.cache.splice(0, this.cache.length);
+        }
     }
 
 }

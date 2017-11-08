@@ -5,13 +5,18 @@ import ReservePrice from './admin_shared/reserveprice';
 // import WinnerPrice from './admin_shared/winner';
 import CheckboxList from '../common/chart/list-checkbox';
 import {getArrangements} from '../../javascripts/componentService/admin/service';
+import {createWebsocket, getAuction} from '../../javascripts/componentService/common/service';
+import {findUpLimit, getRandomColor} from '../../javascripts/componentService/util';
 import {ACCEPT_STATUS} from '../../javascripts/componentService/constant';
 import RankingRealtimeHoc from './rankingChartRealtimeContainer';
 import PriceRealtimeHoc from './priceChartRealtimeContainer';
+import {DuringCountDown} from '../shared/during-countdown';
+import moment from 'moment';
+
 export class AdminDashboard extends Component {
-    constructor(props, context){
+    constructor(props){
         super(props);
-        this.state = {users:[]};
+        this.state = {users:[], extendedValue:1};
     }
     updateRankingOnUsersSelected(ids) {
         this.refs.rankingChart.updateIndentifications(ids);
@@ -19,16 +24,63 @@ export class AdminDashboard extends Component {
     updatePriceOnUsersSelected(ids) {
         this.refs.priceChart.updateIndentifications(ids);
     }
+
     componentDidMount() {
+        getAuction().then(auction => {
+            this.auction = auction;
+            this.timerTitle = auction ? `${auction.name} on ${moment(auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
+            this.forceUpdate();
+            this.ws = createWebsocket(auction? auction.id : 1);
+            this.ws.onConnected(() => {
+                console.log('---message client connected ---');
+            }).onDisconnected(() => {
+                console.log('---message client disconnected ----')
+            }).onReceivedData(data => {
+                console.log('---message client received data ---', data);
+            })
+        })
         getArrangements(ACCEPT_STATUS.PENDING).then(res => {
-            this.setState({users:res});
+            let limit = findUpLimit(res.length);
+            this.setState({users:res.map((element, index) => {
+                element['color'] = getRandomColor((index + 1) * 1.0 / limit);
+                return element;
+            })});
         }, error => {
             console.log(error);
         });
     }
+
+    componentWillUnmount() {
+        if (this.ws) {
+            this.ws.stopConnect();
+        }
+    }
+
+    onExtendInputChanged(e) {
+        if (Number(e.target.value) > 0) {
+            this.setState({extendedValue: e.target.value});
+        }
+    }
+
+    extendTime() {
+        this.ws.sendMessage('extend_time', {'extend_time' : `${this.state.extendedValue}`});
+    }
+
+    goToFinish() {
+
+    }
+
     render () {
         return (
             <div>
+                <DuringCountDown auction={this.auction} countDownOver={this.goToFinish.bind(this)}>
+                    <div id="admin_hold">
+                        <span>Extend Time:</span>
+                        <input type="number" className="fill_hold" value={this.state.extendedValue} onChange={this.onExtendInputChanged.bind(this)}/>
+                        <span>Min</span>
+                        <input type="button" className="hold_submit" value="Submit" onClick={this.extendTime.bind(this)}/>
+                    </div>
+                </DuringCountDown>
                 <div className="u-grid u-mt3">
                     <div className="col-sm-12 col-md-7">
                         <div className="u-grid u-mt2">
