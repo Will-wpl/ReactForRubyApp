@@ -4,7 +4,8 @@ import {TimeCuntDown} from '../shared/time-cuntdown';
 //import {DuringCountDown} from '../shared/during-countdown';
 import {createRa,getAuctionInVersionOne,getRetailerAuctionInVersionOne,retailManageComing} from '../../javascripts/componentService/admin/service';
 import {Modal} from '../shared/show-modal';
-import {getLoginUserId} from '../../javascripts/componentService/util'
+import {getLoginUserId} from '../../javascripts/componentService/util';
+import moment from 'moment';
 
 export class RetailerManage extends Component {
     constructor(props){
@@ -17,6 +18,8 @@ export class RetailerManage extends Component {
     }
     componentWillMount(){
         getAuctionInVersionOne().then(res=>{
+            this.auction = res;
+            this.timerTitle = res ? `${res.name} on ${moment(res.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
             if(res.publish_status == 1){
                 this.setState({
                     live_modal:"live_hide",
@@ -113,7 +116,7 @@ export class RetailerManage extends Component {
                 </p>
             </div>
             <div className={this.state.live_modal_do}>
-            <TimeCuntDown />
+            <TimeCuntDown  title={this.timerTitle} auction={this.auction}/>
             {/* <DuringCountDown /> */}
             <form onSubmit={this.checkSuccess.bind(this)}>
             <div className="u-grid">
