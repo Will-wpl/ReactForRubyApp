@@ -17,13 +17,12 @@ export class RetailerManage extends Component {
     }
     componentWillMount(){
         getAuctionInVersionOne().then(res=>{
-            if(res.publish_status == 0){
+            if(res.publish_status == 1){
                 this.setState({
                     live_modal:"live_hide",
                     live_modal_do:"live_show"
                 })
-            }
-            if(res.publish_status == ""){
+            }else{
                 this.setState({
                     live_modal:"live_show",
                     live_modal_do:"live_hide"
@@ -233,8 +232,8 @@ export class RetailerManage extends Component {
                         </table>
                     </div>
                     <div className="retailer_btn">
-                        {/* <button className="lm--button lm--button--primary">Reject Participation</button> */}
-                        <button className="lm--button lm--button--primary" onClick={this.dosubmit.bind(this,"submit")}>Submit</button>
+                        {/* <button className="lm--button lm--button--primary">Reject Participation</button> */}                       
+                        <button className="lm--button lm--button--primary" >Submit</button>
                     </div>
                 </div>
             </div>
