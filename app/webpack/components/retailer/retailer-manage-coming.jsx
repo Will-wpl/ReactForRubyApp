@@ -4,7 +4,8 @@ import {TimeCuntDown} from '../shared/time-cuntdown';
 //import {DuringCountDown} from '../shared/during-countdown';
 import {createRa,getAuctionInVersionOne,getRetailerAuctionInVersionOne,retailManageComing} from '../../javascripts/componentService/admin/service';
 import {Modal} from '../shared/show-modal';
-import {getLoginUserId} from '../../javascripts/componentService/util'
+import {getLoginUserId} from '../../javascripts/componentService/util';
+import moment from 'moment';
 
 export class RetailerManage extends Component {
     constructor(props){
@@ -17,6 +18,8 @@ export class RetailerManage extends Component {
     }
     componentWillMount(){
         getAuctionInVersionOne().then(res=>{
+            this.auction = res;
+            this.timerTitle = res ? `${res.name} on ${moment(res.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
             if(res.publish_status == 1){
                 this.setState({
                     live_modal:"live_hide",
@@ -94,7 +97,7 @@ export class RetailerManage extends Component {
         }).then(res => {
                 this.refs.Modal.showModal();
                 this.setState({
-                    text:"Your details have been successfully submitted."
+                    text:"Your details have been successfully submitted. You may click on 'Start Bidding' in homepage to standby for the live reverse auction."
                 });
                 // setTimeout(() => {
                 //     window.location.href="/retailer/home"
@@ -113,12 +116,12 @@ export class RetailerManage extends Component {
                 </p>
             </div>
             <div className={this.state.live_modal_do}>
-            <TimeCuntDown />
+            <TimeCuntDown  title={this.timerTitle} auction={this.auction}/>
             {/* <DuringCountDown /> */}
             <form onSubmit={this.checkSuccess.bind(this)}>
             <div className="u-grid">
                 <div className="col-sm-12 col-md-6 push-md-3">
-                    <h3 className="u-mt3 u-mb1">Section A:Information on Reverse Auction</h3>
+                    <h3 className="u-mt3 u-mb1">Section A: Information on Reverse Auction</h3>
                     <div className="lm--formItem lm--formItem--inline string">
                         <label className="lm--formItem-left lm--formItem-label string required">
                             Specifications:
@@ -135,7 +138,7 @@ export class RetailerManage extends Component {
                             <span className="string required link_file">xxx.pdf</span>
                         </div>
                     </div>
-                    <h3 className="u-mt3 u-mb1">Section B:Contact Person Details for Actual Day of Reverse Auction</h3>
+                    <h3 className="u-mt3 u-mb1">Section B: Contact Person Details for Actual Day of Reverse Auction</h3>
                     <h4 className="lm--formItem lm--formItem--inline string">Main Contact Person on Actual Bidding Day:</h4>
                     <div className="lm--formItem lm--formItem--inline string">
                         <label className="lm--formItem-left lm--formItem-label string required">
@@ -202,7 +205,7 @@ export class RetailerManage extends Component {
                             <input type="text" name="alternative_office_number" ref="alternative_office_number" maxLength="50"></input>
                         </div>
                     </div>
-                    <h3 className="u-mt3 u-mb1"><abbr title="required">*</abbr>Section C:Starting Bid Price</h3>
+                    <h3 className="u-mt3 u-mb1"><abbr title="required">*</abbr>Section C: Starting Bid Price</h3>
                     <h4 className="u-mt1 u-mb1 font13">Important: Please note that this will be your starting bid price for the reverse auction. Your price submission during the live reverse auction must be lower than your starting bid price.</h4>
                     <div className="lm--formItem lm--formItem--inline string">
                         <table className="retailer_fill" cellPadding="0" cellSpacing="0">
@@ -211,7 +214,7 @@ export class RetailerManage extends Component {
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Peak</td>
+                                    <td>Peak (7am-7pm)</td>
                                     <td>$ 0.<input type="tel" maxLength="4" className="col" name="lt_peak" ref="lt_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td>
                                     <td>$ 0.<input type="tel" maxLength="4" name="hts_peak" ref="hts_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
@@ -220,7 +223,7 @@ export class RetailerManage extends Component {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Off-Peak</td>
+                                    <td>Off-Peak (7pm-7am)</td>
                                     <td>$ 0.<input type="tel" maxLength="4" name="lt_off_peak" ref="lt_off_peak" required aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td>
                                     <td>$ 0.<input type="tel" maxLength="4" name="hts_off_peak" ref="hts_off_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
