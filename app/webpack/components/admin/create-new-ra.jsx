@@ -20,7 +20,7 @@ export class CreateNewRA extends Component {
             btn_type:"",text:"",id:"",
             edit_btn:"lm--button lm--button--primary show",
             edit_change:"lm--button lm--button--primary hide",
-            disabled:"",live_modal:"",live_modal_do:"",holdOrend:"live_hold"
+            disabled:"",live_modal:"",live_modal_do:"",holdOrend:""
         }
         this.auction = {};
         this.starttimeChange = this.starttimeChange.bind(this);
@@ -42,19 +42,18 @@ export class CreateNewRA extends Component {
     doGetData(type){
         getAuctionInVersionOne().then(res => {
             this.auction = res;
-            if(type == "create"){
-                // if(this.auction.publish_status == 0){
-                //     this.setState({
-                //         live_modal:"live_show",
-                //         live_modal_do:"live_hide",
-                //     })
-                // }else{
+            // if(type == "create"){
+            //     if(this.auction.publish_status == 1){
+            //         this.setState({
+            //             live_modal:"live_show",
+            //             live_modal_do:"live_hide",
+            //         })
+            //     }else{
                     this.setState({
                         live_modal:"live_hide",
                         live_modal_do:"live_show",
                      })
-                // }               
-            }
+                //}               
             if(res.duration == null){
                 this.setState({id:res.id})
             }else{
@@ -160,7 +159,7 @@ export class CreateNewRA extends Component {
         this.auction.name= null;
         this.auction.reserve_price= null;
         this.auction.start_datetime= null;
-        this.auction.publish_status= null;
+        this.auction.publish_status= 0;
         this.auction.published_gid= null;
         this.auction.reserve_price= null;
         this.auction.start_datetime= null;
@@ -220,7 +219,7 @@ export class CreateNewRA extends Component {
             createRa({auction: this.setAuction()}).then(res => {
                 this.auction = res;
                 raPublish({
-                    pagedata:{publish_status: '0'},
+                    pagedata:{publish_status: '1'},
                     id:this.state.id
                 }).then(res => {
                         this.auction = res;
