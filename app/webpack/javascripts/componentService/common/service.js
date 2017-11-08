@@ -7,3 +7,11 @@ export const getAuctionTimeRule = (auction) => {
 export const createWebsocket = (auction, methods = {}) => {
     return new Ws(window.location.port, auction);
 }
+
+export const getAuction = () => {
+    return get('/api/auctions/obtain');
+}
+
+export const ACTION_COMMANDS = {
+    SET_BID: 'set_bid'
+}

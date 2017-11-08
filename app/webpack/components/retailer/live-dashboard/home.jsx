@@ -6,7 +6,7 @@ import BidForm from './bid-form';
 import BidHistory from './bid-history';
 import {getLoginUserId} from '../../../javascripts/componentService/util';
 import {getAuctionHistorys} from '../../../javascripts/componentService/retailer/service';
-import {createWebsocket} from '../../../javascripts/componentService/common/service';
+import {createWebsocket, ACTION_COMMANDS} from '../../../javascripts/componentService/common/service';
 import moment from 'moment';
 
 export default class LiveHomePage extends Component {
@@ -17,7 +17,7 @@ export default class LiveHomePage extends Component {
     }
 
     componentDidMount() {
-        getAuctionHistorys(1, getLoginUserId()).then(res => {
+        getAuctionHistorys(this.props.auction ? this.props.auction.id : 1, getLoginUserId()).then(res => {
             console.log(res);
             this.makeup(res);
             this.createSocket();
@@ -27,51 +27,54 @@ export default class LiveHomePage extends Component {
     }
 
     createSocket() {
-        this.ws = createWebsocket(1);
-        console.log(this.ws)
-        this.ws.onConnected(() => {
-            console.log('---message client connected ---');
-        }).onDisconnected(() => {
-            console.log('---message client disconnected ----')
-        }).onReceivedData(data => {
-            console.log('---message client received data ---', data);
-            if (data && data.action && data.action === 'set_bid') {
-                let curUserId = Number(getLoginUserId());
-                let last = data.data.find(element => {
-                    return Number(element.user_id) === curUserId;
-                });
-                if (last) {
-                    console.log(last);
-                    if (last.is_bidder) {
-                        if (this.state.chartDatas.length === 0) {
-                            this.state.chartDatas = [].concat({id: curUserId, data: [], color: '#e5e816'});
+        if (!this.ws) {
+            this.ws = createWebsocket(1);
+            console.log(this.ws)
+            this.ws.onConnected(() => {
+                console.log('---message client connected ---');
+            }).onDisconnected(() => {
+                console.log('---message client disconnected ----')
+            }).onReceivedData(data => {
+                console.log('---message client received data ---', data);
+                if (data && data.action && data.action === ACTION_COMMANDS.SET_BID) {
+                    let curUserId = Number(getLoginUserId());
+                    let last = data.data.find(element => {
+                        return Number(element.user_id) === curUserId;
+                    });
+                    if (last) {
+                        console.log(last);
+                        if (last.is_bidder) {
+                            if (this.state.chartDatas.length === 0) {
+                                this.state.chartDatas = [].concat({id: curUserId, data: [], color: '#e5e816', template:''});
 
+                            }
+                            this.state.chartDatas[0].template = `${curUserId} Ranking: `
+                            this.state.chartDatas[0].data = this.state.chartDatas[0].data.concat(
+                                {time: moment(last.bid_time).format('YYYY-MM-DD HH:mm:ss')
+                                    , ranking: Number(last.ranking) === 1 ? 2 : last.ranking, needMark: last.is_bidder}
+                            )
                         }
-                        this.state.chartDatas[0].data = this.state.chartDatas[0].data.concat(
-                            {time: moment(last.bid_time).format('YYYY-MM-DD HH:mm:ss')
-                                , ranking: last.ranking, needMark: last.is_bidder}
-                        )
+                        let element = JSON.parse(JSON.stringify(last));
+                        element.bid_time = moment(element.bid_time).format('HH:mm:ss');
+                        element.lt_peak = parseFloat(element.lt_peak).toFixed(4);
+                        element.lt_off_peak = parseFloat(element.lt_off_peak).toFixed(4);
+                        element.hts_peak = parseFloat(element.hts_peak).toFixed(4);
+                        element.hts_off_peak = parseFloat(element.hts_off_peak).toFixed(4);
+                        element.htl_peak = parseFloat(element.htl_peak).toFixed(4);
+                        element.htl_off_peak = parseFloat(element.htl_off_peak).toFixed(4);
+                        this.setState({
+                            ranking: Number(last.ranking) === 1 ? 2 : last.ranking,
+                            priceConfig: [].concat(last.lt_off_peak).concat(last.lt_peak)
+                                .concat(last.hts_off_peak).concat(last.hts_peak)
+                                .concat(last.htl_off_peak).concat(last.htl_peak),
+                            histories: this.state.histories.concat(element),
+                            chartDatas: this.state.chartDatas
+                        })
                     }
-                    let element = JSON.parse(JSON.stringify(last));
-                    element.bid_time = moment(element.bid_time).format('HH:mm:ss');
-                    element.lt_peak = parseFloat(element.lt_peak).toFixed(4);
-                    element.lt_off_peak = parseFloat(element.lt_off_peak).toFixed(4);
-                    element.hts_peak = parseFloat(element.hts_peak).toFixed(4);
-                    element.hts_off_peak = parseFloat(element.hts_off_peak).toFixed(4);
-                    element.htl_peak = parseFloat(element.htl_peak).toFixed(4);
-                    element.htl_off_peak = parseFloat(element.htl_off_peak).toFixed(4);
-                    this.setState({
-                        ranking: last.ranking,
-                        priceConfig: [].concat(last.lt_off_peak).concat(last.lt_peak)
-                            .concat(last.hts_off_peak).concat(last.hts_peak)
-                            .concat(last.htl_off_peak).concat(last.htl_peak),
-                        histories: this.state.histories.concat(element),
-                        chartDatas: this.state.chartDatas
-                    })
                 }
-            }
 
-        })
+            })
+        }
     }
 
     makeup(res) {
@@ -91,15 +94,16 @@ export default class LiveHomePage extends Component {
                 element.htl_off_peak = parseFloat(element.htl_off_peak).toFixed(4);
                 return element;
             });
-            let chartDataTpl = {id: 0, data: [], color: '#e5e816'};
+            let chartDataTpl = {id: 0, data: [], color: '#e5e816', template:''};
             copy.forEach(history => {
                 chartDataTpl.id = history.user_id;
+                chartDataTpl.template = `${history.user_id} Ranking: `
                 chartDataTpl.data.push({time: moment(history.bid_time).format('YYYY-MM-DD HH:mm:ss')
-                    , ranking: history.ranking, needMark: history.is_bidder})
+                    , ranking: Number(history.ranking) === 1 ? 2 : history.ranking, needMark: history.is_bidder})
             });
             let last = histories[histories.length - 1];
             this.setState({
-                ranking: last.ranking, priceConfig: []
+                ranking: Number(last.ranking) === 1 ? 2 : last.ranking, priceConfig: []
                     .concat(last.lt_off_peak).concat(last.lt_peak)
                     .concat(last.hts_off_peak).concat(last.hts_peak)
                     .concat(last.htl_off_peak).concat(last.htl_peak),
@@ -114,7 +118,7 @@ export default class LiveHomePage extends Component {
             , hts_peak:`0.${configs[3]}`,hts_off_peak:`0.${configs[2]}`
             ,htl_peak:`0.${configs[5]}`,htl_off_peak:`0.${configs[4]}`
         });
-        this.ws.sendMessage('set_bid', {
+        this.ws.sendMessage(ACTION_COMMANDS.SET_BID, {
             lt_peak:`0.${configs[1]}`, lt_off_peak: `0.${configs[0]}`
             , hts_peak:`0.${configs[3]}`,hts_off_peak:`0.${configs[2]}`
             ,htl_peak:`0.${configs[5]}`,htl_off_peak:`0.${configs[4]}`
@@ -151,25 +155,4 @@ export default class LiveHomePage extends Component {
             </div>
         );
     }
-}
-
-function runes() {
-    const domNode = document.getElementById('retailerlive1');
-    if (domNode !== null) {
-        ReactDOM.render(
-            React.createElement(LiveHomePage),
-            domNode
-        );
-    }
-}
-
-const loadedStates = [
-    'complete',
-    'loaded',
-    'interactive'
-];
-if (loadedStates.includes(document.readyState) && document.body) {
-    runes();
-} else {
-    window.addEventListener('DOMContentLoaded', runes, false);
 }
