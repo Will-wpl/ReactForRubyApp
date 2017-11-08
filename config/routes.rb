@@ -60,6 +60,7 @@ Rails.application.routes.draw do
       end
       collection do
         get 'empty' # no published auction page
+        get 'goto'
       end
     end
   end
