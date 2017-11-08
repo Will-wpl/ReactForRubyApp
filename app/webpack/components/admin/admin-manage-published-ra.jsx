@@ -10,7 +10,7 @@ export class AdminManagePublishedRa extends Component {
         this.state={
             id:"",
             live_modal:"",live_modal_do:"",
-            holdOrend:"live_hold",
+            //holdOrend:"live_hold",
             dataList:[]
         }
         this.auction = {};
@@ -52,9 +52,7 @@ export class AdminManagePublishedRa extends Component {
                 <div className={this.state.live_modal} id="live_modal">
                     <div className={this.state.holdOrend}></div>
                     <p>
-                    Please standy,bidding will<br></br>
-                    commence soon<br></br>
-                    Page will automatically refresh when<br></br>reverse auction commences
+                    There is no upcoming reverse auction published.
                     </p>
                 </div>
                 <div className={this.state.live_modal_do}>
@@ -67,7 +65,7 @@ export class AdminManagePublishedRa extends Component {
                         <BidderStatus dataList={this.state.dataList} />
                         <div className="createRaMain w_8">
                         <div className="createRa_btn">
-                                <a href="http://localhost:3000/admin/auctions/2/online" className="lm--button lm--button--primary">Commence</a>
+                                <a href="/admin/auctions/2/online" className="lm--button lm--button--primary">Commence</a>
                         </div>
                         </div>
                     </div>

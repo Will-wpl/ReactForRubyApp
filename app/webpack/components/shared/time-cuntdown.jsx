@@ -3,7 +3,6 @@ import {getAuctionTimeRule} from '../../javascripts/componentService/common/serv
 import moment from 'moment';
 
 const ACTUAL_BEGIN_TIME = 'actual_begin_time';
-// const ACTUAL_END_TIME = 'actual_end_time';
 const ACTUAL_CURRENT_TIME = 'current_time';
 const HOLD_STATUS = 'hold_status';
 
@@ -19,12 +18,14 @@ export class TimeCuntDown extends Component {
             this.getAuctionTime();
         }, 1000);
         //test
-        // setTimeout(() => {
-        //     clearInterval(this.interval);
-        //     setTimeout(() => {
-        //         this.props.countDownOver();
-        //     }, 1000)
-        // }, 2000)
+        setTimeout(() => {
+            clearInterval(this.interval);
+            setTimeout(() => {
+                if (this.props.countDownOver) {
+                    this.props.countDownOver();
+                }
+            }, 1000)
+        }, 2000)
     }
 
     componentWillUnmount() {
@@ -38,7 +39,9 @@ export class TimeCuntDown extends Component {
             if (isOver) {
                 if (!res[HOLD_STATUS]) {
                     clearInterval(this.interval);
-                    this.props.countDownOver();
+                    if (this.props.countDownOver) {
+                        this.props.countDownOver();
+                    }
                 }
             }
         }, error => {

@@ -14,7 +14,7 @@ export default class Description extends Component {
                             <img src="/assets/user1.png" alt="userlogo" />
                         </div>
                         <div className="col-sm-7">
-                            <h2>TOP2</h2>
+                            <h2>TOP{this.props.ranking}</h2>
                             <label>My Ranking</label>
                         </div>
                     </div>

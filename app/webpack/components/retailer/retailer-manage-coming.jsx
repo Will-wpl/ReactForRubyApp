@@ -11,7 +11,7 @@ export class RetailerManage extends Component {
         super(props);
         this.state={
             id:"",
-            text:"",holdOrend:"live_hold",
+            text:"",
             type:"",live_modal:"",live_modal_do:""
         }
     }
@@ -82,7 +82,7 @@ export class RetailerManage extends Component {
                 "hts_off_peak": this.refs.hts_off_peak.value/10000,
                 "htl_peak": this.refs.htl_peak.value/10000,
                 "htl_off_peak": this.refs.htl_off_peak.value/10000,
-                "accept_status": "2"
+                "accept_status": "1"   // '0':reject '1':accept '2':pending
             }
         }).then(res => {
                 this.refs.Modal.showModal();
@@ -102,9 +102,7 @@ export class RetailerManage extends Component {
             <div id="live_modal" className={this.state.live_modal}>
                 <div className={this.state.holdOrend}></div>
                 <p>
-                Please standy,bidding will<br></br>
-                commence soon<br></br>
-                Page will automatically refresh when<br></br>reverse auction commences
+                There is no upcoming reverse auction published.
                 </p>
             </div>
             <div className={this.state.live_modal_do}>
@@ -207,20 +205,20 @@ export class RetailerManage extends Component {
                             <tbody>
                                 <tr>
                                     <td>Peak</td>
-                                    <td>$ 0.<input type="tel" className="col" name="lt_peak" ref="lt_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="text" maxLength="4" className="col" name="lt_peak" ref="lt_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td>
-                                    <td>$ 0.<input type="tel" name="hts_peak" ref="hts_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="text" maxLength="4" name="hts_peak" ref="hts_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td>
-                                    <td>$ 0.<input type="tel" name="htl_peak" ref="htl_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="text" maxLength="4" name="htl_peak" ref="htl_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Off-Peak</td>
-                                    <td>$ 0.<input type="tel" name="lt_off_peak" ref="lt_off_peak" required aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="text" maxLength="4" name="lt_off_peak" ref="lt_off_peak" required aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td>
-                                    <td>$ 0.<input type="tel" name="hts_off_peak" ref="hts_off_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="text" maxLength="4" name="hts_off_peak" ref="hts_off_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td> 
-                                    <td>$ 0.<input type="tel" name="htl_off_peak" ref="htl_off_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="text" maxLength="4" name="htl_off_peak" ref="htl_off_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td>
                                 </tr>
                             </tbody>
@@ -234,6 +232,9 @@ export class RetailerManage extends Component {
             </div>
             </form>
             <Modal text={this.state.text} ref="Modal" />
+            </div>
+            <div className="createRaMain u-grid">
+            <a className="lm--button lm--button--primary u-mt3" href="/retailer/home" >Back to Homepage</a>
             </div>
             </div>
         )

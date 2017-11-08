@@ -6,7 +6,7 @@ export const get = (path, params = {}) => {
             url: path,
             data: params,
             success: (data) => {
-                console.log('get successfully');
+                // console.log('get successfully');
                 resolve(data);
             },
             error: (data) => {
