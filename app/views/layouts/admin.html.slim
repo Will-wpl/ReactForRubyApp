@@ -49,9 +49,9 @@ html(lang="en")
 
     .content
       .u-contain
-        - if breadcrumbs.present?
-          ol.lm--breadcrumb
-            = render_breadcrumbs tag: :li, separator: " "
+        /- if breadcrumbs.present?
+        /  ol.lm--breadcrumb
+        /    = render_breadcrumbs tag: :li, separator: " "
 
         = flash_messages
 
