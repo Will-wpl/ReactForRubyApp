@@ -14,7 +14,21 @@ class AuctionChannel < ApplicationCable::Channel
     ActionCable.server.broadcast "auction_#{params[:auction_id]}", 'hello-world'
   end
 
-  def extend_time
+  def extend_time(data)
+    auction = Auction.find(params[:auction_id])
+    extend_time = data['extend_time'].to_i
+    auction_extend_time = AuctionExtendTime.new
+    auction_extend_time.extend_time = extend_time
+    auction_extend_time.current_time = Time.now
+    auction_extend_time.actual_begin_time = auction.actual_begin_time
+    auction_extend_time.actual_end_time = auction.actual_end_time + 60 * extend_time
+    auction_extend_time.auction_id = params[:auction_id]
+    auction_extend_time.user_id = params[:user_id]
+    if auction_extend_time.save
+      if auction.update(actual_end_time: auction_extend_time.actual_end_time)
+        ActionCable.server.broadcast "auction_#{params[:auction_id]}", {action:'extend' , data:{minutes: extend_time}}
+      end
+    end
 
   end
 
