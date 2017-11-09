@@ -84,6 +84,9 @@ export class RetailerLive extends Component {
                         Page will automatically refresh when<br></br>reverse auction commences
                     </p>
                 </div>
+                <div className="createRaMain u-grid">
+                    <a className="lm--button lm--button--primary u-mt3" href="/retailer/home" >Back to Homepage</a>
+                </div>
             </div>
         ) : (
             <div>

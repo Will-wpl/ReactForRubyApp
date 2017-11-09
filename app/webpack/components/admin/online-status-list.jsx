@@ -1,7 +1,12 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import {RetailsOnlineStatus} from './admin_shared/retailers-online-status';
+import {TimeCuntDown} from '../shared/time-cuntdown';
 import {getAuctionInVersionOne,getBidderStatus} from '../../javascripts/componentService/admin/service';
+import {getAuctionTimeRule} from '../../javascripts/componentService/common/service';
+import moment from 'moment';
+const ACTUAL_END_TIME = 'actual_end_time';
+const ACTUAL_CURRENT_TIME = 'current_time';
 export class OnlineStatusMain extends Component {
     constructor(props, context){
         super(props);
@@ -16,6 +21,8 @@ export class OnlineStatusMain extends Component {
     componentWillMount(){
         getAuctionInVersionOne().then(res => {
             //console.log(res);
+            this.auction = res;
+            this.timerTitle = this.auction ? `${this.auction.name} on ${moment(this.auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
             getBidderStatus({auction_id:res.id}).then(res => {
                 console.log(res);
                 this.setState({
@@ -47,10 +54,14 @@ export class OnlineStatusMain extends Component {
             console.log(error);
         })
     }
+    goToDashboard(){
+        window.location.href=`/admin/auctions/${this.auction.id}/dashboard`
+    }
     render (){
         return (
             <div className="onlineStatusMain">
-                <div className="u-grid">
+                <TimeCuntDown title={this.timerTitle} auction={this.auction} countDownOver={this.goToDashboard.bind(this)} />
+                <div className="u-grid u-mt3">
                     <div className="col-sm-12 col-md-10 push-md-1">
                     <h3 className="col-sm-12 col-md-12 u-mb3">Online Status of Retailers</h3>
                     <div className="u-grid u-mt2">
