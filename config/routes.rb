@@ -28,6 +28,7 @@ Rails.application.routes.draw do
       collection do
         get 'obtain'
         get 'link'
+        post 'logout'
       end
     end
     resource :auction_histories do
