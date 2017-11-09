@@ -83,6 +83,8 @@ Rails.application.routes.draw do
       collection do
         get 'empty' # no published auction page
         get 'goto'
+        get 'message' # no published auction page
+        get 'gotobid'
       end
     end
   end
