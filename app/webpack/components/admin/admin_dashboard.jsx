@@ -19,7 +19,7 @@ import moment from 'moment';
 export class AdminDashboard extends Component {
     constructor(props){
         super(props);
-        this.state = {users:[], extendedValue:1};
+        this.state = {users:[], extendedValue:1, realtimeData:[], realtimeRanking:[]};
     }
     updateRankingOnUsersSelected(ids) {
         this.refs.rankingChart.updateIndentifications(ids);
@@ -39,7 +39,10 @@ export class AdminDashboard extends Component {
             this.forceUpdate();
             this.createWebsocket(auction? auction.id : 1);
             getHistories({ auction_id: auction? auction.id : 1}).then(histories => {
-                this.updateChartData(histories);
+                console.log('histories', histories);
+                this.setState({realtimeData: histories, realtimeRanking:histories.map(element => {
+                    return element.data.length > 0 ? element.data[element.data.length - 1] : []
+                })});
             })
         })
         getArrangements(ACCEPT_STATUS.ACCEPT).then(res => {
@@ -67,8 +70,7 @@ export class AdminDashboard extends Component {
                     data.data.forEach((element, index) => {
                         histories.push({id: element.user_id, data:[].concat(element)})
                     })
-                    console.log('histories', histories);
-                    this.updateChartData(histories);
+                    this.setState({realtimeData: histories, realtimeRanking: histories});
                 }
             }
         })
@@ -134,7 +136,7 @@ export class AdminDashboard extends Component {
                         {/*<WinnerPrice showOrhide="show" statusColor="green" showStatus="Awarded" />*/}
                         {/*<RetailerRanking />*/}
                         <ReservePrice />
-                        <RetailerRanking />
+                        <RetailerRanking ranking={this.state.realtimeRanking}/>
                     </div>
                 </div>
             </div>
