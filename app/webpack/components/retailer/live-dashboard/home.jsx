@@ -42,17 +42,19 @@ export default class LiveHomePage extends Component {
                         return Number(element.user_id) === curUserId;
                     });
                     if (last) {
-                        console.log(last);
+                        // console.log(last);
                         if (last.is_bidder) {
                             if (this.state.chartDatas.length === 0) {
                                 this.state.chartDatas = [].concat({id: curUserId, data: [], color: '#e5e816', template:''});
 
                             }
-                            this.state.chartDatas[0].template = `${curUserId} Ranking: `
-                            this.state.chartDatas[0].data = this.state.chartDatas[0].data.concat(
-                                {time: moment(last.bid_time).format('YYYY-MM-DD HH:mm:ss')
-                                    , ranking: Number(last.ranking) === 1 ? 2 : last.ranking, needMark: last.is_bidder}
-                            )
+                            this.state.chartDatas[0].template = `${last.company_name} Ranking: `
+                            // this.state.chartDatas[0].data = this.state.chartDatas[0].data.concat(
+                            //     {time: moment(last.bid_time).format('YYYY-MM-DD HH:mm:ss')
+                            //         , ranking: Number(last.ranking) === 1 ? 2 : last.ranking, needMark: last.is_bidder}
+                            // )
+                            last.ranking = Number(last.ranking) === 1 ? 2 : last.ranking;
+                            this.state.chartDatas[0].data = this.state.chartDatas[0].data.concat(last)
                         }
                         let element = JSON.parse(JSON.stringify(last));
                         element.bid_time = moment(element.bid_time).format('HH:mm:ss');
@@ -63,7 +65,7 @@ export default class LiveHomePage extends Component {
                         element.htl_peak = parseFloat(element.htl_peak).toFixed(4);
                         element.htl_off_peak = parseFloat(element.htl_off_peak).toFixed(4);
                         this.setState({
-                            ranking: Number(last.ranking) === 1 ? 2 : last.ranking,
+                            ranking: last.ranking,
                             priceConfig: [].concat(last.lt_off_peak).concat(last.lt_peak)
                                 .concat(last.hts_off_peak).concat(last.hts_peak)
                                 .concat(last.htl_off_peak).concat(last.htl_peak),
@@ -97,13 +99,16 @@ export default class LiveHomePage extends Component {
             let chartDataTpl = {id: 0, data: [], color: '#e5e816', template:''};
             copy.forEach(history => {
                 chartDataTpl.id = history.user_id;
-                chartDataTpl.template = `${history.user_id} Ranking: `
-                chartDataTpl.data.push({time: moment(history.bid_time).format('YYYY-MM-DD HH:mm:ss')
-                    , ranking: Number(history.ranking) === 1 ? 2 : history.ranking, needMark: history.is_bidder})
+                chartDataTpl.template = `${history.company_name} Ranking: `
+                // chartDataTpl.data.push({time: moment(history.bid_time).format('YYYY-MM-DD HH:mm:ss')
+                //     , ranking: Number(history.ranking) === 1 ? 2 : history.ranking, needMark: history.is_bidder})
+                history.ranking = Number(history.ranking) === 1 ? 2 : history.ranking;
+                chartDataTpl.data.push(history)
             });
             let last = histories[histories.length - 1];
+            last.ranking = Number(last.ranking) === 1 ? 2 : last.ranking;
             this.setState({
-                ranking: Number(last.ranking) === 1 ? 2 : last.ranking, priceConfig: []
+                ranking: last.ranking, priceConfig: []
                     .concat(last.lt_off_peak).concat(last.lt_peak)
                     .concat(last.hts_off_peak).concat(last.hts_peak)
                     .concat(last.htl_off_peak).concat(last.htl_peak),
@@ -113,11 +118,11 @@ export default class LiveHomePage extends Component {
     }
 
     onBidFormSubmit(configs) {
-        console.log({
-            lt_peak:`0.${configs[1]}`, lt_off_peak: `0.${configs[0]}`
-            , hts_peak:`0.${configs[3]}`,hts_off_peak:`0.${configs[2]}`
-            ,htl_peak:`0.${configs[5]}`,htl_off_peak:`0.${configs[4]}`
-        });
+        // console.log({
+        //     lt_peak:`0.${configs[1]}`, lt_off_peak: `0.${configs[0]}`
+        //     , hts_peak:`0.${configs[3]}`,hts_off_peak:`0.${configs[2]}`
+        //     ,htl_peak:`0.${configs[5]}`,htl_off_peak:`0.${configs[4]}`
+        // });
         this.ws.sendMessage(ACTION_COMMANDS.SET_BID, {
             lt_peak:`0.${configs[1]}`, lt_off_peak: `0.${configs[0]}`
             , hts_peak:`0.${configs[3]}`,hts_off_peak:`0.${configs[2]}`
@@ -126,14 +131,6 @@ export default class LiveHomePage extends Component {
     }
 
     render() {
-        let data = [{
-            id: 1,
-            data: [{time: '2017-01-01 10:00:00', ranking: 1}
-                , {time: '2017-01-01 10:01:00', ranking: 2}
-                , {time: '2017-01-01 10:02:00', ranking: 1}
-                , {time: '2017-01-01 10:03:00', ranking: 3}
-                , {time: '2017-01-01 10:04:00', ranking: 8}]
-        }];
         return (
             <div>
                 <div className="u-grid u-mt2">

@@ -4,7 +4,7 @@ import RetailerRanking from './admin_shared/ranking';
 import ReservePrice from './admin_shared/reserveprice';
 // import WinnerPrice from './admin_shared/winner';
 import CheckboxList from '../common/chart/list-checkbox';
-import {getArrangements} from '../../javascripts/componentService/admin/service';
+import {getArrangements, getHistories} from '../../javascripts/componentService/admin/service';
 import {createWebsocket, getAuction} from '../../javascripts/componentService/common/service';
 import {findUpLimit, getRandomColor} from '../../javascripts/componentService/util';
 import {ACCEPT_STATUS} from '../../javascripts/componentService/constant';
@@ -24,22 +24,22 @@ export class AdminDashboard extends Component {
     updatePriceOnUsersSelected(ids) {
         this.refs.priceChart.updateIndentifications(ids);
     }
+    updateChartData(list) {
+        this.refs.rankingChart.appendChartData(list);
+        this.refs.priceChart.appendChartData(list);
+    }
 
     componentDidMount() {
         getAuction().then(auction => {
             this.auction = auction;
             this.timerTitle = auction ? `${auction.name} on ${moment(auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
             this.forceUpdate();
-            this.ws = createWebsocket(auction? auction.id : 1);
-            this.ws.onConnected(() => {
-                console.log('---message client connected ---');
-            }).onDisconnected(() => {
-                console.log('---message client disconnected ----')
-            }).onReceivedData(data => {
-                console.log('---message client received data ---', data);
+            this.createWebsocket(auction? auction.id : 1);
+            getHistories({ auction_id: auction? auction.id : 1}).then(histories => {
+                this.updateChartData(histories);
             })
         })
-        getArrangements(ACCEPT_STATUS.PENDING).then(res => {
+        getArrangements(ACCEPT_STATUS.ACCEPT).then(res => {
             let limit = findUpLimit(res.length);
             this.setState({users:res.map((element, index) => {
                 element['color'] = getRandomColor((index + 1) * 1.0 / limit);
@@ -48,6 +48,17 @@ export class AdminDashboard extends Component {
         }, error => {
             console.log(error);
         });
+    }
+
+    createWebsocket(auction) {
+        this.ws = createWebsocket(auction);
+        this.ws.onConnected(() => {
+            console.log('---message client connected ---');
+        }).onDisconnected(() => {
+            console.log('---message client disconnected ----')
+        }).onReceivedData(data => {
+            console.log('---message client received data ---', data);
+        })
     }
 
     componentWillUnmount() {
