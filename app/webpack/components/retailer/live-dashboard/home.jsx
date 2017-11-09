@@ -29,7 +29,7 @@ export default class LiveHomePage extends Component {
     createSocket() {
         if (!this.ws) {
             this.ws = createWebsocket(1);
-            console.log(this.ws)
+            // console.log(this.ws)
             this.ws.onConnected(() => {
                 console.log('---message client connected ---');
             }).onDisconnected(() => {
@@ -42,8 +42,8 @@ export default class LiveHomePage extends Component {
                         return Number(element.user_id) === curUserId;
                     });
                     if (last) {
-                        // console.log(last);
-                        if (last.is_bidder) {
+                        // console.log('last ========',last);
+                        // if (last.is_bidder) {
                             if (this.state.chartDatas.length === 0) {
                                 this.state.chartDatas = [].concat({id: curUserId, data: [], color: '#e5e816', template:''});
 
@@ -53,7 +53,7 @@ export default class LiveHomePage extends Component {
                             //         , ranking: Number(last.ranking) === 1 ? 2 : last.ranking, needMark: last.is_bidder}
                             // )
                             last.ranking = Number(last.ranking) === 1 ? 2 : last.ranking;
-                            last.template_ranking = `${last.company_name} Ranking: ${last.ranking}`;
+                            last.template_ranking = `Ranking: ${last.ranking}`;
                             if (!last.template_price) {
                                 last.template_price = {};
                             }
@@ -62,7 +62,7 @@ export default class LiveHomePage extends Component {
                             last.template_price['hts'] = `HTS(P):$${parseFloat(last.hts_peak).toFixed(4)} HTS(OP):$${parseFloat(last.hts_off_peak).toFixed(4)}`;
                             last.template_price['htl'] = `HTL(P):$${parseFloat(last.htl_peak).toFixed(4)} HTL(OP):$${parseFloat(last.htl_off_peak).toFixed(4)}`;
                             this.state.chartDatas[0].data = this.state.chartDatas[0].data.concat(last)
-                        }
+                        // }
                         let element = JSON.parse(JSON.stringify(last));
                         element.bid_time = moment(element.bid_time).format('HH:mm:ss');
                         element.lt_peak = parseFloat(element.lt_peak).toFixed(4);
@@ -76,7 +76,7 @@ export default class LiveHomePage extends Component {
                             priceConfig: [].concat(last.lt_off_peak).concat(last.lt_peak)
                                 .concat(last.hts_off_peak).concat(last.hts_peak)
                                 .concat(last.htl_off_peak).concat(last.htl_peak),
-                            histories: this.state.histories.concat(element),
+                            histories: last.is_bidder ? this.state.histories.concat(element): this.state.histories,
                             chartDatas: this.state.chartDatas
                         })
                     }
@@ -109,7 +109,7 @@ export default class LiveHomePage extends Component {
                 // chartDataTpl.data.push({time: moment(history.bid_time).format('YYYY-MM-DD HH:mm:ss')
                 //     , ranking: Number(history.ranking) === 1 ? 2 : history.ranking, needMark: history.is_bidder})
                 history.ranking = Number(history.ranking) === 1 ? 2 : history.ranking;
-                history.template_ranking = `${history.company_name} Ranking: ${history.ranking}`;
+                history.template_ranking = `Ranking: ${history.ranking}`;
                 if (!history.template_price) {
                     history.template_price = {};
                 }
