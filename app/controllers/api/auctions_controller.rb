@@ -1,4 +1,4 @@
-class Api::AuctionsController < ApplicationController
+class Api::AuctionsController < Api::BaseController
   before_action :set_auction, only: [:update, :publish, :timer, :hold, :confrim]
 
   # GET auction info by ajax

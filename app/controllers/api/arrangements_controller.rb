@@ -1,4 +1,4 @@
-class Api::ArrangementsController < ApplicationController
+class Api::ArrangementsController < Api::BaseController
   before_action :set_arrangement, only: [:show, :edit, :update, :destroy]
 
   # GET arrangement list by auction_id
