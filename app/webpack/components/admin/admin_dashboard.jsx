@@ -85,7 +85,7 @@ export class AdminDashboard extends Component {
     }
 
     goToFinish() {
-
+        window.location.href=`/admin/auctions/${this.auction.id}/confirm`
     }
 
     render () {
