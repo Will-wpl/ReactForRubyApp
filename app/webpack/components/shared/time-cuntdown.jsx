@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {getAuctionTimeRule} from '../../javascripts/componentService/common/service';
 import moment from 'moment';
 
+
 const ACTUAL_BEGIN_TIME = 'actual_begin_time';
 const ACTUAL_CURRENT_TIME = 'current_time';
 const HOLD_STATUS = 'hold_status';
@@ -41,6 +42,8 @@ export class TimeCuntDown extends Component {
     getAuctionTime(auction) {
         if (auction) {
             getAuctionTimeRule(auction.id).then(res => {
+                //console.log('pre start time ==>', moment(res[ACTUAL_BEGIN_TIME]).format('YYYY-MM-DD hh:mm:ss'))
+                //console.log('pre now time ==>', moment(res[ACTUAL_CURRENT_TIME]).format('YYYY-MM-DD hh:mm:ss'))
                 let isOver = this.isCountDownOver(moment(res[ACTUAL_BEGIN_TIME]).toDate().getTime()
                     , moment(res[ACTUAL_CURRENT_TIME]).toDate().getTime());
                 if (isOver) {
@@ -64,10 +67,10 @@ export class TimeCuntDown extends Component {
         let minute = Math.floor((divider - day * 24 * 60 * 60 - hour * 3600) / 60);
         let second = Math.floor(divider - day * 24 * 60 * 60 - hour * 3600 - minute * 60);
         let left = day || hour || minute || second;
+        this.setState({day: day, hour: hour, minute: minute, second: second});
         if (left <= 0) {
             return true;
         }
-        this.setState({day: day, hour: hour, minute: minute, second: second});
         return false;
     }
 

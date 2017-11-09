@@ -2,41 +2,38 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import RetailerRanking from './admin_shared/ranking';
 import ReservePrice from './admin_shared/reserveprice';
-// import WinnerPrice from './admin_shared/winner';
 import CheckboxList from '../common/chart/list-checkbox';
 import {getArrangements, getHistories} from '../../javascripts/componentService/admin/service';
 import {createWebsocket, getAuction} from '../../javascripts/componentService/common/service';
 import {findUpLimit, getRandomColor} from '../../javascripts/componentService/util';
 import {ACCEPT_STATUS} from '../../javascripts/componentService/constant';
-import RankingRealtimeHoc from './rankingChartRealtimeContainer';
-import PriceRealtimeHoc from './priceChartRealtimeContainer';
+import ChartRealtimeHoc from './realtimeChartdataContainer';
+import Ranking from '../common/chart/ranking';
+import Price from '../common/chart/price';
 import {DuringCountDown} from '../shared/during-countdown';
 import moment from 'moment';
 
 export class AdminDashboard extends Component {
     constructor(props){
         super(props);
-        this.state = {users:[], extendedValue:1};
-    }
-    updateRankingOnUsersSelected(ids) {
-        this.refs.rankingChart.updateIndentifications(ids);
-    }
-    updatePriceOnUsersSelected(ids) {
-        this.refs.priceChart.updateIndentifications(ids);
-    }
-    updateChartData(list) {
-        this.refs.rankingChart.appendChartData(list);
-        this.refs.priceChart.appendChartData(list);
+        this.state = {users:[], extendedValue:1, realtimeData:[], realtimeRanking:[], currentPrice:'0.0000'};
     }
 
     componentDidMount() {
         getAuction().then(auction => {
             this.auction = auction;
             this.timerTitle = auction ? `${auction.name} on ${moment(auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
-            this.forceUpdate();
+            this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000'
+            this.forceUpdate(); // only once no need to use state
+
             this.createWebsocket(auction? auction.id : 1);
             getHistories({ auction_id: auction? auction.id : 1}).then(histories => {
-                this.updateChartData(histories);
+                console.log('histories', histories);
+                let orderRanking = histories.map(element => {
+                    return element.data.length > 0 ? element.data[element.data.length - 1] : []
+                })
+                this.setState({realtimeData: histories, realtimeRanking: orderRanking
+                    , currentPrice : orderRanking.length > 0 ? orderRanking[0].average_price : this.state.currentPrice});
             })
         })
         getArrangements(ACCEPT_STATUS.ACCEPT).then(res => {
@@ -64,8 +61,8 @@ export class AdminDashboard extends Component {
                     data.data.forEach((element, index) => {
                         histories.push({id: element.user_id, data:[].concat(element)})
                     })
-                    console.log('histories', histories);
-                    this.updateChartData(histories);
+                    this.setState({realtimeData: histories, realtimeRanking: histories
+                        , currentPrice : histories.length > 0 ? histories[0].average_price : this.state.currentPrice});
                 }
             }
         })
@@ -106,26 +103,28 @@ export class AdminDashboard extends Component {
                     <div className="col-sm-12 col-md-7">
                         <div className="u-grid u-mt2">
                             <div className="col-sm-9">
-                                <PriceRealtimeHoc ref="priceChart" />
+                                <ChartRealtimeHoc ref="priceChart" dataStore={this.state.realtimeData}>
+                                    <Price/>
+                                </ChartRealtimeHoc>
                             </div>
                             <div className="col-sm-2 push-md-1">
-                                <CheckboxList list={this.state.users} onCheckeds={this.updatePriceOnUsersSelected.bind(this)}/>
+                                <CheckboxList list={this.state.users} onCheckeds={(ids) => {this.refs.priceChart.updateIndentifications(ids)}}/>
                             </div>
                         </div>
                         <div className="u-grid u-mt2">
                             <div className="col-sm-9">
-                                <RankingRealtimeHoc ref="rankingChart" />
+                                <ChartRealtimeHoc ref="rankingChart" dataStore={this.state.realtimeData}>
+                                    <Ranking />
+                                </ChartRealtimeHoc>
                             </div>
                             <div className="col-sm-2 push-md-1">
-                                <CheckboxList list={this.state.users} onCheckeds={this.updateRankingOnUsersSelected.bind(this)}/>
+                                <CheckboxList list={this.state.users} onCheckeds={(ids) => {this.refs.rankingChart.updateIndentifications(ids)}}/>
                             </div>
                         </div>
                     </div>
                     <div className="col-sm-12 col-md-5">
-                        {/*<WinnerPrice showOrhide="show" statusColor="green" showStatus="Awarded" />*/}
-                        {/*<RetailerRanking />*/}
-                        <ReservePrice />
-                        <RetailerRanking />
+                        <ReservePrice price={this.startPrice} realtimePrice={this.state.currentPrice}/>
+                        <RetailerRanking ranking={this.state.realtimeRanking}/>
                     </div>
                 </div>
             </div>

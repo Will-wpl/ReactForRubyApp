@@ -33,8 +33,8 @@ export class DuringCountDown extends Component {
     getAuctionTime(auction) {
         if (auction) {
             getAuctionTimeRule(auction.id).then(res => {
-                // console.log('end time ==>', moment(res[ACTUAL_END_TIME]).format('YYYY-MM-DD hh:mm:ss'))
-                // console.log('now time ==>', moment(res[ACTUAL_CURRENT_TIME]).format('YYYY-MM-DD hh:mm:ss'))
+                //console.log('during end time ==>', moment(res[ACTUAL_END_TIME]).format('YYYY-MM-DD hh:mm:ss'))
+                //console.log('during now time ==>', moment(res[ACTUAL_CURRENT_TIME]).format('YYYY-MM-DD hh:mm:ss'))
                 let isOver = this.isCountDownOver(moment(res[ACTUAL_END_TIME]).toDate().getTime()
                     , moment(res[ACTUAL_CURRENT_TIME]).toDate().getTime());
                 if (isOver) {
@@ -59,10 +59,10 @@ export class DuringCountDown extends Component {
         let minute = Math.floor((divider - day * 24 * 60 * 60 - hour * 3600) / 60);
         let second = Math.floor(divider - day * 24 * 60 * 60 - hour * 3600 - minute * 60);
         let left = minute || second;
+        this.setState({minute: minute, second: second});
         if (left <= 0) {
             return true;
         }
-        this.setState({minute: minute, second: second});
         return false;
     }
 

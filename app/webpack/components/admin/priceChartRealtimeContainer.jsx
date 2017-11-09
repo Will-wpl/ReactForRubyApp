@@ -1,27 +1,19 @@
 import React, {Component} from 'react';
-import {createWebsocket} from '../../javascripts/componentService/admin/service';
 import Price from '../common/chart/price';
-import moment from 'moment';
 
 export default class PriceRealtimeHoc extends Component {
     constructor(props) {
         super(props);
-        this.ids = [];
         this.list = [];
         this.state = {data: []};
 
     }
 
-    updateIndentifications(ids) {
-        this.ids = ids ? ids : [];
-        this.filterData();
-    }
-
-    appendChartData(chartData) {
+    componentWillReceiveProps(next) {
         if (this.list.length === 0) {
-            this.list = this.list.concat(chartData);
+            this.list = this.list.concat(next.dataStore);
         } else {
-            chartData.forEach(newData => {
+            next.dataStore.forEach(newData => {
                 let result = this.list.find(oldData => {
                     return oldData.id === newData.id;
                 })
@@ -30,13 +22,16 @@ export default class PriceRealtimeHoc extends Component {
                 }
             })
         }
-        this.forceUpdate();
     }
 
-    filterData() {
+    updateIndentifications(ids) {
+        this.filterData(ids ? ids : []);
+    }
+
+    filterData(ids) {
         let results = [];
-        if (this.ids.length > 0) {
-            this.ids.forEach(idColor => {
+        if (ids.length > 0) {
+            ids.forEach(idColor => {
                 let result = this.list.find(element => {
                     return element.id === idColor.id;
                 });
@@ -49,13 +44,13 @@ export default class PriceRealtimeHoc extends Component {
         this.setState({data: results});
     }
 
-    componentDidMount() {
-
-    }
-
     render() {
         return (
             <div><Price data={this.state.data}/></div>
         )
     }
+}
+
+PriceRealtimeHoc.defaultProps = {
+    dataStore:[]
 }
