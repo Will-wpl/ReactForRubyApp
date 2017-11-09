@@ -25,13 +25,15 @@ export default class Price extends Component {
                 }
             };
             element.data.forEach((timePrice) => {
-                let d = timePrice.needMark ? {
+                let d = timePrice.is_bidder ? {
                     symbol: 'triangle',
                     symbolSize: 15,
                     showSymbol: true,
                     value: []
                 } : {value: []};
-                d.value = [].concat(timePrice.time).concat(timePrice.price);
+                // d.value = [].concat(timePrice.time).concat(timePrice.price);
+                d.value = [].concat(moment(timePrice.bid_time).format('YYYY-MM-DD HH:mm:ss'))
+                    .concat(parseFloat(timePrice.average_price).toFixed(4));
                 tmp.data.push(d);
             });
             option.series.push(tmp);
@@ -69,7 +71,7 @@ function getTemplate() {
         grid: {
             top: '2%',
             left: '10%',
-            right: '2%',
+            right: '6%',
             bottom: '3%',
             containLabel: true
         },
@@ -99,9 +101,9 @@ function getTemplate() {
             type: 'time',
             boundaryGap: false,
             axisLabel: {
-                formatter: (value, index) => {
-                    return moment(value).format('HH:mm:ss');
-                }
+                // formatter: (value, index) => {
+                //     return moment(value).format('HH:mm:ss');
+                // }
             },
             axisTick: {
                 show: false
