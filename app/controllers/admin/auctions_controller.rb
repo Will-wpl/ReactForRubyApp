@@ -1,6 +1,6 @@
 class Admin::AuctionsController < Admin::BaseController
   before_action :set_auction, only: [:show, :edit, :update, :destroy, :publish]
-
+  after_action :set_login_status, only: [:new, :empty, :upcoming, :online, :dashboard, :confirm, :result, :report, :log]
   before_action :set_auctions_breadcrumbs
   before_action :set_action_breadcrumbs
 
@@ -81,6 +81,10 @@ class Admin::AuctionsController < Admin::BaseController
 
   def set_auction
     @auction = Auction.find(params[:id])
+  end
+
+  def set_login_status
+    UserExtension.save_or_update_login_status(current_user, 'login', params[:id], request[:action])
   end
 
   def model_params

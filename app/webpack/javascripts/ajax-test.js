@@ -13,6 +13,7 @@ $(function () {
     // auctionHistoriesList();
     // auctionHistoriesAllList();
     // auctionHistorieslastInfo()
+    // auctionLogout();
     function auctionObtain() {
         $.ajax({
             type: "GET",
@@ -273,7 +274,20 @@ $(function () {
             url: '/api/auctions/1/confirm', //1 is auction_id
             data: { user_id: 2 , status: 'win'},//win void
             success: (data) => {
-                console.log('auction_histories last info');
+                console.log('auctions confirm');
+                console.log(data);
+            },
+            dataType: 'json'
+        });
+    }
+
+    function auctionLogout(){
+        $.ajax({
+            type: "POST",
+            url: '/api/auctions/logout',
+            data: { user_id: 1},
+            success: (data) => {
+                console.log('auctions logout');
                 console.log(data);
             },
             dataType: 'json'

@@ -31,11 +31,11 @@ export default class RetailerRanking extends Component {
       <div className="retailrank_box">
         <div className="table-head">
       <table className="retailer_fill">
-                  <colgroup>  
-                        <col style={{width: 50 +'px'}} />  
+                  <colgroup>
+                        <col style={{width: 50 +'px'}} />
                         <col style={{width: 100 +'px'}} />
                         <col style={{width: 100 +'px'}} />
-                    </colgroup> 
+                    </colgroup>
         <thead>
           <tr>
             <th>Rank</th>
@@ -47,11 +47,11 @@ export default class RetailerRanking extends Component {
       </div>
       <div className="table-body">
       <table className="retailer_fill">
-          <colgroup>  
-                        <col style={{width: 50 +'px'}} />  
+          <colgroup>
+                        <col style={{width: 50 +'px'}} />
                         <col style={{width: 100 +'px'}} />
                         <col style={{width: 100 +'px'}} />
-          </colgroup> 
+          </colgroup>
             <tbody>
             {
               this.state.list_data.map((item,index)=>{
@@ -67,4 +67,8 @@ export default class RetailerRanking extends Component {
       </div>
     )
   }
+}
+
+RetailerRanking.defaultProps = {
+    ranking: []
 }
