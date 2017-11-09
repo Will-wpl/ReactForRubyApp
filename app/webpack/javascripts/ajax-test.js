@@ -13,7 +13,7 @@ $(function () {
     // auctionHistoriesList();
     // auctionHistoriesAllList();
     // auctionHistorieslastInfo()
-    auctionLogout()
+    // auctionLogout();
     function auctionObtain() {
         $.ajax({
             type: "GET",
