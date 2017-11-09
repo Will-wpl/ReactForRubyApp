@@ -24,7 +24,13 @@ export class Modal extends React.Component{
         }
     }
     Accept(){
-        this.props.dodelete();
+        if(this.props.acceptFunction){
+            this.props.acceptFunction();
+            this.closeModal();
+        }
+        if(this.props.dodelete){
+            this.props.dodelete();
+        }
         this.setState({
             type:"default"
         })

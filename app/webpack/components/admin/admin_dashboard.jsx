@@ -12,6 +12,7 @@ import Ranking from '../common/chart/ranking';
 import Price from '../common/chart/price';
 import {DuringCountDown} from '../shared/during-countdown';
 import moment from 'moment';
+import {Modal} from '../shared/show-modal';
 
 export class AdminDashboard extends Component {
     constructor(props){
@@ -89,7 +90,9 @@ export class AdminDashboard extends Component {
             this.setState({extendedValue: e.target.value});
         }
     }
-
+    showModal(){
+        this.refs.Modal.showModal("comfirm");
+    }
     extendTime() {
         this.ws.sendMessage('extend_time', {'extend_time' : `${this.state.extendedValue}`});
     }
@@ -106,7 +109,7 @@ export class AdminDashboard extends Component {
                         <span>Extend Time:</span>
                         <input type="number" className="fill_hold" value={this.state.extendedValue} onChange={this.onExtendInputChanged.bind(this)}/>
                         <span>Min</span>
-                        <input type="button" className="hold_submit" value="Submit" onClick={this.extendTime.bind(this)}/>
+                        <input type="button" className="hold_submit" value="Submit" onClick={this.showModal.bind(this)}/>
                     </div>
                 </DuringCountDown>
                 <div className="u-grid u-mt3">
@@ -137,6 +140,7 @@ export class AdminDashboard extends Component {
                         <RetailerRanking ranking={this.state.realtimeRanking}/>
                     </div>
                 </div>
+                <Modal text="Are you sure pad this time?" acceptFunction={this.extendTime.bind(this)} ref="Modal" />
             </div>
         )
     }
