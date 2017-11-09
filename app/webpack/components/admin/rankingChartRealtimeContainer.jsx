@@ -18,13 +18,22 @@ export default class RankingRealtimeHoc extends Component {
     }
 
     appendChartData(chartData) {
-        console.log(chartData)
-        this.list = this.list.concat(chartData);
+        if (this.list.length === 0) {
+            this.list = this.list.concat(chartData);
+        } else {
+            chartData.forEach(newData => {
+                let result = this.list.find(oldData => {
+                    return oldData.id === newData.id;
+                })
+                if (result) {
+                    result.data = result.data.concat(newData.data);
+                }
+            })
+        }
         this.filterData();
     }
 
     filterData() {
-        console.log(this.list);
         let results = [];
         if (this.ids.length > 0) {
             this.ids.forEach(idColor => {

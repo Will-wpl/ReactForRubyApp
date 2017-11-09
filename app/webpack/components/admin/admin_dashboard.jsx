@@ -58,6 +58,16 @@ export class AdminDashboard extends Component {
             console.log('---message client disconnected ----')
         }).onReceivedData(data => {
             console.log('---message client received data ---', data);
+            if (data.action === 'set_bid') {
+                if (data.data.length > 0) {
+                    let histories = [];
+                    data.data.forEach((element, index) => {
+                        histories.push({id: element.user_id, data:[].concat(element)})
+                    })
+                    console.log('histories', histories);
+                    this.updateChartData(histories);
+                }
+            }
         })
     }
 

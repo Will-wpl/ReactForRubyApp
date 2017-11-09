@@ -18,7 +18,18 @@ export default class PriceRealtimeHoc extends Component {
     }
 
     appendChartData(chartData) {
-        this.list = this.list.concat(chartData)
+        if (this.list.length === 0) {
+            this.list = this.list.concat(chartData);
+        } else {
+            chartData.forEach(newData => {
+                let result = this.list.find(oldData => {
+                    return oldData.id === newData.id;
+                })
+                if (result) {
+                    result.data = result.data.concat(newData.data);
+                }
+            })
+        }
         this.forceUpdate();
     }
 
