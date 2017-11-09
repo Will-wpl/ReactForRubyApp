@@ -178,8 +178,10 @@ export class CreateNewRA extends Component {
         this.auction.name= this.refs.name.value;
         this.auction.reserve_price= this.refs.reserve_price.value;
         this.auction.start_datetime= this.state.start_datetime.format();
-        this.auction.actual_begin_time=this.state.start_datetime.format();
-        this.auction.actual_end_time = moment(this.refs.start_datetime.value).add(this.refs.duration.value,'minutes').format();
+        this.auction.actual_begin_time= moment(this.state.start_datetime.toDate()).format();
+        this.auction.actual_end_time = moment(this.state.start_datetime.toDate()).add(this.refs.duration.value,'minutes').format();
+        //console.log(this.state.start_datetime.format('YYYY-MM-DD hh:mm:ss'));
+        //console.log(moment(this.auction.actual_end_time).format('YYYY-MM-DD hh:mm:ss'));
         return this.auction;
     }
 
