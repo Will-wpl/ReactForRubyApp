@@ -79,7 +79,7 @@ class AuctionHistory < ApplicationRecord
 
   def self.find_clone_sort_update_auction_histories(auction_id, current_history_id)
     # histories = AuctionHistory.find_by_sql("select a.* from auction_histories a, (select id , bid_time , min(average_price) from auction_histories where auction_id = :auction_id and is_bidder = :is_bidder group by user_id) b where b.id == a.id order by average_price asc, bid_time asc", {auction_id: auction_id, is_bidder: true})
-    histories = AuctionHistory.find_by_sql ['select a.*, users.company_name from auction_histories a inner join users on users.id = a.user_id, (select min(auction_id) as auction_id , user_id, min(average_price) as price from auction_histories where auction_id = ? and is_bidder = true group by user_id) b where b.auction_id = a.auction_id and b.user_id = a.user_id and b.price = a.average_price and a.is_bidder = true order by average_price asc, bid_time asc', auction_id]
+    histories = AuctionHistory.find_by_sql ['select a.* from auction_histories a inner join users on users.id = a.user_id, (select min(auction_id) as auction_id , user_id, min(average_price) as price from auction_histories where auction_id = ? and is_bidder = true group by user_id) b where b.auction_id = a.auction_id and b.user_id = a.user_id and b.price = a.average_price and a.is_bidder = true order by average_price asc, bid_time asc', auction_id]
     ids = []
     flag = SecureRandom.uuid
     current_time = Time.now
@@ -109,7 +109,8 @@ class AuctionHistory < ApplicationRecord
       end
     end
 
-    histories = AuctionHistory.find(ids)
+    # histories = AuctionHistory.find(ids)
+    histories = AuctionHistory.select('auction_histories.* , users.company_name').joins(:user).find(ids)
     histories
   end
 
