@@ -56,8 +56,8 @@ class AuctionChannel < ApplicationCable::Channel
   private
 
   def update_check_params(login_status)
-    @arrangement = Arrangement.where('auction_id = :auction_id and user_id = :user_id', auction_id: params[:auction_id], user_id: params[:user_id])
-    @arrangement.update(login_status: login_status)
+    # @arrangement = Arrangement.where('auction_id = :auction_id and user_id = :user_id', auction_id: params[:auction_id], user_id: params[:user_id])
+    # @arrangement.update(login_status: login_status)
   end
 
   def set_price(calculate_dto)
