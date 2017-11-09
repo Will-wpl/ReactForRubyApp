@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import RetailerRanking from './admin_shared/ranking';
 import ReservePrice from './admin_shared/reserveprice';
 import WinnerPrice from './admin_shared/winner';
+import {getHistories} from '../../javascripts/componentService/admin/service';
+import {getAuction} from '../../javascripts/componentService/common/service';
+import moment from 'moment';
 export default class AdminConfirmWinner extends Component {
   constructor(props){
     super(props);
@@ -10,20 +13,24 @@ export default class AdminConfirmWinner extends Component {
         status:{
             showOrhide:"hide",
             showStatus:"Awarded",
-            statusColor:"green"
-        },
-        listData:{
-            "name":"Senoko",
-            "price":"$0.0850/kWh",
-            "total":"1,270,199 kWh",
-            "Period":"19 Oct 2018 to 30 Jun 2018",
-            "sum":"$674,475.67(Forecasted)",
-            "winnerPricetable":[
-                {"peak":"Peak (7am-7pm)","lt":"$ 0.XXXX","ht_small":"$ 0.XXXX","ht_large":"$ 0.XXXX"},
-                {"peak":"Off-Peak (7pm-7am)","lt":"$ 0.XXXX","ht_small":"$ 0.XXXX","ht_large":"$ 0.XXXX"}
-            ]
+            statusColor:"green",
+            realtimeRanking:[], currentPrice:'0.0000'
         }
     }
+}
+componentDidMount() {
+    getAuction().then(auction => {
+        this.auction = auction;
+        this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000'
+        getHistories({ auction_id: auction? auction.id : 1}).then(histories => {
+            console.log('histories', histories);
+            let orderRanking = histories.map(element => {
+                return element.data.length > 0 ? element.data[element.data.length - 1] : []
+            })
+            this.setState({realtimeRanking: orderRanking
+                , currentPrice : orderRanking.length > 0 ? orderRanking[0].average_price : this.state.currentPrice});
+        })
+    })
 }
   render() {
     return (
@@ -33,11 +40,11 @@ export default class AdminConfirmWinner extends Component {
             </div>
                 <div className="u-grid u-mt2">
                     <div className="col-sm-12 col-md-6 u-cell">
-                        <div className="col-sm-12 col-md-10 push-md-1"><RetailerRanking /></div>
+                        <div className="col-sm-12 col-md-10 push-md-1"><RetailerRanking ranking={this.state.realtimeRanking} /></div>
                     </div>
                     <div className="col-sm-12 col-md-6 u-cell">
                         <div className="col-sm-12 col-md-10 push-md-1">
-                            <ReservePrice />
+                            <ReservePrice price={this.startPrice} realtimePrice={this.state.currentPrice} />
                             <WinnerPrice showOrhide="hide" />
                             <div className="winnerPrice_main">
                                 <a className="lm--button lm--button--primary u-mt3" >Void Reverse Auction</a>

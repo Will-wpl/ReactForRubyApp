@@ -6,11 +6,12 @@ export default class Price extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {option: getTemplate()};
+        this.state = {option: getTemplate(this.props)};
     }
 
     getChartOption() {
-        let option = getTemplate();
+        let option = getTemplate(this.props);
+        console.log('this.props.data', this.props.data)
         this.props.data.forEach(element => {
             let tmp = {
                 type: 'line',
@@ -25,12 +26,18 @@ export default class Price extends Component {
                 }
             };
             element.data.forEach((timePrice) => {
+                console.log('timePrice.is_bidder', timePrice.is_bidder)
                 let d = timePrice.is_bidder ? {
                     symbol: 'triangle',
                     symbolSize: 15,
                     showSymbol: true,
                     value: []
-                } : {value: []};
+                } : {
+                    symbol: 'circle',
+                    symbolSize: 5,
+                    showSymbol: true,
+                    value: []
+                };
                 // d.value = [].concat(timePrice.time).concat(timePrice.price);
                 d.value = [].concat(moment(timePrice.bid_time).format('YYYY-MM-DD HH:mm:ss'))
                     .concat(parseFloat(timePrice.average_price).toFixed(4));
@@ -57,7 +64,7 @@ Price.defaultProps = {
     data: []
 }
 
-function getTemplate() {
+function getTemplate(props) {
     return {
         calculable: true,
         dataZoom: {
@@ -83,13 +90,27 @@ function getTemplate() {
                 return [point[0] - dom.scrollWidth / 2, point[1] - dom.scrollHeight - 16];
             },
             formatter: (params) => {
+                let content = `<div>${params.value[1]}</div>`;
+                if (props && params.seriesIndex < props.data.length) {
+                    let template;
+                    let serObj = props.data[params.seriesIndex];
+                    if (serObj && serObj.data) {
+                        let d = serObj.data[params.dataIndex];
+                        if (d && d.template_price) {
+                            template = `<strong>${d.template_price.company_price}</strong>
+                                    <div>${d.template_price.lt}</div>
+                                    <div>${d.template_price.hts}</div>
+                                    <div>${d.template_price.htl}</div>`;
+                        }
+                    }
+                    if (template) {
+                        content = template;
+                    }
+                }
                 let result = `<div class="tooltip top">
                                 <div class="tooltip-arrow" style="border-top-color:${params.color}"></div>
                                 <div class="tooltip-inner" style="background-color:${params.color};color:black">
-                                    <strong>asdfasdf</strong>
-                                    <div>fdasdfasdfasdfasdfasdffffffdasdfasdfasdfasdfasdfffff</div>
-                                    <div>fdasdfasdfasdfasdfasdf</div>
-                                    <div>${params.value[1]}</div>
+                                    ${content}
                                 </div>
                             </div>`;
                 return result;

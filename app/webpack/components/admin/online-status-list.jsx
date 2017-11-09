@@ -16,45 +16,62 @@ export class OnlineStatusMain extends Component {
             data_pedding:[],
             data_outline:[],
         }
+        this.auction = {};
+    }
+    componentDidMount(){
+        let timeinterval
+        clearInterval(timeinterval)
+        timeinterval = this.timegetBidderStatus();
+        setInterval(()=>{
+            this.timegetBidderStatus();
+        },5000)
+    }
+    timegetBidderStatus(){
+        getBidderStatus({auction_id:this.auction.id}).then(res => {
+            console.log(res);
+            this.setState({
+                dataList:res,
+            })
+            let data_outline=[],data_online=[],data_pedding=[];
+                this.state.dataList.map((item,index)=>{
+                    if(item.login_status == "logout"){
+                        data_outline.push(item);
+                    }else if(item.login_status == "login"){
+                        if(item.current_room == this.auction.id){
+                            if(item.current_page == "live"){
+                                data_online.push(item);
+                            }else{
+                                data_pedding.push(item);
+                            }                           
+                        }else{
+                            data_pedding.push(item);
+                        }                           
+                    }else{
+                        data_pedding.push(item);
+                    }
+                })
+            
+            this.setState({
+                data_online:data_online,
+                data_outline:data_outline,
+                data_pedding:data_pedding,
+            })
+        }, error => {
+            console.log(error);
+        })
     }
     componentWillMount(){
         getAuctionInVersionOne().then(res => {
             //console.log(res);
             this.auction = res;
             this.timerTitle = this.auction ? `${this.auction.name} on ${moment(this.auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
-            getBidderStatus({auction_id:res.id}).then(res => {
-                console.log(res);
-                this.setState({
-                    dataList:res,
-                })
-                let data_outline=[],
-                    data_online=[],
-                    data_pedding=[]
-                for(let i=0; i<this.state.dataList.length; i++){
-                    if(this.state.dataList[i].login_status == "off"){
-                        data_outline.push(this.state.dataList[i]);
-                    }
-                    if(this.state.dataList[i].login_status == "on"){
-                        data_online.push(this.state.dataList[i]);
-                    }
-                    if(this.state.dataList[i].login_status == "other"){
-                        data_pedding.push(this.state.dataList[i]);
-                    }
-                }
-                this.setState({
-                    data_online:data_online,
-                    data_outline:data_outline,
-                    data_pedding:data_pedding,
-                })
-            }, error => {
-                console.log(error);
-            })
+            this.timegetBidderStatus();
         }, error => {
             console.log(error);
         })
     }
     goToDashboard(){
-        window.location.href=`/admin/auctions/${this.auction.id}/dashboard`
+        //window.location.href=`/admin/auctions/${this.auction.id}/dashboard`
     }
     render (){
         return (
@@ -65,13 +82,13 @@ export class OnlineStatusMain extends Component {
                     <h3 className="col-sm-12 col-md-12 u-mb3">Online Status of Retailers</h3>
                     <div className="u-grid u-mt2">
                         <div className="col-sm-12 col-md-4">
-                            <RetailsOnlineStatus list_data={this.state.data_online} />
+                            <RetailsOnlineStatus list_data={this.state.data_online} onlineStatus="on" />
                         </div>
                         <div className="col-sm-12 col-md-4">
-                            <RetailsOnlineStatus list_data={this.state.data_pedding} />
+                            <RetailsOnlineStatus list_data={this.state.data_pedding} onlineStatus="other" />
                         </div>
                         <div className="col-sm-12 col-md-4">
-                            <RetailsOnlineStatus list_data={this.state.data_outline} />
+                            <RetailsOnlineStatus list_data={this.state.data_outline} onlineStatus="off" />
                         </div>
                     </div>
                     </div>
