@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171108092059) do
+ActiveRecord::Schema.define(version: 20171109030721) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,7 +37,6 @@ ActiveRecord::Schema.define(version: 20171108092059) do
     t.string "accept_status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "login_status"
     t.index ["auction_id"], name: "index_arrangements_on_auction_id"
     t.index ["user_id"], name: "index_arrangements_on_user_id"
   end
@@ -145,6 +144,16 @@ ActiveRecord::Schema.define(version: 20171108092059) do
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource_type_and_resource_id"
   end
 
+  create_table "user_extensions", force: :cascade do |t|
+    t.string "login_status"
+    t.string "current_room"
+    t.string "current_page"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_extensions_on_user_id"
+  end
+
   create_table "users", id: :serial, force: :cascade do |t|
     t.string "name"
     t.string "email", default: "", null: false
@@ -179,4 +188,5 @@ ActiveRecord::Schema.define(version: 20171108092059) do
   add_foreign_key "auction_histories", "auctions"
   add_foreign_key "auction_histories", "users"
   add_foreign_key "auction_results", "auctions"
+  add_foreign_key "user_extensions", "users"
 end
