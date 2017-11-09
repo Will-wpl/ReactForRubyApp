@@ -85,6 +85,9 @@ export class AdminDashboard extends Component {
     }
     extendTime() {
         this.ws.sendMessage('extend_time', {'extend_time' : `${this.state.extendedValue}`});
+        this.setState({
+            extendedValue:1
+        })
     }
 
     goToFinish() {
@@ -97,7 +100,7 @@ export class AdminDashboard extends Component {
                 <DuringCountDown auction={this.auction} countDownOver={this.goToFinish.bind(this)}>
                     <div id="admin_hold">
                         <span>Extend Time:</span>
-                        <input type="number" className="fill_hold" value={this.state.extendedValue} onChange={this.onExtendInputChanged.bind(this)}/>
+                        <input type="tel" className="fill_hold" maxLength="2" value={this.state.extendedValue} onChange={this.onExtendInputChanged.bind(this)}/>
                         <span>Min</span>
                         <input type="button" className="hold_submit" value="Submit" onClick={this.showModal.bind(this)}/>
                     </div>
@@ -130,7 +133,7 @@ export class AdminDashboard extends Component {
                         <RetailerRanking ranking={this.state.realtimeRanking}/>
                     </div>
                 </div>
-                <Modal text="Are you sure pad this time?" acceptFunction={this.extendTime.bind(this)} ref="Modal" />
+                <Modal text="Are you sure extend this auction time?" acceptFunction={this.extendTime.bind(this)} ref="Modal" />
             </div>
         )
     }
