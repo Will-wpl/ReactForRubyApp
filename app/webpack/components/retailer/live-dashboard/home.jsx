@@ -88,6 +88,7 @@ export default class LiveHomePage extends Component {
 
     makeup(res) {
         if (res.length > 0) {
+            console.log('res ====>', res)
             let copy = JSON.parse(JSON.stringify(res));
             let histories = res.map((element, index) => {
                 if (index === 0) { // start

@@ -3,9 +3,24 @@ import React, {Component} from 'react';
 export default class BidHistory extends Component {
 
     render() {
-        let trs = this.props.data.map((element, index) => {
-            return <tr key={element.id}>
-                <td>{index + 1}</td>
+        // let trs = this.props.data.map((element, index) => {
+        //     return <tr key={element.id}>
+        //         <td>{index + 1}</td>
+        //         <td>{element.bid_time}</td>
+        //         <td>${element.lt_off_peak}</td>
+        //         <td>${element.lt_peak}</td>
+        //         <td>${element.hts_off_peak}</td>
+        //         <td>${element.hts_peak}</td>
+        //         <td>${element.htl_off_peak}</td>
+        //         <td>${element.htl_peak}</td>
+        //     </tr>
+        // })
+        let len = this.props.data.length;
+        let trs = [];
+        for (let i = len - 1; i >= 0; i--) {
+            let element = this.props.data[i];
+            trs.push(<tr key={element.id}>
+                <td>{i + 1}</td>
                 <td>{element.bid_time}</td>
                 <td>${element.lt_off_peak}</td>
                 <td>${element.lt_peak}</td>
@@ -13,8 +28,8 @@ export default class BidHistory extends Component {
                 <td>${element.hts_peak}</td>
                 <td>${element.htl_off_peak}</td>
                 <td>${element.htl_peak}</td>
-            </tr>
-        })
+            </tr>)
+        }
         return (
             <form>
                 <h3>My Bid History</h3>
