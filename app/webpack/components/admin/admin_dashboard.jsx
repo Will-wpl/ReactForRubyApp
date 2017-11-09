@@ -86,7 +86,7 @@ export class AdminDashboard extends Component {
     }
 
     onExtendInputChanged(e) {
-        if (Number(e.target.value) > 0) {
+        if (Number(e.target.value) >0 && Number(e.target.value) <=60) {
             this.setState({extendedValue: e.target.value});
         }
     }
@@ -110,7 +110,7 @@ export class AdminDashboard extends Component {
                 <DuringCountDown auction={this.auction} countDownOver={this.goToFinish.bind(this)}>
                     <div id="admin_hold">
                         <span>Extend Time:</span>
-                        <input type="tel" className="fill_hold" maxLength="2" value={this.state.extendedValue} onChange={this.onExtendInputChanged.bind(this)}/>
+                        <input type="number" className="fill_hold" maxLength="2" value={this.state.extendedValue} onChange={this.onExtendInputChanged.bind(this)}/>
                         <span>Min</span>
                         <input type="button" className="hold_submit" value="Submit" onClick={this.showModal.bind(this)}/>
                     </div>
