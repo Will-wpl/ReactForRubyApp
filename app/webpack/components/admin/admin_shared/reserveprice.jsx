@@ -1,20 +1,23 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 export default class ReservePrice extends Component {
-  constructor(props){
-    super(props);
-    this.state={
-            priceNum:"0.0556",
-            priceStatus:"fail",
-            priceText:"Reserve Price Not Achieved"
+    render() {
+        let compareResult = parseFloat(this.props.realtimePrice) > parseFloat(this.props.price)
+        return (
+            <dl className="reservePrice">
+                <dd>SP Group Reserve Auction</dd>
+                <dd>
+                    <span>Reserve Price = $ {this.props.price} /KWh</span>
+                    <span className={compareResult ? 'success' : 'fail'}>
+                {compareResult ? 'Reserve Price Achieved' : 'Reserve Price Not Achieved'}
+                </span>
+                </dd>
+            </dl>
+        )
     }
 }
-  render() {
-    return (
-      <dl className="reservePrice">
-        <dd>SP Group Reserve Auction</dd>
-        <dd><span>Reserve Pice = $ {this.state.priceNum} /KWh</span><span className={this.state.priceStatus}>{this.state.priceText}</span></dd>
-      </dl>
-    )
-  }
+
+ReservePrice.defaultProps = {
+    price: '0.0000',
+    realtimePrice: '0.0000'
 }
