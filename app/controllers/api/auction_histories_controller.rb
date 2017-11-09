@@ -1,4 +1,4 @@
-class Api::AuctionHistoriesController < ApplicationController
+class Api::AuctionHistoriesController < Api::BaseController
 
   # get histories by user_id and auction_id
   def show

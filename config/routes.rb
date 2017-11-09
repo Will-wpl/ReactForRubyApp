@@ -2,11 +2,15 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   # root to: 'home#index'
-  resources :home, only: :index
+  resources :home, only: [:index, :term] do
+    collection do
+      get 'term'
+    end
+  end
 
-  devise_for :users, skip: [:sessions]
+  devise_for :users, skip: [:sessions, :home]
   as :user do
-    root :to => 'devise/sessions#new'
+    root to: 'devise/sessions#new'
     get 'log_in', to: 'devise/sessions#new', as: :new_user_session
     post 'sign_up', to: 'devise/sessions#create', as: :user_session
     match 'log_out', to: 'devise/sessions#destroy', as: :destroy_user_session, via: Devise.mappings[:user].sign_out_via
