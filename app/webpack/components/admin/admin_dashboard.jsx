@@ -2,14 +2,11 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import RetailerRanking from './admin_shared/ranking';
 import ReservePrice from './admin_shared/reserveprice';
-// import WinnerPrice from './admin_shared/winner';
 import CheckboxList from '../common/chart/list-checkbox';
 import {getArrangements, getHistories} from '../../javascripts/componentService/admin/service';
 import {createWebsocket, getAuction} from '../../javascripts/componentService/common/service';
 import {findUpLimit, getRandomColor} from '../../javascripts/componentService/util';
 import {ACCEPT_STATUS} from '../../javascripts/componentService/constant';
-// import RankingRealtimeHoc from './rankingChartRealtimeContainer';
-// import PriceRealtimeHoc from './priceChartRealtimeContainer';
 import ChartRealtimeHoc from './realtimeChartdataContainer';
 import Ranking from '../common/chart/ranking';
 import Price from '../common/chart/price';
@@ -116,7 +113,6 @@ export class AdminDashboard extends Component {
                     <div className="col-sm-12 col-md-7">
                         <div className="u-grid u-mt2">
                             <div className="col-sm-9">
-                                {/*<PriceRealtimeHoc ref="priceChart" dataStore={this.state.realtimeData}/>*/}
                                 <ChartRealtimeHoc ref="priceChart" dataStore={this.state.realtimeData}>
                                     <Price/>
                                 </ChartRealtimeHoc>
@@ -127,7 +123,6 @@ export class AdminDashboard extends Component {
                         </div>
                         <div className="u-grid u-mt2">
                             <div className="col-sm-9">
-                                {/*<RankingRealtimeHoc ref="rankingChart" dataStore={this.state.realtimeData}/>*/}
                                 <ChartRealtimeHoc ref="rankingChart" dataStore={this.state.realtimeData}>
                                     <Ranking />
                                 </ChartRealtimeHoc>
@@ -138,8 +133,6 @@ export class AdminDashboard extends Component {
                         </div>
                     </div>
                     <div className="col-sm-12 col-md-5">
-                        {/*<WinnerPrice showOrhide="show" statusColor="green" showStatus="Awarded" />*/}
-                        {/*<RetailerRanking />*/}
                         <ReservePrice price={this.startPrice} realtimePrice={this.state.currentPrice}/>
                         <RetailerRanking ranking={this.state.realtimeRanking}/>
                     </div>
