@@ -4,6 +4,8 @@ import {CreateNewRA} from './create-new-ra';
 import {BidderStatus} from './admin_shared/bidders-status';
 import {TimeCuntDown} from '../shared/time-cuntdown';
 import {getAuctionInVersionOne,getBidderStatus} from '../../javascripts/componentService/admin/service';
+import moment from 'moment';
+
 export class AdminManagePublishedRa extends Component {
     constructor(props, context){
         super(props);
@@ -18,6 +20,8 @@ export class AdminManagePublishedRa extends Component {
     componentDidMount(){
         getAuctionInVersionOne().then(res => {
             this.auction = res;
+            this.timerTitle = this.auction ? `${this.auction.name} on ${moment(this.auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
+            this.forceUpdate();
             // if(this.auction.publish_status == 1){
             //     this.setState({
             //         live_modal:"live_hide",
@@ -55,7 +59,7 @@ export class AdminManagePublishedRa extends Component {
                     </p>
                 </div> */}
                 <div className={this.state.live_modal_do}>
-                <TimeCuntDown />
+                <TimeCuntDown title={this.timerTitle} auction={this.auction} />
                 <div className="u-grid u-mt3">
                     <div className="col-sm-12 col-md-7">
                         <CreateNewRA left_name="Manage Upcoming Reverse Auction" />
