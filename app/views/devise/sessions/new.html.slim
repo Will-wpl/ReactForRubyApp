@@ -14,4 +14,4 @@
       .lm--formItem
         = f.button :submit, 'Login', class: 'lm--button--primary u-block', data: { disable_with: t('views.disable_with') }
       .lm--formItem.u-text-center
-        | By logging in, you agree to our #{link_to 'Terms of Use', new_password_path(resource_name)}
+        | By logging in, you agree to our #{link_to 'Terms of Use', term_home_index_path()}
