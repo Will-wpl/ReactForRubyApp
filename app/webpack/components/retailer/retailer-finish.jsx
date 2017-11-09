@@ -9,19 +9,21 @@ export class RetailerFinish extends Component {
     }
     render () {
         return (
-            <div className="u-grid">
-            <div id="live_modal">
-                <div className={this.state.holdOrend}></div>
-                <p>
-                The Reverse Auction has ended<br/>
-                Thank you for your participation!<br/>
-                You will be contacted separately<br/>
-                on the Reverse Auction results
-                </p>
-            </div>
-            <div className="createRaMain u-grid">
+            <div>
+                <div className="u-grid">
+                    <div id="live_modal">
+                        <div className={this.state.holdOrend}></div>
+                        <p>
+                        The Reverse Auction has ended<br/>
+                        Thank you for your participation!<br/>
+                        You will be contacted separately<br/>
+                        on the Reverse Auction results
+                        </p>
+                    </div>
+                </div>
+                <div className="createRaMain u-grid">
                     <a className="lm--button lm--button--primary u-mt3" href="/retailer/home" >Back to Homepage</a>
-            </div>
+                </div>
             </div>
         )
     }
