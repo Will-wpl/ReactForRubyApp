@@ -32,6 +32,7 @@ export class OnlineStatusMain extends Component {
             this.setState({
                 dataList:res,
             })
+            //console.log("当前auction： "+this.auction.id)
             let data_outline=[],data_online=[],data_pedding=[];
                 this.state.dataList.map((item,index)=>{
                     if(item.login_status == "logout"){
@@ -47,7 +48,7 @@ export class OnlineStatusMain extends Component {
                             data_pedding.push(item);
                         }                           
                     }else{
-                        data_pedding.push(item);
+                        data_outline.push(item);
                     }
                 })
             
