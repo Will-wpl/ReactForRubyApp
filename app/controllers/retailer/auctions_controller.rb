@@ -1,5 +1,5 @@
 class Retailer::AuctionsController < Retailer::BaseController
-
+  before_action :set_login_status, only: [:upcoming, :live, :finish, :empty]
   # GET upcoming page
   def upcoming;
   end
@@ -30,4 +30,11 @@ class Retailer::AuctionsController < Retailer::BaseController
       redirect_to retailer_home_index_path
     end
   end
+
+  private
+
+  def set_login_status
+    UserExtension.save_or_update_login_status(current_user, 'login', params[:id], request[:action])
+  end
+
 end
