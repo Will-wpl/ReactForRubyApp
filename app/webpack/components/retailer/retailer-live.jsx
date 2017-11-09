@@ -63,7 +63,7 @@ export class RetailerLive extends Component {
                 }
                 this.extendTimeout = setTimeout(() => {
                     this.setState({extendVisible : false});
-                }, 3000);
+                }, 5000);
             }
         })
     }
