@@ -72,7 +72,7 @@ export class OnlineStatusMain extends Component {
         })
     }
     goToDashboard(){
-        //window.location.href=`/admin/auctions/${this.auction.id}/dashboard`
+        window.location.href=`/admin/auctions/${this.auction.id}/dashboard`
     }
     render (){
         return (
