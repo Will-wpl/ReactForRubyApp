@@ -117,7 +117,6 @@ export const Ws = class {
         let user = getLoginUserId();
         let mixin = {
             connected: () => {
-                this.sockHandler.perform('check_in', {user_id: `${user}`});
                 if (this.connectedCall) {
                     this.connectedCall();
                 }
