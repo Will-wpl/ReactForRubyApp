@@ -43,7 +43,7 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_out_path_for(resource)
-    UserExtension.save_or_update_login_status(current_user, 'logout', '', '')
     root_url
   end
+
 end
