@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import ReactEcharts from 'echarts-for-react';
 import moment from 'moment';
 
@@ -6,7 +6,7 @@ export default class Ranking extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { option: getTemplate(this.props) };
+        this.state = {option: getTemplate(this.props)};
     }
 
     getChartOption() {
@@ -30,7 +30,12 @@ export default class Ranking extends Component {
                     symbolSize: 15,
                     showSymbol: true,
                     value: []
-                } : {value: []};
+                } : {
+                    symbol: 'circle',
+                    symbolSize: 5,
+                    showSymbol: true,
+                    value: []
+                };
                 // d.value = [].concat(timeRanking.time).concat(timeRanking.ranking);
                 d.value = [].concat(moment(timeRanking.bid_time).format('YYYY-MM-DD HH:mm:ss')).concat(timeRanking.ranking);
                 tmp.data.push(d);
@@ -45,8 +50,8 @@ export default class Ranking extends Component {
             <ReactEcharts
                 option={this.getChartOption()}
                 notMerge={true}
-                style={{ height: '280px', width: '100%' }}
-                className='react_for_echarts' />
+                style={{height: '280px', width: '100%'}}
+                className='react_for_echarts'/>
         );
     }
 }
@@ -83,9 +88,16 @@ const getTemplate = (props) => {
             formatter: (params) => {
                 let content = `${params.value[1]}`;
                 if (props && params.seriesIndex < props.data.length) {
-                    let template = props.data[params.seriesIndex].template;
+                    let template;
+                    let serObj = props.data[params.seriesIndex];
+                    if (serObj && serObj.data) {
+                        let d = serObj.data[params.dataIndex];
+                        if (d && d.template_ranking) {
+                            template = d.template_ranking;
+                        }
+                    }
                     if (template) {
-                        content = `${template}${params.value[1]}`;
+                        content = template;
                     }
                 }
                 let result = `<div class="tooltip top">
@@ -98,7 +110,7 @@ const getTemplate = (props) => {
             }
         },
         xAxis: {
-            splitLine: { show: false },
+            splitLine: {show: false},
             show: true,
             type: 'time',
             boundaryGap: false,
@@ -117,7 +129,7 @@ const getTemplate = (props) => {
             }
         },
         yAxis: {
-            splitLine: { show: false },
+            splitLine: {show: false},
             type: 'value',
             name: 'Ranking',
             nameLocation: 'middle',
