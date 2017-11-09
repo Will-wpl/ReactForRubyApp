@@ -18,7 +18,18 @@ export default class BidHistory extends Component {
         return (
             <form>
                 <h3>My Bid History</h3>
+                <div className="table-head">
                 <table className="retailer_fill u-mt2">
+                    <colgroup>  
+                        <col style={{width: 50 +'px'}} />  
+                        <col style={{width: 100 +'px'}} />
+                        <col style={{width: 50 +'px'}} /> 
+                        <col style={{width: 50 +'px'}} /> 
+                        <col style={{width: 50 +'px'}} /> 
+                        <col style={{width: 50 +'px'}} /> 
+                        <col style={{width: 50 +'px'}} /> 
+                        <col style={{width: 50 +'px'}} /> 
+                    </colgroup>  
                     <thead>
                     <tr>
                         <th colSpan="8" className="table_title">Bid Price</th>
@@ -34,10 +45,25 @@ export default class BidHistory extends Component {
                         <th>HTL (Peak)</th>
                     </tr>
                     </thead>
+                </table>
+                </div>
+                <div className="table-body">
+                <table className="retailer_fill">
+                    <colgroup>  
+                    <col style={{width: 50 +'px'}} />  
+                    <col style={{width: 100 +'px'}} />
+                    <col style={{width: 50 +'px'}} /> 
+                    <col style={{width: 50 +'px'}} /> 
+                    <col style={{width: 50 +'px'}} /> 
+                    <col style={{width: 50 +'px'}} /> 
+                    <col style={{width: 50 +'px'}} /> 
+                    <col style={{width: 50 +'px'}} /> 
+                    </colgroup>  
                     <tbody>
                     {trs}
                     </tbody>
                 </table>
+                </div>
             </form>
         );
     }

@@ -29,7 +29,13 @@ export default class RetailerRanking extends Component {
       <div className="retailrank_main">
       <h3>Retailer Ranking</h3>
       <div className="retailrank_box">
-      <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+        <div className="table-head">
+      <table className="retailer_fill">
+                  <colgroup>  
+                        <col style={{width: 50 +'px'}} />  
+                        <col style={{width: 100 +'px'}} />
+                        <col style={{width: 100 +'px'}} />
+                    </colgroup> 
         <thead>
           <tr>
             <th>Rank</th>
@@ -37,7 +43,16 @@ export default class RetailerRanking extends Component {
             <th>Price</th>
             </tr>
           </thead>
-          <tbody>
+      </table>
+      </div>
+      <div className="table-body">
+      <table className="retailer_fill">
+          <colgroup>  
+                        <col style={{width: 50 +'px'}} />  
+                        <col style={{width: 100 +'px'}} />
+                        <col style={{width: 100 +'px'}} />
+          </colgroup> 
+            <tbody>
             {
               this.state.list_data.map((item,index)=>{
                 return(
@@ -46,7 +61,8 @@ export default class RetailerRanking extends Component {
               })
             }
           </tbody>
-      </table>
+        </table>
+        </div>
       </div>
       </div>
     )

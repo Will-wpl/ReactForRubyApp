@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import {RetailsOnlineStatus} from './admin_shared/retailers-online-status';
 import {TimeCuntDown} from '../shared/time-cuntdown';
 import {getAuctionInVersionOne,getBidderStatus} from '../../javascripts/componentService/admin/service';
-import {getAuctionTimeRule} from '../../javascripts/componentService/common/service';
 import moment from 'moment';
 const ACTUAL_END_TIME = 'actual_end_time';
 const ACTUAL_CURRENT_TIME = 'current_time';

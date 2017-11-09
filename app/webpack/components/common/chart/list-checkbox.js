@@ -38,7 +38,7 @@ export default class CheckboxList extends Component {
             })
         }
         return (
-            <ul>
+            <ul className="charList">
                 {checkItems}
             </ul>
 
