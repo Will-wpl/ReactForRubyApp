@@ -19,20 +19,24 @@ import moment from 'moment';
 export class AdminDashboard extends Component {
     constructor(props){
         super(props);
-        this.state = {users:[], extendedValue:1, realtimeData:[], realtimeRanking:[]};
+        this.state = {users:[], extendedValue:1, realtimeData:[], realtimeRanking:[], currentPrice:'0.0000'};
     }
 
     componentDidMount() {
         getAuction().then(auction => {
             this.auction = auction;
             this.timerTitle = auction ? `${auction.name} on ${moment(auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
-            this.forceUpdate();
+            this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000'
+            this.forceUpdate(); // only once no need to use state
+
             this.createWebsocket(auction? auction.id : 1);
             getHistories({ auction_id: auction? auction.id : 1}).then(histories => {
                 console.log('histories', histories);
-                this.setState({realtimeData: histories, realtimeRanking:histories.map(element => {
+                let orderRanking = histories.map(element => {
                     return element.data.length > 0 ? element.data[element.data.length - 1] : []
-                })});
+                })
+                this.setState({realtimeData: histories, realtimeRanking: orderRanking
+                    , currentPrice : orderRanking.length > 0 ? orderRanking[0].average_price : this.state.currentPrice});
             })
         })
         getArrangements(ACCEPT_STATUS.ACCEPT).then(res => {
@@ -60,7 +64,8 @@ export class AdminDashboard extends Component {
                     data.data.forEach((element, index) => {
                         histories.push({id: element.user_id, data:[].concat(element)})
                     })
-                    this.setState({realtimeData: histories, realtimeRanking: histories});
+                    this.setState({realtimeData: histories, realtimeRanking: histories
+                        , currentPrice : histories.length > 0 ? histories[0].average_price : this.state.currentPrice});
                 }
             }
         })
@@ -125,7 +130,7 @@ export class AdminDashboard extends Component {
                     <div className="col-sm-12 col-md-5">
                         {/*<WinnerPrice showOrhide="show" statusColor="green" showStatus="Awarded" />*/}
                         {/*<RetailerRanking />*/}
-                        <ReservePrice />
+                        <ReservePrice price={this.startPrice} realtimePrice={this.state.currentPrice}/>
                         <RetailerRanking ranking={this.state.realtimeRanking}/>
                     </div>
                 </div>
