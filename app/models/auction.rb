@@ -9,7 +9,7 @@ class Auction < ApplicationRecord
   has_many :users , :through => :arrangements
   has_many :auction_histories
   has_many :auction_events
-  has_one :auction_results
+  has_one :auction_result
   # accepts_nested_attributes
 
   # Validations
