@@ -48,12 +48,19 @@ export default class LiveHomePage extends Component {
                                 this.state.chartDatas = [].concat({id: curUserId, data: [], color: '#e5e816', template:''});
 
                             }
-                            this.state.chartDatas[0].template = `${last.company_name} Ranking: `
                             // this.state.chartDatas[0].data = this.state.chartDatas[0].data.concat(
                             //     {time: moment(last.bid_time).format('YYYY-MM-DD HH:mm:ss')
                             //         , ranking: Number(last.ranking) === 1 ? 2 : last.ranking, needMark: last.is_bidder}
                             // )
                             last.ranking = Number(last.ranking) === 1 ? 2 : last.ranking;
+                            last.template_ranking = `${last.company_name} Ranking: ${last.ranking}`;
+                            if (!last.template_price) {
+                                last.template_price = {};
+                            }
+                            last.template_price['company_price'] = `${last.company_name} ${parseFloat(last.average_price).toFixed(4)}/KWH`;
+                            last.template_price['lt'] = `LT(P):$${parseFloat(last.lt_peak).toFixed(4)} LT(OP):$${parseFloat(last.lt_off_peak).toFixed(4)}`;
+                            last.template_price['hts'] = `HTS(P):$${parseFloat(last.hts_peak).toFixed(4)} HTS(OP):$${parseFloat(last.hts_off_peak).toFixed(4)}`;
+                            last.template_price['htl'] = `HTL(P):$${parseFloat(last.htl_peak).toFixed(4)} HTL(OP):$${parseFloat(last.htl_off_peak).toFixed(4)}`;
                             this.state.chartDatas[0].data = this.state.chartDatas[0].data.concat(last)
                         }
                         let element = JSON.parse(JSON.stringify(last));
@@ -96,13 +103,20 @@ export default class LiveHomePage extends Component {
                 element.htl_off_peak = parseFloat(element.htl_off_peak).toFixed(4);
                 return element;
             });
-            let chartDataTpl = {id: 0, data: [], color: '#e5e816', template:''};
+            let chartDataTpl = {id: 0, data: [], color: '#e5e816'};
             copy.forEach(history => {
                 chartDataTpl.id = history.user_id;
-                chartDataTpl.template = `${history.company_name} Ranking: `
                 // chartDataTpl.data.push({time: moment(history.bid_time).format('YYYY-MM-DD HH:mm:ss')
                 //     , ranking: Number(history.ranking) === 1 ? 2 : history.ranking, needMark: history.is_bidder})
                 history.ranking = Number(history.ranking) === 1 ? 2 : history.ranking;
+                history.template_ranking = `${history.company_name} Ranking: ${history.ranking}`;
+                if (!history.template_price) {
+                    history.template_price = {};
+                }
+                history.template_price['company_price'] = `${history.company_name} ${parseFloat(history.average_price).toFixed(4)}/KWH`;
+                history.template_price['lt'] = `LT(P):$${parseFloat(history.lt_peak).toFixed(4)} LT(OP):$${parseFloat(history.lt_off_peak).toFixed(4)}`;
+                history.template_price['hts'] = `HTS(P):$${parseFloat(history.hts_peak).toFixed(4)} HTS(OP):$${parseFloat(history.hts_off_peak).toFixed(4)}`;
+                history.template_price['htl'] = `HTL(P):$${parseFloat(history.htl_peak).toFixed(4)} HTL(OP):$${parseFloat(history.htl_off_peak).toFixed(4)}`;
                 chartDataTpl.data.push(history)
             });
             let last = histories[histories.length - 1];
