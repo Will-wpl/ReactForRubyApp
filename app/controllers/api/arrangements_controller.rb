@@ -4,7 +4,7 @@ class Api::ArrangementsController < ApplicationController
   # GET arrangement list by auction_id
   # accept_status ['0','1','2'] '0':reject '1':accept '2':pending
   def index
-    query = Arrangement.select('arrangements.*, users.company_name , user_extensions.login_status , user_extensions.current_room , user_extensions.current_page').joins(user: :user_extension).order(:accept_status)
+    query = Arrangement.select('arrangements.*, users.company_name , user_extensions.login_status , user_extensions.current_room , user_extensions.current_page').left_outer_joins(user: :user_extension).order(:accept_status)
     if params[:accept_status] == nil
       @arrangements = query.where('auction_id': params[:auction_id])
     else
