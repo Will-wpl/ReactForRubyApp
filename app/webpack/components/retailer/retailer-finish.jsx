@@ -19,6 +19,9 @@ export class RetailerFinish extends Component {
                 on the Reverse Auction results
                 </p>
             </div>
+            <div className="createRaMain u-grid">
+                    <a className="lm--button lm--button--primary u-mt3" href="/retailer/home" >Back to Homepage</a>
+            </div>
             </div>
         )
     }
