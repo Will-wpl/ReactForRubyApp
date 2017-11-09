@@ -28,8 +28,8 @@ export default class WinnerPrice extends Component {
         <h2 className={this.props.showOrhide}><span className={this.props.statusColor}>Status : {this.props.showStatus}</span></h2>
         <h4 className="u-mt1">Summary of Lowest Bidder</h4>
         <ul>
-          <li><span>Lowest Price Bidder:</span><span>{this.state.listData.name}</span></li>
-          <li><span>Winning Price:</span><span>{this.state.listData.price}</span></li>
+          <li><span>Lowest Price Bidder : </span><span>{this.state.listData.name}</span></li>
+          <li><span>Winning Price : </span><span>{this.state.listData.price}</span></li>
         </ul>
         <table className="retailer_fill" cellPadding="0" cellSpacing="0">
             <thead>
