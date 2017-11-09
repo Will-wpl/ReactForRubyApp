@@ -361,7 +361,7 @@ export class CreateNewRA extends Component {
                     </dd>
                     <dd></dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
-                        <span className="lm--formItem-left lm--formItem-label string optional">Reverse Auction Paramters</span>
+                        <span className="lm--formItem-left lm--formItem-label string optional">Reverse Auction Parameters</span>
                     </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
                         <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Duration (minutes):</span>
@@ -371,7 +371,7 @@ export class CreateNewRA extends Component {
                         </label>
                         </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
-                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Reverse Price ($/kWh):</span>
+                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Reserve Price ($/kWh):</span>
                         <label className="lm--formItem-right lm--formItem-control">
                             <input type="test" ref="reserve_price" onChange={this.doPrice.bind(this)} value={this.state.reserve_price} disabled={this.state.disabled} name="reserve_price" maxLength="50" required aria-required="true" pattern="^\d+(\.\d{4})$" title="Reserve Price must be a number with 4 decimal places, e.g. $0.0891/kWh." ></input>
                             <abbr ref="ra_duration_error" className="col"></abbr>
