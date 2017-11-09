@@ -82,8 +82,8 @@ export const put = (path, body, method = 'PUT') => {
 
 }
 
-ActionCable = require('actioncable');
-const cable = ActionCable.createConsumer(`ws://localhost:${window.location.port}/cable`);
+// ActionCable = require('actioncable');
+const cable = ActionCable.createConsumer();
 // ActionCable.startDebugging();
 export const createWS = (auction, methods = {}) => {
     let user = getLoginUserId();

@@ -25,13 +25,14 @@ export default class Ranking extends Component {
                 }
             };
             element.data.forEach((timeRanking) => {
-                let d = timeRanking.needMark ? {
+                let d = timeRanking.is_bidder ? {
                     symbol: 'triangle',
                     symbolSize: 15,
                     showSymbol: true,
                     value: []
                 } : {value: []};
-                d.value = [].concat(timeRanking.time).concat(timeRanking.ranking);
+                // d.value = [].concat(timeRanking.time).concat(timeRanking.ranking);
+                d.value = [].concat(moment(timeRanking.bid_time).format('YYYY-MM-DD HH:mm:ss')).concat(timeRanking.ranking);
                 tmp.data.push(d);
             });
             option.series.push(tmp);
@@ -68,7 +69,7 @@ const getTemplate = (props) => {
         grid: {
             top: '2%',
             left: '10%',
-            right: '2%',
+            right: '7%',
             bottom: '3%',
             containLabel: true
         },
@@ -102,9 +103,9 @@ const getTemplate = (props) => {
             type: 'time',
             boundaryGap: false,
             axisLabel: {
-                formatter: (value, index) => {
-                    return moment(value).format('HH:mm:ss');
-                }
+                // formatter: (value, index) => {
+                //     return moment(value).format('HH:mm:ss');
+                // }
             },
             axisTick: {
                 show: false
@@ -125,9 +126,9 @@ const getTemplate = (props) => {
             axisTick: {
                 show: false
             },
-            max: (value) => {
-                return 10;
-            },
+            // max: (value) => {
+            //     return 10;
+            // },
             axisLine: {
                 lineStyle: {
                     color: 'white'

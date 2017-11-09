@@ -35,3 +35,7 @@ export const createWebsocket = (auction, methods = {}) => {
 export const arrangementDetail = (params) => {
     return get('/api/arrangements/'+params);
 }
+
+export const getHistories = (params) => {
+    return get('/api/auction_histories/list', params);
+}
