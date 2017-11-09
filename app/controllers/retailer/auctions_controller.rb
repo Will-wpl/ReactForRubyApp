@@ -1,5 +1,5 @@
 class Retailer::AuctionsController < Retailer::BaseController
-  before_action :set_login_status, only: [:upcoming, :live, :finish, :empty]
+  after_action :set_login_status, only: [:upcoming, :live, :finish, :empty]
   # GET upcoming page
   def upcoming;
   end
