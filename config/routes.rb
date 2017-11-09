@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  namespace :admin do
-    resources :auction_extend_times
-  end
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   # root to: 'home#index'
@@ -49,6 +46,8 @@ Rails.application.routes.draw do
     resources :auction_histories
     resources :auction_events
     resources :arrangements
+    resources :user_extensions
+    resources :auction_extend_times
     resources :auctions do
       member do
         get 'upcoming' # published and pre-auction page
