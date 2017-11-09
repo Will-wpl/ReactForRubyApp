@@ -6,12 +6,13 @@ class AuctionChannel < ApplicationCable::Channel
 
   def unsubscribed
     # Any cleanup needed when channel is unsubscribed
-    update_check_params('off')
+    # update_check_params('off')
   end
 
-  def check_in
-    update_check_params('on')
-  end
+  # def check_in
+  #   update_check_params('on-live')
+  #   ActionCable.server.broadcast "auction_#{params[:auction_id]}"
+  # end
 
   def extend_time(data)
     auction = Auction.find(params[:auction_id])
