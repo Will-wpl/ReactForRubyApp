@@ -195,6 +195,8 @@ export class CreateNewRA extends Component {
         this.auction.reserve_price= null;
         this.auction.start_datetime= null;
         this.auction.total_volume= null;
+        this.auction.actual_begin_time= null;
+        this.auction.actual_end_time= null;
         return this.auction;
     }
     showDelete(){

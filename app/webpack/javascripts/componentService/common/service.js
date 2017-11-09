@@ -1,11 +1,11 @@
-import {get, Ws} from '../../../javascripts/http';
+import {get, Ws, createWS} from '../../../javascripts/http';
 
 export const getAuctionTimeRule = (auction) => {
     return get(`/api/auctions/${auction}/timer`);
 }
 
-export const createWebsocket = (auction, methods = {}) => {
-    return new Ws(window.location.port, auction);
+export const createWebsocket = (auction) => {
+    return new Ws(auction); // return createWS(auction);
 }
 
 export const getAuction = () => {
