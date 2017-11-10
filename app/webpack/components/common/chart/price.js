@@ -76,9 +76,9 @@ function getTemplate(props) {
             showDetail: false
         },
         grid: {
-            top: '2%',
+            top: '5%',
             left: '10%',
-            right: '6%',
+            right: '7%',
             bottom: '3%',
             containLabel: true
         },
@@ -87,7 +87,19 @@ function getTemplate(props) {
             triggerOn: 'mousemove|click',
             backgroundColor: 'transparent',
             position: (point, params, dom, rect, size) => {
-                return [point[0] - dom.scrollWidth / 2, point[1] - dom.scrollHeight - 16];
+                let xPosition = point[0] - dom.scrollWidth / 2;
+                let yPosition = point[1] - dom.scrollHeight - 16;
+                if (xPosition < 0) {
+                    xPosition = point[0] + 5;
+                    yPosition = point[1] - (dom.scrollHeight + 16) / 2;
+                    let divs = dom.getElementsByTagName('div');
+                    if (divs.length > 1) {
+                        divs[1].className = '';
+                    }
+                }
+                console.log('~~~~~~~~~~~')
+                return [xPosition, yPosition];
+                // return [point[0] - dom.scrollWidth / 2, point[1] - dom.scrollHeight - 16];
             },
             formatter: (params) => {
                 let content = `<div>${params.value[1]}</div>`;
