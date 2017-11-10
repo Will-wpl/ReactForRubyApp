@@ -126,8 +126,7 @@ const getTemplate = (props) => {
                 lineStyle: {
                     color: 'white'
                 }
-            },
-            minInterval: 1
+            }
         },
         yAxis: {
             splitLine: {show: false},
@@ -146,7 +145,8 @@ const getTemplate = (props) => {
                 lineStyle: {
                     color: 'white'
                 }
-            }
+            },
+            minInterval: 1
         },
         series: []
     }
