@@ -66,6 +66,9 @@ export class AdminDashboard extends Component {
                         , currentPrice : histories.length > 0 ? histories[0].average_price : this.state.currentPrice});
                 }
             }
+            if (data.action === 'extend_time') {
+                this.refs.submitBtn.disabled=false;
+            }
         })
     }
 
@@ -97,12 +100,12 @@ export class AdminDashboard extends Component {
     render () {
         return (
             <div>
-                <DuringCountDown auction={this.auction} countDownOver={this.goToFinish.bind(this)}>
+                <DuringCountDown auction={this.auction} countDownOver={this.goToFinish.bind(this)} onSecondBreaker={() => {this.refs.submitBtn.disabled='disabled'}}>
                     <div id="admin_hold">
                         <span>Extend Time:</span>
                         <input type="number" className="fill_hold" maxLength="2" value={this.state.extendedValue} onChange={this.onExtendInputChanged.bind(this)}/>
                         <span>Min</span>
-                        <input type="button" className="hold_submit" value="Submit" onClick={this.showModal.bind(this)}/>
+                        <input type="button" className="hold_submit" value="Submit" onClick={this.showModal.bind(this)} ref="submitBtn" />
                     </div>
                 </DuringCountDown>
                 <div className="u-grid u-mt3">

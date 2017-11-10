@@ -18,7 +18,7 @@ export default class LiveHomePage extends Component {
 
     componentDidMount() {
         getAuctionHistorys(this.props.auction ? this.props.auction.id : 1, getLoginUserId()).then(res => {
-            console.log(res);
+            console.log('res==========================', res);
             this.makeup(res);
             this.createSocket();
         }, error => {
@@ -53,7 +53,7 @@ export default class LiveHomePage extends Component {
                             //         , ranking: Number(last.ranking) === 1 ? 2 : last.ranking, needMark: last.is_bidder}
                             // )
                             last.ranking = Number(last.ranking) === 1 ? 2 : last.ranking;
-                            last.template_ranking = `Ranking: ${last.ranking}`;
+                            last.template_ranking = `Ranking: ${last.ranking} ${last.is_bidder ? '(Bit Submitter)' : ''}`;
                             if (!last.template_price) {
                                 last.template_price = {};
                             }
@@ -110,7 +110,7 @@ export default class LiveHomePage extends Component {
                 // chartDataTpl.data.push({time: moment(history.bid_time).format('YYYY-MM-DD HH:mm:ss')
                 //     , ranking: Number(history.ranking) === 1 ? 2 : history.ranking, needMark: history.is_bidder})
                 history.ranking = Number(history.ranking) === 1 ? 2 : history.ranking;
-                history.template_ranking = `Ranking: ${history.ranking}`;
+                history.template_ranking = `Ranking: ${history.ranking} ${history.is_bidder ? '(Bit Submitter)' : ''}`;
                 if (!history.template_price) {
                     history.template_price = {};
                 }
@@ -122,12 +122,15 @@ export default class LiveHomePage extends Component {
             });
             let last = histories[histories.length - 1];
             last.ranking = Number(last.ranking) === 1 ? 2 : last.ranking;
+            console.log('res =>>>>',res);
             this.setState({
                 ranking: last.ranking, priceConfig: []
                     .concat(last.lt_off_peak).concat(last.lt_peak)
                     .concat(last.hts_off_peak).concat(last.hts_peak)
                     .concat(last.htl_off_peak).concat(last.htl_peak),
-                histories: res, chartDatas: [].concat(chartDataTpl)
+                histories: res.filter(element => {
+                    return element.is_bidder;
+                }), chartDatas: [].concat(chartDataTpl)
             })
         }
     }
