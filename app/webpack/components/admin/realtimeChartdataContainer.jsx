@@ -22,16 +22,18 @@ export default class ChartRealtimeHoc extends Component {
                 }
             })
         }
+        this.filterData();
     }
 
     updateIndentifications(ids) {
-        this.filterData(ids ? ids : []);
+        this.ids = ids ? ids : [];
+        this.filterData();
     }
 
-    filterData(ids) {
+    filterData() {
         let results = [];
-        if (ids.length > 0) {
-            ids.forEach(idColor => {
+        if (this.ids.length > 0) {
+            this.ids.forEach(idColor => {
                 let result = this.list.find(element => {
                     return element.id === idColor.id;
                 });
