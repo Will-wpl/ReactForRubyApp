@@ -4,7 +4,7 @@ export default class RetailerRanking extends Component {
     render() {
         console.log('ranking', this.props.ranking)
         this.props.ranking.sort((a, b) => {
-            return parseFloat(a.average_price) < parseFloat(b.average_price)
+            return parseFloat(a.average_price) > parseFloat(b.average_price)
         })
         return (
             <div className="retailrank_main">
