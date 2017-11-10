@@ -26,6 +26,8 @@ class AuctionChannel < ApplicationCable::Channel
     auction_extend_time.user_id = params[:user_id]
     if auction_extend_time.save
       if auction.update(actual_end_time: auction_extend_time.actual_end_time)
+
+        AuctionEvent.set_events(params[:user_id], auction.id, 'extend_time', auction_extend_time.to_json)
         ActionCable.server.broadcast "auction_#{params[:auction_id]}", {action:'extend' , data:{minutes: extend_time}}
       end
     end
@@ -51,6 +53,7 @@ class AuctionChannel < ApplicationCable::Channel
     calculate_dto.htl_off_peak = data['htl_off_peak']
     calculate_dto.user_id = params[:user_id]
     calculate_dto.auction_id = params[:auction_id]
+    
     ActionCable.server.broadcast "auction_#{params[:auction_id]}", {data: set_price(calculate_dto), action: 'set_bid'}
   end
 
@@ -78,6 +81,7 @@ class AuctionChannel < ApplicationCable::Channel
     @history = AuctionHistory.new(lt_peak: calculate_dto.lt_peak, lt_off_peak: calculate_dto.lt_off_peak, hts_peak: calculate_dto.hts_peak, hts_off_peak: calculate_dto.hts_off_peak, htl_peak: calculate_dto.htl_peak, htl_off_peak: calculate_dto.htl_off_peak, bid_time: Time.now,
                                   user_id: calculate_dto.user_id, auction_id: calculate_dto.auction_id, average_price: average_price, total_award_sum: total_award_sum, is_bidder: true)
     if @history.save
+      AuctionEvent.set_events(@history.user_id, @history.auction_id, 'set bid', @history.to_json)
       # update update sort
       @histories = AuctionHistory.find_clone_sort_update_auction_histories(params[:auction_id], @history.id)
 
