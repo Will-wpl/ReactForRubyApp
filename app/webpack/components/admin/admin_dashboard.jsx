@@ -72,7 +72,7 @@ export class AdminDashboard extends Component {
                     data.data.forEach((element, index) => {
                         histories.push({id: element.user_id, data:[].concat(element)})
                     })
-                    this.setState({realtimeData: histories, realtimeRanking: histories
+                    this.setState({realtimeData: histories, realtimeRanking: data.data
                         , currentPrice : histories.length > 0 ? histories[0].average_price : this.state.currentPrice});
                 }
             }
