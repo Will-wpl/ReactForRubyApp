@@ -5,7 +5,7 @@ class Admin::AuctionResultsController < Admin::BaseController
   # before_action :set_action_breadcrumbs
 
   def index
-    AuctionResult.select('auction_results.* , auctions.name , auctions.start_datetime ').left_outer_joins(:auction).order(created_at: :desc).page(params[:page])
+    @auction_results = AuctionResult.select('auction_results.* , auctions.name , auctions.start_datetime ').left_outer_joins(:auction).order(created_at: :desc).page(params[:page])
   end
 
   # def new
