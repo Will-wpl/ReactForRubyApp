@@ -18,7 +18,7 @@ export default class LiveHomePage extends Component {
 
     componentDidMount() {
         getAuctionHistorys(this.props.auction ? this.props.auction.id : 1, getLoginUserId()).then(res => {
-            console.log(res);
+            console.log('res==========================', res);
             this.makeup(res);
             this.createSocket();
         }, error => {
@@ -122,6 +122,7 @@ export default class LiveHomePage extends Component {
             });
             let last = histories[histories.length - 1];
             last.ranking = Number(last.ranking) === 1 ? 2 : last.ranking;
+            console.log('res =>>>>',res);
             this.setState({
                 ranking: last.ranking, priceConfig: []
                     .concat(last.lt_off_peak).concat(last.lt_peak)
