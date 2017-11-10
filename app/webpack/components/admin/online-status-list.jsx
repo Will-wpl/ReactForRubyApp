@@ -20,9 +20,8 @@ export class OnlineStatusMain extends Component {
     }
     componentDidMount(){
         let timeinterval
-        clearInterval(timeinterval)
-        timeinterval = this.timegetBidderStatus();
-        setInterval(()=>{
+        clearInterval(timeinterval);
+        timeinterval = setInterval(()=>{
             this.timegetBidderStatus();
         },5000)
     }
