@@ -127,7 +127,9 @@ export default class LiveHomePage extends Component {
                     .concat(last.lt_off_peak).concat(last.lt_peak)
                     .concat(last.hts_off_peak).concat(last.hts_peak)
                     .concat(last.htl_off_peak).concat(last.htl_peak),
-                histories: res, chartDatas: [].concat(chartDataTpl)
+                histories: res.filter(element => {
+                    return element.is_bidder;
+                }), chartDatas: [].concat(chartDataTpl)
             })
         }
     }
