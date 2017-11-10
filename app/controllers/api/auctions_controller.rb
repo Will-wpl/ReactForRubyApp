@@ -34,6 +34,7 @@ class Api::AuctionsController < Api::BaseController
   def create
     @auction = Auction.new(model_params)
     if @auction.save
+      AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
       render json: @auction, status: 201
     else
       render json: 'error code ', status: 500
@@ -44,7 +45,7 @@ class Api::AuctionsController < Api::BaseController
   def update
     params[:auction]['total_volume'] = Auction.set_total_volume(model_params[:total_lt_peak], model_params[:total_lt_off_peak], model_params[:total_hts_peak], model_params[:total_hts_off_peak], model_params[:total_htl_peak], model_params[:total_htl_off_peak])
     if @auction.update(model_params)
-
+      AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
       # $redis.sadd(@auction.id , @auction.to_json)
       # $redis.set(@auction.id, @auction.to_json)
       render json: @auction, status: 200
@@ -56,6 +57,7 @@ class Api::AuctionsController < Api::BaseController
   # PUT publish auction by ajax
   def publish
     if @auction.update(publish_status: params[:publish_status])
+      AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
       render json: @auction, status: 200
     else
       render json: 'error code ', status: 500
@@ -68,15 +70,18 @@ class Api::AuctionsController < Api::BaseController
     # click hold
     if hold_status
       if @auction.update(hold_status: hold_status)
+        AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
         render json: {hold_status: true, forward: false}, status: 200
       end
     elsif !hold_status && Time.now < @auction.actual_begin_time
       if @auction.update(hold_status: hold_status)
+        AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
         render json: {hold_status: false, forward: false}, status: 200
       end
     elsif !hold_status && Time.now > @auction.actual_begin_time
       if @auction.update(hold_status: hold_status, actual_begin_time: Time.now, actual_end_time: Time.now + 60 * @auction.duration)
-        link = set_link(@auction.id, 'dashboard')
+        # link = set_link(@auction.id, 'dashboard')
+        AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
         render json: {hold_status: false, forward: true}, status: 200
       end
     end
@@ -119,6 +124,7 @@ class Api::AuctionsController < Api::BaseController
       result.user_id = params[:user_id]
 
       if result.save
+        AuctionEvent.set_events(current_user.id, @auction.id, request[:action], result.to_json)
         render json: result
       end
 
