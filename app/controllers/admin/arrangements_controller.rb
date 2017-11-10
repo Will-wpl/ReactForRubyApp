@@ -1,8 +1,8 @@
 class Admin::ArrangementsController < Admin::BaseController
   before_action :set_arrangement, only: [:show, :edit, :update, :destroy]
 
-  before_action :set_arrangements_breadcrumbs
-  before_action :set_action_breadcrumbs
+  # before_action :set_arrangements_breadcrumbs
+  # before_action :set_action_breadcrumbs
 
 
 

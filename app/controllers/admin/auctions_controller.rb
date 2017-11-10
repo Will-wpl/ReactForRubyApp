@@ -1,8 +1,8 @@
 class Admin::AuctionsController < Admin::BaseController
   before_action :set_auction, only: [:show, :edit, :update, :destroy, :publish]
   after_action :set_login_status, only: [:new, :empty, :upcoming, :online, :dashboard, :confirm, :result, :report, :log]
-  before_action :set_auctions_breadcrumbs
-  before_action :set_action_breadcrumbs
+  # before_action :set_auctions_breadcrumbs
+  # before_action :set_action_breadcrumbs
 
   # GET create auction page
   def new; end
@@ -91,9 +91,9 @@ class Admin::AuctionsController < Admin::BaseController
     params.require(:auction).permit(:name, :start_datetime, :contract_period_start_date, :contract_period_end_date, :duration, :reserve_price)
   end
 
-  def set_auctions_breadcrumbs
-    add_breadcrumb 'Home', admin_home_index_path
-    add_breadcrumb Auction.model_name.human.pluralize, admin_auctions_path
-    add_breadcrumb @auction.name_was, admin_auction_path(@auction) if @auction.try(:persisted?)
-  end
+  # def set_auctions_breadcrumbs
+  #   add_breadcrumb 'Home', admin_home_index_path
+  #   add_breadcrumb Auction.model_name.human.pluralize, admin_auctions_path
+  #   add_breadcrumb @auction.name_was, admin_auction_path(@auction) if @auction.try(:persisted?)
+  # end
 end
