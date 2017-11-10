@@ -6,7 +6,8 @@ export default class BidForm extends Component {
         super(props);
         this.state = {
             configs: ['0000', '0000', '0000', '0000', '0000', '0000'],
-            changed: true
+            changed: true,
+            error:false
         }
     }
 
@@ -47,11 +48,28 @@ export default class BidForm extends Component {
         console.log(isChanged);
         if (this.props.onSubmit && isChanged) {
             this.props.onSubmit(this.state.configs);
+            this.setState({
+                error:false
+            })
+        }else{
+            this.setState({
+                error:true
+            })
+            setTimeout(()=>{
+                this.setState({
+                    error:false
+                })
+            },5000)
         }
     }
 
     render() {
+        let error_html = '';
+        !this.state.error ? error_html ='' : error_html = <div className="number_error">Invalid submission. Please check that your bid submission fulfils the following criteria:<br/>
+                                                                                        1.None of the values should be higher than its previous value<br/>
+                                                                                        2.At least one of the values must be lower than its previous value</div>;
         return (
+            <div className="number_form">
             <form>
                 <h3>Enter My Bids</h3>
                 <table className="retailer_fill u-mt2">
@@ -80,7 +98,9 @@ export default class BidForm extends Component {
                     </tbody>
                 </table>
                 <button type="button" className="lm--button lm--button--primary u-mt2 fright" onClick={this.onSubmit.bind(this)}>Submit</button>
+                {error_html}
             </form>
+            </div>
         );
     }
 }
