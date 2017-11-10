@@ -40,7 +40,7 @@ class Retailer::AuctionsController < Retailer::BaseController
   def gotobid
     @auction = Auction.first
     arrangement = Arrangement.find_by_user_id(current_user.id)
-    if @auction.publish_status != '1' || (arrangement.accept_status != '1') || (@auction.publish_status == '1' && @auction.actual_end_time < Time.now && @auction.auction_result.exists?)
+    if @auction.publish_status != '1' || (arrangement.accept_status != '1') || (@auction.publish_status == '1' && @auction.actual_end_time < Time.now ) && (@auction.auction_result.nil?)
       redirect_to message_retailer_auctions_path()
     elsif @auction.publish_status == '1' && Time.now < @auction.actual_begin_time && arrangement.accept_status == '1'
       redirect_to live_retailer_auction_path(@auction.id)
@@ -53,7 +53,7 @@ class Retailer::AuctionsController < Retailer::BaseController
 
   def message
     @auction = Auction.first
-    if @auction.publish_status != '1' || (@auction.publish_status == '1' && @auction.actual_end_time < Time.now && @auction.auction_result.exists?)
+    if @auction.publish_status != '1' || (@auction.publish_status == '1' && @auction.actual_end_time < Time.now) && (@auction.auction_result.nil?)
       @message = "There is no upcoming reverse auction published."
     elsif Arrangement.find_by_user_id(current_user.id).accept_status != '1'
       @message = "Please enter the upcoming reverse auction information. You may click on 'Manage Upcoming Reverse Auction' in homepage."
