@@ -83,17 +83,24 @@ class AuctionHistory < ApplicationRecord
     ids = []
     flag = SecureRandom.uuid
     current_time = Time.now
+    count = 0
+    tmp_average_price = nil
     histories.each_with_index do |history, index|
+      if tmp_average_price == history.average_price
+        count += 1
+      else
+        count = 0
+      end
       # puts history, index
       if history.id == current_history_id
-        ids.push(history.id) if history.update(ranking: index + 1, flag: flag, bid_time: current_time)
+        ids.push(history.id) if history.update(ranking: index + 1 - count, flag: flag, bid_time: current_time)
         # update
       else
         # save
         history_new = AuctionHistory.new
         history_new.auction_id = history.auction_id
         history_new.user_id = history.user_id
-        history_new.ranking = index + 1
+        history_new.ranking = index + 1 - count
         history_new.average_price = history.average_price
         history_new.lt_peak = history.lt_peak
         history_new.lt_off_peak = history.lt_off_peak
@@ -107,8 +114,8 @@ class AuctionHistory < ApplicationRecord
         history_new.flag = flag
         ids.push(history_new.id) if history_new.save
       end
+      tmp_average_price = history.average_price
     end
-
     # histories = AuctionHistory.find(ids)
     histories = AuctionHistory.select('auction_histories.* , users.company_name').joins(:user).find(ids)
     histories
