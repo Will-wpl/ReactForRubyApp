@@ -17,12 +17,12 @@ Rails.application.routes.draw do
   end
 
   namespace :api do
-    resources :arrangements do
+    resources :arrangements, only: [:index, :show, :obtain, :update] do
       collection do
         get 'obtain'
       end
     end
-    resources :auctions do
+    resources :auctions, only: [:obtain, :link, :create, :update, :publish, :hold, :timer, :confirm, :logout] do
       member do
         get 'timer'
         put 'publish'
@@ -35,7 +35,7 @@ Rails.application.routes.draw do
         post 'logout'
       end
     end
-    resource :auction_histories do
+    resource :auction_histories, only: [:show, :list, :last] do
       collection do
         get 'list'
         get 'last'
@@ -47,13 +47,13 @@ Rails.application.routes.draw do
     # get '/' => 'admin/home#index'
     resources :home, only: :index
     resources :users
-    resources :auction_results
-    resources :auction_histories
-    resources :auction_events
-    resources :arrangements
-    resources :user_extensions
-    resources :auction_extend_times
-    resources :auctions do
+    resources :auction_results, only: [:index]
+    resources :auction_histories, only: []
+    resources :auction_events, only: []
+    resources :arrangements, only: []
+    resources :user_extensions, only: []
+    resources :auction_extend_times, only: []
+    resources :auctions, only: [:new, :empty, :goto, :upcoming, :online, :dashboard, :confirm, :result, :report, :log] do
       member do
         get 'upcoming' # published and pre-auction page
         get 'online' # published and pre-auciton page to retailer online status page
@@ -72,9 +72,9 @@ Rails.application.routes.draw do
 
   namespace :retailer do
     resources :home, only: :index
-    resources :arrangements
-    resources :auction_results
-    resources :auctions do
+    resources :arrangements, only: []
+    resources :auction_results, only: [:index]
+    resources :auctions, only: [:upcoming, :live, :finish, :result, :empty, :goto, :message, :gotobid] do
       member do
         get 'upcoming' # upcoming auction page
         get 'live' # standby and live page
