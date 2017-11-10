@@ -60,6 +60,9 @@ export class DuringCountDown extends Component {
         let second = Math.floor(divider - day * 24 * 60 * 60 - hour * 3600 - minute * 60);
         let left = minute || second;
         this.setState({minute: minute, second: second});
+        if (this.props.onSecondBreaker && second === this.props.secondBreaker) {
+            this.props.onSecondBreaker();
+        }
         if (left <= 0) {
             return true;
         }
@@ -86,5 +89,6 @@ export class DuringCountDown extends Component {
 }
 
 DuringCountDown.defaultProps = {
-    title:'Reverse Auction has commenced. Please start bidding.'
+    title:'Reverse Auction has commenced. Please start bidding.',
+    secondBreaker: 5
 }
