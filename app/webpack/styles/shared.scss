@@ -94,8 +94,8 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 .reservePrice{ 
   width: 86%; margin: 10px auto; line-height:22px;
   span{ margin-right: 10px;}
-  span.success{ color:green}
-  span.fail{ color:red}
+  span.success{ color:green; background: url("../images/achieved.png") no-repeat left; padding-left:20px;}
+  span.fail{ color:red; background: url("../images/not_achieved.png") no-repeat left; padding-left:20px;}
 }
 
 //winnerPirce

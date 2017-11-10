@@ -17,10 +17,29 @@ export class AdminManagePublishedRa extends Component {
         }
         this.auction = {};
     }
+    getBidderList(){
+        getBidderStatus({auction_id:this.auction.id}).then(res => {
+            console.log(res);
+            this.setState({
+                dataList:res,
+            })
+        }, error => {
+            console.log(error);
+        })
+    }
     componentDidMount(){
+        if(this.interval){
+            clearInterval(this.interval);
+        }
+        this.interval = setInterval(()=>{
+            this.getBidderList();
+        },5000);
+    }
+    componentWillMount(){
         getAuctionInVersionOne().then(res => {
             this.auction = res;
             this.timerTitle = this.auction ? `${this.auction.name} on ${moment(this.auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
+            this.getBidderList();
             //this.forceUpdate();
             // if(this.auction.publish_status == 1){
             //     this.setState({
@@ -34,20 +53,9 @@ export class AdminManagePublishedRa extends Component {
             //     })
             // }
             //console.log(res);
-            getBidderStatus({auction_id:res.id}).then(res => {
-                //console.log(res);
-                this.setState({
-                    dataList:res,
-                })
-            }, error => {
-                console.log(error);
-            })
         }, error => {
             console.log(error);
         })
-    }
-    componentWillMount(){
-
     }
     render () {
         return (
