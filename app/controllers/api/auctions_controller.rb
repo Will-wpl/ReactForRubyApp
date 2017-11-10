@@ -1,5 +1,5 @@
 class Api::AuctionsController < Api::BaseController
-  before_action :set_auction, only: [:update, :publish, :timer, :hold, :confrim]
+  before_action :set_auction, only: [:update, :publish, :timer, :hold, :confirm]
 
   # GET auction info by ajax
   def obtain
@@ -100,38 +100,76 @@ class Api::AuctionsController < Api::BaseController
   # POST confirm
   def confirm
     status = params[:status]
-    result = AuctionResult.new
-    if status == 'void'
-      result.auction_id = params[:id]
-      result.status = 'void'
-    else
-      history = AuctionHistory.where('auction_id = ? and user_id = ? and is_bidder = true ', params[:id], params[:user_id]).order(bid_time: :desc).first
-      user = User.find(params[:user_id])
-      result.reserve_price = @auction.reserve_price
-      result.lowest_average_price = history.average_price
-      result.status = 'winner'
-      result.lowest_price_bidder = user.company_name
-      result.contract_period_start_date = @auction.contract_period_start_date
-      result.contract_period_end_date = @auction.contract_period_end_date
-      result.total_volume = @auction.total_volume
-      result.total_award_sum = history.total_award_sum
-      result.lt_peak = history.lt_peak
-      result.lt_off_peak = history.lt_off_peak
-      result.hts_peak = history.hts_peak
-      result.hts_off_peak = history.hts_off_peak
-      result.htl_peak = history.htl_peak
-      result.htl_off_peak = history.htl_off_peak
-      result.user_id = params[:user_id]
-
+    auction_result = AuctionResult.find_by_auction_id(params[:id])
+    if auction_result.nil?
+      result = AuctionResult.new
+      if status == 'void'
+        result.auction_id = params[:id]
+        result.status = 'void'
+      else
+        history = AuctionHistory.where('auction_id = ? and user_id = ? and is_bidder = true ', params[:id], params[:user_id]).order(bid_time: :desc).first
+        user = User.find(params[:user_id])
+        result.reserve_price = @auction.reserve_price
+        result.lowest_average_price = history.average_price
+        result.status = 'winner'
+        result.lowest_price_bidder = user.company_name
+        result.contract_period_start_date = @auction.contract_period_start_date
+        result.contract_period_end_date = @auction.contract_period_end_date
+        result.total_volume = @auction.total_volume
+        result.total_award_sum = history.total_award_sum
+        result.lt_peak = history.lt_peak
+        result.lt_off_peak = history.lt_off_peak
+        result.hts_peak = history.hts_peak
+        result.hts_off_peak = history.hts_off_peak
+        result.htl_peak = history.htl_peak
+        result.htl_off_peak = history.htl_off_peak
+        result.user_id = params[:user_id]
+      end
       if result.save
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], result.to_json)
         render json: result
       end
-
+    else
+      if status == 'void'
+        auction_result.reserve_price = nil
+        auction_result.lowest_average_price = nil
+        auction_result.status = 'void'
+        auction_result.lowest_price_bidder = nil
+        auction_result.contract_period_start_date = nil
+        auction_result.contract_period_end_date = nil
+        auction_result.total_volume = nil
+        auction_result.total_award_sum = nil
+        auction_result.lt_peak = nil
+        auction_result.lt_off_peak = nil
+        auction_result.hts_peak = nil
+        auction_result.hts_off_peak = nil
+        auction_result.htl_peak = nil
+        auction_result.htl_off_peak = nil
+        auction_result.user_id = nil
+      else
+        auction_result.reserve_price = @auction.reserve_price
+        auction_result.lowest_average_price = history.average_price
+        auction_result.status = 'winner'
+        auction_result.lowest_price_bidder = user.company_name
+        auction_result.contract_period_start_date = @auction.contract_period_start_date
+        auction_result.contract_period_end_date = @auction.contract_period_end_date
+        auction_result.total_volume = @auction.total_volume
+        auction_result.total_award_sum = history.total_award_sum
+        auction_result.lt_peak = history.lt_peak
+        auction_result.lt_off_peak = history.lt_off_peak
+        auction_result.hts_peak = history.hts_peak
+        auction_result.hts_off_peak = history.hts_off_peak
+        auction_result.htl_peak = history.htl_peak
+        auction_result.htl_off_peak = history.htl_off_peak
+        auction_result.user_id = params[:user_id]
+      end
+      if auction_result.save
+        AuctionEvent.set_events(current_user.id, @auction.id, request[:action], auction_result.to_json)
+        render json: auction_result
+      end
     end
 
 
-    AuctionResult
 
   end
 
