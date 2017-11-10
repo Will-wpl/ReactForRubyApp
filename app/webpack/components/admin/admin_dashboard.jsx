@@ -17,7 +17,8 @@ import {Modal} from '../shared/show-modal';
 export class AdminDashboard extends Component {
     constructor(props){
         super(props);
-        this.state = {users:[], extendedValue:1, realtimeData:[], realtimeRanking:[], currentPrice:'0.0000'};
+        this.state = {users:[], realtimeData:[], realtimeRanking:[], currentPrice:'0.0000'};
+        this.lastInput = 1;
     }
 
     componentDidMount() {
@@ -29,7 +30,7 @@ export class AdminDashboard extends Component {
 
             this.createWebsocket(auction? auction.id : 1);
             getHistories({ auction_id: auction? auction.id : 1}).then(histories => {
-                console.log('histories', histories);
+                // console.log('histories', histories);
                 let orderRanking = histories.map(element => {
                     return element.data.length > 0 ? element.data[element.data.length - 1] : []
                 })
@@ -62,7 +63,7 @@ export class AdminDashboard extends Component {
                     data.data.forEach((element, index) => {
                         histories.push({id: element.user_id, data:[].concat(element)})
                     })
-                    this.setState({realtimeData: histories, realtimeRanking: histories
+                    this.setState({realtimeData: histories, realtimeRanking: data.data
                         , currentPrice : histories.length > 0 ? histories[0].average_price : this.state.currentPrice});
                 }
             }
@@ -80,17 +81,18 @@ export class AdminDashboard extends Component {
 
     onExtendInputChanged(e) {
         if (Number(e.target.value) >0 && Number(e.target.value) <=60) {
-            this.setState({extendedValue: e.target.value});
+            this.refs.extendedValue.value = e.target.value;
+            this.lastInput = e.target.value;
+        } else {
+            this.refs.extendedValue.value = this.lastInput;
         }
     }
     showModal(){
         this.refs.Modal.showModal("comfirm");
     }
     extendTime() {
-        this.ws.sendMessage('extend_time', {'extend_time' : `${this.state.extendedValue}`});
-        this.setState({
-            extendedValue:1
-        })
+        this.ws.sendMessage('extend_time', {'extend_time' : `${parseInt(this.refs.extendedValue.value})`});
+        this.refs.extendedValue.value = 1;
     }
 
     goToFinish() {
@@ -103,7 +105,7 @@ export class AdminDashboard extends Component {
                 <DuringCountDown auction={this.auction} countDownOver={this.goToFinish.bind(this)} onSecondBreaker={() => {this.refs.submitBtn.disabled='disabled'}}>
                     <div id="admin_hold">
                         <span>Extend Time:</span>
-                        <input type="number" className="fill_hold" maxLength="2" value={this.state.extendedValue} onChange={this.onExtendInputChanged.bind(this)}/>
+                        <input type="number" className="fill_hold" maxLength="2" ref="extendedValue" defaultValue={1} onChange={this.onExtendInputChanged.bind(this)}/>
                         <span>Min</span>
                         <input type="button" className="hold_submit" value="Submit" onClick={this.showModal.bind(this)} ref="submitBtn" />
                     </div>
