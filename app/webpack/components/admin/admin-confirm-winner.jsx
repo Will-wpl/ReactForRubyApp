@@ -96,7 +96,7 @@ render() {
     return (
         <div>
             <div className="time_cuntdown during">
-            <p>Reverse Auction has ended. Please proceed to confirm the outcome </p>
+            <p>Reverse Auction has ended. Please proceed to confirm the outcome. </p>
             </div>
                 <div className="u-grid u-mt2">
                     <div className="col-sm-12 col-md-6 u-cell">
