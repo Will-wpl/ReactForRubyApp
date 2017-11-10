@@ -14,9 +14,9 @@ class Retailer::AuctionsController < Retailer::BaseController
 
   def empty
     @auction = Auction.first
-    if @auction.publish_status != '1' || (@auction.publish_status == '1' && @auction.actual_end_time < Time.now && @auction.auction_result.exists?)
+    if @auction.publish_status != '1' || (@auction.publish_status == '1' && @auction.actual_end_time < Time.now && @auction.auction_result.nil?)
       @message = "There is no upcoming reverse auction published."
-    elsif (@auction.publish_status == '1' && @auction.actual_begin_time < Time.now && Time.now < @auction.actual_end_time) || (!@auction.auction_result.exists?)
+    elsif (@auction.publish_status == '1' && @auction.actual_begin_time < Time.now && Time.now < @auction.actual_end_time) || (!@auction.auction_result.nil?)
       auction_name = @auction.name
       @message = "#{auction_name} is currently in progress. Please click on 'Start Bidding' button to participate."
     end
@@ -24,7 +24,7 @@ class Retailer::AuctionsController < Retailer::BaseController
 
   def goto
     @auction = Auction.first
-    if @auction.publish_status != '1' || (@auction.publish_status == '1' && @auction.actual_begin_time < Time.now && Time.now < @auction.actual_end_time) || (!@auction.auction_result.exists?)
+    if @auction.publish_status != '1' || (@auction.publish_status == '1' && @auction.actual_begin_time < Time.now && Time.now < @auction.actual_end_time) || (!@auction.auction_result.nil?)
       redirect_to empty_retailer_auctions_path()
     elsif @auction.publish_status == '1' && Time.now < @auction.actual_begin_time
       redirect_to upcoming_retailer_auction_path(@auction.id)
@@ -46,7 +46,7 @@ class Retailer::AuctionsController < Retailer::BaseController
       redirect_to live_retailer_auction_path(@auction.id)
     elsif @auction.publish_status == '1' && @auction.actual_begin_time < Time.now && Time.now < @auction.actual_end_time && arrangement.accept_status == '1'
       redirect_to live_retailer_auction_path(@auction.id)
-    elsif @auction.publish_status == '1' && @auction.actual_end_time < Time.now && !@auction.auction_result.exists? && arrangement.accept_status == '1'
+    elsif @auction.publish_status == '1' && @auction.actual_end_time < Time.now && !@auction.auction_result.nil? && arrangement.accept_status == '1'
       redirect_to finish_retailer_auction_path(@auction.id)
     end
   end
