@@ -38,7 +38,7 @@ export default class WinnerPrice extends Component {
         <ul>
           <li><span>Contact Period: </span><span>{moment(this.props.winnerData.updated_at).format('LLL')}</span></li>
           <li><span>Total Volume: </span><span>{this.props.winnerData.total_volume} kWh</span><span> (forecasted)</span></li>
-          <li><span>Total Award Sum : </span><span>{this.props.winnerData.total_award_sum}</span><span> (forecasted)</span></li>
+          <li><span>Total Award Sum: </span><span>{this.props.winnerData.total_award_sum}</span><span> (forecasted)</span></li>
           </ul>
       </div>
     )
