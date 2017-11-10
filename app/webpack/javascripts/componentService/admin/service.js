@@ -39,3 +39,7 @@ export const arrangementDetail = (params) => {
 export const getHistories = (params) => {
     return get('/api/auction_histories/list', params);
 }
+
+export const auctionConfirm = (params) => {
+    return create('/api/auctions/'+params.id+'/confirm', params.data);
+}
