@@ -1,0 +1,36 @@
+.page-header
+  
+  h1= page_title(model: AuctionResult.model_name.human.pluralize)
+
+table.table.table-hover
+  thead
+    tr
+      th Name
+      th Date
+      th Result
+      th
+  tbody
+    - @auction_results.each do |auction_results|
+      tr
+
+        /td= link_to auction_history.id, admin_auction_history_path(auction_history)
+        td[data-label="Name"]= auction_results.name
+        td[data-label="Date"]= auction_results.start_datetime
+        td[data-label="Result"]= auction_results.status
+        /td.text-right
+        /  = link_to admin_auction_history_path(auction_history), class: "btn btn-success btn-sm" do
+        /    = icon "eye", t("views.actions.show")
+        /  ' &nbsp;
+        /  = link_to edit_admin_auction_history_path(auction_history), class: "btn btn-warning btn-sm" do
+        /    = icon "edit", t("views.actions.edit")
+        /  ' &nbsp;
+        /  = link_to admin_auction_history_path(auction_history), class: "btn btn-danger btn-sm", method: :delete, data: {confirm: t('views.confirm'), disable_with: t('views.disable_with')} do
+        /    = icon "trash", t("views.actions.destroy")
+
+hr
+
+.row
+  .col-sm-6
+    = page_entries_info @auction_results, entry_name: AuctionResult.model_name.human
+  .col-sm-6
+    = paginate(@auction_results)

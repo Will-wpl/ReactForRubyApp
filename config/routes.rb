@@ -73,6 +73,7 @@ Rails.application.routes.draw do
   namespace :retailer do
     resources :home, only: :index
     resources :arrangements
+    resources :auction_results
     resources :auctions do
       member do
         get 'upcoming' # upcoming auction page
