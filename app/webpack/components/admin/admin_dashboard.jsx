@@ -91,7 +91,7 @@ export class AdminDashboard extends Component {
         this.refs.Modal.showModal("comfirm");
     }
     extendTime() {
-        this.ws.sendMessage('extend_time', {'extend_time' : `${parseInt(this.refs.extendedValue.value})`});
+        this.ws.sendMessage('extend_time', {'extend_time' : `${parseInt(this.refs.extendedValue.value)}`});
         this.refs.extendedValue.value = 1;
     }
 
