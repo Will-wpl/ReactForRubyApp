@@ -145,9 +145,9 @@ function getTemplate(props) {
             axisTick: {
                 show: false
             },
-            max: function (value) {
-                return 1;
-            },
+            // max: function (value) {
+            //     return 1;
+            // },
             axisLine: {
                 lineStyle: {
                     color: 'white'
