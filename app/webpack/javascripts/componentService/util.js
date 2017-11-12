@@ -38,7 +38,7 @@ export const getNumBref = (num) => {
             suffix = 'st';
             break;
         case 2:
-            suffix = 'nd';
+            suffix = '';
             break;
         case 3:
             suffix = 'rd';
