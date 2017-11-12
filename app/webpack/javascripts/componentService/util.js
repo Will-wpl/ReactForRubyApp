@@ -7,7 +7,7 @@ export const findUpLimit = (curValue) => {
         // return curValue * 10 / Number(`${curValue}`.substr(0, 1));
         return arr.join('');
     }
-    return 0;
+    return 1;
 }
 
 export const getRandomColor = (intNum) => {
