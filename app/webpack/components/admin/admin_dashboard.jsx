@@ -80,8 +80,9 @@ export class AdminDashboard extends Component {
                     data.data.forEach((element, index) => {
                         histories.push({id: element.user_id, data:[].concat(element)})
                     })
+                    console.log('data.data[0].average_price', data.data[0].average_price);
                     this.setState({realtimeData: histories, realtimeRanking: data.data
-                        , currentPrice : histories.length > 0 ? histories[0].average_price : this.state.currentPrice});
+                        , currentPrice : data.data[0].average_price});
                 }
             }
             if (data.action === 'extend_time') {
