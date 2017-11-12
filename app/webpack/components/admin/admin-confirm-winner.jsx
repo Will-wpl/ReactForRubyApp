@@ -48,11 +48,8 @@ componentDidMount() {
             console.log('histories', data);
             this.winner.data = data.histories[0];
             this.winner.auction = data.auction;
-            //this.winnerdata = data.histories[0];
-            //this.winnerauction=data.auction
             //orderRanking.sort(this.compare("average_price"))
             this.setState({realtimeRanking:data.histories,currentPrice : data.histories.length > 0 ? data.histories[0].average_price : this.state.currentPrice});
-            //console.log(this.winnerdata);
         })
     })
 }
