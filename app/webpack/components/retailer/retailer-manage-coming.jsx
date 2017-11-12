@@ -143,8 +143,7 @@ export class RetailerManage extends Component {
         : btn_html = !this.state.btn_status ? <a className="lm--button lm--button--primary" onClick={this.btnStatus.bind(this)}>Edit</a> 
                        :<div><button className="lm--button lm--button--primary" >Submit</button>
                         <a className="lm--button lm--button--primary" onClick={this.cancel.bind(this)}>Cancel</a>
-                        </div>;
-        
+                        </div>;       
         return (
             <div>
             <div id="live_modal" className={this.state.live_modal}>

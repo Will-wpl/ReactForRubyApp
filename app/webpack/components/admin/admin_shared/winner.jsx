@@ -23,7 +23,7 @@ export default class WinnerPrice extends Component {
   } 
   render() {
     console.log(this.props.winner);
-    return this.props.winner ? ( 
+    return this.props.winner.data ? ( 
       <div className="winnerPrice_main">
         <h2 className={this.props.showOrhide}><span className={this.props.statusColor}>Status : {this.props.showStatus}</span></h2>
         <h4 className="u-mt1">Summary of Lowest Bidder</h4>
@@ -52,7 +52,7 @@ export default class WinnerPrice extends Component {
           </ul>
       </div>
     ):(
-      <div className="winnerPrice_main"></div>
+      <div className="winnerPrice_main">no data</div>
     )
   }
 }
