@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import RetailerRanking from './admin_shared/ranking';
 import ReservePrice from './admin_shared/reserveprice';
 import WinnerPrice from './admin_shared/winner';
-import {getHistories,auctionConfirm} from '../../javascripts/componentService/admin/service';
+import {getHistoriesLast,auctionConfirm} from '../../javascripts/componentService/admin/service';
 import {getAuction} from '../../javascripts/componentService/common/service';
 import {Modal} from '../shared/show-modal';
 import moment from 'moment';
@@ -36,9 +36,10 @@ compare(prop) {
 }
 componentDidMount() {
     getAuction().then(auction => {
+        //console.log(auction);
         this.auction = auction;
         this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000'
-        getHistories({ auction_id: auction? auction.id : 1}).then(histories => {
+        getHistoriesLast({ auction_id: auction? auction.id : 1}).then(histories => {
             console.log('histories', histories);
             let orderRanking = histories.map(element => {
                 return element.data.length > 0 ? element.data[element.data.length - 1] : []
