@@ -40,6 +40,10 @@ export const getHistories = (params) => {
     return get('/api/auction_histories/list', params);
 }
 
+export const getHistoriesLast = (params) => {
+    return get('/api/auction_histories/last', params);
+}
+
 export const auctionConfirm = (params) => {
     return create('/api/auctions/'+params.id+'/confirm', params.data);
 }
