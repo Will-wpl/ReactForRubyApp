@@ -13,8 +13,12 @@ export class RetailerManage extends Component {
         this.state={
             id:"",
             text:"",
-            type:"",live_modal:"",live_modal_do:""
+            type:"",live_modal:"",live_modal_do:"",
+            btn_status:false,
+            disabled:false,
+            havedata:false
         }
+        this.auctionData = {};
     }
     componentWillMount(){
         getAuctionInVersionOne().then(res=>{
@@ -36,11 +40,26 @@ export class RetailerManage extends Component {
         })
     }
     componentDidMount() {
+        this.getRetailerAuction();
+    }
+    getRetailerAuction(){
         let auction_id = window.location.href.split("auctions/")[1];
         auction_id = auction_id.split("/upcoming")[0];
         let user_id = getLoginUserId();
         getRetailerAuctionInVersionOne({ auction_id: auction_id, user_id: user_id}).then(res => {
-            console.log(res);
+            //console.log(res);
+            if(res.main_name && res.main_email_address && res.main_mobile_number && res.main_office_number){
+                this.setState({
+                    disabled:true,
+                    havedata:true
+                })
+            }else{
+                this.setState({
+                    disabled:false,
+                    havedata:false
+                })
+            }
+            this.auctionData = res;
             this.setState({id:res.id})
             this.refs.main_name.value = res.main_name;
             this.refs.main_email_address.value = res.main_email_address;
@@ -60,11 +79,6 @@ export class RetailerManage extends Component {
             console.log(error);
         })
     }
-    dosubmit(type,e){
-        this.setState({
-            type:type
-        })
-    }
     padZero(num, n) { 
         let len = num.toString().split('.')[1].length; 
         while(len < n) { 
@@ -73,6 +87,19 @@ export class RetailerManage extends Component {
         } 
         return num; 
     } 
+    btnStatus(){
+        this.setState({
+            btn_status:true,
+            disabled:false
+        })
+    }
+    cancel(){
+        this.getRetailerAuction();
+        this.setState({
+            btn_status:false,
+            disabled:true
+        })
+    }
     checkSuccess(event,obj){
         event.preventDefault();
         retailManageComing({
@@ -99,6 +126,10 @@ export class RetailerManage extends Component {
                 this.setState({
                     text:"Your details have been successfully submitted. You may click on 'Start Bidding' in homepage to standby for the live reverse auction."
                 });
+                this.setState({
+                    btn_status:false,
+                    disabled:true
+                })
                 // setTimeout(() => {
                 //     window.location.href="/retailer/home"
                 // },3000);
@@ -107,6 +138,13 @@ export class RetailerManage extends Component {
             })
     }
     render () {
+        let btn_html ='';
+        !this.state.havedata ? btn_html = <button className="lm--button lm--button--primary" >Submit</button> 
+        : btn_html = !this.state.btn_status ? <a className="lm--button lm--button--primary" onClick={this.btnStatus.bind(this)}>Edit</a> 
+                       :<div><button className="lm--button lm--button--primary" >Submit</button>
+                        <a className="lm--button lm--button--primary" onClick={this.cancel.bind(this)}>Cancel</a>
+                        </div>;
+        
         return (
             <div>
             <div id="live_modal" className={this.state.live_modal}>
@@ -145,7 +183,7 @@ export class RetailerManage extends Component {
                         <abbr title="required">*</abbr> Name:
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="main_name" ref="main_name" maxLength="150" required aria-required="true" title="The length must not be longer than 150 characters and must not contain numbers"></input>
+                            <input type="text" name="main_name" disabled={this.state.disabled} ref="main_name" maxLength="150" required aria-required="true" title="The length must not be longer than 150 characters and must not contain numbers"></input>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -153,7 +191,7 @@ export class RetailerManage extends Component {
                         <abbr title="required">*</abbr> Email Address:
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="main_email_address" ref="main_email_address" maxLength="50" required aria-required="true" pattern="^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$" title="Email must have @."></input>
+                            <input type="text" name="main_email_address" disabled={this.state.disabled} ref="main_email_address" maxLength="50" required aria-required="true" pattern="^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$" title="Email must have @."></input>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -161,7 +199,7 @@ export class RetailerManage extends Component {
                         <abbr title="required">*</abbr> Mobile Number: (+65)
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="main_mobile_number" ref="main_mobile_number" maxLength="50" required aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
+                            <input type="text" name="main_mobile_number" disabled={this.state.disabled} ref="main_mobile_number" maxLength="50" required aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -169,7 +207,7 @@ export class RetailerManage extends Component {
                         <abbr title="required">*</abbr> Office Number: (+65)
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="main_office_number" ref="main_office_number" maxLength="50" required aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
+                            <input type="text" name="main_office_number" disabled={this.state.disabled} ref="main_office_number" maxLength="50" required aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
                         </div>
                     </div>
                     <h4 className="lm--formItem lm--formItem--inline string">Alternative Contact Person on Actual Bidding Day:</h4>
@@ -178,7 +216,7 @@ export class RetailerManage extends Component {
                         Name:
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="alternative_name" ref="alternative_name" maxLength="50"></input>
+                            <input type="text" name="alternative_name" disabled={this.state.disabled} ref="alternative_name" maxLength="50"></input>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -186,7 +224,7 @@ export class RetailerManage extends Component {
                         Email Address:
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="alternative_email_address" ref="alternative_email_address" maxLength="50"></input>
+                            <input type="text" name="alternative_email_address" disabled={this.state.disabled} ref="alternative_email_address" maxLength="50"></input>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -194,7 +232,7 @@ export class RetailerManage extends Component {
                         Mobile Number: (+65)
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="alternative_mobile_number" ref="alternative_mobile_number" maxLength="50"></input>
+                            <input type="text" name="alternative_mobile_number" disabled={this.state.disabled} ref="alternative_mobile_number" maxLength="50"></input>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -202,7 +240,7 @@ export class RetailerManage extends Component {
                         Office Number: (+65)
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="alternative_office_number" ref="alternative_office_number" maxLength="50"></input>
+                            <input type="text" name="alternative_office_number" disabled={this.state.disabled} ref="alternative_office_number" maxLength="50"></input>
                         </div>
                     </div>
                     <h3 className="u-mt3 u-mb1"><abbr title="required">*</abbr>Section C: Starting Bid Price</h3>
@@ -215,20 +253,20 @@ export class RetailerManage extends Component {
                             <tbody>
                                 <tr>
                                     <td>Peak (7am-7pm)</td>
-                                    <td>$ 0.<input type="tel" maxLength="4" className="col" name="lt_peak" ref="lt_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="tel" disabled={this.state.disabled} maxLength="4" className="col" name="lt_peak" ref="lt_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td>
-                                    <td>$ 0.<input type="tel" maxLength="4" name="hts_peak" ref="hts_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="tel" disabled={this.state.disabled} maxLength="4" name="hts_peak" ref="hts_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td>
-                                    <td>$ 0.<input type="tel" maxLength="4" name="htl_peak" ref="htl_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="tel" disabled={this.state.disabled} maxLength="4" name="htl_peak" ref="htl_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Off-Peak (7pm-7am)</td>
-                                    <td>$ 0.<input type="tel" maxLength="4" name="lt_off_peak" ref="lt_off_peak" required aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="tel" disabled={this.state.disabled} maxLength="4" name="lt_off_peak" ref="lt_off_peak" required aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td>
-                                    <td>$ 0.<input type="tel" maxLength="4" name="hts_off_peak" ref="hts_off_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="tel" disabled={this.state.disabled} maxLength="4" name="hts_off_peak" ref="hts_off_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td> 
-                                    <td>$ 0.<input type="tel" maxLength="4" name="htl_off_peak" ref="htl_off_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
+                                    <td>$ 0.<input type="tel" disabled={this.state.disabled} maxLength="4" name="htl_off_peak" ref="htl_off_peak" required  aria-required="true" pattern="^\d{4}$" title="Price must be a number with 4 decimal places, e.g. $0.0891/kWh."></input>
                                     </td>
                                 </tr>
                             </tbody>
@@ -236,7 +274,7 @@ export class RetailerManage extends Component {
                     </div>
                     <div className="retailer_btn">
                         {/* <button className="lm--button lm--button--primary">Reject Participation</button> */}                       
-                        <button className="lm--button lm--button--primary" >Submit</button>
+                        {btn_html}
                     </div>
                 </div>
             </div>
