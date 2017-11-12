@@ -26,14 +26,17 @@ export class RetailsOnlineStatus extends Component {
                 <div className="col-sm-12 col-md-12">
                 <ul className="bidders_list">
                     {
-                        this.props.list_data.map((item,index) => {
+                        this.props.list_data.length > 0 ? this.props.list_data.map((item,index) => {
                         return(
                             <li key={index} className="u-grid">
-                                <span className="col-sm-9 col-md-9">{item.company_name}</span>
-                                <span className="col-sm-3 col-md-3" onClick={this.showDetail.bind(this,item.id)}><abbr className={this.props.onlineStatus}></abbr></span>
+                                <span className="col-sm-9 col-md-9" onClick={this.showDetail.bind(this,item.id)} title={item.company_name}>{item.company_name}</span>
+                                <span className="col-sm-3 col-md-3"><abbr className={this.props.onlineStatus}></abbr></span>
                             </li>
                             )
-                        })
+                        }) : <li className="u-grid">
+                                <span className="col-sm-9 col-md-9"></span>
+                                <span className="col-sm-3 col-md-3"><abbr className={this.props.onlineStatus}></abbr></span>
+                            </li>
                     }
                 </ul>               
                 </div>
