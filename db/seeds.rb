@@ -9,35 +9,35 @@ if User.count == 0
   Role.create(name: 'retailer')
   Role.create(name: 'buyer')
 
-  @mark = User.create(name: 'mark',
+  @mark = User.create(name: 'Keppel Electric Mark',
                       email: 'mark@example.com',
                       password: 'password',
                       password_confirmation: 'password',
                       company_name: 'Keppel Electric Mark')
   @mark.add_role :retailer
 
-  @brian = User.create(name: 'brian',
+  @brian = User.create(name: 'SembCorp Power Brian',
                        email: 'brian@example.com',
                        password: 'password',
                        password_confirmation: 'password',
                        company_name: 'SembCorp Power Brian')
   @brian.add_role :retailer
 
-  @jason = User.create(name: 'jason',
+  @jason = User.create(name: 'Tuas Power Supply Jason',
                        email: 'jason@example.com',
                        password: 'password',
                        password_confirmation: 'password',
                        company_name: 'Tuas Power Supply Jason')
   @jason.add_role :retailer
 
-  @will = User.create(name: 'will',
+  @will = User.create(name: 'Senoko Energy Supply Will',
                       email: 'will@example.com',
                       password: 'password',
                       password_confirmation: 'password',
                       company_name: 'Senoko Energy Supply Will')
   @will.add_role :retailer
 
-  @judy = User.create(name: 'judy',
+  @judy = User.create(name: 'Cleantech Solar Management Company Judy',
                       email: 'judy@example.com',
                       password: 'password',
                       password_confirmation: 'password',

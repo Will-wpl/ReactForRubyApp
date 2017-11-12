@@ -146,7 +146,7 @@ export class AdminDashboard extends Component {
                         <RetailerRanking ranking={this.state.realtimeRanking}/>
                     </div>
                 </div>
-                <Modal text="Are you sure extend this auction time?" acceptFunction={this.extendTime.bind(this)} ref="Modal" />
+                <Modal text="Please confirm your time extension." acceptFunction={this.extendTime.bind(this)} ref="Modal" />
             </div>
         )
     }
