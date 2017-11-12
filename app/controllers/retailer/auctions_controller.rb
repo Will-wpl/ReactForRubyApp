@@ -56,7 +56,7 @@ class Retailer::AuctionsController < Retailer::BaseController
     if @auction.publish_status != '1' || (@auction.publish_status == '1' && @auction.actual_end_time < Time.now) && (@auction.auction_result.nil?) || (@auction.auction_result.nil? && Time.now < @auction.actual_end_time)
       @message = "There is no upcoming reverse auction published."
     elsif Arrangement.find_by_user_id(current_user.id).accept_status != '1'
-      @message = "Please enter the upcoming reverse auction information. You may click on 'Manage Upcoming Reverse Auction' in homepage."
+      @message = "Please complete the necessary details under 'Manage Upcoming Reverse Auction' located in homepage."
     end
   end
 
