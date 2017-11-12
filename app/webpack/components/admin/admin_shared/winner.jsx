@@ -11,6 +11,16 @@ export default class WinnerPrice extends Component {
         }
     }
 }
+  padZero(num, n) { 
+    if(num){
+      let len = num.split('.')[1].length; 
+      while(len < n) { 
+      num = num+"0"; 
+      len++; 
+      } 
+      return num; 
+    }
+  } 
   render() {
     console.log(this.props.winner);
     return this.props.winner ? ( 
@@ -31,8 +41,8 @@ export default class WinnerPrice extends Component {
                 </tr>
             </thead>
             <tbody>
-                <tr><td>Peak (7am-7pm)</td><td>{this.props.winner.data.lt_peak}</td><td>{this.props.winner.data.hts_peak}</td><td>{this.props.winner.data.htl_peak}</td></tr>
-                <tr><td>Off-Peak (7pm-7am)</td><td>{this.props.winner.data.lt_off_peak}</td><td>{this.props.winner.data.hts_off_peak}</td><td>{this.props.winner.data.htl_off_peak}</td></tr>
+                <tr><td>Peak (7am-7pm)</td><td>{this.padZero(this.props.winner.data.lt_peak,4)}</td><td>{this.padZero(this.props.winner.data.hts_peak,4)}</td><td>{this.padZero(this.props.winner.data.htl_peak,4)}</td></tr>
+                <tr><td>Off-Peak (7pm-7am)</td><td>{this.padZero(this.props.winner.data.lt_off_peak,4)}</td><td>{this.padZero(this.props.winner.data.hts_off_peak,4)}</td><td>{this.padZero(this.props.winner.data.htl_off_peak,4)}</td></tr>
             </tbody>
       </table>
         <ul>
