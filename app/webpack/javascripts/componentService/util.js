@@ -7,7 +7,7 @@ export const findUpLimit = (curValue) => {
         // return curValue * 10 / Number(`${curValue}`.substr(0, 1));
         return arr.join('');
     }
-    return 0;
+    return 1;
 }
 
 export const getRandomColor = (intNum) => {
@@ -21,4 +21,33 @@ export const getLoginUserId = () => {
         return element.getAttribute('value');
     }
     return 0;
+}
+
+export const getNumBref = (num) => {
+    if (num <= 0) {
+        return `${num}`
+    }
+    if (num >= 11 && num <= 13) {
+        return `${num}th`;
+    }
+    let splices = Number(num).toString().split('');
+    let lastEle = splices[splices.length - 1];
+    let suffix;
+    switch (Number(lastEle)) {
+        case 1:
+            suffix = 'st';
+            break;
+        case 2:
+            suffix = 'nd';
+            break;
+        case 3:
+            suffix = 'rd';
+            break;
+        default:
+            suffix = 'th';
+            break;
+    }
+    splices[splices.length - 1] = `${lastEle}${suffix}`;
+    return splices.join('');
+
 }

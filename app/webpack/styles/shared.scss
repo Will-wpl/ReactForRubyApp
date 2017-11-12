@@ -148,6 +148,12 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 //   display:none;
 // }
 
+.table-body::-webkit-scrollbar{
+  display:none;
+ }
+ .table-body::-ms-scrollbar{
+  display:none;
+ }
 
 //retailer 
 .number_form{ position: relative; width: 100%;}

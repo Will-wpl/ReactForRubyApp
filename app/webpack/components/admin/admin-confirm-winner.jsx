@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import RetailerRanking from './admin_shared/ranking';
 import ReservePrice from './admin_shared/reserveprice';
 import WinnerPrice from './admin_shared/winner';
-import {getHistories,auctionConfirm} from '../../javascripts/componentService/admin/service';
+import {getHistoriesLast,auctionConfirm} from '../../javascripts/componentService/admin/service';
 import {getAuction} from '../../javascripts/componentService/common/service';
 import {Modal} from '../shared/show-modal';
 import moment from 'moment';
@@ -17,9 +17,14 @@ export default class AdminConfirmWinner extends Component {
             statusColor:"green",
             realtimeRanking:[], currentPrice:'0.0000',
         },
-        winnerdata:{},
         fnStatus:false,
         text:""
+    }
+    //this.winnerdata=[];
+    //this.winnerauction={};
+    this.winner = {
+        data:{},
+        auction:{}
     }
 }
 compare(prop) {
@@ -36,16 +41,17 @@ compare(prop) {
 }
 componentDidMount() {
     getAuction().then(auction => {
+        console.log(auction);
         this.auction = auction;
         this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000'
-        getHistories({ auction_id: auction? auction.id : 1}).then(histories => {
-            console.log('histories', histories);
-            let orderRanking = histories.map(element => {
-                return element.data.length > 0 ? element.data[element.data.length - 1] : []
-            })
-            orderRanking.sort(this.compare("average_price"))
-            this.setState({realtimeRanking: orderRanking,winnerdata:orderRanking[0]
-                , currentPrice : orderRanking.length > 0 ? orderRanking[0].average_price : this.state.currentPrice});
+        getHistoriesLast({ auction_id: auction? auction.id : 1}).then(data => {
+            console.log('histories', data);
+            this.winner.data = data.histories[0];
+            this.winner.auction = data.auction;
+            //this.winnerdata = data.histories[0];
+            //this.winnerauction=data.auction
+            //orderRanking.sort(this.compare("average_price"))
+            this.setState({realtimeRanking:data.histories,currentPrice : data.histories.length > 0 ? data.histories[0].average_price : this.state.currentPrice});
             //console.log(this.winnerdata);
         })
     })
@@ -70,7 +76,7 @@ showDetail(type,obj){
     }
 }
 void_auction(){
-    auctionConfirm({data:{ user_id: this.state.winnerdata.user_id , status:'void'},id:this.auction.id}).then(res=>{
+    auctionConfirm({data:{ user_id: this.winner.data.user_id , status:'void'},id:this.auction.id}).then(res=>{
         console.log(res);
         this.refs.Modal.showModal();
         this.setState({
@@ -81,18 +87,18 @@ void_auction(){
     })
 }
 confirm_winner(){
-    auctionConfirm({data:{ user_id: this.state.winnerdata.user_id , status:'win'},id:this.auction.id}).then(res=>{
+    auctionConfirm({data:{ user_id: this.winner.data.user_id , status:'win'},id:this.auction.id}).then(res=>{
         console.log(res);
         this.refs.Modal.showModal();
         this.setState({
-            text:this.state.winnerdata.company_name+"is the winner"
+            text:this.winner.data.company_name+"is the winner"
         })
     },error=>{
 
     })
 }
 render() {
-    console.log(this.state.winnerdata);
+    console.log(this.winner.data);
     return (
         <div>
             <div className="time_cuntdown during">
@@ -105,7 +111,7 @@ render() {
                     <div className="col-sm-12 col-md-6 u-cell">
                         <div className="col-sm-12 col-md-10 push-md-1">
                             <ReservePrice price={this.startPrice} realtimePrice={this.state.currentPrice} />
-                            <WinnerPrice showOrhide="hide" winnerData={this.state.winnerdata} />
+                            <WinnerPrice showOrhide="hide" winner={this.winner} />
                             <div className="winnerPrice_main">
                                 <a className="lm--button lm--button--primary u-mt3" onClick={this.showDetail.bind(this,'void')}>Void Reverse Auction</a>
                                 {/* <a className="lm--button lm--button--primary u-mt3" >Alternate Winner</a> */}
