@@ -4,7 +4,7 @@ import Description from './description';
 import Ranking from '../../common/chart/ranking';
 import BidForm from './bid-form';
 import BidHistory from './bid-history';
-import {getLoginUserId} from '../../../javascripts/componentService/util';
+import {getLoginUserId, getNumBref} from '../../../javascripts/componentService/util';
 import {getAuctionHistorys} from '../../../javascripts/componentService/retailer/service';
 import {createWebsocket, ACTION_COMMANDS} from '../../../javascripts/componentService/common/service';
 import moment from 'moment';
@@ -153,7 +153,7 @@ export default class LiveHomePage extends Component {
             <div>
                 <div className="u-grid u-mt2">
                     <div className="col-sm-12 col-md-5 u-cell">
-                        <div className="col-sm-12 col-md-10 push-md-1"><Description ranking={this.state.ranking}/></div>
+                        <div className="col-sm-12 col-md-10 push-md-1"><Description ranking={` ${getNumBref(this.state.ranking)}`}/></div>
                     </div>
                     <div className="col-sm-12 col-md-7 u-cell">
                         <div className="col-sm-12 col-md-10 push-md-1"><Ranking data={this.state.chartDatas}/></div>
