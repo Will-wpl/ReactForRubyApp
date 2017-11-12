@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import {RetailsOnlineStatus} from './admin_shared/retailers-online-status';
 import {TimeCuntDown} from '../shared/time-cuntdown';
-import {getAuctionInVersionOne,getBidderStatus} from '../../javascripts/componentService/admin/service';
+import {getAuctionInVersionOne,getBidderStatus, upateHoldStatus} from '../../javascripts/componentService/admin/service';
 import moment from 'moment';
 const ACTUAL_END_TIME = 'actual_end_time';
 const ACTUAL_CURRENT_TIME = 'current_time';
@@ -17,6 +17,7 @@ export class OnlineStatusMain extends Component {
             data_outline:[],
         }
         this.auction = {};
+        this.holdStatus = false;
     }
     componentDidMount(){
         let timeinterval
@@ -73,6 +74,12 @@ export class OnlineStatusMain extends Component {
     goToDashboard(){
         window.location.href=`/admin/auctions/${this.auction.id}/dashboard`
     }
+    hold() {
+        this.holdStatus = !this.holdStatus;
+        // ajax
+        upateHoldStatus(this.auction ? this.auction.id : 1, this.holdStatus);
+    }
+
     render (){
         return (
             <div className="onlineStatusMain">
@@ -102,7 +109,7 @@ export class OnlineStatusMain extends Component {
                         </div>
                     </div>
                     <div className="col-sm-12 col-md-10 push-md-1 u-mt3">
-                        <button className="lm--button lm--button--primary fright">Hold</button>
+                        <button className="lm--button lm--button--primary fright" onClick={this.hold.bind(this)}>Hold</button>
                     </div>
                 </div>
                 <div className="createRaMain u-grid">

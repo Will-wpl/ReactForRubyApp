@@ -44,6 +44,9 @@ export class TimeCuntDown extends Component {
             getAuctionTimeRule(auction.id).then(res => {
                 //console.log('pre start time ==>', moment(res[ACTUAL_BEGIN_TIME]).format('YYYY-MM-DD hh:mm:ss'))
                 //console.log('pre now time ==>', moment(res[ACTUAL_CURRENT_TIME]).format('YYYY-MM-DD hh:mm:ss'))
+                if (this.props.listenHold) {
+                    this.props.listenHold(res[HOLD_STATUS]);
+                }
                 let isOver = this.isCountDownOver(moment(res[ACTUAL_BEGIN_TIME]).toDate().getTime()
                     , moment(res[ACTUAL_CURRENT_TIME]).toDate().getTime());
                 if (isOver) {
