@@ -6,7 +6,7 @@ export default class CheckboxListItem extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { status: false }
+        this.state = { status: true }
     }
     onItemChecked(id, value) {
         this.props.onCheck(id, value);
