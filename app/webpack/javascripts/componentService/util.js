@@ -22,3 +22,32 @@ export const getLoginUserId = () => {
     }
     return 0;
 }
+
+export const getNumBref = (num) => {
+    if (num <= 0) {
+        return `${num}`
+    }
+    if (num >= 11 && num <= 13) {
+        return `${num}th`;
+    }
+    let splices = Number(num).toString().split('');
+    let lastEle = splices[splices.length - 1];
+    let suffix;
+    switch (Number(lastEle)) {
+        case 1:
+            suffix = 'st';
+            break;
+        case 2:
+            suffix = 'nd';
+            break;
+        case 3:
+            suffix = 'rd';
+            break;
+        default:
+            suffix = 'th';
+            break;
+    }
+    splices[splices.length - 1] = `${lastEle}${suffix}`;
+    return splices.join('');
+
+}
