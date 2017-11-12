@@ -28,10 +28,11 @@
               input.time_ico{background:url("../images/time.png") no-repeat right;}
         }
     }
-    .createRa_btn{position: absolute; right:0px; bottom:0px;
+    .createRa_btn{text-align: right; right:0px; bottom:0px;
         .show{display:inline-block;}
         .hide{ display: none;}
         button{ margin: 0 10px;}
+        button:last-child{margin-right: 0px;}
     }
 }
 
@@ -57,7 +58,7 @@
             margin-bottom: 5px; 
             background: #183243; overflow: hidden;
             span{
-                text-indent: 20px; border-right: 1px solid #485A68;
+                text-indent: 20px; color:#00afb2; overflow: hidden; white-space:nowrap; text-overflow: ellipsis; border-right: 1px solid #485A68; text-decoration: underline; cursor: pointer;
                 abbr{
                     display:block; width:60%; height: 20px; margin: 6px auto;
                 }
@@ -71,6 +72,9 @@
             span:last-child{
                 border:none; text-align: center; text-indent: 0px; text-decoration:underline;
                 cursor: pointer;
+            }
+            span.white{
+                color:#fff; cursor:default; text-decoration: none;
             }
         }
     }

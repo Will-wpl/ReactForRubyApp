@@ -59,7 +59,7 @@ showDetail(type,obj){
             fnStatus:true
         })
         this.setState({
-            text:"Are you confirm this retailer is the winner?"
+            text:"Are you sure you want to confirm the winner?"
         })
         this.refs.Modal.showModal("comfirm");
     }else{
@@ -67,7 +67,7 @@ showDetail(type,obj){
             fnStatus:false
         })
         this.setState({
-            text:"Are you confirm this auction loss?"
+            text:"Are you sure you want to void this Reverse Auction exercise?"
         })
         this.refs.Modal.showModal("comfirm");
     }
@@ -77,7 +77,7 @@ void_auction(){
         console.log(res);
         this.refs.Modal.showModal();
         this.setState({
-            text:"This Auction has been loss"
+            text:"You have voided this Reverse Auction exercise, and will be redirected to the homepage."
         })
     },error=>{
 
@@ -88,8 +88,11 @@ confirm_winner(){
         console.log(res);
         this.refs.Modal.showModal();
         this.setState({
-            text:this.winner.data.company_name+"is the winner"
+            text:"Congratulations! Reverse Auction winner has been confirmed."
         })
+        setTimeout(()=>{
+            window.location.href=`/admin/auctions/${this.auction.id}/result`;
+        },2000)
     },error=>{
 
     })
@@ -99,7 +102,7 @@ render() {
     return (
         <div>
             <div className="time_cuntdown during">
-            <p>Reverse Auction has ended. Please proceed to confirm the outcome. </p>
+            <p className="confirm">Reverse Auction has ended. Please proceed to confirm the outcome. </p>
             </div>
                 <div className="u-grid u-mt2">
                     <div className="col-sm-12 col-md-6 u-cell">

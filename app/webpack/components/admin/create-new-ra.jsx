@@ -256,9 +256,16 @@ export class CreateNewRA extends Component {
             createRa({auction: this.setAuction()}).then(res => {
                             this.auction = res;
                             this.refs.Modal.showModal();
-                            this.setState({
-                                text:this.auction.name + " has been successfully saved "
-                            });
+                            if(this.props.left_name){
+                                this.setState({
+                                    text:this.auction.name + " has been successfully updated. "
+                                });
+                            }else{
+                                this.setState({
+                                    text:this.auction.name + " has been successfully saved. "
+                                });
+                            }
+                            
                         }, error => {
                             console.log(error);
                         })
