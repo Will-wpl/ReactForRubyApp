@@ -14,6 +14,7 @@ $(function () {
     // auctionHistoriesAllList();
     // auctionHistorieslastInfo()
     // auctionLogout();
+    // auctionConfirm();
     function auctionObtain() {
         $.ajax({
             type: "GET",
@@ -272,7 +273,7 @@ $(function () {
         $.ajax({
             type: "POST",
             url: '/api/auctions/1/confirm', //1 is auction_id
-            data: { user_id: 2 , status: 'win'},//win void
+            data: { user_id: 2 , status: 'void'},//win void
             success: (data) => {
                 console.log('auctions confirm');
                 console.log(data);

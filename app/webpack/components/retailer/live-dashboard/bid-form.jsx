@@ -7,7 +7,8 @@ export default class BidForm extends Component {
         this.state = {
             configs: ['0000', '0000', '0000', '0000', '0000', '0000'],
             changed: true,
-            error:false
+            error:false,
+            thisStatus:false
         }
     }
 
@@ -42,6 +43,9 @@ export default class BidForm extends Component {
     }
 
     onSubmit() {
+        this.setState({
+            thisStatus:true
+        })
         let isChanged = this.state.configs.some((element, index) => {
             return Number(element) !== parseFloat(this.props.data[index]) * 10000;
         })
@@ -51,13 +55,20 @@ export default class BidForm extends Component {
             this.setState({
                 error:false
             })
+            setTimeout(()=>{
+                this.setState({
+                    error:true,
+                    thisStatus:false
+                })
+            },5000)
         }else{
             this.setState({
                 error:true
             })
             setTimeout(()=>{
                 this.setState({
-                    error:false
+                    error:false,
+                    thisStatus:false
                 })
             },5000)
         }
@@ -65,9 +76,12 @@ export default class BidForm extends Component {
 
     render() {
         let error_html = '';
-        !this.state.error ? error_html ='' : error_html = <div className="number_error">Invalid submission. Please check that your bid submission fulfils the following criteria:<br/>
+        if(this.state.thisStatus){
+            !this.state.error ? error_html =<div className="number_error">Your bid has been successfully submitted.</div> : error_html = <div className="number_error">Invalid submission. Please check that your bid submission fulfils the following criteria:<br/>
                                                                                         1.None of the values should be higher than its previous value<br/>
                                                                                         2.At least one of the values must be lower than its previous value</div>;
+        }
+        
         return (
             <div className="number_form">
             <form>
