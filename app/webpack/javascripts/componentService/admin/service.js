@@ -47,3 +47,7 @@ export const getHistoriesLast = (params) => {
 export const auctionConfirm = (params) => {
     return create('/api/auctions/'+params.id+'/confirm', params.data);
 }
+
+export const upateHoldStatus = (auction, hold_status) => {
+    return put(`/api/auctions/${auction}/hold`, {hold_status});
+}

@@ -80,6 +80,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
     a{ float: right; padding-right:15px;}
   }
   .modal_detail{ width:90%; min-height: 112px; margin:0px auto; line-height: 22px; font-size: 16px;}
+  .showinfo{ color: red; min-height: auto;}
   .modal_btn{ width:100%; margin: 10px auto; overflow: hidden;}
   .modal_btn a{ width: 60px; float:right; margin-right: 10px;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; margin: 0px 10px;}
 }
@@ -142,6 +143,8 @@ abbr[title]{color: #fe0000; text-decoration: none;}
   padding-right: 0px !important;
 }
 
+
+.admin_hold{ position: absolute; color:red; top:25%;}
 //hide scrollbar
 // ::-webkit-scrollbar{
 //   display:none;
