@@ -46,8 +46,10 @@ export default class BidForm extends Component {
         this.setState({
             thisStatus:true
         })
+        console.log(this.state.configs);
         let isChanged = this.state.configs.some((element, index) => {
-            return Number(element) !== parseFloat(this.props.data[index]) * 10000;
+            //console.log("state:"+Number(element) / 10000+"--------props:"+parseFloat(this.props.data[index]));
+            return Number(element) / 10000 !== parseFloat(this.props.data[index]);
         })
         console.log(isChanged);
         if (this.props.onSubmit && isChanged) {
