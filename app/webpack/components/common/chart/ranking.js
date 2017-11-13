@@ -25,7 +25,7 @@ export default class Ranking extends Component {
                 }
             };
             element.data.forEach((timeRanking) => {
-                let d = timeRanking.is_bidder ? {
+                let d = timeRanking.is_bidder && timeRanking.flag !== null ? {
                     symbol: 'triangle',
                     symbolSize: 15,
                     showSymbol: true,

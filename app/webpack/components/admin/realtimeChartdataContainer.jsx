@@ -40,7 +40,7 @@ export default class ChartRealtimeHoc extends Component {
                 if (result) {
                     result.color = idColor.color;
                     result.data.forEach(d => {
-                        d.template_ranking = `${d.company_name} Ranking: ${d.ranking} ${d.is_bidder ? '(Bit Submitter)' : ''}`;
+                        d.template_ranking = `${d.company_name} Ranking: ${d.ranking} ${d.is_bidder && d.flag !== null ? '(Bit Submitter)' : ''}`;
                         if (!d.template_price) {
                             d.template_price = {};
                         }
