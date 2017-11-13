@@ -27,9 +27,8 @@ class Api::AuctionsController < Api::BaseController
   def update
     params[:auction]['total_volume'] = Auction.set_total_volume(model_params[:total_lt_peak], model_params[:total_lt_off_peak], model_params[:total_hts_peak], model_params[:total_hts_off_peak], model_params[:total_htl_peak], model_params[:total_htl_off_peak])
     if @auction.update(model_params)
+      AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id).update_all(bid_time: @auction.actual_begin_time)
       AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
-      # $redis.sadd(@auction.id , @auction.to_json)
-      # $redis.set(@auction.id, @auction.to_json)
       render json: @auction, status: 200
     else
       render json: 'error code ', status: 500
