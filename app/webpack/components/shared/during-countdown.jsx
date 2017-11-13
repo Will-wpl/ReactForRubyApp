@@ -8,7 +8,7 @@ const HOLD_STATUS = 'hold_status';
 export class DuringCountDown extends Component {
     constructor(props){
         super(props);
-        this.state = {minute: 0, second: 0}
+        this.state = {hour: 0, minute: 0, second: 0}
     }
     componentDidMount() {
         this.getAuctionTime(this.props.auction);
@@ -59,7 +59,7 @@ export class DuringCountDown extends Component {
         let minute = Math.floor((divider - day * 24 * 60 * 60 - hour * 3600) / 60);
         let second = Math.floor(divider - day * 24 * 60 * 60 - hour * 3600 - minute * 60);
         let left = minute || second;
-        this.setState({minute: minute, second: second});
+        this.setState({hour: hour, minute: minute, second: second});
         if (this.props.onSecondBreaker && minute ===0 && second === this.props.secondBreaker) {
             this.props.onSecondBreaker();
         }
@@ -76,6 +76,7 @@ export class DuringCountDown extends Component {
                 <div className="Countdown">
                     <abbr>Countdown Timer:</abbr>
                     <ol id="during_countdown_timer">
+                        <span><font>{this.state.hour}</font>HOURS</span>
                         <span><font>{this.state.minute}</font>MINUTES</span>
                         <span><font>{this.state.second}</font>SECONDS</span>
                     </ol>
