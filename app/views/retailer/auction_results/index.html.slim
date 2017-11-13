@@ -1,6 +1,6 @@
 .page-header
 
-  h1= page_title(model: AuctionResult.model_name.human.pluralize)
+  /h1= page_title(model: AuctionResult.model_name.human.pluralize)
 div.u-grid.u-mt3
   div.col-sm-12.col-md-6.push-md-3
     table.table.table-hover.retailer_fill
@@ -38,3 +38,7 @@ div.u-grid.u-mt3
     = page_entries_info @auction_results, entry_name: AuctionResult.model_name.human
   .col-sm-12.col-md-6
     = paginate(@auction_results)
+
+
+div.createRaMain.u-grid
+    a.lm--button.lm--button--primary.u-mt3 href="/admin/home" Back to Homepage

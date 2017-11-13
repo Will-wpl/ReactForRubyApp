@@ -3,7 +3,8 @@ if User.count == 0
   @admin = User.create(name: 'admin',
                        email: 'admin@example.com',
                        password: 'password',
-                       password_confirmation: 'password')
+                       password_confirmation: 'password',
+                       company_name: 'SP GROUP')
 
   @admin.add_role :admin
   Role.create(name: 'retailer')
