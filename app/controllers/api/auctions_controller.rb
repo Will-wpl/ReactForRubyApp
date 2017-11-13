@@ -11,24 +11,6 @@ class Api::AuctionsController < Api::BaseController
     end
   end
 
-  # GET manage route link by ajax
-  def link
-    @auction = Auction.first
-    if @auction.publish_status != '1'
-      render json: {url: '/admin/auctions/empty'}, status: 200
-    elsif @auction.publish_status == '1' && Time.now < @auction.actual_begin_time
-      link = set_link(@auction.id, 'upcoming')
-      render json: {url: link}, status: 200
-    elsif @auction.publish_status == '1' && @auction.actual_begin_time < Time.now && Time.now < @auction.actual_end_time
-      link = set_link(@auction.id, 'dashboard')
-      render json: {url: link}, status: 200
-    elsif @auction.publish_status == '1' && @auction.actual_end_time < Time.now
-      link = set_link(@auction.id, 'result')
-      render json: {url: link}, status: 200
-    else
-      render json: nil, status: 200
-    end
-  end
 
   # POST create auction by ajax
   def create
@@ -73,13 +55,13 @@ class Api::AuctionsController < Api::BaseController
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
         render json: {hold_status: true, forward: false}, status: 200
       end
-    elsif !hold_status && Time.now < @auction.actual_begin_time
+    elsif !hold_status && Time.current < @auction.actual_begin_time
       if @auction.update(hold_status: hold_status)
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
         render json: {hold_status: false, forward: false}, status: 200
       end
-    elsif !hold_status && Time.now > @auction.actual_begin_time
-      if @auction.update(hold_status: hold_status, actual_begin_time: Time.now, actual_end_time: Time.now + 60 * @auction.duration)
+    elsif !hold_status && Time.current > @auction.actual_begin_time
+      if @auction.update(hold_status: hold_status, actual_begin_time: Time.current, actual_end_time: Time.current + 60 * @auction.duration)
         # link = set_link(@auction.id, 'dashboard')
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
         render json: {hold_status: false, forward: true}, status: 200
@@ -89,7 +71,7 @@ class Api::AuctionsController < Api::BaseController
 
   # GET current time by ajax
   def timer
-    render json: {current_time: Time.now, hold_status: @auction.hold_status, actual_begin_time: @auction.actual_begin_time, actual_end_time: @auction.actual_end_time}, status: 200
+    render json: {current_time: Time.current, hold_status: @auction.hold_status, actual_begin_time: @auction.actual_begin_time, actual_end_time: @auction.actual_end_time}, status: 200
   end
 
   # POST extend time
