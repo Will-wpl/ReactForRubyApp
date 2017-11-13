@@ -25,8 +25,12 @@ table.table.table-hover.retailer_fill.u-mt3
         td= auction_result.lowest_price_bidder
         td= auction_result.lowest_average_price
         td= auction_result.total_volume
-        td= 'report-link'
-        td= 'log-link'
+        td
+          = link_to report_admin_auction_path(auction_result.auction_id), class: 'report' do
+            = ''
+        td
+          = link_to log_admin_auction_path(auction_result.auction_id), class: 'log' do
+            = ''
         /td= link_to auction_history.id, admin_auction_history_path(auction_history)
         /td.text-right
         /  = link_to admin_auction_history_path(auction_history), class: "btn btn-success btn-sm" do
