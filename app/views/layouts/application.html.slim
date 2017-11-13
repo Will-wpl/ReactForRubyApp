@@ -39,8 +39,8 @@ html(lang="en")
                   = current_user.name
                   i class="lm--icon-profile" aria-hidden="true"
                 ul.lm--dropdown-menu
-                  li
-                    = link_to 'Manage Account', edit_user_registration_path, class: 'lm--dropdown-link'
+                  /li
+                  /  = link_to 'Manage Account', edit_user_registration_path, class: 'lm--dropdown-link'
                   li
                     = link_to 'Log Out', destroy_user_session_path, method: :delete, class: 'lm--dropdown-link'
           - else
