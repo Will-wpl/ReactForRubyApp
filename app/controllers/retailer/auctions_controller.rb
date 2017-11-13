@@ -16,7 +16,7 @@ class Retailer::AuctionsController < Retailer::BaseController
     @auction = Auction.first
     arrangement = Arrangement.find_by_user_id(current_user.id)
     auction_name = @auction.name
-    progress_message = "#{auction_name} is currently in progress. Please click on 'Start Bidding' button to participate."
+    progress_message = "#{auction_name} is currently in progress. Please click on 'Start Bidding' button located in homepage to participate."
     empty_message = "There is no upcoming reverse auction published."
     if @auction.publish_status != '1'
       @message = empty_message
