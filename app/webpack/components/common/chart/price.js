@@ -11,7 +11,6 @@ export default class Price extends Component {
 
     getChartOption() {
         let option = getTemplate(this.props);
-        console.log('this.props.data', this.props.data)
         this.props.data.forEach(element => {
             let tmp = {
                 type: 'line',
@@ -65,6 +64,23 @@ Price.defaultProps = {
 }
 
 function getTemplate(props) {
+    let yAxisMin = 0;
+    if (props.data.length > 0) {
+        let tmp = 1;
+        props.data.forEach(element => {
+            let result =  Math.min.apply(null, element.data.map(el => {
+                return Number(el.average_price);
+            }));
+            if (result < tmp) {
+                tmp = result;
+            }
+        })
+        if (tmp < 1) {
+            if (tmp > 0.2) {
+                yAxisMin = parseFloat(tmp - 0.1).toFixed(1);
+            }
+        }
+    }
     return {
         calculable: true,
         dataZoom: {
@@ -160,6 +176,7 @@ function getTemplate(props) {
             // max: function (value) {
             //     return 1;
             // },
+            min: yAxisMin,
             axisLine: {
                 lineStyle: {
                     color: 'white'

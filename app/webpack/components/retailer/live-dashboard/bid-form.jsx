@@ -5,7 +5,7 @@ export default class BidForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            configs: ['0000', '0000', '0000', '0000', '0000', '0000'],
+            configs: ['', '', '', '', '', ''],
             changed: true,
             samePrice: false,
             thisStatus: false,
@@ -13,14 +13,22 @@ export default class BidForm extends Component {
         }
     }
 
+    initConfigs(configs) {
+        console.log('initial config', configs);
+        this.compareConfigs = configs;
+    }
+
     componentWillReceiveProps(nextProps) {
-        this.setState({
-            configs: nextProps.data.map(element => {
+        if (nextProps.data.length > 0) {
+            this.compareConfigs = nextProps.data.map(element => {
                 return parseFloat(element).toFixed(4).substring(2);
-            }), status: this.state.status.map(element => {
-                return true;
-            })
-        });
+            });
+            this.setState({
+                configs: JSON.parse(JSON.stringify(this.compareConfigs)), status: this.state.status.map(element => {
+                    return true;
+                })
+            });
+        }
     }
 
     onInputChanged(i, e) {
@@ -31,14 +39,17 @@ export default class BidForm extends Component {
             } else {
                 num = '0000';
             }
-            let target = this.props.data.find((element, index) => {
+            let target = this.compareConfigs.find((element, index) => {
                 return index === i;
             });
             let status = this.state.status;
-            if (Number(num) * 1.0 / 10000 > Number(target)) {
-                status[i] = false;
-            } else {
-                status[i] = true;
+            console.log('target ===>', target)
+            if (target) {
+                if (Number(num) * 1.0 / 10000 > Number(target)) {
+                    status[i] = false;
+                } else {
+                    status[i] = true;
+                }
             }
             this.setState({
                 configs: this.state.configs.map((element, index) => {
@@ -55,12 +66,17 @@ export default class BidForm extends Component {
         this.setState({
             thisStatus: true
         })
-        let isChanged = this.state.configs.some((element, index) => {
-            //console.log("state:"+Number(element) / 10000+"--------props:"+parseFloat(this.props.data[index]));
-            return Number(element) / 10000 < Number(this.props.data[index]);
+        let allow = this.state.configs.every(element => {
+            return element.length > 0;
         })
-        if (this.props.onSubmit && isChanged) {
-            this.props.onSubmit(this.state.configs);
+        let isChanged = this.state.configs.some((element, index) => {
+            // console.log("state:"+Number(element) / 10000+"--------props:"+parseFloat(this.compareConfigs[index]));
+            return element.length > 0 && Number(element) / 10000 < Number(this.compareConfigs[index]);
+        })
+        if (allow && isChanged) {
+            if (this.props.onSubmit) {
+                this.props.onSubmit(this.state.configs);
+            }
             this.setState({
                 samePrice: false
             })
