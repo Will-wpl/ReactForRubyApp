@@ -2,19 +2,24 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import RetailerRanking from './admin_shared/ranking';
 import CheckboxList from '../common/chart/list-checkbox';
-import {getArrangements, getHistories} from '../../javascripts/componentService/admin/service';
+import {getArrangements, getHistories,getHistoriesLast} from '../../javascripts/componentService/admin/service';
 import {getAuction} from '../../javascripts/componentService/common/service';
 import {findUpLimit, getRandomColor} from '../../javascripts/componentService/util';
 import {ACCEPT_STATUS} from '../../javascripts/componentService/constant';
 import ChartRealtimeHoc from './realtimeChartdataContainer';
 import Ranking from '../common/chart/ranking';
 import Price from '../common/chart/price';
+import WinnerPrice from './admin_shared/winner';
 import moment from 'moment';
 
 export class AdminReport extends Component {
     constructor(props){
         super(props);
         this.state = {users:[], histories:[], ranking:[], currentPrice:'0.0000'};
+        this.winner = {
+            data:{},
+            auction:{}
+        }
     }
 
     componentDidMount() {
@@ -26,12 +31,21 @@ export class AdminReport extends Component {
             this.duration = auction.duration;
             this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000';
             this.actualPrice = '0.0000';
-
+            getHistoriesLast({ auction_id: auction? auction.id : 1}).then(data => {
+                console.log('histories', data);
+                this.winner.data = data.histories[0];
+                this.winner.auction = data.auction;
+            })
             getHistories({ auction_id: auction? auction.id : 1}).then(histories => {
                 // console.log('histories', histories);
-                let orderRanking = histories.map(element => {
-                    return element.data.length > 0 ? element.data[element.data.length - 1] : []
-                })
+                let orderRanking = []
+                if(histories.length > 0){
+                    orderRanking = histories.map(element => {
+                        return element.data.length > 0 ? element.data[element.data.length - 1] : []
+                    })
+                }else{
+                    orderRanking = [];
+                }
                 try {
                     orderRanking.sort((a, b) => {
                         return parseFloat(a.average_price) > parseFloat(b.average_price)
@@ -59,10 +73,10 @@ export class AdminReport extends Component {
         let achieved = parseFloat(this.actualPrice) < parseFloat(this.startPrice);
         return (
             <div>
-                <div className="u-grid u-mt3">
+                <div className="u-grid u-mt2 report_bg">
                     <div className="col-sm-12 col-md-7">
                         <p>{this.userStartInfo}</p>
-                        <p>Start Time:{this.startTime}, End Time:{this.endTime} Total Auction Duration:{this.duration} minutes</p>
+                        <p>Start Time : {this.startTime}, End Time : {this.endTime} Total Auction Duration : {this.duration} minutes</p>
                     </div>
                     <div className="col-sm-12 col-md-5">
                         <dl className="reservePrice">
@@ -99,6 +113,7 @@ export class AdminReport extends Component {
                         </div>
                     </div>
                     <div className="col-sm-12 col-md-5">
+                        <WinnerPrice showOrhide="show" winner={this.winner} />
                         <RetailerRanking ranking={this.state.ranking}/>
                     </div>
                 </div>
