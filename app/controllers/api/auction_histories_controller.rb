@@ -38,7 +38,9 @@ class Api::AuctionHistoriesController < Api::BaseController
   def last
     auction = Auction.find(params[:auction_id])
     histories = AuctionHistory.find_by_sql ["select auction_histories.* ,users.company_name from auction_histories LEFT OUTER JOIN users ON users.id = auction_histories.user_id where flag = (select flag from auction_histories where auction_id = ? and is_bidder = true order by bid_time desc LIMIT 1)", auction.id]
-    render json: { auction: auction, histories: histories }
+    result = AuctionResult.find_by_auction_id(params[:auction_id])
+    render json: { auction: auction, histories: histories, result: result }
   end
+
 
 end
