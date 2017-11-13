@@ -23,7 +23,7 @@ export const getLoginUserId = () => {
     return 0;
 }
 
-export const getNumBref = (num) => {
+export const getNumBref = (num, standard = false) => {
     if (num <= 0) {
         return `${num}`
     }
@@ -38,7 +38,7 @@ export const getNumBref = (num) => {
             suffix = 'st';
             break;
         case 2:
-            suffix = '';
+            suffix = standard ? 'nd' : '';
             break;
         case 3:
             suffix = 'rd';
@@ -49,5 +49,10 @@ export const getNumBref = (num) => {
     }
     splices[splices.length - 1] = `${lastEle}${suffix}`;
     return splices.join('');
+
+}
+
+export const getStandardNumBref = (num) => {
+    return getNumBref(num, true);
 
 }
