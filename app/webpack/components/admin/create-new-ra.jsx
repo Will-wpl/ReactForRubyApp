@@ -31,8 +31,8 @@ export class CreateNewRA extends Component {
     componentDidMount() {
         if (this.props.left_name) {//eidt
             this.setState({
-                disabled: "disabled",
-                live_modal: "live_hide"
+                disabled:this.props.disabled,
+                live_modal:"live_hide"
             })
             this.doGetData();
         } else {//create
@@ -42,34 +42,31 @@ export class CreateNewRA extends Component {
     doGetData(type) {
         getAuctionInVersionOne().then(res => {
             this.auction = res;
-            // if(type == "create"){
-            //     if(this.auction.publish_status == 1){
-            //         this.setState({
-            //             live_modal:"live_show",
-            //             live_modal_do:"live_hide",
-            //         })
-            //     }else{
-            //         this.setState({
-            //             live_modal:"live_hide",
-            //             live_modal_do:"live_show",
-            //          })
-            // }               
-            if(res.duration == null){
-                this.setState({id:res.id})
-            }else{
-                this.setState({
-                    id: res.id,
-                    name: res.name == null ? '' : res.name,
-                    start_datetime: res.start_datetime == null ? '' : moment(res.start_datetime),
-                    startDate: res.contract_period_start_date == null ? '' :  moment(res.contract_period_start_date),
-                    endDate:res.contract_period_end_date == null ? '' : moment(res.contract_period_end_date),
-                    duration:res.duration== null ? '' : res.duration,
-                    reserve_price:res.reserve_price== null ? '' : this.padZero(res.reserve_price,'4')
-                });
-                // }
-                //console.log(res);
-
-            };
+            if(type == "create"){
+                if(this.auction.publish_status == 1){
+                    this.setState({
+                        disabled:true
+                    })
+                }else{
+                    this.setState({
+                        disabled:false
+                    })
+                }          
+            }     
+            if(res.start_datetime == null){
+                    this.setState({id:res.id})
+                }else{
+                    this.setState({
+                        id:res.id,
+                        name:res.name == null ? '' : res.name,
+                        start_datetime: res.start_datetime == null ? '' : moment(res.start_datetime),
+                        startDate: res.contract_period_start_date == null ? '' :  moment(res.contract_period_start_date),
+                        endDate:res.contract_period_end_date == null ? '' : moment(res.contract_period_end_date),
+                        duration:res.duration== null ? '' : res.duration,
+                        reserve_price:res.reserve_price== null ? '' : this.padZero(res.reserve_price,'4')
+                    });
+                }
+            //console.log(res);;
         })
     }
     padZero(num, n) { 
@@ -308,19 +305,21 @@ export class CreateNewRA extends Component {
         if (this.props.left_name == undefined) {//Create New Ra
             styleType = "col-sm-12 col-md-8 push-md-2";
             left_name = "Create New Reverse Auction";
-            btn_html = <div className="createRa_btn">
-                <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this, 'save')}>Save</button>
-                <a className="lm--button lm--button--primary" onClick={this.showDelete.bind(this)}>Delete</a>
-                <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this, 'publish')}>Publish</button>
-            </div>
-        } else {//edit
+                btn_html = <div className="createRa_btn">
+                                {this.state.disabled ? <div className="mask"></div> : ''}
+                                <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'save')}>Save</button>
+                                <a className="lm--button lm--button--primary" onClick={this.showDelete.bind(this)}>Delete</a>
+                                <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'publish')}>Publish</button>
+                            </div>
+        }else{//edit
             styleType = "col-sm-12 col-md-12";
             left_name = this.props.left_name;
             btn_html = <div className="createRa_btn">
-                <a className={this.state.edit_btn} onClick={this.edit.bind(this)}>Edit</a>
-                <button className={this.state.edit_change} onClick={this.auctionCreate.bind(this, 'save')}>Save</button>
-                <a className={this.state.edit_change} onClick={this.Cancel.bind(this)}>Cancel</a>
-            </div>
+                            {this.state.disabled ? <div className="mask"></div> : ''}
+                            <a className={this.state.edit_btn} onClick={this.edit.bind(this)}>Edit</a>
+                            <button className={this.state.edit_change} onClick={this.auctionCreate.bind(this,'save')}>Save</button>
+                            <a className={this.state.edit_change} onClick={this.Cancel.bind(this)}>Cancel</a>
+                        </div>
         }
         return (
             <div>
