@@ -73,22 +73,24 @@ export class RetailerLive extends Component {
         window.location.href=`/retailer/auctions/${this.auction.id}/finish`
     }
 
-    nofityHoldStatus(status) {
-        if (this.localHoldStatus !== status) {
-            console.log('status ====>', status, this.localHoldStatus);
-            this.setState({holdStatus: status});
-            this.localHoldStatus = status
+    nofityHoldStatus(status,isOver) {
+        if(isOver){
+            if (this.localHoldStatus !== status) {
+                //console.log('status ====>', status, this.localHoldStatus);
+                this.setState({holdStatus: status});
+                this.localHoldStatus = status          
+            }
         }
     }
 
     render() {
-        let holdContent;
-        if (this.state.holdStatus) {
-            holdContent = <div id="modal_main"><h4></h4><div className="modal_detail showinfo">admin time delay</div></div>
-        }
         return !this.state.showLive ? (
             <div>
-                <TimeCuntDown countDownOver={() => this.setState({showLive: true})} title={this.timerTitle} auction={this.auction} listenHold={this.nofityHoldStatus.bind(this)}/>
+                <TimeCuntDown countDownOver={() => this.setState({showLive: true})} title={this.timerTitle} auction={this.auction} listenHold={this.nofityHoldStatus.bind(this)}>
+                    <div id="retailer_hold" className={this.state.holdStatus ? '' : 'live_hide'}>
+                        <b>RA has been put on hold due to an emergency situation. RA will commence immediately once situation clears. Please continue to standby for commencement.</b>
+                    </div>
+                </TimeCuntDown>
                 <div className={'live_show'} id="live_modal">
                     <div className={'live_hold'}></div>
                     <p>
@@ -100,7 +102,6 @@ export class RetailerLive extends Component {
                 <div className="createRaMain u-grid">
                     <a className="lm--button lm--button--primary u-mt3" href="/retailer/home" >Back to Homepage</a>
                 </div>
-                {holdContent}
             </div>
         ) : (
             <div>

@@ -76,7 +76,6 @@ export class OnlineStatusMain extends Component {
     }
     hold() {
         this.holdStatus = !this.holdStatus;
-        // ajax
         upateHoldStatus(this.auction ? this.auction.id : 1, this.holdStatus);
     }
 
