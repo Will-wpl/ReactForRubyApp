@@ -1,4 +1,4 @@
-import {get, Ws, createWS} from '../../../javascripts/http';
+import {get, Ws, createWS,create} from '../../../javascripts/http';
 
 export const getAuctionTimeRule = (auction) => {
     return get(`/api/auctions/${auction}/timer`);
@@ -10,6 +10,11 @@ export const createWebsocket = (auction) => {
 
 export const getAuction = () => {
     return get('/api/auctions/obtain');
+}
+
+export const logout = (id) => {
+    alert(id);
+    return create('/api/auctions/logout',{user_id:id});
 }
 
 export const ACTION_COMMANDS = {

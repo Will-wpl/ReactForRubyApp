@@ -25,7 +25,7 @@ export default class WinnerPrice extends Component {
     console.log(this.props.winner);
     return this.props.winner.data ? ( 
       <div className="winnerPrice_main">
-        <h2 className={this.props.showOrhide}><span className={this.props.statusColor}>Status : {this.props.showStatus}</span></h2>
+        <h2 className={this.props.showOrhide}>{this.props.winner.data.is_bidder ? <span className="green">Status : Awarded</span> : <span className="red">Status :Not Awarded</span>}</h2>
         <h4 className="u-mt1">Summary of Lowest Bidder</h4>
         <ul>
           <li><span>Lowest Price Bidder: </span><span>{this.props.winner.data.company_name}</span></li>

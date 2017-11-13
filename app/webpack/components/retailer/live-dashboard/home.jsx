@@ -13,12 +13,12 @@ export default class LiveHomePage extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {ranking: '', priceConfig: ['', '', '', '', '', ''], histories: [], chartDatas: []};
+        this.state = {ranking: '', priceConfig: [], histories: [], chartDatas: []};
     }
 
     componentDidMount() {
         getAuctionHistorys(this.props.auction ? this.props.auction.id : 1, getLoginUserId()).then(res => {
-            console.log('res==========================', res);
+            // console.log('res==========================', res);
             this.makeup(res);
             this.createSocket();
         }, error => {
@@ -71,6 +71,7 @@ export default class LiveHomePage extends Component {
                         element.hts_off_peak = parseFloat(element.hts_off_peak).toFixed(4);
                         element.htl_peak = parseFloat(element.htl_peak).toFixed(4);
                         element.htl_off_peak = parseFloat(element.htl_off_peak).toFixed(4);
+
                         this.setState({
                             ranking: last.ranking,
                             priceConfig: [].concat(last.lt_off_peak).concat(last.lt_peak)
@@ -88,7 +89,7 @@ export default class LiveHomePage extends Component {
 
     makeup(res) {
         if (res.length > 0) {
-            console.log('res ====>', res)
+            // console.log('res ====>', res)
             let copy = JSON.parse(JSON.stringify(res));
             let histories = res.map((element, index) => {
                 if (index === 0) { // start
@@ -122,12 +123,19 @@ export default class LiveHomePage extends Component {
             });
             let last = histories[histories.length - 1];
             last.ranking = Number(last.ranking) === 1 ? 2 : last.ranking;
-            console.log('res =>>>>',res);
-            this.setState({
-                ranking: last.ranking, priceConfig: []
+            console.log('last =>>>>',last);
+            if (last.flag === null) {
+                this.bidForm.initConfigs([]
                     .concat(last.lt_off_peak).concat(last.lt_peak)
                     .concat(last.hts_off_peak).concat(last.hts_peak)
-                    .concat(last.htl_off_peak).concat(last.htl_peak),
+                    .concat(last.htl_off_peak).concat(last.htl_peak));
+            }
+            this.setState({
+                ranking: last.ranking,
+                    priceConfig: last.flag ? []
+                    .concat(last.lt_off_peak).concat(last.lt_peak)
+                    .concat(last.hts_off_peak).concat(last.hts_peak)
+                    .concat(last.htl_off_peak).concat(last.htl_peak) : [],
                 histories: res.filter(element => {
                     return element.is_bidder;
                 }), chartDatas: [].concat(chartDataTpl)
@@ -161,7 +169,7 @@ export default class LiveHomePage extends Component {
                 </div>
                 <div className="u-grid u-mt2">
                     <div className="col-sm-12 col-md-5 u-cell">
-                        <div className="col-sm-12 col-md-10 push-md-1"><BidForm data={this.state.priceConfig} onSubmit={this.onBidFormSubmit.bind(this)}/></div>
+                        <div className="col-sm-12 col-md-10 push-md-1"><BidForm data={this.state.priceConfig} ref={instance => this.bidForm = instance} onSubmit={this.onBidFormSubmit.bind(this)}/></div>
                     </div>
                     <div className="col-sm-12 col-md-7 u-cell">
                         <div className="col-sm-12 col-md-10 push-md-1"><BidHistory data={this.state.histories.filter(element => {
