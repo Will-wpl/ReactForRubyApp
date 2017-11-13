@@ -53,7 +53,7 @@ export default class Price extends Component {
             <ReactEcharts
                 option={this.getChartOption()}
                 notMerge={true}
-                style={{height: '280px', width: '100%'}}
+                style={{minHeight: '280px', width: '100%'}}
                 className='react_for_echarts'/>
 
         );

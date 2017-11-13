@@ -53,7 +53,7 @@ export default class LiveHomePage extends Component {
                             //         , ranking: Number(last.ranking) === 1 ? 2 : last.ranking, needMark: last.is_bidder}
                             // )
                             last.ranking = Number(last.ranking) === 1 ? 2 : last.ranking;
-                            last.template_ranking = `Ranking: ${last.ranking} ${last.is_bidder ? '(Bit Submitter)' : ''}`;
+                            last.template_ranking = `Ranking: ${Number(last.ranking) <= 2 ? 'TOP 2' : getNumBref(last.ranking)} ${last.is_bidder ? '(Bit Submitter)' : ''}`;
                             if (!last.template_price) {
                                 last.template_price = {};
                             }
@@ -110,7 +110,7 @@ export default class LiveHomePage extends Component {
                 // chartDataTpl.data.push({time: moment(history.bid_time).format('YYYY-MM-DD HH:mm:ss')
                 //     , ranking: Number(history.ranking) === 1 ? 2 : history.ranking, needMark: history.is_bidder})
                 history.ranking = Number(history.ranking) === 1 ? 2 : history.ranking;
-                history.template_ranking = `Ranking: ${history.ranking} ${history.is_bidder ? '(Bit Submitter)' : ''}`;
+                history.template_ranking = `Ranking: ${Number(history.ranking) <= 2 ? 'TOP 2' : getNumBref(history.ranking)} ${history.is_bidder ? '(Bit Submitter)' : ''}`;
                 if (!history.template_price) {
                     history.template_price = {};
                 }
@@ -153,10 +153,10 @@ export default class LiveHomePage extends Component {
             <div>
                 <div className="u-grid u-mt2">
                     <div className="col-sm-12 col-md-5 u-cell">
-                        <div className="col-sm-12 col-md-10 push-md-1"><Description ranking={` ${getNumBref(this.state.ranking)}`}/></div>
+                        <div className="col-sm-12 col-md-10 push-md-1"><Description ranking={`${this.state.ranking === 2 ? 'TOP ' : ''}${getNumBref(this.state.ranking)}`}/></div>
                     </div>
                     <div className="col-sm-12 col-md-7 u-cell">
-                        <div className="col-sm-12 col-md-10 push-md-1"><Ranking data={this.state.chartDatas}/></div>
+                        <div className="col-sm-12 col-md-10 push-md-1"><Ranking data={this.state.chartDatas} yAxisFormatterRule={{0 : ' ', 1 : ' ', 2 : 'Top 2', 'func': getNumBref}}/></div>
                     </div>
                 </div>
                 <div className="u-grid u-mt2">
@@ -164,7 +164,9 @@ export default class LiveHomePage extends Component {
                         <div className="col-sm-12 col-md-10 push-md-1"><BidForm data={this.state.priceConfig} onSubmit={this.onBidFormSubmit.bind(this)}/></div>
                     </div>
                     <div className="col-sm-12 col-md-7 u-cell">
-                        <div className="col-sm-12 col-md-10 push-md-1"><BidHistory data={this.state.histories} order={'desc'}/></div>
+                        <div className="col-sm-12 col-md-10 push-md-1"><BidHistory data={this.state.histories.filter(element => {
+                            return element.flag !== null;
+                        })} order={'desc'}/></div>
                     </div>
                 </div>
             </div>
