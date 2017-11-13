@@ -57,10 +57,12 @@ export default class Ranking extends Component {
 }
 
 Ranking.defaultProps = {
-    data: []
+    data: [],
+    yAxisFormatterRule: {}
 }
 
 const getTemplate = (props) => {
+    let yAxisSplitNum = 20;
     return {
         calculable: true,
         dataZoom: {
@@ -149,9 +151,17 @@ const getTemplate = (props) => {
             axisTick: {
                 show: false
             },
-            // max: (value) => {
-            //     return 10;
-            // },
+            max: (value) => {
+                return value.max + 1;
+            },
+            // min: 1,
+            splitNumber: 100,
+            axisLabel: {
+                formatter: (value, index) => {
+                    return props.yAxisFormatterRule[value] ? props.yAxisFormatterRule[value]
+                        : props.yAxisFormatterRule.func ? props.yAxisFormatterRule.func(value) : value;
+                }
+            },
             axisLine: {
                 lineStyle: {
                     color: 'white'
