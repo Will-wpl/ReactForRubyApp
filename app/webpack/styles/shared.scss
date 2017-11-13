@@ -167,3 +167,12 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 //retailer 
 .number_form{ position: relative; width: 100%;}
 .number_error{ position: absolute; background: #fff; border-radius: 5px; color: #333; font-size: 12px; padding:5px 10px; bottom:-164px; border:2px solid #fbb136;}
+
+//remove default arrow
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+input[type="number"]{
+  -moz-appearance: textfield;
+}
