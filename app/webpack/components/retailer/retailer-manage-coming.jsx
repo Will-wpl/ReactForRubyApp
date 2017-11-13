@@ -113,12 +113,12 @@ export class RetailerManage extends Component {
                 "alternative_email_address": this.refs.alternative_email_address.value,
                 "alternative_mobile_number": this.refs.alternative_mobile_number.value,
                 "alternative_office_number": this.refs.alternative_office_number.value,
-                "lt_peak": parseFloat("0."+this.refs.lt_peak.value),
-                "lt_off_peak": parseFloat("0."+this.refs.lt_off_peak.value),
-                "hts_peak": parseFloat("0."+this.refs.hts_peak.value),
-                "hts_off_peak": parseFloat("0."+this.refs.hts_off_peak.value),
-                "htl_peak": parseFloat("0."+this.refs.htl_peak.value),
-                "htl_off_peak": parseFloat("0."+this.refs.htl_off_peak.value),
+                "lt_peak": parseFloat("0.1458"),//+this.refs.lt_peak.value
+                "lt_off_peak": parseFloat("0.1458"),//+this.refs.lt_off_peak.value
+                "hts_peak": parseFloat("0.1458"),//+this.refs.hts_peak.value
+                "hts_off_peak": parseFloat("0.1458"),//+this.refs.hts_off_peak.value
+                "htl_peak": parseFloat("0.1458"),//+this.refs.htl_peak.value
+                "htl_off_peak": parseFloat("0.1458"),//+this.refs.htl_off_peak.value
                 "accept_status": "1"   // '0':reject '1':accept '2':pending
             }
         }).then(res => {
@@ -158,7 +158,7 @@ export class RetailerManage extends Component {
             <form onSubmit={this.checkSuccess.bind(this)}>
             <div className="u-grid">
                 <div className="col-sm-12 col-md-6 push-md-3">
-                    <h3 className="u-mt3 u-mb1">Section A: Information on Reverse Auction</h3>
+                    {/* <h3 className="u-mt3 u-mb1">Section A: Information on Reverse Auction</h3>
                     <div className="lm--formItem lm--formItem--inline string">
                         <label className="lm--formItem-left lm--formItem-label string required">
                             Specifications:
@@ -174,7 +174,7 @@ export class RetailerManage extends Component {
                         <div className="lm--formItem-right lm--formItem-control">
                             <span className="string required link_file">xxx.pdf</span>
                         </div>
-                    </div>
+                    </div> */}
                     <h3 className="u-mt3 u-mb1">Section B: Contact Person Details for Actual Day of Reverse Auction</h3>
                     <h4 className="lm--formItem lm--formItem--inline string">Main Contact Person on Actual Bidding Day:</h4>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -242,7 +242,7 @@ export class RetailerManage extends Component {
                             <input type="text" name="alternative_office_number" disabled={this.state.disabled} ref="alternative_office_number" maxLength="50"></input>
                         </div>
                     </div>
-                    <h3 className="u-mt3 u-mb1"><abbr title="required">*</abbr>Section C: Starting Bid Price</h3>
+                    {/* <h3 className="u-mt3 u-mb1"><abbr title="required">*</abbr>Section C: Starting Bid Price</h3>
                     <h4 className="u-mt1 u-mb1 font13">Important: Please note that this will be your starting bid price for the reverse auction. Your price submission during the live reverse auction must be lower than your starting bid price.</h4>
                     <div className="lm--formItem lm--formItem--inline string">
                         <table className="retailer_fill" cellPadding="0" cellSpacing="0">
@@ -270,7 +270,7 @@ export class RetailerManage extends Component {
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
+                    </div> */}
                     <div className="retailer_btn">
                         {/* <button className="lm--button lm--button--primary">Reject Participation</button> */}                       
                         {btn_html}
