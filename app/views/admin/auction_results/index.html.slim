@@ -1,7 +1,7 @@
 .page-header
   h1= page_title(model: AuctionResult.model_name.human.pluralize)
 
-table.table.table-hover
+table.table.table-hover.retailer_fill.u-mt3
   thead
     tr
       th Name
@@ -14,7 +14,6 @@ table.table.table-hover
       th Total Volume
       th Reverse Auction Report
       th Activites Log
-      th
   tbody
     - @auction_results.each do |auction_result|
       tr
@@ -41,8 +40,8 @@ table.table.table-hover
 
 hr
 
-.row
-  .col-sm-6
+.u-grid.u-mt3
+  .col-sm-12.col-md-6
     = page_entries_info @auction_results, entry_name: AuctionResult.model_name.human
-  .col-sm-6
+  .col-sm-12.col-md-6
     = paginate(@auction_results)
