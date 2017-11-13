@@ -53,7 +53,7 @@ export default class LiveHomePage extends Component {
                             //         , ranking: Number(last.ranking) === 1 ? 2 : last.ranking, needMark: last.is_bidder}
                             // )
                             last.ranking = Number(last.ranking) === 1 ? 2 : last.ranking;
-                            last.template_ranking = `Ranking: ${last.ranking} ${last.is_bidder ? '(Bit Submitter)' : ''}`;
+                            last.template_ranking = `Ranking: ${Number(last.ranking) <= 2 ? 'TOP 2' : getNumBref(last.ranking)} ${last.is_bidder ? '(Bit Submitter)' : ''}`;
                             if (!last.template_price) {
                                 last.template_price = {};
                             }
@@ -110,7 +110,7 @@ export default class LiveHomePage extends Component {
                 // chartDataTpl.data.push({time: moment(history.bid_time).format('YYYY-MM-DD HH:mm:ss')
                 //     , ranking: Number(history.ranking) === 1 ? 2 : history.ranking, needMark: history.is_bidder})
                 history.ranking = Number(history.ranking) === 1 ? 2 : history.ranking;
-                history.template_ranking = `Ranking: ${history.ranking} ${history.is_bidder ? '(Bit Submitter)' : ''}`;
+                history.template_ranking = `Ranking: ${Number(history.ranking) <= 2 ? 'TOP 2' : getNumBref(history.ranking)} ${history.is_bidder ? '(Bit Submitter)' : ''}`;
                 if (!history.template_price) {
                     history.template_price = {};
                 }
