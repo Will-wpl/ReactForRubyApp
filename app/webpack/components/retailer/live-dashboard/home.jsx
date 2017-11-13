@@ -164,7 +164,9 @@ export default class LiveHomePage extends Component {
                         <div className="col-sm-12 col-md-10 push-md-1"><BidForm data={this.state.priceConfig} onSubmit={this.onBidFormSubmit.bind(this)}/></div>
                     </div>
                     <div className="col-sm-12 col-md-7 u-cell">
-                        <div className="col-sm-12 col-md-10 push-md-1"><BidHistory data={this.state.histories} order={'desc'}/></div>
+                        <div className="col-sm-12 col-md-10 push-md-1"><BidHistory data={this.state.histories.filter(element => {
+                            return element.flag !== null;
+                        })} order={'desc'}/></div>
                     </div>
                 </div>
             </div>
