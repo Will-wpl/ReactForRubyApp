@@ -57,6 +57,8 @@ export class TimeCuntDown extends Component {
                         if (this.props.countDownOver) {
                             this.props.countDownOver();
                         }
+                    }else{
+                        this.setState({day: 0, hour: 0, minute: 0, second: 0});
                     }
                 }
             }, error => {
