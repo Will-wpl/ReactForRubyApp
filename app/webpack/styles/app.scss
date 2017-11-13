@@ -1,8 +1,8 @@
 @import 'shared';
 @import 'chart';
 .devise-logo {
-  margin-top: 150px;
-  width:418px;
+  margin-top: 120px;
+  width:auto; max-width: 100%;
 }
 .user_form{
   width: 100%; margin: 0 auto;

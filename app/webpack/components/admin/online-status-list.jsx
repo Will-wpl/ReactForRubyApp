@@ -15,6 +15,7 @@ export class OnlineStatusMain extends Component {
             data_online:[],
             data_pedding:[],
             data_outline:[],
+            holdStatus:false
         }
         this.auction = {};
         this.holdStatus = false;
@@ -76,6 +77,9 @@ export class OnlineStatusMain extends Component {
     }
     hold() {
         this.holdStatus = !this.holdStatus;
+        this.setState({
+            holdStatus:this.holdStatus
+        })
         upateHoldStatus(this.auction ? this.auction.id : 1, this.holdStatus);
     }
 
@@ -108,7 +112,8 @@ export class OnlineStatusMain extends Component {
                         </div>
                     </div>
                     <div className="col-sm-12 col-md-10 push-md-1 u-mt3">
-                        <button className="lm--button lm--button--primary fright" onClick={this.hold.bind(this)}>Hold</button>
+                        {!this.state.holdStatus ? <button className="startHold fright" onClick={this.hold.bind(this)}>Hold</button>
+                                               : <button className="endHold fright" onClick={this.hold.bind(this)}>Stop</button>}
                     </div>
                 </div>
                 <div className="createRaMain u-grid">
