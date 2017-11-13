@@ -75,6 +75,9 @@ export class RetailerLive extends Component {
 
     nofityHoldStatus(status,isOver) {
         if(isOver){
+            if(status === false){
+                this.setState({showLive: true})
+            }
             if (this.localHoldStatus !== status) {
                 //console.log('status ====>', status, this.localHoldStatus);
                 this.setState({holdStatus: status});
