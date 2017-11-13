@@ -27,7 +27,7 @@ export default class Price extends Component {
             };
             element.data.forEach((timePrice) => {
                 // console.log('timePrice.is_bidder', timePrice.is_bidder)
-                let d = timePrice.is_bidder ? {
+                let d = timePrice.is_bidder && timePrice.flag !== null ? {
                     symbol: 'triangle',
                     symbolSize: 15,
                     showSymbol: true,
