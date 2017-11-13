@@ -37,14 +37,14 @@ class AuctionHistory < ApplicationRecord
                                           calculate_dto.lt_peak, calculate_dto.lt_off_peak, calculate_dto.hts_peak, calculate_dto.hts_off_peak, calculate_dto.htl_peak, calculate_dto.htl_off_peak)
     average_price = set_average_price(total_award_sum, total_volume)
     if @histories.count == 0
-      @history = AuctionHistory.new(lt_peak: calculate_dto.lt_peak, lt_off_peak: calculate_dto.lt_off_peak, hts_peak: calculate_dto.hts_peak, hts_off_peak: calculate_dto.hts_off_peak, htl_peak: calculate_dto.htl_peak, htl_off_peak: calculate_dto.htl_off_peak, bid_time: Time.now,
+      @history = AuctionHistory.new(lt_peak: calculate_dto.lt_peak, lt_off_peak: calculate_dto.lt_off_peak, hts_peak: calculate_dto.hts_peak, hts_off_peak: calculate_dto.hts_off_peak, htl_peak: calculate_dto.htl_peak, htl_off_peak: calculate_dto.htl_off_peak, bid_time: @auction.actual_begin_time,
                                     user_id: calculate_dto.user_id, auction_id: calculate_dto.auction_id, average_price: average_price, total_award_sum: total_award_sum, is_bidder: true)
       if @history.save
         find_sort_update_auction_histories(calculate_dto.auction_id)
       end
     else
       @history = @histories.first
-      if @history.update(lt_peak: calculate_dto.lt_peak, lt_off_peak: calculate_dto.lt_off_peak, hts_peak: calculate_dto.hts_peak, hts_off_peak: calculate_dto.hts_off_peak, htl_peak: calculate_dto.htl_peak, htl_off_peak: calculate_dto.htl_off_peak, bid_time: Time.now,
+      if @history.update(lt_peak: calculate_dto.lt_peak, lt_off_peak: calculate_dto.lt_off_peak, hts_peak: calculate_dto.hts_peak, hts_off_peak: calculate_dto.hts_off_peak, htl_peak: calculate_dto.htl_peak, htl_off_peak: calculate_dto.htl_off_peak, bid_time: @auction.actual_begin_time,
                          user_id: calculate_dto.user_id, auction_id: calculate_dto.auction_id, average_price: average_price, total_award_sum: total_award_sum, is_bidder: true)
         find_sort_update_auction_histories(calculate_dto.auction_id)
       end
