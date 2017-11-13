@@ -1,8 +1,10 @@
 div.col-sm-12.col-md-4.push-md-4.admin_result_list.u-mt3
     ul
         li
-            a.report href="" Reverse Auction Report : 
-        li  
-            a.log href="" Activity Log:
+            = link_to report_admin_auction_path(), class: 'report' do
+              = 'Reverse Auction Report :'
+        li
+            = link_to log_admin_auction_path(), class: 'log' do
+              = 'Activity Log:'
 div.createRaMain.u-grid
     a.lm--button.lm--button--primary.u-mt3 href="/admin/home" Back to Homepage
