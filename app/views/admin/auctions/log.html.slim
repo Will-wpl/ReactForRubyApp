@@ -1,0 +1,21 @@
+.page-header
+
+table.table.table-hover.retailer_fill.u-mt3
+  thead
+    tr
+      th Name
+      th Date
+      th Action
+  tbody
+    - @auction_events.each do |event|
+      tr
+        td= event.company_name
+        td= event.auction_when
+        td= event.auction_do
+hr
+
+.u-grid.u-mt3
+  .col-sm-12.col-md-6
+    = page_entries_info @auction_events, entry_name: AuctionEvent.model_name.human
+  .col-sm-12.col-md-6
+    = paginate(@auction_events)

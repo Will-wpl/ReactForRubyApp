@@ -29,7 +29,9 @@ class Admin::AuctionsController < Admin::BaseController
   def report; end
 
   # GET log page
-  def log; end
+  def log
+    @auction_events = AuctionEvent.select('auction_events.* , users.company_name ').left_outer_joins(:user).order(created_at: :desc).page(params[:page])
+  end
 
   def goto
     @auction = Auction.first
