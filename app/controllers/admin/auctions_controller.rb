@@ -39,8 +39,10 @@ class Admin::AuctionsController < Admin::BaseController
       redirect_to upcoming_admin_auction_path(@auction.id)
     elsif @auction.publish_status == '1' && @auction.actual_begin_time < Time.current && Time.current < @auction.actual_end_time
       redirect_to dashboard_admin_auction_path(@auction.id)
-    elsif @auction.publish_status == '1' && @auction.actual_end_time < Time.current
+    elsif @auction.publish_status == '1' && @auction.actual_end_time < Time.current && @auction.auction_result.nil?
       redirect_to confirm_admin_auction_path(@auction.id)
+    elsif @auction.publish_status == '1' && @auction.actual_end_time < Time.current && !@auction.auction_result.nil?
+      redirect_to result_admin_auction_path(@auction.id)
     else
       redirect_to admin_home_index_path
     end
