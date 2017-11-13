@@ -73,24 +73,31 @@ showDetail(type,obj){
     }
 }
 void_auction(){
+    let timeFn;
     auctionConfirm({data:{ user_id: this.winner.data.user_id , status:'void'},id:this.auction.id}).then(res=>{
         console.log(res);
+        clearTimeout(timeFn);
         this.refs.Modal.showModal();
         this.setState({
             text:"You have voided this Reverse Auction exercise, and will be redirected to the homepage."
         })
+        timeFn = setTimeout(()=>{
+            window.location.href=`/admin/auctions/${this.auction.id}/result`;
+        },2000)
     },error=>{
 
     })
 }
 confirm_winner(){
+    let timeFn;
     auctionConfirm({data:{ user_id: this.winner.data.user_id , status:'win'},id:this.auction.id}).then(res=>{
         console.log(res);
+        clearTimeout(timeFn);
         this.refs.Modal.showModal();
         this.setState({
             text:"Congratulations! Reverse Auction winner has been confirmed."
         })
-        setTimeout(()=>{
+        timeFn = setTimeout(()=>{
             window.location.href=`/admin/auctions/${this.auction.id}/result`;
         },2000)
     },error=>{
