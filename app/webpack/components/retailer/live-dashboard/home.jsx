@@ -153,10 +153,10 @@ export default class LiveHomePage extends Component {
             <div>
                 <div className="u-grid u-mt2">
                     <div className="col-sm-12 col-md-5 u-cell">
-                        <div className="col-sm-12 col-md-10 push-md-1"><Description ranking={` ${getNumBref(this.state.ranking)}`}/></div>
+                        <div className="col-sm-12 col-md-10 push-md-1"><Description ranking={`${this.state.ranking === 2 ? 'TOP ' : ''}${getNumBref(this.state.ranking)}`}/></div>
                     </div>
                     <div className="col-sm-12 col-md-7 u-cell">
-                        <div className="col-sm-12 col-md-10 push-md-1"><Ranking data={this.state.chartDatas}/></div>
+                        <div className="col-sm-12 col-md-10 push-md-1"><Ranking data={this.state.chartDatas} yAxisFormatterRule={{0 : ' ', 1 : ' ', 2 : 'Top 2', 'func': getNumBref}}/></div>
                     </div>
                 </div>
                 <div className="u-grid u-mt2">
