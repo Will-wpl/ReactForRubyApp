@@ -92,7 +92,8 @@ function getTemplate(props) {
             showDetail: false,
             bottom: '10%',
             fillerColor: 'rgba(6, 178 ,180 , 0.1)',
-            borderColor: '#06b2b3'
+            borderColor: '#06b2b3',
+            handleColor: '#06b2b3'
         },
         grid: {
             top: '5%',
