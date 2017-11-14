@@ -38,7 +38,7 @@ export default class Price extends Component {
                     value: []
                 };
                 // d.value = [].concat(timePrice.time).concat(timePrice.price);
-                d.value = [].concat(moment(timePrice.bid_time).format('YYYY-MM-DD HH:mm:ss'))
+                d.value = [].concat(moment(timePrice.bid_time).utc().format('YYYY-MM-DD HH:mm:ss'))
                     .concat(parseFloat(timePrice.average_price).toFixed(4));
                 tmp.data.push(d);
             });

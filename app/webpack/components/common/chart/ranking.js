@@ -37,7 +37,7 @@ export default class Ranking extends Component {
                     value: []
                 };
                 // d.value = [].concat(timeRanking.time).concat(timeRanking.ranking);
-                d.value = [].concat(moment(timeRanking.bid_time).format('YYYY-MM-DD HH:mm:ss')).concat(timeRanking.ranking);
+                d.value = [].concat(moment(timeRanking.bid_time).utc().format('YYYY-MM-DD HH:mm:ss')).concat(timeRanking.ranking);
                 tmp.data.push(d);
             });
             option.series.push(tmp);
