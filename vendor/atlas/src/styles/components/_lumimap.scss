@@ -1,0 +1,14 @@
+#lumimap-markers canvas {
+  box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.15);
+  border-radius: 100%;
+  animation: pulse .5s infinite alternate;
+  -webkit-animation: pulse .5s infinite alternate;
+  transform-origin: center;
+  -webkit-transform-origin: center;
+}
+
+@keyframes pulse {
+  to {
+    box-shadow: 0 0 0 15px rgba(255, 255, 255, 0.05);
+  }
+}

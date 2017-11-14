@@ -1,0 +1,29 @@
+.alert {
+  position: absolute;
+  right: rem($gutter-small);
+  align-items: flex-start;
+  justify-content: space-between;
+  display: flex;
+  margin-bottom: rem(10);
+  padding: rem(12) rem(6) rem(14) rem(16);
+  border-radius: rem(5);
+
+  @include bp(md) {
+    right: rem($gutter-medium);
+    max-width: 50%;
+  }
+
+  &-error {
+    background-color: #b93939;
+  }
+
+  &-success,
+  &-info {
+    background-color: #018c8e;
+  }
+
+  button {
+    order: 2;
+    margin-left: rem(20);
+  }
+}

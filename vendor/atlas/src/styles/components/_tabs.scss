@@ -1,0 +1,107 @@
+.lm--tabs {
+
+  // nav
+  &-nav {
+    display: flex;
+    margin-bottom: rem(29);
+    list-style: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+
+    li {
+      font-size: rem(16);
+
+      a {
+        @include nav-highlight;
+
+        display: block;
+        padding: rem(19) rem(15) rem(22);
+        color: rgba(255, 255, 255, 0.5);
+        text-decoration: none;
+      }
+
+      &.is-active {
+        a {
+          color: #fff;
+        }
+      }
+
+      &:hover,
+      &.is-active {
+        a {
+          @include nav-highlight-active();
+        }
+      }
+    }
+  }
+
+  // content panes
+  &-pane {
+    display: none;
+
+    &.is-active {
+      display: block;
+    }
+  }
+
+  // centered
+  &--centered &-item {
+    flex: 1;
+    text-align: center;
+  }
+
+  // trigger button
+  &-trigger {
+    display: none;
+    width: 100%;
+    margin-bottom: rem(20);
+    padding: rem(19) rem(15) rem(22);
+    font-size: 1rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+
+    &:after {
+      @include caret;
+    }
+  }
+}
+
+@include bp(md) {
+  .lm--tabs {
+    &-nav {
+      padding-right: $gutter-medium;
+      padding-left: $gutter-medium;
+    }
+  }
+}
+
+// droppdown mode in mobile
+@include bp(sm) {
+  .lm--tabs[data-triggerable] {
+    .lm--tabs-trigger {
+      display: block;
+    }
+
+    .lm--tabs-nav {
+      position: absolute;
+      z-index: 1;
+      display: none;
+      width: 100%;
+      background: $color-blue9;
+
+      a:after {
+        display: none;
+      }
+    }
+
+    // dropdown open
+    &.is-open {
+      .lm--tabs-nav {
+        display: block;
+      }
+
+      .lm--tabs-trigger:after {
+        transform: rotateZ(315deg);
+      }
+    }
+  }
+}

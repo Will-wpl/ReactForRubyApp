@@ -1,0 +1,77 @@
+[type='text'],
+[type='password'],
+[type='date'],
+[type='datetime'],
+[type='datetime-local'],
+[type='month'],
+[type='week'],
+[type='email'],
+[type='number'],
+[type='search'],
+[type='tel'],
+[type='time'],
+[type='url'],
+[type='color'],
+textarea,
+select {
+  display: block;
+  width: 100%;
+  padding: rem(11) rem(16);
+  font-size: 1rem;
+  font-weight: 300;
+  color: #fff;
+  line-height: 1.25;
+  background: transparent;
+  border: 1px solid $color-input-border;
+  border-radius: rem(5);
+
+  &:focus {
+    border-color: $color-input-border-focus;
+    outline: none;
+  }
+
+  .is-error & {
+    border-color: $color-red;
+  }
+}
+
+input,
+textarea {
+  &::-webkit-input-placeholder {
+    /* Chrome/Opera/Safari */
+    color: $color-neutral-light;
+  }
+
+  &::-moz-placeholder {
+    /* Firefox 19+ */
+    color: $color-neutral-light;
+  }
+
+  &:-ms-input-placeholder {
+    /* IE 10+ */
+    color: $color-neutral-light;
+  }
+
+  &:-moz-placeholder {
+    /* Firefox 18- */
+    color: $color-neutral-light;
+  }
+
+  &[disabled] {
+    color: $color-neutral-light;
+    border-color: #1d3845;
+    cursor: not-allowed;
+  }
+}
+
+.help-block,
+.error-block {
+  margin-top: rem(10);
+  font-size: rem(12);
+  font-weight: 300;
+  color: $color-neutral-light;
+}
+
+.error-block {
+  color: $color-red;
+}

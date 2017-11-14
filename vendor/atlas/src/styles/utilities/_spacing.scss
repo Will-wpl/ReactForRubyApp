@@ -1,0 +1,95 @@
+
+$sizes: (0, 0), (1, 10px), (2, 20px), (3, 30px);
+$margin-sizes: append($sizes, (a, auto));
+
+// margins
+
+@each $size in $margin-sizes {
+  @include bp-all('.u-m#{nth($size, 1)}') {
+    margin: #{nth($size, 2)};
+  }
+}
+
+@each $size in $margin-sizes {
+  @include bp-all('.u-mv#{nth($size, 1)}') {
+    margin-top: #{nth($size, 2)};
+    margin-bottom: #{nth($size, 2)};
+  }
+}
+
+@each $size in $margin-sizes {
+  @include bp-all('.u-mh#{nth($size, 1)}') {
+    margin-right: #{nth($size, 2)};
+    margin-left: #{nth($size, 2)};
+  }
+}
+
+@each $size in $margin-sizes {
+  @include bp-all('.u-mt#{nth($size, 1)}') {
+    margin-top: #{nth($size, 2)};
+  }
+}
+
+@each $size in $margin-sizes {
+  @include bp-all('.u-mr#{nth($size, 1)}') {
+    margin-right: #{nth($size, 2)};
+  }
+}
+
+@each $size in $margin-sizes {
+  @include bp-all('.u-mb#{nth($size, 1)}') {
+    margin-bottom: #{nth($size, 2)};
+  }
+}
+
+@each $size in $margin-sizes {
+  @include bp-all('.u-ml#{nth($size, 1)}') {
+    margin-left: #{nth($size, 2)};
+  }
+}
+
+// paddings
+
+@each $size in $sizes {
+  @include bp-all('.u-p#{nth($size, 1)}') {
+    padding: #{nth($size, 2)};
+  }
+}
+
+@each $size in $sizes {
+  @include bp-all('.u-pv#{nth($size, 1)}') {
+    padding-top: #{nth($size, 2)};
+    padding-bottom: #{nth($size, 2)};
+  }
+}
+
+@each $size in $sizes {
+  @include bp-all('.u-ph#{nth($size, 1)}') {
+    padding-right: #{nth($size, 2)};
+    padding-left: #{nth($size, 2)};
+  }
+}
+
+@each $size in $sizes {
+  @include bp-all('.u-pt#{nth($size, 1)}') {
+    padding-top: #{nth($size, 2)};
+  }
+}
+
+@each $size in $sizes {
+  @include bp-all('.u-pr#{nth($size, 1)}') {
+    padding-right: #{nth($size, 2)};
+  }
+}
+
+@each $size in $sizes {
+  @include bp-all('.u-pb#{nth($size, 1)}') {
+    padding-bottom: #{nth($size, 2)};
+  }
+}
+
+@each $size in $sizes {
+  @include bp-all('.u-pl#{nth($size, 1)}') {
+    padding-left: #{nth($size, 2)};
+  }
+}

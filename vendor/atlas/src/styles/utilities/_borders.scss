@@ -1,0 +1,21 @@
+$border-color: #1d3845;
+
+@include bp-all('.u-b') {
+  border: 1px solid $border-color;
+}
+
+@include bp-all('.u-bt') {
+  border-top: 1px solid $border-color;
+}
+
+@include bp-all('.u-br') {
+  border-right: 1px solid $border-color;
+}
+
+@include bp-all('.u-bb') {
+  border-bottom: 1px solid $border-color;
+}
+
+@include bp-all('.u-bl') {
+  border-left: 1px solid $border-color;
+}

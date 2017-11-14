@@ -1,0 +1,18 @@
+= simple_form_for <%= singular_resource_ref %> do |f|
+
+  <%- attributes.each do |attribute| -%>
+  = f.<%= attribute.reference? ? :association : :input %> :<%= attribute.name %>
+  <%- end -%>
+
+  .form-action.form-group
+    .form-left-offset.form-right
+      - if f.object.new_record?
+        => f.button :button, class: "btn btn-primary", data: { disable_with: t("views.disable_with") } do
+          = icon "check-square-o", t("views.forms.create", model: f.object.class.model_name.human.titleize)
+        = " or "
+        = link_to t(".cancel", default: t("views.actions.cancel")), <%= plural_resource_path %>_path
+      - else
+        => f.button :button, class: "btn btn-primary", data: { disable_with: t("views.disable_with") } do
+          = icon "check-square-o", t("views.forms.update", model: f.object.class.model_name.human.titleize)
+        = " or "
+        = link_to t(".cancel", default: t("views.actions.cancel")), <%= singular_resource_path %>_path(f.object)

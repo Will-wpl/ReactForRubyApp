@@ -1,0 +1,22 @@
+@mixin nav-highlight() {
+  position: relative;
+
+  &:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: $color-accent;
+    transform: scale(0);
+    transition: transform 250ms ease;
+    transform-origin: 50% 100%;
+  }
+}
+
+@mixin nav-highlight-active() {
+  &:after {
+    transform: scale(1);
+  }
+}

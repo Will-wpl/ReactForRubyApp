@@ -1,0 +1,19 @@
+// dimmer text
+.u-text-muted {
+  color: $color-neutral-light;
+}
+
+// for units like kWh, S$, est, °C
+.u-unit {
+  margin-left: 0.25em;
+  font-size: rem(14);
+}
+
+.u-valign {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.u-small {
+  font-size: rem(12);
+}

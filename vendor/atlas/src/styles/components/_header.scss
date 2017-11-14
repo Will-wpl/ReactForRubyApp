@@ -1,0 +1,247 @@
+$header-height-mobile: rem(60);
+$header-height: rem(80);
+
+.lm--header {
+  @include clearfix;
+
+  margin-bottom: $gutter-medium;
+  background: $color-blue13;
+
+  // icon
+  [class^='lm--icon-'] {
+    padding: rem(4) rem(0.8);
+    font-size: rem(16);
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 1;
+  }
+
+  &-nav {
+    align-items: center;
+    display: flex;
+    height: $header-height-mobile;
+    font-size: rem(20);
+    line-height: 1.2;
+  }
+
+  &-logo {
+    height: 100%;
+    margin: 0 auto;
+
+    > a {
+      display: flex;
+      height: 100%;
+      padding: rem(10) rem(15);
+      text-decoration: none;
+    }
+
+    img {
+      max-height: 100%;
+      width: auto;
+    }
+  }
+
+  &-menu {
+    list-style: none;
+    background-color: $color-blue13;
+
+    &--secondary {
+      display: inline-flex;
+      margin-left: auto;
+      font-size: rem(14);
+    }
+  }
+
+  &-menu--secondary .lm--dropdown.is-open {
+    [class^='lm--icon-'] {
+      color: #fff;
+    }
+  }
+
+  &-link {
+    height: $header-height;
+    padding: rem(27) rem(10);
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+
+    .lm--header-item & {
+      display: block;
+    }
+
+    .is-active > & {
+      color: #fff;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  // search bar
+  &-search {
+    align-items: flex-start;
+    display: flex;
+    height: 100%;
+    padding-top: rem(26);
+    padding-right: rem(20);
+    box-shadow: $color-blue13 -20px -15px inset, rgba(255, 255, 255, 0.2) -20px -16px inset;
+    cursor: pointer;
+    white-space: nowrap;
+
+    input {
+      padding: 0 rem(6);
+      color: #fff;
+      line-height: 1.857142857;
+      background: transparent;
+      border: none;
+    }
+
+    .c-icon {
+      width: 13px;
+    }
+  }
+
+  // account
+  &-account:after {
+    @include caret;
+  }
+
+  // mobile only
+
+  @include bp(sm) {
+    position: relative;
+    margin-bottom: $gutter-small;
+
+    &-link {
+      height: $header-height-mobile;
+      padding: rem(18) rem(8);
+    }
+
+    &-search--mobile {
+      position: absolute;
+      left: 0;
+      align-items: center;
+      padding: 0;
+      background-color: $color-blue13;
+      box-shadow: none;
+
+      input {
+        flex: 1;
+        display: none;
+        margin-right: $gutter-small;
+        font-size: rem(16);
+        font-weight: 300;
+      }
+
+      &.is-open {
+        z-index: 1;
+        width: 100%;
+
+        input {
+          display: block;
+        }
+      }
+    }
+
+    &-search--mobile &-link {
+      padding-left: $gutter-small;
+    }
+
+    &-selector {
+      margin: 0 auto;
+      font-weight: 300;
+      color: #fff;
+
+      &:after {
+        @include caret;
+      }
+    }
+
+    &-menu--primary {
+      position: absolute;
+      top: $header-height-mobile;
+      right: 0;
+      left: 0;
+      z-index: 1;
+      max-height: 0;
+      overflow: hidden;
+    }
+
+    &-menu--secondary {
+      position: absolute;
+      right: 0;
+    }
+
+    &-menu--secondary &-item:last-child &-link {
+      padding-right: rem(16);
+    }
+
+    // nav open
+    &-nav.is-open &-menu--primary {
+      max-height: 500px;
+      transition: max-height 250ms ease-in;
+    }
+
+    &-nav.is-open &-selector:after {
+      transform: rotateZ(315deg);
+    }
+
+    // secondary menu dropdown
+
+    &-menu--secondary {
+      .lm--dropdown-menu {
+        right: 0;
+        left: auto;
+        width: 100vw;
+        margin-top: 0;
+        text-align: center;
+
+        &:before {
+          display: none;
+        }
+      }
+    }
+  }
+
+  // tablet and above
+
+  @include bp(md) {
+    &-nav {
+      height: $header-height;
+    }
+
+    &-logo {
+      margin: 0;
+
+      > a {
+        padding: rem(18) rem(22) rem(18) $gutter-medium;
+      }
+    }
+
+    &-menu {
+      display: inline-flex;
+    }
+
+    &-menu--primary &-link {
+      @include nav-highlight;
+    }
+
+    &-menu--primary .is-active > &-link {
+      @include nav-highlight-active;
+    }
+
+    &-menu--secondary {
+      margin-right: rem(10);
+
+      .lm--dropdown-menu {
+        right: 0;
+      }
+    }
+
+    &-menu--secondary &-item:last-child &-link {
+      padding-right: rem(20);
+    }
+  }
+}

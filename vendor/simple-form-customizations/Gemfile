@@ -1,0 +1,16 @@
+source 'http://nexus.in.spdigital.io/repository/rubygems-all/'
+
+group :development do
+  gem 'rake'
+  gem 'bundler'
+end
+
+group :development, :test do
+  gem 'simple_form'
+  gem 'sqlite3'
+  gem 'rails'
+  gem 'rspec-rails'
+end
+
+# Specify your gem's dependencies in simple_form_customizations.gemspec
+gemspec

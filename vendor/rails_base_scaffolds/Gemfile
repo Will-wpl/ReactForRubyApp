@@ -1,0 +1,17 @@
+source 'http://nexus.in.spdigital.io/repository/rubygems-all'
+
+git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
+
+group :development, :test do
+  gem 'bundler'
+  gem 'rake'
+  gem 'rails'
+  gem 'rspec'
+  gem 'rspec-rails'
+  gem 'factory_girl_rails'
+  gem 'sqlite3'
+  gem 'ammeter'
+end
+
+# Specify your gem's dependencies in rails_base_scaffold.gemspec
+gemspec

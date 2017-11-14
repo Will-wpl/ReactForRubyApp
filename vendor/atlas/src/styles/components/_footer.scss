@@ -1,0 +1,20 @@
+$footer-height: 54px;
+
+body {
+  position: relative;
+  padding-bottom: $footer-height + 30px;
+}
+
+.lm--footer {
+  @include clearfix();
+
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: $footer-height;
+  padding: rem(20) 0;
+  font-size: rem(12);
+  color: $color-neutral-light;
+  line-height: 1.166666667;
+}
