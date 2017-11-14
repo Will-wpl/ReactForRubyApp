@@ -11,8 +11,8 @@ export default class BidHistory extends Component {
                     <td>{element.bid_time}</td>
                     <td>${element.lt_off_peak}</td>
                     <td>${element.lt_peak}</td>
-                    <td>${element.hts_off_peak}</td>
-                    <td>${element.hts_peak}</td>
+                    <td style={{display: 'none'}}>${element.hts_off_peak}</td>
+                    <td style={{display: 'none'}}>${element.hts_peak}</td>
                     <td>${element.htl_off_peak}</td>
                     <td>${element.htl_peak}</td>
                 </tr>
@@ -27,8 +27,8 @@ export default class BidHistory extends Component {
                     <td>{element.bid_time}</td>
                     <td>${element.lt_off_peak}</td>
                     <td>${element.lt_peak}</td>
-                    <td>${element.hts_off_peak}</td>
-                    <td>${element.hts_peak}</td>
+                    <td style={{display: 'none'}}>${element.hts_off_peak}</td>
+                    <td style={{display: 'none'}}>${element.hts_peak}</td>
                     <td>${element.htl_off_peak}</td>
                     <td>${element.htl_peak}</td>
                 </tr>)
@@ -45,22 +45,22 @@ export default class BidHistory extends Component {
                         <col style={{width: 100 +'px'}} />
                         <col style={{width: 50 +'px'}} /> 
                         <col style={{width: 50 +'px'}} /> 
-                        <col style={{width: 50 +'px'}} /> 
-                        <col style={{width: 50 +'px'}} /> 
+                        <col style={{width: 50 +'px', display: 'none'}} />
+                        <col style={{width: 50 +'px', display: 'none'}} />
                         <col style={{width: 50 +'px'}} /> 
                         <col style={{width: 50 +'px'}} /> 
                     </colgroup>  
                     <thead>
                     <tr>
-                        <th colSpan="8" className="table_title">Bid Price</th>
+                        <th colSpan="6" className="table_title">Bid Price</th>
                     </tr>
                     <tr>
                         <th>S/N</th>
                         <th>Time</th>
                         <th>LT (Off-Peak)</th>
                         <th>LT (Peak)</th>
-                        <th>HTS (Off-Peak)</th>
-                        <th>HTS (Peak)</th>
+                        <th style={{display: 'none'}}>HTS (Off-Peak)</th>
+                        <th style={{display: 'none'}}>HTS (Peak)</th>
                         <th>HTL (Off-Peak)</th>
                         <th>HTL (Peak)</th>
                     </tr>
@@ -74,8 +74,8 @@ export default class BidHistory extends Component {
                     <col style={{width: 100 +'px'}} />
                     <col style={{width: 50 +'px'}} /> 
                     <col style={{width: 50 +'px'}} /> 
-                    <col style={{width: 50 +'px'}} /> 
-                    <col style={{width: 50 +'px'}} /> 
+                    <col style={{width: 50 +'px', display: 'none'}} />
+                    <col style={{width: 50 +'px', display: 'none'}} />
                     <col style={{width: 50 +'px'}} /> 
                     <col style={{width: 50 +'px'}} /> 
                     </colgroup>  
