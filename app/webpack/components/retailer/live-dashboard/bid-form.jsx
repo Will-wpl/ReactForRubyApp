@@ -41,7 +41,7 @@ export default class BidForm extends Component {
         });
         console.log(Number(formatNum), formatNum, target);
         let status = this.state.status;
-        if (formatNum !== '' && Number(formatNum) < Number(target)) {
+        if (formatNum !== '' && Number(`0.${formatNum}`) <= Number(`0.${target}`)) {
             status[i] = true;
         } else {
             status[i] = false;
@@ -88,8 +88,8 @@ export default class BidForm extends Component {
         this.setState({
             thisStatus: true
         })
-        let allow = this.state.configs.every(element => {
-            return element.length > 0;
+        let allow = this.state.configs.every((element, index) => {
+            return element.length > 0 && Number(`0.${element}`) <= Number(`0.${this.compareConfigs[index]}`);
         })
         let isChanged = this.state.configs.some((element, index) => {
             console.log("state:" + Number(element) + "--------props:" + parseFloat(this.compareConfigs[index]));
@@ -97,6 +97,7 @@ export default class BidForm extends Component {
         })
         if (allow && isChanged) {
             if (this.props.onSubmit) {
+                console.log(this.state.configs)
                 this.props.onSubmit(this.state.configs);
             }
             this.setState({
