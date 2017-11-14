@@ -89,16 +89,27 @@ export default class BidForm extends Component {
             thisStatus: true
         })
         let allow = this.state.configs.every((element, index) => {
+            if (index === 2 || index === 3) {
+                return true;
+            }
             return element.length > 0 && Number(`0.${element}`) <= Number(`0.${this.compareConfigs[index]}`);
         })
         let isChanged = this.state.configs.some((element, index) => {
             // console.log("state:" + Number(element) + "--------props:" + Number(this.compareConfigs[index]));
+            if (index === 2 || index === 3) {
+                return false;
+            }
             return Number(`0.${element}`) < Number(`0.${this.compareConfigs[index]}`);
         })
         if (allow && isChanged) {
             if (this.props.onSubmit) {
-                console.log(this.state.configs)
-                this.props.onSubmit(this.state.configs);
+
+                let params = this.state.configs.map(element => {
+                    return element;
+                });
+                params.splice(2, 2, "0", "0");
+                // console.log(this.state.configs, params);
+                this.props.onSubmit(params);
             }
             this.setState({
                 samePrice: false
@@ -147,7 +158,7 @@ export default class BidForm extends Component {
                         <tr>
                             <th></th>
                             <th>LT</th>
-                            <th>HT(Small)</th>
+                            <th style={{display: 'none'}}>HT(Small)</th>
                             <th>HT(Large)</th>
                         </tr>
                         </thead>
@@ -158,7 +169,7 @@ export default class BidForm extends Component {
                                           style={{borderColor: this.state.status[1] ? 'white' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 1)}
                                           maxLength={4}/></td>
-                            <td>$0.<input type="text" value={this.state.configs[3]}
+                            <td style={{display: 'none'}}>$0.<input type="text" value={this.state.configs[3]}
                                           style={{borderColor: this.state.status[3] ? 'white' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 3)}
                                           maxLength={4}/></td>
@@ -173,7 +184,7 @@ export default class BidForm extends Component {
                                           style={{borderColor: this.state.status[0] ? 'white' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 0)}
                                           maxLength={4}/></td>
-                            <td>$0.<input type="text" value={this.state.configs[2]}
+                            <td style={{display: 'none'}}>$0.<input type="text" value={this.state.configs[2]}
                                           style={{borderColor: this.state.status[2] ? 'white' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 2)}
                                           maxLength={4}/></td>

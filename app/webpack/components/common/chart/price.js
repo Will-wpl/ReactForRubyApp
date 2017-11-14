@@ -38,7 +38,7 @@ export default class Price extends Component {
                     value: []
                 };
                 // d.value = [].concat(timePrice.time).concat(timePrice.price);
-                d.value = [].concat(moment(timePrice.bid_time).utc().format('YYYY-MM-DD HH:mm:ss'))
+                d.value = [].concat(moment(timePrice.bid_time).format('YYYY-MM-DD HH:mm:ss'))
                     .concat(parseFloat(timePrice.average_price).toFixed(4));
                 tmp.data.push(d);
             });
@@ -128,10 +128,9 @@ function getTemplate(props) {
                     let serObj = props.data[params.seriesIndex];
                     if (serObj && serObj.data) {
                         let d = serObj.data[params.dataIndex];
-                        if (d && d.template_price) {
+                        if (d && d.template_price) { //<div>${d.template_price.hts}</div>
                             template = `<strong>${d.template_price.company_price}</strong>
                                     <div>${d.template_price.lt}</div>
-                                    <div>${d.template_price.hts}</div>
                                     <div>${d.template_price.htl}</div>`;
                         }
                     }
