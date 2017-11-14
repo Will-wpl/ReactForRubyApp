@@ -4,22 +4,19 @@ import {getLoginUserId} from './componentService/util';
 import {logout} from './componentService/common/service';
 export default class UserLogout extends Component {
     componentDidMount(){
-        window.addEventListener("beforeunload", function(event) {
-            event.returnValue = "affaa";
-            console.log(event);
-            return;
-            let n = event.screenX - window.screenLeft;
-            let b = n > document.documentElement.scrollWidth -20;
-            if(b && event.clientY < -40 || event.altKey){
-                alert("关闭浏览器");
-                this.doOut();
-            }else if(event.clientY > -40 && (event.clientY < -30) && event.clientX > 500){
-                alert("关闭标签页");
-                this.doOut();
-            }else{
-                alert("刷新页面");
-            }
-        });
+        let user_id = getLoginUserId();
+        $(".lm--dropdown-link").click(function(){
+            $.ajax({
+                type: "POST",
+                dataType: 'json',
+                url:'/api/auctions/logout',
+                data:{user_id:user_id},
+                success:function(res){
+                    console.log(res);
+                }
+            })
+            //this.doOut();
+        })      
     }
     doOut(){
         let user_id = getLoginUserId();
@@ -30,7 +27,7 @@ export default class UserLogout extends Component {
                 })
     }
     render() {
-        return <div onClick={this.doOut.bind(this)}>logout</div>
+        return <div></div>
     }
 }
 function run() {
