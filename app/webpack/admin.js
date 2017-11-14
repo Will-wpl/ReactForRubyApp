@@ -9,6 +9,6 @@ import "components/admin/admin_dashboard";
 import "components/admin/online-status-list";
 import "components/admin/admin-confirm-winner";
 import "components/admin/admin-report";
-import "./javascripts/ajax-test.js";
+// import "./javascripts/ajax-test.js";
 console.log("Admin Webpacker");
 
