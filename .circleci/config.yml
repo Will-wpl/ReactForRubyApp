@@ -106,12 +106,12 @@ workflows:
           filters:
             branches:
               only:
-                - circle_ci
+                - ci_cd
       - deploy:
           requires:
             - build
           filters:
             branches:
               only:
-                - circle_ci
+                - ci_cd
 
