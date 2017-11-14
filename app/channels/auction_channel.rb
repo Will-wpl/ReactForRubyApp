@@ -19,7 +19,7 @@ class AuctionChannel < ApplicationCable::Channel
     extend_time = data['extend_time'].to_i
     auction_extend_time = AuctionExtendTime.new
     auction_extend_time.extend_time = extend_time
-    auction_extend_time.current_time = Time.now
+    auction_extend_time.current_time = Time.current
     auction_extend_time.actual_begin_time = auction.actual_begin_time
     auction_extend_time.actual_end_time = auction.actual_end_time + 60 * extend_time
     auction_extend_time.auction_id = params[:auction_id]
@@ -78,7 +78,7 @@ class AuctionChannel < ApplicationCable::Channel
 
     average_price = AuctionHistory.set_average_price(total_award_sum, total_volume)
 
-    @history = AuctionHistory.new(lt_peak: calculate_dto.lt_peak, lt_off_peak: calculate_dto.lt_off_peak, hts_peak: calculate_dto.hts_peak, hts_off_peak: calculate_dto.hts_off_peak, htl_peak: calculate_dto.htl_peak, htl_off_peak: calculate_dto.htl_off_peak, bid_time: Time.now,
+    @history = AuctionHistory.new(lt_peak: calculate_dto.lt_peak, lt_off_peak: calculate_dto.lt_off_peak, hts_peak: calculate_dto.hts_peak, hts_off_peak: calculate_dto.hts_off_peak, htl_peak: calculate_dto.htl_peak, htl_off_peak: calculate_dto.htl_off_peak, bid_time: Time.current,
                                   user_id: calculate_dto.user_id, auction_id: calculate_dto.auction_id, average_price: average_price, total_award_sum: total_award_sum, is_bidder: true)
     if @history.save
       AuctionEvent.set_events(@history.user_id, @history.auction_id, 'set bid', @history.to_json)
