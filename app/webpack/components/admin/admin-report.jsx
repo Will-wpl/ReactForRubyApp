@@ -81,7 +81,7 @@ export class AdminReport extends Component {
                     <div className="col-sm-12 col-md-5">
                         <dl className="reservePrice">
                             <dd>
-                                <span>Reserve Price = $ {this.startPrice} /KWh</span>
+                                <span>Reserve Price = $ {this.startPrice} /kWh</span>
                                 <span className={achieved ? 'success' : 'fail'}>
                                 {achieved ? 'Reserve Price Achieved' : 'Reserve Price Not Achieved'}
                                 </span>

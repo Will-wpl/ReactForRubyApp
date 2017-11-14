@@ -57,7 +57,7 @@ export default class LiveHomePage extends Component {
                             if (!last.template_price) {
                                 last.template_price = {};
                             }
-                            last.template_price['company_price'] = `${last.company_name} ${parseFloat(last.average_price).toFixed(4)}/KWH`;
+                            last.template_price['company_price'] = `${last.company_name} ${parseFloat(last.average_price).toFixed(4)}/kWh`;
                             last.template_price['lt'] = `LT(P):$${parseFloat(last.lt_peak).toFixed(4)} LT(OP):$${parseFloat(last.lt_off_peak).toFixed(4)}`;
                             last.template_price['hts'] = `HTS(P):$${parseFloat(last.hts_peak).toFixed(4)} HTS(OP):$${parseFloat(last.hts_off_peak).toFixed(4)}`;
                             last.template_price['htl'] = `HTL(P):$${parseFloat(last.htl_peak).toFixed(4)} HTL(OP):$${parseFloat(last.htl_off_peak).toFixed(4)}`;
@@ -116,7 +116,7 @@ export default class LiveHomePage extends Component {
                 if (!history.template_price) {
                     history.template_price = {};
                 }
-                history.template_price['company_price'] = `${history.company_name} ${parseFloat(history.average_price).toFixed(4)}/KWH`;
+                history.template_price['company_price'] = `${history.company_name} ${parseFloat(history.average_price).toFixed(4)}/kWh`;
                 history.template_price['lt'] = `LT(P):$${parseFloat(history.lt_peak).toFixed(4)} LT(OP):$${parseFloat(history.lt_off_peak).toFixed(4)}`;
                 history.template_price['hts'] = `HTS(P):$${parseFloat(history.hts_peak).toFixed(4)} HTS(OP):$${parseFloat(history.hts_off_peak).toFixed(4)}`;
                 history.template_price['htl'] = `HTL(P):$${parseFloat(history.htl_peak).toFixed(4)} HTL(OP):$${parseFloat(history.htl_off_peak).toFixed(4)}`;
