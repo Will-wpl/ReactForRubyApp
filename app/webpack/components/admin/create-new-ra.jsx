@@ -32,6 +32,7 @@ export class CreateNewRA extends Component {
         if (this.props.left_name) {//eidt
             this.setState({
                 disabled:this.props.disabled,
+                editdisabled:this.props.editdisabled,
                 live_modal:"live_hide"
             })
             this.doGetData();
@@ -154,16 +155,16 @@ export class CreateNewRA extends Component {
     }
     edit() {
         this.setState({
-            edit_btn: "lm--button lm--button--primary hide",
-            edit_change: "lm--button lm--button--primary show",
-            disabled: ""
+            edit_btn:"lm--button lm--button--primary hide",
+            edit_change:"lm--button lm--button--primary show",
+            disabled:false
         })
     }
     Cancel() {
         this.setState({
-            edit_btn: "lm--button lm--button--primary show",
-            edit_change: "lm--button lm--button--primary hide",
-            disabled: "disabled"
+            edit_btn:"lm--button lm--button--primary show",
+            edit_change:"lm--button lm--button--primary hide",
+            disabled:true
         })
         this.doGetData();
     }
@@ -270,7 +271,7 @@ export class CreateNewRA extends Component {
                 this.setState({
                     edit_btn:"lm--button lm--button--primary show",
                     edit_change:"lm--button lm--button--primary hide",
-                    disabled:"disabled"
+                    disabled:true
                 })
             }
         }
@@ -315,7 +316,7 @@ export class CreateNewRA extends Component {
             styleType = "col-sm-12 col-md-12";
             left_name = this.props.left_name;
             btn_html = <div className="createRa_btn">
-                            {this.state.disabled ? <div className="mask"></div> : ''}
+                            {this.state.editdisabled ? <div className="mask"></div> : ''}
                             <a className={this.state.edit_btn} onClick={this.edit.bind(this)}>Edit</a>
                             <button className={this.state.edit_change} onClick={this.auctionCreate.bind(this,'save')}>Save</button>
                             <a className={this.state.edit_change} onClick={this.Cancel.bind(this)}>Cancel</a>
