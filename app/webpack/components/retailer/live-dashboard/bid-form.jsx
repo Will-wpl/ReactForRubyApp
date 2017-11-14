@@ -15,10 +15,13 @@ export default class BidForm extends Component {
 
     initConfigs(configs) {
         console.log('initial config', configs);
-        this.compareConfigs = configs;
+        this.compareConfigs = configs.map(element => {
+            return parseFloat(element).toFixed(4).substring(2);
+        });
     }
 
     componentWillReceiveProps(nextProps) {
+        console.log('newest config', nextProps.data);
         if (nextProps.data.length > 0) {
             this.compareConfigs = nextProps.data.map(element => {
                 return parseFloat(element).toFixed(4).substring(2);
@@ -70,8 +73,8 @@ export default class BidForm extends Component {
             return element.length > 0;
         })
         let isChanged = this.state.configs.some((element, index) => {
-            // console.log("state:"+Number(element) / 10000+"--------props:"+parseFloat(this.compareConfigs[index]));
-            return element.length > 0 && Number(element) / 10000 < Number(this.compareConfigs[index]);
+            console.log("state:"+Number(element) +"--------props:"+parseFloat(this.compareConfigs[index]));
+            return Number(element) < Number(this.compareConfigs[index]);
         })
         if (allow && isChanged) {
             if (this.props.onSubmit) {

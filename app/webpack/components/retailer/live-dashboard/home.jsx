@@ -74,9 +74,10 @@ export default class LiveHomePage extends Component {
 
                         this.setState({
                             ranking: last.ranking,
-                            priceConfig: [].concat(last.lt_off_peak).concat(last.lt_peak)
-                                .concat(last.hts_off_peak).concat(last.hts_peak)
-                                .concat(last.htl_off_peak).concat(last.htl_peak),
+                            priceConfig: last.is_bidder ? [].concat(last.lt_off_peak)
+                                .concat(last.lt_peak).concat(last.hts_off_peak)
+                                .concat(last.hts_peak).concat(last.htl_off_peak)
+                                .concat(last.htl_peak) : this.state.priceConfig,
                             histories: last.is_bidder ? this.state.histories.concat(element): this.state.histories,
                             chartDatas: this.state.chartDatas
                         })
@@ -121,21 +122,28 @@ export default class LiveHomePage extends Component {
                 history.template_price['htl'] = `HTL(P):$${parseFloat(history.htl_peak).toFixed(4)} HTL(OP):$${parseFloat(history.htl_off_peak).toFixed(4)}`;
                 chartDataTpl.data.push(history)
             });
-            let last = histories[histories.length - 1];
-            last.ranking = Number(last.ranking) === 1 ? 2 : last.ranking;
-            console.log('last =>>>>',last);
-            if (last.flag === null) {
-                this.bidForm.initConfigs([]
-                    .concat(last.lt_off_peak).concat(last.lt_peak)
-                    .concat(last.hts_off_peak).concat(last.hts_peak)
-                    .concat(last.htl_off_peak).concat(last.htl_peak));
+
+            let biddenArr = histories.filter(element => {
+                return element.is_bidder;
+            })
+            let lastBidden = biddenArr[biddenArr.length - 1];
+            lastBidden.ranking = Number(lastBidden.ranking) === 1 ? 2 : Number(lastBidden.ranking);
+            if (biddenArr.length === 1) {
+                if (lastBidden.flag === null) {
+                    this.bidForm.initConfigs([]
+                        .concat(lastBidden.lt_off_peak).concat(lastBidden.lt_peak)
+                        .concat(lastBidden.hts_off_peak).concat(lastBidden.hts_peak)
+                        .concat(lastBidden.htl_off_peak).concat(lastBidden.htl_peak));
+                }
             }
+            // console.log('last =>>>>',last);
+            let newest = histories[histories.length - 1];
             this.setState({
-                ranking: last.ranking,
-                    priceConfig: last.flag ? []
-                    .concat(last.lt_off_peak).concat(last.lt_peak)
-                    .concat(last.hts_off_peak).concat(last.hts_peak)
-                    .concat(last.htl_off_peak).concat(last.htl_peak) : [],
+                ranking: Number(newest.ranking) === 1 ? 2 : Number(newest.ranking),
+                    priceConfig: biddenArr.length > 1 ? []
+                    .concat(lastBidden.lt_off_peak).concat(lastBidden.lt_peak)
+                    .concat(lastBidden.hts_off_peak).concat(lastBidden.hts_peak)
+                    .concat(lastBidden.htl_off_peak).concat(lastBidden.htl_peak) : [],
                 histories: res.filter(element => {
                     return element.is_bidder;
                 }), chartDatas: [].concat(chartDataTpl)
