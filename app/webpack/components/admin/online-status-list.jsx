@@ -112,8 +112,8 @@ export class OnlineStatusMain extends Component {
                         </div>
                     </div>
                     <div className="col-sm-12 col-md-10 push-md-1 u-mt3">
-                        {!this.state.holdStatus ? <button className="startHold fright" onClick={this.hold.bind(this)}>Hold</button>
-                                               : <button className="endHold fright" onClick={this.hold.bind(this)}>Stop</button>}
+                        {!this.state.holdStatus ? <button className="endHold fright" onClick={this.hold.bind(this)}>Stop</button>
+                                               : <button className="startHold fright" onClick={this.hold.bind(this)}>Hold</button>}
                     </div>
                 </div>
                 <div className="createRaMain u-grid">
