@@ -92,8 +92,8 @@ export default class BidForm extends Component {
             return element.length > 0 && Number(`0.${element}`) <= Number(`0.${this.compareConfigs[index]}`);
         })
         let isChanged = this.state.configs.some((element, index) => {
-            console.log("state:" + Number(element) + "--------props:" + parseFloat(this.compareConfigs[index]));
-            return Number(element) < Number(this.compareConfigs[index]);
+            // console.log("state:" + Number(element) + "--------props:" + Number(this.compareConfigs[index]));
+            return Number(`0.${element}`) < Number(`0.${this.compareConfigs[index]}`);
         })
         if (allow && isChanged) {
             if (this.props.onSubmit) {
