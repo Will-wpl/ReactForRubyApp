@@ -89,16 +89,27 @@ export default class BidForm extends Component {
             thisStatus: true
         })
         let allow = this.state.configs.every((element, index) => {
+            if (index === 2 || index === 3) {
+                return true;
+            }
             return element.length > 0 && Number(`0.${element}`) <= Number(`0.${this.compareConfigs[index]}`);
         })
         let isChanged = this.state.configs.some((element, index) => {
             // console.log("state:" + Number(element) + "--------props:" + Number(this.compareConfigs[index]));
+            if (index === 2 || index === 3) {
+                return false;
+            }
             return Number(`0.${element}`) < Number(`0.${this.compareConfigs[index]}`);
         })
         if (allow && isChanged) {
             if (this.props.onSubmit) {
-                console.log(this.state.configs)
-                this.props.onSubmit(this.state.configs);
+
+                let params = this.state.configs.map(element => {
+                    return element;
+                });
+                params.splice(2, 2, "0", "0");
+                // console.log(this.state.configs, params);
+                this.props.onSubmit(params);
             }
             this.setState({
                 samePrice: false
