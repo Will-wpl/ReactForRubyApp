@@ -117,6 +117,9 @@ export class AdminReport extends Component {
                         <RetailerRanking ranking={this.state.ranking}/>
                     </div>
                 </div>
+                <div className="createRaMain u-grid">
+                    <a className="lm--button lm--button--primary u-mt3" href="/admin/home" >Back to Homepage</a>
+                </div>
             </div>
         )
     }
