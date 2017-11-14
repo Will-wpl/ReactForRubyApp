@@ -45,7 +45,7 @@ export class TimeCuntDown extends Component {
                 //console.log('pre start time ==>', moment(res[ACTUAL_BEGIN_TIME]).format('YYYY-MM-DD hh:mm:ss'))
                 //console.log('pre now time ==>', moment(res[ACTUAL_CURRENT_TIME]).format('YYYY-MM-DD hh:mm:ss'))
                 //console.log(res[HOLD_STATUS]);
-                this.timerTitle = res ? `${res.name} on ${moment(res.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
+                this.timerTitle = res ? `${res.name} on ${moment(res.start_datetime).toDate().getTime().format('D MMM YYYY, h:mm a')}` : '';
                 let isOver = this.isCountDownOver(moment(res[ACTUAL_BEGIN_TIME]).toDate().getTime()
                     , moment(res[ACTUAL_CURRENT_TIME]).toDate().getTime());
                 if (this.props.listenHold) {
@@ -84,7 +84,7 @@ export class TimeCuntDown extends Component {
     render() {
         return (
             <div className="time_cuntdown">
-                <p>{this.timerTitle}</p>
+                <p>{this.props.title}</p>
                 <div className="Countdown"><abbr>Countdown Timer:</abbr>
                     <ol id="countdown_timer">
                         <span><font>{this.state.day}</font>DAYS</span>
