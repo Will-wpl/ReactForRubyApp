@@ -136,7 +136,7 @@ export default class BidForm extends Component {
         if (this.state.status.some(element => {
                 return !element
             })) {
-            illegal = <p className="number_error" style={{color: 'red'}}>need lesser</p>;
+            illegal = <p className="number_error" style={{color: 'red'}}>Prices submitted must be lower than the energy cost component of prevailing SPS LT Tariff ($0.1458/kWh)</p>;
         }
         return (
             <div className="number_form">

@@ -166,7 +166,7 @@ function getTemplate(props) {
         yAxis: {
             splitLine: {show: false},
             type: 'value',
-            name: '$/kwh',
+            name: '$/kWh',
             nameLocation: 'middle',
             nameGap: 50,
             nameRotate: 89.99999999,
