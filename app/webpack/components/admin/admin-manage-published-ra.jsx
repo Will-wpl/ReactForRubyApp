@@ -13,7 +13,8 @@ export class AdminManagePublishedRa extends Component {
             id:"",
             live_modal:"",live_modal_do:"",
             //holdOrend:"live_hold",
-            dataList:[]
+            dataList:[],
+            disabled:false
         }
         this.auction = {};
     }
@@ -67,10 +68,10 @@ export class AdminManagePublishedRa extends Component {
                     </p>
                 </div> */}
                 <div className={this.state.live_modal_do}>
-                <TimeCuntDown title={this.timerTitle} auction={this.auction} />
+                <TimeCuntDown title={this.timerTitle} auction={this.auction} countDownOver={()=>{this.setState({disabled:true})}} />
                 <div className="u-grid u-mt3">
                     <div className="col-sm-12 col-md-7">
-                        <CreateNewRA left_name="Manage Upcoming Reverse Auction" />
+                        <CreateNewRA left_name="Manage Upcoming Reverse Auction" disabled={this.state.disabled} />
                     </div>
                     <div className="col-sm-12 col-md-5">
                         <BidderStatus dataList={this.state.dataList} />
