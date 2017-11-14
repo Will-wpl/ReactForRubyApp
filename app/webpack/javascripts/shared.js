@@ -4,9 +4,19 @@ import {getLoginUserId} from './componentService/util';
 import {logout} from './componentService/common/service';
 export default class UserLogout extends Component {
     componentDidMount(){
-        $(window).bind('beforeunload',function(){
-            return '您输入的内容尚未保存，确定离开此页面吗？';
-        });      
+        let user_id = getLoginUserId();
+        $(".lm--dropdown-link").click(function(){
+            $.ajax({
+                type: "POST",
+                dataType: 'json',
+                url:'/api/auctions/logout',
+                data:{user_id:user_id},
+                success:function(res){
+                    console.log(res);
+                }
+            })
+            //this.doOut();
+        })      
     }
     doOut(){
         let user_id = getLoginUserId();
