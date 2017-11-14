@@ -58,9 +58,17 @@ class AuctionHistory < ApplicationRecord
   def self.sort_update_auction_histories(histories)
     # code here
     histories = histories.order(average_price: :asc, bid_time: :asc)
+    count = 0
+    tmp_average_price = nil
     histories.each_with_index do |history, index|
+      if tmp_average_price == history.average_price
+        count += 1
+      else
+        count = 0
+      end
       # puts history, index
-      history.update(ranking: index + 1)
+      history.update(ranking: index + 1 - count)
+      tmp_average_price = history.average_price
     end
   end
 
