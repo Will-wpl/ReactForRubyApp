@@ -30,7 +30,7 @@ export default class WinnerPrice extends Component {
                               <h4 className="u-mt1">Summary of Lowest Bidder</h4>
                               <ul>
                                 <li><span>Lowest Price Bidder: </span><span>{this.props.winner.data.lowest_price_bidder}</span></li>
-                                <li><span>Lowest Average Price: </span><span>{Number(this.props.winner.data.lowest_average_price).toFixed(4)}</span></li>
+                                <li><span>Lowest Average Price: </span><span>${Number(this.props.winner.data.lowest_average_price).toFixed(4)}/kWh</span></li>
                               </ul>
                               <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                                   <thead>
@@ -57,7 +57,7 @@ export default class WinnerPrice extends Component {
                       <h4 className="u-mt1">Summary of Lowest Bidder</h4>
                       <ul>
                         <li><span>Lowest Price Bidder: </span><span>{this.props.winner.data.company_name}</span></li>
-                        <li><span>Lowest Average Price: </span><span>{Number(this.props.winner.data.average_price).toFixed(4)}</span></li>
+                        <li><span>Lowest Average Price: </span><span>${Number(this.props.winner.data.average_price).toFixed(4)}/kWh</span></li>
                       </ul>
                       <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                           <thead>
