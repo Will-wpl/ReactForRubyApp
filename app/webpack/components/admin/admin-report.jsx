@@ -27,8 +27,8 @@ export class AdminReport extends Component {
             this.auction = auction;
             this.userStartInfo = auction ? `${auction.name} on ${moment(auction.start_datetime).format('D MMM YYYY')}` : '';
             this.startTime = auction ? `${moment(auction.start_datetime).format('h:mm a')}` : '';
-            this.endTime = auction ? `${moment(auction.end_datetime).format('h:mm a')}` : '';
-            this.duration = parseInt((moment(auction.actual_end_time) - moment(auction.actual_begin_time))/1000);
+            this.endTime = auction ? `${moment(auction.actual_end_time).format('h:mm a')}` : '';
+            this.duration = parseInt((moment(auction.actual_end_time) - moment(auction.actual_begin_time))/1000/60);
             this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000';
             this.actualPrice = '0.0000';
             getHistoriesLast({ auction_id: auction? auction.id : 1}).then(data => {
@@ -81,7 +81,7 @@ export class AdminReport extends Component {
                     <div className="col-sm-12 col-md-5">
                         <dl className="reservePrice">
                             <dd>
-                                <span>Reserve Price = $ {this.startPrice} /KWh</span>
+                                <span>Reserve Price = $ {this.startPrice} /kWh</span>
                                 <span className={achieved ? 'success' : 'fail'}>
                                 {achieved ? 'Reserve Price Achieved' : 'Reserve Price Not Achieved'}
                                 </span>
@@ -116,6 +116,9 @@ export class AdminReport extends Component {
                         <WinnerPrice showOrhide="show" isWinner="winner" winner={this.winner} />
                         <RetailerRanking ranking={this.state.ranking}/>
                     </div>
+                </div>
+                <div className="createRaMain u-grid">
+                    <a className="lm--button lm--button--primary u-mt3" href="/admin/home" >Back to Homepage</a>
                 </div>
             </div>
         )

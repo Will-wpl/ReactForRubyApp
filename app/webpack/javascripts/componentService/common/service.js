@@ -13,7 +13,6 @@ export const getAuction = () => {
 }
 
 export const logout = (id) => {
-    alert(id);
     return create('/api/auctions/logout',{user_id:id});
 }
 

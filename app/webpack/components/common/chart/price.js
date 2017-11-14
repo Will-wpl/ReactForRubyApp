@@ -38,7 +38,7 @@ export default class Price extends Component {
                     value: []
                 };
                 // d.value = [].concat(timePrice.time).concat(timePrice.price);
-                d.value = [].concat(moment(timePrice.bid_time).format('YYYY-MM-DD HH:mm:ss'))
+                d.value = [].concat(moment(timePrice.bid_time).utc().format('YYYY-MM-DD HH:mm:ss'))
                     .concat(parseFloat(timePrice.average_price).toFixed(4));
                 tmp.data.push(d);
             });
@@ -52,7 +52,7 @@ export default class Price extends Component {
             <ReactEcharts
                 option={this.getChartOption()}
                 notMerge={true}
-                style={{minHeight: '280px', width: '100%'}}
+                style={{minHeight: '310px', width: '100%'}}
                 className='react_for_echarts'/>
 
         );
@@ -89,13 +89,17 @@ function getTemplate(props) {
             label: {
                 show: false
             },
-            showDetail: false
+            showDetail: false,
+            bottom: '10%',
+            fillerColor: 'rgba(6, 178 ,180 , 0.1)',
+            borderColor: '#06b2b3',
+            handleColor: '#06b2b3'
         },
         grid: {
             top: '5%',
             left: '10%',
             right: '7%',
-            bottom: '3%',
+            bottom: '20%',
             containLabel: true
         },
         tooltip: {
@@ -166,7 +170,7 @@ function getTemplate(props) {
         yAxis: {
             splitLine: {show: false},
             type: 'value',
-            name: '$/kwh',
+            name: '$/kWh',
             nameLocation: 'middle',
             nameGap: 50,
             nameRotate: 89.99999999,

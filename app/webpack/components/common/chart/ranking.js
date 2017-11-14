@@ -37,7 +37,7 @@ export default class Ranking extends Component {
                     value: []
                 };
                 // d.value = [].concat(timeRanking.time).concat(timeRanking.ranking);
-                d.value = [].concat(moment(timeRanking.bid_time).format('YYYY-MM-DD HH:mm:ss')).concat(timeRanking.ranking);
+                d.value = [].concat(moment(timeRanking.bid_time).utc().format('YYYY-MM-DD HH:mm:ss')).concat(timeRanking.ranking);
                 tmp.data.push(d);
             });
             option.series.push(tmp);
@@ -50,7 +50,7 @@ export default class Ranking extends Component {
             <ReactEcharts
                 option={this.getChartOption()}
                 notMerge={true}
-                style={{minHeight: '280px', width: '100%'}}
+                style={{minHeight: '310px', width: '100%'}}
                 className='react_for_echarts'/>
         );
     }
@@ -71,13 +71,17 @@ const getTemplate = (props) => {
             label: {
                 show: false
             },
-            showDetail: false
+            showDetail: false,
+            bottom: '10%',
+            fillerColor: 'rgba(6, 178 ,180 , 0.1)',
+            borderColor: '#06b2b3',
+            handleColor: '#06b2b3'
         },
         grid: {
             top: '10%',
             left: '10%',
             right: '7%',
-            bottom: '3%',
+            bottom: '20%',
             containLabel: true
         },
         tooltip: {

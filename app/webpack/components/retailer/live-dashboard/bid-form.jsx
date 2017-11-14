@@ -35,49 +35,69 @@ export default class BidForm extends Component {
     }
 
     onInputChanged(i, e) {
-        let num = parseInt(e.target.value);
-        if (num < 10000) {
-            if (num > 0) {
-                num = parseFloat(num * 1.0 / 10000).toFixed(4).substring(2);
-            } else {
-                num = '0000';
-            }
-            let target = this.compareConfigs.find((element, index) => {
-                return index === i;
-            });
-            let status = this.state.status;
-            console.log('target ===>', target)
-            if (target) {
-                if (Number(num) * 1.0 / 10000 > Number(target)) {
-                    status[i] = false;
-                } else {
-                    status[i] = true;
-                }
-            }
-            this.setState({
-                configs: this.state.configs.map((element, index) => {
-                    if (index === i) {
-                        element = num;
-                    }
-                    return element;
-                }), status: status
-            });
+        let formatNum = e.target.value.replace(/\D/, '');
+        let target = this.compareConfigs.find((element, index) => {
+            return index === i;
+        });
+        console.log(Number(formatNum), formatNum, target);
+        let status = this.state.status;
+        if (formatNum !== '' && Number(`0.${formatNum}`) <= Number(`0.${target}`)) {
+            status[i] = true;
+        } else {
+            status[i] = false;
         }
+        this.setState({
+            configs: this.state.configs.map((element, index) => {
+                if (index === i) {
+                    element = formatNum;
+                }
+                return element;
+            }), status: status
+        });
+        // let num = parseInt(e.target.value);
+        // if (num < 10000) {
+        //     if (num > 0) {
+        //         num = parseFloat(num * 1.0 / 10000).toFixed(4).substring(2);
+        //     } else {
+        //         num = '0000';
+        //     }
+        //     let target = this.compareConfigs.find((element, index) => {
+        //         return index === i;
+        //     });
+        //     let status = this.state.status;
+        //     console.log('target ===>', target)
+        //     if (target) {
+        //         if (Number(num) * 1.0 / 10000 > Number(target)) {
+        //             status[i] = false;
+        //         } else {
+        //             status[i] = true;
+        //         }
+        //     }
+        //     this.setState({
+        //         configs: this.state.configs.map((element, index) => {
+        //             if (index === i) {
+        //                 element = num;
+        //             }
+        //             return element;
+        //         }), status: status
+        //     });
+        // }
     }
 
     onSubmit() {
         this.setState({
             thisStatus: true
         })
-        let allow = this.state.configs.every(element => {
-            return element.length > 0;
+        let allow = this.state.configs.every((element, index) => {
+            return element.length > 0 && Number(`0.${element}`) <= Number(`0.${this.compareConfigs[index]}`);
         })
         let isChanged = this.state.configs.some((element, index) => {
-            console.log("state:"+Number(element) +"--------props:"+parseFloat(this.compareConfigs[index]));
-            return Number(element) < Number(this.compareConfigs[index]);
+            // console.log("state:" + Number(element) + "--------props:" + Number(this.compareConfigs[index]));
+            return Number(`0.${element}`) < Number(`0.${this.compareConfigs[index]}`);
         })
         if (allow && isChanged) {
             if (this.props.onSubmit) {
+                console.log(this.state.configs)
                 this.props.onSubmit(this.state.configs);
             }
             this.setState({
@@ -116,7 +136,7 @@ export default class BidForm extends Component {
         if (this.state.status.some(element => {
                 return !element
             })) {
-            illegal = <p className="number_error" style={{color: 'red'}}>need lesser</p>;
+            illegal = <p className="number_error" style={{color: 'red'}}>Prices submitted must be lower than the energy cost component of prevailing SPS LT Tariff ($0.1458/kWh)</p>;
         }
         return (
             <div className="number_form">
@@ -134,27 +154,33 @@ export default class BidForm extends Component {
                         <tbody>
                         <tr>
                             <td>Peak (7am-7pm)</td>
-                            <td>$0.<input type="number" value={this.state.configs[1]}
+                            <td>$0.<input type="text" value={this.state.configs[1]}
                                           style={{borderColor: this.state.status[1] ? 'white' : 'red'}}
-                                          onChange={this.onInputChanged.bind(this, 1)}/></td>
-                            <td>$0.<input type="number" value={this.state.configs[3]}
+                                          onChange={this.onInputChanged.bind(this, 1)}
+                                          maxLength={4}/></td>
+                            <td>$0.<input type="text" value={this.state.configs[3]}
                                           style={{borderColor: this.state.status[3] ? 'white' : 'red'}}
-                                          onChange={this.onInputChanged.bind(this, 3)}/></td>
-                            <td>$0.<input type="number" value={this.state.configs[5]}
+                                          onChange={this.onInputChanged.bind(this, 3)}
+                                          maxLength={4}/></td>
+                            <td>$0.<input type="text" value={this.state.configs[5]}
                                           style={{borderColor: this.state.status[5] ? 'white' : 'red'}}
-                                          onChange={this.onInputChanged.bind(this, 5)}/></td>
+                                          onChange={this.onInputChanged.bind(this, 5)}
+                                          maxLength={4}/></td>
                         </tr>
                         <tr>
                             <td>Off-Peak (7pm-7am)</td>
-                            <td>$0.<input type="number" value={this.state.configs[0]}
+                            <td>$0.<input type="text" value={this.state.configs[0]}
                                           style={{borderColor: this.state.status[0] ? 'white' : 'red'}}
-                                          onChange={this.onInputChanged.bind(this, 0)}/></td>
-                            <td>$0.<input type="number" value={this.state.configs[2]}
+                                          onChange={this.onInputChanged.bind(this, 0)}
+                                          maxLength={4}/></td>
+                            <td>$0.<input type="text" value={this.state.configs[2]}
                                           style={{borderColor: this.state.status[2] ? 'white' : 'red'}}
-                                          onChange={this.onInputChanged.bind(this, 2)}/></td>
-                            <td>$0.<input type="number" value={this.state.configs[4]}
+                                          onChange={this.onInputChanged.bind(this, 2)}
+                                          maxLength={4}/></td>
+                            <td>$0.<input type="text" value={this.state.configs[4]}
                                           style={{borderColor: this.state.status[4] ? 'white' : 'red'}}
-                                          onChange={this.onInputChanged.bind(this, 4)}/></td>
+                                          onChange={this.onInputChanged.bind(this, 4)}
+                                          maxLength={4}/></td>
                         </tr>
 
                         </tbody>
