@@ -106,12 +106,12 @@ workflows:
           filters:
             branches:
               only:
-                - ci_cd
+                - master
       - deploy:
           requires:
             - build
           filters:
             branches:
               only:
-                - ci_cd
+                - master
 
