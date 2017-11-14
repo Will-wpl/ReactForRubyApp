@@ -76,7 +76,7 @@ export class AdminManagePublishedRa extends Component {
                     <div className="col-sm-12 col-md-5">
                         <BidderStatus dataList={this.state.dataList} />
                         <div className="createRaMain w_8">
-                        <div className="createRa_btn">
+                        <div className="createRa_btn u-mt3">
                                 <a href={"/admin/auctions/"+this.auction.id+"/online"} className="lm--button lm--button--primary">Commence</a>
                         </div>
                         </div>
