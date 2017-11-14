@@ -1,0 +1,42 @@
+.lm--dropdown {
+  position: relative;
+
+  &-menu {
+    position: absolute;
+    top: 100%;
+    z-index: 1;
+    display: none;
+    margin-top: 12px;
+    list-style: none;
+    background: #fff;
+    background-color: $color-blue13;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+
+    &:before {
+      content: "";
+      position: absolute;
+      top: -12px;
+      right: 20px;
+      display: block;
+      border-style: solid;
+      border-width: 0 12px 12px;
+      border-color: transparent transparent $color-blue13;
+    }
+  }
+
+  &-link {
+    display: block;
+    padding: rem(15) rem(20);
+    font-size: rem(16);
+    font-weight: 300;
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  &.is-open &-menu {
+    display: block;
+  }
+
+}

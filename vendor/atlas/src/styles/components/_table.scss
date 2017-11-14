@@ -1,0 +1,91 @@
+.lm--table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  text-align: left;
+
+  th {
+    padding: 1.2775em 0;
+    font-size: rem(12);
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  td {
+    padding: 1.2em 0;
+    font-weight: 300;
+  }
+
+  th,
+  td {
+    padding-right: rem(15);
+
+    &:last-child {
+      padding-right: 0;
+    }
+  }
+
+  tbody {
+    font-size: rem(14);
+
+    tr {
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  &-actions {
+    a {
+      padding: 0 rem(3);
+      text-decoration: none;
+      vertical-align: middle;
+
+      &:hover {
+        color: $color-green;
+      }
+    }
+  }
+}
+
+// container for overflowing
+.lm--table-container {
+  overflow-x: auto;
+}
+
+@include bp(sm) {
+  .lm--table--responsive {
+    display: block;
+
+    thead {
+      display: none;
+    }
+
+    tbody,
+    tr,
+    td {
+      display: block;
+    }
+
+    td {
+      justify-content: space-between;
+      display: flex;
+      padding: 0.4em;
+      text-align: right;
+
+      &:first-child {
+        padding-top: 1.2em;
+      }
+    }
+
+    td[data-label]:before {
+      content: attr(data-label);
+      display: inline;
+      margin-right: 1em;
+      color: $color-neutral-light;
+    }
+
+    .lm--table-actions {
+      justify-content: space-around;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  }
+}

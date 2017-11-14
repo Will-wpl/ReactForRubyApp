@@ -1,0 +1,103 @@
+/* ==========================================================================
+   #RESET
+   ========================================================================== */
+
+/**
+ * A very simple reset that sits on top of Normalize.css.
+ */
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+blockquote,
+p,
+pre,
+dl,
+dd,
+ol,
+ul,
+figure,
+hr,
+fieldset,
+legend {
+  margin: 0;
+  padding: 0;
+}
+
+/**
+ * Remove trailing margins from nested lists.
+ */
+
+li > {
+  ol,
+  ul {
+    margin-bottom: 0;
+  }
+}
+
+/**
+ * Remove default table spacing.
+ */
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/**
+ * 1. Reset Chrome and Firefox behaviour which sets a `min-width: min-content;`
+ *    on fieldsets.
+ */
+
+fieldset {
+  min-width: 0; /* [1] */
+  border: 0;
+}
+
+/**
+ * Set font family for control elements
+**/
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: $font-sans-serif;
+}
+
+/**
+ * Defaults for special elements
+**/
+
+img,
+object,
+video,
+embed,
+iframe {
+  max-width: 100%;
+  height: auto;
+  border: 0;
+}
+
+/**
+ * Reset button element
+**/
+button,
+a {
+  color: #fff;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+/**
+ * SVG defaults
+**/
+svg {
+  fill: #fff;
+}

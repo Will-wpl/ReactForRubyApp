@@ -8,11 +8,8 @@ env:
   http_proxy: http://proxy.singaporepower.com.sg:8080
   no_proxy: .in.spdigital.io
 applications:
-  - name: <app_name>
-    buildpack: ruby_buildpack_v1_6_37
-    host: <app_name>
-    command: source cf.sh
-    memory: 1024M
+  - name: atlas
+    buildpack: staticfile_buildpack
+    host: atlas
+    memory: 512M
     disk_quota: 512M
-    services:
-      - <app_name>-db

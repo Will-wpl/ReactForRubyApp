@@ -1,0 +1,50 @@
+$color-checker-border: #5d7789;
+$color-checker-border-focus: #00b3b4;
+
+%checker {
+
+  // hide original input checkbox / radio
+  &-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    border: none;
+    clip: rect(0, 0, 0, 0);
+    opacity: 0;
+  }
+
+  // <label> which wraps faux appearance and content text
+  &-label {
+    align-items: center;
+    display: inline-flex;
+    margin-right: rem(5);
+    padding-right: rem(5);
+    cursor: pointer;
+    position: relative;
+
+    // faux checkbox / radio appearance using pseudo elements
+
+    &:before {
+      content: "";
+      display: inline-block;
+      width: rem(18);
+      height: rem(18);
+      margin-right: rem(8);
+      border: 2px solid $color-checker-border;
+    }
+
+    &:after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 9px;
+      transition: all 100ms linear;
+    }
+  }
+
+  // focus
+  &-focus {
+    border-color: $color-checker-border-focus;
+  }
+}

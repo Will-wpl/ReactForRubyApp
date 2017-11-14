@@ -1,0 +1,131 @@
+// deprecated
+.o-table {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  font-size: rem(14);
+  color: $color-neutral-light;
+  border-collapse: collapse;
+  border-spacing: 0 rem(20);
+
+  &__thead {
+    display: none;
+  }
+
+  &__tr {
+    flex-wrap: wrap;
+    display: flex;
+    margin: rem(20) 0;
+    color: #fff;
+    text-decoration: none;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &:before,
+    &:after {
+      content: '';
+      width: 100%;
+    }
+  }
+
+  &__td {
+    flex: auto;
+    padding: rem(20);
+  }
+
+  &__title {
+    order: -1;
+
+    & + & {
+      flex-grow: 0;
+      text-align: right;
+    }
+  }
+
+  &__footer {
+    order: 2;
+    text-align: center;
+    border-top: 1px solid #454f54;
+  }
+
+  &__thead &__td {
+    padding-top: 0;
+    padding-bottom: 0;
+    color: $color-neutral-light;
+  }
+
+  &__tbody &__td {
+    background: $color-blue13;
+  }
+
+  &__td[data-heading] {
+    &:before {
+      content: attr(data-heading);
+      display: block;
+      color: $color-neutral-light;
+    }
+  }
+
+  &__mark {
+    margin-left: rem(-20);
+    padding-right: rem(20);
+    padding-left: rem(20);
+
+    [class*="icon-star"] {
+      color: $color-neutral-light;
+    }
+
+    &:hover [class*="icon-star"] {
+      color: $color-yellow;
+    }
+  }
+}
+
+@include bp(md) {
+  .o-table--wide {
+    border-collapse: initial;
+
+    .o-table__tr {
+      display: table-row;
+      margin: 0;
+
+      &:before,
+      &:after {
+        display: none;
+      }
+    }
+
+    .o-table__title + .o-table__title {
+      text-align: left;
+    }
+
+    .o-table__td {
+      display: table-cell;
+      height: rem(89);
+      float: none;
+      padding: rem(20);
+      vertical-align: middle;
+    }
+
+    .o-table__thead,
+    .o-table__tbody {
+      display: table-row-group;
+    }
+
+    .o-table__td[data-heading] {
+      &:before {
+        display: none;
+      }
+    }
+
+    .o-table__footer {
+      border-top: none;
+    }
+  }
+}

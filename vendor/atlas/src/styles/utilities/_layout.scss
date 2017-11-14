@@ -1,0 +1,71 @@
+@include bp-all('.u-pull-left') {
+  float: left;
+}
+
+@include bp-all('.u-pull-right') {
+  float: right;
+}
+
+@include bp-all('.u-text-left') {
+  text-align: left;
+}
+
+@include bp-all('.u-text-center') {
+  text-align: center;
+}
+
+@include bp-all('.u-text-right') {
+  text-align: right;
+}
+
+.u-align-start {
+  align-items: flex-start;
+}
+
+.u-align-center {
+  align-items: center;
+}
+
+.u-align-end {
+  align-items: flex-end;
+}
+
+.u-align-stretch {
+  align-items: stretch;
+}
+
+.u-self-start {
+  align-self: flex-start;
+}
+
+.u-self-center {
+  align-self: center;
+}
+
+.u-self-end {
+  align-self: flex-end;
+}
+
+.u-self-stretch {
+  align-self: stretch;
+}
+
+.u-justify-start {
+  justify-content: flex-start;
+}
+
+.u-justify-center {
+  justify-content: center;
+}
+
+.u-justify-end {
+  justify-content: flex-end;
+}
+
+.u-justify-around {
+  justify-content: space-around;
+}
+
+.u-justify-betweenn {
+  justify-content: space-between;
+}

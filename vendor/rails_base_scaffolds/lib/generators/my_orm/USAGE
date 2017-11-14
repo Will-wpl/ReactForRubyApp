@@ -1,0 +1,3 @@
+Description:
+    This is a wrapper around ActiveRecord::Generators::ModelGenerator and is invoked from MyScaffold.
+     You shouldn't have to use this.

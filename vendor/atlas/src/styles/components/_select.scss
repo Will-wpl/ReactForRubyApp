@@ -1,0 +1,32 @@
+.lm--select {
+  display: block;
+  padding: rem(13) rem(40) rem(13) rem(16);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMiIgaGVpZ2h0PSI3IiB2aWV3Qm94PSIwIDAgMTIgNyI+CiAgPHBvbHlsaW5lIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzlCQTZBQSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjIiIHBvaW50cz0iNy41IDE0LjM3OCAxMi40MzggOS41IDE3LjUgMTQuNSIgdHJhbnNmb3JtPSJtYXRyaXgoMSAwIDAgLTEgLTYuNSAxNS41KSIvPgo8L3N2Zz4K");
+  background-position: right rem(16) center;
+  background-repeat: no-repeat;
+  border-radius: rem(5);
+  cursor: pointer;
+
+  &:focus {
+    border-color: $color-input-border-focus;
+  }
+
+  &[multiple] {
+    padding-right: 0;
+    background: none;
+    cursor: default;
+
+    &::-webkit-scrollbar {
+      width: 10px;
+      background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $color-blue15;
+      border-radius: 10px;
+    }
+  }
+}

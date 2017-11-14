@@ -1,0 +1,21 @@
+.lm--breadcrumb {
+  display: flex;
+  margin-bottom: rem(20);
+  list-style: none;
+
+  li {
+    &:not(:last-child):after {
+      content: "/";
+      margin: 0 rem(4);
+    }
+  }
+
+  a {
+    color: $color-accent;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

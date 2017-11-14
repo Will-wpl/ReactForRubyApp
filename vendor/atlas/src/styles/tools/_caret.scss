@@ -1,0 +1,13 @@
+@mixin caret {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-left: 10px;
+  transform: rotateZ(135deg);
+  transition: all 200ms ease-in;
+  border-width: 2px 2px 0 0;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.5);
+  vertical-align: 2px;
+}

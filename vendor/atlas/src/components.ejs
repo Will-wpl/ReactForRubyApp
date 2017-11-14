@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .vw-title {
+      font-weight: 400;
+      border-bottom: 1px solid #fff;
+      margin: 1em 0 1.5em;
+    }
+
+    .vw-subtitle {
+      font-weight: 400;
+      border-bottom: 1px solid #fff;
+      display: inline-block;
+      margin-bottom: 1em;
+    }
+
+    .vw-subtitle:not(:first-child) {
+      margin-top: 1em;
+    }
+
+    .vw-block {
+      display: block;
+      margin-bottom: 1.5em;
+    }
+
+    .vw-block:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    .vw-block-cols [class*="col-"], .vw-block-cols .col {
+      background: rgba(255, 255, 255, 0.1);
+      background-clip: content-box;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .vw-box {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .vw-examples {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+    }
+
+    .lm--info+.lm--info {
+      margin-top: 30px;
+    }
+
+    pre {
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="lm--header">
+    <nav class="lm--header-nav" data-mobile-nav>
+      <label class="lm--header-search lm--header-search--mobile u-visible@sm" data-search-toggle>
+        <button class="lm--header-link u-visible@sm" data-search-toggle-trigger><i class="lm--icon-search"></i></button>
+        <input type="text" data-field>
+      </label>
+      <button class="lm--header-link lm--header-selector u-visible@sm" data-mobile-nav-trigger>
+        Nav
+      </button>
+      <div class="lm--header-logo u-hidden@sm">
+        <a href="#"><img src="images/logo-sp-notext.png" alt="SP Group"></a>
+      </div>
+      <ul class="lm--header-menu lm--header-menu--primary">
+        <li class="lm--header-item is-active">
+          <a class="lm--header-link" href="#">Link 1</a>
+        </li>
+        <li class="lm--header-item">
+          <a class="lm--header-link" href="#">Link 2</a>
+        </li>
+      </ul>
+
+      <ul class="lm--header-menu lm--header-menu--secondary">
+        <li class="lm--header-item u-hidden@sm">
+          <label class="lm--header-search">
+            <i class="lm--icon-search"></i>
+            <input type="text">
+          </label>
+        </li>
+        <li class="lm--header-item">
+          <a class="lm--header-link" href="#">
+            <span class="u-hidden">Notifications</span>
+            <i class="lm--icon-bell"></i>
+          </a>
+        </li>
+        <li class="lm--header-item">
+
+          <div class="lm--dropdown" data-dropdown>
+            <button class="lm--header-link lm--dropdown-button" data-dropdown-trigger>
+              <i class="lm--icon-profile"></i>
+            </button>
+            <ul class="lm--dropdown-menu">
+              <li>
+                <a href="#" class="lm--dropdown-link">Link 1</a>
+              </li>
+              <li>
+                <a href="#" class="lm--dropdown-link">Link 2</a>
+              </li>
+            </ul>
+          </div>
+
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="u-contain">
+    <h3 class="vw-title">Breadcrumb</h3>
+
+    <div class="vw-block vw-block-cols">
+      <ol class="lm--breadcrumb">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Components</a></li>
+      </ol>
+    </div>
+
+
+    <h3 class="vw-title">Grid (12 columns)</h3>
+
+    <div class="vw-block vw-block-cols">
+      <div class="u-grid">
+        <div class="col-sm-6 col-md-1 u-cell">1</div>
+        <div class="col-sm-6 col-md-2 u-cell">2</div>
+        <div class="col-sm-12 col-md-3 u-cell">3</div>
+        <div class="col-sm-12 col-md-6 u-cell">6</div>
+      </div>
+    </div>
+
+    <div class="vw-block vw-block-cols">
+      <div class="u-grid">
+        <div class="col-sm-12 col-md-6 u-cell">6</div>
+        <div class="col-sm-12 col-md-6 u-cell">6</div>
+      </div>
+    </div>
+
+    <div class="vw-block vw-block-cols">
+      <div class="u-grid">
+        <div class="col-sm-1 push-sm-1 u-cell">1 push 1</div>
+        <div class="col-sm-1 push-sm-2 u-cell">1 push 2</div>
+        <div class="col-sm-3 push-sm-1 u-cell">3 push 1</div>
+        <div class="col-sm-2 push-sm-1 u-cell">2 push 1</div>
+      </div>
+    </div>
+
+    <div class="vw-block vw-block-cols">
+      <div class="u-grid">
+        <div class="col u-cell">auto</div>
+        <div class="col u-cell">auto</div>
+        <div class="col u-cell">auto</div>
+      </div>
+    </div>
+
+    <div class="vw-block vw-block-cols">
+      <div class="u-grid">
+        <div class="col u-cell">auto</div>
+        <div class="col col-static u-cell">&nbsp; don't grow &nbsp;</div>
+      </div>
+    </div>
+
+    <div class="vw-block vw-block-cols">
+      <div class="u-grid u-grid-center@md">
+        <div class="col-sm-4 u-cell">centered</div>
+      </div>
+    </div>
+
+    <div class="vw-block">
+      <h3 class="vw-title">Spacings, alignments, borders</h3>
+      <div class="u-grid">
+        <div class="col-sm-12 col-md-7 u-cell">
+          <h4 class="vw-subtitle">Margins</h4>
+          <pre>
+.u-{m,mh,mv,mt,mr,mb,ml}{a,0,1,2,3}[{@sm,@md,@lg,@xl}]
+
+m: margin
+mh (horizontal): margin-left + margin-right
+mv (vertical): margin-top + margin-bottom
+mt: margin-top
+mr: margin-right
+mb: margin-bottom
+ml: margin-left
+</pre>
+
+<div class="vw-examples u-mt2">
+  <h4 class="u-mb2">Examples</h4>
+  <pre>
+.u-ma (margin: auto; across all resolutions)
+.u-mv2@lg (margin-top: 20px; margin-bottom: 20px; on desktop and up)
+.u-m1@sm (margin: 10px; on mobile only)
+.u-mla@md (margin-left: auto; on tablet and up)
+
+*don't confuse ml (margin left), m1 (margin one), ml1 (margin left one)!!
+</pre>
+</div>
+
+<hr />
+
+<h4 class="vw-subtitle">Paddings</h4>
+          <pre>
+.u-{p,ph,pv,pt,pr,pb,pl}{0,1,2,3}[{@sm,@md,@lg,@xl}]
+
+p: padding
+ph (horizontal): padding-left + padding-right
+pv (vertical): padding-top + padding-bottom
+pt: padding-top
+pr: padding-right
+pb: padding-bottom
+pl: padding-left
+</pre>
+
+<div class="vw-examples u-mt2">
+  <pre>
+Similar to above margin examples.
+Note that there is no "auto" value for padding.
+</pre>
+</div>
+
+<hr/>
+
+<h4 class="vw-subtitle">Text alignments</h4>
+      <pre>
+.u-text-{left,center,right}[{@sm,@md,@lg,@xl}]
+</pre>
+
+<div class="vw-examples u-mt2">
+  <h4 class="u-mb2">Examples</h4>
+  <pre>
+.u-text-left@sm (text-align: left; on mobile only)
+.u-text-center (text-align: center; across all resolutions)
+.u-text-right@md (text-align: right; on tablet and up)
+</pre>
+
+</div>
+
+<hr/>
+
+<h4 class="vw-subtitle">Float left / right</h4>
+<pre>
+.u-pull-{left,right}[{@sm,@md,@lg,@xl}]
+</pre>
+
+<hr/>
+
+<h4 class="vw-subtitle">Flexbox alignments</h4>
+<pre>
+.u-align-{start,center,end,stretch}
+( apply on flex container, for align-items: flex-start / center / flex-end / stretch)
+
+.u-self-{start,center,end,stretch}
+( apply on flex child, for align-self: flex-start / center / flex-end / stretch)
+
+.u-justify-{start,center,end,around,between}
+( apply on flex container, for justify-content: flex-start / center / flex-end / space-around / space-between)
+</pre>
+
+<hr/>
+
+<h4 class="vw-subtitle">Borders</h4>
+      <pre>
+.u-{b,bt,br,bb,bl}[{@sm,@md,@lg,@xl}]
+</pre>
+
+<div class="vw-examples u-mt2">
+  <h4 class="u-mb2">Examples</h4>
+  <pre>
+.u-b (border all sides; across all resolutions)
+.u-bl@md (border left; on tablet and up)
+
+*all borders are 1px solid #1d3845
+</pre>
+</div>
+
+
+        </div>
+        <div class="col-sm-12 col-md-5 u-cell u-mt3@sm">
+          <div class="vw-box u-p3" style="height: 100%">
+            <h4 class="vw-subtitle">Spacing values</h4>
+              <pre>
+a: auto
+0: 0px
+1: 10px
+2: 20px
+3: 30px
+              </pre>
+
+              <h4 class="vw-subtitle">Breakpoint triggers</h4>
+              <pre>
+[blank]: across all
+@sm: mobile only (<768px)
+@md: tablet and above (>=768px)
+@lg: desktop and above (>=992px)
+@xl: large desktop and above (>=1367px)
+              </pre>
+            </div>
+          </div>
+        </div>
+
+    <div class="vw-block">
+      <h3 class="vw-title">Alert</h3>
+      <div style="position: relative; height: 110px">
+        <div class="alert alert-error">
+          Login is unsuccessful. Also this is a terriby long message. Much more text than is needed to convey the meaning of this alert. The main purpose is to show the max width of this alert.
+          <button data-dismiss><i class="lm--icon lm--icon-cross"></i></button>
+        </div>
+      </div>
+      <div style="position: relative; height: 70px">
+        <div class="alert alert-success">
+          Login is successful.
+          <button data-dismiss><i class="lm--icon lm--icon-cross"></i></button>
+        </div>
+      </div>
+      <div style="position: relative; height: 70px">
+        <div class="alert alert-info u-pull-right@sm">
+          Info text.
+          <button data-dismiss><i class="lm--icon lm--icon-cross"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="vw-block">
+      <h3 class="vw-title">Info</h3>
+      <div class="lm--info">
+        <div class="lm--info-label">Mode</div>
+        <div class="lm--info-value">Test</div>
+      </div>
+
+      <div class="lm--info lm--info--large">
+        <div class="lm--info-label">Mode</div>
+        <div class="lm--info-value">60.32<span class="u-unit">kWh</span></div>
+      </div>
+    </div>
+
+
+    <div class="vw-block">
+      <h3 class="vw-title">Kard (New Card!!)</h3>
+
+      <div class="u-contain-breakout@sm">
+        <div class="lm--kard">
+          <div class="lm--kard-item h4">
+              <div class="u-flag">
+                <button class="lm--kard-mark"><i class="lm--icon-star-empty"></i></button>
+                Grid Incoming
+              </div>
+          </div>
+          <div class="lm--kard-item u-mla">
+            <div class="u-flag">
+              <i class="lm--icon-circle u-normal"></i>
+              <span><span class="h2">37.11</span>
+              <span class="u-unit">kW</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="u-block"></div>
+
+          <div class="lm--kard-item col-sm-6">
+            <div class="lm--info">
+              <div class="lm--info-label lm--card-label u-text-muted">Lower Threshold</div>
+              <div class="lm--info-value h4">20<span class="u-unit">kWh</span></div>
+            </div>
+          </div>
+          <div class="lm--kard-item col-sm-6">
+            <div class="lm--info">
+              <div class="lm--info-label lm--card-label u-text-muted">Lower Threshold</div>
+              <div class="lm--info-value h4">20<span class="u-unit">kWh</span></div>
+            </div>
+          </div>
+
+          <div class="lm--kard-item lm--kard-actions col-sm-12">
+            <div class="u-grid">
+              <div class="col-sm-6">
+                <button class="lm--button lm--button--text lm--button--small">
+                  <span class="u-flag"><i class="lm--icon-edit"></i>Edit Threshold</span>
+                </button>
+              </div>
+              <div class="col-sm-6">
+                <button class="lm--button lm--button--text lm--button--small">
+                  <span class="u-flag"><i class="lm--icon-edit"></i>Edit Threshold</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lm--kard lm--kard--nowrap@md">
+          <div class="lm--kard-item col-md-3 h4">
+              <div class="u-flag">
+                <button class="lm--kard-mark"><i class="lm--icon-star-empty"></i></button>
+                Grid Incoming
+              </div>
+          </div>
+          <div class="lm--kard-item col-md-2 u-mla">
+            <div class="u-flag">
+              <i class="lm--icon-circle u-normal"></i>
+              <span><span class="h2">37.11</span>
+              <span class="u-unit">kW</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="u-block u-visible@sm"></div>
+
+          <div class="lm--kard-item col">
+            <div class="lm--info">
+              <div class="lm--info-label lm--card-label u-text-muted">Lower Threshold</div>
+              <div class="lm--info-value h4">20<span class="u-unit">kWh</span></div>
+            </div>
+          </div>
+          <div class="lm--kard-item col">
+            <div class="lm--info">
+              <div class="lm--info-label lm--card-label u-text-muted">Lower Threshold</div>
+              <div class="lm--info-value h4">20<span class="u-unit">kWh</span></div>
+            </div>
+          </div>
+
+          <div class="lm--kard-item lm--kard-actions col-sm-12 col-md-4">
+            <div class="u-grid">
+              <div class="col-sm-6">
+                <button class="lm--button lm--button--text lm--button--small">
+                  <span class="u-flag"><i class="lm--icon-edit"></i>Edit Threshold</span>
+                </button>
+              </div>
+              <div class="col-sm-6">
+                <button class="lm--button lm--button--text lm--button--small">
+                  <span class="u-flag"><i class="lm--icon-edit"></i>Edit Threshold</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vw-block">
+      <h3 class="vw-title">Card</h3>
+      <div class="lm--card">
+        <div class="lm--card-header">
+          <div class="lm--card-item">
+            <span class="h4">Some title</span>
+          </div>
+        </div>
+
+        <div class="lm--card-section">
+          <div class="lm--card-item col-sm-6">
+            <div class="lm--info">
+              <div class="lm--info-label">Lower Threshold</div>
+              <div class="lm--info-value">20<span class="u-unit">kWh</span></div>
+            </div>
+          </div>
+          <div class="lm--card-item col-sm-6">
+            <div class="lm--info">
+              <div class="lm--info-label">Upper Threshold</div>
+              <div class="lm--info-value">350<span class="u-unit">kWh</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lm--card-footer">
+          <div class="lm--card-item lm--card-action col-sm-6">
+            <button class="lm--button lm--button--text lm--button--small">
+              <span class="u-flag"><i class="lm--icon-edit"></i>Edit Threshold</span>
+            </button>
+          </div>
+          <div class="lm--card-item lm--card-action col-sm-6">
+            <button class="lm--button lm--button--text lm--button--small">
+              <span class="u-flag"><i class="lm--icon-chart"></i>View History</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vw-block">
+      <h3 class="vw-title">Card (wide)</h3>
+
+      <div class="lm--card lm--card--wide lm--card--transparent u-text-muted u-hidden@sm">
+        <div class="lm--card-header col-md-5">
+          <div class="lm--card-item col-md-8">Name</div>
+          <div class="lm--card-item col-md-4">Power</div>
+        </div>
+        <div class="lm--card-section col-md-3">
+          <div class="lm--card-item col-md-6">Lower Threshold</div>
+          <div class="lm--card-item col-md-6">Upper Threshold</div>
+        </div>
+        <div class="lm--card-item col-md-4"></div>
+      </div>
+
+      <div class="lm--card lm--card--wide">
+        <div class="lm--card-header col-md-5">
+          <div class="lm--card-item lm--card-title col-md-8 h4">
+            <button class="lm--button lm--button--text lm--button--small lm--card-mark"><i class="lm--icon-star-empty"></i></button>            Grid Incoming
+          </div>
+          <div class="lm--card-item col-md-4">
+            <div class="u-flag">
+              <i class="lm--icon-circle u-normal"></i>
+              <span>
+                <span class="h2">37.11</span>
+              <span class="u-unit">kW</span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="lm--card-section col-md-3">
+          <div class="lm--card-item col-sm-6">
+            <div class="lm--info">
+              <div class="lm--info-label lm--card-label u-text-muted">Lower Threshold</div>
+              <div class="lm--info-value h4">20<span class="u-unit">kWh</span></div>
+            </div>
+          </div>
+          <div class="lm--card-item col-sm-6">
+            <div class="lm--info">
+              <div class="lm--info-label lm--card-label u-text-muted">Upper Threshold</div>
+              <div class="lm--info-value h4">350<span class="u-unit">kWh</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="lm--card-footer col-md-4">
+          <div class="lm--card-item lm--card-action">
+            <button class="lm--button lm--button--text lm--button--small">
+              <span class="u-flag"><i class="lm--icon-edit"></i>Edit Threshold</span>
+            </button>
+          </div>
+          <div class="lm--card-item lm--card-action">
+            <button class="lm--button lm--button--text lm--button--small">
+              <span class="u-flag"><i class="lm--icon-chart"></i>View History</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="vw-block">
+      <h3 class="vw-title">Form elements</h3>
+
+      <div class="Form">
+        <div class="lm--formItem">
+          <div class="lm--formItem-label">Username</div>
+          <div class="lm--formItem-control">
+            <input type="text" placeholder="Text input" />
+            <div class="help-block">Just some hint text for this field. Username must be at least 6 characters long.</div>
+          </div>
+        </div>
+        <div class="lm--formItem">
+          <div class="lm--formItem-label u-text-muted">Disabled</div>
+          <div class="lm--formItem-control">
+            <input type="text" disabled placeholder="Disabled input"/>
+          </div>
+        </div>
+        <div class="lm--formItem lm--formItem--inline">
+          <div class="lm--formItem-label">Email</div>
+          <div class="lm--formItem-control">
+            <input type="text" placeholder="Inline field" />
+          </div>
+        </div>
+        <div class="lm--formItem lm--formItem--inline@md">
+          <div class="lm--formItem-label">Email</div>
+          <div class="lm--formItem-control">
+            <input type="text" placeholder="Inline from [breakpoint] and up" />
+          </div>
+        </div>
+        <div class="lm--formItem is-error">
+          <div class="lm--formItem-label">Password</div>
+          <div class="lm--formItem-control">
+            <input type="text" placeholder="Error">
+            <div class="error-block">Help Text - Password must be between 8 and 16 characters and contains at least one number. No special charaters
+              are allowed.</div>
+          </div>
+        </div>
+        <div class="lm--formItem">
+          <label class="lm--inputGroup">
+              <div class="lm--inputGroup-prefix">
+                <i class="lm--icon-search"></i>
+              </div>
+              <input type="text" class="lm--inputGroup-field" placeholder="Search...">
+            </label>
+        </div>
+        <div class="lm--formItem">
+          <select class="lm--select">
+            <option value="">Option 1</option>
+            <option value="">Option 2</option>
+          </select>
+        </div>
+        <div class="lm--formItem">
+          <select class="lm--select" multiple>
+            <option value="">Multi option 1</option>
+            <option value="">Multi option 2</option>
+            <option value="">Multi option 2</option>
+            <option value="">Multi option 2</option>
+            <option value="">Multi option 2</option>
+            <option value="">Multi option 2</option>
+          </select>
+        </div>
+        <div class="lm--formItem">
+          <div class="lm--checkbox">
+            <input type="checkbox" id="checkbox2" class="lm--checkbox-input">
+            <label for="checkbox2" class="lm--checkbox-label">
+                Check me
+              </label>
+          </div>
+        </div>
+        <div class="lm--formItem">
+          <div class="lm--radio">
+            <input type="radio" id="radioshack" name="radiogroup" class="lm--radio-input">
+            <label for="radioshack" class="lm--radio-label">
+                Radioshack
+              </label>
+          </div>
+          <div class="lm--radio">
+            <input type="radio" id="radiohead" name="radiogroup" class="lm--radio-input">
+            <label for="radiohead" class="lm--radio-label">
+                Radiohead
+              </label>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="vw-block">
+        <h3 class="vw-title">Dropdown</h3>
+
+        <div class="lm--dropdown" data-dropdown>
+          <button class="lm--button lm--dropdown-button" data-dropdown-trigger>Dropdown</button>
+          <ul class="lm--dropdown-menu">
+            <li>
+              <a href="#" class="lm--dropdown-link">Link 1</a>
+            </li>
+            <li>
+              <a href="#" class="lm--dropdown-link">Link 2</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="lm--dropdown" data-dropdown>
+          <button class="lm--button lm--dropdown-button" data-dropdown-trigger>Dropdown</button>
+          <ul class="lm--dropdown-menu">
+            <li>
+              <a href="#" class="lm--dropdown-link">Link 1</a>
+            </li>
+            <li>
+              <a href="#" class="lm--dropdown-link">Link 2</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="vw-block">
+      <h3 class="vw-title">Text</h3>
+      <h1>Heading 1 (32/42)</h1>
+      <h2>Heading 2 (24/32)</h2>
+      <h3>Heading 3 (20/26)</h3>
+      <h4>Heading 4 (16/24)</h4>
+      <p>Default paragraph text</p>
+    </div>
+
+    <div class="vw-block">
+      <h3 class="vw-title">Definition List</h3>
+      <h4 class="vw-subtitle">Normal</h4>
+      <dl>
+        <dt>First</dt>
+        <dd>Description for first</dd>
+        <dt>The Second</dt>
+        <dd>What is the second?</dd>
+      </dl>
+
+      <hr>
+
+      <h4 class="vw-subtitle">Inline</h4>
+      <dl class="lm--dl--inline">
+        <dt>First</dt>
+        <dd>Description for first</dd>
+        <dt>The Second</dt>
+        <dd>What is the second?</dd>
+      </dl>
+
+      <hr>
+
+      <h4 class="vw-subtitle">Inline with col / push</h4>
+      <dl class="lm--dl--inline">
+        <dt class="col-sm-2">First</dt>
+        <dd class="push-sm-2">Description for first</dd>
+        <dt class="col-sm-2">The Second</dt>
+        <dd class="push-sm-2">What is the second?</dd>
+      </dl>
+
+    </div>
+
+    <div class="vw-block">
+      <h3 class="vw-title">Buttons</h3>
+      <a href="#" class="lm--button">Anchor button</a>
+      <button class="lm--button">Button button</button>
+      <button class="lm--button lm--button--primary">Primary button</button>
+      <button class="lm--button lm--button--red">Red button</button>
+      <button class="lm--button lm--button--green">Green button</button>
+      <button class="lm--button lm--button--text">Text button</button>
+      <button class="lm--button lm--button--text lm--button--small"><span class="u-flag"><i class="lm--icon-edit"></i>Edit</span></button>
+      <button class="lm--button lm--button--text lm--button--small"><i class="lm--icon-star"></i></button>
+    </div>
+
+    <div class="vw-block">
+      <button class="lm--button u-block">Block button</button>
+    </div>
+
+    <div class="vw-block">
+      <h3 class="vw-title">Tabs</h3>
+
+      <nav data-tabs class="lm--tabs o-contain__breakout">
+        <ul class="lm--tabs-nav">
+          <li class="lm--tabs-item">
+            <a href="#tab-1" class="lm--tabs-link">Tab 1</a>
+          </li>
+          <li class="lm--tabs-item">
+            <a href="#tab-2" class="lm--tabs-link is-active">Tab 2</a>
+          </li>
+          <li class="lm--tabs-item">
+            <a href="#tab-3" class="lm--tabs-link">Tab 3</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="lm--tabs-panes">
+        <div id="tab-1" class="lm--tabs-pane">
+          Tab 1
+        </div>
+        <div id="tab-2" class="lm--tabs-pane">
+          Tab 2
+        </div>
+        <div id="tab-3" class="lm--tabs-pane">
+          Tab 3
+        </div>
+      </div>
+
+      <nav data-tabs class="lm--tabs lm--tabs--centered o-contain__breakout">
+        <button class="lm--tabs-trigger"></button>
+        <ul class="lm--tabs-nav">
+          <li class="lm--tabs-item">
+            <a href="#tab-a" class="lm--tabs-link">Tab A</a>
+          </li>
+          <li class="lm--tabs-item">
+            <a href="http://google.com" class="lm--tabs-link">Google</a>
+          </li>
+          <li class="lm--tabs-item">
+            <a href="#tab-c" class="lm--tabs-link">Tab C</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="lm--tabs-panes">
+        <div id="tab-a" class="lm--tabs-pane">
+          Tab A
+        </div>
+        <div id="tab-b" class="lm--tabs-pane">
+          Tab B
+        </div>
+        <div id="tab-c" class="lm--tabs-pane is-active">
+          Tab C
+        </div>
+      </div>
+
+    </div>
+
+    <div class="vw-block">
+      <h3 class="vw-title">Icons</h3>
+      <i class="lm--icon-search"></i>
+      <i class="lm--icon-profile"></i>
+      <i class="lm--icon-bell"></i>
+      <i class="lm--icon-edit"></i>
+      <i class="lm--icon-trash"></i>
+      <i class="lm--icon-chart"></i>
+      <i class="lm--icon-star"></i>
+      <i class="lm--icon-star-empty"></i>
+      <i class="lm--icon-circle"></i>
+      <i class="lm--icon-circle-thin"></i>
+      <i class="lm--icon-cancel-circled"></i>
+      <i class="lm--icon-plus"></i>
+      <i class="lm--icon-cross"></i>
+      <i class="lm--icon-cross-big"></i>
+      <i class="lm--icon-angle-right"></i>
+    </div>
+
+    <div class="vw-block">
+      <h3 class="vw-title">Flag object</h3>
+      <div>
+        <div class="u-flag">
+          <i class="lm--icon-circle u-normal"></i>
+          <span class="h3">100<span class="u-unit">&deg;C</span></span>
+        </div>
+      </div>
+      <div>
+        <div class="u-flag">
+          <i class="lm--icon-edit"></i>
+          <span>Edit thresholds</span>
+        </div>
+      </div>
+      <div>
+        <div class="u-flag u-flag--block u-flag--rev">
+          <div class="u-flag-img">
+            <a href="#" class="lm--button lm--button--small lm--button--text">
+              <span class="u-flag u-flag--rev">
+                <i class="lm--icon-angle-right"></i>
+                See all
+              </span>
+            </a>
+          </div>
+          <span class="u-flag-body h3">Energy monitors</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="vw-block">
+      <h3 class="vw-title">Tables</h3>
+      <div class="lm--table-container">
+        <table class="lm--table lm--table--responsive">
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Permissions</th>
+              <th>Last Activity</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-label="Status"><div class="u-flag u-green"><i class="lm--icon-circle"></i>Enabled</div></td>
+              <td data-label="Name">Michael Cheng</td>
+              <td data-label="Email">michaelccm@spgroup.com.sg</td>
+              <td data-label="Permissions">Admin, DER Component Control, SPUG Control</td>
+              <td data-label="Last Activity">2017-03-17, 14:33:03</td>
+              <td class="lm--table-actions">
+                <a href=""><i class="lm--icon-edit"></i></a>
+                <a href=""><i class="lm--icon-trash"></i></a>
+              </td>
+            </tr>
+            <tr>
+              <td data-label="Status"><div class="u-flag u-green"><i class="lm--icon-circle"></i>Online</div></td>
+              <td data-label="Name">Kelvin Teh</td>
+              <td data-label="Email">kelvinteh@spgroup.com.sg</td>
+              <td data-label="Permissions">Admin, DER Component Control, SPUG Control</td>
+              <td data-label="Last Activity">2017-03-17, 14:33:03</td>
+              <td class="lm--table-actions">
+                <a href=""><i class="lm--icon-edit"></i></a>
+                <a href=""><i class="lm--icon-trash"></i></a>
+              </td>
+            </tr>
+            <tr>
+              <td data-label="Status" class="u-offline"><div class="u-flag"><i class="lm--icon-circle-thin u-disabled"></i>Offline</div></td>
+              <td data-label="Name">Winston Teo</td>
+              <td data-label="Email">winstonteo@spgroup.com.sg</td>
+              <td data-label="Permissions">Admin, DER Component Control, SPUG Control</td>
+              <td data-label="Last Activity">2017-03-17, 14:33:03</td>
+              <td class="lm--table-actions">
+                <a href=""><i class="lm--icon-edit"></i></a>
+                <a href=""><i class="lm--icon-trash"></i></a>
+              </td>
+            </tr>
+            <tr class="u-disabled">
+              <td data-label="Status"><div class="u-flag"><i class="lm--icon-cancel-circled"></i>Disabled</div></td>
+              <td data-label="Name">Thye Chuan Tan</td>
+              <td data-label="Email">winstonteo@spgroup.com.sg</td>
+              <td data-label="Permissions">Admin, DER Component Control, SPUG Control</td>
+              <td data-label="Last Activity">2017-03-17, 14:33:03</td>
+              <td class="lm--table-actions">
+                <a href=""><i class="lm--icon-edit"></i></a>
+                <a href=""><i class="lm--icon-trash"></i></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="vw-block">
+      <h3 class="vw-title">Horizontal rule</h3>
+      <hr />
+    </div>
+
+    <div class="vw-block">
+      <h3 class="vw-title">Tables (deprecated)</h3>
+
+      <div class="o-table o-table--wide">
+        <div class="o-table__thead">
+          <div class="o-table__tr">
+            <div class="o-table__td">
+              Heading 1
+            </div>
+            <div class="o-table__td">
+              Heading 2
+            </div>
+            <div class="o-table__td">
+              Heading 3
+            </div>
+            <div class="o-table__td"></div>
+            <div class="o-table__td"></div>
+          </div>
+        </div>
+
+        <div class="o-table__tbody">
+          <a href="#" class="o-table__tr">
+            <div class="o-table__td o-table__title" data-heading="First heading">
+              <button class="lm--button lm--button--text lm--button--small o-table__mark"><i class="lm--icon-star-empty"></i></button>              Hello
+            </div>
+            <div class="o-table__td o-table__title" data-heading="Second heading">
+              World
+            </div>
+            <div class="o-table__td" data-heading="Third heading">
+              Man
+            </div>
+            <div class="o-table__td o-table__footer">
+              <button class="lm--button lm--button--text lm--button--small">
+                <div class="o-flag"><i class="lm--icon-edit"></i>Edit</div>
+              </button>
+            </div>
+            <div class="o-table__td o-table__footer">
+              <button class="lm--button lm--button--text lm--button--small">
+                <div class="o-flag"><i class="lm--icon-chart"></i>View</div>
+              </button>
+            </div>
+          </a>
+          <a href="#" class="o-table__tr">
+            <div class="o-table__td">
+              Lorem
+            </div>
+            <div class="o-table__td">
+              Ipsum
+            </div>
+            <div class="o-table__td">
+              Dolor
+            </div>
+            <div class="o-table__td">
+              <div class="o-flag"><i class="lm--icon-edit"></i>Edit</div>
+            </div>
+            <div class="o-table__td">
+              <div class="o-flag"><i class="lm--icon-chart"></i>View</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="vw-block">
+      <h3 class="vw-title">LumiMap</h3>
+      <div id="map" class="u-mb3" style="width: 100%; height: 500px;"><i>Demo WIP</i></div>
+
+      <div class="vw-examples u-mt2">
+        <h4 class="u-mb2">javascript</h4>
+        <pre>
+import Atlas from 'atlas'; // to be finalised
+
+var options = {
+
+  apiOptions: {
+    key: 'AIzaSyCyOOZ_pZ6sdDHyIbR5etUy5yQKrewTrrs'
+  },
+
+  markers: [
+    { lat: 1.3255421, lng: 103.8635995, color: '#B93939', label: 'SP Group' },
+    { lat: 1.2743129, lng: 103.842785, color: '#00D897', label: 'SP Digital', size: 20 }
+  ],
+
+  // (optional) options that will be passed directly into the GoogleMaps API Object, overriding Atlas defaults (see link below)
+  mapOptions: {
+    gestureHandling: 'greedy'
+  }
+
+}
+
+new Atlas.LumiMap('#map', options);
+        </pre>
+        <a href="https://developers.google.com/maps/documentation/javascript/tutorial#MapOptions" target="_blank">Google Maps Options</a>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="lm--footer">
+    <div class="o-contain">
+      &copy; 2017 Singapore Power Ltd. All Rights Reserved
+    </div>
+  </footer>
+
+  <script>
+
+    // arbitrary timeout to wait for atlas to laod
+    window.setTimeout(function() {
+      domReady(function() {
+        // init map
+        const map = document.getElementById('map');
+        new Atlas.LumiMap(map, {
+          apiOptions: {
+            key: 'AIzaSyCyOOZ_pZ6sdDHyIbR5etUy5yQKrewTrrs',
+          },
+          markers: [
+            { lat: 1.3255421, lng: 103.8635995, color: '#B93939', label: 'SP Group' },
+            { lat: 1.2743129, lng: 103.842785, color: '#00D897', label: 'SP Digital', size: 20 }
+          ],
+          mapOptions: {
+            gestureHandling: 'greedy'
+          }
+        });
+      });
+    }, 1000);
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,10 @@
+.u-list-inline,
+.o-list-inline { // deprecated
+  margin-left: 0;
+  list-style: none;
+}
+
+.u-list-inline-item,
+.o-list-inline__item { // deprecated
+  display: inline-block;
+}

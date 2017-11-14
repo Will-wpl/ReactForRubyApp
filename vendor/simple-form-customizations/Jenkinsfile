@@ -1,0 +1,80 @@
+pipeline {
+  agent {
+    node {
+      label 'rails_base'
+    }
+  }
+
+  environment {
+    http_proxy          = "http://proxy.singaporepower.com.sg:8080"
+    https_proxy         = "http://proxy.singaporepower.com.sg:8080"
+    no_proxy            = "nexus.in.spdigital.io,in.spdigital.io,localhost,127.0.0.1"
+    PATH                = "${env.HOME}/.rbenv/bin:${env.HOME}/.rbenv/shims:$PATH"
+    SLACK_CHANNEL       = "#sp-digital-bots"
+    SLACK_TEAM_DOMAIN   = "sp-digital"
+    SLACK_TOKEN         = credentials("spdigital-slack-token")
+    ARCHI_PROC_NEXUS    = credentials("ARCHI_PROC_NEXUS")
+  }
+
+  stages {
+    stage('Start'){
+      steps {
+        notifySlack('CI/CD', 'STARTED')
+      }
+    }
+
+    stage('Install services') {
+        steps {
+            sh "sudo su -c 'env | sort' root"
+
+            sh "sudo su -c 'apt-get update && apt-get install sqlite3 libsqlite3-dev' root"
+        }
+    }
+
+    stage("Run test files") {
+      steps {
+        sh 'RAILS_ENV=test bundle install'
+
+        sh "bundle exec rspec spec"
+      }
+      post{
+        success{
+          notifySlack('Test', 'SUCCESS')
+        }
+        failure{
+          notifySlack('Test', 'FAILURE')
+        }
+      }
+    }
+
+    stage("Build and Deploy"){
+      when {
+        branch 'release'
+      }
+
+      steps{
+        sh "rm -rf pkg"
+        sh "rake build"
+
+        sh "gem install nexus"
+
+        sh "unset HTTP_PROXY http_proxy HTTPS_PROXY https_proxy"
+
+        sh 'gem nexus --url http://nexus.in.spdigital.io/repository/rubygems-internal/ --credential "${ARCHI_PROC_NEXUS_USR}:${ARCHI_PROC_NEXUS_PSW}" pkg/\$(ls pkg)'
+      }
+      post {
+        success {
+          notifySlack('Build and Deploy', 'SUCCESS')
+        }
+        failure {
+          notifySlack('Build and Deploy', 'FAILURE')
+        }
+      }
+    }
+  }
+  post {
+    success {
+      notifySlack('CI/CD', 'SUCCESS')
+    }
+  }
+}
