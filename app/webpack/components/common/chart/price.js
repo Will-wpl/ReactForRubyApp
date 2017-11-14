@@ -128,10 +128,9 @@ function getTemplate(props) {
                     let serObj = props.data[params.seriesIndex];
                     if (serObj && serObj.data) {
                         let d = serObj.data[params.dataIndex];
-                        if (d && d.template_price) {
+                        if (d && d.template_price) { //<div>${d.template_price.hts}</div>
                             template = `<strong>${d.template_price.company_price}</strong>
                                     <div>${d.template_price.lt}</div>
-                                    <div>${d.template_price.hts}</div>
                                     <div>${d.template_price.htl}</div>`;
                         }
                     }
