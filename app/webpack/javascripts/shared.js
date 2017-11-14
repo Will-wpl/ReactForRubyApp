@@ -27,7 +27,7 @@ export default class UserLogout extends Component {
                 })
     }
     render() {
-        return <div onClick={this.doOut.bind(this)}>logout</div>
+        return <div></div>
     }
 }
 function run() {
