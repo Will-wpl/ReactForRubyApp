@@ -16,7 +16,8 @@ export class RetailerManage extends Component {
             type:"",live_modal:"",live_modal_do:"",
             btn_status:false,
             disabled:false,
-            havedata:false
+            havedata:false,
+            allbtnStatus:true
         }
         this.auctionData = {};
     }
@@ -153,7 +154,7 @@ export class RetailerManage extends Component {
                 </p>
             </div>
             <div className={this.state.live_modal_do}>
-            <TimeCuntDown  title={this.timerTitle} auction={this.auction}/>
+            <TimeCuntDown  title={this.timerTitle} auction={this.auction} countDownOver={()=>{this.setState({disabled:true,allbtnStatus:false})}}/>
             {/* <DuringCountDown /> */}
             <form onSubmit={this.checkSuccess.bind(this)}>
             <div className="u-grid">
@@ -272,6 +273,7 @@ export class RetailerManage extends Component {
                         </table>
                     </div> */}
                     <div className="retailer_btn">
+                        {!this.state.allbtnStatus ? <div className="mask"></div> : ''}
                         {/* <button className="lm--button lm--button--primary">Reject Participation</button> */}                       
                         {btn_html}
                     </div>
