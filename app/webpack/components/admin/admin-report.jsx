@@ -33,7 +33,7 @@ export class AdminReport extends Component {
             this.actualPrice = '0.0000';
             getHistoriesLast({ auction_id: auction? auction.id : 1}).then(data => {
                 console.log('histories', data);
-                this.winner.data = data.histories[0];
+                this.winner.data = data.result;
                 this.winner.auction = data.auction;
             })
             getHistories({ auction_id: auction? auction.id : 1}).then(histories => {
@@ -113,7 +113,7 @@ export class AdminReport extends Component {
                         </div>
                     </div>
                     <div className="col-sm-12 col-md-5">
-                        <WinnerPrice showOrhide="show" winner={this.winner} />
+                        <WinnerPrice showOrhide="show" isWinner="winner" winner={this.winner} />
                         <RetailerRanking ranking={this.state.ranking}/>
                     </div>
                 </div>
