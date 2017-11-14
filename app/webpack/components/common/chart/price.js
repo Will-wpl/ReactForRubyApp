@@ -54,18 +54,20 @@ export default class Price extends Component {
     }
 
     render() {
-        let chartContent;
-        if (this.props.data.length > 0) {
-            chartContent = <ReactEcharts
+        // let chartContent;
+        // if (this.props.data.length > 0) {
+        //     chartContent = <ReactEcharts
+        //         option={this.getChartOption()}
+        //         notMerge={true}
+        //         style={{minHeight: '310px', width: '100%'}}
+        //         className='react_for_echarts'/>;
+        // }
+        return (
+            <ReactEcharts
                 option={this.getChartOption()}
                 notMerge={true}
                 style={{minHeight: '310px', width: '100%'}}
-                className='react_for_echarts'/>;
-        }
-        return (
-            <div>
-                {chartContent}
-            </div>
+                className='react_for_echarts'/>
         );
     }
 }
