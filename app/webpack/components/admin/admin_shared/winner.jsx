@@ -24,9 +24,9 @@ export default class WinnerPrice extends Component {
   render() {
     console.log(this.props.winner);
     return this.props.winner.data ? (
-      this.props.isWinner === 'winner' ?
+      this.props.winner.data.status ?
                     <div className="winnerPrice_main">
-                              <h2 className={this.props.showOrhide}>{this.props.winner.data.status === 'winner' ? <span className="green">Status : Awarded</span> : this.props.winner.data.status === 'void' ? <span className="red">Status : Void</span> : <span className="red">Status : Not Awarded</span> }</h2>
+                              <h2 className={this.props.showOrhide}>{this.props.winner.data.status === 'winner' ? <span className="green">Status : Awarded</span> : <span className="red">Status : Void</span> }</h2>
                               <h4 className="u-mt1">Summary of Lowest Bidder</h4>
                               <ul>
                                 <li><span>Lowest Price Bidder: </span><span>{this.props.winner.data.lowest_price_bidder}</span></li>
@@ -37,13 +37,13 @@ export default class WinnerPrice extends Component {
                                   <tr>
                                       <th></th>
                                       <th>LT</th>
-                                      <th>HT (Small)</th>
+                                      <th className="live_hide">HT (Small)</th>
                                       <th>HT (Large)</th>
                                       </tr>
                                   </thead>
                                   <tbody>
-                                      <tr><td>Peak (7am-7pm)</td><td>{this.padZero(this.props.winner.data.lt_peak,4)}</td><td>{this.padZero(this.props.winner.data.hts_peak,4)}</td><td>{this.padZero(this.props.winner.data.htl_peak,4)}</td></tr>
-                                      <tr><td>Off-Peak (7pm-7am)</td><td>{this.padZero(this.props.winner.data.lt_off_peak,4)}</td><td>{this.padZero(this.props.winner.data.hts_off_peak,4)}</td><td>{this.padZero(this.props.winner.data.htl_off_peak,4)}</td></tr>
+                                      <tr><td>Peak (7am-7pm)</td><td>{this.padZero(this.props.winner.data.lt_peak,4)}</td><td className="live_hide">{this.padZero(this.props.winner.data.hts_peak,4)}</td><td>{this.padZero(this.props.winner.data.htl_peak,4)}</td></tr>
+                                      <tr><td>Off-Peak (7pm-7am)</td><td>{this.padZero(this.props.winner.data.lt_off_peak,4)}</td><td className="live_hide">{this.padZero(this.props.winner.data.hts_off_peak,4)}</td><td>{this.padZero(this.props.winner.data.htl_off_peak,4)}</td></tr>
                                   </tbody>
                             </table>
                               <ul>
