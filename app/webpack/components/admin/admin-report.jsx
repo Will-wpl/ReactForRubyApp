@@ -113,7 +113,7 @@ export class AdminReport extends Component {
                         </div>
                     </div>
                     <div className="col-sm-12 col-md-5">
-                        <WinnerPrice showOrhide="show" isWinner="winner" winner={this.winner} />
+                        <WinnerPrice showOrhide="show" winner={this.winner} />
                         <RetailerRanking ranking={this.state.ranking}/>
                     </div>
                 </div>
