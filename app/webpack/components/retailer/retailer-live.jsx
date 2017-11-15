@@ -70,7 +70,9 @@ export class RetailerLive extends Component {
     }
 
     goToFinish() {
-        window.location.href=`/retailer/auctions/${this.auction.id}/finish`
+        if(!this.state.holdStatus){
+            window.location.href=`/retailer/auctions/${this.auction.id}/finish`
+        }
     }
 
     nofityHoldStatus(status,isOver) {
