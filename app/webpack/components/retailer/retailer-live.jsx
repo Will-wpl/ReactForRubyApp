@@ -102,7 +102,7 @@ export class RetailerLive extends Component {
                 <div className={'live_show'} id="live_modal">
                     <div className={'live_hold'}></div>
                     <p>
-                        Please standby, Bidding will<br></br>
+                        Please standby, bidding will<br></br>
                         commence soon.<br></br>
                         Page will automatically refresh when<br></br>Reverse Auction commences.
                     </p>
