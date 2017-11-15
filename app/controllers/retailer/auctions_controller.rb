@@ -85,12 +85,14 @@ class Retailer::AuctionsController < Retailer::BaseController
           # stand by page
         elsif @auction.actual_begin_time < Time.current && Time.current < @auction.actual_end_time
           redirect_to live_retailer_auction_path(@auction.id)
-          # live page
-        elsif @auction.auction_result.nil? && Time.current > @auction.actual_end_time
+        elsif @auction.auction_result.nil? && Time.current > @auction.actual_end_time && @auction.hold_status
+          redirect_to live_retailer_auction_path(@auction.id)
+        elsif @auction.auction_result.nil? && Time.current > @auction.actual_end_time && !@auction.hold_status
           redirect_to finish_retailer_auction_path(@auction.id)
         elsif !@auction.auction_result.nil?
           redirect_to message_retailer_auctions_path()
           # There is no upcoming reverse auction published.
+        end
         end
       end
     end
