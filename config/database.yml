@@ -84,6 +84,5 @@ test:
 production:
   <<: *default
   database: reverse_auction_production
-#  host: localhost
-#  username: reverse_auction
-#  password: <%= ENV['DATABASE_PASSWORD'] %>
+  username: reverse_auction
+  password: <%= ENV['DATABASE_PASSWORD'] %>
