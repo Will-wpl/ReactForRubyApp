@@ -40,7 +40,7 @@ export default class Ranking extends Component {
                 if (element.data.length === 1) {
                     d.value = [].concat(0).concat(timeRanking.ranking);
                 } else {
-                    d.value = [].concat(moment(timeRanking.bid_time).format('HH:mm:ss')).concat(timeRanking.ranking);
+                    d.value = [].concat(moment(timeRanking.bid_time).format('YYYY-DD-MM HH:mm:ss')).concat(timeRanking.ranking);
                 }
                 tmp.data.push(d);
             });
@@ -245,9 +245,9 @@ const getTemplate = (props) => {
             type: 'time',
             boundaryGap: false,
             axisLabel: {
-                // formatter: (value, index) => {
-                //     return moment(value).format('HH:mm:ss');
-                // }
+                formatter: (value, index) => {
+                    return moment(value).format('HH:mm:ss');
+                }
             },
             axisTick: {
                 show: false

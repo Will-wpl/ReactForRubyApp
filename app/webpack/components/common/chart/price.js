@@ -42,7 +42,7 @@ export default class Price extends Component {
                     d.value = [].concat(0)
                         .concat(parseFloat(timePrice.average_price).toFixed(4));
                 } else {
-                    d.value = [].concat(moment(timePrice.bid_time).format('HH:mm:ss'))
+                    d.value = [].concat(moment(timePrice.bid_time).format('YYYY-DD-MM HH:mm:ss'))
                         .concat(parseFloat(timePrice.average_price).toFixed(4));
                 }
 
@@ -260,9 +260,9 @@ function getTemplate(props) {
             type: 'time',
             boundaryGap: false,
             axisLabel: {
-                // formatter: (value, index) => {
-                //     return moment(value).format('HH:mm:ss');
-                // }
+                formatter: (value, index) => {
+                    return moment(value).format('HH:mm:ss');
+                }
             },
             axisTick: {
                 show: false
