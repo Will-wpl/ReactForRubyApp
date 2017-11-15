@@ -11,7 +11,7 @@ export default class ReservePrice extends Component {
         // console.log(this.props.realtimePrice, this.props.price)
         return (
             <dl className="reservePrice">
-                <dd>SP Group Reserve Auction</dd>
+                <dd>SP Group Reverse Auction</dd>
                 <dd>
                     <span>Reserve Price = $ {this.props.price}/kWh</span>
                     <span className={matched ? 'success' : 'fail'}>
