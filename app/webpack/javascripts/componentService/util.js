@@ -56,3 +56,13 @@ export const getStandardNumBref = (num) => {
     return getNumBref(num, true);
 
 }
+
+export const isEmptyJsonObj = (obj) => {
+    if (!obj) {
+        return true;
+    }
+    for (let item in obj) {
+        return false;
+    }
+    return true;
+}

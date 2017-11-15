@@ -5,7 +5,7 @@ import ReservePrice from './admin_shared/reserveprice';
 import CheckboxList from '../common/chart/list-checkbox';
 import {getArrangements, getHistories} from '../../javascripts/componentService/admin/service';
 import {createWebsocket, getAuction} from '../../javascripts/componentService/common/service';
-import {findUpLimit, getRandomColor, getStandardNumBref} from '../../javascripts/componentService/util';
+import {findUpLimit, getRandomColor, getStandardNumBref, isEmptyJsonObj} from '../../javascripts/componentService/util';
 import {ACCEPT_STATUS} from '../../javascripts/componentService/constant';
 import ChartRealtimeHoc from './realtimeChartdataContainer';
 import Ranking from '../common/chart/ranking';
@@ -30,8 +30,8 @@ export class AdminDashboard extends Component {
 
             this.createWebsocket(auction? auction.id : 1);
             getHistories({ auction_id: auction? auction.id : 1}).then(histories => {
-                // console.log('histories', histories);
-                if (histories) {
+                // console.log('histories', histories, isEmptyJsonObj(histories));
+                if (!isEmptyJsonObj(histories)) {
                     let orderRanking = histories.map(element => {
                         return element.data.length > 0 ? element.data[element.data.length - 1] : []
                     })
