@@ -32,7 +32,7 @@ export default class Ranking extends Component {
                     value: []
                 } : {
                     symbol: 'circle',
-                    symbolSize: 5,
+                    symbolSize: 8,
                     showSymbol: true,
                     value: []
                 };
@@ -40,7 +40,7 @@ export default class Ranking extends Component {
                 if (element.data.length === 1) {
                     d.value = [].concat(0).concat(timeRanking.ranking);
                 } else {
-                    d.value = [].concat(moment(timeRanking.bid_time).format('YYYY-MM-DD HH:mm:ss')).concat(timeRanking.ranking);
+                    d.value = [].concat(moment(timeRanking.bid_time).format('HH:mm:ss')).concat(timeRanking.ranking);
                 }
                 tmp.data.push(d);
             });
@@ -50,14 +50,6 @@ export default class Ranking extends Component {
     }
 
     render() {
-        // let chartContent;
-        // if (this.props.data.length > 0) {
-        //     chartContent = <ReactEcharts
-        //         option={this.getChartOption()}
-        //         notMerge={true}
-        //         style={{minHeight: '310px', width: '100%'}}
-        //         className='react_for_echarts'/>;
-        // }
         return (
             <ReactEcharts
                 option={this.getChartOption()}
@@ -137,7 +129,7 @@ const getTemplate = (props) => {
                     formatter: (value, index) => {
                         if (index === 0) {
                             if (props.data.length > 0 && props.data[0].data.length > 0) {
-                                return moment(props.data[0].data[0].bid_time).format('YYYY-MM-DD HH:mm:ss');
+                                return moment(props.data[0].data[0].bid_time).format('HH:mm:ss');
                             }
                         }
                         return '';
