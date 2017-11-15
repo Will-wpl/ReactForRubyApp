@@ -11,17 +11,16 @@
             tr
               th Name
               th Date
-              th Result
+              th My Result
           tbody
             - @auction_results.each do |auction_result|
               tr
-
                 /td= link_to auction_history.id, admin_auction_history_path(auction_history)
                 td[data-label="Name"]= auction_result.name
                 td[data-label="Date"]= auction_result.start_datetime.strftime("%d %b %Y")
                 td[data-label="My Result"]
                   - if auction_result.status == 'void'
-                    'void
+                    'Tender Void
                   - else
                     - if auction_result.user_id == current_user.id
                         'Tender Awarded
@@ -46,5 +45,5 @@
         = paginate(@auction_results)
 
 
-    div.createRaMain.u-grid
-      a.lm--button.lm--button--primary.u-mt3 href="/retailer/home" Back to Homepage
+div.createRaMain.u-grid
+  a.lm--button.lm--button--primary.u-mt3 href="/retailer/home" Back to Homepage
