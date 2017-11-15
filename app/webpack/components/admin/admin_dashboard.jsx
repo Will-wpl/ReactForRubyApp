@@ -61,7 +61,7 @@ export class AdminDashboard extends Component {
         getArrangements(ACCEPT_STATUS.ACCEPT).then(res => {
             let limit = findUpLimit(res.length);
             this.setState({users:res.map((element, index) => {
-                element['color'] = getRandomColor((index + 1) * 1.0 / limit);
+                element['color'] = getRandomColor(index + 1, limit); //getRandomColor((index + 1) * 1.0 / limit);
                 return element;
             })});
         }, error => {
