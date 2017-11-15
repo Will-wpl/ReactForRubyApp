@@ -28,8 +28,3 @@ public/packs-test
 
 tmp/
 
-vendor/atlas/
-
-vendor/rails_base_scaffolds/
-
-vendor/simple-form-customizations/
