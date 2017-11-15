@@ -4,7 +4,7 @@ import RetailerRanking from './admin_shared/ranking';
 import CheckboxList from '../common/chart/list-checkbox';
 import {getArrangements, getHistories,getHistoriesLast} from '../../javascripts/componentService/admin/service';
 import {getAuction} from '../../javascripts/componentService/common/service';
-import {findUpLimit, getRandomColor} from '../../javascripts/componentService/util';
+import {findUpLimit, getRandomColor, getStandardNumBref} from '../../javascripts/componentService/util';
 import {ACCEPT_STATUS} from '../../javascripts/componentService/constant';
 import ChartRealtimeHoc from './realtimeChartdataContainer';
 import Ranking from '../common/chart/ranking';
@@ -104,7 +104,7 @@ export class AdminReport extends Component {
                         <div className="u-grid u-mt2">
                             <div className="col-sm-9">
                                 <ChartRealtimeHoc ref="rankingChart" dataStore={this.state.histories}>
-                                    <Ranking />
+                                    <Ranking yAxisFormatterRule={{0 : ' ', 'func': getStandardNumBref}}/>
                                 </ChartRealtimeHoc>
                             </div>
                             <div className="col-sm-2 push-md-1">
