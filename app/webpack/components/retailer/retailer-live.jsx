@@ -95,7 +95,7 @@ export class RetailerLive extends Component {
             <div>
                 <TimeCuntDown countDownOver={() => this.setState({showLive: true})} title={this.timerTitle} auction={this.auction} listenHold={this.nofityHoldStatus.bind(this)}>
                     <div id="retailer_hold" className={this.state.holdStatus ? '' : 'live_hide'}>
-                        <b>RA has been put on hold due to an emergency situation. RA will commence immediately once situation clears. Please continue to standby for commencement.</b>
+                        <b>Reverse Auction has been put on hold due to an emergency situation. Reverse Auction will commence immediately once situation clears. Please continue to standby for commencement.</b>
                     </div>
                 </TimeCuntDown>
                 <div className={'live_show'} id="live_modal">

@@ -177,7 +177,7 @@ export class RetailerManage extends Component {
                             <span className="string required link_file">xxx.pdf</span>
                         </div>
                     </div> */}
-                    <h3 className="u-mt3 u-mb1">Section B: Contact Person Details for Actual Day of Reverse Auction</h3>
+                    <h3 className="u-mt3 u-mb1">Contact Person Details for Actual Day of Reverse Auction</h3>
                     <h4 className="lm--formItem lm--formItem--inline string">Main Contact Person on Actual Bidding Day:</h4>
                     <div className="lm--formItem lm--formItem--inline string">
                         <label className="lm--formItem-left lm--formItem-label string required">
