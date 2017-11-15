@@ -6,6 +6,7 @@ import {getAuctionInVersionOne,getBidderStatus, upateHoldStatus} from '../../jav
 import moment from 'moment';
 const ACTUAL_END_TIME = 'actual_end_time';
 const ACTUAL_CURRENT_TIME = 'current_time';
+const HOLD_STATUS = 'hold_status';
 export class OnlineStatusMain extends Component {
     constructor(props, context){
         super(props);
@@ -67,6 +68,11 @@ export class OnlineStatusMain extends Component {
             //console.log(res);
             this.auction = res;
             this.timerTitle = this.auction ? `${this.auction.name} on ${moment(this.auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
+            getAuctionTimeRule(this.auction.id).then(status => {
+                this.setState({
+                    holdStatus:status[HOLD_STATUS]
+                })
+            })
             this.timegetBidderStatus();
         }, error => {
             console.log(error);
