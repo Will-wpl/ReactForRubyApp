@@ -1,7 +1,7 @@
 require 'feature_helper'
 
 RSpec.feature 'sign up' do
-  scenario 'user can sign up', js: true do
+  xscenario 'user can sign up', js: true do
     visit new_user_registration_path
 
     within('form.new_user') do
@@ -21,7 +21,7 @@ RSpec.feature 'sign in' do
     create(:user, email: 'user@example.com', password: 'password')
   end
 
-  scenario 'user can sign in', js: true do
+  xscenario 'user can sign in', js: true do
     visit new_user_session_path
 
     within('form.new_user') do
