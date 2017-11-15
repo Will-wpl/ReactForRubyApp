@@ -54,36 +54,6 @@ class Admin::AuctionsController < Admin::BaseController
     end
   end
 
-  # default create
-  # def create
-  #   @auction = Auction.new(model_params)
-
-  #   if @auction.save
-  #     redirect_to [:admin, @auction], notice: "#{Auction.model_name.human} was successfully created."
-  #   else
-  #     render :new
-  #   end
-  # end
-
-  # def show
-  # end
-  #
-  # def edit
-  # end
-  #
-  # def update
-  #   if @auction.update(model_params)
-  #     redirect_to [:admin, @auction], notice: "#{Auction.model_name.human} was successfully updated."
-  #   else
-  #     render :edit
-  #   end
-  # end
-
-  # def destroy
-  #   @auction.destroy
-
-  #   redirect_to admin_auctions_path, notice: "#{Auction.model_name.human} was successfully destroyed."
-  # end
 
   private
 
@@ -99,9 +69,4 @@ class Admin::AuctionsController < Admin::BaseController
     params.require(:auction).permit(:name, :start_datetime, :contract_period_start_date, :contract_period_end_date, :duration, :reserve_price)
   end
 
-  # def set_auctions_breadcrumbs
-  #   add_breadcrumb 'Home', admin_home_index_path
-  #   add_breadcrumb Auction.model_name.human.pluralize, admin_auctions_path
-  #   add_breadcrumb @auction.name_was, admin_auction_path(@auction) if @auction.try(:persisted?)
-  # end
 end
