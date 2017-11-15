@@ -192,8 +192,8 @@ if Auction.count == 0
                  total_volume: nil, #TBD SP provide six volumes 6_805_584,
                  total_lt_peak: 2_361_990,
                  total_lt_off_peak: 1_574_664,
-                 total_hts_peak: 37_452,
-                 total_hts_off_peak: 56_046,
+                 total_hts_peak: 0,
+                 total_hts_off_peak: 0,
                  total_htl_peak: 1_983_720,
                  total_htl_off_peak: 791_712,
                  publish_status: '0')
