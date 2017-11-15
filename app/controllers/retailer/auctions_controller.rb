@@ -93,6 +93,7 @@ class Retailer::AuctionsController < Retailer::BaseController
           redirect_to message_retailer_auctions_path()
           # There is no upcoming reverse auction published.
         end
+        end
       end
     end
   end
