@@ -20,7 +20,7 @@ export class BidderStatus extends Component {
                     console.log(error);
                 })
             }
-        }, 5000);
+        }, 1000);
     }
     componentWillUnmount() {
         clearInterval(this.interval);
@@ -45,9 +45,9 @@ export class BidderStatus extends Component {
                         this.state.dataList.map((item,index) => {
                         return(
                             <li key={index} className="u-grid">
-                                <span className="col-sm-7 col-md-7 white" title={item.company_name}>{item.company_name}</span>
-                                <span className="col-sm-3 col-md-3"><abbr className={'color'+item.accept_status}></abbr></span>
-                                <span className="col-sm-2 col-md-2" onClick={this.showDetail.bind(this,item.id)}>Details</span>     
+                                <span className="col-sm-7 white" title={item.company_name}>{item.company_name}</span>
+                                <span className="col-sm-3"><abbr className={'color'+item.accept_status}></abbr></span>
+                                <span className="col-sm-2" onClick={this.showDetail.bind(this,item.id)}>Details</span>     
                             </li>)
                         })
                     }
