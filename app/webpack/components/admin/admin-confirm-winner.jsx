@@ -18,7 +18,11 @@ export default class AdminConfirmWinner extends Component {
             realtimeRanking:[], currentPrice:'0.0000',
         },
         fnStatus:false,
-        text:""
+        text:"",
+        winner:{
+            data:{},
+            auction:{}
+        }
     }
     //this.winnerdata=[];
     //this.winnerauction={};
@@ -46,8 +50,12 @@ componentDidMount() {
         this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000'
         getHistoriesLast({ auction_id: auction? auction.id : 1}).then(data => {
             console.log('histories', data);
-            this.winner.data = data.histories[0];
-            this.winner.auction = data.auction;
+            this.setState({
+                winner:{
+                    data:data.histories[0],
+                    auction:data.auction
+                }
+            })
             //orderRanking.sort(this.compare("average_price"))
             this.setState({realtimeRanking:data.histories,currentPrice : data.histories.length > 0 ? data.histories[0].average_price : this.state.currentPrice});
         })
@@ -74,7 +82,7 @@ showDetail(type,obj){
 }
 void_auction(){
     let timeFn;
-    auctionConfirm({data:{ user_id: this.winner.data.user_id , status:'void'},id:this.auction.id}).then(res=>{
+    auctionConfirm({data:{ user_id: this.state.winner.data.user_id , status:'void'},id:this.auction.id}).then(res=>{
         console.log(res);
         clearTimeout(timeFn);
         this.refs.Modal.showModal();
@@ -90,7 +98,7 @@ void_auction(){
 }
 confirm_winner(){
     let timeFn;
-    auctionConfirm({data:{ user_id: this.winner.data.user_id , status:'win'},id:this.auction.id}).then(res=>{
+    auctionConfirm({data:{ user_id: this.state.winner.data.user_id , status:'win'},id:this.auction.id}).then(res=>{
         console.log(res);
         clearTimeout(timeFn);
         this.refs.Modal.showModal();
@@ -118,7 +126,7 @@ render() {
                     <div className="col-sm-12 col-md-6 u-cell">
                         <div className="col-sm-12 col-md-10 push-md-1">
                             <ReservePrice price={this.startPrice} realtimePrice={this.state.currentPrice} />
-                            <WinnerPrice showOrhide="hide" winner={this.winner} />
+                            <WinnerPrice showOrhide="hide" winner={this.state.winner} />
                             <div className="winnerPrice_main">
                                 <a className="lm--button lm--button--primary u-mt3" onClick={this.showDetail.bind(this,'void')}>Void Reverse Auction</a>
                                 {/* <a className="lm--button lm--button--primary u-mt3" >Alternate Winner</a> */}
