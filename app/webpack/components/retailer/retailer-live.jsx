@@ -25,6 +25,7 @@ export class RetailerLive extends Component {
             getAuctionTimeRule(this.auction.id).then(res => {
                 let divider = parseInt((moment(res[ACTUAL_END_TIME]).toDate().getTime()
                     - moment(res[ACTUAL_CURRENT_TIME]).toDate().getTime()) / 1000);
+                this.status = res.hold_status;
                 let day = Math.floor(divider / (60 * 60 * 24));
                 let hour = Math.floor((divider - day * 24 * 60 * 60) / 3600);
                 let minute = Math.floor((divider - day * 24 * 60 * 60 - hour * 3600) / 60);
@@ -70,15 +71,14 @@ export class RetailerLive extends Component {
     }
 
     goToFinish() {
-        if(!this.hold_status){
-            window.location.href=`/retailer/auctions/${this.auction.id}/finish`
-        }else{
-            () => this.setState({showLive: true});
+            if(!this.status){
+                window.location.href=`/retailer/auctions/${this.auction.id}/finish`
+            }else{
+                () => {this.setState({showLive: true})};
         }
     }
 
     nofityHoldStatus(status,isOver) {
-        this.hold_status = status;
         if(isOver){
             if (this.localHoldStatus !== status) {
                 //console.log('status ====>', status, this.localHoldStatus);
