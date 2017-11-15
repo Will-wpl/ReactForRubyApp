@@ -15,11 +15,17 @@ import moment from 'moment';
 export class AdminReport extends Component {
     constructor(props){
         super(props);
-        this.state = {users:[], histories:[], ranking:[], currentPrice:'0.0000'};
-        this.winner = {
-            data:{},
-            auction:{}
-        }
+        this.state = {
+            users:[], histories:[], ranking:[], currentPrice:'0.0000',
+            winner:{
+                data:{},
+                auction:{}
+            }
+        };
+        // this.winner = {
+        //     data:{},
+        //     auction:{}
+        // }
     }
 
     componentDidMount() {
@@ -33,8 +39,12 @@ export class AdminReport extends Component {
             this.actualPrice = '0.0000';
             getHistoriesLast({ auction_id: auction? auction.id : 1}).then(data => {
                 console.log('histories', data);
-                this.winner.data = data.result;
-                this.winner.auction = data.auction;
+                this.setState({
+                    winner:{
+                        data:data.result,
+                        auction:data.auction
+                    }
+                })
             })
             getHistories({ auction_id: auction? auction.id : 1}).then(histories => {
                 // console.log('histories', histories);
@@ -113,7 +123,7 @@ export class AdminReport extends Component {
                         </div>
                     </div>
                     <div className="col-sm-12 col-md-5">
-                        <WinnerPrice showOrhide="show" winner={this.winner} />
+                        <WinnerPrice showOrhide="show" winner={this.state.winner} />
                         <RetailerRanking ranking={this.state.ranking}/>
                     </div>
                 </div>
