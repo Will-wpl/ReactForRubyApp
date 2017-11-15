@@ -5,14 +5,7 @@ class AuctionChannel < ApplicationCable::Channel
   end
 
   def unsubscribed
-    # Any cleanup needed when channel is unsubscribed
-    # update_check_params('off')
   end
-
-  # def check_in
-  #   update_check_params('on-live')
-  #   ActionCable.server.broadcast "auction_#{params[:auction_id]}"
-  # end
 
   def extend_time(data)
     auction = Auction.find(params[:auction_id])
@@ -59,10 +52,6 @@ class AuctionChannel < ApplicationCable::Channel
 
   private
 
-  def update_check_params(login_status)
-    # @arrangement = Arrangement.where('auction_id = :auction_id and user_id = :user_id', auction_id: params[:auction_id], user_id: params[:user_id])
-    # @arrangement.update(login_status: login_status)
-  end
 
   def set_price(calculate_dto)
     total_award_sum = AuctionHistory.set_total_award_sum(calculate_dto.total_lt_peak, calculate_dto.total_lt_off_peak,
