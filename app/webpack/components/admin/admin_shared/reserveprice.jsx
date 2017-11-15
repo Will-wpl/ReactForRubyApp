@@ -8,7 +8,7 @@ export default class ReservePrice extends Component {
             <dl className="reservePrice">
                 <dd>SP Group Reserve Auction</dd>
                 <dd>
-                    <span>Reserve Price = $ {this.props.price} /kWh</span>
+                    <span>Reserve Price = $ {this.props.price}/kWh</span>
                     <span className={matched ? 'success' : 'fail'}>
                 {matched ? 'Reserve Price Achieved' : 'Reserve Price Not Achieved'}
                 </span>
