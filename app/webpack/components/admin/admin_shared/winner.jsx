@@ -49,7 +49,7 @@ export default class WinnerPrice extends Component {
                               <ul>
                                 <li><span>Contract Period: </span><span>{moment(this.props.winner.auction.contract_period_start_date).format('LL')} to {moment(this.props.winner.auction.contract_period_end_date).format('LL')}</span></li>
                                 <li><span>Total Volume: </span><span>{this.props.winner.data.total_volume} kWh (forecasted)</span></li>
-                                <li><span>Total Award Sum: </span><span>{this.props.winner.data.total_award_sum} (forecasted)</span></li>
+                                <li><span>Total Award Sum: </span><span>${this.props.winner.data.total_award_sum} (forecasted)</span></li>
                                 </ul>
                             </div>
                   : <div className="winnerPrice_main">
@@ -76,7 +76,7 @@ export default class WinnerPrice extends Component {
                       <ul>
                         <li><span>Contract Period: </span><span>{moment(this.props.winner.auction.contract_period_start_date).format('LL')} to {moment(this.props.winner.auction.contract_period_end_date).format('LL')}</span></li>
                         <li><span>Total Volume: </span><span>{this.props.winner.auction.total_volume} kWh (forecasted)</span></li>
-                        <li><span>Total Award Sum: </span><span>{this.props.winner.data.total_award_sum} (forecasted)</span></li>
+                        <li><span>Total Award Sum: </span><span>${this.props.winner.data.total_award_sum} (forecasted)</span></li>
                         </ul>
                     </div>                       
     ):(
