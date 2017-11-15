@@ -299,7 +299,7 @@ export class CreateNewRA extends Component {
             styleType = "col-sm-12 col-md-12";
             left_name = this.props.left_name;
             btn_html = <div className="createRa_btn">
-                            {this.state.editdisabled ? <div className="mask"></div> : ''}
+                            {this.props.editdisabled ? <div className="mask"></div> : ''}
                             <a className={this.state.edit_btn} onClick={this.edit.bind(this)}>Edit</a>
                             <button className={this.state.edit_change} onClick={this.auctionCreate.bind(this,'save')}>Save</button>
                             <a className={this.state.edit_change} onClick={this.Cancel.bind(this)}>Cancel</a>
