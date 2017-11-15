@@ -9,12 +9,12 @@ export default class BidHistory extends Component {
                 return <tr key={element.id}>
                     <td>{index + 1}</td>
                     <td>{element.bid_time}</td>
-                    <td>${element.lt_off_peak}</td>
-                    <td>${element.lt_peak}</td>
-                    <td style={{display: 'none'}}>${element.hts_off_peak}</td>
-                    <td style={{display: 'none'}}>${element.hts_peak}</td>
-                    <td>${element.htl_off_peak}</td>
-                    <td>${element.htl_peak}</td>
+                    <td>$ {element.lt_off_peak}</td>
+                    <td>$ {element.lt_peak}</td>
+                    <td style={{display: 'none'}}>$ {element.hts_off_peak}</td>
+                    <td style={{display: 'none'}}>$ {element.hts_peak}</td>
+                    <td>$ {element.htl_off_peak}</td>
+                    <td>$ {element.htl_peak}</td>
                 </tr>
             })
         } else {
@@ -25,12 +25,12 @@ export default class BidHistory extends Component {
                 trs.push(<tr key={element.id}>
                     <td>{i + 1}</td>
                     <td>{element.bid_time}</td>
-                    <td>${element.lt_off_peak}</td>
-                    <td>${element.lt_peak}</td>
-                    <td style={{display: 'none'}}>${element.hts_off_peak}</td>
-                    <td style={{display: 'none'}}>${element.hts_peak}</td>
-                    <td>${element.htl_off_peak}</td>
-                    <td>${element.htl_peak}</td>
+                    <td>$ {element.lt_off_peak}</td>
+                    <td>$ {element.lt_peak}</td>
+                    <td style={{display: 'none'}}>$ {element.hts_off_peak}</td>
+                    <td style={{display: 'none'}}>$ {element.hts_peak}</td>
+                    <td>$ {element.htl_off_peak}</td>
+                    <td>$ {element.htl_peak}</td>
                 </tr>)
             }
         }
