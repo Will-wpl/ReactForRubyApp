@@ -17,10 +17,13 @@ div.u-grid.u-mt3
             td[data-label="Name"]= auction_result.name
             td[data-label="Date"]= auction_result.start_datetime.strftime("%d %b %Y")
             td[data-label="My Result"]
-              - if auction_result.user_id == current_user.id
-                  'Tender Awarded
+              - if auction_result.status == 'void'
+                'void
               - else
-                  'Tender Not Awarded
+                - if auction_result.user_id == current_user.id
+                    'Tender Awarded
+                - else
+                    'Tender Not Awarded
             /td.text-right
             /  = link_to admin_auction_history_path(auction_history), class: "btn btn-success btn-sm" do
             /    = icon "eye", t("views.actions.show")

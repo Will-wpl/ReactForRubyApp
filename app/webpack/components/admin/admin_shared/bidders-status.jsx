@@ -1,15 +1,29 @@
 import React, { Component, PropTypes } from 'react'
-import ReactDOM from 'react-dom';
 import {Modal} from '../../shared/show-modal';
-import {arrangementDetail} from '../../../javascripts/componentService/admin/service';
+import {arrangementDetail,getBidderStatus} from '../../../javascripts/componentService/admin/service';
 export class BidderStatus extends Component {
     constructor(props){
         super(props);
         this.state={
-            text:"message",
             showDetail:{},
-            modalshowhide:"modal_hide"
+            dataList: []
         }
+    }
+    componentDidMount() {
+        this.interval = setInterval(() => {
+            if (this.props.auction) {
+                getBidderStatus({auction_id:this.props.auction.id}).then(res => {
+                    this.setState({
+                        dataList:res,
+                    })
+                }, error => {
+                    console.log(error);
+                })
+            }
+        }, 5000);
+    }
+    componentWillUnmount() {
+        clearInterval(this.interval);
     }
     showDetail(id,obj){
         arrangementDetail(id).then(res=>{
@@ -28,7 +42,7 @@ export class BidderStatus extends Component {
                 <h3>Bidders Status of Submission</h3>
                 <ul className="bidders_list">
                     {
-                        this.props.dataList.map((item,index) => {
+                        this.state.dataList.map((item,index) => {
                         return(
                             <li key={index} className="u-grid">
                                 <span className="col-sm-7 col-md-7 white" title={item.company_name}>{item.company_name}</span>
@@ -41,8 +55,6 @@ export class BidderStatus extends Component {
                 <div className="color_show">
                     <label><span className="green"></span><dfn>Submitted</dfn></label>
                     <label><span className="yellow"></span><dfn>Pending</dfn></label>
-                    {/*Displaying in Future Iteration */}
-                    {/*<label><span className="red"></span><dfn>Rejected</dfn></label>*/}
                 </div>
                 </div>
                 <Modal showdetail={this.state.showDetail} ref="Modal" />
