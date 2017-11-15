@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {RetailsOnlineStatus} from './admin_shared/retailers-online-status';
 import {TimeCuntDown} from '../shared/time-cuntdown';
 import {getAuctionInVersionOne,getBidderStatus, upateHoldStatus} from '../../javascripts/componentService/admin/service';
+import {getAuctionTimeRule} from '../../javascripts/componentService/common/service';
 import moment from 'moment';
 const ACTUAL_END_TIME = 'actual_end_time';
 const ACTUAL_CURRENT_TIME = 'current_time';
@@ -69,6 +70,7 @@ export class OnlineStatusMain extends Component {
             this.auction = res;
             this.timerTitle = this.auction ? `${this.auction.name} on ${moment(this.auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
             getAuctionTimeRule(this.auction.id).then(status => {
+                console.log(status[HOLD_STATUS]);
                 this.setState({
                     holdStatus:status[HOLD_STATUS]
                 })
