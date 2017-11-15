@@ -10,7 +10,7 @@ table.table.table-hover.retailer_fill.u-mt3
     - @auction_events.each do |event|
       tr
         td= event.company_name
-        td= event.auction_when
+        td= event.auction_when.strftime("%d %b %Y - %H:%m:%S")
         td= event.auction_do
 hr
 
