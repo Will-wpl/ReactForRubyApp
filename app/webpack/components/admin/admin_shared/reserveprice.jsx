@@ -2,7 +2,12 @@ import React, {Component} from 'react';
 
 export default class ReservePrice extends Component {
     render() {
-        let matched = parseFloat(this.props.realtimePrice) <= parseFloat(this.props.price);
+        let matched
+        if(this.props.realtimePrice){
+            matched = parseFloat(this.props.realtimePrice) <= parseFloat(this.props.price);
+        }else{
+            matched = false
+        } 
         // console.log(this.props.realtimePrice, this.props.price)
         return (
             <dl className="reservePrice">
