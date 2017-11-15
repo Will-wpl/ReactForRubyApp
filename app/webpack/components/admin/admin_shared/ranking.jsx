@@ -40,7 +40,7 @@ export default class RetailerRanking extends Component {
                                         <tr key={item.id}>
                                             <td>{item.ranking}</td>
                                             <td>{item.company_name}</td>
-                                            <td>{parseFloat(item.average_price).toFixed(4)}</td>
+                                            <td>$ {parseFloat(item.average_price).toFixed(4)}/kWh</td>
                                         </tr>
                                     )
                                 })

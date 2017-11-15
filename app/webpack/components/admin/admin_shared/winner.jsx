@@ -30,7 +30,7 @@ export default class WinnerPrice extends Component {
                               <h4 className="u-mt1">Summary of Lowest Bidder</h4>
                               <ul>
                                 <li><span>Lowest Price Bidder: </span><span>{this.props.winner.data.lowest_price_bidder}</span></li>
-                                <li><span>Lowest Average Price: </span><span>${Number(this.props.winner.data.lowest_average_price).toFixed(4)}/kWh</span></li>
+                                <li><span>Lowest Average Price: </span><span>$ {Number(this.props.winner.data.lowest_average_price).toFixed(4)}/kWh</span></li>
                               </ul>
                               <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                                   <thead>
@@ -42,14 +42,14 @@ export default class WinnerPrice extends Component {
                                       </tr>
                                   </thead>
                                   <tbody>
-                                      <tr><td>Peak (7am-7pm)</td><td>{this.padZero(this.props.winner.data.lt_peak,4)}</td><td className="live_hide">{this.padZero(this.props.winner.data.hts_peak,4)}</td><td>{this.padZero(this.props.winner.data.htl_peak,4)}</td></tr>
-                                      <tr><td>Off-Peak (7pm-7am)</td><td>{this.padZero(this.props.winner.data.lt_off_peak,4)}</td><td className="live_hide">{this.padZero(this.props.winner.data.hts_off_peak,4)}</td><td>{this.padZero(this.props.winner.data.htl_off_peak,4)}</td></tr>
+                                      <tr><td>Peak (7am-7pm)</td><td>$ {this.padZero(this.props.winner.data.lt_peak,4)}</td><td className="live_hide">$ {this.padZero(this.props.winner.data.hts_peak,4)}</td><td>$ {this.padZero(this.props.winner.data.htl_peak,4)}</td></tr>
+                                      <tr><td>Off-Peak (7pm-7am)</td><td>$ {this.padZero(this.props.winner.data.lt_off_peak,4)}</td><td className="live_hide">$ {this.padZero(this.props.winner.data.hts_off_peak,4)}</td><td>$ {this.padZero(this.props.winner.data.htl_off_peak,4)}</td></tr>
                                   </tbody>
                             </table>
                               <ul>
                                 <li><span>Contract Period: </span><span>{moment(this.props.winner.auction.contract_period_start_date).format('LL')} to {moment(this.props.winner.auction.contract_period_end_date).format('LL')}</span></li>
                                 <li><span>Total Volume: </span><span>{this.props.winner.data.total_volume} kWh (forecasted)</span></li>
-                                <li><span>Total Award Sum: </span><span>{this.props.winner.data.total_award_sum} (forecasted)</span></li>
+                                <li><span>Total Award Sum: </span><span>$ {this.props.winner.data.total_award_sum} (forecasted)</span></li>
                                 </ul>
                             </div>
                   : <div className="winnerPrice_main">
@@ -57,7 +57,7 @@ export default class WinnerPrice extends Component {
                       <h4 className="u-mt1">Summary of Lowest Bidder</h4>
                       <ul>
                         <li><span>Lowest Price Bidder: </span><span>{this.props.winner.data.company_name}</span></li>
-                        <li><span>Lowest Average Price: </span><span>${Number(this.props.winner.data.average_price).toFixed(4)}/kWh</span></li>
+                        <li><span>Lowest Average Price: </span><span>$ {Number(this.props.winner.data.average_price).toFixed(4)}/kWh</span></li>
                       </ul>
                       <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                           <thead>
@@ -69,14 +69,14 @@ export default class WinnerPrice extends Component {
                               </tr>
                           </thead>
                           <tbody>
-                              <tr><td>Peak (7am-7pm)</td><td>{this.padZero(this.props.winner.data.lt_peak,4)}</td><td className="live_hide">{this.padZero(this.props.winner.data.hts_peak,4)}</td><td>{this.padZero(this.props.winner.data.htl_peak,4)}</td></tr>
-                              <tr><td>Off-Peak (7pm-7am)</td><td>{this.padZero(this.props.winner.data.lt_off_peak,4)}</td><td className="live_hide">{this.padZero(this.props.winner.data.hts_off_peak,4)}</td><td>{this.padZero(this.props.winner.data.htl_off_peak,4)}</td></tr>
+                              <tr><td>Peak (7am-7pm)</td><td>$ {this.padZero(this.props.winner.data.lt_peak,4)}</td><td className="live_hide">$ {this.padZero(this.props.winner.data.hts_peak,4)}</td><td>$ {this.padZero(this.props.winner.data.htl_peak,4)}</td></tr>
+                              <tr><td>Off-Peak (7pm-7am)</td><td>$ {this.padZero(this.props.winner.data.lt_off_peak,4)}</td><td className="live_hide">$ {this.padZero(this.props.winner.data.hts_off_peak,4)}</td><td>$ {this.padZero(this.props.winner.data.htl_off_peak,4)}</td></tr>
                           </tbody>
                     </table>
                       <ul>
                         <li><span>Contract Period: </span><span>{moment(this.props.winner.auction.contract_period_start_date).format('LL')} to {moment(this.props.winner.auction.contract_period_end_date).format('LL')}</span></li>
                         <li><span>Total Volume: </span><span>{this.props.winner.auction.total_volume} kWh (forecasted)</span></li>
-                        <li><span>Total Award Sum: </span><span>{this.props.winner.data.total_award_sum} (forecasted)</span></li>
+                        <li><span>Total Award Sum: </span><span>$ {this.props.winner.data.total_award_sum} (forecasted)</span></li>
                         </ul>
                     </div>                       
     ):(

@@ -25,7 +25,7 @@ export class RetailerLive extends Component {
             getAuctionTimeRule(this.auction.id).then(res => {
                 let divider = parseInt((moment(res[ACTUAL_END_TIME]).toDate().getTime()
                     - moment(res[ACTUAL_CURRENT_TIME]).toDate().getTime()) / 1000);
-                this.status = res.hold_status;
+                //this.status = res.hold_status;
                 let day = Math.floor(divider / (60 * 60 * 24));
                 let hour = Math.floor((divider - day * 24 * 60 * 60) / 3600);
                 let minute = Math.floor((divider - day * 24 * 60 * 60 - hour * 3600) / 60);
@@ -71,11 +71,13 @@ export class RetailerLive extends Component {
     }
 
     goToFinish() {
-            if(!this.status){
+        getAuctionTimeRule(this.auction.id).then(res => {
+            if(!res.hold_status){
                 window.location.href=`/retailer/auctions/${this.auction.id}/finish`
             }else{
                 () => {this.setState({showLive: true})};
             }
+        })        
     }
 
     nofityHoldStatus(status,isOver) {
@@ -93,7 +95,7 @@ export class RetailerLive extends Component {
             <div>
                 <TimeCuntDown countDownOver={() => this.setState({showLive: true})} title={this.timerTitle} auction={this.auction} listenHold={this.nofityHoldStatus.bind(this)}>
                     <div id="retailer_hold" className={this.state.holdStatus ? '' : 'live_hide'}>
-                        <b>RA has been put on hold due to an emergency situation. RA will commence immediately once situation clears. Please continue to standby for commencement.</b>
+                        <b>Reverse Auction has been put on hold due to an emergency situation. Reverse Auction will commence immediately once situation clears. Please continue to standby for commencement.</b>
                     </div>
                 </TimeCuntDown>
                 <div className={'live_show'} id="live_modal">
