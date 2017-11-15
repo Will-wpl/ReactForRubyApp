@@ -127,6 +127,7 @@ export class RetailerManage extends Component {
                 this.setState({
                     text:"Your details have been successfully submitted. You may click on 'Start Bidding' in homepage to standby for the live reverse auction."
                 });
+                this.getRetailerAuction();
                 this.setState({
                     btn_status:false,
                     disabled:true

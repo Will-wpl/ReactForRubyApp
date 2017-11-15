@@ -75,7 +75,7 @@ export class RetailerLive extends Component {
                 window.location.href=`/retailer/auctions/${this.auction.id}/finish`
             }else{
                 () => {this.setState({showLive: true})};
-        }
+            }
     }
 
     nofityHoldStatus(status,isOver) {
