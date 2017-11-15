@@ -26,8 +26,8 @@ export class AdminReport extends Component {
         getAuction().then(auction => {
             this.auction = auction;
             this.userStartInfo = auction ? `${auction.name} on ${moment(auction.start_datetime).format('D MMM YYYY')}` : '';
-            this.startTime = auction ? `${moment(auction.start_datetime).format('h:mm a')}` : '';
-            this.endTime = auction ? `${moment(auction.actual_end_time).format('h:mm a')}` : '';
+            this.startTime = auction ? `${moment(auction.start_datetime).format('h:mm A')}` : '';
+            this.endTime = auction ? `${moment(auction.actual_end_time).format('h:mm A')}` : '';
             this.duration = parseInt((moment(auction.actual_end_time) - moment(auction.actual_begin_time))/1000/60);
             this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000';
             this.actualPrice = '0.0000';
