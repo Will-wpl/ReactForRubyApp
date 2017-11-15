@@ -37,6 +37,10 @@ export class AdminManagePublishedRa extends Component {
             this.getBidderList();
         },5000);
     }
+    clearList(){
+        this.setState({disabled:true,editdisabled:true})
+        clearInterval(this.interval);
+    }
     componentWillMount(){
         getAuctionInVersionOne().then(res => {
             this.auction = res;
@@ -69,7 +73,7 @@ export class AdminManagePublishedRa extends Component {
                     </p>
                 </div> */}
                 <div className={this.state.live_modal_do}>
-                <TimeCuntDown title={this.timerTitle} auction={this.auction} countDownOver={()=>{this.setState({disabled:true,editdisabled:true})}} />
+                <TimeCuntDown title={this.timerTitle} auction={this.auction} countDownOver={this.clearList.bind(this)} />
                 <div className="u-grid u-mt3">
                     <div className="col-sm-12 col-md-7">
                         <CreateNewRA left_name="Manage Upcoming Reverse Auction" disabled={this.state.disabled} editdisabled={this.state.editdisabled} />
