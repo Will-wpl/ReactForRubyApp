@@ -33,7 +33,7 @@ export default class Price extends Component {
                     value: []
                 } : {
                     symbol: 'circle',
-                    symbolSize: 5,
+                    symbolSize: 8,
                     showSymbol: true,
                     value: []
                 };
@@ -42,7 +42,7 @@ export default class Price extends Component {
                     d.value = [].concat(0)
                         .concat(parseFloat(timePrice.average_price).toFixed(4));
                 } else {
-                    d.value = [].concat(moment(timePrice.bid_time).format('YYYY-MM-DD HH:mm:ss'))
+                    d.value = [].concat(moment(timePrice.bid_time).format('HH:mm:ss'))
                         .concat(parseFloat(timePrice.average_price).toFixed(4));
                 }
 
@@ -54,14 +54,6 @@ export default class Price extends Component {
     }
 
     render() {
-        // let chartContent;
-        // if (this.props.data.length > 0) {
-        //     chartContent = <ReactEcharts
-        //         option={this.getChartOption()}
-        //         notMerge={true}
-        //         style={{minHeight: '310px', width: '100%'}}
-        //         className='react_for_echarts'/>;
-        // }
         return (
             <ReactEcharts
                 option={this.getChartOption()}
@@ -104,7 +96,6 @@ function getTemplate(props) {
                             divs[1].className = '';
                         }
                     }
-                    console.log('~~~~~~~~~~~')
                     return [xPosition, yPosition];
                     // return [point[0] - dom.scrollWidth / 2, point[1] - dom.scrollHeight - 16];
                 },
@@ -143,7 +134,7 @@ function getTemplate(props) {
                     formatter: (value, index) => {
                         if (index === 0) {
                             if (props.data.length > 0 && props.data[0].data.length > 0) {
-                                return moment(props.data[0].data[0].bid_time).format('YYYY-MM-DD HH:mm:ss');
+                                return moment(props.data[0].data[0].bid_time).format('HH:mm:ss');
                             }
                         }
                         return '';
@@ -234,7 +225,6 @@ function getTemplate(props) {
                         divs[1].className = '';
                     }
                 }
-                console.log('~~~~~~~~~~~')
                 return [xPosition, yPosition];
                 // return [point[0] - dom.scrollWidth / 2, point[1] - dom.scrollHeight - 16];
             },
