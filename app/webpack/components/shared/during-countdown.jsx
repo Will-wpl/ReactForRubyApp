@@ -15,15 +15,6 @@ export class DuringCountDown extends Component {
         this.interval = setInterval(() => {
             this.getAuctionTime(this.props.auction);
         }, 1000);
-        //test
-        // setTimeout(() => {
-        //     clearInterval(this.interval);
-        //     setTimeout(() => {
-        //         if (this.props.countDownOver) {
-        //             this.props.countDownOver();
-        //         }
-        //     }, 1000)
-        // }, 2000)
     }
 
     componentWillUnmount() {
@@ -33,8 +24,6 @@ export class DuringCountDown extends Component {
     getAuctionTime(auction) {
         if (auction) {
             getAuctionTimeRule(auction.id).then(res => {
-                //console.log('during end time ==>', moment(res[ACTUAL_END_TIME]).format('YYYY-MM-DD hh:mm:ss'))
-                //console.log('during now time ==>', moment(res[ACTUAL_CURRENT_TIME]).format('YYYY-MM-DD hh:mm:ss'))
                 let isOver = this.isCountDownOver(moment(res[ACTUAL_END_TIME]).toDate().getTime()
                     , moment(res[ACTUAL_CURRENT_TIME]).toDate().getTime());
                 if (isOver) {
@@ -59,13 +48,17 @@ export class DuringCountDown extends Component {
         let minute = Math.floor((divider - day * 24 * 60 * 60 - hour * 3600) / 60);
         let second = Math.floor(divider - day * 24 * 60 * 60 - hour * 3600 - minute * 60);
         let left = day || hour || minute || second;
-        this.setState({hour: hour, minute: minute, second: second});
-        if (this.props.onSecondBreaker && minute ===0 && second === this.props.secondBreaker) {
+        // this.setState({hour: hour, minute: minute, second: second});
+        if (this.props.onSecondBreaker && left === this.props.secondBreaker) {
             this.props.onSecondBreaker();
         }
         if (left <= 0) {
+            if (left === 0) {
+                this.setState({day: 0, hour: 0, minute: 0, second: 0});
+            }
             return true;
         }
+        this.setState({hour: hour, minute: minute, second: second});
         return false;
     }
 
