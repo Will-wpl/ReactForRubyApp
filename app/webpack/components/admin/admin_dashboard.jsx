@@ -31,18 +31,21 @@ export class AdminDashboard extends Component {
             this.createWebsocket(auction? auction.id : 1);
             getHistories({ auction_id: auction? auction.id : 1}).then(histories => {
                 // console.log('histories', histories);
-                let orderRanking = histories.map(element => {
-                    return element.data.length > 0 ? element.data[element.data.length - 1] : []
-                })
-                try {
-                    orderRanking.sort((a, b) => {
-                        return parseFloat(a.average_price) > parseFloat(b.average_price)
+                if (histories) {
+                    let orderRanking = histories.map(element => {
+                        return element.data.length > 0 ? element.data[element.data.length - 1] : []
                     })
-                } catch (error) {
+                    try {
+                        orderRanking.sort((a, b) => {
+                            return parseFloat(a.average_price) > parseFloat(b.average_price)
+                        })
+                    } catch (error) {
 
+                    }
+                    this.setState({realtimeData: histories, realtimeRanking: orderRanking
+                        , currentPrice : orderRanking.length > 0 ? orderRanking[0].average_price : this.state.currentPrice});
                 }
-                this.setState({realtimeData: histories, realtimeRanking: orderRanking
-                    , currentPrice : orderRanking.length > 0 ? orderRanking[0].average_price : this.state.currentPrice});
+
             })
         })
         getArrangements(ACCEPT_STATUS.ACCEPT).then(res => {
