@@ -26,8 +26,8 @@ export class DuringCountDown extends Component {
             getAuctionTimeRule(auction.id).then(res => {
                 let isOver = this.isCountDownOver(moment(res[ACTUAL_END_TIME]).toDate().getTime()
                     , moment(res[ACTUAL_CURRENT_TIME]).toDate().getTime());
-                if (isOver) {
-                    if (!res[HOLD_STATUS]) {
+                if (!res[HOLD_STATUS]) {
+                    if (isOver) {
                         clearInterval(this.interval);
                         if (this.props.countDownOver) {
                             this.props.countDownOver();
