@@ -20,16 +20,6 @@ export class AdminDashboard extends Component {
         this.state = {users:[], realtimeData:[], realtimeRanking:[], currentPrice:'0.0000'};
         this.lastInput = 1;
     }
-    updateRankingOnUsersSelected(ids) {
-        this.refs.rankingChart.updateIndentifications(ids);
-    }
-    updatePriceOnUsersSelected(ids) {
-        this.refs.priceChart.updateIndentifications(ids);
-    }
-    updateChartData(list) {
-        this.refs.rankingChart.appendChartData(list);
-        this.refs.priceChart.appendChartData(list);
-    }
 
     componentDidMount() {
         getAuction().then(auction => {
@@ -45,13 +35,13 @@ export class AdminDashboard extends Component {
                     let orderRanking = histories.map(element => {
                         return element.data.length > 0 ? element.data[element.data.length - 1] : []
                     })
-                    try {
-                        orderRanking.sort((a, b) => {
-                            return parseFloat(a.average_price) > parseFloat(b.average_price)
-                        })
-                    } catch (error) {
+                    // try {
+                    //     orderRanking.sort((a, b) => {
+                    //         return parseFloat(a.average_price) > parseFloat(b.average_price)
+                    //     })
+                    // } catch (error) {
 
-                    }
+                    // }
                     this.setState({realtimeData: histories, realtimeRanking: orderRanking
                         , currentPrice : orderRanking.length > 0 ? orderRanking[0].average_price : this.state.currentPrice});
                 }
@@ -140,7 +130,7 @@ export class AdminDashboard extends Component {
                                 </ChartRealtimeHoc>
                             </div>
                             <div className="col-sm-2 push-md-1">
-                                <CheckboxList list={this.state.users} onCheckeds={this.updatePriceOnUsersSelected.bind(this)}/>
+                                <CheckboxList list={this.state.users} onCheckeds={(ids) => {this.refs.priceChart.updateIndentifications(ids)}}/>
                             </div>
                         </div>
                         <div className="u-grid u-mt2">
@@ -150,7 +140,7 @@ export class AdminDashboard extends Component {
                                 </ChartRealtimeHoc>
                             </div>
                             <div className="col-sm-2 push-md-1">
-                                <CheckboxList list={this.state.users} onCheckeds={this.updateRankingOnUsersSelected.bind(this)}/>
+                                <CheckboxList list={this.state.users} onCheckeds={(ids) => {this.refs.rankingChart.updateIndentifications(ids)}}/>
                             </div>
                         </div>
                     </div>

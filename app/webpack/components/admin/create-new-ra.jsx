@@ -1,13 +1,13 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import DatePicker from 'react-datepicker';
-import moment from 'moment';
+import moment from 'moment'; 
 import 'react-datepicker/dist/react-datepicker.css';
-import { createRa, getAuctionInVersionOne, raPublish } from '../../javascripts/componentService/admin/service';
-import { Modal } from '../shared/show-modal';
+import {createRa,getAuctionInVersionOne,raPublish} from '../../javascripts/componentService/admin/service';
+import {Modal} from '../shared/show-modal';
 
 export class CreateNewRA extends Component {
-    constructor(props, context) {
+    constructor(props, context){
         super(props, context);
         this.state = {
             name:"",
@@ -29,18 +29,18 @@ export class CreateNewRA extends Component {
         this.timeChange = this.timeChange.bind(this);
     }
     componentDidMount() {
-        if (this.props.left_name) {//eidt
+        if(this.props.left_name){//eidt
             this.setState({
                 disabled:this.props.disabled,
                 editdisabled:this.props.editdisabled,
                 live_modal:"live_hide"
             })
             this.doGetData();
-        } else {//create
+        }else{//create
             this.doGetData("create")
         }
     }
-    doGetData(type) {
+    doGetData(type){
         getAuctionInVersionOne().then(res => {
             this.auction = res;
             if(type == "create"){
@@ -81,22 +81,22 @@ export class CreateNewRA extends Component {
     doName(e){
         let obj = e.target.value;
         this.setState({
-            name: obj
+            name:obj
         })
     }
-    doDuration(e) {
+    doDuration(e){
         let obj = e.target.value;
         if(Number(obj) > 1380){
             return false;
         }
         this.setState({
-            duration: obj
+            duration:obj
         })
     }
-    doPrice(e) {
+    doPrice(e){
         let obj = e.target.value;
         this.setState({
-            reserve_price: obj
+            reserve_price:obj
         })
     }
     starttimeChange(data) {
@@ -141,29 +141,29 @@ export class CreateNewRA extends Component {
             
         }
     }
-    dateChange(data) {
+    dateChange(data){
         this.setState({
-            ra_date: data
+            ra_date:data
         })
     }
-    timeChange(data) {
+    timeChange(data){
         this.setState({
-            start_datetime: data
+            start_datetime:data
         })
     }
-    auctionCreate(type, e) {
+    auctionCreate(type,e){
         this.setState({
-            btn_type: type
+            btn_type:type
         })
     }
-    edit() {
+    edit(){
         this.setState({
             edit_btn:"lm--button lm--button--primary hide",
             edit_change:"lm--button lm--button--primary show",
             disabled:false
         })
     }
-    Cancel() {
+    Cancel(){
         this.setState({
             edit_btn:"lm--button lm--button--primary show",
             edit_change:"lm--button lm--button--primary hide",
@@ -171,7 +171,7 @@ export class CreateNewRA extends Component {
         })
         this.doGetData();
     }
-    setAuction() {
+    setAuction(){
         // this.auction.id=this.state.id;
         this.auction.contract_period_end_date= this.state.endDate.format().split("T")[0];
         this.auction.contract_period_start_date= this.state.startDate.format().split("T")[0];
@@ -218,43 +218,26 @@ export class CreateNewRA extends Component {
             this.setState({text:"Are you sure you want to delete?"});
         })   
     }
-    delete() {
-        createRa({ auction: this.removeAuction() }).then(res => {
-            this.refs.Modal.showModal();
-            this.setState({
-                text: this.state.name + " has been successfully deleted."
-            });
-            this.auction = res;
-            this.setState({
-                id: this.state.id,
-                name: "",
-                start_datetime: "",
-                startDate: "",
-                endDate: "",
-                duration: "",
-                reserve_price: ""
-            });
-            //sessionStorage.removeItem("raInfo");
-            // setTimeout(() => {
-            //     window.location.href="http://localhost:3000/admin/home"
-            // },3000);
-        }, error => {
-            console.log(error);
-        })
-    }
-    checkSuccess(event, obj) {
-        event.preventDefault();
-        if (this.state.btn_type == "save") {
-            console.log(this.state.startDate.format());
-            console.log(this.state.endDate.format());
-            this.setAuction();
-            //return;
-            createRa({ auction: this.setAuction() }).then(res => {
-                this.auction = res;
+    delete(){
+            createRa({ auction: this.removeAuction()}).then(res => {
                 this.refs.Modal.showModal();
                 this.setState({
-                    text: this.auction.name + " has been successfully saved "
+                    text:this.state.name + " has been successfully deleted."
                 });
+                this.auction = res;
+                this.setState({
+                    id:this.state.id,
+                    name:"",
+                    start_datetime:"",
+                    startDate:"",
+                    endDate:"",
+                    duration:"",
+                    reserve_price:""
+                });
+                //sessionStorage.removeItem("raInfo");
+                // setTimeout(() => {
+                //     window.location.href="http://localhost:3000/admin/home"
+                // },3000);
             }, error => {
                 console.log(error);
             })
@@ -287,8 +270,8 @@ export class CreateNewRA extends Component {
                 })
             }
         }
-        if (this.state.btn_type == "publish") {
-            createRa({ auction: this.setAuction() }).then(res => {
+        if(this.state.btn_type == "publish"){
+            createRa({auction: this.setAuction()}).then(res => {
                 this.auction = res;
                 raPublish({
                     pagedata:{publish_status: '1'},
@@ -311,12 +294,12 @@ export class CreateNewRA extends Component {
             })
         }
     }
-    render() {
-        let left_name = "";
-        let btn_html = "";
+    render () {
+        let left_name ="";
+        let btn_html ="";
         let sStorage = {};
         let styleType = "";
-        if (this.props.left_name == undefined) {//Create New Ra
+        if(this.props.left_name == undefined){//Create New Ra
             styleType = "col-sm-12 col-md-8 push-md-2";
             left_name = "Create New Reverse Auction";
                 btn_html = <div className="createRa_btn">
@@ -407,13 +390,18 @@ export class CreateNewRA extends Component {
                 </form>
                 <Modal text={this.state.text} dodelete={this.delete.bind(this)} ref="Modal" />
             </div>
+            </div>
+            <div className="createRaMain u-grid">
+            <a className="lm--button lm--button--primary u-mt3" href="/admin/home" >Back to Homepage</a>
+            </div>
+            </div>
         )
     }
 }
 
 function run() {
     const domNode = document.getElementById('createNewRA');
-    if (domNode !== null) {
+    if(domNode !== null){
         ReactDOM.render(
             React.createElement(CreateNewRA),
             domNode
