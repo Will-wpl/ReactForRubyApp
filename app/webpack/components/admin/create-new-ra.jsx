@@ -103,13 +103,13 @@ export class CreateNewRA extends Component {
         if(this.state.endDate != ''){
         let selectDay = new Date(data.format());
         let endDay = new Date(this.state.endDate.format());
-                if (selectDay <= endDay) {
+                if (selectDay < endDay) {
                     this.setState({
                         startDate: data
                     })
                 } else {
                     this.setState({
-                        startDate: this.state.endDate,
+                        startDate: data,
                         endDate: data
                     });
                 }
@@ -124,14 +124,14 @@ export class CreateNewRA extends Component {
         if(this.state.startDate != ''){
             let selectDay = new Date(data.format());
             let startDay = new Date(this.state.startDate.format());
-            if (selectDay >= startDay) {
+            if (selectDay > startDay) {
                 this.setState({
                     endDate: data
                 })
             } else {
                 this.setState({
                     startDate: data,
-                    endDate: this.state.startDate
+                    endDate: data
                 });
             }
         }else{
