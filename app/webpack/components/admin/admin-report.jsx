@@ -80,7 +80,7 @@ export class AdminReport extends Component {
     }
 
     render () {
-        let achieved = parseFloat(this.actualPrice) < parseFloat(this.startPrice);
+        let achieved = parseFloat(this.actualPrice).toFixed(4) <= parseFloat(this.startPrice);
         return (
             <div>
                 <div className="u-grid u-mt2 report_bg">

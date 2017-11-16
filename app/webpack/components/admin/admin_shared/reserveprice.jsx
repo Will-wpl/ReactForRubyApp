@@ -4,7 +4,7 @@ export default class ReservePrice extends Component {
     render() {
         let matched
         if(this.props.realtimePrice){
-            matched = parseFloat(this.props.realtimePrice) <= parseFloat(this.props.price);
+            matched = parseFloat(this.props.realtimePrice).toFixed(4) <= parseFloat(this.props.price);
         }else{
             matched = false
         } 

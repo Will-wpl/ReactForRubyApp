@@ -86,6 +86,9 @@ export class CreateNewRA extends Component {
     }
     doDuration(e) {
         let obj = e.target.value;
+        if(Number(obj) > 1380){
+            return false;
+        }
         this.setState({
             duration: obj
         })
@@ -99,8 +102,8 @@ export class CreateNewRA extends Component {
     starttimeChange(data) {
         if(this.state.endDate != ''){
         let selectDay = new Date(data.format());
-                let endDay = new Date(this.state.endDate.format());
-                if (selectDay < endDay) {
+        let endDay = new Date(this.state.endDate.format());
+                if (selectDay <= endDay) {
                     this.setState({
                         startDate: data
                     })
@@ -121,7 +124,7 @@ export class CreateNewRA extends Component {
         if(this.state.startDate != ''){
             let selectDay = new Date(data.format());
             let startDay = new Date(this.state.startDate.format());
-            if (selectDay > startDay) {
+            if (selectDay >= startDay) {
                 this.setState({
                     endDate: data
                 })
@@ -203,8 +206,17 @@ export class CreateNewRA extends Component {
         event.preventDefault();
     }  
     showDelete(){
-        this.refs.Modal.showModal("comfirm");
-        this.setState({ text: "Are you sure you want to delete?" });
+        getAuctionInVersionOne().then(res => {
+            if(res.start_datetime == null){
+                this.refs.Modal.showModal();
+                this.setState({
+                    text:"Please save first"
+                });
+                return false;
+            }
+            this.refs.Modal.showModal("comfirm");
+            this.setState({text:"Are you sure you want to delete?"});
+        })   
     }
     delete() {
         createRa({ auction: this.removeAuction() }).then(res => {
@@ -285,7 +297,8 @@ export class CreateNewRA extends Component {
                         this.auction = res;
                         this.refs.Modal.showModal();
                         this.setState({
-                            text:this.auction.name+" has been successfully published. Please go to 'Manage Published Upcoming Reverse Auction' for further actions."
+                            text:this.auction.name+" has been successfully published. Please go to 'Manage Published Upcoming Reverse Auction' for further actions.",
+                            disabled:true
                         });
                         // setTimeout(() => {
                         //      window.location.href="/admin/home"
