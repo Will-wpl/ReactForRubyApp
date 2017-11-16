@@ -49,7 +49,8 @@ export class DuringCountDown extends Component {
         let second = Math.floor(divider - day * 24 * 60 * 60 - hour * 3600 - minute * 60);
         let left = day || hour || minute || second;
         // this.setState({hour: hour, minute: minute, second: second});
-        if (this.props.onSecondBreaker && (day === 0 && hour === 0 && minute === 0) && second <= this.props.secondBreaker) {
+        console.log('during count down < 5', divider / 1000)
+        if (this.props.onSecondBreaker && divider / 1000 <= this.props.secondBreaker) {
             this.props.onSecondBreaker();
         }
         if (left <= 0) {
