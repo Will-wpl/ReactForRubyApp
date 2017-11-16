@@ -203,8 +203,17 @@ export class CreateNewRA extends Component {
         event.preventDefault();
     }  
     showDelete(){
-        this.refs.Modal.showModal("comfirm");
-        this.setState({text:"Are you sure you want to delete?"});
+        getAuctionInVersionOne().then(res => {
+            if(res.start_datetime == null){
+                this.refs.Modal.showModal();
+                this.setState({
+                    text:"Please save it before deleting it"
+                });
+                return false;
+            }
+            this.refs.Modal.showModal("comfirm");
+            this.setState({text:"Are you sure you want to delete?"});
+        })   
     }
     delete(){
             createRa({ auction: this.removeAuction()}).then(res => {
