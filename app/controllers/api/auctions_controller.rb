@@ -27,16 +27,12 @@ class Api::AuctionsController < Api::BaseController
   # PATCH update auction by ajax
   def update
     params[:auction]['total_volume'] = Auction.set_total_volume(model_params[:total_lt_peak], model_params[:total_lt_off_peak], model_params[:total_hts_peak], model_params[:total_hts_off_peak], model_params[:total_htl_peak], model_params[:total_htl_off_peak])
-    if Time.parse(params[:auction]['start_datetime']) < Time.current
-      render json: { message: 'invalid time' }, status: 200
+    if @auction.update(model_params)
+      AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id).update_all(bid_time: @auction.actual_begin_time)
+      AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
+      render json: @auction, status: 200
     else
-      if @auction.update(model_params)
-        AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id).update_all(bid_time: @auction.actual_begin_time)
-        AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
-        render json: @auction, status: 200
-      else
-        render json: 'error code ', status: 500
-      end
+      render json: 'error code ', status: 500
     end
   end
 
@@ -132,7 +128,7 @@ class Api::AuctionsController < Api::BaseController
       AuctionEvent.set_events(current_user.id, @auction.id, request[:action], auction_result.to_json)
       render json: auction_result, status: 200
     else
-      render json: auction_result.errors , status:500
+      render json: auction_result.errors, status: 500
     end
 
   end
