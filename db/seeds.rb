@@ -14,7 +14,7 @@ if User.count == 0
                            email: 'enquiry@bestelectricity.com.sg',
                            password: 'password',
                            password_confirmation: 'password',
-                           company_name: 'enquiry@bestelectricity.com.sg')
+                           company_name: 'Best Electricity Supply')
   @retailer1.add_role :retailer
 
   @retailer2 = User.create(name: 'Charis Electric',
