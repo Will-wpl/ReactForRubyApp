@@ -8,40 +8,41 @@ import moment from 'moment';
 
 const ACTUAL_END_TIME = 'actual_end_time';
 const ACTUAL_CURRENT_TIME = 'current_time';
+const ACTUAL_BEGIN_TIME = 'actual_begin_time';
+const HOLD_STATUS = 'hold_status';
 export class RetailerLive extends Component {
     constructor(props) {
         super(props);
-        this.state = {showLive: false, extendVisible: false, holdStatus:false};
+        this.state = {extendVisible: false, holdStatus:false};
         this.localHoldStatus = false;
     }
 
     componentDidMount() {
-        getAuction().then(auction => {
-            this.auction = auction;
-            console.log(this.auction);
-            this.createSocket(auction ? auction.id : 1);
-            // this.timerTitle = auction ? `${auction.name} on ${moment(auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
-            // this.forceUpdate();
-            getAuctionTimeRule(this.auction.id).then(res => {
-                let divider = parseInt((moment(res[ACTUAL_END_TIME]).toDate().getTime()
-                    - moment(res[ACTUAL_CURRENT_TIME]).toDate().getTime()) / 1000);
-                //this.status = res.hold_status;
-                let day = Math.floor(divider / (60 * 60 * 24));
-                let hour = Math.floor((divider - day * 24 * 60 * 60) / 3600);
-                let minute = Math.floor((divider - day * 24 * 60 * 60 - hour * 3600) / 60);
-                let second = Math.floor(divider - day * 24 * 60 * 60 - hour * 3600 - minute * 60);
-                let left = day || hour || minute || second;
-                if (left <= 0) {
-                    this.goToFinish();
+        if (this.props.auction) {
+            this.createSocket(this.props.auction.id);
+            if (this.props.rule) {
+                if (!this.props.rule[HOLD_STATUS]) {
+                    let beforeStartSpace = calTwoTimeSpace(this.props.rule[ACTUAL_BEGIN_TIME], this.props.rule[ACTUAL_CURRENT_TIME]);
+                    if (beforeStartSpace > 0) {
+                        console.log('not start yet');
+                        this.setState({showLive: false});
+                    } else {
+                        let alreadyStartSpace = calTwoTimeSpace(this.props.rule[ACTUAL_END_TIME], this.props.rule[ACTUAL_CURRENT_TIME]);
+                        if (alreadyStartSpace <= 0) {
+                            console.log('already completed')
+                            this.goToFinish();
+                        } else {
+                            this.setState({showLive: true});
+                        }
+                    }
                 } else {
-                    this.timerTitle = auction ? `${auction.name} on ${moment(auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
-                    this.forceUpdate();
+                    this.setState({showLive: false});
                 }
-            }, error => {
-                this.timerTitle = auction ? `${auction.name} on ${moment(auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
-                this.forceUpdate();
-            })
-        })
+            } else {
+                this.setState({showLive: false});
+            }
+        }
+
     }
 
     componentWillUnmount() {
@@ -71,64 +72,100 @@ export class RetailerLive extends Component {
     }
 
     goToFinish() {
-        getAuctionTimeRule(this.auction.id).then(res => {
-            if(!res.hold_status){
-                window.location.href=`/retailer/auctions/${this.auction.id}/finish`
-            }else{
-                () => {this.setState({showLive: true})};
-            }
-        })        
+        window.location.href=`/retailer/auctions/${this.props.auction ? this.props.auction.id : 1}/finish`;
     }
 
-    nofityHoldStatus(status,isOver) {
-        this.hold_status = status;
-        if(isOver){
+    nofityHoldStatus(status, isOver) {
+        if (isOver) {
             if (this.localHoldStatus !== status) {
                 //console.log('status ====>', status, this.localHoldStatus);
                 this.setState({holdStatus: status});
-                this.localHoldStatus = status          
+                this.localHoldStatus = status;
             }
         }
     }
 
     render() {
-        return !this.state.showLive ? (
-            <div>
-                <TimeCuntDown countDownOver={() => this.setState({showLive: true})} title={this.timerTitle} auction={this.auction} listenHold={this.nofityHoldStatus.bind(this)}>
-                    <div id="retailer_hold" className={this.state.holdStatus ? '' : 'live_hide'}>
-                        <b>Reverse Auction has been put on hold due to an emergency situation. Reverse Auction will commence immediately once situation clears. Please continue to standby for commencement.</b>
+        console.log('this.props', this.props);
+        let content;
+        if (this.props.auction) {
+            if (this.state.hasOwnProperty('showLive')) {
+                content = !this.state.showLive ? (
+                    <div>
+                        <TimeCuntDown countDownOver={() => this.setState({showLive: true})} auction={this.props.auction} listenHold={this.nofityHoldStatus.bind(this)}>
+                            <div id="retailer_hold" className={this.state.holdStatus ? '' : 'live_hide'}>
+                                <b>Reverse Auction has been put on hold due to an emergency situation. Reverse Auction will commence immediately once situation clears. Please continue to standby for commencement.</b>
+                            </div>
+                        </TimeCuntDown>
+                        <div className={'live_show'} id="live_modal">
+                            <div className={'live_hold'}></div>
+                            <p>
+                                Please standby, bidding will<br></br>
+                                commence soon.<br></br>
+                                Page will automatically refresh when<br></br>Reverse Auction commences.
+                            </p>
+                        </div>
+                        <div className="createRaMain u-grid">
+                            <a className="lm--button lm--button--primary u-mt3" href="/retailer/home" >Back to Homepage</a>
+                        </div>
                     </div>
-                </TimeCuntDown>
+                ) : (
+                    <div>
+                        <DuringCountDown auction={this.props.auction} countDownOver={this.goToFinish.bind(this)}>
+                            <div id="retailer_hold" className={this.state.extendVisible ? '' : 'live_hide'}>
+                                <b>Admin has extended auction duration by {this.state.extendVisible} minuties</b>
+                            </div>
+                        </DuringCountDown>
+                        <LiveHomePage auction={this.props.auction}/>
+                    </div>
+                )
+            } else {
+                content = <div></div>;
+            }
+        } else {
+            content = <div>
                 <div className={'live_show'} id="live_modal">
                     <div className={'live_hold'}></div>
                     <p>
-                        Please standby, bidding will<br></br>
-                        commence soon.<br></br>
-                        Page will automatically refresh when<br></br>Reverse Auction commences.
+                        Auction may be not illegal, please fix auction configuration.
                     </p>
                 </div>
                 <div className="createRaMain u-grid">
                     <a className="lm--button lm--button--primary u-mt3" href="/retailer/home" >Back to Homepage</a>
                 </div>
-            </div>
-        ) : (
-            <div>
-                <DuringCountDown auction={this.auction} countDownOver={this.goToFinish.bind(this)}>
-                    <div id="retailer_hold" className={this.state.extendVisible ? '' : 'live_hide'}>
-                        <b>Admin has extended auction duration by {this.state.extendVisible} minuties</b>
-                    </div>
-                </DuringCountDown>
-                <LiveHomePage auction={this.auction}/>
-            </div>
-        );
+            </div>;
+        }
+        return content;
     }
 }
 
-function runes() {
+const calTwoTimeSpace = (start, nowSeq) => {
+    let divider = parseInt((moment(start).toDate().getTime() - moment(nowSeq).toDate().getTime()) / 1000);
+    let day = Math.floor(divider / (60 * 60 * 24));
+    let hour = Math.floor((divider - day * 24 * 60 * 60) / 3600);
+    let minute = Math.floor((divider - day * 24 * 60 * 60 - hour * 3600) / 60);
+    let second = Math.floor(divider - day * 24 * 60 * 60 - hour * 3600 - minute * 60);
+    return day || hour || minute || second;
+}
+
+const runes = () => {
+    getAuction().then(auction => {
+        getAuctionTimeRule(auction.id).then(res => {
+            renderRoot(auction, res);
+        }, error => {
+            renderRoot(auction);
+        })
+    }, error => {
+        renderRoot();
+    })
+
+}
+
+const renderRoot = (auction = null, rule = null) => {
     const domNode = document.getElementById('retailerlive');
     if (domNode !== null) {
         ReactDOM.render(
-            React.createElement(RetailerLive),
+            React.createElement(RetailerLive, {auction: auction, rule: rule}),
             domNode
         );
     }

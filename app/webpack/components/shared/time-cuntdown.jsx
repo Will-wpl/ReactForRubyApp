@@ -14,6 +14,9 @@ export class TimeCuntDown extends Component {
     }
 
     componentDidMount() {
+        if (this.props.auction) {
+            this.timerTitle = this.props.auction.start_datetime ? `${this.props.auction.name} on ${moment(this.props.auction.start_datetime).format('LLL')}` : '';
+        }
         this.interval = setInterval(() => {
             this.getAuctionTime(this.props.auction);
         }, 1000);
@@ -26,14 +29,14 @@ export class TimeCuntDown extends Component {
     getAuctionTime(auction) {
         if (auction) {
             getAuctionTimeRule(auction.id).then(res => {
-                this.timerTitle = auction ? `${auction.name} on ${moment(res[ACTUAL_BEGIN_TIME]).format('LLL')}` : '';
-                let isOver = this.isCountDownOver(moment(res[ACTUAL_BEGIN_TIME]).toDate().getTime()
+                this.timerTitle = `${auction.name} on ${moment(res[ACTUAL_BEGIN_TIME]).format('LLL')}`;
+                const isOver = this.isCountDownOver(moment(res[ACTUAL_BEGIN_TIME]).toDate().getTime()
                     , moment(res[ACTUAL_CURRENT_TIME]).toDate().getTime());
-                if (this.props.listenHold) {
-                    this.props.listenHold(res[HOLD_STATUS],isOver);
+                if (this.props.hasOwnProperty('listenHold')) {
+                    this.props.listenHold(res[HOLD_STATUS], isOver);
                 }
-                if (isOver) {
-                    if (!res[HOLD_STATUS]) {
+                if (!res[HOLD_STATUS]) {
+                    if (isOver) {
                         clearInterval(this.interval);
                         if (this.props.countDownOver) {
                             this.props.countDownOver();
@@ -41,7 +44,7 @@ export class TimeCuntDown extends Component {
                     }
                 }
             }, error => {
-                console.log('whoops dam it')
+                console.log('whoops , server connection down')
             })
         }
     }
