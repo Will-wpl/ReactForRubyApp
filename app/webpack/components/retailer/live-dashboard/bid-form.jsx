@@ -154,8 +154,8 @@ export default class BidForm extends Component {
             // illegal = <p className="number_error" style={{color: 'red'}}>Prices submitted must be lower than the energy cost component of prevailing SPS LT Tariff ($0.1458/kWh)</p>;
 
             illegal = <p className="number_error" style={{color: 'red'}}>
-                Invalid submission. Please check that your submission fulfils the following criteria:
-                &nbsp;<br/>
+                Invalid submission. Please check that your submission fulfils the following criteria:<br/>
+                <br/>
                 For initial submission:<br/>
                 Prices submitted must be lower than the energy cost component of prevailing SPS LT Tariff($0.1458/kWh)<br/>
                 <br/>
