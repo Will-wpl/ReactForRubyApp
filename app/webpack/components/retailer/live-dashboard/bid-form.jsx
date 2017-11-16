@@ -138,16 +138,30 @@ export default class BidForm extends Component {
         if (this.state.thisStatus) {
             error_html = !this.state.samePrice ?
                 <div className="number_error">Your bid has been successfully submitted.</div>
-                : <div className="number_error">Invalid submission. Please check that your bid submission fulfils the
-                    following criteria:<br/>
-                    1.None of the values should be higher than its previous value<br/>
-                    2.At least one of the values must be lower than its previous value</div>;
+                : <div className="number_error">Invalid submission. Please check that your submission fulfils the following criteria:<br/>
+                    <br/>
+                    For initial submission:<br/>
+                    Prices submitted must be lower than the energy cost component of prevailing SPS LT Tariff($0.1458/kWh)<br/>
+                    <br/>
+                    For subsequent submission:<br/>
+                    1. None of the values should be higher than its previous value<br/>
+                    2. At least one of the values must be lower than its previous value</div>;
         }
         let illegal;
         if (this.state.status.some(element => {
                 return !element
             })) {
-            illegal = <p className="number_error" style={{color: 'red'}}>Prices submitted must be lower than the energy cost component of prevailing SPS LT Tariff ($0.1458/kWh)</p>;
+            // illegal = <p className="number_error" style={{color: 'red'}}>Prices submitted must be lower than the energy cost component of prevailing SPS LT Tariff ($0.1458/kWh)</p>;
+
+            illegal = <p className="number_error" style={{color: 'red'}}>
+                Invalid submission. Please check that your submission fulfils the following criteria:
+                &nbsp;<br/>
+                For initial submission:<br/>
+                Prices submitted must be lower than the energy cost component of prevailing SPS LT Tariff($0.1458/kWh)<br/>
+                <br/>
+                For subsequent submission:<br/>
+                1. None of the values should be higher than its previous value<br/>
+                2. At least one of the values must be lower than its previous value</p>;
         }
         return (
             <div className="number_form">

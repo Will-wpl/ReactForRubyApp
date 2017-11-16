@@ -10,7 +10,7 @@ table.table.table-hover.retailer_fill.u-mt3
     - @auction_events.each do |event|
       tr
         td= event.company_name
-        td= event.auction_when
+        td= event.auction_when.strftime("%d %b %Y - %H:%m:%S")
         td= event.auction_do
 hr
 
@@ -19,3 +19,6 @@ hr
     = page_entries_info @auction_events, entry_name: AuctionEvent.model_name.human
   .col-sm-12.col-md-6
     = paginate(@auction_events)
+
+div.createRaMain.u-grid
+  a.lm--button.lm--button--primary.u-mt3 href="/admin/home" Back to Homepage

@@ -11,8 +11,7 @@
         tr
           th Name
           th Date
-          th Contract Begin Period
-          th Contract End Period
+          th Contract Period
           th Status
           th Winning Bidder
           th Winning Price
@@ -24,12 +23,14 @@
           tr
             td= auction_result.name
             td= auction_result.start_datetime.strftime("%d %b %Y")
-            td= auction_result.contract_period_start_date.strftime("%d %b %Y")
-            td= auction_result.contract_period_end_date.strftime("%d %b %Y")
-            td= auction_result.status
+            td  #{auction_result.contract_period_end_date.strftime("%d %b %Y")} to #{auction_result.contract_period_start_date.strftime("%d %b %Y")}
+            - if auction_result.status == "void"
+                td Void
+            - else
+                td Awarded
             td= auction_result.lowest_price_bidder
-            td= auction_result.lowest_average_price
-            td= auction_result.total_volume
+            td  #{number_to_currency(auction_result.lowest_average_price,unit: "$ ", precision: 4) }/kWh
+            td  #{number_to_currency(auction_result.total_volume,unit: "", precision: 0) }/kWh
             td
               = link_to report_admin_auction_path(auction_result.auction_id), class: 'report' do
                 = ''
