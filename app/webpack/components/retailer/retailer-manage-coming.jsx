@@ -70,12 +70,12 @@ export class RetailerManage extends Component {
             this.refs.alternative_email_address.value = res.alternative_email_address;
             this.refs.alternative_mobile_number.value = res.alternative_mobile_number;
             this.refs.alternative_office_number.value = res.alternative_office_number;
-            this.refs.lt_peak.value = res.lt_peak == null ? '' : this.padZero(res.lt_peak,4).toString().split('.')[1];
-            this.refs.lt_off_peak.value = res.lt_off_peak == null ? '' : this.padZero(res.lt_off_peak,4).toString().split('.')[1];
-            this.refs.hts_peak.value = res.hts_peak == null ? '' : this.padZero(res.hts_peak,4).toString().split('.')[1];
-            this.refs.hts_off_peak.value = res.hts_off_peak == null ? '' : this.padZero(res.hts_off_peak,4).toString().split('.')[1];
-            this.refs.htl_peak.value = res.htl_peak == null ? '' : this.padZero(res.htl_peak,4).toString().split('.')[1];
-            this.refs.htl_off_peak.value = res.htl_off_peak == null ? '' : this.padZero(res.htl_off_peak,4).toString().split('.')[1];
+            //this.refs.lt_peak.value = res.lt_peak == null ? '' : this.padZero(res.lt_peak,4).toString().split('.')[1];
+            //this.refs.lt_off_peak.value = res.lt_off_peak == null ? '' : this.padZero(res.lt_off_peak,4).toString().split('.')[1];
+            //this.refs.hts_peak.value = res.hts_peak == null ? '' : this.padZero(res.hts_peak,4).toString().split('.')[1];
+            //this.refs.hts_off_peak.value = res.hts_off_peak == null ? '' : this.padZero(res.hts_off_peak,4).toString().split('.')[1];
+            //this.refs.htl_peak.value = res.htl_peak == null ? '' : this.padZero(res.htl_peak,4).toString().split('.')[1];
+            //this.refs.htl_off_peak.value = res.htl_off_peak == null ? '' : this.padZero(res.htl_off_peak,4).toString().split('.')[1];
         }, error => {
             console.log(error);
         })
@@ -184,7 +184,7 @@ export class RetailerManage extends Component {
                         <abbr title="required">*</abbr> Name:
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="main_name" disabled={this.state.disabled} ref="main_name" maxLength="150" required aria-required="true" title="The length must not be longer than 150 characters and must not contain numbers"></input>
+                            <input type="text" name="main_name" disabled={this.state.disabled} ref="main_name" maxLength="150" required aria-required="true" title="The length must not be longer than 150 characters."></input>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -217,7 +217,7 @@ export class RetailerManage extends Component {
                         Name:
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="alternative_name" disabled={this.state.disabled} ref="alternative_name" maxLength="50"></input>
+                            <input type="text" name="alternative_name" disabled={this.state.disabled} ref="alternative_name" maxLength="150"></input>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
