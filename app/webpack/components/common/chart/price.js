@@ -7,6 +7,7 @@ export default class Price extends Component {
     constructor(props) {
         super(props);
         this.state = {option: getTemplate(this.props)};
+        this.onyAxisMouseOver = this.onyAxisMouseOver.bind(this);
     }
 
     getChartOption() {
@@ -53,13 +54,28 @@ export default class Price extends Component {
         return option;
     }
 
+    onyAxisMouseOver(params) {
+        if (params.componentType && params.componentType.toLowerCase() === 'yaxis' && this.charts_instance) {
+            let instance = this.charts_instance.getEchartsInstance();
+            if (instance) {
+                let option = instance.getOption();
+                if (option.dataZoom && option.dataZoom.hasOwnProperty(1)) {
+                    option.dataZoom[1].show = !option.dataZoom[1].show;
+                    instance.setOption(option);
+                }
+            }
+        }
+    }
+
     render() {
         return (
             <ReactEcharts
+                ref={instance => this.charts_instance = instance}
                 option={this.getChartOption()}
                 notMerge={true}
                 style={{minHeight: '310px', width: '100%'}}
-                className='react_for_echarts'/>
+                className='react_for_echarts'
+                onEvents={{'mouseOver': this.onyAxisMouseOver}}/>
         );
     }
 }
@@ -162,7 +178,7 @@ function getTemplate(props) {
                 // max: function (value) {
                 //     return 1;
                 // },
-                min: yAxisMin,
+                // min: yAxisMin,
                 axisLine: {
                     lineStyle: {
                         color: 'white'
@@ -173,25 +189,26 @@ function getTemplate(props) {
         }
     }
     let yAxisMin = 0;
-    if (props.data.length > 0) {
-        let tmp = 1;
-        props.data.forEach(element => {
-            let result =  Math.min.apply(null, element.data.map(el => {
-                return Number(el.average_price);
-            }));
-            if (result < tmp) {
-                tmp = result;
-            }
-        })
-        if (tmp < 1) {
-            if (tmp > 0.2) {
-                yAxisMin = parseFloat(tmp - 0.1).toFixed(1);
-            }
-        }
-    }
+    // if (props.data.length > 0) {
+    //     let tmp = 1;
+    //     props.data.forEach(element => {
+    //         let result =  Math.min.apply(null, element.data.map(el => {
+    //             return Number(el.average_price);
+    //         }));
+    //         if (result < tmp) {
+    //             tmp = result;
+    //         }
+    //     })
+    //     if (tmp < 1) {
+    //         if (tmp > 0.2) {
+    //             yAxisMin = parseFloat(tmp - 0.1).toFixed(1);
+    //         }
+    //     }
+    // }
     return {
         calculable: true,
-        dataZoom: {
+        dataZoom: [{
+            type:'slider',
             show: true,
             realtime: true,
             label: {
@@ -201,8 +218,22 @@ function getTemplate(props) {
             bottom: '10%',
             fillerColor: 'rgba(6, 178 ,180 , 0.1)',
             borderColor: '#06b2b3',
-            handleColor: '#06b2b3'
-        },
+            handleColor: '#06b2b3',
+            xAxisIndex: 0
+        },{
+            type:'slider',
+            show: false,
+            realtime: true,
+            label: {
+                show: false
+            },
+            showDetail: false,
+            fillerColor: 'rgba(6, 178 ,180 , 0.1)',
+            borderColor: '#06b2b3',
+            handleColor: '#06b2b3',
+            right: '0%',
+            yAxisIndex: 0
+        }],
         grid: {
             top: '5%',
             left: '10%',
@@ -286,12 +317,13 @@ function getTemplate(props) {
             // max: function (value) {
             //     return 1;
             // },
-            min: yAxisMin,
+            // min: yAxisMin,
             axisLine: {
                 lineStyle: {
                     color: 'white'
                 }
-            }
+            },
+            triggerEvent: true
         },
         series: []
     }

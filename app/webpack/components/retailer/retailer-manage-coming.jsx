@@ -192,7 +192,7 @@ export class RetailerManage extends Component {
                         <abbr title="required">*</abbr> Email Address:
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="main_email_address" disabled={this.state.disabled} ref="main_email_address" maxLength="50" required aria-required="true" pattern="^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$" title="Email must have @."></input>
+                            <input type="text" name="main_email_address" disabled={this.state.disabled} ref="main_email_address" maxLength="50" required aria-required="true" pattern="\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" title="Email must have @ and after must have . just like(@chariselectric.com.sg)"></input>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
