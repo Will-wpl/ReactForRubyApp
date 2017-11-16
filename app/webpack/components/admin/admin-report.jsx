@@ -56,13 +56,13 @@ export class AdminReport extends Component {
                 }else{
                     orderRanking = [];
                 }
-                try {
-                    orderRanking.sort((a, b) => {
-                        return parseFloat(a.average_price) > parseFloat(b.average_price)
-                    })
-                } catch (error) {
+                ///try {
+                    //orderRanking.sort((a, b) => {
+                        //return parseFloat(a.average_price) > parseFloat(b.average_price)
+                    //})
+                //} catch (error) {
 
-                }
+                //}
                 this.actualPrice = orderRanking.length > 0 ? orderRanking[0].average_price : '0.0000';
 
                 this.setState({histories: histories, ranking: orderRanking});
