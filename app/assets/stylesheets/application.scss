@@ -1,0 +1,21 @@
+.admin_btn{ 
+    margin:10rem auto; position: relative;
+    a{ display:inline-block; background:#00b0b2 url("/assets/btn_ico.png") no-repeat right; font-size: 16px; 
+        margin-bottom:26px; padding: 1.55rem 1rem 1.55rem; 
+        white-space: nowrap;
+    }
+    div.begin_auction{ 
+        display:inline-block;
+        a{
+            text-indent: -9999px;
+            background: #DF5C28 url("/assets/hammer.png") no-repeat center 5px;
+            width: 100%; font-size: 13px; min-height: 68px;
+        }
+         text-align: center;}
+}
+.confirmdiv{background:rgba(255,255,255,0.2); padding: 10px 20px; line-height: 24px; font-size: 13px;}
+.live_modal{
+    width: 480px; margin: 60px auto;
+    border-radius: 5px; overflow: hidden; 
+    p{ background: #00afb1; width: 100%; line-height: 32px; font-size: 18px; padding:10px 10px 20px 10px; text-align: center}
+  }

@@ -10,33 +10,43 @@
 import "atlas/src/index.js";
 import "./javascripts/shared.js";
 import "./styles/app.scss";
+import "components/retailer/retailer-manage-coming";
+import "components/retailer/retailer-live";
+import "components/retailer/retailer-finish";
+// ActionCable = require('actioncable')
 
-import "components/hello-world";
-import "components/chat-channel";
-
-ActionCable = require('actioncable')
-
-const cable = ActionCable.createConsumer('ws://localhost:3000/cable')
-
-const chat = cable.subscriptions.create({
-    channel: 'ChatChannel',
-    room: 'a'
-}, {
-    connected: function () {
-        console.log('-----message client connected ------------')
-        chat.buy('hello 1024');
-    },
-    disconnected: function () {
-        console.log('-----message client disconnected ------------')
-    },
-    received: function (data) {
-        console.log("received : " + data.message)
-    },
-    buy: function (msg) {
-        return this.perform('buy', {message: msg});
-    }
-    // normal channel code goes here...
-});
+// const cable = ActionCable.createConsumer()
+// const entry = ActionCable.createConsumer().subscriptions.create({
+//     channel: 'EntryChannel',
+//     auction_id: '1',
+//     user_id: '2'
+// }, {
+//     connected () {
+//         console.log('-----message client connected ------------')
+//         // auction.checkIn({user_id: 2});
+//         // auction.setBid({lt_peak:'0.020', lt_off_peak: '0.1000' , hts_peak:'0.1000',hts_off_peak:'0.0893',htl_peak:'0.1000',htl_off_peak:'0.1000'});
+//         // auction.extendTime({extend_time : '5'});
+//
+//     },
+//     disconnected () {
+//         console.log('-----message client disconnected ------------')
+//         entry.logout();
+//     },
+//     received (data) {
+//         console.log(data)
+//     },
+//     logout (params) {
+//         return this.perform('log_out', params);
+//     }
+//     ,
+//     setBid (params){
+//         return this.perform('set_bid', params);
+//     },
+//     extendTime(params){
+//         return this.perform('extend_time', params);
+//     }
+//     // normal channel code goes here...
+// });
 
 
 // import ChatRoom from "components/chat-channel";

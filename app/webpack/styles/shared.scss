@@ -1,0 +1,193 @@
+//all
+body a{outline:none;}
+//retailer manage coming
+.link_file{line-height: 40px; text-decoration: underline;}
+abbr[title]{color: #fe0000; text-decoration: none;}
+.retailer_btn{ 
+  text-align: right; width: 100%; margin: 25px auto; position: relative;
+  button{ display: inline-block; margin: 0px 10px;}
+  button:last-child{ margin-right: 0px;}
+  .mask{ width: 100%; height: 100%; position: absolute; left: 0; top:0;}
+}
+  
+.table-body{width:100%; height:300px;overflow-y:auto; overflow-x:hidden}
+.retailer_fill{
+   width: 100%; font-size: 12px; table-layout: fixed; border-top:1px solid #314657; border-left:1px solid #314657;
+   thead{
+     tr{ background: #00394A;
+      th{ height: 40px; border-right:1px solid #314657; font-size: 14px;}
+      th.table_title{border-bottom:1px solid #314657;}
+    }
+   }
+   tbody{
+     overflow:auto; height: 30px;
+     tr{
+       td{border:1px solid #314657; text-align: center; height: 40px;
+        a{ display: block; width: 100%; height: 100%;}
+        a.report{background: url("../images/Reverse_Auction_Report.png") no-repeat center; background-size:19px;}
+        a.log{background: url("../images/Activity_Log.png") no-repeat center; background-size:19px;}
+        input{
+          width: 60px; display: inline-block; padding:2px; border:1px solid #fff; margin-left: 5px; background: none;
+        }
+      }   
+     }
+   }
+}
+
+//time_cuntdown
+.time_cuntdown{ 
+  width: 100%; padding:12px; background: #90bf33; overflow: hidden; min-height: 132px; color:#fff;
+  p{font-size:20px; line-height: 30px;}
+  p.confirm{ padding:35px 0px;}
+  .Countdown{
+    font-size:20px; line-height: 30px; margin-top: 10px;
+    abbr{float: left; line-height: 60px;}
+  }
+  #countdown_timer,#during_countdown_timer{
+    width:300px; overflow: hidden; float: left;
+      span{
+        width: 25%; float: left; text-align: center; font-size:14px !important;
+        font{ font-size:35px; display: block;}
+      }
+  }
+  #during_countdown_timer{
+    width: 260px;
+    span{
+      width:33.3333333%;
+    }
+  }
+  #retailer_hold{
+    float: left;
+    b{ font-size: 14px; color:#fff; background: #E60013; padding: 4px;}
+  }
+ }
+ .during{
+  background:#fbb136; color: #000;
+  .show{ display: block;}
+  .hide{ display: none;}
+  p{color: #000;}
+  #admin_hold,#retailer_hold{
+    float: left; line-height: 60px; width: 380px;
+    span,input{display: inline-block;}
+    b{ font-size: 14px; color:#fff; background: #E60013; padding: 4px;}
+    .fill_hold{ width:60px; background: #fff; color:#000; margin:0px 10px; border:1px solid #000; text-indent: 10px; padding: 0px; height: 26px;}
+    .hold_submit{ background: #22ad38; border:none; margin-left: 10px; color:#fff; padding: 3px 10px; border-radius: 5px;}
+  }
+ }
+
+
+
+
+//var modal css by will
+.modal_hide{ opacity: 0; z-index: -1;}
+.modal_show{ opacity: 1; z-index: 10;}
+#modal_main{ position: fixed; transition: 0.8s all; font-size: 12px;
+  width:420px; min-height:200px; background-color: rgba(0, 0, 0, 1); border-radius: 10px; box-shadow: 0px 0px 10px #ccc; 
+  top:35%; left:50%; margin: -100px 0px 0px -210px;
+  h4{
+    height: 32px; line-height: 32px; width: 100%; margin: 0 auto; font-size: 13px;
+    span{ float: left; padding-left:15px;}
+    a{ float: right; padding-right:15px;}
+  }
+  .modal_detail{ width:90%; min-height: 112px; margin:0px auto; line-height: 22px; font-size: 16px;}
+  .showinfo{ color: red; min-height: auto;}
+  .modal_btn{ width:100%; margin: 10px auto; overflow: hidden;}
+  .modal_btn a{ width: 60px; float:right; margin-right: 10px;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; margin: 0px 10px;}
+}
+.u-contain{overflow:hidden;}
+
+
+//retailer ranking
+.retailrank_main{ width: 86%; margin: 10px auto; font-size: 12px;
+  h4{ color:#fff;}
+  .retailrank_box{width: 100%; height: 441px; margin: 10px auto; overflow-y: auto;}
+} 
+
+//reservePrice
+.reservePrice{ 
+  width: 86%; margin: 10px auto; line-height:22px;
+  span{ margin-right: 10px;}
+  span.success{ color:green; background: url("../images/achieved.png") no-repeat left; padding-left:20px;}
+  span.fail{ color:red; background: url("../images/not_achieved.png") no-repeat left; padding-left:20px;}
+}
+
+//winnerPirce
+.winnerPrice_main{ 
+  width:86%; margin: 10px auto; font-size: 12px;
+  h4{ color:#fff;}
+  ul li{ line-height: 32px; list-style: none;}
+  table{ margin: 15px auto;}
+  .show{display: block;}
+  .hide{ display: none}
+  .green{ color: #54B41B;}
+  .red{ color: #E60013;}
+  a{ margin: 0px 5px;}
+}
+
+//checkitem
+.checkitem{ list-style: none; line-height:22px;
+  img{ margin-right:10px;}
+}
+
+
+
+//retailer liveing
+#live_modal{
+  width: 480px; margin: 60px auto;
+  border-radius: 0px 0px 5px 5px; overflow: hidden; 
+  .live_hold{ background: url("../images/count_down.png") no-repeat; width: 100%; height:126px; }
+  .live_end{ background: url("../images/thank you_end.png") no-repeat; width: 100%; height:126px; }
+  p{ background: #00afb1; width: 100%; line-height: 32px; font-size: 18px; padding:10px 10px 20px 10px; text-align: center}
+}
+.font13{ font-size: 14px;}
+.live_show{display: block;}
+.live_hide{display: none;}
+
+
+.showdetail{
+  width: 100%; overflow:hidden;
+  li{ list-style: none; line-height:28px; font-size:14px;}
+  ol{ margin: 20px auto 0px auto;}
+}
+.react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list{
+  padding-right: 0px !important;
+}
+
+
+.admin_hold{ position: absolute; color:red; top:25%;}
+//hide scrollbar
+// ::-webkit-scrollbar{
+//   display:none;
+// }
+// ::-ms-scrollbar{
+//   display:none;
+// }
+
+.table-body::-webkit-scrollbar{
+  display:none;
+ }
+ .table-body::-ms-scrollbar{
+  display:none;
+ }
+
+//retailer 
+.number_form{ position: relative; width: 100%; }
+.number_error{ position: absolute; background: #fff; top:242px; border-radius: 5px; color: #333; font-size: 12px; padding:5px 10px; border:2px solid #fbb136;}
+
+//remove default arrow
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+input[type="number"]{
+  -moz-appearance: textfield;
+}
+
+//resposive
+@media screen and (max-width:1008px){
+  .col-md-5,.col-md-7{ width: 100%;} 
+  .push-md-1{margin-left: 4.33333%;}
+  .admin_btn{
+    .push-md-1{margin-left: 0px;}
+  }
+}
