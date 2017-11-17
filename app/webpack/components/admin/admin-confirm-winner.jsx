@@ -49,7 +49,6 @@ componentDidMount() {
         this.auction = auction;
         this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000'
         getHistoriesLast({ auction_id: auction? auction.id : 1}).then(data => {
-            //console.log('histories', data);
             this.setState({
                 winner:{
                     data:data.histories[0],
