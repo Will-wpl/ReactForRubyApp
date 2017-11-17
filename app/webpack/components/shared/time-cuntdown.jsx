@@ -29,11 +29,16 @@ export class TimeCuntDown extends Component {
     getAuctionTime(auction) {
         if (auction) {
             getAuctionTimeRule(auction.id).then(res => {
-                this.timerTitle = `${auction.name} on ${moment(res[ACTUAL_BEGIN_TIME]).format('D MMM YYYY hh:mm a')}`;
+                this.timerTitle = `${auction.name} on ${moment(res[ACTUAL_BEGIN_TIME]).format('D MMM YYYY hh:mm A')}`;
                 const isOver = this.isCountDownOver(moment(res[ACTUAL_BEGIN_TIME]).toDate().getTime()
                     , moment(res[ACTUAL_CURRENT_TIME]).toDate().getTime());
                 if (this.props.hasOwnProperty('listenHold')) {
                     this.props.listenHold(res[HOLD_STATUS], isOver);
+                }
+                if(isOver){
+                    if (this.props.btnDisabled) {
+                        this.props.btnDisabled();
+                    }
                 }
                 if (!res[HOLD_STATUS]) {
                     if (isOver) {

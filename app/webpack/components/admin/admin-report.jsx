@@ -43,29 +43,14 @@ export class AdminReport extends Component {
                     winner:{
                         data:data.result,
                         auction:data.auction
-                    }
+                    },
+                    ranking:data.histories
                 })
+                this.actualPrice = data.histories.length > 0 ? data.histories[0].average_price : '0.0000';
             })
             getHistories({ auction_id: auction? auction.id : 1}).then(histories => {
                 // console.log('histories', histories);
-                let orderRanking = []
-                if(histories.length > 0){
-                    orderRanking = histories.map(element => {
-                        return element.data.length > 0 ? element.data[element.data.length - 1] : []
-                    })
-                }else{
-                    orderRanking = [];
-                }
-                ///try {
-                    //orderRanking.sort((a, b) => {
-                        //return parseFloat(a.average_price) > parseFloat(b.average_price)
-                    //})
-                //} catch (error) {
-
-                //}
-                this.actualPrice = orderRanking.length > 0 ? orderRanking[0].average_price : '0.0000';
-
-                this.setState({histories: histories, ranking: orderRanking});
+                this.setState({histories: histories});
             })
         })
         getArrangements(ACCEPT_STATUS.ACCEPT).then(res => {
