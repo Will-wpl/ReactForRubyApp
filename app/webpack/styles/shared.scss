@@ -10,7 +10,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
   .mask{ width: 100%; height: 100%; position: absolute; left: 0; top:0;}
 }
   
-.table-body{width:100%; height:300px;overflow-y:auto; overflow-x:hidden}
+.table-body{width:100%; height:100px;overflow-y:auto; overflow-x:hidden}
 .retailer_fill{
    width: 100%; font-size: 12px; table-layout: fixed; border-top:1px solid #314657; border-left:1px solid #314657;
    thead{
@@ -155,20 +155,51 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 
 
 .admin_hold{ position: absolute; color:red; top:25%;}
-//hide scrollbar
-// ::-webkit-scrollbar{
-//   display:none;
-// }
-// ::-ms-scrollbar{
-//   display:none;
-// }
+::-webkit-scrollbar  
+{  
+    position: absolute;
+    width: 5px;  
+    height: 5px;  
+    background-color: #314657;  
+    border-radius: 10px;  
+}  
+ 
+::-webkit-scrollbar-track  
+{  
+    -webkit-box-shadow: inset 0 0 6px #314657;  
+    border-radius: 10px;  
+    background-color: #00394A;  
+}  
+   
+::-webkit-scrollbar-thumb  
+{  
+    border-radius: 10px;  
+    -webkit-box-shadow: inset 0 0 1px #00b0b2;  
+    background-color: #00b0b2;  
+}
 
-.table-body::-webkit-scrollbar{
-  display:none;
- }
- .table-body::-ms-scrollbar{
-  display:none;
- }
+::-moz-scrollbar  
+{  
+    position: absolute;
+    width: 5px;  
+    height: 5px;  
+    background-color: #314657;  
+    border-radius: 10px;  
+}  
+ 
+::-moz-scrollbar-track  
+{  
+    -moz-box-shadow: inset 0 0 6px #314657;  
+    border-radius: 10px;  
+    background-color: #00394A;  
+}  
+   
+::-moz-scrollbar-thumb  
+{  
+    border-radius: 10px;  
+    -moz-box-shadow: inset 0 0 1px #00b0b2;  
+    background-color: #00b0b2;  
+}
 
 //retailer 
 .number_form{ position: relative; width: 100%; }

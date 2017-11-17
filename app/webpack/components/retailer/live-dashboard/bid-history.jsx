@@ -9,12 +9,12 @@ export default class BidHistory extends Component {
                 return <tr key={element.id}>
                     <td>{index + 1}</td>
                     <td>{element.bid_time}</td>
-                    <td>$ {element.lt_off_peak}</td>
                     <td>$ {element.lt_peak}</td>
+                    <td>$ {element.lt_off_peak}</td>
                     <td style={{display: 'none'}}>$ {element.hts_off_peak}</td>
                     <td style={{display: 'none'}}>$ {element.hts_peak}</td>
-                    <td>$ {element.htl_off_peak}</td>
                     <td>$ {element.htl_peak}</td>
+                    <td>$ {element.htl_off_peak}</td>
                 </tr>
             })
         } else {
@@ -25,12 +25,12 @@ export default class BidHistory extends Component {
                 trs.push(<tr key={element.id}>
                     <td>{i + 1}</td>
                     <td>{element.bid_time}</td>
-                    <td>$ {element.lt_off_peak}</td>
                     <td>$ {element.lt_peak}</td>
+                    <td>$ {element.lt_off_peak}</td>
                     <td style={{display: 'none'}}>$ {element.hts_off_peak}</td>
                     <td style={{display: 'none'}}>$ {element.hts_peak}</td>
-                    <td>$ {element.htl_off_peak}</td>
                     <td>$ {element.htl_peak}</td>
+                    <td>$ {element.htl_off_peak}</td>
                 </tr>)
             }
         }
@@ -57,12 +57,12 @@ export default class BidHistory extends Component {
                     <tr>
                         <th>S/N</th>
                         <th>Time</th>
-                        <th>LT (Off-Peak)</th>
                         <th>LT (Peak)</th>
+                        <th>LT (Off-Peak)</th>
                         <th style={{display: 'none'}}>HTS (Off-Peak)</th>
                         <th style={{display: 'none'}}>HTS (Peak)</th>
-                        <th>HTL (Off-Peak)</th>
                         <th>HTL (Peak)</th>
+                        <th>HTL (Off-Peak)</th>
                     </tr>
                     </thead>
                 </table>

@@ -21,7 +21,7 @@ export default class RetailerRanking extends Component {
                             <tr>
                                 <th>Rank</th>
                                 <th>Retailer</th>
-                                <th>Price</th>
+                                <th>Average Price</th>
                             </tr>
                             </thead>
                         </table>
@@ -37,7 +37,7 @@ export default class RetailerRanking extends Component {
                             {
                                 this.props.ranking.map((item, index) => {
                                     return (
-                                        <tr key={item.id}>
+                                        <tr key={index}>
                                             <td>{item.ranking}</td>
                                             <td>{item.company_name}</td>
                                             <td>$ {parseFloat(item.average_price).toFixed(4)}/kWh</td>
