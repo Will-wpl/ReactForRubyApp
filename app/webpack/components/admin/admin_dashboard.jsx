@@ -35,13 +35,13 @@ export class AdminDashboard extends Component {
                     let orderRanking = histories.map(element => {
                         return element.data.length > 0 ? element.data[element.data.length - 1] : []
                     })
-                    // try {
-                    //     orderRanking.sort((a, b) => {
-                    //         return parseFloat(a.average_price) > parseFloat(b.average_price)
-                    //     })
-                    // } catch (error) {
+                     try {
+                         orderRanking.sort((a, b) => {
+                             return parseFloat(a.average_price) > parseFloat(b.average_price)
+                         })
+                     } catch (error) {
 
-                    // }
+                     }
                     this.setState({realtimeData: histories, realtimeRanking: orderRanking
                         , currentPrice : orderRanking.length > 0 ? orderRanking[0].average_price : this.state.currentPrice});
                 }
