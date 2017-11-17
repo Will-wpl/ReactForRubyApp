@@ -35,6 +35,11 @@ export class TimeCuntDown extends Component {
                 if (this.props.hasOwnProperty('listenHold')) {
                     this.props.listenHold(res[HOLD_STATUS], isOver);
                 }
+                if(isOver){
+                    if (this.props.btnDisabled) {
+                        this.props.btnDisabled();
+                    }
+                }
                 if (!res[HOLD_STATUS]) {
                     if (isOver) {
                         clearInterval(this.interval);
