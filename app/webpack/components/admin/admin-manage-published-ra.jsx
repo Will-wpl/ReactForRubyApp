@@ -28,7 +28,7 @@ export class AdminManagePublishedRa extends Component {
         return (
             <div>
                 <div>
-                <TimeCuntDown title={this.timerTitle} auction={this.auction} countDownOver={() => {this.setState({disabled:true,editdisabled:true})}} />
+                <TimeCuntDown title={this.timerTitle} auction={this.auction} btnDisabled={() => {this.setState({disabled:true,editdisabled:true})}} countDownOver={() => {this.setState({disabled:true,editdisabled:true})}} />
                 <div className="u-grid u-mt3">
                     <div className="col-sm-12 col-md-7">
                         <CreateNewRA left_name="Manage Upcoming Reverse Auction" disabled={this.state.disabled} editdisabled={this.state.editdisabled} />
