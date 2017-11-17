@@ -1,0 +1,21 @@
+.lm--inputGroup {
+  position: relative;
+  display: flex;
+
+  &-prefix {
+    position: absolute;
+    align-items: center;
+    display: flex;
+    height: 100%;
+    padding: 0 rem(10) 0 rem(14);
+    font-size: rem(18);
+  }
+
+  [class*="icon-"] {
+    color: $color-neutral-light;
+  }
+
+  &-field {
+    padding-left: rem(40);
+  }
+}

@@ -1,0 +1,17 @@
+.lm--info {
+  font-weight: 300;
+
+  &-label {
+    margin-bottom: rem(4);
+    color: $color-neutral-light;
+    line-height: 1.4em;
+  }
+
+  &-value {
+    font-size: rem(16);
+  }
+
+  &--large &-value {
+    font-size: rem(24);
+  }
+}

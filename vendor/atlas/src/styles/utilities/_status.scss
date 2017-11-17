@@ -1,0 +1,40 @@
+// indicator lamps
+.u-disabled {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.u-offline {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.u-low {
+  color: $color-blue;
+}
+
+.u-normal {
+  color: $color-green;
+}
+
+.u-high {
+  color: $color-red;
+}
+
+.u-red {
+  color: $color-red;
+}
+
+.u-green {
+  color: $color-green;
+}
+
+.u-blue {
+  color: $color-blue;
+}
+
+.u-orange {
+  color: $color-orange;
+}
+
+.u-yellow {
+  color: $color-yellow;
+}

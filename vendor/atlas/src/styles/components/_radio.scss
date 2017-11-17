@@ -1,0 +1,33 @@
+.lm--radio {
+  &-input {
+    @extend %checker-input;
+  }
+
+  &-label {
+    @extend %checker-label;
+
+    &:before {
+      border-radius: 100%;
+    }
+
+    &:after {
+      border-radius: 100%;
+      width: 8px;
+      height: 8px;
+      background-color: #fff;
+      border-radius: 100%;
+      transform: scale(0) translate(-50%, -50%);
+      transform-origin: 0 0;
+    }
+  }
+
+  // checked
+  &-input:checked + &-label:after {
+    transform: scale(1) translate(-50%, -50%);
+  }
+
+  // focus
+  &-input:focus + &-label:before {
+    @extend %checker-focus;
+  }
+}

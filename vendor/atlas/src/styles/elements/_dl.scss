@@ -1,0 +1,13 @@
+dl {
+  dt {
+    font-weight: 500;
+  }
+
+  dd {
+    font-weight: 300;
+
+    + dt {
+      margin-top: 0.5em;
+    }
+  }
+}

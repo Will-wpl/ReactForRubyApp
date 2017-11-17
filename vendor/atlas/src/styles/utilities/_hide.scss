@@ -1,0 +1,17 @@
+.u-visible\@sm,
+.u-visible\@small {
+  @include bp(md) {
+    display: none !important;
+  }
+}
+
+@include bp-all('.u-hidden') {
+  display: none !important;
+}
+
+// deprecated
+.u-hidden\@small {
+  @include bp(sm) {
+    display: none !important;
+  }
+}

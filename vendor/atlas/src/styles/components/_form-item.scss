@@ -1,0 +1,73 @@
+.lm--formItem {
+  & + & {
+    margin-top: rem(20);
+  }
+
+  &-label {
+    display: inline-block;
+    padding: rem(11) rem(33) rem(8) 0;
+    font-size: rem(14);
+    font-weight: 300;
+  }
+
+  // alignments for inline form fields
+  &-left {
+    width: 30%;
+    text-align: right;
+  }
+
+  &-right {
+    width: 70%;
+  }
+
+  &-right-push {
+    margin-left: 30%;
+  }
+
+  // option
+  &-option + &-option {
+    margin-top: rem(6);
+  }
+
+  // add margin-top to non-text inputs
+  &-option:first-of-type,
+  input[type="file"] {
+    margin-top: rem(11);
+  }
+}
+
+// inline fields
+
+.lm--formItem--inline {
+  align-items: flex-start;
+  display: flex;
+}
+
+[class*="lm--formItem--inline"] .lm--formItem-control {
+  flex-grow: 1;
+}
+
+@include bp-all('.lm--formItem--inline') {
+  align-items: flex-start;
+  display: flex;
+}
+
+// override above to force form fields in mobile to be vertical
+@include bp(sm) {
+  .lm--formItem--inline {
+    display: block;
+  }
+
+  .lm--formItem-left {
+    text-align: left;
+  }
+
+  .lm--formItem-left,
+  .lm--formItem-right {
+    width: auto;
+  }
+
+  .lm--formItem-right-push {
+    margin-left: 0;
+  }
+}

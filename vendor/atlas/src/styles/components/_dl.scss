@@ -1,0 +1,20 @@
+.lm--dl--inline {
+  dt {
+    clear: left;
+    float: left;
+    padding-right: rem(20);
+    text-align: right;
+
+    &:not(:first-of-type) {
+      margin-top: 0.5em;
+    }
+  }
+
+  dd {
+    @include clearfix;
+
+    &:not(:first-of-type) {
+      padding-top: 0.5em;
+    }
+  }
+}

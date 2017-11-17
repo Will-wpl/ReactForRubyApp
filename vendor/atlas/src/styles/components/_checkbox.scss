@@ -1,0 +1,36 @@
+.lm--checkbox {
+  &-input {
+    @extend %checker-input;
+  }
+
+  &-label {
+    @extend %checker-label;
+
+    &:before {
+      border-radius: rem(3);
+    }
+
+    &:after {
+      top: 0;
+      width: 6px;
+      height: 11px;
+      margin-top: rem(4);
+      margin-left: rem(-4);
+      transform: scale(0) rotateZ(45deg) translate3d(-50%, 0, 0);
+      border-style: solid;
+      border-width: 0 2px 2px 0;
+      border-color: #fff;
+      transform-origin: 50% 100%;
+    }
+  }
+
+  // checked 
+  &-input:checked + &-label:after {
+    transform: scale(1) rotateZ(45deg) translate3d(-50%, 0, 0);
+  }
+
+  // focus
+  &-input:focus + &-label:before {
+    @extend %checker-focus;
+  }
+}

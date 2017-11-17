@@ -1,0 +1,10 @@
+Description:
+    This is a custom generator that can create scaffold for public or admin resources.
+    Bakes in opinionated Controller (Specs), Views and Model.
+
+Example:
+    For public resource:
+    `rails generate my_scaffold MODEL_NAME FIELD:TYPE`
+
+    For admin resource:
+    `rails generate my_scaffold MODEL_NAME FIELD:TYPE --model-name=MODEL_NAME --admin=true`

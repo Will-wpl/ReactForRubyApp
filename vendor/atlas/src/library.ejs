@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" type="" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism-tomorrow.min.css">
+  <style>
+    .vw-title {
+      font-weight: 400;
+      border-bottom: 1px solid #fff;
+      margin: 1em 0 1.5em;
+    }
+
+    .vw-block {
+      display: block;
+      margin-bottom: 1.5em;
+    }
+    .vw-block:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    .vw-block-cols [class*="col-"] {
+      background: rgba(255,255,255,0.1);
+      background-clip: content-box;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .o-media + .o-media {
+      margin-top: 30px;
+    }
+
+    .snippet {
+      margin-top: 25px;
+    }
+    
+    .snippet pre {
+       background: rgba(0,0,0,0.2); 
+    }
+
+  </style>
+</head>
+<body>
+
+  <header class="c-header">
+    <nav class="c-nav js-nav">
+      <label class="c-nav__search c-nav__search--mobile js-search u-visible@small">
+        <button class="c-nav__link js-search-toggle u-visible@small"><i class="icon-search"></i></button>
+        <input type="text">
+      </label>
+      <button class="c-nav__link c-nav__selector u-visible@small js-nav-toggle">
+        Nav
+      </button>
+      <div class="c-nav__logo u-hidden@small">
+        <a href="#"><img src="images/logo-sp-notext.png" alt="SP Group"></a>
+      </div>
+      <ul class="c-nav__menu c-nav__menu--primary">
+        <li class="c-nav__item is-active">
+          <a class="c-nav__link" href="#">Link 1</a>
+        </li>
+      </ul>
+
+      <ul class="c-nav__menu c-nav__menu--secondary">
+        <li class="c-nav__item u-hidden@small">
+          <label class="c-nav__search">
+            <i class="icon-search"></i>
+            <input type="text">
+          </label>
+        </li>
+        <li class="c-nav__item">
+          <a class="c-nav__link" href="#">
+            <span class="u-hidden">Notifications</span>
+            <i class="icon-bell"></i>
+          </a>
+        </li>
+        <li class="c-nav__item">
+          <div class="c-dropdown js-dropdown">
+            <button class="c-nav__link js-dropdown-toggle">
+              <span class="c-nav__account u-hidden@small">Thye Chuan</span>
+              <i class="icon-profile u-visible@small"></i>
+            </button>
+            <ul class="c-dropdown__menu">
+              <li class="c-dropdown__item">
+                <a href="#" class="c-dropdown__link">Test 1</a>
+              </li>
+              <li class="c-dropdown__item">
+                  <a href="#" class="c-dropdown__link">Test 2</a>
+                </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  
+  <div class="o-grid">
+
+    <div class="col-md-12">
+
+      <div class="vw-block">
+        <h3 class="vw-title">Panel</h3>
+        <div class="c-panel">
+          <div class="c-panel__header">
+            <span class="h4">Some title</span>
+          </div>
+
+          <div class="c-panel__grid">
+            <div class="col-sm-6">
+              <div class="o-media">
+                <span class="o-media__title c-panel__label u-text-muted">Lower Threshold</span>
+                <span class="h4 o-media__content">20<span class="u-unit">kWh</span></span>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="o-media">
+                <span class="o-media__title c-panel__label u-text-muted">Upper Threshold</span>
+                <span class="h4 o-media__content">350<span class="u-unit">kWh</span></span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="c-panel__footer">
+            <button class="c-btn c-btn--text c-btn--small">
+              <span class="o-flag"><i class="icon-edit"></i>Edit Threshold</span>
+            </button>
+            <button class="c-btn c-btn--text c-btn--small">
+              <span class="o-flag"><i class="icon-chart"></i>View History</span>
+            </button>
+          </div>
+        </div>
+
+<div class="snippet">
+<pre>
+  <code class="language-markup">
+  &lt;div class=&quot;c-panel&quot;&gt;
+
+    &lt;div class=&quot;c-panel__header&quot;&gt;
+      &lt;span class=&quot;h4&quot;&gt;Some title&lt;/span&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;c-panel__grid&quot;&gt;
+      &lt;div class=&quot;col-sm-6&quot;&gt;
+        &lt;div class=&quot;o-media&quot;&gt;
+          &lt;span class=&quot;o-media__title c-panel__label u-text-muted&quot;&gt;Lower Threshold&lt;/span&gt;
+          &lt;span class=&quot;h4 o-media__content&quot;&gt;20&lt;span class=&quot;u-unit&quot;&gt;kWh&lt;/span&gt;&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;col-sm-6&quot;&gt;
+        &lt;div class=&quot;o-media&quot;&gt;
+          &lt;span class=&quot;o-media__title c-panel__label u-text-muted&quot;&gt;Upper Threshold&lt;/span&gt;
+          &lt;span class=&quot;h4 o-media__content&quot;&gt;350&lt;span class=&quot;u-unit&quot;&gt;kWh&lt;/span&gt;&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;div class=&quot;c-panel__footer&quot;&gt;
+      &lt;button class=&quot;c-btn c-btn--text c-btn--small&quot;&gt;
+        &lt;span class=&quot;o-flag&quot;&gt;&lt;i class=&quot;icon-edit&quot;&gt;&lt;/i&gt;Edit Threshold&lt;/span&gt;
+      &lt;/button&gt;
+      &lt;button class=&quot;c-btn c-btn--text c-btn--small&quot;&gt;
+        &lt;span class=&quot;o-flag&quot;&gt;&lt;i class=&quot;icon-chart&quot;&gt;&lt;/i&gt;View History&lt;/span&gt;
+      &lt;/button&gt;
+    &lt;/div&gt;
+    
+  &lt;/div&gt;
+  </code>
+</pre>
+</div>
+        
+        <div class="vw-block">
+          <h3 class="vw-title">Dropdown</h3>
+          
+          <div class="c-dropdown js-dropdown">
+            <button class="c-btn js-dropdown-toggle">Dropdown</button>
+            <ul class="c-dropdown__menu">
+              <li class="c-dropdown__item">
+                <a href="#" class="c-dropdown__link">Link 1</a>
+              </li>
+              <li class="c-dropdown__item">
+                  <a href="#" class="c-dropdown__link">Link 2</a>
+                </li>
+            </ul>
+          </div>
+
+        </div>
+
+<div class="snippet">
+<pre>
+  <code class="language-markup">
+  &lt;div class=&quot;c-dropdown js-dropdown&quot;&gt;
+    &lt;button class=&quot;c-btn js-dropdown-toggle&quot;&gt;Dropdown&lt;/button&gt;
+
+    &lt;ul class=&quot;c-dropdown__menu&quot;&gt;
+      &lt;li class=&quot;c-dropdown__item&quot;&gt;
+        &lt;a href=&quot;#&quot; class=&quot;c-dropdown__link&quot;&gt;Link 1&lt;/a&gt;
+      &lt;/li&gt;
+      &lt;li class=&quot;c-dropdown__item&quot;&gt;
+          &lt;a href=&quot;#&quot; class=&quot;c-dropdown__link&quot;&gt;Link 2&lt;/a&gt;
+        &lt;/li&gt;
+    &lt;/ul&gt;
+
+  &lt;/div&gt;
+  </code>
+</pre>
+</div>
+
+      <div class="vw-block">
+        <h3 class="vw-title">Buttons</h3>
+        <a href="#" class="c-btn">Anchor button</a>
+        <button class="c-btn">Button button</button>
+        <button class="c-btn c-btn--primary">Primary button</button>
+        <button class="c-btn c-btn--red">Red button</button>
+        <button class="c-btn c-btn--green">Green button</button>
+        <button class="c-btn c-btn--text">Text button</button>
+        <button class="c-btn c-btn--text c-btn--small"><span class="o-flag"><i class="icon-edit"></i>Edit</span></button>
+        <button class="c-btn c-btn--text c-btn--small"><i class="icon-star"></i></button>
+      </div>
+
+      <div class="vw-block">
+        <button class="c-btn u-block">Block button</button>
+      </div>
+
+<div class="snippet">
+<pre>
+  <code class="language-markup">
+  &lt;a href=&quot;#&quot; class=&quot;c-btn&quot;&gt;Anchor button&lt;/a&gt;
+
+  &lt;button class=&quot;c-btn&quot;&gt;Button button&lt;/button&gt;
+
+  &lt;button class=&quot;c-btn c-btn--primary&quot;&gt;Primary button&lt;/button&gt;
+
+  &lt;button class=&quot;c-btn c-btn--red&quot;&gt;Red button&lt;/button&gt;
+
+  &lt;button class=&quot;c-btn c-btn--green&quot;&gt;Green button&lt;/button&gt;
+
+  &lt;button class=&quot;c-btn c-btn--text&quot;&gt;Text button&lt;/button&gt;
+
+  &lt;button class=&quot;c-btn c-btn--text c-btn--small&quot;&gt;&lt;span class=&quot;o-flag&quot;&gt;&lt;i class=&quot;icon-edit&quot;&gt;&lt;/i&gt;Edit&lt;/span&gt;&lt;/button&gt;
+
+  &lt;button class=&quot;c-btn c-btn--text c-btn--small&quot;&gt;&lt;i class=&quot;icon-star&quot;&gt;&lt;/i&gt;&lt;/button&gt;
+
+  &lt;button class=&quot;c-btn u-block&quot;&gt;Block button&lt;/button&gt;
+  </code>
+</pre>
+</div>
+
+      
+
+      <div class="vw-block">
+        <h3 class="vw-title">Tabs</h3>
+
+        <div class="c-tabs js-tabs">
+          <ul class="c-tabs__nav js-tabs-nav">
+            <li class="c-tabs__title is-active">
+              <a href="#tab-1">Tab 1</a>
+            </li>
+            <li class="c-tabs__title">
+              <a href="#tab-2">Tab 2</a>
+            </li>
+            <li class="c-tabs__title">
+              <a href="#tab-3">Tab 3</a>
+            </li>
+          </ul>
+          <div class="js-tabs-content">
+            <div class="c-tabs__content" id="tab-1">
+              Tabs content 1
+            </div>
+            <div class="c-tabs__content" id="tab-2">
+              Tabs content 2
+            </div>
+            <div class="c-tabs__content" id="tab-3">
+              Tabs content 3
+            </div>
+          </div>
+        </div>
+      </div>
+
+<div class="snippet">
+<pre>
+  <code class="language-markup">
+  &lt;div class=&quot;c-tabs js-tabs&quot;&gt;
+
+    &lt;ul class=&quot;c-tabs__nav js-tabs-nav&quot;&gt;
+      &lt;li class=&quot;c-tabs__title is-active&quot;&gt;
+        &lt;a href=&quot;#tab-1&quot;&gt;Tab 1&lt;/a&gt;
+      &lt;/li&gt;
+      &lt;li class=&quot;c-tabs__title&quot;&gt;
+        &lt;a href=&quot;#tab-2&quot;&gt;Tab 2&lt;/a&gt;
+      &lt;/li&gt;
+      &lt;li class=&quot;c-tabs__title&quot;&gt;
+        &lt;a href=&quot;#tab-3&quot;&gt;Tab 3&lt;/a&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;div class=&quot;js-tabs-content&quot;&gt;
+      &lt;div class=&quot;c-tabs__content&quot; id=&quot;tab-1&quot;&gt;
+        Tabs content 1
+      &lt;/div&gt;
+      &lt;div class=&quot;c-tabs__content&quot; id=&quot;tab-2&quot;&gt;
+        Tabs content 2
+      &lt;/div&gt;
+      &lt;div class=&quot;c-tabs__content&quot; id=&quot;tab-3&quot;&gt;
+        Tabs content 3
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+  &lt;/div&gt;
+  </code>
+</pre>
+</div>
+
+    </div>
+  </div>
+
+  <footer class="c-footer">
+    <div class="o-contain">
+      &copy; 2017 Singapore Power Ltd. All Rights Reserved
+    </div>
+  </footer>
+
+  <script
+  src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+  integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
+  crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
+</body>
+</html>

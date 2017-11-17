@@ -1,0 +1,29 @@
+///* ========================================================================
+//   #GLOBAL
+//   ======================================================================== */
+// The global settings file contains any project-wide variables; things that
+// need to be made available to the entire codebase.
+
+/* Fonts
+   ========================================================================== */
+$font-sans-serif: geomanist, Arial;
+
+/* Breakpoints
+   ========================================================================== */
+
+$bp-small: 767px; // and below
+$bp-medium: 768px; // and up
+$bp-large: 992px; // and up
+$bp-xlarge: 1367px; // and up
+
+$breakpoints: (
+  sm: $bp-small,
+  md: $bp-medium,
+  lg: $bp-large,
+  xl: $bp-xlarge
+);
+
+$gutter-small: 16px;
+$gutter-medium: 24px;
+
+$spacing: 20px;
