@@ -235,7 +235,7 @@ function getTemplate(props) {
         }],
         grid: {
             top: '5%',
-            left: '10%',
+            left: '15%',
             right: '7%',
             bottom: '20%',
             containLabel: true
