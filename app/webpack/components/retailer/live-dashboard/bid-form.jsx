@@ -54,7 +54,7 @@ export default class BidForm extends Component {
         });
         console.log(Number(formatNum), formatNum, target);
         let status = this.state.status;
-        if (formatNum !== '' && Number(`0.${formatNum}`) <= Number(`0.${target}`)) {
+        if (formatNum === '' || Number(`0.${formatNum}`) <= Number(`0.${target}`)) {
             status[i] = true;
         } else {
             status[i] = false;
