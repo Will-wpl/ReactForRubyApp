@@ -311,7 +311,7 @@ const loadedStates = [
     'loaded',
     'interactive'
 ];
-if (loadedStates.includes(document.readyState) && document.body) {
+if (loadedStates.indexOf(document.readyState) > -1 && document.body) {
     runs();
 } else {
     window.addEventListener('DOMContentLoaded', runs, false);

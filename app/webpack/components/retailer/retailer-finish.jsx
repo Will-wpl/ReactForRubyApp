@@ -44,7 +44,7 @@ const loadedStates = [
     'loaded',
     'interactive'
 ];
-if (loadedStates.includes(document.readyState) && document.body) {
+if (loadedStates.indexOf(document.readyState) > -1 && document.body) {
     runes();
 } else {
     window.addEventListener('DOMContentLoaded', runes, false);
