@@ -217,7 +217,7 @@ export class RetailerManage extends Component {
                         Name:
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="alternative_name" disabled={this.state.disabled} ref="alternative_name" maxLength="150"></input>
+                            <input type="text" name="alternative_name" disabled={this.state.disabled} ref="alternative_name" maxLength="150" title="The length must not be longer than 150 characters."></input>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -225,7 +225,7 @@ export class RetailerManage extends Component {
                         Email Address:
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="alternative_email_address" disabled={this.state.disabled} ref="alternative_email_address" maxLength="50"></input>
+                            <input type="text" name="alternative_email_address" disabled={this.state.disabled} ref="alternative_email_address" aria-required="true" pattern="\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" maxLength="50" title="Email must have @ and after must have . just like(@chariselectric.com.sg)"></input>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -233,7 +233,7 @@ export class RetailerManage extends Component {
                         Mobile Number: (+65)
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="alternative_mobile_number" disabled={this.state.disabled} ref="alternative_mobile_number" maxLength="50"></input>
+                            <input type="text" name="alternative_mobile_number" disabled={this.state.disabled} ref="alternative_mobile_number" maxLength="50" aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -241,7 +241,7 @@ export class RetailerManage extends Component {
                         Office Number: (+65)
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="alternative_office_number" disabled={this.state.disabled} ref="alternative_office_number" maxLength="50"></input>
+                            <input type="text" name="alternative_office_number" disabled={this.state.disabled} ref="alternative_office_number" maxLength="50" aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
                         </div>
                     </div>
                     {/* <h3 className="u-mt3 u-mb1"><abbr title="required">*</abbr>Section C: Starting Bid Price</h3>
@@ -311,7 +311,7 @@ const loadedStates = [
     'loaded',
     'interactive'
 ];
-if (loadedStates.includes(document.readyState) && document.body) {
+if (loadedStates.indexOf(document.readyState) > -1 && document.body) {
     runs();
 } else {
     window.addEventListener('DOMContentLoaded', runs, false);

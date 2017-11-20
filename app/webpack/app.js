@@ -8,7 +8,7 @@
 // layout file, like app/views/layouts/application.html.erb
 
 import "atlas/src/index.js";
-import "./javascripts/shared.js";
+//import "./javascripts/shared.js";
 import "./styles/app.scss";
 import "components/retailer/retailer-manage-coming";
 import "components/retailer/retailer-live";
@@ -62,7 +62,7 @@ import "components/retailer/retailer-finish";
 //     'loaded',
 //     'interactive'
 // ];
-// if (loadedStates.includes(document.readyState) && document.body) {
+// if (loadedStates.indexOf(document.readyState) && document.body) {
 //     run();
 // } else {
 //     window.addEventListener('DOMContentLoaded', run, false);

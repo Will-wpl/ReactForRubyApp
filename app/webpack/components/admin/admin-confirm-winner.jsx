@@ -135,9 +135,9 @@ render() {
                         </div>
                     </div>
                 </div>
-                <div className="createRaMain u-grid">
+                {/* <div className="createRaMain u-grid">
                     <a className="lm--button lm--button--primary u-mt3" href="/admin/home" >Back to Homepage</a>
-                </div>
+                </div> */}
                 <Modal ref="Modal" text={this.state.text} acceptFunction={!this.state.fnStatus ? this.void_auction.bind(this) : this.confirm_winner.bind(this)} />
             </div>
     )
@@ -159,7 +159,7 @@ const loadedStates = [
     'loaded',
     'interactive'
 ];
-if (loadedStates.includes(document.readyState) && document.body) {
+if (loadedStates.indexOf(document.readyState) > -1 && document.body) {
     run();
 } else {
     window.addEventListener('DOMContentLoaded', run, false);

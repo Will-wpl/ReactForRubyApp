@@ -24,19 +24,19 @@ if User.count == 0
                            company_name: 'Charis Electric')
   @retailer2.add_role :retailer
 
-  @retailer3 = User.create(name: 'Cleantech Solar Management Company',
-                           email: 'contact@cleantechsolar.com',
-                           password: 'password',
-                           password_confirmation: 'password',
-                           company_name: 'Cleantech Solar Management Company')
-  @retailer3.add_role :retailer
+  # @retailer3 = User.create(name: 'Cleantech Solar Management Company',
+  #                          email: 'contact@cleantechsolar.com',
+  #                          password: 'password',
+  #                          password_confirmation: 'password',
+  #                          company_name: 'Cleantech Solar Management Company')
+  # @retailer3.add_role :retailer
 
-  @retailer4 = User.create(name: 'Diamond Energy Merchants',
-                           email: 'dekay@diamond-energy.com.sg',
-                           password: 'password',
-                           password_confirmation: 'password',
-                           company_name: 'Diamond Energy Merchants')
-  @retailer4.add_role :retailer
+  # @retailer4 = User.create(name: 'Diamond Energy Merchants',
+  #                          email: 'dekay@diamond-energy.com.sg',
+  #                          password: 'password',
+  #                          password_confirmation: 'password',
+  #                          company_name: 'Diamond Energy Merchants')
+  # @retailer4.add_role :retailer
 
   @retailer5 = User.create(name: 'Energy Supply Solutions',
                            email: 'lim@energysupplysolutions.com.sg',
@@ -45,12 +45,12 @@ if User.count == 0
                            company_name: 'Energy Supply Solutions')
   @retailer5.add_role :retailer
 
-  @retailer6 = User.create(name: 'Environmental Solutions (Asia)',
-                           email: 'info@env-solutions.com',
-                           password: 'password',
-                           password_confirmation: 'password',
-                           company_name: 'Environmental Solutions (Asia)')
-  @retailer6.add_role :retailer
+  # @retailer6 = User.create(name: 'Environmental Solutions (Asia)',
+  #                          email: 'info@env-solutions.com',
+  #                          password: 'password',
+  #                          password_confirmation: 'password',
+  #                          company_name: 'Environmental Solutions (Asia)')
+  # @retailer6.add_role :retailer
 
   @retailer7 = User.create(name: 'Hyflux Energy',
                            email: 'Huixin_tang@hyflux.com',
@@ -66,12 +66,12 @@ if User.count == 0
                            company_name: 'I Switch')
   @retailer8.add_role :retailer
 
-  @retailer9 = User.create(name: 'Just Electric',
-                           email: 'jeffrey.ng@justelectric.sg',
-                           password: 'password',
-                           password_confirmation: 'password',
-                           company_name: 'Just Electric')
-  @retailer9.add_role :retailer
+  # @retailer9 = User.create(name: 'Just Electric',
+  #                          email: 'jeffrey.ng@justelectric.sg',
+  #                          password: 'password',
+  #                          password_confirmation: 'password',
+  #                          company_name: 'Just Electric')
+  # @retailer9.add_role :retailer
 
   @retailer10 = User.create(name: 'Keppel Electric',
                             email: 'Peiling.liew@kepinfra.com',
@@ -80,12 +80,12 @@ if User.count == 0
                             company_name: 'Keppel Electric')
   @retailer10.add_role :retailer
 
-  @retailer11 = User.create(name: 'Ohm Energy',
-                            email: 'info@burienergy.com',
-                            password: 'password',
-                            password_confirmation: 'password',
-                            company_name: 'Ohm Energy')
-  @retailer11.add_role :retailer
+  # @retailer11 = User.create(name: 'Ohm Energy',
+  #                           email: 'info@burienergy.com',
+  #                           password: 'password',
+  #                           password_confirmation: 'password',
+  #                           company_name: 'Ohm Energy')
+  # @retailer11.add_role :retailer
 
   @retailer12 = User.create(name: 'PacificLight Energy',
                             email: 'eugene.he@pacificlight.com.sg',
@@ -108,12 +108,12 @@ if User.count == 0
                             company_name: 'SembCorp Power')
   @retailer14.add_role :retailer
 
-  @retailer15 = User.create(name: 'Senoko Energy Supply',
-                            email: 'dylanng@senokoenergy.com',
-                            password: 'password',
-                            password_confirmation: 'password',
-                            company_name: 'Senoko Energy Supply')
-  @retailer15.add_role :retailer
+  # @retailer15 = User.create(name: 'Senoko Energy Supply',
+  #                           email: 'dylanng@senokoenergy.com',
+  #                           password: 'password',
+  #                           password_confirmation: 'password',
+  #                           company_name: 'Senoko Energy Supply')
+  # @retailer15.add_role :retailer
 
   @retailer16 = User.create(name: 'Seraya Energy',
                             email: 'lamkl@pseraya.com.sg',
@@ -188,12 +188,12 @@ if Auction.count == 0
                  duration: nil,
                  reserve_price: nil,
                  total_volume: nil, # TBD SP provide six volumes 6_805_584,
-                 total_lt_peak: 411_396,
-                 total_lt_off_peak: 257_449,
+                 total_lt_peak: 2_468_376,
+                 total_lt_off_peak: 1_544_694,
                  total_hts_peak: 0,
                  total_hts_off_peak: 0,
-                 total_htl_peak: 330_620,
-                 total_htl_off_peak: 131_952,
+                 total_htl_peak: 1_983_720,
+                 total_htl_off_peak: 791_712,
                  publish_status: '0')
 end
 
@@ -366,84 +366,6 @@ if Arrangement.count == 0
                      htl_off_peak: nil,
                      accept_status: '2',
                      user_id: 14,
-                     auction_id: 1)
-  Arrangement.create(main_name: '',
-                     main_email_address: '',
-                     main_mobile_number: '',
-                     main_office_number: '',
-                     lt_peak: nil,
-                     lt_off_peak: nil,
-                     hts_peak: nil,
-                     hts_off_peak: nil,
-                     htl_peak: nil,
-                     htl_off_peak: nil,
-                     accept_status: '2',
-                     user_id: 15,
-                     auction_id: 1)
-  Arrangement.create(main_name: '',
-                     main_email_address: '',
-                     main_mobile_number: '',
-                     main_office_number: '',
-                     lt_peak: nil,
-                     lt_off_peak: nil,
-                     hts_peak: nil,
-                     hts_off_peak: nil,
-                     htl_peak: nil,
-                     htl_off_peak: nil,
-                     accept_status: '2',
-                     user_id: 16,
-                     auction_id: 1)
-  Arrangement.create(main_name: '',
-                     main_email_address: '',
-                     main_mobile_number: '',
-                     main_office_number: '',
-                     lt_peak: nil,
-                     lt_off_peak: nil,
-                     hts_peak: nil,
-                     hts_off_peak: nil,
-                     htl_peak: nil,
-                     htl_off_peak: nil,
-                     accept_status: '2',
-                     user_id: 17,
-                     auction_id: 1)
-  Arrangement.create(main_name: '',
-                     main_email_address: '',
-                     main_mobile_number: '',
-                     main_office_number: '',
-                     lt_peak: nil,
-                     lt_off_peak: nil,
-                     hts_peak: nil,
-                     hts_off_peak: nil,
-                     htl_peak: nil,
-                     htl_off_peak: nil,
-                     accept_status: '2',
-                     user_id: 18,
-                     auction_id: 1)
-  Arrangement.create(main_name: '',
-                     main_email_address: '',
-                     main_mobile_number: '',
-                     main_office_number: '',
-                     lt_peak: nil,
-                     lt_off_peak: nil,
-                     hts_peak: nil,
-                     hts_off_peak: nil,
-                     htl_peak: nil,
-                     htl_off_peak: nil,
-                     accept_status: '2',
-                     user_id: 19,
-                     auction_id: 1)
-  Arrangement.create(main_name: '',
-                     main_email_address: '',
-                     main_mobile_number: '',
-                     main_office_number: '',
-                     lt_peak: nil,
-                     lt_off_peak: nil,
-                     hts_peak: nil,
-                     hts_off_peak: nil,
-                     htl_peak: nil,
-                     htl_off_peak: nil,
-                     accept_status: '2',
-                     user_id: 20,
                      auction_id: 1)
 
   # Arrangement.create(main_name: '',

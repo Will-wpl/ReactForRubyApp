@@ -21,6 +21,19 @@ export default class WinnerPrice extends Component {
       return num; 
     }
   } 
+  toThousands(k) {
+    let num = k.toString(), result = '',node ='';
+    if(num.indexOf('.')>0){
+      node = '.'+num.split('.')[1];
+      num = num.split('.')[0];
+    }
+    while (num.length > 3) {
+        result = ',' + num.slice(-3) + result;
+        num = num.slice(0, num.length - 3);
+    }
+    if (num) { result = num + result; }
+    return result+node;
+  }
   render() {
     console.log(this.props.winner);
     return this.props.winner.data ? (
@@ -48,8 +61,8 @@ export default class WinnerPrice extends Component {
                             </table>
                               <ul>
                                 <li><span>Contract Period: </span><span>{moment(this.props.winner.auction.contract_period_start_date).format('D MMM YYYY')} to {moment(this.props.winner.auction.contract_period_end_date).format('D MMM YYYY')}</span></li>
-                                <li><span>Total Volume: </span><span>{parseInt(this.props.winner.data.total_volume)} kWh (forecasted)</span></li>
-                                <li><span>Total Award Sum: </span><span>$ {this.props.winner.data.total_award_sum} (forecasted)</span></li>
+                                <li><span>Total Volume: </span><span>{this.toThousands(parseInt(this.props.winner.auction.total_volume))} kWh (forecasted)</span></li>
+                                <li><span>Total Award Sum: </span><span>$ {this.toThousands(Number(this.props.winner.data.total_award_sum).toFixed(2))} (forecasted)</span></li>
                                 </ul>
                             </div>
                   : <div className="winnerPrice_main">
@@ -75,8 +88,8 @@ export default class WinnerPrice extends Component {
                     </table>
                       <ul>
                         <li><span>Contract Period: </span><span>{moment(this.props.winner.auction.contract_period_start_date).format('D MMM YYYY')} to {moment(this.props.winner.auction.contract_period_end_date).format('D MMM YYYY')}</span></li>
-                        <li><span>Total Volume: </span><span>{parseInt(this.props.winner.auction.total_volume)} kWh (forecasted)</span></li>
-                        <li><span>Total Award Sum: </span><span>$ {this.props.winner.data.total_award_sum} (forecasted)</span></li>
+                        <li><span>Total Volume: </span><span>{this.toThousands(parseInt(this.props.winner.auction.total_volume))} kWh (forecasted)</span></li>
+                        <li><span>Total Award Sum: </span><span>$ {this.toThousands(Number(this.props.winner.data.total_award_sum).toFixed(2))} (forecasted)</span></li>
                         </ul>
                     </div>                       
     ):(
