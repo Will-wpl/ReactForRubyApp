@@ -17,12 +17,13 @@ export default class LiveHomePage extends Component {
     }
 
     componentDidMount() {
-        getAuctionHistorys(this.props.auction ? this.props.auction.id : 1, getLoginUserId()).then(res => {
+        let auctionId = this.props.auction ? this.props.auction.id : 1;
+        getAuctionHistorys(auctionId, getLoginUserId()).then(res => {
             // console.log('res==========================', res);
             this.makeup(res);
-            this.createSocket();
+            this.createSocket(auctionId);
         }, error => {
-            this.createSocket();
+            this.createSocket(auctionId);
         });
     }
 
@@ -32,9 +33,9 @@ export default class LiveHomePage extends Component {
         }
     }
 
-    createSocket() {
+    createSocket(auctionId) {
         if (!this.ws) {
-            this.ws = createWebsocket(1);
+            this.ws = createWebsocket(auctionId);
             // console.log(this.ws)
             this.ws.onConnected(() => {
                 console.log('---message client connected ---');
