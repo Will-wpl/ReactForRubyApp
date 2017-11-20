@@ -22,6 +22,7 @@ export default class BidForm extends Component {
 
     componentWillReceiveProps(nextProps) {
         console.log('newest config', nextProps.data);
+        //alert('newest config', nextProps.data);
         if (nextProps.data.length > 0) {
             this.compareConfigs = nextProps.data.map(element => {
                 return parseFloat(element).toFixed(4).substring(2);
@@ -33,7 +34,17 @@ export default class BidForm extends Component {
             });
         }
     }
-
+    componentWillUnmount() {
+        clearInterval(this.configTime);
+    }
+    componentDidMount() {
+        this.configTime = setTimeout(()=>{
+            this.refs.configs1.value = this.state.configs[1];
+            this.refs.configs5.value = this.state.configs[5];
+            this.refs.configs0.value = this.state.configs[0];
+            this.refs.configs4.value = this.state.configs[4];
+        },1000)
+    }
     onInputChanged(i, e) {
         let formatNum = e.target.value.replace(/\D/, '');
         let target = this.compareConfigs.find((element, index) => {
@@ -179,7 +190,7 @@ export default class BidForm extends Component {
                         <tbody>
                         <tr>
                             <td>Peak (7am-7pm)</td>
-                            <td>$0.<input type="text" value={this.state.configs[1]}
+                            <td>$0.<input type="text" ref="configs1"
                                           style={{borderColor: this.state.status[1] ? 'white' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 1)}
                                           maxLength={4}/></td>
@@ -187,14 +198,14 @@ export default class BidForm extends Component {
                                           style={{borderColor: this.state.status[3] ? 'white' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 3)}
                                           maxLength={4}/></td>
-                            <td>$0.<input type="text" value={this.state.configs[5]}
+                            <td>$0.<input type="text" ref="configs5"
                                           style={{borderColor: this.state.status[5] ? 'white' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 5)}
                                           maxLength={4}/></td>
                         </tr>
                         <tr>
                             <td>Off-Peak (7pm-7am)</td>
-                            <td>$0.<input type="text" value={this.state.configs[0]}
+                            <td>$0.<input type="text" ref="configs0"
                                           style={{borderColor: this.state.status[0] ? 'white' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 0)}
                                           maxLength={4}/></td>
@@ -202,7 +213,7 @@ export default class BidForm extends Component {
                                           style={{borderColor: this.state.status[2] ? 'white' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 2)}
                                           maxLength={4}/></td>
-                            <td>$0.<input type="text" value={this.state.configs[4]}
+                            <td>$0.<input type="text" ref="configs4"
                                           style={{borderColor: this.state.status[4] ? 'white' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 4)}
                                           maxLength={4}/></td>
