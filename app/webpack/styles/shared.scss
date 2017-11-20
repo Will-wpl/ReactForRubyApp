@@ -203,7 +203,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 
 //retailer 
 .number_form{ position: relative; width: 100%; }
-.number_error{ position: absolute; background: #fff; top:242px; border-radius: 5px; color: #333; font-size: 12px; padding:5px 10px; border:2px solid #fbb136;}
+.number_error{ position: absolute; width: 100%; background: #fff; top:242px; border-radius: 5px; color: #333; font-size: 12px; padding:5px 10px; border:2px solid #fbb136;}
 
 //remove default arrow
 input::-webkit-outer-spin-button,

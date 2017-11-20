@@ -145,15 +145,30 @@ export const Ws = class {
             auction_id: `${auction}`,
             user_id: `${user}`
         }, mixin);
-        this.tryReconnect(1000)
+        // this.tryReconnect(2000)
+        this.checkConnectionLooply(3);
     }
 
-    tryReconnect(time) {
-        setTimeout(() => {
-            if (!this.connected) {
-                cable.connection.reopen();
+    // tryReconnect(time) {
+    //     setTimeout(() => {
+    //         if (!this.connected) {
+    //             cable.connection.reopen();
+    //         }
+    //     }, time)
+    // }
+
+    checkConnectionLooply(times) {
+        let cnt = 1;
+        let mInterval = setInterval(() => {
+            if (this.connected || cnt > times) {
+                clearInterval(mInterval);
+            } else {
+                if (!this.connected) {
+                    cable.connection.reopen();
+                }
             }
-        }, time)
+            cnt ++;
+        }, 2500)//normally 2.5 second should be connected
     }
 
     onConnected(callback) {

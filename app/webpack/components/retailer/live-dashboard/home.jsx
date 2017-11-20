@@ -97,6 +97,26 @@ export default class LiveHomePage extends Component {
                         this.extendTimeout = setTimeout(() => {
                             this.setState({extendVisible : false});
                         }, 5000);
+                        // }
+                        let element = JSON.parse(JSON.stringify(last));
+                        element.bid_time = moment(element.bid_time).format('HH:mm:ss');
+                        element.lt_peak = parseFloat(element.lt_peak).toFixed(4);
+                        element.lt_off_peak = parseFloat(element.lt_off_peak).toFixed(4);
+                        element.hts_peak = parseFloat(element.hts_peak).toFixed(4);
+                        element.hts_off_peak = parseFloat(element.hts_off_peak).toFixed(4);
+                        element.htl_peak = parseFloat(element.htl_peak).toFixed(4);
+                        element.htl_off_peak = parseFloat(element.htl_off_peak).toFixed(4);
+                        //console.log('is_bidder', curUserId, last, last.is_bidder);
+                        //alert(last.is_bidder);
+                        this.setState({
+                            ranking: last.ranking,
+                            priceConfig: last.is_bidder ? [].concat(last.lt_off_peak)
+                                .concat(last.lt_peak).concat(last.hts_off_peak)
+                                .concat(last.hts_peak).concat(last.htl_off_peak)
+                                .concat(last.htl_peak) : [],//this.state.priceConfig
+                            histories: last.is_bidder ? this.state.histories.concat(element): this.state.histories,
+                            chartDatas: this.state.chartDatas
+                        })
                     }
                 }
             })
