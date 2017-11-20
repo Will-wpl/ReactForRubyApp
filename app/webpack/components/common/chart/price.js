@@ -74,8 +74,7 @@ export default class Price extends Component {
                 option={this.getChartOption()}
                 notMerge={true}
                 style={{minHeight: '310px', width: '100%'}}
-                className='react_for_echarts'
-                onEvents={{'mouseOver': this.onyAxisMouseOver}}/>
+                className='react_for_echarts' />
         );
     }
 }
@@ -222,7 +221,7 @@ function getTemplate(props) {
             xAxisIndex: 0
         },{
             type:'slider',
-            show: false,
+            show: true,
             realtime: true,
             label: {
                 show: false
@@ -231,7 +230,7 @@ function getTemplate(props) {
             fillerColor: 'rgba(6, 178 ,180 , 0.1)',
             borderColor: '#06b2b3',
             handleColor: '#06b2b3',
-            right: '0%',
+            left: '5%',
             yAxisIndex: 0
         }],
         grid: {
@@ -309,7 +308,7 @@ function getTemplate(props) {
             type: 'value',
             name: '$/kWh',
             nameLocation: 'middle',
-            nameGap: 50,
+            nameGap: 70,
             nameRotate: 89.99999999,
             axisTick: {
                 show: false
@@ -318,6 +317,14 @@ function getTemplate(props) {
             //     return 1;
             // },
             // min: yAxisMin,
+            axisLabel: {
+                formatter: (value, index) => {
+                    if (typeof value === 'number') {
+                        return parseFloat(value).toFixed(4);
+                    }
+                    return value;
+                }
+            },
             axisLine: {
                 lineStyle: {
                     color: 'white'
