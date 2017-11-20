@@ -27,3 +27,4 @@ public/packs-test
 \.idea/
 
 tmp/
+public/assets
