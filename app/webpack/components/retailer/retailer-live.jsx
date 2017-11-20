@@ -5,6 +5,7 @@ import {DuringCountDown} from '../shared/during-countdown';
 import LiveHomePage from './live-dashboard/home';
 import {createWebsocket, getAuction, getAuctionTimeRule} from '../../javascripts/componentService/common/service';
 import moment from 'moment';
+import {getLoginUserId} from '../../javascripts/componentService/util';
 
 const ACTUAL_END_TIME = 'actual_end_time';
 const ACTUAL_CURRENT_TIME = 'current_time';
@@ -149,16 +150,17 @@ const calTwoTimeSpace = (start, nowSeq) => {
 }
 
 const runes = () => {
-    getAuction().then(auction => {
-        getAuctionTimeRule(auction.id).then(res => {
-            renderRoot(auction, res);
+    if (Number(getLoginUserId()) > 0) {
+        getAuction().then(auction => {
+            getAuctionTimeRule(auction.id).then(res => {
+                renderRoot(auction, res);
+            }, error => {
+                renderRoot(auction);
+            })
         }, error => {
-            renderRoot(auction);
+            renderRoot();
         })
-    }, error => {
-        renderRoot();
-    })
-
+    }
 }
 
 const renderRoot = (auction = null, rule = null) => {
