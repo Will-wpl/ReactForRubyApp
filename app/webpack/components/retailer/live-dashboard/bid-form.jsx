@@ -9,7 +9,8 @@ export default class BidForm extends Component {
             changed: true,
             samePrice: false,
             thisStatus: false,
-            status: [true, true, true, true, true, true]
+            status: [true, true, true, true, true, true],
+            answered: true
         }
     }
 
@@ -31,7 +32,7 @@ export default class BidForm extends Component {
             this.setState({
                 configs: JSON.parse(JSON.stringify(this.compareConfigs)), status: this.state.status.map(element => {
                     return true;
-                })
+                }), answered: true
             });
         }
     }
@@ -115,13 +116,13 @@ export default class BidForm extends Component {
         })
         if (allow && isChanged) {
             if (this.props.onSubmit) {
-
                 let params = this.state.configs.map(element => {
                     return element;
                 });
                 params.splice(2, 2, "0", "0");
                 // console.log(this.state.configs, params);
                 this.props.onSubmit(params);
+                this.setState({answered: false})
             }
             this.setState({
                 samePrice: false
@@ -223,8 +224,8 @@ export default class BidForm extends Component {
                         </tbody>
                     </table>
                     {illegal}
-                    <button type="button" className="lm--button lm--button--primary u-mt2 fright"
-                            onClick={this.onSubmit.bind(this)}>Submit
+                    <button type="button" className="lm--button lm--button--primary u-mt2 fright" disabled={this.state.answered ? false : 'disabled'}
+                            onClick={this.onSubmit.bind(this)}>{!this.state.answered ? 'Processing...' : 'Submit'}
                     </button>
                     {error_html}
                 </form>
