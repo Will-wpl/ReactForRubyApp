@@ -7,7 +7,7 @@ export default class Description extends Component {
         return (
             <div className="user_form u-grid">
                 <div className="col-sm-6 col-md-6">
-                    <img src={char} alt="rankinglogo" width="100" />
+                    <img src={char} alt="rankinglogo" width="98" />
                 </div>
                 <div className="col-sm-6 col-md-6">
                     <div className="u-grid user_info">
