@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
+import {DuringCountDown} from '../../shared/during-countdown';
 import Description from './description';
 import Ranking from '../../common/chart/ranking';
 import BidForm from './bid-form';
@@ -13,7 +13,7 @@ export default class LiveHomePage extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {ranking: '', priceConfig: [], histories: [], chartDatas: []};
+        this.state = {extendVisible: false, ranking: '', priceConfig: [], histories: [], chartDatas: []};
     }
 
     componentDidMount() {
@@ -26,6 +26,12 @@ export default class LiveHomePage extends Component {
         });
     }
 
+    componentWillUnmount() {
+        if (this.ws) {
+            this.ws.stopConnect();
+        }
+    }
+
     createSocket() {
         if (!this.ws) {
             this.ws = createWebsocket(1);
@@ -36,14 +42,15 @@ export default class LiveHomePage extends Component {
                 console.log('---message client disconnected ----')
             }).onReceivedData(data => {
                 console.log('---message client received data ---', data);
-                if (data && data.action && data.action === ACTION_COMMANDS.SET_BID) {
-                    let curUserId = Number(getLoginUserId());
-                    let last = data.data.find(element => {
-                        return Number(element.user_id) === curUserId;
-                    });
-                    if (last) {
-                        // console.log('last ========',last);
-                        // if (last.is_bidder) {
+                if (data && data.action) {
+                    if (data.action === ACTION_COMMANDS.SET_BID) {
+                        let curUserId = Number(getLoginUserId());
+                        let last = data.data.find(element => {
+                            return Number(element.user_id) === curUserId;
+                        });
+                        if (last) {
+                            // console.log('last ========',last);
+                            // if (last.is_bidder) {
                             if (this.state.chartDatas.length === 0) {
                                 this.state.chartDatas = [].concat({id: curUserId, data: [], color: '#e5e816', template:''});
 
@@ -62,29 +69,36 @@ export default class LiveHomePage extends Component {
                             last.template_price['hts'] = `HTS(P):$${parseFloat(last.hts_peak).toFixed(4)} HTS(OP):$${parseFloat(last.hts_off_peak).toFixed(4)}`;
                             last.template_price['htl'] = `HTL(P):$${parseFloat(last.htl_peak).toFixed(4)} HTL(OP):$${parseFloat(last.htl_off_peak).toFixed(4)}`;
                             this.state.chartDatas[0].data = this.state.chartDatas[0].data.concat(last)
-                        // }
-                        let element = JSON.parse(JSON.stringify(last));
-                        element.bid_time = moment(element.bid_time).format('HH:mm:ss');
-                        element.lt_peak = parseFloat(element.lt_peak).toFixed(4);
-                        element.lt_off_peak = parseFloat(element.lt_off_peak).toFixed(4);
-                        element.hts_peak = parseFloat(element.hts_peak).toFixed(4);
-                        element.hts_off_peak = parseFloat(element.hts_off_peak).toFixed(4);
-                        element.htl_peak = parseFloat(element.htl_peak).toFixed(4);
-                        element.htl_off_peak = parseFloat(element.htl_off_peak).toFixed(4);
-                        //console.log('is_bidder', curUserId, last, last.is_bidder);
-                        //alert(last.is_bidder);
-                        this.setState({
-                            ranking: last.ranking,
-                            priceConfig: last.is_bidder ? [].concat(last.lt_off_peak)
-                                .concat(last.lt_peak).concat(last.hts_off_peak)
-                                .concat(last.hts_peak).concat(last.htl_off_peak)
-                                .concat(last.htl_peak) : [],//this.state.priceConfig
-                            histories: last.is_bidder ? this.state.histories.concat(element): this.state.histories,
-                            chartDatas: this.state.chartDatas
-                        })
+                            // }
+                            let element = JSON.parse(JSON.stringify(last));
+                            element.bid_time = moment(element.bid_time).format('HH:mm:ss');
+                            element.lt_peak = parseFloat(element.lt_peak).toFixed(4);
+                            element.lt_off_peak = parseFloat(element.lt_off_peak).toFixed(4);
+                            element.hts_peak = parseFloat(element.hts_peak).toFixed(4);
+                            element.hts_off_peak = parseFloat(element.hts_off_peak).toFixed(4);
+                            element.htl_peak = parseFloat(element.htl_peak).toFixed(4);
+                            element.htl_off_peak = parseFloat(element.htl_off_peak).toFixed(4);
+
+                            this.setState({
+                                ranking: last.ranking,
+                                priceConfig: last.is_bidder ? [].concat(last.lt_off_peak)
+                                    .concat(last.lt_peak).concat(last.hts_off_peak)
+                                    .concat(last.hts_peak).concat(last.htl_off_peak)
+                                    .concat(last.htl_peak) : [],//this.state.priceConfig
+                                histories: last.is_bidder ? this.state.histories.concat(element): this.state.histories,
+                                chartDatas: this.state.chartDatas
+                            })
+                        }
+                    } else if (data.action === 'extend') {
+                        this.setState({extendVisible : data.data.minutes});
+                        if (this.extendTimeout) {
+                            clearTimeout(this.extendTimeout);
+                        }
+                        this.extendTimeout = setTimeout(() => {
+                            this.setState({extendVisible : false});
+                        }, 5000);
                     }
                 }
-
             })
         }
     }
@@ -165,9 +179,18 @@ export default class LiveHomePage extends Component {
         })
     }
 
+    goToFinish() {
+        window.location.href=`/retailer/auctions/${this.props.auction.id}/finish`;
+    }
+
     render() {
         return (
             <div>
+                <DuringCountDown auction={this.props.auction} countDownOver={this.goToFinish.bind(this)}>
+                    <div id="retailer_hold" className={this.state.extendVisible ? '' : 'live_hide'}>
+                        <b>Admin has extended auction duration by {this.state.extendVisible} minuties</b>
+                    </div>
+                </DuringCountDown>
                 <div className="u-grid u-mt2">
                     <div className="col-sm-12 col-md-5 u-cell">
                         <div className="col-sm-12 col-md-10 push-md-1"><Description ranking={`${this.state.ranking === 2 ? 'TOP ' : ''}${getNumBref(this.state.ranking)}`}/></div>
