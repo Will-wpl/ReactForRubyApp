@@ -23,6 +23,7 @@ export default class BidForm extends Component {
     componentWillReceiveProps(nextProps) {
         console.log('newest config', nextProps.data);
         //alert('newest config', nextProps.data);
+        //alert(nextProps.data.length);
         if (nextProps.data.length > 0) {
             this.compareConfigs = nextProps.data.map(element => {
                 return parseFloat(element).toFixed(4).substring(2);
@@ -35,7 +36,7 @@ export default class BidForm extends Component {
         }
     }
     componentWillUnmount() {
-        clearInterval(this.configTime);
+        //clearInterval(this.configTime);
     }
     componentDidMount() {
         // this.configTime = setTimeout(()=>{
