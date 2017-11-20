@@ -77,7 +77,7 @@ export default class LiveHomePage extends Component {
                             priceConfig: last.is_bidder ? [].concat(last.lt_off_peak)
                                 .concat(last.lt_peak).concat(last.hts_off_peak)
                                 .concat(last.hts_peak).concat(last.htl_off_peak)
-                                .concat(last.htl_peak) : this.state.priceConfig,
+                                .concat(last.htl_peak) : [],//this.state.priceConfig
                             histories: last.is_bidder ? this.state.histories.concat(element): this.state.histories,
                             chartDatas: this.state.chartDatas
                         })
