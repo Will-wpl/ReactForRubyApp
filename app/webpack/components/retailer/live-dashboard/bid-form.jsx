@@ -15,14 +15,14 @@ export default class BidForm extends Component {
     }
 
     initConfigs(configs) {
-        console.log('initial config', configs);
+        // console.log('initial config', configs);
         this.compareConfigs = configs.map(element => {
             return parseFloat(element).toFixed(4).substring(2);
         });
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('newest config', nextProps.data);
+        // console.log('newest config', nextProps.data);
         //alert('newest config', nextProps.data);
         //alert(nextProps.data.length);
         if (nextProps.data.length > 0) {
@@ -52,7 +52,7 @@ export default class BidForm extends Component {
         let target = this.compareConfigs.find((element, index) => {
             return index === i;
         });
-        console.log(Number(formatNum), formatNum, target);
+        // console.log(Number(formatNum), formatNum, target);
         let status = this.state.status;
         if (formatNum === '' || Number(`0.${formatNum}`) <= Number(`0.${target}`)) {
             status[i] = true;
