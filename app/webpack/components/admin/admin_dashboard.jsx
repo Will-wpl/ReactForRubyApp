@@ -28,7 +28,7 @@ export class AdminDashboard extends Component {
             this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000'
             this.forceUpdate(); // only once no need to use state
 
-            this.createWebsocket(auction? auction.id : 1);
+
             getHistories({ auction_id: auction? auction.id : 1}).then(histories => {
                 // console.log('histories', histories, isEmptyJsonObj(histories));
                 if (!isEmptyJsonObj(histories)) {
@@ -65,11 +65,13 @@ export class AdminDashboard extends Component {
                      } catch (error) {
                          console.log(error);
                      }
-                    console.log('realtimeData======>', histories)
+                    console.log('history======>', histories)
                     this.setState({realtimeData: histories, realtimeRanking: orderRanking
                         , currentPrice : orderRanking.length > 0 ? orderRanking[0].average_price : this.state.currentPrice});
                 }
-
+                this.createWebsocket(auction? auction.id : 1);
+            }, error => {
+                this.createWebsocket(auction? auction.id : 1);
             })
         })
         getArrangements(ACCEPT_STATUS.ACCEPT).then(res => {
@@ -95,12 +97,13 @@ export class AdminDashboard extends Component {
         }).onReceivedData(data => {
             //console.log('---message client received data ---', data);
             if (data.action === 'set_bid') {
+                console.log('---message client received set_bid data ---', data);
                 if (data.data.length > 0) {
                     let histories = [];
                     data.data.forEach((element, index) => {
                         histories.push({id: element.user_id, data:[].concat(element)})
                     })
-                    //console.log('data.data[0].average_price', data.data[0].average_price);
+                    console.log('realtime ===> ', histories);
                     this.setState({realtimeData: histories, realtimeRanking: data.data
                         , currentPrice : data.data[0].average_price});
                 }
