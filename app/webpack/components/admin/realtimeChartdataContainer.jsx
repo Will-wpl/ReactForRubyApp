@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {getStandardNumBref} from '../../javascripts/componentService/util';
+import moment from 'moment';
 
 export default class ChartRealtimeHoc extends Component {
     constructor(props) {
@@ -14,18 +15,24 @@ export default class ChartRealtimeHoc extends Component {
         if (this.list.length === 0) {
             this.list = this.list.concat(next.dataStore);
         } else {
+            // let dataCopy = JSON.parse(JSON.stringify(next.dataStore));
             next.dataStore.forEach(newData => {
                 let result = this.list.find(oldData => {
                     return oldData.id === newData.id;
                 })
                 if (result) {
-                    result.data = result.data.concat(newData.data);
-                    // console.log('chart find ====>', result, 'connect new data ===>', newData)
-                    // if (newData.flag !== result.flag && newData.bid_time !== result.bid_time) {
-                    //     result.data = result.data.concat(newData.data);
-                    // } else {
-                    //     console.error('chart find error ====>', result, 'connect new data ===>', newData)
-                    // }
+                    // result.data = result.data.concat(newData.data);
+                    // console.error('result ====>', result.id, newData.id)
+                    if (result.data.length > 0 && newData.data.length > 0) {
+                        let oldLast = result.data[result.data.length - 1];
+                        let newLast = newData.data[newData.data.length - 1];
+                        // console.error('oldLast, newLast ====>', oldLast, newLast)
+                        if (oldLast.flag !== newLast.flag && moment(newLast.bid_time) > moment(oldLast.bid_time)) {
+                            result.data = result.data.concat(newData.data);
+                        } else {
+                            // console.error('chart append error ====>', result, 'connect new data ===>', newData)
+                        }
+                    }
 
                 }
             })
