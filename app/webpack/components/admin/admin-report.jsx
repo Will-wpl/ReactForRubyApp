@@ -16,16 +16,12 @@ export class AdminReport extends Component {
     constructor(props){
         super(props);
         this.state = {
-            users:[], histories:[], ranking:[], currentPrice:'0.0000',
+            users:[], histories:[], ranking:[],
             winner:{
                 data:{},
                 auction:{}
             }
         };
-        // this.winner = {
-        //     data:{},
-        //     auction:{}
-        // }
     }
 
     componentDidMount() {
@@ -37,21 +33,38 @@ export class AdminReport extends Component {
             this.duration = parseInt((moment(auction.actual_end_time) - moment(auction.actual_begin_time))/1000/60);
             this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000';
             this.actualPrice = '0.0000';
-            getHistoriesLast({ auction_id: auction? auction.id : 1}).then(data => {
+            const auctionId = auction? auction.id : 1;
+            getHistoriesLast({ auction_id: auctionId}).then(data => {
                 //console.log('histories', data);
-                this.setState({
-                    winner:{
-                        data:data.result,
-                        auction:data.auction
-                    },
-                    ranking:data.histories
-                })
+                // this.setState({
+                //     winner:{
+                //         data:data.result,
+                //         auction:data.auction
+                //     },
+                //     ranking:data.histories
+                // })
                 this.actualPrice = data.histories.length > 0 ? data.histories[0].average_price : '0.0000';
+                getHistories({ auction_id: auctionId}).then(histories => {
+                    this.setState({
+                        histories: histories,
+                        winner:{
+                            data:data.result,
+                            auction:data.auction
+                        },
+                        ranking:data.histories
+                    });
+                }, error => {
+                    this.forceUpdate();
+                })
+            }, error => {
+                getHistories({ auction_id: auctionId}).then(histories => {
+                    this.setState({histories: histories});
+                })
             })
-            getHistories({ auction_id: auction? auction.id : 1}).then(histories => {
-                // console.log('histories', histories);
-                this.setState({histories: histories});
-            })
+            // getHistories({ auction_id: auction? auction.id : 1}).then(histories => {
+            //     // console.log('histories', histories);
+            //     this.setState({histories: histories});
+            // })
         })
         getArrangements(ACCEPT_STATUS.ACCEPT).then(res => {
             let limit = findUpLimit(res.length);
