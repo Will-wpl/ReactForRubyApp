@@ -25,12 +25,12 @@ export class RetailerLive extends Component {
                 if (!this.props.rule[HOLD_STATUS]) {
                     let beforeStartSpace = calTwoTimeSpace(this.props.rule[ACTUAL_BEGIN_TIME], this.props.rule[ACTUAL_CURRENT_TIME]);
                     if (beforeStartSpace > 0) {
-                        console.log('not start yet');
+                        // console.log('not start yet');
                         this.setState({showLive: false});
                     } else {
                         let alreadyStartSpace = calTwoTimeSpace(this.props.rule[ACTUAL_END_TIME], this.props.rule[ACTUAL_CURRENT_TIME]);
                         if (alreadyStartSpace <= 0) {
-                            console.log('already completed')
+                            // console.log('already completed')
                             this.goToFinish();
                         } else {
                             this.setState({showLive: true});
@@ -87,7 +87,7 @@ export class RetailerLive extends Component {
     }
 
     render() {
-        console.log('this.props', this.props);
+        // console.log('this.props', this.props);
         let content;
         if (this.props.auction) {
             if (this.state.hasOwnProperty('showLive')) {

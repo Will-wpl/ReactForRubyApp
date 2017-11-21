@@ -10,7 +10,7 @@ export const get = (path, params = {}) => {
                 resolve(data);
             },
             error: (data) => {
-                console.log('fail to get');
+                // console.log('fail to get');
                 reject(data);
             },
             dataType: 'json'
@@ -27,11 +27,11 @@ export const create = (path, body) => {
             url: path,
             data: body,
             success: (data) => {
-                console.log('post successfully');
+                // console.log('post successfully');
                 resolve(data);
             },
             error: (data) => {
-                console.log('fail to post');
+                // console.log('fail to post');
                 reject(data);
             }
         });
@@ -48,11 +48,11 @@ export const update = (path, body, method = 'PATCH') => {
             url: path,
             data: body,
             success: (data) => {
-                console.log('update successfully');
+                // console.log('update successfully');
                 resolve(data);
             },
             error: (data) => {
-                console.log('fail to update');
+                // console.log('fail to update');
                 reject(data);
             }
         });
@@ -70,11 +70,11 @@ export const put = (path, body, method = 'PUT') => {
             url: path,
             data: body,
             success: (data) => {
-                console.log('update successfully');
+                // console.log('update successfully');
                 resolve(data);
             },
             error: (data) => {
-                console.log('fail to update');
+                // console.log('fail to update');
                 reject(data);
             }
         });
@@ -87,21 +87,21 @@ const cable = ActionCable.createConsumer();
 // ActionCable.startDebugging();
 export const createWS = (auction, methods = {}) => {
     let user = getLoginUserId();
-    console.log(auction, cable);
+    // console.log(auction, cable);
     let handler = cable.subscriptions.create({
         channel: 'AuctionChannel',
         auction_id: auction.toString(),
         user_id:user.toString()
     }, {
         connected() {
-            console.log('---message client connected ---');
+            // console.log('---message client connected ---');
             handler.perform('check_in', {user_id: user});
         },
         disconnected() {
 
         },
         received(data) {
-            console.log('---message client received data ---', data);
+            // console.log('---message client received data ---', data);
         }
     });
     return handler;
@@ -187,7 +187,7 @@ export const Ws = class {
     }
 
     sendMessage(action, data) {
-        console.log('send', data);
+        // console.log('send', data);
         if (!this.connected) {
             cable.connection.reopen();
             this.cache.push({action,data})
