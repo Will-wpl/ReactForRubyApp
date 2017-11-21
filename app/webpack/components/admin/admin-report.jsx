@@ -35,14 +35,6 @@ export class AdminReport extends Component {
             this.actualPrice = '0.0000';
             const auctionId = auction? auction.id : 1;
             getHistoriesLast({ auction_id: auctionId}).then(data => {
-                //console.log('histories', data);
-                // this.setState({
-                //     winner:{
-                //         data:data.result,
-                //         auction:data.auction
-                //     },
-                //     ranking:data.histories
-                // })
                 this.actualPrice = data.histories.length > 0 ? data.histories[0].average_price : '0.0000';
                 getHistories({ auction_id: auctionId}).then(histories => {
                     this.setState({
