@@ -1,23 +1,23 @@
 require 'rails_helper'
 
 RSpec.describe Api::AuctionsController, type: :controller do
-  before {sign_in create(:user, :with_admin)}
+  before { sign_in create(:user, :with_admin) }
 
-  describe "#obtain" do
+  describe '#obtain' do
     def do_request
-      post :create, params: {auction: params}
+      post :create, params: { auction: params }
     end
 
     context 'not auction' do
       it 'success' do
         get :obtain
-        expect(response.body).to  eq('null')
+        expect(response.body).to eq('null')
         expect(response).to have_http_status(:ok)
       end
     end
 
     context 'got auctions list' do
-      let(:params) {attributes_for(:auction)}
+      let(:params) { attributes_for(:auction) }
 
       before { do_request }
 
@@ -28,10 +28,10 @@ RSpec.describe Api::AuctionsController, type: :controller do
       end
     end
 
-    it "got an auction" do
+    it 'got an auction' do
       get :obtain
 
-      expect(response.content_type).to eq("application/json")
+      expect(response.content_type).to eq('application/json')
       expect(response).to have_http_status(:ok)
     end
   end
@@ -46,7 +46,7 @@ RSpec.describe Api::AuctionsController, type: :controller do
   #   end
   # end
 
-  describe "#create" do
+  describe '#create' do
     def do_request
       post :create, params: { auction: params }
     end
@@ -72,5 +72,4 @@ RSpec.describe Api::AuctionsController, type: :controller do
   #     it { expect(Auction.last.name).to match '-modified' }
   #   end
   # end
-
 end

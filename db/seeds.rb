@@ -1,4 +1,3 @@
-require 'date'
 if User.count == 0
   @admin = User.create(name: 'admin',
                        email: 'admin@example.com',

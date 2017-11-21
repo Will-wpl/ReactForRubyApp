@@ -4,8 +4,7 @@ class AuctionChannel < ApplicationCable::Channel
     stream_from "auction_#{params[:auction_id]}"
   end
 
-  def unsubscribed
-  end
+  def unsubscribed; end
 
   def extend_time(data)
     auction = Auction.find(params[:auction_id])
@@ -21,10 +20,9 @@ class AuctionChannel < ApplicationCable::Channel
       if auction.update(actual_end_time: auction_extend_time.actual_end_time)
 
         AuctionEvent.set_events(params[:user_id], auction.id, 'extend_time', auction_extend_time.to_json)
-        ActionCable.server.broadcast "auction_#{params[:auction_id]}", {action: 'extend', data: {minutes: extend_time}}
+        ActionCable.server.broadcast "auction_#{params[:auction_id]}", action: 'extend', data: { minutes: extend_time }
       end
     end
-
   end
 
   def set_bid(data)
@@ -47,11 +45,10 @@ class AuctionChannel < ApplicationCable::Channel
     calculate_dto.user_id = params[:user_id]
     calculate_dto.auction_id = params[:auction_id]
 
-    ActionCable.server.broadcast "auction_#{params[:auction_id]}", {data: set_price(calculate_dto), action: 'set_bid'}
+    ActionCable.server.broadcast "auction_#{params[:auction_id]}", data: set_price(calculate_dto), action: 'set_bid'
   end
 
   private
-
 
   def set_price(calculate_dto)
     total_award_sum = AuctionHistory.set_total_award_sum(calculate_dto.total_lt_peak, calculate_dto.total_lt_off_peak,
@@ -61,9 +58,10 @@ class AuctionChannel < ApplicationCable::Channel
                                                          calculate_dto.hts_peak, calculate_dto.hts_off_peak,
                                                          calculate_dto.htl_peak, calculate_dto.htl_off_peak)
     total_volume = Auction.set_total_volume(
-        calculate_dto.total_lt_peak, calculate_dto.total_lt_off_peak,
-        calculate_dto.total_hts_peak, calculate_dto.total_hts_off_peak,
-        calculate_dto.total_htl_peak, calculate_dto.total_htl_off_peak)
+      calculate_dto.total_lt_peak, calculate_dto.total_lt_off_peak,
+      calculate_dto.total_hts_peak, calculate_dto.total_hts_off_peak,
+      calculate_dto.total_htl_peak, calculate_dto.total_htl_off_peak
+    )
 
     average_price = AuctionHistory.set_average_price(total_award_sum, total_volume)
 
