@@ -44,8 +44,8 @@ export class AdminDashboard extends Component {
                              } else if (ar > br) {
                                  return 1;
                              } else {
-                                 const at = moment(a.bid_time);
-                                 const bt = moment(b.bid_time);
+                                 const at = moment(a.actual_bid_time);
+                                 const bt = moment(b.actual_bid_time);
                                  if (at < bt) {
                                      return -1;
                                  } else if (at > bt) {
@@ -57,7 +57,7 @@ export class AdminDashboard extends Component {
                              // return Number(a.average_price) > Number(b.average_price)
                          })
                      } catch (error) {
-
+                         console.log(error);
                      }
                     this.setState({realtimeData: histories, realtimeRanking: orderRanking
                         , currentPrice : orderRanking.length > 0 ? orderRanking[0].average_price : this.state.currentPrice});
