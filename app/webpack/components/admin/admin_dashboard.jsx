@@ -32,9 +32,15 @@ export class AdminDashboard extends Component {
             getHistories({ auction_id: auction? auction.id : 1}).then(histories => {
                 // console.log('histories', histories, isEmptyJsonObj(histories));
                 if (!isEmptyJsonObj(histories)) {
-                    let orderRanking = histories.map(element => {
-                        return element.data.length > 0 ? element.data[element.data.length - 1] : []
+                    let orderRanking = histories.filter(element => {
+                        return element.data.length > 0;
+                    }).map(element => {
+                        return element.data[element.data.length - 1];
                     })
+                    // let orderRanking = histories.map(element => {
+                    //     return element.data.length > 0 ? element.data[element.data.length - 1] : []
+                    // })
+                    console.log('orderRanking', orderRanking);
                      try {
                          orderRanking.sort((a, b) => {
                              const ar = Number(a.ranking);
@@ -59,6 +65,7 @@ export class AdminDashboard extends Component {
                      } catch (error) {
                          console.log(error);
                      }
+                    console.log('realtimeData======>', histories)
                     this.setState({realtimeData: histories, realtimeRanking: orderRanking
                         , currentPrice : orderRanking.length > 0 ? orderRanking[0].average_price : this.state.currentPrice});
                 }
