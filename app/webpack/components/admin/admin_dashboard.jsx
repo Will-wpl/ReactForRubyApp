@@ -37,7 +37,7 @@ export class AdminDashboard extends Component {
                     })
                      try {
                          orderRanking.sort((a, b) => {
-                             return parseFloat(a.average_price) > parseFloat(b.average_price)
+                             return Number(a.ranking) > Number(b.ranking)
                          })
                      } catch (error) {
 
