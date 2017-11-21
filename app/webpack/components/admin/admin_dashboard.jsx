@@ -50,10 +50,13 @@ export class AdminDashboard extends Component {
         })
         getArrangements(ACCEPT_STATUS.ACCEPT).then(res => {
             let limit = findUpLimit(res.length);
-            this.setState({users:res.map((element, index) => {
+            let users = res.map((element, index) => {
                 element['color'] = getRandomColor(index + 1, limit); //getRandomColor((index + 1) * 1.0 / limit);
                 return element;
-            })});
+            });
+            this.setState({users:users});
+            this.priceUsers.selectAll(users);
+            this.rankingUsers.selectAll(users);
         }, error => {
             //console.log(error);
         });
@@ -130,7 +133,7 @@ export class AdminDashboard extends Component {
                                 </ChartRealtimeHoc>
                             </div>
                             <div className="col-sm-2 push-md-1">
-                                <CheckboxList list={this.state.users} onCheckeds={(ids) => {this.refs.priceChart.updateIndentifications(ids)}}/>
+                                <CheckboxList list={this.state.users} ref={e => this.priceUsers = e} onCheckeds={(ids) => {this.refs.priceChart.updateIndentifications(ids)}}/>
                             </div>
                         </div>
                         <div className="u-grid u-mt2">
@@ -140,7 +143,7 @@ export class AdminDashboard extends Component {
                                 </ChartRealtimeHoc>
                             </div>
                             <div className="col-sm-2 push-md-1">
-                                <CheckboxList list={this.state.users} onCheckeds={(ids) => {this.refs.rankingChart.updateIndentifications(ids)}}/>
+                                <CheckboxList list={this.state.users} ref={e => this.rankingUsers = e} onCheckeds={(ids) => {this.refs.rankingChart.updateIndentifications(ids)}}/>
                             </div>
                         </div>
                     </div>
