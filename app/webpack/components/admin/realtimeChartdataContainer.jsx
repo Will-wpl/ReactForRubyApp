@@ -20,9 +20,17 @@ export default class ChartRealtimeHoc extends Component {
                 })
                 if (result) {
                     result.data = result.data.concat(newData.data);
+                    // console.log('chart find ====>', result, 'connect new data ===>', newData)
+                    // if (newData.flag !== result.flag && newData.bid_time !== result.bid_time) {
+                    //     result.data = result.data.concat(newData.data);
+                    // } else {
+                    //     console.error('chart find error ====>', result, 'connect new data ===>', newData)
+                    // }
+
                 }
             })
         }
+        // console.log('chart data ====>', this.list);
         this.filterData();
     }
 

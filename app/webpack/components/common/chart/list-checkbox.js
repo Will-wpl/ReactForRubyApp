@@ -9,16 +9,28 @@ export default class CheckboxList extends Component {
         this.filters = [];
     }
 
-    componentWillReceiveProps(next) {
-        if (this.filters.length === 0 && next.list) {
-            next.list.forEach(element => {
-                let id = element.user_id;
-                let color = element.color;
-                this.filters.push({id, color});
-            })
-            if (this.props.onCheckeds) {
-                this.props.onCheckeds(this.filters);
-            }
+    // componentWillReceiveProps(next) {
+    //     if (this.filters.length === 0 && next.list) {
+    //         next.list.forEach(element => {
+    //             let id = element.user_id;
+    //             let color = element.color;
+    //             this.filters.push({id, color});
+    //         })
+    //         if (this.props.onCheckeds) {
+    //             this.props.onCheckeds(this.filters);
+    //         }
+    //     }
+    // }
+
+    selectAll(list) {
+        this.filters = [];
+        list.forEach(element => {
+            let id = element.user_id;
+            let color = element.color;
+            this.filters.push({id, color});
+        })
+        if (this.props.onCheckeds) {
+            this.props.onCheckeds(this.filters);
         }
     }
 

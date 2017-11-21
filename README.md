@@ -1,6 +1,7 @@
 # README
 
 ## Setup system environment
+
 ```
 install git:
 add-apt-repository ppa:git-core/ppa
@@ -37,7 +38,7 @@ sudo apt-get install chromium-chromedriver
 # install rails external libraries
 bundle install -j4
 
-# install react of webpacker external library 
+# install react of webpacker external library
 bundle exec rails webpacker:install:react
 
 # install webpack components

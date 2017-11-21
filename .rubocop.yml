@@ -5,6 +5,8 @@ AllCops:
     - 'db/**/*'
     - 'lib/templates/**/*'
     - 'lib/generators/**/*'
+    - 'vendor/**/*'
+    - 'bin/**/*'
 
 Documentation:
   Enabled: false

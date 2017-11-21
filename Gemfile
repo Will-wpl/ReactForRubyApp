@@ -28,10 +28,10 @@ gem 'webpacker', '~> 2.0'
 ## Utilities
 gem 'breadcrumbs_on_rails'
 gem 'kaminari'
+gem 'rails_base_scaffolds', path: './vendor/rails_base_scaffolds'
 gem 'rails_utils'
 gem 'simple_form'
-gem 'simple_form_customizations', :path => "./vendor/simple-form-customizations"
-gem 'rails_base_scaffolds', :path => "./vendor/rails_base_scaffolds"
+gem 'simple_form_customizations', path: './vendor/simple-form-customizations'
 
 ## Features
 
@@ -40,8 +40,8 @@ gem 'rolify'
 
 gem 'local_time'
 
-gem 'rubocop', require: false
 gem 'foreman', require: false
+gem 'rubocop', require: false
 
 # Use Redis adapter to run Action Cable in production
 gem 'redis'

@@ -35,7 +35,7 @@ export default class WinnerPrice extends Component {
     return result+node;
   }
   render() {
-    console.log(this.props.winner);
+    //console.log(this.props.winner);
     return this.props.winner.data ? (
       this.props.winner.data.status ?
                     <div className="winnerPrice_main">

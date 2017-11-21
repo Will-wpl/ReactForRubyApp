@@ -37,13 +37,10 @@ class ApplicationController < ActionController::Base
       stored_location_for(resource) || admin_home_index_path
     elsif roleName == 'retailer'
       stored_location_for(resource) || retailer_home_index_path
-    else
-    
     end
   end
 
-  def after_sign_out_path_for(resource)
+  def after_sign_out_path_for(_resource)
     root_url
   end
-
 end

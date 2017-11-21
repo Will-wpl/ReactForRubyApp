@@ -1,4 +1,3 @@
-require 'date'
 if User.count == 0
   @admin = User.create(name: 'admin',
                        email: 'admin@example.com',
@@ -188,8 +187,8 @@ if Auction.count == 0
                  duration: nil,
                  reserve_price: nil,
                  total_volume: nil, # TBD SP provide six volumes 6_805_584,
-                 total_lt_peak: 2_468_376,
-                 total_lt_off_peak: 1_544_694,
+                 total_lt_peak: 2_468_375,
+                 total_lt_off_peak: 1_544_695,
                  total_hts_peak: 0,
                  total_hts_off_peak: 0,
                  total_htl_peak: 1_983_720,

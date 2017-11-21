@@ -28,52 +28,82 @@ export class AdminDashboard extends Component {
             this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000'
             this.forceUpdate(); // only once no need to use state
 
-            this.createWebsocket(auction? auction.id : 1);
+
             getHistories({ auction_id: auction? auction.id : 1}).then(histories => {
                 // console.log('histories', histories, isEmptyJsonObj(histories));
                 if (!isEmptyJsonObj(histories)) {
-                    let orderRanking = histories.map(element => {
-                        return element.data.length > 0 ? element.data[element.data.length - 1] : []
+                    let orderRanking = histories.filter(element => {
+                        return element.data.length > 0;
+                    }).map(element => {
+                        return element.data[element.data.length - 1];
                     })
+                    // let orderRanking = histories.map(element => {
+                    //     return element.data.length > 0 ? element.data[element.data.length - 1] : []
+                    // })
+                    console.log('orderRanking', orderRanking);
                      try {
                          orderRanking.sort((a, b) => {
-                             return parseFloat(a.average_price) > parseFloat(b.average_price)
+                             const ar = Number(a.ranking);
+                             const br = Number(b.ranking);
+                             if (ar < br) {
+                                 return -1;
+                             } else if (ar > br) {
+                                 return 1;
+                             } else {
+                                 const at = moment(a.actual_bid_time);
+                                 const bt = moment(b.actual_bid_time);
+                                 if (at < bt) {
+                                     return -1;
+                                 } else if (at > bt) {
+                                     return 1;
+                                 } else {
+                                     return 0;
+                                 }
+                             }
+                             // return Number(a.average_price) > Number(b.average_price)
                          })
                      } catch (error) {
-
+                         console.log(error);
                      }
+                    console.log('history======>', histories)
                     this.setState({realtimeData: histories, realtimeRanking: orderRanking
                         , currentPrice : orderRanking.length > 0 ? orderRanking[0].average_price : this.state.currentPrice});
                 }
-
+                this.createWebsocket(auction? auction.id : 1);
+            }, error => {
+                this.createWebsocket(auction? auction.id : 1);
             })
         })
         getArrangements(ACCEPT_STATUS.ACCEPT).then(res => {
             let limit = findUpLimit(res.length);
-            this.setState({users:res.map((element, index) => {
+            let users = res.map((element, index) => {
                 element['color'] = getRandomColor(index + 1, limit); //getRandomColor((index + 1) * 1.0 / limit);
                 return element;
-            })});
+            });
+            this.setState({users:users});
+            this.priceUsers.selectAll(users);
+            this.rankingUsers.selectAll(users);
         }, error => {
-            console.log(error);
+            //console.log(error);
         });
     }
 
     createWebsocket(auction) {
         this.ws = createWebsocket(auction);
         this.ws.onConnected(() => {
-            console.log('---message client connected ---');
+            //console.log('---message client connected ---');
         }).onDisconnected(() => {
-            console.log('---message client disconnected ----')
+            //console.log('---message client disconnected ----')
         }).onReceivedData(data => {
-            console.log('---message client received data ---', data);
+            //console.log('---message client received data ---', data);
             if (data.action === 'set_bid') {
+                console.log('---message client received set_bid data ---', data);
                 if (data.data.length > 0) {
                     let histories = [];
                     data.data.forEach((element, index) => {
                         histories.push({id: element.user_id, data:[].concat(element)})
                     })
-                    console.log('data.data[0].average_price', data.data[0].average_price);
+                    console.log('realtime ===> ', histories);
                     this.setState({realtimeData: histories, realtimeRanking: data.data
                         , currentPrice : data.data[0].average_price});
                 }
@@ -130,7 +160,7 @@ export class AdminDashboard extends Component {
                                 </ChartRealtimeHoc>
                             </div>
                             <div className="col-sm-2 push-md-1">
-                                <CheckboxList list={this.state.users} onCheckeds={(ids) => {this.refs.priceChart.updateIndentifications(ids)}}/>
+                                <CheckboxList list={this.state.users} ref={e => this.priceUsers = e} onCheckeds={(ids) => {this.refs.priceChart.updateIndentifications(ids)}}/>
                             </div>
                         </div>
                         <div className="u-grid u-mt2">
@@ -140,7 +170,7 @@ export class AdminDashboard extends Component {
                                 </ChartRealtimeHoc>
                             </div>
                             <div className="col-sm-2 push-md-1">
-                                <CheckboxList list={this.state.users} onCheckeds={(ids) => {this.refs.rankingChart.updateIndentifications(ids)}}/>
+                                <CheckboxList list={this.state.users} ref={e => this.rankingUsers = e} onCheckeds={(ids) => {this.refs.rankingChart.updateIndentifications(ids)}}/>
                             </div>
                         </div>
                     </div>

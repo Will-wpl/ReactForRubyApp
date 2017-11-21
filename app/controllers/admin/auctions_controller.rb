@@ -1,6 +1,6 @@
 class Admin::AuctionsController < Admin::BaseController
-  before_action :set_auction, only: [:show, :edit, :update, :destroy, :publish]
-  after_action :set_login_status, only: [:new, :empty, :upcoming, :online, :dashboard, :confirm, :result, :report, :log]
+  before_action :set_auction, only: %i[show edit update destroy publish]
+  after_action :set_login_status, only: %i[new empty upcoming online dashboard confirm result report log]
   # before_action :set_auctions_breadcrumbs
   # before_action :set_action_breadcrumbs
 
@@ -54,7 +54,6 @@ class Admin::AuctionsController < Admin::BaseController
     end
   end
 
-
   private
 
   def set_auction
@@ -68,5 +67,4 @@ class Admin::AuctionsController < Admin::BaseController
   def model_params
     params.require(:auction).permit(:name, :start_datetime, :contract_period_start_date, :contract_period_end_date, :duration, :reserve_price)
   end
-
 end

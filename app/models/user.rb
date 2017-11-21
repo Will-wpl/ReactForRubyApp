@@ -17,7 +17,7 @@ class User < ApplicationRecord
   # has_and_belongs_to_many :roles, join_table: :users_roles
   has_one :user_extension
   has_many :arrangements
-  has_many :auctions, :through => :arrangements
+  has_many :auctions, through: :arrangements
 
   # accepts_nested_attributes
 
@@ -33,5 +33,4 @@ class User < ApplicationRecord
   # Custom
 
   # Methods (class methods before instance methods)
-
 end

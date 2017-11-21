@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171110024401) do
+ActiveRecord::Schema.define(version: 20171121063623) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -83,6 +83,7 @@ ActiveRecord::Schema.define(version: 20171110024401) do
     t.integer "ranking"
     t.boolean "is_bidder"
     t.string "flag"
+    t.datetime "actual_bid_time"
     t.index ["auction_id"], name: "index_auction_histories_on_auction_id"
     t.index ["user_id"], name: "index_auction_histories_on_user_id"
   end

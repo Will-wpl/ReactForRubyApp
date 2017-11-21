@@ -150,6 +150,20 @@ export class CreateNewRA extends Component {
         this.setState({
             start_datetime:data
         })
+        // if(this.state.startDate != ''){
+        //     if((data-this.state.startDate) >= 0){
+        //                 this.setState({
+        //                     startDate:data
+        //                 })
+        //             }
+        // }
+        // if(this.state.endDate != ''){
+        //     if((data-this.state.endDate) >= 0){
+        //                 this.setState({
+        //                     endDate:data
+        //                 })
+        //             }
+        // }        
     }
     auctionCreate(type,e){
         this.setState({
@@ -239,7 +253,7 @@ export class CreateNewRA extends Component {
                 //     window.location.href="http://localhost:3000/admin/home"
                 // },3000);
             }, error => {
-                console.log(error);
+                //console.log(error);
             })
     }
     checkSuccess(event,obj){
@@ -260,7 +274,7 @@ export class CreateNewRA extends Component {
                             }
                             
                         }, error => {
-                            console.log(error);
+                            //console.log(error);
                         })
             if(this.props.left_name){
                 this.setState({
@@ -287,10 +301,10 @@ export class CreateNewRA extends Component {
                         //      window.location.href="/admin/home"
                         //  },5000);
                     }, error => {
-                        console.log(error);
+                        //console.log(error);
                     })
             }, error => {
-                console.log(error);
+                //console.log(error);
             })
         }
     }
