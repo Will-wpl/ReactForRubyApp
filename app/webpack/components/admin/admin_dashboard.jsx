@@ -100,7 +100,7 @@ export class AdminDashboard extends Component {
                     data.data.forEach((element, index) => {
                         histories.push({id: element.user_id, data:[].concat(element)})
                     })
-                    //console.log('data.data[0].average_price', data.data[0].average_price);
+                    console.log('bid realtime ===> ', histories);
                     this.setState({realtimeData: histories, realtimeRanking: data.data
                         , currentPrice : data.data[0].average_price});
                 }
