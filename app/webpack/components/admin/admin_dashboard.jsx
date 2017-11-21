@@ -37,14 +37,22 @@ export class AdminDashboard extends Component {
                     })
                      try {
                          orderRanking.sort((a, b) => {
-                             const ap = Number(a.average_price);
-                             const bp = Number(b.average_price);
-                             if (ap < bp) {
+                             const ar = Number(a.ranking);
+                             const br = Number(b.ranking);
+                             if (ar < br) {
                                  return -1;
-                             } else if (ap > bp) {
+                             } else if (ar > br) {
                                  return 1;
                              } else {
-                                 return 0;
+                                 const at = moment(a.bid_time);
+                                 const bt = moment(b.bid_time);
+                                 if (at < bt) {
+                                     return -1;
+                                 } else if (at > bt) {
+                                     return 1;
+                                 } else {
+                                     return 0;
+                                 }
                              }
                              // return Number(a.average_price) > Number(b.average_price)
                          })
