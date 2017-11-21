@@ -7,7 +7,7 @@ class Api::AuctionHistoriesController < Api::BaseController
 
   # get all users history list by auction_id
   def list
-    @histories = AuctionHistory.select('users.name, users.company_name, auction_histories.*').joins(:user).where('auction_id = ?', params[:auction_id]).order(bid_time: :asc)
+    @histories = AuctionHistory.select('users.name, users.company_name, auction_histories.*').joins(:user).where('auction_id = ?', params[:auction_id]).order(id: :asc)
     # @users = Auction.find(params[:auction_id]).users
     @arrangements = Arrangement.where("auction_id = ? and accept_status = '1'", params[:auction_id])
     hash = {}
