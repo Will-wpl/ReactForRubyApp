@@ -19,6 +19,7 @@ export default class ChartRealtimeHoc extends Component {
                     return oldData.id === newData.id;
                 })
                 if (result) {
+                    console.log('chart find ====>', result, 'connect new data ===>', newData.data)
                     result.data = result.data.concat(newData.data);
                 }
             })
