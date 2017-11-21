@@ -253,7 +253,10 @@ export class CreateNewRA extends Component {
                 //     window.location.href="http://localhost:3000/admin/home"
                 // },3000);
             }, error => {
-                //console.log(error);
+                this.setState({
+                    text:'Request exception,Delete failed!'
+                });
+                this.refs.Modal.showModal();
             })
     }
     checkSuccess(event,obj){
@@ -274,6 +277,10 @@ export class CreateNewRA extends Component {
                             }
                             
                         }, error => {
+                            this.setState({
+                                text:'Request exception,Save failed!'
+                            });
+                            this.refs.Modal.showModal();
                             //console.log(error);
                         })
             if(this.props.left_name){
@@ -301,10 +308,16 @@ export class CreateNewRA extends Component {
                         //      window.location.href="/admin/home"
                         //  },5000);
                     }, error => {
-                        //console.log(error);
+                        this.setState({
+                            text:'Request exception,Publish failed!'
+                        });
+                        this.refs.Modal.showModal();
                     })
             }, error => {
-                //console.log(error);
+                this.setState({
+                    text:'Request exception,Save failed!'
+                });
+                this.refs.Modal.showModal();
             })
         }
     }

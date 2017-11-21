@@ -40,7 +40,7 @@ export class AdminDashboard extends Component {
                     // let orderRanking = histories.map(element => {
                     //     return element.data.length > 0 ? element.data[element.data.length - 1] : []
                     // })
-                    console.log('orderRanking', orderRanking);
+                    // console.log('orderRanking', orderRanking);
                      try {
                          orderRanking.sort((a, b) => {
                              const ar = Number(a.ranking);
@@ -65,9 +65,11 @@ export class AdminDashboard extends Component {
                      } catch (error) {
                          console.log(error);
                      }
-                    console.log('history======>', histories)
+                    // console.log('history======>', histories)
                     this.setState({realtimeData: histories, realtimeRanking: orderRanking
                         , currentPrice : orderRanking.length > 0 ? orderRanking[0].average_price : this.state.currentPrice});
+                    // this.refs.priceChart.setChartData(histories, 'price');
+                    // this.refs.rankingChart.setChartData(histories, 'ranking');
                 }
                 this.createWebsocket(auction? auction.id : 1);
             }, error => {
@@ -97,15 +99,16 @@ export class AdminDashboard extends Component {
         }).onReceivedData(data => {
             //console.log('---message client received data ---', data);
             if (data.action === 'set_bid') {
-                console.log('---message client received set_bid data ---', data);
                 if (data.data.length > 0) {
                     let histories = [];
                     data.data.forEach((element, index) => {
                         histories.push({id: element.user_id, data:[].concat(element)})
                     })
-                    console.log('realtime ===> ', histories);
+                    // console.log('realtime ===> ', histories);
                     this.setState({realtimeData: histories, realtimeRanking: data.data
                         , currentPrice : data.data[0].average_price});
+                    // this.refs.priceChart.setChartData(histories, 'price');
+                    // this.refs.rankingChart.setChartData(histories, 'ranking');
                 }
             }
             if (data.action === 'extend_time') {
