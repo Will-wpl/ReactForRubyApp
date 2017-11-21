@@ -65,7 +65,7 @@ export class AdminDashboard extends Component {
                      } catch (error) {
                          console.log(error);
                      }
-                    console.log('realtimeData======>', histories)
+                    console.log('history======>', histories)
                     this.setState({realtimeData: histories, realtimeRanking: orderRanking
                         , currentPrice : orderRanking.length > 0 ? orderRanking[0].average_price : this.state.currentPrice});
                 }
@@ -100,7 +100,7 @@ export class AdminDashboard extends Component {
                     data.data.forEach((element, index) => {
                         histories.push({id: element.user_id, data:[].concat(element)})
                     })
-                    console.log('bid realtime ===> ', histories);
+                    console.log('realtime ===> ', histories);
                     this.setState({realtimeData: histories, realtimeRanking: data.data
                         , currentPrice : data.data[0].average_price});
                 }
