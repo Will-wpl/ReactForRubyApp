@@ -38,7 +38,7 @@ export class AdminReport extends Component {
             this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000';
             this.actualPrice = '0.0000';
             getHistoriesLast({ auction_id: auction? auction.id : 1}).then(data => {
-                console.log('histories', data);
+                //console.log('histories', data);
                 this.setState({
                     winner:{
                         data:data.result,
@@ -60,7 +60,7 @@ export class AdminReport extends Component {
                 return element;
             })});
         }, error => {
-            console.log(error);
+            //console.log(error);
         });
     }
 
