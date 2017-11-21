@@ -5,6 +5,6 @@ class Retailer::BaseController < ApplicationController
   private
 
   def retailer_required
-    head :unauthorized unless current_user && current_user.has_role?(:retailer)
+    head :unauthorized unless current_user&.has_role?(:retailer)
   end
 end

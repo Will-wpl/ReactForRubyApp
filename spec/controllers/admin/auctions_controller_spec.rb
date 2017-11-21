@@ -1,5 +1,5 @@
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe Admin::AuctionsController, type: :controller do
-    pending "add test to #{__FILE__}"
+  pending "add test to #{__FILE__}"
 end
