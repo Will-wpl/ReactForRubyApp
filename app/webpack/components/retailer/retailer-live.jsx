@@ -150,7 +150,8 @@ const calTwoTimeSpace = (start, nowSeq) => {
 }
 
 const runes = () => {
-    if (Number(getLoginUserId()) > 0) {
+    const domNode = document.getElementById('retailerlive');
+    if (domNode !== null) {
         getAuction().then(auction => {
             getAuctionTimeRule(auction.id).then(res => {
                 renderRoot(auction, res);
