@@ -97,6 +97,7 @@ export class AdminDashboard extends Component {
         }).onReceivedData(data => {
             //console.log('---message client received data ---', data);
             if (data.action === 'set_bid') {
+                console.log('---message client received set_bid data ---', data);
                 if (data.data.length > 0) {
                     let histories = [];
                     data.data.forEach((element, index) => {
