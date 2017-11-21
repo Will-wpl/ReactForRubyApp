@@ -23,7 +23,7 @@
           tr
             td= auction_result.name
             td= auction_result.start_datetime.strftime("%d %b %Y")
-            td  #{auction_result.contract_period_end_date.strftime("%d %b %Y")} to #{auction_result.contract_period_start_date.strftime("%d %b %Y")}
+            td  #{auction_result.contract_period_start_date.strftime("%d %b %Y")} to #{auction_result.contract_period_end_date.strftime("%d %b %Y")}
             - if auction_result.status == "void"
                 td Void
             - else
