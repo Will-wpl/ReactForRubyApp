@@ -82,7 +82,7 @@ showDetail(type,obj){
 void_auction(){
     let timeFn;
     auctionConfirm({data:{ user_id: this.state.winner.data.user_id , status:'void'},id:this.auction.id}).then(res=>{
-        console.log(res);
+        //console.log(res);
         clearTimeout(timeFn);
         this.refs.Modal.showModal();
         this.setState({
@@ -98,7 +98,7 @@ void_auction(){
 confirm_winner(){
     let timeFn;
     auctionConfirm({data:{ user_id: this.state.winner.data.user_id , status:'win'},id:this.auction.id}).then(res=>{
-        console.log(res);
+        //console.log(res);
         clearTimeout(timeFn);
         this.refs.Modal.showModal();
         this.setState({
@@ -112,7 +112,7 @@ confirm_winner(){
     })
 }
 render() {
-    console.log(this.winner.data);
+    //console.log(this.winner.data);
     return (
         <div>
             <div className="time_cuntdown during">

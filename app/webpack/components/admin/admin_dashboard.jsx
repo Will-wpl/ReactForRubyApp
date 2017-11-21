@@ -55,25 +55,25 @@ export class AdminDashboard extends Component {
                 return element;
             })});
         }, error => {
-            console.log(error);
+            //console.log(error);
         });
     }
 
     createWebsocket(auction) {
         this.ws = createWebsocket(auction);
         this.ws.onConnected(() => {
-            console.log('---message client connected ---');
+            //console.log('---message client connected ---');
         }).onDisconnected(() => {
-            console.log('---message client disconnected ----')
+            //console.log('---message client disconnected ----')
         }).onReceivedData(data => {
-            console.log('---message client received data ---', data);
+            //console.log('---message client received data ---', data);
             if (data.action === 'set_bid') {
                 if (data.data.length > 0) {
                     let histories = [];
                     data.data.forEach((element, index) => {
                         histories.push({id: element.user_id, data:[].concat(element)})
                     })
-                    console.log('data.data[0].average_price', data.data[0].average_price);
+                    //console.log('data.data[0].average_price', data.data[0].average_price);
                     this.setState({realtimeData: histories, realtimeRanking: data.data
                         , currentPrice : data.data[0].average_price});
                 }
