@@ -32,7 +32,7 @@ class UserExtension < ApplicationRecord
       # update
       ue = user.user_extension
       # ue = UserExtension.find_by_user_id(user.id)
-      if ue.update(login_status: login_status , current_room: current_room , current_page: current_page)
+      if ue.update(login_status: login_status, current_room: current_room, current_page: current_page)
         puts 'updated'
       end
 

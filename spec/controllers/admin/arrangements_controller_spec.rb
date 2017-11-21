@@ -1,4 +1,4 @@
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe Admin::ArrangementsController, type: :controller do
   pending "add test to #{__FILE__}"
