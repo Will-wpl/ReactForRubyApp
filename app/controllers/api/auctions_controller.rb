@@ -28,7 +28,7 @@ class Api::AuctionsController < Api::BaseController
   def update
     params[:auction]['total_volume'] = Auction.set_total_volume(model_params[:total_lt_peak], model_params[:total_lt_off_peak], model_params[:total_hts_peak], model_params[:total_hts_off_peak], model_params[:total_htl_peak], model_params[:total_htl_off_peak])
     if @auction.update(model_params)
-      AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id).update_all(bid_time: @auction.actual_begin_time)
+      AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id).update_all(bid_time: @auction.actual_begin_time , actual_bid_time: @auction.actual_begin_time)
       AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
       render json: @auction, status: 200
     else
@@ -106,7 +106,7 @@ class Api::AuctionsController < Api::BaseController
     #   auction_result.htl_off_peak = nil
     #   auction_result.user_id = nil
     # else
-    history = AuctionHistory.select('auction_histories.* ,users.company_name').joins(:user).where('auction_id = ? and user_id = ? and is_bidder = true ', params[:id], params[:user_id]).order(bid_time: :desc).first
+    history = AuctionHistory.select('auction_histories.* ,users.company_name').joins(:user).where('auction_id = ? and user_id = ? and is_bidder = true ', params[:id], params[:user_id]).order(actual_bid_time: :desc).first
 
     auction_result.reserve_price = @auction.reserve_price
     auction_result.lowest_average_price = history.average_price
