@@ -73,7 +73,7 @@ const getTemplate = (props) => {
             calculable: true,
             grid: {
                 top: '10%',
-                left: '5%',
+                left: '10%',
                 right: '7%',
                 bottom: '20%',
                 containLabel: true
@@ -149,7 +149,7 @@ const getTemplate = (props) => {
                 type: 'value',
                 name: 'Ranking',
                 nameLocation: 'middle',
-                nameGap: 70,
+                nameGap: 50,
                 nameRotate: 89.99999999,
                 axisTick: {
                     show: false
