@@ -21,7 +21,7 @@ export class AdminManagePublishedRa extends Component {
             this.timerTitle = this.auction ? `${this.auction.name} on ${moment(this.auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
             this.forceUpdate();
         }, error => {
-            console.log(error);
+            //console.log(error);
         })
     }
     render () {

@@ -2,13 +2,13 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   # root to: 'home#index'
-  resources :home, only: [:index, :term] do
+  resources :home, only: %i[index term] do
     collection do
       get 'term'
     end
   end
 
-  devise_for :users, skip: [:sessions, :home]
+  devise_for :users, skip: %i[sessions home]
   as :user do
     root to: 'devise/sessions#new'
     get 'log_in', to: 'devise/sessions#new', as: :new_user_session
@@ -17,12 +17,12 @@ Rails.application.routes.draw do
   end
 
   namespace :api do
-    resources :arrangements, only: [:index, :show, :obtain, :update] do
+    resources :arrangements, only: %i[index show obtain update] do
       collection do
         get 'obtain'
       end
     end
-    resources :auctions, only: [:obtain, :link, :create, :update, :publish, :hold, :timer, :confirm, :logout] do
+    resources :auctions, only: %i[obtain link create update publish hold timer confirm logout] do
       member do
         get 'timer'
         put 'publish'
@@ -35,7 +35,7 @@ Rails.application.routes.draw do
         post 'logout'
       end
     end
-    resource :auction_histories, only: [:show, :list, :last] do
+    resource :auction_histories, only: %i[show list last] do
       collection do
         get 'list'
         get 'last'
@@ -53,7 +53,7 @@ Rails.application.routes.draw do
     resources :arrangements, only: []
     resources :user_extensions, only: []
     resources :auction_extend_times, only: []
-    resources :auctions, only: [:new, :empty, :goto, :upcoming, :online, :dashboard, :confirm, :result, :report, :log] do
+    resources :auctions, only: %i[new empty goto upcoming online dashboard confirm result report log] do
       member do
         get 'upcoming' # published and pre-auction page
         get 'online' # published and pre-auciton page to retailer online status page
@@ -74,7 +74,7 @@ Rails.application.routes.draw do
     resources :home, only: :index
     resources :arrangements, only: []
     resources :auction_results, only: [:index]
-    resources :auctions, only: [:upcoming, :live, :finish, :result, :empty, :goto, :message, :gotobid] do
+    resources :auctions, only: %i[upcoming live finish result empty goto message gotobid] do
       member do
         get 'upcoming' # upcoming auction page
         get 'live' # standby and live page

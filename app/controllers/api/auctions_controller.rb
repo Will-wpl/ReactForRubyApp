@@ -1,6 +1,6 @@
 class Api::AuctionsController < Api::BaseController
-  require "time"
-  before_action :set_auction, only: [:update, :publish, :timer, :hold, :confirm]
+  require 'time'
+  before_action :set_auction, only: %i[update publish timer hold confirm]
 
   # GET auction info by ajax
   def obtain
@@ -11,7 +11,6 @@ class Api::AuctionsController < Api::BaseController
       render json: @auction, status: 200
     end
   end
-
 
   # POST create auction by ajax
   def create
@@ -28,7 +27,7 @@ class Api::AuctionsController < Api::BaseController
   def update
     params[:auction]['total_volume'] = Auction.set_total_volume(model_params[:total_lt_peak], model_params[:total_lt_off_peak], model_params[:total_hts_peak], model_params[:total_hts_off_peak], model_params[:total_htl_peak], model_params[:total_htl_off_peak])
     if @auction.update(model_params)
-      AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id).update_all(bid_time: @auction.actual_begin_time)
+      AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id).update_all(bid_time: @auction.actual_begin_time , actual_bid_time: @auction.actual_begin_time)
       AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
       render json: @auction, status: 200
     else
@@ -48,46 +47,41 @@ class Api::AuctionsController < Api::BaseController
 
   # POST hold auction for long pulling
   def hold
-    hold_status = params[:hold_status] == "true" ? true : false
+    hold_status = params[:hold_status] == 'true'
     # click hold
     if hold_status
       if @auction.update(hold_status: hold_status)
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
-        render json: {hold_status: true, forward: false}, status: 200
+        render json: { hold_status: true, forward: false }, status: 200
       end
     elsif !hold_status && Time.current < @auction.actual_begin_time
       if @auction.update(hold_status: hold_status)
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
-        render json: {hold_status: false, forward: false}, status: 200
+        render json: { hold_status: false, forward: false }, status: 200
       end
     elsif !hold_status && Time.current > @auction.actual_begin_time
       if @auction.update(hold_status: hold_status, actual_begin_time: Time.current, actual_end_time: Time.current + 60 * @auction.duration)
         # link = set_link(@auction.id, 'dashboard')
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
-        render json: {hold_status: false, forward: true}, status: 200
+        render json: { hold_status: false, forward: true }, status: 200
       end
     end
   end
 
   # GET current time by ajax
   def timer
-    render json: {current_time: Time.current, hold_status: @auction.hold_status, actual_begin_time: @auction.actual_begin_time, actual_end_time: @auction.actual_end_time}, status: 200
+    render json: { current_time: Time.current, hold_status: @auction.hold_status, actual_begin_time: @auction.actual_begin_time, actual_end_time: @auction.actual_end_time }, status: 200
   end
 
   # POST extend time
-  def delay
-
-  end
+  def delay; end
 
   # POST confirm
-
 
   def confirm
     status = params[:status]
     auction_result = AuctionResult.find_by_auction_id(params[:id])
-    if auction_result.nil?
-      auction_result = AuctionResult.new
-    end
+    auction_result = AuctionResult.new if auction_result.nil?
     auction_result.auction_id = params[:id].to_i
     # if status == 'void'
     #   auction_result.reserve_price = nil
@@ -106,7 +100,7 @@ class Api::AuctionsController < Api::BaseController
     #   auction_result.htl_off_peak = nil
     #   auction_result.user_id = nil
     # else
-    history = AuctionHistory.select('auction_histories.* ,users.company_name').joins(:user).where('auction_id = ? and user_id = ? and is_bidder = true ', params[:id], params[:user_id]).order(bid_time: :desc).first
+    history = AuctionHistory.select('auction_histories.* ,users.company_name').joins(:user).where('auction_id = ? and user_id = ? and is_bidder = true ', params[:id], params[:user_id]).order(actual_bid_time: :desc).first
 
     auction_result.reserve_price = @auction.reserve_price
     auction_result.lowest_average_price = history.average_price
@@ -130,7 +124,6 @@ class Api::AuctionsController < Api::BaseController
     else
       render json: auction_result.errors, status: 500
     end
-
   end
 
   # set logout status
@@ -153,6 +146,4 @@ class Api::AuctionsController < Api::BaseController
   def set_link(auctionId, addr)
     "/admin/auctions/#{auctionId}/#{addr}"
   end
-
-
 end
