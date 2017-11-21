@@ -116,7 +116,7 @@ class AuctionHistory < ApplicationRecord
         history_new.hts_off_peak = history.hts_off_peak
         history_new.htl_peak = history.htl_peak
         history_new.htl_off_peak = history.htl_off_peak
-        history_new.bid_time = current_time
+        history_new.bid_time = history.bid_time
         history_new.total_award_sum = history.total_award_sum
         history_new.is_bidder = false
         history_new.flag = flag
