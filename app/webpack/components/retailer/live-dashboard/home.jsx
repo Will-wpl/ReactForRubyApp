@@ -189,7 +189,7 @@ export default class LiveHomePage extends Component {
             <div>
                 <DuringCountDown auction={this.props.auction} countDownOver={this.goToFinish.bind(this)}>
                     <div id="retailer_hold" className={this.state.extendVisible ? '' : 'live_hide'}>
-                        <b>Admin has extended auction duration by {Number(this.state.extendVisible) > 1 ? `${this.state.extendVisible} minutes.` : '1 minute.'}</b>
+                        <b>Admin has extended auction duration by {this.state.extendVisible} min.</b>
                     </div>
                 </DuringCountDown>
                 <div className="u-grid u-mt2">
