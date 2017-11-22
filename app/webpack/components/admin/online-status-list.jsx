@@ -31,7 +31,7 @@ export class OnlineStatusMain extends Component {
     }
     timegetBidderStatus(){
         getBidderStatus({auction_id:this.auction.id}).then(res => {
-            console.log(res);
+            //console.log(res);
             this.setState({
                 dataList:res,
             })
@@ -61,7 +61,7 @@ export class OnlineStatusMain extends Component {
                 data_pedding:data_pedding,
             })
         }, error => {
-            console.log(error);
+            //console.log(error);
         })
     }
     componentWillMount(){
@@ -77,7 +77,7 @@ export class OnlineStatusMain extends Component {
             })
             this.timegetBidderStatus();
         }, error => {
-            console.log(error);
+            //console.log(error);
         })
     }
     goToDashboard(){
