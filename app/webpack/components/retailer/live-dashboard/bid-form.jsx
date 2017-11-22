@@ -152,13 +152,11 @@ export default class BidForm extends Component {
             error_html = !this.state.samePrice ?
                 <div className="number_error">Your bid has been successfully submitted.</div>
                 : <div className="number_error" style={{color: 'red'}}>Invalid submission. Please check that your submission fulfils the following criteria:<br/>
-                    <br/>
-                    For initial submission:<br/>
-                    Prices submitted must be lower than the energy cost component of prevailing SPS LT Tariff ($0.1458/kWh)<br/>
-                    <br/>
-                    For subsequent submission:<br/>
-                    1. None of the values should be higher than its previous value<br/>
-                    2. At least one of the values must be lower than its previous value</div>;
+                    1.	Prices submitted must be lower than the energy cost component of prevailing SPS LT Tariff ($0.1458/kWh)<br/>
+                    2.	None of the values should be higher than its previous value<br/>
+                    3.	At least one of the values must be lower than its previous value<br/>
+                    4.	None of the values should be zero<br/>
+                  </div>;
         }
         let illegal;
         if (this.state.status.some(element => {
@@ -166,15 +164,12 @@ export default class BidForm extends Component {
             })) {
             // illegal = <p className="number_error" style={{color: 'red'}}>Prices submitted must be lower than the energy cost component of prevailing SPS LT Tariff ($0.1458/kWh)</p>;
 
-            illegal = <p className="number_error" style={{color: 'red'}}>
-                Invalid submission. Please check that your submission fulfils the following criteria:<br/>
-                <br/>
-                For initial submission:<br/>
-                Prices submitted must be lower than the energy cost component of prevailing SPS LT Tariff ($0.1458/kWh)<br/>
-                <br/>
-                For subsequent submission:<br/>
-                1. None of the values should be higher than its previous value<br/>
-                2. At least one of the values must be lower than its previous value</p>;
+            illegal = <div className="number_error" style={{color: 'red'}}>Invalid submission. Please check that your submission fulfils the following criteria:<br/>
+                        1.	Prices submitted must be lower than the energy cost component of prevailing SPS LT Tariff ($0.1458/kWh)<br/>
+                        2.	None of the values should be higher than its previous value<br/>
+                        3.	At least one of the values must be lower than its previous value<br/>
+                        4.	None of the values should be zero<br/>
+                      </div>;
         }
         return (
             <div className="number_form">
