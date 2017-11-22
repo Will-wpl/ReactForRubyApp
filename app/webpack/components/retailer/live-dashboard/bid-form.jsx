@@ -105,7 +105,7 @@ export default class BidForm extends Component {
             if (index === 2 || index === 3) {
                 return true;
             }
-            return element.length > 0 && Number(`0.${element}`) <= Number(`0.${this.compareConfigs[index]}`);
+            return element.length > 0 && Number(element) !== 0 && Number(`0.${element}`) <= Number(`0.${this.compareConfigs[index]}`);
         })
         let isChanged = this.state.configs.some((element, index) => {
             // console.log("state:" + Number(element) + "--------props:" + Number(this.compareConfigs[index]));
