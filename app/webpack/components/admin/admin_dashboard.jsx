@@ -146,7 +146,7 @@ export class AdminDashboard extends Component {
     render () {
         return (
             <div>
-                <DuringCountDown auction={this.auction} countDownOver={this.goToFinish.bind(this)} onSecondBreaker={() => {this.refs.submitBtn.disabled='disabled'}}>
+                <DuringCountDown auction={this.auction} countDownOver={this.goToFinish.bind(this)} onSecondBreaker={() => {this.refs.submitBtn.disabled='disabled';this.refs.Modal.closeModal();}}>
                     <div id="admin_hold">
                         <span>Extend Time:</span>
                         <input type="number" className="fill_hold" maxLength="2" ref="extendedValue" defaultValue={1} onChange={this.onExtendInputChanged.bind(this)}/>
