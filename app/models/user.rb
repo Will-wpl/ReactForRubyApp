@@ -18,6 +18,9 @@ class User < ApplicationRecord
   has_one :user_extension
   has_many :arrangements
   has_many :auctions, through: :arrangements
+  has_many :auction_events
+  has_many :auction_extend_times
+  has_many :auction_histories
 
   # accepts_nested_attributes
 
