@@ -85,5 +85,5 @@ export class DuringCountDown extends Component {
 
 DuringCountDown.defaultProps = {
     title:'Reverse Auction has commenced. Please start bidding.',
-    secondBreaker: 5
+    secondBreaker: 3
 }
