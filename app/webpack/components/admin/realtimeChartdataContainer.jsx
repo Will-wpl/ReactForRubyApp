@@ -74,7 +74,7 @@ export default class ChartRealtimeHoc extends Component {
 
     render() {
         return (
-            <div>
+            <div style={{'width':'100%'}}>
                 {
                     React.Children.map(this.props.children,
                         (child) => React.cloneElement(child, {data: this.state.data}))
