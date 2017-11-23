@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :auction do
     name 'MyString'
     start_datetime '2017-10-26 15:42:52'

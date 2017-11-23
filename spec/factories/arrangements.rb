@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :arrangement do
     main_name 'MyString'
     main_email_address 'MyString'

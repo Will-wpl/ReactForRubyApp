@@ -63,7 +63,7 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
 
   # Factory Girl
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
 
   # Devise
   config.include Devise::Test::ControllerHelpers, type: :controller
