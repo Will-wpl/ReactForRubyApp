@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   end
 
   namespace :api do
-    resources :base, only: %i[hearbeat] do
+    resources :base, only: %i[heartbeat] do
       collection do
         post 'heartbeat'
       end
