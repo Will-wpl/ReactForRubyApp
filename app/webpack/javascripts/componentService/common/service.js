@@ -19,3 +19,7 @@ export const logout = (id) => {
 export const ACTION_COMMANDS = {
     SET_BID: 'set_bid'
 }
+
+export const checknetwork = () => {
+    return create('/api/base/heartbeat');
+}

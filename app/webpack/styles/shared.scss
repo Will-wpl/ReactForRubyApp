@@ -1,14 +1,67 @@
 //all
-body a{outline:none; cursor: default; transition: 0.5s all;}
+body a{outline:none; cursor: default;}
 button{ cursor: pointer; transition: 0.5s all;}
+
+
+//createRaMain or retailer btn
+.createRaMain{
+  margin: 0px auto;
+  width:100%; position: relative; padding-bottom: 60px;
+  a{transition: 0.8s all;
+      &:hover{background:#00888a;}
+  }
+  .creatRa{
+      margin: 30px auto;
+      .react-datepicker__input-container,.react-datepicker-wrapper{width:100%;}
+      dd{
+          margin-bottom: 20px;
+          b{ 
+              font-weight: normal; font-size: 18px; line-height: 44px; text-align:center; display: block;
+              &.textLeft{text-align: left;}
+          }
+          input{
+              display: block;
+              width: 100%;
+              padding: 0.6875rem 1rem;
+              font-size: 1rem;
+              font-weight: 300;
+              color: #fff;
+              line-height: 1.25;
+              background: transparent;
+              border: 1px solid #5d7789;
+              border-radius: 0.3125rem;
+              &.date_ico{background:url("../images/date.png") no-repeat right;}
+              &.time_ico{background:url("../images/time.png") no-repeat right;}
+            }
+      }
+  }
+  .createRa_btn{text-align: right; right:0px; bottom:0px; position: relative;
+      .show{display:inline-block;}
+      .hide{ display: none;}
+      button{ 
+          margin: 0 10px;
+          &:last-child{margin-right: 0px;}
+          &:hover{background:#00888a;}
+      }
+      .mask{ width: 100%; height: 100%; position: absolute; left: 0; top:0;}
+  }
+}
+
+
+
 //retailer manage coming
 .link_file{line-height: 40px; text-decoration: underline;}
 abbr[title]{color: #fe0000; text-decoration: none;}
 .retailer_btn{ 
   text-align: right; width: 100%; margin: 25px auto; position: relative;
-  button{ display: inline-block; margin: 0px 10px;}
-  button:last-child{ margin-right: 0px;}
-  button:hover,a:hover{background:#00888a;}
+  button{ 
+    display: inline-block; margin: 0px 10px;
+    &:last-child{ margin-right: 0px;}
+    &:hover{background:#00888a;}
+  }
+  a{transition: 0.8s all;
+    &:hover{background:#00888a;}
+  }
   .mask{ width: 100%; height: 100%; position: absolute; left: 0; top:0;}
 }
   
@@ -17,17 +70,21 @@ abbr[title]{color: #fe0000; text-decoration: none;}
    width: 100%; font-size: 12px; table-layout: fixed; border-top:1px solid #314657; border-left:1px solid #314657;
    thead{
      tr{ background: #00394A;
-      th{ height: 40px; border-right:1px solid #314657; font-size: 14px;}
-      th.table_title{border-bottom:1px solid #314657;}
+      th{ 
+        height: 40px; border-right:1px solid #314657; font-size: 14px;
+        &.table_title{border-bottom:1px solid #314657;}
+      }
     }
    }
    tbody{
      overflow:auto; height: 30px;
      tr{
        td{border:1px solid #314657; text-align: center; height: 40px;
-        a{ display: block; width: 100%; height: 100%;}
-        a.report{background: url("../images/Reverse_Auction_Report.png") no-repeat center; background-size:19px;}
-        a.log{background: url("../images/Activity_Log.png") no-repeat center; background-size:19px;}
+        a{ 
+          display: block; width: 100%; height: 100%;
+          &.report{background: url("../images/Reverse_Auction_Report.png") no-repeat center; background-size:19px;}
+          &.log{background: url("../images/Activity_Log.png") no-repeat center; background-size:19px;}
+        }
         input{
           width: 60px; display: inline-block; padding:2px; border:1px solid #fff; margin-left: 5px; background: none;
         }
@@ -38,30 +95,32 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 
 //time_cuntdown
 .time_cuntdown{ 
-  width: 100%; padding:12px; background: #90bf33; overflow: hidden; min-height: 132px; color:#fff;
-  p{font-size:20px; line-height: 30px;}
-  p.confirm{ padding:35px 0px;}
-  .Countdown{
-    font-size:20px; line-height: 30px; margin-top: 10px;
-    abbr{float: left; line-height: 60px;}
-  }
-  #countdown_timer,#during_countdown_timer{
-    width:300px; overflow: hidden; float: left;
-      span{
-        width: 25%; float: left; text-align: center; font-size:14px !important;
-        font{ font-size:35px; display: block;}
-      }
-  }
-  #during_countdown_timer{
-    width: 260px;
-    span{
-      width:33.3333333%;
+    width: 100%; padding:12px; background: #90bf33; overflow: hidden; min-height: 132px; color:#fff;
+    p{
+      font-size:20px; line-height: 30px;
+      &.confirm{ padding:35px 0px;}
     }
-  }
-  #retailer_hold{
-    float: left;
-    b{ font-size: 14px; color:#fff; background: #E60013; padding: 4px;}
-  }
+    .Countdown{
+      font-size:20px; line-height: 30px; margin-top: 10px;
+      abbr{float: left; line-height: 60px;}
+    }
+    #countdown_timer,#during_countdown_timer{
+      width:300px; overflow: hidden; float: left;
+        span{
+          width: 25%; float: left; text-align: center; font-size:14px !important;
+          font{ font-size:35px; display: block;}
+        }
+    }
+    #during_countdown_timer{
+      width: 260px;
+      span{
+        width:33.3333333%;
+      }
+    }
+    #retailer_hold{
+      float: left;
+      b{ font-size: 14px; color:#fff; background: #E60013; padding: 4px;}
+    }
  }
  .during{
   background:#fbb136; color: #000;
@@ -93,8 +152,10 @@ abbr[title]{color: #fe0000; text-decoration: none;}
   }
   .modal_detail{ width:90%; min-height: 112px; margin:0px auto; line-height: 22px; font-size: 16px;}
   .showinfo{ color: red; min-height: auto;}
-  .modal_btn{ width:100%; margin: 10px auto; overflow: hidden;}
-  .modal_btn a{ width: 60px; float:right; margin-right: 10px;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; margin: 0px 10px;}
+  .modal_btn{ 
+    width:100%; margin: 10px auto; overflow: hidden;
+    a{ width: 60px; float:right; margin-right: 10px;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; margin: 0px 10px;}
+  }
 }
 .u-contain{overflow:hidden;}
 
@@ -108,9 +169,11 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 //reservePrice
 .reservePrice{ 
   width: 86%; margin: 10px auto; line-height:22px;
-  span{ margin-right: 10px;}
-  span.success{ color:green; background: url("../images/achieved.png") no-repeat left; padding-left:20px;}
-  span.fail{ color:red; background: url("../images/not_achieved.png") no-repeat left; padding-left:20px;}
+  span{ 
+    margin-right: 10px;
+    &.success{ color:green; background: url("../images/achieved.png") no-repeat left; padding-left:20px;}
+    &.fail{ color:red; background: url("../images/not_achieved.png") no-repeat left; padding-left:20px;}
+  }
 }
 
 //winnerPirce
@@ -220,6 +283,11 @@ input[type="number"]{
 @media screen and (max-width:1008px){
   .col-md-5,.col-md-7{ width: 100%;} 
   .push-md-1{margin-left: 4.33333%;}
+  .admin_btn{
+    .push-md-1{margin-left: 8.33333%;}
+  }
+}
+@media screen and (max-width:767px){
   .admin_btn{
     .push-md-1{margin-left: 0px;}
   }

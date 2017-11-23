@@ -17,6 +17,12 @@ Rails.application.routes.draw do
   end
 
   namespace :api do
+    resources :base, only: %i[heartbeat] do
+      collection do
+        post 'heartbeat'
+      end
+    end
+
     resources :arrangements, only: %i[index show obtain update] do
       collection do
         get 'obtain'
