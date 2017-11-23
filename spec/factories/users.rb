@@ -10,5 +10,11 @@ FactoryBot.define do
         user.add_role(:admin)
       end
     end
+
+    trait :with_retailer do
+      after(:create) do |user|
+        user.add_role(:retailer)
+      end
+    end
   end
 end
