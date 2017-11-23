@@ -19,7 +19,9 @@ export class CheckNetwork extends React.Component{
         },error => {
             this.setState({
                 networkStatus:false,
-                text:'Error:Network connection failed. Please contact your administrator at revv@spgroup.com.sg for assistance.'
+                text:window.location.href.indexOf('admin') > 0 
+                ? 'Error:Network connection failed.' 
+                : 'Error:Network connection failed. Please contact your administrator at revv@spgroup.com.sg for assistance.'
             })
             this.refs.Modal.showModal();
         })
