@@ -56,13 +56,12 @@ class AuctionChannel < ApplicationCable::Channel
   private
 
   def set_price(calculate_dto)
-    total_award_sum = AuctionHistory.set_total_award_sum([calculate_dto.total_lt_peak, calculate_dto.total_lt_off_peak,
+    total_award_sum = AuctionHistory.set_total_award_sum(calculate_dto.total_lt_peak, calculate_dto.total_lt_off_peak,
                                                          calculate_dto.total_hts_peak, calculate_dto.total_hts_off_peak,
-                                                         calculate_dto.total_htl_peak, calculate_dto.total_htl_off_peak],
-                                                         [calculate_dto.lt_peak, calculate_dto.lt_off_peak,
+                                                         calculate_dto.total_htl_peak, calculate_dto.total_htl_off_peak,
+                                                         calculate_dto.lt_peak, calculate_dto.lt_off_peak,
                                                          calculate_dto.hts_peak, calculate_dto.hts_off_peak,
-                                                         calculate_dto.htl_peak, calculate_dto.htl_off_peak]
-    )
+                                                         calculate_dto.htl_peak, calculate_dto.htl_off_peak)
     total_volume = Auction.set_total_volume(
       calculate_dto.total_lt_peak, calculate_dto.total_lt_off_peak,
       calculate_dto.total_hts_peak, calculate_dto.total_hts_off_peak,
