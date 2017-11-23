@@ -1,43 +1,5 @@
 @import 'shared';
 @import 'chart';
-.createRaMain{
-    margin: 0px auto;
-    width:100%; position: relative; padding-bottom: 60px;
-    .creatRa{
-        margin: 30px auto;
-        .react-datepicker__input-container,.react-datepicker-wrapper{width:100%;}
-        dd{
-            margin-bottom: 20px;
-            b{ 
-                font-weight: normal; font-size: 18px; line-height: 44px; text-align:center; display: block
-            }
-            b.textLeft{text-align: left;}
-            input{
-                display: block;
-                width: 100%;
-                padding: 0.6875rem 1rem;
-                font-size: 1rem;
-                font-weight: 300;
-                color: #fff;
-                line-height: 1.25;
-                background: transparent;
-                border: 1px solid #5d7789;
-                border-radius: 0.3125rem;
-              }
-              input.date_ico{background:url("../images/date.png") no-repeat right;}
-              input.time_ico{background:url("../images/time.png") no-repeat right;}
-        }
-    }
-    .createRa_btn{text-align: right; right:0px; bottom:0px; position: relative;
-        .show{display:inline-block;}
-        .hide{ display: none;}
-        button{ margin: 0 10px;}
-        button:last-child{margin-right: 0px;}
-        button:hover,a:hover{background:#00888a;}
-        .mask{ width: 100%; height: 100%; position: absolute; left: 0; top:0;}
-    }
-}
-
 
 //bidders Status of retailers
 .bidderStatus{ 
@@ -48,9 +10,11 @@
          width: 80%; margin: 0 auto; display:block; text-align: center;
          label{ 
              margin:0 15px;
-             span{display: inline-block; width:10px; height: 10px; background: #54BD1B; margin-right: 5px;}
-             span.yellow{background: yellow;}
-             span.red{background: red;}
+             span{
+                 display: inline-block; width:10px; height: 10px; background: #54BD1B; margin-right: 5px;
+                 &.yellow{background: yellow;}
+                 &.red{background: red;}
+                }
              dfn{font-style: normal; font-size: 12px;}
          }
     }
@@ -63,20 +27,20 @@
                 text-indent: 20px; color:#00afb2; overflow: hidden; white-space:nowrap; text-overflow: ellipsis; border-right: 1px solid #485A68; text-decoration: underline; cursor: pointer;
                 abbr{
                     display:block; width:60%; height: 20px; margin: 6px auto;
+                    &.color1{ background:#54BD1B; }
+                    &.color0{ background:red; }
+                    &.color2{ background:yellow; }
+                    &.on{ background: url("../images/green.png") no-repeat center;}
+                    &.off{background: url("../images/red.png") no-repeat center;}
+                    &.other{background: url("../images/Yellow.png") no-repeat center;}
                 }
-                abbr.color1{ background:#54BD1B; }
-                abbr.color0{ background:red; }
-                abbr.color2{ background:yellow; }
-                abbr.on{ background: url("../images/green.png") no-repeat center;}
-                abbr.off{background: url("../images/red.png") no-repeat center;}
-                abbr.other{background: url("../images/Yellow.png") no-repeat center;}
-            }
-            span:last-child{
-                border:none; text-align: center; text-indent: 0px; text-decoration:underline;
-                cursor: pointer;
-            }
-            span.white{
-                color:#fff; cursor:default; text-decoration: none;
+                &:last-child{
+                    border:none; text-align: center; text-indent: 0px; text-decoration:underline;
+                    cursor: pointer;
+                }
+                &.white{
+                    color:#fff; cursor:default; text-decoration: none;
+                }
             }
         }
     }
@@ -85,14 +49,18 @@
 .onlineStatusMain{
     .ros_tab{ 
         width:100%; overflow: hidden; margin: 0px auto;
-        li{font-size: 12px; color:#fff; line-height:26px; text-align: left; padding-left: 25px;}
-        li.on{ background: url("../images/green.png") no-repeat left;}
-        li.other{ background: url("../images/Yellow.png") no-repeat left;}
-        li.off{ background: url("../images/red.png") no-repeat left;}
+        li{
+            font-size: 12px; color:#fff; line-height:26px; text-align: left; padding-left: 25px;
+            &.on{ background: url("../images/green.png") no-repeat left;}
+            &.other{ background: url("../images/Yellow.png") no-repeat left;}
+            &.off{ background: url("../images/red.png") no-repeat left;}
+        }
     }
-    button{ width: 99px; height:89px; text-indent: -9999px; outline: none;}
-    button.startHold{background: url("../images/go.png") no-repeat center;}
-    button.endHold{background: url("../images/stop.png") no-repeat center;}
+    button{ 
+        width: 99px; height:89px; text-indent: -9999px; outline: none;
+        &.startHold{background: url("../images/go.png") no-repeat center;}
+        &.endHold{background: url("../images/stop.png") no-repeat center;}
+    }
 }
 
 .w_8{ width: 80%;}
@@ -103,9 +71,11 @@
 .admin_result_list{
     ul{ width: 100%;
         li{ width: 100%; margin: 15px auto; cursor: pointer; list-style: none; padding:30px 0px; background: #183243; 
-            a{line-height: 26px; padding-right: 25px; text-decoration: none; padding-left: 26px;}
-            a.report{background: url("../images/Reverse_Auction_Report.png") no-repeat right; background-size:19px;}
-            a.log{background: url("../images/Activity_Log.png") no-repeat right; background-size:19px;}
+            a{
+                line-height: 26px; padding-right: 25px; text-decoration: none; padding-left: 26px;
+                &.report{background: url("../images/Reverse_Auction_Report.png") no-repeat right; background-size:19px;}
+                &.log{background: url("../images/Activity_Log.png") no-repeat right; background-size:19px;}
+            }
         }
     }
 }

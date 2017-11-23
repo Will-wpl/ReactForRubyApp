@@ -2,18 +2,19 @@
     margin:10rem auto; position: relative;
     a{ display:inline-block; background:#00b0b2 asset-url("btn_ico.png") no-repeat right; font-size: 16px;
         margin-bottom:26px; padding: 1.55rem 1rem 1.55rem; transition: 0.8s all;
-        white-space: nowrap;
+        overflow: hidden; text-overflow:ellipsis; white-space: nowrap;
+        &:hover{background:#00888a asset-url("btn_ico.png") no-repeat right;}
     }
-    a:hover{background:#00888a asset-url("btn_ico.png") no-repeat right;}
     div.begin_auction{
         display:inline-block;
         a{
             text-indent: -9999px;
             background: #DF5C28 asset-url("hammer.png") no-repeat center 5px;
             width: 100%; font-size: 13px; min-height: 68px;
+            &:hover{background:#BC4414 asset-url("hammer.png") no-repeat center 5px;}
+            text-align: center;
         }
-        a:hover{background:#BC4414 asset-url("hammer.png") no-repeat center 5px;}
-         text-align: center;}
+    }
 }
 .confirmdiv{background:rgba(255,255,255,0.2); padding: 10px 20px; line-height: 24px; font-size: 13px;}
 .live_modal{
