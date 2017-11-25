@@ -18,6 +18,8 @@ FactoryBot.define do
 
     trait :upcoming do
       start_datetime { DateTime.now.advance(minutes: 10) }
+      actual_begin_time { DateTime.now.advance(minutes: 10) }
+      actual_end_time { DateTime.now.advance(minutes: 20) }
     end
 
     trait :published do
