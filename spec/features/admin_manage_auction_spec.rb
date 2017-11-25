@@ -53,6 +53,7 @@ RSpec.describe 'admin manage auction', type: :feature, js: true do
 
         auction.reload
         expect(auction.name).to eq 'Changed Title'
+        expect(auction.duration).to eq 10
         expect(auction.reserve_price).to eq BigDecimal.new('0.0840')
       end
     end
