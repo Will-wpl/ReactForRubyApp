@@ -85,4 +85,17 @@ RSpec.describe 'retailer manage auction', type: :feature, js: true do
       end
     end
   end
+
+  context 'auction started' do
+    let!(:auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
+    let!(:arrangement) { create(:arrangement, user: retailer_user, auction: auction) }
+
+    it 'unable to participate' do
+      visit retailer_home_index_path
+
+      click_link 'Manage Upcoming Reverse Auction'
+
+      expect(page).to have_content 'We regret to inform that you are unable to participate as you have not submitted the necessary contact person details. We hope to see you again in future reverse auctions'
+    end
+  end
 end

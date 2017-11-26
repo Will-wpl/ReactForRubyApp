@@ -8,7 +8,7 @@ FactoryBot.define do
     total_hts_off_peak 0
     total_htl_peak 1_983_720
     total_htl_off_peak 791_712
-    duration 10
+    duration 30
     reserve_price { BigDecimal.new('0.0841') }
 
     trait :for_next_month do
@@ -28,6 +28,7 @@ FactoryBot.define do
 
     trait :started do
       start_datetime { DateTime.now.advance(minutes: -5) }
+      actual_begin_time { DateTime.now.advance(minutes: -5) }
     end
   end
 end
