@@ -72,7 +72,7 @@ RSpec.describe 'auction start', type: :feature, js: true do
     end
   end
 
-  xcontext 'auction published and started' do
+  context 'auction published and started' do
     let!(:auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
 
     let!(:admin_user) { create(:user, :with_admin) }
@@ -81,43 +81,29 @@ RSpec.describe 'auction start', type: :feature, js: true do
     let!(:arrangement) { create(:arrangement, :accepted, user: retailer_user, auction: auction) }
 
     describe 'visit commence and bid page' do
-      it 'shows valid details' do
-        in_browser(:admin) do
+      describe 'admin' do
+        before do
           login_as(admin_user)
+        end
 
+        it 'sees valid details' do
           visit admin_home_index_path
           click_link 'Manage Published Upcoming Reverse Auction'
 
           expect(page).to have_content 'Reverse Auction has commenced. Please start bidding'
         end
+      end
 
-        in_browser(:retailer) do
-          visit new_user_session_path
+      describe 'retailer' do
+        before do
+          login_as(retailer_user)
+        end
 
-          within('form.new_user') do
-            fill_in 'user_email', with: retailer_user.email
-            fill_in 'user_password', with: 'password'
-            click_button 'Login'
-          end
-
+        it 'sees valid details' do
+          visit retailer_home_index_path
           click_link 'Start Bidding'
 
           expect(page).to have_content 'Reverse Auction has commenced. Please start bidding'
-
-          sleep(60)
-
-          # fill_in 'peak_lt', with: '1333'
-          # fill_in 'peak_ht', with: '1333'
-          # fill_in 'off_peak_lt', with: '1333'
-          # fill_in 'off_peak_ht', with: '1333'
-          #
-          # click_button 'Submit'
-
-          # expect(page).to have_content 'submitted bid'
-        end
-
-        in_browser(:admin) do
-
         end
       end
     end

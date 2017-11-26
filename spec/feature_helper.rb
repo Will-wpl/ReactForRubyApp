@@ -31,6 +31,8 @@ RSpec.configure do |config|
   end
 end
 
+Capybara.server = :puma # Needs to be Puma in order for ActionCable / Websockets to work
+
 webdriver_options = {
   browser: :chrome
 }
