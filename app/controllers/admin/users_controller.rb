@@ -55,7 +55,7 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def model_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation, role_ids: [])
+    params.require(:user).permit(:name, :email, :password, :password_confirmation, :company_name, role_ids: [])
   end
 
   def set_users_breadcrumbs

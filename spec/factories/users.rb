@@ -4,7 +4,7 @@ FactoryBot.define do
     sequence(:email) { |n| "user#{n}@example.com" }
     password 'password'
     password_confirmation 'password'
-
+    company_name { Faker::Company.name }
 
     trait :with_admin do
       company_name { 'SP Group' }
@@ -15,8 +15,6 @@ FactoryBot.define do
     end
 
     trait :with_retailer do
-      company_name { Faker::Company.name }
-
       after(:create) do |user|
         user.add_role(:retailer)
       end
