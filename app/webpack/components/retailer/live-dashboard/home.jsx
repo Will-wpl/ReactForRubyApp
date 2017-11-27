@@ -45,51 +45,59 @@ export default class LiveHomePage extends Component {
                 // console.log('---message client received data ---', data);
                 if (data && data.action) {
                     if (data.action === ACTION_COMMANDS.SET_BID) {
-                        let curUserId = Number(getLoginUserId());
-                        let last = data.data.find(element => {
-                            return Number(element.user_id) === curUserId;
-                        });
-                        if (last) {
-                            // console.log('last ========',last);
-                            // if (last.is_bidder) {
-                            if (this.state.chartDatas.length === 0) {
-                                this.state.chartDatas = [].concat({id: curUserId, data: [], color: '#e5e816', template:''});
+                        if(data.data){
+                            let curUserId = Number(getLoginUserId());
+                            let last = data.data.find(element => {
+                                return Number(element.user_id) === curUserId;
+                            });
+                            if (last) {
+                                // console.log('last ========',last);
+                                // if (last.is_bidder) {
+                                if (this.state.chartDatas.length === 0) {
+                                    this.state.chartDatas = [].concat({id: curUserId, data: [], color: '#e5e816', template:''});
 
-                            }
-                            // this.state.chartDatas[0].data = this.state.chartDatas[0].data.concat(
-                            //     {time: moment(last.bid_time).format('YYYY-MM-DD HH:mm:ss')
-                            //         , ranking: Number(last.ranking) === 1 ? 2 : last.ranking, needMark: last.is_bidder}
-                            // )
-                            last.ranking = Number(last.ranking) === 1 ? 2 : last.ranking;
-                            last.template_ranking = `Ranking: ${Number(last.ranking) <= 2 ? 'TOP 2' : getNumBref(last.ranking)} ${last.is_bidder && last.flag !== null ? '(Bid Submitter)' : ''}`;
-                            if (!last.template_price) {
-                                last.template_price = {};
-                            }
-                            last.template_price['company_price'] = `${last.company_name} ${parseFloat(last.average_price).toFixed(4)}/kWh`;
-                            last.template_price['lt'] = `LT(P):$${parseFloat(last.lt_peak).toFixed(4)} LT(OP):$${parseFloat(last.lt_off_peak).toFixed(4)}`;
-                            last.template_price['hts'] = `HTS(P):$${parseFloat(last.hts_peak).toFixed(4)} HTS(OP):$${parseFloat(last.hts_off_peak).toFixed(4)}`;
-                            last.template_price['htl'] = `HTL(P):$${parseFloat(last.htl_peak).toFixed(4)} HTL(OP):$${parseFloat(last.htl_off_peak).toFixed(4)}`;
-                            this.state.chartDatas[0].data = this.state.chartDatas[0].data.concat(last)
-                            // }
-                            let element = JSON.parse(JSON.stringify(last));
-                            element.bid_time = moment(element.bid_time).format('HH:mm:ss');
-                            element.lt_peak = parseFloat(element.lt_peak).toFixed(4);
-                            element.lt_off_peak = parseFloat(element.lt_off_peak).toFixed(4);
-                            element.hts_peak = parseFloat(element.hts_peak).toFixed(4);
-                            element.hts_off_peak = parseFloat(element.hts_off_peak).toFixed(4);
-                            element.htl_peak = parseFloat(element.htl_peak).toFixed(4);
-                            element.htl_off_peak = parseFloat(element.htl_off_peak).toFixed(4);
+                                }
+                                // this.state.chartDatas[0].data = this.state.chartDatas[0].data.concat(
+                                //     {time: moment(last.bid_time).format('YYYY-MM-DD HH:mm:ss')
+                                //         , ranking: Number(last.ranking) === 1 ? 2 : last.ranking, needMark: last.is_bidder}
+                                // )
+                                last.ranking = Number(last.ranking) === 1 ? 2 : last.ranking;
+                                last.template_ranking = `Ranking: ${Number(last.ranking) <= 2 ? 'TOP 2' : getNumBref(last.ranking)} ${last.is_bidder && last.flag !== null ? '(Bid Submitter)' : ''}`;
+                                if (!last.template_price) {
+                                    last.template_price = {};
+                                }
+                                last.template_price['company_price'] = `${last.company_name} ${parseFloat(last.average_price).toFixed(4)}/kWh`;
+                                last.template_price['lt'] = `LT(P):$${parseFloat(last.lt_peak).toFixed(4)} LT(OP):$${parseFloat(last.lt_off_peak).toFixed(4)}`;
+                                last.template_price['hts'] = `HTS(P):$${parseFloat(last.hts_peak).toFixed(4)} HTS(OP):$${parseFloat(last.hts_off_peak).toFixed(4)}`;
+                                last.template_price['htl'] = `HTL(P):$${parseFloat(last.htl_peak).toFixed(4)} HTL(OP):$${parseFloat(last.htl_off_peak).toFixed(4)}`;
+                                this.state.chartDatas[0].data = this.state.chartDatas[0].data.concat(last)
+                                // }
+                                let element = JSON.parse(JSON.stringify(last));
+                                element.bid_time = moment(element.bid_time).format('HH:mm:ss');
+                                element.lt_peak = parseFloat(element.lt_peak).toFixed(4);
+                                element.lt_off_peak = parseFloat(element.lt_off_peak).toFixed(4);
+                                element.hts_peak = parseFloat(element.hts_peak).toFixed(4);
+                                element.hts_off_peak = parseFloat(element.hts_off_peak).toFixed(4);
+                                element.htl_peak = parseFloat(element.htl_peak).toFixed(4);
+                                element.htl_off_peak = parseFloat(element.htl_off_peak).toFixed(4);
 
-                            this.setState({
-                                ranking: last.ranking,
-                                priceConfig: last.is_bidder ? [].concat(last.lt_off_peak)
-                                    .concat(last.lt_peak).concat(last.hts_off_peak)
-                                    .concat(last.hts_peak).concat(last.htl_off_peak)
-                                    .concat(last.htl_peak) : [],//this.state.priceConfig
-                                histories: last.is_bidder ? this.state.histories.concat(element): this.state.histories,
-                                chartDatas: this.state.chartDatas
-                            })
+                                this.setState({
+                                    ranking: last.ranking,
+                                    priceConfig: last.is_bidder ? [].concat(last.lt_off_peak)
+                                        .concat(last.lt_peak).concat(last.hts_off_peak)
+                                        .concat(last.hts_peak).concat(last.htl_off_peak)
+                                        .concat(last.htl_peak) : [],//this.state.priceConfig
+                                    histories: last.is_bidder ? this.state.histories.concat(element): this.state.histories,
+                                    chartDatas: this.state.chartDatas
+                                })
+                            }
+                        }else{
+                            getAuctionHistorys(auctionId, getLoginUserId()).then(res => {
+                                // console.log('res==========================', res);
+                                this.makeup(res);
+                            });
                         }
+                        
                     } else if (data.action === 'extend') {
                         this.setState({extendVisible : data.data.minutes});
                         if (this.extendTimeout) {
