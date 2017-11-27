@@ -8,8 +8,6 @@ RSpec.describe 'admin view past auctions', type: :feature, js: true do
   end
 
   context 'no past auctions' do
-    let!(:auction) { create(:auction) }
-
     it 'has no auction shown' do
       visit admin_home_index_path
 

@@ -8,7 +8,7 @@ RSpec.describe 'retailer manage auction', type: :feature, js: true do
   end
 
   describe 'no upcoming auction' do
-    let!(:auction) { create(:auction, :for_next_month, :upcoming) }
+    let!(:auction) { create(:auction) }
 
     it 'nothing to do' do
       visit retailer_home_index_path
