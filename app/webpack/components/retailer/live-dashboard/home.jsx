@@ -89,7 +89,7 @@ export default class LiveHomePage extends Component {
                                 histories: last.is_bidder ? this.state.histories.concat(element): this.state.histories,
                                 chartDatas: this.state.chartDatas
                             })
-                       
+                        }
                     } else if (data.action === 'extend') {
                         this.setState({extendVisible : data.data.minutes});
                         if (this.extendTimeout) {
