@@ -38,13 +38,7 @@ retailers = [
   { name: 'Seraya Energy', email: 'lamkl@pseraya.com.sg', company_name: 'Seraya Energy', password: '6Fb5Fq3M'  },
   { name: 'Sunseap Energy', email: 'Darius.kok@sunseap.com', company_name: 'Sunseap Energy', password: '5Ve6Ay9J'  },
   { name: 'Tuas Power Supply', email: 'angiebai@tuaspower.com.sg', company_name: 'Tuas Power Supply', password: '8Qk3Mk5L'  },
-  { name: 'Union Power', email: 'hermann@unionpower.com.sg', company_name: 'Union Power', password: '6Yp9Uq3Y' },
-  { name: 'Retailer_A', email: 'Retailer_A@example.com', company_name: 'Retailer_A', password: 'password' },
-  { name: 'Retailer_B', email: 'Retailer_B@example.com', company_name: 'Retailer_B', password: 'password' },
-  { name: 'Retailer_C', email: 'Retailer_C@example.com', company_name: 'Retailer_C', password: 'password' },
-  { name: 'Retailer_D', email: 'Retailer_D@example.com', company_name: 'Retailer_D', password: 'password' },
-  { name: 'Retailer_E', email: 'Retailer_E@example.com', company_name: 'Retailer_E', password: 'password' },
-  { name: 'Retailer_F', email: 'Retailer_F@example.com', company_name: 'Retailer_F', password: 'password' }
+  { name: 'Union Power', email: 'hermann@unionpower.com.sg', company_name: 'Union Power', password: '6Yp9Uq3Y' }
 
 ]
 
