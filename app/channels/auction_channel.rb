@@ -74,14 +74,16 @@ class AuctionChannel < ApplicationCable::Channel
       end
     end
     unless exist_same_history
-      @history = AuctionHistory.new(lt_peak: calculate_dto.lt_peak, lt_off_peak: calculate_dto.lt_off_peak, hts_peak: calculate_dto.hts_peak, hts_off_peak: calculate_dto.hts_off_peak, htl_peak: calculate_dto.htl_peak, htl_off_peak: calculate_dto.htl_off_peak, bid_time: Time.current, actual_bid_time: Time.current,
+      current_time = Time.current
+      @history = AuctionHistory.new(lt_peak: calculate_dto.lt_peak, lt_off_peak: calculate_dto.lt_off_peak, hts_peak: calculate_dto.hts_peak, hts_off_peak: calculate_dto.hts_off_peak, htl_peak: calculate_dto.htl_peak, htl_off_peak: calculate_dto.htl_off_peak, bid_time: current_time, actual_bid_time: current_time,
                                     user_id: calculate_dto.user_id, auction_id: calculate_dto.auction_id, average_price: average_price, total_award_sum: total_award_sum, is_bidder: true)
+      AuctionEvent.set_events(@history.user_id, @history.auction_id, 'set bid', @history.to_json)
+      # AuctionHistory.transaction do
       if @history.save
-        AuctionEvent.set_events(@history.user_id, @history.auction_id, 'set bid', @history.to_json)
         # update update sort
-        @histories = AuctionHistory.find_clone_sort_update_auction_histories(params[:auction_id], @history.id)
-
+        @histories = AuctionHistory.find_clone_sort_update_auction_histories(params[:auction_id], @history.id, current_time)
       end
+      # end
     end
   end
 end
