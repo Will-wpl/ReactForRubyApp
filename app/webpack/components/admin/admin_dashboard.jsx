@@ -28,8 +28,9 @@ export class AdminDashboard extends Component {
             this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000'
             this.forceUpdate(); // only once no need to use state
 
+            let auction_id = auction? auction.id : 1;
 
-            getHistories({ auction_id: auction? auction.id : 1}).then(histories => {
+            getHistories({ auction_id: auction_id}).then(histories => {
                 // console.log('histories', histories, isEmptyJsonObj(histories));
                 if (!isEmptyJsonObj(histories)) {
                     let orderRanking = histories.filter(element => {
@@ -74,20 +75,21 @@ export class AdminDashboard extends Component {
                 this.createWebsocket(auction? auction.id : 1);
             }, error => {
                 this.createWebsocket(auction? auction.id : 1);
-            })
-        })
-        getArrangements(ACCEPT_STATUS.ACCEPT).then(res => {
-            let limit = findUpLimit(res.length);
-            let users = res.map((element, index) => {
-                element['color'] = getRandomColor(index + 1, limit); //getRandomColor((index + 1) * 1.0 / limit);
-                return element;
             });
-            this.setState({users:users});
-            this.priceUsers.selectAll(users);
-            this.rankingUsers.selectAll(users);
-        }, error => {
-            //console.log(error);
-        });
+
+            getArrangements(auction_id, ACCEPT_STATUS.ACCEPT).then(res => {
+                let limit = findUpLimit(res.length);
+                let users = res.map((element, index) => {
+                    element['color'] = getRandomColor(index + 1, limit); //getRandomColor((index + 1) * 1.0 / limit);
+                    return element;
+                });
+                this.setState({users:users});
+                this.priceUsers.selectAll(users);
+                this.rankingUsers.selectAll(users);
+            }, error => {
+                //console.log(error);
+            });
+        })
     }
 
     createWebsocket(auction) {

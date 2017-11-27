@@ -187,7 +187,7 @@ export default class BidForm extends Component {
                         <tbody>
                         <tr>
                             <td>Peak (7am-7pm)</td>
-                            <td>$0.<input type="text" value={this.state.configs[1]}
+                            <td>$0.<input type="text" name="peak_lt" value={this.state.configs[1]}
                                           style={{borderColor: this.state.status[1] ? 'white' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 1)}
                                           maxLength={4}/></td>
@@ -195,14 +195,14 @@ export default class BidForm extends Component {
                                           style={{borderColor: this.state.status[3] ? 'white' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 3)}
                                           maxLength={4}/></td>
-                            <td>$0.<input type="text" value={this.state.configs[5]}
+                            <td>$0.<input type="text" name="peak_ht" value={this.state.configs[5]}
                                           style={{borderColor: this.state.status[5] ? 'white' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 5)}
                                           maxLength={4}/></td>
                         </tr>
                         <tr>
                             <td>Off-Peak (7pm-7am)</td>
-                            <td>$0.<input type="text" value={this.state.configs[0]}
+                            <td>$0.<input type="text" name="off_peak_lt" value={this.state.configs[0]}
                                           style={{borderColor: this.state.status[0] ? 'white' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 0)}
                                           maxLength={4}/></td>
@@ -210,7 +210,7 @@ export default class BidForm extends Component {
                                           style={{borderColor: this.state.status[2] ? 'white' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 2)}
                                           maxLength={4}/></td>
-                            <td>$0.<input type="text" value={this.state.configs[4]}
+                            <td>$0.<input type="text" name="off_peak_ht" value={this.state.configs[4]}
                                           style={{borderColor: this.state.status[4] ? 'white' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 4)}
                                           maxLength={4}/></td>

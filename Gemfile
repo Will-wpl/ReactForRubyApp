@@ -62,6 +62,8 @@ group :development, :test do
   gem 'capybara'
   gem 'selenium-webdriver'
   gem 'spring-commands-rspec'
+
+  gem 'timecop'
 end
 
 group :development do

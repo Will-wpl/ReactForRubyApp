@@ -1,7 +1,7 @@
 import {get, create, put, Ws,update} from '../../../javascripts/http';
 
-export const getArrangements = (status) => {
-    return get('/api/arrangements', { auction_id: 1, accept_status: status });
+export const getArrangements = (auction_id, status) => {
+    return get('/api/arrangements', { auction_id: auction_id, accept_status: status });
 }
 
 export const createRa = (params) => {
