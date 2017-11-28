@@ -66,7 +66,7 @@ class AuctionChannel < ApplicationCable::Channel
     average_price = AuctionHistory.set_average_price(total_award_sum, total_volume)
 
     someone_histories = AuctionHistory.where('auction_id = ? and user_id = ? and is_bidder = true', calculate_dto.auction_id, calculate_dto.user_id)
-    ast_history = someone_histories.order(actual_bid_time: :desc).first
+    last_history = someone_histories.order(actual_bid_time: :desc).first
     if average_price < last_history.average_price
       exist_same_history = false
       someone_histories.each do |history|
