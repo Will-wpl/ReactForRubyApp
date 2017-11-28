@@ -80,4 +80,7 @@ group :test do
   gem 'rspec_junit_formatter'
 end
 
-gem 'rails_12factor', group: :production
+group :production do
+  gem 'newrelic_rpm'
+  gem 'rails_12factor'
+end
