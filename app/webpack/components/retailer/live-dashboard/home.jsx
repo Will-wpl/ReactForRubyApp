@@ -91,7 +91,7 @@ export default class LiveHomePage extends Component {
                             })
                         }
                     } else if (data.action === 'extend') {
-                        this.setState({extendVisible : data.data.minutes});
+                        this.setState({extendVisible : data.data.minutes, priceConfig: []});
                         if (this.extendTimeout) {
                             clearTimeout(this.extendTimeout);
                         }
