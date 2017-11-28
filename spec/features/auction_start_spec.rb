@@ -15,9 +15,14 @@ RSpec.describe 'auction start', type: :feature, js: true do
     describe 'visit commence and bid page' do
       it 'shows valid details' do
         in_browser(:admin) do
-          login_as(admin_user)
+          visit new_user_session_path
 
-          visit admin_home_index_path
+          within('form.new_user') do
+            fill_in 'user_email', with: admin_user.email
+            fill_in 'user_password', with: 'password'
+            click_button 'Login'
+          end
+
           click_link 'Manage Published Upcoming Reverse Auction'
 
           expect(page).to have_content 'Manage Upcoming Reverse Auction'
