@@ -99,7 +99,7 @@ class Api::AuctionsController < Api::BaseController
     #   auction_result.htl_off_peak = nil
     #   auction_result.user_id = nil
     # else
-    history = AuctionHistory.select('auction_histories.* ,users.company_name').joins(:user).where('auction_id = ? and user_id = ? and is_bidder = true ', params[:id], current_user.id).order(actual_bid_time: :desc).first
+    history = AuctionHistory.select('auction_histories.* ,users.company_name').joins(:user).where('auction_id = ? and user_id = ? and is_bidder = true ', params[:id], params[:user_id]).order(actual_bid_time: :desc).first
 
     auction_result.reserve_price = @auction.reserve_price
     auction_result.lowest_average_price = history.average_price
@@ -115,7 +115,7 @@ class Api::AuctionsController < Api::BaseController
     auction_result.hts_off_peak = history.hts_off_peak
     auction_result.htl_peak = history.htl_peak
     auction_result.htl_off_peak = history.htl_off_peak
-    auction_result.user_id = current_user.id
+    auction_result.user_id = params[:user_id]
     # end
     if auction_result.save
       AuctionEvent.set_events(current_user.id, @auction.id, request[:action], auction_result.to_json)
