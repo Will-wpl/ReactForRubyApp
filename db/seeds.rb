@@ -31,6 +31,7 @@ retailers = [
   { name: 'Energy Supply Solutions', email: 'yap@energysupplysolutions.com.sg', company_name: 'Energy Supply Solutions', password: '5Qq2Qy8E'  },
   { name: 'Hyflux Energy', email: 'huixin_tang@hyflux.com', company_name: 'Hyflux Energy', password: '2Cy7Fw5J'  },
   { name: 'I Switch', email: 'Jovan.tang@iswitch.com.sg', company_name: 'I Switch', password: '9Fr6Yt4G'  },
+  { name: 'Keppel Electric', email: 'peiling.liew@kepinfra.com', company_name: 'Keppel Electric', password: '6Yz3Pd7Z'  },
   { name: 'PacificLight Energy', email: 'Eugene.he@pacificlight.com.sg', company_name: 'PacificLight Energy', password: '7Tr5Au2Q'  },
   { name: 'Red Dot Power', email: 'hafizah.ahmad@reddotpower.com.sg', company_name: 'Red Dot Power', password: '6Pc9Qk7S'  },
   { name: 'SembCorp Power', email: 'jenny.lye@sembcorp.com', company_name: 'SembCorp Power', password: '2Uk6Cr7G'  },
