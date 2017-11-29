@@ -10,6 +10,9 @@ class Api::ArrangementsController < Api::BaseController
     else
       @arrangements = query.where('auction_id = :auction_id and accept_status = :accept_status ', auction_id: params[:auction_id], accept_status: params[:accept_status])
     end
+    unless is_admin
+      @arrangements = query.where('user_id': current_user.id)
+    end
     render json: @arrangements, status: 200
   end
 
@@ -19,7 +22,7 @@ class Api::ArrangementsController < Api::BaseController
   end
 
   def obtain
-    @arrangement = Arrangement.where('auction_id = ? and user_id = ?', params[:auction_id], params[:user_id]).first
+    @arrangement = Arrangement.where('auction_id = ? and user_id = ?', params[:auction_id], current_user.id).first
     render json: @arrangement, status: 200
   end
 
@@ -53,7 +56,7 @@ class Api::ArrangementsController < Api::BaseController
   private
 
   def set_arrangement
-    @arrangement = Arrangement.find(params[:id])
+      @arrangement = Arrangement.find(params[:id])
   end
 
   def model_params
