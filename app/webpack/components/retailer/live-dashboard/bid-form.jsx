@@ -179,9 +179,9 @@ export default class BidForm extends Component {
                         <thead>
                         <tr>
                             <th></th>
-                            <th>LT</th>
+                            <th>LT ($/kWh)</th>
                             <th style={{display: 'none'}}>HT(Small)</th>
-                            <th>HT(Large)</th>
+                            <th>HT Large ($/kWh)</th>
                         </tr>
                         </thead>
                         <tbody>
