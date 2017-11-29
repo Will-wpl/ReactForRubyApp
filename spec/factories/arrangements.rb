@@ -9,6 +9,12 @@ FactoryBot.define do
     alternative_email_address ''
     alternative_mobile_number ''
     alternative_office_number ''
+    lt_peak 0.1458
+    lt_off_peak 0.1458
+    hts_peak 0
+    hts_off_peak 0
+    htl_peak 0.1458
+    htl_off_peak 0.1458
 
     trait :accepted do
       main_name { Faker::Name.name }
