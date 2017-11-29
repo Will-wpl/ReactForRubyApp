@@ -1,4 +1,5 @@
 class Api::AuctionHistoriesController < Api::BaseController
+  before_action :admin_required, only: %i[list last]
   # get histories by user_id and auction_id
   def show
     @histories = AuctionHistory.select('users.name, users.company_name, auction_histories.*').joins(:user).where('auction_id = ? and user_id = ?', params[:auction_id], current_user.id).order(bid_time: :asc)

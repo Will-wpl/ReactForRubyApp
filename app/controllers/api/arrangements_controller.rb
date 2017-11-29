@@ -10,6 +10,9 @@ class Api::ArrangementsController < Api::BaseController
     else
       @arrangements = query.where('auction_id = :auction_id and accept_status = :accept_status ', auction_id: params[:auction_id], accept_status: params[:accept_status])
     end
+    unless is_admin
+      @arrangements = query.where('user_id': current_user.id)
+    end
     render json: @arrangements, status: 200
   end
 
