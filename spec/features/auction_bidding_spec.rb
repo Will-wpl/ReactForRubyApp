@@ -92,6 +92,7 @@ RSpec.describe 'auction bidding', type: :feature, js: true do
       end
 
       in_browser(:admin) do
+        expect(all('table.retailer_fill tbody')[0]).to have_selector('tr', wait: 5) # Wait for the row to be populated
         expect(all('table.retailer_fill tbody tr')[0]).to have_selector('td', text: retailer_user.company_name)
         expect(all('table.retailer_fill tbody tr')[0]).to have_selector('td', text: '0.1222')
       end
