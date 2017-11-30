@@ -39,6 +39,10 @@ export default class LiveHomePage extends Component {
             // console.log(this.ws)
             this.ws.onConnected(() => {
                 console.log('---message client connected ---');
+                this.timestamp = new Date().getTime() + Math.random();
+                setTimeout(()=> {
+                    this.ws.sendMessage(ACTION_COMMANDS.MAKE_UNIQUE, {timestamp: this.timestamp});
+                }, 1000);
             }).onDisconnected(() => {
                 console.log('---message client disconnected ----')
             }).onReceivedData(data => {
@@ -98,6 +102,13 @@ export default class LiveHomePage extends Component {
                         this.extendTimeout = setTimeout(() => {
                             this.setState({extendVisible : false});
                         }, 5000);
+                    } else if (data.action === 'limit_user') {
+                        if (data.data.user_id === getLoginUserId()) {
+                            if (this.timestamp !== data.data.timestamp) {
+                                alert('You will be redirected to the homepage as you have logged in using another device.');
+                                window.location.href=`/retailer/home`;
+                            }
+                        }
                     }
                 }
             })
