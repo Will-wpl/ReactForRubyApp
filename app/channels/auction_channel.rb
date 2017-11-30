@@ -6,6 +6,11 @@ class AuctionChannel < ApplicationCable::Channel
 
   def unsubscribed; end
 
+  def limit_user(data)
+    timestamp = data['timestamp']
+    ActionCable.server.broadcast "auction_#{params[:auction_id]}", action: 'limit_user', data: { user_id: params[:user_id], timestamp: timestamp }
+  end
+
   def extend_time(data)
     auction = Auction.find(params[:auction_id])
     extend_time = data['extend_time'].to_i
