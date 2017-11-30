@@ -17,7 +17,8 @@ export const logout = (id) => {
 }
 
 export const ACTION_COMMANDS = {
-    SET_BID: 'set_bid'
+    SET_BID: 'set_bid',
+    MAKE_UNIQUE: 'limit_user'
 }
 
 export const checknetwork = () => {
