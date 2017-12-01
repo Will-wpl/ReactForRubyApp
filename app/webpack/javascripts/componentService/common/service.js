@@ -1,4 +1,4 @@
-import {get, Ws, createWS,create} from '../../../javascripts/http';
+import {get, Ws, create} from '../../../javascripts/http';
 
 export const getAuctionTimeRule = (auction) => {
     return get(`/api/auctions/${auction}/timer`);

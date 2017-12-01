@@ -77,7 +77,7 @@ export class AdminDashboard extends Component {
                 this.createWebsocket(auction? auction.id : 1);
             });
 
-            getArrangements(auction_id, ACCEPT_STATUS.ACCEPT).then(res => {
+            getArrangements(auctionId, ACCEPT_STATUS.ACCEPT).then(res => {
                 let limit = findUpLimit(res.length);
                 let users = res.map((element, index) => {
                     element['color'] = getRandomColor(index + 1, limit); //getRandomColor((index + 1) * 1.0 / limit);

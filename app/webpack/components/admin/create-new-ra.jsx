@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import DatePicker from 'react-datepicker';
 import moment from 'moment'; 
 import 'react-datepicker/dist/react-datepicker.css';
-import {createRa,getAuctionInVersionOne,raPublish} from '../../javascripts/componentService/admin/service';
+import {createRa, raPublish} from '../../javascripts/componentService/admin/service';
+import {getAuction} from '../../javascripts/componentService/common/service';
 import {Modal} from '../shared/show-modal';
 
 export class CreateNewRA extends Component {
@@ -41,7 +42,7 @@ export class CreateNewRA extends Component {
         }
     }
     doGetData(type){
-        getAuctionInVersionOne().then(res => {
+        getAuction().then(res => {
             this.auction = res;
             if(type == "create"){
                 if(this.auction.publish_status == 1){
@@ -220,7 +221,7 @@ export class CreateNewRA extends Component {
         event.preventDefault();
     }  
     showDelete(){
-        getAuctionInVersionOne().then(res => {
+        getAuction().then(res => {
             if(res.start_datetime == null){
                 this.refs.Modal.showModal();
                 this.setState({
