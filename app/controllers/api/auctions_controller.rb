@@ -107,12 +107,6 @@ class Api::AuctionsController < Api::BaseController
     end
   end
 
-  # set logout status
-  def logout
-    user = User.find(current_user.id)
-    UserExtension.save_or_update_login_status(user, 'logout', params[:id], request[:action])
-  end
-
   private
 
   def set_auction
