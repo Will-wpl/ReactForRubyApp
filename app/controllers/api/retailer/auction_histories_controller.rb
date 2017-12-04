@@ -1,3 +1,3 @@
-class Api::AuctionHistoriesController < Api::BaseController
+class Api::AuctionHistoriesController < Api::AuctionHistoriesController
   before_action :retailer_required, only: %i[show]
 end
