@@ -30,6 +30,12 @@ Rails.application.routes.draw do
           post 'logout'
         end
       end
+      resource :auction_histories, only: %i[list last] do
+        collection do
+          get 'list'
+          get 'last'
+        end
+      end
     end
   end
 
@@ -40,6 +46,8 @@ Rails.application.routes.draw do
           get 'obtain'
         end
       end
+      resource :auction_histories, only: %i[show] do
+      end
     end
   end
 
@@ -49,7 +57,6 @@ Rails.application.routes.draw do
         post 'heartbeat'
       end
     end
-
     resources :arrangements, only: %i[index show obtain update] do
       collection do
         get 'obtain'
@@ -60,12 +67,6 @@ Rails.application.routes.draw do
         get 'timer'
       end
       collection do
-      end
-    end
-    resource :auction_histories, only: %i[show list last] do
-      collection do
-        get 'list'
-        get 'last'
       end
     end
   end
