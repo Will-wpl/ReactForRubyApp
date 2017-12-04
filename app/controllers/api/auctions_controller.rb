@@ -1,6 +1,6 @@
 class Api::AuctionsController < Api::BaseController
-  require 'time'
   before_action :set_auction, only: %i[update publish timer hold confirm]
+
   # GET auction info by ajax
   def obtain
     if Auction.count == 0
@@ -82,25 +82,7 @@ class Api::AuctionsController < Api::BaseController
     auction_result = AuctionResult.find_by_auction_id(params[:id])
     auction_result = AuctionResult.new if auction_result.nil?
     auction_result.auction_id = params[:id].to_i
-    # if status == 'void'
-    #   auction_result.reserve_price = nil
-    #   auction_result.lowest_average_price = nil
-    #   auction_result.status = 'void'
-    #   auction_result.lowest_price_bidder = nil
-    #   auction_result.contract_period_start_date = nil
-    #   auction_result.contract_period_end_date = nil
-    #   auction_result.total_volume = nil
-    #   auction_result.total_award_sum = nil
-    #   auction_result.lt_peak = nil
-    #   auction_result.lt_off_peak = nil
-    #   auction_result.hts_peak = nil
-    #   auction_result.hts_off_peak = nil
-    #   auction_result.htl_peak = nil
-    #   auction_result.htl_off_peak = nil
-    #   auction_result.user_id = nil
-    # else
     history = AuctionHistory.select('auction_histories.* ,users.company_name').joins(:user).where('auction_id = ? and user_id = ? and is_bidder = true ', params[:id], params[:user_id]).order(actual_bid_time: :desc).first
-
     auction_result.reserve_price = @auction.reserve_price
     auction_result.lowest_average_price = history.average_price
     auction_result.status = status

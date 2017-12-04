@@ -17,6 +17,33 @@ Rails.application.routes.draw do
   end
 
   namespace :api do
+    namespace :admin do
+      resources :auctions, only: %i[obtain link create update publish hold confirm logout] do
+        member do
+          put 'publish'
+          put 'hold'
+          post 'confirm'
+        end
+        collection do
+          get 'obtain'
+          get 'link'
+          post 'logout'
+        end
+      end
+    end
+  end
+
+  namespace :api do
+    namespace :retailer do
+      resources :auctions, only: %i[obtain] do
+        collection do
+          get 'obtain'
+        end
+      end
+    end
+  end
+
+  namespace :api do
     resources :base, only: %i[heartbeat] do
       collection do
         post 'heartbeat'
@@ -28,17 +55,11 @@ Rails.application.routes.draw do
         get 'obtain'
       end
     end
-    resources :auctions, only: %i[obtain link create update publish hold timer confirm logout] do
+    resources :auctions, only: %i[timer] do
       member do
         get 'timer'
-        put 'publish'
-        put 'hold'
-        post 'confirm'
       end
       collection do
-        get 'obtain'
-        get 'link'
-        post 'logout'
       end
     end
     resource :auction_histories, only: %i[show list last] do
