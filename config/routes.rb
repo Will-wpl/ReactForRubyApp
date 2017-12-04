@@ -18,7 +18,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :admin do
-      resources :auctions, only: %i[obtain link create update publish hold confirm logout] do
+      resources :auctions, only: %i[obtain link create update publish hold confirm] do
         member do
           put 'publish'
           put 'hold'
@@ -26,8 +26,6 @@ Rails.application.routes.draw do
         end
         collection do
           get 'obtain'
-          get 'link'
-          post 'logout'
         end
       end
       resource :auction_histories, only: %i[list last] do
@@ -70,8 +68,6 @@ Rails.application.routes.draw do
     resources :auctions, only: %i[timer] do
       member do
         get 'timer'
-      end
-      collection do
       end
     end
   end
