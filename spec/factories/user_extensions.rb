@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :user_extension do
     login_status 'MyString'
     current_room 'MyString'

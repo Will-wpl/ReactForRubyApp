@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :auction_event do
     auction_who 'MyString'
     auction_when '2017-10-27 10:51:22'

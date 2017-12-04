@@ -20,7 +20,7 @@ require 'rspec/rails'
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-# Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
@@ -63,7 +63,7 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
 
   # Factory Girl
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
 
   # Devise
   config.include Devise::Test::ControllerHelpers, type: :controller

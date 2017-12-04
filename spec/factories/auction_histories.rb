@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :auction_history do
     average_price '9.99'
     lt_peak '9.99'

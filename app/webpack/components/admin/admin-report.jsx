@@ -57,19 +57,20 @@ export class AdminReport extends Component {
             //     // console.log('histories', histories);
             //     this.setState({histories: histories});
             // })
-        })
-        getArrangements(ACCEPT_STATUS.ACCEPT).then(res => {
-            let limit = findUpLimit(res.length);
-            let users = res.map((element, index) => {
-                element['color'] = getRandomColor(index + 1, limit); //getRandomColor((index + 1) * 1.0 / limit);
-                return element;
+
+            getArrangements(auctionId, ACCEPT_STATUS.ACCEPT).then(res => {
+                let limit = findUpLimit(res.length);
+                let users = res.map((element, index) => {
+                    element['color'] = getRandomColor(index + 1, limit); //getRandomColor((index + 1) * 1.0 / limit);
+                    return element;
+                });
+                this.setState({users:users});
+                this.priceUsers.selectAll(users);
+                this.rankingUsers.selectAll(users);
+            }, error => {
+                //console.log(error);
             });
-            this.setState({users:users});
-            this.priceUsers.selectAll(users);
-            this.rankingUsers.selectAll(users);
-        }, error => {
-            //console.log(error);
-        });
+        })
     }
 
     render () {

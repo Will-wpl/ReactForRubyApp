@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {CreateNewRA} from './create-new-ra';
 import {BidderStatus} from './admin_shared/bidders-status';
 import {TimeCuntDown} from '../shared/time-cuntdown';
-import {getAuctionInVersionOne,getBidderStatus} from '../../javascripts/componentService/admin/service';
+import {getAuction} from '../../javascripts/componentService/common/service';
 import moment from 'moment';
 
 export class AdminManagePublishedRa extends Component {
@@ -16,7 +16,7 @@ export class AdminManagePublishedRa extends Component {
     }
 
     componentWillMount(){
-        getAuctionInVersionOne().then(res => {
+        getAuction().then(res => {
             this.auction = res;
             this.timerTitle = this.auction ? `${this.auction.name} on ${moment(this.auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
             this.forceUpdate();

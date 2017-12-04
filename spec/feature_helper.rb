@@ -31,13 +31,19 @@ RSpec.configure do |config|
   end
 end
 
+Capybara.server = :puma # Needs to be Puma in order for ActionCable / Websockets to work
+
 webdriver_options = {
   browser: :chrome
 }
 
+Capybara.register_driver :chrome do |app|
+  Capybara::Selenium::Driver.new(app, webdriver_options)
+end
+
 Capybara.register_driver :headless_chrome do |app|
   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-    chromeOptions: { args: %w[headless disable-gpu no-sandbox] }
+    chromeOptions: { args: %w[headless disable-gpu no-sandbox window-size=1920,1080] }
   )
   webdriver_options[:desired_capabilities] = capabilities
 

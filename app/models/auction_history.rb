@@ -52,7 +52,7 @@ class AuctionHistory < ApplicationRecord
   end
 
   def self.find_bidder_histories(auction_id)
-    @histories = AuctionHistory.where('auction_id = ? and is_bidder = ?', auction_id, true)
+    AuctionHistory.where('auction_id = ? and is_bidder = ?', auction_id, true)
   end
 
   def self.sort_update_auction_histories(histories)
@@ -130,6 +130,6 @@ class AuctionHistory < ApplicationRecord
   end
 
   def self.find_bidder_retailer_histories(auction_id)
-    @histories = AuctionHistory.where('auction_id = ? and is_bidder = ?', auction_id, true)
+    AuctionHistory.where('auction_id = ? and is_bidder = ?', auction_id, true)
   end
 end
