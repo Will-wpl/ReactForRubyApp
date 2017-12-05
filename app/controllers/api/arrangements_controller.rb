@@ -4,15 +4,7 @@ class Api::ArrangementsController < Api::BaseController
   # GET arrangement list by auction_id
   # accept_status ['0','1','2'] '0':reject '1':accept '2':pending
   def index
-    query = Arrangement.select('arrangements.*, users.company_name , user_extensions.login_status , user_extensions.current_room , user_extensions.current_page').left_outer_joins(user: :user_extension).order('arrangements.accept_status ASC, users.company_name ASC')
-    if params[:accept_status].nil?
-      @arrangements = query.where('auction_id': params[:auction_id])
-    else
-      @arrangements = query.where('auction_id = :auction_id and accept_status = :accept_status ', auction_id: params[:auction_id], accept_status: params[:accept_status])
-    end
-    # unless is_admin
-    #   @arrangements = query.where('user_id': current_user.id)
-    # end
+    @arrangements = Arrangement.query_list(params[:auction_id], params[:accept_status])
     render json: @arrangements, status: 200
   end
 
@@ -62,4 +54,5 @@ class Api::ArrangementsController < Api::BaseController
   def model_params
     params.require(:arrangement).permit(:main_name, :main_email_address, :main_mobile_number, :main_office_number, :alternative_name, :alternative_email_address, :alternative_mobile_number, :alternative_office_number, :lt_peak, :lt_off_peak, :hts_peak, :hts_off_peak, :htl_peak, :htl_off_peak, :accept_status)
   end
+
 end
