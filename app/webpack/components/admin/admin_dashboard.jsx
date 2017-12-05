@@ -28,9 +28,9 @@ export class AdminDashboard extends Component {
             this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000'
             this.forceUpdate(); // only once no need to use state
 
-            let auction_id = auction? auction.id : 1;
+            let auctionId = auction? auction.id : 1;
 
-            getHistories({ auction_id: auction_id}).then(histories => {
+            getHistories({ auction_id: auctionId}).then(histories => {
                 // console.log('histories', histories, isEmptyJsonObj(histories));
                 if (!isEmptyJsonObj(histories)) {
                     let orderRanking = histories.filter(element => {
@@ -72,9 +72,9 @@ export class AdminDashboard extends Component {
                     // this.refs.priceChart.setChartData(histories, 'price');
                     // this.refs.rankingChart.setChartData(histories, 'ranking');
                 }
-                this.createWebsocket(auction? auction.id : 1);
+                this.createWebsocket(auctionId);
             }, error => {
-                this.createWebsocket(auction? auction.id : 1);
+                this.createWebsocket(auctionId);
             });
 
             getArrangements(auctionId, ACCEPT_STATUS.ACCEPT).then(res => {
