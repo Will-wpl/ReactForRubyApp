@@ -5,7 +5,7 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
       render json: nil
     else
       @auction = Auction.first
-      render json: {id: @auction.id}, status: 200
+      render json: {id: @auction.id, publish_status: @auction.publish_status}, status: 200
     end
   end
 end
