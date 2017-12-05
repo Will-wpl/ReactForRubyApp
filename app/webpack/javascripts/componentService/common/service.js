@@ -8,8 +8,8 @@ export const createWebsocket = (auction) => {
     return new Ws(auction); // return createWS(auction);
 }
 
-export const getAuction = () => {
-    return get('/api/auctions/obtain');
+export const getAuction = (type) => {
+    return get(`/api/${type}/auctions/obtain`);
 }
 
 export const logout = (id) => {

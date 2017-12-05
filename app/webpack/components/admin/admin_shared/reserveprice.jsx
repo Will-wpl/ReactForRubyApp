@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {getAuction} from '../../../javascripts/componentService/common/service';
 export default class ReservePrice extends Component {
     componentDidMount() {
-        getAuction().then(auction => {
+        getAuction('admin').then(auction => {
             this.name = auction.name;
         }, error => {
         })

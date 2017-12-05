@@ -22,7 +22,7 @@ export class AdminDashboard extends Component {
     }
 
     componentDidMount() {
-        getAuction().then(auction => {
+        getAuction('admin').then(auction => {
             this.auction = auction;
             this.timerTitle = auction ? `${auction.name} on ${moment(auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
             this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000'
