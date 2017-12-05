@@ -51,7 +51,7 @@ Rails.application.routes.draw do
       end
       resource :auction_histories, only: %i[show] do
       end
-      resources :arrangements, only: %i[index show obtain] do
+      resources :arrangements, only: %i[index show obtain update] do
         collection do
           get 'obtain'
         end

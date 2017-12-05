@@ -54,7 +54,7 @@ class AuctionHistory < ApplicationRecord
         AuctionEvent.set_events(@history.user_id, @history.auction_id, 'set bid', @history.to_json)
         if @history.save
           # update update sort
-          @histories = AuctionHistory.find_clone_sort_update_auction_histories(params[:auction_id], @history.id, current_time)
+          @histories = find_clone_sort_update_auction_histories(calculate_dto.auction_id, @history.id, current_time)
         end
       end
     end
@@ -162,7 +162,6 @@ class AuctionHistory < ApplicationRecord
       tmp_average_price = history.average_price
     end
     # histories = AuctionHistory.find(ids)
-    histories = AuctionHistory.select('auction_histories.* , users.company_name').joins(:user).find(ids)
-    histories
+    AuctionHistory.select('auction_histories.* , users.company_name').joins(:user).find(ids)
   end
 end

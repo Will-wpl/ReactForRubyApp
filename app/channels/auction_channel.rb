@@ -37,6 +37,6 @@ class AuctionChannel < ApplicationCable::Channel
     calculate_dto.user_id = params[:user_id]
     calculate_dto.auction_id = params[:auction_id]
 
-    ActionCable.server.broadcast "auction_#{params[:auction_id]}", data: AuctionHistory.set_price(calculate_dto), action: 'set_bid'
+    ActionCable.server.broadcast "auction_#{params[:auction_id]}", data: AuctionHistory.set_bid(calculate_dto), action: 'set_bid'
   end
 end
