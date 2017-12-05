@@ -22,7 +22,7 @@ class AuctionHistory < ApplicationRecord
   # Custom
 
   # Methods (class methods before instance methods)
-
+  
   def self.set_bid(calculate_dto)
     total_award_sum = AuctionHistory.set_total_award_sum(calculate_dto.total_lt_peak, calculate_dto.total_lt_off_peak,
                                                          calculate_dto.total_hts_peak, calculate_dto.total_hts_off_peak,
@@ -164,9 +164,5 @@ class AuctionHistory < ApplicationRecord
     # histories = AuctionHistory.find(ids)
     histories = AuctionHistory.select('auction_histories.* , users.company_name').joins(:user).find(ids)
     histories
-  end
-
-  def self.find_bidder_retailer_histories(auction_id)
-    AuctionHistory.where('auction_id = ? and is_bidder = ?', auction_id, true)
   end
 end
