@@ -72,11 +72,7 @@ class Api::AuctionsController < Api::BaseController
     render json: { current_time: Time.current, hold_status: @auction.hold_status, actual_begin_time: @auction.actual_begin_time, actual_end_time: @auction.actual_end_time }, status: 200
   end
 
-  # POST extend time
-  def delay; end
-
   # POST confirm
-
   def confirm
     status = params[:status]
     auction_result = AuctionResult.find_by_auction_id(params[:id])
