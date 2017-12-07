@@ -1,5 +1,5 @@
 class Api::AuctionsController < Api::BaseController
-  before_action :set_auction, only: %i[update publish timer hold confirm]
+  before_action :set_auction, only: %i[timer]
 
   # GET auction info by ajax
   def obtain
@@ -12,15 +12,15 @@ class Api::AuctionsController < Api::BaseController
   end
 
   # POST create auction by ajax
-  def create
-    @auction = Auction.new(model_params)
-    if @auction.save
-      AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
-      render json: @auction, status: 201
-    else
-      render json: 'error code ', status: 500
-    end
-  end
+  # def create
+  #   @auction = Auction.new(model_params)
+  #   if @auction.save
+  #     AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
+  #     render json: @auction, status: 201
+  #   else
+  #     render json: 'error code ', status: 500
+  #   end
+  # end
 
   # PATCH update auction by ajax
   def update
