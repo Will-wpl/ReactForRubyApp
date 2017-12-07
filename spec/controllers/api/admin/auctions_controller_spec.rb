@@ -162,6 +162,44 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
 
   end
 
+  context 'retailer user' do
+
+    before { sign_in create(:user, :with_retailer) }
+
+    describe '401 Unauthorized' do
+      context 'GET obtain' do
+        it 'success' do
+          get :obtain
+          expect(response).to have_http_status(401)
+        end
+      end
+      context '#publish' do
+        it 'success' do
+          put :publish, params: { id: auction.id }
+          expect(response).to have_http_status(401)
+        end
+      end
+      context '#hold' do
+        it 'success' do
+          put :hold, params: { id: auction.id }
+          expect(response).to have_http_status(401)
+        end
+      end
+      context '#confirm' do
+        it 'success' do
+          post :confirm, params: { id: auction.id }
+          expect(response).to have_http_status(401)
+        end
+      end
+      context '#confirm' do
+        it 'success' do
+          put :update, params: { id: auction.id}
+          expect(response).to have_http_status(401)
+        end
+      end
+    end
+  end
+
   context 'api/admin/auctions routes' do
     describe 'GET timer' do
       it 'success' do
