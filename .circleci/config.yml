@@ -4,56 +4,103 @@
 #
 version: 2
 jobs:
-  build:
+  checkout_code:
     docker:
-      # specify the version you desire here
-      - image: circleci/ruby:2.4.1-node
-        environment:
-          RAILS_ENV: test
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      - image: circleci/postgres:9.4
-        environment:
-          POSTGRES_USER: root
-          POSTGRES_DB: circle_test
-
-      # Adding node for yarn
-      - image: circleci/node:6.10
+      - image: circleci/ruby:2.4.1-node-browsers
 
     working_directory: ~/repo
 
     steps:
       - checkout
+      - save_cache:
+          key: ra-repo-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/repo
 
-      # Download and cache dependencies
+  bundle_dependencies:
+    docker:
+      - image: circleci/ruby:2.4.1-node-browsers
+        environment:
+          RAILS_ENV: test
+
+    working_directory: ~/repo
+
+    steps:
       - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "Gemfile.lock" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+          key: ra-repo-{{ .Environment.CIRCLE_SHA1 }}
+
+      - restore_cache:
+          key: gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
 
       - run:
-          name: install dependencies
+          name: install ruby dependencies
           command: |
             bundle install --jobs=4 --retry=3 --path vendor/bundle
 
       - save_cache:
           paths:
             - ./vendor/bundle
-          key: v1-dependencies-{{ checksum "Gemfile.lock" }}
+          key: gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
 
-      # Database setup
+  yarn_dependencies:
+    docker:
+      - image: circleci/ruby:2.4.1-node-browsers
+        environment:
+          RAILS_ENV: test
+
+    working_directory: ~/repo
+
+    steps:
+      - restore_cache:
+          key: ra-repo-{{ .Environment.CIRCLE_SHA1 }}
+
+      - restore_cache:
+          key: yarn-cache-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
+
+      - run:
+          name: install yarn dependencies
+          command: |
+            yarn install
+
+      - save_cache:
+          paths:
+            - ./node_modules
+          key: yarn-cache-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
+
+  run_test:
+    docker:
+      - image: circleci/ruby:2.4.1-node-browsers
+        environment:
+          RAILS_ENV: test
+          CHROME_BIN: "/usr/bin/google-chrome"
+
+      - image: circleci/postgres:9.4
+        environment:
+          POSTGRES_USER: root
+          POSTGRES_DB: reverse_auction_test
+
+    working_directory: ~/repo
+
+    steps:
+      - restore_cache:
+          key: ra-repo-{{ .Environment.CIRCLE_SHA1 }}
+
+      - restore_cache:
+          key: gem-cache-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+
+      - restore_cache:
+          key: yarn-cache-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
+
+      - run: bundle --path vendor/bundle
+
       - run:
           name: Database setup
           environment:
-            DATABASE_URL: postgres://root@localhost:5432/circle_test
+            DATABASE_URL: postgres://root@localhost:5432/reverse_auction_test
           command: |
             bundle exec rake db:create
             bundle exec rake db:schema:load
 
-      # run tests!
       - run:
           name: run tests
           command: |
@@ -67,7 +114,7 @@ jobs:
                             -- \
                             $TEST_FILES
           environment:
-            DATABASE_URL: postgres://root@localhost:5432/circle_test
+            DATABASE_URL: postgres://root@localhost:5432/reverse_auction_test
 
       # collect reports
       - store_test_results:
@@ -75,9 +122,9 @@ jobs:
       - store_artifacts:
           path: /tmp/test-results
           destination: test-results
+
   deploy:
     docker:
-      # specify the version you desire here
       - image: circleci/ruby:2.4.1-node
 
     working_directory: ~/repo
@@ -102,16 +149,22 @@ jobs:
 
 workflows:
   version: 2
-  build_and_deploy:
+  build_test_deploy:
     jobs:
-      - build:
-          filters:
-            branches:
-              only:
-                - master
+      - checkout_code
+      - bundle_dependencies:
+          requires:
+            - checkout_code
+      - yarn_dependencies:
+          requires:
+            - checkout_code
+      - run_test:
+          requires:
+            - bundle_dependencies
+            - yarn_dependencies
       - deploy:
           requires:
-            - build
+            - run_test
           filters:
             branches:
               only:
