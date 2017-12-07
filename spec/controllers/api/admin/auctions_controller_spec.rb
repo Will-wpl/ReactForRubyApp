@@ -15,7 +15,6 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
         end
         before { do_request }
         it 'success' do
-          puts auction.id
           hash_body = JSON.parse(response.body)
           expect(hash_body['id']).to eq(auction.id)
           expect(response).to have_http_status(:ok)
@@ -30,7 +29,6 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       context 'has published an auction' do
         before { do_request }
         it 'success' do
-          puts auction.id
           expect(auction.publish_status).to eq('0')
           hash_body = JSON.parse(response.body)
           expect(hash_body['publish_status']).to eq('1')
@@ -51,7 +49,6 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       context 'has to hold an auction' do
         before { do_request_hold }
         it 'success' do
-          puts auction.id
           expect(auction.hold_status).to eq(false)
           hash_body = JSON.parse(response.body)
           expect(hash_body['hold_status']).to eq(true)
@@ -64,7 +61,6 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
         let (:auction) { create(:auction, :for_next_month, :upcoming, :published) }
         before { do_request_un_hold }
         it 'success' do
-          puts auction.id
           expect(auction.hold_status).to eq(false)
           hash_body = JSON.parse(response.body)
           expect(hash_body['hold_status']).to eq(false)
@@ -77,7 +73,6 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
         let (:auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
         before { do_request_un_hold }
         it 'success' do
-          puts auction.id
           expect(auction.hold_status).to eq(false)
           hash_body = JSON.parse(response.body)
           expect(hash_body['hold_status']).to eq(false)
@@ -219,45 +214,6 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
         expect(patch: "/#{base_url}/#{auction.id}").to route_to(controller: "#{base_url}",
                                                               action: "update",
                                                               id: auction.id.to_s)
-      end
-    end
-  end
-
-
-  context 'retailer user' do
-
-    before { sign_in create(:user, :with_retailer) }
-
-    describe '401 Unauthorized' do
-      context 'GET obtain' do
-        it 'success' do
-          get :obtain
-          expect(response).to have_http_status(401)
-        end
-      end
-      context '#publish' do
-        it 'success' do
-          put :publish, params: { id: auction.id }
-          expect(response).to have_http_status(401)
-        end
-      end
-      context '#hold' do
-        it 'success' do
-          put :hold, params: { id: auction.id }
-          expect(response).to have_http_status(401)
-        end
-      end
-      context '#confirm' do
-        it 'success' do
-          post :confirm, params: { id: auction.id }
-          expect(response).to have_http_status(401)
-        end
-      end
-      context '#confirm' do
-        it 'success' do
-          put :update, params: { id: auction.id}
-          expect(response).to have_http_status(401)
-        end
       end
     end
   end
