@@ -51,7 +51,7 @@ RSpec.describe Api::AuctionsController, type: :controller do
 
     describe 'POST confirm' do
       it 'success' do
-        expect(put: "/api/auctions/#{auction.id}/confirm").not_to be_routable
+        expect(post: "/api/auctions/#{auction.id}/confirm").not_to be_routable
       end
     end
 
