@@ -103,8 +103,6 @@ jobs:
 
       - run:
           name: run tests
-          environment:
-              CODECOV_TOKEN: 7544372b-2084-4c22-a826-17bb4b8bc8a0
           command: |
             mkdir /tmp/test-results
             TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)"
