@@ -28,16 +28,16 @@ class Api::AuctionsController < Api::BaseController
     if @auction.update(model_params)
       AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id).update_all(bid_time: @auction.actual_begin_time , actual_bid_time: @auction.actual_begin_time)
       AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
-      render json: @auction, status: 200
     end
+    render json: @auction, status: 200
   end
 
   # PUT publish auction by ajax
   def publish
     if @auction.update(publish_status: params[:publish_status])
       AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
-      render json: @auction, status: 200
     end
+    render json: @auction, status: 200
   end
 
   # POST hold auction for long pulling
@@ -93,8 +93,8 @@ class Api::AuctionsController < Api::BaseController
     # end
     if auction_result.save
       AuctionEvent.set_events(current_user.id, @auction.id, request[:action], auction_result.to_json)
-      render json: auction_result, status: 200
     end
+    render json: auction_result, status: 200
   end
 
   private

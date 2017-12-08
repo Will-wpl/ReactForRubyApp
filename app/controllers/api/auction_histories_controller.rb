@@ -26,9 +26,8 @@ class Api::AuctionHistoriesController < Api::BaseController
         history.data = value
         list.push(history)
       end
-
-      render json: list, status: 200
     end
+    render json: list, status: 200
   end
 
   # get comfirm winner infomation by auction_id
