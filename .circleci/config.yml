@@ -122,6 +122,9 @@ jobs:
       - store_artifacts:
           path: /tmp/test-results
           destination: test-results
+      - store_artifacts:
+          path: /~/repo/coverage
+          destination: test-results/coverage
 
   deploy:
     docker:
