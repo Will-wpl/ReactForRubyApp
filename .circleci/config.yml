@@ -123,7 +123,7 @@ jobs:
           path: /tmp/test-results
           destination: test-results
       - store_artifacts:
-          path: /~/repo/coverage
+          path: ~/repo/coverage
           destination: test-results/coverage
 
   deploy:
