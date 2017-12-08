@@ -64,6 +64,9 @@ group :development, :test do
   gem 'spring-commands-rspec'
 
   gem 'timecop'
+
+  gem 'simplecov', require: false
+  gem 'codecov', require: false
 end
 
 group :development do
