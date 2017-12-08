@@ -1,0 +1,47 @@
+require 'rails_helper'
+
+RSpec.describe Api::Retailer::AuctionHistoriesController, type: :controller do
+
+  current_time = Time.current
+  bid_time = Time.current + 10
+  let!(:admin_user) { create(:user, :with_admin) }
+  let!(:retailer_user) { create(:user, :with_retailer) }
+  let!(:auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
+  let!(:retailer1) { create(:user, :with_retailer) }
+  let!(:retailer2) { create(:user, :with_retailer) }
+  let!(:retailer3) { create(:user, :with_retailer) }
+  let!(:arrangement_1) { create(:arrangement, :accepted, user: retailer1, auction: auction) }
+  let!(:arrangement_2) { create(:arrangement, :accepted, user: retailer2, auction: auction) }
+  let!(:arrangement_3) { create(:arrangement, :accepted, user: retailer3, auction: auction) }
+  let!(:r1_his_init) { create(:auction_history, bid_time: current_time, user: retailer1, auction: auction, actual_bid_time:current_time) }
+  let!(:r2_his_init) { create(:auction_history, bid_time: current_time, user: retailer2, auction: auction, actual_bid_time:current_time) }
+  let!(:r3_his_init) { create(:auction_history, bid_time: current_time, user: retailer3, auction: auction, actual_bid_time:current_time) }
+  let!(:r1_his_bid) { create(:auction_history, :set_bid, bid_time: bid_time, user: retailer1, auction: auction, actual_bid_time:bid_time) }
+  let!(:r2_his_bid) { create(:auction_history, :not_bid, bid_time: bid_time, user: retailer2, auction: auction, actual_bid_time:current_time) }
+  let!(:r3_his_bid) { create(:auction_history, :not_bid, bid_time: bid_time, user: retailer3, auction: auction, actual_bid_time:current_time) }
+
+
+  describe '#show' do
+    def do_request
+      get :show, params: { auction_id: auction.id }
+    end
+    context 'admin' do
+      before { sign_in admin_user }
+      before { do_request }
+      it { expect(response).to have_http_status(401) }
+    end
+
+    context 'retailer' do
+      before { sign_in retailer1 }
+      before { do_request }
+      it "got auction history list by himself" do
+        expect(response).to be_success
+        list_body = JSON.parse(response.body)
+        expect(list_body.size).to eq(2)
+        expect(list_body[0]['id']).to eq(r1_his_init.id)
+        expect(list_body[1]['id']).to eq(r1_his_bid.id)
+      end
+    end
+  end
+
+end
