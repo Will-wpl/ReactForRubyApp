@@ -39,8 +39,6 @@ class Api::ArrangementsController < Api::BaseController
       AuctionHistory.save_update_sort_init_auction_histories(calculate_dto)
       AuctionEvent.set_events(current_user.id, @arrangement.auction_id, request[:action], @arrangement.to_json)
       render json: @arrangement, status: 200
-    else
-      render json: 'error code ', status: 500
     end
     # end
   end

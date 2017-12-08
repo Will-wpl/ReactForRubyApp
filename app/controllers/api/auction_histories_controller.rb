@@ -28,8 +28,6 @@ class Api::AuctionHistoriesController < Api::BaseController
       end
 
       render json: list, status: 200
-    else
-      render json: {}, status: 200
     end
   end
 

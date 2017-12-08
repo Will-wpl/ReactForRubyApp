@@ -29,8 +29,6 @@ class Api::AuctionsController < Api::BaseController
       AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id).update_all(bid_time: @auction.actual_begin_time , actual_bid_time: @auction.actual_begin_time)
       AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
       render json: @auction, status: 200
-    else
-      render json: 'error code ', status: 500
     end
   end
 
@@ -39,8 +37,6 @@ class Api::AuctionsController < Api::BaseController
     if @auction.update(publish_status: params[:publish_status])
       AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
       render json: @auction, status: 200
-    else
-      render json: 'error code ', status: 500
     end
   end
 
@@ -98,8 +94,6 @@ class Api::AuctionsController < Api::BaseController
     if auction_result.save
       AuctionEvent.set_events(current_user.id, @auction.id, request[:action], auction_result.to_json)
       render json: auction_result, status: 200
-    else
-      render json: auction_result.errors, status: 500
     end
   end
 
