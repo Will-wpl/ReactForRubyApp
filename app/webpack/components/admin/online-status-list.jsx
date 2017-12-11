@@ -2,7 +2,8 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import {RetailsOnlineStatus} from './admin_shared/retailers-online-status';
 import {TimeCuntDown} from '../shared/time-cuntdown';
-import {getAuctionInVersionOne,getBidderStatus, upateHoldStatus} from '../../javascripts/componentService/admin/service';
+import {getBidderStatus, upateHoldStatus} from '../../javascripts/componentService/admin/service';
+import {getAuction} from '../../javascripts/componentService/common/service';
 import {getAuctionTimeRule} from '../../javascripts/componentService/common/service';
 import moment from 'moment';
 const ACTUAL_END_TIME = 'actual_end_time';
@@ -65,7 +66,7 @@ export class OnlineStatusMain extends Component {
         })
     }
     componentWillMount(){
-        getAuctionInVersionOne().then(res => {
+        getAuction('admin').then(res => {
             //console.log(res);
             this.auction = res;
             this.timerTitle = this.auction ? `${this.auction.name} on ${moment(this.auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';

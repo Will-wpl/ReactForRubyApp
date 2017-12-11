@@ -2,7 +2,8 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import {TimeCuntDown} from '../shared/time-cuntdown';
 //import {DuringCountDown} from '../shared/during-countdown';
-import {createRa,getAuctionInVersionOne,getRetailerAuctionInVersionOne,retailManageComing} from '../../javascripts/componentService/admin/service';
+import {getRetailerAuctionInVersionOne, retailManageComing} from '../../javascripts/componentService/retailer/service';
+import {getAuction} from '../../javascripts/componentService/common/service';
 import {Modal} from '../shared/show-modal';
 import {getLoginUserId} from '../../javascripts/componentService/util';
 import moment from 'moment';
@@ -22,7 +23,7 @@ export class RetailerManage extends Component {
         this.auctionData = {};
     }
     componentWillMount(){
-        getAuctionInVersionOne().then(res=>{
+        getAuction('retailer').then(res=>{
             this.auction = res;
             this.timerTitle = res ? `${res.name} on ${moment(res.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
             if(res.publish_status == 1){

@@ -28,3 +28,6 @@ public/packs-test
 
 tmp/
 public/assets
+
+#rcov
+coverage

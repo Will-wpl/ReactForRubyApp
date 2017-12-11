@@ -1,75 +1,66 @@
 require 'rails_helper'
 
 RSpec.describe Api::AuctionsController, type: :controller do
-  before { sign_in create(:user, :with_admin) }
 
-  describe '#obtain' do
-    def do_request
-      post :create, params: { auction: params }
-    end
+  let! (:auction) { create(:auction, :for_next_month, :upcoming) }
 
-    context 'not auction' do
+  context 'admin user' do
+    before { sign_in create(:user, :with_admin) }
+
+    describe 'GET timer' do
       it 'success' do
-        get :obtain
-        expect(response.body).to eq('null')
+        get :timer, params: { id: auction.id }
         expect(response).to have_http_status(:ok)
+        hash_timer = JSON.parse(response.body)
+        expect(Time.parse(hash_timer['actual_begin_time']).ctime).to eq(auction.actual_begin_time.ctime)
+        expect(Time.parse(hash_timer['actual_end_time']).ctime).to eq(auction.actual_end_time.ctime)
+        expect(Time.parse(hash_timer['current_time']).ctime).to_not be_nil
       end
     end
 
-    context 'got auctions list' do
-      let(:params) { attributes_for(:auction) }
+  end
 
-      before { do_request }
-
+  context 'api/auctions routes' do
+    describe 'GET timer' do
       it 'success' do
-        get :obtain
-        expect(response.body).to include('id')
-        expect(response).to have_http_status(:ok)
+        expect(get: "/api/auctions/#{auction.id}/timer").to be_routable
+        expect(get: "/api/auctions/#{auction.id}/timer").to route_to(
+                                                        controller: "api/auctions",
+                                                        action: "timer",
+                                                        id: auction.id.to_s )
       end
     end
 
-    it 'got an auction' do
-      get :obtain
+    describe 'GET obtain' do
+      it 'success' do
+        expect(get: "/api/auctions/obtain").not_to be_routable
+      end
+    end
 
-      expect(response.content_type).to eq('application/json')
-      expect(response).to have_http_status(:ok)
+    describe 'PUT publish' do
+      it 'success' do
+        expect(put: "/api/auctions/#{auction.id}/publish").not_to be_routable
+      end
+    end
+
+    describe 'PUT hold' do
+      it 'success' do
+        expect(put: "/api/auctions/#{auction.id}/hold").not_to be_routable
+      end
+    end
+
+    describe 'POST confirm' do
+      it 'success' do
+        expect(post: "/api/auctions/#{auction.id}/confirm").not_to be_routable
+      end
+    end
+
+    describe 'PUT/PATCH update' do
+      it 'success' do
+        expect(put: "/api/auctions/#{auction.id}").not_to be_routable
+        expect(patch: "/api/auctions/#{auction.id}").not_to be_routable
+      end
     end
   end
 
-  # describe "#publish" do
-  #
-  #   it "publish an auction" do
-  #     post :publish, params: {id: 1, hello: {a: 'hello', b: 'world'}}
-  #
-  #     expect(response.content_type).to eq("application/json")
-  #     expect(response).to have_http_status(:ok)
-  #   end
-  # end
-
-  describe '#create' do
-    def do_request
-      post :create, params: { auction: params }
-    end
-    context 'create new auction' do
-      let(:params) { attributes_for(:auction) }
-      it 'success' do
-        expect { do_request }.to change(Auction, :count).by(1)
-      end
-    end
-  end
-
-  # describe "#update" do
-  #   let(:auction) { create(:auction) }
-  #   def do_request
-  #     patch :update, params: {id: auction.id, auction: params }
-  #   end
-  #
-  #   context 'success' do
-  #     let(:params) { Hash(id: auction.id, name: auction.name + '-modified') }
-  #
-  #     before { do_request }
-  #
-  #     it { expect(Auction.last.name).to match '-modified' }
-  #   end
-  # end
 end

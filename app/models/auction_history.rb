@@ -22,6 +22,43 @@ class AuctionHistory < ApplicationRecord
   # Custom
 
   # Methods (class methods before instance methods)
+  
+  def self.set_bid(calculate_dto)
+    total_award_sum = AuctionHistory.set_total_award_sum(calculate_dto.total_lt_peak, calculate_dto.total_lt_off_peak,
+                                                         calculate_dto.total_hts_peak, calculate_dto.total_hts_off_peak,
+                                                         calculate_dto.total_htl_peak, calculate_dto.total_htl_off_peak,
+                                                         calculate_dto.lt_peak, calculate_dto.lt_off_peak,
+                                                         calculate_dto.hts_peak, calculate_dto.hts_off_peak,
+                                                         calculate_dto.htl_peak, calculate_dto.htl_off_peak)
+    total_volume = Auction.set_total_volume(
+        calculate_dto.total_lt_peak, calculate_dto.total_lt_off_peak,
+        calculate_dto.total_hts_peak, calculate_dto.total_hts_off_peak,
+        calculate_dto.total_htl_peak, calculate_dto.total_htl_off_peak
+    )
+    average_price = AuctionHistory.set_average_price(total_award_sum, total_volume)
+    someone_histories = AuctionHistory.where('auction_id = ? and user_id = ? and is_bidder = true', calculate_dto.auction_id, calculate_dto.user_id)
+    last_history = someone_histories.order(actual_bid_time: :desc).first
+
+    if average_price < last_history.average_price
+      exist_same_history = false
+      someone_histories.each do |history|
+        if history.average_price == average_price
+          exist_same_history = true
+          break
+        end
+      end
+      unless exist_same_history
+        current_time = Time.current
+        @history = AuctionHistory.new(lt_peak: calculate_dto.lt_peak, lt_off_peak: calculate_dto.lt_off_peak, hts_peak: calculate_dto.hts_peak, hts_off_peak: calculate_dto.hts_off_peak, htl_peak: calculate_dto.htl_peak, htl_off_peak: calculate_dto.htl_off_peak, bid_time: current_time, actual_bid_time: current_time,
+                                      user_id: calculate_dto.user_id, auction_id: calculate_dto.auction_id, average_price: average_price, total_award_sum: total_award_sum, is_bidder: true)
+        AuctionEvent.set_events(@history.user_id, @history.auction_id, 'set bid', @history.to_json)
+        if @history.save
+          # update update sort
+          @histories = find_clone_sort_update_auction_histories(calculate_dto.auction_id, @history.id, current_time)
+        end
+      end
+    end
+  end
 
   def self.save_update_sort_init_auction_histories(calculate_dto)
     @auction = Auction.find(calculate_dto.auction_id)
@@ -52,7 +89,7 @@ class AuctionHistory < ApplicationRecord
   end
 
   def self.find_bidder_histories(auction_id)
-    @histories = AuctionHistory.where('auction_id = ? and is_bidder = ?', auction_id, true)
+    AuctionHistory.where('auction_id = ? and is_bidder = ?', auction_id, true)
   end
 
   def self.sort_update_auction_histories(histories)
@@ -125,11 +162,6 @@ class AuctionHistory < ApplicationRecord
       tmp_average_price = history.average_price
     end
     # histories = AuctionHistory.find(ids)
-    histories = AuctionHistory.select('auction_histories.* , users.company_name').joins(:user).find(ids)
-    histories
-  end
-
-  def self.find_bidder_retailer_histories(auction_id)
-    @histories = AuctionHistory.where('auction_id = ? and is_bidder = ?', auction_id, true)
+    AuctionHistory.select('auction_histories.* , users.company_name').joins(:user).find(ids)
   end
 end

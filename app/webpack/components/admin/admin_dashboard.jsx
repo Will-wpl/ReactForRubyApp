@@ -22,14 +22,15 @@ export class AdminDashboard extends Component {
     }
 
     componentDidMount() {
-        getAuction().then(auction => {
+        getAuction('admin').then(auction => {
             this.auction = auction;
             this.timerTitle = auction ? `${auction.name} on ${moment(auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
             this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000'
             this.forceUpdate(); // only once no need to use state
 
+            let auctionId = auction? auction.id : 1;
 
-            getHistories({ auction_id: auction? auction.id : 1}).then(histories => {
+            getHistories({ auction_id: auctionId}).then(histories => {
                 // console.log('histories', histories, isEmptyJsonObj(histories));
                 if (!isEmptyJsonObj(histories)) {
                     let orderRanking = histories.filter(element => {
@@ -71,23 +72,24 @@ export class AdminDashboard extends Component {
                     // this.refs.priceChart.setChartData(histories, 'price');
                     // this.refs.rankingChart.setChartData(histories, 'ranking');
                 }
-                this.createWebsocket(auction? auction.id : 1);
+                this.createWebsocket(auctionId);
             }, error => {
-                this.createWebsocket(auction? auction.id : 1);
-            })
-        })
-        getArrangements(ACCEPT_STATUS.ACCEPT).then(res => {
-            let limit = findUpLimit(res.length);
-            let users = res.map((element, index) => {
-                element['color'] = getRandomColor(index + 1, limit); //getRandomColor((index + 1) * 1.0 / limit);
-                return element;
+                this.createWebsocket(auctionId);
             });
-            this.setState({users:users});
-            this.priceUsers.selectAll(users);
-            this.rankingUsers.selectAll(users);
-        }, error => {
-            //console.log(error);
-        });
+
+            getArrangements(auctionId, ACCEPT_STATUS.ACCEPT).then(res => {
+                let limit = findUpLimit(res.length);
+                let users = res.map((element, index) => {
+                    element['color'] = getRandomColor(index + 1, limit); //getRandomColor((index + 1) * 1.0 / limit);
+                    return element;
+                });
+                this.setState({users:users});
+                this.priceUsers.selectAll(users);
+                this.rankingUsers.selectAll(users);
+            }, error => {
+                //console.log(error);
+            });
+        })
     }
 
     createWebsocket(auction) {

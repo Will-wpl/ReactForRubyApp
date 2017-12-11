@@ -152,7 +152,7 @@ const calTwoTimeSpace = (start, nowSeq) => {
 const runes = () => {
     const domNode = document.getElementById('retailerlive');
     if (domNode !== null) {
-        getAuction().then(auction => {
+        getAuction('retailer').then(auction => {
             getAuctionTimeRule(auction.id).then(res => {
                 renderRoot(auction, res);
             }, error => {
