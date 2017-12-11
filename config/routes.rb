@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-
+  require 'resque/server'
+  mount Resque::Server, at: '/jobs'
+  
   # root to: 'home#index'
   resources :home, only: %i[index term] do
     collection do
