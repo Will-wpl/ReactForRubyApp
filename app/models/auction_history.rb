@@ -161,7 +161,11 @@ class AuctionHistory < ApplicationRecord
       end
       tmp_average_price = history.average_price
     end
-    # histories = AuctionHistory.find(ids)
+    # AuctionHistory.select('auction_histories.* , users.company_name').joins(:user).find(ids)
+    find_histories_by_ids(ids)
+  end
+
+  def self.find_histories_by_ids(ids)
     AuctionHistory.select('auction_histories.* , users.company_name').joins(:user).find(ids)
   end
 end
