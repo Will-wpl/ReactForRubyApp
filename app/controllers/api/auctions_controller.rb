@@ -28,8 +28,6 @@ class Api::AuctionsController < Api::BaseController
     params[:auction]['total_volume'] = Auction.set_total_volume(model_params[:total_lt_peak], model_params[:total_lt_off_peak], model_params[:total_hts_peak], model_params[:total_hts_off_peak], model_params[:total_htl_peak], model_params[:total_htl_off_peak])
     if @auction.update(model_params)
       AuctionHelper.set_auction(@auction)
-      BidJob.perform_now('hello')
-
       AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id).update_all(bid_time: @auction.actual_begin_time , actual_bid_time: @auction.actual_begin_time)
       AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
     end
