@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe AuctionHistory, type: :model do
+RSpec.describe Api::Retailer::AuctionHistoriesController, type: :controller do
 
   current_time = Time.current
   bid_time = Time.current + 10
@@ -21,30 +21,27 @@ RSpec.describe AuctionHistory, type: :model do
   let!(:r3_his_bid) { create(:auction_history, :not_bid, bid_time: bid_time, user: retailer3, auction: auction, actual_bid_time:current_time) }
 
 
-  describe 'associations' do
-    it { is_expected.to belong_to(:user) }
-    it { is_expected.to belong_to(:auction) }
+  describe '#show' do
+    def do_request
+      get :show, params: { auction_id: auction.id }
+    end
+    context 'admin' do
+      before { sign_in admin_user }
+      before { do_request }
+      it { expect(response).to have_http_status(401) }
+    end
+
+    context 'retailer' do
+      before { sign_in retailer1 }
+      before { do_request }
+      it "got auction history list by himself" do
+        expect(response).to be_success
+        list_body = JSON.parse(response.body)
+        expect(list_body.size).to eq(2)
+        expect(list_body[0]['id']).to eq(r1_his_init.id)
+        expect(list_body[1]['id']).to eq(r1_his_bid.id)
+      end
+    end
   end
 
-  describe 'has_less_than_and_equal_to_average_price' do
-    def do_request(average_price)
-      AuctionHistory.has_less_than_or_equal_to_average_price(auction.id, retailer1.id, average_price)
-    end
-
-    # histories include (0.1458 , 0.1233)
-    context "has less than average price" do
-      it { expect(do_request(0.1455)).to eq(true) }
-    end
-
-
-    context "has equal to average price" do
-      it { expect(do_request(0.1233)).to eq(true) }
-    end
-
-    context "has not less than and equal to average price" do
-      it { expect(do_request(0.0008)).to eq(false) }
-    end
-
-
-    end
 end

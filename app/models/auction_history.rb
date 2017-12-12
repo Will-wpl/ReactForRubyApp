@@ -22,7 +22,40 @@ class AuctionHistory < ApplicationRecord
   # Custom
 
   # Methods (class methods before instance methods)
+  
+  def self.set_bid(calculate_dto)
+    total_award_sum = AuctionHistory.set_total_award_sum(calculate_dto.total_lt_peak, calculate_dto.total_lt_off_peak,
+                                                         calculate_dto.total_hts_peak, calculate_dto.total_hts_off_peak,
+                                                         calculate_dto.total_htl_peak, calculate_dto.total_htl_off_peak,
+                                                         calculate_dto.lt_peak, calculate_dto.lt_off_peak,
+                                                         calculate_dto.hts_peak, calculate_dto.hts_off_peak,
+                                                         calculate_dto.htl_peak, calculate_dto.htl_off_peak)
+    total_volume = Auction.set_total_volume(
+        calculate_dto.total_lt_peak, calculate_dto.total_lt_off_peak,
+        calculate_dto.total_hts_peak, calculate_dto.total_hts_off_peak,
+        calculate_dto.total_htl_peak, calculate_dto.total_htl_off_peak
+    )
+    average_price = AuctionHistory.set_average_price(total_award_sum, total_volume)
 
+    unless has_less_than_or_equal_to_average_price(calculate_dto.auction_id, calculate_dto.user_id, average_price)
+      current_time = Time.current
+      @history = AuctionHistory.new(lt_peak: calculate_dto.lt_peak, lt_off_peak: calculate_dto.lt_off_peak, hts_peak: calculate_dto.hts_peak, hts_off_peak: calculate_dto.hts_off_peak, htl_peak: calculate_dto.htl_peak, htl_off_peak: calculate_dto.htl_off_peak, bid_time: current_time, actual_bid_time: current_time,
+                                    user_id: calculate_dto.user_id, auction_id: calculate_dto.auction_id, average_price: average_price, total_award_sum: total_award_sum, is_bidder: true)
+      AuctionEvent.set_events(@history.user_id, @history.auction_id, 'set bid', @history.to_json)
+      if @history.save
+        # update sort
+        ids = create_bid_slice_up(calculate_dto.auction_id, @history.id, current_time)
+        find_histories_by_ids(ids)
+      end
+    end
+  end
+
+  # The histories has less than or equal to current average price
+  def self.has_less_than_or_equal_to_average_price(auction_id, user_id, average_price)
+    AuctionHistory.where('auction_id = ? and user_id = ? and is_bidder = true and average_price <= ?', auction_id, user_id, average_price).exists?
+  end
+
+  # when any retailer submit arrangement, then update and sort the init auction history.
   def self.save_update_sort_init_auction_histories(calculate_dto)
     @auction = Auction.find(calculate_dto.auction_id)
     @histories = AuctionHistory.where('auction_id = ? and user_id = ?', calculate_dto.auction_id, calculate_dto.user_id)
@@ -51,10 +84,12 @@ class AuctionHistory < ApplicationRecord
     end
   end
 
+  # find the all bidder histories in one auction
   def self.find_bidder_histories(auction_id)
     AuctionHistory.where('auction_id = ? and is_bidder = ?', auction_id, true)
   end
 
+  # sort and update the input auction histories
   def self.sort_update_auction_histories(histories)
     # code here
     histories = histories.order(average_price: :asc, actual_bid_time: :asc)
@@ -80,12 +115,15 @@ class AuctionHistory < ApplicationRecord
     BigDecimal.new(total_award_sum) / BigDecimal.new(total_volume)
   end
 
+  # for init history data
   def self.find_sort_update_auction_histories(auction_id)
     histories = find_bidder_histories(auction_id)
     sort_update_auction_histories(histories)
   end
 
-  def self.find_clone_sort_update_auction_histories(auction_id, current_history_id, current_time)
+  # create a sorted slice up for each bid
+  # @return [ids]
+  def self.create_bid_slice_up(auction_id, current_history_id, current_time)
     # histories = AuctionHistory.find_by_sql("select a.* from auction_histories a, (select id , bid_time , min(average_price) from auction_histories where auction_id = :auction_id and is_bidder = :is_bidder group by user_id) b where b.id == a.id order by average_price asc, bid_time asc", {auction_id: auction_id, is_bidder: true})
     histories = AuctionHistory.find_by_sql ['select a.* from auction_histories a inner join users on users.id = a.user_id, (select min(auction_id) as auction_id , user_id, min(average_price) as price from auction_histories where auction_id = ? and is_bidder = true and actual_bid_time <= ? group by user_id) b where b.auction_id = a.auction_id and b.user_id = a.user_id and b.price = a.average_price and a.is_bidder = true order by average_price asc, actual_bid_time asc', auction_id , current_time]
     ids = []
@@ -124,12 +162,11 @@ class AuctionHistory < ApplicationRecord
       end
       tmp_average_price = history.average_price
     end
-    # histories = AuctionHistory.find(ids)
-    histories = AuctionHistory.select('auction_histories.* , users.company_name').joins(:user).find(ids)
-    histories
+    ids
   end
 
-  def self.find_bidder_retailer_histories(auction_id)
-    AuctionHistory.where('auction_id = ? and is_bidder = ?', auction_id, true)
+  # find auction histories by auction ids(array)
+  def self.find_histories_by_ids(ids)
+    AuctionHistory.select('auction_histories.* , users.company_name').joins(:user).find(ids)
   end
 end

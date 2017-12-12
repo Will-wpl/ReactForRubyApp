@@ -23,7 +23,7 @@ export class RetailerManage extends Component {
         this.auctionData = {};
     }
     componentWillMount(){
-        getAuction().then(res=>{
+        getAuction('retailer').then(res=>{
             this.auction = res;
             this.timerTitle = res ? `${res.name} on ${moment(res.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
             if(res.publish_status == 1){

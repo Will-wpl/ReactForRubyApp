@@ -5,6 +5,8 @@ require File.expand_path('../../config/environment', __FILE__)
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 require 'spec_helper'
 require 'rspec/rails'
+require 'simplecov'
+require 'codecov'
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -28,6 +30,18 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
   end
 end
+
+SimpleCov.start do
+  add_filter '/spec/'
+  add_filter '/config/'
+
+  add_group 'Controllers', 'app/controllers'
+  add_group 'Models', 'app/models'
+  add_group 'Helpers', 'app/helpers'
+  add_group 'Libraries', 'lib'
+end
+
+SimpleCov.formatter = SimpleCov::Formatter::Codecov
 
 # Checks for pending migration and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove this line.

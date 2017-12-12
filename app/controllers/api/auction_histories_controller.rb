@@ -1,5 +1,4 @@
 class Api::AuctionHistoriesController < Api::BaseController
-  before_action :admin_required, only: %i[list last]
   # get histories by user_id and auction_id
   def show
     @histories = AuctionHistory.select('users.name, users.company_name, auction_histories.*').joins(:user).where('auction_id = ? and user_id = ?', params[:auction_id], current_user.id).order(bid_time: :asc)
@@ -27,11 +26,8 @@ class Api::AuctionHistoriesController < Api::BaseController
         history.data = value
         list.push(history)
       end
-
-      render json: list, status: 200
-    else
-      render json: {}, status: 200
     end
+    render json: list, status: 200
   end
 
   # get comfirm winner infomation by auction_id

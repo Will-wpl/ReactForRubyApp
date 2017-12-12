@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-
+  
   # root to: 'home#index'
   resources :home, only: %i[index term] do
     collection do
@@ -17,34 +17,57 @@ Rails.application.routes.draw do
   end
 
   namespace :api do
+    namespace :admin do
+      resources :auctions, only: %i[obtain link create update publish hold confirm] do
+        member do
+          put 'publish'
+          put 'hold'
+          post 'confirm'
+        end
+        collection do
+          get 'obtain'
+        end
+      end
+      resource :auction_histories, only: %i[list last] do
+        collection do
+          get 'list'
+          get 'last'
+        end
+      end
+      resources :arrangements, only: %i[index show obtain update] do
+        collection do
+          get 'obtain'
+        end
+      end
+    end
+  end
+
+  namespace :api do
+    namespace :retailer do
+      resources :auctions, only: %i[obtain] do
+        collection do
+          get 'obtain'
+        end
+      end
+      resource :auction_histories, only: %i[show] do
+      end
+      resources :arrangements, only: %i[index show obtain update] do
+        collection do
+          get 'obtain'
+        end
+      end
+    end
+  end
+
+  namespace :api do
     resources :base, only: %i[heartbeat] do
       collection do
         post 'heartbeat'
       end
     end
-
-    resources :arrangements, only: %i[index show obtain update] do
-      collection do
-        get 'obtain'
-      end
-    end
-    resources :auctions, only: %i[obtain link create update publish hold timer confirm logout] do
+    resources :auctions, only: %i[timer] do
       member do
         get 'timer'
-        put 'publish'
-        put 'hold'
-        post 'confirm'
-      end
-      collection do
-        get 'obtain'
-        get 'link'
-        post 'logout'
-      end
-    end
-    resource :auction_histories, only: %i[show list last] do
-      collection do
-        get 'list'
-        get 'last'
       end
     end
   end

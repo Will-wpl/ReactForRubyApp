@@ -46,6 +46,8 @@ gem 'rubocop', require: false
 # Use Redis adapter to run Action Cable in production
 gem 'redis'
 
+gem 'resque'
+
 # Workaround with application in proxy calling external services
 gem 'no_proxy_fix'
 
@@ -64,6 +66,9 @@ group :development, :test do
   gem 'spring-commands-rspec'
 
   gem 'timecop'
+
+  gem 'simplecov', require: false
+  gem 'codecov', require: false
 end
 
 group :development do

@@ -42,7 +42,7 @@ export class CreateNewRA extends Component {
         }
     }
     doGetData(type){
-        getAuction().then(res => {
+        getAuction('admin').then(res => {
             this.auction = res;
             if(type == "create"){
                 if(this.auction.publish_status == 1){
@@ -221,7 +221,7 @@ export class CreateNewRA extends Component {
         event.preventDefault();
     }  
     showDelete(){
-        getAuction().then(res => {
+        getAuction('admin').then(res => {
             if(res.start_datetime == null){
                 this.refs.Modal.showModal();
                 this.setState({

@@ -1,13 +1,13 @@
 import {get, update} from '../../../javascripts/http';
 
 export const retailManageComing = (params) => {
-    return update('/api/arrangements/'+params.arrangement.id, params);
+    return update('/api/retailer/arrangements/'+params.arrangement.id, params);
 }
 
 export const getRetailerAuctionInVersionOne = (params) => {
-    return get('/api/arrangements/obtain', params);
+    return get('/api/retailer/arrangements/obtain', params);
 }
 
 export const getAuctionHistorys = (auction, user) => {
-    return get('/api/auction_histories', { auction_id: auction, user_id: user });
+    return get('/api/retailer/auction_histories', { auction_id: auction, user_id: user });
 }

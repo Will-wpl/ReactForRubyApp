@@ -7,11 +7,11 @@ class Api::BaseController < ApplicationController
 
   protected
 
-  def is_admin
-    current_user&.has_role?(:admin)
-  end
-
   def admin_required
     head :unauthorized unless current_user&.has_role?(:admin)
+  end
+
+  def retailer_required
+    head :unauthorized unless current_user&.has_role?(:retailer)
   end
 end

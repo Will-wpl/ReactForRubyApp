@@ -44,7 +44,7 @@ compare(prop) {
     } 
 }
 componentDidMount() {
-    getAuction().then(auction => {
+    getAuction('admin').then(auction => {
         console.log(auction);
         this.auction = auction;
         this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000'

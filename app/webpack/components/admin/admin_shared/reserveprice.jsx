@@ -24,6 +24,5 @@ export default class ReservePrice extends Component {
 
 ReservePrice.defaultProps = {
     price: '0.0000',
-    realtimePrice: '0.0000',
-    name:'RA'
+    realtimePrice: '0.0000'
 }
