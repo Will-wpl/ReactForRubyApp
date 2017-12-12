@@ -98,9 +98,13 @@ export default class BidForm extends Component {
     }
 
     onSubmit() {
+        this.props.onSubmitjest();
         this.setState({
             thisStatus: true
         })
+        if(!this.compareConfigs){
+            return;
+        }
         let allow = this.state.configs.every((element, index) => {
             if (index === 2 || index === 3) {
                 return true;
@@ -228,3 +232,6 @@ export default class BidForm extends Component {
         );
     }
 }
+BidForm.propTypes = {
+    onSubmitjest: ()=>{}
+};

@@ -180,7 +180,7 @@ export class AdminDashboard extends Component {
                         </div>
                     </div>
                     <div className="col-sm-12 col-md-5">
-                        <ReservePrice price={this.startPrice} realtimePrice={this.state.currentPrice}/>
+                        <ReservePrice name={this.auction.name} price={this.startPrice} realtimePrice={this.state.currentPrice}/>
                         <RetailerRanking ranking={this.state.realtimeRanking}/>
                     </div>
                 </div>

@@ -42,8 +42,8 @@ export default class WinnerPrice extends Component {
                               <h2 className={this.props.showOrhide}>{this.props.winner.data.status === 'win' ? <span className="green">Status : Awarded</span> : <span className="red">Status : Void</span> }</h2>
                               <h4 className="u-mt1">Summary of Lowest Bidder</h4>
                               <ul>
-                                <li><span>Lowest Price Bidder: </span><span>{this.props.winner.data.lowest_price_bidder}</span></li>
-                                <li><span>Lowest Average Price: </span><span>$ {Number(this.props.winner.data.lowest_average_price).toFixed(4)}/kWh</span></li>
+                                <li><span>Lowest Price Bidder: </span><span className="bidder_name">{this.props.winner.data.lowest_price_bidder}</span></li>
+                                <li><span>Lowest Average Price: </span><span className="bidder_price">$ {Number(this.props.winner.data.lowest_average_price).toFixed(4)}/kWh</span></li>
                               </ul>
                               <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                                   <thead>

@@ -6,7 +6,9 @@ export class BidderStatus extends Component {
         super(props);
         this.state={
             showDetail:{},
-            dataList: []
+            dataList: [
+                        {company_name:"company name1",accept_status:false,id:10}
+                        ]
         }
     }
     componentDidMount() {
@@ -26,6 +28,10 @@ export class BidderStatus extends Component {
         clearInterval(this.interval);
     }
     showDetail(id,obj){
+        this.props.onAddClick();
+        if(this.props.onAddturly === 'jest'){
+            return;
+        }
         arrangementDetail(id).then(res=>{
             this.setState({
                 showDetail:res,
@@ -47,7 +53,7 @@ export class BidderStatus extends Component {
                             <li key={index} className="u-grid">
                                 <span className="col-sm-7 white" title={item.company_name}>{item.company_name}</span>
                                 <span className="col-sm-3"><abbr className={'color'+item.accept_status}></abbr></span>
-                                <span className="col-sm-2" onClick={this.showDetail.bind(this,item.id)}>Details</span>     
+                                <span className="col-sm-2" id="showDetail" onClick={this.showDetail.bind(this,item.id)}>Details</span>     
                             </li>)
                         })
                     }
@@ -62,3 +68,7 @@ export class BidderStatus extends Component {
         )
     }
 }
+
+BidderStatus.propTypes = {
+  onAddClick: ()=>{}
+};

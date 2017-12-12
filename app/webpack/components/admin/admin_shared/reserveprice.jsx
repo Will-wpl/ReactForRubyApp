@@ -1,12 +1,5 @@
 import React, {Component} from 'react';
-import {getAuction} from '../../../javascripts/componentService/common/service';
 export default class ReservePrice extends Component {
-    componentDidMount() {
-        getAuction().then(auction => {
-            this.name = auction.name;
-        }, error => {
-        })
-    }
     render() {
         let matched
         if(this.props.realtimePrice){
@@ -17,7 +10,7 @@ export default class ReservePrice extends Component {
         // console.log(this.props.realtimePrice, this.props.price)
         return (
             <dl className="reservePrice">
-                <dd>{this.name}</dd>
+                <dd id="reservePrice_name">{this.props.name}</dd>
                 <dd>
                     <span>Reserve Price = $ {this.props.price}/kWh</span>
                     <span className={matched ? 'success' : 'fail'}>
@@ -31,5 +24,6 @@ export default class ReservePrice extends Component {
 
 ReservePrice.defaultProps = {
     price: '0.0000',
-    realtimePrice: '0.0000'
+    realtimePrice: '0.0000',
+    name:'RA'
 }

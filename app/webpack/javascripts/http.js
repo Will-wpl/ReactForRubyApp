@@ -1,7 +1,10 @@
 import {getLoginUserId} from './componentService/util'
+import {mock} from './mock'
+const test = false;
+const handler = !test ? $ : mock;
 export const get = (path, params = {}) => {
     return new Promise((resolve, reject) => {
-        $.ajax({
+        handler.ajax({
             type: "GET",
             url: path,
             data: params,
@@ -20,10 +23,10 @@ export const get = (path, params = {}) => {
 
 export const create = (path, body) => {
     return new Promise((resolve, reject) => {
-        $.ajax({
+        handler.ajax({
             type: "POST",
             dataType: 'json',
-            beforeSend: $.rails.CSRFProtection,
+            beforeSend: handler.rails.CSRFProtection,
             url: path,
             data: body,
             success: (data) => {
@@ -41,10 +44,10 @@ export const create = (path, body) => {
 
 export const update = (path, body, method = 'PATCH') => {
     return new Promise((resolve, reject) => {
-        $.ajax({
+        handler.ajax({
             type: method,
             dataType: 'json',
-            beforeSend: $.rails.CSRFProtection,
+            beforeSend: handler.rails.CSRFProtection,
             url: path,
             data: body,
             success: (data) => {
@@ -63,10 +66,10 @@ export const update = (path, body, method = 'PATCH') => {
 
 export const put = (path, body, method = 'PUT') => {
     return new Promise((resolve, reject) => {
-        $.ajax({
+        handler.ajax({
             type: method,
             dataType: 'json',
-            beforeSend: $.rails.CSRFProtection,
+            beforeSend: handler.rails.CSRFProtection,
             url: path,
             data: body,
             success: (data) => {
@@ -83,9 +86,12 @@ export const put = (path, body, method = 'PUT') => {
 }
 
 // ActionCable = require('actioncable');
-const cable = ActionCable.createConsumer();
 // ActionCable.startDebugging();
 export const createWS = (auction, methods = {}) => {
+    if(test){
+        return;
+    }
+    const cable = ActionCable.createConsumer();
     let user = getLoginUserId();
     // console.log(auction, cable);
     let handler = cable.subscriptions.create({
