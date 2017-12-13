@@ -13,6 +13,9 @@ export class RetailsOnlineStatus extends Component {
         if(this.props.showDetail){
             this.props.showDetail();
         }
+        if(this.props.onAddturly === 'jest'){
+            return;
+        }
         arrangementDetail(id).then(res=>{
             this.setState({
                 showDetail:res,
