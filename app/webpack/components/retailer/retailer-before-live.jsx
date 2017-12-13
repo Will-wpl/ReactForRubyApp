@@ -79,6 +79,7 @@ export class RetailerBeforeLive extends Component {
 
 RetailerBeforeLive.PropTypes = {
     auction: PropTypes.shape({
+        id: PropTypes.number.isRequired,
         start_datetime: PropTypes.string,
         name: PropTypes.string
     }).isRequired,

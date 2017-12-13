@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export class CounterDownOnLive extends Component {
+export default class CounterDownShowOnLive extends Component {
 
     render () {
         return (
@@ -22,7 +22,7 @@ export class CounterDownOnLive extends Component {
     }
 }
 
-CounterDownOnLive.defaultProps = {
+CounterDownShowOnLive.defaultProps = {
     hour: 0,
     minute: 0,
     second: 0
