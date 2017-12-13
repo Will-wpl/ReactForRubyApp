@@ -21,6 +21,13 @@ export const ACTION_COMMANDS = {
     MAKE_UNIQUE: 'limit_user'
 }
 
+export const AUCTION_PROPS = {
+    ACTUAL_BEGIN_TIME : 'actual_begin_time',
+    ACTUAL_CURRENT_TIME : 'current_time',
+    ACTUAL_END_TIME : 'actual_end_time',
+    HOLD_STATUS : 'hold_status'
+}
+
 export const checknetwork = () => {
     return create('/api/base/heartbeat');
 }
