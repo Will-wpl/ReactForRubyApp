@@ -84,13 +84,14 @@ export const getDHMSbetweenTwoTimes = (startSeq, nowSeq) => {
         const hour = Math.floor((divider - day * 24 * 60 * 60) / 3600);
         const minute = Math.floor((divider - day * 24 * 60 * 60 - hour * 3600) / 60);
         const second = Math.floor(divider - day * 24 * 60 * 60 - hour * 3600 - minute * 60);
-        return {day, hour,minute,second}
+        return {day, hour, minute, second, divider}
     }
     return {
         day: 0,
         hour: 0,
         minute: 0,
-        second: 0
+        second: 0,
+        divider: 0
     }
 }
 
