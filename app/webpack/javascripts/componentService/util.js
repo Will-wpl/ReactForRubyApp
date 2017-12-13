@@ -1,3 +1,4 @@
+import moment from 'moment';
 export const findUpLimit = (curValue) => {
     if (curValue > 0) {
         let arr = `${curValue}`.split('').map((element, index) => {
@@ -74,4 +75,26 @@ export const isEmptyJsonObj = (obj) => {
         return false;
     }
     return true;
+}
+
+export const getDHMSbetweenTwoTimes = (startSeq, nowSeq) => {
+    let divider = parseInt((moment(startSeq).toDate().getTime() - moment(nowSeq).toDate().getTime()) / 1000);
+    if (!isNaN(divider)) {
+        const day = Math.floor(divider / (60 * 60 * 24));
+        const hour = Math.floor((divider - day * 24 * 60 * 60) / 3600);
+        const minute = Math.floor((divider - day * 24 * 60 * 60 - hour * 3600) / 60);
+        const second = Math.floor(divider - day * 24 * 60 * 60 - hour * 3600 - minute * 60);
+        return {day, hour,minute,second}
+    }
+    return {
+        day: 0,
+        hour: 0,
+        minute: 0,
+        second: 0
+    }
+}
+
+export const calTwoTimeSpace = (startSeq, nowSeq) => {
+    let time = getDHMSbetweenTwoTimes(startSeq, nowSeq);
+    return time.day || time.hour || time.minute || time.second;
 }

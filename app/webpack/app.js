@@ -11,7 +11,8 @@ import "atlas/src/index.js";
 //import "./javascripts/shared.js";
 import "./styles/app.scss";
 import "components/retailer/retailer-manage-coming";
-import "components/retailer/retailer-live";
+// import "components/retailer/retailer-live";
+import "components/retailer/retailer-live-container";
 import "components/retailer/retailer-finish";
 import "components/shared/check-network";
 // ActionCable = require('actioncable')
