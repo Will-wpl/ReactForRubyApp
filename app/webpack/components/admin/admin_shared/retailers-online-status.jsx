@@ -10,6 +10,12 @@ export class RetailsOnlineStatus extends Component {
         }
     }
     showDetail(id,obj){
+        if(this.props.showDetail){
+            this.props.showDetail();
+        }
+        if(this.props.onAddturly === 'jest'){
+            return;
+        }
         arrangementDetail(id).then(res=>{
             this.setState({
                 showDetail:res,
@@ -29,7 +35,7 @@ export class RetailsOnlineStatus extends Component {
                         this.props.list_data.length > 0 ? this.props.list_data.map((item,index) => {
                         return(
                             <li key={index} className="u-grid">
-                                <span className="col-sm-9 col-md-9" onClick={this.showDetail.bind(this,item.id)} title={item.company_name}>{item.company_name}</span>
+                                <span className="col-sm-9 col-md-9" className="showclick" onClick={this.showDetail.bind(this,item.id)} title={item.company_name}>{item.company_name}</span>
                                 <span className="col-sm-3 col-md-3"><abbr className={this.props.onlineStatus}></abbr></span>
                             </li>
                             )
@@ -46,3 +52,6 @@ export class RetailsOnlineStatus extends Component {
         )
     }
 }
+RetailsOnlineStatus.propTypes = {
+    showDetail: ()=>{}
+};
