@@ -19,6 +19,7 @@ export class AdminDashboard extends Component {
         super(props);
         this.state = {users:[], realtimeData:[], realtimeRanking:[], currentPrice:'0.0000'};
         this.lastInput = 1;
+        this.auction={};
     }
 
     componentDidMount() {

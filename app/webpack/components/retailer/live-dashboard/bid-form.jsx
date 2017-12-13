@@ -98,7 +98,9 @@ export default class BidForm extends Component {
     }
 
     onSubmit() {
-        this.props.onSubmitjest();
+        if(this.props.onSubmitjest){
+            this.props.onSubmitjest();
+        }
         this.setState({
             thisStatus: true
         })

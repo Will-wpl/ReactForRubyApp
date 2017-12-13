@@ -87,11 +87,11 @@ export const put = (path, body, method = 'PUT') => {
 
 // ActionCable = require('actioncable');
 // ActionCable.startDebugging();
+const cable = test ? '' : ActionCable.createConsumer();
 export const createWS = (auction, methods = {}) => {
     if(test){
         return;
     }
-    const cable = ActionCable.createConsumer();
     let user = getLoginUserId();
     // console.log(auction, cable);
     let handler = cable.subscriptions.create({
