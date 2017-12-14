@@ -1,7 +1,12 @@
 import {getLoginUserId} from './componentService/util'
 import {mock} from './mock'
-const test = false;
-const handler = !test ? $ : mock;
+let test = false,handler;
+if(typeof($) === 'function'){
+    test = false;
+}else{
+    test = true;
+}
+handler = !test ? $ : mock;
 export const get = (path, params = {}) => {
     return new Promise((resolve, reject) => {
         handler.ajax({

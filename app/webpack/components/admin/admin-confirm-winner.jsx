@@ -30,6 +30,7 @@ export default class AdminConfirmWinner extends Component {
         data:{},
         auction:{}
     }
+    this.auction={}
 }
 compare(prop) {
     return function (obj1, obj2) {

@@ -9,9 +9,9 @@ export default class CounterDownShowOnLive extends Component {
                 <div className="Countdown">
                     <abbr>Countdown Timer:</abbr>
                     <ol id="during_countdown_timer">
-                        <span><font>{this.props.hour}</font>HOURS</span>
-                        <span><font>{this.props.minute}</font>MINUTES</span>
-                        <span><font>{this.props.second}</font>SECONDS</span>
+                        <span><font id="during_countdown_timer_hour">{this.props.hour}</font>HOURS</span>
+                        <span><font id="during_countdown_timer_minute">{this.props.minute}</font>MINUTES</span>
+                        <span><font id="during_countdown_timer_second">{this.props.second}</font>SECONDS</span>
                     </ol>
                     {
                         this.props.children

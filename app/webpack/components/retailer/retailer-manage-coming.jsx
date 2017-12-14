@@ -18,7 +18,15 @@ export class RetailerManage extends Component {
             btn_status:false,
             disabled:false,
             havedata:false,
-            allbtnStatus:true
+            allbtnStatus:true,
+            main_name:"",
+            main_email_address:"",
+            main_mobile_number:"",
+            main_office_number:"",
+            alternative_name:"",
+            alternative_email_address:"",
+            alternative_mobile_number:"",
+            alternative_office_number:""
         }
         this.auctionData = {};
     }
@@ -26,17 +34,34 @@ export class RetailerManage extends Component {
         getAuction('retailer').then(res=>{
             this.auction = res;
             this.timerTitle = res ? `${res.name} on ${moment(res.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
-            if(res.publish_status == 1){
-                this.setState({
-                    live_modal:"live_hide",
-                    live_modal_do:"live_show"
-                })
+
+            if(this.props.doJest){//for Jest
+                if(this.props.pubStatusJest == 1){
+                    this.setState({
+                        live_modal:"live_hide",
+                        live_modal_do:"live_show"
+                    })
+                }else{
+                    this.setState({
+                        live_modal:"live_show",
+                        live_modal_do:"live_hide"
+                    })
+                }
             }else{
-                this.setState({
-                    live_modal:"live_show",
-                    live_modal_do:"live_hide"
-                })
+                if(res.publish_status == 1){
+                    this.setState({
+                        live_modal:"live_hide",
+                        live_modal_do:"live_show"
+                    })
+                }else{
+                    this.setState({
+                        live_modal:"live_show",
+                        live_modal_do:"live_hide"
+                    })
+                }
             }
+            
+            
         }, error => {
             console.log(error);
         })
@@ -45,32 +70,64 @@ export class RetailerManage extends Component {
         this.getRetailerAuction();
     }
     getRetailerAuction(){
-        let auction_id = window.location.href.split("auctions/")[1];
-        auction_id = auction_id.split("/upcoming")[0];
+        let auction_id = ''
+        if(this.props.doJest){
+            auction_id = 1
+        }else{
+            auction_id = window.location.href.split("auctions/")[1];
+            auction_id = auction_id.split("/upcoming")[0];
+        }
         let user_id = getLoginUserId();
         getRetailerAuctionInVersionOne({ auction_id: auction_id, user_id: user_id}).then(res => {
             //console.log(res);
-            if(res.main_name && res.main_email_address && res.main_mobile_number && res.main_office_number){
+            if(this.props.doJest){
                 this.setState({
-                    disabled:true,
-                    havedata:true
+                        disabled:false,
+                        havedata:false,
+                        id:this.props.main.id,
+                        main_name:this.props.main.main_name,
+                        main_email_address:this.props.main.main_email_address,
+                        main_mobile_number:this.props.main.main_mobile_number,
+                        main_office_number:this.props.main.main_office_number,
+                        alternative_name:this.props.main.alternative_name,
+                        alternative_email_address:this.props.main.alternative_email_address,
+                        alternative_mobile_number:this.props.main.alternative_mobile_number,
+                        alternative_office_number:this.props.main.alternative_office_number
                 })
             }else{
+                if(res.main_name && res.main_email_address && res.main_mobile_number && res.main_office_number){
+                    this.setState({
+                        disabled:true,
+                        havedata:true
+                    })
+                }else{
+                    this.setState({
+                        disabled:false,
+                        havedata:false
+                    })
+                }
+                this.auctionData = res;
                 this.setState({
-                    disabled:false,
-                    havedata:false
+                    id:res.id,
+                    main_name:res.main_name,
+                    main_email_address:res.main_email_address,
+                    main_mobile_number:res.main_mobile_number,
+                    main_office_number:res.main_office_number,
+                    alternative_name:res.alternative_name,
+                    alternative_email_address:res.alternative_email_address,
+                    alternative_mobile_number:res.alternative_mobile_number,
+                    alternative_office_number:res.alternative_office_number
                 })
+                // this.refs.main_name.value = res.main_name;
+                // this.refs.main_email_address.value = res.main_email_address;
+                // this.refs.main_mobile_number.value = res.main_mobile_number;
+                // this.refs.main_office_number.value = res.main_office_number;
+                // this.refs.alternative_name.value = res.alternative_name;
+                // this.refs.alternative_email_address.value = res.alternative_email_address;
+                // this.refs.alternative_mobile_number.value = res.alternative_mobile_number;
+                // this.refs.alternative_office_number.value = res.alternative_office_number;
             }
-            this.auctionData = res;
-            this.setState({id:res.id})
-            this.refs.main_name.value = res.main_name;
-            this.refs.main_email_address.value = res.main_email_address;
-            this.refs.main_mobile_number.value = res.main_mobile_number;
-            this.refs.main_office_number.value = res.main_office_number;
-            this.refs.alternative_name.value = res.alternative_name;
-            this.refs.alternative_email_address.value = res.alternative_email_address;
-            this.refs.alternative_mobile_number.value = res.alternative_mobile_number;
-            this.refs.alternative_office_number.value = res.alternative_office_number;
+            
             //this.refs.lt_peak.value = res.lt_peak == null ? '' : this.padZero(res.lt_peak,4).toString().split('.')[1];
             //this.refs.lt_off_peak.value = res.lt_off_peak == null ? '' : this.padZero(res.lt_off_peak,4).toString().split('.')[1];
             //this.refs.hts_peak.value = res.hts_peak == null ? '' : this.padZero(res.hts_peak,4).toString().split('.')[1];
@@ -103,18 +160,22 @@ export class RetailerManage extends Component {
         })
     }
     checkSuccess(event,obj){
-        event.preventDefault();
+        if(this.props.onSubmitjest){
+            this.props.onSubmitjest();
+        }else{
+            event.preventDefault();
+        }
         retailManageComing({
             arrangement: {
                 "id": this.state.id,
-                "main_name": this.refs.main_name.value,
-                "main_email_address": this.refs.main_email_address.value,
-                "main_mobile_number": this.refs.main_mobile_number.value,
-                "main_office_number": this.refs.main_office_number.value,
-                "alternative_name": this.refs.alternative_name.value,
-                "alternative_email_address": this.refs.alternative_email_address.value,
-                "alternative_mobile_number": this.refs.alternative_mobile_number.value,
-                "alternative_office_number": this.refs.alternative_office_number.value,
+                "main_name": this.state.main_name,
+                "main_email_address": this.state.main_email_address,
+                "main_mobile_number": this.state.main_mobile_number,
+                "main_office_number": this.state.main_office_number,
+                "alternative_name": this.state.alternative_name,
+                "alternative_email_address": this.state.alternative_email_address,
+                "alternative_mobile_number": this.state.alternative_mobile_number,
+                "alternative_office_number": this.state.alternative_office_number,
                 "lt_peak": 0.1458,//+this.refs.lt_peak.value
                 "lt_off_peak": 0.1458,//+this.refs.lt_off_peak.value
                 "hts_peak":0,//+this.refs.hts_peak.value
@@ -124,7 +185,9 @@ export class RetailerManage extends Component {
                 "accept_status": "1"   // '0':reject '1':accept '2':pending
             }
         }).then(res => {
+            if(!this.props.doJest){
                 this.refs.Modal.showModal();
+            }
                 this.setState({
                     text:"Your details have been successfully submitted. You may click on 'Start Bidding' in homepage to standby for the live reverse auction."
                 });
@@ -140,22 +203,43 @@ export class RetailerManage extends Component {
                 console.log(error);
             })
     }
+    Change(type,e){
+        let value = e.target.value;
+        switch(type){
+            case 'main_name': this.setState({main_name:value})
+            break
+            case 'main_email_address': this.setState({main_email_address:value})
+            break
+            case 'main_mobile_number': this.setState({main_mobile_number:value})
+            break
+            case 'main_office_number': this.setState({main_office_number:value})
+            break
+            case 'alternative_name': this.setState({alternative_name:value})
+            break
+            case 'alternative_email_address': this.setState({alternative_email_address:value})
+            break
+            case 'alternative_mobile_number': this.setState({alternative_mobile_number:value})
+            break
+            case 'alternative_office_number': this.setState({alternative_office_number:value})
+            break
+        }
+    }
     render () {
         let btn_html ='';
-        !this.state.havedata ? btn_html = <button className="lm--button lm--button--primary" >Submit</button> 
+        !this.state.havedata ? btn_html = <button id="submit_form" className="lm--button lm--button--primary" >Submit</button> 
         : btn_html = !this.state.btn_status ? <a className="lm--button lm--button--primary" onClick={this.btnStatus.bind(this)}>Edit</a> 
-                       :<div><button className="lm--button lm--button--primary" >Submit</button>
+                       :<div><button id="submit_form" className="lm--button lm--button--primary" >Submit</button>
                         <a className="lm--button lm--button--primary" onClick={this.cancel.bind(this)}>Cancel</a>
                         </div>;       
         return (
-            <div>
+            <div className="retailer_manage_coming">
             <div id="live_modal" className={this.state.live_modal}>
                 <div className={this.state.holdOrend}></div>
                 <p>
                 There is no upcoming reverse auction published.
                 </p>
             </div>
-            <div className={this.state.live_modal_do}>
+            <div id="retailer_form" className={this.state.live_modal_do}>
             <TimeCuntDown  title={this.timerTitle} auction={this.auction} countDownOver={()=>{this.setState({disabled:true,allbtnStatus:false})}}/>
             {/* <DuringCountDown /> */}
             <form onSubmit={this.checkSuccess.bind(this)}>
@@ -185,7 +269,7 @@ export class RetailerManage extends Component {
                         <abbr title="required">*</abbr> Name:
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="main_name" disabled={this.state.disabled} ref="main_name" maxLength="150" required aria-required="true" title="The length must not be longer than 150 characters."></input>
+                            <input type="text" name="main_name" value={this.state.main_name} onChange={this.Change.bind(this,'main_name')} disabled={this.state.disabled} ref="main_name" maxLength="150" required aria-required="true" title="The length must not be longer than 150 characters."></input>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -193,7 +277,7 @@ export class RetailerManage extends Component {
                         <abbr title="required">*</abbr> Email Address:
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="main_email_address" disabled={this.state.disabled} ref="main_email_address" maxLength="50" required aria-required="true" pattern="\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" title="Email address should be in the format name@example.com."></input>
+                            <input type="text" name="main_email_address" value={this.state.main_email_address} onChange={this.Change.bind(this,'main_email_address')} disabled={this.state.disabled} ref="main_email_address" maxLength="50" required aria-required="true" pattern="\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" title="Email address should be in the format name@example.com."></input>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -201,7 +285,7 @@ export class RetailerManage extends Component {
                         <abbr title="required">*</abbr> Mobile Number: (+65)
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="main_mobile_number" disabled={this.state.disabled} ref="main_mobile_number" maxLength="50" required aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
+                            <input type="text" name="main_mobile_number" value={this.state.main_mobile_number} onChange={this.Change.bind(this,'main_mobile_number')} disabled={this.state.disabled} ref="main_mobile_number" maxLength="50" required aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -209,7 +293,7 @@ export class RetailerManage extends Component {
                         <abbr title="required">*</abbr> Office Number: (+65)
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="main_office_number" disabled={this.state.disabled} ref="main_office_number" maxLength="50" required aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
+                            <input type="text" name="main_office_number" value={this.state.main_office_number} onChange={this.Change.bind(this,'main_office_number')} disabled={this.state.disabled} ref="main_office_number" maxLength="50" required aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
                         </div>
                     </div>
                     <h4 className="lm--formItem lm--formItem--inline string">Alternative Contact Person on Actual Bidding Day:</h4>
@@ -218,7 +302,7 @@ export class RetailerManage extends Component {
                         Name:
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="alternative_name" disabled={this.state.disabled} ref="alternative_name" maxLength="150" title="The length must not be longer than 150 characters."></input>
+                            <input type="text" name="alternative_name" value={this.state.alternative_name} onChange={this.Change.bind(this,'alternative_name')} disabled={this.state.disabled} ref="alternative_name" maxLength="150" title="The length must not be longer than 150 characters."></input>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -226,7 +310,7 @@ export class RetailerManage extends Component {
                         Email Address:
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="alternative_email_address" disabled={this.state.disabled} ref="alternative_email_address" aria-required="true" pattern="\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" maxLength="50" title="Email address should be in the format name@example.com."></input>
+                            <input type="text" name="alternative_email_address" value={this.state.alternative_email_address} onChange={this.Change.bind(this,'alternative_email_address')} disabled={this.state.disabled} ref="alternative_email_address" aria-required="true" pattern="\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" maxLength="50" title="Email address should be in the format name@example.com."></input>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -234,7 +318,7 @@ export class RetailerManage extends Component {
                         Mobile Number: (+65)
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="alternative_mobile_number" disabled={this.state.disabled} ref="alternative_mobile_number" maxLength="50" aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
+                            <input type="text" name="alternative_mobile_number" value={this.state.alternative_mobile_number} onChange={this.Change.bind(this,'alternative_mobile_number')} disabled={this.state.disabled} ref="alternative_mobile_number" maxLength="50" aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -242,7 +326,7 @@ export class RetailerManage extends Component {
                         Office Number: (+65)
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="alternative_office_number" disabled={this.state.disabled} ref="alternative_office_number" maxLength="50" aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
+                            <input type="text" name="alternative_office_number" value={this.state.alternative_office_number} onChange={this.Change.bind(this,'alternative_office_number')} disabled={this.state.disabled} ref="alternative_office_number" maxLength="50" aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
                         </div>
                     </div>
                     {/* <h3 className="u-mt3 u-mb1"><abbr title="required">*</abbr>Section C: Starting Bid Price</h3>
@@ -292,7 +376,9 @@ export class RetailerManage extends Component {
     }
 }
 
-
+RetailerManage.propTypes = {
+    onSubmitjest: ()=>{}
+};
 
 
 
