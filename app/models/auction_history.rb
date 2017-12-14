@@ -23,6 +23,10 @@ class AuctionHistory < ApplicationRecord
 
   # Methods (class methods before instance methods)
   
+  def self.bid_and_sort(auction_histories)
+    auction_histories.sort_by { |history| [history['average_price'], history['actual_bid_time']] }
+  end
+  
   def self.set_bid(calculate_dto)
     total_award_sum = AuctionHistory.set_total_award_sum(calculate_dto.total_lt_peak, calculate_dto.total_lt_off_peak,
                                                          calculate_dto.total_hts_peak, calculate_dto.total_hts_off_peak,
