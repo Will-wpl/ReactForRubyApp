@@ -25,16 +25,7 @@ class Api::ArrangementsController < Api::BaseController
     #   render json: {message: 'invalid time'}, status: 200
     # else
     if @arrangement.update(model_params)
-      calculate_dto = CalculateDto.new(
-        lt_peak: @arrangement.lt_peak,
-        lt_off_peak: @arrangement.lt_off_peak,
-        hts_peak: @arrangement.hts_peak,
-        hts_off_peak: @arrangement.hts_off_peak,
-        htl_peak: @arrangement.htl_peak,
-        htl_off_peak: @arrangement.htl_off_peak,
-        user_id: @arrangement.user_id,
-        auction_id: @arrangement.auction_id
-      )
+      calculate_dto = CalculateDto.new(@arrangement)
 
       AuctionHistory.save_update_sort_init_auction_histories(calculate_dto)
       AuctionEvent.set_events(current_user.id, @arrangement.auction_id, request[:action], @arrangement.to_json)
