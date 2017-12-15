@@ -14,6 +14,7 @@ const setup = () => {
       {company_name:"company name1",onlineStatus:"on",id:10}
     ],
     showDetail: jest.fn(),
+    onAddturly:'jest'
   }
 
   // 通过 enzyme 提供的 shallow(浅渲染) 创建组件

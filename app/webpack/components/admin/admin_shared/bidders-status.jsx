@@ -28,7 +28,9 @@ export class BidderStatus extends Component {
         clearInterval(this.interval);
     }
     showDetail(id,obj){
-        this.props.onAddClick();
+        if(this.props.onAddClick){
+            this.props.onAddClick();
+        }
         if(this.props.onAddturly === 'jest'){
             return;
         }
