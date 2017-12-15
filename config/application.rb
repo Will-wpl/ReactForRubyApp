@@ -26,7 +26,7 @@ module RailsBase
     config.assets.precompile += %w[admin.css admin.js]
 
     # sidekiq job settings
-    config.active_job.queue_adapter = :sidekiq
-    config.active_job.queue_name_prefix = Rails.env
+    # config.active_job.queue_adapter = :sidekiq
+    # config.active_job.queue_name_prefix = Rails.env
   end
 end
