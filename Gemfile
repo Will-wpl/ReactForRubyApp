@@ -46,7 +46,8 @@ gem 'rubocop', require: false
 # Use Redis adapter to run Action Cable in production
 gem 'redis'
 
-gem 'resque'
+# Use sidekiq to run Action Job
+gem 'sidekiq'
 
 # Workaround with application in proxy calling external services
 gem 'no_proxy_fix'
