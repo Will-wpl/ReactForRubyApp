@@ -36,7 +36,10 @@ class AuctionChannel < ApplicationCable::Channel
     calculate_dto.htl_off_peak = data['htl_off_peak']
     calculate_dto.user_id = params[:user_id]
     calculate_dto.auction_id = params[:auction_id]
-    BidJob.perform_now(params[:auction_id], calculate_dto)
+    args = { auction_id: params[:auction_id], calculate_dto: calculate_dto }.to_json
+
+    BidJob.perform_later(args)
+    # BidJob.perform_later(params[:auction_id], calculate_dto)
     # ActionCable.server.broadcast "auction_#{params[:auction_id]}", data: AuctionHistory.set_bid(calculate_dto), action: 'set_bid'
   end
 end
