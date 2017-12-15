@@ -52,13 +52,30 @@ RSpec.describe AuctionHistory, type: :model do
       auction_histories_json = auction_histories.to_json
       list = JSON.parse(auction_histories_json)
       new_auction_histories = []
-      list.each { |his|
+      list.each do |his|
         new_auction_histories.push(AuctionHistory.new(his))
-      }
+      end
       new_histories = do_request(new_auction_histories)
       expect(new_histories[0].id).to eq(r1_his_bid.id)
       expect(new_histories[1].id).to eq(r2_his_bid.id)
       expect(new_histories[2].id).to eq(r3_his_bid.id)
+    end
+  end
+
+  describe 'sort by average_price and actual_bid_time' do
+    auction_histories = AuctionHistory.where('flag is not null')
+    it "test reject" do
+      auction_histories_json = auction_histories.to_json
+      list = JSON.parse(auction_histories_json)
+      new_auction_histories = []
+      list.each { |his|
+        new_auction_histories.push(AuctionHistory.new(his))
+      }
+      new_list = list.reject {|l|
+        l['is_bidder'] == true
+      }
+       expect(new_list.size).to eq(2)
+
     end
   end
 end
