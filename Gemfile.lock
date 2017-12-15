@@ -72,7 +72,6 @@ GEM
       simplecov
       url
     concurrent-ruby (1.0.5)
-    connection_pool (2.2.1)
     crass (1.0.2)
     database_rewinder (0.8.2)
     devise (4.3.0)
@@ -153,8 +152,6 @@ GEM
     public_suffix (3.0.0)
     puma (3.10.0)
     rack (2.0.3)
-    rack-protection (2.0.0)
-      rack
     rack-test (0.7.0)
       rack (>= 1.0, < 3)
     rails (5.1.4)
@@ -243,11 +240,6 @@ GEM
       rubyzip (~> 1.0)
     shoulda-matchers (3.1.2)
       activesupport (>= 4.0.0)
-    sidekiq (5.0.5)
-      concurrent-ruby (~> 1.0)
-      connection_pool (~> 2.2, >= 2.2.0)
-      rack-protection (>= 1.5.0)
-      redis (>= 3.3.4, < 5)
     simple_form (3.5.0)
       actionpack (> 4, < 5.2)
       activemodel (> 4, < 5.2)
@@ -340,7 +332,6 @@ DEPENDENCIES
   sass-rails
   selenium-webdriver
   shoulda-matchers (~> 3.1)
-  sidekiq
   simple_form
   simple_form_customizations!
   simplecov
