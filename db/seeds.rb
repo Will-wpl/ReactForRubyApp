@@ -1,7 +1,7 @@
 admin_user = User.find_or_create_by(name: 'admin') do |user|
   user.email = 'revv@spgroup.com.sg'
-  user.password = 'RA2017revv'
-  user.password_confirmation = 'RA2017revv'
+  user.password = 'password'
+  user.password_confirmation = 'password'
   user.company_name = 'SP GROUP'
 end
 admin_user.add_role :admin
@@ -26,18 +26,18 @@ reverse_auction = Auction.find_or_create_by(name: 'SP Reverse Auction') do |auct
 end
 
 retailers = [
-  { name: 'Best Electricity Supply ', email: 'jichong@bestelectricity.com.sg', company_name: 'Best Electricity Supply', password: '8Qd3Xk7A' },
-  { name: 'Charis Electric', email: 'kenneth.lee@chariselectric.com.sg', company_name: 'Charis Electric', password: '4F93Za4V'  },
-  { name: 'Energy Supply Solutions', email: 'yap@energysupplysolutions.com.sg', company_name: 'Energy Supply Solutions', password: '5Qq2Qy8E'  },
-  { name: 'Hyflux Energy', email: 'huixin_tang@hyflux.com', company_name: 'Hyflux Energy', password: '2Cy7Fw5J'  },
-  { name: 'I Switch', email: 'Jovan.tang@iswitch.com.sg', company_name: 'I Switch', password: '9Fr6Yt4G'  },
-  { name: 'Dummy Retailer', email: 'retailer@example.com', company_name: 'Dummy Retailer', password: 'dumdum1952'  },
-  { name: 'PacificLight Energy', email: 'Eugene.he@pacificlight.com.sg', company_name: 'PacificLight Energy', password: '7Tr5Au2Q'  },
-  { name: 'Red Dot Power', email: 'hafizah.ahmad@reddotpower.com.sg', company_name: 'Red Dot Power', password: '6Pc9Qk7S'  },
-  { name: 'SembCorp Power', email: 'jenny.lye@sembcorp.com', company_name: 'SembCorp Power', password: '2Uk6Cr7G'  },
-  { name: 'Sunseap Energy', email: 'Ryan.Ang@sunseap.com', company_name: 'Sunseap Energy', password: '5Ve6Ay9J'  },
-  { name: 'Tuas Power Supply', email: 'charlainechan@tuaspower.com.sg', company_name: 'Tuas Power Supply', password: '8Qk3Mk5L'  },
-  { name: 'Union Power', email: 'Hermann@UnionPower.com.sg', company_name: 'Union Power', password: '6Yp9Uq3Y' }
+  { name: 'Best Electricity Supply ', email: 'jichong@bestelectricity.com.sg', company_name: 'Best Electricity Supply', password: 'password' },
+  { name: 'Charis Electric', email: 'kenneth.lee@chariselectric.com.sg', company_name: 'Charis Electric', password: 'password'  },
+  { name: 'Energy Supply Solutions', email: 'yap@energysupplysolutions.com.sg', company_name: 'Energy Supply Solutions', password: 'password'  },
+  { name: 'Hyflux Energy', email: 'huixin_tang@hyflux.com', company_name: 'Hyflux Energy', password: 'password'  },
+  { name: 'I Switch', email: 'Jovan.tang@iswitch.com.sg', company_name: 'I Switch', password: 'password'  },
+  { name: 'Dummy Retailer', email: 'retailer@example.com', company_name: 'Dummy Retailer', password: 'password'  },
+  { name: 'PacificLight Energy', email: 'Eugene.he@pacificlight.com.sg', company_name: 'PacificLight Energy', password: 'password'  },
+  { name: 'Red Dot Power', email: 'hafizah.ahmad@reddotpower.com.sg', company_name: 'Red Dot Power', password: 'password'  },
+  { name: 'SembCorp Power', email: 'jenny.lye@sembcorp.com', company_name: 'SembCorp Power', password: 'password'  },
+  { name: 'Sunseap Energy', email: 'Ryan.Ang@sunseap.com', company_name: 'Sunseap Energy', password: 'password'  },
+  { name: 'Tuas Power Supply', email: 'charlainechan@tuaspower.com.sg', company_name: 'Tuas Power Supply', password: 'password'  },
+  { name: 'Union Power', email: 'Hermann@UnionPower.com.sg', company_name: 'Union Power', password: 'password' }
 
 ]
 

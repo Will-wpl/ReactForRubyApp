@@ -208,6 +208,21 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 .live_show{display: block;}
 .live_hide{display: none;}
 
+.buyer{
+  .addSite{ width: 100%; margin: 10px auto;
+    a{color:#00888a;}
+  }
+  .buyer_btn{ text-align: right; width: 100%;
+    button{ 
+        margin: 0 10px;
+        &:last-child{margin-right: 0px;}
+        &:hover{background:#00888a;}
+    }
+  }
+}
+
+
+
 
 .showdetail{
   width: 100%; overflow:hidden;
@@ -297,4 +312,18 @@ input[type="number"]{
   width: 480px; margin: 60px auto;
   border-radius: 5px; overflow: hidden; display: table;
   p{ background: #00afb1; width: 100%; font-size: 18px; padding:60px 10px 60px 10px; text-align: center}
+}
+
+.registration{ margin: 30px auto; min-height: 400px;
+  h4{text-align: center; margin: 20px auto;}
+  a{width:170px; margin: 40px auto; border-radius:6px; display: block; transition: 0.3s all; cursor: pointer; height:228px; text-indent: -9999px;
+    &.buyer{  
+      background:#3b98de url("../images/buyer_ico.png") no-repeat bottom;
+      &:hover{width:190px; height:248px; box-shadow: 0px 0px 25px #fff;}
+    }
+    &.retailer{  
+      background:#D69841 url("../images/retailer_ico.png") no-repeat bottom;
+      &:hover{width:190px; height:248px; box-shadow: 0px 0px 25px #fff;}
+    }
+  }
 }
