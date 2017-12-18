@@ -17,4 +17,4 @@ div.u-grid.u-mb3.u-mt3
       .lm--formItem
         = f.button :submit, 'Login', class: 'lm--button--primary u-block', data: { disable_with: t('views.disable_with') }
       .lm--formItem.u-text-center
-        | #{link_to 'Sign Up', users_choose_path} or #{link_to 'Forgot Password', new_password_path(resource_name)}
+        | #{link_to 'Sign Up', new_user_registration_path} or #{link_to 'Forgot Password', new_password_path(resource_name)}
