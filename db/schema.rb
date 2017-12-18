@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171121063623) do
+ActiveRecord::Schema.define(version: 20171218071207) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -145,6 +145,22 @@ ActiveRecord::Schema.define(version: 20171121063623) do
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource_type_and_resource_id"
   end
 
+  create_table "user_details", force: :cascade do |t|
+    t.string "consumer_type"
+    t.string "company_address"
+    t.string "company_unique_entity_number"
+    t.string "account_fin"
+    t.string "account_mobile_number"
+    t.string "account_office_number"
+    t.string "account_home_number"
+    t.string "account_housing_type"
+    t.string "account_home_address"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_details_on_user_id"
+  end
+
   create_table "user_extensions", force: :cascade do |t|
     t.string "login_status"
     t.string "current_room"
@@ -189,5 +205,6 @@ ActiveRecord::Schema.define(version: 20171121063623) do
   add_foreign_key "auction_histories", "auctions"
   add_foreign_key "auction_histories", "users"
   add_foreign_key "auction_results", "auctions"
+  add_foreign_key "user_details", "users"
   add_foreign_key "user_extensions", "users"
 end
