@@ -13,7 +13,6 @@ Rails.application.routes.draw do
   devise_for :users, skip: %i[sessions home]
   as :user do
     root to: 'devise/sessions#new'
-    get 'users/choose', to: 'devise/registrations#choose'
     get 'log_in', to: 'devise/sessions#new', as: :new_user_session
     post 'sign_up', to: 'devise/sessions#create', as: :user_session
     match 'log_out', to: 'devise/sessions#destroy', as: :destroy_user_session, via: Devise.mappings[:user].sign_out_via
