@@ -49,11 +49,11 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def retailers
-
+    @users = User.retailers.where('users.id = 2').order(created_at: :desc).page(params[:page])
   end
 
   def buyers
-
+    @users = User.buyers.order(created_at: :desc).page(params[:page])
   end
 
   private

@@ -4,6 +4,7 @@ class CreateUserDetails < ActiveRecord::Migration[5.1]
       t.string :consumer_type
       t.string :company_address
       t.string :company_unique_entity_number
+      t.string :company_license_number
       t.string :account_fin
       t.string :account_mobile_number
       t.string :account_office_number

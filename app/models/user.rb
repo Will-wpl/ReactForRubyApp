@@ -29,7 +29,8 @@ class User < ApplicationRecord
   validates_presence_of :name
 
   # Scopes
-
+  scope :retailers, -> { includes(:roles, :user_detail).where(roles: { name: 'retailer' }) }
+  scope :buyers, -> { includes(:roles, :user_detail).where(roles: { name: 'buyer' }) }
   # Callbacks
 
   # Delegates
