@@ -84,7 +84,7 @@ Rails.application.routes.draw do
     resources :arrangements, only: []
     resources :user_extensions, only: []
     resources :auction_extend_times, only: []
-    resources :auctions, only: %i[new empty goto upcoming online dashboard confirm result report log] do
+    resources :auctions, only: %i[new empty goto upcoming online dashboard confirm result report log retailers buyers] do
       member do
         get 'upcoming' # published and pre-auction page
         get 'online' # published and pre-auciton page to retailer online status page
@@ -97,6 +97,8 @@ Rails.application.routes.draw do
       collection do
         get 'empty' # no published auction page
         get 'goto'
+        get 'retailers'
+        get 'buyers'
       end
     end
   end
