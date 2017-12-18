@@ -54,13 +54,6 @@ class Admin::AuctionsController < Admin::BaseController
     end
   end
 
-  def retailers
-
-  end
-
-  def buyers
-
-  end
 
   private
 

@@ -48,6 +48,14 @@ class Admin::UsersController < Admin::BaseController
     redirect_to admin_users_path, notice: "#{User.model_name.human} was successfully destroyed."
   end
 
+  def retailers
+
+  end
+
+  def buyers
+
+  end
+
   private
 
   def set_user

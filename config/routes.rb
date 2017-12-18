@@ -77,14 +77,19 @@ Rails.application.routes.draw do
   namespace :admin do
     # get '/' => 'admin/home#index'
     resources :home, only: :index
-    resources :users
+    resources :users do
+      collection do
+        get 'retailers'
+        get 'buyers'
+      end
+    end
     resources :auction_results, only: [:index]
     resources :auction_histories, only: []
     resources :auction_events, only: []
     resources :arrangements, only: []
     resources :user_extensions, only: []
     resources :auction_extend_times, only: []
-    resources :auctions, only: %i[new empty goto upcoming online dashboard confirm result report log retailers buyers] do
+    resources :auctions, only: %i[new empty goto upcoming online dashboard confirm result report log] do
       member do
         get 'upcoming' # published and pre-auction page
         get 'online' # published and pre-auciton page to retailer online status page
@@ -97,8 +102,6 @@ Rails.application.routes.draw do
       collection do
         get 'empty' # no published auction page
         get 'goto'
-        get 'retailers'
-        get 'buyers'
       end
     end
   end
