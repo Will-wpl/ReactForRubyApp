@@ -100,7 +100,7 @@ class AuctionHistory < ApplicationRecord
       history_new.bid_time = current_time
       history_new.actual_bid_time = history.actual_bid_time
       history_new.total_award_sum = history.total_award_sum
-      history_new.is_bidder = history.user_id == current_history.user_id ? true : false
+      history_new.is_bidder = history.user_id == current_history.user_id
       history_new.flag = flag
       new_histories.push(history_new)
       tmp_average_price = history.average_price
