@@ -14,7 +14,8 @@ class Auction < ApplicationRecord
   # Validations
 
   # Scopes
-
+  scope :published, -> { where(publish_status == '1') }
+  scope :unpublished, -> { where(publish_status == '0') }
   # Callbacks
 
   # Delegates

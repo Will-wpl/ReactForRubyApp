@@ -54,6 +54,13 @@ class Admin::AuctionsController < Admin::BaseController
     end
   end
 
+  def published
+    @auction = Auction.published.order(created_at: :desc).page(params[:page])
+  end
+
+  def unpublished
+    @auction = Auction.unpublished.order(created_at: :desc).page(params[:page])
+  end
 
   private
 
