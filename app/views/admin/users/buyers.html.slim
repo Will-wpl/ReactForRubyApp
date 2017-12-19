@@ -5,34 +5,35 @@
   table.lm--table.lm--table--responsive
     thead
       tr
-        th Company Name
-        th License Number
-        th Status
+        th Name
+        th Email
+        th Consumer Type
         th
     tbody
       - @users.each do |user|
         tr
-          td[data-label="Name"]= user.name
+          /td[data-label="Name"]= user.company_name
+          - if !user.user_detail.nil? && user.user_detail.consumer_type == '0'
+            td[data-label="Name"]= user.company_name
+          - if !user.user_detail.nil? && user.user_detail.consumer_type == '1'
+            td[data-label="Name"]= user.name
+
           td[data-label="Email"]= user.email
-          td[data-label="Current Sign In At"]= user.current_sign_in_at ? local_time(user.current_sign_in_at) : 'Not Signed In'
-          td[data-label="Roles"]= user.roles.pluck(:name).join(', ')
+          /td[data-label="Status"]= user.approval_status
+          - if !user.user_detail.nil? && user.user_detail.consumer_type == '0'
+            td[data-label="Consumer Type"]= 'Company'
+          - if !user.user_detail.nil? && user.user_detail.consumer_type == '1'
+            td[data-label="Consumer Type"]= 'Individual'
           td.u-text-right.lm--table-actions
-            = link_to admin_user_path(user), class: "lm--button lm--button--text lm--button--small lm--button--success" do
-              span.lm--icon-eye
-              = t("views.actions.show")
-            ' &nbsp;
             = link_to edit_admin_user_path(user), class: "lm--button lm--button--text lm--button--small lm--button--warning" do
-              span.lm--icon-edit
-              = t("views.actions.edit")
+              span.lm--icon-search
+              = t("views.actions.view")
             ' &nbsp;
-            = link_to admin_user_path(user), class: "lm--button lm--button--text lm--button--small lm--button--danger ", method: :delete, data: {confirm: t('views.confirm'), disable_with: t('views.disable_with')} do
-              span.lm--icon-trash
-              = t("views.actions.destroy")
 
 hr
 
 .u-grid
   .col-sm-6.u-cell
-    = page_entries_info @users, entry_name: User.model_name.human
+    = page_entries_info @users
   .col-sm-6.u-cell
     = paginate(@users)
