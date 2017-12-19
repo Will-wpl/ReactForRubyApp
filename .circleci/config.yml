@@ -79,6 +79,8 @@ jobs:
           POSTGRES_USER: root
           POSTGRES_DB: reverse_auction_test
 
+      - image: redis:4.0
+
     working_directory: ~/repo
 
     steps:
