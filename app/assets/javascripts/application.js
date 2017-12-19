@@ -14,3 +14,33 @@
 //= require jquery_ujs
 //= require local-time
 //= require_tree .
+//alert($(".buy"));
+var registration = {
+    show_registration:(type)=>{
+        $(".registration").hide();
+        $("#"+type).fadeIn(500);
+    },
+    choose_buy_type:()=>{
+        $("#buy_registration_choose").hide();
+        $("#buyer_registration").fadeIn(500)
+        let val = $("#buyer_type").val();
+        $(".buyer_type").val(val);
+        $("#buyer_registration_type option[value="+val+"]").attr("selected","selected");
+        if(val == "company"){
+            $("#buyer_registration_company").show();
+        }else{
+            $("#buyer_registration_Individual").show();
+        }
+    },
+    change_buyer_type:(obj)=>{
+        let val = $(obj).val();
+        $(".buyer_type").val(val);
+        if(val == "company"){
+            $("#buyer_registration_Individual").hide();
+            $("#buyer_registration_company").fadeIn(500)
+        }else{
+            $("#buyer_registration_company").hide();
+            $("#buyer_registration_Individual").fadeIn(500)
+        }
+    }
+}
