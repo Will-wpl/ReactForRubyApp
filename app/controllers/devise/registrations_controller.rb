@@ -1,4 +1,6 @@
 class Devise::RegistrationsController < DeviseController
+  before_action :configure_permitted_parameters, if: :devise_controller?
+
   prepend_before_action :require_no_authentication, only: %i[new, create, cancel]
   prepend_before_action :authenticate_scope!, only: %i[edit, update, destroy]
   prepend_before_action :set_minimum_password_length, only: %i[new, edit]
@@ -13,8 +15,7 @@ class Devise::RegistrationsController < DeviseController
   # POST /resource
   def create
     build_resource(sign_up_params)
-
-    resource.save
+    resource.add_role(:retailer) if resource.save
     yield resource if block_given?
     if resource.persisted?
       if resource.active_for_authentication?
@@ -132,6 +133,14 @@ class Devise::RegistrationsController < DeviseController
   def authenticate_scope!
     send(:"authenticate_#{resource_name}!", force: true)
     self.resource = send(:"current_#{resource_name}")
+  end
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up,
+                                      keys: %i[name company_name company_address company_unique_entity_number
+                                               company_license_number account_mobile_number account_office_number
+                                               consumer_type account_fin account_home_number
+                                               account_housing_type account_home_address])
   end
 
   def sign_up_params

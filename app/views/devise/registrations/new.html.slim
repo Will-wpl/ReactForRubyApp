@@ -14,9 +14,6 @@ div.col-sm-12.col-md-6.push-md-3.registration
     = simple_form_for(resource, as: resource_name, url: registration_path(resource_name),
       wrapper: :vertical_form,id:'registration_form', defaults: { label: false }) do |f|
       .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label 
-         font Company Information:
-      .lm--formItem.lm--formItem--inline.string.optional
         .lm--formItem-left.lm--formItem-label * Email
         .lm--formItem-right.lm--formItem-control
           = f.input :email,required:true,id:'retailer_email'
@@ -38,15 +35,15 @@ div.col-sm-12.col-md-6.push-md-3.registration
       .lm--formItem.lm--formItem--inline.string.optional
         .lm--formItem-left.lm--formItem-label * Company Address
         .lm--formItem-right.lm--formItem-control
-          = f.input :email,required:true,id:'retailer_address'
+          = f.input :company_address,required:true,id:'retailer_company_address'
       .lm--formItem.lm--formItem--inline.string.optional
         .lm--formItem-left.lm--formItem-label * Unique Entity Number (UEN)
         .lm--formItem-right.lm--formItem-control
-          = f.input :sign_in_count,required:true,id:'retailer_entity_number'
+          = f.input :company_unique_entity_number,required:true,id:'retailer_entity_number'
       .lm--formItem.lm--formItem--inline.string.optional
         .lm--formItem-left.lm--formItem-label * Retailer Licence Number
         .lm--formItem-right.lm--formItem-control
-          = f.input :remember_me,required:true,id:'retailer_licence_number'
+          = f.input :company_license_number,required:true,id:'retailer_licence_number'
       .lm--formItem.lm--formItem--inline.string.optional
         .lm--formItem-left.lm--formItem-label 
           font Contact Information:
@@ -57,11 +54,11 @@ div.col-sm-12.col-md-6.push-md-3.registration
       .lm--formItem.lm--formItem--inline.string.optional
         .lm--formItem-left.lm--formItem-label * Mobile Number
         .lm--formItem-right.lm--formItem-control
-          = f.input :remember_me,required:true,id:'retailer_mobile_number'
+          = f.input :account_mobile_number,required:true,id:'retailer_mobile_number'
       .lm--formItem.lm--formItem--inline.string.optional
         .lm--formItem-left.lm--formItem-label * Office Number
         .lm--formItem-right.lm--formItem-control
-          = f.input :remember_me,required:true,id:'retailer_office_number'
+          = f.input :account_office_number,required:true,id:'retailer_office_number'
       .lm--formItem.lm--formItem--inline.string.optional
         .lm--formItem-left.lm--formItem-label
         .lm--formItem-right.lm--formItem-control
