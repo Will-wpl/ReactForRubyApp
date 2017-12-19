@@ -3,11 +3,11 @@
   
 div.col-sm-12.col-md-6.push-md-3.registration
   h4 Choose an account type
-  div.u-grid
-    div.col-sm-12.col-md-6
-        a.buyer onclick="registration.show_registration('buy_registration_choose')" Buyer 
+  div.u-grid 
     div.col-sm-12.col-md-6
         a.retailer onclick="registration.show_registration('retailer_registration')" Retailer
+    div.col-sm-12.col-md-6
+        a.buyer onclick="registration.show_registration('buy_registration_choose')" Buyer
 
 .u-grid.u-mb3 id="retailer_registration"
   .col-sm-12.col-md-8.u-mha
@@ -21,14 +21,6 @@ div.col-sm-12.col-md-6.push-md-3.registration
         .lm--formItem-right.lm--formItem-control
           = f.input :email,required:true,id:'retailer_email'
       .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label * Company Name
-        .lm--formItem-right.lm--formItem-control
-          = f.input :company_name,required:true,autofocus: true,id:'retailer_company_name'
-      .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label * Company Address
-        .lm--formItem-right.lm--formItem-control
-          = f.input :email,required:true,id:'retailer_address'
-      .lm--formItem.lm--formItem--inline.string.optional
         .lm--formItem-left.lm--formItem-label * Password (Minimum 8 characters)
         .lm--formItem-right.lm--formItem-control
           = f.input :password,required:true,id:'retailer_password',placeholder: 'Password (Minimum 8 characters)'
@@ -36,6 +28,17 @@ div.col-sm-12.col-md-6.push-md-3.registration
         .lm--formItem-left.lm--formItem-label * Password Confirmation
         .lm--formItem-right.lm--formItem-control
           = f.input :password_confirmation,required:true,id:'retailer_password_confirmation'
+      .lm--formItem.lm--formItem--inline.string.optional
+        .lm--formItem-left.lm--formItem-label 
+          font Company Information:
+      .lm--formItem.lm--formItem--inline.string.optional
+        .lm--formItem-left.lm--formItem-label * Company Name
+        .lm--formItem-right.lm--formItem-control
+          = f.input :company_name,required:true,autofocus: true,id:'retailer_company_name'
+      .lm--formItem.lm--formItem--inline.string.optional
+        .lm--formItem-left.lm--formItem-label * Company Address
+        .lm--formItem-right.lm--formItem-control
+          = f.input :email,required:true,id:'retailer_address'
       .lm--formItem.lm--formItem--inline.string.optional
         .lm--formItem-left.lm--formItem-label * Unique Entity Number (UEN)
         .lm--formItem-right.lm--formItem-control
@@ -46,7 +49,7 @@ div.col-sm-12.col-md-6.push-md-3.registration
           = f.input :remember_me,required:true,id:'retailer_licence_number'
       .lm--formItem.lm--formItem--inline.string.optional
         .lm--formItem-left.lm--formItem-label 
-          font Account Information:
+          font Contact Information:
       .lm--formItem.lm--formItem--inline.string.optional
         .lm--formItem-left.lm--formItem-label * Contact Name
         .lm--formItem-right.lm--formItem-control
