@@ -15,44 +15,64 @@ export class AdminManagePublishedRa extends Component {
         }
     }
 
-    componentWillMount(){
-        getAuction('admin').then(res => {
-            this.auction = res;
-            this.timerTitle = this.auction ? `${this.auction.name} on ${moment(this.auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
-            this.forceUpdate();
-        }, error => {
-            //console.log(error);
-        })
-    }
+    // componentWillMount(){
+    //     getAuction('admin').then(res => {
+    //         this.auction = res;
+    //         this.timerTitle = this.auction ? `${this.auction.name} on ${moment(this.auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
+    //         this.forceUpdate();
+    //     }, error => {
+    //         //console.log(error);
+    //     })
+    // }
     render () {
-        return (
-            <div>
+        let content = <div></div>;
+        if (this.props.auction) {
+            content = (
                 <div>
-                <TimeCuntDown title={this.timerTitle} auction={this.auction} btnDisabled={() => {this.setState({disabled:true,editdisabled:true})}} countDownOver={() => {this.setState({disabled:true,editdisabled:true})}} />
-                <div className="u-grid u-mt3">
-                    <div className="col-sm-12 col-md-7">
-                        <CreateNewRA left_name="Manage Upcoming Reverse Auction" disabled={this.state.disabled} editdisabled={this.state.editdisabled} />
+                    <div>
+                    <TimeCuntDown auction={this.props.auction} btnDisabled={() => {this.setState({disabled:true,editdisabled:true})}} countDownOver={() => {this.setState({disabled:true,editdisabled:true})}} />
+                    <div className="u-grid u-mt3">
+                        <div className="col-sm-12 col-md-7">
+                            <CreateNewRA left_name="Manage Upcoming Reverse Auction" disabled={this.state.disabled} editdisabled={this.state.editdisabled} />
+                        </div>
+                        <div className="col-sm-12 col-md-5">
+                            <BidderStatus auction={this.props.auction} />
+                            <div className="createRaMain w_8">
+                            <div className="createRa_btn u-mt3">
+                                    <a href={`/admin/auctions/${this.props.auction.id}/online`} className="lm--button lm--button--primary">Commence</a>
+                            </div>
+                            </div>
+                        </div>
                     </div>
-                    <div className="col-sm-12 col-md-5">
-                        <BidderStatus auction={this.auction} />
-                        <div className="createRaMain w_8">
-                        <div className="createRa_btn u-mt3">
-                                <a href={`/admin/auctions/${this.auction ? this.auction.id : 1}/online`} className="lm--button lm--button--primary">Commence</a>
-                        </div>
-                        </div>
                     </div>
                 </div>
-                </div>
-            </div>
-        )
+            )
+        }
+        
+        return content;
     }
 }
 
 function run() {
     const domNode = document.getElementById('AdminManagePublishedRa');
     if(domNode !== null){
+        getAuction('admin').then(auction => {
+            renderRoot(auction);
+        }, error => {
+            renderRoot();
+        })
+        // ReactDOM.render(
+        //     React.createElement(AdminManagePublishedRa),
+        //     domNode
+        // );
+    }
+}
+
+const renderRoot = (auction = null) => {
+    const domNode = document.getElementById('AdminManagePublishedRa');
+    if (domNode !== null) {
         ReactDOM.render(
-            React.createElement(AdminManagePublishedRa),
+            React.createElement(AdminManagePublishedRa, {auction: auction}),
             domNode
         );
     }
