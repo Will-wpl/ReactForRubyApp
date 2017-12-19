@@ -13,16 +13,16 @@
       - @users.each do |user|
         tr
           /td[data-label="Name"]= user.company_name
-          - if !user.user_detail.nil? && user.user_detail.consumer_type == '0'
+          - if !user.consumer_type.nil? && user.consumer_type == '0'
             td[data-label="Name"]= user.company_name
-          - if !user.user_detail.nil? && user.user_detail.consumer_type == '1'
+          - if !user.consumer_type.nil? && user.consumer_type == '1'
             td[data-label="Name"]= user.name
 
           td[data-label="Email"]= user.email
           /td[data-label="Status"]= user.approval_status
-          - if !user.user_detail.nil? && user.user_detail.consumer_type == '0'
+          - if !user.consumer_type.nil? && user.consumer_type == '0'
             td[data-label="Consumer Type"]= 'Company'
-          - if !user.user_detail.nil? && user.user_detail.consumer_type == '1'
+          - if !user.consumer_type.nil? && user.consumer_type == '1'
             td[data-label="Consumer Type"]= 'Individual'
           td.u-text-right.lm--table-actions
             = link_to edit_admin_user_path(user), class: "lm--button lm--button--text lm--button--small lm--button--warning" do

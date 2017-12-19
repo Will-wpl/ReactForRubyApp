@@ -13,7 +13,7 @@
       - @users.each do |user|
         tr
           td[data-label="Company Name"]= user.company_name
-          td[data-label="License Number"]= user.user_detail.nil? ? '' : user.user_detail.company_license_number
+          td[data-label="License Number"]= user.company_license_number
           /td[data-label="Status"]= user.approval_status
           - if user.approval_status == "0"
               td[data-label="Status"]= 'Rejected'
