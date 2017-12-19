@@ -48,6 +48,16 @@ class Admin::UsersController < Admin::BaseController
     redirect_to admin_users_path, notice: "#{User.model_name.human} was successfully destroyed."
   end
 
+  # user.approval_status['0', '1', '2'] '0':rejected '1':approved '2':pending
+  def retailers
+    @users = User.retailers.order(created_at: :desc).page(params[:page])
+  end
+
+  # user.user_detail.consumer_type['0', '1'] '0':company '1':individual
+  def buyers
+    @users = User.buyers.order(created_at: :desc).page(params[:page])
+  end
+
   private
 
   def set_user

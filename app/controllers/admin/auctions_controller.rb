@@ -54,6 +54,7 @@ class Admin::AuctionsController < Admin::BaseController
     end
   end
 
+
   private
 
   def set_auction
