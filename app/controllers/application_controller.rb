@@ -37,6 +37,8 @@ class ApplicationController < ActionController::Base
       stored_location_for(resource) || admin_home_index_path
     elsif roleName == 'retailer'
       stored_location_for(resource) || retailer_home_index_path
+    elsif roleName == 'buyer'
+      stored_location_for(resource) || buyer_home_index_path
     end
   end
 

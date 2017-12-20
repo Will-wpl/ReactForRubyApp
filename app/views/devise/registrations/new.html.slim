@@ -6,10 +6,11 @@
     .col-sm-12.col-md-8.u-mha
       = simple_form_for(resource, as: resource_name, url: registration_path(resource_name),
         wrapper: :vertical_form,id:'registration_form', defaults: { label: false }) do |f|
+        input name='type' type="hidden" value=params['type']
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Email
           .lm--formItem-right.lm--formItem-control
-            = f.input :email,required:true
+            = f.input :email,required:true, autofocus: true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Password (Minimum 8 characters)
           .lm--formItem-right.lm--formItem-control
@@ -24,7 +25,7 @@
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Company Name
           .lm--formItem-right.lm--formItem-control
-            = f.input :company_name,required:true,autofocus: true
+            = f.input :company_name,required:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Company Address
           .lm--formItem-right.lm--formItem-control
@@ -32,7 +33,7 @@
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Unique Entity Number (UEN)
           .lm--formItem-right.lm--formItem-control
-            = f.input :company_unique_entity_number,required:true
+            = f.input :company_unique_entity_number
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Retailer Licence Number
           .lm--formItem-right.lm--formItem-control
@@ -69,15 +70,17 @@
             option value="3" Individual
       = simple_form_for(resource, as: resource_name, url: registration_path(resource_name),
         wrapper: :vertical_form, defaults: { label: false }) do |f|
-        input.buyer_type type="hidden" value="2"
+        input name='type' type="hidden" value=params['type']
+        input name='user[consumer_type]' type="hidden" value=params['type']
+        /= f.input :consumer_type, as: :hidden
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Email
           .lm--formItem-right.lm--formItem-control
-            = f.input :email,id:'buy_company_email',required:true
+            = f.input :email,required:true, autofocus: true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Password (Minimum 8 characters)
           .lm--formItem-right.lm--formItem-control
-            = f.input :password,id:'buyer_company_password',required:true, placeholder: 'Password (Minimum 8 characters)'
+            = f.input :password,required:true, placeholder: 'Password (Minimum 8 characters)'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Password Confirmation
           .lm--formItem-right.lm--formItem-control
@@ -88,7 +91,7 @@
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Company Name
           .lm--formItem-right.lm--formItem-control
-            = f.input :company_name,id:'buyer_company_name',required:true, autofocus: true
+            = f.input :company_name,required:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Company Address
           .lm--formItem-right.lm--formItem-control
@@ -129,11 +132,12 @@
             option value="3" selected="selected" Individual
       = simple_form_for(resource, as: resource_name, url: registration_path(resource_name),
       wrapper: :vertical_form, defaults: { label: false }) do |f|
-        input.buyer_type type="hidden" value="3"
+        input name='type' type="hidden" value=params['type']
+        input name='user[consumer_type]' type="hidden" value=params['type']
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Email
           .lm--formItem-right.lm--formItem-control
-            = f.input :email,required:true
+            = f.input :email,required:true, autofocus: true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Password (Minimum 8 characters)
           .lm--formItem-right.lm--formItem-control
@@ -148,7 +152,7 @@
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Name
           .lm--formItem-right.lm--formItem-control
-            = f.input :company_name,required:true, autofocus: true
+            = f.input :name,required:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * NRIC/FIN
           .lm--formItem-right.lm--formItem-control

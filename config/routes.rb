@@ -127,4 +127,8 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  namespace :buyer do
+    resources :home, only: :index
+  end
 end

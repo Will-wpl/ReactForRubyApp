@@ -16,9 +16,8 @@
 //= require_tree .
 //alert($(".buy"));
 var registration = {
-    choose_buy_type:(obj)=>{
+    choose_buyer_type:(obj)=>{
         let val = $(obj).val();
-        $(".buyer_type").val(val);
         if(val == "2"){
             $("#link_type").attr("href","/users/sign_up?type=2");
         }else{
