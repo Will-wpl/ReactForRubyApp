@@ -26,7 +26,7 @@ var registration = {
         let val = $("#buyer_type").val();
         $(".buyer_type").val(val);
         $("#buyer_registration_type option[value="+val+"]").attr("selected","selected");
-        if(val == "company"){
+        if(val == "0"){
             $("#buyer_registration_company").show();
         }else{
             $("#buyer_registration_Individual").show();
@@ -35,7 +35,7 @@ var registration = {
     change_buyer_type:(obj)=>{
         let val = $(obj).val();
         $(".buyer_type").val(val);
-        if(val == "company"){
+        if(val == "0"){
             $("#buyer_registration_Individual").hide();
             $("#buyer_registration_company").fadeIn(500)
         }else{

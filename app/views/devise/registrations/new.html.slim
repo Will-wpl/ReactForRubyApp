@@ -1,202 +1,300 @@
 .u-text-center.u-mb3
   = image_tag 'logo-railsbase.png', alt: 'railsbase-logo', class: 'devise-logo'
-  
-div.col-sm-12.col-md-6.push-md-3.registration
-  h4 Choose an account type
-  div.u-grid 
-    div.col-sm-12.col-md-6
-        a.retailer onclick="registration.show_registration('retailer_registration')" Retailer
-    div.col-sm-12.col-md-6
-        a.buyer onclick="registration.show_registration('buy_registration_choose')" Buyer
 
-.u-grid.u-mb3 id="retailer_registration"
-  .col-sm-12.col-md-8.u-mha
-    = simple_form_for(resource, as: resource_name, url: registration_path(resource_name),
-      wrapper: :vertical_form,id:'registration_form', defaults: { label: false }) do |f|
-      .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label * Email
-        .lm--formItem-right.lm--formItem-control
-          = f.input :email,required:true,id:'retailer_email'
-      .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label * Password (Minimum 8 characters)
-        .lm--formItem-right.lm--formItem-control
-          = f.input :password,required:true,id:'retailer_password',placeholder: 'Password (Minimum 8 characters)'
-      .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label * Password Confirmation
-        .lm--formItem-right.lm--formItem-control
-          = f.input :password_confirmation,required:true,id:'retailer_password_confirmation'
-      .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label 
-          font Company Information:
-      .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label * Company Name
-        .lm--formItem-right.lm--formItem-control
-          = f.input :company_name,required:true,autofocus: true,id:'retailer_company_name'
-      .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label * Company Address
-        .lm--formItem-right.lm--formItem-control
-          = f.input :company_address,required:true,id:'retailer_company_address'
-      .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label * Unique Entity Number (UEN)
-        .lm--formItem-right.lm--formItem-control
-          = f.input :company_unique_entity_number,required:true,id:'retailer_entity_number'
-      .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label * Retailer Licence Number
-        .lm--formItem-right.lm--formItem-control
-          = f.input :company_license_number,required:true,id:'retailer_licence_number'
-      .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label 
-          font Contact Information:
-      .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label * Contact Name
-        .lm--formItem-right.lm--formItem-control
-          = f.input :name,required:true,id:'retailer_contact_name'
-      .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label * Mobile Number
-        .lm--formItem-right.lm--formItem-control
-          = f.input :account_mobile_number,required:true,id:'retailer_mobile_number'
-      .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label * Office Number
-        .lm--formItem-right.lm--formItem-control
-          = f.input :account_office_number,required:true,id:'retailer_office_number'
-      .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label
-        .lm--formItem-right.lm--formItem-control
-          = f.button :submit, 'Sign Up', class: 'lm--button--primary u-block', data: { disable_with: t('views.disable_with') }
-      .lm--formItem.u-text-center
-        | Have an Account? #{link_to 'Log In', new_user_session_path}
-
-
-.u-grid.u-mb3 id="buy_registration_choose"
-  .col-sm-12.col-md-8.u-mha
-      .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label Consumer Type
-        .lm--formItem-right.lm--formItem-control
-          select id='buyer_type'
-            option value="company" Company
-            option value="individual" Individual
-      .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label
-        .lm--formItem-right.lm--formItem-control
-          button.lm--button.lm--button--primary.u-block id='buyer_type_btn' onclick="registration.choose_buy_type()" Sign Up
-      .lm--formItem.u-text-center
-        | Have an Account? #{link_to 'Log In', new_user_session_path}
-
-
-
-.u-grid.u-mb3 id="buyer_registration"
-  .col-sm-12.col-md-8.u-mha
-    .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label Consumer Type
-        .lm--formItem-right.lm--formItem-control
-          select id='buyer_registration_type' onchange="registration.change_buyer_type(this)"
-            option value="company" Company
-            option value="individual" Individual
-    div id='buyer_registration_company'
+- if params['type'] == '1'
+  .u-grid.u-mb3
+    .col-sm-12.col-md-8.u-mha
       = simple_form_for(resource, as: resource_name, url: registration_path(resource_name),
-        wrapper: :vertical_form, defaults: { label: false }) do |f|
-        input.buyer_type type="hidden"
+        wrapper: :vertical_form,id:'registration_form', defaults: { label: false }) do |f|
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Email
           .lm--formItem-right.lm--formItem-control
-            = f.input :email,id:'buy_company_email',required:true
+            = f.input :email,required:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Password (Minimum 8 characters)
           .lm--formItem-right.lm--formItem-control
-            = f.input :password,id:'buyer_company_password',required:true, placeholder: 'Password (Minimum 8 characters)'
+            = f.input :password,required:true,placeholder: 'Password (Minimum 8 characters)'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Password Confirmation
           .lm--formItem-right.lm--formItem-control
-            = f.input :password_confirmation,required:true,id:'buyer_company_password_confirmation'
+            = f.input :password_confirmation,required:true
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label 
+          .lm--formItem-left.lm--formItem-label
             font Company Information:
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Company Name
           .lm--formItem-right.lm--formItem-control
-            = f.input :company_name,id:'buyer_company_name',required:true, autofocus: true
+            = f.input :company_name,required:true,autofocus: true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Company Address
           .lm--formItem-right.lm--formItem-control
-            = f.input :email,required:true,id:'buyer_company_address'
+            = f.input :company_address,required:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Unique Entity Number (UEN)
           .lm--formItem-right.lm--formItem-control
-            = f.input :sign_in_count,required:true,id:'buyer_company_entity_number'
+            = f.input :company_unique_entity_number,required:true
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label 
+          .lm--formItem-left.lm--formItem-label * Retailer Licence Number
+          .lm--formItem-right.lm--formItem-control
+            = f.input :company_license_number,required:true
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label
             font Contact Information:
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Contact Name
           .lm--formItem-right.lm--formItem-control
-            = f.input :name,required:true,id:'buyer_company_contact_name'
+            = f.input :name,required:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Mobile Number
           .lm--formItem-right.lm--formItem-control
-            = f.input :remember_me,required:true,id:'buyer_company_mobile_number'
+            = f.input :account_mobile_number,required:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Office Number
           .lm--formItem-right.lm--formItem-control
-            = f.input :remember_me,required:true,id:'buyer_company_office_number'
+            = f.input :account_office_number,required:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
           .lm--formItem-right.lm--formItem-control
             = f.button :submit, 'Sign Up', class: 'lm--button--primary u-block', data: { disable_with: t('views.disable_with') }
         .lm--formItem.u-text-center
           | Have an Account? #{link_to 'Log In', new_user_session_path}
-
-
-    div id='buyer_registration_Individual'
-      = simple_form_for(resource, as: resource_name, url: registration_path(resource_name),
-      wrapper: :vertical_form, defaults: { label: false }) do |f|
-        input.buyer_type type="hidden"
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Email
-          .lm--formItem-right.lm--formItem-control
-            = f.input :email,required:true,id:'buy_individual_email'
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Password (Minimum 8 characters)
-          .lm--formItem-right.lm--formItem-control
-            = f.input :password,required:true,id:'buyer_individual_password', placeholder: 'Password (Minimum 8 characters)'
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Password Confirmation
-          .lm--formItem-right.lm--formItem-control
-            = f.input :password_confirmation,required:true,id:'buyer_individual_password_confirmation'
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label 
-            font Account Information:
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Name
-          .lm--formItem-right.lm--formItem-control
-            = f.input :company_name,required:true,id:'buyer_individual_name', autofocus: true
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * NRIC/FIN
-          .lm--formItem-right.lm--formItem-control
-            = f.input :email,required:true,id:'buyer_nric_address'
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Housing Type:(HDB/Private High-rise/Landed)
-          .lm--formItem-right.lm--formItem-control
-            = f.input :remember_me,required:true,id:'buyer_individual_housing_type'
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Home Address
-          .lm--formItem-right.lm--formItem-control
-            = f.input :remember_me,required:true,id:'buyer_individual_home_address'
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Mobile Number
-          .lm--formItem-right.lm--formItem-control
-            = f.input :sign_in_count,required:true,id:'buyer_individual_mobile_number'
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Home Number
-          .lm--formItem-right.lm--formItem-control
-            = f.input :remember_me,required:true,id:'buyer_individual_home_number'
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Office Number
-          .lm--formItem-right.lm--formItem-control
-            = f.input :remember_me,required:true,id:'buyer_individual_office_number'
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label
-          .lm--formItem-right.lm--formItem-control
-            = f.button :submit, 'Sign Up', class: 'lm--button--primary u-block', data: { disable_with: t('views.disable_with') }
-        .lm--formItem.u-text-center
-          | Have an Account? #{link_to 'Log In', new_user_session_path}
-    
+- if params['type'] == '2'
+  = simple_form_for(resource, as: resource_name, url: registration_path(resource_name),
+    wrapper: :vertical_form, defaults: { label: false }) do |f|
+    input.buyer_type type="hidden"
+    .lm--formItem.lm--formItem--inline.string.optional
+      .lm--formItem-left.lm--formItem-label * Email
+      .lm--formItem-right.lm--formItem-control
+        = f.input :email,id:'buy_company_email',required:true
+    .lm--formItem.lm--formItem--inline.string.optional
+      .lm--formItem-left.lm--formItem-label * Password (Minimum 8 characters)
+      .lm--formItem-right.lm--formItem-control
+        = f.input :password,id:'buyer_company_password',required:true, placeholder: 'Password (Minimum 8 characters)'
+    .lm--formItem.lm--formItem--inline.string.optional
+      .lm--formItem-left.lm--formItem-label * Password Confirmation
+      .lm--formItem-right.lm--formItem-control
+        = f.input :password_confirmation,required:true
+    .lm--formItem.lm--formItem--inline.string.optional
+      .lm--formItem-left.lm--formItem-label
+        font Company Information:
+    .lm--formItem.lm--formItem--inline.string.optional
+      .lm--formItem-left.lm--formItem-label * Company Name
+      .lm--formItem-right.lm--formItem-control
+        = f.input :company_name,id:'buyer_company_name',required:true, autofocus: true
+    .lm--formItem.lm--formItem--inline.string.optional
+      .lm--formItem-left.lm--formItem-label * Company Address
+      .lm--formItem-right.lm--formItem-control
+        = f.input :company_address,required:true
+    .lm--formItem.lm--formItem--inline.string.optional
+      .lm--formItem-left.lm--formItem-label * Unique Entity Number (UEN)
+      .lm--formItem-right.lm--formItem-control
+        = f.input :company_unique_entity_number,required:true
+    .lm--formItem.lm--formItem--inline.string.optional
+      .lm--formItem-left.lm--formItem-label
+        font Contact Information:
+    .lm--formItem.lm--formItem--inline.string.optional
+      .lm--formItem-left.lm--formItem-label * Contact Name
+      .lm--formItem-right.lm--formItem-control
+        = f.input :name,required:true
+    .lm--formItem.lm--formItem--inline.string.optional
+      .lm--formItem-left.lm--formItem-label * Mobile Number
+      .lm--formItem-right.lm--formItem-control
+        = f.input :account_mobile_number,required:true
+    .lm--formItem.lm--formItem--inline.string.optional
+      .lm--formItem-left.lm--formItem-label * Office Number
+      .lm--formItem-right.lm--formItem-control
+        = f.input :account_office_number,required:true
+    .lm--formItem.lm--formItem--inline.string.optional
+      .lm--formItem-left.lm--formItem-label
+      .lm--formItem-right.lm--formItem-control
+        = f.button :submit, 'Sign Up', class: 'lm--button--primary u-block', data: { disable_with: t('views.disable_with') }
+    .lm--formItem.u-text-center
+      | Have an Account? #{link_to 'Log In', new_user_session_path}
+- if params['type'] == '3'
+  = simple_form_for(resource, as: resource_name, url: registration_path(resource_name),
+  wrapper: :vertical_form, defaults: { label: false }) do |f|
+    input.buyer_type type="hidden"
+    .lm--formItem.lm--formItem--inline.string.optional
+      .lm--formItem-left.lm--formItem-label * Email
+      .lm--formItem-right.lm--formItem-control
+        = f.input :email,required:true
+    .lm--formItem.lm--formItem--inline.string.optional
+      .lm--formItem-left.lm--formItem-label * Password (Minimum 8 characters)
+      .lm--formItem-right.lm--formItem-control
+        = f.input :password,required:true, placeholder: 'Password (Minimum 8 characters)'
+    .lm--formItem.lm--formItem--inline.string.optional
+      .lm--formItem-left.lm--formItem-label * Password Confirmation
+      .lm--formItem-right.lm--formItem-control
+        = f.input :password_confirmation,required:true
+    .lm--formItem.lm--formItem--inline.string.optional
+      .lm--formItem-left.lm--formItem-label
+        font Account Information:
+    .lm--formItem.lm--formItem--inline.string.optional
+      .lm--formItem-left.lm--formItem-label * Name
+      .lm--formItem-right.lm--formItem-control
+        = f.input :company_name,required:true, autofocus: true
+    .lm--formItem.lm--formItem--inline.string.optional
+      .lm--formItem-left.lm--formItem-label * NRIC/FIN
+      .lm--formItem-right.lm--formItem-control
+        = f.input :account_fin,required:true
+    .lm--formItem.lm--formItem--inline.string.optional
+      .lm--formItem-left.lm--formItem-label * Housing Type:(HDB/Private High-rise/Landed)
+      .lm--formItem-right.lm--formItem-control
+        = f.input :account_housing_type,required:true
+    .lm--formItem.lm--formItem--inline.string.optional
+      .lm--formItem-left.lm--formItem-label * Home Address
+      .lm--formItem-right.lm--formItem-control
+        = f.input :account_home_address,required:true
+    .lm--formItem.lm--formItem--inline.string.optional
+      .lm--formItem-left.lm--formItem-label * Mobile Number
+      .lm--formItem-right.lm--formItem-control
+        = f.input :account_mobile_number,required:true
+    .lm--formItem.lm--formItem--inline.string.optional
+      .lm--formItem-left.lm--formItem-label * Home Number
+      .lm--formItem-right.lm--formItem-control
+        = f.input :account_home_number,required:true
+    .lm--formItem.lm--formItem--inline.string.optional
+      .lm--formItem-left.lm--formItem-label * Office Number
+      .lm--formItem-right.lm--formItem-control
+        = f.input :account_office_number,required:true
+    .lm--formItem.lm--formItem--inline.string.optional
+      .lm--formItem-left.lm--formItem-label
+      .lm--formItem-right.lm--formItem-control
+        = f.button :submit, 'Sign Up', class: 'lm--button--primary u-block', data: { disable_with: t('views.disable_with') }
+    .lm--formItem.u-text-center
+      | Have an Account? #{link_to 'Log In', new_user_session_path}
+- else
+  h1 Please select account type before.
+/.u-grid.u-mb3 id="buy_registration_choose"
+/  .col-sm-12.col-md-8.u-mha
+/      .lm--formItem.lm--formItem--inline.string.optional
+/        .lm--formItem-left.lm--formItem-label Consumer Type
+/        .lm--formItem-right.lm--formItem-control
+/          select id='buyer_type'
+/            option value="0" Company
+/            option value="1" Individual
+/      .lm--formItem.lm--formItem--inline.string.optional
+/        .lm--formItem-left.lm--formItem-label
+/        .lm--formItem-right.lm--formItem-control
+/          button.lm--button.lm--button--primary.u-block id='buyer_type_btn' onclick="registration.choose_buy_type()" Sign Up
+/      .lm--formItem.u-text-center
+/        | Have an Account? #{link_to 'Log In', new_user_session_path}
+/
+/
+/
+/
+/.u-grid.u-mb3 id="buyer_registration"
+/  .col-sm-12.col-md-8.u-mha
+/    .lm--formItem.lm--formItem--inline.string.optional
+/        .lm--formItem-left.lm--formItem-label Consumer Type
+/        .lm--formItem-right.lm--formItem-control
+/          select id='buyer_registration_type' onchange="registration.change_buyer_type(this)"
+/            option value="0" Company
+/            option value="1" Individual
+/    div id='buyer_registration_company'
+/      = simple_form_for(resource, as: resource_name, url: registration_path(resource_name),
+/        wrapper: :vertical_form, defaults: { label: false }) do |f|
+/        input.buyer_type type="hidden"
+/        .lm--formItem.lm--formItem--inline.string.optional
+/          .lm--formItem-left.lm--formItem-label * Email
+/          .lm--formItem-right.lm--formItem-control
+/            = f.input :email,id:'buy_company_email',required:true
+/        .lm--formItem.lm--formItem--inline.string.optional
+/          .lm--formItem-left.lm--formItem-label * Password (Minimum 8 characters)
+/          .lm--formItem-right.lm--formItem-control
+/            = f.input :password,id:'buyer_company_password',required:true, placeholder: 'Password (Minimum 8 characters)'
+/        .lm--formItem.lm--formItem--inline.string.optional
+/          .lm--formItem-left.lm--formItem-label * Password Confirmation
+/          .lm--formItem-right.lm--formItem-control
+/            = f.input :password_confirmation,required:true
+/        .lm--formItem.lm--formItem--inline.string.optional
+/          .lm--formItem-left.lm--formItem-label
+/            font Company Information:
+/        .lm--formItem.lm--formItem--inline.string.optional
+/          .lm--formItem-left.lm--formItem-label * Company Name
+/          .lm--formItem-right.lm--formItem-control
+/            = f.input :company_name,id:'buyer_company_name',required:true, autofocus: true
+/        .lm--formItem.lm--formItem--inline.string.optional
+/          .lm--formItem-left.lm--formItem-label * Company Address
+/          .lm--formItem-right.lm--formItem-control
+/            = f.input :company_address,required:true
+/        .lm--formItem.lm--formItem--inline.string.optional
+/          .lm--formItem-left.lm--formItem-label * Unique Entity Number (UEN)
+/          .lm--formItem-right.lm--formItem-control
+/            = f.input :company_unique_entity_number,required:true
+/        .lm--formItem.lm--formItem--inline.string.optional
+/          .lm--formItem-left.lm--formItem-label
+/            font Contact Information:
+/        .lm--formItem.lm--formItem--inline.string.optional
+/          .lm--formItem-left.lm--formItem-label * Contact Name
+/          .lm--formItem-right.lm--formItem-control
+/            = f.input :name,required:true
+/        .lm--formItem.lm--formItem--inline.string.optional
+/          .lm--formItem-left.lm--formItem-label * Mobile Number
+/          .lm--formItem-right.lm--formItem-control
+/            = f.input :account_mobile_number,required:true
+/        .lm--formItem.lm--formItem--inline.string.optional
+/          .lm--formItem-left.lm--formItem-label * Office Number
+/          .lm--formItem-right.lm--formItem-control
+/            = f.input :account_office_number,required:true
+/        .lm--formItem.lm--formItem--inline.string.optional
+/          .lm--formItem-left.lm--formItem-label
+/          .lm--formItem-right.lm--formItem-control
+/            = f.button :submit, 'Sign Up', class: 'lm--button--primary u-block', data: { disable_with: t('views.disable_with') }
+/        .lm--formItem.u-text-center
+/          | Have an Account? #{link_to 'Log In', new_user_session_path}
+/
+/
+/    div id='buyer_registration_Individual'
+/      = simple_form_for(resource, as: resource_name, url: registration_path(resource_name),
+/      wrapper: :vertical_form, defaults: { label: false }) do |f|
+/        input.buyer_type type="hidden"
+/        .lm--formItem.lm--formItem--inline.string.optional
+/          .lm--formItem-left.lm--formItem-label * Email
+/          .lm--formItem-right.lm--formItem-control
+/            = f.input :email,required:true
+/        .lm--formItem.lm--formItem--inline.string.optional
+/          .lm--formItem-left.lm--formItem-label * Password (Minimum 8 characters)
+/          .lm--formItem-right.lm--formItem-control
+/            = f.input :password,required:true, placeholder: 'Password (Minimum 8 characters)'
+/        .lm--formItem.lm--formItem--inline.string.optional
+/          .lm--formItem-left.lm--formItem-label * Password Confirmation
+/          .lm--formItem-right.lm--formItem-control
+/            = f.input :password_confirmation,required:true
+/        .lm--formItem.lm--formItem--inline.string.optional
+/          .lm--formItem-left.lm--formItem-label
+/            font Account Information:
+/        .lm--formItem.lm--formItem--inline.string.optional
+/          .lm--formItem-left.lm--formItem-label * Name
+/          .lm--formItem-right.lm--formItem-control
+/            = f.input :company_name,required:true, autofocus: true
+/        .lm--formItem.lm--formItem--inline.string.optional
+/          .lm--formItem-left.lm--formItem-label * NRIC/FIN
+/          .lm--formItem-right.lm--formItem-control
+/            = f.input :account_fin,required:true
+/        .lm--formItem.lm--formItem--inline.string.optional
+/          .lm--formItem-left.lm--formItem-label * Housing Type:(HDB/Private High-rise/Landed)
+/          .lm--formItem-right.lm--formItem-control
+/            = f.input :account_housing_type,required:true
+/        .lm--formItem.lm--formItem--inline.string.optional
+/          .lm--formItem-left.lm--formItem-label * Home Address
+/          .lm--formItem-right.lm--formItem-control
+/            = f.input :account_home_address,required:true
+/        .lm--formItem.lm--formItem--inline.string.optional
+/          .lm--formItem-left.lm--formItem-label * Mobile Number
+/          .lm--formItem-right.lm--formItem-control
+/            = f.input :account_mobile_number,required:true
+/        .lm--formItem.lm--formItem--inline.string.optional
+/          .lm--formItem-left.lm--formItem-label * Home Number
+/          .lm--formItem-right.lm--formItem-control
+/            = f.input :account_home_number,required:true
+/        .lm--formItem.lm--formItem--inline.string.optional
+/          .lm--formItem-left.lm--formItem-label * Office Number
+/          .lm--formItem-right.lm--formItem-control
+/            = f.input :account_office_number,required:true
+/        .lm--formItem.lm--formItem--inline.string.optional
+/          .lm--formItem-left.lm--formItem-label
+/          .lm--formItem-right.lm--formItem-control
+/            = f.button :submit, 'Sign Up', class: 'lm--button--primary u-block', data: { disable_with: t('views.disable_with') }
+/        .lm--formItem.u-text-center
+/          | Have an Account? #{link_to 'Log In', new_user_session_path}

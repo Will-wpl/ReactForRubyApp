@@ -12,6 +12,10 @@ class Devise::RegistrationsController < DeviseController
     respond_with resource
   end
 
+  def choose_type; end
+
+  def buyer_type; end
+
   # POST /resource
   def create
     build_resource(sign_up_params)

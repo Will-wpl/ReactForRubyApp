@@ -12,6 +12,8 @@ Rails.application.routes.draw do
 
   devise_for :users, skip: %i[sessions home]
   as :user do
+    get 'users/choose_type', to: 'devise/registrations#choose_type'
+    get 'users/buyer_type', to: 'devise/registrations#buyer_type'
     root to: 'devise/sessions#new'
     get 'log_in', to: 'devise/sessions#new', as: :new_user_session
     post 'sign_up', to: 'devise/sessions#create', as: :user_session
