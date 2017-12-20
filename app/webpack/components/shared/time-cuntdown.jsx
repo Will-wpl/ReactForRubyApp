@@ -14,7 +14,7 @@ export class TimeCuntDown extends Component {
     }
 
     componentDidMount() {
-        this.getAuctionTime(this.props.auction);
+        //this.getAuctionTime(this.props.auction);
         if (this.props.auction) {
             this.timerTitle = this.props.auction.start_datetime ? `${this.props.auction.name} on ${moment(this.props.auction.start_datetime).format('D MMM YYYY hh:mm a')}` : '';
         }
