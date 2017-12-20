@@ -327,8 +327,8 @@ input[type="number"]{
     }
   }
 }
-#retailer_registration,#buyer_registration,#buy_registration_choose,#buyer_registration_company,#buyer_registration_Individual{display: none}
-#buyer_registration_company,#buyer_registration_Individual{ margin-top: 25px;}
+
+.buyer_registration form{ margin-top: 25px;}
 .lm--formItem-left.lm--formItem-label{
   font{font-size: 20px;}
   // &:first-letter{color:red;}

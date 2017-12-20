@@ -16,31 +16,21 @@
 //= require_tree .
 //alert($(".buy"));
 var registration = {
-    show_registration:(type)=>{
-        $(".registration").hide();
-        $("#"+type).fadeIn(500);
-    },
-    choose_buy_type:()=>{
-        $("#buy_registration_choose").hide();
-        $("#buyer_registration").fadeIn(500)
-        let val = $("#buyer_type").val();
+    choose_buy_type:(obj)=>{
+        let val = $(obj).val();
         $(".buyer_type").val(val);
-        $("#buyer_registration_type option[value="+val+"]").attr("selected","selected");
-        if(val == "0"){
-            $("#buyer_registration_company").show();
+        if(val == "2"){
+            $("#link_type").attr("href","/users/sign_up?type=2");
         }else{
-            $("#buyer_registration_Individual").show();
+            $("#link_type").attr("href","/users/sign_up?type=3");
         }
     },
     change_buyer_type:(obj)=>{
         let val = $(obj).val();
-        $(".buyer_type").val(val);
-        if(val == "0"){
-            $("#buyer_registration_Individual").hide();
-            $("#buyer_registration_company").fadeIn(500)
+        if(val == "2"){
+            window.location.href="/users/sign_up?type=2"
         }else{
-            $("#buyer_registration_company").hide();
-            $("#buyer_registration_Individual").fadeIn(500)
+            window.location.href="/users/sign_up?type=3"
         }
     }
 }
