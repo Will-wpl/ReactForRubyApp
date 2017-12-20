@@ -30,7 +30,7 @@ export default class AdminConfirmWinner extends Component {
         data:{},
         auction:{}
     }
-    this.auction={}
+    //this.auction={}
 }
 compare(prop) {
     return function (obj1, obj2) {
@@ -125,7 +125,7 @@ render() {
                     </div>
                     <div className="col-sm-12 col-md-6 u-cell">
                         <div className="col-sm-12 col-md-10 push-md-1">
-                            <ReservePrice name={this.auction.name} price={this.startPrice} realtimePrice={this.state.currentPrice} />
+                            <ReservePrice auction={this.auction} price={this.startPrice} realtimePrice={this.state.currentPrice} />
                             <WinnerPrice showOrhide="hide" winner={this.state.winner} />
                             <div className="winnerPrice_main">
                                 <a className="lm--button lm--button--primary u-mt3" onClick={this.showDetail.bind(this,'void')}>Void Reverse Auction</a>

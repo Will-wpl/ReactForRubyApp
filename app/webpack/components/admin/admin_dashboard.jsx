@@ -19,12 +19,13 @@ export class AdminDashboard extends Component {
         super(props);
         this.state = {users:[], realtimeData:[], realtimeRanking:[], currentPrice:'0.0000'};
         this.lastInput = 1;
-        this.auction={};
+        //this.auction={};
     }
 
     componentDidMount() {
         getAuction('admin').then(auction => {
             this.auction = auction;
+            console.log(this.auction.name);
             this.timerTitle = auction ? `${auction.name} on ${moment(auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
             this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000'
             this.forceUpdate(); // only once no need to use state
@@ -181,7 +182,7 @@ export class AdminDashboard extends Component {
                         </div>
                     </div>
                     <div className="col-sm-12 col-md-5">
-                        <ReservePrice name={this.auction.name} price={this.startPrice} realtimePrice={this.state.currentPrice}/>
+                        <ReservePrice auction={this.auction} price={this.startPrice} realtimePrice={this.state.currentPrice}/>
                         <RetailerRanking ranking={this.state.realtimeRanking}/>
                     </div>
                 </div>
