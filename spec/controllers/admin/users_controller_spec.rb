@@ -129,7 +129,6 @@ RSpec.describe Admin::UsersController, type: :controller do
 
   describe '#retailers' do
     let!(:retailer) { create(:user, :with_retailer) }
-    let!(:retailer_detail) { create(:user_detail, user: retailer) }
     def do_request
       get :retailers
     end
@@ -141,7 +140,6 @@ RSpec.describe Admin::UsersController, type: :controller do
 
   describe '#buyers' do
     let!(:buyer) { create(:user, :with_buyer) }
-    let!(:buyer_detail) { create(:user_detail, :with_company_buyer, user: buyer) }
     def do_request
       get :buyers
     end
