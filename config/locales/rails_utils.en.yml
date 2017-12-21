@@ -17,6 +17,14 @@ en:
     edit:
       title: 'Edit User'
 
+  buyer_home:
+    index:
+      title: 'Home'
+
+  retailer_home:
+    index:
+      title: 'Home'
+
   devise_sessions:
     new:
       title: 'Log In'
@@ -24,8 +32,14 @@ en:
   devise_registrations:
     new:
       title: 'Sign Up'
-    edit:
+    edit_account:
       title: 'Manage Account'
+    edit_password:
+      title: 'Manage Password'
+    choose_type:
+      title: 'Choose Account Type'
+    buyer_type:
+      title: 'Choose Buyer Type'
 
   devise_passwords:
     new:
