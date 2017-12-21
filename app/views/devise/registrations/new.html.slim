@@ -14,11 +14,11 @@
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Password (Minimum 8 characters)
           .lm--formItem-right.lm--formItem-control
-            = f.input :password,required:true,placeholder: 'Password (Minimum 8 characters)'
+            = f.input :password,required:true,minlength:'8',maxlength:'20',placeholder: 'Password (Minimum 8 characters)'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Password Confirmation
           .lm--formItem-right.lm--formItem-control
-            = f.input :password_confirmation,required:true
+            = f.input :password_confirmation,required:true,minlength:'8',maxlength:'20'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
             font Company Information:
@@ -80,11 +80,11 @@
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Password (Minimum 8 characters)
           .lm--formItem-right.lm--formItem-control
-            = f.input :password,required:true, placeholder: 'Password (Minimum 8 characters)'
+            = f.input :password,required:true,minlength:'8',maxlength:'20',placeholder: 'Password (Minimum 8 characters)'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Password Confirmation
           .lm--formItem-right.lm--formItem-control
-            = f.input :password_confirmation,required:true
+            = f.input :password_confirmation,minlength:'8',maxlength:'20',required:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
             font Company Information:
@@ -141,11 +141,11 @@
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Password (Minimum 8 characters)
           .lm--formItem-right.lm--formItem-control
-            = f.input :password,required:true, placeholder: 'Password (Minimum 8 characters)'
+            = f.input :password,required:true,minlength:'8',maxlength:'20',placeholder: 'Password (Minimum 8 characters)'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Password Confirmation
           .lm--formItem-right.lm--formItem-control
-            = f.input :password_confirmation,required:true
+            = f.input :password_confirmation,minlength:'8',maxlength:'20',required:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
             font Account Information:
