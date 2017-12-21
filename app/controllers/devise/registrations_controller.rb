@@ -56,6 +56,18 @@ class Devise::RegistrationsController < DeviseController
   # We need to use a copy of the resource because we don't want to change
   # the current user in place.
   def update
+    update_user_params = model_params
+
+    if update_user_params[:password].blank?
+      update_user_params.delete('password')
+      update_user_params.delete('password_confirmation')
+    end
+
+    if @user.update(update_user_params)
+      redirect_to users_edit_account_path, notice: "#{User.model_name.human} was successfully updated."
+    else
+      render :edit_account
+    end
     # self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
     # prev_unconfirmed_email = resource.unconfirmed_email if resource.respond_to?(:unconfirmed_email)
     #
@@ -176,5 +188,13 @@ class Devise::RegistrationsController < DeviseController
 
   def set_user
     @user = User.find(current_user.id)
+  end
+
+  def model_params
+    params.require(:user).permit(:name, :email, :password, :password_confirmation, :company_name,
+                                 :company_name, :approval_status, :company_address,
+                                 :company_unique_entity_number, :company_license_number, :account_fin,
+                                 :account_mobile_number, :account_office_number, :account_home_number,
+                                 :account_housing_type, :account_home_address)
   end
 end
