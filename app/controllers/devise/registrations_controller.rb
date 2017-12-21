@@ -30,7 +30,7 @@ class Devise::RegistrationsController < DeviseController
       if resource.active_for_authentication?
         # is retailer, need redirect to login page
         if resource.approval_status == '2'
-          set_flash_message! :notice, :"signed_up_but_inactive"
+          set_flash_message! :notice, :signed_up_but_not_approved
           expire_data_after_sign_in!
           respond_with resource, location: after_inactive_sign_up_path_for(resource)
         else

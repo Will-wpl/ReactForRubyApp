@@ -27,7 +27,7 @@ class Devise::SessionsController < DeviseController
     if resource.approval_status == '1'
       respond_with resource, location: after_sign_in_path_for(resource)
     else
-      no_authentication_sign_in(:signed_up_but_inactive)
+      no_authentication_sign_in(:signed_up_but_not_approved)
     end
   end
 
