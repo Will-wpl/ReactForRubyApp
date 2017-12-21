@@ -1,9 +1,9 @@
 class Devise::RegistrationsController < DeviseController
-  before_action :configure_permitted_parameters, if: :devise_controller?
-
   prepend_before_action :require_no_authentication, only: %i[new create cancel]
   prepend_before_action :authenticate_scope!, only: %i[edit_password edit_account update destroy]
   prepend_before_action :set_minimum_password_length, only: %i[new]
+  before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :set_user, only: %i[edit_account edit_password update update_password]
 
   # GET /resource/sign_up
   def new
@@ -44,13 +44,7 @@ class Devise::RegistrationsController < DeviseController
   end
 
   # GET /resource/edit
-  def edit_account
-    @user = User.find(current_user.id)
-  end
-
-  def edit_password
-    @user = User.find(current_user.id)
-  end
+  def edit_account; end
 
   # PUT /resource
   # We need to use a copy of the resource because we don't want to change
@@ -74,6 +68,12 @@ class Devise::RegistrationsController < DeviseController
     #   set_minimum_password_length
     #   respond_with resource
     # end
+  end
+
+  def edit_password; end
+
+  def update_password
+
   end
 
   # DELETE /resource
@@ -166,5 +166,9 @@ class Devise::RegistrationsController < DeviseController
 
   def translation_scope
     'devise.registrations'
+  end
+
+  def set_user
+    @user = User.find(current_user.id)
   end
 end
