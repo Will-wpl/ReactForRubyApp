@@ -48,8 +48,9 @@
             = f.input :account_office_number,required:true,pattern:'^(\d{8})$',maxlength:'8',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
-          .lm--formItem-right.lm--formItem-control
-            = f.button :submit, 'Sign Up', class: 'lm--button--primary u-block', data: { disable_with: t('views.disable_with') }
+          .lm--formItem-right.lm--formItem-control.save-right
+            = f.button :submit, 'Save', class: 'lm--button lm--button lm--button--primary', data: { disable_with: t('views.disable_with') }
+            a.lm--button href="/users/sign_up?type=1" Cancel
         .lm--formItem.u-text-center
           | Have an Account? #{link_to 'Log In', new_user_session_path}
 - if params['type'] == '2'
@@ -102,8 +103,9 @@
             = f.input :account_office_number,required:true,pattern:'^(\d{8})$',maxlength:'8',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
-          .lm--formItem-right.lm--formItem-control
-            = f.button :submit, 'Sign Up', class: 'lm--button--primary u-block', data: { disable_with: t('views.disable_with') }
+          .lm--formItem-right.lm--formItem-control.save-right
+            = f.button :submit, 'Save', class: 'lm--button lm--button lm--button--primary', data: { disable_with: t('views.disable_with') }
+            a.lm--button href="/users/sign_up?type=2" Cancel
         .lm--formItem.u-text-center
           | Have an Account? #{link_to 'Log In', new_user_session_path}
 - if params['type'] == '3'
@@ -156,8 +158,9 @@
             = f.input :account_office_number,required:true,pattern:'^(\d{8})$',maxlength:'8',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
-          .lm--formItem-right.lm--formItem-control
-            = f.button :submit, 'Sign Up', class: 'lm--button--primary u-block', data: { disable_with: t('views.disable_with') }
+          .lm--formItem-right.lm--formItem-control.save-right
+            = f.button :submit, 'Save', class: 'lm--button lm--button lm--button--primary', data: { disable_with: t('views.disable_with') }
+            a.lm--button href="/users/sign_up?type=3" Cancel
         .lm--formItem.u-text-center
           | Have an Account? #{link_to 'Log In', new_user_session_path}
 - else
