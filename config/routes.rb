@@ -14,9 +14,6 @@ Rails.application.routes.draw do
   as :user do
     get 'users/choose_type', to: 'devise/registrations#choose_type'
     get 'users/buyer_type', to: 'devise/registrations#buyer_type'
-    get 'users/edit_account', to: 'devise/registrations#edit_account'
-    get 'users/edit_password', to: 'devise/registrations#edit_password'
-    post 'users/update_password', to: 'devise/registrations#update_password'
     root to: 'devise/sessions#new'
     get 'log_in', to: 'devise/sessions#new', as: :new_user_session
     post 'sign_up', to: 'devise/sessions#create', as: :user_session

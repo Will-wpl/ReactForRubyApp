@@ -1,9 +1,9 @@
 class Devise::RegistrationsController < DeviseController
   prepend_before_action :require_no_authentication, only: %i[new create cancel]
-  prepend_before_action :authenticate_scope!, only: %i[edit_password edit_account update destroy]
+  prepend_before_action :authenticate_scope!, only: %i[edit update destroy]
   prepend_before_action :set_minimum_password_length, only: %i[new]
   before_action :configure_permitted_parameters, if: :devise_controller?
-  before_action :set_user, only: %i[edit_account edit_password update update_password]
+  before_action :set_user, only: %i[edit update]
 
   # GET /resource/sign_up
   def new
@@ -50,7 +50,7 @@ class Devise::RegistrationsController < DeviseController
   end
 
   # GET /resource/edit
-  def edit_account; end
+  def edit; end
 
   # PUT /resource
   # We need to use a copy of the resource because we don't want to change
@@ -64,7 +64,7 @@ class Devise::RegistrationsController < DeviseController
     end
 
     if @user.update(update_user_params)
-      redirect_to users_edit_account_path, notice: "#{User.model_name.human} was successfully updated."
+      redirect_to edit_user_registration_path, notice: "#{User.model_name.human} was successfully updated."
     else
       render :edit_account
     end
@@ -91,7 +91,7 @@ class Devise::RegistrationsController < DeviseController
   def edit_password; end
 
   def update_password
-
+    puts '12111111'
   end
 
   # DELETE /resource
