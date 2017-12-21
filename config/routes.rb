@@ -12,6 +12,8 @@ Rails.application.routes.draw do
 
   devise_for :users, skip: %i[sessions home]
   as :user do
+    get 'users/pwds/edit', to: 'devise/pwds#edit'
+    patch 'users/pwds/update', to: 'devise/pwds#update'
     get 'users/choose_type', to: 'devise/registrations#choose_type'
     get 'users/buyer_type', to: 'devise/registrations#buyer_type'
     root to: 'devise/sessions#new'
@@ -19,6 +21,10 @@ Rails.application.routes.draw do
     post 'sign_up', to: 'devise/sessions#create', as: :user_session
     match 'log_out', to: 'devise/sessions#destroy', as: :destroy_user_session, via: Devise.mappings[:user].sign_out_via
   end
+  #
+  # namespace :devise do
+  #   resource :pwds
+  # end
 
   namespace :api do
     namespace :admin do

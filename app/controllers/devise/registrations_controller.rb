@@ -88,12 +88,6 @@ class Devise::RegistrationsController < DeviseController
     # end
   end
 
-  def edit_password; end
-
-  def update_password
-    puts '12111111'
-  end
-
   # DELETE /resource
   def destroy
     resource.destroy
