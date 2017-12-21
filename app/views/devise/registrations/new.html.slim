@@ -8,6 +8,7 @@
         wrapper: :vertical_form,id:'registration_form', defaults: { label: false }) do |f|
         input name='type' type="hidden" value=params['type']
         input name='user[consumer_type]' type="hidden" value=params['type']
+        input name='user[approval_status]' type="hidden" value='2'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Email
           .lm--formItem-right.lm--formItem-control
@@ -73,6 +74,7 @@
         wrapper: :vertical_form, defaults: { label: false }) do |f|
         input name='type' type="hidden" value=params['type']
         input name='user[consumer_type]' type="hidden" value=params['type']
+        input name='user[approval_status]' type="hidden" value='1'
         /= f.input :consumer_type, as: :hidden
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Email
@@ -135,6 +137,7 @@
       wrapper: :vertical_form, defaults: { label: false }) do |f|
         input name='type' type="hidden" value=params['type']
         input name='user[consumer_type]' type="hidden" value=params['type']
+        input name='user[approval_status]' type="hidden" value='1'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Email
           .lm--formItem-right.lm--formItem-control

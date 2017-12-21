@@ -170,7 +170,7 @@ ActiveRecord::Schema.define(version: 20171219091938) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "company_name"
-    t.string "approval_status", default: "0"
+    t.string "approval_status"
     t.string "consumer_type"
     t.string "company_address"
     t.string "company_unique_entity_number"
