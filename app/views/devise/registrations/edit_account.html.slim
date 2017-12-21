@@ -1,17 +1,15 @@
 .u-text-center.u-mb3
   = image_tag 'logo-railsbase.png', alt: 'railsbase-logo', class: 'devise-logo'
 
-- if params['type'] == '1'
+- if @user.roles[0].name == 'retailer'
   .u-grid.u-mb3
     .col-sm-12.col-md-8.u-mha
       = simple_form_for(resource, as: resource_name, url: registration_path(resource_name),
         wrapper: :vertical_form,id:'registration_form', defaults: { label: false }) do |f|
-        input name='type' type="hidden" value=params['type']
-        input name='user[consumer_type]' type="hidden" value=params['type']
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Email
           .lm--formItem-right.lm--formItem-control
-            = f.input :email,required:true, autofocus: true
+            = f.input :email,required:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
             font Company Information:
@@ -49,27 +47,17 @@
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
           .lm--formItem-right.lm--formItem-control
-            = f.button :submit, 'Sign Up', class: 'lm--button--primary u-block', data: { disable_with: t('views.disable_with') }
-        .lm--formItem.u-text-center
-          | Have an Account? #{link_to 'Log In', new_user_session_path}
-- if params['type'] == '2'
+            = f.button :submit, 'Update', class: 'lm--button--primary u-block', data: { disable_with: t('views.disable_with') }
+- if @user.roles[0].name == 'buyer' and  @user.consumer_type == '2'
   .u-grid.u-mb3.buyer_registration
     .col-sm-12.col-md-8.u-mha
-      .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label Consumer Type
-        .lm--formItem-right.lm--formItem-control
-          select onchange="registration.change_buyer_type(this)"
-            option value="2" selected="selected" Company
-            option value="3" Individual
       = simple_form_for(resource, as: resource_name, url: registration_path(resource_name),
         wrapper: :vertical_form, defaults: { label: false }) do |f|
-        input name='type' type="hidden" value=params['type']
-        input name='user[consumer_type]' type="hidden" value=params['type']
         /= f.input :consumer_type, as: :hidden
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Email
           .lm--formItem-right.lm--formItem-control
-            = f.input :email,required:true, autofocus: true
+            = f.input :email,required:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
             font Company Information:
@@ -103,26 +91,16 @@
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
           .lm--formItem-right.lm--formItem-control
-            = f.button :submit, 'Sign Up', class: 'lm--button--primary u-block', data: { disable_with: t('views.disable_with') }
-        .lm--formItem.u-text-center
-          | Have an Account? #{link_to 'Log In', new_user_session_path}
-- if params['type'] == '3'
+            = f.button :submit, 'Update', class: 'lm--button--primary u-block', data: { disable_with: t('views.disable_with') }
+- if @user.roles[0].name == 'buyer' and  @user.consumer_type == '3'
   .u-grid.u-mb3.buyer_registration
     .col-sm-12.col-md-8.u-mha
-      .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label Consumer Type
-        .lm--formItem-right.lm--formItem-control
-          select onchange="registration.change_buyer_type(this)"
-            option value="2" Company
-            option value="3" selected="selected" Individual
       = simple_form_for(resource, as: resource_name, url: registration_path(resource_name),
       wrapper: :vertical_form, defaults: { label: false }) do |f|
-        input name='type' type="hidden" value=params['type']
-        input name='user[consumer_type]' type="hidden" value=params['type']
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Email
           .lm--formItem-right.lm--formItem-control
-            = f.input :email,required:true, autofocus: true
+            = f.input :email,required:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
             font Account Information:
@@ -137,7 +115,7 @@
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Housing Type:(HDB/Private High-rise/Landed)
           .lm--formItem-right.lm--formItem-control
-            = f.input :account_housing_type,required:true
+            = f.input :account_housing_type, collection: [[ 'HDB', 0 ],['Private High-rise', 1],['Landed', 2]] , required: true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Home Address
           .lm--formItem-right.lm--formItem-control
@@ -157,8 +135,6 @@
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
           .lm--formItem-right.lm--formItem-control
-            = f.button :submit, 'Sign Up', class: 'lm--button--primary u-block', data: { disable_with: t('views.disable_with') }
-        .lm--formItem.u-text-center
-          | Have an Account? #{link_to 'Log In', new_user_session_path}
+            = f.button :submit, 'Update', class: 'lm--button--primary u-block', data: { disable_with: t('views.disable_with') }
 - else
   /h1 Please select account type before.
