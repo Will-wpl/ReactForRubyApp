@@ -32,14 +32,13 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    role_name = resource.roles.first.name
-    if role_name == 'admin'
+    if resource.has_role?(:admin)
       stored_location_for(resource) || admin_home_index_path
-    elsif role_name == 'retailer'
+    elsif resource.has_role?(:retailer)
       if resource.approval_status == '1'
         stored_location_for(resource) || retailer_home_index_path
       end
-    elsif role_name == 'buyer'
+    elsif resource.has_role?(:buyer)
       stored_location_for(resource) || buyer_home_index_path
     end
   end
