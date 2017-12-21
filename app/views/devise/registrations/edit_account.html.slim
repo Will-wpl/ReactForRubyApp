@@ -1,6 +1,29 @@
-.u-text-center.u-mb3
-  = image_tag 'logo-railsbase.png', alt: 'railsbase-logo', class: 'devise-logo'
-
+- if @user.roles[0].name == 'admin'
+  .u-grid.u-mb3
+    .col-sm-12.col-md-8.u-mha
+      = simple_form_for(resource, as: resource_name, url: registration_path(resource_name),
+              wrapper: :vertical_form,id:'registration_form', defaults: { label: false }) do |f|
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label * Email
+          .lm--formItem-right.lm--formItem-control
+            = f.input :email,required:true
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label * Name
+          .lm--formItem-right.lm--formItem-control
+            = f.input :name,required:true,placeholder: ''
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label * Company Name
+          .lm--formItem-right.lm--formItem-control
+            = f.input :company_name,required:true,placeholder: ''
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label * Company Address
+          .lm--formItem-right.lm--formItem-control
+            = f.input :company_address,required:true
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label
+          .lm--formItem-right.lm--formItem-control
+            = f.button :submit, 'Save', class: 'lm--button lm--button lm--button--primary', data: { disable_with: t('views.disable_with') }
+            a.lm--button href="/retailer/home" Cancel
 - if @user.roles[0].name == 'retailer'
   .u-grid.u-mb3
     .col-sm-12.col-md-8.u-mha
@@ -24,11 +47,11 @@
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Unique Entity Number (UEN)
           .lm--formItem-right.lm--formItem-control
-            = f.input :company_unique_entity_number,required:true
+            = f.input :company_unique_entity_number,disabled:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Retailer Licence Number
           .lm--formItem-right.lm--formItem-control
-            = f.input :company_license_number,required:true
+            = f.input :company_license_number,disabled:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
             font Contact Information:
@@ -48,7 +71,7 @@
           .lm--formItem-left.lm--formItem-label
           .lm--formItem-right.lm--formItem-control
              = f.button :submit, 'Save', class: 'lm--button lm--button lm--button--primary', data: { disable_with: t('views.disable_with') }
-             a.lm--button href="/users/sign_up?type=1" Cancel
+             a.lm--button href="/retailer/home" Cancel
 - if @user.roles[0].name == 'buyer' and  @user.consumer_type == '2'
   .u-grid.u-mb3.buyer_registration
     .col-sm-12.col-md-8.u-mha
@@ -93,7 +116,7 @@
           .lm--formItem-left.lm--formItem-label
           .lm--formItem-right.lm--formItem-control
             = f.button :submit, 'Save', class: 'lm--button lm--button lm--button--primary', data: { disable_with: t('views.disable_with') }
-            a.lm--button href="/users/sign_up?type=2" Cancel
+            a.lm--button href="/buyer/home" Cancel
 - if @user.roles[0].name == 'buyer' and  @user.consumer_type == '3'
   .u-grid.u-mb3.buyer_registration
     .col-sm-12.col-md-8.u-mha
@@ -138,6 +161,6 @@
           .lm--formItem-left.lm--formItem-label
           .lm--formItem-right.lm--formItem-control
             = f.button :submit, 'Save', class: 'lm--button lm--button lm--button--primary', data: { disable_with: t('views.disable_with') }
-            a.lm--button href="/users/sign_up?type=3" Cancel
+            a.lm--button href="/buyer/home" Cancel
 - else
   /h1 Please select account type before.
