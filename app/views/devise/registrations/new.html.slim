@@ -34,11 +34,11 @@
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Unique Entity Number (UEN)
           .lm--formItem-right.lm--formItem-control
-            = f.input :company_unique_entity_number,required:true,maxlength:'50'
+            = f.input :company_unique_entity_number,required:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Retailer Licence Number
           .lm--formItem-right.lm--formItem-control
-            = f.input :company_license_number,required:true,pattern:'^(\d{8})$',maxlength:'50',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
+            = f.input :company_license_number,required:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
             font Contact Information:
@@ -92,7 +92,7 @@
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Company Name
           .lm--formItem-right.lm--formItem-control
-            = f.input :company_name,required:true,maxlength:'150'
+            = f.input :company_name,required:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Company Address
           .lm--formItem-right.lm--formItem-control
@@ -107,7 +107,7 @@
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Contact Name
           .lm--formItem-right.lm--formItem-control
-            = f.input :name,required:true,placeholder: '',maxlength:'150'
+            = f.input :name,required:true,placeholder: ''
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Mobile Number
           .lm--formItem-right.lm--formItem-control
@@ -153,7 +153,7 @@
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Name
           .lm--formItem-right.lm--formItem-control
-            = f.input :name,required:true,placeholder: '',maxlength:'150'
+            = f.input :name,required:true,placeholder: ''
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * NRIC/FIN
           .lm--formItem-right.lm--formItem-control
