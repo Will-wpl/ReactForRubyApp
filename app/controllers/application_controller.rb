@@ -35,9 +35,7 @@ class ApplicationController < ActionController::Base
     if resource.has_role?(:admin)
       stored_location_for(resource) || admin_home_index_path
     elsif resource.has_role?(:retailer)
-      if resource.approval_status == '1'
-        stored_location_for(resource) || retailer_home_index_path
-      end
+      stored_location_for(resource) || retailer_home_index_path
     elsif resource.has_role?(:buyer)
       stored_location_for(resource) || buyer_home_index_path
     end

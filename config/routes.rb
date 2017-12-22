@@ -14,8 +14,7 @@ Rails.application.routes.draw do
   as :user do
     get 'users/pwds/edit', to: 'devise/pwds#edit'
     patch 'users/pwds/update', to: 'devise/pwds#update'
-    get 'users/choose_type', to: 'devise/registrations#choose_type'
-    get 'users/buyer_type', to: 'devise/registrations#buyer_type'
+    get 'users/choose', to: 'devise/registrations#choose'
     root to: 'devise/sessions#new'
     get 'log_in', to: 'devise/sessions#new', as: :new_user_session
     post 'sign_up', to: 'devise/sessions#create', as: :user_session
@@ -28,6 +27,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :admin do
+      resource :users, only: %i[index]
       resources :auctions, only: %i[obtain link create update publish hold confirm] do
         member do
           put 'publish'

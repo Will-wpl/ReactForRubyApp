@@ -12,9 +12,7 @@ class Devise::RegistrationsController < DeviseController
     respond_with resource
   end
 
-  def choose_type; end
-
-  def buyer_type; end
+  def choose; end
 
   # POST /resource
   def create
@@ -28,16 +26,9 @@ class Devise::RegistrationsController < DeviseController
     yield resource if block_given?
     if resource.persisted?
       if resource.active_for_authentication?
-        # is retailer, need redirect to login page
-        if resource.approval_status == '2'
-          set_flash_message! :notice, :signed_up_but_not_approved
-          expire_data_after_sign_in!
-          respond_with resource, location: after_inactive_sign_up_path_for(resource)
-        else
-          set_flash_message! :notice, :signed_up
-          sign_up(resource_name, resource)
-          respond_with resource, location: after_sign_up_path_for(resource)
-        end
+        set_flash_message! :notice, :signed_up
+        sign_up(resource_name, resource)
+        respond_with resource, location: after_sign_up_path_for(resource)
       else
         set_flash_message! :notice, :"signed_up_but_#{resource.inactive_message}"
         respond_to_on_destroy
