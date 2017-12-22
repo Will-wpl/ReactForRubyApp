@@ -1,0 +1,167 @@
+- if @user.has_role?(:admin)
+  .u-grid.u-mb3
+    .col-sm-12.col-md-8.u-mha
+      .lm--formItem.lm--formItem--inline.string.optional
+        .lm--formItem-left.lm--formItem-label * Email
+        .lm--formItem-right.lm--formItem-control
+          = @user.email
+      .lm--formItem.lm--formItem--inline.string.optional
+        .lm--formItem-left.lm--formItem-label * Name
+        .lm--formItem-right.lm--formItem-control
+          = @user.name
+      .lm--formItem.lm--formItem--inline.string.optional
+        .lm--formItem-left.lm--formItem-label * Company Name
+        .lm--formItem-right.lm--formItem-control
+          = @user.company_name
+      .lm--formItem.lm--formItem--inline.string.optional
+        .lm--formItem-left.lm--formItem-label * Company Address
+        .lm--formItem-right.lm--formItem-control
+          = @user.company_address
+      .lm--formItem.lm--formItem--inline.string.optional
+        .lm--formItem-left.lm--formItem-label
+        .lm--formItem-right.lm--formItem-control
+- if @user.has_role?(:retailer)
+  .u-grid.u-mb3
+    .col-sm-12.col-md-8.u-mha
+      .lm--formItem.lm--formItem--inline.string.optional
+        .lm--formItem-left.lm--formItem-label * Email
+        .lm--formItem-right.lm--formItem-control
+          = @user.email
+      .lm--formItem.lm--formItem--inline.string.optional
+        .lm--formItem-left.lm--formItem-label
+          font Company Information:
+      .lm--formItem.lm--formItem--inline.string.optional
+        .lm--formItem-left.lm--formItem-label * Company Name
+        .lm--formItem-right.lm--formItem-control
+          = @user.company_name
+      .lm--formItem.lm--formItem--inline.string.optional
+        .lm--formItem-left.lm--formItem-label * Company Address
+        .lm--formItem-right.lm--formItem-control
+          = @user.company_address
+      .lm--formItem.lm--formItem--inline.string.optional
+        .lm--formItem-left.lm--formItem-label * Unique Entity Number (UEN)
+        .lm--formItem-right.lm--formItem-control
+          = @user.company_unique_entity_number
+      .lm--formItem.lm--formItem--inline.string.optional
+        .lm--formItem-left.lm--formItem-label * Retailer Licence Number
+        .lm--formItem-right.lm--formItem-control
+          = @user.company_license_number
+      .lm--formItem.lm--formItem--inline.string.optional
+        .lm--formItem-left.lm--formItem-label
+          font Contact Information:
+      .lm--formItem.lm--formItem--inline.string.optional
+        .lm--formItem-left.lm--formItem-label * Contact Name
+        .lm--formItem-right.lm--formItem-control
+          = @user.name
+      .lm--formItem.lm--formItem--inline.string.optional
+        .lm--formItem-left.lm--formItem-label * Mobile Number
+        .lm--formItem-right.lm--formItem-control
+          = @user.account_mobile_number
+      .lm--formItem.lm--formItem--inline.string.optional
+        .lm--formItem-left.lm--formItem-label * Office Number
+        .lm--formItem-right.lm--formItem-control
+          = @user.account_office_number
+      .lm--formItem.lm--formItem--inline.string.optional
+        .lm--formItem-left.lm--formItem-label
+        .lm--formItem-right.lm--formItem-control
+      = simple_form_for(@user, url: approval_admin_users_path(@user),
+              wrapper: :vertical_form, defaults: { label: false }) do |f|
+        = f.button :submit, 'Approved', name: 'approved', class: 'lm--button lm--button lm--button--primary', data: {disable_with: t('views.disable_with')}
+        = f.button :submit, 'Reject', name: 'reject', class: 'lm--button lm--button lm--button--primary', data: {disable_with: t('views.disable_with')}
+      /= simple_form_for(@user, url: approval_admin_users_path(@user),
+      /        wrapper: :vertical_form, defaults: {label: false}) do |f|
+
+
+- if @user.has_role?(:buyer) and  @user.consumer_type == '2'
+  .u-grid.u-mb3.buyer_registration
+    .col-sm-12.col-md-8.u-mha
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label * Email
+          .lm--formItem-right.lm--formItem-control
+            = @user.email
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label
+            font Company Information:
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label * Company Name
+          .lm--formItem-right.lm--formItem-control
+            = @user.company_name
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label * Company Address
+          .lm--formItem-right.lm--formItem-control
+            = @user.company_address
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label * Unique Entity Number (UEN)
+          .lm--formItem-right.lm--formItem-control
+            = @user.company_unique_entity_number
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label
+            font Contact Information:
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label * Contact Name
+          .lm--formItem-right.lm--formItem-control
+            = @user.name
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label * Mobile Number
+          .lm--formItem-right.lm--formItem-control
+            = @user.account_mobile_number
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label * Office Number
+          .lm--formItem-right.lm--formItem-control
+            = @user.account_office_number
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label
+          .lm--formItem-right.lm--formItem-control
+
+
+            /= f.button :submit, 'Approved', class: 'lm--button lm--button lm--button--primary', data: {disable_with: t('views.disable_with')}
+            /= f.button :submit, 'Reject', class: 'lm--button lm--button lm--button--primary', data: {disable_with: t('views.disable_with')}
+- if @user.has_role?(:buyer) and @user.consumer_type == '3'
+  .u-grid.u-mb3.buyer_registration
+    .col-sm-12.col-md-8.u-mha
+      = simple_form_for(@user, url: approval_admin_users_path(@user),
+              wrapper: :vertical_form, defaults: { label: false }) do |f|
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label * Email
+          .lm--formItem-right.lm--formItem-control
+            = @user.email
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label
+            font Account Information:
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label * Name
+          .lm--formItem-right.lm--formItem-control
+            = @user.name
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label * NRIC/FIN
+          .lm--formItem-right.lm--formItem-control
+            = @user.account_fin
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label * Housing Type:(HDB/Private High-rise/Landed)
+          .lm--formItem-right.lm--formItem-control
+            = @user.account_housing_type
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label * Home Address
+          .lm--formItem-right.lm--formItem-control
+            = @user.account_home_address
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label * Mobile Number
+          .lm--formItem-right.lm--formItem-control
+            = @user.account_mobile_number
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label * Home Number
+          .lm--formItem-right.lm--formItem-control
+            = @user.account_home_number
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label * Office Number
+          .lm--formItem-right.lm--formItem-control
+            = @user.account_office_number
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label
+          .lm--formItem-right.lm--formItem-control
+
+
+            /= f.button :submit, 'Approved', class: 'lm--button lm--button lm--button--primary', data: {disable_with: t('views.disable_with')}
+            /= f.button :submit, 'Reject', class: 'lm--button lm--button lm--button--primary', data: {disable_with: t('views.disable_with')}
+- else
+  /h1 Please select account type before.
