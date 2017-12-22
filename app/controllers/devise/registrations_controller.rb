@@ -12,9 +12,7 @@ class Devise::RegistrationsController < DeviseController
     respond_with resource
   end
 
-  def choose_type; end
-
-  def buyer_type; end
+  def choose; end
 
   # POST /resource
   def create
