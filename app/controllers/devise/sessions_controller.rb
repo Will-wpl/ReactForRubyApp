@@ -15,6 +15,10 @@ class Devise::SessionsController < DeviseController
   # POST /resource/sign_in
   def create
     self.resource = warden.authenticate!(auth_options)
+    if resource.approval_status.nil?
+      resource.approval_status = '1'
+      resource.save
+    end
     set_flash_message!(:notice, :signed_in)
     sign_in(resource_name, resource)
     yield resource if block_given?
