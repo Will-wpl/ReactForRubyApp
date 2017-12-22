@@ -27,7 +27,12 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :admin do
-      resource :users, only: %i[index]
+      resource :users, only: %i[retailers buyers] do
+        collection do
+          get 'retailers'
+          get 'buyers'
+        end
+      end
       resources :auctions, only: %i[obtain link create update publish hold confirm] do
         member do
           put 'publish'
@@ -86,9 +91,13 @@ Rails.application.routes.draw do
     # get '/' => 'admin/home#index'
     resources :home, only: :index
     resources :users do
+      member do
+        get 'manage'
+      end
       collection do
         get 'retailers'
         get 'buyers'
+        put 'approval'
       end
     end
     resources :auction_results, only: [:index]
