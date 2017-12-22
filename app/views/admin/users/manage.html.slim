@@ -24,6 +24,15 @@
   .u-grid.u-mb3
     .col-sm-12.col-md-8.u-mha
       .lm--formItem.lm--formItem--inline.string.optional
+        .lm--formItem-left.lm--formItem-label * Approval Status:
+        .lm--formItem-right.lm--formItem-control
+          - if @user.approval_status == '2'
+            = 'Pending'
+          - if @user.approval_status == '0'
+            = 'Reject'
+          - if @user.approval_status == '1'
+            = 'Approved'
+      .lm--formItem.lm--formItem--inline.string.optional
         .lm--formItem-left.lm--formItem-label * Email
         .lm--formItem-right.lm--formItem-control
           = @user.email

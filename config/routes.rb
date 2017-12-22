@@ -97,7 +97,7 @@ Rails.application.routes.draw do
       collection do
         get 'retailers'
         get 'buyers'
-        put 'approval'
+        patch 'approval'
       end
     end
     resources :auction_results, only: [:index]
