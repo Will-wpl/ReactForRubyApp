@@ -368,9 +368,9 @@ select{
   }
   div.lm--table-container{
     .table_page{ 
-      width: 100%; text-align: left;
-      span{ display: inline-block; line-height: 32px; color:#fff; padding: 0px 15px;
-        &.table_page_selected{ background:#314657; }
+      width: 100%; text-align: center; margin: 30px auto 0px auto;
+      span{ display: inline-block; line-height: 32px; color:#fff; cursor: pointer; padding: 0px 15px; transition: 0.5s all;
+        &.table_page_selected,&:hover{ background:#314657; }
       }
     }
   }
