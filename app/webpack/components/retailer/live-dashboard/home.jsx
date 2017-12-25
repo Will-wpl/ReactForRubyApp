@@ -13,7 +13,10 @@ export default class LiveHomePage extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {extendVisible: false, ranking: '', priceConfig: [], histories: [], chartDatas: []};
+        this.state = {
+            extendVisible: false, ranking: '', priceConfig: [], histories: [], chartDatas: [],
+            showTop2Rule: false
+        };
     }
 
     componentDidMount() {
@@ -71,8 +74,8 @@ export default class LiveHomePage extends Component {
                             //     {time: moment(last.bid_time).format('YYYY-MM-DD HH:mm:ss')
                             //         , ranking: Number(last.ranking) === 1 ? 2 : last.ranking, needMark: last.is_bidder}
                             // )
-                            last.ranking = Number(last.ranking) === 1 ? 2 : last.ranking;
-                            last.template_ranking = `Ranking: ${Number(last.ranking) <= 2 ? 'TOP 2' : getNumBref(last.ranking)} ${last.is_bidder && last.flag !== null ? '(Bid Submitter)' : ''}`;
+                            last.ranking = this.state.showTop2Rule && Number(last.ranking) === 1 ? 2 : last.ranking;
+                            last.template_ranking = `Ranking: ${(this.state.showTop2Rule && Number(last.ranking) <= 2) ? 'TOP 2' : getNumBref(last.ranking)} ${last.is_bidder && last.flag !== null ? '(Bid Submitter)' : ''}`;
                             if (!last.template_price) {
                                 last.template_price = {};
                             }
@@ -151,8 +154,8 @@ export default class LiveHomePage extends Component {
                 chartDataTpl.id = history.user_id;
                 // chartDataTpl.data.push({time: moment(history.bid_time).format('YYYY-MM-DD HH:mm:ss')
                 //     , ranking: Number(history.ranking) === 1 ? 2 : history.ranking, needMark: history.is_bidder})
-                history.ranking = Number(history.ranking) === 1 ? 2 : history.ranking;
-                history.template_ranking = `Ranking: ${Number(history.ranking) <= 2 ? 'TOP 2' : getNumBref(history.ranking)} ${history.is_bidder && history.flag !== null  ? '(Bid Submitter)' : ''}`;
+                history.ranking = (this.state.showTop2Rule && Number(history.ranking) === 1) ? 2 : history.ranking;
+                history.template_ranking = `Ranking: ${(this.state.showTop2Rule && Number(history.ranking) <= 2) ? 'TOP 2' : getNumBref(history.ranking)} ${history.is_bidder && history.flag !== null  ? '(Bid Submitter)' : ''}`;
                 if (!history.template_price) {
                     history.template_price = {};
                 }
@@ -167,7 +170,7 @@ export default class LiveHomePage extends Component {
                 return element.is_bidder;
             })
             let lastBidden = biddenArr[biddenArr.length - 1];
-            lastBidden.ranking = Number(lastBidden.ranking) === 1 ? 2 : Number(lastBidden.ranking);
+            lastBidden.ranking = this.state.showTop2Rule && Number(lastBidden.ranking) === 1 ? 2 : Number(lastBidden.ranking);
             if (biddenArr.length === 1) {
                 if (lastBidden.flag === null) {
                     this.bidForm.initConfigs([]
@@ -179,7 +182,7 @@ export default class LiveHomePage extends Component {
             // console.log('last =>>>>',last);
             let newest = histories[histories.length - 1];
             this.setState({
-                ranking: Number(newest.ranking) === 1 ? 2 : Number(newest.ranking),
+                ranking: this.state.showTop2Rule && Number(newest.ranking) === 1 ? 2 : Number(newest.ranking),
                     priceConfig: biddenArr.length > 1 ? []
                     .concat(lastBidden.lt_off_peak).concat(lastBidden.lt_peak)
                     .concat(lastBidden.hts_off_peak).concat(lastBidden.hts_peak)
@@ -218,10 +221,10 @@ export default class LiveHomePage extends Component {
                 </DuringCountDown>
                 <div className="u-grid u-mt2">
                     <div className="col-sm-12 col-md-5 u-cell">
-                        <div className="col-sm-12 col-md-10 push-md-1"><Description ranking={`${this.state.ranking === 2 ? 'TOP ' : ''}${getNumBref(this.state.ranking)}`}/></div>
+                        <div className="col-sm-12 col-md-10 push-md-1"><Description ranking={`${(this.state.showTop2Rule && this.state.ranking === 2) ? 'TOP ' : ''}${getNumBref(this.state.ranking)}`}/></div>
                     </div>
                     <div className="col-sm-12 col-md-7 u-cell">
-                        <div className="col-sm-12 col-md-10 push-md-1"><Ranking data={this.state.chartDatas} yAxisFormatterRule={{0 : ' ', 1 : ' ', 2 : 'Top 2', 'func': getNumBref}}/></div>
+                        <div className="col-sm-12 col-md-10 push-md-1"><Ranking data={this.state.chartDatas} yAxisFormatterRule={(this.state.showTop2Rule) ? {0 : ' ', 1 : ' ', 2 : 'Top 2', 'func': getNumBref} : {0 : ' ', 'func': getNumBref}}/></div>
                     </div>
                 </div>
                 <div className="u-grid u-mt2">
