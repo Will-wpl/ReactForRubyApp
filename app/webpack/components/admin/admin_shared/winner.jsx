@@ -49,14 +49,24 @@ export default class WinnerPrice extends Component {
                                   <thead>
                                   <tr>
                                       <th></th>
-                                      <th>LT</th>
-                                      <th className="live_hide">HT (Small)</th>
-                                      <th>HT (Large)</th>
+                                      <th className={this.props.isLtVisible ? '' : "live_hide"}>LT</th>
+                                      <th className={this.props.isHtsVisible ? '' : "live_hide"}>HT (Small)</th>
+                                      <th className={this.props.isHtlVisible ? '' : "live_hide"}>HT (Large)</th>
                                       </tr>
                                   </thead>
                                   <tbody>
-                                      <tr><td>Peak (7am-7pm)</td><td>$ {this.padZero(this.props.winner.data.lt_peak,4)}</td><td className="live_hide">$ {this.padZero(this.props.winner.data.hts_peak,4)}</td><td>$ {this.padZero(this.props.winner.data.htl_peak,4)}</td></tr>
-                                      <tr><td>Off-Peak (7pm-7am)</td><td>$ {this.padZero(this.props.winner.data.lt_off_peak,4)}</td><td className="live_hide">$ {this.padZero(this.props.winner.data.hts_off_peak,4)}</td><td>$ {this.padZero(this.props.winner.data.htl_off_peak,4)}</td></tr>
+                                      <tr>
+                                          <td>Peak (7am-7pm)</td>
+                                          <td className={this.props.isLtVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.lt_peak,4)}</td>
+                                          <td className={this.props.isHtsVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.hts_peak,4)}</td>
+                                          <td className={this.props.isHtlVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.htl_peak,4)}</td>
+                                      </tr>
+                                      <tr>
+                                          <td>Off-Peak (7pm-7am)</td>
+                                          <td className={this.props.isLtVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.lt_off_peak,4)}</td>
+                                          <td className={this.props.isHtsVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.hts_off_peak,4)}</td>
+                                          <td className={this.props.isHtlVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.htl_off_peak,4)}</td>
+                                      </tr>
                                   </tbody>
                             </table>
                               <ul>
@@ -76,14 +86,23 @@ export default class WinnerPrice extends Component {
                           <thead>
                           <tr>
                               <th></th>
-                              <th>LT</th>
-                              <th className="live_hide">HT (Small)</th>
-                              <th>HT (Large)</th>
+                              <th className={this.props.isLtVisible ? '' : "live_hide"}>LT</th>
+                              <th className={this.props.isHtsVisible ? '' : "live_hide"}>HT (Small)</th>
+                              <th className={this.props.isHtlVisible ? '' : "live_hide"}>HT (Large)</th>
                               </tr>
                           </thead>
                           <tbody>
-                              <tr><td>Peak (7am-7pm)</td><td>$ {this.padZero(this.props.winner.data.lt_peak,4)}</td><td className="live_hide">$ {this.padZero(this.props.winner.data.hts_peak,4)}</td><td>$ {this.padZero(this.props.winner.data.htl_peak,4)}</td></tr>
-                              <tr><td>Off-Peak (7pm-7am)</td><td>$ {this.padZero(this.props.winner.data.lt_off_peak,4)}</td><td className="live_hide">$ {this.padZero(this.props.winner.data.hts_off_peak,4)}</td><td>$ {this.padZero(this.props.winner.data.htl_off_peak,4)}</td></tr>
+                              <tr><td>Peak (7am-7pm)</td>
+                                  <td className={this.props.isLtVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.lt_peak,4)}</td>
+                                  <td className={this.props.isHtsVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.hts_peak,4)}</td>
+                                  <td className={this.props.isHtlVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.htl_peak,4)}</td>
+                              </tr>
+                              <tr>
+                                  <td>Off-Peak (7pm-7am)</td>
+                                  <td className={this.props.isLtVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.lt_off_peak,4)}</td>
+                                  <td className={this.props.isHtsVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.hts_off_peak,4)}</td>
+                                  <td className={this.props.isHtlVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.htl_off_peak,4)}</td>
+                              </tr>
                           </tbody>
                     </table>
                       <ul>
@@ -96,4 +115,10 @@ export default class WinnerPrice extends Component {
       <div className="winnerPrice_main">no data</div>
     )
   }
+}
+
+WinnerPrice.defaultProps = {
+    isLtVisible: true,
+    isHtsVisible: false,
+    isHtlVisible: true
 }
