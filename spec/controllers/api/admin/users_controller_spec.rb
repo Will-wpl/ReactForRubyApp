@@ -80,7 +80,7 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
 
       context 'Pager Search' do
         def do_request
-          get :buyers, params: {page_size: '10', page_index: '1' }
+          get :buyers, params: { page_size: '10', page_index: '1' }
         end
 
         before { do_request }

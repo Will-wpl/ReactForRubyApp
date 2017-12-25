@@ -49,14 +49,15 @@ class Api::UsersController < Api::BaseController
       { name: 'Consumer Type', field_name: 'consumer_type' }
     ]
     actions = [{ url: '/admin/users/:id/manage', name: 'View', icon: 'lm--icon-search' }]
-    headers.delete_if { |header| header[:field_name] == 'name' } if params[:consumer_type][0] == '2'
-    headers.delete_if { |header| header[:field_name] == 'company_name' } if params[:consumer_type][0] == '3'
-
+    unless params[:consumer_type].nil?
+      headers.delete_if { |header| header[:field_name] == 'name' } if  params[:consumer_type][0] == '2'
+      headers.delete_if { |header| header[:field_name] == 'company_name' } if params[:consumer_type][0] == '3'
+    end
     data = users.order(consumer_type: :desc).each do |user|
       user.consumer_type = user.consumer_type == '2' ? 'Company' : 'Individual'
     end
     bodies = { data: data, total: total }
-    
+
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
   end
 end
