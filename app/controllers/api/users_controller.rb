@@ -15,8 +15,10 @@ class Api::UsersController < Api::BaseController
                                'Approved'
                              end
     end
+    total = data.count
+    bodies = {data: data, total: total}
     actions.push(url: 'users/:id/manage', name: 'Manage', icon: 'lm--icon-search')
-    render json: { headers: headers, data: data, actions: actions }, status: 200
+    render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
   end
 
   # user.user_detail.consumer_type['0', '1'] '0':company '1':individual
@@ -31,7 +33,9 @@ class Api::UsersController < Api::BaseController
     data = User.buyers.order(created_at: :desc).each do |user|
       user.consumer_type = user.consumer_type == '2' ? 'Company' : 'Individual'
     end
+    total = data.count
+    bodies = { data: data, total: total }
     actions.push(url: 'users/:id/manage', name: 'View', icon: 'lm--icon-search')
-    render json: { headers: headers, data: data, actions: actions }, status: 200
+    render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
   end
 end
