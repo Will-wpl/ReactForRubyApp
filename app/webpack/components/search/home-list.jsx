@@ -16,8 +16,17 @@ export class ListHome extends Component {
     }
     doSearch(data,url){
         getRoleList(data,url).then(res => {
-            let total = [];
-            for(let i=0; i<res.bodies.total; i++){
+            let total = [],total_size=1;
+            if(res.bodies.total%data.page_size != 0){
+                if(res.bodies.total%data.page_size > 0){
+                    total_size = parseInt(res.bodies.total/data.page_size)+1;
+                }else{
+                    total_size = 1;
+                }
+            }else{
+                total_size = 1;
+            }
+            for(let i=0; i<total_size; i++){
                 total.push((i+1));
             }
             this.setState({
