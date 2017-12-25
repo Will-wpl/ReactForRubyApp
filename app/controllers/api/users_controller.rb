@@ -11,11 +11,12 @@ class Api::UsersController < Api::BaseController
       users = User.retailers
       total = users.count
     end
-    headers = []
-    actions = []
-    headers.push(name: 'Company Name', field_name: 'company_name')
-    headers.push(name: 'License Number', field_name: 'company_license_number')
-    headers.push(name: 'Status', field_name: 'approval_status')
+    headers = [
+      { name: 'Company Name', field_name: 'company_name' },
+      { name: 'License Number', field_name: 'company_license_number' },
+      { name: 'Status', field_name: 'approval_status' }
+    ]
+    actions = [{ url: '/admin/users/:id/manage', name: 'Manage', icon: 'lm--icon-search' }]
     data = users.order(approval_status: :desc).each do |user|
       user.approval_status = if user.approval_status == '0'
                                'Rejected'
@@ -26,7 +27,6 @@ class Api::UsersController < Api::BaseController
                              end
     end
     bodies = { data: data, total: total }
-    actions.push(url: '/admin/users/:id/manage', name: 'Manage', icon: 'lm--icon-search')
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
   end
 
@@ -42,23 +42,21 @@ class Api::UsersController < Api::BaseController
       users = User.buyers
       total = users.count
     end
-    headers = []
-    actions = []
-    if params[:consumer_type][0] == '2'
-      headers.push(name: 'Company Name', field_name: 'company_name')
-    elsif params[:consumer_type][0] == '3'
-      headers.push(name: 'Name', field_name: 'name')
-    else
-      headers.push(name: 'Company Name', field_name: 'company_name')
-      headers.push(name: 'Name', field_name: 'name')
-    end
-    headers.push(name: 'Email', field_name: 'email')
-    headers.push(name: 'Consumer Type', field_name: 'consumer_type')
+    headers = [
+      { name: 'Company Name', field_name: 'company_name' },
+      { name: 'Name', field_name: 'name' },
+      { name: 'Email', field_name: 'email' },
+      { name: 'Consumer Type', field_name: 'consumer_type' }
+    ]
+    actions = [{ url: '/admin/users/:id/manage', name: 'View', icon: 'lm--icon-search' }]
+    headers.delete_if { |header| header[:field_name] == 'name' } if params[:consumer_type][0] == '2'
+    headers.delete_if { |header| header[:field_name] == 'company_name' } if params[:consumer_type][0] == '3'
+
     data = users.order(consumer_type: :desc).each do |user|
       user.consumer_type = user.consumer_type == '2' ? 'Company' : 'Individual'
     end
     bodies = { data: data, total: total }
-    actions.push(url: '/admin/users/:id/manage', name: 'View', icon: 'lm--icon-search')
+    
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
   end
 end

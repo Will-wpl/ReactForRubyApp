@@ -119,8 +119,10 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
           expect(hash['headers'].size).to eq(3)
+          expect(hash['headers'][0]['field_name']).to eq('company_name')
           expect(hash['bodies']['total']).to eq(1)
           expect(hash['bodies']['data'].size).to eq(1)
+          expect(hash['bodies']['data'][0]['company_name']).to eq(company_buyers[0].company_name)
           expect(hash['actions'].size).to eq(1)
         end
       end
