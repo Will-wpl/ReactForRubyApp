@@ -5,7 +5,7 @@ import Ranking from '../../common/chart/ranking';
 import BidForm from './bid-form';
 import BidHistory from './bid-history';
 import {getLoginUserId, getNumBref} from '../../../javascripts/componentService/util';
-import {getAuctionHistorys} from '../../../javascripts/componentService/retailer/service';
+import {getAuctionHistorys, validateCanBidForm} from '../../../javascripts/componentService/retailer/service';
 import {createWebsocket, ACTION_COMMANDS} from '../../../javascripts/componentService/common/service';
 import moment from 'moment';
 
@@ -43,6 +43,13 @@ export default class LiveHomePage extends Component {
                 setTimeout(()=> {
                     this.ws.sendMessage(ACTION_COMMANDS.MAKE_UNIQUE, {timestamp: this.timestamp});
                 }, 1000);
+                // validateCanBidForm(auctionId).then(res => {
+                //
+                // }, err => {
+                //
+                // })
+                // or
+                // this.ws.sendMessage(ACTION_COMMANDS.CAN_BIDDING_FORM, {});
             }).onDisconnected(() => {
                 console.log('---message client disconnected ----')
             }).onReceivedData(data => {
@@ -111,8 +118,14 @@ export default class LiveHomePage extends Component {
                         }
                     }
                 }
+            }).onConnectedFailure(() => {
+                this.onRequestForbiddenBy()
             })
         }
+    }
+
+    onRequestForbiddenBy() {
+
     }
 
     makeup(res) {

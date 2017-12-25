@@ -122,6 +122,7 @@ export const Ws = class {
     connectedCall;
     disconnectedCall;
     receiveDataCall;
+    connectedFailureCall;
     connected = false;
     cache = [];
     constructor(auction) {
@@ -173,6 +174,11 @@ export const Ws = class {
         let mInterval = setInterval(() => {
             if (this.connected || cnt > times) {
                 clearInterval(mInterval);
+                if (cnt > times) {
+                    if (this.connectedFailureCall) {
+                        this.connectedFailureCall();
+                    }
+                }
             } else {
                 if (!this.connected) {
                     cable.connection.reopen();
@@ -194,6 +200,11 @@ export const Ws = class {
 
     onReceivedData(callback) {
         this.receiveDataCall = callback;
+        return this;
+    }
+
+    onConnectedFailure(callback) {
+        this.connectedFailureCall = callback;
         return this;
     }
 

@@ -18,7 +18,8 @@ export const logout = (id) => {
 
 export const ACTION_COMMANDS = {
     SET_BID: 'set_bid',
-    MAKE_UNIQUE: 'limit_user'
+    MAKE_UNIQUE: 'limit_user',
+    CAN_BIDDING_FORM: 'can_bid_form'
 }
 
 export const AUCTION_PROPS = {
