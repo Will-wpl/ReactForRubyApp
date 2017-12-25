@@ -30,7 +30,7 @@ export class SearchType extends Component {
                 case 'select':
                 field = <select ref={type} id={type}>
                          {options.map((item,index)=>{
-                            return <option value={index}>{item.option}</option>
+                            return <option value={item.value}>{item.option}</option>
                           })}
                        </select>
                 break
