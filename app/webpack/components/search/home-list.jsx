@@ -9,16 +9,23 @@ export class ListHome extends Component {
     constructor(props, context){
         super(props);
         this.searchType = getSearchType();
-    }
-    componentDidMount(){
-       
-    }
-    componentWillMount(){
-        
+        this.state={
+            total:[],
+            list_data:{},list_url:'',table_data:null
+        }
     }
     doSearch(data,url){
         getRoleList(data,url).then(res => {
-            console.log(res);
+            let total = [];
+            for(let i=0; i<res.bodies.total; i++){
+                total.push((i+1));
+            }
+            this.setState({
+                table_data:res,
+                total:total,
+                list_data:data,
+                list_url:url,
+            })
         }, error => {
             console.log(error);
         })
@@ -30,7 +37,7 @@ export class ListHome extends Component {
                     <SearchType type={this.searchType} doSearch={this.doSearch.bind(this)}/>
                 </div>
                 <div className="col-sm-12 col-md-12">
-                    <SearchList/>
+                    <SearchList table_data={this.state.table_data} page_total={this.state.total} list_data={this.state.list_data} list_url={this.state.list_url} doSearch={this.doSearch.bind(this)}/>
                 </div>
             </div>
         )}
