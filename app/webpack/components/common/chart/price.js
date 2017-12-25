@@ -34,7 +34,7 @@ export default class Price extends Component {
                     value: []
                 } : {
                     symbol: 'circle',
-                    symbolSize: 8,
+                    symbolSize: 6,
                     showSymbol: true,
                     value: []
                 };
@@ -72,7 +72,7 @@ export default class Price extends Component {
             <ReactEcharts
                 ref={instance => this.charts_instance = instance}
                 option={this.getChartOption()}
-                notMerge={true}
+                notMerge={false}
                 style={{minHeight: '310px', width: '100%'}}
                 className='react_for_echarts' />
         );
