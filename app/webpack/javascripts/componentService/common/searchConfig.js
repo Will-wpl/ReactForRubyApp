@@ -9,7 +9,7 @@ export const searchTypeData = {
                 ]
     },
     "Buyer List":{
-        list_url:"/api/admin/users/buies",
+        list_url:"/api/admin/users/buyers",
         list_data:[
             {title:"Name:",type:"name",species:"input"},
             {title:"Email:",type:"email",species:"input"},
