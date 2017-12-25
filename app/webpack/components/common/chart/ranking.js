@@ -32,7 +32,7 @@ export default class Ranking extends Component {
                     value: []
                 } : {
                     symbol: 'circle',
-                    symbolSize: 8,
+                    symbolSize: 6,
                     showSymbol: true,
                     value: []
                 };
@@ -53,7 +53,7 @@ export default class Ranking extends Component {
         return (
             <ReactEcharts
                 option={this.getChartOption()}
-                notMerge={true}
+                notMerge={false}
                 style={{minHeight: '310px', width: '100%'}}
                 className='react_for_echarts'/>
         );

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import RetailerRanking from './admin_shared/ranking';
 import ReservePrice from './admin_shared/reserveprice';
 import CheckboxList from '../common/chart/list-checkbox';
+import CheckboxListItem from '../common/chart/list-checkbox-item';
 import {getArrangements, getHistories} from '../../javascripts/componentService/admin/service';
 import {createWebsocket, getAuction} from '../../javascripts/componentService/common/service';
 import {findUpLimit, getRandomColor, getStandardNumBref, isEmptyJsonObj} from '../../javascripts/componentService/util';
@@ -167,6 +168,13 @@ export class AdminDashboard extends Component {
                                 </ChartRealtimeHoc>
                             </div>
                             <div className="col-sm-2 push-md-1">
+                                <CheckboxListItem key={0} id={0} display={'check/uncheck all'} color={'white'} status={true} onCheck={(id, status, color) => {
+                                    if (status) {
+                                        this.priceUsers.selectAll(this.state.users);
+                                    } else {
+                                        this.priceUsers.disSelectAll();
+                                    }
+                                }} />
                                 <CheckboxList list={this.state.users} ref={e => this.priceUsers = e} onCheckeds={(ids) => {this.refs.priceChart.updateIndentifications(ids)}}/>
                             </div>
                         </div>
@@ -177,6 +185,13 @@ export class AdminDashboard extends Component {
                                 </ChartRealtimeHoc>
                             </div>
                             <div className="col-sm-2 push-md-1">
+                                <CheckboxListItem key={0} id={0} display={'check/uncheck all'} color={'white'} status={true} onCheck={(id, status, color) => {
+                                    if (status) {
+                                        this.rankingUsers.selectAll(this.state.users);
+                                    } else {
+                                        this.rankingUsers.disSelectAll();
+                                    }
+                                }} />
                                 <CheckboxList list={this.state.users} ref={e => this.rankingUsers = e} onCheckeds={(ids) => {this.refs.rankingChart.updateIndentifications(ids)}}/>
                             </div>
                         </div>
