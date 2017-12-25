@@ -339,3 +339,39 @@ select{
     color:#333;
   }
 }
+
+#users_search_list{ 
+  .mg0{ margin: 0 auto;}
+  width: 100%;
+  div.search_type{
+    dd{ float: left; margin: 0px 5px; margin-bottom: 10px;
+      span{font-size: 12px; padding:5px 0px; vertical-align: top;}
+      label{ width: 140px; display: inline-block; margin-left: 10px;
+        .react-datepicker__input-container,.react-datepicker-wrapper{ width: 100%;}
+        input,select{
+          display: block; margin: 0 auto; font-size: 12px; text-indent: 10px;
+          width: 100%;
+          padding: 6px 0px;
+          font-weight: 300;
+          color: #fff;
+          line-height: 1.25;
+          background: transparent;
+          border: 1px solid #5d7789;
+          border-radius: 0.3125rem;
+          &.time_ico{background:url("../images/date.png") no-repeat right;}
+        }
+      }
+      button.lm--button{
+        height: 30px; font-size: 12px; padding: 0px 12px; margin-left: 10px; line-height: 30px;
+      }
+    }    
+  }
+  div.lm--table-container{
+    .table_page{ 
+      width: 100%; text-align: left;
+      span{ display: inline-block; line-height: 32px; color:#fff; padding: 0px 15px;
+        &.table_page_selected{ background:#314657; }
+      }
+    }
+  }
+}
