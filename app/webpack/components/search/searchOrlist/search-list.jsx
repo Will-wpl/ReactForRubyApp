@@ -10,7 +10,7 @@ export class SearchList extends Component {
         if(this.props.list_data){
             listData = this.props.list_data;
             listData.page_index = index;
-            console.log(listData);
+            //console.log(listData);
             if(this.props.doSearch && this.props.list_url){
                 this.props.doSearch(listData,this.props.list_url);
             }
