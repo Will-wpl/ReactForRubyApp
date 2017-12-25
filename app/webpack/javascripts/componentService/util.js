@@ -33,6 +33,15 @@ export const getLoginUserId = () => {
     return 0;
 }
 
+export const getSearchType = () => {
+    let element = $('.search_list_type');
+    if (element) {
+        return element.text();
+    }
+    return 0;
+}
+
+
 export const getNumBref = (num, standard = false) => {
     if (num <= 0) {
         return `${num}`

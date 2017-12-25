@@ -16,10 +16,13 @@ export const logout = (id) => {
     return create('/api/auctions/logout',{user_id:id});
 }
 
+export const getRoleList = (data,url) => {
+    return get(url,data);
+}
+
 export const ACTION_COMMANDS = {
     SET_BID: 'set_bid',
-    MAKE_UNIQUE: 'limit_user',
-    CAN_BIDDING_FORM: 'can_bid_form'
+    MAKE_UNIQUE: 'limit_user'
 }
 
 export const AUCTION_PROPS = {
