@@ -34,7 +34,7 @@ export default class Price extends Component {
                     value: []
                 } : {
                     symbol: 'circle',
-                    symbolSize: 8,
+                    symbolSize: 6,
                     showSymbol: true,
                     value: []
                 };
@@ -72,7 +72,7 @@ export default class Price extends Component {
             <ReactEcharts
                 ref={instance => this.charts_instance = instance}
                 option={this.getChartOption()}
-                notMerge={true}
+                notMerge={false}
                 style={{minHeight: '310px', width: '100%'}}
                 className='react_for_echarts' />
         );
@@ -80,7 +80,10 @@ export default class Price extends Component {
 }
 
 Price.defaultProps = {
-    data: []
+    data: [],
+    isLtVisible: true,
+    isHtsVisible: false,
+    isHtlVisible: true
 }
 
 function getTemplate(props) {
@@ -123,8 +126,9 @@ function getTemplate(props) {
                             let d = serObj.data[params.dataIndex];
                             if (d && d.template_price) { //<div>${d.template_price.hts}</div>
                                 template = `<strong>${d.template_price.company_price}</strong>
-                                    <div>${d.template_price.lt}</div>
-                                    <div>${d.template_price.htl}</div>`;
+                                    <div style="${props.isLtVisible ? '' : 'display:none'}">${d.template_price.lt}</div>
+                                    <div style="${props.isHtsVisible ? '' : 'display:none'}">${d.template_price.hts}</div>
+                                    <div style="${props.isHtlVisible ? '' : 'display:none'}">${d.template_price.htl}</div>`;
                             }
                         }
                         if (template) {
@@ -267,8 +271,9 @@ function getTemplate(props) {
                         let d = serObj.data[params.dataIndex];
                         if (d && d.template_price) { //<div>${d.template_price.hts}</div>
                             template = `<strong>${d.template_price.company_price}</strong>
-                                    <div>${d.template_price.lt}</div>
-                                    <div>${d.template_price.htl}</div>`;
+                                    <div style="${props.isLtVisible ? '' : 'display:none'}">${d.template_price.lt}</div>
+                                    <div style="${props.isHtsVisible ? '' : 'display:none'}">${d.template_price.hts}</div>
+                                    <div style="${props.isHtlVisible ? '' : 'display:none'}">${d.template_price.htl}</div>`;
                         }
                     }
                     if (template) {
