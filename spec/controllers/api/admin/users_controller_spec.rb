@@ -43,7 +43,7 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
         end
       end
 
-      context 'Search Pager Search' do
+      context 'Conditions Pager Search' do
         def do_request
           get :retailers, params: { company_name: [retailers[0].company_name, 'like'], company_license_number: [retailers[0].company_license_number, 'like'], approval_status: [retailers[0].approval_status, '='], page_size: '10', page_index: '1' }
         end
@@ -76,6 +76,55 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
           expect(hash['actions'].size).to eq(1)
         end
       end
+
+
+      context 'Pager Search' do
+        def do_request
+          get :buyers, params: {page_size: '10', page_index: '1' }
+        end
+
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash = JSON.parse(response.body)
+          expect(hash['headers'].size).to eq(4)
+          expect(hash['bodies']['total']).to eq(60)
+          expect(hash['bodies']['data'].size).to eq(10)
+          expect(hash['actions'].size).to eq(1)
+        end
+      end
+
+
+      context 'Conditions Pager Search' do
+        def do_request
+          get :buyers, params: { consumer_type: [2, '='], page_size: '10', page_index: '1' }
+        end
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash = JSON.parse(response.body)
+          expect(hash['headers'].size).to eq(3)
+          expect(hash['bodies']['total']).to eq(30)
+          expect(hash['bodies']['data'].size).to eq(10)
+          expect(hash['actions'].size).to eq(1)
+        end
+      end
+
+      context 'Conditions Pager Search' do
+        def do_request
+          get :buyers, params: { company_name: [company_buyers[0].company_name, 'like'], consumer_type: [company_buyers[0].consumer_type, '='], page_size: '10', page_index: '1' }
+        end
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash = JSON.parse(response.body)
+          expect(hash['headers'].size).to eq(3)
+          expect(hash['bodies']['total']).to eq(1)
+          expect(hash['bodies']['data'].size).to eq(1)
+          expect(hash['actions'].size).to eq(1)
+        end
+      end
+
     end
   end
 
