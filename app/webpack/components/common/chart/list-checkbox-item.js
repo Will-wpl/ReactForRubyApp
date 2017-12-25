@@ -8,8 +8,8 @@ export default class CheckboxListItem extends Component {
         super(props);
         this.state = { status: true }
     }
-    onItemChecked(id, value) {
-        this.props.onCheck(id, value);
+    componentWillReceiveProps(next) {
+        this.setState({status: next.status});
     }
     onItemClick(id, status, color) {
         this.setState({ status: status });
