@@ -1,6 +1,6 @@
 require 'feature_helper'
 
-RSpec.describe 'admin manage auction', type: :feature, js: true do
+RSpec.xdescribe 'admin manage auction', type: :feature, js: true do
   let(:admin_user) { create(:user, :with_admin) }
 
   before do

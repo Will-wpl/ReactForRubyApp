@@ -83,19 +83,15 @@
         .lm--formItem-right.lm--formItem-control
           dfn.manage_label
             = @user.account_office_number
-      .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label Comment
-        .lm--formItem-right.lm--formItem-control
-          textarea fill
       .lm--formItem.lm--formItem--inline.string.optional.save-right
         = simple_form_for(@user, url: approval_admin_users_path(@user),
                 wrapper: :vertical_form, defaults: { label: false }) do |f|
+          .lm--formItem.lm--formItem--inline.string.optional
+            .lm--formItem-left.lm--formItem-label Comment
+            .lm--formItem-right.lm--formItem-control
+              = f.input :comment
           = f.button :submit, 'Approved', name: 'approved', class: 'lm--button lm--button lm--button--primary', data: {disable_with: t('views.disable_with')}
           = f.button :submit, 'Reject', name: 'reject', class: 'lm--button lm--button lm--button--primary', data: {disable_with: t('views.disable_with')}
-      /= simple_form_for(@user, url: approval_admin_users_path(@user),
-      /        wrapper: :vertical_form, defaults: {label: false}) do |f|
-
-
 - if @user.has_role?(:buyer) and  @user.consumer_type == '2'
   .u-grid.u-mt3.buyer_registration
     .col-sm-12.col-md-8.u-mha
