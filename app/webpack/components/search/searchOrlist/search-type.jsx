@@ -67,6 +67,11 @@ export class SearchType extends Component {
             this.props.doSearch(JSON.parse(needData),this.list_url)
         }
     }
+    goReset(){
+        $(".search_type input").val("");
+        $(".search_type select").val($(".search_type select option:first").val());
+        this.goSearch();
+    }
     render (){
         return (
             <div className="search_type">
@@ -83,7 +88,7 @@ export class SearchType extends Component {
                     }
                     <dd>
                         <button className="lm--button lm--button--primary" onClick={this.goSearch.bind(this)}>Search</button>
-                        <button className="lm--button lm--button--primary" >Reset</button>
+                        <button className="lm--button lm--button--primary" onClick={this.goReset.bind(this)}>Reset</button>
                     </dd>
                 </dl>
             </div>
