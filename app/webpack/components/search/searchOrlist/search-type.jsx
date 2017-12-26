@@ -51,14 +51,14 @@ export class SearchType extends Component {
     goSearch(){
         let needData = ''
         this.search_type_data.map((item,index)=>{
-            needData += '"'+item.type+'":"'+$('#'+item.type).val()+'",';
-            // if(item.species === 'input'){
-            //     needData += '"'+item.type+'":["'+$('#'+item.type).val()+'","like"],';
-            // }else if(item.species === 'select'){
-            //     needData += '"'+item.type+'":["'+$('#'+item.type).val()+'","="],';
-            // }else{
-            //     needData += '"'+item.type+'":["'+$('#'+item.type).val()+'","<="],';
-            // }
+            //needData += '"'+item.type+'":"'+$('#'+item.type).val()+'",';
+            if(item.species === 'input'){
+                needData += '"'+item.type+'":["'+$('#'+item.type).val()+'","like"],';
+            }else if(item.species === 'select'){
+                needData += '"'+item.type+'":["'+$('#'+item.type).val()+'","="],';
+            }else{
+                needData += '"'+item.type+'":["'+$('#'+item.type).val()+'","<="],';
+            }
         })
         needData = needData.substr(0,needData.length-1);
         needData = '{'+needData+',"page_size":10,"page_index":1}';
