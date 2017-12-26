@@ -68,9 +68,9 @@
           .lm--formItem-right.lm--formItem-control
             = f.input :account_office_number,required:true,pattern:'^(\d{8})$',maxlength:'8',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Admin Comment
+          .lm--formItem-left.lm--formItem-label * Comment
           .lm--formItem-right.lm--formItem-control
-            = f.input :comment
+            = f.input :comment,readonly:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
           .lm--formItem-right.lm--formItem-control
