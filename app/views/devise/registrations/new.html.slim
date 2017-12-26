@@ -16,11 +16,11 @@
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Password (Minimum 8 characters):
           .lm--formItem-right.lm--formItem-control
-            = f.input :password,required:true,pattern:'^(\w{8,20})$',placeholder: 'Password (Minimum 8 characters)'
+            = f.input :password,required:true,pattern:'^(.|\n){8,20}$',placeholder: 'Password (Minimum 8 characters)'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Password Confirmation:
           .lm--formItem-right.lm--formItem-control
-            = f.input :password_confirmation,required:true,pattern:'^(\w{8,20})$'
+            = f.input :password_confirmation,required:true,pattern:'^(.|\n){8,20}$'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
             font Company Information:
@@ -50,11 +50,11 @@
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Mobile Number:
           .lm--formItem-right.lm--formItem-control
-            = f.input :account_mobile_number,required:true,pattern:'^(\w{8,20})$',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
+            = f.input :account_mobile_number,required:true,pattern:'^(\d{8,20})*$',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Office Number:
           .lm--formItem-right.lm--formItem-control
-            = f.input :account_office_number,required:true,pattern:'^(\w{8,20})$',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
+            = f.input :account_office_number,required:true,pattern:'^(\d{8,20})$',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
           .lm--formItem-right.lm--formItem-control
@@ -83,11 +83,11 @@
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Password (Minimum 8 characters):
           .lm--formItem-right.lm--formItem-control
-            = f.input :password,required:true,pattern:'^(\w{8,20})$',placeholder: 'Password (Minimum 8 characters)'
+            = f.input :password,required:true,pattern:'^(.|\n){8,20}$',placeholder: 'Password (Minimum 8 characters)'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Password Confirmation:
           .lm--formItem-right.lm--formItem-control
-            = f.input :password_confirmation,pattern:'^(\w{8,20})$',required:true
+            = f.input :password_confirmation,pattern:'^(.|\n){8,20}$',required:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
             font Company Information:
@@ -145,11 +145,11 @@
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Password (Minimum 8 characters):
           .lm--formItem-right.lm--formItem-control
-            = f.input :password,required:true,minlength:'8',maxlength:'8',pattern:'^(\d{8})$',placeholder: 'Password (Minimum 8 characters)'
+            = f.input :password,required:true,minlength:'8',maxlength:'8',pattern:'^(.|\n){8,20}$',placeholder: 'Password (Minimum 8 characters)'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label * Password Confirmation:
           .lm--formItem-right.lm--formItem-control
-            = f.input :password_confirmation,minlength:'8',maxlength:'8',required:true,pattern:'^(\d{8})$'
+            = f.input :password_confirmation,minlength:'8',maxlength:'8',required:true,pattern:'^(.|\n){8,20}$'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
             font Account Information:
