@@ -396,7 +396,7 @@ dfn.manage_label{
   div.lm--table-container{
     a{ text-decoration: none; cursor: pointer;}
     .table_page{ 
-      width: 100%; text-align: center; margin: 30px auto 0px auto;
+      width: 100%; text-align: left; margin: 30px auto 0px auto;
       span{ display: inline-block; line-height: 32px; color:#fff; cursor: pointer; padding: 0px 15px; transition: 0.5s all;
         &.table_page_selected,&:hover{ background:#314657; }
       }
