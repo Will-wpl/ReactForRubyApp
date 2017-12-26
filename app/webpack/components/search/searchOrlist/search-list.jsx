@@ -6,6 +6,9 @@ export class SearchList extends Component {
         super(props);
     }
     dosearch(index,obj){
+        if(this.props.onAddClick){
+            this.props.onAddClick();
+        }
         let listData = {};
         if(this.props.list_data){
             listData = this.props.list_data;
@@ -85,3 +88,6 @@ export class SearchList extends Component {
         }
     }
 }
+SearchList.propTypes = {
+    onAddClick: ()=>{}
+  };
