@@ -36,7 +36,12 @@ html(lang="en")
             li.lm--header-item
               .lm--dropdown[data={dropdown:''}]
                 button.lm--header-link[data={'dropdown-trigger':''}]
-                  = current_user.name
+                  - if current_user.consumer_type == '2'
+                    = current_user.name
+                  - elsif current_user.consumer_type == '3'
+                    = current_user.company_name
+                  - else
+                    = current_user.company_name
                   i class="lm--icon-profile" aria-hidden="true"
                 ul.lm--dropdown-menu
                   li
