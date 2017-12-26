@@ -10,49 +10,69 @@
         input name='user[consumer_type]' type="hidden" value=params['type']
         input name='user[approval_status]' type="hidden" value='2'
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Email:
+          .lm--formItem-left.lm--formItem-label
+            b *  
+            attr Email:
           .lm--formItem-right.lm--formItem-control
             = f.input :email,required:true, autofocus: true
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Password (Minimum 8 characters):
+          .lm--formItem-left.lm--formItem-label
+            b * 
+            attr Password (Minimum 8 characters):
           .lm--formItem-right.lm--formItem-control
             = f.input :password,required:true,pattern:'^(.|\n){8,20}$',placeholder: 'Password (Minimum 8 characters)'
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Password Confirmation:
+          .lm--formItem-left.lm--formItem-label
+            b * 
+            attr Password Confirmation:
           .lm--formItem-right.lm--formItem-control
             = f.input :password_confirmation,required:true,pattern:'^(.|\n){8,20}$'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
             font Company Information:
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Company Name:
+          .lm--formItem-left.lm--formItem-label 
+            b * 
+            attr Company Name:
           .lm--formItem-right.lm--formItem-control
             = f.input :company_name,required:true,placeholder: ''
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Company Address:
+          .lm--formItem-left.lm--formItem-label 
+            b * 
+            attr Company Address:
           .lm--formItem-right.lm--formItem-control
             = f.input :company_address,required:true
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Unique Entity Number (UEN):
+          .lm--formItem-left.lm--formItem-label 
+            b * 
+            attr Unique Entity Number (UEN):
           .lm--formItem-right.lm--formItem-control
             = f.input :company_unique_entity_number,required:true
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Retailer Licence Number:
+          .lm--formItem-left.lm--formItem-label 
+            b * 
+            attr Retailer Licence Number:
           .lm--formItem-right.lm--formItem-control
             = f.input :company_license_number,required:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
             font Contact Information:
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Contact Name:
+          .lm--formItem-left.lm--formItem-label 
+            b * 
+            attr Contact Name:
           .lm--formItem-right.lm--formItem-control
             = f.input :name,required:true,placeholder: ''
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Mobile Number:
+          .lm--formItem-left.lm--formItem-label 
+            b * 
+            attr Mobile Number:
           .lm--formItem-right.lm--formItem-control
             = f.input :account_mobile_number,required:true,pattern:'^(\d{8,20})*$',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Office Number:
+          .lm--formItem-left.lm--formItem-label 
+            b * 
+            attr Office Number:
           .lm--formItem-right.lm--formItem-control
             = f.input :account_office_number,required:true,pattern:'^(\d{8,20})$',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
         .lm--formItem.lm--formItem--inline.string.optional
@@ -65,7 +85,9 @@
   .u-grid.u-mb3.buyer_registration
     .col-sm-12.col-md-8.u-mha
       .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label * Consumer Type (Choose Company or Individual):
+        .lm--formItem-left.lm--formItem-label 
+          b * 
+          attr Consumer Type (Choose Company or Individual):
         .lm--formItem-right.lm--formItem-control
           select onchange="registration.change_buyer_type(this)"
             option value="2" selected="selected" Company
@@ -77,45 +99,63 @@
         input name='user[approval_status]' type="hidden" value='1'
         /= f.input :consumer_type, as: :hidden
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Email:
+          .lm--formItem-left.lm--formItem-label 
+            b * 
+            attr Email:
           .lm--formItem-right.lm--formItem-control
             = f.input :email,required:true, autofocus: true
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Password (Minimum 8 characters):
+          .lm--formItem-left.lm--formItem-label 
+            b * 
+            attr Password (Minimum 8 characters):
           .lm--formItem-right.lm--formItem-control
             = f.input :password,required:true,pattern:'^(.|\n){8,20}$',placeholder: 'Password (Minimum 8 characters)'
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Password Confirmation:
+          .lm--formItem-left.lm--formItem-label 
+            b * 
+            attr Password Confirmation:
           .lm--formItem-right.lm--formItem-control
             = f.input :password_confirmation,pattern:'^(.|\n){8,20}$',required:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
             font Company Information:
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Company Name:
+          .lm--formItem-left.lm--formItem-label 
+            b * 
+            attr Company Name:
           .lm--formItem-right.lm--formItem-control
             = f.input :company_name,required:true
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Company Address:
+          .lm--formItem-left.lm--formItem-label 
+            b * 
+            attr Company Address:
           .lm--formItem-right.lm--formItem-control
             = f.input :company_address,required:true
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Unique Entity Number (UEN):
+          .lm--formItem-left.lm--formItem-label 
+            b * 
+            attr Unique Entity Number (UEN):
           .lm--formItem-right.lm--formItem-control
             = f.input :company_unique_entity_number,required:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
             font Contact Information:
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Contact Name:
+          .lm--formItem-left.lm--formItem-label 
+            b * 
+            attr Contact Name:
           .lm--formItem-right.lm--formItem-control
             = f.input :name,required:true,placeholder: ''
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Mobile Number:
+          .lm--formItem-left.lm--formItem-label 
+            b * 
+            attr Mobile Number:
           .lm--formItem-right.lm--formItem-control
             = f.input :account_mobile_number,required:true,pattern:'^(\d{8})$',maxlength:'8',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Office Number:
+          .lm--formItem-left.lm--formItem-label 
+            b * 
+            attr Office Number:
           .lm--formItem-right.lm--formItem-control
             = f.input :account_office_number,required:true,pattern:'^(\d{8})$',maxlength:'8',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
         .lm--formItem.lm--formItem--inline.string.optional
@@ -128,7 +168,9 @@
   .u-grid.u-mb3.buyer_registration
     .col-sm-12.col-md-8.u-mha
       .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label * Consumer Type (Choose Company or Individual):
+        .lm--formItem-left.lm--formItem-label 
+          b * 
+          attr Consumer Type (Choose Company or Individual):
         .lm--formItem-right.lm--formItem-control
           select onchange="registration.change_buyer_type(this)"
             option value="2" Company
@@ -139,51 +181,67 @@
         input name='user[consumer_type]' type="hidden" value=params['type']
         input name='user[approval_status]' type="hidden" value='1'
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Email:
+          .lm--formItem-left.lm--formItem-label 
+            b * 
+            attr Email:
           .lm--formItem-right.lm--formItem-control
             = f.input :email,required:true, autofocus: true
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Password (Minimum 8 characters):
+          .lm--formItem-left.lm--formItem-label 
+            b * 
+            attr Password (Minimum 8 characters):
           .lm--formItem-right.lm--formItem-control
             = f.input :password,required:true,minlength:'8',maxlength:'8',pattern:'^(.|\n){8,20}$',placeholder: 'Password (Minimum 8 characters)'
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Password Confirmation:
+          .lm--formItem-left.lm--formItem-label 
+            b * 
+            attr Password Confirmation:
           .lm--formItem-right.lm--formItem-control
             = f.input :password_confirmation,minlength:'8',maxlength:'8',required:true,pattern:'^(.|\n){8,20}$'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
             font Account Information:
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Name:
+          .lm--formItem-left.lm--formItem-label 
+            b * 
+            attr Name:
           .lm--formItem-right.lm--formItem-control
             = f.input :name,required:true,placeholder: ''
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * NRIC/FIN:
+          .lm--formItem-left.lm--formItem-label 
+            b * 
+            attr NRIC/FIN:
           .lm--formItem-right.lm--formItem-control
             = f.input :account_fin,required:true
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Housing Type:(HDB/Private High-rise/Landed):
+          .lm--formItem-left.lm--formItem-label 
+            b * 
+            attr Housing Type:(HDB/Private High-rise/Landed):
           .lm--formItem-right.lm--formItem-control
             = f.select :account_housing_type,required:true
               option value='0' HDB
               option value='1' Private High-rise
               option value='2' Landed
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Home Address:
+          .lm--formItem-left.lm--formItem-label 
+            b * 
+            attr Home Address:
           .lm--formItem-right.lm--formItem-control
             = f.input :account_home_address,required:true
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Mobile Number:
+          .lm--formItem-left.lm--formItem-label 
+            b * 
+            attr Mobile Number:
           .lm--formItem-right.lm--formItem-control
             = f.input :account_mobile_number,required:true,pattern:'^(\d{8})$',maxlength:'8',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Home Number:
+          .lm--formItem-left.lm--formItem-label Home Number:
           .lm--formItem-right.lm--formItem-control
-            = f.input :account_home_number,required:true,pattern:'^(\d{8})$',maxlength:'8',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
+            = f.input :account_home_number,pattern:'^(\d{8})$',maxlength:'8',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label * Office Number:
+          .lm--formItem-left.lm--formItem-label Office Number:
           .lm--formItem-right.lm--formItem-control
-            = f.input :account_office_number,required:true,pattern:'^(\d{8})$',maxlength:'8',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
+            = f.input :account_office_number,pattern:'^(\d{8})$',maxlength:'8',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
           .lm--formItem-right.lm--formItem-control
