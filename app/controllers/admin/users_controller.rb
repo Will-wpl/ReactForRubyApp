@@ -57,7 +57,8 @@ class Admin::UsersController < Admin::BaseController
   def approval
     @user = User.find(params[:format])
     approval_status = params[:approved].nil? ? '0' : '1'
-    if @user.update(approval_status: approval_status)
+    comment = params[:user][:comment]
+    if @user.update(approval_status: approval_status, comment: comment)
       redirect_to manage_admin_user_path(@user), notice: "#{User.model_name.human} was successfully updated."
     else
       render :manage
