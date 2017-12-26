@@ -1,6 +1,6 @@
 require 'feature_helper'
 
-RSpec.describe 'auction bidding', type: :feature, js: true do
+RSpec.xdescribe 'auction bidding', type: :feature, js: true do
   after do
     Timecop.return
   end
