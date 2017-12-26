@@ -25,6 +25,13 @@
         .lm--formItem-left.lm--formItem-label
         .lm--formItem-right.lm--formItem-control
 - if @user.has_role?(:retailer)
+  div.modal_hide id="modal_main"
+    h4
+      a onClick="slimModal.close_modal()" X
+    div.modal_detail
+    div.modal_btn 
+      a onClick="slimModal.confirm_modal()" Yes
+      a onClick="slimModal.close_modal()" No
   .u-grid.u-mt3
     .col-sm-12.col-md-8.u-mha
       .lm--formItem.lm--formItem--inline.string.optional
@@ -93,8 +100,8 @@
           .lm--formItem.lm--formItem--inline.string.optional
             .lm--formItem-left.lm--formItem-label
             .lm--formItem-right.lm--formItem-control
-              = f.button :submit, 'Approved', name: 'approved', class: 'lm--button lm--button lm--button--primary', data: {disable_with: t('views.disable_with')}
-              = f.button :submit, 'Reject', name: 'reject', class: 'lm--button lm--button lm--button--primary', data: {disable_with: t('views.disable_with')}
+              = f.button :submit, 'Approved', name: 'approved', id:'approved', class: 'lm--button lm--button lm--button--primary', data: {disable_with: t('views.disable_with')},onClick:"slimModal.show_modal(event,'approved')"
+              = f.button :submit, 'Reject', name: 'reject',id:'reject',class: 'lm--button lm--button lm--button--primary', data: {disable_with: t('views.disable_with')},onClick:"slimModal.show_modal(event,'reject')"
 - if @user.has_role?(:buyer) and  @user.consumer_type == '2'
   .u-grid.u-mt3.buyer_registration
     .col-sm-12.col-md-8.u-mha

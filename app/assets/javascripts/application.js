@@ -25,3 +25,30 @@ var registration = {
         }
     }
 }
+
+var slimModal = {
+    dosubmit:true,
+    type:'',
+    show_modal:(event,type)=>{
+        if(slimModal.dosubmit){
+            event.preventDefault();
+            slimModal.dosubmit = false;
+            slimModal.type=type;
+            $("#modal_main").attr("class","modal_show");
+            switch(type){
+                case "approved" : $("#modal_main .modal_detail").text("Are you sure you want to approve the request?")
+                break
+                case "reject" : $("#modal_main .modal_detail").text("Are you sure you want to reject the request?")
+            }
+        }
+    },
+    close_modal:()=>{
+        $("#modal_main").attr("class","modal_hide");
+        slimModal.dosubmit = true;
+        slimModal.type='';
+    },
+    confirm_modal:()=>{
+        slimModal.dosubmit = false;
+        $("#"+slimModal.type).click();
+    }
+}
