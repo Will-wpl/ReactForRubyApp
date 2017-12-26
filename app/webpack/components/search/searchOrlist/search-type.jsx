@@ -87,8 +87,8 @@ export class SearchType extends Component {
                         })
                     }
                     <dd>
-                        <button className="lm--button lm--button--primary" onClick={this.goSearch.bind(this)}>Search</button>
-                        <button className="lm--button lm--button--primary" onClick={this.goReset.bind(this)}>Reset</button>
+                        <button className="lm--button lm--button--primary search_btn" onClick={this.goSearch.bind(this)}>Search</button>
+                        <button className="lm--button lm--button--primary reset_btn" onClick={this.goReset.bind(this)}>Reset</button>
                     </dd>
                 </dl>
             </div>
