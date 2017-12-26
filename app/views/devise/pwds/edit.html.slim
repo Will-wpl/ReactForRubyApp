@@ -24,3 +24,12 @@
         .lm--formItem-right.lm--formItem-control.save-right
           = f.button :submit, 'Confirm', class: 'lm--button lm--button lm--button--primary', data: { disable_with: t("views.disable_with") }
           a.lm--button href="/users/password" Cancel
+- if @user.has_role?(:admin)
+  div.createRaMain.u-grid
+    a.lm--button.lm--button--primary.u-mt3 href="/admin/home" Back to Homepage
+- if @user.has_role?(:retailer)
+  div.createRaMain.u-grid
+    a.lm--button.lm--button--primary.u-mt3 href="/retailer/home" Back to Homepage
+- if @user.has_role?(:buyer)
+  div.createRaMain.u-grid
+    a.lm--button.lm--button--primary.u-mt3 href="/buyer/home" Back to Homepage

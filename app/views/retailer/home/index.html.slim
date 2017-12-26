@@ -7,7 +7,15 @@
   div id='checkNetwork'
 
 - if current_user.approval_status == '0'
-  h1 = 'Account Status: Pending Admin Approval'
+  div.live_modal
+    p Account Status: Pending Admin Approval.
+  div.createRaMain.u-grid
+    a.lm--button.lm--button--primary.u-mt3 href="/retailer/home" Back to Homepage
+  /h1 = 'Account Status: Pending Admin Approval'
 
 - if current_user.approval_status == '2'
-  h1 = 'Account Status: Rejected by Admin'
+  /h1 = 'Account Status: Rejected by Admin'
+  div.live_modal
+    p Account Status: Rejected by Admin.
+  div.createRaMain.u-grid
+    a.lm--button.lm--button--primary.u-mt3 href="/retailer/home" Back to Homepage
