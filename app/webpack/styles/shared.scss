@@ -333,7 +333,11 @@ input[type="number"]{
   font{font-size: 20px;}
   // &:first-letter{color:red;}
 }
-.save-right{ text-align: right;}
+.save-right{ text-align: right;
+  form{ width: 100%;
+    input[type="submit"]{ margin-left:15px;}
+  }
+}
 select{
   option{
     color:#333;
@@ -341,7 +345,16 @@ select{
 }
 
 dfn.manage_label{
-  font-style: normal; display: block; padding: 0.6875rem 2.0625rem 0.5rem 0;
+  font-style: normal; display: block;
+  width: 100%;
+  padding: 0.6875rem 1rem;
+  font-size: 1rem;
+  font-weight: 300;
+  color: #fff;
+  line-height: 1.25;
+  background: transparent;
+  border: 1px solid #5d7789; min-height: 42px;
+  border-radius: 0.3125rem;
 }
 
 #users_search_list{ 
