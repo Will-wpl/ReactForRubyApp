@@ -191,13 +191,13 @@
             b * 
             attr Password (Minimum 8 characters):
           .lm--formItem-right.lm--formItem-control
-            = f.input :password,required:true,minlength:'8',maxlength:'8',pattern:'^(.|\n){8,20}$',placeholder: 'Password (Minimum 8 characters)'
+            = f.input :password,required:true,pattern:'^(.|\n){8,20}$',placeholder: 'Password (Minimum 8 characters)'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label 
             b * 
             attr Password Confirmation:
           .lm--formItem-right.lm--formItem-control
-            = f.input :password_confirmation,minlength:'8',maxlength:'8',required:true,pattern:'^(.|\n){8,20}$'
+            = f.input :password_confirmation,required:true,pattern:'^(.|\n){8,20}$'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
             font Account Information:

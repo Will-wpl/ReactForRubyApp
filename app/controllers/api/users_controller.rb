@@ -50,7 +50,7 @@ class Api::UsersController < Api::BaseController
     ]
     actions = [{ url: '/admin/users/:id/manage', name: 'View', icon: 'lm--icon-search' }]
     unless params[:consumer_type].nil?
-      headers.delete_if { |header| header[:field_name] == 'name' } if  params[:consumer_type][0] == '2'
+      headers.delete_if { |header| header[:field_name] == 'name' } if params[:consumer_type][0] == '2'
       headers.delete_if { |header| header[:field_name] == 'company_name' } if params[:consumer_type][0] == '3'
     end
     data = users.order(consumer_type: :desc).each do |user|
