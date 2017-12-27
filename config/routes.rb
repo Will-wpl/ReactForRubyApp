@@ -117,6 +117,7 @@ Rails.application.routes.draw do
         get 'log' # auction activity log page
         get 'invitation' # create RA next page
         get 'select' # select users page
+        get 'comsumption' # select users page
       end
       collection do
         get 'empty' # no published auction page
