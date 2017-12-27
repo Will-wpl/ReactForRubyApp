@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171226023226) do
+ActiveRecord::Schema.define(version: 20171227035802) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,16 @@ ActiveRecord::Schema.define(version: 20171226023226) do
     t.datetime "updated_at", null: false
     t.index ["auction_id"], name: "index_arrangements_on_auction_id"
     t.index ["user_id"], name: "index_arrangements_on_user_id"
+  end
+
+  create_table "auction_attachments", force: :cascade do |t|
+    t.string "file_type"
+    t.string "file_name"
+    t.string "file_path"
+    t.bigint "auction_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["auction_id"], name: "index_auction_attachments_on_auction_id"
   end
 
   create_table "auction_events", force: :cascade do |t|
@@ -132,6 +142,37 @@ ActiveRecord::Schema.define(version: 20171226023226) do
     t.decimal "total_htl_peak"
     t.decimal "total_htl_off_peak"
     t.boolean "hold_status", default: false
+    t.string "time_extension"
+    t.string "average_price"
+    t.string "retailer_mode"
+  end
+
+  create_table "comsumption_details", force: :cascade do |t|
+    t.string "account_number"
+    t.string "intake_level"
+    t.decimal "peak"
+    t.decimal "off_peak"
+    t.bigint "comsumption_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["comsumption_id"], name: "index_comsumption_details_on_comsumption_id"
+  end
+
+  create_table "comsumptions", force: :cascade do |t|
+    t.string "action_status"
+    t.string "participation_status"
+    t.decimal "lt_peak"
+    t.decimal "lt_off_peak"
+    t.decimal "hts_peak"
+    t.decimal "hts_off_peak"
+    t.decimal "htl_peak"
+    t.decimal "htl_off_peak"
+    t.bigint "user_id"
+    t.bigint "auction_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["auction_id"], name: "index_comsumptions_on_auction_id"
+    t.index ["user_id"], name: "index_comsumptions_on_user_id"
   end
 
   create_table "roles", id: :serial, force: :cascade do |t|
@@ -196,10 +237,14 @@ ActiveRecord::Schema.define(version: 20171226023226) do
 
   add_foreign_key "arrangements", "auctions"
   add_foreign_key "arrangements", "users"
+  add_foreign_key "auction_attachments", "auctions"
   add_foreign_key "auction_events", "auctions"
   add_foreign_key "auction_events", "users"
   add_foreign_key "auction_histories", "auctions"
   add_foreign_key "auction_histories", "users"
   add_foreign_key "auction_results", "auctions"
+  add_foreign_key "comsumption_details", "comsumptions"
+  add_foreign_key "comsumptions", "auctions"
+  add_foreign_key "comsumptions", "users"
   add_foreign_key "user_extensions", "users"
 end

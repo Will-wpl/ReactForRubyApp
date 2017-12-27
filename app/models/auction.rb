@@ -8,6 +8,8 @@ class Auction < ApplicationRecord
   has_many :users, through: :arrangements
   has_many :auction_histories
   has_many :auction_events
+  has_many :auction_attachments
+  has_many :comsumptions
   has_one :auction_result
   # accepts_nested_attributes
 
