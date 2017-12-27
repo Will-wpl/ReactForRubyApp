@@ -115,6 +115,8 @@ Rails.application.routes.draw do
         get 'result' # auciton result page
         get 'report' # auciton report page
         get 'log' # auction activity log page
+        get 'invitation' # create RA next page
+        get 'select' # select users page
       end
       collection do
         get 'empty' # no published auction page
