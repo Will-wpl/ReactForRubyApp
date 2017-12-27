@@ -1,39 +1,6 @@
 .page-header
   h1= 'Buyer List'
 
-.lm--table-container
-  table.lm--table.lm--table--responsive
-    thead
-      tr
-        th Name
-        th Email
-        th Consumer Type
-        th
-    tbody
-      - @users.each do |user|
-        tr
-          /td[data-label="Name"]= user.company_name
-          - if !user.consumer_type.nil? && user.consumer_type == '0'
-            td[data-label="Name"]= user.company_name
-          - if !user.consumer_type.nil? && user.consumer_type == '1'
-            td[data-label="Name"]= user.name
-
-          td[data-label="Email"]= user.email
-          /td[data-label="Status"]= user.approval_status
-          - if !user.consumer_type.nil? && user.consumer_type == '0'
-            td[data-label="Consumer Type"]= 'Company'
-          - if !user.consumer_type.nil? && user.consumer_type == '1'
-            td[data-label="Consumer Type"]= 'Individual'
-          td.u-text-right.lm--table-actions
-            = link_to edit_admin_user_path(user), class: "lm--button lm--button--text lm--button--small lm--button--warning" do
-              span.lm--icon-search
-              = t("views.actions.view")
-            ' &nbsp;
-
-hr
-
-.u-grid
-  .col-sm-6.u-cell
-    = page_entries_info @users
-  .col-sm-6.u-cell
-    = paginate(@users)
+div id='users_search_list'
+div.createRaMain.u-grid
+    a.lm--button.lm--button--primary.u-mt3 href="/admin/home" Back to Homepage
