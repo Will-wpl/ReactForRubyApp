@@ -148,5 +148,6 @@ Rails.application.routes.draw do
 
   namespace :buyer do
     resources :home, only: :index
+    resources :auctions,only: %i[index new]
   end
 end
