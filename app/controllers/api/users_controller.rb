@@ -2,8 +2,8 @@ class Api::UsersController < Api::BaseController
   # user.approval_status['0', '1', '2'] '0':rejected '1':approved '2':pending
   def retailers
     if params.key?(:page_size) && params.key?(:page_index)
-      search_parmas = reject_params(params, %w[controller action])
-      search_where_array = set_search_params(search_parmas)
+      search_params = reject_params(params, %w[controller action])
+      search_where_array = set_search_params(search_params)
       users = User.retailers.where(search_where_array)
                   .page(params[:page_index]).per(params[:page_size])
       total = users.total_count
@@ -33,8 +33,8 @@ class Api::UsersController < Api::BaseController
   # user.user_detail.consumer_type['0', '1'] '0':company '1':individual
   def buyers
     if params.key?(:page_size) && params.key?(:page_index)
-      search_parmas = reject_params(params, %w[controller action])
-      search_where_array = set_search_params(search_parmas)
+      search_params = reject_params(params, %w[controller action])
+      search_where_array = set_search_params(search_params)
       users = User.buyers.where(search_where_array)
                   .page(params[:page_index]).per(params[:page_size])
       total = users.total_count
