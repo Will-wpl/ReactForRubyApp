@@ -28,7 +28,7 @@ class Api::AuctionsController < Api::BaseController
     params[:auction]['total_volume'] = Auction.set_total_volume(model_params[:total_lt_peak], model_params[:total_lt_off_peak], model_params[:total_hts_peak], model_params[:total_hts_off_peak], model_params[:total_htl_peak], model_params[:total_htl_off_peak])
     if @auction.update(model_params)
       RedisHelper.set_auction(@auction)
-      AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id).update_all(bid_time: @auction.actual_begin_time , actual_bid_time: @auction.actual_begin_time)
+      AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id).update_all(bid_time: @auction.actual_begin_time, actual_bid_time: @auction.actual_begin_time)
       histories = AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id)
       RedisHelper.set_current_sorted_histories(@auction.id, histories)
       AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
@@ -101,6 +101,51 @@ class Api::AuctionsController < Api::BaseController
     render json: auction_result, status: 200
   end
 
+  def unpublished
+    if params.key?(:page_size) && params.key?(:page_index)
+      search_params = reject_params(params, %w[controller action])
+      search_where_array = set_search_params(search_params)
+      auction = Auction.unpublished.where(search_where_array)
+                       .page(params[:page_index]).per(params[:page_size])
+      total = auction.total_count
+    else
+      auction = Auction.unpublished
+      total = auction.count
+    end
+    headers = [
+      { name: 'Name', field_name: 'name' },
+      { name: 'Date/Time', field_name: 'actual_begin_time' }
+    ]
+    actions = [{ url: '/api/admin/auctions/new', name: 'Edit', icon: 'lm--icon-search' },
+               { url: '/api/admin/auctions/:id', name: 'Delete', icon: 'lm--icon-search' }]
+    data = auction.order(actual_begin_time: :asc)
+    bodies = { data: data, total: total }
+    render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
+  end
+
+  def published
+    if params.key?(:page_size) && params.key?(:page_index)
+      search_params = reject_params(params, %w[controller action])
+      search_where_array = set_search_params(search_params)
+      auction = Auction.published.where(search_where_array)
+                       .page(params[:page_index]).per(params[:page_size])
+      total = auction.total_count
+    else
+      auction = Auction.published
+      total = auction.count
+    end
+    headers = [
+      { name: 'ID', field_name: 'published_gid' },
+      { name: 'Name', field_name: 'name' },
+      { name: 'Date/Time', field_name: 'actual_begin_time' },
+      { name: 'Status', field_name: 'null' }
+    ]
+    actions = [{ url: '/api/admin/auctions/new', name: 'Edit', icon: 'lm--icon-search' }]
+    data = auction.order(actual_begin_time: :asc)
+    bodies = { data: data, total: total }
+    render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
+  end
+
   private
 
   def set_auction
@@ -115,5 +160,4 @@ class Api::AuctionsController < Api::BaseController
   def set_link(auctionId, addr)
     "/admin/auctions/#{auctionId}/#{addr}"
   end
-
 end

@@ -33,7 +33,7 @@ Rails.application.routes.draw do
           get 'buyers'
         end
       end
-      resources :auctions, only: %i[obtain link create update publish hold confirm] do
+      resources :auctions, only: %i[obtain link create update publish hold confirm destroy unpublished published] do
         member do
           put 'publish'
           put 'hold'
@@ -41,6 +41,8 @@ Rails.application.routes.draw do
         end
         collection do
           get 'obtain'
+          get 'unpublished'
+          get 'published'
         end
       end
       resource :auction_histories, only: %i[list last] do
@@ -106,7 +108,7 @@ Rails.application.routes.draw do
     resources :arrangements, only: []
     resources :user_extensions, only: []
     resources :auction_extend_times, only: []
-    resources :auctions, only: %i[new empty goto upcoming online dashboard confirm result report log invitation select comsumption] do
+    resources :auctions, only: %i[new empty goto upcoming online dashboard confirm result report log invitation select comsumption unpublished published] do
       member do
         get 'upcoming' # published and pre-auction page
         get 'online' # published and pre-auciton page to retailer online status page
@@ -122,6 +124,8 @@ Rails.application.routes.draw do
       collection do
         get 'empty' # no published auction page
         get 'goto'
+        get 'unpublished'
+        get 'published'
       end
     end
   end

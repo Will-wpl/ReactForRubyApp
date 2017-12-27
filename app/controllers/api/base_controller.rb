@@ -21,6 +21,12 @@ class Api::BaseController < ApplicationController
           where_conditions.push("#{key} = ?")
           where_attributes.push(value[0])
         end
+        if value[1] == 'date_between'
+          date_time = Time.parse(value[0])
+          where_conditions.push("#{key} between ? and ?")
+          where_attributes.push(date_time.beginning_of_day)
+          where_attributes.push(date_time.at_end_of_day)
+        end
       end
     end
     where = []
