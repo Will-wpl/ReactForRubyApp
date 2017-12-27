@@ -37,6 +37,9 @@ export class ListHome extends Component {
             })
         }, error => {
             console.log(error);
+            this.setState({
+                table_data:null
+            })
         })
     }
     render (){

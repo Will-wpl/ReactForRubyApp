@@ -30,12 +30,12 @@ export class SearchType extends Component {
                 case 'select':
                 field = <select ref={type} id={type}>
                          {options.map((item,index)=>{
-                            return <option value={item.value}>{item.option}</option>
+                            return <option key={index} value={item.value}>{item.option}</option>
                           })}
                        </select>
                 break
                 case 'datePacker':
-                field = <DatePicker selected={this.state.start_datetime} id={type}  onKeyDown={this.noPermitInput.bind(this)} ref={type} shouldCloseOnSelect={true} name={type} showTimeSelect dateFormat="DD-MM-YYYY HH:mm" timeFormat="HH:mm" timeIntervals={1}  className="time_ico"  onChange = {this.timeChange.bind(this)} minDate={moment()} title="Time must not be in the past."  />
+                field = <DatePicker selected={this.state.start_datetime} id={type}  onKeyDown={this.noPermitInput.bind(this)} ref={type} shouldCloseOnSelect={true} name={type} showTimeSelect dateFormat="DD-MM-YYYY"  className="time_ico"  onChange = {this.timeChange.bind(this)} minDate={moment()} title="Time must not be in the past."  />
                 break
             }
             return field
@@ -78,7 +78,7 @@ export class SearchType extends Component {
                 <dl className="lm--formItem string optional">
                     {
                         this.search_type_data.map((item,index)=>{
-                            return <dd>
+                            return <dd key={index}>
                                         <span className="lm--formItem-label string optional">{item.title}</span>
                                         <label className="lm--formItem-control">
                                             {item.options ? this.search_type(item.type,item.species,item.options) : this.search_type(item.type,item.species)}

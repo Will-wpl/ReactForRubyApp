@@ -49,7 +49,7 @@ export class SearchList extends Component {
                         <tr>
                             {
                                 this.props.table_data.headers.map((item,index)=>{
-                                    return <th>{item.name}</th>
+                                    return <th key={index}>{item.name}</th>
                                 })
                             }
                         <th/>
@@ -58,10 +58,10 @@ export class SearchList extends Component {
                         <tbody>
                             {
                                 this.props.table_data.bodies.data.map((item,index)=>{
-                                    return <tr>
+                                    return <tr key={index}>
                                                 {
                                                     this.props.table_data.headers.map((it,i)=>{
-                                                        return <td>{item[`${it.field_name}`]}</td>
+                                                        return <td key={i}>{item[`${it.field_name}`]}</td>
                                                     })
                                                 }
                                                 <td><a className={this.props.table_data.actions[0].icon} href={`${this.props.table_data.actions[0].url.split(":id")[0]}${item.id}${this.props.table_data.actions[0].url.split(":id")[1]}`}>{this.props.table_data.actions[0].name}</a></td>
@@ -84,7 +84,7 @@ export class SearchList extends Component {
                 </div>
             )
         }else{
-            return <div></div>
+            return <div>interface bad!!</div>
         }
     }
 }

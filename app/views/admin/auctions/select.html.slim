@@ -1,8 +1,23 @@
 - if params[:type] == '1'
-  h1 Select Retailers
+  .page-header
+  h1.search_list_type
+    = 'Select Retailers'
+  div id='users_search_list'
+  div.createRaMain.u-grid
+    a.lm--button.lm--button--primary.u-mt3 href="/admin/home" Back to Homepage
 - elsif params[:type] == '2'
-  h1 Select Company Buyers
+  .page-header
+  h1.search_list_type
+    = 'Select Company Buyers'
+  div id='users_search_list'
+  div.createRaMain.u-grid
+    a.lm--button.lm--button--primary.u-mt3 href="/admin/home" Back to Homepage
 - elsif params[:type] == '3'
-  h1 Select Individual Buyers
+  .page-header
+  h1.search_list_type
+    = 'Select Individual Buyers'
+  div id='users_search_list'
+  div.createRaMain.u-grid
+    a.lm--button.lm--button--primary.u-mt3 href="/admin/home" Back to Homepage
 - else
   h1 error

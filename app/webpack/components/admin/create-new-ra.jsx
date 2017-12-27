@@ -21,7 +21,7 @@ export class CreateNewRA extends Component {
             btn_type:"",text:"",id:"",
             edit_btn:"lm--button lm--button--primary show",
             edit_change:"lm--button lm--button--primary hide",
-            disabled:"",live_modal:"",live_modal_do:"",holdOrend:""
+            disabled:"",live_modal:"",live_modal_do:"",holdOrend:"",
         }
         this.auction = {};
         this.starttimeChange = this.starttimeChange.bind(this);
@@ -403,7 +403,7 @@ export class CreateNewRA extends Component {
                             <input type="test" ref="duration" onChange={this.doDuration.bind(this)} value={this.state.duration} disabled={this.state.disabled} name="duration" maxLength="50" required aria-required="true" pattern="^[0-9]*[1-9][0-9]*$" title="Duration must be an integer."></input>
                             <abbr ref="ra_duration_error" className="col"></abbr>
                         </label>
-                        </dd>
+                    </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
                         <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Reserve Price ($/kWh):</span>
                         <label className="lm--formItem-right lm--formItem-control">
@@ -411,8 +411,9 @@ export class CreateNewRA extends Component {
                             <abbr ref="ra_duration_error" className="col"></abbr>
                         </label>
                     </dd>
-                    <dd className="lm--formItem lm--formItem--inline string optional"><span className="lm--formItem-left lm--formItem-label string optional">Time Extension :</span><label className="lm--formItem-right lm--formItem-control"><b className="textLeft">Manual</b></label></dd>
-                    <dd className="lm--formItem lm--formItem--inline string optional"><span className="lm--formItem-left lm--formItem-label string optional">Average price :</span><label className="lm--formItem-right lm--formItem-control"><b className="textLeft">Weighted Average</b></label></dd>
+                    <dd className="lm--formItem lm--formItem--inline string optional"><span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Time Extension :</span><label className="lm--formItem-right lm--formItem-control"><select ref="time_extension"><option value="0">Manual</option></select></label></dd>
+                    <dd className="lm--formItem lm--formItem--inline string optional"><span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Average Price :</span><label className="lm--formItem-right lm--formItem-control"><select ref="average_price"><option value="0">Weighted Average</option></select></label></dd>
+                    <dd className="lm--formItem lm--formItem--inline string optional"><span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Retailer Mode :</span><label className="lm--formItem-right lm--formItem-control"><select ref="retailer_mode"><option value="0">Model:Top2</option><option value="1">Model:Top1</option></select></label></dd>
                 </dl>
                 {btn_html}
                 </form>
@@ -420,7 +421,7 @@ export class CreateNewRA extends Component {
             </div>
             </div>
             <div className="createRaMain u-grid">
-            <a className="lm--button lm--button--primary u-mt3" href="/admin/home" >Back to Homepage</a>
+                <a className="lm--button lm--button--primary u-mt3" href="/admin/home" >Back to Homepage</a>
             </div>
             </div>
         )
