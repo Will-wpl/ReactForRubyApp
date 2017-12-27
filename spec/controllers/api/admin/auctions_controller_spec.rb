@@ -3,6 +3,9 @@ require 'rails_helper'
 RSpec.describe Api::Admin::AuctionsController, type: :controller do
   # let! (:auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
   let! (:auction) { create(:auction, :for_next_month, :upcoming) }
+
+  let!(:published_upcoming_auction) { create(:auction, :for_next_month, :upcoming, :published) }
+  let!(:published_living_auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
   base_url = 'api/admin/auctions'
 
   context 'admin user' do
@@ -156,6 +159,76 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
           hash_body = JSON.parse(response.body)
           expect(hash_body['name']).to eq('Hello world')
           expect(response).to have_http_status(:ok)
+        end
+      end
+    end
+
+
+    describe 'GET Unpublished auction list' do
+
+      context 'Pager unpublished an auction' do
+        def do_request
+          get :unpublished, params: { page_size: '10', page_index: '1' }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash = JSON.parse(response.body)
+          expect(hash['headers'].size).to eq(2)
+          expect(hash['bodies']['total']).to eq(1)
+          expect(hash['bodies']['data'].size).to eq(1)
+          expect(hash['bodies']['data'][0]['name']).to eq(auction.name)
+        end
+      end
+
+      context 'Params pagers unpublished auction' do
+        def do_request
+          get :unpublished, params: { name: [auction.name, 'like'], actual_begin_time: [Time.current.strftime("%Y-%m-%d"), 'date_between'], page_size: '10', page_index: '1' }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash = JSON.parse(response.body)
+          expect(hash['headers'].size).to eq(2)
+          expect(hash['bodies']['total']).to eq(1)
+          expect(hash['bodies']['data'].size).to eq(1)
+          expect(hash['bodies']['data'][0]['name']).to eq(auction.name)
+        end
+      end
+    end
+
+    describe 'GET published auction list' do
+
+      context 'Pager published auction' do
+        def do_request
+          get :published, params: { page_size: '10', page_index: '1' }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash = JSON.parse(response.body)
+          expect(hash['headers'].size).to eq(4)
+          expect(hash['bodies']['total']).to eq(2)
+          expect(hash['bodies']['data'].size).to eq(2)
+          # hash['bodies']['data'].each do |auction|
+          #   if auction.publish_status == '0'
+          # end
+          # expect(hash['bodies']['data']).to eq(auction.name)
+        end
+      end
+
+      context 'Params pagers published auction' do
+        def do_request
+          get :published, params: { name: [auction.name, 'like'], actual_begin_time: [Time.current.strftime("%Y-%m-%d"), 'date_between'], page_size: '10', page_index: '1' }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash = JSON.parse(response.body)
+          expect(hash['headers'].size).to eq(4)
+          expect(hash['bodies']['total']).to eq(2)
+          expect(hash['bodies']['data'].size).to eq(2)
+          expect(hash['bodies']['data'][0]['name']).to eq(auction.name)
         end
       end
     end
