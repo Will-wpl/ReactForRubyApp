@@ -164,7 +164,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
     end
 
 
-    describe 'GET Unpublished auction list' do
+    describe 'GET unpublished auction list' do
 
       context 'Pager unpublished an auction' do
         def do_request
