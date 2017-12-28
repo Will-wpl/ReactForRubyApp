@@ -219,6 +219,7 @@
             attr Housing Type:(HDB/Private High-rise/Landed):
           .lm--formItem-right.lm--formItem-control
             = f.select :account_housing_type,required:true
+              option value=''
               option value='0' HDB
               option value='1' Private High-rise
               option value='2' Landed
