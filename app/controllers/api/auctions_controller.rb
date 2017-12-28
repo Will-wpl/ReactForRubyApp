@@ -3,13 +3,13 @@ class Api::AuctionsController < Api::BaseController
 
   # GET auction info by ajax
   def obtain
-    if Auction.count == 0
+    if params[:id].nil?
       render json: nil
     else
-      # @auction = AuctionHelper.get_auction(1)
-      @auction = Auction.first
-      render json: @auction, status: 200
+      auction = Auction.find(params[:id])
+      render json: auction, status: 200
     end
+
   end
 
   # POST create auction by ajax
