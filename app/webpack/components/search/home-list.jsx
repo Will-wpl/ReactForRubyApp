@@ -24,7 +24,11 @@ export class ListHome extends Component {
                     total_size = 1;
                 }
             }else{
-                total_size = 1;
+                if(res.bodies.total/data.page_size > 1){
+                    total_size = res.bodies.total/data.page_size;
+                }else{
+                    total_size = 1;
+                }
             }
             for(let i=0; i<total_size; i++){
                 total.push((i+1));

@@ -68,13 +68,13 @@
             b * 
             attr Mobile Number:
           .lm--formItem-right.lm--formItem-control
-            = f.input :account_mobile_number,required:true,pattern:'^(\d{8})*$',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
+            = f.input :account_mobile_number,required:true,maxlength:'8',pattern:'^(\d{8})*$',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label 
             b * 
             attr Office Number:
           .lm--formItem-right.lm--formItem-control
-            = f.input :account_office_number,required:true,pattern:'^(\d{8})$',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
+            = f.input :account_office_number,required:true,maxlength:'8',pattern:'^(\d{8})$',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
           .lm--formItem-right.lm--formItem-control
@@ -219,6 +219,7 @@
             attr Housing Type:(HDB/Private High-rise/Landed):
           .lm--formItem-right.lm--formItem-control
             = f.select :account_housing_type,required:true
+              option value=''
               option value='0' HDB
               option value='1' Private High-rise
               option value='2' Landed
