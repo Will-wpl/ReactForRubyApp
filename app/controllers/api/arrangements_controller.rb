@@ -14,7 +14,7 @@ class Api::ArrangementsController < Api::BaseController
   end
 
   def obtain
-    @arrangement = Arrangement.where('auction_id = ? and user_id = ?', params[:auction_id], current_user.id).first
+    @arrangement = Arrangement.auction_of_current_user(params[:auction_id], current_user.id).first
     render json: @arrangement, status: 200
   end
 

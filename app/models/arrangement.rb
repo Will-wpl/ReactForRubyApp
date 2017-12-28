@@ -11,7 +11,7 @@ class Arrangement < ApplicationRecord
   # Validations
 
   # Scopes
-
+  scope :auction_of_current_user, ->(auction_id, user_id) { where('auction_id = ? and user_id = ?', auction_id, user_id) }
   # Callbacks
 
   # Delegates
