@@ -36,6 +36,11 @@ class Api::UsersController < Api::BaseController
   def buyers
     if params.key?(:page_size) && params.key?(:page_index)
       search_params = reject_params(params, %w[controller action])
+      if params[:consumer_type][0] == '2' && !params[:name].nil?
+        company_name = { company_name: params[:name] }
+        search_params = reject_params(search_params, %w[name])
+        search_params = search_params.merge(company_name)
+      end
       search_where_array = set_search_params(search_params)
       users = User.buyers.where(search_where_array)
                   .page(params[:page_index]).per(params[:page_size])
