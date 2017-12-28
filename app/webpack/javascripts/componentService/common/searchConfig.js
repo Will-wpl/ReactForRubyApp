@@ -19,7 +19,7 @@ export const searchTypeData = {
     "Unpublished Auction List":{//connect back end OK
         list_url:"/api/admin/auctions/unpublished",
         list_data:[
-            {title:"Name:",type:"name",species:"input",operator:'like',table:'users'},
+            {title:"Name:",type:"name",species:"input",operator:'like'},
             {title:"Date:",type:"start_datetime",species:"datePacker",operator:'date_between'}
         ]
     },
@@ -27,39 +27,39 @@ export const searchTypeData = {
         list_url:"/api/admin/auctions/published",
         list_data:[
             {title:"ID:",type:"id",species:"input",operator:'like'},
-            {title:"Name:",type:"name",species:"input",operator:'like',table:'users'},
+            {title:"Name:",type:"name",species:"input",operator:'like'},
             {title:"Date:",type:"start_datetime",species:"datePacker",operator:'date_between'}
         ]
     },
     "Status of Participation":{
         list_url:"/api/admin/users/buies",
         list_data:[
-            {title:"Name:",type:"name",species:"input"},
-            {title:"Date:",type:"start_datetime",species:"datePacker"},
-            {title:"Auctions Status:",type:"publish_status",species:"select",options:[{option:"Unpublished",value:"0"},{option:"Published",value:"1"}]},
-            {title:"Participation Status:",type:"participation_status",species:"select",options:[{option:"Rejected",value:"0"},{option:"Confirmed",value:"1"},{option:"Pending",value:"2"}]}
+            {title:"Name:",type:"name",species:"input",operator:'like'},
+            {title:"Date:",type:"start_datetime",species:"datePacker",operator:'date_between'},
+            {title:"Auctions Status:",type:"publish_status",species:"select",operator:'=',options:[{option:"Unpublished",value:"0"},{option:"Published",value:"1"}]},
+            {title:"Participation Status:",type:"participation_status",species:"select",operator:'=',options:[{option:"Rejected",value:"0"},{option:"Confirmed",value:"1"},{option:"Pending",value:"2"}]}
         ]
     },
     "Select Retailers":{
         list_url:"/api/admin/users/buies",
         list_data:[
-            {title:"Company Name:",type:"company_name",species:"input"},
-            {title:"Status:",type:"approval_status",species:"select",options:[{option:"Rejected",value:"0"},{option:"Approved",value:"1"},{option:"Pending",value:"2"}]}
+            {title:"Company Name:",type:"company_name",species:"input",operator:'like'},
+            {title:"Status:",type:"approval_status",species:"select",operator:'=',options:[{option:"Rejected",value:"0"},{option:"Approved",value:"1"},{option:"Pending",value:"2"}]}
         ]
     },
     "Select Company Buyers":{
         list_url:"/api/admin/users/buies",
         list_data:[
-            {title:"Company Name:",type:"company_name",species:"input"},
-            {title:"Status:",type:"approval_status",species:"select",options:[{option:"Rejected",value:"0"},{option:"Approved",value:"1"},{option:"Pending",value:"2"}]}
+            {title:"Company Name:",type:"company_name",species:"input",operator:'like'},
+            {title:"Status:",type:"approval_status",species:"select",operator:'=',options:[{option:"Rejected",value:"0"},{option:"Approved",value:"1"},{option:"Pending",value:"2"}]}
         ]
     },
     "Select Individual Buyers":{
         list_url:"/api/admin/users/buies",
         list_data:[
-            {title:"Name:",type:"name",species:"input"},
-            {title:"Housing Type:",type:"housing_type",species:"select",options:[{option:"HDB",value:"0"},{option:"Private High-rise",value:"1"},{option:"landed",value:"2"}]},
-            {title:"Status:",type:"approval_status",species:"select",options:[{option:"Rejected",value:"0"},{option:"Approved",value:"1"},{option:"Pending",value:"2"}]}
+            {title:"Name:",type:"name",species:"input",operator:'like'},
+            {title:"Housing Type:",type:"housing_type",species:"select",operator:'=',options:[{option:"HDB",value:"0"},{option:"Private High-rise",value:"1"},{option:"landed",value:"2"}]},
+            {title:"Status:",type:"approval_status",species:"select",operator:'=',options:[{option:"Rejected",value:"0"},{option:"Approved",value:"1"},{option:"Pending",value:"2"}]}
         ]
     }
 }
