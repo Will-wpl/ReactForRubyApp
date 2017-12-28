@@ -5,7 +5,7 @@ export const searchTypeData = {
         list_data:[
                     {title:"Company Name:",type:"company_name",species:"input"},
                     {title:"License Number:",type:"company_license_number",species:"input"},
-                    {title:"Status:",type:"approval_status",species:"select",options:[{option:"Rejected",value:"0"},{option:"Approved",value:"1"},{option:"Pending",value:"2"}]}
+                    {title:"Status:",type:"approval_status",species:"select",options:[{option:"All",value:""},{option:"Rejected",value:"0"},{option:"Approved",value:"1"},{option:"Pending",value:"2"}]}
                 ]
     },
     "Buyer List":{//connect back end OK
