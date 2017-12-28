@@ -16,15 +16,15 @@ export const searchTypeData = {
             {title:"Consumer Type:",type:"consumer_type",species:"select",options:[{option:"Company",value:"2"},{option:"Individual",value:"3"}]}
         ]
     },
-    "Unpublished Auction List":{
-        list_url:"/api/admin/unpublished",
+    "Unpublished Auction List":{//connect back end OK
+        list_url:"/api/admin/auctions/unpublished",
         list_data:[
             {title:"Name:",type:"name",species:"input"},
             {title:"Date:",type:"start_datetime",species:"datePacker"}
         ]
     },
-    "Published Auction List":{
-        list_url:"/api/admin/users/buies",
+    "Published Auction List":{//connect back end OK
+        list_url:"/api/admin/auctions/published",
         list_data:[
             {title:"ID:",type:"id",species:"input"},
             {title:"Name:",type:"name",species:"input"},
