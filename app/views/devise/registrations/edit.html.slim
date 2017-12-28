@@ -1,4 +1,6 @@
 - if @user.has_role?(:admin)
+  h1.title_top.u-mt2
+   = 'Manage Account'
   .u-grid.u-mb3
     .col-sm-12.col-md-8.u-mha
       = simple_form_for(resource, as: resource_name, url: registration_path(resource_name),
@@ -35,6 +37,8 @@
   div.createRaMain.u-grid
     a.lm--button.lm--button--primary.u-mt3 href="/admin/home" Back to Homepage
 - if @user.has_role?(:retailer)
+  h1.title_top.u-mt2
+   = 'Manage Account'
   .u-grid.u-mb3
     .col-sm-12.col-md-8.u-mha
       = simple_form_for(resource, as: resource_name, url: registration_path(resource_name),
@@ -101,6 +105,8 @@
   div.createRaMain.u-grid
     a.lm--button.lm--button--primary.u-mt3 href="/retailer/home" Back to Homepage
 - if @user.has_role?(:buyer) and  @user.consumer_type == '2'
+  h1.title_top.u-mt2
+   = 'Manage Account'
   .u-grid.u-mb3.buyer_registration
     .col-sm-12.col-md-8.u-mha
       = simple_form_for(resource, as: resource_name, url: registration_path(resource_name),
@@ -162,6 +168,8 @@
   div.createRaMain.u-grid
     a.lm--button.lm--button--primary.u-mt3 href="/buyer/home" Back to Homepage
 - if @user.has_role?(:buyer) and @user.consumer_type == '3'
+  h1.title_top.u-mt2
+   = 'Manage Account'
   .u-grid.u-mb3.buyer_registration
     .col-sm-12.col-md-8.u-mha
       = simple_form_for(resource, as: resource_name, url: registration_path(resource_name),
