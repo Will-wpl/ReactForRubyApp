@@ -2,15 +2,18 @@ require 'rails_helper'
 
 RSpec.describe Api::Retailer::AuctionsController, type: :controller do
 
-  let! (:auction) { create(:auction, :for_next_month, :upcoming) }
+  let!(:admin_user){ create(:user, :with_admin) }
+  let!(:retailer_user){ create(:user, :with_retailer) }
+  let!(:auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
+  let!(:arrangement) { create(:arrangement, user: retailer_user, auction: auction) }
   base_url = 'api/retailer/auctions'
   context 'retailer user' do
-    before { sign_in create(:user, :with_retailer) }
+    before { sign_in retailer_user }
 
     describe 'GET obtain' do
       context 'has an part of auction' do
         def do_request
-          get :obtain
+          get :obtain, params: { id: auction.id }
         end
         before { do_request }
         it 'success' do

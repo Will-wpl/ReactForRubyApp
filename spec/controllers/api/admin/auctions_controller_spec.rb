@@ -12,9 +12,21 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
     before { sign_in create(:user, :with_admin) }
 
     describe 'GET obtain' do
-      context 'has an auction' do
+      context 'Has an empty auction' do
         def do_request
           get :obtain
+        end
+        before { do_request }
+        it 'success' do
+          hash_body = JSON.parse(response.body)
+          expect(hash_body).to be_nil
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
+      context 'Has an auction' do
+        def do_request
+          get :obtain, params: { id: auction.id }
         end
         before { do_request }
         it 'success' do
