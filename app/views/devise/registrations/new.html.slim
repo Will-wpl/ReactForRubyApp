@@ -68,13 +68,13 @@
             b * 
             attr Mobile Number:
           .lm--formItem-right.lm--formItem-control
-            = f.input :account_mobile_number,required:true,pattern:'^(\d{8})*$',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
+            = f.input :account_mobile_number,required:true,maxlength:'8',pattern:'^(\d{8})*$',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label 
             b * 
             attr Office Number:
           .lm--formItem-right.lm--formItem-control
-            = f.input :account_office_number,required:true,pattern:'^(\d{8})$',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
+            = f.input :account_office_number,required:true,maxlength:'8',pattern:'^(\d{8})$',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
           .lm--formItem-right.lm--formItem-control

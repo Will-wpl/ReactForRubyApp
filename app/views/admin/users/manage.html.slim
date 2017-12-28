@@ -49,7 +49,7 @@
             - if @user.approval_status == '1'
               = 'Approved'
       .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label Email
+        .lm--formItem-left.lm--formItem-label Email:
         .lm--formItem-right.lm--formItem-control
           dfn.manage_label
             = @user.email
@@ -57,22 +57,22 @@
         .lm--formItem-left.lm--formItem-label
           font Company Information:
       .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label Company Name
+        .lm--formItem-left.lm--formItem-label Company Name:
         .lm--formItem-right.lm--formItem-control
           dfn.manage_label
             = @user.company_name
       .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label Company Address
+        .lm--formItem-left.lm--formItem-label Company Address:
         .lm--formItem-right.lm--formItem-control
           dfn.manage_label
             = @user.company_address
       .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label Unique Entity Number (UEN)
+        .lm--formItem-left.lm--formItem-label Unique Entity Number (UEN):
         .lm--formItem-right.lm--formItem-control
           dfn.manage_label
             = @user.company_unique_entity_number
       .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label Retailer Licence Number
+        .lm--formItem-left.lm--formItem-label Retailer Licence Number:
         .lm--formItem-right.lm--formItem-control
           dfn.manage_label
             = @user.company_license_number
@@ -80,17 +80,17 @@
         .lm--formItem-left.lm--formItem-label
           font Contact Information:
       .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label Contact Name
+        .lm--formItem-left.lm--formItem-label Contact Name:
         .lm--formItem-right.lm--formItem-control
           dfn.manage_label
             = @user.name
       .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label Mobile Number
+        .lm--formItem-left.lm--formItem-label Mobile Number:
         .lm--formItem-right.lm--formItem-control
           dfn.manage_label
             = @user.account_mobile_number
       .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label Office Number
+        .lm--formItem-left.lm--formItem-label Office Number:
         .lm--formItem-right.lm--formItem-control
           dfn.manage_label
             = @user.account_office_number
@@ -98,7 +98,7 @@
         = simple_form_for(@user, url: approval_admin_users_path(@user),
                 wrapper: :vertical_form, defaults: { label: false }) do |f|
           .lm--formItem.lm--formItem--inline.string.optional
-            .lm--formItem-left.lm--formItem-label Comment
+            .lm--formItem-left.lm--formItem-label Comment:
             .lm--formItem-right.lm--formItem-control
               = f.input :comment
           .lm--formItem.lm--formItem--inline.string.optional
@@ -112,7 +112,7 @@
   .u-grid.u-mt3.buyer_registration
     .col-sm-12.col-md-8.u-mha
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label Email
+          .lm--formItem-left.lm--formItem-label Email:
           .lm--formItem-right.lm--formItem-control
             dfn.manage_label
               = @user.email
@@ -120,17 +120,17 @@
           .lm--formItem-left.lm--formItem-label
             font Company Information:
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label Company Name
+          .lm--formItem-left.lm--formItem-label Company Name:
           .lm--formItem-right.lm--formItem-control
             dfn.manage_label
               = @user.company_name
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label Company Address
+          .lm--formItem-left.lm--formItem-label Company Address:
           .lm--formItem-right.lm--formItem-control
             dfn.manage_label
               = @user.company_address
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label Unique Entity Number (UEN)
+          .lm--formItem-left.lm--formItem-label Unique Entity Number (UEN):
           .lm--formItem-right.lm--formItem-control
             dfn.manage_label
               = @user.company_unique_entity_number
@@ -138,17 +138,17 @@
           .lm--formItem-left.lm--formItem-label
             font Contact Information:
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label Contact Name
+          .lm--formItem-left.lm--formItem-label Contact Name:
           .lm--formItem-right.lm--formItem-control
             dfn.manage_label
               = @user.name
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label Mobile Number
+          .lm--formItem-left.lm--formItem-label Mobile Number:
           .lm--formItem-right.lm--formItem-control
             dfn.manage_label
               = @user.account_mobile_number
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label Office Number
+          .lm--formItem-left.lm--formItem-label Office Number:
           .lm--formItem-right.lm--formItem-control
             dfn.manage_label
               = @user.account_office_number
@@ -167,7 +167,7 @@
       = simple_form_for(@user, url: approval_admin_users_path(@user),
               wrapper: :vertical_form, defaults: { label: false }) do |f|
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label Email
+          .lm--formItem-left.lm--formItem-label Email:
           .lm--formItem-right.lm--formItem-control
             dfn.manage_label
               = @user.email
@@ -175,37 +175,37 @@
           .lm--formItem-left.lm--formItem-label
             font Account Information:
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label Name
+          .lm--formItem-left.lm--formItem-label Name:
           .lm--formItem-right.lm--formItem-control
             dfn.manage_label
               = @user.name
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label NRIC/FIN
+          .lm--formItem-left.lm--formItem-label NRIC/FIN:
           .lm--formItem-right.lm--formItem-control
             dfn.manage_label
               = @user.account_fin
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label Housing Type:(HDB/Private High-rise/Landed)
+          .lm--formItem-left.lm--formItem-label Housing Type:(HDB/Private High-rise/Landed):
           .lm--formItem-right.lm--formItem-control
             dfn.manage_label
               = @user.account_housing_type
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label Home Address
+          .lm--formItem-left.lm--formItem-label Home Address:
           .lm--formItem-right.lm--formItem-control
             dfn.manage_label
               = @user.account_home_address
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label Mobile Number
+          .lm--formItem-left.lm--formItem-label Mobile Number:
           .lm--formItem-right.lm--formItem-control
             dfn.manage_label
               = @user.account_mobile_number
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label Home Number
+          .lm--formItem-left.lm--formItem-label Home Number:
           .lm--formItem-right.lm--formItem-control
             dfn.manage_label
               = @user.account_home_number
         .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label Office Number
+          .lm--formItem-left.lm--formItem-label Office Number:
           .lm--formItem-right.lm--formItem-control
             dfn.manage_label
               = @user.account_office_number
