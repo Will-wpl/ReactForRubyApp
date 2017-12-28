@@ -62,7 +62,6 @@ export class SearchType extends Component {
         })
         needData = needData.substr(0,needData.length-1);
         needData = '{'+needData+',"page_size":10,"page_index":1}';
-        //console.log(JSON.parse(needData));
         if(this.props.doSearch){
             this.props.doSearch(JSON.parse(needData),this.list_url)
         }
