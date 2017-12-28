@@ -55,7 +55,9 @@ class Api::UsersController < Api::BaseController
       headers.delete_if { |header| header[:field_name] == 'name' } if params[:consumer_type][0] == '2'
       headers.delete_if { |header| header[:field_name] == 'company_name' } if params[:consumer_type][0] == '3'
     end
-    data = if params[:consumer_type][0] == '2'
+    data = if params[:consumer_type].nil?
+             users
+           elsif params[:consumer_type][0] == '2'
              users.order(company_name: :asc)
            elsif params[:consumer_type][0] == '3'
              users.order(name: :asc)
