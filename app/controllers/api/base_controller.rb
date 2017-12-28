@@ -14,7 +14,7 @@ class Api::BaseController < ApplicationController
     where_params.each do |key,value|
       unless value[0] == ''
         if value[1] == 'like'
-          where_conditions.push("#{key} like ?")
+          where_conditions.push("#{key} ilike ?")
           where_attributes.push("%#{value[0]}%")
         end
         if value[1] == '='
