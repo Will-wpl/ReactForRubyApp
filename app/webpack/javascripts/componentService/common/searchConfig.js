@@ -17,7 +17,7 @@ export const searchTypeData = {
         ]
     },
     "Unpublished Auction List":{
-        list_url:"/api/admin/users/buies",
+        list_url:"/api/admin/unpublished",
         list_data:[
             {title:"Name:",type:"name",species:"input"},
             {title:"Date:",type:"start_datetime",species:"datePacker"}

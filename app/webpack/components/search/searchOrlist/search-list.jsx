@@ -64,7 +64,13 @@ export class SearchList extends Component {
                                                         return <td key={i}>{item[`${it.field_name}`]}</td>
                                                     })
                                                 }
-                                                <td><a className={this.props.table_data.actions[0].icon} href={`${this.props.table_data.actions[0].url.split(":id")[0]}${item.id}${this.props.table_data.actions[0].url.split(":id")[1]}`}>{this.props.table_data.actions[0].name}</a></td>
+                                                <td>
+                                                    {
+                                                        this.props.table_data.actions.map((ik,k)=>{
+                                                            return <a key={k} className={ik.icon} href={`${ik.url.split(":id")[0]}${item.id}${ik.url.split(":id")[1]}`}>{ik.name}</a>
+                                                        })
+                                                    }
+                                                </td>
                                             </tr>
                                 })
                             }
@@ -73,8 +79,8 @@ export class SearchList extends Component {
                     <div className="table_page">
                         <span onClick={this.gotopage.bind(this,'prev')}>{"<"}</span>
                         {
-                            this.props.page_total.map((item)=>{
-                                return <span className={this.props.list_data.page_index === item ? 'table_page_selected' : ''} onClick={this.dosearch.bind(this,item)}>{item}</span>
+                            this.props.page_total.map((item,index)=>{
+                                return <span key={index} className={this.props.list_data.page_index === item ? 'table_page_selected' : ''} onClick={this.dosearch.bind(this,item)}>{item}</span>
                             })
                         }
                         {/* <span className="table_page_selected">1</span>
