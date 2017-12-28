@@ -57,7 +57,7 @@ class Devise::RegistrationsController < DeviseController
     if @user.update(update_user_params)
       redirect_to edit_user_registration_path, notice: "#{User.model_name.human} was successfully updated."
     else
-      render :edit_account
+      render :edit
     end
   end
 
