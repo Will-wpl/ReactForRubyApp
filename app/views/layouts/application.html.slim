@@ -36,7 +36,9 @@ html(lang="en")
             li.lm--header-item
               .lm--dropdown[data={dropdown:''}]
                 button.lm--header-link[data={'dropdown-trigger':''}]
-                  - if current_user.consumer_type == '2'
+                  - if current_user.has_role?('admin')
+                    = current_user.name
+                  - elsif current_user.consumer_type == '2'
                     = current_user.company_name
                   - elsif current_user.consumer_type == '3'
                     = current_user.name
