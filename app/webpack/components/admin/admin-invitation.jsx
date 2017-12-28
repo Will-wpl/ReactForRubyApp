@@ -72,6 +72,7 @@ render() {
                         Retailers:
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
+                            <abbr>You have selected 5 retailers</abbr>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -89,6 +90,8 @@ render() {
                         Buyers:
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
+                            <abbr>You have selected 0 company buyers and 6 individual buyers.</abbr>
+                            <abbr>You have selected send to 6 buyers</abbr>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -106,22 +109,6 @@ render() {
                         Upload files:
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                        </div>
-                    </div>
-                    <div className="lm--formItem lm--formItem--inline string">
-                        <label className="lm--formItem-left lm--formItem-label string required">
-                        Tender Documents Upload :
-                        </label>
-                        <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                        {this.addinputfile("tender_documents_upload")}
-                        </div>
-                    </div>
-                    <div className="lm--formItem lm--formItem--inline string">
-                        <label className="lm--formItem-left lm--formItem-label string required">
-                        Birefing Pack Upload :
-                        </label>
-                        <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                        {this.addinputfile("birefing_pack_upload")}
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -157,6 +144,22 @@ render() {
                                 </div>
                                 <div className="col-sm-12 col-md-6 u-cell"><a href="/admin/auctions/1/comsumption?type=2" className="lm--button lm--button--primary col-sm-12">Company Consumption Details</a></div>
                                 <div className="col-sm-12 col-md-6 u-cell"><a href="/admin/auctions/1/comsumption?type=3" className="lm--button lm--button--primary col-sm-12">Individual Consumption Details</a></div>                
+                        </div>
+                    </div>
+                    <div className="lm--formItem lm--formItem--inline string">
+                        <label className="lm--formItem-left lm--formItem-label string required">
+                        Tender Documents Upload :
+                        </label>
+                        <div className="lm--formItem-right lm--formItem-control u-grid mg0">
+                        {this.addinputfile("tender_documents_upload")}
+                        </div>
+                    </div>
+                    <div className="lm--formItem lm--formItem--inline string">
+                        <label className="lm--formItem-left lm--formItem-label string required">
+                        Birefing Pack Upload :
+                        </label>
+                        <div className="lm--formItem-right lm--formItem-control u-grid mg0">
+                        {this.addinputfile("birefing_pack_upload")}
                         </div>
                     </div>
                     <div className="retailer_btn">
