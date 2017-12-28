@@ -17,7 +17,7 @@ class Api::UsersController < Api::BaseController
       { name: 'Status', field_name: 'approval_status' }
     ]
     actions = [{ url: '/admin/users/:id/manage', name: 'Manage', icon: 'lm--icon-search' }]
-    data = users.order(approval_status: :asc, company_name: :asc).each do |user|
+    data = users.order(approval_status: :desc, company_name: :asc).each do |user|
       user.approval_status = if user.approval_status == '0'
                                'Rejected'
                              elsif user.approval_status == '1'
