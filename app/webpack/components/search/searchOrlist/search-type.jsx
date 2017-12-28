@@ -52,16 +52,11 @@ export class SearchType extends Component {
         let needData = ''
         this.search_type_data.map((item,index)=>{
             //needData += '"'+item.type+'":"'+$('#'+item.type).val()+'",';
-            if(item.species === 'input'){
-                needData += '"'+item.type+'":["'+$('#'+item.type).val()+'","like"],';
-            }else if(item.species === 'select'){
-                needData += '"'+item.type+'":["'+$('#'+item.type).val()+'","="],';
-            }else{
-                needData += '"'+item.type+'":["'+$('#'+item.type).val()+'","<="],';
-            }
+            needData += '"'+item.type+'":["'+$('#'+item.type).val()+'","'+item.like+'","'+item.table+'"],';
         })
         needData = needData.substr(0,needData.length-1);
         needData = '{'+needData+',"page_size":10,"page_index":1}';
+        console.log(JSON.parse(needData))
         if(this.props.doSearch){
             this.props.doSearch(JSON.parse(needData),this.list_url)
         }
