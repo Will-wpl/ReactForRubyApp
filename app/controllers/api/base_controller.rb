@@ -13,17 +13,18 @@ class Api::BaseController < ApplicationController
     where_attributes = []
     where_params.each do |key,value|
       unless value[0] == ''
+        table_name = value[2].nil? ? nil : value[2] + '.'
         if value[1] == 'like'
-          where_conditions.push("#{key} ilike ?")
+          where_conditions.push("#{table_name}#{key} ilike ?")
           where_attributes.push("%#{value[0]}%")
         end
         if value[1] == '='
-          where_conditions.push("#{key} = ?")
+          where_conditions.push("#{table_name}#{key} = ?")
           where_attributes.push(value[0])
         end
         if value[1] == 'date_between'
           date_time = Time.parse(value[0])
-          where_conditions.push("#{key} between ? and ?")
+          where_conditions.push("#{table_name}#{key} between ? and ?")
           where_attributes.push(date_time.beginning_of_day)
           where_attributes.push(date_time.at_end_of_day)
         end
