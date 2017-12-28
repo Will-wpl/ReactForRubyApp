@@ -9,16 +9,16 @@
       .lm--formItem.lm--formItem--inline.string.optional
         .lm--formItem-left.lm--formItem-label New Password
         .lm--formItem-right.lm--formItem-control
-          = f.input :password, autocomplete: 'off' ,maxlength:'8'
+          = f.input :password,required:true,pattern:'^(.|\n){8,20}$'
       .lm--formItem.lm--formItem--inline.string.optional
         .lm--formItem-left.lm--formItem-label Confirm New Password
         .lm--formItem-right.lm--formItem-control
-          = f.input :password_confirmation,maxlength:'8'
+          = f.input :password_confirmation,required:true,pattern:'^(.|\n){8,20}$'
       hr
       .lm--formItem.lm--formItem--inline.string.optional
         .lm--formItem-left.lm--formItem-label Current Password
         .lm--formItem-right.lm--formItem-control
-          = f.input :current_password, wrapper: :vertical_form,maxlength:'8'
+          = f.input :current_password,required:true,pattern:'^(.|\n){8,20}$'
       .lm--formItem.lm--formItem--inline.string.optional
         .lm--formItem-left.lm--formItem-label
         .lm--formItem-right.lm--formItem-control.save-right
