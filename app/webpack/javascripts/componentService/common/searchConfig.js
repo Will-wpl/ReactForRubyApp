@@ -19,15 +19,15 @@ export const searchTypeData = {
     "Unpublished Auction List":{//connect back end OK
         list_url:"/api/admin/auctions/unpublished",
         list_data:[
-            {title:"Name:",type:"name",species:"input"},
+            {title:"Name:",type:"name",species:"input",operator:'like',table:'users'},
             {title:"Date:",type:"start_datetime",species:"datePacker",operator:'date_between'}
         ]
     },
     "Published Auction List":{//connect back end OK
         list_url:"/api/admin/auctions/published",
         list_data:[
-            {title:"ID:",type:"id",species:"input"},
-            {title:"Name:",type:"name",species:"input"},
+            {title:"ID:",type:"id",species:"input",operator:'like'},
+            {title:"Name:",type:"name",species:"input",operator:'like',table:'users'},
             {title:"Date:",type:"start_datetime",species:"datePacker",operator:'date_between'}
         ]
     },

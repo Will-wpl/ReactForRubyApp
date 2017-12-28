@@ -52,7 +52,11 @@ export class SearchType extends Component {
         let needData = ''
         this.search_type_data.map((item,index)=>{
             //needData += '"'+item.type+'":"'+$('#'+item.type).val()+'",';
-            needData += '"'+item.type+'":["'+$('#'+item.type).val()+'","'+item.like+'","'+item.table+'"],';
+            if(item.table){
+                needData += '"'+item.type+'":["'+$('#'+item.type).val()+'","'+item.operator+'","'+item.table+'"],';
+            }else{
+                needData += '"'+item.type+'":["'+$('#'+item.type).val()+'","'+item.operator+'"],';
+            }
         })
         needData = needData.substr(0,needData.length-1);
         needData = '{'+needData+',"page_size":10,"page_index":1}';
