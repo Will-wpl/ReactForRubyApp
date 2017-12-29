@@ -56,7 +56,7 @@ export class AdminManagePublishedRa extends Component {
 function run() {
     const domNode = document.getElementById('AdminManagePublishedRa');
     if(domNode !== null){
-        getAuction('admin').then(auction => {
+        getAuction('admin',localStorage.auction_id).then(auction => {
             renderRoot(auction);
         }, error => {
             renderRoot();

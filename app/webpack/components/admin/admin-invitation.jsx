@@ -81,7 +81,7 @@ render() {
                         </label>
                         <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                             <div className="col-sm-12 col-md-6 u-cell">
-                                <a href="/admin/auctions/1/select?type=1" className="lm--button lm--button--primary col-sm-12">Selected Retailers</a>
+                                <a href={`/admin/auctions/${localStorage.auction_id}/select?type=1`} className="lm--button lm--button--primary col-sm-12">Selected Retailers</a>
                             </div>                     
                         </div>
                     </div>
@@ -99,8 +99,8 @@ render() {
                         Buyer to Invite:
                         </label>
                         <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                        <div className="col-sm-12 col-md-6 u-cell"><a href="/admin/auctions/1/select?type=2" className="lm--button lm--button--primary col-sm-12">Selected Company Retailers</a></div>
-                        <div className="col-sm-12 col-md-6 u-cell"><a href="/admin/auctions/1/select?type=3" className="lm--button lm--button--primary col-sm-12">Selected Individual Retailers</a></div>
+                        <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${localStorage.auction_id}/select?type=2`} className="lm--button lm--button--primary col-sm-12">Selected Company Retailers</a></div>
+                        <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${localStorage.auction_id}/select?type=3`} className="lm--button lm--button--primary col-sm-12">Selected Individual Retailers</a></div>
                         <div className="col-sm-12 col-md-12 u-cell"><a className="lm--button lm--button--primary col-sm-12 orange">Send Invitation Email</a></div>
                         </div>
                     </div>
@@ -142,8 +142,8 @@ render() {
                                         </tbody>
                                     </table>
                                 </div>
-                                <div className="col-sm-12 col-md-6 u-cell"><a href="/admin/auctions/1/comsumption?type=2" className="lm--button lm--button--primary col-sm-12">Company Consumption Details</a></div>
-                                <div className="col-sm-12 col-md-6 u-cell"><a href="/admin/auctions/1/comsumption?type=3" className="lm--button lm--button--primary col-sm-12">Individual Consumption Details</a></div>                
+                                <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${localStorage.auction_id}/comsumption?type=2`} className="lm--button lm--button--primary col-sm-12">Company Consumption Details</a></div>
+                                <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${localStorage.auction_id}/comsumption?type=3`} className="lm--button lm--button--primary col-sm-12">Individual Consumption Details</a></div>                
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">

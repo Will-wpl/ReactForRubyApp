@@ -25,7 +25,7 @@ export class AdminReport extends Component {
     }
 
     componentDidMount() {
-        getAuction('admin').then(auction => {
+        getAuction('admin',localStorage.auction_id).then(auction => {
             this.auction = auction;
             this.userStartInfo = auction ? `${auction.name} on ${moment(auction.start_datetime).format('D MMM YYYY')}` : '';
             this.startTime = auction ? `${moment(auction.actual_begin_time).format('h:mm A')}` : '';

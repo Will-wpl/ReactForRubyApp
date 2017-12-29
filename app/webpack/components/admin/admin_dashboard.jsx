@@ -24,7 +24,7 @@ export class AdminDashboard extends Component {
     }
 
     componentDidMount() {
-        getAuction('admin').then(auction => {
+        getAuction('admin',localStorage.auction_id).then(auction => {
             this.auction = auction;
             console.log(this.auction.name);
             this.timerTitle = auction ? `${auction.name} on ${moment(auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';

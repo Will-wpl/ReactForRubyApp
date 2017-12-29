@@ -39,6 +39,11 @@ export class SearchList extends Component {
             }
         }
     }
+    getNeedId(id,type,obj){
+        if(type == "auction"){
+            localStorage.auction_id=id;
+        }
+    }
     render (){
         if(this.props.table_data){
             console.log(this.props.table_data);
@@ -67,7 +72,7 @@ export class SearchList extends Component {
                                                 <td>
                                                     {
                                                         this.props.table_data.actions.map((ik,k)=>{
-                                                            return <a key={k} className={ik.icon} href={`${ik.url.split(":id")[0]}${item.id}${ik.url.split(":id")[1]}`}>{ik.name}</a>
+                                                            return <a key={k} className={ik.icon} onClick={this.getNeedId.bind(this,item.id,ik.interface_type ? ik.interface_type : "")} href={`${ik.url.replace(":id",item.id)}`}>{ik.name}</a>
                                                         })
                                                     }
                                                 </td>

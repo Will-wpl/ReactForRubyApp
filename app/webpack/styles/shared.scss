@@ -367,6 +367,7 @@ dfn.manage_label{
   width: 100%;
   div.search_type{
     dd{ float: left; margin: 0px 5px; margin-bottom: 10px;
+      &.fright{ float:right; margin: 0;}
       span{font-size: 12px; padding:5px 0px; vertical-align: top;}
       label{ width: 140px; display: inline-block; margin-left: 10px;
         .react-datepicker__input-container,.react-datepicker-wrapper{ width: 100%;}
@@ -383,9 +384,10 @@ dfn.manage_label{
           &.time_ico{background:url("../images/date.png") no-repeat right;}
         }
       }
-      button.lm--button{
+      button.lm--button,a.lm--button{
         height: 30px; font-size: 12px; padding: 0px 20px 0px 30px; margin-left: 10px; line-height: 30px;
       }
+      a.lm--button{padding: 0px 20px 0px 20px;}
     }
     .search_btn{
       background:#00b0b2 url("../images/search.png") no-repeat 5px center; background-size: 18px; 

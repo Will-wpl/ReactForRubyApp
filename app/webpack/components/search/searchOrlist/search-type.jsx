@@ -70,6 +70,9 @@ export class SearchType extends Component {
         $(".search_type select").val($(".search_type select option:first").val());
         this.goSearch();
     }
+    getAuctionId(type,obj){
+        localStorage.auction_id=type;
+    }
     render (){
         return (
             <div className="search_type">
@@ -88,6 +91,7 @@ export class SearchType extends Component {
                         <button className="lm--button lm--button--primary search_btn" onClick={this.goSearch.bind(this)}>Search</button>
                         <button className="lm--button lm--button--primary reset_btn" onClick={this.goReset.bind(this)}>Reset</button>
                     </dd>
+                    {this.props.type === "Unpublished Auction List" ?<dd className="fright"><a className="lm--button lm--button--primary " onClick={this.getAuctionId.bind(this,"new")} href="/admin/auctions/new">Create</a></dd> : ""}                   
                 </dl>
             </div>
         )}
