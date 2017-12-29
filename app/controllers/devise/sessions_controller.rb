@@ -16,7 +16,7 @@ class Devise::SessionsController < DeviseController
   def create
     self.resource = warden.authenticate!(auth_options)
     if resource.approval_status.nil?
-      resource.approval_status = '1'
+      resource.approval_status = '2'
       resource.save
     end
     set_flash_message!(:notice, :signed_in)
