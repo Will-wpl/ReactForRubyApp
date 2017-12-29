@@ -66,6 +66,7 @@ export class SearchList extends Component {
                 this.setState({
                     text:this.state.name + " has been successfully deleted."
                 });
+                this.dosearch(1);
             }, error => {
                 this.setState({
                     text:'Request exception,Delete failed!'
