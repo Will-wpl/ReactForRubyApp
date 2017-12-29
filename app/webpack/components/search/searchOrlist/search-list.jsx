@@ -96,7 +96,11 @@ export class SearchList extends Component {
                                     return <tr key={index}>
                                                 {
                                                     this.props.table_data.headers.map((it,i)=>{
-                                                        return <td key={i}>{item[`${it.field_name}`]}</td>
+                                                        return <td key={i}>
+                                                                {it.field_name === "actual_begin_time" 
+                                                                ? moment(item[`${it.field_name}`]).format('D MMM YYYY hh:mm A') 
+                                                                : item[`${it.field_name}`]}
+                                                                </td>
                                                     })
                                                 }
                                                 <td>
