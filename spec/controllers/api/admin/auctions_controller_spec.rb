@@ -140,7 +140,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
     end
 
     describe 'PUT update' do
-      def do_request
+      def do_request(id)
         auction_object = {
             name: 'Hello world',
             start_datetime: auction.start_datetime,
@@ -152,24 +152,33 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
             actual_end_time: auction.actual_end_time,
             total_volume: auction.total_volume,
             publish_status: auction.publish_status,
-            published_gid: auction.published_gid,
-            total_lt_peak: auction.total_lt_peak,
-            total_lt_off_peak: auction.total_lt_off_peak,
-            total_hts_peak: auction.total_hts_peak,
-            total_hts_off_peak: auction.total_hts_off_peak,
-            total_htl_peak: auction.total_htl_peak,
-            total_htl_off_peak: auction.total_htl_off_peak,
-            hold_status: auction.hold_status
-
+            hold_status: auction.hold_status,
+            time_extension: '1',
+            average_price: '2',
+            retailer_mode: '3'
         }
-        put :update, params: { id: auction.id, auction: auction_object }
+        put :update, params: { id: id, auction: auction_object }
       end
-      context 'has updated an auction' do
 
-        before { do_request }
+      context 'Has create an auction' do
+        before { do_request(0) }
         it 'success' do
           hash_body = JSON.parse(response.body)
+          expect(hash_body['id']).not_to eq(auction.id)
           expect(hash_body['name']).to eq('Hello world')
+          expect(hash_body['average_price']).to eq('2')
+          expect(response).to have_http_status(201)
+        end
+      end
+
+      context 'has updated an auction' do
+
+        before { do_request(auction.id) }
+        it 'success' do
+          hash_body = JSON.parse(response.body)
+          expect(hash_body['id']).to eq(auction.id)
+          expect(hash_body['name']).to eq('Hello world')
+          expect(hash_body['average_price']).to eq('2')
           expect(response).to have_http_status(:ok)
         end
       end

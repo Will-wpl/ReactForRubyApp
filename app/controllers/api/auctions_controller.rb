@@ -12,28 +12,26 @@ class Api::AuctionsController < Api::BaseController
 
   end
 
-  # POST create auction by ajax
-  # def create
-  #   @auction = Auction.new(model_params)
-  #   if @auction.save
-  #     AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
-  #     render json: @auction, status: 201
-  #   else
-  #     render json: 'error code ', status: 500
-  #   end
-  # end
-
   # PATCH update auction by ajax
   def update
-    params[:auction]['total_volume'] = Auction.set_total_volume(model_params[:total_lt_peak], model_params[:total_lt_off_peak], model_params[:total_hts_peak], model_params[:total_hts_off_peak], model_params[:total_htl_peak], model_params[:total_htl_off_peak])
-    if @auction.update(model_params)
-      RedisHelper.set_auction(@auction)
-      AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id).update_all(bid_time: @auction.actual_begin_time, actual_bid_time: @auction.actual_begin_time)
-      histories = AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id)
-      RedisHelper.set_current_sorted_histories(@auction.id, histories)
-      AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
+    if params[:id] == '0' # create
+      if @auction.save
+        AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
+        render json: @auction, status: 201
+      end
+    else # update
+      # params[:auction]['total_volume'] = Auction.set_total_volume(model_params[:total_lt_peak], model_params[:total_lt_off_peak], model_params[:total_hts_peak], model_params[:total_hts_off_peak], model_params[:total_htl_peak], model_params[:total_htl_off_peak])
+      if @auction.update(model_params)
+        AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id).update_all(bid_time: @auction.actual_begin_time, actual_bid_time: @auction.actual_begin_time)
+
+        # set sorted histories to redis
+        histories = AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id)
+        RedisHelper.set_current_sorted_histories(@auction.id, histories)
+        AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
+      end
+      render json: @auction, status: 200
     end
-    render json: @auction, status: 200
+
   end
 
   # PUT publish auction by ajax
@@ -149,12 +147,12 @@ class Api::AuctionsController < Api::BaseController
   private
 
   def set_auction
-    @auction = Auction.find(params[:id])
+    (params[:id] == '0') ? @auction = Auction.new(model_params) : @auction = Auction.find(params[:id])
   end
 
   def model_params
     params.require(:auction).permit(:name, :start_datetime, :contract_period_start_date, :contract_period_end_date, :duration, :reserve_price, :actual_begin_time, :actual_end_time, :total_volume, :publish_status, :published_gid,
-                                    :total_lt_peak, :total_lt_off_peak, :total_hts_peak, :total_hts_off_peak, :total_htl_peak, :total_htl_off_peak, :hold_status)
+                                    :total_lt_peak, :total_lt_off_peak, :total_hts_peak, :total_hts_off_peak, :total_htl_peak, :total_htl_off_peak, :hold_status, :time_extension, :average_price, :retailer_mode)
   end
 
   def set_link(auctionId, addr)
