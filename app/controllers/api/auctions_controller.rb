@@ -15,6 +15,7 @@ class Api::AuctionsController < Api::BaseController
   # PATCH update auction by ajax
   def update
     if params[:id] == '0' # create
+      params[:auction]['publish_status'] = '0'
       if @auction.save
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
         render json: @auction, status: 201
