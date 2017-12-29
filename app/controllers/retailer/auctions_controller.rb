@@ -1,5 +1,6 @@
 class Retailer::AuctionsController < Retailer::BaseController
   before_action :retailer_approved_required
+  before_action :retailer_could_access, only: %i[upcoming live finish result]
   after_action :set_login_status, only: %i[upcoming live finish empty]
   # GET upcoming page
   def upcoming; end
