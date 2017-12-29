@@ -16,6 +16,10 @@ export const createRa = (params) => {
     return update('/api/admin/auctions/'+params.auction.id, params);
 }
 
+// export const createNewRa = (params) => {
+//     return update('/api/admin/auctions/new', params);
+// }
+
 export const raPublish = (params) => {
     return put('/api/admin/auctions/'+params.id+'/publish', params.pagedata);
 }

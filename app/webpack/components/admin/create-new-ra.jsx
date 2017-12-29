@@ -18,7 +18,7 @@ export class CreateNewRA extends Component {
             duration:"",
             reserve_price:"",
             left_name:this.props.left_name,
-            btn_type:"",text:"",id:"",
+            btn_type:"",text:"",id:"0",
             edit_btn:"lm--button lm--button--primary show",
             edit_change:"lm--button lm--button--primary hide",
             disabled:"",live_modal:"",live_modal_do:"",holdOrend:"",
@@ -42,7 +42,10 @@ export class CreateNewRA extends Component {
         }
     }
     doGetData(type){
-        getAuction('admin').then(res => {
+        if(localStorage.auction_id == "new"){
+            return;
+        }
+        getAuction('admin',localStorage.auction_id).then(res => {
             this.auction = res;
             if(type == "create"){
                 if(this.auction.publish_status == 1){
@@ -55,7 +58,7 @@ export class CreateNewRA extends Component {
                     })
                 }          
             }     
-            if(res.start_datetime == null){
+            if(res.name == null){
                     this.setState({id:res.id})
                 }else{
                     this.setState({
@@ -187,7 +190,7 @@ export class CreateNewRA extends Component {
         this.doGetData();
     }
     setAuction(){
-        // this.auction.id=this.state.id;
+        this.auction.id=this.state.id;
         this.auction.contract_period_end_date= this.state.endDate.format().split("T")[0];
         this.auction.contract_period_start_date= this.state.startDate.format().split("T")[0];
         this.auction.duration= this.refs.duration.value;
@@ -221,7 +224,7 @@ export class CreateNewRA extends Component {
         event.preventDefault();
     }  
     showDelete(){
-        getAuction('admin').then(res => {
+        getAuction('admin',localStorage.auction_id).then(res => {
             if(res.start_datetime == null){
                 this.refs.Modal.showModal();
                 this.setState({
@@ -292,6 +295,23 @@ export class CreateNewRA extends Component {
                 })
             }
         }
+        if(this.state.btn_type == "next"){
+            createRa({auction: this.setAuction()}).then(res => {
+                this.auction = res;
+                this.setState({
+                    text:this.auction.name + " has been successfully saved. "
+                });
+                this.refs.Modal.showModal();
+                setTimeout(()=>{
+                    window.location.href=`/admin/auctions/${res.id}/invitation`;
+                },2000)
+            }, error => {
+                this.setState({
+                    text:'Request exception,Save failed!'
+                });
+                this.refs.Modal.showModal();
+            })
+        }
         if(this.state.btn_type == "publish"){
             createRa({auction: this.setAuction()}).then(res => {
                 this.auction = res;
@@ -333,8 +353,9 @@ export class CreateNewRA extends Component {
                 btn_html = <div className="createRa_btn">
                                 {this.state.disabled ? <div className="mask"></div> : ''}
                                 <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'save')}>Save</button>
-                                <a className="lm--button lm--button--primary" onClick={this.showDelete.bind(this)}>Delete</a>
-                                <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'publish')}>Publish</button>
+                                <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'next')}>Next</button>
+                                {/* <a className="lm--button lm--button--primary" onClick={this.showDelete.bind(this)}>Delete</a>
+                                <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'publish')}>Publish</button> */}
                             </div>
         }else{//edit
             styleType = "col-sm-12 col-md-12";
