@@ -35,6 +35,15 @@ class Api::AuctionsController < Api::BaseController
 
   end
 
+  def destroy
+    if @auction.publish_status == '0'
+      @auction.destroy
+      render json: nil, status: 200
+    else
+      render json: { message: 'The auction already published, you can not delete it!' }, status: 200
+    end
+  end
+
   # PUT publish auction by ajax
   def publish
     if @auction.update(publish_status: params[:publish_status])

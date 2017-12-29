@@ -4,13 +4,14 @@ class Auction < ApplicationRecord
   # Includes
 
   # Associations
-  has_many :arrangements
+  has_many :arrangements, dependent: :destroy
   has_many :users, through: :arrangements
-  has_many :auction_histories
-  has_many :auction_events
-  has_many :auction_attachments
-  has_many :comsumptions
-  has_one :auction_result
+  has_many :auction_histories, dependent: :destroy
+  has_many :auction_events, dependent: :destroy
+  has_many :auction_attachments, dependent: :destroy
+  has_many :comsumptions, dependent: :destroy
+  has_many :users, through: :comsumptions
+  has_one :auction_result, dependent: :destroy
   # accepts_nested_attributes
 
   # Validations

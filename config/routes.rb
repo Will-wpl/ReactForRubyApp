@@ -33,7 +33,7 @@ Rails.application.routes.draw do
           get 'buyers'
         end
       end
-      resources :auctions, only: %i[obtain link create update publish hold confirm destroy unpublished published] do
+      resources :auctions, only: %i[obtain link create update delete publish hold confirm destroy unpublished published] do
         member do
           put 'publish'
           put 'hold'
