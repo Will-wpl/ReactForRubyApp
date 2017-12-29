@@ -15,7 +15,7 @@ class Api::AuctionsController < Api::BaseController
   # PATCH update auction by ajax
   def update
     if params[:id] == '0' # create
-      params[:auction]['publish_status'] = '0'
+      @auction.publish_status = '0'
       if @auction.save
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
         render json: @auction, status: 201
@@ -148,7 +148,7 @@ class Api::AuctionsController < Api::BaseController
   private
 
   def set_auction
-    (params[:id] == '0') ? @auction = Auction.new(model_params) : @auction = Auction.find(params[:id])
+    @auction = params[:id] == '0' ? Auction.new(model_params) : Auction.find(params[:id])
   end
 
   def model_params
