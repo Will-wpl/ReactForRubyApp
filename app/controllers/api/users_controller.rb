@@ -36,7 +36,7 @@ class Api::UsersController < Api::BaseController
   def buyers
     if params.key?(:page_size) && params.key?(:page_index)
       search_params = reject_params(params, %w[controller action])
-      if params[:consumer_type][0] == '2' && !params[:name].nil?
+      if !params[:name].nil? && params[:consumer_type][0] == '2'
         company_name = { company_name: params[:name] }
         search_params = reject_params(search_params, %w[name])
         search_params = search_params.merge(company_name)
