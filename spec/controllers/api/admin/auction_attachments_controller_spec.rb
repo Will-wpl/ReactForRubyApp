@@ -21,8 +21,11 @@ RSpec.describe Api::Admin::AuctionAttachmentsController, type: :controller do
 
     describe 'Upload file' do
       context 'Base get' do
+
+
         def do_request
-          post :create
+          @file = fixture_file_upload('files/test.jpg', 'image/jpg')
+          post :create, params: { file: @file }
         end
         before { do_request }
         it 'success' do

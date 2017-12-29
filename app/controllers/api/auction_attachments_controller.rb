@@ -7,10 +7,11 @@ class Api::AuctionAttachmentsController < Api::BaseController
 
   # create a auction attachment by auction id
   def create
-    # file = params[:file]
-    # uploader = AvatarUploader.new
-    #
-    # uploader.store!(file)
+    # coding
+    file = params[:file]
+    uploader = AvatarUploader.new
+    uploader.store!(file)
+
     render json: nil, status: 200
   end
 end

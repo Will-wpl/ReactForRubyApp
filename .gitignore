@@ -23,6 +23,7 @@ vendor/bundle
 /public/packs
 /node_modules
 public/packs-test
+public/uploads
 
 \.idea/
 

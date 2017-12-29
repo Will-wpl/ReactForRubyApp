@@ -25,6 +25,8 @@ gem 'webpacker', '~> 2.0'
 
 # App Specific
 
+gem 'carrierwave', '~> 1.0'
+
 ## Utilities
 gem 'breadcrumbs_on_rails'
 gem 'kaminari'
