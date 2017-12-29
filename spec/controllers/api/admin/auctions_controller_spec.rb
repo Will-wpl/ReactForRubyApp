@@ -52,6 +52,36 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       end
     end
 
+    describe 'DELETE destroy' do
+
+      context 'Has deleted an auction' do
+
+        def do_request
+          delete :destroy, params: { id: auction.id }
+        end
+
+        before { do_request }
+        it 'success' do
+          expect(response.body).to eq('null')
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
+      context 'Has not delete an auction' do
+
+        def do_request
+          delete :destroy, params: { id: published_upcoming_auction.id }
+        end
+
+        before { do_request }
+        it 'success' do
+          hash_body = JSON.parse(response.body)
+          expect(hash_body['message']).to include("not delete it")
+          expect(response).to have_http_status(:ok)
+        end
+      end
+    end
+
     describe 'PUT hold' do
       def do_request_hold
         put :hold, params: { id: auction.id, hold_status: true }
@@ -288,6 +318,12 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       context '#confirm' do
         it 'success' do
           put :update, params: { id: auction.id}
+          expect(response).to have_http_status(401)
+        end
+      end
+      context '#delete' do
+        it 'success' do
+          delete :destroy, params: { id: auction.id}
           expect(response).to have_http_status(401)
         end
       end
