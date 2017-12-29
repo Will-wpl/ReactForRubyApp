@@ -114,8 +114,8 @@ class Api::AuctionsController < Api::BaseController
       { name: 'Name', field_name: 'name' },
       { name: 'Date/Time', field_name: 'actual_begin_time' }
     ]
-    actions = [{ url: '/admin/auctions/new', name: 'Edit', icon: 'lm--icon-search' , interface_type: 'auction' },
-               { url: '/admin/auctions/:id', name: 'Delete', icon: 'lm--icon-search' , interface_type: 'auction' }]
+    actions = [{ url: '/admin/auctions/new', name: 'Edit', icon: 'lm--icon-search', interface_type: 'auction' },
+               { url: '/admin/auctions/:id', name: 'Delete', icon: 'lm--icon-search', interface_type: 'auction' }]
     data = auction.order(actual_begin_time: :asc)
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
@@ -138,7 +138,7 @@ class Api::AuctionsController < Api::BaseController
       { name: 'Date/Time', field_name: 'actual_begin_time' },
       { name: 'Status', field_name: 'null' }
     ]
-    actions = [{ url: '/admin/auctions/:id/upcoming', name: 'Edit', icon: 'lm--icon-search' , interface_type: 'auction' }]
+    actions = [{ url: '/admin/auctions/:id/upcoming', name: 'Edit', icon: 'lm--icon-search', interface_type: 'auction' }]
     data = auction.order(actual_begin_time: :asc)
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
