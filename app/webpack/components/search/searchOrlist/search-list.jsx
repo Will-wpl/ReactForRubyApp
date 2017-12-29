@@ -1,9 +1,14 @@
 import React, { Component, PropTypes } from 'react'
 //import {getAuctionTimeRule} from '../../javascripts/componentService/common/service';
 import moment from 'moment';
+import {Modal} from '../../shared/show-modal';
+import {deleteAuction} from '../../../javascripts/componentService/admin/service';
 export class SearchList extends Component {
     constructor(props, context){
         super(props);
+        this.state={
+            text:""
+        }
     }
     dosearch(index,obj){
         if(this.props.onAddClick){
@@ -39,10 +44,34 @@ export class SearchList extends Component {
             }
         }
     }
-    getNeedId(id,type,obj){
+    clickFunction(id,url,name,type,obj){
         if(type == "auction"){
             localStorage.auction_id=id;
         }
+        if(name == "Delete"){
+            this.auction_id = id;
+            this.showDelete();
+        }else{
+            window.location.href=`${url.replace(":id",id)}`;
+        }
+        
+    }
+    showDelete(){
+        this.refs.Modal.showModal("comfirm");
+        this.setState({text:"Are you sure you want to delete?"});
+    }
+    delete(){
+        deleteAuction({ auction: {id:this.auction_id}}).then(res => {
+                this.refs.Modal.showModal();
+                this.setState({
+                    text:this.state.name + " has been successfully deleted."
+                });
+            }, error => {
+                this.setState({
+                    text:'Request exception,Delete failed!'
+                });
+                this.refs.Modal.showModal();
+            })
     }
     render (){
         if(this.props.table_data){
@@ -72,7 +101,7 @@ export class SearchList extends Component {
                                                 <td>
                                                     {
                                                         this.props.table_data.actions.map((ik,k)=>{
-                                                            return <a key={k} className={ik.icon} onClick={this.getNeedId.bind(this,item.id,ik.interface_type ? ik.interface_type : "")} href={`${ik.url.replace(":id",item.id)}`}>{ik.name}</a>
+                                                            return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "")}>{ik.name}</a>
                                                         })
                                                     }
                                                 </td>
@@ -92,6 +121,7 @@ export class SearchList extends Component {
                         <span>2</span> */}
                         <span onClick={this.gotopage.bind(this,'next')}>{">"}</span>
                     </div>
+                    <Modal text={this.state.text} dodelete={this.delete.bind(this)} ref="Modal" />
                 </div>
             )
         }else{

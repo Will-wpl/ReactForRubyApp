@@ -47,6 +47,28 @@ export const create = (path, body) => {
 
 }
 
+export const Ddelete = (path, body, method = 'DELETE') => {
+    return new Promise((resolve, reject) => {
+        handler.ajax({
+            type: method,
+            dataType: 'json',
+            beforeSend: handler.rails.CSRFProtection,
+            url: path,
+            data: body,
+            success: (data) => {
+                // console.log('update successfully');
+                resolve(data);
+            },
+            error: (data) => {
+                // console.log('fail to update');
+                reject(data);
+            }
+        });
+    })
+
+}
+
+
 export const update = (path, body, method = 'PATCH') => {
     return new Promise((resolve, reject) => {
         handler.ajax({

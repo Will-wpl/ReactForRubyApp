@@ -1,4 +1,4 @@
-import {get, create, put, Ws, update} from '../../../javascripts/http';
+import {get, create, put, Ws, update,Ddelete} from '../../../javascripts/http';
 
 export const getArrangements = (auction_id, status) => {
     return get('/api/admin/arrangements', { auction_id: auction_id, accept_status: status });
@@ -16,6 +16,9 @@ export const createRa = (params) => {
     return update('/api/admin/auctions/'+params.auction.id, params);
 }
 
+export const deleteAuction = (params) => {
+    return Ddelete('/api/admin/auctions/'+params.auction.id);
+}
 // export const createNewRa = (params) => {
 //     return update('/api/admin/auctions/new', params);
 // }

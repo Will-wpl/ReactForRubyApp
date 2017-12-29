@@ -71,6 +71,9 @@ export class CreateNewRA extends Component {
                         reserve_price:res.reserve_price== null ? '' : this.padZero(res.reserve_price,'4')
                     });
                 }
+                $("#time_extension option[value='"+res.time_extension+"']").attr("selected",true);
+                $("#average_price option[value='"+res.average_price+"']").attr("selected",true);
+                $("#retailer_mode option[value='"+res.retailer_mode+"']").attr("selected",true);
             //console.log(res);;
         })
     }
@@ -199,70 +202,17 @@ export class CreateNewRA extends Component {
         this.auction.start_datetime= this.state.start_datetime.format();
         this.auction.actual_begin_time= moment(this.state.start_datetime.toDate()).format();
         this.auction.actual_end_time = moment(this.state.start_datetime.toDate()).add(this.refs.duration.value,'minutes').format();
+        this.auction.time_extension= this.refs.time_extension.value;
+        this.auction.average_price= this.refs.average_price.value;
+        this.auction.retailer_mode= this.refs.retailer_mode.value;
         //console.log(this.state.start_datetime.format('YYYY-MM-DD hh:mm:ss'));
         //console.log(moment(this.auction.actual_end_time).format('YYYY-MM-DD hh:mm:ss'));
         return this.auction;
     }
 
-    removeAuction(){
-        this.auction.contract_period_end_date= null;
-        this.auction.contract_period_start_date= null;
-        this.auction.duration= null;
-        this.auction.name= null;
-        this.auction.reserve_price= null;
-        this.auction.start_datetime= null;
-        this.auction.publish_status= 0;
-        this.auction.published_gid= null;
-        this.auction.reserve_price= null;
-        this.auction.start_datetime= null;
-        this.auction.total_volume= null;
-        this.auction.actual_begin_time= null;
-        this.auction.actual_end_time= null;
-        return this.auction;
-    }
     noPermitInput(event){
         event.preventDefault();
     }  
-    showDelete(){
-        getAuction('admin',localStorage.auction_id).then(res => {
-            if(res.start_datetime == null){
-                this.refs.Modal.showModal();
-                this.setState({
-                    text:"Please save first"
-                });
-                return false;
-            }
-            this.refs.Modal.showModal("comfirm");
-            this.setState({text:"Are you sure you want to delete?"});
-        })   
-    }
-    delete(){
-            createRa({ auction: this.removeAuction()}).then(res => {
-                this.refs.Modal.showModal();
-                this.setState({
-                    text:this.state.name + " has been successfully deleted."
-                });
-                this.auction = res;
-                this.setState({
-                    id:this.state.id,
-                    name:"",
-                    start_datetime:"",
-                    startDate:"",
-                    endDate:"",
-                    duration:"",
-                    reserve_price:""
-                });
-                //sessionStorage.removeItem("raInfo");
-                // setTimeout(() => {
-                //     window.location.href="http://localhost:3000/admin/home"
-                // },3000);
-            }, error => {
-                this.setState({
-                    text:'Request exception,Delete failed!'
-                });
-                this.refs.Modal.showModal();
-            })
-    }
     checkSuccess(event,obj){
         event.preventDefault();
         if(this.state.btn_type == "save"){
@@ -432,13 +382,38 @@ export class CreateNewRA extends Component {
                             <abbr ref="ra_duration_error" className="col"></abbr>
                         </label>
                     </dd>
-                    <dd className="lm--formItem lm--formItem--inline string optional"><span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Time Extension :</span><label className="lm--formItem-right lm--formItem-control"><select ref="time_extension"><option value="0">Manual</option></select></label></dd>
-                    <dd className="lm--formItem lm--formItem--inline string optional"><span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Average Price :</span><label className="lm--formItem-right lm--formItem-control"><select ref="average_price"><option value="0">Weighted Average</option></select></label></dd>
-                    <dd className="lm--formItem lm--formItem--inline string optional"><span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Retailer Mode :</span><label className="lm--formItem-right lm--formItem-control"><select ref="retailer_mode"><option value="0">Model:Top2</option><option value="1">Model:Top1</option></select></label></dd>
+                    <dd className="lm--formItem lm--formItem--inline string optional">
+                        <span className="lm--formItem-left lm--formItem-label string optional">
+                            <abbr title="required">*</abbr>Time Extension :</span>
+                            <label className="lm--formItem-right lm--formItem-control">
+                                <select ref="time_extension" id="time_extension">
+                                    <option value="0">Manual</option>
+                                </select>
+                            </label>
+                    </dd>
+                    <dd className="lm--formItem lm--formItem--inline string optional">
+                        <span className="lm--formItem-left lm--formItem-label string optional">
+                            <abbr title="required">*</abbr>Average Price :</span>
+                            <label className="lm--formItem-right lm--formItem-control">
+                                <select ref="average_price" id="average_price">
+                                    <option value="0">Weighted Average</option>
+                                </select>
+                            </label>
+                    </dd>
+                    <dd className="lm--formItem lm--formItem--inline string optional">
+                        <span className="lm--formItem-left lm--formItem-label string optional">
+                            <abbr title="required">*</abbr>Retailer Mode :</span>
+                            <label className="lm--formItem-right lm--formItem-control">
+                                <select ref="retailer_mode" id="retailer_mode">
+                                    <option value="0">Model:Top2</option>
+                                    <option value="1">Model:Top1</option>
+                                </select>
+                            </label>
+                    </dd>
                 </dl>
                 {btn_html}
                 </form>
-                <Modal text={this.state.text} dodelete={this.delete.bind(this)} ref="Modal" />
+                <Modal text={this.state.text} ref="Modal" />
             </div>
             </div>
             <div className="createRaMain u-grid">
