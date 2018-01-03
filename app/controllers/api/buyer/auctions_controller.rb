@@ -18,12 +18,12 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
     if params.key?(:page_size) && params.key?(:page_index)
       search_params = reject_params(params, %w[controller action])
       search_where_array = set_search_params(search_params)
-      auction = Auction.im_in(current_user.id).published.where(search_where_array)
-                       .page(params[:page_index]).per(params[:page_size])
-      total = auction.total_count
+      consumption = Consumption.mine(current_user.id).join_buyer_auction.where(search_where_array)
+          .page(params[:page_index]).per(params[:page_size])
+      total = consumption.total_count
     else
-      auction = Auction.published
-      total = auction.count
+      consumption = Consumption.mine(current_user.id)
+      total = consumption.count
     end
     headers = [
       { name: 'Name', field_name: 'name' },
@@ -31,8 +31,11 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
       { name: 'Auction Status', field_name: 'publish_status' },
       { name: 'Status of Participation', field_name: 'participation_status' }
     ]
-    actions = [{ url: '/buyer/consumptions/:id/edit', name: 'Edit', icon: 'lm--icon-search', interface_type: 'auction' }]
-    data = auction.order(actual_begin_time: :asc).each do |auction|
+    actions = [{ url: '/buyer/consumptions/:id/edit', name: 'Edit', icon: 'lm--icon-search' }]
+    data = []
+    consumption.order('auctions.actual_begin_time asc').each do |consumption|
+      data.push(name: consumption.auction.name, actual_begin_time: consumption.auction.actual_begin_time,
+                publish_status: consumption.auction.publish_status, participation_status: consumption.participation_status)
     end
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
