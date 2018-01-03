@@ -76,7 +76,7 @@ export class SearchList extends Component {
     }
     render (){
         if(this.props.table_data){
-            console.log(this.props.table_data);
+            //console.log(this.props.table_data);
             return (
                 <div className="lm--table-container">
                     <table className="lm--table lm--table--responsive">
@@ -119,7 +119,7 @@ export class SearchList extends Component {
                         <span onClick={this.gotopage.bind(this,'prev')}>{"<"}</span>
                         {
                             this.props.page_total.map((item,index)=>{
-                                return <span key={index} className={this.props.list_data.page_index === item ? 'table_page_selected' : ''} onClick={this.dosearch.bind(this,item)}>{item}</span>
+                                return <span key={index} className={this.props.list_data.page_index === item ? 'table_page_selected' : ''} onClick={this.dosearch.bind(this,item)} id={"table_page_"+item}>{item}</span>
                             })
                         }
                         {/* <span className="table_page_selected">1</span>
