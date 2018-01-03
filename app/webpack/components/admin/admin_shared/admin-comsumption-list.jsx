@@ -20,6 +20,9 @@ componentDidMount() {
     
 }
 show_table(index){
+    if(this.props.onAddClick){
+        this.props.onAddClick();
+    }
     $("#comsumption_list_table_"+index).slideToggle(300);
 }
 render() {
@@ -70,4 +73,8 @@ render() {
     )
   }
 }
+
+AdminComsumptionList.propTypes = {
+    onAddClick: ()=>{}
+  };
 

@@ -7,13 +7,6 @@ export default class AdminComsumptionPrice extends Component {
     this.state={
         
     }
-    //this.winnerdata=[];
-    //this.winnerauction={};
-    this.winner = {
-        data:{},
-        auction:{}
-    }
-    //this.auction={}
 }
 
 componentDidMount() {
@@ -23,8 +16,8 @@ render() {
     //console.log(this.winner.data);
     return (
         <div className="u-grid mg0">
-               <div className="col-sm-12 u-mb1">{this.props.price.title} Consumpation Total Summary:</div>
-               <div className="col-sm-12 u-mb1">Number of Companies: {this.props.price.number} Number of Accounts: {this.props.price.accounts}</div>
+               <div className="col-sm-12 u-mb1" id="price_title">{this.props.price.title} Consumpation Total Summary:</div>
+               <div className="col-sm-12 u-mb1" id="price_number">Number of Companies: {this.props.price.number} Number of Accounts: {this.props.price.accounts}</div>
                <table className="retailer_fill w_100"  cellPadding="0" cellSpacing="0">
                <thead>
                <tr>
