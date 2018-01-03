@@ -39,7 +39,7 @@ describe('AdminInvitation', () => {
     expect(wrapper.find('.admin_invitation').exists());
   });
 
-  it('When click the submit, doPublish() shoule be called', () => {
+  it('When click the publish, doPublish() shoule be called', () => {
     const mockEvent = {
       key: 'Click',
     }
