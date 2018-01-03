@@ -18,8 +18,8 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
     if params.key?(:page_size) && params.key?(:page_index)
       search_params = reject_params(params, %w[controller action])
       search_where_array = set_search_params(search_params)
-      consumption = Consumption.mine(current_user.id).join_buyer_auction.where(search_where_array)
-          .page(params[:page_index]).per(params[:page_size])
+      # consumption = Consumption.includes(:auction).where(auctions: { publish_status: '1' }).page(params[:page_index]).per(params[:page_size])
+      consumption = Consumption.join_buyer_auction.mine(current_user.id).where(search_where_array).page(params[:page_index]).per(params[:page_size])
       total = consumption.total_count
     else
       consumption = Consumption.mine(current_user.id)

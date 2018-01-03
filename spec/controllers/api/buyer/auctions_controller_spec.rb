@@ -5,12 +5,12 @@ RSpec.describe Api::Buyer::AuctionsController, type: :controller do
   let!(:auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
   let!(:auctions) { create_list(:auction, 10, :for_next_month, :upcoming, :published, :started) }
   let!(:company_buyers) { create_list(:user, 30, :with_buyer, :with_company_buyer) }
-  let!(:consumption0) { create(:consumption, user: company_buyers[0], auction: auctions[0]) }
-  let!(:consumption1) { create(:consumption, user: company_buyers[0], auction: auctions[1]) }
-  let!(:consumption2) { create(:consumption, user: company_buyers[0], auction: auctions[2]) }
-  let!(:consumption3) { create(:consumption, user: company_buyers[0], auction: auctions[3]) }
-  let!(:consumption4) { create(:consumption, user: company_buyers[0], auction: auctions[7]) }
-  let!(:consumption5) { create(:consumption, user: company_buyers[0], auction: auctions[9]) }
+  let!(:consumption0) { create(:consumption, user: company_buyers[0], auction: auctions[0], participation_status: '1') }
+  let!(:consumption1) { create(:consumption, user: company_buyers[0], auction: auctions[1], participation_status: '1') }
+  let!(:consumption2) { create(:consumption, user: company_buyers[0], auction: auctions[2], participation_status: '1') }
+  let!(:consumption3) { create(:consumption, user: company_buyers[0], auction: auctions[3], participation_status: '2') }
+  let!(:consumption4) { create(:consumption, user: company_buyers[0], auction: auctions[7], participation_status: '2') }
+  let!(:consumption5) { create(:consumption, user: company_buyers[0], auction: auctions[9], participation_status: '2') }
   let!(:consumption6) { create(:consumption, user: company_buyers[1], auction: auctions[7]) }
   let!(:consumption7) { create(:consumption, user: company_buyers[1], auction: auctions[9]) }
   let!(:consumption8) { create(:consumption, user: company_buyers[2], auction: auctions[7]) }
@@ -53,20 +53,24 @@ RSpec.describe Api::Buyer::AuctionsController, type: :controller do
       end
     end
 
-    # context 'Params pagers published auction' do
-    #   def do_request
-    #     get :published, params: { name: [auction.name, 'like'], actual_begin_time: [Time.current.strftime("%Y-%m-%d"), 'date_between'], page_size: '10', page_index: '1' }
-    #   end
-    #
-    #   before { do_request }
-    #   it 'Success' do
-    #     hash = JSON.parse(response.body)
-    #     expect(hash['headers'].size).to eq(4)
-    #     expect(hash['bodies']['total']).to eq(2)
-    #     expect(hash['bodies']['data'].size).to eq(2)
-    #     expect(hash['bodies']['data'][0]['name']).to eq(auction.name)
-    #   end
-    # end
+    context 'Params pagers published auction' do
+      def do_request
+        get :published, params: { name: [auctions[0].name, 'like', 'auctions'],
+                                  actual_begin_time: [Time.current.strftime("%Y-%m-%d"), 'date_between', 'auctions'],
+                                  publish_status: [auctions[0].publish_status, '=', 'auctions'],
+                                  participation_status: ['1', '='],
+                                  page_size: '10', page_index: '1' }
+      end
+
+      before { do_request }
+      it 'Success' do
+        hash = JSON.parse(response.body)
+        expect(hash['headers'].size).to eq(4)
+        # expect(hash['bodies']['total']).to eq(3)
+        expect(hash['bodies']['data'].size).to eq(3)
+        expect(hash['bodies']['data'][0]['name']).to eq(auction.name)
+      end
+    end
   end
 
   context 'api/retailer/auctions routes' do
