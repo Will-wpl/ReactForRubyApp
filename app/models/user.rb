@@ -21,7 +21,7 @@ class User < ApplicationRecord
   has_many :auction_events
   has_many :auction_extend_times
   has_many :auction_histories
-  has_many :comsumptions
+  has_many :consumptions
 
   # accepts_nested_attributes
 

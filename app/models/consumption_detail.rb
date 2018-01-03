@@ -1,12 +1,10 @@
-class Comsumption < ApplicationRecord
+class ConsumptionDetail < ApplicationRecord
   # Extends
 
   # Includes
 
   # Associations
-  belongs_to :user
-  belongs_to :auction
-  has_many :comsumption_details
+  belongs_to :consumption
   # accepts_nested_attributes
 
   # Validations

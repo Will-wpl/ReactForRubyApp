@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :comsumption do
+  factory :consumption do
     
   end
 end
