@@ -52,3 +52,7 @@ var slimModal = {
         $("#"+slimModal.type).click();
     }
 }
+function clearStorage(){
+    sessionStorage.removeItem("auction_id");
+    sessionStorage.removeItem("isAuctionId");
+}

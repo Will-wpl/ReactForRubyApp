@@ -7,6 +7,7 @@ export class DoFillConsumption extends Component {
         return (
             <div>
                 {
+                    this.props.site_list ?
                     this.props.site_list.map((item,index)=>{
                     return <div>
                              <h4 className="site_list_title"><span>{index+1}.My Site Information</span>{index != 0 ? <a onClick={this.props.remove.bind(this,index)}>Delete</a> : ''}</h4>
@@ -28,13 +29,14 @@ export class DoFillConsumption extends Component {
                                  </tbody>
                              </table>
                           </div>
-                    })
+                    }) 
+                    : ''
                 }
             </div>
         )
     }
 }
 
-BidderStatus.propTypes = {
+DoFillConsumption.propTypes = {
   onAddClick: ()=>{}
 };

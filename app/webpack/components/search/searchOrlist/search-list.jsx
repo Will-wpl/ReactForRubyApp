@@ -46,7 +46,7 @@ export class SearchList extends Component {
     }
     clickFunction(id,url,name,type,obj){
         if(type == "auction"){
-            localStorage.auction_id=id;
+            sessionStorage.auction_id=id;
         }
         if(name == "Delete"){
             this.auction_id = id;

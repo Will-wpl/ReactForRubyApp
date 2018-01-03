@@ -42,10 +42,10 @@ export class CreateNewRA extends Component {
         }
     }
     doGetData(type){
-        if(localStorage.auction_id == "new"){
+        if(sessionStorage.auction_id == "new"){
             return;
         }
-        getAuction('admin',localStorage.auction_id).then(res => {
+        getAuction('admin',sessionStorage.auction_id).then(res => {
             this.auction = res;
             if(type == "create"){
                 if(this.auction.publish_status == 1){
@@ -220,6 +220,7 @@ export class CreateNewRA extends Component {
             createRa({auction: this.setAuction()}).then(res => {
                             this.auction = res;
                             this.refs.Modal.showModal();
+                            sessionStorage.auction_id = res.id;
                             if(this.props.left_name){
                                 this.setState({
                                     text:this.auction.name + " has been successfully updated. "
@@ -246,8 +247,10 @@ export class CreateNewRA extends Component {
             }
         }
         if(this.state.btn_type == "next"){
+            sessionStorage.isAuctionId = "yes";
             createRa({auction: this.setAuction()}).then(res => {
                 this.auction = res;
+                sessionStorage.auction_id = res.id;
                 this.setState({
                     text:this.auction.name + " has been successfully saved. "
                 });
