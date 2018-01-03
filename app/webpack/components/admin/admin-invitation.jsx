@@ -23,11 +23,11 @@ export default class AdminInvitation extends Component {
 }
 
 componentDidMount() {
-    
+    //alert(localStorage.auction_id);
 }
 upload(type,index){
     $.ajax({
-        url: '/api/admin/auction_attachments?auction_id='+localStorage.auction_id+'&file_type='+type,
+        url: '/api/admin/auction_attachments?auction_id='+sessionStorage.auction_id+'&file_type='+type,
         type: 'POST',
         cache: false,
         data: new FormData($('#'+type)[index]),
@@ -42,7 +42,7 @@ changefileval(id){
 doPublish(){
     raPublish({
         pagedata:{publish_status: '1'},
-        id:localStorage.auction_id
+        id:sessionStorage.auction_id
     }).then(res => {
             this.auction = res;
             this.refs.Modal.showModal();
@@ -68,7 +68,7 @@ addinputfile(type){
                                     <div className="col-sm-12 col-md-8 u-cell">
                                         <a className="upload_file_btn">
                                             <dfn></dfn>
-                                            <input type="file" size="1" ref={type+index} accept="application/pdf,application/msword" onChange={this.changefileval.bind(this,type+index)} id={type+index} name="file" disabled={this.state.disabled}></input>
+                                            <input type="file" ref={type+index} accept="application/pdf,application/msword" onChange={this.changefileval.bind(this,type+index)} id={type+index} name="file" disabled={this.state.disabled}></input>
                                             <span>Browse..</span>
                                         </a>
                                     </div>
@@ -107,6 +107,7 @@ render() {
     //console.log(this.winner.data);
     return (
         <div className="u-grid admin_invitation">
+            {sessionStorage.isAuctionId === "yes" ?
                 <div className="col-sm-12 col-md-8 push-md-2">
                     <h3 className="u-mt3 u-mb1">invitation</h3>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -123,7 +124,7 @@ render() {
                         </label>
                         <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                             <div className="col-sm-12 col-md-6 u-cell">
-                                <a href={`/admin/auctions/${localStorage.auction_id}/select?type=1`} className="lm--button lm--button--primary col-sm-12">Selected Retailers</a>
+                                <a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=1`} className="lm--button lm--button--primary col-sm-12">Selected Retailers</a>
                             </div>                     
                         </div>
                     </div>
@@ -141,8 +142,8 @@ render() {
                         Buyer to Invite:
                         </label>
                         <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                        <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${localStorage.auction_id}/select?type=2`} className="lm--button lm--button--primary col-sm-12">Selected Company Retailers</a></div>
-                        <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${localStorage.auction_id}/select?type=3`} className="lm--button lm--button--primary col-sm-12">Selected Individual Retailers</a></div>
+                        <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=2`} className="lm--button lm--button--primary col-sm-12">Selected Company Retailers</a></div>
+                        <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=3`} className="lm--button lm--button--primary col-sm-12">Selected Individual Retailers</a></div>
                         <div className="col-sm-12 col-md-12 u-cell"><a className="lm--button lm--button--primary col-sm-12 orange">Send Invitation Email</a></div>
                         </div>
                     </div>
@@ -184,8 +185,8 @@ render() {
                                         </tbody>
                                     </table>
                                 </div>
-                                <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${localStorage.auction_id}/comsumption?type=2`} className="lm--button lm--button--primary col-sm-12">Company Consumption Details</a></div>
-                                <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${localStorage.auction_id}/comsumption?type=3`} className="lm--button lm--button--primary col-sm-12">Individual Consumption Details</a></div>                
+                                <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/comsumption?type=2`} className="lm--button lm--button--primary col-sm-12">Company Consumption Details</a></div>
+                                <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/comsumption?type=3`} className="lm--button lm--button--primary col-sm-12">Individual Consumption Details</a></div>                
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -210,6 +211,11 @@ render() {
                         <a className="lm--button lm--button--primary" onClick={this.doPublish.bind(this)}>Publish</a>
                     </div>
                 </div>
+                : <div className="live_modal">
+                            <p>
+                                Please select an auction again.
+                            </p>
+                        </div>}
                 <div className="createRaMain u-grid">
                     <a className="lm--button lm--button--primary u-mt3" href="/admin/home" >Back to Homepage</a>
                 </div>

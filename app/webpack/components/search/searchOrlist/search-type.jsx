@@ -71,7 +71,7 @@ export class SearchType extends Component {
         this.goSearch();
     }
     getAuctionId(type,obj){
-        localStorage.auction_id=type;
+        sessionStorage.auction_id=type;
     }
     render (){
         return (

@@ -44,7 +44,7 @@ html(lang="en")
                   li
                     = link_to 'Manage Password', users_pwds_edit_path, class: 'lm--dropdown-link'
                   li
-                    = link_to 'Log Out', destroy_user_session_path, method: :delete, class: 'lm--dropdown-link'
+                    = link_to 'Log Out', destroy_user_session_path, method: :delete, class: 'lm--dropdown-link',onClick:'clearStorage()'
           - else
             = link_to 'Log In', new_user_session_path, class: 'lm--button lm--button--text'
 
