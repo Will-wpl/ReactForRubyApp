@@ -32,6 +32,10 @@ upload(type,index){
         contentType: false
     }).done(function(res) {}).fail(function(res) {});
 }
+changefileval(id){
+    let fileObj = $("#"+id);
+    fileObj.prev("dfn").text(fileObj.val());
+}
 addinputfile(type){
         let fileHtml = '';
         fileHtml = <form id={type} encType="multipart/form-data">
@@ -39,7 +43,8 @@ addinputfile(type){
                         return <div className="u-grid mg0" key={index}>
                                     <div className="col-sm-12 col-md-8 u-cell">
                                         <a className="upload_file_btn">
-                                            <input type="file" size="1" ref={type+index} id={type+index} name="file" disabled={this.state.disabled}></input>
+                                            <dfn></dfn>
+                                            <input type="file" size="1" ref={type+index} onChange={this.changefileval.bind(this,type+index)} id={type+index} name="file" disabled={this.state.disabled}></input>
                                             <span>Browse..</span>
                                         </a>
                                     </div>
