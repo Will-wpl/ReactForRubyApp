@@ -61,7 +61,7 @@ export default class AdminComsumption extends Component {
             ]
         }
     ]
-    if(this.pageType == "Views Company Comsumption Details"){
+    if(this.pageType == "Views Company Consumption Details"){
         this.price = {
             title:"Company",number:"4",accounts:"16"
         }
