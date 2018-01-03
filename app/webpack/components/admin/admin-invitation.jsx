@@ -6,8 +6,8 @@ export default class AdminInvitation extends Component {
     super(props);
     this.state={
         fileData:{
-                "tender_documents_upload":[{buttonName:"add"}],
-                "birefing_pack_upload":[{buttonName:"add"}]
+                "tender_documents_upload":[{buttonName:"add",buttonText:"+"}],
+                "birefing_pack_upload":[{buttonName:"add",buttonText:"+"}]
             }
     }
     //this.winnerdata=[];
@@ -24,7 +24,7 @@ componentDidMount() {
 }
 upload(type,index){
     $.ajax({
-        url: '/api/admin/auction_attachments?auction_id='+localStorage.auction_id,
+        url: '/api/admin/auction_attachments?auction_id='+localStorage.auction_id+'&file_type='+type,
         type: 'POST',
         cache: false,
         data: new FormData($('#'+type)[index]),
@@ -44,7 +44,7 @@ addinputfile(type){
                                     <div className="col-sm-12 col-md-8 u-cell">
                                         <a className="upload_file_btn">
                                             <dfn></dfn>
-                                            <input type="file" size="1" ref={type+index} onChange={this.changefileval.bind(this,type+index)} id={type+index} name="file" disabled={this.state.disabled}></input>
+                                            <input type="file" size="1" ref={type+index} accept="application/pdf,application/msword" onChange={this.changefileval.bind(this,type+index)} id={type+index} name="file" disabled={this.state.disabled}></input>
                                             <span>Browse..</span>
                                         </a>
                                     </div>
@@ -52,7 +52,7 @@ addinputfile(type){
                                         <a className="lm--button lm--button--primary" onClick={this.upload.bind(this,type,index)}>Upload</a>
                                     </div>
                                     <div className="col-sm-12 col-md-2 u-cell">
-                                        <a onClick={this.fileclick.bind(this,index,type,item.buttonName)} className="lm--button lm--button--primary">{item.buttonName}</a>
+                                        <a onClick={this.fileclick.bind(this,index,type,item.buttonName)} className={"lm--button lm--button--primary "+item.buttonName}>{item.buttonText}</a>
                                     </div>
                                 </div>
                         })}
@@ -64,7 +64,7 @@ addinputfile(type){
             allfileObj = this.state.fileData;
             fileArray = this.state.fileData[type];
             if(typeName == "add"){
-                fileArray.push({buttonName:"remove"});
+                fileArray.push({buttonName:"remove",buttonText:"-"});
                 allfileObj[type] = fileArray;
                 this.setState({
                     fileData:allfileObj
