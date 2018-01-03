@@ -4,8 +4,4 @@ class Buyer::AuctionsController < Buyer::BaseController
   def index
 
   end
-
-  def new
-
-  end
 end

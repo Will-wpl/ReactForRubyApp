@@ -31,7 +31,7 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
       { name: 'Auction Status', field_name: 'publish_status' },
       { name: 'Status of Participation', field_name: 'participation_status' }
     ]
-    actions = [{ url: '/admin/auctions/:id/upcoming', name: 'Edit', icon: 'lm--icon-search', interface_type: 'auction' }]
+    actions = [{ url: '/buyer/consumptions/:id/edit', name: 'Edit', icon: 'lm--icon-search', interface_type: 'auction' }]
     data = auction.order(actual_begin_time: :asc).each do |auction|
     end
     bodies = { data: data, total: total }
