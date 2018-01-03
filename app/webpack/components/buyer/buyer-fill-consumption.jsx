@@ -42,7 +42,7 @@ export class FillConsumption extends Component {
     render () {
         return (
             <div>
-                <form>
+                <form name="buyer_form">
                 <div className="u-grid buyer">
                     <div className="col-sm-12 col-md-8 push-md-2">
                     <DoFillConsumption site_list={this.site_list} remove={this.remove_site.bind(this)} />
