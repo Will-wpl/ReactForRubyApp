@@ -22,23 +22,36 @@ export default class AdminInvitation extends Component {
 componentDidMount() {
     
 }
+upload(type,index){
+    $.ajax({
+        url: '/api/admin/auction_attachments',
+        type: 'POST',
+        cache: false,
+        data: new FormData($('#'+type)[index]),
+        processData: false,
+        contentType: false
+    }).done(function(res) {}).fail(function(res) {});
+}
 addinputfile(type){
         let fileHtml = '';
-        fileHtml = <div>
+        fileHtml = <form id={type} encType="multipart/form-data">
                         {this.state.fileData[type].map((item,index)=>{
                         return <div className="u-grid mg0" key={index}>
-                                    <div className="col u-cell">
-                                        <input type="file" size="1" ref={type+index} id={type+index} disabled={this.state.disabled} name="tender_documents_upload"></input>
+                                    <div className="col-sm-12 col-md-8 u-cell">
+                                        <a className="upload_file_btn">
+                                            <input type="file" size="1" ref={type+index} id={type+index} name="file" disabled={this.state.disabled}></input>
+                                            <span>Browse..</span>
+                                        </a>
                                     </div>
-                                    <div className="col u-cell">
-                                        <a className="lm--button lm--button--primary">Upload</a>
+                                    <div className="col-sm-12 col-md-2 u-cell">
+                                        <a className="lm--button lm--button--primary" onClick={this.upload.bind(this,type,index)}>Upload</a>
                                     </div>
-                                    <div className="col u-cell">
+                                    <div className="col-sm-12 col-md-2 u-cell">
                                         <a onClick={this.fileclick.bind(this,index,type,item.buttonName)} className="lm--button lm--button--primary">{item.buttonName}</a>
                                     </div>
                                 </div>
                         })}
-                    </div>
+                    </form>
         return fileHtml;
     }
     fileclick(index,type,typeName,obj){
