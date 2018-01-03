@@ -17,6 +17,7 @@ class Auction < ApplicationRecord
   # Validations
 
   # Scopes
+  scope :im_in, ->(user_id) { includes(:comsumptions).where(comsumptions: { user_id: user_id }) }
   scope :published, -> { where("publish_status = '1'") }
   scope :unpublished, -> { where("publish_status = '0'") }
   # Callbacks
