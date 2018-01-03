@@ -210,6 +210,13 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 .live_hide{display: none;}
 
 .buyer{
+  .retailer_fill{
+    input{ width:99%; margin: 3px auto; padding: 1px;}
+  }
+  .site_list_title{
+    span{float: left;}
+    a{ float: right; color: #00888a; font-size: 13px;}
+  }
   .addSite{ width: 100%; margin: 10px auto;
     a{color:#00888a;}
   }

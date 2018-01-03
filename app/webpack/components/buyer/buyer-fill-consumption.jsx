@@ -17,12 +17,6 @@ export class FillConsumption extends Component {
             }
         ]
     }
-    componentDidMount() {
-        
-    }
-    componentWillUnmount() {
-         
-    }
     add_site(){
         let list = {};
         list = {
@@ -32,6 +26,9 @@ export class FillConsumption extends Component {
             off_peak:''
         }
         this.site_list.push(list);
+    }
+    remove_site(id){
+        this.site_list.splice(id,1);
     }
     showDetail(id,obj){
         if(this.props.onAddClick){
@@ -48,7 +45,7 @@ export class FillConsumption extends Component {
                 <form>
                 <div className="u-grid buyer">
                     <div className="col-sm-12 col-md-8 push-md-2">
-                    <DoFillConsumption site_list={this.site_list} />
+                    <DoFillConsumption site_list={this.site_list} remove={this.remove_site.bind(this)} />
                     <div className="addSite"><a>Add Site</a></div>
                     <div className="buyer_btn">
                         <button className="lm--button lm--button--primary">Reject</button>
