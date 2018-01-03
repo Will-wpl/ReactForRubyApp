@@ -1,10 +1,13 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import moment from 'moment';
+import {raPublish} from '../../javascripts/componentService/admin/service';
+import {Modal} from '../shared/show-modal';
 export default class AdminInvitation extends Component {
   constructor(props){
     super(props);
     this.state={
+        text:"",
         fileData:{
                 "tender_documents_upload":[{buttonName:"add",buttonText:"+"}],
                 "birefing_pack_upload":[{buttonName:"add",buttonText:"+"}]
@@ -35,6 +38,27 @@ upload(type,index){
 changefileval(id){
     let fileObj = $("#"+id);
     fileObj.prev("dfn").text(fileObj.val());
+}
+doPublish(){
+    raPublish({
+        pagedata:{publish_status: '1'},
+        id:localStorage.auction_id
+    }).then(res => {
+            this.auction = res;
+            this.refs.Modal.showModal();
+            this.setState({
+                text:this.auction.name+" has been successfully published. Please go to 'Manage Published Upcoming Reverse Auction' for further actions.",
+                disabled:true
+            });
+            // setTimeout(() => {
+            //      window.location.href="/admin/home"
+            //  },5000);
+        }, error => {
+            this.setState({
+                text:'Request exception,Publish failed!'
+            });
+            this.refs.Modal.showModal();
+        })
 }
 addinputfile(type){
         let fileHtml = '';
@@ -183,12 +207,13 @@ render() {
                     <div className="retailer_btn">
                         <a className="lm--button lm--button--primary" href="/admin/auctions/new">Previous</a>
                         <a className="lm--button lm--button--primary">Save</a>
-                        <a className="lm--button lm--button--primary">Publish</a>
+                        <a className="lm--button lm--button--primary" onClick={this.doPublish.bind(this)}>Publish</a>
                     </div>
                 </div>
                 <div className="createRaMain u-grid">
                     <a className="lm--button lm--button--primary u-mt3" href="/admin/home" >Back to Homepage</a>
                 </div>
+                <Modal text={this.state.text} ref="Modal" />
             </div>
     )
   }
