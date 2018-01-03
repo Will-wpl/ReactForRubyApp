@@ -10,14 +10,14 @@ class Auction < ApplicationRecord
   has_many :auction_events, dependent: :destroy
   has_many :auction_attachments, dependent: :destroy
   has_many :consumptions, dependent: :destroy
-  has_many :users, through: :comsumptions
+  has_many :users, through: :consumptions
   has_one :auction_result, dependent: :destroy
   # accepts_nested_attributes
 
   # Validations
 
   # Scopes
-  scope :im_in, ->(user_id) { includes(:comsumptions).where(comsumptions: { user_id: user_id }) }
+  scope :im_in, ->(user_id) { includes(:consumptions).where(consumptions: { user_id: user_id }) }
   scope :published, -> { where("publish_status = '1'") }
   scope :unpublished, -> { where("publish_status = '0'") }
   # Callbacks

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171227035802) do
+ActiveRecord::Schema.define(version: 20180103074707) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -147,7 +147,7 @@ ActiveRecord::Schema.define(version: 20171227035802) do
     t.string "retailer_mode"
   end
 
-  create_table "comsumption_details", force: :cascade do |t|
+  create_table "consumption_details", force: :cascade do |t|
     t.string "account_number"
     t.string "intake_level"
     t.decimal "peak"
@@ -155,10 +155,10 @@ ActiveRecord::Schema.define(version: 20171227035802) do
     t.bigint "comsumption_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["comsumption_id"], name: "index_comsumption_details_on_comsumption_id"
+    t.index ["comsumption_id"], name: "index_consumption_details_on_comsumption_id"
   end
 
-  create_table "comsumptions", force: :cascade do |t|
+  create_table "consumptions", force: :cascade do |t|
     t.string "action_status"
     t.string "participation_status"
     t.decimal "lt_peak"
@@ -171,8 +171,8 @@ ActiveRecord::Schema.define(version: 20171227035802) do
     t.bigint "auction_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["auction_id"], name: "index_comsumptions_on_auction_id"
-    t.index ["user_id"], name: "index_comsumptions_on_user_id"
+    t.index ["auction_id"], name: "index_consumptions_on_auction_id"
+    t.index ["user_id"], name: "index_consumptions_on_user_id"
   end
 
   create_table "roles", id: :serial, force: :cascade do |t|
@@ -243,8 +243,8 @@ ActiveRecord::Schema.define(version: 20171227035802) do
   add_foreign_key "auction_histories", "auctions"
   add_foreign_key "auction_histories", "users"
   add_foreign_key "auction_results", "auctions"
-  add_foreign_key "comsumption_details", "comsumptions"
-  add_foreign_key "comsumptions", "auctions"
-  add_foreign_key "comsumptions", "users"
+  add_foreign_key "consumption_details", "consumptions", column: "comsumption_id"
+  add_foreign_key "consumptions", "auctions"
+  add_foreign_key "consumptions", "users"
   add_foreign_key "user_extensions", "users"
 end

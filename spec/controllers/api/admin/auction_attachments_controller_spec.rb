@@ -2,15 +2,16 @@ require 'rails_helper'
 
 RSpec.describe Api::Admin::AuctionAttachmentsController, type: :controller do
   let! (:auction) { create(:auction, :for_next_month, :upcoming) }
+  let! (:admin_user) { create(:user, :with_admin) }
   base_url = 'api/admin/auction_attachments'
 
   context 'admin user' do
-    before { sign_in create(:user, :with_admin) }
+    before { sign_in admin_user }
 
     describe 'GET index' do
       context 'Base get' do
         def do_request
-          get :index
+          get :index, params: {auction_id: auction.id }
         end
         before { do_request }
         it 'success' do
