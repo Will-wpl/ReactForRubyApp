@@ -40,6 +40,9 @@ changefileval(id){
     fileObj.prev("dfn").text(fileObj.val());
 }
 doPublish(){
+    if(this.props.onAddClick){
+        this.props.onAddClick();
+    }
     raPublish({
         pagedata:{publish_status: '1'},
         id:sessionStorage.auction_id
@@ -208,7 +211,7 @@ render() {
                     <div className="retailer_btn">
                         <a className="lm--button lm--button--primary" href="/admin/auctions/new">Previous</a>
                         <a className="lm--button lm--button--primary">Save</a>
-                        <a className="lm--button lm--button--primary" onClick={this.doPublish.bind(this)}>Publish</a>
+                        <a className="lm--button lm--button--primary" id="doPublish" onClick={this.doPublish.bind(this)}>Publish</a>
                     </div>
                 </div>
                 : <div className="live_modal">
@@ -224,7 +227,9 @@ render() {
     )
   }
 }
-
+AdminInvitation.propTypes = {
+    onAddClick: ()=>{}
+  };
 function run() {
     const domNode = document.getElementById('admin_invitation');
     if(domNode !== null){
