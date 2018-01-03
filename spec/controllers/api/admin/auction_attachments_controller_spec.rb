@@ -21,15 +21,17 @@ RSpec.describe Api::Admin::AuctionAttachmentsController, type: :controller do
 
     describe 'Upload file' do
       context 'Base get' do
-
-
         def do_request
-          @file = fixture_file_upload('files/test.jpg', 'image/jpg')
-          post :create, params: { file: @file }
+          file = fixture_file_upload('files/test.jpg', 'image/jpg')
+          post :create, params: { file: file, auction_id: auction.id, file_type: 'tender_documents_upload' }
         end
         before { do_request }
         it 'success' do
           expect(response).to have_http_status(:ok)
+          hash_body = JSON.parse(response.body)
+          expect(hash_body['file_path']).to include("uploads/attachments/#{auction.id}/")
+          expect(hash_body['file_type']).to eq('tender_documents_upload')
+          expect(hash_body['file_name']).to eq('test.jpg')
         end
       end
     end
