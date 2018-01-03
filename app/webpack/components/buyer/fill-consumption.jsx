@@ -37,6 +37,6 @@ export class DoFillConsumption extends Component {
     }
 }
 
-BidderStatus.propTypes = {
+DoFillConsumption.propTypes = {
   onAddClick: ()=>{}
 };
