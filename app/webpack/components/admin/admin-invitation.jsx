@@ -24,7 +24,7 @@ componentDidMount() {
 }
 upload(type,index){
     $.ajax({
-        url: '/api/admin/auction_attachments',
+        url: '/api/admin/auction_attachments?auction_id='+localStorage.auction_id,
         type: 'POST',
         cache: false,
         data: new FormData($('#'+type)[index]),
@@ -181,7 +181,7 @@ render() {
                         </div>
                     </div>
                     <div className="retailer_btn">
-                        <a className="lm--button lm--button--primary">Previous</a>
+                        <a className="lm--button lm--button--primary" href="/admin/auctions/new">Previous</a>
                         <a className="lm--button lm--button--primary">Save</a>
                         <a className="lm--button lm--button--primary">Publish</a>
                     </div>
