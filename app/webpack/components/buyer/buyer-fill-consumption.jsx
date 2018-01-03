@@ -42,8 +42,10 @@ export class FillConsumption extends Component {
     render () {
         return (
             <div>
+                <h1>Participate in upcoming Reverse Auction exercise on </h1>
                 <form name="buyer_form">
                 <div className="u-grid buyer">
+                <h4><input name="agree_auction" type="checkbox" required /> I agree to the terms and conditions.</h4>
                     <div className="col-sm-12 col-md-8 push-md-2">
                     <DoFillConsumption site_list={this.site_list} remove={this.remove_site.bind(this)} />
                     <div className="addSite"><a>Add Site</a></div>
