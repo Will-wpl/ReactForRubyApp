@@ -13,6 +13,7 @@ const setup = () => {
   const props = {
     onAddClick: jest.fn((e) => {
     }),
+    onAddturly:'jest',
     comsumption_list : [
         {
             name:"Company Name 01",
@@ -29,23 +30,7 @@ const setup = () => {
                 {account_number:"A0545454",intake_level:"HTL",peak_volume:"5233",off_peak_volume:"8455"},
                 {account_number:"A0545454",intake_level:"HTL",peak_volume:"5233",off_peak_volume:"8455"}
             ]
-        },
-        {
-            name:"Company Name 02",
-            accounts:"5",
-            lt_peak:"5431",
-            lt_off_peak:"5431",
-            hts_peak:"5431",
-            hts_off_peak:"5431",
-            htl_peak:"5431",
-            htl_off_peak:"5431",
-            unit:"kWh",
-            table:[
-                {account_number:"A0545454",intake_level:"HTL",peak_volume:"5233",off_peak_volume:"8455"},
-                {account_number:"A0545454",intake_level:"HTL",peak_volume:"5233",off_peak_volume:"8455"},
-                {account_number:"A0545454",intake_level:"HTL",peak_volume:"5233",off_peak_volume:"8455"}
-            ]
-        },
+        }
       ]
   }
 
@@ -72,7 +57,7 @@ describe('AdminComsumptionList', () => {
     const mockEvent = {
       key: 'Click',
     }
-    wrapper.find('button').simulate('click', mockEvent);
+    wrapper.find('.comsumption_list_top').simulate('click', mockEvent);
     expect(props.onAddClick).toBeCalled();
   });
   

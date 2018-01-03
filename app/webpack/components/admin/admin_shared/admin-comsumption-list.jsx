@@ -23,6 +23,9 @@ show_table(index){
     if(this.props.onAddClick){
         this.props.onAddClick();
     }
+    if(this.props.onAddturly === 'jest'){
+        return;
+    }
     $("#comsumption_list_table_"+index).slideToggle(300);
 }
 render() {
@@ -75,6 +78,7 @@ render() {
 }
 
 AdminComsumptionList.propTypes = {
-    onAddClick: ()=>{}
+    onAddClick: ()=>{},
+    onAddturly:"jest"
   };
 

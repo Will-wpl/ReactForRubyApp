@@ -11,7 +11,11 @@ import {SearchList} from '../../app/webpack/components/search/searchOrlist/searc
 const setup = () => {
   // 模拟 props
 const props = {
-  data:{
+  page_total:["1"],
+  list_data:{
+    page_index:"1"
+  },
+  table_data:{
     "headers":[
       {"name":"Company Name","field_name":"company_name"},
       {"name":"License Number","field_name":"company_license_number"},
@@ -59,17 +63,17 @@ describe('SearchList', () => {
   });
   
   it('SearchList Component have data', () => {
-    expect(props.data.headers[0].field_name).toEqual('Company Name');
-    expect(props.data.headers[1].name).toEqual('License Number');
+    expect(props.table_data.headers[0].field_name).toEqual('company_name');
+    expect(props.table_data.headers[1].name).toEqual('License Number');
   })
   it('SearchList tbody data Rely on the headers', () => {
-    expect(props.data.bodies.data[0][""+props.data.headers[0].name+""]).toEqual('Energy Supply Solutions');
+    expect(props.table_data.bodies.data[0].company_name).toEqual('Energy Supply Solutions');
   })
   it('if you click table_page button the dosearch() will be called', () => {
     const mockEvent = {
       key: 'Click',
     }
-    wrapper.find('.table_page span').simulate('click',mockEvent);
+    wrapper.find('#table_page_1').simulate('click',mockEvent);
     expect(props.onAddClick).toBeCalled()
   })
 })
