@@ -57,4 +57,8 @@ class Api::BaseController < ApplicationController
   def retailer_required
     head :unauthorized unless current_user&.has_role?(:retailer)
   end
+
+  def buyer_required
+    head :unauthorized unless current_user&.has_role?(:buyer)
+  end
 end

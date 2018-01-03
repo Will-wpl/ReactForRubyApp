@@ -79,6 +79,17 @@ Rails.application.routes.draw do
   end
 
   namespace :api do
+    namespace :buyer do
+      resources :auctions, only: %i[obtain published] do
+        collection do
+          get 'obtain'
+          get 'published'
+        end
+      end
+    end
+  end
+
+  namespace :api do
     resources :base, only: %i[heartbeat] do
       collection do
         post 'heartbeat'
