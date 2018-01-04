@@ -34,7 +34,7 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
     actions = [{ url: '/buyer/consumptions/:id/edit', name: 'Edit', icon: 'lm--icon-search' }]
     data = []
     consumption.order('auctions.actual_begin_time asc').each do |consumption|
-      data.push(name: consumption.auction.name, actual_begin_time: consumption.auction.actual_begin_time,
+      data.push(id: consumption.id, name: consumption.auction.name, actual_begin_time: consumption.auction.actual_begin_time,
                 publish_status: consumption.auction.publish_status, participation_status: consumption.participation_status)
     end
     bodies = { data: data, total: total }
