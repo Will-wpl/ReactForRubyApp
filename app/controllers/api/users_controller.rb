@@ -76,4 +76,9 @@ class Api::UsersController < Api::BaseController
 
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
   end
+
+  def show
+    user = User.find(params[:id])
+    render json: user, status: 200
+  end
 end

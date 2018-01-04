@@ -3,7 +3,11 @@ require 'rails_helper'
 RSpec.describe Api::Admin::AuctionsController, type: :controller do
   # let! (:auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
   let! (:auction) { create(:auction, :for_next_month, :upcoming) }
-
+  let! (:retailers) { create_list(:user, 25, :with_retailer) }
+  let! (:arrangement_1) { create(:arrangement, user: retailers[0], auction: auction) }
+  let! (:arrangement_2) { create(:arrangement, user: retailers[1], auction: auction) }
+  let! (:arrangement_3) { create(:arrangement, user: retailers[2], auction: auction) }
+  let! (:arrangement_4) { create(:arrangement, user: retailers[4], auction: auction) }
   let!(:published_upcoming_auction) { create(:auction, :for_next_month, :upcoming, :published) }
   let!(:published_living_auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
   base_url = 'api/admin/auctions'
@@ -53,9 +57,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
     end
 
     describe 'DELETE destroy' do
-
       context 'Has deleted an auction' do
-
         def do_request
           delete :destroy, params: { id: auction.id }
         end
@@ -68,7 +70,6 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       end
 
       context 'Has not delete an auction' do
-
         def do_request
           delete :destroy, params: { id: published_upcoming_auction.id }
         end
@@ -76,7 +77,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
         before { do_request }
         it 'success' do
           hash_body = JSON.parse(response.body)
-          expect(hash_body['message']).to include("not delete it")
+          expect(hash_body['message']).to include('not delete it')
           expect(response).to have_http_status(:ok)
         end
       end
@@ -134,12 +135,12 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       let!(:retailer1) { create(:user, :with_retailer) }
       let!(:retailer2) { create(:user, :with_retailer) }
       let!(:retailer3) { create(:user, :with_retailer) }
-      let!(:r1_his_init) { create(:auction_history, bid_time: current_time, user: retailer1, auction: auction, actual_bid_time:current_time) }
-      let!(:r2_his_init) { create(:auction_history, bid_time: current_time, user: retailer2, auction: auction, actual_bid_time:current_time) }
-      let!(:r3_his_init) { create(:auction_history, bid_time: current_time, user: retailer3, auction: auction, actual_bid_time:current_time) }
-      let!(:r1_his_bid) { create(:auction_history, :set_bid, bid_time: bid_time, user: retailer1, auction: auction, actual_bid_time:bid_time) }
-      let!(:r2_his_bid) { create(:auction_history, :not_bid, bid_time: bid_time, user: retailer2, auction: auction, actual_bid_time:current_time) }
-      let!(:r3_his_bid) { create(:auction_history, :not_bid, bid_time: bid_time, user: retailer3, auction: auction, actual_bid_time:current_time) }
+      let!(:r1_his_init) { create(:auction_history, bid_time: current_time, user: retailer1, auction: auction, actual_bid_time: current_time) }
+      let!(:r2_his_init) { create(:auction_history, bid_time: current_time, user: retailer2, auction: auction, actual_bid_time: current_time) }
+      let!(:r3_his_init) { create(:auction_history, bid_time: current_time, user: retailer3, auction: auction, actual_bid_time: current_time) }
+      let!(:r1_his_bid) { create(:auction_history, :set_bid, bid_time: bid_time, user: retailer1, auction: auction, actual_bid_time: bid_time) }
+      let!(:r2_his_bid) { create(:auction_history, :not_bid, bid_time: bid_time, user: retailer2, auction: auction, actual_bid_time: current_time) }
+      let!(:r3_his_bid) { create(:auction_history, :not_bid, bid_time: bid_time, user: retailer3, auction: auction, actual_bid_time: current_time) }
 
       def do_request_void
         post :confirm, params: { id: auction.id, user_id: retailer1, status: 'void' }
@@ -172,20 +173,20 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
     describe 'PUT update' do
       def do_request(id)
         auction_object = {
-            name: 'Hello world',
-            start_datetime: auction.start_datetime,
-            contract_period_start_date: auction.contract_period_start_date,
-            contract_period_end_date: auction.contract_period_end_date,
-            duration: auction.duration,
-            reserve_price: auction.reserve_price,
-            actual_begin_time: auction.actual_begin_time,
-            actual_end_time: auction.actual_end_time,
-            total_volume: auction.total_volume,
-            publish_status: auction.publish_status,
-            hold_status: auction.hold_status,
-            time_extension: '1',
-            average_price: '2',
-            retailer_mode: '3'
+          name: 'Hello world',
+          start_datetime: auction.start_datetime,
+          contract_period_start_date: auction.contract_period_start_date,
+          contract_period_end_date: auction.contract_period_end_date,
+          duration: auction.duration,
+          reserve_price: auction.reserve_price,
+          actual_begin_time: auction.actual_begin_time,
+          actual_end_time: auction.actual_end_time,
+          total_volume: auction.total_volume,
+          publish_status: auction.publish_status,
+          hold_status: auction.hold_status,
+          time_extension: '1',
+          average_price: '2',
+          retailer_mode: '3'
         }
         put :update, params: { id: id, auction: auction_object }
       end
@@ -202,7 +203,6 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       end
 
       context 'has updated an auction' do
-
         before { do_request(auction.id) }
         it 'success' do
           hash_body = JSON.parse(response.body)
@@ -214,9 +214,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       end
     end
 
-
     describe 'GET unpublished auction list' do
-
       context 'Pager unpublished an auction' do
         def do_request
           get :unpublished, params: { page_size: '10', page_index: '1' }
@@ -234,7 +232,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
 
       context 'Params pagers unpublished auction' do
         def do_request
-          get :unpublished, params: { name: [auction.name, 'like'], actual_begin_time: [Time.current.strftime("%Y-%m-%d"), 'date_between'], page_size: '10', page_index: '1' }
+          get :unpublished, params: { name: [auction.name, 'like'], actual_begin_time: [Time.current.strftime('%Y-%m-%d'), 'date_between'], page_size: '10', page_index: '1' }
         end
 
         before { do_request }
@@ -249,7 +247,6 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
     end
 
     describe 'GET published auction list' do
-
       context 'Pager published auction' do
         def do_request
           get :published, params: { page_size: '10', page_index: '1' }
@@ -270,7 +267,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
 
       context 'Params pagers published auction' do
         def do_request
-          get :published, params: { name: [auction.name, 'like'], actual_begin_time: [Time.current.strftime("%Y-%m-%d"), 'date_between'], page_size: '10', page_index: '1' }
+          get :published, params: { name: [auction.name, 'like'], actual_begin_time: [Time.current.strftime('%Y-%m-%d'), 'date_between'], page_size: '10', page_index: '1' }
         end
 
         before { do_request }
@@ -284,10 +281,60 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       end
     end
 
+    describe 'GET retailers of selected auction' do
+
+
+      context 'Pager got user list' do
+        def do_request
+          get :retailers, params: { id: auction.id, status: ['', '='], page_size: '10', page_index: '1' }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+          expect(hash['headers'].size).to eq(2)
+          expect(hash['bodies']['total']).to eq(25)
+          expect(hash['bodies']['data'].size).to eq(10)
+        end
+      end
+
+      context 'Pager got selected user list' do
+        def do_request
+          get :retailers, params: { id: auction.id, status: ['1', '='], page_size: '10', page_index: '1' }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+          puts response.body
+          expect(hash['headers'].size).to eq(2)
+          expect(hash['bodies']['total']).to eq(4)
+          expect(hash['bodies']['data'].size).to eq(4)
+        end
+      end
+
+      context 'Pager got un-selected user list' do
+        def do_request
+          get :retailers, params: { id: auction.id, status: ['0', '='], page_size: '10', page_index: '1' }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+          puts response.body
+          expect(hash['headers'].size).to eq(2)
+          expect(hash['bodies']['total']).to eq(21)
+          expect(hash['bodies']['data'].size).to eq(10)
+        end
+      end
+
+    end
   end
 
   context 'retailer user' do
-
     before { sign_in create(:user, :with_retailer) }
 
     describe '401 Unauthorized' do
@@ -317,13 +364,13 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       end
       context '#confirm' do
         it 'success' do
-          put :update, params: { id: auction.id}
+          put :update, params: { id: auction.id }
           expect(response).to have_http_status(401)
         end
       end
       context '#delete' do
         it 'success' do
-          delete :destroy, params: { id: auction.id}
+          delete :destroy, params: { id: auction.id }
           expect(response).to have_http_status(401)
         end
       end
@@ -340,35 +387,35 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
     describe 'GET obtain' do
       it 'success' do
         expect(get: "/#{base_url}/obtain").to be_routable
-        expect(get: "/#{base_url}/obtain").to route_to(controller: "#{base_url}",
-                                                        action: "obtain")
+        expect(get: "/#{base_url}/obtain").to route_to(controller: base_url.to_s,
+                                                       action: 'obtain')
       end
     end
 
     describe 'PUT publish' do
       it 'success' do
         expect(put: "/#{base_url}/#{auction.id}/publish").to be_routable
-        expect(put: "/#{base_url}/#{auction.id}/publish").to route_to(controller: "#{base_url}",
-                                                                       action: "publish",
-                                                                       id: auction.id.to_s)
+        expect(put: "/#{base_url}/#{auction.id}/publish").to route_to(controller: base_url.to_s,
+                                                                      action: 'publish',
+                                                                      id: auction.id.to_s)
       end
     end
 
     describe 'PUT hold' do
       it 'success' do
         expect(put: "/#{base_url}/#{auction.id}/hold").to be_routable
-        expect(put: "/#{base_url}/#{auction.id}/hold").to route_to(controller: "#{base_url}",
-                                                                     action: "hold",
-                                                                     id: auction.id.to_s)
+        expect(put: "/#{base_url}/#{auction.id}/hold").to route_to(controller: base_url.to_s,
+                                                                   action: 'hold',
+                                                                   id: auction.id.to_s)
       end
     end
 
     describe 'POST confirm' do
       it 'success' do
         expect(post: "/#{base_url}/#{auction.id}/confirm").to be_routable
-        expect(post: "/#{base_url}/#{auction.id}/confirm").to route_to(controller: "#{base_url}",
-                                                                  action: "confirm",
-                                                                  id: auction.id.to_s)
+        expect(post: "/#{base_url}/#{auction.id}/confirm").to route_to(controller: base_url.to_s,
+                                                                       action: 'confirm',
+                                                                       id: auction.id.to_s)
       end
     end
 
@@ -376,14 +423,13 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       it 'success' do
         expect(put: "/#{base_url}/#{auction.id}").to be_routable
         expect(patch: "/#{base_url}/#{auction.id}").to be_routable
-        expect(put: "/#{base_url}/#{auction.id}").to route_to(controller: "#{base_url}",
-                                                                      action: "update",
-                                                                      id: auction.id.to_s)
-        expect(patch: "/#{base_url}/#{auction.id}").to route_to(controller: "#{base_url}",
-                                                              action: "update",
+        expect(put: "/#{base_url}/#{auction.id}").to route_to(controller: base_url.to_s,
+                                                              action: 'update',
                                                               id: auction.id.to_s)
+        expect(patch: "/#{base_url}/#{auction.id}").to route_to(controller: base_url.to_s,
+                                                                action: 'update',
+                                                                id: auction.id.to_s)
       end
     end
   end
-
 end

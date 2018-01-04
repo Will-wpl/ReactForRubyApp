@@ -9,7 +9,6 @@ class Api::AuctionsController < Api::BaseController
       auction = Auction.find(params[:id])
       render json: auction, status: 200
     end
-
   end
 
   # PATCH update auction by ajax
@@ -32,7 +31,6 @@ class Api::AuctionsController < Api::BaseController
       end
       render json: @auction, status: 200
     end
-
   end
 
   def destroy
@@ -150,6 +148,41 @@ class Api::AuctionsController < Api::BaseController
     ]
     actions = [{ url: '/admin/auctions/:id/upcoming', name: 'Edit', icon: 'lm--icon-search', interface_type: 'auction' }]
     data = auction.order(actual_begin_time: :asc)
+    bodies = { data: data, total: total }
+    render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
+  end
+
+  def retailers
+    if params.key?(:page_size) && params.key?(:page_index)
+      users_search_params = select_params(params, %w[company_name])
+      search_where_array = set_search_params(users_search_params)
+      users = User.retailers.where(search_where_array)
+      arrangements = Arrangement.find_by_auction_id(params[:id])
+      ids = get_user_ids(arrangements)
+      if !params[:status].nil? && params[:status][0] == '1'
+        users = users.selected_retailers(params[:id])
+      elsif !params[:status].nil? && params[:status][0] == '0'
+        users = users.exclude(ids)
+      end
+      users = users.page(params[:page_index]).per(params[:page_size])
+      total = users.total_count
+    else
+      users = User.retailers
+      total = users.count
+    end
+    headers = [
+      { name: 'Company Name', field_name: 'company_name' },
+      { name: 'Status', field_name: 'status' }
+    ]
+    actions = [
+      { url: 'doooooooooooooooooooo' },
+      { url: '/api/admin/users/:id', name: 'View', icon: 'lm--icon-search' }
+    ]
+    data = []
+    users.order(approval_status: :desc, company_name: :asc).each do |user|
+      status = ids.include?(user.id) ? '1' : '0'
+      data.push(company_name: user.company_name, status: status)
+    end
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
   end

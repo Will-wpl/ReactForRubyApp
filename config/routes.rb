@@ -27,13 +27,13 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :admin do
-      resource :users, only: %i[retailers buyers] do
+      resources :users, only: %i[show retailers buyers] do
         collection do
           get 'retailers'
           get 'buyers'
         end
       end
-      resources :auctions, only: %i[obtain link create update delete publish hold confirm destroy unpublished published] do
+      resources :auctions, only: %i[obtain link create update delete publish hold confirm destroy unpublished published retailers] do
         member do
           put 'publish'
           put 'hold'
@@ -43,6 +43,7 @@ Rails.application.routes.draw do
           get 'obtain'
           get 'unpublished'
           get 'published'
+          get 'retailers'
         end
       end
       resource :auction_histories, only: %i[list last] do

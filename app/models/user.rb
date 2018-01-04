@@ -31,6 +31,8 @@ class User < ApplicationRecord
   # Scopes
   scope :retailers, -> { includes(:roles).where(roles: { name: 'retailer' }) }
   scope :buyers, -> { includes(:roles).where(roles: { name: 'buyer' }) }
+  scope :selected_retailers, ->(auction_id) { includes(:arrangements).where(arrangements: { auction_id: auction_id }) }
+  scope :exclude, ->(ids) { where('users.id not in (?)', ids) }
   # Callbacks
 
   # Delegates

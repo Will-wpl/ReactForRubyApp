@@ -49,6 +49,16 @@ class Api::BaseController < ApplicationController
     selected_params
   end
 
+  def get_user_ids(objects)
+    ids = []
+    objects.each do |object|
+      if object.class.to_s.underscore == 'arrangement'
+        ids.push(object[:user_id])
+      end
+    end
+    ids
+  end
+
 
   def admin_required
     head :unauthorized unless current_user&.has_role?(:admin)
