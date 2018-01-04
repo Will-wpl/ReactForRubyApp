@@ -1,6 +1,6 @@
-class CreateComsumptions < ActiveRecord::Migration[5.1]
+class CreateConsumptions < ActiveRecord::Migration[5.1]
   def change
-    create_table :comsumptions do |t|
+    create_table :consumptions do |t|
       t.string :action_status
       t.string :participation_status
       t.decimal :lt_peak
