@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180103074707) do
+ActiveRecord::Schema.define(version: 20171227035802) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -152,10 +152,10 @@ ActiveRecord::Schema.define(version: 20180103074707) do
     t.string "intake_level"
     t.decimal "peak"
     t.decimal "off_peak"
-    t.bigint "comsumption_id"
+    t.bigint "consumption_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["comsumption_id"], name: "index_consumption_details_on_comsumption_id"
+    t.index ["consumption_id"], name: "index_consumption_details_on_consumption_id"
   end
 
   create_table "consumptions", force: :cascade do |t|
@@ -243,7 +243,7 @@ ActiveRecord::Schema.define(version: 20180103074707) do
   add_foreign_key "auction_histories", "auctions"
   add_foreign_key "auction_histories", "users"
   add_foreign_key "auction_results", "auctions"
-  add_foreign_key "consumption_details", "consumptions", column: "comsumption_id"
+  add_foreign_key "consumption_details", "consumptions"
   add_foreign_key "consumptions", "auctions"
   add_foreign_key "consumptions", "users"
   add_foreign_key "user_extensions", "users"
