@@ -9,19 +9,19 @@ class Api::ConsumptionDetailsController < Api::BaseController
 
   def update
     if params[:id] == '0' # create
-      render json: @consumption_detail, status: 201 if @consumption_detail.save
+      render json: @detail, status: 201 if @detail.save
     else # update
-      render json: @consumption_detail, status: 200 if @consumption_detail.update(model_params)
+      render json: @detail, status: 200 if @detail.update(model_params)
     end
   end
 
   private
 
   def set_consumption_detail
-    @consumption_detail = params[:id] == '0' ? ConsumptionDetail.new(model_params) : ConsumptionDetail.find(params[:id])
+    @detail = params[:id] == '0' ? ConsumptionDetail.new(model_params) : ConsumptionDetail.find(params[:id])
   end
 
   def model_params
-    params.require(:consumption_detail).permit(:account_number, :intake_level, :peak, :off_peak, :comsumption_id)
+    params.require(:consumption_detail).permit(:account_number, :intake_level, :peak, :off_peak, :consumption_id)
   end
 end
