@@ -9,7 +9,7 @@ export default class AdminInvitation extends Component {
     this.state={
         text:"",
         fileData:{
-                "buyer_tc_upload":[{buttonName:"add",buttonText:"+"}],
+                "buyer_tc_upload":[{buttonName:"none"}],
                 "tender_documents_upload":[{buttonName:"add",buttonText:"+"}],
                 "birefing_pack_upload":[{buttonName:"add",buttonText:"+"}]
             }
@@ -20,7 +20,7 @@ componentDidMount() {
     //alert(localStorage.auction_id);
 }
 upload(type,index){
-    let barObj = $('#'+type+index).parent("a").next();
+    let barObj = $('#'+type+index).parents("a").next();
     $.ajax({
         url: '/api/admin/auction_attachments?auction_id='+sessionStorage.auction_id+'&file_type='+type+index,
         type: 'POST',
@@ -43,6 +43,7 @@ upload(type,index){
         },
         success:(res)=>{
             barObj.find(".progress-bar").text('upload successful!');
+            $('#'+type+index).next().fadeOut(300);
         },
         error:()=>{
             barObj.find(".progress-bar").text('upload failed!');
@@ -52,13 +53,31 @@ upload(type,index){
 }
 changefileval(id){
     let fileObj = $("#"+id);
-    if(fileObj.val() != ""){
-        fileObj.prev("dfn").text(fileObj.val());
+    fileObj.parent().prev("dfn").text(fileObj.val());
+    fileObj.next().fadeOut(300);
+}
+checkRequired(){
+    let requiredObj = $("input[type='file'][required]"),result = true;
+    for(let i=0; i<requiredObj.length; i++){
+        if(requiredObj[i].value === ""){
+            console.log($("#"+requiredObj[i].id).parents("a.upload_file_btn").next().find(".progress-bar").text());
+            $("#"+requiredObj[i].id).next().fadeIn(300);
+            result = false;
+            break;            
+        }else if($("#"+requiredObj[i].id).parents("a.upload_file_btn").next().find(".progress-bar").text() != "upload successful!"){
+            $("#"+requiredObj[i].id).next().fadeIn(300);
+            result = false;
+            break; 
+        }
     }
+    return result;
 }
 doPublish(){
     if(this.props.onAddClick){
         this.props.onAddClick();
+    }
+    if(!this.checkRequired()){
+        return;
     }
     raPublish({
         pagedata:{publish_status: '1'},
@@ -80,7 +99,7 @@ doPublish(){
             this.refs.Modal.showModal();
         })
 }
-addinputfile(type){
+addinputfile(type,required){
         let fileHtml = '';
         fileHtml = <div className="file_box">
                         {this.state.fileData[type].map((item,index)=>{
@@ -90,18 +109,23 @@ addinputfile(type){
                                         <a className="upload_file_btn">
                                             <dfn>No file selected...</dfn>
                                             {/* accept="application/pdf,application/msword" */}
-                                            <input type="file" ref={type+index} onChange={this.changefileval.bind(this,type+index)} id={type+index} name="file" disabled={this.state.disabled}></input>
+                                            {required == "required" ? <div>
+                                            <input type="file" required="required" ref={type+index} onChange={this.changefileval.bind(this,type+index)} id={type+index} name="file" disabled={this.state.disabled} />
+                                            <div className="required_error">
+                                                Please fill out this field and upload this file
+                                            </div></div> 
+                                            : <input type="file" ref={type+index} onChange={this.changefileval.bind(this,type+index)} id={type+index} name="file" disabled={this.state.disabled} />}
                                             <span>Browse..</span>
                                         </a>
-                                        <div className="progress progress-striped active">
-                                            <div className="progress-bar progress-bar-success" role="progressbar" style={{width:"0%"}}>0%</div>
+                                        <div className="progress">
+                                            <div className="progress-bar" style={{width:"0%"}}>0%</div>
                                         </div>
                                     </div>
                                     <div className="col-sm-12 col-md-2 u-cell">
                                         <a className="lm--button lm--button--primary" onClick={this.upload.bind(this,type,index)}>Upload</a>
                                     </div>
                                     <div className="col-sm-12 col-md-2 u-cell">
-                                        <a onClick={this.fileclick.bind(this,index,type,item.buttonName)} className={"lm--button lm--button--primary "+item.buttonName}>{item.buttonText}</a>
+                                        {item.buttonName === "none" ? "" : <a onClick={this.fileclick.bind(this,index,type,item.buttonName)} className={"lm--button lm--button--primary "+item.buttonName}>{item.buttonText}</a>}
                                     </div>
                                 </div>
                                 </form>
@@ -173,13 +197,6 @@ render() {
                         <div className="col-sm-12 col-md-12 u-cell"><a className="lm--button lm--button--primary col-sm-12 orange">Send Invitation Email</a></div>
                         </div>
                     </div>
-                    <div className="lm--formItem lm--formItem--inline string u-mt3">
-                        <label className="lm--formItem-left lm--formItem-label string required">
-                        Upload files:
-                        </label>
-                        <div className="lm--formItem-right lm--formItem-control">
-                        </div>
-                    </div>
                     <div className="lm--formItem lm--formItem--inline string">
                         <label className="lm--formItem-left lm--formItem-label string required">
                         Aggregate Consumption:
@@ -215,20 +232,27 @@ render() {
                                 <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/comsumption?type=3`} className="lm--button lm--button--primary col-sm-12">Individual Consumption Details</a></div>                
                         </div>
                     </div>
-                    <div className="lm--formItem lm--formItem--inline string">
+                    <div className="lm--formItem lm--formItem--inline string u-mt3">
                         <label className="lm--formItem-left lm--formItem-label string required">
-                        Buyer T&C Upload :
+                        Upload files:
                         </label>
-                        <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                        {this.addinputfile("buyer_tc_upload")}
+                        <div className="lm--formItem-right lm--formItem-control">
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
                         <label className="lm--formItem-left lm--formItem-label string required">
-                        Tender Documents Upload :
+                        <abbr title="required">*</abbr> Buyer T&C Upload :
                         </label>
                         <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                        {this.addinputfile("tender_documents_upload")}
+                        {this.addinputfile("buyer_tc_upload","required")}
+                        </div>
+                    </div>
+                    <div className="lm--formItem lm--formItem--inline string">
+                        <label className="lm--formItem-left lm--formItem-label string required">
+                        <abbr title="required">*</abbr> Tender Documents Upload :
+                        </label>
+                        <div className="lm--formItem-right lm--formItem-control u-grid mg0">
+                        {this.addinputfile("tender_documents_upload","required")}
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
