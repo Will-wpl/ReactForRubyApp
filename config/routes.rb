@@ -80,6 +80,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :buyer do
+      resources :consumption_details, only:%i[index update]
       resources :auctions, only: %i[obtain published] do
         collection do
           get 'obtain'
