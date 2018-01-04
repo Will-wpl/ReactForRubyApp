@@ -9,35 +9,52 @@ export default class AdminInvitation extends Component {
     this.state={
         text:"",
         fileData:{
+                "buyer_tc_upload":[{buttonName:"add",buttonText:"+"}],
                 "tender_documents_upload":[{buttonName:"add",buttonText:"+"}],
                 "birefing_pack_upload":[{buttonName:"add",buttonText:"+"}]
             }
     }
-    //this.winnerdata=[];
-    //this.winnerauction={};
-    this.winner = {
-        data:{},
-        auction:{}
-    }
-    //this.auction={}
 }
 
 componentDidMount() {
     //alert(localStorage.auction_id);
 }
 upload(type,index){
+    let barObj = $('#'+type+index).parent("a").next();
     $.ajax({
-        url: '/api/admin/auction_attachments?auction_id='+sessionStorage.auction_id+'&file_type='+type,
+        url: '/api/admin/auction_attachments?auction_id='+sessionStorage.auction_id+'&file_type='+type+index,
         type: 'POST',
         cache: false,
-        data: new FormData($('#'+type)[index]),
+        data: new FormData($('#'+type+"_form_"+index)[0]),
         processData: false,
-        contentType: false
-    }).done(function(res) {}).fail(function(res) {});
+        contentType: false,
+        xhr:()=>{
+            var xhr = new window.XMLHttpRequest();
+            xhr.upload.addEventListener("progress", function (evt) {
+                //console.log(evt)
+                if (evt.lengthComputable) {
+                    let percentComplete = parseInt(evt.loaded / evt.total * 100, 10);
+                    barObj.show();
+                    barObj.find(".progress-bar").css('width',percentComplete + '%');
+                    barObj.find(".progress-bar").text(percentComplete + '%');
+                }
+            }, false);
+            return xhr;
+        },
+        success:(res)=>{
+            barObj.find(".progress-bar").text('upload successful!');
+        },
+        error:()=>{
+            barObj.find(".progress-bar").text('upload failed!');
+            barObj.find(".progress-bar").css('background','red');
+        }
+    })
 }
 changefileval(id){
     let fileObj = $("#"+id);
-    fileObj.prev("dfn").text(fileObj.val());
+    if(fileObj.val() != ""){
+        fileObj.prev("dfn").text(fileObj.val());
+    }
 }
 doPublish(){
     if(this.props.onAddClick){
@@ -65,15 +82,20 @@ doPublish(){
 }
 addinputfile(type){
         let fileHtml = '';
-        fileHtml = <form id={type} encType="multipart/form-data">
+        fileHtml = <div className="file_box">
                         {this.state.fileData[type].map((item,index)=>{
-                        return <div className="u-grid mg0" key={index}>
+                        return <form key={index} id={type+"_form_"+index} encType="multipart/form-data">
+                                <div className="u-grid mg0 u-mt2" >
                                     <div className="col-sm-12 col-md-8 u-cell">
                                         <a className="upload_file_btn">
-                                            <dfn></dfn>
-                                            <input type="file" ref={type+index} accept="application/pdf,application/msword" onChange={this.changefileval.bind(this,type+index)} id={type+index} name="file" disabled={this.state.disabled}></input>
+                                            <dfn>No file selected...</dfn>
+                                            {/* accept="application/pdf,application/msword" */}
+                                            <input type="file" ref={type+index} onChange={this.changefileval.bind(this,type+index)} id={type+index} name="file" disabled={this.state.disabled}></input>
                                             <span>Browse..</span>
                                         </a>
+                                        <div className="progress progress-striped active">
+                                            <div className="progress-bar progress-bar-success" role="progressbar" style={{width:"0%"}}>0%</div>
+                                        </div>
                                     </div>
                                     <div className="col-sm-12 col-md-2 u-cell">
                                         <a className="lm--button lm--button--primary" onClick={this.upload.bind(this,type,index)}>Upload</a>
@@ -82,8 +104,9 @@ addinputfile(type){
                                         <a onClick={this.fileclick.bind(this,index,type,item.buttonName)} className={"lm--button lm--button--primary "+item.buttonName}>{item.buttonText}</a>
                                     </div>
                                 </div>
+                                </form>
                         })}
-                    </form>
+                    </div>
         return fileHtml;
     }
     fileclick(index,type,typeName,obj){
@@ -103,7 +126,7 @@ addinputfile(type){
                     fileData:allfileObj
                 })
             }
-            console.log(this.state.tender_documents);   
+            console.log(this.state.fileData);   
 
     }
 render() {
@@ -190,6 +213,14 @@ render() {
                                 </div>
                                 <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/comsumption?type=2`} className="lm--button lm--button--primary col-sm-12">Company Consumption Details</a></div>
                                 <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/comsumption?type=3`} className="lm--button lm--button--primary col-sm-12">Individual Consumption Details</a></div>                
+                        </div>
+                    </div>
+                    <div className="lm--formItem lm--formItem--inline string">
+                        <label className="lm--formItem-left lm--formItem-label string required">
+                        Buyer T&C Upload :
+                        </label>
+                        <div className="lm--formItem-right lm--formItem-control u-grid mg0">
+                        {this.addinputfile("buyer_tc_upload")}
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">

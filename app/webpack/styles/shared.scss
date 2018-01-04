@@ -422,7 +422,7 @@ body.choose{
 .admin_invitation{
   .w_100{ width: 100%;}
   .retailer_fill{ margin-bottom: 1.5rem;}
-  a{ margin-bottom: 1.5rem; text-align: center; font-size: 13px;
+  a{ margin-bottom: 1rem; text-align: center; font-size: 13px;
     &.orange{background:#DF5C28;}
   }
   .lm--formItem-right.lm--formItem-control abbr{
@@ -434,18 +434,23 @@ body.choose{
   .retailer_btn{
     a{ margin-right: 0.75rem;}
   }
-  form{ 
+  .file_box{ 
     width: 100%;
     .upload_file_btn{ 
-      position: relative; width: 100%; display:inline-block; 
+      position: relative; width: 100%; display:inline-block; min-height:40px; margin-bottom: 0px;
       border:1px solid #fff;
-      input{ position: absolute; width: 100%; opacity: 0; top:0px; left:0px; margin: 0; height: 100%;}
+      input{ position: absolute; width: 100%; opacity: 0; top:0px; left:0px; margin: 0; height: 100%; z-index: 10;}
       dfn{float: left; padding: 0.70rem 1rem 0.70rem; line-height: 1.176470588;}
-      span{ float: right; text-align: center; line-height: 1.176470588; padding: 0.70rem 1rem 0.70rem; background: #334859; color: #fff; }
+      span{ display: block; position: absolute; right:0px; top:0px; z-index: 3; text-align: center; line-height: 1.176470588; padding: 0.70rem 1rem 0.70rem; background: #334859; color: #fff; }
     }
+    .u-mt2{ margin-bottom:15px;}
     .add{ border-radius: 100%; background: none; padding: 0.70rem 0.95rem 0.70rem; border:2px solid #00888a; color:#00888a;}
     .remove{border-radius: 100%; background: none; padding: 0.70rem 0.95rem 0.70rem; border:2px solid #00888a; color:#00888a;}
   }
+  .progress{
+    border: 1px solid #00888a; display: none;
+    .progress-bar{ background: #22ad38; text-indent: 5px; transition: 0.5s all;}
+  } 
 }
 
 .comsumption_list{
