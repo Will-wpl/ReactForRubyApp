@@ -33,7 +33,7 @@ Rails.application.routes.draw do
           get 'buyers'
         end
       end
-      resources :auctions, only: %i[obtain link create update delete publish hold confirm destroy unpublished published retailers] do
+      resources :auctions, only: %i[obtain link create update delete publish hold confirm destroy unpublished published retailers buyers] do
         member do
           put 'publish'
           put 'hold'
@@ -44,6 +44,7 @@ Rails.application.routes.draw do
           get 'unpublished'
           get 'published'
           get 'retailers'
+          get 'buyers'
         end
       end
       resource :auction_histories, only: %i[list last] do

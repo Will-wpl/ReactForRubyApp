@@ -187,6 +187,67 @@ class Api::AuctionsController < Api::BaseController
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
   end
 
+  def buyers
+    if params.key?(:page_size) && params.key?(:page_index)
+      consumer_type = params[:consumer_type][0]
+      users_search_params = if consumer_type == '2'
+                              select_params(params, %w[company_name consumer_type])
+                            elsif consumer_type == '3'
+                              select_params(params, %w[name consumer_type account_housing_type])
+                            else
+                              []
+                            end
+      search_where_array = set_search_params(users_search_params)
+      users = User.buyers.where(search_where_array)
+      consumption = Consumption.find_by_auction_id(params[:id])
+      ids = get_user_ids(consumption)
+      if !params[:status].nil? && params[:status][0] == '1'
+        users = users.selected_buyers(params[:id])
+      elsif !params[:status].nil? && params[:status][0] == '0'
+        users = users.exclude(ids)
+      end
+      users = users.page(params[:page_index]).per(params[:page_size])
+      total = users.total_count
+    else
+      users = User.buyers
+      total = users.count
+    end
+    if consumer_type == '2'
+      headers = [
+        { name: 'Company Name', field_name: 'company_name' },
+        { name: 'Status', field_name: 'status' }
+      ]
+      actions = [
+        { url: 'doooooooooooooooooooo' },
+        { url: '/api/admin/users/:id', name: 'View', icon: 'lm--icon-search' }
+      ]
+    elsif consumer_type == '3'
+      headers = [
+        { name: 'Name', field_name: 'company_name' },
+        { name: 'Housing Type', field_name: 'account_housing_type' },
+        { name: 'Status', field_name: 'status' }
+      ]
+      actions = [
+        { url: 'doooooooooooooooooooo' },
+        { url: '/api/admin/users/:id', name: 'View', icon: 'lm--icon-search' }
+      ]
+    else
+      headers = []
+      actions = []
+    end
+    data = []
+    users.order(approval_status: :desc, company_name: :asc).each do |user|
+      status = ids.include?(user.id) ? '1' : '0'
+      if consumer_type == '2'
+        data.push(company_name: user.company_name, status: status)
+      elsif consumer_type == '3'
+        data.push(company_name: user.company_name, house_type: user.account_housing_type, status: status)
+      end
+    end
+    bodies = { data: data, total: total }
+    render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
+  end
+
   private
 
   def set_auction

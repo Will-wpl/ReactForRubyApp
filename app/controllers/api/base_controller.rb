@@ -52,7 +52,7 @@ class Api::BaseController < ApplicationController
   def get_user_ids(objects)
     ids = []
     objects.each do |object|
-      if object.class.to_s.underscore == 'arrangement'
+      if object.class.to_s.underscore == 'arrangement' || object.class.to_s.underscore == 'consumption'
         ids.push(object[:user_id])
       end
     end

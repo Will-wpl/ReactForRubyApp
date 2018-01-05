@@ -8,6 +8,16 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
   let! (:arrangement_2) { create(:arrangement, user: retailers[1], auction: auction) }
   let! (:arrangement_3) { create(:arrangement, user: retailers[2], auction: auction) }
   let! (:arrangement_4) { create(:arrangement, user: retailers[4], auction: auction) }
+  let! (:buyer_c_s) { create_list(:user, 25, :with_buyer, :with_company_buyer) }
+  let! (:consumption_1) { create(:consumption, user: buyer_c_s[0], auction: auction) }
+  let! (:consumption_2) { create(:consumption, user: buyer_c_s[1], auction: auction) }
+  let! (:consumption_3) { create(:consumption, user: buyer_c_s[2], auction: auction) }
+  let! (:consumption_4) { create(:consumption, user: buyer_c_s[4], auction: auction) }
+  let! (:buyer_i_s) { create_list(:user, 25, :with_buyer, :with_individual_buyer) }
+  let! (:consumption_5) { create(:consumption, user: buyer_i_s[0], auction: auction) }
+  let! (:consumption_6) { create(:consumption, user: buyer_i_s[1], auction: auction) }
+  let! (:consumption_7) { create(:consumption, user: buyer_i_s[2], auction: auction) }
+  let! (:consumption_8) { create(:consumption, user: buyer_i_s[4], auction: auction) }
   let!(:published_upcoming_auction) { create(:auction, :for_next_month, :upcoming, :published) }
   let!(:published_living_auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
   base_url = 'api/admin/auctions'
@@ -326,6 +336,105 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
           expect(response).to have_http_status(:ok)
           puts response.body
           expect(hash['headers'].size).to eq(2)
+          expect(hash['bodies']['total']).to eq(21)
+          expect(hash['bodies']['data'].size).to eq(10)
+        end
+      end
+
+    end
+
+    describe 'GET buyer of selected auction' do
+
+
+      context 'Pager got company buyer user list' do
+        def do_request
+          get :buyers, params: { id: auction.id, consumer_type: ['2', '='], status: ['', '='], page_size: '10', page_index: '1' }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+          expect(hash['headers'].size).to eq(2)
+          expect(hash['bodies']['total']).to eq(25)
+          expect(hash['bodies']['data'].size).to eq(10)
+        end
+      end
+
+      context 'Pager got individual buyer user list' do
+        def do_request
+          get :buyers, params: { id: auction.id, consumer_type: ['3', '='], status: ['', '='], page_size: '10', page_index: '1' }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+          expect(hash['headers'].size).to eq(3)
+          expect(hash['bodies']['total']).to eq(25)
+          expect(hash['bodies']['data'].size).to eq(10)
+        end
+      end
+
+      context 'Pager got selected company buyer list' do
+        def do_request
+          get :buyers, params: { id: auction.id, consumer_type: ['2', '='], status: ['1', '='], page_size: '10', page_index: '1' }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+          puts response.body
+          expect(hash['headers'].size).to eq(2)
+          expect(hash['bodies']['total']).to eq(4)
+          expect(hash['bodies']['data'].size).to eq(4)
+        end
+      end
+
+      context 'Pager got selected individual list' do
+        def do_request
+          get :buyers, params: { id: auction.id, consumer_type: ['3', '='], status: ['1', '='], page_size: '10', page_index: '1' }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+          puts response.body
+          expect(hash['headers'].size).to eq(3)
+          expect(hash['bodies']['total']).to eq(4)
+          expect(hash['bodies']['data'].size).to eq(4)
+        end
+      end
+
+      context 'Pager got selected individual list' do
+        def do_request
+          get :buyers, params: { id: auction.id, consumer_type: ['2', '='], status: ['0', '='], page_size: '10', page_index: '1' }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+          puts response.body
+          expect(hash['headers'].size).to eq(2)
+          expect(hash['bodies']['total']).to eq(21)
+          expect(hash['bodies']['data'].size).to eq(10)
+        end
+      end
+
+      context 'Pager got selected individual list' do
+        def do_request
+          get :buyers, params: { id: auction.id, consumer_type: ['3', '='], status: ['0', '='], page_size: '10', page_index: '1' }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+          puts response.body
+          expect(hash['headers'].size).to eq(3)
           expect(hash['bodies']['total']).to eq(21)
           expect(hash['bodies']['data'].size).to eq(10)
         end
