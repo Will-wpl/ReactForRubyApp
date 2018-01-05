@@ -7,35 +7,42 @@ export class FillConsumption extends Component {
         super(props);
         this.state={
             text:"Intake Level has unrepeatable",
-            submit_type:""
+            submit_type:"",
+            site_list:[
+                {
+                    number:'A000032100',
+                    level:['LT','HTS','HTL','EHT'],
+                    peak:5234,
+                    off_peak:5235
+                }
+            ]
         }
-        this.site_list = [
-            {
-                number:'A000032100',
-                level:['LT','HTS','HTL','EHT'],
-                peak:5234,
-                off_peak:5235
-            }
-        ]
     }
     add_site(){
         if(this.props.onAddClick){
             this.props.onAddClick();
         }
-        let list = {};
+        let list = {},site_listObj = this.state.site_list;
         list = {
             number:'A000032100',
             level:['LT','HTS','HTL','EHT'],
             peak:'',
             off_peak:''
         }
-        this.site_list.push(list);
+        site_listObj.push(list)
+        this.setState({
+            site_list:site_listObj
+        })
     }
     remove_site(index){
         if(this.props.onAddClick){
             this.props.onAddClick();
         }
-        this.site_list.splice(index,1);
+        let site_listObj = this.state.site_list;
+        site_listObj.splice(index,1);
+        this.setState({
+            site_list:site_listObj
+        })
     }
     showDetail(id,obj){
         if(this.props.onAddClick){
@@ -62,10 +69,10 @@ export class FillConsumption extends Component {
             <div>
                 <h1>Participate in upcoming Reverse Auction exercise on </h1>
                 <form name="buyer_form" method="post" onSubmit={this.checkSuccess.bind(this)}>
-                <div className="u-grid buyer">
-                <h4><input name="agree_auction" type="checkbox" required /> I agree to the terms and conditions.</h4>
+                <div className="u-grid buyer mg0">
+                <h4 className="u-mb3"><input name="agree_auction" type="checkbox" required /> I agree to the terms and conditions.</h4>
                     <div className="col-sm-12 col-md-8 push-md-2">
-                    <DoFillConsumption site_list={this.site_list} remove={this.remove_site.bind(this)} />
+                    <DoFillConsumption site_list={this.state.site_list} remove={this.remove_site.bind(this)} />
                     <div className="addSite"><a onClick={this.add_site.bind(this)}>Add Site</a></div>
                     <div className="buyer_btn">
                         <button className="lm--button lm--button--primary" onClick={this.doSubmit.bind(this,'Reject')}>Reject</button>
