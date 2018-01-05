@@ -2,21 +2,23 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import {Modal} from '../shared/show-modal';
 import {DoFillConsumption} from './fill-consumption'
+import {setBuyerParticipate} from '../../javascripts/componentService/common/service';
 export class FillConsumption extends Component {
     constructor(props){
         super(props);
         this.state={
-            text:"Intake Level has unrepeatable",
+            text:"",
             submit_type:"",
             site_list:[
                 {
                     number:'A000032100',
                     level:['LT','HTS','HTL','EHT'],
-                    peak:5234,
-                    off_peak:5235
+                    peak:'',
+                    off_peak:''
                 }
             ]
         }
+        this.buyer_id = (window.location.href.split("consumptions/")[1]).split("/edit")[0];
     }
     add_site(){
         if(this.props.onAddClick){
@@ -44,24 +46,61 @@ export class FillConsumption extends Component {
             site_list:site_listObj
         })
     }
-    showDetail(id,obj){
-        if(this.props.onAddClick){
-            this.props.onAddClick();
+    doAccept(){
+        let makeData = {},buyerlist = '';
+        this.state.site_list.map((item,index)=>{
+            buyerlist += '{"account_number":"'+$("#number"+(index+1)).val()+'","intake_level":"'+$("#level"+(index+1)).val()+'","peak":"'+$("#peak"+(index+1)).val()+'","off_peak":"'+$("#off_peak"+(index+1)).val()+'","consumption_id":"'+this.buyer_id+'"},';
+        })
+        buyerlist = buyerlist.substr(0,buyerlist.length-1);
+        buyerlist = '['+buyerlist+']';
+        makeData = {
+            consumption_id:2,
+            details:JSON.parse(buyerlist)
         }
-        if(this.props.onAddturly === 'jest'){
-            return;
+        console.log(makeData);
+        if(this.state.submit_type === "Reject"){ //do Reject
+            setBuyerParticipate({consumption_id:this.buyer_id},'/api/buyer/consumption_details/reject').then(res=>{
+                this.refs.Modal.showModal();
+                this.setState({
+                    text:"Thank you for the confirmation. You have rejected this auction."
+                });
+            },error=>{
+                this.refs.Modal.showModal();
+                this.setState({
+                    text:"Interface failed"
+                });
+            })
+            
+        }else{//do Participate
+            setBuyerParticipate(makeData,'/api/buyer/consumption_details/participate').then(res=>{
+                this.refs.Modal.showModal();
+                this.setState({
+                    text:"Congratulations, your participation in this auction has been confirmed."
+                });
+            },error=>{
+                this.refs.Modal.showModal();
+                this.setState({
+                    text:"Interface failed"
+                });
+            })
         }
-        this.refs.Modal.showModal();
     }
     doSubmit(type){
         this.setState({submit_type:type});
+        if(type === "Reject"){
+            this.refs.Modal.showModal("comfirm");
+            this.setState({
+                text:"Are you sure you want to reject this auction?"
+            });
+        }
     }
     checkSuccess(event,obj){
         event.preventDefault();
-        if(this.state.submit_type === "Reject"){
-
-        }else if(this.state.submit_type === "Participate"){
-
+        if(this.state.submit_type === "Participate"){
+            this.refs.Modal.showModal("comfirm");
+            this.setState({
+                text:"Are you sure you want to participate in this auction?"
+            });
         }
     }
     render () {
@@ -75,12 +114,12 @@ export class FillConsumption extends Component {
                     <DoFillConsumption site_list={this.state.site_list} remove={this.remove_site.bind(this)} />
                     <div className="addSite"><a onClick={this.add_site.bind(this)}>Add Site</a></div>
                     <div className="buyer_btn">
-                        <button className="lm--button lm--button--primary" onClick={this.doSubmit.bind(this,'Reject')}>Reject</button>
+                        <a className="lm--button lm--button--primary" onClick={this.doSubmit.bind(this,'Reject')}>Reject</a>
                         <button className="lm--button lm--button--primary" onClick={this.doSubmit.bind(this,'Participate')}>Participate</button>
                     </div>
                     </div>
                 </div>
-                <Modal text={this.state.text} ref="Modal" />
+                <Modal text={this.state.text} acceptFunction={this.doAccept.bind(this)} ref="Modal" />
                 </form>
             </div>
         )

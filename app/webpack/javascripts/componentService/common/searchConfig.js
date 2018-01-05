@@ -41,25 +41,27 @@ export const searchTypeData = {
         ]
     },
     "Select Retailers":{
-        list_url:"/api/admin/users/buies",
+        list_url:"/api/admin/users/retailers",
         list_data:[
             {title:"Company Name:",type:"company_name",species:"input",operator:'like'},
             {title:"Status:",type:"approval_status",species:"select",operator:'=',options:[{option:"Rejected",value:"0"},{option:"Approved",value:"1"},{option:"Pending",value:"2"}]}
         ]
     },
     "Select Company Buyers":{
-        list_url:"/api/admin/users/buies",
+        list_url:"/api/admin/users/buyers",
         list_data:[
             {title:"Company Name:",type:"company_name",species:"input",operator:'like'},
-            {title:"Status:",type:"approval_status",species:"select",operator:'=',options:[{option:"Rejected",value:"0"},{option:"Approved",value:"1"},{option:"Pending",value:"2"}]}
+            {title:"Status:",type:"approval_status",species:"select",operator:'=',options:[{option:"Rejected",value:"0"},{option:"Approved",value:"1"},{option:"Pending",value:"2"}]},
+            {title:"consumer_type:",type:"consumer_type",operator:'=',defaultval:'2',species:'hidden'}
         ]
     },
     "Select Individual Buyers":{
-        list_url:"/api/admin/users/buies",
+        list_url:"/api/admin/users/buyers",
         list_data:[
             {title:"Name:",type:"name",species:"input",operator:'like'},
-            {title:"Housing Type:",type:"housing_type",species:"select",operator:'=',options:[{option:"HDB",value:"0"},{option:"Private High-rise",value:"1"},{option:"landed",value:"2"}]},
-            {title:"Status:",type:"approval_status",species:"select",operator:'=',options:[{option:"Rejected",value:"0"},{option:"Approved",value:"1"},{option:"Pending",value:"2"}]}
+            {title:"Housing Type:",type:"account_housing_type",species:"select",operator:'=',options:[{option:"HDB",value:"0"},{option:"Private High-rise",value:"1"},{option:"landed",value:"2"}]},
+            {title:"Status:",type:"approval_status",species:"select",operator:'=',options:[{option:"Rejected",value:"0"},{option:"Approved",value:"1"},{option:"Pending",value:"2"}]},
+            {title:"consumer_type:",type:"consumer_type",operator:'=',defaultval:'3',species:'hidden'}
         ]
     }
 }

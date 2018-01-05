@@ -33,6 +33,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
   def reject
     consumption = Consumption.find(params[:consumption_id])
     consumption.participation_status = '0'
+    consumption.save
     render json: nil, status: 200
   end
 
