@@ -60,6 +60,9 @@ Rails.application.routes.draw do
           get 'obtain'
         end
       end
+      resources :consumptions, only: %i[create destroy] do
+      end
+
     end
   end
 
