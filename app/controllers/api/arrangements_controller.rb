@@ -33,14 +33,31 @@ class Api::ArrangementsController < Api::BaseController
     render json: @arrangement, status: 200
   end
 
+  def create
+    @arrangement = Arrangement.new
+    @arrangement.auction_id = params[:auction_id]
+    @arrangement.user_id = params[:user_id]
+    @arrangement.action_status = '2'
+    @arrangement.main_name = ''
+    @arrangement.main_email_address = ''
+    @arrangement.main_mobile_number = ''
+    @arrangement.main_office_number = ''
+    @arrangement.save
+    render json: @arrangement, status: 201
+  end
+
+  def destroy
+    @arrangement.destroy
+    render json: nil, status: 200
+  end
+
   private
 
   def set_arrangement
-      @arrangement = Arrangement.find(params[:id])
+    @arrangement = Arrangement.find(params[:id])
   end
 
   def model_params
     params.require(:arrangement).permit(:main_name, :main_email_address, :main_mobile_number, :main_office_number, :alternative_name, :alternative_email_address, :alternative_mobile_number, :alternative_office_number, :lt_peak, :lt_off_peak, :hts_peak, :hts_off_peak, :htl_peak, :htl_off_peak, :accept_status)
   end
-
 end

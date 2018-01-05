@@ -55,7 +55,7 @@ Rails.application.routes.draw do
       end
       resources :auction_attachments, only: %i[index create] do
       end
-      resources :arrangements, only: %i[index show obtain update] do
+      resources :arrangements, only: %i[index show obtain update create destroy] do
         collection do
           get 'obtain'
         end
