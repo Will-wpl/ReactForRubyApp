@@ -34,9 +34,9 @@ export const searchTypeData = {
     "Status of Participation":{
         list_url:"/api/buyer/auctions/published",
         list_data:[
-            {title:"Name:",type:"name",species:"input",operator:'like'},
-            {title:"Date:",type:"start_datetime",species:"datePacker",operator:'date_between'},
-            {title:"Auctions Status:",type:"publish_status",species:"select",operator:'=',options:[{option:"All",value:""},{option:"Unpublished",value:"0"},{option:"Published",value:"1"}]},
+            {title:"Name:",type:"name",species:"input",operator:'like',table:'auctions'},
+            {title:"Date:",type:"start_datetime",species:"datePacker",operator:'date_between',table:'auctions'},
+            {title:"Auctions Status:",type:"publish_status",species:"select",operator:'=',table:'auctions',options:[{option:"All",value:""},{option:"Unpublished",value:"0"},{option:"Published",value:"1"}]},
             {title:"Participation Status:",type:"participation_status",species:"select",operator:'=',options:[{option:"All",value:""},{option:"Rejected",value:"0"},{option:"Confirmed",value:"1"},{option:"Pending",value:"2"}]}
         ]
     },
