@@ -13,7 +13,7 @@ class Consumption < ApplicationRecord
 
   # Scopes
   scope :mine, ->(user_id) { where('user_id = ?', user_id) }
-  scope :join_buyer_auction, -> { includes(:auction).where(auctions: { publish_status: '1' }) }
+  scope :join_buyer_auction, -> { includes(:auction).where.not(auctions: { publish_status: nil }) }
   # Callbacks
 
   # Delegates
