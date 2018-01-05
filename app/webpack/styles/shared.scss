@@ -211,14 +211,15 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 
 .buyer{
   .retailer_fill{
-    input,select{ width:99%; margin: 3px auto; padding: 1px;}
+    input,select{ width:96%; margin: 3px auto; padding: 1px; border:1px solid #fff;}
   }
   .site_list_title{
+    width: 100%; overflow: hidden; line-height:42px;
     span{float: left;}
-    a{ float: right; color: #00888a; font-size: 13px;}
+    a{ float: right; color: #00888a; font-size: 15px; cursor: pointer;}
   }
   .addSite{ width: 100%; margin: 10px auto;
-    a{color:#00888a;}
+    a{color:#00888a; cursor: pointer;}
   }
   .buyer_btn{ text-align: right; width: 100%;
     button{ 
