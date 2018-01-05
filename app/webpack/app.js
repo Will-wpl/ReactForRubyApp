@@ -16,6 +16,7 @@ import "components/retailer/retailer-live-container";
 import "components/retailer/retailer-finish";
 import "components/shared/check-network";
 import "components/search/home-list";
+import "components/buyer/buyer-fill-consumption";
 // ActionCable = require('actioncable')
 
 // const cable = ActionCable.createConsumer()

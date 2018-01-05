@@ -83,3 +83,24 @@ export class FillConsumption extends Component {
 FillConsumption.propTypes = {
   onAddClick: ()=>{}
 };
+
+function run() {
+    const domNode = document.getElementById('buyer_fill_consumption');
+    if(domNode !== null){
+        ReactDOM.render(
+            React.createElement(FillConsumption),
+            domNode
+        );
+    }
+}
+
+const loadedStates = [
+    'complete',
+    'loaded',
+    'interactive'
+];
+if (loadedStates.indexOf(document.readyState) > -1 && document.body) {
+    run();
+} else {
+    window.addEventListener('DOMContentLoaded', run, false);
+}
