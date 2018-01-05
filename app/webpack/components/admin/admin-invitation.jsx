@@ -37,6 +37,9 @@ upload(type,index){
                     barObj.show();
                     barObj.find(".progress-bar").css('width',percentComplete + '%');
                     barObj.find(".progress-bar").text(percentComplete + '%');
+                    if(percentComplete == 100){
+                        barObj.find(".progress-bar").text('Processing..');
+                    }
                 }
             }, false);
             return xhr;

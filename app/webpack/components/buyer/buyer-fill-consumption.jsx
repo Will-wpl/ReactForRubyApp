@@ -12,7 +12,7 @@ export class FillConsumption extends Component {
         this.site_list = [
             {
                 number:'A000032100',
-                level:['LT','HTS','HTL'],
+                level:['LT','HTS','HTL','EHT'],
                 peak:5234,
                 off_peak:5235
             }
@@ -25,7 +25,7 @@ export class FillConsumption extends Component {
         let list = {};
         list = {
             number:'A000032100',
-            level:['LT','HTS','HTL'],
+            level:['LT','HTS','HTL','EHT'],
             peak:'',
             off_peak:''
         }
