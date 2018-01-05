@@ -15,6 +15,27 @@ class Api::ConsumptionDetailsController < Api::BaseController
     end
   end
 
+  def participate
+    params[:details].each do |detail|
+      consumption_detail = ConsumptionDetail.new
+      consumption_detail.account_number = detail.account_number
+      consumption_detail.intake_level = detail.intake_level
+      consumption_detail.peak = detail.peak
+      consumption_detail.off_peak = detail.off_peak
+      consumption_detail.consumption_id = params[:consumption_id]
+      consumption_detail.save
+    end
+    consumption = Consumption.find(params[:consumption_id])
+    consumption.participation_status = '1'
+    render json: consumption, status: 200
+  end
+
+  def reject
+    consumption = Consumption.find(params[:consumption_id])
+    consumption.participation_status = '0'
+    render json: nil, status: 200
+  end
+
   private
 
   def set_consumption_detail
