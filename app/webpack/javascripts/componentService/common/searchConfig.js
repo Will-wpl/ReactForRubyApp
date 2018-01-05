@@ -32,7 +32,7 @@ export const searchTypeData = {
         ]
     },
     "Status of Participation":{
-        list_url:"/api/admin/users/buies",
+        list_url:"/api/buyer/auctions/published",
         list_data:[
             {title:"Name:",type:"name",species:"input",operator:'like'},
             {title:"Date:",type:"start_datetime",species:"datePacker",operator:'date_between'},
