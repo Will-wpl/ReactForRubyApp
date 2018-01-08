@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180105065627) do
+ActiveRecord::Schema.define(version: 20180108033952) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,8 @@ ActiveRecord::Schema.define(version: 20180105065627) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "action_status"
+    t.decimal "eht_peak"
+    t.decimal "eht_off_peak"
     t.index ["auction_id"], name: "index_arrangements_on_auction_id"
     t.index ["user_id"], name: "index_arrangements_on_user_id"
   end
@@ -95,6 +97,8 @@ ActiveRecord::Schema.define(version: 20180105065627) do
     t.boolean "is_bidder"
     t.string "flag"
     t.datetime "actual_bid_time"
+    t.decimal "eht_peak"
+    t.decimal "eht_off_peak"
     t.index ["auction_id"], name: "index_auction_histories_on_auction_id"
     t.index ["user_id"], name: "index_auction_histories_on_user_id"
   end
@@ -118,6 +122,8 @@ ActiveRecord::Schema.define(version: 20180105065627) do
     t.bigint "auction_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "eht_peak"
+    t.decimal "eht_off_peak"
     t.index ["auction_id"], name: "index_auction_results_on_auction_id"
     t.index ["user_id"], name: "index_auction_results_on_user_id"
   end
@@ -146,6 +152,8 @@ ActiveRecord::Schema.define(version: 20180105065627) do
     t.string "time_extension"
     t.string "average_price"
     t.string "retailer_mode"
+    t.decimal "total_eht_peak"
+    t.decimal "total_eht_off_peak"
   end
 
   create_table "consumption_details", force: :cascade do |t|
@@ -172,6 +180,8 @@ ActiveRecord::Schema.define(version: 20180105065627) do
     t.bigint "auction_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "eht_peak"
+    t.decimal "eht_off_peak"
     t.index ["auction_id"], name: "index_consumptions_on_auction_id"
     t.index ["user_id"], name: "index_consumptions_on_user_id"
   end
