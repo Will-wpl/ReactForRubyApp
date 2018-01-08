@@ -7,6 +7,8 @@ FactoryBot.define do
     hts_off_peak 0
     htl_peak 0.1458
     htl_off_peak 0.1458
+    eht_peak 0.1458
+    eht_off_peak 0.1458
     bid_time nil
     total_award_sum 989_763.5916
     ranking 1

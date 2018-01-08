@@ -8,6 +8,8 @@ FactoryBot.define do
     total_hts_off_peak 0
     total_htl_peak 1_983_720
     total_htl_off_peak 791_712
+    total_eht_peak 1_983_720
+    total_eht_off_peak 791_712
     duration 30
     reserve_price { BigDecimal.new('0.0841') }
 
