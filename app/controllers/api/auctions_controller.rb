@@ -99,6 +99,8 @@ class Api::AuctionsController < Api::BaseController
     auction_result.hts_off_peak = history.hts_off_peak
     auction_result.htl_peak = history.htl_peak
     auction_result.htl_off_peak = history.htl_off_peak
+    auction_result.eht_peak = history.eht_peak
+    auction_result.eht_off_peak = history.eht_off_peak
     auction_result.user_id = params[:user_id]
     # end
     if auction_result.save
