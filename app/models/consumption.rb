@@ -1,4 +1,11 @@
 class Consumption < ApplicationRecord
+
+  # Field description:
+  # participation_status
+  # "0":"Reject", "1":"Participate", "2":"Pending"
+  # action_status: admin select buyers in auction creation
+  # "1":"Notification sent", "2":"Pending Notification"
+
   # Extends
 
   # Includes

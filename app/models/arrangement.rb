@@ -1,4 +1,11 @@
 class Arrangement < ApplicationRecord
+
+  # Field description:
+  # accept_status
+  # "0":"Reject", "1":"Accept", "2":"Pending"
+  # action_status: admin select retailers in auction creation
+  # "1":"Notification sent", "2":"Pending Notification"
+
   # Extends
 
   # Includes
