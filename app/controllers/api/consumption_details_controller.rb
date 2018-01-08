@@ -2,7 +2,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
 
   def index
     unless params[:consumption_id].nil?
-      @consumption_details = ConsumptionDetail.where('consumption_id = ?', params[:consumption_id])
+      @consumption_details = ConsumptionDetail.find_by_consumption_id(params[:consumption_id])
       render json: @consumption_details, status: 200
     end
   end

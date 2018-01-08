@@ -64,13 +64,13 @@ Rails.application.routes.draw do
           get 'obtain'
         end
       end
-      resources :consumptions, only: %i[destroy update_status] do
-        collection do
+      resources :consumptions, only: %i[index destroy update_status] do
+        member do
           put 'update_status'
         end
-
       end
-
+      resources :consumption_details, only: %i[index] do
+      end
     end
   end
 

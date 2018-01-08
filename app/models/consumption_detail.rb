@@ -10,7 +10,7 @@ class ConsumptionDetail < ApplicationRecord
   # Validations
 
   # Scopes
-
+  scope :find_by_consumption_id, ->(consumption_id) { where('consumption_id = ?', consumption_id) }
   # Callbacks
 
   # Delegates
