@@ -21,7 +21,7 @@ export class SearchType extends Component {
     componentWillMount(){
 
     }
-    search_type(type,species,options){
+    search_type(type,species,defaultval,options){
             let field = '';
             switch(species){
                 case 'input':
@@ -36,6 +36,8 @@ export class SearchType extends Component {
                 break
                 case 'datePacker':
                 field = <DatePicker selected={this.state.start_datetime} id={type}  onKeyDown={this.noPermitInput.bind(this)} ref={type} shouldCloseOnSelect={true} name={type} dateFormat="DD-MM-YYYY"  className="time_ico"  onChange = {this.timeChange.bind(this)} minDate={moment()} title="Time must not be in the past."  />
+                case 'hidden':
+                field = <input type="hidden" id={type} defaultValue={defaultval}  ref={type}/>
                 break
             }
             return field
@@ -79,10 +81,13 @@ export class SearchType extends Component {
                 <dl className="lm--formItem string optional">
                     {
                         this.search_type_data.map((item,index)=>{
-                            return <dd key={index}>
+                            let sName = item.species === "hidden" ? 'hide':'show';
+                            return <dd key={index} className={sName}>
                                         <span className="lm--formItem-label string optional">{item.title}</span>
                                         <label className="lm--formItem-control">
-                                            {item.options ? this.search_type(item.type,item.species,item.options) : this.search_type(item.type,item.species)}
+                                            {
+                                                item.options ? this.search_type(item.type,item.species,item.defaultval,item.options) : this.search_type(item.type,item.species,item.defaultval)
+                                                }
                                         </label>
                                     </dd>
                         })

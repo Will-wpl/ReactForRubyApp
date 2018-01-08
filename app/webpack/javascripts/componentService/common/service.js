@@ -20,6 +20,10 @@ export const getRoleList = (data,url) => {
     return get(url,data);
 }
 
+export const setBuyerParticipate = (data,url) => {
+    return create(url,data);
+}
+
 export const ACTION_COMMANDS = {
     SET_BID: 'set_bid',
     MAKE_UNIQUE: 'limit_user'
