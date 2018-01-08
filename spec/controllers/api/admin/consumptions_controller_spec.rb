@@ -2,9 +2,37 @@ require 'rails_helper'
 
 RSpec.describe Api::Admin::ConsumptionsController, type: :controller do
   let!(:admin_user){ create(:user, :with_admin) }
-  let!(:buyer_user){ create(:user, :with_buyer) }
+  let!(:buyer_user){ create(:user, :with_buyer, :with_company_buyer) }
   let!(:auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
-  let!(:consumption) { create(:consumption, user: buyer_user, auction: auction ) }
+  let!(:consumption) { create(:consumption, :init, user: buyer_user, auction: auction ) }
+  let!(:consumption_lt) { create(:consumption_detail, :for_lt, consumption_id: consumption.id) }
+  let!(:consumption_hts) { create(:consumption_detail, :for_hts, consumption_id: consumption.id) }
+  let!(:consumption_htl) { create(:consumption_detail, :for_htl, consumption_id: consumption.id) }
+  let!(:consumption_eht) { create(:consumption_detail, :for_eht, consumption_id: consumption.id) }
+
+  describe '#index' do
+
+    describe 'admin ' do
+      before { sign_in admin_user }
+
+      describe 'got consumption list buy auction_id' do
+        def do_request
+          get :index, params: { id: auction.id, consumer_type: '2' }
+        end
+
+        before { do_request }
+
+        it "return list and total object" do
+          expect(response).to be_success
+          hash = JSON.parse(response.body)
+          expect(hash['list'].size).to eq(1)
+          expect(hash['list'][0]['lt_peak']).to eq('100.0')
+          expect(hash['total_info']['lt_peak']).to eq('100.0')
+        end
+      end
+    end
+  end
+
 
   describe '#update_status' do
 
