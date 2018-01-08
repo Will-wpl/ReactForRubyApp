@@ -13,7 +13,7 @@ class Consumption < ApplicationRecord
   # Associations
   belongs_to :user
   belongs_to :auction
-  has_many :consumption_details
+  has_many :consumption_details, dependent: :destroy
   # accepts_nested_attributes
 
   # Validations
