@@ -29,7 +29,7 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
     end
   end
 
-  describe 'PUT buyer update consumption detail' do
+  describe 'PUT update buyer consumption detail' do
     before { sign_in company_buyer }
 
     context 'Has updated a consumption detail' do
@@ -78,4 +78,41 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
 
   end
 
+  describe 'PUT buyer consumption participate' do
+    before { sign_in company_buyer }
+
+    context 'Has set participation_status to 1 at consumption' do
+      def do_request
+        details = []
+        details.push({account_number: '000001', intake_level: 'LT' , peak: '111', off_peak:'222'})
+        details.push({account_number: '000002', intake_level: 'HTS' , peak: '111', off_peak:'222'})
+        put :participate, params: { consumption_id: consumption.id , details: details}
+      end
+
+      before { do_request }
+      it 'Success' do
+        hash = JSON.parse(response.body)
+        expect(response).to have_http_status(:ok)
+        expect(hash['participation_status']).to eq('1')
+      end
+    end
+
+  end
+
+  describe 'DELETE buyer consumption reject' do
+    before { sign_in company_buyer }
+
+    context 'Has set participation_status to 0 at consumption' do
+      def do_request
+        delete :reject, params: { consumption_id: consumption.id}
+      end
+
+      before { do_request }
+      it 'Success' do
+        hash = JSON.parse(response.body)
+        expect(response).to have_http_status(:ok)
+        expect(hash['participation_status']).to eq('0')
+      end
+    end
+  end
 end
