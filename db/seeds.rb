@@ -22,6 +22,8 @@ reverse_auction = Auction.find_or_create_by(name: 'SP Reverse Auction') do |auct
   auction.total_hts_off_peak = 0
   auction.total_htl_peak = 1_983_720
   auction.total_htl_off_peak = 791_712
+  auction.total_eht_peak = 0
+  auction.total_eht_off_peak = 0
   auction.publish_status = '0'
 end
 
