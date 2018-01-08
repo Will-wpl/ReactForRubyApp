@@ -19,7 +19,7 @@ export class DoFillConsumption extends Component {
                                             <select id={"level"+(index+1)} name={"level"+(index+1)}>
                                             {
                                                 this.props.site_list[index].level.map((it,i)=>{
-                                                    return <option key={i} value={i}>{it}</option>
+                                                    return <option key={i} value={it}>{it}</option>
                                                 })
                                             }
                                             </select>
