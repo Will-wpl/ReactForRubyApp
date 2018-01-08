@@ -259,6 +259,14 @@ class Api::AuctionsController < Api::BaseController
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
   end
 
+  def selects
+    retailers = Arrangement.find_by_auction_id(params[:id]).group(:action_status).count
+    company_buyers = Consumption.find_by_auction_id(params[:id]).find_by_user_consumer_type('2').group(:action_status).count
+    individual_buyers = Consumption.find_by_auction_id(params[:id]).find_by_user_consumer_type('3').group(:action_status).count
+
+    render json: { retailers: retailers, company_buyers: company_buyers, individual_buyers: individual_buyers }, status: 200
+  end
+
   private
 
   def set_auction
