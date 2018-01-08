@@ -84,8 +84,8 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
     context 'Has set participation_status to 1 at consumption' do
       def do_request
         details = []
-        details.push({account_number: '000001', intake_level: 'LT' , peak: '111', off_peak:'222'})
-        details.push({account_number: '000002', intake_level: 'HTS' , peak: '111', off_peak:'222'})
+        details.push({account_number: '000001', intake_level: 'LT' , peak: 100, off_peak: 100})
+        details.push({account_number: '000002', intake_level: 'HTS' , peak: 100, off_peak: 100})
         put :participate, params: { consumption_id: consumption.id , details: details.to_json}
       end
 
@@ -94,6 +94,14 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
         hash = JSON.parse(response.body)
         expect(response).to have_http_status(:ok)
         expect(hash['participation_status']).to eq('1')
+        expect(hash['lt_peak']).to eq('100.0')
+        expect(hash['lt_off_peak']).to eq('100.0')
+        expect(hash['hts_peak']).to eq('100.0')
+        expect(hash['hts_off_peak']).to eq('100.0')
+        expect(hash['htl_peak']).to eq('0.0')
+        expect(hash['htl_off_peak']).to eq('0.0')
+        auction = Auction.find(hash['auction_id'])
+        expect(auction.total_lt_peak.to_s).to eq('2468475.0')
       end
     end
 

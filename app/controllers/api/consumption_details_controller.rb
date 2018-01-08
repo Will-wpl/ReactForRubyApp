@@ -17,6 +17,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
 
   def participate
     details = JSON.parse(params[:details])
+    values = []
     details.each do |detail|
       consumption_detail = ConsumptionDetail.new
       consumption_detail.account_number = detail['account_number']
@@ -24,11 +25,38 @@ class Api::ConsumptionDetailsController < Api::BaseController
       consumption_detail.peak = detail['peak']
       consumption_detail.off_peak = detail['off_peak']
       consumption_detail.consumption_id = params[:consumption_id]
-      consumption_detail.save
+      if consumption_detail.save
+        values.push(Consumption.convert_intake_value(consumption_detail.intake_level, consumption_detail.peak, consumption_detail.off_peak))
+      end
     end
     consumption = Consumption.find(params[:consumption_id])
     consumption.participation_status = '1'
-    consumption.save
+    intake_values = Consumption.set_intake_value(values)
+    consumption.lt_peak = intake_values[0]
+    consumption.lt_off_peak = intake_values[1]
+    consumption.hts_peak = intake_values[2]
+    consumption.hts_off_peak = intake_values[3]
+    consumption.htl_peak = intake_values[4]
+    consumption.htl_off_peak = intake_values[5]
+    consumption.eht_peak = intake_values[6]
+    consumption.eht_off_peak = intake_values[7]
+    if consumption.save
+      # update auction
+      auction = Auction.find(consumption.auction_id)
+      auction.total_lt_peak += intake_values[0]
+      auction.total_lt_off_peak += intake_values[1]
+      auction.total_hts_peak += intake_values[2]
+      auction.total_hts_off_peak += intake_values[3]
+      auction.total_htl_peak += intake_values[4]
+      auction.total_htl_off_peak += intake_values[5]
+      auction.total_eht_peak += intake_values[6]
+      auction.total_eht_off_peak += intake_values[7]
+      auction.total_volume = Auction.set_total_volume(
+          intake_values[0], intake_values[1], intake_values[2], intake_values[3],
+          intake_values[4], intake_values[5], intake_values[6], intake_values[7])
+      auction.save
+    end
+
     render json: consumption, status: 200
   end
 
