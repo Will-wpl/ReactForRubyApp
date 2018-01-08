@@ -56,12 +56,19 @@ Rails.application.routes.draw do
       end
       resources :auction_attachments, only: %i[index create] do
       end
-      resources :arrangements, only: %i[index show obtain update create destroy] do
+      resources :arrangements, only: %i[index show obtain update destroy update_status] do
+        member do
+          put 'update_status'
+        end
         collection do
           get 'obtain'
         end
       end
-      resources :consumptions, only: %i[create destroy] do
+      resources :consumptions, only: %i[destroy update_status] do
+        collection do
+          put 'update_status'
+        end
+
       end
 
     end

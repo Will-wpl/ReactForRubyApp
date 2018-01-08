@@ -4,29 +4,51 @@ RSpec.describe Api::Admin::ConsumptionsController, type: :controller do
   let!(:admin_user){ create(:user, :with_admin) }
   let!(:buyer_user){ create(:user, :with_buyer) }
   let!(:auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
-  let!(:consumption) { create(:consumption, user: buyer_user, auction: auction) }
+  let!(:consumption) { create(:consumption, user: buyer_user, auction: auction ) }
 
-  describe '#create' do
+  describe '#update_status' do
 
-    def do_request
-      post :create, params: { auction_id: auction.id, user_id: buyer_user.id }
-    end
-
-    context 'authorize as an admin' do
+    describe 'admin ' do
       before { sign_in admin_user }
 
-      before { do_request }
+      describe 'new consumption action_status' do
+        def do_request
+          put :update_status, params: { id: 0, auction_id: auction.id, user_id: buyer_user.id }
+        end
 
-      it "return new arragement" do
-        expect(response).to be_success
-        expect(JSON.parse(response.body)['user_id']).to eq(buyer_user.id)
-        expect(JSON.parse(response.body)['auction_id']).to eq(auction.id)
+        before { do_request }
+
+        it "return new consumption" do
+          expect(response).to be_success
+          expect(JSON.parse(response.body)['user_id']).to eq(buyer_user.id)
+          expect(JSON.parse(response.body)['auction_id']).to eq(auction.id)
+        end
       end
+
+      describe 'update consumption action_status' do
+        def do_request
+          put :update_status, params: { id: consumption.id, action_status: '1' }
+        end
+
+        before { do_request }
+
+        it "return updated consumption" do
+          expect(response).to be_success
+          expect(JSON.parse(response.body)['user_id']).to eq(buyer_user.id)
+          expect(JSON.parse(response.body)['auction_id']).to eq(auction.id)
+          expect(JSON.parse(response.body)['action_status']).to eq('1')
+        end
+      end
+
     end
 
-    context 'unauthorize' do
+    describe 'unauthorize' do
+
       before { sign_in create(:user) }
 
+      def do_request
+        put :update_status, params: { id: 0, auction_id: auction.id, user_id: buyer_user.id }
+      end
       before { do_request }
 
       it { expect(response).to have_http_status(401) }

@@ -144,26 +144,48 @@ RSpec.describe Api::Admin::ArrangementsController, type: :controller do
     end
   end
 
-  describe '#create' do
+  describe '#update_status' do
 
-    def do_request
-      post :create, params: { auction_id: auction.id, user_id: retailer_user.id }
-    end
-
-    context 'authorize as an admin' do
+    context 'admin ' do
       before { sign_in admin_user }
 
-      before { do_request }
+      describe 'new arrangement action_status' do
+        def do_request
+          put :update_status, params: { id: 0, auction_id: auction.id, user_id: retailer_user.id }
+        end
 
-      it "return new arragement" do
-        expect(response).to be_success
-        expect(JSON.parse(response.body)['user_id']).to eq(retailer_user.id)
-        expect(JSON.parse(response.body)['auction_id']).to eq(auction.id)
+        before { do_request }
+
+        it "return new arrangement" do
+          expect(response).to be_success
+          expect(JSON.parse(response.body)['user_id']).to eq(retailer_user.id)
+          expect(JSON.parse(response.body)['auction_id']).to eq(auction.id)
+        end
       end
+
+      describe 'update arrangement action_status' do
+        def do_request
+          put :update_status, params: { id: arrangement.id, action_status: '1' }
+        end
+
+        before { do_request }
+
+        it "return updated arrangement" do
+          expect(response).to be_success
+          expect(JSON.parse(response.body)['user_id']).to eq(retailer_user.id)
+          expect(JSON.parse(response.body)['auction_id']).to eq(auction.id)
+          expect(JSON.parse(response.body)['action_status']).to eq('1')
+        end
+      end
+
     end
 
     context 'unauthorize' do
       before { sign_in create(:user) }
+
+      def do_request
+        put :update_status, params: { id: 0, auction_id: auction.id, user_id: retailer_user.id }
+      end
 
       before { do_request }
 

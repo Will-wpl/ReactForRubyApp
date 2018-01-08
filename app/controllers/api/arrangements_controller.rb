@@ -1,5 +1,5 @@
 class Api::ArrangementsController < Api::BaseController
-  before_action :set_arrangement, only: %i[show edit update destroy]
+  before_action :set_arrangement, only: %i[show edit update destroy update_status]
 
   # GET arrangement list by auction_id
   # accept_status ['0','1','2'] '0':reject '1':accept '2':pending
@@ -33,17 +33,23 @@ class Api::ArrangementsController < Api::BaseController
     render json: @arrangement, status: 200
   end
 
-  def create
-    @arrangement = Arrangement.new
-    @arrangement.auction_id = params[:auction_id]
-    @arrangement.user_id = params[:user_id]
-    @arrangement.action_status = '2'
-    @arrangement.main_name = ''
-    @arrangement.main_email_address = ''
-    @arrangement.main_mobile_number = ''
-    @arrangement.main_office_number = ''
-    @arrangement.save
-    render json: @arrangement, status: 201
+  def update_status
+    if params[:id] == '0'
+      @arrangement = Arrangement.new
+      @arrangement.auction_id = params[:auction_id]
+      @arrangement.user_id = params[:user_id]
+      @arrangement.action_status = '2'
+      @arrangement.main_name = ''
+      @arrangement.main_email_address = ''
+      @arrangement.main_mobile_number = ''
+      @arrangement.main_office_number = ''
+      @arrangement.save
+      render json: @arrangement, status: 201
+    else
+      @arrangement.update(action_status: params['action_status'])
+      render json: @arrangement, status: 200
+    end
+
   end
 
   def destroy
@@ -54,7 +60,7 @@ class Api::ArrangementsController < Api::BaseController
   private
 
   def set_arrangement
-    @arrangement = Arrangement.find(params[:id])
+    @arrangement = Arrangement.find(params[:id]) unless params[:id] == '0'
   end
 
   def model_params
