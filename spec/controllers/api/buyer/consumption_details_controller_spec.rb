@@ -86,7 +86,7 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
         details = []
         details.push({account_number: '000001', intake_level: 'LT' , peak: '111', off_peak:'222'})
         details.push({account_number: '000002', intake_level: 'HTS' , peak: '111', off_peak:'222'})
-        put :participate, params: { consumption_id: consumption.id , details: details}
+        put :participate, params: { consumption_id: consumption.id , details: details.to_json}
       end
 
       before { do_request }
