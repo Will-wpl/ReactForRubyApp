@@ -172,16 +172,21 @@ class Api::AuctionsController < Api::BaseController
     end
     headers = [
       { name: 'Company Name', field_name: 'company_name' },
-      { name: 'Status', field_name: 'status' }
+      { name: 'Status', field_name: 'status' },
+      { name: 'Action', field_name: 'action' }
     ]
     actions = [
-      { url: 'doooooooooooooooooooo' },
       { url: '/api/admin/users/:id', name: 'View', icon: 'lm--icon-search' }
     ]
     data = []
     users.order(approval_status: :desc, company_name: :asc).each do |user|
-      status = ids.include?(user.id) ? '1' : '0'
-      data.push(company_name: user.company_name, status: status)
+      index = arrangements.index do |arrangement|
+        arrangement.user_id == user.id
+      end
+      arrangement = index.nil? ? nil : arrangements[index]
+      status = arrangement.nil? ? nil : arrangement.action_status
+      action = arrangement.nil? ? nil : arrangement.id
+      data.push(id: user.id, company_name: user.company_name, status: status, action: action)
     end
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
@@ -199,8 +204,8 @@ class Api::AuctionsController < Api::BaseController
                             end
       search_where_array = set_search_params(users_search_params)
       users = User.buyers.where(search_where_array)
-      consumption = Consumption.find_by_auction_id(params[:id])
-      ids = get_user_ids(consumption)
+      consumptions = Consumption.find_by_auction_id(params[:id])
+      ids = get_user_ids(consumptions)
       if !params[:status].nil? && params[:status][0] == '1'
         users = users.selected_buyers(params[:id])
       elsif !params[:status].nil? && params[:status][0] == '0'
@@ -215,20 +220,20 @@ class Api::AuctionsController < Api::BaseController
     if consumer_type == '2'
       headers = [
         { name: 'Company Name', field_name: 'company_name' },
-        { name: 'Status', field_name: 'status' }
+        { name: 'Status', field_name: 'status' },
+        { name: 'Action', field_name: 'action' }
       ]
       actions = [
-        { url: 'doooooooooooooooooooo' },
         { url: '/api/admin/users/:id', name: 'View', icon: 'lm--icon-search' }
       ]
     elsif consumer_type == '3'
       headers = [
         { name: 'Name', field_name: 'company_name' },
         { name: 'Housing Type', field_name: 'account_housing_type' },
-        { name: 'Status', field_name: 'status' }
+        { name: 'Status', field_name: 'status' },
+        { name: 'Action', field_name: 'action' }
       ]
       actions = [
-        { url: 'doooooooooooooooooooo' },
         { url: '/api/admin/users/:id', name: 'View', icon: 'lm--icon-search' }
       ]
     else
@@ -237,11 +242,17 @@ class Api::AuctionsController < Api::BaseController
     end
     data = []
     users.order(approval_status: :desc, company_name: :asc).each do |user|
-      status = ids.include?(user.id) ? '1' : '0'
+      # status = ids.include?(user.id) ? '1' : '0'
+      index = consumptions.index do |consumption|
+        consumption.user_id == user.id
+      end
+      consumption = index.nil? ? nil : consumptions[index]
+      status = consumption.nil? ? nil : consumption.action_status
+      action = consumption.nil? ? nil : consumption.id
       if consumer_type == '2'
-        data.push(company_name: user.company_name, status: status)
+        data.push(company_name: user.company_name, status: status, action: action)
       elsif consumer_type == '3'
-        data.push(company_name: user.company_name, house_type: user.account_housing_type, status: status)
+        data.push(company_name: user.company_name, house_type: user.account_housing_type, status: status, action: action)
       end
     end
     bodies = { data: data, total: total }
@@ -256,7 +267,7 @@ class Api::AuctionsController < Api::BaseController
 
   def model_params
     params.require(:auction).permit(:name, :start_datetime, :contract_period_start_date, :contract_period_end_date, :duration, :reserve_price, :actual_begin_time, :actual_end_time, :total_volume, :publish_status, :published_gid,
-                                    :total_lt_peak, :total_lt_off_peak, :total_hts_peak, :total_hts_off_peak, :total_htl_peak, :total_htl_off_peak,:total_eht_peak, :total_eht_off_peak, :hold_status, :time_extension, :average_price, :retailer_mode)
+                                    :total_lt_peak, :total_lt_off_peak, :total_hts_peak, :total_hts_off_peak, :total_htl_peak, :total_htl_off_peak, :total_eht_peak, :total_eht_off_peak, :hold_status, :time_extension, :average_price, :retailer_mode)
   end
 
   def set_link(auctionId, addr)

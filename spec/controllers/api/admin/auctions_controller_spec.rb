@@ -4,9 +4,9 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
   # let! (:auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
   let! (:auction) { create(:auction, :for_next_month, :upcoming) }
   let! (:retailers) { create_list(:user, 25, :with_retailer) }
-  let! (:arrangement_1) { create(:arrangement, user: retailers[0], auction: auction) }
-  let! (:arrangement_2) { create(:arrangement, user: retailers[1], auction: auction) }
-  let! (:arrangement_3) { create(:arrangement, user: retailers[2], auction: auction) }
+  let! (:arrangement_1) { create(:arrangement, user: retailers[0], auction: auction, action_status: '1') }
+  let! (:arrangement_2) { create(:arrangement, user: retailers[1], auction: auction, action_status: '1') }
+  let! (:arrangement_3) { create(:arrangement, user: retailers[2], auction: auction, action_status: '1') }
   let! (:arrangement_4) { create(:arrangement, user: retailers[4], auction: auction) }
   let! (:buyer_c_s) { create_list(:user, 25, :with_buyer, :with_company_buyer) }
   let! (:consumption_1) { create(:consumption, user: buyer_c_s[0], auction: auction) }
@@ -303,7 +303,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
         it 'Success' do
           hash = JSON.parse(response.body)
           expect(response).to have_http_status(:ok)
-          expect(hash['headers'].size).to eq(2)
+          expect(hash['headers'].size).to eq(3)
           expect(hash['bodies']['total']).to eq(25)
           expect(hash['bodies']['data'].size).to eq(10)
         end
@@ -317,9 +317,9 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
         before { do_request }
         it 'Success' do
           hash = JSON.parse(response.body)
-          expect(response).to have_http_status(:ok)
           puts response.body
-          expect(hash['headers'].size).to eq(2)
+          expect(response).to have_http_status(:ok)
+          expect(hash['headers'].size).to eq(3)
           expect(hash['bodies']['total']).to eq(4)
           expect(hash['bodies']['data'].size).to eq(4)
         end
@@ -334,8 +334,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
         it 'Success' do
           hash = JSON.parse(response.body)
           expect(response).to have_http_status(:ok)
-          puts response.body
-          expect(hash['headers'].size).to eq(2)
+          expect(hash['headers'].size).to eq(3)
           expect(hash['bodies']['total']).to eq(21)
           expect(hash['bodies']['data'].size).to eq(10)
         end
@@ -355,7 +354,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
         it 'Success' do
           hash = JSON.parse(response.body)
           expect(response).to have_http_status(:ok)
-          expect(hash['headers'].size).to eq(2)
+          expect(hash['headers'].size).to eq(3)
           expect(hash['bodies']['total']).to eq(25)
           expect(hash['bodies']['data'].size).to eq(10)
         end
@@ -370,7 +369,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
         it 'Success' do
           hash = JSON.parse(response.body)
           expect(response).to have_http_status(:ok)
-          expect(hash['headers'].size).to eq(3)
+          expect(hash['headers'].size).to eq(4)
           expect(hash['bodies']['total']).to eq(25)
           expect(hash['bodies']['data'].size).to eq(10)
         end
@@ -385,8 +384,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
         it 'Success' do
           hash = JSON.parse(response.body)
           expect(response).to have_http_status(:ok)
-          puts response.body
-          expect(hash['headers'].size).to eq(2)
+          expect(hash['headers'].size).to eq(3)
           expect(hash['bodies']['total']).to eq(4)
           expect(hash['bodies']['data'].size).to eq(4)
         end
@@ -401,8 +399,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
         it 'Success' do
           hash = JSON.parse(response.body)
           expect(response).to have_http_status(:ok)
-          puts response.body
-          expect(hash['headers'].size).to eq(3)
+          expect(hash['headers'].size).to eq(4)
           expect(hash['bodies']['total']).to eq(4)
           expect(hash['bodies']['data'].size).to eq(4)
         end
@@ -417,8 +414,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
         it 'Success' do
           hash = JSON.parse(response.body)
           expect(response).to have_http_status(:ok)
-          puts response.body
-          expect(hash['headers'].size).to eq(2)
+          expect(hash['headers'].size).to eq(3)
           expect(hash['bodies']['total']).to eq(21)
           expect(hash['bodies']['data'].size).to eq(10)
         end
@@ -433,8 +429,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
         it 'Success' do
           hash = JSON.parse(response.body)
           expect(response).to have_http_status(:ok)
-          puts response.body
-          expect(hash['headers'].size).to eq(3)
+          expect(hash['headers'].size).to eq(4)
           expect(hash['bodies']['total']).to eq(21)
           expect(hash['bodies']['data'].size).to eq(10)
         end
