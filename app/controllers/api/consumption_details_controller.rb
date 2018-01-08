@@ -16,12 +16,13 @@ class Api::ConsumptionDetailsController < Api::BaseController
   end
 
   def participate
-    params[:details].each do |detail|
+    details = JSON.parse(params[:details])
+    details.each do |detail|
       consumption_detail = ConsumptionDetail.new
-      consumption_detail.account_number = detail[:account_number]
-      consumption_detail.intake_level = detail[:intake_level]
-      consumption_detail.peak = detail[:peak]
-      consumption_detail.off_peak = detail[:off_peak]
+      consumption_detail.account_number = detail['account_number']
+      consumption_detail.intake_level = detail['intake_level']
+      consumption_detail.peak = detail['peak']
+      consumption_detail.off_peak = detail['off_peak']
       consumption_detail.consumption_id = params[:consumption_id]
       consumption_detail.save
     end
