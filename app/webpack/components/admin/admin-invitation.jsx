@@ -280,14 +280,14 @@ render() {
                                                 <td >{this.state.peak_lt}</td>
                                                 <td >{this.state.peak_hts}</td>
                                                 <td >{this.state.peak_htl}</td>
-                                                <td >{this.state.eht_htl}</td>
+                                                <td >{this.state.peak_eht}</td>
                                             </tr>
                                             <tr>
                                                 <td>Off-Peak (7pm-7am)</td>
                                                 <td >{this.state.off_peak_lt}</td>
                                                 <td >{this.state.off_peak_hts}</td>
                                                 <td >{this.state.off_peak_htl}</td>
-                                                <td >{this.state.off_eht_htl}</td>
+                                                <td >{this.state.off_peak_eht}</td>
                                             </tr>
                                         </tbody>
                                     </table>
