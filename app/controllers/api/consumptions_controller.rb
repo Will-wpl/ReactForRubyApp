@@ -11,6 +11,8 @@ class Api::ConsumptionsController < Api::BaseController
       data.push(id: consumption.id,
                 auction_id: consumption.auction_id,
                 user_id: consumption.user_id,
+                company_name: consumption.user.company_name,
+                name: consumption.user.name,
                 count: count,
                 lt_peak: consumption.lt_peak.nil? ? 0 : consumption.lt_peak,
                 lt_off_peak: consumption.lt_off_peak.nil? ? 0 : consumption.lt_off_peak,

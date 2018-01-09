@@ -28,6 +28,7 @@ RSpec.describe Api::Admin::ConsumptionsController, type: :controller do
           hash = JSON.parse(response.body)
           expect(hash['list'].size).to eq(1)
           expect(hash['list'][0]['lt_peak']).to eq('100.0')
+          expect(hash['list'][0]['company_name']).to eq(buyer_user.company_name)
           expect(hash['total_info']['lt_peak']).to eq('100.0')
         end
       end
