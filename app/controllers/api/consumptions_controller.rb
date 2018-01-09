@@ -36,13 +36,18 @@ class Api::ConsumptionsController < Api::BaseController
 
   def update_status
     if params[:id] == '0'
-      @consumption = Consumption.new
-      @consumption.auction_id = params[:auction_id]
-      @consumption.user_id = params[:user_id]
-      @consumption.action_status = '2'
-      @consumption.participation_status = '2'
-      @consumption.save
-      render json: @consumption, status: 201
+      if Consumption.find_by_auction_and_user(params[:auction_id], params[:user_id]).exists?
+        @consumption = Consumption.new
+        @consumption.auction_id = params[:auction_id]
+        @consumption.user_id = params[:user_id]
+        @consumption.action_status = '2'
+        @consumption.participation_status = '2'
+        @consumption.save
+        render json: @consumption, status: 201
+      else
+        render json: { message: 'consumption exist' }, status: 200
+      end
+
     else
       @consumption.update(action_status: params['action_status'])
       render json: @consumption, status: 200
@@ -53,7 +58,6 @@ class Api::ConsumptionsController < Api::BaseController
     @consumption.destroy
     render json: nil, status: 200
   end
-
 
   private
 

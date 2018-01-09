@@ -35,21 +35,25 @@ class Api::ArrangementsController < Api::BaseController
 
   def update_status
     if params[:id] == '0'
-      @arrangement = Arrangement.new
-      @arrangement.auction_id = params[:auction_id]
-      @arrangement.user_id = params[:user_id]
-      @arrangement.action_status = '2'
-      @arrangement.main_name = ''
-      @arrangement.main_email_address = ''
-      @arrangement.main_mobile_number = ''
-      @arrangement.main_office_number = ''
-      @arrangement.save
-      render json: @arrangement, status: 201
+      if Arrangement.find_by_auction_and_user(params[:auction_id], params[:user_id]).exists?
+        @arrangement = Arrangement.new
+        @arrangement.auction_id = params[:auction_id]
+        @arrangement.user_id = params[:user_id]
+        @arrangement.action_status = '2'
+        @arrangement.main_name = ''
+        @arrangement.main_email_address = ''
+        @arrangement.main_mobile_number = ''
+        @arrangement.main_office_number = ''
+        @arrangement.save
+        render json: @arrangement, status: 201
+      else
+        render json: { message: 'consumption exist' }, status: 200
+      end
+
     else
       @arrangement.update(action_status: params['action_status'])
       render json: @arrangement, status: 200
     end
-
   end
 
   def destroy
@@ -64,6 +68,6 @@ class Api::ArrangementsController < Api::BaseController
   end
 
   def model_params
-    params.require(:arrangement).permit(:main_name, :main_email_address, :main_mobile_number, :main_office_number, :alternative_name, :alternative_email_address, :alternative_mobile_number, :alternative_office_number, :lt_peak, :lt_off_peak, :hts_peak, :hts_off_peak, :htl_peak, :htl_off_peak,:eht_peak, :eht_off_peak, :accept_status)
+    params.require(:arrangement).permit(:main_name, :main_email_address, :main_mobile_number, :main_office_number, :alternative_name, :alternative_email_address, :alternative_mobile_number, :alternative_office_number, :lt_peak, :lt_off_peak, :hts_peak, :hts_off_peak, :htl_peak, :htl_off_peak, :eht_peak, :eht_off_peak, :accept_status)
   end
 end
