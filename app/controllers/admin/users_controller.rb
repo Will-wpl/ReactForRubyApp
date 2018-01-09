@@ -59,6 +59,11 @@ class Admin::UsersController < Admin::BaseController
     approval_status = params[:approved].nil? ? '0' : '1'
     comment = params[:user][:comment]
     if @user.update(approval_status: approval_status, comment: comment)
+      if approval_status == '1'
+        UserMailer.approval_email(@user).deliver_later
+      elsif approval_status == '0'
+        UserMailer.reject_email(@user).deliver_later
+      end
       redirect_to manage_admin_user_path(@user), notice: "#{User.model_name.human} was successfully updated."
     else
       render :manage

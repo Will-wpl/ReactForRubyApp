@@ -80,3 +80,18 @@ _unused_retailers = [
   { name: 'Senoko Energy Supply Will', email: 'will@example.com', company_name: 'Senoko Energy Supply Will' },
   { name: 'Cleantech Solar Management Company Judy', email: 'judy@example.com', company_name: 'Cleantech Solar Management Company Judy' }
 ]
+
+email_templates = [
+    {subject: 'REVV account', body: 'Dear Admin,<br/>#user.company_name has registered for a REVV account. <br/>Please proceed to approve/reject the registration at revv.sg.<br/>', template_type: '1'},
+    {subject: 'REVV account registration has been approved', body: 'Dear #user.company_name,<br/>Congratulations, your REVV account registration has been approved.<br/>You may now log in to your account at revv.sg. <br/>', template_type: '2'},
+    {subject: 'REVV account registration has been rejected', body: 'Dear #user.company_name,<br/>Your REVV account registration has been rejected.<br/>Comments: [#user.comment] <br/>', template_type: '3'}
+]
+
+email_templates.each do |template|
+  email_template = EmailTemplate.find_or_create_by(template_type: template[:template_type]) do |this_template|
+    this_template.subject = template[:subject]
+    this_template.body = template[:body]
+    this_template.template_type = template[:template_type]
+
+  end
+end
