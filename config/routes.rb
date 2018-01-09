@@ -41,14 +41,14 @@ Rails.application.routes.draw do
           put 'publish'
           put 'hold'
           post 'confirm'
+          get 'retailers'
+          get 'buyers'
+          get 'selects'
         end
         collection do
           get 'obtain'
           get 'unpublished'
           get 'published'
-          get 'retailers'
-          get 'buyers'
-          get 'selects'
         end
       end
       resource :auction_histories, only: %i[list last] do
