@@ -8,7 +8,7 @@
     li.select_ico_1 Notification Sent
     li.select_ico_2 Pending Notification
   div.createRaMain.u-grid
-    a.lm--button.lm--button--primary.u-mt3 href="javascript:window.history.back();" Back
+    a.lm--button.lm--button--primary.u-mt3 href="javascript:self.location=document.referrer;" Back
 - elsif params[:type] == '2'
   .page-header
   h1.search_list_type
@@ -19,7 +19,7 @@
     li.select_ico_1 Notification Sent
     li.select_ico_2 Pending Notification
   div.createRaMain.u-grid
-    a.lm--button.lm--button--primary.u-mt3 href="javascript:window.history.back();" Back
+    a.lm--button.lm--button--primary.u-mt3 href="javascript:self.location=document.referrer;" Back
 - elsif params[:type] == '3'
   .page-header
   h1.search_list_type
@@ -30,6 +30,6 @@
     li.select_ico_1 Notification Sent
     li.select_ico_2 Pending Notification
   div.createRaMain.u-grid
-    a.lm--button.lm--button--primary.u-mt3 href="javascript:window.history.back();" Back
+    a.lm--button.lm--button--primary.u-mt3 href="javascript:self.location=document.referrer;" Back
 - else
   h1 error
