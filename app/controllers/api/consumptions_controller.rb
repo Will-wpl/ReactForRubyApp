@@ -47,10 +47,14 @@ class Api::ConsumptionsController < Api::BaseController
         @consumption.save
         render json: @consumption, status: 201
       end
-
     else
+      if params['action_status'] == '1'
       @consumption.update(action_status: params['action_status'])
       render json: @consumption, status: 200
+      else
+        @consumption.destroy
+        render json: nil, status: 200
+      end
     end
   end
 

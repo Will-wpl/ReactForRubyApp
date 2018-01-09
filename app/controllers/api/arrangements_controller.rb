@@ -51,8 +51,13 @@ class Api::ArrangementsController < Api::BaseController
       end
 
     else
-      @arrangement.update(action_status: params['action_status'])
-      render json: @arrangement, status: 200
+      if params['action_status'] == '1'
+        @arrangement.update(action_status: params['action_status'])
+        render json: @arrangement, status: 200
+      else
+        @arrangement.destroy
+        render json: nil, status: 200
+      end
     end
   end
 
