@@ -188,7 +188,7 @@ class Api::AuctionsController < Api::BaseController
       arrangement = index.nil? ? nil : arrangements[index]
       status = arrangement.nil? ? nil : arrangement.action_status
       action = arrangement.nil? ? nil : arrangement.id
-      data.push(id: user.id, company_name: user.company_name, status: status, action: action)
+      data.push(user_id: user.id, company_name: user.company_name, status: status, action: action)
     end
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
@@ -252,9 +252,9 @@ class Api::AuctionsController < Api::BaseController
       status = consumption.nil? ? nil : consumption.action_status
       action = consumption.nil? ? nil : consumption.id
       if consumer_type == '2'
-        data.push(company_name: user.company_name, status: status, action: action)
+        data.push(user_id: user.id, company_name: user.company_name, status: status, action: action)
       elsif consumer_type == '3'
-        data.push(company_name: user.company_name, house_type: user.account_housing_type, status: status, action: action)
+        data.push(user_id: user.id, company_name: user.company_name, house_type: user.account_housing_type, status: status, action: action)
       end
     end
     bodies = { data: data, total: total }
