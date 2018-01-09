@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe Api::Admin::ConsumptionsController, type: :controller do
   let!(:admin_user){ create(:user, :with_admin) }
   let!(:buyer_user){ create(:user, :with_buyer, :with_company_buyer) }
+  let!(:buyer_user_1){ create(:user, :with_buyer, :with_company_buyer) }
   let!(:auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
   let!(:consumption) { create(:consumption, :init, user: buyer_user, auction: auction ) }
   let!(:consumption_lt) { create(:consumption_detail, :for_lt, consumption_id: consumption.id) }
@@ -41,14 +42,14 @@ RSpec.describe Api::Admin::ConsumptionsController, type: :controller do
 
       describe 'new consumption action_status' do
         def do_request
-          put :update_status, params: { id: 0, auction_id: auction.id, user_id: buyer_user.id }
+          put :update_status, params: { id: 0, auction_id: auction.id, user_id: buyer_user_1.id }
         end
 
         before { do_request }
 
         it "return new consumption" do
           expect(response).to be_success
-          expect(JSON.parse(response.body)['user_id']).to eq(buyer_user.id)
+          expect(JSON.parse(response.body)['user_id']).to eq(buyer_user_1.id)
           expect(JSON.parse(response.body)['auction_id']).to eq(auction.id)
         end
       end

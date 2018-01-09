@@ -41,14 +41,14 @@ export const searchTypeData = {
         ]
     },
     "Select Retailers":{
-        list_url:"/api/admin/users/retailers",
+        list_url:"/api/admin/auctions/"+sessionStorage.auction_id+"/retailers",
         list_data:[
             {title:"Company Name:",type:"company_name",species:"input",operator:'like'},
             {title:"Status:",type:"approval_status",species:"select",operator:'=',options:[{option:"All",value:""},{option:"Rejected",value:"0"},{option:"Approved",value:"1"},{option:"Pending",value:"2"}]}
         ]
     },
     "Select Company Buyers":{
-        list_url:"/api/admin/users/buyers",
+        list_url:"/api/admin/auctions/"+sessionStorage.auction_id+"/buyers",
         list_data:[
             {title:"Company Name:",type:"company_name",species:"input",operator:'like'},
             {title:"Status:",type:"approval_status",species:"select",operator:'=',options:[{option:"All",value:""},{option:"Rejected",value:"0"},{option:"Approved",value:"1"},{option:"Pending",value:"2"}]},
@@ -56,7 +56,7 @@ export const searchTypeData = {
         ]
     },
     "Select Individual Buyers":{
-        list_url:"/api/admin/users/buyers",
+        list_url:"/api/admin/auctions/"+sessionStorage.auction_id+"/buyers",
         list_data:[
             {title:"Name:",type:"name",species:"input",operator:'like'},
             {title:"Housing Type:",type:"account_housing_type",species:"select",operator:'=',options:[{option:"All",value:""},{option:"HDB",value:"0"},{option:"Private High-rise",value:"1"},{option:"landed",value:"2"}]},

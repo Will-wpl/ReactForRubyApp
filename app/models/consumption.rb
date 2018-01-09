@@ -23,6 +23,7 @@ class Consumption < ApplicationRecord
   scope :find_by_auction_id, ->(auction_id) { where('auction_id = ?', auction_id) }
   scope :join_buyer_auction, -> { includes(:auction).where.not(auctions: { publish_status: nil }) }
   scope :find_by_user_consumer_type, ->(consumer_type) { includes(:user).where(users: { consumer_type: consumer_type }) }
+  scope :find_by_auction_and_user, ->(auction_id, user_id) { where('auction_id = ? and user_id =?', auction_id, user_id) }
   # Callbacks
 
   # Delegates

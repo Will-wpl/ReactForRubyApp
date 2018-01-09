@@ -7,13 +7,6 @@ export default class AdminComsumptionList extends Component {
     this.state={
         
     }
-    //this.winnerdata=[];
-    //this.winnerauction={};
-    this.winner = {
-        data:{},
-        auction:{}
-    }
-    //this.auction={}
 }
 
 componentDidMount() {

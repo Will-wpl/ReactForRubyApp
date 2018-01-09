@@ -174,8 +174,8 @@ class Api::AuctionsController < Api::BaseController
     end
     headers = [
       { name: 'Company Name', field_name: 'company_name' },
-      { name: 'Status', field_name: 'status' },
-      { name: 'Action', field_name: 'action' }
+      { name: 'Status', field_name: 'select_status' },
+      { name: 'Action', field_name: 'select_action' }
     ]
     actions = [
       { url: '/api/admin/users/:id', name: 'View', icon: 'lm--icon-search' }
@@ -188,7 +188,7 @@ class Api::AuctionsController < Api::BaseController
       arrangement = index.nil? ? nil : arrangements[index]
       status = arrangement.nil? ? nil : arrangement.action_status
       action = arrangement.nil? ? nil : arrangement.id
-      data.push(user_id: user.id, company_name: user.company_name, status: status, action: action)
+      data.push(user_id: user.id, company_name: user.company_name, select_status: status, select_action: action)
     end
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
@@ -222,8 +222,8 @@ class Api::AuctionsController < Api::BaseController
     if consumer_type == '2'
       headers = [
         { name: 'Company Name', field_name: 'company_name' },
-        { name: 'Status', field_name: 'status' },
-        { name: 'Action', field_name: 'action' }
+        { name: 'Status', field_name: 'select_status' },
+        { name: 'Action', field_name: 'select_action' }
       ]
       actions = [
         { url: '/api/admin/users/:id', name: 'View', icon: 'lm--icon-search' }
@@ -232,8 +232,8 @@ class Api::AuctionsController < Api::BaseController
       headers = [
         { name: 'Name', field_name: 'company_name' },
         { name: 'Housing Type', field_name: 'account_housing_type' },
-        { name: 'Status', field_name: 'status' },
-        { name: 'Action', field_name: 'action' }
+        { name: 'Status', field_name: 'select_status' },
+        { name: 'Action', field_name: 'select_action' }
       ]
       actions = [
         { url: '/api/admin/users/:id', name: 'View', icon: 'lm--icon-search' }
@@ -252,9 +252,9 @@ class Api::AuctionsController < Api::BaseController
       status = consumption.nil? ? nil : consumption.action_status
       action = consumption.nil? ? nil : consumption.id
       if consumer_type == '2'
-        data.push(user_id: user.id, company_name: user.company_name, status: status, action: action)
+        data.push(user_id: user.id, company_name: user.company_name, select_status: status, select_action: action)
       elsif consumer_type == '3'
-        data.push(user_id: user.id, company_name: user.company_name, house_type: user.account_housing_type, status: status, action: action)
+        data.push(user_id: user.id, company_name: user.company_name, house_type: user.account_housing_type, select_status: status, select_action: action)
       end
     end
     bodies = { data: data, total: total }

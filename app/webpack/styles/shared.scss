@@ -407,12 +407,38 @@ dfn.manage_label{
   }
   div.lm--table-container{
     a{ text-decoration: none; cursor: pointer;}
+    table.lm--table{
+      table-layout: fixed;
+      th{
+        font-size: 18px;
+        &:first-child{ width: 45%;}
+      }
+      td{
+        div{ width: 100%; height:20px;
+          &.select_ico_0{background:url("../images/not_invited.png") no-repeat 15px center;}
+          &.select_ico_1{background:url("../images/notification_sent.png") no-repeat 15px center;}
+          &.select_ico_2{background:url("../images/pending_notification.png") no-repeat 15px center;}
+        }
+        span{
+          cursor: pointer; padding-left: 20px;
+          &.invite{background:url("../images/invite.png") no-repeat left;}
+          &.cancel_invite{background:url("../images/cancel_invite.png") no-repeat left;}
+        }
+      }
+    }
     .table_page{ 
       width: 100%; text-align: left; margin: 30px auto 0px auto;
       span{ display: inline-block; line-height: 32px; color:#fff; cursor: pointer; padding: 0px 15px; transition: 0.5s all;
         &.table_page_selected,&:hover{ background:#314657; }
       }
     }
+  }
+}
+.select_ico_tab{ overflow: hidden;
+  li{ float: left; list-style: none; padding-left: 20px; margin-right: 3rem;
+    &.select_ico_0{background:url("../images/not_invited.png") no-repeat left;}
+    &.select_ico_1{background:url("../images/notification_sent.png") no-repeat left;}
+    &.select_ico_2{background:url("../images/pending_notification.png") no-repeat left;}
   }
 }
 .mg0{ margin: 0 auto;}
