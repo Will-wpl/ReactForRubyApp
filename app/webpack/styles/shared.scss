@@ -449,7 +449,10 @@ body.choose{
 
 .admin_invitation{
   .w_100{ width: 100%;}
-  .retailer_fill{ margin-bottom: 1.5rem;}
+  .consumption{ position: relative;
+    .retailer_fill{ margin-bottom: 1.5rem;}
+    .required_error{position:absolute; top:125px; display: none; left:0px; width: 100%; padding:5px 10px; border:2px solid #fbb136; background: #fff; color:#333; font-size: 15px;}
+  }
   a{ margin-bottom: 1rem; text-align: center; font-size: 13px;
     &.orange{background:#DF5C28;}
   }

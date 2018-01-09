@@ -248,7 +248,7 @@ export class CreateNewRA extends Component {
         }
         if(this.state.btn_type == "next"){
             sessionStorage.isAuctionId = "yes";
-            createRa({auction: this.setAuction()}).then(res => {
+            createRa({auction: this.auction}).then(res => {
                 this.auction = res;
                 sessionStorage.auction_id = res.id;
                 this.setState({

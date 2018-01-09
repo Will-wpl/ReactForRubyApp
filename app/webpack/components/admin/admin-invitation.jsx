@@ -1,13 +1,19 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import moment from 'moment';
-import {raPublish} from '../../javascripts/componentService/admin/service';
+import {raPublish,adminShowSelects,} from '../../javascripts/componentService/admin/service';
+import {getAuction} from '../../javascripts/componentService/common/service';
 import {Modal} from '../shared/show-modal';
 export default class AdminInvitation extends Component {
   constructor(props){
     super(props);
     this.state={
         text:"",
+        retailer_select:0,retailer_send:0,retailer_pend:0,
+        buyer_company_select:0,buyer_company_send:0,buyer_company_pend:0,
+        buyer_individual_select:0,buyer_individual_send:0,buyer_individual_pend:0,
+        peak_lt:0,peak_hts:0,peak_htl:0,eht_htl:0,
+        off_peak_lt:0,off_peak_hts:0,off_peak_htl:0,off_eht_htl:0,
         fileData:{
                 "buyer_tc_upload":[{buttonName:"none"}],
                 "tender_documents_upload":[{buttonName:"add",buttonText:"+"}],
@@ -17,6 +23,44 @@ export default class AdminInvitation extends Component {
 }
 
 componentDidMount() {
+    adminShowSelects().then(res=>{
+        console.log(res);
+        this.setState({
+            retailer_select:(res.retailers['2'] ? res.retailers['2'] : 0)+(res.retailers['3'] ? res.retailers['3'] : 0),
+            retailer_send:res.retailers['3'] ? res.retailers['3'] : 0,
+            retailer_pend:res.retailers['2'] ? res.retailers['2'] : 0,
+            buyer_company_select:(res.company_buyers['2'] ? res.company_buyers['2'] : 0)+(res.company_buyers['3'] ? res.company_buyers['3'] : 0),
+            buyer_company_send:res.company_buyers['3'] ? res.company_buyers['3'] : 0,
+            buyer_company_pend:res.company_buyers['2'] ? res.company_buyers['2'] : 0,
+            buyer_individual_select:(res.individual_buyers['2'] ? res.individual_buyers['2'] : 0)+(res.individual_buyers['3'] ? res.individual_buyers['3'] : 0),
+            buyer_individual_send:res.individual_buyers['3'] ? res.individual_buyers['3'] : 0,
+            buyer_individual_pend:res.individual_buyers['2'] ? res.individual_buyers['2'] : 0,
+        })
+    },error=>{
+        this.setState({
+            text:'Request exception failed!'
+        });
+        this.refs.Modal.showModal();
+    })
+    getAuction('admin',sessionStorage.auction_id).then(res=>{
+        console.log(res);
+        this.setState({
+            peak_lt:res.total_lt_peak ? res.total_lt_peak : 0,
+            peak_hts:res.total_hts_peak ? res.total_hts_peak : 0,
+            peak_htl:res.total_htl_peak ? res.total_htl_peak : 0,
+            peak_eht:res.total_eht_peak ? res.total_eht_peak : 0,
+            off_peak_lt:res.total_lt_off_peak ? res.total_lt_off_peak : 0,
+            off_peak_hts:res.total_hts_off_peak ? res.total_hts_off_peak : 0,
+            off_peak_htl:res.total_htl_off_peak ? res.total_htl_off_peak : 0,
+            off_peak_eht:res.total_eht_off_peak ? res.total_eht_off_peak : 0,
+        })
+    },error=>{
+        this.setState({
+            text:'Request exception failed!'
+        });
+        this.refs.Modal.showModal();
+    })
+    //window.location.href='';
     //alert(localStorage.auction_id);
 }
 upload(type,index){
@@ -76,8 +120,22 @@ checkRequired(){
     return result;
 }
 doPublish(){
+    let required;
     if(this.props.onAddClick){
         this.props.onAddClick();
+    }
+    if(this.state.eht_htl<=0 && this.state.off_eht_htl<=0
+        && this.state.peak_lt<=0 && this.state.off_peak_lt<=0
+        && this.state.peak_hts<=0 && this.state.off_peak_hts<=0
+        && this.state.peak_htl<=0 && this.state.off_peak_htl<=0
+    ){
+        clearTimeout(required);
+        $(".consumption .required_error").fadeIn(300);
+        location.href="#aggregate_consumption";
+        required = setTimeout(()=>{
+            $(".consumption .required_error").fadeOut(300);
+        },5000)
+        return;
     }
     if(!this.checkRequired()){
         return;
@@ -168,7 +226,7 @@ render() {
                         Retailers:
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <abbr>You have selected 5 retailers</abbr>
+                            <abbr>Selected : {this.state.retailer_select}&nbsp;&nbsp;&nbsp;&nbsp;Notification Send : {this.state.retailer_send}&nbsp;&nbsp;&nbsp;&nbsp;Pending Notification : {this.state.retailer_pend}</abbr>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -186,8 +244,8 @@ render() {
                         Buyers:
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <abbr>You have selected 0 company buyers and 6 individual buyers.</abbr>
-                            <abbr>You have selected send to 6 buyers</abbr>
+                            <abbr>Company Selected : {this.state.buyer_company_select}&nbsp;&nbsp;&nbsp;&nbsp;Notification Send : {this.state.buyer_company_send}&nbsp;&nbsp;&nbsp;&nbsp;Pending Notification : {this.state.buyer_company_pend}</abbr>
+                            <abbr>Individual Selected : {this.state.buyer_individual_select}&nbsp;&nbsp;&nbsp;&nbsp;Notification Send : {this.state.buyer_individual_send}&nbsp;&nbsp;&nbsp;&nbsp;Pending Notification : {this.state.buyer_individual_pend}</abbr>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -205,7 +263,7 @@ render() {
                         Aggregate Consumption:
                         </label>
                         <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                            <div className="col-sm-12 u-cell">
+                            <div className="col-sm-12 u-cell consumption" id="aggregate_consumption">
                                 <table className="retailer_fill w_100"  cellPadding="0" cellSpacing="0">
                                         <thead>
                                         <tr>
@@ -213,23 +271,29 @@ render() {
                                             <th>LT</th>
                                             <th>HT (Small)</th>
                                             <th>HT (Large)</th>
+                                            <th>EHT</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
                                                 <td>Peak (7am-7pm)</td>
-                                                <td >147878</td>
-                                                <td >147878</td>
-                                                <td >147878</td>
+                                                <td >{this.state.peak_lt}</td>
+                                                <td >{this.state.peak_hts}</td>
+                                                <td >{this.state.peak_htl}</td>
+                                                <td >{this.state.eht_htl}</td>
                                             </tr>
                                             <tr>
                                                 <td>Off-Peak (7pm-7am)</td>
-                                                <td >147878</td>
-                                                <td >147878</td>
-                                                <td >147878</td>
+                                                <td >{this.state.off_peak_lt}</td>
+                                                <td >{this.state.off_peak_hts}</td>
+                                                <td >{this.state.off_peak_htl}</td>
+                                                <td >{this.state.off_eht_htl}</td>
                                             </tr>
                                         </tbody>
                                     </table>
+                                    <div className="required_error">
+                                        At least one field in intake level must have value greater than 0 kWh.
+                                    </div>
                                 </div>
                                 <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/comsumption?type=2`} className="lm--button lm--button--primary col-sm-12">Company Consumption Details</a></div>
                                 <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/comsumption?type=3`} className="lm--button lm--button--primary col-sm-12">Individual Consumption Details</a></div>                

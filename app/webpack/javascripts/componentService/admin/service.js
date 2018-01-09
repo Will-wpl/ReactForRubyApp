@@ -27,6 +27,18 @@ export const raPublish = (params) => {
     return put('/api/admin/auctions/'+params.id+'/publish', params.pagedata);
 }
 
+export const getBuyerDetails = (params) => {
+    return get('/api/admin/consumptions?id='+params.id+'&consumer_type='+params.type);
+}
+
+export const getBuyerDetailsConsumptions = (params) => {
+    return get('/api/admin/consumption_details?consumption_id='+params.id);
+}
+
+export const adminShowSelects = () => {
+    return get('/api/admin/auctions/'+sessionStorage.auction_id+'/selects');
+}
+
 export const upateHoldStatus = (auction, hold_status) => {
     return put(`/api/admin/auctions/${auction}/hold`, {hold_status});
 }
