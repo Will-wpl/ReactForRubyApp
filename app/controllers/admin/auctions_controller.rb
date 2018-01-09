@@ -58,6 +58,11 @@ class Admin::AuctionsController < Admin::BaseController
 
   def unpublished; end
 
+  def retailer_dashboard; end
+
+  def buyer_dashboard; end
+
+
   private
 
   def set_auction

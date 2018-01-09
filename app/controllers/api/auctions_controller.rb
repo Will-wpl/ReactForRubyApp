@@ -289,6 +289,15 @@ class Api::AuctionsController < Api::BaseController
     render json: nil, status: 200
   end
 
+  def retailer_dashboard
+
+  end
+
+  def buyer_dashboard
+
+  end
+
+
   private
 
   def set_auction
