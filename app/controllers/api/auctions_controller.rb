@@ -252,9 +252,9 @@ class Api::AuctionsController < Api::BaseController
       status = consumption.nil? ? nil : consumption.action_status
       action = consumption.nil? ? nil : consumption.id
       if consumer_type == '2'
-        data.push(user_id: user.id, company_name: user.company_name, select_status: status, action: action)
+        data.push(user_id: user.id, company_name: user.company_name, select_status: status, select_action: action)
       elsif consumer_type == '3'
-        data.push(user_id: user.id, company_name: user.company_name, house_type: user.account_housing_type, select_status: status, action: action)
+        data.push(user_id: user.id, company_name: user.company_name, house_type: user.account_housing_type, select_status: status, select_action: action)
       end
     end
     bodies = { data: data, total: total }
