@@ -15,6 +15,15 @@ class Api::AuctionsController < Api::BaseController
   def update
     if params[:id] == '0' # create
       @auction.publish_status = '0'
+      @auction.total_lt_peak = 0
+      @auction.total_lt_off_peak = 0
+      @auction.total_hts_peak = 0
+      @auction.total_hts_off_peak = 0
+      @auction.total_htl_peak = 0
+      @auction.total_htl_off_peak = 0
+      @auction.total_eht_peak = 0
+      @auction.total_eht_off_peak = 0
+      @auction.total_volume =0
       if @auction.save
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
         render json: @auction, status: 201
