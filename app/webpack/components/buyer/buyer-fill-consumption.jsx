@@ -2,23 +2,48 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import {Modal} from '../shared/show-modal';
 import {DoFillConsumption} from './fill-consumption'
-import {setBuyerParticipate} from '../../javascripts/componentService/common/service';
+import {setBuyerParticipate,getBuyerParticipate} from '../../javascripts/componentService/common/service';
 export class FillConsumption extends Component {
     constructor(props){
         super(props);
         this.state={
             text:"",
             submit_type:"",
-            site_list:[
-                {
-                    number:'A000032100',
-                    level:['LT','HTS','HTL','EHT'],
-                    peak:'',
-                    off_peak:''
-                }
-            ]
+            site_list:[]
         }
         this.consumptions_id = (window.location.href.split("consumptions/")[1]).split("/edit")[0];
+    }
+    componentDidMount(){
+        getBuyerParticipate('/api/buyer/consumption_details?consumption_id='+this.consumptions_id).then(res=>{
+            this.site_list = res;
+            console.log(this.site_list);
+            if(res.length>0){
+                this.site_list.map((item,index)=>{
+                    this.site_list[index].intake_level_selected = item.intake_level;
+                    this.site_list[index].intake_level = ['LT','HTS','HTL','EHT'];
+                })
+                this.setState({
+                    site_list:this.site_list
+                })
+            }else{
+                this.site_list = [
+                    {
+                        account_number:'A000032100',
+                        intake_level:['LT','HTS','HTL','EHT'],
+                        peak:'',
+                        off_peak:''
+                    }
+                ]
+                this.setState({
+                    site_list:this.site_list
+                })
+            }
+        },error=>{
+            this.refs.Modal.showModal();
+            this.setState({
+                text:"Interface failed"
+            });
+        })
     }
     add_site(){
         if(this.props.onAddClick){
@@ -26,8 +51,8 @@ export class FillConsumption extends Component {
         }
         let list = {},site_listObj = this.state.site_list;
         list = {
-            number:'A000032100',
-            level:['LT','HTS','HTL','EHT'],
+            account_number:'A000032100',
+            intake_level:['LT','HTS','HTL','EHT'],
             peak:'',
             off_peak:''
         }
@@ -49,7 +74,7 @@ export class FillConsumption extends Component {
     doAccept(){
         let makeData = {},buyerlist = [];
         this.state.site_list.map((item,index)=>{
-            buyerlist += '{"account_number":"'+$("#number"+(index+1)).val()+'","intake_level":"'+$("#level"+(index+1)).val()+'","peak":"'+$("#peak"+(index+1)).val()+'","off_peak":"'+$("#off_peak"+(index+1)).val()+'","consumption_id":"'+this.consumptions_id+'"},';
+            buyerlist += '{"account_number":"'+$("#account_number"+(index+1)).val()+'","intake_level":"'+$("#intake_level"+(index+1)).val()+'","peak":"'+$("#peak"+(index+1)).val()+'","off_peak":"'+$("#off_peak"+(index+1)).val()+'","consumption_id":"'+this.consumptions_id+'"},';
         })
         buyerlist = buyerlist.substr(0,buyerlist.length-1);
         buyerlist = '['+buyerlist+']';

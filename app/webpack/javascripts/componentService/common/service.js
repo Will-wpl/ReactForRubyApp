@@ -24,6 +24,10 @@ export const setBuyerParticipate = (data,url) => {
     return create(url,data);
 }
 
+export const getBuyerParticipate = (url) => {
+    return get(url);
+}
+
 export const ACTION_COMMANDS = {
     SET_BID: 'set_bid',
     MAKE_UNIQUE: 'limit_user'
