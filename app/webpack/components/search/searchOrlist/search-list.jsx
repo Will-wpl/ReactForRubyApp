@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 //import {getAuctionTimeRule} from '../../javascripts/componentService/common/service';
 import moment from 'moment';
 import {Modal} from '../../shared/show-modal';
-import {deleteAuction} from '../../../javascripts/componentService/admin/service';
+import {deleteAuction,updateStatus,deleteStatus} from '../../../javascripts/componentService/admin/service';
 export class SearchList extends Component {
     constructor(props, context){
         super(props);
@@ -74,6 +74,42 @@ export class SearchList extends Component {
                 this.refs.Modal.showModal();
             })
     }
+    doinvite(type,user_id,select_action){
+        let invite_type = this.props.type === 'Select Retailers' ? 'arrangements' : 'consumptions';
+        if(type === "invite"){
+            updateStatus({
+                id:0,
+                type:invite_type,
+                data:{
+                    id:0,
+                    auction_id:sessionStorage.auction_id,
+                    user_id:user_id
+                }
+            }).then(res=>{
+                this.dosearch(this.props.list_data.page_index);
+            },error=>{
+                this.setState({
+                    text:'Request exception failed!'
+                });
+                this.refs.Modal.showModal();
+            })
+        }else{
+            deleteStatus({
+                id:select_action,
+                type:invite_type,
+                data:{
+                    action_status:0
+                }
+            }).then(res=>{
+                this.dosearch(this.props.list_data.page_index);
+            },error=>{
+                this.setState({
+                    text:'Request exception failed!'
+                });
+                this.refs.Modal.showModal();
+            })
+        }
+    }
     render (){
         if(this.props.table_data){
             //console.log(this.props.table_data);
@@ -96,11 +132,29 @@ export class SearchList extends Component {
                                     return <tr key={index}>
                                                 {
                                                     this.props.table_data.headers.map((it,i)=>{
-                                                        return <td key={i}>
+                                                        if(it.field_name === 'select_action'){
+                                                            return <td key={i}>
+                                                                    {item[`${it.field_name}`] === null 
+                                                                    ? <span className={'invite'} onClick={this.doinvite.bind(this,'invite',item.user_id)}>Invite</span> 
+                                                                    :(
+                                                                        item[`select_status`] === '2' 
+                                                                        ? <span className={'cancel_invite'} onClick={this.doinvite.bind(this,'not_invite',item.user_id,item.select_action)}>Cancel Invite</span>
+                                                                        : ''
+                                                                     )
+                                                                    }
+                                                                   </td>
+                                                        }else if(it.field_name === 'select_status'){
+                                                            return <td key={i}>
+                                                                    {item[`${it.field_name}`] === null ? <div className={'select_ico_0'}></div> : <div className={'select_ico_'+item[`${it.field_name}`]}></div>}
+                                                                   </td>
+                                                        }else{
+                                                            return <td key={i}>
                                                                 {it.field_name === "actual_begin_time" 
                                                                 ? moment(item[`${it.field_name}`]).format('D MMM YYYY hh:mm A') 
                                                                 : item[`${it.field_name}`]}
                                                                 </td>
+                                                        }
+                                                        
                                                     })
                                                 }
                                                 <td>

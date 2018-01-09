@@ -49,24 +49,16 @@ export class FillConsumption extends Component {
     doAccept(){
         let makeData = {},buyerlist = [];
         this.state.site_list.map((item,index)=>{
-            let detail = {};
-            detail.account_number = $("#number"+(index+1)).val();
-            detail.intake_level = $("#level"+(index+1)).val();
-            detail.peak = $("#peak"+(index+1)).val();
-            detail.off_peak = $("#off_peak"+(index+1)).val();
-            detail.consumption_id = this.consumptions_id;
-            buyerlist.push(detail);
-            // buyerlist += '{"account_number":"'+$("#number"+(index+1)).val()+'","intake_level":"'+$("#level"+(index+1)).val()+'","peak":"'+$("#peak"+(index+1)).val()+'","off_peak":"'+$("#off_peak"+(index+1)).val()+'","consumption_id":"'+this.consumptions_id+'"},';
+            buyerlist += '{"account_number":"'+$("#number"+(index+1)).val()+'","intake_level":"'+$("#level"+(index+1)).val()+'","peak":"'+$("#peak"+(index+1)).val()+'","off_peak":"'+$("#off_peak"+(index+1)).val()+'","consumption_id":"'+this.consumptions_id+'"},';
         })
-        // buyerlist = buyerlist.substr(0,buyerlist.length-1);
-        // buyerlist = '['+buyerlist+']';
+        buyerlist = buyerlist.substr(0,buyerlist.length-1);
+        buyerlist = '['+buyerlist+']';
 
         makeData = {
             consumption_id:this.consumptions_id,
-            // details:JSON.parse(buyerlist)
-            details:JSON.stringify(buyerlist)
+            details:buyerlist
         }
-        console.log("---makeData-->"+makeData.details);
+        //console.log("---makeData-->"+makeData.details);
         if(this.state.submit_type === "Reject"){ //do Reject
             setBuyerParticipate({consumption_id:this.consumptions_id},'/api/buyer/consumption_details/reject').then(res=>{
                 this.refs.Modal.showModal();

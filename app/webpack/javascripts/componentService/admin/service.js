@@ -35,6 +35,16 @@ export const auctionConfirm = (params) => {
     return create('/api/admin/auctions/'+params.id+'/confirm', params.data);
 }
 
+export const updateStatus = (params) => {
+    return put('/api/admin/'+params.type+'/'+params.id+'/update_status', params.data);
+}
+
+export const deleteStatus = (params) => {
+    return Ddelete('/api/admin/'+params.type+'/'+params.id);
+}
+
+//arrangements
+//consumptions
 export const getHistories = (params) => {
     return get('/api/admin/auction_histories/list', params);
 }

@@ -17,6 +17,7 @@ export class ListHome extends Component {
     doSearch(data,url){
         getRoleList(data,url).then(res => {
             let total = [],total_size=1;
+            console.log(res);
             if(res.bodies.total%data.page_size != 0){
                 if(res.bodies.total%data.page_size > 0){
                     total_size = parseInt(res.bodies.total/data.page_size)+1;
@@ -53,7 +54,7 @@ export class ListHome extends Component {
                     <SearchType type={this.searchType} doSearch={this.doSearch.bind(this)}/>
                 </div>
                 <div className="col-sm-12 col-md-12">
-                    <SearchList table_data={this.state.table_data} page_total={this.state.total} list_data={this.state.list_data} list_url={this.state.list_url} doSearch={this.doSearch.bind(this)}/>
+                    <SearchList type={this.searchType} table_data={this.state.table_data} page_total={this.state.total} list_data={this.state.list_data} list_url={this.state.list_url} doSearch={this.doSearch.bind(this)}/>
                 </div>
             </div>
         )}
