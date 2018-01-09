@@ -21,6 +21,7 @@ class Arrangement < ApplicationRecord
   scope :auction_of_current_user, ->(auction_id, user_id) { where('auction_id = ? and user_id = ?', auction_id, user_id) }
   scope :find_by_auction_id, ->(auction_id) { where('auction_id = ?', auction_id) }
   scope :find_by_auction_and_user, ->(auction_id, user_id) { where('auction_id = ? and user_id =?', auction_id, user_id) }
+  scope :is_not_notify, -> { where("action_status = '2'") }
   # Callbacks
 
   # Delegates

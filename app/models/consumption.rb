@@ -24,6 +24,7 @@ class Consumption < ApplicationRecord
   scope :join_buyer_auction, -> { includes(:auction).where.not(auctions: { publish_status: nil }) }
   scope :find_by_user_consumer_type, ->(consumer_type) { includes(:user).where(users: { consumer_type: consumer_type }) }
   scope :find_by_auction_and_user, ->(auction_id, user_id) { where('auction_id = ? and user_id =?', auction_id, user_id) }
+  scope :is_not_notify, -> { where("action_status = '2'") }
   # Callbacks
 
   # Delegates

@@ -454,6 +454,39 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
         end
       end
     end
+
+    describe 'PUT send email' do
+
+      context 'Send email for retailer' do
+        def do_request
+          put :send_mails, params: { id: auction.id, role_name: 'retailer'}
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash = JSON.parse(response.body)
+          arrangement = Arrangement.find(arrangement_1.id)
+          expect(arrangement.action_status).to eq('1')
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
+      context 'Send email for buyer' do
+        def do_request
+          put :send_mails, params: { id: auction.id, role_name: 'buyer'}
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash = JSON.parse(response.body)
+          consumption = Consumption.find(consumption_1.id)
+          expect(consumption.action_status).to eq('1')
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
+
+    end
   end
 
   context 'retailer user' do

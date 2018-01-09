@@ -269,6 +269,17 @@ class Api::AuctionsController < Api::BaseController
     render json: { retailers: retailers, company_buyers: company_buyers, individual_buyers: individual_buyers }, status: 200
   end
 
+  def send_mails
+    auction_id = params[:id]
+    role_name = params[:role_name]
+    if role_name == 'retailer'
+      Arrangement.find_by_auction_id(auction_id).is_not_notify.update_all(action_status: '1')
+    elsif role_name == 'buyer'
+      Consumption.find_by_auction_id(auction_id).is_not_notify.update_all(action_status: '1')
+    end
+    render json: nil, status: 200
+  end
+
   private
 
   def set_auction
