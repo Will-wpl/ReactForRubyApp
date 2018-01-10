@@ -252,27 +252,34 @@ next();
 
             }
             show_send_mail(type){
-                let timeBar,doSend=true;
+                let timeBar,doSend = true;
                 if(type === "retailer"){
                     if(this.state.retailer_select === 0){
                         clearTimeout(timeBar);
                         $("#retailer_select_box").next().fadeIn(300);
                         timeBar = setTimeout(()=>{
                             $("#retailer_select_box").next().fadeOut(300);
+                            doSend = true;
                         },3000)
                         doSend = false;
+                    }else{
+                        doSend = true;
                     }
-                    return doSend;
                 }else{
                     if(this.state.buyer_company_select === 0 && this.state.buyer_individual_select === 0){
                         clearTimeout(timeBar);
                         $("#buyer_select_box").next().fadeIn(300);
                         timeBar = setTimeout(()=>{
                             $("#buyer_select_box").next().fadeOut(300);
+                            doSend = true;
                         },3000)
                         doSend = false;
+                    }else{
+                        doSend = true;
                     }
-                    return doSend;
+                }
+                if(!doSend){
+                    return false;
                 }
                 this.setState({
                     role_name:type
