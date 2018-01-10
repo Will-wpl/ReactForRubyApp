@@ -46,7 +46,12 @@ class Api::ArrangementsController < Api::BaseController
         @arrangement.main_email_address = ''
         @arrangement.main_mobile_number = ''
         @arrangement.main_office_number = ''
-        @arrangement.save
+        if @arrangement.save
+          tender = TenderStateMachine.new
+          tender.arrangement = @arrangement
+          tender.save
+        end
+
         render json: @arrangement, status: 201
       end
 
@@ -55,14 +60,18 @@ class Api::ArrangementsController < Api::BaseController
         @arrangement.update(action_status: params['action_status'])
         render json: @arrangement, status: 200
       else
-        @arrangement.destroy
-        render json: nil, status: 200
+        destroy
       end
     end
   end
 
   def destroy
     @arrangement.destroy
+    tender = TenderStateMachine.find_by_arrangement_id(@arrangement.id)
+    if tender.exists?
+      tender.destroy
+    end
+
     render json: nil, status: 200
   end
 
