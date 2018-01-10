@@ -1,5 +1,5 @@
 admin_user = User.find_or_create_by(name: 'admin') do |user|
-  user.email = 'revv@spgroup.com.sg'
+  user.email = 'admin@example.com'
   user.password = 'password'
   user.password_confirmation = 'password'
   user.company_name = 'SP GROUP'
@@ -82,9 +82,14 @@ _unused_retailers = [
 ]
 
 email_templates = [
-    {subject: 'REVV account', body: 'Dear Admin,<br/>#user.company_name has registered for a REVV account. <br/>Please proceed to approve/reject the registration at revv.sg.<br/>', template_type: '1'},
-    {subject: 'REVV account registration has been approved', body: 'Dear #user.company_name,<br/>Congratulations, your REVV account registration has been approved.<br/>You may now log in to your account at revv.sg. <br/>', template_type: '2'},
-    {subject: 'REVV account registration has been rejected', body: 'Dear #user.company_name,<br/>Your REVV account registration has been rejected.<br/>Comments: [#user.comment] <br/>', template_type: '3'}
+    {subject: 'REVV account', body: 'Dear Admin,<br/><br/>#user.company_name has registered for a REVV account. <br/><br/>Please proceed to approve/reject the registration at <a href="http://revv.sg">revv.sg</a>.<br/>', template_type: '1'},
+    {subject: 'REVV account registration has been approved', body: 'Dear #user.company_name,<br/><br/>Congratulations, your REVV account registration has been <b>approved</b>.<br/><br/>You may now log in to your account at <a href="http://revv.sg">revv.sg</a>. <br/>', template_type: '2'},
+    {subject: 'REVV account registration has been rejected', body: 'Dear #user.company_name,<br/><br/>Your REVV account registration has been <b>rejected</b>.<br/>Comments: #user.comment <br/><br/>Kindly access your account registration page at <a href="http://revv.sg">revv.sg</a> for further actions.', template_type: '3'},
+    {subject: 'You are invited', body: 'Dear #buyer.name,<br/><br/>You are invited to participate in an upcoming auction for aggregated electricity purchase. <br/><br/>Please proceed to view and manage your participation at <a href="http://revv.sg">revv.sg</a>. <br/>', template_type: '4'},
+    {subject: 'An auction for aggregated', body: 'Dear #user.company_name,<br/><br/>An auction for aggregated electricity purchase has been published. You are invited to bid in this auction. <br/><br/>Please proceed to view and manage your participation at <a href="http://revv.sg">revv.sg</a>.<br/>', template_type: '5'},
+    {subject: '#user.company_name has submitted their tender documents', body: 'Dear Admin,<br/><br/>#user.company_name has submitted their tender documents. <br/><br/>Please proceed to approve/reject the tender documents submission at <a href="http://revv.sg">revv.sg</a>.<br/>', template_type: '6'},
+    {subject: 'Your tender documents submission has been approved', body: 'Dear #user.company_name,<br/><br/>Your tender documents submission has been <b>approved</b>.<br/><br/>You may now log in to your account at <a href="http://revv.sg">revv.sg</a> to submit the contact person details for actual day of bidding. <br/>', template_type: '7'},
+    {subject: 'Your tender documents submission has been rejected', body: 'Dear #user.company_name,<br/><br/>Your tender documents submission has been <b>rejected</b>.<br/>Comments: #user.comment <br/><br/>Please log in to your account at <a href="http://revv.sg">revv.sg</a> for further actions.<br/>', template_type: '8'}
 ]
 
 email_templates.each do |template|
