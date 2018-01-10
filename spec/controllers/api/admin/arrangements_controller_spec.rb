@@ -159,8 +159,11 @@ RSpec.describe Api::Admin::ArrangementsController, type: :controller do
 
         it "return new arrangement" do
           expect(response).to be_success
-          expect(JSON.parse(response.body)['user_id']).to eq(retailer_1.id)
-          expect(JSON.parse(response.body)['auction_id']).to eq(auction.id)
+          hash = JSON.parse(response.body)
+          has_tender = TenderStateMachine.find_by_arrangement_id(hash['id']).exists?
+          expect(has_tender).to eq(true)
+          expect(hash['user_id']).to eq(retailer_1.id)
+          expect(hash['auction_id']).to eq(auction.id)
         end
       end
 
