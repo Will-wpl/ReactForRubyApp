@@ -147,6 +147,14 @@ export class SearchList extends Component {
                                                             return <td key={i}>
                                                                     {item[`${it.field_name}`] === null ? <div className={'select_ico_0'}></div> : <div className={'select_ico_'+item[`${it.field_name}`]}></div>}
                                                                    </td>
+                                                        }else if(it.field_name === 'publish_status'){
+                                                            return <td key={i}>
+                                                                    {item[`${it.field_name}`] === '0' ? 'Unpublished' : 'Published'}
+                                                                   </td>
+                                                        }else if(it.field_name === 'participation_status'){
+                                                            return <td key={i}>
+                                                                    {item[`${it.field_name}`] === '0' ? <div className={'participation_status_0'}></div> : <div className={'participation_status_'+item[`${it.field_name}`]}></div>}
+                                                                   </td>
                                                         }else{
                                                             return <td key={i}>
                                                                 {it.field_name === "actual_begin_time" 
