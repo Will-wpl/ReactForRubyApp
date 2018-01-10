@@ -44,7 +44,7 @@ export const searchTypeData = {
         list_url:"/api/admin/auctions/"+sessionStorage.auction_id+"/retailers",
         list_data:[
             {title:"Company Name:",type:"company_name",species:"input",operator:'like'},
-            {title:"Status:",type:"approval_status",species:"select",operator:'=',options:[{option:"All",value:""},{option:"Rejected",value:"0"},{option:"Approved",value:"1"},{option:"Pending",value:"2"}]}
+            {title:"Status:",type:"approval_status",species:"select",operator:'=',options:[{option:"All",value:""},{option:"Invited",value:"1"},{option:"Not invited",value:"0"}]}
         ]
     },
     "Select Company Buyers":{
