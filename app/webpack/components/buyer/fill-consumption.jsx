@@ -15,7 +15,7 @@ export class DoFillConsumption extends Component {
                                      <tr><td>Account Number</td><td><input type="text" defaultValue={`${item.account_number}${index+1}`} id={"account_number"+(index+1)} required aria-required="true" name={"number"+(index+1)}/></td></tr>
                                      <tr><td>Intake Level</td>
                                         <td>
-                                            <select id={"intake_level"+(index+1)} name={"intake_level"+(index+1)}>
+                                            <select id={"intake_level"+(index+1)} name={"intake_level"+(index+1)} defaultValue={this.props.site_list[index].intake_level_selected}>
                                             {
                                                 this.props.site_list[index].intake_level.map((it, i) => <option key={i} value={it}>{it}</option>)
                                             }

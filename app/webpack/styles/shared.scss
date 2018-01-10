@@ -226,6 +226,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
         margin: 0 10px;
         &:last-child{margin-right: 0px;}
         &:hover{background:#00888a;}
+        &.disabled{background: #666; color: #aaa;}
     }
   }
 }
@@ -410,7 +411,7 @@ dfn.manage_label{
     table.lm--table{
       table-layout: fixed;
       th{
-        font-size: 18px;
+        font-size: 16px;
         &:first-child{ width: 45%;}
       }
       td{
