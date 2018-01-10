@@ -10,7 +10,8 @@ export class FillConsumption extends Component {
             text:"",
             submit_type:"",
             site_list:[],
-            disabled:''
+            disabled:'',
+            checked:false
         }
         this.consumptions_id = (window.location.href.split("consumptions/")[1]).split("/edit")[0];
     }
@@ -20,7 +21,8 @@ export class FillConsumption extends Component {
             console.log(this.site_list);
             if(res.consumption.participation_status === '1'){
                 this.setState({
-                    disabled:'disabled'
+                    disabled:'disabled',
+                    checked:true
                 })
             }
             if(res.consumption_details.length>0){
@@ -121,7 +123,7 @@ export class FillConsumption extends Component {
                 <h1>Participate in upcoming Reverse Auction exercise on </h1>
                 <form name="buyer_form" method="post" onSubmit={this.checkSuccess.bind(this)}>
                 <div className="u-grid buyer mg0">
-                <h4 className="u-mb3"><input name="agree_auction" type="checkbox" required /> I agree to the terms and conditions.</h4>
+                <h4 className="u-mb3"><input name="agree_auction" type="checkbox" checked={this.state.checked} disabled={this.state.disabled} required /> I agree to the terms and conditions.</h4>
                     <div className="col-sm-12 col-md-8 push-md-2">
                     <DoFillConsumption site_list={this.state.site_list} remove={this.remove_site.bind(this)} />
                     <div className="addSite"><a onClick={this.add_site.bind(this)}>Add Site</a></div>
