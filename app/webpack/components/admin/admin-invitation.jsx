@@ -259,7 +259,6 @@ next();
                         $("#retailer_select_box").next().fadeIn(300);
                         timeBar = setTimeout(()=>{
                             $("#retailer_select_box").next().fadeOut(300);
-                            doSend = true;
                         },3000)
                         doSend = false;
                     }else{
@@ -271,7 +270,6 @@ next();
                         $("#buyer_select_box").next().fadeIn(300);
                         timeBar = setTimeout(()=>{
                             $("#buyer_select_box").next().fadeOut(300);
-                            doSend = true;
                         },3000)
                         doSend = false;
                     }else{
