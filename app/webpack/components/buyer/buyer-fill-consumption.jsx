@@ -125,8 +125,8 @@ export class FillConsumption extends Component {
                 <div className="u-grid buyer mg0">
                 <h4 className="u-mb3"><input name="agree_auction" type="checkbox" checked={this.state.checked} disabled={this.state.disabled} required /> I agree to the terms and conditions.</h4>
                     <div className="col-sm-12 col-md-8 push-md-2">
-                    <DoFillConsumption site_list={this.state.site_list} remove={this.remove_site.bind(this)} />
-                    <div className="addSite"><a onClick={this.add_site.bind(this)}>Add Site</a></div>
+                    <DoFillConsumption site_list={this.state.site_list} checked={this.state.checked} remove={this.remove_site.bind(this)} />
+                    {this.state.checked ? '' : <div className="addSite"><a onClick={this.add_site.bind(this)}>Add Site</a></div>}
                     <div className="buyer_btn">
                         <a className="lm--button lm--button--primary" onClick={this.doSubmit.bind(this, 'Reject')}>Reject</a>
                         <button className={"lm--button lm--button--primary "+this.state.disabled} disabled={this.state.disabled} onClick={this.doSubmit.bind(this, 'Participate')}>Participate</button>
