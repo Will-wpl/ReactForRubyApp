@@ -86,7 +86,7 @@ show_detail(index,consumption_id){
     getBuyerDetailsConsumptions({id:consumption_id}).then(res=>{
         console.log(res);
         this.setState({
-            detail:res,
+            detail:res.consumption_details,
         })
         $("#comsumption_list_table_"+index).slideToggle(300);
     },error=>{
