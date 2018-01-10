@@ -24,6 +24,7 @@ export class CreateNewRA extends Component {
             disabled:"",live_modal:"",live_modal_do:"",holdOrend:"",
         }
         this.auction = {};
+        this.auction_data = null;
         this.starttimeChange = this.starttimeChange.bind(this);
         this.endtimeChange = this.endtimeChange.bind(this);
         this.dateChange = this.dateChange.bind(this);
@@ -218,6 +219,7 @@ export class CreateNewRA extends Component {
         if(this.state.btn_type == "save"){
             //return;
             createRa({auction: this.setAuction()}).then(res => {
+                            this.auction_data = res;
                             this.auction = res;
                             this.refs.Modal.showModal();
                             sessionStorage.auction_id = res.id;
@@ -248,16 +250,16 @@ export class CreateNewRA extends Component {
         }
         if(this.state.btn_type == "next"){
             sessionStorage.isAuctionId = "yes";
-            createRa({auction: this.auction}).then(res => {
+            let data = {};
+            if(this.auction_data === null){
+                data = this.setAuction();
+            }else{
+                data = this.auction_data;
+            }
+            createRa({auction: data}).then(res => {
                 this.auction = res;
                 sessionStorage.auction_id = res.id;
-                this.setState({
-                    text:this.auction.name + " has been successfully saved. "
-                });
-                this.refs.Modal.showModal();
-                setTimeout(()=>{
-                    window.location.href=`/admin/auctions/${res.id}/invitation`;
-                },2000)
+                window.location.href=`/admin/auctions/${res.id}/invitation`;
             }, error => {
                 this.setState({
                     text:'Request exception,Save failed!'
