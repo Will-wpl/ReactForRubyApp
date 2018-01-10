@@ -27,6 +27,10 @@ export const raPublish = (params) => {
     return put('/api/admin/auctions/'+params.id+'/publish', params.pagedata);
 }
 
+export const sendMail = (params) => {
+    return put('/api/admin/auctions/'+params.id+'/send_mails', params.data);
+}
+
 export const getBuyerDetails = (params) => {
     return get('/api/admin/consumptions?id='+params.id+'&consumer_type='+params.type);
 }

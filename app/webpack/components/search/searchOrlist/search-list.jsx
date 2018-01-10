@@ -139,7 +139,7 @@ export class SearchList extends Component {
                                                                         :(
                                                                             item[`select_status`] === '2' 
                                                                             ? <span className={'cancel_invite'} onClick={this.doinvite.bind(this,'not_invite',item.user_id,item.select_action)}>Cancel Invite</span>
-                                                                            : ''
+                                                                            : (item[`select_status`] === null ? <span className={'invite'} onClick={this.doinvite.bind(this,'invite',item.user_id)}>Invite</span>  : '')
                                                                         )
                                                                     }
                                                                    </td>

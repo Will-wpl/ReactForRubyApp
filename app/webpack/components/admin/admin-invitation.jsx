@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom';
 import moment from 'moment';
-import {adminShowSelects, raPublish} from '../../javascripts/componentService/admin/service';
+import {adminShowSelects, raPublish,sendMail} from '../../javascripts/componentService/admin/service';
 import {getAuction} from '../../javascripts/componentService/common/service';
 import {Modal} from '../shared/show-modal';
 export default class AdminInvitation extends Component {
@@ -9,40 +9,41 @@ export default class AdminInvitation extends Component {
     super(props);
     this.state={
         text:"",
+        role_name:"",
         retailer_select:0,
-retailer_send:0,
-retailer_pend:0,
+        retailer_send:0,
+        retailer_pend:0,
         buyer_company_select:0,
-buyer_company_send:0,
-buyer_company_pend:0,
+        buyer_company_send:0,
+        buyer_company_pend:0,
         buyer_individual_select:0,
-buyer_individual_send:0,
-buyer_individual_pend:0,
+        buyer_individual_send:0,
+        buyer_individual_pend:0,
         peak_lt:0,
-peak_hts:0,
-peak_htl:0,
-eht_htl:0,
+        peak_hts:0,
+        peak_htl:0,
+        eht_htl:0,
         off_peak_lt:0,
-off_peak_hts:0,
-off_peak_htl:0,
-off_eht_htl:0,
+        off_peak_hts:0,
+        off_peak_htl:0,
+        off_eht_htl:0,
         fileData:{
                 "buyer_tc_upload":[{buttonName:"none"}],
                 "tender_documents_upload":[
-{
-buttonName:"add",
-buttonText:"+"
-}
-],
-                "birefing_pack_upload":[
-{
-buttonName:"add",
-buttonText:"+"
-}
-]
+        {
+        buttonName:"add",
+        buttonText:"+"
+        }
+        ],
+        "birefing_pack_upload":[
+            {
+            buttonName:"add",
+            buttonText:"+"
             }
-    }
-}
+                        ]
+                    }
+            }
+        }
 
 componentDidMount() {
     adminShowSelects().then((res) => {
@@ -110,136 +111,153 @@ next();
         success:(res) => {
             barObj.find(".progress-bar").text('upload successful!');
             $('#'+type+index).next().
-fadeOut(300);
-        },
-        error:() => {
-            barObj.find(".progress-bar").text('upload failed!');
-            barObj.find(".progress-bar").css('background', 'red');
+        fadeOut(300);
+                },
+                error:() => {
+                    barObj.find(".progress-bar").text('upload failed!');
+                    barObj.find(".progress-bar").css('background', 'red');
+                }
+            })
         }
-    })
-}
-changefileval(id){
-    const fileObj = $("#"+id);
-    fileObj.parent().prev("dfn").
-text(fileObj.val());
-    fileObj.next().fadeOut(300);
-}
-checkRequired(){
-    let requiredObj = $("input[type='file'][required]"),
-result = true;
-    for(let i=0; i<requiredObj.length; i++){
-        if(requiredObj[i].value === ""){
-            console.log($("#"+requiredObj[i].id).parents("a.upload_file_btn").
-next().
-find(".progress-bar").
-text());
-            $("#"+requiredObj[i].id).next().
-fadeIn(300);
-            result = false;
-            break;
-        }else if($("#"+requiredObj[i].id).parents("a.upload_file_btn").
-next().
-find(".progress-bar").
-text() != "upload successful!"){
-            $("#"+requiredObj[i].id).next().
-fadeIn(300);
-            result = false;
-            break;
+        changefileval(id){
+            const fileObj = $("#"+id);
+            fileObj.parent().prev("dfn").
+        text(fileObj.val());
+            fileObj.next().fadeOut(300);
         }
-    }
-    return result;
-}
-doPublish(){
-    let required;
-    if(this.props.onAddClick){
-        this.props.onAddClick();
-    }
-    if(this.state.eht_htl<=0 && this.state.off_eht_htl<=0 &&
-        this.state.peak_lt<=0 && this.state.off_peak_lt<=0 &&
-        this.state.peak_hts<=0 && this.state.off_peak_hts<=0 &&
-        this.state.peak_htl<=0 && this.state.off_peak_htl<=0
-    ){
-        clearTimeout(required);
-        $(".consumption .required_error").fadeIn(300);
-        location.href="#aggregate_consumption";
-        required = setTimeout(() => {
-            $(".consumption .required_error").fadeOut(300);
-        }, 5000)
-        return;
-    }
-    if(!this.checkRequired()){
-        return;
-    }
-    raPublish({
-        pagedata:{publish_status: '1'},
-        id:sessionStorage.auction_id
-    }).then((res) => {
-            this.auction = res;
-            this.refs.Modal.showModal();
-            this.setState({
-                text:this.auction.name+" has been successfully published. Please go to 'Manage Published Upcoming Reverse Auction' for further actions.",
-                disabled:true
-            });
-            // setTimeout(() => {
-            //      window.location.href="/admin/home"
-            //  },5000);
-        }, (error) => {
-            this.setState({text:'Request exception,Publish failed!'});
-            this.refs.Modal.showModal();
-        })
-}
-addinputfile(type, required){
-        let fileHtml = '';
-        fileHtml = <div className="file_box">
-                        {this.state.fileData[type].map((item, index) => <form key={index} id={type+"_form_"+index} encType="multipart/form-data">
-                                <div className="u-grid mg0 u-mt2" >
-                                    <div className="col-sm-12 col-md-8 u-cell">
-                                        <a className="upload_file_btn">
-                                            <dfn>No file selected...</dfn>
-                                            {/* accept="application/pdf,application/msword" */}
-                                            {required == "required" ? <div>
-                                            <input type="file" required="required" ref={type+index} onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.state.disabled} />
-                                            <div className="required_error">
-                                                Please fill out this field and upload this file
-                                            </div></div>
-                                            : <input type="file" ref={type+index} onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.state.disabled} />}
-                                            <span>Browse..</span>
-                                        </a>
-                                        <div className="progress">
-                                            <div className="progress-bar" style={{width:"0%"}}>0%</div>
-                                        </div>
-                                    </div>
-                                    <div className="col-sm-12 col-md-2 u-cell">
-                                        <a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>
-                                    </div>
-                                    <div className="col-sm-12 col-md-2 u-cell">
-                                        {item.buttonName === "none" ? "" : <a onClick={this.fileclick.bind(this, index, type, item.buttonName)} className={"lm--button lm--button--primary "+item.buttonName}>{item.buttonText}</a>}
-                                    </div>
-                                </div>
-                                </form>)}
-                    </div>
-        return fileHtml;
-    }
-    fileclick(index, type, typeName, obj){
-        let fileArray = [],
-allfileObj={};
-            allfileObj = this.state.fileData;
-            fileArray = this.state.fileData[type];
-            if(typeName == "add"){
-                fileArray.push({
-buttonName:"remove",
-buttonText:"-"
-});
-                allfileObj[type] = fileArray;
-                this.setState({fileData:allfileObj})
-            }else{
-                fileArray.splice(index, 1);
-                allfileObj[type] = fileArray;
-                this.setState({fileData:allfileObj})
+        checkRequired(){
+            let requiredObj = $("input[type='file'][required]"),
+        result = true;
+            for(let i=0; i<requiredObj.length; i++){
+                if(requiredObj[i].value === ""){
+                    //console.log($("#"+requiredObj[i].id).parents("a.upload_file_btn").next().find(".progress-bar").text());
+                    $("#"+requiredObj[i].id).next().fadeIn(300);
+                    result = false;
+                    break;
+                }else if($("#"+requiredObj[i].id).parents("a.upload_file_btn").next().find(".progress-bar").text() != "upload successful!"){
+                    $("#"+requiredObj[i].id).next().fadeIn(300);
+                    result = false;
+                    break;
+                }
             }
-            console.log(this.state.fileData);
+            return result;
+        }
+        doPublish(){
+            let required;
+            if(this.props.onAddClick){
+                this.props.onAddClick();
+            }
+            if(this.state.eht_htl<=0 && this.state.off_eht_htl<=0 &&
+                this.state.peak_lt<=0 && this.state.off_peak_lt<=0 &&
+                this.state.peak_hts<=0 && this.state.off_peak_hts<=0 &&
+                this.state.peak_htl<=0 && this.state.off_peak_htl<=0
+            ){
+                clearTimeout(required);
+                $(".consumption .required_error").fadeIn(300);
+                location.href="#aggregate_consumption";
+                required = setTimeout(() => {
+                    $(".consumption .required_error").fadeOut(300);
+                }, 5000)
+                return;
+            }
+            if(!this.checkRequired()){
+                return;
+            }
+            raPublish({
+                pagedata:{publish_status: '1'},
+                id:sessionStorage.auction_id
+            }).then((res) => {
+                    this.auction = res;
+                    this.refs.Modal.showModal();
+                    this.setState({
+                        text:this.auction.name+" has been successfully published. Please go to 'Manage Published Upcoming Reverse Auction' for further actions.",
+                        disabled:true
+                    });
+                    // setTimeout(() => {
+                    //      window.location.href="/admin/home"
+                    //  },5000);
+                }, (error) => {
+                    this.setState({text:'Request exception,Publish failed!'});
+                    this.refs.Modal.showModal();
+                })
+        }
+        addinputfile(type, required){
+                let fileHtml = '';
+                fileHtml = <div className="file_box">
+                                {this.state.fileData[type].map((item, index) => <form key={index} id={type+"_form_"+index} encType="multipart/form-data">
+                                        <div className="u-grid mg0 u-mt2" >
+                                            <div className="col-sm-12 col-md-8 u-cell">
+                                                <a className="upload_file_btn">
+                                                    <dfn>No file selected...</dfn>
+                                                    {/* accept="application/pdf,application/msword" */}
+                                                    {required == "required" ? <div>
+                                                    <input type="file" required="required" ref={type+index} onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.state.disabled} />
+                                                    <div className="required_error">
+                                                        Please fill out this field and upload this file
+                                                    </div></div>
+                                                    : <input type="file" ref={type+index} onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.state.disabled} />}
+                                                    <span>Browse..</span>
+                                                </a>
+                                                <div className="progress">
+                                                    <div className="progress-bar" style={{width:"0%"}}>0%</div>
+                                                </div>
+                                            </div>
+                                            <div className="col-sm-12 col-md-2 u-cell">
+                                                <a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>
+                                            </div>
+                                            <div className="col-sm-12 col-md-2 u-cell">
+                                                {item.buttonName === "none" ? "" : <a onClick={this.fileclick.bind(this, index, type, item.buttonName)} className={"lm--button lm--button--primary "+item.buttonName}>{item.buttonText}</a>}
+                                            </div>
+                                        </div>
+                                        </form>)}
+                            </div>
+                return fileHtml;
+            }
+            fileclick(index, type, typeName, obj){
+                let fileArray = [],
+                    allfileObj={};
+                    allfileObj = this.state.fileData;
+                    fileArray = this.state.fileData[type];
+                    if(typeName == "add"){
+                        fileArray.push({
+                        buttonName:"remove",
+                        buttonText:"-"
+                        });
+                        allfileObj[type] = fileArray;
+                        this.setState({fileData:allfileObj})
+                    }else{
+                        fileArray.splice(index, 1);
+                        allfileObj[type] = fileArray;
+                        this.setState({fileData:allfileObj})
+                    }
+                    console.log(this.state.fileData);
 
-    }
+            }
+            show_send_mail(type){
+                this.setState({
+                    role_name:type
+                })
+                this.refs.Modal.showModal("comfirm");
+                this.setState({
+                    text:"Are you sure want to send this message?",
+                });
+            }
+            send_mail(){
+            let sendData = {};
+            sendData = {
+                id:sessionStorage.auction_id,
+                data:{role_name:this.state.role_name}
+            }
+            sendMail(sendData).then(res=>{
+                console.log(res);
+                this.refs.Modal.showModal();
+                this.setState({
+                    text:"Send message has been successful!",
+                });
+            },error=>{
+
+            })
+        }
 render() {
     //console.log(this.winner.data);
     return (
@@ -263,6 +281,7 @@ render() {
                             <div className="col-sm-12 col-md-6 u-cell">
                                 <a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=1`} className="lm--button lm--button--primary col-sm-12">Selected Retailers</a>
                             </div>
+                            <div className="col-sm-12 col-md-6 u-cell"><a className="lm--button lm--button--primary col-sm-12 orange" onClick={this.show_send_mail.bind(this,'retailer')}>Send Invitation Email</a></div>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string u-mt3">
@@ -281,7 +300,7 @@ render() {
                         <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                         <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=2`} className="lm--button lm--button--primary col-sm-12">Selected Company Buyers</a></div>
                         <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=3`} className="lm--button lm--button--primary col-sm-12">Selected Individual Buyers</a></div>
-                        <div className="col-sm-12 col-md-12 u-cell"><a className="lm--button lm--button--primary col-sm-12 orange">Send Invitation Email</a></div>
+                        <div className="col-sm-12 col-md-12 u-cell"><a className="lm--button lm--button--primary col-sm-12 orange" onClick={this.show_send_mail.bind(this,'buyer')}>Send Invitation Email</a></div>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -370,7 +389,7 @@ render() {
                 <div className="createRaMain u-grid">
                     <a className="lm--button lm--button--primary u-mt3" href="/admin/home" >Back to Homepage</a>
                 </div>
-                <Modal text={this.state.text} ref="Modal" />
+                <Modal text={this.state.text} acceptFunction={this.send_mail.bind(this)} ref="Modal" />
             </div>
     )
   }
