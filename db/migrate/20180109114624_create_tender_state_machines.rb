@@ -4,6 +4,7 @@ class CreateTenderStateMachines < ActiveRecord::Migration[5.1]
       t.integer :previous_node
       t.integer :current_node
       t.integer :next_node
+      t.integer :turn_to
       t.references :arrangement, index: true
       t.timestamps
     end

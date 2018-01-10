@@ -211,6 +211,7 @@ ActiveRecord::Schema.define(version: 20180109114624) do
     t.integer "previous_node"
     t.integer "current_node"
     t.integer "next_node"
+    t.integer "turn_to"
     t.bigint "arrangement_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
