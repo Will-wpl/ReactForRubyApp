@@ -210,7 +210,7 @@ ActiveRecord::Schema.define(version: 20180109114624) do
   create_table "tender_state_machines", force: :cascade do |t|
     t.integer "previous_node"
     t.integer "current_node"
-    t.integer "next_node"
+    t.string "current_status"
     t.integer "turn_to"
     t.bigint "arrangement_id"
     t.datetime "created_at", null: false
