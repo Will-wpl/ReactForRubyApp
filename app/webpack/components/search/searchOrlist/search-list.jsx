@@ -168,7 +168,7 @@ export class SearchList extends Component {
                                                 <td>
                                                     {
                                                         this.props.table_data.actions.map((ik,k)=>{
-                                                            return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "")}>{ik.name}</a>
+                                                            return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "")}>{ik.name}</a>
                                                         })
                                                     }
                                                 </td>
