@@ -50,8 +50,8 @@ render() {
                                             <tr>
                                                 <th>Account Number</th>
                                                 <th>Intake Level</th>
-                                                <th>Peak Volume (kWh/mouth)</th>
-                                                <th>Off-Peak Volume (kWh/mouth)</th>
+                                                <th>Peak Volume (kWh/month)</th>
+                                                <th>Off-Peak Volume (kWh/month)</th>
                                             </tr>
                                         </thead>
                                         <tbody>

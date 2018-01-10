@@ -139,13 +139,21 @@ export class SearchList extends Component {
                                                                         :(
                                                                             item[`select_status`] === '2' 
                                                                             ? <span className={'cancel_invite'} onClick={this.doinvite.bind(this,'not_invite',item.user_id,item.select_action)}>Cancel Invite</span>
-                                                                            : ''
+                                                                            : (item[`select_status`] === null ? <span className={'invite'} onClick={this.doinvite.bind(this,'invite',item.user_id)}>Invite</span>  : '')
                                                                         )
                                                                     }
                                                                    </td>
                                                         }else if(it.field_name === 'select_status'){
                                                             return <td key={i}>
                                                                     {item[`${it.field_name}`] === null ? <div className={'select_ico_0'}></div> : <div className={'select_ico_'+item[`${it.field_name}`]}></div>}
+                                                                   </td>
+                                                        }else if(it.field_name === 'publish_status'){
+                                                            return <td key={i}>
+                                                                    {item[`${it.field_name}`] === '0' ? 'Unpublished' : 'Published'}
+                                                                   </td>
+                                                        }else if(it.field_name === 'participation_status'){
+                                                            return <td key={i}>
+                                                                    {item[`${it.field_name}`] === '0' ? <div className={'participation_status_0'}></div> : <div className={'participation_status_'+item[`${it.field_name}`]}></div>}
                                                                    </td>
                                                         }else{
                                                             return <td key={i}>
@@ -160,7 +168,7 @@ export class SearchList extends Component {
                                                 <td>
                                                     {
                                                         this.props.table_data.actions.map((ik,k)=>{
-                                                            return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "")}>{ik.name}</a>
+                                                            return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "")}>{ik.name}</a>
                                                         })
                                                     }
                                                 </td>

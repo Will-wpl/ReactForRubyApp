@@ -1,5 +1,5 @@
 admin_user = User.find_or_create_by(name: 'admin') do |user|
-  user.email = 'revv@spgroup.com.sg'
+  user.email = 'admin@example.com'
   user.password = 'password'
   user.password_confirmation = 'password'
   user.company_name = 'SP GROUP'
@@ -28,18 +28,18 @@ reverse_auction = Auction.find_or_create_by(name: 'SP Reverse Auction') do |auct
 end
 
 retailers = [
-  { name: 'Best Electricity Supply ', email: 'jichong@bestelectricity.com.sg', company_name: 'Best Electricity Supply', password: 'password' },
-  { name: 'Charis Electric', email: 'kenneth.lee@chariselectric.com.sg', company_name: 'Charis Electric', password: 'password'  },
-  { name: 'Energy Supply Solutions', email: 'yap@energysupplysolutions.com.sg', company_name: 'Energy Supply Solutions', password: 'password'  },
-  { name: 'Hyflux Energy', email: 'huixin_tang@hyflux.com', company_name: 'Hyflux Energy', password: 'password'  },
-  { name: 'I Switch', email: 'Jovan.tang@iswitch.com.sg', company_name: 'I Switch', password: 'password'  },
-  { name: 'Dummy Retailer', email: 'retailer@example.com', company_name: 'Dummy Retailer', password: 'password'  },
-  { name: 'PacificLight Energy', email: 'Eugene.he@pacificlight.com.sg', company_name: 'PacificLight Energy', password: 'password'  },
-  { name: 'Red Dot Power', email: 'hafizah.ahmad@reddotpower.com.sg', company_name: 'Red Dot Power', password: 'password'  },
-  { name: 'SembCorp Power', email: 'jenny.lye@sembcorp.com', company_name: 'SembCorp Power', password: 'password'  },
-  { name: 'Sunseap Energy', email: 'Ryan.Ang@sunseap.com', company_name: 'Sunseap Energy', password: 'password'  },
-  { name: 'Tuas Power Supply', email: 'charlainechan@tuaspower.com.sg', company_name: 'Tuas Power Supply', password: 'password'  },
-  { name: 'Union Power', email: 'Hermann@UnionPower.com.sg', company_name: 'Union Power', password: 'password' }
+  { name: 'Best Electricity Supply ', email: 'Will.wang@chinasofti.com', company_name: 'Best Electricity Supply', password: 'password' },
+  { name: 'Charis Electric', email: 'Mark.Liu@chinasofti.com', company_name: 'Charis Electric', password: 'password'  },
+  { name: 'Energy Supply Solutions', email: 'Jason.huang@chinasofti.com', company_name: 'Energy Supply Solutions', password: 'password'  },
+  { name: 'Hyflux Energy', email: 'Judy.Zhu@chinasofti.com', company_name: 'Hyflux Energy', password: 'password'  },
+  { name: 'I Switch', email: 'yangqingxin@chinasofti.com', company_name: 'I Switch', password: 'password'  },
+  { name: 'Dummy Retailer', email: 'jingzhu.wang@chinasofti.com', company_name: 'Dummy Retailer', password: 'password'  }
+  # { name: 'PacificLight Energy', email: 'Eugene.he@pacificlight.com.sg', company_name: 'PacificLight Energy', password: 'password'  },
+  # { name: 'Red Dot Power', email: 'hafizah.ahmad@reddotpower.com.sg', company_name: 'Red Dot Power', password: 'password'  },
+  # { name: 'SembCorp Power', email: 'jenny.lye@sembcorp.com', company_name: 'SembCorp Power', password: 'password'  },
+  # { name: 'Sunseap Energy', email: 'Ryan.Ang@sunseap.com', company_name: 'Sunseap Energy', password: 'password'  },
+  # { name: 'Tuas Power Supply', email: 'charlainechan@tuaspower.com.sg', company_name: 'Tuas Power Supply', password: 'password'  },
+  # { name: 'Union Power', email: 'Hermann@UnionPower.com.sg', company_name: 'Union Power', password: 'password' }
 
 ]
 
@@ -82,9 +82,14 @@ _unused_retailers = [
 ]
 
 email_templates = [
-    {subject: 'REVV account', body: 'Dear Admin,<br/>#user.company_name has registered for a REVV account. <br/>Please proceed to approve/reject the registration at revv.sg.<br/>', template_type: '1'},
-    {subject: 'REVV account registration has been approved', body: 'Dear #user.company_name,<br/>Congratulations, your REVV account registration has been approved.<br/>You may now log in to your account at revv.sg. <br/>', template_type: '2'},
-    {subject: 'REVV account registration has been rejected', body: 'Dear #user.company_name,<br/>Your REVV account registration has been rejected.<br/>Comments: [#user.comment] <br/>', template_type: '3'}
+    {subject: 'REVV account', body: 'Dear Admin,<br/><br/>#user.company_name has registered for a REVV account. <br/><br/>Please proceed to approve/reject the registration at <a href="http://revv.sg">revv.sg</a>.<br/>', template_type: '1'},
+    {subject: 'REVV account registration has been approved', body: 'Dear #user.company_name,<br/><br/>Congratulations, your REVV account registration has been <b>approved</b>.<br/><br/>You may now log in to your account at <a href="http://revv.sg">revv.sg</a>. <br/>', template_type: '2'},
+    {subject: 'REVV account registration has been rejected', body: 'Dear #user.company_name,<br/><br/>Your REVV account registration has been <b>rejected</b>.<br/>Comments: #user.comment <br/><br/>Kindly access your account registration page at <a href="http://revv.sg">revv.sg</a> for further actions.', template_type: '3'},
+    {subject: 'You are invited', body: 'Dear #buyer.name,<br/><br/>You are invited to participate in an upcoming auction for aggregated electricity purchase. <br/><br/>Please proceed to view and manage your participation at <a href="http://revv.sg">revv.sg</a>. <br/>', template_type: '4'},
+    {subject: 'An auction for aggregated', body: 'Dear #user.company_name,<br/><br/>An auction for aggregated electricity purchase has been published. You are invited to bid in this auction. <br/><br/>Please proceed to view and manage your participation at <a href="http://revv.sg">revv.sg</a>.<br/>', template_type: '5'},
+    {subject: '#user.company_name has submitted their tender documents', body: 'Dear Admin,<br/><br/>#user.company_name has submitted their tender documents. <br/><br/>Please proceed to approve/reject the tender documents submission at <a href="http://revv.sg">revv.sg</a>.<br/>', template_type: '6'},
+    {subject: 'Your tender documents submission has been approved', body: 'Dear #user.company_name,<br/><br/>Your tender documents submission has been <b>approved</b>.<br/><br/>You may now log in to your account at <a href="http://revv.sg">revv.sg</a> to submit the contact person details for actual day of bidding. <br/>', template_type: '7'},
+    {subject: 'Your tender documents submission has been rejected', body: 'Dear #user.company_name,<br/><br/>Your tender documents submission has been <b>rejected</b>.<br/>Comments: #user.comment <br/><br/>Please log in to your account at <a href="http://revv.sg">revv.sg</a> for further actions.<br/>', template_type: '8'}
 ]
 
 email_templates.each do |template|

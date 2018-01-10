@@ -9,35 +9,33 @@ export class FillConsumption extends Component {
         this.state={
             text:"",
             submit_type:"",
-            site_list:[]
+            site_list:[],
+            disabled:'',
+            checked:false
         }
         this.consumptions_id = (window.location.href.split("consumptions/")[1]).split("/edit")[0];
     }
     componentDidMount(){
         getBuyerParticipate('/api/buyer/consumption_details?consumption_id='+this.consumptions_id).then((res) => {
-            this.site_list = res;
+            this.site_list = res.consumption_details;
             console.log(this.site_list);
-            if(res.length>0){
+            if(res.consumption.participation_status === '1'){
+                this.setState({
+                    disabled:'disabled',
+                    checked:true
+                })
+            }
+            if(res.consumption_details.length>0){
                 this.site_list.map((item, index) => {
                     this.site_list[index].intake_level_selected = item.intake_level;
-                    this.site_list[index].intake_level = [
-'LT',
-'HTS',
-'HTL',
-'EHT'
-];
+                    this.site_list[index].intake_level = ['LT','HTS','HTL','EHT'];
                 })
                 this.setState({site_list:this.site_list})
             }else{
                 this.site_list = [
                     {
                         account_number:'A000032100',
-                        intake_level:[
-'LT',
-'HTS',
-'HTL',
-'EHT'
-],
+                        intake_level:['LT','HTS','HTL','EHT'],
                         peak:'',
                         off_peak:''
                     }
@@ -54,15 +52,10 @@ export class FillConsumption extends Component {
             this.props.onAddClick();
         }
         let list = {},
-site_listObj = this.state.site_list;
+        site_listObj = this.state.site_list;
         list = {
             account_number:'A000032100',
-            intake_level:[
-'LT',
-'HTS',
-'HTL',
-'EHT'
-],
+            intake_level:['LT','HTS','HTL','EHT'],
             peak:'',
             off_peak:''
         }
@@ -79,7 +72,7 @@ site_listObj = this.state.site_list;
     }
     doAccept(){
         let makeData = {},
-buyerlist = [];
+        buyerlist = [];
         this.state.site_list.map((item, index) => {
             buyerlist += '{"account_number":"'+$("#account_number"+(index+1)).val()+'","intake_level":"'+$("#intake_level"+(index+1)).val()+'","peak":"'+$("#peak"+(index+1)).val()+'","off_peak":"'+$("#off_peak"+(index+1)).val()+'","consumption_id":"'+this.consumptions_id+'"},';
         })
@@ -130,13 +123,13 @@ buyerlist = [];
                 <h1>Participate in upcoming Reverse Auction exercise on </h1>
                 <form name="buyer_form" method="post" onSubmit={this.checkSuccess.bind(this)}>
                 <div className="u-grid buyer mg0">
-                <h4 className="u-mb3"><input name="agree_auction" type="checkbox" required /> I agree to the terms and conditions.</h4>
+                <h4 className="u-mb3"><input name="agree_auction" type="checkbox" checked={this.state.checked} disabled={this.state.disabled} required /> I agree to the terms and conditions.</h4>
                     <div className="col-sm-12 col-md-8 push-md-2">
-                    <DoFillConsumption site_list={this.state.site_list} remove={this.remove_site.bind(this)} />
-                    <div className="addSite"><a onClick={this.add_site.bind(this)}>Add Site</a></div>
+                    <DoFillConsumption site_list={this.state.site_list} checked={this.state.checked} remove={this.remove_site.bind(this)} />
+                    {this.state.checked ? '' : <div className="addSite"><a onClick={this.add_site.bind(this)}>Add Site</a></div>}
                     <div className="buyer_btn">
                         <a className="lm--button lm--button--primary" onClick={this.doSubmit.bind(this, 'Reject')}>Reject</a>
-                        <button className="lm--button lm--button--primary" onClick={this.doSubmit.bind(this, 'Participate')}>Participate</button>
+                        <button className={"lm--button lm--button--primary "+this.state.disabled} disabled={this.state.disabled} onClick={this.doSubmit.bind(this, 'Participate')}>Participate</button>
                     </div>
                     </div>
                 </div>
