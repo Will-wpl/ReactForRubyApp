@@ -147,6 +147,15 @@ next();
             if(this.props.onAddClick){
                 this.props.onAddClick();
             }
+            if(this.state.buyer_company_select === 0 && this.state.buyer_individual_select === 0){
+                clearTimeout(required);
+                $("#buyer_select_box").next().fadeIn(300);
+                location.href="#buyer_select_box";
+                required = setTimeout(()=>{
+                    $("#buyer_select_box").next().fadeOut(300);
+                },5000)
+                return;
+            }
             if(this.state.eht_htl<=0 && this.state.off_eht_htl<=0 &&
                 this.state.peak_lt<=0 && this.state.off_peak_lt<=0 &&
                 this.state.peak_hts<=0 && this.state.off_peak_hts<=0 &&
@@ -163,6 +172,15 @@ next();
             if(!this.checkRequired()){
                 return;
             }
+            // if(this.state.retailer_select === 0){
+            //     clearTimeout(required);
+            //     $("#retailer_select_box").next().fadeIn(300);
+            //     location.href="#retailer_select_box";
+            //     required = setTimeout(()=>{
+            //         $("#retailer_select_box").next().fadeOut(300);
+            //     },5000)
+            //     return;
+            // }
             raPublish({
                 pagedata:{publish_status: '1'},
                 id:sessionStorage.auction_id
@@ -234,6 +252,28 @@ next();
 
             }
             show_send_mail(type){
+                let timeBar,doSend=true;
+                if(type === "retailer"){
+                    if(this.state.retailer_select === 0){
+                        clearTimeout(timeBar);
+                        $("#retailer_select_box").next().fadeIn(300);
+                        timeBar = setTimeout(()=>{
+                            $("#retailer_select_box").next().fadeOut(300);
+                        },3000)
+                        doSend = false;
+                    }
+                    return doSend;
+                }else{
+                    if(this.state.buyer_company_select === 0 && this.state.buyer_individual_select === 0){
+                        clearTimeout(timeBar);
+                        $("#buyer_select_box").next().fadeIn(300);
+                        timeBar = setTimeout(()=>{
+                            $("#buyer_select_box").next().fadeOut(300);
+                        },3000)
+                        doSend = false;
+                    }
+                    return doSend;
+                }
                 this.setState({
                     role_name:type
                 })
@@ -249,11 +289,15 @@ next();
                 data:{role_name:this.state.role_name}
             }
             sendMail(sendData).then(res=>{
-                console.log(res);
+                let timeBar;
                 this.refs.Modal.showModal();
                 this.setState({
                     text:"Send message has been successful!",
                 });
+                clearTimeout(timeBar);
+                timeBar = setTimeout(()=>{
+                    location.reload();
+                },5000)
             },error=>{
 
             })
@@ -265,12 +309,15 @@ render() {
             {sessionStorage.isAuctionId === "yes"
                 ? <div className="col-sm-12 col-md-8 push-md-2">
                     <h3 className="u-mt3 u-mb1">invitation</h3>
-                    <div className="lm--formItem lm--formItem--inline string">
+                    <div className="lm--formItem lm--formItem--inline string role_select">
                         <label className="lm--formItem-left lm--formItem-label string required">
                         Retailers:
                         </label>
-                        <div className="lm--formItem-right lm--formItem-control">
+                        <div className="lm--formItem-right lm--formItem-control" id="retailer_select_box">
                             <abbr>Selected : {this.state.retailer_select}&nbsp;&nbsp;&nbsp;&nbsp;Notification Send : {this.state.retailer_send}&nbsp;&nbsp;&nbsp;&nbsp;Pending Notification : {this.state.retailer_pend}</abbr>
+                        </div>
+                        <div className="required_error">
+                            At least select one Retailer.
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -284,13 +331,16 @@ render() {
                             <div className="col-sm-12 col-md-6 u-cell"><a className="lm--button lm--button--primary col-sm-12 orange" onClick={this.show_send_mail.bind(this,'retailer')}>Send Invitation Email</a></div>
                         </div>
                     </div>
-                    <div className="lm--formItem lm--formItem--inline string u-mt3">
+                    <div className="lm--formItem lm--formItem--inline string u-mt3 role_select">
                         <label className="lm--formItem-left lm--formItem-label string required">
                         Buyers:
                         </label>
-                        <div className="lm--formItem-right lm--formItem-control">
+                        <div className="lm--formItem-right lm--formItem-control" id="buyer_select_box">
                             <abbr>Company Selected : {this.state.buyer_company_select}&nbsp;&nbsp;&nbsp;&nbsp;Notification Send : {this.state.buyer_company_send}&nbsp;&nbsp;&nbsp;&nbsp;Pending Notification : {this.state.buyer_company_pend}</abbr>
                             <abbr>Individual Selected : {this.state.buyer_individual_select}&nbsp;&nbsp;&nbsp;&nbsp;Notification Send : {this.state.buyer_individual_send}&nbsp;&nbsp;&nbsp;&nbsp;Pending Notification : {this.state.buyer_individual_pend}</abbr>
+                        </div>
+                        <div className="required_error">
+                            At least select one Buyer.
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
