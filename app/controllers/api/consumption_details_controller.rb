@@ -2,9 +2,14 @@ class Api::ConsumptionDetailsController < Api::BaseController
 
   def index
     unless params[:consumption_id].nil?
-      @consumption_details = ConsumptionDetail.find_by_consumption_id(params[:consumption_id])
-      @consumption = Consumption.find(params[:consumption_id])
-      render json: { consumption_details: @consumption_details, consumption: @consumption }, status: 200
+      consumption_details = ConsumptionDetail.find_by_consumption_id(params[:consumption_id])
+      consumption = Consumption.find(params[:consumption_id])
+      auction = consumption.auction
+
+      tc_attachment = AuctionAttachment.find_by(auction_id: params[:id], file_type: 'buyer_tc_upload0')
+      render json: { consumption_details: consumption_details, consumption: consumption,
+                     auction: { id: auction.id, name: auction.name, actual_begin_time: auction.actual_begin_time },
+                     tc_attachment: tc_attachment }, status: 200
     end
   end
 
