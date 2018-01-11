@@ -32,7 +32,9 @@ class User < ApplicationRecord
   scope :retailers, -> { includes(:roles).where(roles: { name: 'retailer' }) }
   scope :buyers, -> { includes(:roles).where(roles: { name: 'buyer' }) }
   scope :selected_retailers, ->(auction_id) { includes(:arrangements).where(arrangements: { auction_id: auction_id }) }
+  scope :selected_retailers_action_status, ->(auction_id, action_status) { includes(:arrangements).where(arrangements: { auction_id: auction_id, action_status: action_status }) }
   scope :selected_buyers, ->(auction_id) { includes(:consumptions).where(consumptions: { auction_id: auction_id }) }
+  scope :selected_buyers_action_status, ->(auction_id, action_status) { includes(:consumptions).where(consumptions: { auction_id: auction_id, action_status: action_status }) }
   scope :exclude, ->(ids) { where('users.id not in (?)', ids) }
   # Callbacks
 
