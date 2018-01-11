@@ -23,13 +23,12 @@ class TenderStateMachine < ApplicationRecord
     tender_state_machine = TenderStateMachine.find_by_arrangement_id(arrangement_id)
     tender_state_machine.update(previous_node: state_machine_params[:previous_node],
                                 current_node: state_machine_params[:current_node],
-                                next_node: state_machine_params[:next_node],
+                                current_status: state_machine_params[:status],
                                 turn_to: state_machine_params[:turn_to])
+    arrangement = Arrangement.find(arrangement_id)
     if state_machine_params[:status] == 'reject'
-      arrangement = Arrangement.find(arrangement_id)
       arrangement.update(accept_status: '0')
     elsif state_machine_params[:status] == 'closed'
-      arrangement = Arrangement.find(arrangement_id)
       arrangement.update(accept_status: '1')
     end
   end
