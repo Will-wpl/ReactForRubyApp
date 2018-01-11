@@ -104,6 +104,9 @@ export class FillConsumption extends Component {
         }
     }
     doSubmit(type){
+        if(type === "return"){
+            return false;
+        }
         this.setState({submit_type:type});
         if(type === "Reject"){
             this.refs.Modal.showModal("comfirm");
@@ -128,7 +131,7 @@ export class FillConsumption extends Component {
                     <DoFillConsumption site_list={this.state.site_list} checked={this.state.checked} remove={this.remove_site.bind(this)} />
                     {this.state.checked ? '' : <div className="addSite"><a onClick={this.add_site.bind(this)}>Add Site</a></div>}
                     <div className="buyer_btn">
-                        <a className="lm--button lm--button--primary" onClick={this.doSubmit.bind(this, 'Reject')}>Reject</a>
+                        <a className={"lm--button lm--button--primary "+this.state.disabled} onClick={this.state.disabled === "disabled" ? this.doSubmit.bind(this, 'return') : this.doSubmit.bind(this, 'Reject')}>Reject</a>
                         <button className={"lm--button lm--button--primary "+this.state.disabled} disabled={this.state.disabled} onClick={this.doSubmit.bind(this, 'Participate')}>Participate</button>
                     </div>
                     </div>
