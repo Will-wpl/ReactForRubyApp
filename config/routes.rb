@@ -104,12 +104,6 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :auction_attachments, only: %i[download_tc] do
-        member do
-          get 'download_tc'
-        end
-      end
-
       resources :auctions, only: %i[obtain published] do
         collection do
           get 'obtain'
