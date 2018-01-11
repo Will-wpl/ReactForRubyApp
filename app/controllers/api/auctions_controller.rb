@@ -263,7 +263,7 @@ class Api::AuctionsController < Api::BaseController
       if consumer_type == '2'
         data.push(user_id: user.id, company_name: user.company_name, select_status: status, select_action: action)
       elsif consumer_type == '3'
-        data.push(user_id: user.id, name: user.name, house_type: user.account_housing_type, select_status: status, select_action: action)
+        data.push(user_id: user.id, name: user.name, account_housing_type: user.account_housing_type, select_status: status, select_action: action)
       end
     end
     bodies = { data: data, total: total }
