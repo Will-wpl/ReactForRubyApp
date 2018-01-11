@@ -213,17 +213,19 @@ export class CreateNewRA extends Component {
 
     noPermitInput(event){
         event.preventDefault();
+    }
+    checkSubmitTruly(){
+        let data = {};
+        if(this.auction_data === null){
+            data = this.setAuction();
+        }else{
+            data = this.auction_data;
+        }
+        return data;
     }  
     checkSuccess(event,obj){
         event.preventDefault();
-        if(this.state.btn_type == "save"){
-            let data = {};
-            if(this.auction_data === null){
-                data = this.setAuction();
-            }else{
-                data = this.auction_data;
-            }
-            createRa({auction: data}).then(res => {
+            createRa({auction: this.checkSubmitTruly()}).then(res => {
                             this.auction_data = res;
                             this.auction = res;
                             this.refs.Modal.showModal();
@@ -252,16 +254,9 @@ export class CreateNewRA extends Component {
                     disabled:true
                 })
             }
-        }
         if(this.state.btn_type == "next"){
             sessionStorage.isAuctionId = "yes";
-            let data = {};
-            if(this.auction_data === null){
-                data = this.setAuction();
-            }else{
-                data = this.auction_data;
-            }
-            createRa({auction: data}).then(res => {
+            createRa({auction: this.checkSubmitTruly()}).then(res => {
                 this.auction = res;
                 sessionStorage.auction_id = res.id;
                 window.location.href=`/admin/auctions/${res.id}/invitation`;
