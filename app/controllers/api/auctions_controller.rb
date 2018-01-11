@@ -163,11 +163,12 @@ class Api::AuctionsController < Api::BaseController
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
   end
 
+  # Admin create auction select retailer. If retailer's account is not approved, can't find
   def retailers
     if params.key?(:page_size) && params.key?(:page_index)
       users_search_params = select_params(params, %w[company_name])
       search_where_array = set_search_params(users_search_params)
-      users = User.retailers.where(search_where_array)
+      users = User.retailers.retailer_approved.where(search_where_array)
       arrangements = Arrangement.find_by_auction_id(params[:id])
       ids = get_user_ids(arrangements)
       if !params[:status].nil? && params[:status][0] == '0'
@@ -194,7 +195,7 @@ class Api::AuctionsController < Api::BaseController
       { url: '/admin/users/:id/manage', name: 'View', icon: 'lm--icon-search' }
     ]
     data = []
-    users.order(approval_status: :desc, company_name: :asc).each do |user|
+    users.order(company_name: :asc).each do |user|
       index = arrangements.index do |arrangement|
         arrangement.user_id == user.id
       end
