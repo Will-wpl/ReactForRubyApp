@@ -9,23 +9,23 @@ admin_user.add_role :admin
 Role.first_or_create(name: 'retailer')
 Role.first_or_create(name: 'buyer')
 
-reverse_auction = Auction.find_or_create_by(name: 'SP Reverse Auction') do |auction|
-  auction.start_datetime = nil
-  auction.contract_period_start_date = nil
-  auction.contract_period_end_date = nil
-  auction.duration = nil
-  auction.reserve_price = nil
-  auction.total_volume = nil # TBD SP provide six volumes 6_805_584
-  auction.total_lt_peak = 2_468_375
-  auction.total_lt_off_peak = 1_544_695
-  auction.total_hts_peak = 0
-  auction.total_hts_off_peak = 0
-  auction.total_htl_peak = 1_983_720
-  auction.total_htl_off_peak = 791_712
-  auction.total_eht_peak = 0
-  auction.total_eht_off_peak = 0
-  auction.publish_status = '0'
-end
+# reverse_auction = Auction.find_or_create_by(name: 'SP Reverse Auction') do |auction|
+#   auction.start_datetime = nil
+#   auction.contract_period_start_date = nil
+#   auction.contract_period_end_date = nil
+#   auction.duration = nil
+#   auction.reserve_price = nil
+#   auction.total_volume = nil # TBD SP provide six volumes 6_805_584
+#   auction.total_lt_peak = 2_468_375
+#   auction.total_lt_off_peak = 1_544_695
+#   auction.total_hts_peak = 0
+#   auction.total_hts_off_peak = 0
+#   auction.total_htl_peak = 1_983_720
+#   auction.total_htl_off_peak = 791_712
+#   auction.total_eht_peak = 0
+#   auction.total_eht_off_peak = 0
+#   auction.publish_status = '0'
+# end
 
 retailers = [
   { name: 'Will ', email: 'Will.wang@chinasofti.com', company_name: 'Will Electricity', password: 'password',approval_status:'1' },
@@ -58,19 +58,19 @@ retailers.each do |retailer|
   end
   retail_user.add_role :retailer
 
-  Arrangement.where(user: retail_user, auction: reverse_auction).first_or_create do |arrangement|
-    arrangement.main_name = ''
-    arrangement.main_email_address = ''
-    arrangement.main_mobile_number = ''
-    arrangement.main_office_number = ''
-    arrangement.lt_peak = nil
-    arrangement.lt_off_peak = nil
-    arrangement.hts_peak = nil
-    arrangement.hts_off_peak = nil
-    arrangement.htl_peak = nil
-    arrangement.htl_off_peak = nil
-    arrangement.accept_status = '2'
-  end
+  # Arrangement.where(user: retail_user, auction: reverse_auction).first_or_create do |arrangement|
+  #   arrangement.main_name = ''
+  #   arrangement.main_email_address = ''
+  #   arrangement.main_mobile_number = ''
+  #   arrangement.main_office_number = ''
+  #   arrangement.lt_peak = nil
+  #   arrangement.lt_off_peak = nil
+  #   arrangement.hts_peak = nil
+  #   arrangement.hts_off_peak = nil
+  #   arrangement.htl_peak = nil
+  #   arrangement.htl_off_peak = nil
+  #   arrangement.accept_status = '2'
+  # end
 end
 
 company_buyers = [
