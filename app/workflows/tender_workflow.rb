@@ -17,12 +17,11 @@ class TenderWorkflow < Workflow
     super(node1: @node1, node2: @node2)
   end
 
-  def execute(node_name, event_name, arrangement_id)
+  def execute(node_name, event_name)
     node = find_node_by_name(node_name)
     event = node.find_event_by_name(event_name)
     state_machine = set_state_machine_by_rule(node, event)
-    TenderStateMachine.update_state_machine(arrangement_id, state_machine)
-    yield if block_given?
+    yield(state_machine) if block_given?
   end
 
   protected
