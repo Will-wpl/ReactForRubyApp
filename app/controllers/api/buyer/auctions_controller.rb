@@ -29,13 +29,17 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
       { name: 'Name', field_name: 'name' },
       { name: 'Date/Time', field_name: 'actual_begin_time' },
       { name: 'Auction Status', field_name: 'publish_status' },
-      { name: 'Status of Participation', field_name: 'participation_status' }
+      { name: 'Status of Participation', field_name: 'participation_status' },
+      { name: nil, field_name: 'actions' }
     ]
-    actions = [{ url: '/buyer/consumptions/:id/edit', name: 'Edit', icon: 'lm--icon-search' }]
+    actions = [{ url: '/buyer/consumptions/:id/edit', name: 'Edit', icon: 'lm--icon-search' },
+               { url: '/buyer/consumptions/:id/edit', name: 'View', icon: 'lm--icon-search' }]
     data = []
     consumption.order('auctions.actual_begin_time asc').each do |consumption|
+      actions = consumption.participation_status != '1' ? 0 : 1
       data.push(id: consumption.id, name: consumption.auction.name, actual_begin_time: consumption.auction.actual_begin_time,
-                publish_status: consumption.auction.publish_status, participation_status: consumption.participation_status)
+                publish_status: consumption.auction.publish_status, participation_status: consumption.participation_status,
+                actions: actions)
     end
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200

@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Api::Admin::AuctionAttachmentsController, type: :controller do
   let! (:auction) { create(:auction, :for_next_month, :upcoming) }
   let! (:admin_user) { create(:user, :with_admin) }
-
+  let!(:tc) { create(:auction_attachment, file_type: 'buyer_tc_upload0', file_name: 'test', file_path: 'test', auction: auction, user: admin_user)}
   base_url = 'api/admin/auction_attachments'
 
   context 'admin user' do
@@ -51,6 +51,18 @@ RSpec.describe Api::Admin::AuctionAttachmentsController, type: :controller do
           expect(hash_body['file_type']).to eq('tender_documents_upload')
           expect(hash_body['file_name']).to eq('test.jpg')
           expect(hash_body['user_id']).to eq(admin_user.id)
+        end
+      end
+    end
+
+    describe 'Delete file' do
+      context 'Base get' do
+        def do_request
+          delete :destroy, params: {id: tc.id }
+        end
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
         end
       end
     end
