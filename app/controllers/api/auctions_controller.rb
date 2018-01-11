@@ -170,11 +170,15 @@ class Api::AuctionsController < Api::BaseController
       users = User.retailers.where(search_where_array)
       arrangements = Arrangement.find_by_auction_id(params[:id])
       ids = get_user_ids(arrangements)
-      if !params[:status].nil? && params[:status][0] == '1'
-        users = users.selected_retailers(params[:id])
-      elsif !params[:status].nil? && params[:status][0] == '0'
+      if !params[:status].nil? && params[:status][0] == '0'
         users = users.exclude(ids)
+      elsif !params[:status].nil? && params[:status][0] == '1'
+        users = users.selected_retailers(params[:id])
+      elsif !params[:status].nil? && (params[:status][0] == '2' || params[:status][0] == '3')
+        action_status = params[:status][0] == '2' ? '2' : '1'
+        users = users.selected_retailers_action_status(params[:id], action_status)
       end
+
       users = users.page(params[:page_index]).per(params[:page_size])
       total = users.total_count
     else
@@ -217,11 +221,16 @@ class Api::AuctionsController < Api::BaseController
       users = User.buyers.where(search_where_array)
       consumptions = Consumption.find_by_auction_id(params[:id])
       ids = get_user_ids(consumptions)
-      if !params[:status].nil? && params[:status][0] == '1'
-        users = users.selected_buyers(params[:id])
-      elsif !params[:status].nil? && params[:status][0] == '0'
+
+      if !params[:status].nil? && params[:status][0] == '0'
         users = users.exclude(ids)
+      elsif !params[:status].nil? && params[:status][0] == '1'
+        users = users.selected_buyers(params[:id])
+      elsif !params[:status].nil? && (params[:status][0] == '2' || params[:status][0] == '3')
+        action_status = params[:status][0] == '2' ? '2' : '1'
+        users = users.selected_buyers_action_status(params[:id], action_status)
       end
+
       users = users.page(params[:page_index]).per(params[:page_size])
       total = users.total_count
     else
