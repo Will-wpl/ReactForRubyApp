@@ -165,6 +165,7 @@ class Api::AuctionsController < Api::BaseController
   end
 
   # Admin create auction select retailer. If retailer's account is not approved, can't find
+  # params[:status]: "0", "Not Invited", "1":"Invited", "2":"Pending Notification",  "3":"Notification Sent"
   def retailers
     if params.key?(:page_size) && params.key?(:page_index)
       users_search_params = select_params(params, %w[company_name])
