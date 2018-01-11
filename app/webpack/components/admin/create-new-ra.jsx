@@ -217,8 +217,13 @@ export class CreateNewRA extends Component {
     checkSuccess(event,obj){
         event.preventDefault();
         if(this.state.btn_type == "save"){
-            //return;
-            createRa({auction: this.setAuction()}).then(res => {
+            let data = {};
+            if(this.auction_data === null){
+                data = this.setAuction();
+            }else{
+                data = this.auction_data;
+            }
+            createRa({auction: data}).then(res => {
                             this.auction_data = res;
                             this.auction = res;
                             this.refs.Modal.showModal();
