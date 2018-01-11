@@ -28,18 +28,18 @@ reverse_auction = Auction.find_or_create_by(name: 'SP Reverse Auction') do |auct
 end
 
 retailers = [
-  { name: 'Best Electricity Supply ', email: 'Will.wang@chinasofti.com', company_name: 'Best Electricity Supply', password: 'password' },
-  { name: 'Charis Electric', email: 'Mark.Liu@chinasofti.com', company_name: 'Charis Electric', password: 'password'  },
-  { name: 'Energy Supply Solutions', email: 'Jason.huang@chinasofti.com', company_name: 'Energy Supply Solutions', password: 'password'  },
-  { name: 'Hyflux Energy', email: 'Judy.Zhu@chinasofti.com', company_name: 'Hyflux Energy', password: 'password'  },
-  { name: 'I Switch', email: 'yangqingxin@chinasofti.com', company_name: 'I Switch', password: 'password'  },
-  { name: 'Dummy Retailer', email: 'jingzhu.wang@chinasofti.com', company_name: 'Dummy Retailer', password: 'password'  }
-  # { name: 'PacificLight Energy', email: 'Eugene.he@pacificlight.com.sg', company_name: 'PacificLight Energy', password: 'password'  },
-  # { name: 'Red Dot Power', email: 'hafizah.ahmad@reddotpower.com.sg', company_name: 'Red Dot Power', password: 'password'  },
-  # { name: 'SembCorp Power', email: 'jenny.lye@sembcorp.com', company_name: 'SembCorp Power', password: 'password'  },
-  # { name: 'Sunseap Energy', email: 'Ryan.Ang@sunseap.com', company_name: 'Sunseap Energy', password: 'password'  },
-  # { name: 'Tuas Power Supply', email: 'charlainechan@tuaspower.com.sg', company_name: 'Tuas Power Supply', password: 'password'  },
-  # { name: 'Union Power', email: 'Hermann@UnionPower.com.sg', company_name: 'Union Power', password: 'password' }
+  { name: 'Will ', email: 'Will.wang@chinasofti.com', company_name: 'Will Electricity', password: 'password' },
+  { name: 'Mark', email: 'Mark.Liu@chinasofti.com', company_name: 'Mark Electricity', password: 'password'  },
+  { name: 'Jason', email: 'Jason.huang@chinasofti.com', company_name: 'Jason Electricity', password: 'password'  },
+  { name: 'Judy', email: 'Judy.Zhu@chinasofti.com', company_name: 'Judy Electricity', password: 'password'  },
+  { name: 'Yang Qingxin', email: 'yangqingxin@chinasofti.com', company_name: 'Yang Qingxin Electricity', password: 'password'  },
+  { name: 'Wang Jingzhu', email: 'jingzhu.wang@chinasofti.com', company_name: 'Wang Jingzhu Electricity', password: 'password'  },
+  { name: 'Retailer 1', email: 'retailer1@example.com', company_name: 'Retailer1 Company', password: 'password'  },
+  { name: 'Retailer 2', email: 'retailer2@example.com', company_name: 'Retailer2 Company', password: 'password'  },
+  { name: 'Retailer 3', email: 'retailer3@example.com', company_name: 'Retailer3 Company', password: 'password'  },
+  { name: 'Retailer 4', email: 'retailer4@example.com', company_name: 'Retailer4 Company', password: 'password'  },
+  { name: 'Retailer 5', email: 'retailer5@example.com', company_name: 'Retailer5 Company', password: 'password'  },
+  { name: 'Retailer 6', email: 'retailer6@example.com', company_name: 'Retailer6 Company', password: 'password' }
 
 ]
 
@@ -49,6 +49,12 @@ retailers.each do |retailer|
     retail_user.company_name = retailer[:company_name]
     retail_user.password = retailer[:password]
     retail_user.password_confirmation = retailer[:password]
+    retail_user.approval_status = '1'
+    retail_user.company_address = 'China DL'
+    retail_user.company_unique_entity_number = 'UEN 01234'
+    retail_user.company_license_number = 'LICENSE 01234'
+    retail_user.account_mobile_number = '12345678'
+    retail_user.account_office_number = '87654321'
   end
   retail_user.add_role :retailer
 
@@ -66,6 +72,66 @@ retailers.each do |retailer|
     arrangement.accept_status = '2'
   end
 end
+
+company_buyers = [
+    { name: 'buyer1', email: 'cbuyer1@example.com', company_name: 'Company Buyer 1', password: 'password' },
+    { name: 'buyer2', email: 'cbuyer2@example.com', company_name: 'Company Buyer 2', password: 'password' },
+    { name: 'buyer3', email: 'cbuyer3@example.com', company_name: 'Company Buyer 3', password: 'password' },
+    { name: 'buyer4', email: 'cbuyer4@example.com', company_name: 'Company Buyer 4', password: 'password' },
+    { name: 'buyer5', email: 'cbuyer5@example.com', company_name: 'Company Buyer 5', password: 'password' },
+    { name: 'buyer6', email: 'cbuyer6@example.com', company_name: 'Company Buyer 6', password: 'password' },
+    { name: 'buyer7', email: 'cbuyer7@example.com', company_name: 'Company Buyer 7', password: 'password' },
+    { name: 'buyer8', email: 'cbuyer8@example.com', company_name: 'Company Buyer 8', password: 'password' },
+    { name: 'buyer9', email: 'cbuyer9@example.com', company_name: 'Company Buyer 9', password: 'password' },
+    { name: 'buyer10', email: 'cbuyer9@example.com', company_name: 'Company Buyer 10', password: 'password' }
+]
+
+company_buyers.each do |buyer|
+    com_buyer = User.find_or_create_by(email: buyer[:email]) do |com_buyer|
+        com_buyer.name = buyer[:name]
+        com_buyer.company_name = buyer[:company_name]
+        com_buyer.password = buyer[:password]
+        com_buyer.password_confirmation = buyer[:password]
+        com_buyer.consumer_type = '2'
+        com_buyer.company_address = 'China DL'
+        com_buyer.company_unique_entity_number = 'UEN 01234'
+        com_buyer.account_mobile_number = '12345678'
+        com_buyer.account_office_number = '87654321'
+    end
+    com_buyer.add_role :buyer
+
+end
+
+individual_buyers = [
+    { name: 'individual buyer1', email: 'ibuyer1@example.com', account_housing_type: '0', password: 'password' },
+    { name: 'individual buyer2', email: 'ibuyer2@example.com', account_housing_type: '0', password: 'password' },
+    { name: 'individual buyer3', email: 'ibuyer3@example.com', account_housing_type: '0', password: 'password' },
+    { name: 'individual buyer4', email: 'ibuyer4@example.com', account_housing_type: '1', password: 'password' },
+    { name: 'individual buyer5', email: 'ibuyer5@example.com', account_housing_type: '1', password: 'password' },
+    { name: 'individual buyer6', email: 'ibuyer6@example.com', account_housing_type: '1', password: 'password' },
+    { name: 'individual buyer7', email: 'ibuyer7@example.com', account_housing_type: '2', password: 'password' },
+    { name: 'individual buyer8', email: 'ibuyer8@example.com', account_housing_type: '2', password: 'password' },
+    { name: 'individual buyer9', email: 'ibuyer9@example.com', account_housing_type: '2', password: 'password' },
+    { name: 'individual buyer10', email: 'ibuyer9@example.com', account_housing_type: '2', password: 'password' }
+]
+
+individual_buyers.each do |buyer|
+  ind_buyer = User.find_or_create_by(email: buyer[:email]) do |ind_buyer|
+    ind_buyer.name = buyer[:name]
+    ind_buyer.account_housing_type = buyer[:account_housing_type]
+    ind_buyer.password = buyer[:password]
+    ind_buyer.password_confirmation = buyer[:password]
+    ind_buyer.consumer_type = '3'
+    ind_buyer.account_home_address = 'China DL'
+    ind_buyer.account_fin = 'FIN 01234'
+    ind_buyer.account_mobile_number = '12345678'
+    ind_buyer.account_office_number = '87654321'
+  end
+  ind_buyer.add_role :buyer
+
+end
+
+
 
 _unused_retailers = [
   { name: 'Cleantech Solar Management Company', email: 'contact@cleantechsolar.com', company_name: 'Cleantech Solar Management Company' },
