@@ -21,8 +21,8 @@ export class DoFillConsumption extends Component {
                                             }
                                             </select>
                                         </td></tr>
-                                     <tr><td>Peak Volume (kWh/month)</td><td><input type="text" disabled={this.props.checked} required aria-required="true" name={"peak"+(index+1)} id={"peak"+(index+1)} defaultValue={item.peak}/></td></tr>
-                                     <tr><td>Off-peak Volume (kWh/month)</td><td><input type="text" disabled={this.props.checked} required aria-required="true" name={"off_peak"+(index+1)} defaultValue={item.off_peak} id={"off_peak"+(index+1)}/></td></tr>
+                                     <tr><td>Peak Volume (kWh/month)</td><td><input type="number" disabled={this.props.checked} required aria-required="true" name={"peak"+(index+1)} id={"peak"+(index+1)} defaultValue={item.peak}/></td></tr>
+                                     <tr><td>Off-peak Volume (kWh/month)</td><td><input type="number" disabled={this.props.checked} required aria-required="true" name={"off_peak"+(index+1)} defaultValue={item.off_peak} id={"off_peak"+(index+1)}/></td></tr>
                                  </tbody>
                              </table>
                           </div>)

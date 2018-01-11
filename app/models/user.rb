@@ -1,4 +1,10 @@
 class User < ApplicationRecord
+
+  # Field description:
+  # approval_status for retailer
+  # "0":"Reject by admin", "1":"Approved by admin", "2":"Pending"
+
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
