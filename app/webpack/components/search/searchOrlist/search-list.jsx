@@ -7,7 +7,8 @@ export class SearchList extends Component {
     constructor(props, context){
         super(props);
         this.state={
-            text:""
+            text:"",
+            name:""
         }
     }
     dosearch(index,obj){
@@ -44,21 +45,21 @@ export class SearchList extends Component {
             }
         }
     }
-    clickFunction(id,url,name,type,obj){
+    clickFunction(id,url,name,type,list_name){
         if(type == "auction"){
             sessionStorage.auction_id=id;
         }
         if(name == "Delete"){
             this.auction_id = id;
-            this.showDelete();
+            this.showDelete(list_name);
         }else{
             window.location.href=`${url.replace(":id",id)}`;
         }
         
     }
-    showDelete(){
+    showDelete(auction_name){
         this.refs.Modal.showModal("comfirm");
-        this.setState({text:"Are you sure you want to delete?"});
+        this.setState({text:"Are you sure you want to delete?",name:auction_name});
     }
     delete(){
         deleteAuction({ auction: {id:this.auction_id}}).then(res => {
@@ -172,7 +173,7 @@ export class SearchList extends Component {
                                                 <td>
                                                     {
                                                         this.props.table_data.actions.map((ik,k)=>{
-                                                            return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "")}>{ik.name}</a>
+                                                            return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '')}>{ik.name}</a>
                                                         })
                                                     }
                                                 </td>

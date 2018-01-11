@@ -13,7 +13,7 @@ export default class AdminInvitation extends Component {
         buyer_company_pend:0,buyer_individual_select:0,buyer_individual_send:0,
         buyer_individual_pend:0,peak_lt:0,peak_hts:0,
         peak_htl:0,eht_htl:0,off_peak_lt:0,off_peak_hts:0,
-        off_peak_htl:0,off_eht_htl:0,
+        off_peak_htl:0,off_eht_htl:0,disabled:false,
         fileData:{
                 "buyer_tc_upload":[{buttonName:"none"}],
                 "tender_documents_upload":[
@@ -70,8 +70,7 @@ componentDidMount() {
     //alert(localStorage.auction_id);
 }
 upload(type, index){
-    const barObj = $('#'+type+index).parents("a").
-next();
+    const barObj = $('#'+type+index).parents("a").next();
     $.ajax({
         url: '/api/admin/auction_attachments?auction_id='+sessionStorage.auction_id+'&file_type='+type+index,
         type: 'POST',
@@ -178,9 +177,9 @@ next();
                         text:this.auction.name+" has been successfully published. Please go to 'Manage Published Upcoming Reverse Auction' for further actions.",
                         disabled:true
                     });
-                    // setTimeout(() => {
-                    //      window.location.href="/admin/home"
-                    //  },5000);
+                    setTimeout(() => {
+                          window.location.href="/admin/auctions/published"
+                    },2000);
                 }, (error) => {
                     this.setState({text:'Request exception,Publish failed!'});
                     this.refs.Modal.showModal();
@@ -196,7 +195,7 @@ next();
                                                     <dfn>No file selected...</dfn>
                                                     {/* accept="application/pdf,application/msword" */}
                                                     {required == "required" ? <div>
-                                                    <input type="file" required="required" ref={type+index} onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.state.disabled} />
+                                                    <input type="file" required="required" ref={type+index}  onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.state.disabled} />
                                                     <div className="required_error">
                                                         Please fill out this field and upload this file
                                                     </div></div>
@@ -364,17 +363,17 @@ render() {
                                         <tbody>
                                             <tr>
                                                 <td>Peak (7am-7pm)</td>
-                                                <td >{this.state.peak_lt}</td>
-                                                <td >{this.state.peak_hts}</td>
-                                                <td >{this.state.peak_htl}</td>
-                                                <td >{this.state.peak_eht}</td>
+                                                <td >{parseInt(this.state.peak_lt)}</td>
+                                                <td >{parseInt(this.state.peak_hts)}</td>
+                                                <td >{parseInt(this.state.peak_htl)}</td>
+                                                <td >{parseInt(this.state.peak_eht)}</td>
                                             </tr>
                                             <tr>
                                                 <td>Off-Peak (7pm-7am)</td>
-                                                <td >{this.state.off_peak_lt}</td>
-                                                <td >{this.state.off_peak_hts}</td>
-                                                <td >{this.state.off_peak_htl}</td>
-                                                <td >{this.state.off_peak_eht}</td>
+                                                <td >{parseInt(this.state.off_peak_lt)}</td>
+                                                <td >{parseInt(this.state.off_peak_hts)}</td>
+                                                <td >{parseInt(this.state.off_peak_htl)}</td>
+                                                <td >{parseInt(this.state.off_peak_eht)}</td>
                                             </tr>
                                         </tbody>
                                     </table>
