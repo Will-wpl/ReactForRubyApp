@@ -264,7 +264,7 @@ class Api::AuctionsController < Api::BaseController
       actions = []
     end
     data = []
-    users.order(approval_status: :desc, company_name: :asc).each do |user|
+    users.order(company_name: :asc).each do |user|
       # status = ids.include?(user.id) ? '1' : '0'
       index = consumptions.index do |consumption|
         consumption.user_id == user.id
