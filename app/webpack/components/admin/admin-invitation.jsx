@@ -8,42 +8,29 @@ export default class AdminInvitation extends Component {
   constructor(props){
     super(props);
     this.state={
-        text:"",
-        role_name:"",
-        retailer_select:0,
-        retailer_send:0,
-        retailer_pend:0,
-        buyer_company_select:0,
-        buyer_company_send:0,
-        buyer_company_pend:0,
-        buyer_individual_select:0,
-        buyer_individual_send:0,
-        buyer_individual_pend:0,
-        peak_lt:0,
-        peak_hts:0,
-        peak_htl:0,
-        eht_htl:0,
-        off_peak_lt:0,
-        off_peak_hts:0,
-        off_peak_htl:0,
-        off_eht_htl:0,
+        text:"",role_name:"",retailer_select:0,retailer_send:0,
+        retailer_pend:0,buyer_company_select:0,buyer_company_send:0,
+        buyer_company_pend:0,buyer_individual_select:0,buyer_individual_send:0,
+        buyer_individual_pend:0,peak_lt:0,peak_hts:0,
+        peak_htl:0,eht_htl:0,off_peak_lt:0,off_peak_hts:0,
+        off_peak_htl:0,off_eht_htl:0,
         fileData:{
                 "buyer_tc_upload":[{buttonName:"none"}],
                 "tender_documents_upload":[
-        {
-        buttonName:"add",
-        buttonText:"+"
-        }
-        ],
-        "birefing_pack_upload":[
-            {
-            buttonName:"add",
-            buttonText:"+"
-            }
-                        ]
+                    {
+                        buttonName:"add",
+                        buttonText:"+"
                     }
+                ],
+                "birefing_pack_upload":[
+                    {
+                        buttonName:"add",
+                        buttonText:"+"
+                    }
+                ]
             }
-        }
+    }
+ }
 
 componentDidMount() {
     adminShowSelects().then((res) => {
