@@ -340,7 +340,7 @@ export class CreateNewRA extends Component {
                         <label className="lm--formItem-right lm--formItem-control" id="start_datetime">
                         <DatePicker selected={this.state.start_datetime} disabled={this.state.disabled} onKeyDown={this.noPermitInput.bind(this)} ref="start_datetime" shouldCloseOnSelect={true} name="start_datetime" showTimeSelect dateFormat="DD-MM-YYYY HH:mm" timeFormat="HH:mm" timeIntervals={1}  className="time_ico"  onChange = {this.timeChange} minDate={moment()} title="Time must not be in the past."  required aria-required="true"/>
                         <abbr ref="ra_duration_error" className="col">(SGT)</abbr>
-                        <div className="required_error">The Date/time must be bigger than current time</div>
+                        <div className="required_error">Auction Date/time must bigger than current time</div>
                         </label>
                     </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
@@ -403,8 +403,8 @@ export class CreateNewRA extends Component {
                             <abbr title="required">*</abbr>Retailer Mode :</span>
                             <label className="lm--formItem-right lm--formItem-control">
                                 <select ref="retailer_mode" id="retailer_mode">
-                                    <option value="0">Model 1: Top 2</option>
-                                    <option value="1">Model 2: 1st, 2nd</option>
+                                    <option value="0">Mode 1: Top 2</option>
+                                    <option value="1">Mode 2: 1st, 2nd</option>
                                 </select>
                             </label>
                     </dd>
