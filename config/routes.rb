@@ -97,10 +97,16 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :buyer do
-      resources :consumption_details, only:%i[index update participate reject] do
+      resources :consumption_details, only: %i[index update participate reject] do
         collection do
           post 'participate'
           post 'reject'
+        end
+      end
+
+      resources :auction_attachments, only: %i[download_tc] do
+        member do
+          get 'download_tc'
         end
       end
 
