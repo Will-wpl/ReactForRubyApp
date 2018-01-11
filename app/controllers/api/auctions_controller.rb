@@ -174,7 +174,7 @@ class Api::AuctionsController < Api::BaseController
       arrangements = Arrangement.find_by_auction_id(params[:id])
       ids = get_user_ids(arrangements)
       if !params[:status].nil? && params[:status][0] == '0'
-        users = users.exclude(ids)
+        users = users.exclude(ids) unless ids.empty?
       elsif !params[:status].nil? && params[:status][0] == '1'
         users = users.selected_retailers(params[:id])
       elsif !params[:status].nil? && (params[:status][0] == '2' || params[:status][0] == '3')
@@ -226,7 +226,7 @@ class Api::AuctionsController < Api::BaseController
       ids = get_user_ids(consumptions)
 
       if !params[:status].nil? && params[:status][0] == '0'
-        users = users.exclude(ids)
+        users = users.exclude(ids) unless ids.empty?
       elsif !params[:status].nil? && params[:status][0] == '1'
         users = users.selected_buyers(params[:id])
       elsif !params[:status].nil? && (params[:status][0] == '2' || params[:status][0] == '3')
