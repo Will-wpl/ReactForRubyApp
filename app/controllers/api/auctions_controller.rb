@@ -283,8 +283,10 @@ class Api::AuctionsController < Api::BaseController
     role_name = params[:role_name]
     if role_name == 'retailer'
       Arrangement.find_by_auction_id(auction_id).is_not_notify.update_all(action_status: '1')
+      retailer_send_mails Arrangement.find_by_auction_id(auction_id).pluck(:user_id)
     elsif role_name == 'buyer'
       Consumption.find_by_auction_id(auction_id).is_not_notify.update_all(action_status: '1')
+      buyer_send_mails Consumption.find_by_auction_id(auction_id).pluck(:user_id)
     end
     render json: nil, status: 200
   end
@@ -299,6 +301,20 @@ class Api::AuctionsController < Api::BaseController
 
 
   private
+
+  def retailer_send_mails(user_ids)
+    return if user_ids.empty?
+    User.where('id in (?)', user_ids).each do |user|
+      UserMailer.retailer_invited_email(user).deliver_later
+    end
+  end
+
+  def buyer_send_mails(user_ids)
+    return if user_ids.empty?
+    User.where('id in (?)', user_ids).each do |user|
+      UserMailer.buyer_invited_email(user).deliver_later
+    end
+  end
 
   def set_auction
     @auction = params[:id] == '0' ? Auction.new(model_params) : Auction.find(params[:id])
