@@ -60,6 +60,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
         it 'success' do
           expect(auction.publish_status).to eq('0')
           hash_body = JSON.parse(response.body)
+          expect(hash_body['published_gid']).to eq("RA#{Time.current.year}" + '0003')
           expect(hash_body['publish_status']).to eq('1')
           expect(response).to have_http_status(:ok)
         end

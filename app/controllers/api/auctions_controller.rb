@@ -53,7 +53,8 @@ class Api::AuctionsController < Api::BaseController
 
   # PUT publish auction by ajax
   def publish
-    if @auction.update(publish_status: params[:publish_status])
+    published_gid = "RA#{Time.current.year}" + (Auction.published.count + 1).to_s.rjust(4, '0')
+    if @auction.update(publish_status: params[:publish_status], published_gid: published_gid)
       AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
     end
     render json: @auction, status: 200
