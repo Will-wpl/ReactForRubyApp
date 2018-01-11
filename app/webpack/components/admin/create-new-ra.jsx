@@ -158,20 +158,20 @@ export class CreateNewRA extends Component {
         this.setState({
             start_datetime:data
         })
-        // if(this.state.startDate != ''){
-        //     if((data-this.state.startDate) >= 0){
-        //                 this.setState({
-        //                     startDate:data
-        //                 })
-        //             }
-        // }
-        // if(this.state.endDate != ''){
-        //     if((data-this.state.endDate) >= 0){
-        //                 this.setState({
-        //                     endDate:data
-        //                 })
-        //             }
-        // }        
+        if(this.state.startDate != ''){
+            if((data-this.state.startDate) >= 0){
+                        this.setState({
+                            startDate:''
+                        })
+                    }
+        }
+        if(this.state.endDate != ''){
+            if((data-this.state.endDate) >= 0){
+                        this.setState({
+                            endDate:''
+                        })
+                    }
+        }        
     }
     auctionCreate(type,e){
         this.setState({
@@ -213,12 +213,30 @@ export class CreateNewRA extends Component {
 
     noPermitInput(event){
         event.preventDefault();
+    }
+    checkSubmitTruly(){
+        let data = {};
+        if(this.auction_data === null){
+            data = this.setAuction();
+        }else{
+            data = this.auction_data;
+        }
+        return data;
     }  
     checkSuccess(event,obj){
         event.preventDefault();
+        let timeBar;
+        if(this.state.start_datetime < moment()){
+            $("#start_datetime .required_error").fadeIn(300);
+            window.location.href="#start_datetime";
+            clearTimeout(timeBar);
+            timeBar = setTimeout(()=>{
+                $("#start_datetime .required_error").fadeOut(300);
+            },5000)
+            return false;
+        }
         if(this.state.btn_type == "save"){
-            //return;
-            createRa({auction: this.setAuction()}).then(res => {
+            createRa({auction: this.checkSubmitTruly()}).then(res => {
                             this.auction_data = res;
                             this.auction = res;
                             this.refs.Modal.showModal();
@@ -250,45 +268,10 @@ export class CreateNewRA extends Component {
         }
         if(this.state.btn_type == "next"){
             sessionStorage.isAuctionId = "yes";
-            let data = {};
-            if(this.auction_data === null){
-                data = this.setAuction();
-            }else{
-                data = this.auction_data;
-            }
-            createRa({auction: data}).then(res => {
+            createRa({auction: this.checkSubmitTruly()}).then(res => {
                 this.auction = res;
                 sessionStorage.auction_id = res.id;
                 window.location.href=`/admin/auctions/${res.id}/invitation`;
-            }, error => {
-                this.setState({
-                    text:'Request exception,Save failed!'
-                });
-                this.refs.Modal.showModal();
-            })
-        }
-        if(this.state.btn_type == "publish"){
-            createRa({auction: this.setAuction()}).then(res => {
-                this.auction = res;
-                raPublish({
-                    pagedata:{publish_status: '1'},
-                    id:this.state.id
-                }).then(res => {
-                        this.auction = res;
-                        this.refs.Modal.showModal();
-                        this.setState({
-                            text:this.auction.name+" has been successfully published. Please go to 'Manage Published Upcoming Reverse Auction' for further actions.",
-                            disabled:true
-                        });
-                        // setTimeout(() => {
-                        //      window.location.href="/admin/home"
-                        //  },5000);
-                    }, error => {
-                        this.setState({
-                            text:'Request exception,Publish failed!'
-                        });
-                        this.refs.Modal.showModal();
-                    })
             }, error => {
                 this.setState({
                     text:'Request exception,Save failed!'
@@ -354,18 +337,28 @@ export class CreateNewRA extends Component {
                     </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
                         <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Date/Time of Reverse Auction :</span>
-                        <label className="lm--formItem-right lm--formItem-control">
+                        <label className="lm--formItem-right lm--formItem-control" id="start_datetime">
                         <DatePicker selected={this.state.start_datetime} disabled={this.state.disabled} onKeyDown={this.noPermitInput.bind(this)} ref="start_datetime" shouldCloseOnSelect={true} name="start_datetime" showTimeSelect dateFormat="DD-MM-YYYY HH:mm" timeFormat="HH:mm" timeIntervals={1}  className="time_ico"  onChange = {this.timeChange} minDate={moment()} title="Time must not be in the past."  required aria-required="true"/>
                         <abbr ref="ra_duration_error" className="col">(SGT)</abbr>
+                        <div className="required_error">The Date/time must be bigger than current time</div>
                         </label>
                     </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
                         <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Reverse Auction Contract Period :</span>
-                        <label className="col"><DatePicker disabled={this.state.disabled} minDate={moment()} shouldCloseOnSelect={true} onKeyDown={this.noPermitInput.bind(this)} required aria-required="true" ref="contract_period_start_date" name="contract_period_start_date" className="date_ico" dateFormat="DD-MM-YYYY" selected={this.state.startDate} selectsStart startDate={this.state.startDate} endDate={this.state.endDate} onChange = {this.starttimeChange}/>
+                        <label className="col">
+                            {
+                                this.state.start_datetime === '' ? <DatePicker disabled={this.state.disabled} minDate={moment()} shouldCloseOnSelect={true} onKeyDown={this.noPermitInput.bind(this)} required aria-required="true" ref="contract_period_start_date" name="contract_period_start_date" className="date_ico" dateFormat="DD-MM-YYYY" selected={this.state.startDate} selectsStart startDate={this.state.startDate} endDate={this.state.endDate} onChange = {this.starttimeChange}/> 
+                                :<DatePicker disabled={this.state.disabled} minDate={this.state.start_datetime} shouldCloseOnSelect={true} onKeyDown={this.noPermitInput.bind(this)} required aria-required="true" ref="contract_period_start_date" name="contract_period_start_date" className="date_ico" dateFormat="DD-MM-YYYY" selected={this.state.startDate} selectsStart startDate={this.state.startDate} endDate={this.state.endDate} onChange = {this.starttimeChange}/>
+                            }
                         {/* <abbr className="error-block"  ref="ra_time_start_error">{this.state.ra_time_start_error}</abbr> */}
                         </label>
                         <label className="col"><b>to</b></label>
-                        <label className="col"><DatePicker disabled={this.state.disabled} minDate={moment()} shouldCloseOnSelect={true} onKeyDown={this.noPermitInput.bind(this)} required aria-required="true" ref="contract_period_end_date" name="contract_period_end_date" className="date_ico" dateFormat="DD-MM-YYYY" selected={this.state.endDate} selectsEnd startDate={this.state.startDate} endDate={this.state.endDate}  onChange = {this.endtimeChange}/>
+                        <label className="col">
+                            {
+                                this.state.start_datetime === '' ? <DatePicker disabled={this.state.disabled} minDate={moment()} shouldCloseOnSelect={true} onKeyDown={this.noPermitInput.bind(this)} required aria-required="true" ref="contract_period_end_date" name="contract_period_end_date" className="date_ico" dateFormat="DD-MM-YYYY" selected={this.state.endDate} selectsEnd startDate={this.state.startDate} endDate={this.state.endDate}  onChange = {this.endtimeChange}/>
+                                :<DatePicker disabled={this.state.disabled} minDate={this.state.start_datetime} shouldCloseOnSelect={true} onKeyDown={this.noPermitInput.bind(this)} required aria-required="true" ref="contract_period_end_date" name="contract_period_end_date" className="date_ico" dateFormat="DD-MM-YYYY" selected={this.state.endDate} selectsEnd startDate={this.state.startDate} endDate={this.state.endDate}  onChange = {this.endtimeChange}/>
+                            }
+                            
                         {/* <abbr className="error-block" ref="ra_time_end_error">{this.state.ra_time_end_error}</abbr> */}
                         </label>
                     </dd>
@@ -410,8 +403,8 @@ export class CreateNewRA extends Component {
                             <abbr title="required">*</abbr>Retailer Mode :</span>
                             <label className="lm--formItem-right lm--formItem-control">
                                 <select ref="retailer_mode" id="retailer_mode">
-                                    <option value="0">Model:Top2</option>
-                                    <option value="1">Model:Top1</option>
+                                    <option value="0">Model 1: Top 2</option>
+                                    <option value="1">Model 2: 1st, 2nd</option>
                                 </select>
                             </label>
                     </dd>

@@ -15,6 +15,10 @@ button{ cursor: pointer; transition: 0.5s all;}
       .react-datepicker__input-container,.react-datepicker-wrapper{width:100%;}
       dd{
           margin-bottom: 20px;
+          .lm--formItem-right{ 
+            position: relative;
+            .required_error{position:absolute; display: none; top:45px; left:0; width: 100%; padding:5px 10px; border:2px solid #fbb136; background: #fff; color:#333; font-size: 15px;}
+          }
           b{ 
               font-weight: normal; font-size: 18px; line-height: 44px; text-align:center; display: block;
               &.textLeft{text-align: left;}
@@ -222,6 +226,9 @@ abbr[title]{color: #fe0000; text-decoration: none;}
     a{color:#00888a; cursor: pointer;}
   }
   .buyer_btn{ text-align: right; width: 100%;
+    a{
+      &.disabled{background: #666; color: #aaa;}
+    }
     button{ 
         margin: 0 10px;
         &:last-child{margin-right: 0px;}
@@ -427,6 +434,9 @@ dfn.manage_label{
           cursor: pointer; padding-left: 20px;
           &.invite{background:url("../images/invite.png") no-repeat left;}
           &.cancel_invite{background:url("../images/cancel_invite.png") no-repeat left;}
+        }
+        a{
+          margin: 0px 10px;
         }
       }
     }
