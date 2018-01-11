@@ -30,4 +30,10 @@ class Api::AuctionAttachmentsController < Api::BaseController
     attachment.save
     render json: attachment, status: 200
   end
+
+  def destroy
+    attachment = AuctionAttachment.find(params[:id])
+    attachment.destroy
+    render json: nil, status: 200
+  end
 end

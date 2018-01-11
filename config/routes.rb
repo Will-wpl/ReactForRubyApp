@@ -58,7 +58,7 @@ Rails.application.routes.draw do
           get 'last'
         end
       end
-      resources :auction_attachments, only: %i[index create] do
+      resources :auction_attachments, only: %i[index create destroy] do
       end
       resources :arrangements, only: %i[index show obtain update destroy update_status] do
         member do
