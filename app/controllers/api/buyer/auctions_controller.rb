@@ -36,10 +36,10 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
                { url: '/buyer/consumptions/:id/edit', name: 'View', icon: 'lm--icon-search' }]
     data = []
     consumption.order('auctions.actual_begin_time asc').each do |consumption|
-      actions = consumption.participation_status != '1' ? 0 : 1
+      action = consumption.participation_status != '1' ? 0 : 1
       data.push(id: consumption.id, name: consumption.auction.name, actual_begin_time: consumption.auction.actual_begin_time,
                 publish_status: consumption.auction.publish_status, participation_status: consumption.participation_status,
-                actions: actions)
+                actions: action)
     end
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
