@@ -2,18 +2,17 @@ require 'engine/workflow'
 require 'engine/node'
 require 'engine/event'
 class TenderWorkflow < Workflow
-
   def initialize
     # from 1 is admin , 2 is retailer
     @node1 = Node.new(:node1, 1, 'begin',
                       accept: Event.new(:accept, :node2, 2),
                       reject: Event.new(:reject, nil, 2))
-    @node2 = Node.new(:node2, 2,'process',
+    @node2 = Node.new(:node2, 2, 'process',
                       accept_all: Event.new(:accept_all, :node4, 2),
                       propose_deviations: Event.new(:propose_deviations, :node3, 2))
 
     @node5 = Node.new(:node5, 5, 'end',
-                      submit: Event.new(:submit, nil, 2),)
+                      submit: Event.new(:submit, nil, 2))
     super(node1: @node1, node2: @node2)
   end
 
@@ -27,37 +26,21 @@ class TenderWorkflow < Workflow
   protected
 
   def set_state_machine_by_rule(node, event)
-    state_machine = {}
     if node.status == 'begin'
       if event.transitions_to.nil?
-        state_machine[:status] = 'reject'
+        set_start_reject_state_machine
       else
-        state_machine = set_state_machine(node, event)
+        set_processing_state_machine(node, event)
       end
     elsif node.status == 'end'
       if event.transitions_to.nil?
-        state_machine[:status] = 'closed'
-        state_machine[:previous_node] = node.code
-        state_machine[:current_node] = node.code
+        set_end_accept_state_machine
       else
-        state_machine = set_state_machine(node, event)
+        set_processing_state_machine(node, event)
       end
     else
-      state_machine = set_state_machine(node, event)
+      set_processing_state_machine(node, event)
     end
-    state_machine
-  end
-
-  private
-
-  def set_state_machine(node, event)
-    state_machine = {}
-    state_machine[:previous_node] = node.code
-    next_node = find_next_node(event)
-    state_machine[:current_node] = next_node.code
-    state_machine[:turn_to] = event.turn_to_role
-    state_machine[:status] = next_node.status
-    state_machine
   end
 
 end
