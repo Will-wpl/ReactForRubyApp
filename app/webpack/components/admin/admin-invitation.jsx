@@ -49,14 +49,14 @@ componentDidMount() {
     adminShowSelects().then((res) => {
         console.log(res);
         this.setState({
-            retailer_select:(res.retailers['2'] ? res.retailers['2'] : 0)+(res.retailers['3'] ? res.retailers['3'] : 0),
-            retailer_send:res.retailers['3'] ? res.retailers['3'] : 0,
+            retailer_select:(res.retailers['2'] ? res.retailers['2'] : 0)+(res.retailers['1'] ? res.retailers['1'] : 0),
+            retailer_send:res.retailers['1'] ? res.retailers['1'] : 0,
             retailer_pend:res.retailers['2'] ? res.retailers['2'] : 0,
-            buyer_company_select:(res.company_buyers['2'] ? res.company_buyers['2'] : 0)+(res.company_buyers['3'] ? res.company_buyers['3'] : 0),
-            buyer_company_send:res.company_buyers['3'] ? res.company_buyers['3'] : 0,
+            buyer_company_select:(res.company_buyers['2'] ? res.company_buyers['2'] : 0)+(res.company_buyers['1'] ? res.company_buyers['1'] : 0),
+            buyer_company_send:res.company_buyers['1'] ? res.company_buyers['1'] : 0,
             buyer_company_pend:res.company_buyers['2'] ? res.company_buyers['2'] : 0,
-            buyer_individual_select:(res.individual_buyers['2'] ? res.individual_buyers['2'] : 0)+(res.individual_buyers['3'] ? res.individual_buyers['3'] : 0),
-            buyer_individual_send:res.individual_buyers['3'] ? res.individual_buyers['3'] : 0,
+            buyer_individual_select:(res.individual_buyers['2'] ? res.individual_buyers['2'] : 0)+(res.individual_buyers['1'] ? res.individual_buyers['1'] : 0),
+            buyer_individual_send:res.individual_buyers['1'] ? res.individual_buyers['1'] : 0,
             buyer_individual_pend:res.individual_buyers['2'] ? res.individual_buyers['2'] : 0
         })
     }, (error) => {
