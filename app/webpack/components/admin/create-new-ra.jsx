@@ -225,6 +225,7 @@ export class CreateNewRA extends Component {
     }  
     checkSuccess(event,obj){
         event.preventDefault();
+        if(this.state.btn_type == "save"){
             createRa({auction: this.checkSubmitTruly()}).then(res => {
                             this.auction_data = res;
                             this.auction = res;
@@ -254,41 +255,13 @@ export class CreateNewRA extends Component {
                     disabled:true
                 })
             }
+        }
         if(this.state.btn_type == "next"){
             sessionStorage.isAuctionId = "yes";
             createRa({auction: this.checkSubmitTruly()}).then(res => {
                 this.auction = res;
                 sessionStorage.auction_id = res.id;
                 window.location.href=`/admin/auctions/${res.id}/invitation`;
-            }, error => {
-                this.setState({
-                    text:'Request exception,Save failed!'
-                });
-                this.refs.Modal.showModal();
-            })
-        }
-        if(this.state.btn_type == "publish"){
-            createRa({auction: this.setAuction()}).then(res => {
-                this.auction = res;
-                raPublish({
-                    pagedata:{publish_status: '1'},
-                    id:this.state.id
-                }).then(res => {
-                        this.auction = res;
-                        this.refs.Modal.showModal();
-                        this.setState({
-                            text:this.auction.name+" has been successfully published. Please go to 'Manage Published Upcoming Reverse Auction' for further actions.",
-                            disabled:true
-                        });
-                        // setTimeout(() => {
-                        //      window.location.href="/admin/home"
-                        //  },5000);
-                    }, error => {
-                        this.setState({
-                            text:'Request exception,Publish failed!'
-                        });
-                        this.refs.Modal.showModal();
-                    })
             }, error => {
                 this.setState({
                     text:'Request exception,Save failed!'
