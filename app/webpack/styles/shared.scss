@@ -428,6 +428,9 @@ dfn.manage_label{
           &.invite{background:url("../images/invite.png") no-repeat left;}
           &.cancel_invite{background:url("../images/cancel_invite.png") no-repeat left;}
         }
+        a{
+          margin: 0px 10px;
+        }
       }
     }
     .table_page{ 
