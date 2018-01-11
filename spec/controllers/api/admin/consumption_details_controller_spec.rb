@@ -21,9 +21,10 @@ RSpec.describe Api::Admin::ConsumptionDetailsController, type: :controller do
 
       before { do_request }
       it 'Success' do
-        array = JSON.parse(response.body)
-        expect(array.size).to eq(4)
-        expect(array[0]['intake_level']).to eq('LT')
+        hash = JSON.parse(response.body)
+        expect(hash.size).to eq(2)
+        expect(hash['consumption_details'].size).to eq(4)
+        expect(hash['consumption_details'][0]['intake_level']).to eq('LT')
         expect(response).to have_http_status(:ok)
       end
     end

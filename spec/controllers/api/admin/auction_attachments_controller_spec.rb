@@ -50,7 +50,7 @@ RSpec.describe Api::Admin::AuctionAttachmentsController, type: :controller do
           expect(hash_body['file_path']).to include("uploads/attachments/#{auction.id}/")
           expect(hash_body['file_type']).to eq('tender_documents_upload')
           expect(hash_body['file_name']).to eq('test.jpg')
-          expect(hash_body['user_id']).to eq("#{admin_user.id}")
+          expect(hash_body['user_id']).to eq(admin_user.id)
         end
       end
     end
