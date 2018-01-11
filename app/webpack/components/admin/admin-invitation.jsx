@@ -318,7 +318,7 @@ render() {
                         </label>
                         <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                             <div className="col-sm-12 col-md-6 u-cell">
-                                <a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=1`} className="lm--button lm--button--primary col-sm-12">Selected Retailers</a>
+                                <a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=1`} className="lm--button lm--button--primary col-sm-12">Select Retailers</a>
                             </div>
                             <div className="col-sm-12 col-md-6 u-cell"><a className="lm--button lm--button--primary col-sm-12 orange" onClick={this.show_send_mail.bind(this,'retailer')}>Send Invitation Email</a></div>
                         </div>
@@ -340,8 +340,8 @@ render() {
                         Buyer to Invite:
                         </label>
                         <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                        <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=2`} className="lm--button lm--button--primary col-sm-12">Selected Company Buyers</a></div>
-                        <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=3`} className="lm--button lm--button--primary col-sm-12">Selected Individual Buyers</a></div>
+                        <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=2`} className="lm--button lm--button--primary col-sm-12">Select Company Buyers</a></div>
+                        <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=3`} className="lm--button lm--button--primary col-sm-12">Select Individual Buyers</a></div>
                         <div className="col-sm-12 col-md-12 u-cell"><a className="lm--button lm--button--primary col-sm-12 orange" onClick={this.show_send_mail.bind(this,'buyer')}>Send Invitation Email</a></div>
                         </div>
                     </div>
