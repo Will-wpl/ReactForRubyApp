@@ -188,7 +188,12 @@
           .lm--formItem-left.lm--formItem-label Housing Type:(HDB/Private High-rise/Landed):
           .lm--formItem-right.lm--formItem-control
             dfn.manage_label
-              = @user.account_housing_type
+              - if @user.account_housing_type == '0'
+                = 'HDB'
+              - if @user.account_housing_type == '1'
+                = 'Private High-rise'
+              - if @user.account_housing_type == '2'
+                = 'Landed'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label Home Address:
           .lm--formItem-right.lm--formItem-control
