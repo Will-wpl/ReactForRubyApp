@@ -43,30 +43,27 @@ render() {
                                     <div className="col">EHT(Off-Peak): {item.eht_off_peak}</div>
                                     <div className="col">Unit: kWh</div>
                                 </div>
-                                <div className="comsumption_list_table u-grid" id={"comsumption_list_table_"+index}>
-                                    {this.props.table ? 
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Account Number</th>
-                                                <th>Intake Level</th>
-                                                <th>Peak Volume (kWh/month)</th>
-                                                <th>Off-Peak Volume (kWh/month)</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {this.props.table.map((it,i)=>{
-                                                return <tr key={i}>
-                                                            <td>{it.account_number}</td>
-                                                            <td>{it.intake_level}</td>
-                                                            <td>{it.peak}</td>
-                                                            <td>{it.off_peak}</td>
-                                                        </tr>
-                                            })}
-                                            
-                                        </tbody>
-                                    </table>
-                                    : ''}
+                                <div className="comsumption_list_table u-grid" id={"comsumption_list_table_"+index}> 
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Account Number</th>
+                                                    <th>Intake Level</th>
+                                                    <th>Peak Volume (kWh/month)</th>
+                                                    <th>Off-Peak Volume (kWh/month)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {item.details.map((it,i)=>{
+                                                    return <tr key={i}>
+                                                                <td>{it.account_number}</td>
+                                                                <td>{it.intake_level}</td>
+                                                                <td>{it.peak}</td>
+                                                                <td>{it.off_peak}</td>
+                                                            </tr>
+                                                })}
+                                            </tbody>
+                                        </table> 
                                 </div>
                             </div>    
                 }) : ''

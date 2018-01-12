@@ -17,58 +17,9 @@ export default class AdminComsumption extends Component {
     this.state={
         comsumption_list:[],
         price:{},
-        detail:[]
+        detail:[],
+        detail_index:0
     }
-    // this.comsumption_list = [
-    //     {
-    //         name:"Company Name 01",
-    //         accounts:"6",
-    //         lt_peak:"5431",
-    //         lt_off_peak:"5431",
-    //         hts_peak:"5431",
-    //         hts_off_peak:"5431",
-    //         htl_peak:"5431",
-    //         htl_off_peak:"5431",
-    //         unit:"kWh",
-    //         table:[
-    //             {account_number:"A0545454",intake_level:"HTL",peak_volume:"5233",off_peak_volume:"8455"},
-    //             {account_number:"A0545454",intake_level:"HTL",peak_volume:"5233",off_peak_volume:"8455"},
-    //             {account_number:"A0545454",intake_level:"HTL",peak_volume:"5233",off_peak_volume:"8455"}
-    //         ]
-    //     },
-    //     {
-    //         name:"Company Name 02",
-    //         accounts:"5",
-    //         lt_peak:"5431",
-    //         lt_off_peak:"5431",
-    //         hts_peak:"5431",
-    //         hts_off_peak:"5431",
-    //         htl_peak:"5431",
-    //         htl_off_peak:"5431",
-    //         unit:"kWh",
-    //         table:[
-    //             {account_number:"A0545454",intake_level:"HTL",peak_volume:"5233",off_peak_volume:"8455"},
-    //             {account_number:"A0545454",intake_level:"HTL",peak_volume:"5233",off_peak_volume:"8455"},
-    //             {account_number:"A0545454",intake_level:"HTL",peak_volume:"5233",off_peak_volume:"8455"}
-    //         ]
-    //     },
-    //     {
-    //         name:"Company Name 03",
-    //         accounts:"4",
-    //         lt_peak:"5431",
-    //         lt_off_peak:"5431",
-    //         hts_peak:"5431",
-    //         hts_off_peak:"5431",
-    //         htl_peak:"5431",
-    //         htl_off_peak:"5431",
-    //         unit:"kWh",
-    //         table:[
-    //             {account_number:"A0545454",intake_level:"HTL",peak_volume:"5233",off_peak_volume:"8455"},
-    //             {account_number:"A0545454",intake_level:"HTL",peak_volume:"5233",off_peak_volume:"8455"},
-    //             {account_number:"A0545454",intake_level:"HTL",peak_volume:"5233",off_peak_volume:"8455"}
-    //         ]
-    //     }
-    // ]
 }
 
 componentDidMount() {
@@ -83,23 +34,14 @@ componentDidMount() {
     })
 }
 show_detail(index,consumption_id){
-    getBuyerDetailsConsumptions({id:consumption_id}).then(res=>{
-        console.log(res);
-        this.setState({
-            detail:res.consumption_details,
-        })
-        $("#comsumption_list_table_"+index).slideToggle(300);
-    },error=>{
-
-    })
-    
+    $("#comsumption_list_table_"+index).slideToggle(300);
 }
 render() {
     //console.log(this.winner.data);
     return (
         <div className="u-grid mg0">
             <div className="col-sm-12 u-mb3">
-                <AdminComsumptionList table={this.state.detail} type={this.pageType} comsumption_list={this.state.comsumption_list} detail={this.show_detail.bind(this)} />
+                <AdminComsumptionList table={this.state.detail} detail_index={this.state.detail_index} type={this.pageType} comsumption_list={this.state.comsumption_list} detail={this.show_detail.bind(this)} />
             </div>
             <div className="col-sm-5">
                 <AdminComsumptionPrice type={this.pageType} price={this.state.price}  />
