@@ -145,7 +145,7 @@ class Api::AuctionsController < Api::BaseController
     if params.key?(:page_size) && params.key?(:page_index)
       search_params = reject_params(params, %w[controller action])
       search_where_array = set_search_params(search_params)
-      auction = Auction.published.where(search_where_array)
+      auction = Auction.published.has_auction_result.where(search_where_array)
                        .page(params[:page_index]).per(params[:page_size])
       total = auction.total_count
     else
@@ -156,10 +156,18 @@ class Api::AuctionsController < Api::BaseController
       { name: 'ID', field_name: 'published_gid' },
       { name: 'Name', field_name: 'name' },
       { name: 'Date/Time', field_name: 'actual_begin_time' },
-      { name: 'Status', field_name: 'null' }
+      { name: 'Status', field_name: 'status' }
     ]
     actions = [{ url: '/admin/auctions/:id/upcoming', name: 'Edit', icon: 'lm--icon-search', interface_type: 'auction' }]
-    data = auction.order(actual_begin_time: :asc)
+    data = []
+    auction.order(actual_begin_time: :asc).each do |auction|
+      status = if Time.current < auction.actual_begin_time
+                 'upcoming'
+               elsif Time.current >= auction.actual_begin_time && Time.current <= auction.actual_end_time
+                 'In Progress'
+               end
+      data.push(published_gid: auction.published_gid, name: auction.name, actual_begin_time: auction.actual_begin_time, status: status)
+    end
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
   end
