@@ -17,7 +17,7 @@ export class DoFillConsumption extends Component {
                                         <td>
                                             <select id={"intake_level"+(index+1)} disabled={this.props.checked} name={"intake_level"+(index+1)} defaultValue={this.props.site_list[index].intake_level_selected}>
                                             {
-                                                this.props.site_list[index].intake_level.map((it, i) => <option key={i} value={it}>{it}</option>)
+                                                this.props.site_list[index].intake_level.map((it, i) => <option key={i} value={(it.split("(")[1]).split(")")[0]}>{it}</option>)
                                             }
                                             </select>
                                         </td></tr>

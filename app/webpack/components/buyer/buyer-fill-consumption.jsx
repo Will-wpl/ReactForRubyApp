@@ -118,7 +118,7 @@ export class FillConsumption extends Component {
             consumption_id:this.consumptions_id,
             details:buyerlist
         }
-        //console.log("---makeData-->"+makeData.details);
+        //console.log("---makeData-->"+makeData.details);   
         if(this.state.submit_type === "Reject"){ //do Reject
             setBuyerParticipate({consumption_id:this.consumptions_id}, '/api/buyer/consumption_details/reject').then((res) => {
                 this.refs.Modal.showModal();
