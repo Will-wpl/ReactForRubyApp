@@ -20,6 +20,7 @@ class Api::AuctionAttachmentsController < Api::BaseController
     attachment.auction_id = params[:auction_id]
     attachment.file_name = tmp_file_name
     attachment.file_type = params[:file_type]
+    attachment.user = current_user
     if params[:user_id].nil?
       attachment.file_path = uploader.store_dir + '/' + file.original_filename
     else
