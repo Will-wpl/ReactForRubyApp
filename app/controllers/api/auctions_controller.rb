@@ -134,8 +134,8 @@ class Api::AuctionsController < Api::BaseController
       { name: 'Name', field_name: 'name' },
       { name: 'Date/Time', field_name: 'actual_begin_time' }
     ]
-    actions = [{ url: '/admin/auctions/new', name: 'Edit', icon: 'lm--icon-search', interface_type: 'auction' },
-               { url: '/admin/auctions/:id', name: 'Delete', icon: 'lm--icon-search', interface_type: 'auction' }]
+    actions = [{ url: '/admin/auctions/new', name: 'Edit', icon: 'edit', interface_type: 'auction' },
+               { url: '/admin/auctions/:id', name: 'Delete', icon: 'delete', interface_type: 'auction' }]
     data = auction.order(actual_begin_time: :asc)
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
@@ -182,7 +182,7 @@ class Api::AuctionsController < Api::BaseController
       arrangements = Arrangement.find_by_auction_id(params[:id])
       ids = get_user_ids(arrangements)
       if !params[:status].nil? && params[:status][0] == '0'
-        users = users.exclude(ids)
+        users = users.exclude(ids) unless ids.empty?
       elsif !params[:status].nil? && params[:status][0] == '1'
         users = users.selected_retailers(params[:id])
       elsif !params[:status].nil? && (params[:status][0] == '2' || params[:status][0] == '3')
@@ -202,7 +202,7 @@ class Api::AuctionsController < Api::BaseController
       { name: 'Action', field_name: 'select_action' }
     ]
     actions = [
-      { url: '/admin/users/:id/manage', name: 'View', icon: 'lm--icon-search' }
+      { url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail' }
     ]
     data = []
     users.order(company_name: :asc).each do |user|
@@ -234,7 +234,7 @@ class Api::AuctionsController < Api::BaseController
       ids = get_user_ids(consumptions)
 
       if !params[:status].nil? && params[:status][0] == '0'
-        users = users.exclude(ids)
+        users = users.exclude(ids) unless ids.empty?
       elsif !params[:status].nil? && params[:status][0] == '1'
         users = users.selected_buyers(params[:id])
       elsif !params[:status].nil? && (params[:status][0] == '2' || params[:status][0] == '3')
@@ -255,7 +255,7 @@ class Api::AuctionsController < Api::BaseController
         { name: 'Action', field_name: 'select_action' }
       ]
       actions = [
-        { url: '/admin/users/:id/manage', name: 'View', icon: 'lm--icon-search' }
+        { url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail' }
       ]
     elsif consumer_type == '3'
       headers = [
@@ -265,14 +265,14 @@ class Api::AuctionsController < Api::BaseController
         { name: 'Action', field_name: 'select_action' }
       ]
       actions = [
-        { url: '/admin/users/:id/manage', name: 'View', icon: 'lm--icon-search' }
+        { url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail' }
       ]
     else
       headers = []
       actions = []
     end
     data = []
-    users.order(approval_status: :desc, company_name: :asc).each do |user|
+    users.order(company_name: :asc).each do |user|
       # status = ids.include?(user.id) ? '1' : '0'
       index = consumptions.index do |consumption|
         consumption.user_id == user.id

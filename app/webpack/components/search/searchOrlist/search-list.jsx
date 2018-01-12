@@ -2,12 +2,13 @@ import React, { Component, PropTypes } from 'react'
 //import {getAuctionTimeRule} from '../../javascripts/componentService/common/service';
 import moment from 'moment';
 import {Modal} from '../../shared/show-modal';
-import {deleteAuction,updateStatus,deleteStatus} from '../../../javascripts/componentService/admin/service';
+import {deleteAuction,updateStatus,deleteStatus,getUsersDetail} from '../../../javascripts/componentService/admin/service';
 export class SearchList extends Component {
     constructor(props, context){
         super(props);
         this.state={
-            text:""
+            text:"",showDetail:{},
+            name:""
         }
     }
     dosearch(index,obj){
@@ -44,21 +45,33 @@ export class SearchList extends Component {
             }
         }
     }
-    clickFunction(id,url,name,type,obj){
+    clickFunction(id,url,name,type,list_name){
         if(type == "auction"){
             sessionStorage.auction_id=id;
         }
+        if(type == "show_detail"){
+            getUsersDetail(id).then(res=>{
+                console.log(res);
+                this.setState({
+                    showDetail:res,
+                })
+                this.refs.Modal.showModal();
+            },error=>{
+
+            })
+            return;
+        }
         if(name == "Delete"){
             this.auction_id = id;
-            this.showDelete();
+            this.showDelete(list_name);
         }else{
             window.location.href=`${url.replace(":id",id)}`;
         }
         
     }
-    showDelete(){
+    showDelete(auction_name){
         this.refs.Modal.showModal("comfirm");
-        this.setState({text:"Are you sure you want to delete?"});
+        this.setState({text:"Are you sure you want to delete?",name:auction_name});
     }
     delete(){
         deleteAuction({ auction: {id:this.auction_id}}).then(res => {
@@ -169,10 +182,10 @@ export class SearchList extends Component {
                                                         
                                                     })
                                                 }
-                                                <td>
+                                                <td className="search_list_btn">
                                                     {
                                                         this.props.table_data.actions.map((ik,k)=>{
-                                                            return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "")}>{ik.name}</a>
+                                                            return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '')}>{ik.name}</a>
                                                         })
                                                     }
                                                 </td>
@@ -192,7 +205,7 @@ export class SearchList extends Component {
                         <span>2</span> */}
                         <span onClick={this.gotopage.bind(this,'next')}>{">"}</span>
                     </div>
-                    <Modal text={this.state.text} dodelete={this.delete.bind(this)} ref="Modal" />
+                    <Modal text={this.state.text} listdetail={this.state.showDetail} listdetailtype={this.props.type} dodelete={this.delete.bind(this)} ref="Modal" />
                 </div>
             )
         }else{

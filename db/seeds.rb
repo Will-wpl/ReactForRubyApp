@@ -83,7 +83,7 @@ company_buyers = [
     { name: 'buyer7', email: 'cbuyer7@example.com', company_name: 'Company Buyer 7', password: 'password' },
     { name: 'buyer8', email: 'cbuyer8@example.com', company_name: 'Company Buyer 8', password: 'password' },
     { name: 'buyer9', email: 'cbuyer9@example.com', company_name: 'Company Buyer 9', password: 'password' },
-    { name: 'buyer10', email: 'cbuyer9@example.com', company_name: 'Company Buyer 10', password: 'password' }
+    { name: 'buyer10', email: 'cbuyer10@example.com', company_name: 'Company Buyer 10', password: 'password' }
 ]
 
 company_buyers.each do |buyer|
@@ -112,7 +112,7 @@ individual_buyers = [
     { name: 'individual buyer7', email: 'ibuyer7@example.com', account_housing_type: '2', password: 'password' },
     { name: 'individual buyer8', email: 'ibuyer8@example.com', account_housing_type: '2', password: 'password' },
     { name: 'individual buyer9', email: 'ibuyer9@example.com', account_housing_type: '2', password: 'password' },
-    { name: 'individual buyer10', email: 'ibuyer9@example.com', account_housing_type: '2', password: 'password' }
+    { name: 'individual buyer10', email: 'ibuyer10@example.com', account_housing_type: '2', password: 'password' }
 ]
 
 individual_buyers.each do |buyer|

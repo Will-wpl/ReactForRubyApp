@@ -12,6 +12,10 @@ export const arrangementDetail = (params) => {
     return get('/api/admin/arrangements/'+params);
 }
 
+export const getUsersDetail = (params) => {
+    return get('/api/admin/users/'+params);
+}
+
 export const createRa = (params) => {
     return update('/api/admin/auctions/'+params.auction.id, params);
 }
