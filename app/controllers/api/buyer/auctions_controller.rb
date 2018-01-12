@@ -19,7 +19,7 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
       search_params = reject_params(params, %w[controller action])
       search_where_array = set_search_params(search_params)
       # consumption = Consumption.includes(:auction).where(auctions: { publish_status: '1' }).page(params[:page_index]).per(params[:page_size])
-      consumption = Consumption.join_buyer_auction.mine(current_user.id).where(search_where_array).page(params[:page_index]).per(params[:page_size])
+      consumption = Consumption.join_buyer_auction.mine(current_user.id).find_notify_buyer.where(search_where_array).page(params[:page_index]).per(params[:page_size])
       total = consumption.total_count
     else
       consumption = Consumption.mine(current_user.id)
