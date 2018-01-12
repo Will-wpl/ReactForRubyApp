@@ -5,12 +5,12 @@ RSpec.describe Api::Buyer::AuctionsController, type: :controller do
   let!(:auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
   let!(:auctions) { create_list(:auction, 10, :for_next_month, :upcoming, :published, :started) }
   let!(:company_buyers) { create_list(:user, 30, :with_buyer, :with_company_buyer) }
-  let!(:consumption0) { create(:consumption, user: company_buyers[0], auction: auctions[0], participation_status: '1') }
-  let!(:consumption1) { create(:consumption, user: company_buyers[0], auction: auctions[1], participation_status: '1') }
-  let!(:consumption2) { create(:consumption, user: company_buyers[0], auction: auctions[2], participation_status: '1') }
-  let!(:consumption3) { create(:consumption, user: company_buyers[0], auction: auctions[3], participation_status: '2') }
-  let!(:consumption4) { create(:consumption, user: company_buyers[0], auction: auctions[7], participation_status: '2') }
-  let!(:consumption5) { create(:consumption, user: company_buyers[0], auction: auctions[9], participation_status: '2') }
+  let!(:consumption0) { create(:consumption, user: company_buyers[0], auction: auctions[0], participation_status: '1', action_status: '1') }
+  let!(:consumption1) { create(:consumption, user: company_buyers[0], auction: auctions[1], participation_status: '1', action_status: '1') }
+  let!(:consumption2) { create(:consumption, user: company_buyers[0], auction: auctions[2], participation_status: '1', action_status: '1') }
+  let!(:consumption3) { create(:consumption, user: company_buyers[0], auction: auctions[3], participation_status: '2', action_status: '1') }
+  let!(:consumption4) { create(:consumption, user: company_buyers[0], auction: auctions[7], participation_status: '2', action_status: '1') }
+  let!(:consumption5) { create(:consumption, user: company_buyers[0], auction: auctions[9], participation_status: '2', action_status: '1') }
   let!(:consumption6) { create(:consumption, user: company_buyers[1], auction: auctions[7]) }
   let!(:consumption7) { create(:consumption, user: company_buyers[1], auction: auctions[9]) }
   let!(:consumption8) { create(:consumption, user: company_buyers[2], auction: auctions[7]) }
