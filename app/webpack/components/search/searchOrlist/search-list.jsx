@@ -133,7 +133,10 @@ export class SearchList extends Component {
                         <tr>
                             {
                                 this.props.table_data.headers.map((item,index)=>{
-                                    return <th key={index}>{item.name}</th>
+                                    if(item.name){
+                                        return <th key={index}>{item.name}</th>
+                                    }
+                                    
                                 })
                             }
                         <th/>
@@ -172,6 +175,8 @@ export class SearchList extends Component {
                                                             return <td key={i}>
                                                                     {item[`${it.field_name}`] === '0' ? 'HDB' : (item[`${it.field_name}`] === '1' ? 'Private High-rise' : 'Landed')}
                                                                    </td>
+                                                        }else if(it.field_name === 'actions'){
+                                        
                                                         }else{
                                                             return <td key={i}>
                                                                 {it.field_name === "actual_begin_time" 
@@ -184,7 +189,10 @@ export class SearchList extends Component {
                                                 }
                                                 <td className="search_list_btn">
                                                     {
-                                                        this.props.table_data.actions.map((ik,k)=>{
+                                                        item["actions"] ? <a className={this.props.table_data.actions[item["actions"]].icon} 
+                                                                            onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,this.props.table_data.actions[item["actions"]].url,this.props.table_data.actions[item["actions"]].name,this.props.table_data.actions[item["actions"]].interface_type ? this.props.table_data.actions[item["actions"]].interface_type : "",item.name ? item.name : '')}>
+                                                                            {this.props.table_data.actions[item["actions"]].name}</a>
+                                                        : this.props.table_data.actions.map((ik,k)=>{
                                                             return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '')}>{ik.name}</a>
                                                         })
                                                     }

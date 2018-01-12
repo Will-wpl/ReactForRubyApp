@@ -13,7 +13,7 @@ export default class AdminInvitation extends Component {
         buyer_company_pend:0,buyer_individual_select:0,buyer_individual_send:0,
         buyer_individual_pend:0,peak_lt:0,peak_hts:0,
         peak_htl:0,eht_htl:0,off_peak_lt:0,off_peak_hts:0,
-        off_peak_htl:0,off_eht_htl:0,disabled:false,
+        off_peak_htl:0,off_eht_htl:0,disabled:false,publish_status:0,
         fileData:{
                 "buyer_tc_upload":[{buttonName:"none"}],
                 "tender_documents_upload":[
@@ -53,14 +53,15 @@ componentDidMount() {
     getAuction('admin', sessionStorage.auction_id).then((res) => {
         console.log(res);
         this.setState({
-            peak_lt:res.total_lt_peak ? res.total_lt_peak : 0,
-            peak_hts:res.total_hts_peak ? res.total_hts_peak : 0,
-            peak_htl:res.total_htl_peak ? res.total_htl_peak : 0,
-            peak_eht:res.total_eht_peak ? res.total_eht_peak : 0,
-            off_peak_lt:res.total_lt_off_peak ? res.total_lt_off_peak : 0,
-            off_peak_hts:res.total_hts_off_peak ? res.total_hts_off_peak : 0,
-            off_peak_htl:res.total_htl_off_peak ? res.total_htl_off_peak : 0,
-            off_peak_eht:res.total_eht_off_peak ? res.total_eht_off_peak : 0
+            peak_lt:res.total_lt_peak ? parseInt(Number(res.total_lt_peak)) : 0,
+            peak_hts:res.total_hts_peak ? parseInt(Number(res.total_hts_peak)) : 0,
+            peak_htl:res.total_htl_peak ? parseInt(Number(res.total_htl_peak)) : 0,
+            peak_eht:res.total_eht_peak ? parseInt(Number(res.total_eht_peak)) : 0,
+            off_peak_lt:res.total_lt_off_peak ? parseInt(Number(res.total_lt_off_peak)) : 0,
+            off_peak_hts:res.total_hts_off_peak ? parseInt(Number(res.total_hts_off_peak)) : 0,
+            off_peak_htl:res.total_htl_off_peak ? parseInt(Number(res.total_htl_off_peak)) : 0,
+            off_peak_eht:res.total_eht_off_peak ? parseInt(Number(res.total_eht_off_peak)) : 0,
+            publish_status:res.publish_status
         })
     }, (error) => {
         this.setState({text:'Request exception failed!'});
@@ -300,50 +301,68 @@ render() {
             {sessionStorage.isAuctionId === "yes"
                 ? <div className="col-sm-12 col-md-8 push-md-2">
                     <h3 className="u-mt3 u-mb1">invitation</h3>
-                    <div className="lm--formItem lm--formItem--inline string role_select">
-                        <label className="lm--formItem-left lm--formItem-label string required">
-                        Retailers:
-                        </label>
-                        <div className="lm--formItem-right lm--formItem-control" id="retailer_select_box">
-                            <abbr>Selected : {this.state.retailer_select}&nbsp;&nbsp;&nbsp;&nbsp;Notification Send : {this.state.retailer_send}&nbsp;&nbsp;&nbsp;&nbsp;Pending Notification : {this.state.retailer_pend}</abbr>
-                        </div>
-                        <div className="required_error">
-                            At least select one Retailer.
-                        </div>
-                    </div>
-                    <div className="lm--formItem lm--formItem--inline string">
-                        <label className="lm--formItem-left lm--formItem-label string required">
-                        Retailer to Invite:
-                        </label>
-                        <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                            <div className="col-sm-12 col-md-6 u-cell">
-                                <a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=1`} className="lm--button lm--button--primary col-sm-12">Select Retailers</a>
+                    {(this.state.publish_status === "0" ? 
+                        <div>
+                            <div className="lm--formItem lm--formItem--inline string u-mt3 role_select">
+                                <label className="lm--formItem-left lm--formItem-label string required">
+                                Buyers:
+                                </label>
+                                <div className="lm--formItem-right lm--formItem-control" id="buyer_select_box">
+                                    <abbr>Company Selected : {this.state.buyer_company_select}&nbsp;&nbsp;&nbsp;&nbsp;Notification Send : {this.state.buyer_company_send}&nbsp;&nbsp;&nbsp;&nbsp;Pending Notification : {this.state.buyer_company_pend}</abbr>
+                                    <abbr>Individual Selected : {this.state.buyer_individual_select}&nbsp;&nbsp;&nbsp;&nbsp;Notification Send : {this.state.buyer_individual_send}&nbsp;&nbsp;&nbsp;&nbsp;Pending Notification : {this.state.buyer_individual_pend}</abbr>
+                                </div>
+                                <div className="required_error">
+                                    At least select one Buyer.
+                                </div>
                             </div>
-                            <div className="col-sm-12 col-md-6 u-cell"><a className="lm--button lm--button--primary col-sm-12 orange" onClick={this.show_send_mail.bind(this,'retailer')}>Send Invitation Email</a></div>
+                            <div className="lm--formItem lm--formItem--inline string">
+                                <label className="lm--formItem-left lm--formItem-label string required">
+                                Buyer to Invite:
+                                </label>
+                                <div className="lm--formItem-right lm--formItem-control u-grid mg0">
+                                <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=2`} className="lm--button lm--button--primary col-sm-12">Select Company Buyers</a></div>
+                                <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=3`} className="lm--button lm--button--primary col-sm-12">Select Individual Buyers</a></div>
+                                <div className="col-sm-12 col-md-12 u-cell"><a className="lm--button lm--button--primary col-sm-12 orange" onClick={this.show_send_mail.bind(this,'buyer')}>Send Invitation Email</a></div>
+                                </div>
+                            </div>
+                        </div>
+                     :<div> 
+                        <div className="lm--formItem lm--formItem--inline string role_select">
+                            <label className="lm--formItem-left lm--formItem-label string required">
+                            Retailers:
+                            </label>
+                            <div className="lm--formItem-right lm--formItem-control" id="retailer_select_box">
+                                <abbr>Selected : {this.state.retailer_select}&nbsp;&nbsp;&nbsp;&nbsp;Notification Send : {this.state.retailer_send}&nbsp;&nbsp;&nbsp;&nbsp;Pending Notification : {this.state.retailer_pend}</abbr>
+                            </div>
+                            <div className="required_error">
+                                At least select one Retailer.
+                            </div>
+                        </div>
+                        <div className="lm--formItem lm--formItem--inline string">
+                            <label className="lm--formItem-left lm--formItem-label string required">
+                            Retailer to Invite:
+                            </label>
+                            <div className="lm--formItem-right lm--formItem-control u-grid mg0">
+                                <div className="col-sm-12 col-md-6 u-cell">
+                                    <a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=1`} className="lm--button lm--button--primary col-sm-12">Select Retailers</a>
+                                </div>
+                                <div className="col-sm-12 col-md-6 u-cell"><a className="lm--button lm--button--primary col-sm-12 orange" onClick={this.show_send_mail.bind(this,'retailer')}>Send Invitation Email</a></div>
+                            </div>
+                        </div>
+                        <div className="lm--formItem lm--formItem--inline string u-mt3 role_select">
+                            <label className="lm--formItem-left lm--formItem-label string required">
+                            Buyers:
+                            </label>
+                            <div className="lm--formItem-right lm--formItem-control" id="buyer_select_box">
+                                <abbr>Company Invited : {this.state.buyer_company_select}</abbr>
+                                <abbr>Individual Invited : {this.state.buyer_individual_select}</abbr>
+                            </div>
+                            <div className="required_error">
+                                At least select one Buyer.
+                            </div>
                         </div>
                     </div>
-                    <div className="lm--formItem lm--formItem--inline string u-mt3 role_select">
-                        <label className="lm--formItem-left lm--formItem-label string required">
-                        Buyers:
-                        </label>
-                        <div className="lm--formItem-right lm--formItem-control" id="buyer_select_box">
-                            <abbr>Company Selected : {this.state.buyer_company_select}&nbsp;&nbsp;&nbsp;&nbsp;Notification Send : {this.state.buyer_company_send}&nbsp;&nbsp;&nbsp;&nbsp;Pending Notification : {this.state.buyer_company_pend}</abbr>
-                            <abbr>Individual Selected : {this.state.buyer_individual_select}&nbsp;&nbsp;&nbsp;&nbsp;Notification Send : {this.state.buyer_individual_send}&nbsp;&nbsp;&nbsp;&nbsp;Pending Notification : {this.state.buyer_individual_pend}</abbr>
-                        </div>
-                        <div className="required_error">
-                            At least select one Buyer.
-                        </div>
-                    </div>
-                    <div className="lm--formItem lm--formItem--inline string">
-                        <label className="lm--formItem-left lm--formItem-label string required">
-                        Buyer to Invite:
-                        </label>
-                        <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                        <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=2`} className="lm--button lm--button--primary col-sm-12">Select Company Buyers</a></div>
-                        <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=3`} className="lm--button lm--button--primary col-sm-12">Select Individual Buyers</a></div>
-                        <div className="col-sm-12 col-md-12 u-cell"><a className="lm--button lm--button--primary col-sm-12 orange" onClick={this.show_send_mail.bind(this,'buyer')}>Send Invitation Email</a></div>
-                        </div>
-                    </div>
+                    )}
                     <div className="lm--formItem lm--formItem--inline string">
                         <label className="lm--formItem-left lm--formItem-label string required">
                         Aggregate Consumption:
@@ -363,17 +382,17 @@ render() {
                                         <tbody>
                                             <tr>
                                                 <td>Peak (7am-7pm)</td>
-                                                <td >{parseInt(this.state.peak_lt)}</td>
-                                                <td >{parseInt(this.state.peak_hts)}</td>
-                                                <td >{parseInt(this.state.peak_htl)}</td>
-                                                <td >{parseInt(this.state.peak_eht)}</td>
+                                                <td >{this.state.peak_lt}</td>
+                                                <td >{this.state.peak_hts}</td>
+                                                <td >{this.state.peak_htl}</td>
+                                                <td >{this.state.peak_eht}</td>
                                             </tr>
                                             <tr>
                                                 <td>Off-Peak (7pm-7am)</td>
-                                                <td >{parseInt(this.state.off_peak_lt)}</td>
-                                                <td >{parseInt(this.state.off_peak_hts)}</td>
-                                                <td >{parseInt(this.state.off_peak_htl)}</td>
-                                                <td >{parseInt(this.state.off_peak_eht)}</td>
+                                                <td >{this.state.off_peak_lt}</td>
+                                                <td >{this.state.off_peak_hts}</td>
+                                                <td >{this.state.off_peak_htl}</td>
+                                                <td >{this.state.off_peak_eht}</td>
                                             </tr>
                                         </tbody>
                                     </table>
