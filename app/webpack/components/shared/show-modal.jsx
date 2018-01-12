@@ -53,7 +53,7 @@ export class Modal extends React.Component{
                 this.props.showdetail.alternative_office_number
             ]
             let isChanged = this.secondaryData.some((element, index) => {
-                    return element !== '' || undefined;
+                    return element !== '' || null;
                 })
                 if(isChanged){
                     secondStatus = "live_show"
@@ -77,6 +77,46 @@ export class Modal extends React.Component{
                         </ul>
         }else{
             showDetail = '';
+        }
+        if(this.props.listdetail){
+            if(this.props.listdetailtype === "Select Retailers"){
+                showDetail = <ul className="showdetail">
+                            <li>View Account</li>
+                            <li>Email : {this.props.listdetail.email}</li>
+                            <li>Company Name : {this.props.listdetail.company_name}</li>
+                            <li>Company Address : {this.props.listdetail.company_address}</li>
+                            <li>Unique Entity Number (UEN) : {this.props.listdetail.company_unique_entity_number}</li>
+                            <li>Retailer Licence Number : {this.props.listdetail.company_license_number}</li>
+                            <li>Contact Name : {this.props.listdetail.name}</li>
+                            <li>Mobile Number : {this.props.listdetail.account_mobile_number}</li>
+                            <li>Office Number : {this.props.listdetail.account_office_number}</li>
+                         </ul>
+            }else if(this.props.listdetailtype === "Select Company Buyers"){
+                showDetail = <ul className="showdetail">
+                                <li>View Account</li>
+                                <li>Email : {this.props.listdetail.email}</li>
+                                <li>Company Name : {this.props.listdetail.company_name}</li>
+                                <li>Company Address : {this.props.listdetail.company_address}</li>
+                                <li>Unique Entity Number (UEN) : {this.props.listdetail.company_unique_entity_number}</li>
+                                <li>Retailer Licence Number : {this.props.listdetail.company_license_number}</li>
+                                <li>Contact Name : {this.props.listdetail.name}</li>
+                                <li>Mobile Number : {this.props.listdetail.account_mobile_number}</li>
+                                <li>Office Number : {this.props.listdetail.account_office_number}</li>
+                            </ul>
+            }else{
+                showDetail = <ul className="showdetail">
+                                <li>View Account</li>
+                                <li>Email : {this.props.listdetail.email}</li>
+                                <li>Name : {this.props.listdetail.company_name}</li>
+                                <li>NRIC/FIN : {this.props.listdetail.account_fin}</li>
+                                <li>Housing Type : {this.props.listdetail.account_housing_type === '0' ? 'HDB' : (this.props.listdetail.account_housing_type === '1' ? 'Private High-rise' : 'Landed')}</li>
+                                <li>Home Address : {this.props.listdetail.company_address}</li>
+                                <li>Mobile Number : {this.props.listdetail.account_mobile_number}</li>
+                                <li>Home Number : {this.props.listdetail.account_home_number}</li>
+                                <li>Office Number : {this.props.listdetail.account_office_number}</li>
+                            </ul>
+            }
+            
         }       
         let btn_html = '';
         if(this.state.type == "default"){

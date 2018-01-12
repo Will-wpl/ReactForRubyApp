@@ -2,12 +2,12 @@ import React, { Component, PropTypes } from 'react'
 //import {getAuctionTimeRule} from '../../javascripts/componentService/common/service';
 import moment from 'moment';
 import {Modal} from '../../shared/show-modal';
-import {deleteAuction,updateStatus,deleteStatus} from '../../../javascripts/componentService/admin/service';
+import {deleteAuction,updateStatus,deleteStatus,getUsersDetail} from '../../../javascripts/componentService/admin/service';
 export class SearchList extends Component {
     constructor(props, context){
         super(props);
         this.state={
-            text:"",
+            text:"",showDetail:{},
             name:""
         }
     }
@@ -48,6 +48,18 @@ export class SearchList extends Component {
     clickFunction(id,url,name,type,list_name){
         if(type == "auction"){
             sessionStorage.auction_id=id;
+        }
+        if(type == "show_detail"){
+            getUsersDetail(id).then(res=>{
+                console.log(res);
+                this.setState({
+                    showDetail:res,
+                })
+                this.refs.Modal.showModal();
+            },error=>{
+
+            })
+            return;
         }
         if(name == "Delete"){
             this.auction_id = id;
@@ -193,7 +205,7 @@ export class SearchList extends Component {
                         <span>2</span> */}
                         <span onClick={this.gotopage.bind(this,'next')}>{">"}</span>
                     </div>
-                    <Modal text={this.state.text} dodelete={this.delete.bind(this)} ref="Modal" />
+                    <Modal text={this.state.text} listdetail={this.state.showDetail} listdetailtype={this.props.type} dodelete={this.delete.bind(this)} ref="Modal" />
                 </div>
             )
         }else{

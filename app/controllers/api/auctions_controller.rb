@@ -194,7 +194,7 @@ class Api::AuctionsController < Api::BaseController
       { name: 'Action', field_name: 'select_action' }
     ]
     actions = [
-      { url: '/admin/users/:id/manage', name: 'View', icon: 'view' }
+      { url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail' }
     ]
     data = []
     users.order(company_name: :asc).each do |user|
@@ -247,7 +247,7 @@ class Api::AuctionsController < Api::BaseController
         { name: 'Action', field_name: 'select_action' }
       ]
       actions = [
-        { url: '/admin/users/:id/manage', name: 'View', icon: 'view' }
+        { url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail' }
       ]
     elsif consumer_type == '3'
       headers = [
@@ -257,7 +257,7 @@ class Api::AuctionsController < Api::BaseController
         { name: 'Action', field_name: 'select_action' }
       ]
       actions = [
-        { url: '/admin/users/:id/manage', name: 'View', icon: 'view' }
+        { url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail' }
       ]
     else
       headers = []
