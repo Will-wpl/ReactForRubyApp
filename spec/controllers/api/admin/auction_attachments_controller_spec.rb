@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Api::Admin::AuctionAttachmentsController, type: :controller do
   let! (:auction) { create(:auction, :for_next_month, :upcoming) }
   let! (:admin_user) { create(:user, :with_admin) }
-  let!(:tc) { create(:auction_attachment, file_type: 'buyer_tc_upload0', file_name: 'test', file_path: 'test', auction: auction, user: admin_user)}
+  let!(:tc) { create(:auction_attachment, file_type: 'buyer_tc_upload0', file_name: 'test', file_path: 'test', auction: auction)}
   base_url = 'api/admin/auction_attachments'
 
   context 'admin user' do
