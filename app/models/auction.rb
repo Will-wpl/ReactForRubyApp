@@ -19,7 +19,7 @@ class Auction < ApplicationRecord
   # Scopes
 
   scope :published, -> { where("publish_status = '1'") }
-  scope :has_auction_result, ->  { includes(:auction_result).where.not(auction_results: { status: nil }) }
+  scope :has_auction_result, -> { includes(:auction_result).where(auction_results: { status: nil }) }
   scope :unpublished, -> { where("publish_status = '0'") }
   # Callbacks
 
