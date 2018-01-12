@@ -97,10 +97,8 @@ upload(type, index){
         },
         success:(res) => {
             barObj.find(".progress-bar").text('upload successful!');
-            $('#'+type+index).next().
-        fadeOut(300);
-                },
-                error:() => {
+            $('#'+type+index).next().fadeOut(300);
+        },error:() => {
                     barObj.find(".progress-bar").text('upload failed!');
                     barObj.find(".progress-bar").css('background', 'red');
                 }
