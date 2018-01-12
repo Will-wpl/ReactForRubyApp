@@ -170,7 +170,7 @@ export class SearchList extends Component {
                                                         
                                                     })
                                                 }
-                                                <td>
+                                                <td className="search_list_btn">
                                                     {
                                                         this.props.table_data.actions.map((ik,k)=>{
                                                             return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '')}>{ik.name}</a>

@@ -220,10 +220,10 @@ abbr[title]{color: #fe0000; text-decoration: none;}
   .site_list_title{
     width: 100%; overflow: hidden; line-height:42px;
     span{float: left;}
-    a{ float: right; color: #00888a; font-size: 15px; cursor: pointer;}
+    a{ float: right; color: #00888a; font-size: 15px; cursor: pointer; background: url("../images/remove.png") no-repeat left; padding-left:18px;}
   }
   .addSite{ width: 100%; margin: 10px auto;
-    a{color:#00888a; cursor: pointer;}
+    a{color:#00888a; cursor: pointer; background: url("../images/add.png") no-repeat left; padding-left:18px;}
   }
   .buyer_btn{ text-align: right; width: 100%;
     a{
@@ -437,6 +437,18 @@ dfn.manage_label{
         }
         a{
           margin: 0px 10px;
+        }
+        &.search_list_btn{
+          a{ 
+            padding-left: 20px;
+            &::before{
+              display: none;
+            }
+            &.view{background:url("../images/view.png") no-repeat left;}
+            &.delete{background:url("../images/delete.png") no-repeat left;}
+            &.manage{background:url("../images/manage.png") no-repeat left;}
+            &.edit{background:url("../images/edit.png") no-repeat left;}
+          }
         }
       }
     }

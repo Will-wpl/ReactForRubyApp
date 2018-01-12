@@ -32,8 +32,8 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
       { name: 'Status of Participation', field_name: 'participation_status' },
       { name: nil, field_name: 'actions' }
     ]
-    actions = [{ url: '/buyer/consumptions/:id/edit', name: 'Edit', icon: 'lm--icon-search' },
-               { url: '/buyer/consumptions/:id/edit', name: 'View', icon: 'lm--icon-search' }]
+    actions = [{ url: '/buyer/consumptions/:id/edit', name: 'Edit', icon: 'edit' },
+               { url: '/buyer/consumptions/:id/edit', name: 'View', icon: 'view' }]
     data = []
     consumption.order('auctions.actual_begin_time asc').each do |consumption|
       action = consumption.participation_status != '1' ? 0 : 1
