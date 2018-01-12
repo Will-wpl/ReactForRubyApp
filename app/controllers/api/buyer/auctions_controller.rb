@@ -36,7 +36,12 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
                { url: '/buyer/consumptions/:id/edit', name: 'View', icon: 'view' }]
     data = []
     consumption.order('auctions.actual_begin_time asc').each do |consumption|
-      action = consumption.participation_status != '1' ? 0 : 1
+      if (consumption.auction.publish_status == '1') then
+        action = 1
+      else
+        action = consumption.participation_status != '1' ? 0 : 1
+      end
+
       data.push(id: consumption.id, name: consumption.auction.name, actual_begin_time: consumption.auction.actual_begin_time,
                 publish_status: consumption.auction.publish_status, participation_status: consumption.participation_status,
                 auction_id: consumption.auction_id, actions: action)
