@@ -21,7 +21,8 @@ class Api::ConsumptionsController < Api::BaseController
                 htl_peak: consumption.htl_peak.nil? ? 0 : consumption.htl_peak,
                 htl_off_peak: consumption.htl_off_peak.nil? ? 0 : consumption.htl_off_peak,
                 eht_peak: consumption.eht_peak.nil? ? 0 : consumption.eht_peak,
-                eht_off_peak: consumption.eht_off_peak.nil? ? 0 : consumption.eht_off_peak)
+                eht_off_peak: consumption.eht_off_peak.nil? ? 0 : consumption.eht_off_peak,
+                details: consumption.consumption_details)
       total_info[:consumption_count] += 1
       total_info[:account_count] += count
       total_info[:lt_peak] += consumption.lt_peak.nil? ? 0 : consumption.lt_peak

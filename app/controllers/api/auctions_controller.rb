@@ -166,7 +166,7 @@ class Api::AuctionsController < Api::BaseController
                elsif Time.current >= auction.actual_begin_time && Time.current <= auction.actual_end_time
                  'In Progress'
                end
-      data.push(published_gid: auction.published_gid, name: auction.name, actual_begin_time: auction.actual_begin_time, status: status)
+      data.push(id: auction.id, published_gid: auction.published_gid, name: auction.name, actual_begin_time: auction.actual_begin_time, status: status)
     end
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
