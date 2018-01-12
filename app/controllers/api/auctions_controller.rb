@@ -257,6 +257,7 @@ class Api::AuctionsController < Api::BaseController
       actions = [
         { url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail' }
       ]
+      users = users.order(company_name: :asc)
     elsif consumer_type == '3'
       headers = [
         { name: 'Name', field_name: 'name' },
@@ -267,12 +268,13 @@ class Api::AuctionsController < Api::BaseController
       actions = [
         { url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail' }
       ]
+      users = users.order(name: :asc)
     else
       headers = []
       actions = []
     end
     data = []
-    users.order(company_name: :asc).each do |user|
+    users.each do |user|
       # status = ids.include?(user.id) ? '1' : '0'
       index = consumptions.index do |consumption|
         consumption.user_id == user.id
