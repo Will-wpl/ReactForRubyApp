@@ -158,7 +158,7 @@ class Api::AuctionsController < Api::BaseController
       { name: 'Date/Time', field_name: 'actual_begin_time' },
       { name: 'Status', field_name: 'status' }
     ]
-    actions = [{ url: '/admin/auctions/:id/upcoming', name: 'Edit', icon: 'lm--icon-search', interface_type: 'auction' }]
+    actions = [{ url: '/admin/auctions/:id/upcoming', name: 'Edit', icon: 'edit', interface_type: 'auction' }]
     data = []
     auction.order(actual_begin_time: :asc).each do |auction|
       status = if Time.current < auction.actual_begin_time

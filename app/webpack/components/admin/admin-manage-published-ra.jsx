@@ -10,7 +10,7 @@ export class AdminManagePublishedRa extends Component {
     constructor(props){
         super(props);
         this.state={
-            disabled:true,
+            disabled:false,
             editdisabled:false,
             name:""
         }

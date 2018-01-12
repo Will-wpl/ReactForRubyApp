@@ -434,7 +434,7 @@ render() {
                         </div>
                     </div>
                     <div className="retailer_btn">
-                        <a className="lm--button lm--button--primary" href="/admin/auctions/new">Previous</a>
+                        <a className="lm--button lm--button--primary" href="javascript:self.location=document.referrer;">Previous</a>
                         {/* <a className="lm--button lm--button--primary">Save</a> */}
                         <a className="lm--button lm--button--primary" id="doPublish" onClick={this.doPublish.bind(this)}>Publish</a>
                     </div>
