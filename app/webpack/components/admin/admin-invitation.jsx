@@ -298,7 +298,7 @@ render() {
         <div className="u-grid admin_invitation">
             {sessionStorage.isAuctionId === "yes"
                 ? <div className="col-sm-12 col-md-8 push-md-2">
-                    <h3 className="u-mt3 u-mb1">invitation</h3>
+                    <h3 className="u-mt3 u-mb1">Invitation</h3>
                     {(this.state.publish_status === "0" ? 
                         <div>
                             <div className="lm--formItem lm--formItem--inline string u-mt3 role_select">
