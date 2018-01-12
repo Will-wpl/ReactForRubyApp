@@ -9,7 +9,7 @@ export class DoFillConsumption extends Component {
                 {
                     this.props.site_list
                     ? this.props.site_list.map((item, index) => <div key={index}>
-                             <h4 className="site_list_title"><span>{index+1}.My Site Information</span>{index != 0 ? (this.props.checked ? '' : <a onClick={this.props.remove.bind(this, index)}>Delete</a>) : ''}</h4>
+                             <h4 className="site_list_title"><span>{index+1}. My Account Information</span>{index != 0 ? (this.props.checked ? '' : <a onClick={this.props.remove.bind(this, index)}>Delete</a>) : ''}</h4>
                              <table className="retailer_fill u-mb3" cellPadding="0" cellSpacing="0">
                                  <tbody>
                                      <tr><td>Account Number</td><td><input type="text" disabled={this.props.checked} defaultValue={item.account_number}  id={"account_number"+(index+1)} required aria-required="true" name={"number"+(index+1)}/></td></tr>
