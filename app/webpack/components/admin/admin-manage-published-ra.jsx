@@ -11,15 +11,16 @@ export class AdminManagePublishedRa extends Component {
         super(props);
         this.state={
             disabled:true,
-            editdisabled:false
+            editdisabled:false,
+            name:""
         }
     }
 
     // componentWillMount(){
-    //     getAuction('admin').then(res => {
-    //         this.auction = res;
-    //         this.timerTitle = this.auction ? `${this.auction.name} on ${moment(this.auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
-    //         this.forceUpdate();
+    //     getAuction('admin',sessionStorage.auction_id).then(res => {
+    //         this.setState({
+    //             name:res.name
+    //         })
     //     }, error => {
     //         //console.log(error);
     //     })
@@ -30,19 +31,19 @@ export class AdminManagePublishedRa extends Component {
             content = (
                 <div>
                     <div>
-                    <TimeCuntDown auction={this.props.auction} btnDisabled={() => {this.setState({disabled:true,editdisabled:true})}} countDownOver={() => {this.setState({disabled:true,editdisabled:true})}} />
+                    <TimeCuntDown auction={this.props.auction} btnDisabled={() => {this.setState({disabled:true,editdisabled:true})}} countDownOver={() => {this.setState({disabled:true,editdisabled:true})}} timehidden="countdown_seconds" />
                     <div className="u-grid u-mt3">
-                        <div className="col-sm-12 col-md-7">
-                            <CreateNewRA left_name="Manage Upcoming Reverse Auction" disabled={this.state.disabled} editdisabled={this.state.editdisabled} />
+                        <div className="col-sm-12 col-md-12">
+                            <CreateNewRA left_name={this.props.auction.name} disabled={this.state.disabled} editdisabled={this.state.editdisabled} />
                         </div>
-                        <div className="col-sm-12 col-md-5">
+                        {/* <div className="col-sm-12 col-md-5">
                             <BidderStatus auction={this.props.auction} />
                             <div className="createRaMain w_8">
                             <div className="createRa_btn u-mt3">
                                     <a href={`/admin/auctions/${this.props.auction.id}/online`} className="lm--button lm--button--primary">Commence</a>
                             </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                     </div>
                 </div>
@@ -56,7 +57,7 @@ export class AdminManagePublishedRa extends Component {
 function run() {
     const domNode = document.getElementById('AdminManagePublishedRa');
     if(domNode !== null){
-        getAuction('admin',localStorage.auction_id).then(auction => {
+        getAuction('admin',sessionStorage.auction_id).then(auction => {
             renderRoot(auction);
         }, error => {
             renderRoot();

@@ -21,6 +21,9 @@ export class TimeCuntDown extends Component {
         this.interval = setInterval(() => {
             this.getAuctionTime(this.props.auction);
         }, 1000);
+        if(this.props.timehidden){
+            $("#"+this.props.timehidden).hide();
+        }
     }
 
     componentWillUnmount() {
@@ -79,10 +82,10 @@ export class TimeCuntDown extends Component {
                 <p>{this.timerTitle}</p>
                 <div className="Countdown"><abbr>Countdown Timer:</abbr>
                     <ol id="countdown_timer">
-                        <span><font>{this.state.day}</font>DAYS</span>
-                        <span><font>{this.state.hour}</font>HOURS</span>
-                        <span><font>{this.state.minute}</font>MINUTES</span>
-                        <span><font>{this.state.second}</font>SECONDS</span>
+                        <span id="countdown_days"><font>{this.state.day}</font>DAYS</span>
+                        <span id="countdown_hours"><font>{this.state.hour}</font>HOURS</span>
+                        <span id="countdown_minutes"><font>{this.state.minute}</font>MINUTES</span>
+                        <span id="countdown_seconds"><font>{this.state.second}</font>SECONDS</span>
                     </ol>
                     {
                         this.props.children
