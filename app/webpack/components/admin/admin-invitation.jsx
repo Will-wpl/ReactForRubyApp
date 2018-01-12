@@ -12,8 +12,8 @@ export default class AdminInvitation extends Component {
         retailer_pend:0,buyer_company_select:0,buyer_company_send:0,
         buyer_company_pend:0,buyer_individual_select:0,buyer_individual_send:0,
         buyer_individual_pend:0,peak_lt:0,peak_hts:0,
-        peak_htl:0,eht_htl:0,off_peak_lt:0,off_peak_hts:0,
-        off_peak_htl:0,off_eht_htl:0,disabled:false,publish_status:0,
+        peak_htl:0,peak_eht:0,off_peak_lt:0,off_peak_hts:0,
+        off_peak_htl:0,off_peak_eht:0,disabled:false,publish_status:0,
         fileData:{
                 "buyer_tc_upload":[{buttonName:"none"}],
                 "tender_documents_upload":[
@@ -143,7 +143,7 @@ upload(type, index){
                 },5000)
                 return;
             }
-            if(this.state.eht_htl<=0 && this.state.off_eht_htl<=0 &&
+            if(this.state.peak_eht<=0 && this.state.off_peak_eht<=0 &&
                 this.state.peak_lt<=0 && this.state.off_peak_lt<=0 &&
                 this.state.peak_hts<=0 && this.state.off_peak_hts<=0 &&
                 this.state.peak_htl<=0 && this.state.off_peak_htl<=0
