@@ -97,10 +97,8 @@ upload(type, index){
         },
         success:(res) => {
             barObj.find(".progress-bar").text('upload successful!');
-            $('#'+type+index).next().
-        fadeOut(300);
-                },
-                error:() => {
+            $('#'+type+index).next().fadeOut(300);
+        },error:() => {
                     barObj.find(".progress-bar").text('upload failed!');
                     barObj.find(".progress-bar").css('background', 'red');
                 }
@@ -436,7 +434,7 @@ render() {
                         </div>
                     </div>
                     <div className="retailer_btn">
-                        <a className="lm--button lm--button--primary" href="/admin/auctions/new">Previous</a>
+                        <a className="lm--button lm--button--primary" href="javascript:self.location=document.referrer;">Previous</a>
                         {/* <a className="lm--button lm--button--primary">Save</a> */}
                         <a className="lm--button lm--button--primary" id="doPublish" onClick={this.doPublish.bind(this)}>Publish</a>
                     </div>
