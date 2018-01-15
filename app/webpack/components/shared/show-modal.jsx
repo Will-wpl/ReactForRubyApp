@@ -6,12 +6,14 @@ export class Modal extends React.Component{
         this.state={
             modalshowhide:"modal_hide",
             type:'default',
-            secondStatus:"live_hide"
+            secondStatus:"live_hide",
+            props_data:{}
         }
     }
-    showModal(type){
+    showModal(type,data){
         this.setState({
-            modalshowhide:"modal_show"
+            modalshowhide:"modal_show",
+            props_data:data?data:{}
         })
         if(type == "comfirm"){
             this.setState({
@@ -25,7 +27,7 @@ export class Modal extends React.Component{
     }
     Accept(){
         if(this.props.acceptFunction){
-            this.props.acceptFunction();
+            this.props.acceptFunction(this.state.props_data);
             this.closeModal();
         }
         if(this.props.dodelete){
