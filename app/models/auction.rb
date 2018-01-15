@@ -19,7 +19,7 @@ class Auction < ApplicationRecord
   # Scopes
 
   scope :published, -> { where("publish_status = '1'") }
-  scope :current_year, -> { where("to_char((SELECT now()::timestamp),'yyyy') = ?", Time.current.year.to_s) }
+  scope :current_year, -> { where("to_char(actual_begin_time,'yyyy') = ?", Time.current.year.to_s) }
   scope :has_auction_result, -> { includes(:auction_result).where(auction_results: { status: nil }) }
   scope :unpublished, -> { where("publish_status = '0'") }
   # Callbacks
