@@ -37,14 +37,14 @@ export class FillConsumption extends Component {
             if(res.consumption_details.length>0){
                 this.site_list.map((item, index) => {
                     this.site_list[index].intake_level_selected = item.intake_level;
-                    this.site_list[index].intake_level = ['Low Tension(LT)','High Tension Small(HTS)','High Tension Large(HTL)','Extra High Tension(EHT)'];
+                    this.site_list[index].intake_level = ['Low Tension (LT)','High Tension Small (HTS)','High Tension Large (HTL)','Extra High Tension (EHT)'];
                 })
                 this.setState({site_list:this.site_list})
             }else{
                 this.site_list = [
                     {
                         account_number:'',
-                        intake_level:['Low Tension(LT)','High Tension Small(HTS)','High Tension Large(HTL)','Extra High Tension(EHT)'],
+                        intake_level:['Low Tension (LT)','High Tension Small (HTS)','High Tension Large (HTL)','Extra High Tension (EHT)'],
                         peak:'',
                         off_peak:''
                     }
@@ -64,7 +64,7 @@ export class FillConsumption extends Component {
         site_listObj = this.state.site_list;
         list = {
             account_number:'',
-            intake_level:['Low Tension(LT)','High Tension Small(HTS)','High Tension Large(HTL)','Extra High Tension(EHT)'],
+            intake_level:['Low Tension (LT)','High Tension Small (HTS)','High Tension Large (HTL)','Extra High Tension (EHT)'],
             peak:'',
             off_peak:''
         }
