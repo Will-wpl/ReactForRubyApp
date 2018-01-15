@@ -146,9 +146,7 @@ upload(type, index){
         }
         changefileval(id){
             const fileObj = $("#"+id);
-            fileObj.parent().prev("dfn").
-        text(fileObj.val());
-            fileObj.next().fadeOut(300);
+            fileObj.parent().prev("dfn").text(fileObj.val());
         }
         checkRequired(){
             let requiredObj = this.state.fileData,result = true; //$("input[type='file'][required]"),
@@ -270,13 +268,18 @@ upload(type, index){
                                                 <a className="upload_file_btn">
                                                     <dfn>No file selected...</dfn>
                                                     {/* accept="application/pdf,application/msword" */}
-                                                    {required == "required" ? <div>
-                                                    <input type="file" required="required" ref={type+index}  onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.state.disabled} />
-                                                    <div className="required_error">
-                                                        Please fill out this field and upload this file
-                                                    </div></div>
-                                                    : <input type="file" ref={type+index} onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.state.disabled} />}
-                                                    <span>Browse..</span>
+                                                    {required === "required" ? 
+                                                    <div>
+                                                        <input type="file" required="required" ref={type+index}  onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.state.disabled} />
+                                                        <span>Browse..</span>
+                                                        <div className="required_error">
+                                                            Please fill out this field and upload this file
+                                                        </div>
+                                                    </div>
+                                                    :<div>
+                                                        <input type="file" ref={type+index} onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.state.disabled} />
+                                                        <span>Browse..</span>
+                                                    </div>}
                                                 </a>
                                                 <div className="progress">
                                                     <div className="progress-bar" style={{width:"0%"}}>0%</div>
