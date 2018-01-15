@@ -7,7 +7,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
 
       tc_attachment = AuctionAttachment.find_by(auction_id: consumption.auction_id, file_type: 'buyer_tc_upload')
       render json: { consumption_details: consumption_details, consumption: consumption,
-                     auction: { id: auction.id, name: auction.name, actual_begin_time: auction.actual_begin_time },
+                     auction: { id: auction.id, name: auction.name, actual_begin_time: auction.actual_begin_time,publish_status:auction.publish_status },
                      tc_attachment: tc_attachment }, status: 200
     end
   end

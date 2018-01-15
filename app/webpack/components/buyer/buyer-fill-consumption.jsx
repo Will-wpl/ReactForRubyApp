@@ -14,7 +14,7 @@ export class FillConsumption extends Component {
             disabled:'',
             checked:false,
             name:"",
-            time:"",link:""
+            time:"",link:"",
         }
         this.consumptions_id = (window.location.href.split("consumptions/")[1]).split("/edit")[0];
     }
@@ -24,10 +24,10 @@ export class FillConsumption extends Component {
             this.setState({
                 name:res.auction.name,
                 time:res.auction.actual_begin_time,
-                link:res.tc_attachment
+                link:res.tc_attachment,
             })
             console.log(this.site_list);
-            if(res.consumption.participation_status === '1'){
+            if(res.consumption.participation_status === '1' || res.auction.publish_status === "1"){
                 $("input[type='checkbox']").attr("checked",true);
                 this.setState({
                     disabled:'disabled',
