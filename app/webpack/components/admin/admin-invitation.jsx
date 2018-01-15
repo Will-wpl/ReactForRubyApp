@@ -125,7 +125,6 @@ upload(type, index){
         success:(res) => {
             let fileObj;
             barObj.find(".progress-bar").text('upload successful!');
-            $('#'+type+index).next().fadeOut(300);
             fileObj = this.state.fileData;
             fileObj[type].map((item,index)=>{
                 item.files.push({
