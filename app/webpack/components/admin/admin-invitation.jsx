@@ -151,20 +151,31 @@ upload(type, index){
             fileObj.next().fadeOut(300);
         }
         checkRequired(){
-            let requiredObj = $("input[type='file'][required]"),
-        result = true;
-            for(let i=0; i<requiredObj.length; i++){
-                if(requiredObj[i].value === ""){
-                    //console.log($("#"+requiredObj[i].id).parents("a.upload_file_btn").next().find(".progress-bar").text());
-                    $("#"+requiredObj[i].id).next().fadeIn(300);
-                    result = false;
-                    break;
-                }else if($("#"+requiredObj[i].id).parents("a.upload_file_btn").next().find(".progress-bar").text() != "upload successful!"){
-                    $("#"+requiredObj[i].id).next().fadeIn(300);
-                    result = false;
-                    break;
-                }
+            let requiredObj = this.state.fileData,result = true; //$("input[type='file'][required]"),
+            if(requiredObj['buyer_tc_upload'][0].files.length <=0){
+                $("#buyer_tc_upload0").next().fadeIn(300);
+                result = false;
             }
+            if(requiredObj['retailer_confidentiality_undertaking_upload'][0].files.length <=0){
+                $("#retailer_confidentiality_undertaking_upload0").next().fadeIn(300);
+                result = false;
+            }
+            if(requiredObj['tender_documents_upload'][0].files.length <=0){
+                $("#tender_documents_upload0").next().fadeIn(300);
+                result = false;
+            }
+                // for(let i=0; i<requiredObj.length; i++){
+                //     if(requiredObj[i].value === ""){
+                //         //console.log($("#"+requiredObj[i].id).parents("a.upload_file_btn").next().find(".progress-bar").text());
+                //         $("#"+requiredObj[i].id).next().fadeIn(300);
+                //         result = false;
+                //         break;
+                //     }else if($("#"+requiredObj[i].id).parents("a.upload_file_btn").next().find(".progress-bar").text() != "upload successful!"){
+                //         $("#"+requiredObj[i].id).next().fadeIn(300);
+                //         result = false;
+                //         break;
+                //     }
+                // }
             return result;
         }
         doPublish(){
@@ -312,29 +323,35 @@ upload(type, index){
                     console.log(this.state.fileData);
 
             }
+            timeBar(type){
+                let timeBar;
+                clearTimeout(timeBar);
+                $("#"+type+"_select_box").next().fadeIn(300);
+                timeBar = setTimeout(()=>{
+                    $("#"+type+"_select_box").next().fadeOut(300);
+                },3000)
+            }
             show_send_mail(type){
                 this.setState({
                     params_type:"remove_flie"
                 })
-                let timeBar,doSend = true;
+                let doSend = true;
                 if(type === "retailer"){
                     if(this.state.retailer_select === 0){
-                        clearTimeout(timeBar);
-                        $("#retailer_select_box").next().fadeIn(300);
-                        timeBar = setTimeout(()=>{
-                            $("#retailer_select_box").next().fadeOut(300);
-                        },3000)
+                        this.timeBar(type);
+                        doSend = false;
+                    }else if(this.state.fileData["retailer_confidentiality_undertaking_upload"][0].files <= 0){
+                        this.timeBar(type);
                         doSend = false;
                     }else{
                         doSend = true;
                     }
                 }else{
                     if(this.state.buyer_company_select === 0 && this.state.buyer_individual_select === 0){
-                        clearTimeout(timeBar);
-                        $("#buyer_select_box").next().fadeIn(300);
-                        timeBar = setTimeout(()=>{
-                            $("#buyer_select_box").next().fadeOut(300);
-                        },3000)
+                        this.timeBar(type);
+                        doSend = false;
+                    }else if(this.state.fileData["buyer_tc_upload"][0].files <= 0){
+                        this.timeBar(type);
                         doSend = false;
                     }else{
                         doSend = true;
@@ -389,7 +406,7 @@ render() {
                                     <abbr>Individual Selected : {this.state.buyer_individual_select}&nbsp;&nbsp;&nbsp;&nbsp;Notification Sent : {this.state.buyer_individual_send}&nbsp;&nbsp;&nbsp;&nbsp;Pending Notification : {this.state.buyer_individual_pend}</abbr>
                                 </div>
                                 <div className="required_error">
-                                    Please select at least one buyer.
+                                At least select one Buyer and Upload one file for Buyer T&C Upload.
                                 </div>
                             </div>
                             <div className="lm--formItem lm--formItem--inline string">
@@ -412,7 +429,7 @@ render() {
                                 <abbr>Selected : {this.state.retailer_select}&nbsp;&nbsp;&nbsp;&nbsp;Notification Sent : {this.state.retailer_send}&nbsp;&nbsp;&nbsp;&nbsp;Pending Notification : {this.state.retailer_pend}</abbr>
                             </div>
                             <div className="required_error">
-                                Please select at least one retailer.
+                                Please select at least one retailer and Upload one file for Retailer Confidentiality Undertaking Upload.
                             </div>
                         </div>
                         <div className="lm--formItem lm--formItem--inline string">
@@ -435,7 +452,7 @@ render() {
                                 <abbr>Individual Invited : {this.state.buyer_individual_select}</abbr>
                             </div>
                             <div className="required_error">
-                                At least select one Buyer.
+                                At least select one Buyer and Upload one file for Buyer T&C Upload.
                             </div>
                         </div>
                     </div>
