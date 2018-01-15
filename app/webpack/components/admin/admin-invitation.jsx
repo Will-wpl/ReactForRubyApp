@@ -306,11 +306,11 @@ render() {
                                 Buyers:
                                 </label>
                                 <div className="lm--formItem-right lm--formItem-control" id="buyer_select_box">
-                                    <abbr>Company Selected : {this.state.buyer_company_select}&nbsp;&nbsp;&nbsp;&nbsp;Notification Send : {this.state.buyer_company_send}&nbsp;&nbsp;&nbsp;&nbsp;Pending Notification : {this.state.buyer_company_pend}</abbr>
-                                    <abbr>Individual Selected : {this.state.buyer_individual_select}&nbsp;&nbsp;&nbsp;&nbsp;Notification Send : {this.state.buyer_individual_send}&nbsp;&nbsp;&nbsp;&nbsp;Pending Notification : {this.state.buyer_individual_pend}</abbr>
+                                    <abbr>Company Selected : {this.state.buyer_company_select}&nbsp;&nbsp;&nbsp;&nbsp;Notification Sent : {this.state.buyer_company_send}&nbsp;&nbsp;&nbsp;&nbsp;Pending Notification : {this.state.buyer_company_pend}</abbr>
+                                    <abbr>Individual Selected : {this.state.buyer_individual_select}&nbsp;&nbsp;&nbsp;&nbsp;Notification Sent : {this.state.buyer_individual_send}&nbsp;&nbsp;&nbsp;&nbsp;Pending Notification : {this.state.buyer_individual_pend}</abbr>
                                 </div>
                                 <div className="required_error">
-                                    At least select one Buyer.
+                                    Please select at least one buyer.
                                 </div>
                             </div>
                             <div className="lm--formItem lm--formItem--inline string">
@@ -330,10 +330,10 @@ render() {
                             Retailers:
                             </label>
                             <div className="lm--formItem-right lm--formItem-control" id="retailer_select_box">
-                                <abbr>Selected : {this.state.retailer_select}&nbsp;&nbsp;&nbsp;&nbsp;Notification Send : {this.state.retailer_send}&nbsp;&nbsp;&nbsp;&nbsp;Pending Notification : {this.state.retailer_pend}</abbr>
+                                <abbr>Selected : {this.state.retailer_select}&nbsp;&nbsp;&nbsp;&nbsp;Notification Sent : {this.state.retailer_send}&nbsp;&nbsp;&nbsp;&nbsp;Pending Notification : {this.state.retailer_pend}</abbr>
                             </div>
                             <div className="required_error">
-                                At least select one Retailer.
+                                Please select at least one retailer.
                             </div>
                         </div>
                         <div className="lm--formItem lm--formItem--inline string">
