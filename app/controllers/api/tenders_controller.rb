@@ -2,11 +2,17 @@ class Api::TendersController < Api::BaseController
 
   # work flow function
   def node1_retailer_accept
+    workflow = $tender_workflow.execute(:node1, :accept, params[:id]) do
+    end
 
+    render json: workflow, status: 200
   end
 
   def node1_retailer_reject
+    workflow = $tender_workflow.execute(:node1, :reject, params[:id]) do
 
+    end
+    render json: workflow, status: 200
   end
 
   def node2_retailer_accept_all

@@ -48,6 +48,7 @@ class Api::ArrangementsController < Api::BaseController
         @arrangement.main_office_number = ''
         if @arrangement.save
           tender = TenderStateMachine.new
+          tender.current_node = 1
           tender.arrangement = @arrangement
           tender.save
         end
