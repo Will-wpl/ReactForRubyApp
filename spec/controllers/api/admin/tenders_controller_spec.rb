@@ -28,6 +28,7 @@ RSpec.describe Api::Admin::TendersController, type: :controller do
             expect(hash_body['current']['current_node']).to eq(3)
             expect(hash_body['current']['previous_node']).to eq(3)
             expect(hash_body['current']['turn_to_role']).to eq(2)
+            expect(hash_body['flows'].to_s).to eq('[1, 2, 3]')
           end
         end
       end
@@ -51,6 +52,7 @@ RSpec.describe Api::Admin::TendersController, type: :controller do
             expect(hash_body['current']['current_node']).to eq(5)
             expect(hash_body['current']['previous_node']).to eq(4)
             expect(hash_body['current']['turn_to_role']).to eq(2)
+            expect(hash_body['flows'].to_s).to eq('[1, 2, 3, 4, 5]')
           end
         end
       end
@@ -67,6 +69,7 @@ RSpec.describe Api::Admin::TendersController, type: :controller do
             expect(hash_body['current']['current_node']).to eq(4)
             expect(hash_body['current']['previous_node']).to eq(4)
             expect(hash_body['current']['turn_to_role']).to eq(2)
+            expect(hash_body['flows'].to_s).to eq('[1, 2, 3, 4]')
           end
         end
       end

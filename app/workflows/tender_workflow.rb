@@ -64,9 +64,11 @@ class TenderWorkflow < Workflow
   end
 
   def get_arrangement_state_machine(arrangement_id)
-    flows = TenderStateMachine.find_by_arrangement_id(arrangement_id).select(:current_node).distinct
+    flows = TenderStateMachine.find_by_arrangement_id(arrangement_id).where.not(current_node: nil).select(:current_node).distinct
     flow_array = []
-    flows.each { |flow| flow_array.push(flow.current_node) }
+    flows.each do |flow|
+      flow_array.push(flow.current_node) unless flow.current_node.nil?
+    end
     current = TenderStateMachine.find_by_arrangement_id(arrangement_id).last
     actions = get_current_action_status(arrangement_id)
     { flows: flow_array, current: current, actions: actions }
