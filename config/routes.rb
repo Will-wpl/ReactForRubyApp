@@ -75,6 +75,16 @@ Rails.application.routes.draw do
       end
       resources :consumption_details, only: %i[index] do
       end
+      resources :tenders, only: %i[] do
+        member do
+          get 'current'
+          post 'node3_send_response'
+          post 'node3_admin_accept'
+          post 'node3_admin_reject'
+          post 'node4_admin_accept'
+          post 'node4_admin_reject'
+        end
+      end
     end
   end
 
@@ -92,6 +102,23 @@ Rails.application.routes.draw do
       resources :arrangements, only: %i[index show obtain update] do
         collection do
           get 'obtain'
+        end
+      end
+      resources :tenders, only: %i[] do
+        member do
+          get 'current'
+          post 'node1_retailer_accept'
+          post 'node1_retailer_reject'
+          post 'node2_retailer_accept_all'
+          post 'node2_retailer_propose_deviations'
+          post 'node3_retailer_withdraw_all_deviations'
+          post 'node3_retailer_submit_deviations'
+          post 'node3_retailer_next'
+          post 'node3_retailer_save'
+          post 'node4_retailer_submit'
+          post 'node4_retailer_next'
+          post 'node5_retailer_submit'
+
         end
       end
     end

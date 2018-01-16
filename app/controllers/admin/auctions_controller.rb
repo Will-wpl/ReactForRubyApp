@@ -59,9 +59,6 @@ class Admin::AuctionsController < Admin::BaseController
   def unpublished; end
 
   def retailer_dashboard
-    # $tender_workflow.execute(:node1, :reject) do |state_machine|
-    #   TenderStateMachine.update_state_machine(params[:id], state_machine)
-    # end
   end
 
   def buyer_dashboard; end

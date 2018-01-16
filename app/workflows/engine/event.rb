@@ -1,5 +1,5 @@
 class Event
-  attr_reader :name, :transitions_to, :turn_to_role
+  attr_reader :name, :transitions_to, :turn_to_role, :current_role
 
   def initialize(name, transitions_to, turn_to_role, current_role)
     @name = name
