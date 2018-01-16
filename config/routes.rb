@@ -145,7 +145,7 @@ Rails.application.routes.draw do
     resources :arrangements, only: []
     resources :user_extensions, only: []
     resources :auction_extend_times, only: []
-    resources :auctions, only: %i[new empty goto upcoming online dashboard confirm result report log invitation select comsumption unpublished published buyer_dashboard retailer_dashboard] do
+    resources :auctions, only: %i[new empty goto upcoming online dashboard confirm result report log invitation select comsumption unpublished published buyer_dashboard retailer_dashboard tender] do
       member do
         get 'upcoming' # published and pre-auction page
         get 'online' # published and pre-auciton page to retailer online status page
@@ -159,6 +159,7 @@ Rails.application.routes.draw do
         get 'consumption' # select users page
         get 'buyer_dashboard'
         get 'retailer_dashboard'
+        get 'tender'
       end
       collection do
         get 'empty' # no published auction page
@@ -171,7 +172,11 @@ Rails.application.routes.draw do
 
   namespace :retailer do
     resources :home, only: :index
-    resources :arrangements, only: []
+    resources :arrangements, only: %i[tender] do
+      member do
+        get 'tender'
+      end
+    end
     resources :auction_results, only: [:index]
     resources :auctions, only: %i[upcoming live finish result empty goto message gotobid] do
       member do
