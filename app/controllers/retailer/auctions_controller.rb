@@ -11,6 +11,9 @@ class Retailer::AuctionsController < Retailer::BaseController
   # GET finish page
   def finish; end
 
+  # Get published auction list page
+  def index; end
+
   def empty
     @auction = Auction.first
     arrangement = Arrangement.find_by_user_id(current_user.id)
