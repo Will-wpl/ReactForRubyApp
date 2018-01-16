@@ -8,7 +8,7 @@ export class SearchList extends Component {
         super(props);
         this.state={
             text:"",showDetail:{},
-            name:""
+            name:"",params_type:true
         }
     }
     dosearch(index,obj){
@@ -50,6 +50,9 @@ export class SearchList extends Component {
             sessionStorage.auction_id=id;
         }
         if(type == "show_detail"){
+            this.setState({
+                params_type:true
+            })
             getUsersDetail(id).then(res=>{
                 console.log(res);
                 this.setState({
@@ -71,7 +74,7 @@ export class SearchList extends Component {
     }
     showDelete(auction_name){
         this.refs.Modal.showModal("comfirm");
-        this.setState({text:"Are you sure you want to delete?",name:auction_name});
+        this.setState({text:"Are you sure want to delete?",name:auction_name,params_type:false});
     }
     delete(){
         deleteAuction({ auction: {id:this.auction_id}}).then(res => {
@@ -213,7 +216,7 @@ export class SearchList extends Component {
                         <span>2</span> */}
                         <span onClick={this.gotopage.bind(this,'next')}>{">"}</span>
                     </div>
-                    <Modal text={this.state.text} listdetail={this.state.showDetail} listdetailtype={this.props.type} dodelete={this.delete.bind(this)} ref="Modal" />
+                    <Modal text={this.state.text} listdetail={this.state.params_type ? this.state.showDetail : null} listdetailtype={this.props.type} dodelete={this.delete.bind(this)} ref="Modal" />
                 </div>
             )
         }else{

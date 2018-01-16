@@ -16,6 +16,14 @@ export const getUsersDetail = (params) => {
     return get('/api/admin/users/'+params);
 }
 
+export const removeFile = (params) => {
+    return Ddelete('/api/admin/auction_attachments/'+params);
+}
+
+export const getFileList = (params) => {
+    return get('/api/admin/auction_attachments?auction_id='+params);
+}
+
 export const createRa = (params) => {
     return update('/api/admin/auctions/'+params.auction.id, params);
 }

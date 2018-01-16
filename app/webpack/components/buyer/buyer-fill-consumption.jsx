@@ -14,7 +14,7 @@ export class FillConsumption extends Component {
             disabled:'',
             checked:false,
             name:"",
-            time:"",link:""
+            time:"",link:"",
         }
         this.consumptions_id = (window.location.href.split("consumptions/")[1]).split("/edit")[0];
     }
@@ -24,10 +24,10 @@ export class FillConsumption extends Component {
             this.setState({
                 name:res.auction.name,
                 time:res.auction.actual_begin_time,
-                link:res.tc_attachment
+                link:res.tc_attachment,
             })
             console.log(this.site_list);
-            if(res.consumption.participation_status === '1'){
+            if(res.consumption.participation_status === '1' || res.auction.publish_status === "1"){
                 $("input[type='checkbox']").attr("checked",true);
                 this.setState({
                     disabled:'disabled',
@@ -165,7 +165,7 @@ export class FillConsumption extends Component {
                 <h1>Participate in upcoming {this.state.name} exercise on {moment(this.state.time).format('D MMM YYYY hh:mm a')}</h1>
                 <form name="buyer_form" method="post" onSubmit={this.checkSuccess.bind(this)}>
                 <div className="u-grid buyer mg0">
-                <h4 className="u-mb3"><input name="agree_auction" type="checkbox" disabled={this.state.disabled} required /> I agree to the <a className="cursor" download={this.state.link.file_name} href={`/${this.state.link ? this.state.link.file_path : null}`}>terms and conditions.</a></h4>
+                <h4 className="u-mb3"><input name="agree_auction" type="checkbox" disabled={this.state.disabled} required /> I agree to the <a className="cursor" download={this.state.link.file_name} href={`/${this.state.link ? this.state.link.file_path : '#'}`}>terms and conditions.</a></h4>
                     <div className="col-sm-12 col-md-8 push-md-2">
                     <DoFillConsumption site_list={this.state.site_list} checked={this.state.checked} remove={this.remove_site.bind(this)} />
                     {this.state.checked ? '' : <div className="addSite"><a onClick={this.add_site.bind(this)}>Add Account</a></div>}
