@@ -108,7 +108,7 @@ Rails.application.routes.draw do
           post 'node2_retailer_accept_all'
           post 'node2_retailer_propose_deviations'
           post 'node3_retailer_withdraw_all_deviations'
-          post 'node3_retailer_submit'
+          post 'node3_retailer_submit_deviations'
           post 'node3_retailer_next'
           post 'node3_retailer_save'
           post 'node4_retailer_submit'

@@ -12,10 +12,10 @@ class TenderWorkflow < Workflow
                       propose_deviations: Event.new(:propose_deviations, :node3, 2, 2))
     @node3 = Node.new(:node3, 3, 'process',
                       withdraw_all_deviations: Event.new(:withdraw_all_deviations, :node4, 2, 2),
-                      submit: Event.new(:submit, :node3, 1, 2),
+                      submit_deviations: Event.new(:submit_deviations, :node3, 1, 2),
                       next: Event.new(:next, :node4, 2, 2),
                       send_response: Event.new(:send_response, :node3, 2, 1))
-    @node4 = Node.new(:node5, 5, 'end',
+    @node4 = Node.new(:node4, 4, 'end',
                       submit: Event.new(:submit, :node4, 1, 2),
                       next: Event.new(:next, :node5, 2, 2),
                       accept: Event.new(:accept, :node5, 2, 1),
