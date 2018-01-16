@@ -162,8 +162,9 @@ class Api::AuctionsController < Api::BaseController
     data = []
     auction.order(actual_begin_time: :asc).each do |auction|
       status = if Time.current < auction.actual_begin_time
-                 'upcoming'
-               elsif Time.current >= auction.actual_begin_time && Time.current <= auction.actual_end_time
+                 'Upcoming'
+               #elsif Time.current >= auction.actual_begin_time && Time.current <= auction.actual_end_time
+               else
                  'In Progress'
                end
       data.push(id: auction.id, published_gid: auction.published_gid, name: auction.name, actual_begin_time: auction.actual_begin_time, status: status)

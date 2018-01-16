@@ -80,13 +80,15 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :retailer do
-      resources :auctions, only: %i[obtain] do
+      resources :auctions, only: %i[obtain published] do
         collection do
           get 'obtain'
+          get 'published'
         end
       end
       resource :auction_histories, only: %i[show] do
       end
+
       resources :arrangements, only: %i[index show obtain update] do
         collection do
           get 'obtain'

@@ -19,11 +19,14 @@ class Arrangement < ApplicationRecord
   # Validations
 
   # Scopes
-  scope :find_notifiy_retailer, ->{ where("action_status = '1'") }
+
   scope :auction_of_current_user, ->(auction_id, user_id) { where('auction_id = ? and user_id = ?', auction_id, user_id) }
   scope :find_by_auction_id, ->(auction_id) { where('auction_id = ?', auction_id) }
   scope :find_by_auction_and_user, ->(auction_id, user_id) { where('auction_id = ? and user_id =?', auction_id, user_id) }
   scope :is_not_notify, -> { where("action_status = '2'") }
+  scope :find_published_auction, ->{ includes(:auction).where(auctions: { publish_status: '1' }) }
+  scope :find_notify_retailer,  ->(user_id) { where("user_id = ? and action_status = '1'", user_id) }
+
   # Callbacks
 
   # Delegates
