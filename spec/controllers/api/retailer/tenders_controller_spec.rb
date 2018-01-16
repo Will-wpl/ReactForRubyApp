@@ -11,6 +11,21 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
 
     context 'node1' do
 
+      describe 'GET current' do
+        context 'Show node1 message' do
+          def do_request
+            get :current, params: { id: arrangement.id }
+          end
+          before { do_request }
+          it 'Success' do
+            hash_body = JSON.parse(response.body)
+            expect(response).to have_http_status(:ok)
+            expect(hash_body['current']['current_node']).to eq(1)
+            expect(hash_body['flows'].to_s).to eq('[1]')
+          end
+        end
+      end
+
       describe 'POST node1_retailer_accept' do
         context 'Go to node2' do
           def do_request

@@ -17,6 +17,21 @@ RSpec.describe Api::Admin::TendersController, type: :controller do
 
       describe 'POST node3_send_response' do
 
+        describe 'GET current' do
+          context 'Show node3 message' do
+            def do_request
+              get :current, params: { id: arrangement.id }
+            end
+            before { do_request }
+            it 'Success' do
+              hash_body = JSON.parse(response.body)
+              expect(response).to have_http_status(:ok)
+              expect(hash_body['current']['current_node']).to eq(3)
+              expect(hash_body['flows'].to_s).to eq('[1, 2, 3]')
+            end
+          end
+        end
+
         context 'Go to node4' do
           def do_request
             post :node3_send_response, params: { id: arrangement.id }

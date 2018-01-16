@@ -34,6 +34,23 @@ class TenderWorkflow < Workflow
     get_arrangement_state_machine(arrangement_id)
   end
 
+  def get_arrangement_state_machine(arrangement_id)
+    flows = TenderStateMachine.find_by_arrangement_id(arrangement_id).where.not(current_node: nil).select(:current_node).distinct
+    flow_array = []
+    flows.each do |flow|
+      flow_array.push(flow.current_node) unless flow.current_node.nil?
+    end
+    current = TenderStateMachine.find_by_arrangement_id(arrangement_id).last
+    actions = get_current_action_status(arrangement_id)
+    { flows: flow_array, current: current, actions: actions }
+  end
+
+  protected
+
+  def get_action_state_machine(auction_id)
+
+  end
+
   def get_current_action_status(arrangement_id)
     sm = TenderStateMachine.find_by_arrangement_id(arrangement_id).last
     if node1?(sm)
@@ -53,25 +70,6 @@ class TenderWorkflow < Workflow
     else
       {}
     end
-  end
-
-
-
-  protected
-
-  def get_action_state_machine(auction_id)
-
-  end
-
-  def get_arrangement_state_machine(arrangement_id)
-    flows = TenderStateMachine.find_by_arrangement_id(arrangement_id).where.not(current_node: nil).select(:current_node).distinct
-    flow_array = []
-    flows.each do |flow|
-      flow_array.push(flow.current_node) unless flow.current_node.nil?
-    end
-    current = TenderStateMachine.find_by_arrangement_id(arrangement_id).last
-    actions = get_current_action_status(arrangement_id)
-    { flows: flow_array, current: current, actions: actions }
   end
 
   def node1?(sm)

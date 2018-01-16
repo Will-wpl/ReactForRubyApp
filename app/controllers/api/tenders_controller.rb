@@ -1,5 +1,10 @@
 class Api::TendersController < Api::BaseController
 
+  def current
+    workflow = $tender_workflow.get_arrangement_state_machine(params[:id])
+    render json: workflow, status: 200
+  end
+
   # work flow function
   def node1_retailer_accept
     workflow = $tender_workflow.execute(:node1, :accept, params[:id]) do

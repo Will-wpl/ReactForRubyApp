@@ -77,6 +77,7 @@ Rails.application.routes.draw do
       end
       resources :tenders, only: %i[] do
         member do
+          get 'current'
           post 'node3_send_response'
           post 'node3_admin_accept'
           post 'node3_admin_reject'
@@ -103,6 +104,7 @@ Rails.application.routes.draw do
       end
       resources :tenders, only: %i[] do
         member do
+          get 'current'
           post 'node1_retailer_accept'
           post 'node1_retailer_reject'
           post 'node2_retailer_accept_all'
