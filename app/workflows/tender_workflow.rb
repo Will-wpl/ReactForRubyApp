@@ -45,11 +45,15 @@ class TenderWorkflow < Workflow
     { flows: flow_array, current: current, actions: actions }
   end
 
-  protected
-
   def get_action_state_machine(auction_id)
-
+    arrangements = []
+    Arrangement.find_by_auction_id(auction_id).each do |arrangement|
+      arrangements.push(company_name: arrangement.user.company_name, arrangement_id: arrangement.id, detail: get_arrangement_state_machine(arrangement.id))
+    end
+    arrangements
   end
+
+  protected
 
   def get_current_action_status(arrangement_id)
     sm = TenderStateMachine.find_by_arrangement_id(arrangement_id).last
