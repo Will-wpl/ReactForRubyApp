@@ -41,7 +41,7 @@ export class Keppelproposedeviations extends Component {
                                 <td >xxxxxxxxxxx</td>
                                 <td >xxxxxxxxxxxxxxxxxxxx</td>
                                 <td >Accepted : this item should change to 10%</td>
-                                <td><a>Reject</a><a>Accept</a><a>History</a></td>
+                                <td><button>Reject</button><button>Accept</button><button>History</button></td>
                             </tr>
                             <tr>
                                 <td>1</td>
@@ -49,12 +49,12 @@ export class Keppelproposedeviations extends Component {
                                 <td >xxxxxxxxxxx</td>
                                 <td >xxxxxxxxxxxxxxxxxxxx</td>
                                 <td ><input type="text"/></td>
-                                <td><a>Reject</a><a>Accept</a><a>History</a></td>
+                                <td><button>Reject</button><button>Accept</button><button>History</button></td>
                             </tr>
                         </tbody>
                 </table>
                 <div className="workflow_btn u-mt3">    
-                    <a className="lm--button lm--button--primary">Send Response</a>
+                    <button className="lm--button lm--button--primary">Send Response</button>
                 </div>
             </div>
             </div>

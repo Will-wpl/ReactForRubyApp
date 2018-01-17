@@ -13,7 +13,7 @@ export class Workflowtab extends React.Component{
     render(){
         return(
             <div>
-                {/* <TimeCuntDown auction={this.props.auction} countDownOver={() => {this.setState({disabled:true,editdisabled:true})}} timehidden="countdown_seconds" /> */}
+                <TimeCuntDown auction={this.props.auction} countDownOver={() => {this.setState({disabled:true,editdisabled:true})}} timehidden="countdown_seconds" />
                 <div className="u-grid mg0 workflowtab u-mt3">
                     <table>
                         <tbody>

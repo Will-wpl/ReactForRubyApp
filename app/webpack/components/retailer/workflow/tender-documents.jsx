@@ -65,8 +65,8 @@ export class Tenderdocuments extends React.Component{
                 </div>
             </div>
             <div className="workflow_btn u-mt3">
-                        <a className="lm--button lm--button--primary">Propose Deviations</a>
-                        <a className="lm--button lm--button--primary">Accept All</a>
+                        <button className="lm--button lm--button--primary">Propose Deviations</button>
+                        <button className="lm--button lm--button--primary">Accept All</button>
                 </div>
             </div>
         )

@@ -43,7 +43,7 @@ export class Adminretailerdashboard extends Component {
                                     <td >0</td>
                                     <td >1</td>
                                     <td >0</td>
-                                    <td><a>Manage Contact</a><a>Contact Details</a></td>
+                                    <td><button>Manage Contact</button><button>Contact Details</button></td>
                                 </tr>
                             </tbody>
                     </table>

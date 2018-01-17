@@ -54,8 +54,8 @@ export class Signconfidentialityundertaking extends React.Component{
                         <a href="#">download</a>
                     </div>
                 <div className="workflow_btn u-mt3">
-                    <button disabled={this.state.disabled} className="lm--button lm--button--primary" onClick={this.showConfirm.bind(this,'Reject')} >Reject</button>
-                    <button disabled={this.state.disabled} className="lm--button lm--button--primary" onClick={this.showConfirm.bind(this,'Accept')} >Accept</button>
+                    <button disabled={!this.props.node1_retailer_reject} className="lm--button lm--button--primary" onClick={this.showConfirm.bind(this,'Reject')} >Reject</button>
+                    <button disabled={!this.props.node1_retailer_accept} className="lm--button lm--button--primary" onClick={this.showConfirm.bind(this,'Accept')} >Accept</button>
                 </div>
                 <Modal text={this.state.text} acceptFunction={this.state.buttonType === 'Reject'?this.do_reject.bind(this):this.do_accept.bind(this)} ref="Modal" />
             </div>

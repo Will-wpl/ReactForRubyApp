@@ -44,7 +44,7 @@ export class Proposedeviations extends React.Component{
                                     <td ><input type="text"/></td>
                                     <td ><input type="text"/></td>
                                     <td >Accepted : this item should change to 10%</td>
-                                    <td><a>History</a><a>Withdraw</a></td>
+                                    <td><button>History</button><button>Withdraw</button></td>
                                 </tr>
                                 :<tr>
                                     <td>1</td>
@@ -52,7 +52,7 @@ export class Proposedeviations extends React.Component{
                                     <td >xxxxxxxxxxx</td>
                                     <td >xxxxxxxxxxxxxxxxxxxx</td>
                                     <td >Accepted : this item should change to 10%</td>
-                                    <td><a>History</a></td>
+                                    <td><button>History</button></td>
                                 </tr>
                                 }
                             </tbody>
@@ -60,10 +60,10 @@ export class Proposedeviations extends React.Component{
                     {!this.props.tender ? <div className="workflow_btn u-mt3 u-mb3"><a>add</a></div> :''}
                     <div className="workflow_btn u-mt3">
                         {!this.props.tender ?
-                        <div><a className="lm--button lm--button--primary">Withdraw All Deviations</a>
-                        <a className="lm--button lm--button--primary">Save</a>
-                        <a className="lm--button lm--button--primary">Submit Deviations</a></div> :
-                        <a className="lm--button lm--button--primary">Next</a>
+                        <div><button className="lm--button lm--button--primary">Withdraw All Deviations</button>
+                        <button className="lm--button lm--button--primary">Save</button>
+                        <button className="lm--button lm--button--primary">Submit Deviations</button></div> :
+                        <button className="lm--button lm--button--primary">Next</button>
                         }
                     </div>
                 </div>

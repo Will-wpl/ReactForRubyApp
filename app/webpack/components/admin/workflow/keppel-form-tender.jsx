@@ -50,7 +50,7 @@ export class Keppelformtender extends React.Component{
                                     <td >xxxxxxxxxxx</td>
                                     <td >xxxxxxxxxxxxxxxxxxxx</td>
                                     <td >Accepted : this item should change to 10%</td>
-                                    <td><a>Reject</a><a>Accept</a><a>History</a></td>
+                                    <td><button>Reject</button><button>Accept</button><button>History</button></td>
                                 </tr>
                                 <tr>
                                     <td>1</td>
@@ -58,7 +58,7 @@ export class Keppelformtender extends React.Component{
                                     <td >xxxxxxxxxxx</td>
                                     <td >xxxxxxxxxxxxxxxxxxxx</td>
                                     <td >Accepted : this item should change to 10%</td>
-                                    <td><a>Reject</a><a>Accept</a><a>History</a></td>
+                                    <td><button>Reject</button><button>Accept</button><button>History</button></td>
                                 </tr>
                             </tbody>
                     </table>
@@ -73,8 +73,8 @@ export class Keppelformtender extends React.Component{
                     </div>
                 </div>
                 <div className="workflow_btn u-mt3">
-                        <a className="lm--button lm--button--primary">Reject</a>
-                        <a className="lm--button lm--button--primary">Accept</a>
+                        <button className="lm--button lm--button--primary">Reject</button>
+                        <button className="lm--button lm--button--primary">Accept</button>
                 </div>
             </div>
         )
