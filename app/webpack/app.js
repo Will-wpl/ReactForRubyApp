@@ -17,6 +17,7 @@ import "components/retailer/retailer-finish";
 import "components/shared/check-network";
 import "components/search/home-list";
 import "components/buyer/buyer-fill-consumption";
+import "components/retailer/retailer-workflow";
 // ActionCable = require('actioncable')
 
 // const cable = ActionCable.createConsumer()

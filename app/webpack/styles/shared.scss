@@ -420,7 +420,6 @@ dfn.manage_label{
       table-layout: fixed;
       th{
         font-size: 16px;
-        &:first-child{ width: 45%;}
       }
       td{
         div{ width: 100%; height:20px;
@@ -542,3 +541,54 @@ body.choose{
     
   }
 }
+
+.workflowtab{
+  margin:30px 0px;
+  table{ width: 100%; table-layout: fixed;
+    td{height:100px;
+      div{ 
+        width: 100%; height: 100%; background: #00888a;
+        &.step_icon{background: none;}
+      }
+    }
+  }
+}
+
+.workflow_btn{
+  text-align: right;
+  button{ margin-left: 15px;}
+}
+.sign_box{
+   width: 100%;
+   h4{color: #fd6301; margin: 15px 0px;}
+   p{ margin: 15px 0px;}
+   .sign_btn{ text-align: right;
+    a{ margin-left: 15px;}
+  }
+}
+
+.tender_documents{
+  .tender_list{
+    li{ line-height:45px; list-style: none; overflow:hidden;
+      a{cursor: pointer;}
+    }
+  }
+}
+
+.propose_deviations{
+  table.retailer_fill{
+    tbody{
+      tr{
+        td{
+          input,select{
+            width:90%; margin: 0px auto; padding: 2px; border:1px solid #fff;
+          }
+          a{background: #00888a; padding: 4px 8px; width: auto; height: auto; display: inline-block; border-radius: 5px; margin:5px;}
+        }
+      }
+    }
+    
+  }
+}
+.green{color:green;}
+.red{color:red;}

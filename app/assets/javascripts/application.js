@@ -54,5 +54,6 @@ var slimModal = {
 }
 function clearStorage(){
     sessionStorage.removeItem("auction_id");
+    sessionStorage.removeItem("arrangement_id");
     sessionStorage.removeItem("isAuctionId");
 }

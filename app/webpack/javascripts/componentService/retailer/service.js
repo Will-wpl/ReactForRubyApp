@@ -15,3 +15,11 @@ export const getAuctionHistorys = (auction, user) => {
 export const validateCanBidForm = (auction) => {
     return create('', {});
 }
+
+export const retailerReject = (arrangement) => {
+    return create('/api/retailer/tenders/'+arrangement+'/node1_retailer_reject');
+}
+
+export const retailerAccept = (arrangement) => {
+    return create('/api/retailer/tenders/'+arrangement+'/node1_retailer_accept');
+}

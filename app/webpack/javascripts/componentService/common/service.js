@@ -29,3 +29,7 @@ export const AUCTION_PROPS = {
 }
 
 export const checknetwork = () => create('/api/base/heartbeat')
+
+export const getTendersCurrent= (type,id) => {
+    return get('/api/'+type+'/tenders/'+id+'/current');
+}
