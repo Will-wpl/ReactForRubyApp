@@ -13,8 +13,7 @@ export class Retailerworkflow extends React.Component{
         super(props);
         this.state={
             auction:{},text:'',
-            selected:0,current:{},
-            page:1
+            selected:[],current:{},page:1
         }
         this.linklist = [
             {file_name:"app.js",file_path:"#"},
@@ -25,35 +24,36 @@ export class Retailerworkflow extends React.Component{
         this.deviations = false;
         this.submittender = false;
         this.hiddentimeCount = true;
+        this.getPageindex();
     }
     componentDidMount() {
         getAuction('retailer',sessionStorage.auction_id).then(res=>{
             this.setState({auction:res});
-        },error=>{
-
-        })
-        getTendersCurrent('retailer',sessionStorage.arrangement_id).then(res=>{
             console.log(res);
-            this.setState({current:res});
         },error=>{
 
         })
     }
-    getPageindex(index){
-        this.setState({page:index});
+    getPageindex(){
+        getTendersCurrent('retailer',sessionStorage.arrangement_id).then(res=>{
+            console.log(res);
+            this.setState({current:res,page:res.current.current_node,selected:res.flows});
+        },error=>{
+
+        })
     }
     showpage(index){
         let pageDom='';
         switch(index){
-            case 1 : pageDom = <Signconfidentialityundertaking index={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction}/>
+            case 1 : pageDom = <Signconfidentialityundertaking page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction}/>
             break
-            case 2 : pageDom = <Tenderdocuments index={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} linklist={this.linklist} />
+            case 2 : pageDom = <Tenderdocuments page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} linklist={this.linklist} />
             break
-            case 3 : pageDom = <Proposedeviations index={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} tender={this.deviations} />
+            case 3 : pageDom = <Proposedeviations page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} tender={this.deviations} />
             break
-            case 4 : pageDom = <Submittender index={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} submit={this.submittender}/>
+            case 4 : pageDom = <Submittender page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} submit={this.submittender}/>
             break
-            case 5 : pageDom = <RetailerManage index={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} hiddentimeCount={this.hiddentimeCount}/>
+            case 5 : pageDom = <RetailerManage page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} hiddentimeCount={this.hiddentimeCount}/>
             break
         }
         return pageDom;
@@ -61,7 +61,7 @@ export class Retailerworkflow extends React.Component{
     render(){
         return(
             <div>
-                <Workflowtab auction={this.state.auction} selected={this.state.selected} />
+                <Workflowtab auction={this.state.auction} current_page={this.state.page} selected={this.state.selected} />
                 {this.showpage(this.state.page)}
                 <div className="createRaMain u-grid">
                     <a className="lm--button lm--button--primary u-mt3" href="/retailer/home" >Back to Homepage</a>

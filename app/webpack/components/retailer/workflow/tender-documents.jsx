@@ -1,17 +1,44 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-
+import {Modal} from '../../shared/show-modal';
+import {retailerPproposeDeviations,retailerAcceptAll} from '../../../javascripts/componentService/retailer/service';
 export class Tenderdocuments extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            peak_lt:0,peak_hts:0,
-            peak_htl:0,peak_eht:0,off_peak_lt:0,off_peak_hts:0,
-            off_peak_htl:0,off_peak_eht:0,
+            buttonType:''
         }
     }
     componentDidMount() {
         
+    }
+    showConfirm(type){
+        this.setState({buttonType:type});
+        if(type == "Propose_Deviations"){
+            this.refs.Modal.showModal("comfirm");
+            this.setState({
+                text:"Are you sure want to propose deviations?"
+            });
+        }else{
+            this.refs.Modal.showModal("comfirm");
+            this.setState({
+                text:"Are you sure want to accept all?"
+            });
+        }
+    }
+    propose_deviations(){
+        retailerPproposeDeviations(this.props.current.current.arrangement_id).then(res=>{
+            this.props.page();
+        },error=>{
+
+        })
+    }
+    accept_all(){
+        retailerAcceptAll(this.props.current.current.arrangement_id).then(res=>{
+            this.props.page();
+        },error=>{
+
+        })
     }
     render(){
         return(
@@ -35,17 +62,17 @@ export class Tenderdocuments extends React.Component{
                                         <tbody>
                                             <tr>
                                                 <td>Peak (7am-7pm)</td>
-                                                <td >{this.state.peak_lt}</td>
-                                                <td >{this.state.peak_hts}</td>
-                                                <td >{this.state.peak_htl}</td>
-                                                <td >{this.state.peak_eht}</td>
+                                                <td >{this.props.auction.peak_lt?parseInt(Number(this.props.auction.peak_lt)):0}</td>
+                                                <td >{this.props.auction.peak_hts?parseInt(Number(this.props.auction.peak_hts)):0}</td>
+                                                <td >{this.props.auction.peak_htl?parseInt(Number(this.props.auction.peak_htl)):0}</td>
+                                                <td >{this.props.auction.peak_eht?parseInt(Number(this.props.auction.peak_eht)):0}</td>
                                             </tr>
                                             <tr>
                                                 <td>Off-Peak (7pm-7am)</td>
-                                                <td >{this.state.off_peak_lt}</td>
-                                                <td >{this.state.off_peak_hts}</td>
-                                                <td >{this.state.off_peak_htl}</td>
-                                                <td >{this.state.off_peak_eht}</td>
+                                                <td >{this.props.auction.off_peak_lt?parseInt(Number(this.props.auction.off_peak_lt)):0}</td>
+                                                <td >{this.props.auction.off_peak_hts?parseInt(Number(this.props.auction.off_peak_hts)):0}</td>
+                                                <td >{this.props.auction.off_peak_htl?parseInt(Number(this.props.auction.off_peak_htl)):0}</td>
+                                                <td >{this.props.auction.off_peak_eht?parseInt(Number(this.props.auction.off_peak_eht)):0}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -64,10 +91,12 @@ export class Tenderdocuments extends React.Component{
                     </ul>
                 </div>
             </div>
-            <div className="workflow_btn u-mt3">
-                        <button className="lm--button lm--button--primary">Propose Deviations</button>
-                        <button className="lm--button lm--button--primary">Accept All</button>
-                </div>
+            {this.props.current.actions ?
+                <div className="workflow_btn u-mt3">                
+                        <button disabled={!this.props.current.actions.node2_retailer_propose_deviations} onClick={this.showConfirm.bind(this,'Propose_Deviations')} className="lm--button lm--button--primary">Propose Deviations</button>
+                        <button disabled={!this.props.current.actions.node2_retailer_accept_all} onClick={this.showConfirm.bind(this,'Accept_All')} className="lm--button lm--button--primary">Accept All</button>
+                </div>:<div></div>}
+                <Modal text={this.state.text} acceptFunction={this.state.buttonType === 'Propose_Deviations'?this.propose_deviations.bind(this):this.accept_all.bind(this)} ref="Modal" />
             </div>
         )
     }

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {Modal} from '../../shared/show-modal';
-
+import {retailerSubmit} from '../../../javascripts/componentService/retailer/service';
 export class Submittender extends React.Component{
     constructor(props){
         super(props);
         this.state={
+            text:'',
             fileData:{
                 "upload_tender":[
                     {buttonName:"none",files:[]}
@@ -15,6 +16,15 @@ export class Submittender extends React.Component{
     }
     componentDidMount() {
         
+    }
+    showConfirm(type){
+        this.setState({buttonType:type});
+        if(type == "Submit"){
+            this.refs.Modal.showModal("comfirm");
+            this.setState({
+                text:"Are you sure want to submit?"
+            });
+        }
     }
     remove_file(filetype,typeindex,fileindex,fileid){
         this.setState({
@@ -39,6 +49,11 @@ export class Submittender extends React.Component{
             })
         },error=>{
 
+        })
+    }
+    do_submit(){
+        retailerSubmit(this.props.current.current.arrangement_id).then(res=>{
+            this.props.page();
         })
     }
     addinputfile(type, required){
@@ -95,13 +110,13 @@ export class Submittender extends React.Component{
     }
     upload(type, index){
         if($("#"+type+index).val() === ""){
-            $("#"+type+index).next().fadeIn(300);
+            $("#"+type+index).next().next().fadeIn(300);
             return;
         }
         return;
         const barObj = $('#'+type+index).parents("a").next();
         $.ajax({
-            url: '/api/admin/auction_attachments?auction_id='+sessionStorage.auction_id+'&file_type='+type,
+            url: '/api/retailer/auction_attachments?auction_id='+sessionStorage.auction_id+'&file_type='+type,
             type: 'POST',
             cache: false,
             data: new FormData($('#'+type+"_form")[0]),
@@ -153,10 +168,10 @@ export class Submittender extends React.Component{
                 <div className="col-sm-12 col-md-8 push-md-2 u-mt3 u-mb3">
                     {this.addinputfile("upload_tender", "required")}
                     <div className="workflow_btn u-mt3">
-                        <a className="lm--button lm--button--primary">Submit</a>
+                        <a className="lm--button lm--button--primary" disabled={!this.props.current.actions.node4_retailer_submit} onClick={this.showConfirm.bind(this,'Submit')}>Submit</a>
                     </div>
                 </div>
-                <Modal text={this.state.text} acceptFunction={this.do_remove.bind(this)} ref="Modal" />
+                <Modal text={this.state.text} acceptFunction={this.do_submit.bind(this)} ref="Modal" />
             </div>
         )
     }
