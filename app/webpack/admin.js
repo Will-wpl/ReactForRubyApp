@@ -13,6 +13,7 @@ import "components/shared/check-network";
 import "components/search/home-list";
 import "components/admin/admin-invitation";
 import "components/admin/admin-comsumption";
+import "components/admin/admin-workflow";
 // import "./javascripts/ajax-test.js";
 console.log("Admin Webpacker");
 

@@ -31,6 +31,14 @@ export const searchTypeData = {
             {title:"Date:",type:"start_datetime",species:"datePacker",operator:'date_between'}
         ]
     },
+    "Retailer Published Auction List":{
+        list_url:"/api/retailer/auctions/published",
+        list_data:[
+            {title:"ID:",type:"id",species:"input",operator:'like'},
+            {title:"Name:",type:"name",species:"input",operator:'like'},
+            {title:"Date:",type:"start_datetime",species:"datePacker",operator:'date_between'}
+        ]
+    },
     "Status of Participation":{
         list_url:"/api/buyer/auctions/published",
         list_data:[

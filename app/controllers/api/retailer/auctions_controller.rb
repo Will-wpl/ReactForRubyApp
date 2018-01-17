@@ -52,7 +52,7 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
 
       data.push(id_name: arrangement.auction.published_gid, name: arrangement.auction.name, actual_begin_time: arrangement.auction.actual_begin_time,
                 auction_status: auction_status, my_status: arrangement.accept_status,
-                id: arrangement.auction_id, actions: action)
+                id: arrangement.id, auction_id: arrangement.auction_id, actions: action)
     end
 
     bodies = { data: data, total: total }
