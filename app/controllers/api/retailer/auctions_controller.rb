@@ -27,16 +27,16 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
     end
 
     headers = [
-      { name: 'ID', field_name: 'id' },
+      { name: 'ID', field_name: 'id_name' },
       { name: 'Name', field_name: 'name' },
       { name: 'Date/Time', field_name: 'actual_begin_time' },
       { name: 'Auction Status', field_name: 'auction_status' },
       { name: 'My Status', field_name: 'my_status' },
       { name: nil, field_name: 'actions' }
     ]
-    actions = [{ url: '/retailer/arrangement/:id/tender', name: 'Edit', icon: 'edit' },
-               { url: '/retailer/arrangement/:id/tender', name: 'View', icon: 'view' },
-               { url: '/retailer/auctions/:id/upcoming', name: 'Start Bidding', icon: 'bidding'}]
+    actions = [{ url: '/retailer/arrangements/:id/tender', name: 'Edit', icon: 'edit', interface_type: 'auction' },
+               { url: '/retailer/arrangements/:id/tender', name: 'View', icon: 'view', interface_type: 'auction' },
+               { url: '/retailer/auctions/:id/upcoming', name: 'Start Bidding', icon: 'bidding', interface_type: 'auction' }]
     data = []
 
     arrangement.order('auctions.actual_begin_time asc').each do |arrangement|
@@ -50,9 +50,9 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
       #   'In Progress'
       end
 
-      data.push(id: arrangement.auction.published_gid, name: arrangement.auction.name, actual_begin_time: arrangement.auction.actual_begin_time,
+      data.push(id_name: arrangement.auction.published_gid, name: arrangement.auction.name, actual_begin_time: arrangement.auction.actual_begin_time,
                 auction_status: auction_status, my_status: arrangement.accept_status,
-                auction_id: arrangement.auction_id, actions: action)
+                id: arrangement.auction_id, actions: action)
     end
 
     bodies = { data: data, total: total }
