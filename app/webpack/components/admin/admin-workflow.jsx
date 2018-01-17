@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import {TimeCuntDown} from '../shared/time-cuntdown';
-import {getAuction} from '../../javascripts/componentService/common/service';
+import {getAuction,getTendersCurrent} from '../../javascripts/componentService/common/service';
 import {Adminretailerdashboard} from '../admin/workflow/retailer-dashboard';
 import {Keppelproposedeviations} from '../admin/workflow/keppel-propose-deviations';
 import {Keppelformtender} from '../admin/workflow/keppel-form-tender';
@@ -12,7 +12,7 @@ export class Adminworkflow extends Component {
         super(props);
         this.state={
             auction:{},
-            disabled:false,
+            disabled:false,current:{},page:1,
             allbtnStatus:true
         }
         this.linklist = [
@@ -25,9 +25,28 @@ export class Adminworkflow extends Component {
     componentDidMount(){
         
     }
-    
+    getPageindex(arrangement_id){
+        getTendersCurrent('admin',arrangement_id).then(res=>{
+            console.log(res);
+            this.setState({current:res,page:res.current.current_node});
+        },error=>{
+
+        })
+    }
+    showpage(index){
+        let pageDom='';
+        switch(index){
+            case 1 : pageDom = <Adminretailerdashboard index={this.getPageindex.bind(this)} title="Retailer Dashboard" />
+            break
+            case 3 : pageDom = <Keppelproposedeviations index={this.getPageindex.bind(this)} title="keppel Propose Deviations" />
+            break
+            case 4 : pageDom = <Keppelformtender index={this.getPageindex.bind(this)} title="keppel - Form of Tender" linklist={this.linklist}/>
+            break
+        }
+        return pageDom;
+    }
     componentWillMount(){
-        getAuction('admin',1).then(res => {//sessionStorage.auction_id
+        getAuction('admin',sessionStorage.auction_id).then(res => {//sessionStorage.auction_id
             this.setState({auction:res})
         }, error => {
             //console.log(error);
@@ -37,9 +56,7 @@ export class Adminworkflow extends Component {
         return (
             <div className="col-sm-12">
                 <TimeCuntDown auction={this.state.auction} countDownOver={()=>{this.setState({disabled:true,allbtnStatus:false})}} timehidden="countdown_seconds" />
-                <Adminretailerdashboard title="Retailer Dashboard" />
-                <Keppelproposedeviations title="keppel Propose Deviations" />
-                <Keppelformtender title="keppel - Form of Tender" linklist={this.linklist}/>
+                {this.showpage(this.state.page)}
                 <div className="createRaMain u-grid">
                     <a className="lm--button lm--button--primary u-mt3" href="/admin/home" >Back to Homepage</a>
                 </div>
