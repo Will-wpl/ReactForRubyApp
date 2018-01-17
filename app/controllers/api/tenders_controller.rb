@@ -5,6 +5,26 @@ class Api::TendersController < Api::BaseController
     render json: workflow, status: 200
   end
 
+  def node1_retailer
+    auction_id = @arrangement.auction_id
+  end
+
+  def node2_retailer
+
+  end
+
+  def node3_retailer
+
+  end
+
+  def node4_retailer
+
+  end
+
+  def node5_retailer
+
+  end
+
   # work flow function
   def node1_retailer_accept
     workflow = TenderWorkflow.new.execute(:node1, :accept, params[:id]) do
@@ -109,5 +129,11 @@ class Api::TendersController < Api::BaseController
 
   def node3_admin_reject
 
+  end
+
+  private
+
+  def set_arrangement
+    @arrangement = Arrangement.find(params[:id])
   end
 end
