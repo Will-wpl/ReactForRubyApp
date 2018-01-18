@@ -321,14 +321,12 @@ class Api::AuctionsController < Api::BaseController
   end
 
   def retailer_dashboard
+    tenders = TenderWorkflow.new.get_action_state_machine(params[:id])
+    render json: tenders, status: 200
   end
 
   def buyer_dashboard
-  end
-
-  def tenders
-    tenders = TenderWorkflow.new.get_action_state_machine(params[:id])
-    render json: tenders, status: 200
+    
   end
 
   private
