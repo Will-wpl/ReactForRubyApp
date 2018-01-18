@@ -12,20 +12,16 @@ class Api::AuctionAttachmentsController < Api::BaseController
   def create
     # coding
     file = params[:file]
-    tmp_file_name = file.original_filename
-    file.original_filename = Time.current.to_i.to_s
-    uploader = AvatarUploader.new(AuctionAttachment, params[:auction_id])
+    mounted_as = [params[:auction_id]]
+    mounted_as.push(params[:user_id]) unless params[:user_id].nil?
+    uploader = AvatarUploader.new(AuctionAttachment, mounted_as)
     uploader.store!(file)
     attachment = AuctionAttachment.new
     attachment.auction_id = params[:auction_id]
-    attachment.file_name = tmp_file_name
+    attachment.file_name = file.original_filename
     attachment.file_type = params[:file_type]
-    if params[:user_id].nil?
-      attachment.file_path = uploader.store_dir + '/' + file.original_filename
-    else
-      attachment.user_id = params[:user_id]
-      attachment.file_path = uploader.store_dir + "/#{params[:user_id]}" + file.original_filename
-    end
+    attachment.file_path = uploader.store_dir + '/' + file.original_filename
+    attachment.user_id = params[:user_id] unless params[:user_id].nil?
 
     attachment.save
     render json: attachment, status: 200
