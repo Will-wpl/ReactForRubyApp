@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180109114624) do
+ActiveRecord::Schema.define(version: 20180118063711) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,8 +30,6 @@ ActiveRecord::Schema.define(version: 20180109114624) do
     t.decimal "hts_off_peak", precision: 5, scale: 4
     t.decimal "htl_peak", precision: 5, scale: 4
     t.decimal "htl_off_peak", precision: 5, scale: 4
-    t.string "specifications_doc_url"
-    t.string "briefing_pack_doc_url"
     t.bigint "user_id"
     t.bigint "auction_id"
     t.string "accept_status"
