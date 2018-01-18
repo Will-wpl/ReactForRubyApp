@@ -1,5 +1,11 @@
 class AuctionAttachment < ApplicationRecord
 
+  # tender_documents_upload
+  # buyer_tc_upload
+  # retailer_confidentiality_undertaking_upload
+  # birefing_pack_upload
+
+
   # Extends
 
   # Includes
