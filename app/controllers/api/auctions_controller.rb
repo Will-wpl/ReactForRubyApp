@@ -164,7 +164,12 @@ class Api::AuctionsController < Api::BaseController
       { name: 'Date/Time', field_name: 'actual_begin_time' },
       { name: 'Status', field_name: 'status' }
     ]
-    actions = [{ url: '/admin/auctions/:id/upcoming', name: 'Edit', icon: 'edit', interface_type: 'auction' }]
+    actions = [
+      { url: '/admin/auctions/:id/retailer_dashboard', name: 'Retailer Dashboard', icon: 'edit', interface_type: 'auction' },
+      { url: '/admin/auctions/:id/buyer_dashboard', name: 'Buyer Dashboard', icon: 'edit', interface_type: 'auction' },
+      { url: '/admin/auctions/:id/upcoming', name: 'Manage', icon: 'edit', interface_type: 'auction' },
+      { url: '/admin/auctions/:id/online', name: 'Commence', icon: 'edit', interface_type: 'auction' }
+]
     data = []
     auction.order(actual_begin_time: :asc).each do |auction|
       status = if Time.current < auction.actual_begin_time
@@ -326,7 +331,7 @@ class Api::AuctionsController < Api::BaseController
   end
 
   def buyer_dashboard
-    
+
   end
 
   private
