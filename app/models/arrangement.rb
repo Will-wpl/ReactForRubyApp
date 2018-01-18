@@ -13,7 +13,8 @@ class Arrangement < ApplicationRecord
   # Associations
   belongs_to :user
   belongs_to :auction
-  has_one :tender_state_machine, dependent: :destroy
+  has_many :tender_state_machines, dependent: :destroy
+  has_many :tender_chats, dependent: :destroy
   # accepts_nested_attributes
 
   # Validations
