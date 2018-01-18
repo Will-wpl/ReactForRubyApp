@@ -6,11 +6,24 @@ class Api::TendersController < Api::BaseController
   end
 
   def node1_retailer
-    auction_id = @arrangement.auction_id
+    attachments = AuctionAttachment.belong_auction(@arrangement.auction_id)
+                                   .where(file_type: 'retailer_confidentiality_undertaking_upload')
+    render json: attachments, status: 200
   end
 
   def node2_retailer
-
+    auction = @arrangement.auction
+    aggregate_consumptions = { total_lt_peak: auction.total_lt_peak,
+                               total_lt_off_peak: auction.total_lt_off_peak,
+                               total_hts_peak: auction.total_hts_peak,
+                               total_hts_off_peak: auction.total_hts_off_peak,
+                               total_htl_peak: auction.total_htl_peak,
+                               total_htl_off_peak: auction.total_htl_off_peak,
+                               total_eht_peak: auction.total_eht_peak,
+                               total_eht_off_peak: auction.total_eht_off_peak }
+    attachments = AuctionAttachment.belong_auction(@arrangement.auction_id)
+                                   .where(file_type: 'tender_documents_upload')
+    render json: { aggregate_consumptions: aggregate_consumptions, attachments: attachments }, status: 200
   end
 
   def node3_retailer
@@ -18,11 +31,18 @@ class Api::TendersController < Api::BaseController
   end
 
   def node4_retailer
-
+    attachments = AuctionAttachment.user_auction(@arrangement.auction_id, @arrangement.user_id)
+    render json: attachments, status: 200
   end
 
   def node5_retailer
-
+    attachments = []
+    @arrangement.auction.auction_attachments.each do |attachment|
+      if attachment.file_type == 'birefing_pack_upload'
+        attachments.push(attachment)
+      end
+    end
+    render json: attachments, status: 200
   end
 
   # work flow function

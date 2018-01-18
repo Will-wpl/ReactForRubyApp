@@ -5,7 +5,10 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
   let!(:retailer_user){ create(:user, :with_retailer) }
   let!(:arrangement) { create(:arrangement, user: retailer_user, auction: auction) }
   let!(:tender) { create(:tender_state_machine, arrangement: arrangement, current_node: 1) }
-
+  let!(:rcuu) { create(:auction_attachment, :rcuu, auction: auction)}
+  let!(:btu) { create(:auction_attachment, :btu, auction: auction)}
+  let!(:tdus) { create_list(:auction_attachment, 5, :tdu, auction: auction) }
+  let!(:retailer_tdus) { create_list(:auction_attachment, 7, :tdu, auction: auction, user_id: retailer_user.id) }
   context 'retailer user' do
     before { sign_in retailer_user }
 
@@ -43,21 +46,35 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
       end
 
       describe 'POST node1_retailer_reject' do
-      context 'Reject and closed tender' do
-        def do_request
-          post :node1_retailer_reject, params: { id: arrangement.id }
-        end
-        before { do_request }
-        it 'Success' do
-          hash_body = JSON.parse(response.body)
-          expect(response).to have_http_status(:ok)
-          expect(hash_body['current']['current_node']).to be_nil
-          expect(hash_body['current']['previous_node']).to be_nil
-          expect(hash_body['current']['current_status']).to eq('reject')
-          expect(hash_body['flows'].to_s).to eq('[1]')
+        context 'Reject and closed tender' do
+          def do_request
+            post :node1_retailer_reject, params: { id: arrangement.id }
+          end
+          before { do_request }
+          it 'Success' do
+            hash_body = JSON.parse(response.body)
+            expect(response).to have_http_status(:ok)
+            expect(hash_body['current']['current_node']).to be_nil
+            expect(hash_body['current']['previous_node']).to be_nil
+            expect(hash_body['current']['current_status']).to eq('reject')
+            expect(hash_body['flows'].to_s).to eq('[1]')
+          end
         end
       end
-    end
+
+      describe 'GET node1_retailer' do
+        context 'get details' do
+          def do_request
+            post :node1_retailer, params: { id: arrangement.id }
+          end
+          before { do_request }
+          it 'Success' do
+            hash_body = JSON.parse(response.body)
+            expect(response).to have_http_status(:ok)
+            expect(hash_body[0]['file_type']).to eq('retailer_confidentiality_undertaking_upload')
+          end
+        end
+      end
     end
 
     context 'node2' do
@@ -96,6 +113,19 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
         end
       end
 
+      describe 'GET node2_retailer' do
+        context 'get details' do
+          def do_request
+            post :node2_retailer, params: { id: arrangement.id }
+          end
+          before { do_request }
+          it 'Success' do
+            hash_body = JSON.parse(response.body)
+            expect(response).to have_http_status(:ok)
+            expect(hash_body['attachments'].size).to eq(5)
+          end
+        end
+      end
     end
 
     context 'node3' do
@@ -153,6 +183,7 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
             expect(hash_body['flows'].to_s).to eq('[1, 2, 3, 4]')
           end
         end
+
       end
 
     end
@@ -194,6 +225,21 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
             expect(hash_body['current']['previous_node']).to eq(4)
             expect(hash_body['current']['turn_to_role']).to eq(2)
             expect(hash_body['flows'].to_s).to eq('[1, 2, 3, 4, 5]')
+          end
+        end
+      end
+
+      describe 'GET node4_retailer' do
+        context 'get details' do
+          def do_request
+            post :node4_retailer, params: { id: arrangement.id }
+          end
+          before { do_request }
+          it 'Success' do
+            hash_body = JSON.parse(response.body)
+            puts hash_body
+            expect(response).to have_http_status(:ok)
+            expect(hash_body.size).to eq(7)
           end
         end
       end
