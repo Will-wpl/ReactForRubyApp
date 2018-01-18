@@ -40,8 +40,8 @@ export const retailerSubmitDeviations = (arrangement) => {
     return create('/api/retailer/tenders/'+arrangement+'/node3_retailer_submit_deviations');
 }
 
-export const retailerNext = (arrangement) => {
-    return create('/api/retailer/tenders/'+arrangement+'/node3_retailer_next');
+export const retailerNext = (arrangement,node) => {
+    return create('/api/retailer/tenders/'+arrangement+'/node'+node+'_retailer_next');
 }
 
 export const retailerSubmit = (arrangement) => {

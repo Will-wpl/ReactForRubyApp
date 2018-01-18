@@ -10,15 +10,22 @@ export class Proposedeviations extends React.Component{
             peak_htl:0,peak_eht:0,off_peak_lt:0,off_peak_hts:0,
             off_peak_htl:0,off_peak_eht:0,buttonType:'',
             deviations_list:[
-                {item:1,clause:3.5,select_list:[1,2,3,4,5,6,7,8],propose_deviation:'xxxxxxxxxxxx',retailer_response:'xxxxxx',sp_response:'Accepted : this item should change to 10%'},
-                {item:2,clause:5.1,select_list:[1,2,3,4,5,6,7,8],propose_deviation:'xxxxxxxxxxxx',retailer_response:'xxxxxx',sp_response:'Accepted : this item should change to 10%'},
-                {item:3,clause:5.2,select_list:[1,2,3,4,5,6,7,8],propose_deviation:'xxxxxxxxxxxx',retailer_response:'xxxxxx',sp_response:'Accepted : this item should change to 10%'},
-                {item:4,clause:4.5,select_list:[1,2,3,4,5,6,7,8],propose_deviation:'xxxxxxxxxxxx',retailer_response:'xxxxxx',sp_response:'Accepted : this item should change to 10%'},
+                {item:1,clause:3.5,select_list:[1,2,3,4,5,6,7,8],propose_deviation:'xxxxxxxxxxxx',retailer_response:'xxxxxx',sp_response:'Accepted : this item should change to 10%',sp_response_status:'1'},
+                {item:2,clause:5.1,select_list:[1,2,3,4,5,6,7,8],propose_deviation:'xxxxxxxxxxxx',retailer_response:'xxxxxx',sp_response:'Accepted : this item should change to 10%',sp_response_status:'1'},
+                {item:3,clause:5.2,select_list:[1,2,3,4,5,6,7,8],propose_deviation:'xxxxxxxxxxxx',retailer_response:'xxxxxx',sp_response:'Accepted : this item should change to 10%',sp_response_status:'1'},
+                {item:4,clause:4.5,select_list:[1,2,3,4,5,6,7,8],propose_deviation:'xxxxxxxxxxxx',retailer_response:'xxxxxx',sp_response:'Accepted : this item should change to 10%',sp_response_status:'1'},
             ]
         }
     }
     componentDidMount() {
-        
+        let showNext = this.state.deviations_list.find(item=>{
+            return item.sp_response_status === "0"
+        })
+        if(!showNext){
+            if(this.props.tenderFn){
+                this.props.tenderFn();
+            }
+        }
     }
     showConfirm(type){
         this.setState({buttonType:type});
@@ -37,10 +44,15 @@ export class Proposedeviations extends React.Component{
     withdrawDeviations(){
         retailerWithdrawAllDeviations(this.props.current.current.arrangement_id).then(res=>{
             this.props.page();
+            //this.props.tenderFn();
         })
     }
     submitDeviations(){
         retailerSubmitDeviations(this.props.current.current.arrangement_id).then(res=>{
+            this.refs.Modal.showModal();
+            this.setState({
+                text:"Submit deviations successful!"
+            });
             this.props.page();
         })
     }
@@ -48,7 +60,7 @@ export class Proposedeviations extends React.Component{
 
     }
     next(){
-        retailerNext(this.props.current.current.arrangement_id).then(res=>{
+        retailerNext(this.props.current.current.arrangement_id,3).then(res=>{
             this.props.page();
         })
     }
@@ -100,7 +112,7 @@ export class Proposedeviations extends React.Component{
                                             </tr>
                                         })
                                 :this.state.deviations_list.map((item,index)=>{
-                                    return <tr>
+                                    return <tr key={index}>
                                             <td>{item.item}</td>
                                             <td >{item.clause}</td>
                                             <td >{item.propose_deviation}</td>

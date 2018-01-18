@@ -13,7 +13,7 @@ export class Retailerworkflow extends React.Component{
         super(props);
         this.state={
             auction:{},text:'',
-            selected:[],current:{},page:1
+            selected:[],current:{},page:1,tender_status:false
         }
         this.linklist = [
             {file_name:"app.js",file_path:"#"},
@@ -21,7 +21,6 @@ export class Retailerworkflow extends React.Component{
             {file_name:"app.js",file_path:"#"},
             {file_name:"app.js",file_path:"#"}
         ]
-        this.deviations = false;
         this.submittender = false;
         this.hiddentimeCount = true;
         this.getPageindex();
@@ -49,9 +48,9 @@ export class Retailerworkflow extends React.Component{
             break
             case 2 : pageDom = <Tenderdocuments page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} linklist={this.linklist} />
             break
-            case 3 : pageDom = <Proposedeviations page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} tender={this.deviations} />
+            case 3 : pageDom = <Proposedeviations page={this.getPageindex.bind(this)} current={this.state.current} tenderFn={()=>{this.setState({tender_status:true})}} auction={this.state.auction} tender={this.state.tender_status} />
             break
-            case 4 : pageDom = <Submittender page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} submit={this.submittender}/>
+            case 4 : pageDom = <Submittender page={this.getPageindex.bind(this)} tenderFn={()=>{this.setState({tender_status:true})}} tender={this.state.tender_status} current={this.state.current} auction={this.state.auction} submit={this.submittender}/>
             break
             case 5 : pageDom = <RetailerManage page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} hiddentimeCount={this.hiddentimeCount}/>
             break

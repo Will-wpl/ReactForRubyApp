@@ -354,9 +354,9 @@ export class RetailerManage extends Component {
             </form>
             <Modal text={this.state.text} ref="Modal" />
             </div>
-            <div className="createRaMain u-grid">
+            {/* <div className="createRaMain u-grid">
             <a className="lm--button lm--button--primary u-mt3" href="/retailer/home" >Back to Homepage</a>
-            </div>
+            </div> */}
             </div>
         )
     }

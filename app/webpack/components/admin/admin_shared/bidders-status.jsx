@@ -6,9 +6,7 @@ export class BidderStatus extends Component {
         super(props);
         this.state={
             showDetail:{},
-            dataList: [
-                        {company_name:"company name1",accept_status:false,id:10}
-                        ]
+            dataList: [{company_name:"company name1",accept_status:false,id:10}]
         }
     }
     componentDidMount() {
