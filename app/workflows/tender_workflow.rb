@@ -21,7 +21,7 @@ class TenderWorkflow < Workflow
                       accept: Event.new(:accept, :node4, 2, 1),
                       reject: Event.new(:reject, :node4, 2, 1))
     @node5 = Node.new(:node5, 5, 'end',
-                      submit: Event.new(:submit, nil, 2, 2))
+                      submit: Event.new(:submit, nil, 1, 2))
     super(node1: @node1, node2: @node2, node3: @node3, node4: @node4, node5: @node5)
   end
 
@@ -35,10 +35,10 @@ class TenderWorkflow < Workflow
   end
 
   def get_arrangement_state_machine(arrangement_id)
-    flows = TenderStateMachine.find_by_arrangement_id(arrangement_id).where.not(current_node: nil).select(:current_node).distinct
+    flows = TenderStateMachine.find_by_arrangement_id(arrangement_id).where.not(current_node: nil).select(:previous_node).distinct
     flow_array = []
     flows.each do |flow|
-      flow_array.push(flow.current_node) unless flow.current_node.nil?
+      flow_array.push(flow.previous_node) unless flow.previous_node.nil?
     end
     current = TenderStateMachine.find_by_arrangement_id(arrangement_id).last
     actions = get_current_action_status(arrangement_id)
@@ -121,7 +121,7 @@ class TenderWorkflow < Workflow
       end
     elsif node.status == 'end'
       if event.transitions_to.nil?
-        set_end_accept_state_machine
+        set_end_accept_state_machine(node, event)
       else
         set_processing_state_machine(node, event)
       end

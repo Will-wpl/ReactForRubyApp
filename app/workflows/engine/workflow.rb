@@ -33,8 +33,13 @@ class Workflow
     { status: 'reject' }
   end
 
-  def set_end_accept_state_machine
-    { status: 'closed' }
+  def set_end_accept_state_machine(node, event)
+    { previous_node: node.code,
+      current_node: node.code,
+      turn_to_role: event.turn_to_role,
+      current_role: event.current_role,
+      status: 'closed' }
+
   end
 
 
