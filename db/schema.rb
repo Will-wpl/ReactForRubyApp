@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180118063711) do
+ActiveRecord::Schema.define(version: 20180118075123) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(version: 20180118063711) do
     t.string "action_status"
     t.decimal "eht_peak"
     t.decimal "eht_off_peak"
+    t.string "comments"
     t.index ["auction_id"], name: "index_arrangements_on_auction_id"
     t.index ["user_id"], name: "index_arrangements_on_user_id"
   end
