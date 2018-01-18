@@ -45,7 +45,8 @@ Rails.application.routes.draw do
           get 'buyers'
           get 'selects'
           put 'send_mails'
-          get 'tenders'
+          get 'retailer_dashboard'
+          get 'buyer_dashboard'
         end
         collection do
           get 'obtain'
