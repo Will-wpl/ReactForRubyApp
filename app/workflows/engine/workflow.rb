@@ -26,7 +26,7 @@ class Workflow
       current_node: next_node.code,
       turn_to_role: event.turn_to_role,
       current_role: event.current_role,
-      status: next_node.status }
+      status: event.status }
   end
 
   def set_start_reject_state_machine

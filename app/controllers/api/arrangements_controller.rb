@@ -36,7 +36,7 @@ class Api::ArrangementsController < Api::BaseController
   def update_status
     if params[:id] == '0'
       if Arrangement.find_by_auction_and_user(params[:auction_id], params[:user_id]).exists?
-        render json: { message: 'consumption exist' }, status: 200
+        render json: { message: 'arrangement exist' }, status: 200
       else
         @arrangement = Arrangement.new
         @arrangement.auction_id = params[:auction_id]
