@@ -579,7 +579,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
 
     end
 
-    describe 'GET tenders' do
+    describe 'GET retailer_dashbaord' do
       let!(:auction_tender) { create(:auction, :for_next_month, :upcoming, :published) }
       let!(:retailer_user){ create(:user, :with_retailer) }
       let!(:arrangement) { create(:arrangement, user: retailer_user, auction: auction_tender) }
@@ -591,7 +591,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
 
       context 'Got tenders of auction' do
         def do_request
-          get :tenders, params: { id: auction_tender.id}
+          get :retailer_dashboard, params: { id: auction_tender.id}
         end
 
         before { do_request }
