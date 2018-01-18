@@ -63,7 +63,7 @@ class TenderWorkflow < Workflow
     elsif node2?(sm)
       { node2_retailer_accept_all: true, node2_retailer_propose_deviations: true }
     elsif node3_retailer?(sm)
-      { node3_retailer_withdraw_all_deviations: true, node3_retailer_submit: true }
+      { node3_retailer_withdraw_all_deviations: true, node3_retailer_submit_deviations: true }
     elsif node3_admin?(sm)
       { node3_send_response: true }
     elsif node4_retailer?(sm)
