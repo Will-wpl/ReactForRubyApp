@@ -183,6 +183,10 @@ export class SearchList extends Component {
                                                             return <td key={i}>
                                                                     {item[`${it.field_name}`] === '0' ? 'HDB' : (item[`${it.field_name}`] === '1' ? 'Private High-rise' : 'Landed')}
                                                                    </td>
+                                                        }else if(it.field_name === 'my_status'){
+                                                            return <td key={i}>
+                                                                    {item[`${it.field_name}`] === "null" ? 'Pending' : (item[`${it.field_name}`] === '0' ? 'Rejected' : 'Accepted')}
+                                                                   </td>
                                                         }else if(it.field_name === 'actions'){
                                         
                                                         }else{

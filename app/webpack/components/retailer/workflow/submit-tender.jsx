@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {Modal} from '../../shared/show-modal';
-import {retailerSubmit} from '../../../javascripts/componentService/retailer/service';
+import {retailerSubmit,retailerNext} from '../../../javascripts/componentService/retailer/service';
 export class Submittender extends React.Component{
     constructor(props){
         super(props);
         this.state={
             text:'',
+            send_status:true,
             fileData:{
                 "upload_tender":[
                     {buttonName:"none",files:[]}
@@ -15,7 +16,11 @@ export class Submittender extends React.Component{
         }
     }
     componentDidMount() {
-        
+        if(this.state.send_status){
+            if(this.props.tenderFn){
+                this.props.tenderFn();
+            }
+        }
     }
     showConfirm(type){
         this.setState({buttonType:type});
@@ -56,6 +61,11 @@ export class Submittender extends React.Component{
             this.props.page();
         })
     }
+    do_next(){
+        retailerNext(this.props.current.current.arrangement_id,4).then(res=>{
+            this.props.page();
+        })
+    }
     addinputfile(type, required){
         let fileHtml = '';
         fileHtml = <div className="file_box">
@@ -93,7 +103,7 @@ export class Submittender extends React.Component{
                                         </div>
                                     </div>
                                     <div className="col-sm-12 col-md-2 u-cell">
-                                        <a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>
+                                    <button className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</button>
                                     </div>
                                     {/* <div className="col-sm-12 col-md-2 u-cell">
                                         {item.buttonName === "none" ? "" : <a onClick={this.fileclick.bind(this, index, type, item.buttonName)} className={"lm--button lm--button--primary "+item.buttonName}>{item.buttonText}</a>}
@@ -168,7 +178,10 @@ export class Submittender extends React.Component{
                 <div className="col-sm-12 col-md-8 push-md-2 u-mt3 u-mb3">
                     {this.addinputfile("upload_tender", "required")}
                     <div className="workflow_btn u-mt3">
-                        <a className="lm--button lm--button--primary" disabled={!this.props.current.actions.node4_retailer_submit} onClick={this.showConfirm.bind(this,'Submit')}>Submit</a>
+                    {this.props.tender ? 
+                        <button className="lm--button lm--button--primary" disabled={!this.props.current.actions.node4_retailer_next} onClick={this.do_next.bind(this)}>Next</button> :
+                        <button className="lm--button lm--button--primary" disabled={!this.props.current.actions.node4_retailer_submit} onClick={this.showConfirm.bind(this,'Submit')}>Submit</button>
+                    }
                     </div>
                 </div>
                 <Modal text={this.state.text} acceptFunction={this.do_submit.bind(this)} ref="Modal" />

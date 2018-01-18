@@ -33,6 +33,9 @@ export class Signconfidentialityundertaking extends React.Component{
             this.setState({
                 text:"This auction has been rejected!"
             });
+            setTimeout(()=>{
+                window.location.href="/retailer/auctions";
+            },3000)
         },error=>{
 
         })

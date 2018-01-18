@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import moment from 'moment';
-
+import {Modal} from '../../shared/show-modal';
+import {adminSendResponse} from '../../../javascripts/componentService/admin/service';
 export class Keppelproposedeviations extends Component {
     constructor(props, context){
         super(props);
@@ -14,7 +15,20 @@ export class Keppelproposedeviations extends Component {
     componentDidMount(){
         
     }
-    
+    showConfirm(type){
+        if(type == "Send_Response"){
+            this.refs.Modal.showModal("comfirm");
+            this.setState({
+                text:"Are you sure want to send response?"
+            });
+        }
+    }
+    send_response(){
+        adminSendResponse(this.props.current.current.arrangement_id).then(res=>{
+            window.location.href="/admin/auctions/"+sessionStorage.auction_id+"/retailer_dashboard";
+            //this.props.page(this.props.current.current.arrangement_id);
+        })
+    }
     componentWillMount(){
         
     }
@@ -54,9 +68,10 @@ export class Keppelproposedeviations extends Component {
                         </tbody>
                 </table>
                 <div className="workflow_btn u-mt3">    
-                    <button className="lm--button lm--button--primary">Send Response</button>
+                    <button className="lm--button lm--button--primary" onClick={this.showConfirm.bind(this,'Send_Response')}>Send Response</button>
                 </div>
             </div>
+            <Modal text={this.state.text} acceptFunction={this.send_response.bind(this)} ref="Modal" />
             </div>
         )}
     }

@@ -1,15 +1,42 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-
+import {Modal} from '../../shared/show-modal';
+import {arrangementDetail,adminReject,adminAccept} from '../../../javascripts/componentService/admin/service';
 export class Keppelformtender extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            
+            text:'',buttonType:''
         }
     }
     componentDidMount() {
         
+    }
+    showConfirm(type){
+        this.setState({buttonType:type});
+        if(type == "Reject"){
+            this.refs.Modal.showModal("comfirm");
+            this.setState({
+                text:"Are you sure want to reject?"
+            });
+        }else{
+            this.refs.Modal.showModal("comfirm");
+            this.setState({
+                text:"Are you sure want to accept?"
+            });
+        }
+    }
+    admin_reject(){
+        adminReject(this.props.current.current.arrangement_id).then(res=>{
+            //this.props.page(this.props.current.current.arrangement_id);
+            window.location.href="/admin/auctions/"+sessionStorage.auction_id+"/retailer_dashboard";
+        })
+    }
+    admin_accept(){
+        adminAccept(this.props.current.current.arrangement_id).then(res=>{
+            //this.props.page(this.props.current.current.arrangement_id);
+            window.location.href="/admin/auctions/"+sessionStorage.auction_id+"/retailer_dashboard";
+        })
     }
     render(){
         return(
@@ -50,7 +77,7 @@ export class Keppelformtender extends React.Component{
                                     <td >xxxxxxxxxxx</td>
                                     <td >xxxxxxxxxxxxxxxxxxxx</td>
                                     <td >Accepted : this item should change to 10%</td>
-                                    <td><button>Reject</button><button>Accept</button><button>History</button></td>
+                                    <td><button>History</button></td>
                                 </tr>
                                 <tr>
                                     <td>1</td>
@@ -58,7 +85,7 @@ export class Keppelformtender extends React.Component{
                                     <td >xxxxxxxxxxx</td>
                                     <td >xxxxxxxxxxxxxxxxxxxx</td>
                                     <td >Accepted : this item should change to 10%</td>
-                                    <td><button>Reject</button><button>Accept</button><button>History</button></td>
+                                    <td><button>History</button></td>
                                 </tr>
                             </tbody>
                     </table>
@@ -73,9 +100,10 @@ export class Keppelformtender extends React.Component{
                     </div>
                 </div>
                 <div className="workflow_btn u-mt3">
-                        <button className="lm--button lm--button--primary">Reject</button>
-                        <button className="lm--button lm--button--primary">Accept</button>
+                        <button className="lm--button lm--button--primary" onClick={this.showConfirm.bind(this,'Reject')}>Reject</button>
+                        <button className="lm--button lm--button--primary" onClick={this.showConfirm.bind(this,'Accept')}>Accept</button>
                 </div>
+                <Modal text={this.state.text} acceptFunction={this.state.buttonType === 'Reject'?this.admin_reject.bind(this):this.admin_accept.bind(this)} ref="Modal" />
             </div>
         )
     }
