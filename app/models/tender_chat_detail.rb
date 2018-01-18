@@ -1,13 +1,11 @@
-class TenderChat < ApplicationRecord
-
+class TenderChatDetail < ApplicationRecord
   # Extends
 
   # Includes
 
   # Associations
 
-  belongs_to :arrangement
-  has_many :tender_chat_details
+  belongs_to :tender_chat
 
   # accepts_nested_attributes
 
@@ -22,5 +20,4 @@ class TenderChat < ApplicationRecord
   # Custom
 
   # Methods (class methods before instance methods)
-
 end
