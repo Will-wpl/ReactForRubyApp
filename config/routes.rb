@@ -99,7 +99,8 @@ Rails.application.routes.draw do
       end
       resource :auction_histories, only: %i[show] do
       end
-
+      resources :auction_attachments, only: %i[index create destroy] do
+      end
       resources :arrangements, only: %i[index show obtain update] do
         collection do
           get 'obtain'
@@ -119,7 +120,11 @@ Rails.application.routes.draw do
           post 'node4_retailer_submit'
           post 'node4_retailer_next'
           post 'node5_retailer_submit'
-
+          get 'node1_retailer'
+          get 'node2_retailer'
+          get 'node3_retailer'
+          get 'node4_retailer'
+          get 'node5_retailer'
         end
       end
     end

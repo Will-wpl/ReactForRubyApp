@@ -3,7 +3,6 @@ class Api::AuctionAttachmentsController < Api::BaseController
   # get auction attachments by auction id
   def index
     auction_id = params[:auction_id]
-    # attachments = Auction.find(auction_id).auction_attachments
     attachments = AuctionAttachment.belong_auction(auction_id)
     render json: attachments, status: 200
   end

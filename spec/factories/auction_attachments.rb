@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :auction_attachment do
-    file_name 'test.pdf'
-    file_path 'test.pdf'
+    file_name Faker::File.file_name
+    file_path Faker::File.file_name('abc/def/')
   end
 
   trait :rcuu do
