@@ -56,109 +56,91 @@ class Api::TendersController < Api::BaseController
 
   # work flow function
   def node1_retailer_accept
-    workflow = TenderWorkflow.new.execute(:node1, :accept, params[:id]) do
-    end
+    workflow = TenderWorkflow.new.execute(:node1, :accept, params[:id])
 
     render json: workflow, status: 200
   end
 
   def node1_retailer_reject
-    workflow = TenderWorkflow.new.execute(:node1, :reject, params[:id]) do
-
-    end
+    workflow = TenderWorkflow.new.execute(:node1, :reject, params[:id])
     render json: workflow, status: 200
   end
 
   def node2_retailer_accept_all
-    workflow = TenderWorkflow.new.execute(:node2, :accept_all, params[:id]) do
-
-    end
+    workflow = TenderWorkflow.new.execute(:node2, :accept_all, params[:id])
     render json: workflow, status: 200
   end
 
   def node2_retailer_propose_deviations
-    workflow = TenderWorkflow.new.execute(:node2, :propose_deviations, params[:id]) do
-
-    end
+    workflow = TenderWorkflow.new.execute(:node2, :propose_deviations, params[:id])
     render json: workflow, status: 200
   end
 
   def node3_retailer_withdraw_all_deviations
-    workflow = TenderWorkflow.new.execute(:node3, :withdraw_all_deviations, params[:id]) do
-      chats = JSON.parse(params[:chats])
-      ActiveRecord::Base.transaction do
-        chats.each do |chat|
-          tender_chat = set_tender_chat(chat, params[:id])
-          next unless tender_chat.save
-          chat_info = set_withdraw_tender_chat(tender_chat, chat)
-          TenderChatDetail.chat_save(chat_info)
-        end
+    workflow = nil
+    chats = JSON.parse(params[:chats])
+    ActiveRecord::Base.transaction do
+      chats.each do |chat|
+        tender_chat = set_tender_chat(chat, params[:id])
+        next unless tender_chat.save
+        chat_info = set_withdraw_tender_chat(tender_chat, chat)
+        TenderChatDetail.chat_save(chat_info)
       end
+
+      workflow = TenderWorkflow.new.execute(:node3, :withdraw_all_deviations, params[:id])
     end
+
     render json: workflow, status: 200
   end
 
   def node3_retailer_submit_deviations
-    workflow = TenderWorkflow.new.execute(:node3, :submit_deviations, params[:id]) do
-      chats = JSON.parse(params[:chats])
-      ActiveRecord::Base.transaction do
-        chats.each do |chat|
-          tender_chat = set_tender_chat(chat, params[:id])
-          next unless tender_chat.save
-          chat_info = set_submit_deviation_tender_chat(tender_chat, chat)
-          TenderChatDetail.chat_save(chat_info)
-        end
+    workflow = nil
+    chats = JSON.parse(params[:chats])
+    ActiveRecord::Base.transaction do
+      chats.each do |chat|
+        tender_chat = set_tender_chat(chat, params[:id])
+        next unless tender_chat.save
+        chat_info = set_submit_deviation_tender_chat(tender_chat, chat)
+        TenderChatDetail.chat_save(chat_info)
       end
+
+      workflow = TenderWorkflow.new.execute(:node3, :submit_deviations, params[:id])
     end
     render json: workflow, status: 200
   end
 
   def node3_retailer_next
-    workflow = TenderWorkflow.new.execute(:node3, :next, params[:id]) do
-
-    end
+    workflow = TenderWorkflow.new.execute(:node3, :next, params[:id])
     render json: workflow, status: 200
   end
 
   def node3_send_response
-    workflow = TenderWorkflow.new.execute(:node3, :send_response, params[:id]) do
-
-    end
+    workflow = TenderWorkflow.new.execute(:node3, :send_response, params[:id])
     render json: workflow, status: 200
   end
 
   def node4_retailer_submit
-    workflow = TenderWorkflow.new.execute(:node4, :submit, params[:id]) do
-
-    end
+    workflow = TenderWorkflow.new.execute(:node4, :submit, params[:id])
     render json: workflow, status: 200
   end
 
   def node4_retailer_next
-    workflow = TenderWorkflow.new.execute(:node4, :next, params[:id]) do
-
-    end
+    workflow = TenderWorkflow.new.execute(:node4, :next, params[:id])
     render json: workflow, status: 200
   end
 
   def node4_admin_accept
-    workflow = TenderWorkflow.new.execute(:node4, :accept, params[:id]) do
-
-    end
+    workflow = TenderWorkflow.new.execute(:node4, :accept, params[:id])
     render json: workflow, status: 200
   end
 
   def node4_admin_reject
-    workflow = TenderWorkflow.new.execute(:node4, :reject, params[:id]) do
-
-    end
+    workflow = TenderWorkflow.new.execute(:node4, :reject, params[:id])
     render json: workflow, status: 200
   end
 
   def node5_retailer_submit
-    workflow = TenderWorkflow.new.execute(:node5, :submit, params[:id]) do
-
-    end
+    workflow = TenderWorkflow.new.execute(:node5, :submit, params[:id])
     render json: workflow, status: 200
   end
 
