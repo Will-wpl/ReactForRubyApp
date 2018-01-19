@@ -10,7 +10,7 @@ export class Proposedeviations extends React.Component{
             peak_htl:0,peak_eht:0,off_peak_lt:0,off_peak_hts:0,
             off_peak_htl:0,off_peak_eht:0,buttonType:'',
             deviations_list:[
-                {item:1,clause:3.5,select_list:[1,2,3,4,5,6,7,8],propose_deviation:'xxxxxxxxxxxx',retailer_response:'xxxxxx',sp_response:'Accepted : this item should change to 10%',sp_response_status:'1'},
+                {item:1,clause:3.5,select_list:[1,2,3,4,5,6,7,8],propose_deviation:'xxxxxxxxxxxx',retailer_response:'xxxxxx',sp_response:'Accepted : this item should change to 10%',sp_response_status:'0'},
                 {item:2,clause:5.1,select_list:[1,2,3,4,5,6,7,8],propose_deviation:'xxxxxxxxxxxx',retailer_response:'xxxxxx',sp_response:'Accepted : this item should change to 10%',sp_response_status:'1'},
                 {item:3,clause:5.2,select_list:[1,2,3,4,5,6,7,8],propose_deviation:'xxxxxxxxxxxx',retailer_response:'xxxxxx',sp_response:'Accepted : this item should change to 10%',sp_response_status:'1'},
                 {item:4,clause:4.5,select_list:[1,2,3,4,5,6,7,8],propose_deviation:'xxxxxxxxxxxx',retailer_response:'xxxxxx',sp_response:'Accepted : this item should change to 10%',sp_response_status:'1'},
@@ -129,7 +129,7 @@ export class Proposedeviations extends React.Component{
                         {!this.props.tender ?
                         <div><button className="lm--button lm--button--primary" disabled={!this.props.current.actions.node3_retailer_withdraw_all_deviations} onClick={this.showConfirm.bind(this,'Withdraw_Deviations')}>Withdraw All Deviations</button>
                         <button className="lm--button lm--button--primary" onClick={this.save.bind(this)}>Save</button>
-                        <button className="lm--button lm--button--primary" disabled={!this.props.current.actions.node3_retailer_submit} onClick={this.showConfirm.bind(this,'Submit_Deviations')}>Submit Deviations</button></div> :
+                        <button className="lm--button lm--button--primary" disabled={!this.props.current.actions.node3_retailer_submit_deviations} onClick={this.showConfirm.bind(this,'Submit_Deviations')}>Submit Deviations</button></div> :
                         <button className="lm--button lm--button--primary" onClick={this.next.bind(this)}>Next</button>
                         }
                     </div>

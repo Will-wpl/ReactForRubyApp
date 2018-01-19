@@ -1,4 +1,4 @@
-import {get, update, create} from '../../../javascripts/http';
+import {get, update, create,Ddelete} from '../../../javascripts/http';
 
 export const retailManageComing = (params) => {
     return update('/api/retailer/arrangements/'+params.arrangement.id, params);
@@ -46,4 +46,16 @@ export const retailerNext = (arrangement,node) => {
 
 export const retailerSubmit = (arrangement) => {
     return create('/api/retailer/tenders/'+arrangement+'/node4_retailer_submit');
+}
+
+export const getUndertaking = (arrangement) => {
+    return get('/api/retailer/tenders/'+arrangement+'/node1_retailer');
+}
+
+export const getTenderdocuments = (arrangement) => {
+    return get('/api/retailer/tenders/'+arrangement+'/node2_retailer');
+}
+
+export const removeRetailerFile = (params) => {
+    return Ddelete('/api/retailer/auction_attachments/'+params);
 }

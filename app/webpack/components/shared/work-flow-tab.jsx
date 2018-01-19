@@ -12,17 +12,24 @@ export class Workflowtab extends React.Component{
     }
     stepSelect(index){
         let res = '';
-        if(this.props.selected.length>0){
-            // if(this.props.current_page === index){
-            //     return res;
-            // }
-            let val = this.props.selected.some(item=>{
-                return item === index
-            })
-            if(val){
-                res = 'selected'
+        if(this.props.current.current){
+            if(this.props.current.current.current_node === index){
+                if(this.props.current.current.current_status === "0"){
+                    res = '';
+                }else{
+                    res = 'pending';
+                }
+                return res
             }
-            return res
+            if(this.props.selected.length>0){
+                let val = this.props.selected.some(item=>{
+                    return item === index
+                })
+                if(val){
+                    res = 'selected'
+                }
+                return res
+            }
         }
     }
     render(){
