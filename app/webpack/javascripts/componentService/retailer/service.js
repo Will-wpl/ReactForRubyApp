@@ -56,6 +56,10 @@ export const getTenderdocuments = (arrangement) => {
     return get('/api/retailer/tenders/'+arrangement+'/node2_retailer');
 }
 
+export const getSumission = (arrangement) => {
+    return get('/api/retailer/tenders/'+arrangement+'/node4_retailer');
+}
+
 export const removeRetailerFile = (params) => {
     return Ddelete('/api/retailer/auction_attachments/'+params);
 }

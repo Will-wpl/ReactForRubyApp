@@ -545,9 +545,14 @@ body.choose{
 .workflowtab{
   margin:30px 0px;
   table{ width: 100%; table-layout: fixed;
-    td{height:100px;
+    td{height:110px;
       div{ 
         width: 100%; height: 100%; background: #00afb1; position: relative;
+        &.step1{background:#00afb1 url("../images/sign_confidentiality_undertaking.png") no-repeat center; background-size: 100%;}
+        &.step2{background:#00afb1 url("../images/ender_documents.png") no-repeat center; background-size: 100%;}
+        &.step3{background:#00afb1 url("../images/deviations.png") no-repeat center; background-size: 100%;}
+        &.step4{background:#00afb1 url("../images/submit_form_of_tender.png") no-repeat center; background-size: 100%;}
+        &.step5{background:#00afb1 url("../images/contact_details.png") no-repeat center; background-size:100%;}
         span{ 
           position: absolute; width: 40px; height:40px; right: 0px; top:0px;
           &.selected{background: url("../images/selected_ico_n.png") no-repeat right top;}

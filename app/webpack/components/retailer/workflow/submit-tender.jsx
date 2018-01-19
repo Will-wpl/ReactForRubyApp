@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {Modal} from '../../shared/show-modal';
-import {retailerSubmit,retailerNext,removeRetailerFile} from '../../../javascripts/componentService/retailer/service';
+import {retailerSubmit,retailerNext,removeRetailerFile,getSumission} from '../../../javascripts/componentService/retailer/service';
 import {getLoginUserId} from '../../../javascripts/componentService/util';
 export class Submittender extends React.Component{
     constructor(props){
         super(props);
         this.state={
             text:'',
-            send_status:true,
+            params_type:'',
             fileData:{
                 "upload_tender":[
                     {buttonName:"none",files:[]}
@@ -17,11 +17,35 @@ export class Submittender extends React.Component{
         }
     }
     componentDidMount() {
-        if(this.state.send_status){
-            if(this.props.tenderFn){
-                this.props.tenderFn();
+        if(this.props.current.current){
+            if(this.props.current.current.current_status === '3'){
+                this.send_status = true;
+            }else{
+                this.send_status = false;
+            }
+            if(this.send_status){
+                if(this.props.tenderFn){
+                    this.props.tenderFn();
+                }
             }
         }
+        
+        
+        getSumission(sessionStorage.arrangement_id).then(res=>{
+            console.log(res);
+            let fileObj;
+            fileObj = this.state.fileData;
+            res.map((item,index)=>{
+                fileObj[item.file_type][0].files.push({
+                    id:item.id,
+                    file_name:item.file_name,
+                    file_path:item.file_path 
+                })
+            })
+            this.setState({ 
+                fileData:fileObj
+            })
+        })
     }
     showConfirm(type){
         this.setState({buttonType:type});
@@ -42,6 +66,7 @@ export class Submittender extends React.Component{
             fileindex:fileindex,
             fileid:fileid
         }
+        console.log(obj);
         this.setState({text:'Are you sure want to delete this file?'});
         this.refs.Modal.showModal("comfirm",obj);
     }
@@ -51,8 +76,10 @@ export class Submittender extends React.Component{
             fileObj = this.state.fileData;
             fileObj[callbackObj.filetype][callbackObj.typeindex].files.splice(callbackObj.fileindex,1);
             this.setState({
-                fileData:fileObj
+                fileData:fileObj,
+                text:'Delete this file successful!'
             })
+            this.refs.Modal.showModal();
         },error=>{
 
         })
@@ -106,7 +133,7 @@ export class Submittender extends React.Component{
                                         </div>
                                     </div>
                                     <div className="col-sm-12 col-md-2 u-cell">
-                                    <button className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</button>
+                                    <a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>
                                     </div>
                                     {/* <div className="col-sm-12 col-md-2 u-cell">
                                         {item.buttonName === "none" ? "" : <a onClick={this.fileclick.bind(this, index, type, item.buttonName)} className={"lm--button lm--button--primary "+item.buttonName}>{item.buttonText}</a>}
@@ -126,7 +153,6 @@ export class Submittender extends React.Component{
             $("#"+type+index).next().next().fadeIn(300);
             return;
         }
-        return;
         const barObj = $('#'+type+index).parents("a").next();
         $.ajax({
             url: '/api/retailer/auction_attachments?auction_id='+sessionStorage.auction_id+'&file_type='+type+'&user_id='+getLoginUserId(),
@@ -187,7 +213,7 @@ export class Submittender extends React.Component{
                     }
                     </div>
                 </div>
-                <Modal text={this.state.text} acceptFunction={this.do_submit.bind(this)} ref="Modal" />
+                <Modal text={this.state.text} acceptFunction={this.state.params_type === "remove_file" ? this.do_remove.bind(this) : this.do_submit.bind(this)} ref="Modal" />
             </div>
         )
     }
