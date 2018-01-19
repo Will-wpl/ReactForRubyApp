@@ -548,7 +548,11 @@ body.choose{
     td{height:100px;
       div{ 
         width: 100%; height: 100%; background: #00afb1; position: relative;
-        span.selected{ position: absolute; width: 40px; height:40px; right: 0px; top:0px; background: url("../images/selected_ico_n.png") no-repeat right top;}
+        span{ 
+          position: absolute; width: 40px; height:40px; right: 0px; top:0px;
+          &.selected{background: url("../images/selected_ico_n.png") no-repeat right top;}
+          &.pending{background: url("../images/selected_ico_p.png") no-repeat right top;}
+        }
         &.step_icon{background: url("../images/arrows.png") no-repeat center;}
       }
     }
@@ -565,7 +569,8 @@ body.choose{
    p{ margin: 15px 0px;}
    .sign_btn{ text-align: right;
     a{ margin-left: 15px;}
-  }
+    }
+  .download_ico{background: url("../images/file.png") no-repeat center; cursor: pointer; display: block; width: 45px; height: 54px;}
 }
 
 .tender_documents{
@@ -589,7 +594,11 @@ body.choose{
       }
     }
   }
-  .step_finished{ width: 30px; margin: 0 auto; height: 30px; background: url('../images/pigeon.png') no-repeat center;}
+  abbr{
+    width: 30px; margin: 0 auto; height: 30px; display: block;
+    &.step_finished{ background: url('../images/pigeon.png') no-repeat center;}
+    &.step_pending{ background: url('../images/pigeon_p.png') no-repeat center;}
+  }
 }
 .green{color:green;}
 .red{color:red;}

@@ -13,14 +13,8 @@ export class Retailerworkflow extends React.Component{
         super(props);
         this.state={
             auction:{},text:'',
-            selected:[],current:{},page:1,tender_status:false
+            selected:[],current:{},page:0,tender_status:false
         }
-        this.linklist = [
-            {file_name:"app.js",file_path:"#"},
-            {file_name:"app.js",file_path:"#"},
-            {file_name:"app.js",file_path:"#"},
-            {file_name:"app.js",file_path:"#"}
-        ]
         this.submittender = false;
         this.hiddentimeCount = true;
         this.getPageindex();
@@ -44,9 +38,11 @@ export class Retailerworkflow extends React.Component{
     showpage(index){
         let pageDom='';
         switch(index){
+            case 0 : pageDom = <div></div>
+            break
             case 1 : pageDom = <Signconfidentialityundertaking page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction}/>
             break
-            case 2 : pageDom = <Tenderdocuments page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} linklist={this.linklist} />
+            case 2 : pageDom = <Tenderdocuments page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} />
             break
             case 3 : pageDom = <Proposedeviations page={this.getPageindex.bind(this)} current={this.state.current} tenderFn={()=>{this.setState({tender_status:true})}} auction={this.state.auction} tender={this.state.tender_status} />
             break
@@ -60,7 +56,7 @@ export class Retailerworkflow extends React.Component{
     render(){
         return(
             <div>
-                <Workflowtab auction={this.state.auction} current_page={this.state.page} selected={this.state.selected} />
+                <Workflowtab auction={this.state.auction} current={this.state.current} selected={this.state.selected} />
                 {this.showpage(this.state.page)}
                 <div className="createRaMain u-grid">
                     <a className="lm--button lm--button--primary u-mt3" href="/retailer/home" >Back to Homepage</a>

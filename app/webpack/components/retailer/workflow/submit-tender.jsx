@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {Modal} from '../../shared/show-modal';
-import {retailerSubmit,retailerNext} from '../../../javascripts/componentService/retailer/service';
+import {retailerSubmit,retailerNext,removeRetailerFile} from '../../../javascripts/componentService/retailer/service';
+import {getLoginUserId} from '../../../javascripts/componentService/util';
 export class Submittender extends React.Component{
     constructor(props){
         super(props);
@@ -46,7 +47,7 @@ export class Submittender extends React.Component{
     }
     do_remove(callbackObj){
         let fileObj;
-        removeFile(callbackObj.fileid).then(res=>{
+        removeRetailerFile(callbackObj.fileid).then(res=>{
             fileObj = this.state.fileData;
             fileObj[callbackObj.filetype][callbackObj.typeindex].files.splice(callbackObj.fileindex,1);
             this.setState({
@@ -58,6 +59,8 @@ export class Submittender extends React.Component{
     }
     do_submit(){
         retailerSubmit(this.props.current.current.arrangement_id).then(res=>{
+            this.setState({text:'Submit successful!'});
+            this.refs.Modal.showModal();
             this.props.page();
         })
     }
@@ -126,7 +129,7 @@ export class Submittender extends React.Component{
         return;
         const barObj = $('#'+type+index).parents("a").next();
         $.ajax({
-            url: '/api/retailer/auction_attachments?auction_id='+sessionStorage.auction_id+'&file_type='+type,
+            url: '/api/retailer/auction_attachments?auction_id='+sessionStorage.auction_id+'&file_type='+type+'&user_id='+getLoginUserId(),
             type: 'POST',
             cache: false,
             data: new FormData($('#'+type+"_form")[0]),

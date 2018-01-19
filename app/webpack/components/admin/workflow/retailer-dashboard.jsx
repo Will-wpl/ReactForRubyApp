@@ -7,7 +7,8 @@ export class Adminretailerdashboard extends Component {
     constructor(props, context){
         super(props);
         this.state={
-            showDetail:{}
+            showDetail:{},
+            step:[1,2,3,4,5]
         }
         this.auction = {};
         this.holdStatus = false;
@@ -61,14 +62,19 @@ export class Adminretailerdashboard extends Component {
                                     this.props.retailer_list.map((item,index)=>{
                                         return <tr key={index}>
                                                     <td>{item.company_name}</td>
-                                                    <td>{item.detail.flows[0] ? <div className="step_finished"></div>: ''}</td>
-                                                    <td>{item.detail.flows[1] ? <div className="step_finished"></div>: ''}</td>
-                                                    <td>{item.detail.flows[2] ? <div className="step_finished"></div>: ''}</td>
-                                                    <td>{item.detail.flows[3] ? <div className="step_finished"></div>: ''}</td>
-                                                    <td>{item.detail.flows[4] ? <div className="step_finished"></div>: ''}</td>
+                                                        {
+                                                            this.state.step.map((it,i)=>{
+                                                                return <td key={i}>{item.detail.flows[i] ? 
+                                                                                (item.detail.current.current_node === it ? 
+                                                                                    (item.detail.current.current_status === '2' ? 
+                                                                                    <abbr className="step_pending"></abbr> : '')
+                                                                                    : <abbr className="step_finished"></abbr>)
+                                                                                : ''}</td>
+                                                            })
+                                                        }
                                                     <td>{item.detail.current.turn_to_role === 2 ? <button disabled={true}>Manage Contact</button> 
-                                                    : <button onClick={this.manage_contact.bind(this,item.arrangement_id)}>Manage Contact</button>}
-                                                    <button onClick={this.showDetail.bind(this,item.arrangement_id)}>Contact Details</button></td>
+                                                        : <button onClick={this.manage_contact.bind(this,item.arrangement_id)}>Manage Contact</button>}
+                                                        <button onClick={this.showDetail.bind(this,item.arrangement_id)}>Contact Details</button></td>
                                                 </tr>
                                     })
                                 }

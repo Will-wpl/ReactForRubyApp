@@ -1,16 +1,22 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {Modal} from '../../shared/show-modal';
-import {retailerPproposeDeviations,retailerAcceptAll} from '../../../javascripts/componentService/retailer/service';
+import {retailerPproposeDeviations,retailerAcceptAll,getTenderdocuments} from '../../../javascripts/componentService/retailer/service';
 export class Tenderdocuments extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            buttonType:''
+            buttonType:'',aggregate:{},attachments:[]
         }
     }
     componentDidMount() {
-        
+        getTenderdocuments(sessionStorage.arrangement_id).then(res=>{
+            console.log(res);
+            this.setState({
+                aggregate:res.aggregate_consumptions,
+                attachments:res.attachments
+            })
+        })
     }
     showConfirm(type){
         this.setState({buttonType:type});
@@ -62,17 +68,17 @@ export class Tenderdocuments extends React.Component{
                                         <tbody>
                                             <tr>
                                                 <td>Peak (7am-7pm)</td>
-                                                <td >{this.props.auction.peak_lt?parseInt(Number(this.props.auction.peak_lt)):0}</td>
-                                                <td >{this.props.auction.peak_hts?parseInt(Number(this.props.auction.peak_hts)):0}</td>
-                                                <td >{this.props.auction.peak_htl?parseInt(Number(this.props.auction.peak_htl)):0}</td>
-                                                <td >{this.props.auction.peak_eht?parseInt(Number(this.props.auction.peak_eht)):0}</td>
+                                                <td >{this.state.aggregate.total_lt_peak?parseInt(Number(this.state.aggregate.total_lt_peak)):0}</td>
+                                                <td >{this.state.aggregate.total_hts_peak?parseInt(Number(this.state.aggregate.total_hts_peak)):0}</td>
+                                                <td >{this.state.aggregate.total_htl_peak?parseInt(Number(this.state.aggregate.total_htl_peak)):0}</td>
+                                                <td >{this.state.aggregate.total_eht_peak?parseInt(Number(this.state.aggregate.total_eht_peak)):0}</td>
                                             </tr>
                                             <tr>
                                                 <td>Off-Peak (7pm-7am)</td>
-                                                <td >{this.props.auction.off_peak_lt?parseInt(Number(this.props.auction.off_peak_lt)):0}</td>
-                                                <td >{this.props.auction.off_peak_hts?parseInt(Number(this.props.auction.off_peak_hts)):0}</td>
-                                                <td >{this.props.auction.off_peak_htl?parseInt(Number(this.props.auction.off_peak_htl)):0}</td>
-                                                <td >{this.props.auction.off_peak_eht?parseInt(Number(this.props.auction.off_peak_eht)):0}</td>
+                                                <td >{this.state.aggregate.total_lt_off_peak?parseInt(Number(this.state.aggregate.total_lt_off_peak)):0}</td>
+                                                <td >{this.state.aggregate.total_hts_off_peak?parseInt(Number(this.state.aggregate.total_hts_off_peak)):0}</td>
+                                                <td >{this.state.aggregate.total_htl_off_peak?parseInt(Number(this.state.aggregate.total_htl_off_peak)):0}</td>
+                                                <td >{this.state.aggregate.total_eht_off_peak?parseInt(Number(this.state.aggregate.total_eht_off_peak)):0}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -85,8 +91,8 @@ export class Tenderdocuments extends React.Component{
                 </label>
                 <div className="lm--formItem-right lm--formItem-control">
                     <ul className="tender_list">
-                        {this.props.linklist ? this.props.linklist.map((item,index)=>{
-                            return <li key={index}>item {index+1} : <a href={item.file_path}>{item.file_name}</a></li>
+                        {this.state.attachments ? this.state.attachments.map((item,index)=>{
+                            return <li key={index}>item {index+1} : <a download={item.file_name} href={item.file_path}>{item.file_name}</a></li>
                         }) : ''}
                     </ul>
                 </div>
