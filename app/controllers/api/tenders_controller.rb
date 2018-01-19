@@ -80,14 +80,14 @@ class Api::TendersController < Api::BaseController
 
   def node3_retailer_withdraw_all_deviations
     workflow = nil
-    #chats = JSON.parse(params[:chats])
+    chats = JSON.parse(params[:chats])
     ActiveRecord::Base.transaction do
-      # chats.each do |chat|
-      #   tender_chat = set_tender_chat(chat, params[:id])
-      #   next unless tender_chat.save
-      #   chat_info = set_withdraw_tender_chat(tender_chat, chat)
-      #   TenderChatDetail.chat_save(chat_info)
-      # end
+      chats.each do |chat|
+        tender_chat = set_tender_chat(chat, params[:id])
+        next unless tender_chat.save
+        chat_info = set_withdraw_tender_chat(tender_chat, chat)
+        TenderChatDetail.chat_save(chat_info)
+      end
 
       workflow = TenderWorkflow.new.execute(:node3, :withdraw_all_deviations, params[:id])
     end
