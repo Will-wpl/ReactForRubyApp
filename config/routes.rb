@@ -126,6 +126,9 @@ Rails.application.routes.draw do
           get 'node3_retailer'
           get 'node4_retailer'
           get 'node5_retailer'
+          get 'history'
+          post 'node3_retailer_withdraw'
+          post 'node3_retailer_save'
         end
       end
     end

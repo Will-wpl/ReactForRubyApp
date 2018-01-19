@@ -19,8 +19,8 @@ class TenderWorkflow < Workflow
     @node4 = Node.new(:node4, 4, 'in processing',
                       submit: Event.new(:submit, :node4, 1, 2, '2'),
                       next: Event.new(:next, :node5, 2, 2, '0'),
-                      accept: Event.new(:accept, :node4, 2, 1, '2'),
-                      reject: Event.new(:reject, :node4, 2, 1, '2'))
+                      accept: Event.new(:accept, :node4, 2, 1, '3'),
+                      reject: Event.new(:reject, :node4, 2, 1, '4'))
     @node5 = Node.new(:node5, 5, 'end',
                       submit: Event.new(:submit, nil, 1, 2, nil))
     super(node1: @node1, node2: @node2, node3: @node3, node4: @node4, node5: @node5)
