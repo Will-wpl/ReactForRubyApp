@@ -1,5 +1,11 @@
 class TenderChat < ApplicationRecord
 
+  # comments
+  # sp_response_status
+  # '0' reject
+  # '1' accept
+  # '2' retailer save, just input processing, don't show at history list
+  # '3' retailer submit deviation
   # Extends
 
   # Includes
