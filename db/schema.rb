@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180118084000) do
+ActiveRecord::Schema.define(version: 20180119021730) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -212,6 +212,7 @@ ActiveRecord::Schema.define(version: 20180118084000) do
     t.bigint "tender_chat_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "response_status"
     t.index ["tender_chat_id"], name: "index_tender_chat_details_on_tender_chat_id"
   end
 
