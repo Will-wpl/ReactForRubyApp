@@ -19,8 +19,8 @@ class TenderChatDetail < ApplicationRecord
   # Validations
 
   # Scopes
-  scope :last_retailer_response, ->(chat_id) { where("tender_chat_id = ? and response_status != '2' and (sp_response = '' or sp_response is null)", chat_id).last }
-  scope :last_admin_response, ->(chat_id) { where("tender_chat_id = ? and response_status != '2' and (retailer_response = '' or retailer_response is null)", chat_id).last }
+  scope :retailer_response, ->(chat_id) { where("tender_chat_id = ? and (sp_response = '' or sp_response is null)", chat_id) }
+  scope :admin_response, ->(chat_id) { where("tender_chat_id = ? and (retailer_response = '' or retailer_response is null)", chat_id) }
   # Callbacks
 
   # Delegates
@@ -29,7 +29,7 @@ class TenderChatDetail < ApplicationRecord
 
   # Methods (class methods before instance methods)
 
-  def self.chat_save(chat_info)
+  def self.chat_save(chat, chat_info)
     ActiveRecord::Base.transaction do
       chat_detail = TenderChatDetail.new
       chat_detail.tender_chat = chat_info.chat
