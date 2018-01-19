@@ -27,6 +27,8 @@ class Api::TendersController < Api::BaseController
   end
 
   def node3_retailer
+    attachments_count = AuctionAttachment.belong_auction(@arrangement.auction_id)
+                      .where(file_type: 'tender_documents_upload').count
     chats = []
     TenderChat.where(arrangement_id: params[:id]).each do |chat|
       last_retailer_response = TenderChatDetail.last_retailer_response(chat.id)
@@ -36,7 +38,7 @@ class Api::TendersController < Api::BaseController
                  sp_response: last_sp_response.sp_response)
     end
 
-    render json: chats, status: 200
+    render json: { chats: chats, attachments_count: attachments_count }, status: 200
   end
 
   def node4_retailer
