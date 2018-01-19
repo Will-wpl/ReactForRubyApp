@@ -63,3 +63,7 @@ export const getSumission = (arrangement) => {
 export const removeRetailerFile = (params) => {
     return Ddelete('/api/retailer/auction_attachments/'+params);
 }
+
+export const retailManageComingNode5 = (params) => {
+    return create('/api/retailer/tenders/'+params+'/node5_retailer_submit');
+}

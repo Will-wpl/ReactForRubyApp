@@ -48,7 +48,7 @@ export class Retailerworkflow extends React.Component{
             break
             case 4 : pageDom = <Submittender page={this.getPageindex.bind(this)} tenderFn={()=>{this.setState({tender_status:true})}} tender={this.state.tender_status} current={this.state.current} auction={this.state.auction} submit={this.submittender}/>
             break
-            case 5 : pageDom = <RetailerManage page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} hiddentimeCount={this.hiddentimeCount}/>
+            case 5 : pageDom = <RetailerManage page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} hiddentimeCount={this.hiddentimeCount} node={true}/>
             break
         }
         return pageDom;

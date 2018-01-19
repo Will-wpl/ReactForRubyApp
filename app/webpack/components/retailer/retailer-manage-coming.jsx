@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import {TimeCuntDown} from '../shared/time-cuntdown';
 //import {DuringCountDown} from '../shared/during-countdown';
-import {getRetailerAuctionInVersionOne, retailManageComing} from '../../javascripts/componentService/retailer/service';
+import {getRetailerAuctionInVersionOne, retailManageComing,retailManageComingNode5} from '../../javascripts/componentService/retailer/service';
 import {getAuction} from '../../javascripts/componentService/common/service';
 import {Modal} from '../shared/show-modal';
 import {getLoginUserId} from '../../javascripts/componentService/util';
@@ -145,12 +145,7 @@ export class RetailerManage extends Component {
             disabled:true
         })
     }
-    checkSuccess(event,obj){
-        if(this.props.onSubmitjest){
-            this.props.onSubmitjest();
-        }else{
-            event.preventDefault();
-        }
+    retailerManageComing(){
         retailManageComing({
             arrangement: {
                 "id": this.state.id,
@@ -168,6 +163,8 @@ export class RetailerManage extends Component {
                 "hts_off_peak": 0,//+this.refs.hts_off_peak.value
                 "htl_peak": 0.1458,//+this.refs.htl_peak.value
                 "htl_off_peak": 0.1458,//+this.refs.htl_off_peak.value
+                "eht_peak": 0.1458,//+this.refs.htl_peak.value
+                "eht_off_peak": 0.1458,//+this.refs.htl_off_peak.value
                 "accept_status": "1"   // '0':reject '1':accept '2':pending
             }
         }).then(res => {
@@ -188,6 +185,20 @@ export class RetailerManage extends Component {
             }, error => {
                 console.log(error);
             })
+    }
+    checkSuccess(event,obj){
+        if(this.props.onSubmitjest){
+            this.props.onSubmitjest();
+        }else{
+            event.preventDefault();
+        }
+        if(this.props.node){
+            retailManageComingNode5(sessionStorage.arrangement_id).then(res=>{
+                this.retailerManageComing();
+            })
+        }else{
+            this.retailerManageComing();
+        }
     }
     Change(type,e){
         let value = e.target.value;
