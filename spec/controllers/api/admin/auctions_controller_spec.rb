@@ -603,6 +603,25 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
         end
       end
     end
+
+    describe 'GET buyer_dashbaord' do
+
+      context 'Got buyers of auction' do
+
+        def do_request
+          get :buyer_dashboard, params: { id: auction.id, consumer_type: '2'}
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+          expect(hash['count']).to eq(4)
+        end
+      end
+    end
+
+
   end
 
   context 'retailer user' do
