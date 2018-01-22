@@ -20,6 +20,8 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
   let! (:consumption_8) { create(:consumption, user: buyer_i_s[4], auction: auction, action_status: '2') }
   let!(:published_upcoming_auction) { create(:auction, :for_next_month, :upcoming, :published) }
   let!(:published_living_auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
+
+
   base_url = 'api/admin/auctions'
 
   context 'admin user' do
@@ -575,6 +577,31 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       end
 
 
+    end
+
+    describe 'GET retailer_dashbaord' do
+      let!(:auction_tender) { create(:auction, :for_next_month, :upcoming, :published) }
+      let!(:retailer_user){ create(:user, :with_retailer) }
+      let!(:arrangement) { create(:arrangement, user: retailer_user, auction: auction_tender) }
+      let!(:tender) { create(:tender_state_machine, arrangement: arrangement, current_node: 1) }
+      let!(:retailer_user1){ create(:user, :with_retailer) }
+      let!(:arrangement1) { create(:arrangement, user: retailer_user1, auction: auction_tender) }
+      let!(:tender2) { create(:tender_state_machine, arrangement: arrangement1, current_node: 1) }
+
+
+      context 'Got tenders of auction' do
+        def do_request
+          get :retailer_dashboard, params: { id: auction_tender.id}
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+          expect(hash[0]['detail']['flows'].to_s).to eq('[1]')
+          expect(hash[1]['detail']['flows'].to_s).to eq('[1]')
+        end
+      end
     end
   end
 

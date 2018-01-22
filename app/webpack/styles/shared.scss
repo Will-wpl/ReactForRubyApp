@@ -420,7 +420,6 @@ dfn.manage_label{
       table-layout: fixed;
       th{
         font-size: 16px;
-        &:first-child{ width: 45%;}
       }
       td{
         div{ width: 100%; height:20px;
@@ -542,3 +541,70 @@ body.choose{
     
   }
 }
+
+.workflowtab{
+  margin:30px 0px;
+  table{ width: 100%; table-layout: fixed;
+    td{height:110px;
+      div{ 
+        width: 100%; height: 100%; background: #00afb1; position: relative;
+        &.step1{background:#00afb1 url("../images/sign_confidentiality_undertaking.png") no-repeat center; background-size: 100%;}
+        &.step2{background:#00afb1 url("../images/ender_documents.png") no-repeat center; background-size: 100%;}
+        &.step3{background:#00afb1 url("../images/deviations.png") no-repeat center; background-size: 100%;}
+        &.step4{background:#00afb1 url("../images/submit_form_of_tender.png") no-repeat center; background-size: 100%;}
+        &.step5{background:#00afb1 url("../images/contact_details.png") no-repeat center; background-size:100%;}
+        span{ 
+          position: absolute; width: 40px; height:40px; right: 0px; top:0px;
+          &.selected{background: url("../images/selected_ico_n.png") no-repeat right top;}
+          &.pending{background: url("../images/selected_ico_p.png") no-repeat right top;}
+        }
+        &.step_icon{background: url("../images/arrows.png") no-repeat center;}
+      }
+    }
+  }
+}
+
+.workflow_btn{
+  text-align: right;
+  button{ margin-left: 15px;}
+}
+.sign_box{
+   width: 100%;
+   h4{color: #fd6301; margin: 15px 0px;}
+   p{ margin: 15px 0px;}
+   .sign_btn{ text-align: right;
+    a{ margin-left: 15px;}
+    }
+  .download_ico{background: url("../images/file.png") no-repeat center; cursor: pointer; display: block; width: 45px; height: 54px;}
+}
+
+.tender_documents{
+  .tender_list{
+    li{ line-height:45px; list-style: none; overflow:hidden;
+      a{cursor: pointer;}
+    }
+  }
+}
+
+.propose_deviations{
+  table.retailer_fill{
+    tbody{
+      tr{
+        td{
+          input,select{
+            width:90%; margin: 0px auto; padding: 2px; border:1px solid #fff;
+          }
+          button{background: #00888a; padding: 4px 8px; width: auto; height: auto; display: inline-block; border-radius: 5px; margin:5px;}
+        }
+      }
+    }
+  }
+  abbr{
+    width: 30px; margin: 0 auto; height: 30px; display: block;
+    &.step_finished{ background: url('../images/pigeon.png') no-repeat center;}
+    &.step_pending{ background: url('../images/pigeon_p.png') no-repeat center;}
+  }
+}
+.green{color:green;}
+.red{color:red;}
+button[disabled='']{background: #666 !important; color:#999 !important;}

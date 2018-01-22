@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180109114624) do
+ActiveRecord::Schema.define(version: 20180119030408) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,8 +30,6 @@ ActiveRecord::Schema.define(version: 20180109114624) do
     t.decimal "hts_off_peak", precision: 5, scale: 4
     t.decimal "htl_peak", precision: 5, scale: 4
     t.decimal "htl_off_peak", precision: 5, scale: 4
-    t.string "specifications_doc_url"
-    t.string "briefing_pack_doc_url"
     t.bigint "user_id"
     t.bigint "auction_id"
     t.string "accept_status"
@@ -40,6 +38,7 @@ ActiveRecord::Schema.define(version: 20180109114624) do
     t.string "action_status"
     t.decimal "eht_peak"
     t.decimal "eht_off_peak"
+    t.string "comments"
     t.index ["auction_id"], name: "index_arrangements_on_auction_id"
     t.index ["user_id"], name: "index_arrangements_on_user_id"
   end
@@ -205,6 +204,27 @@ ActiveRecord::Schema.define(version: 20180109114624) do
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
     t.index ["name"], name: "index_roles_on_name"
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource_type_and_resource_id"
+  end
+
+  create_table "tender_chat_details", force: :cascade do |t|
+    t.string "retailer_response"
+    t.string "sp_response"
+    t.bigint "tender_chat_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "response_status"
+    t.string "propose_deviation"
+    t.index ["tender_chat_id"], name: "index_tender_chat_details_on_tender_chat_id"
+  end
+
+  create_table "tender_chats", force: :cascade do |t|
+    t.integer "item"
+    t.string "clause"
+    t.string "sp_response_status"
+    t.bigint "arrangement_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["arrangement_id"], name: "index_tender_chats_on_arrangement_id"
   end
 
   create_table "tender_state_machines", force: :cascade do |t|

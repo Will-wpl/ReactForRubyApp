@@ -45,9 +45,14 @@ export class SearchList extends Component {
             }
         }
     }
-    clickFunction(id,url,name,type,list_name){
+    clickFunction(id,url,name,type,list_name,auction_id){
         if(type == "auction"){
-            sessionStorage.auction_id=id;
+            if(auction_id){
+                sessionStorage.arrangement_id=id;
+                sessionStorage.auction_id=auction_id;
+            }else{
+                sessionStorage.auction_id=id;
+            }
         }
         if(type == "show_detail"){
             this.setState({
@@ -178,6 +183,10 @@ export class SearchList extends Component {
                                                             return <td key={i}>
                                                                     {item[`${it.field_name}`] === '0' ? 'HDB' : (item[`${it.field_name}`] === '1' ? 'Private High-rise' : 'Landed')}
                                                                    </td>
+                                                        }else if(it.field_name === 'my_status'){
+                                                            return <td key={i}>
+                                                                    {item[`${it.field_name}`] === "null" ? 'Pending' : (item[`${it.field_name}`] === '0' ? 'Rejected' : 'Accepted')}
+                                                                   </td>
                                                         }else if(it.field_name === 'actions'){
                                         
                                                         }else{
@@ -193,10 +202,10 @@ export class SearchList extends Component {
                                                 <td className="search_list_btn">
                                                     {
                                                         item["actions"] >= 0 ? (<a className={this.props.table_data.actions[item["actions"]].icon} 
-                                                                            onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,this.props.table_data.actions[item["actions"]].url,this.props.table_data.actions[item["actions"]].name,this.props.table_data.actions[item["actions"]].interface_type ? this.props.table_data.actions[item["actions"]].interface_type : "",item.name ? item.name : '')}>
+                                                                            onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,this.props.table_data.actions[item["actions"]].url,this.props.table_data.actions[item["actions"]].name,this.props.table_data.actions[item["actions"]].interface_type ? this.props.table_data.actions[item["actions"]].interface_type : "",item.name ? item.name : '',item.auction_id)}>
                                                                             {this.props.table_data.actions[item["actions"]].name}</a>)
                                                         : (this.props.table_data.actions.map((ik,k)=>{
-                                                            return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '')}>{ik.name}</a>
+                                                            return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>{ik.name}</a>
                                                         }))
                                                     }
                                                 </td>

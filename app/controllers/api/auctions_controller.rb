@@ -23,7 +23,7 @@ class Api::AuctionsController < Api::BaseController
       @auction.total_htl_off_peak = 0
       @auction.total_eht_peak = 0
       @auction.total_eht_off_peak = 0
-      @auction.total_volume =0
+      @auction.total_volume = 0
       if @auction.save
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
         render json: @auction, status: 201
@@ -53,7 +53,13 @@ class Api::AuctionsController < Api::BaseController
 
   # PUT publish auction by ajax
   def publish
-    published_gid = "RA#{Time.current.year}" + (Auction.published.current_year.count + 1).to_s.rjust(4, '0')
+    exist_published_gid = @auction.published_gid
+    published_gid = if exist_published_gid.nil? || exist_published_gid == ''
+                      "RA#{Time.current.year}" + (Auction.published.current_year.count + 1).to_s.rjust(4, '0')
+                    else
+                      exist_published_gid
+                    end
+
     if @auction.update(publish_status: params[:publish_status], published_gid: published_gid)
       AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
     end
@@ -158,12 +164,17 @@ class Api::AuctionsController < Api::BaseController
       { name: 'Date/Time', field_name: 'actual_begin_time' },
       { name: 'Status', field_name: 'status' }
     ]
-    actions = [{ url: '/admin/auctions/:id/upcoming', name: 'Edit', icon: 'edit', interface_type: 'auction' }]
+    actions = [
+      { url: '/admin/auctions/:id/retailer_dashboard', name: 'Retailer Dashboard', icon: 'edit', interface_type: 'auction' },
+      { url: '/admin/auctions/:id/buyer_dashboard', name: 'Buyer Dashboard', icon: 'edit', interface_type: 'auction' },
+      { url: '/admin/auctions/:id/upcoming', name: 'Manage', icon: 'edit', interface_type: 'auction' },
+      { url: '/admin/auctions/:id/online', name: 'Commence', icon: 'edit', interface_type: 'auction' }
+]
     data = []
     auction.order(actual_begin_time: :asc).each do |auction|
       status = if Time.current < auction.actual_begin_time
                  'Upcoming'
-               #elsif Time.current >= auction.actual_begin_time && Time.current <= auction.actual_end_time
+               # elsif Time.current >= auction.actual_begin_time && Time.current <= auction.actual_end_time
                else
                  'In Progress'
                end
@@ -306,22 +317,22 @@ class Api::AuctionsController < Api::BaseController
     role_name = params[:role_name]
     if role_name == 'retailer'
       Arrangement.find_by_auction_id(auction_id).is_not_notify.update_all(action_status: '1')
-      #retailer_send_mails Arrangement.find_by_auction_id(auction_id).pluck(:user_id)
+      # retailer_send_mails Arrangement.find_by_auction_id(auction_id).pluck(:user_id)
     elsif role_name == 'buyer'
       Consumption.find_by_auction_id(auction_id).is_not_notify.update_all(action_status: '1')
-      #buyer_send_mails Consumption.find_by_auction_id(auction_id).pluck(:user_id)
+      # buyer_send_mails Consumption.find_by_auction_id(auction_id).pluck(:user_id)
     end
     render json: nil, status: 200
   end
 
   def retailer_dashboard
-
+    tenders = TenderWorkflow.new.get_action_state_machine(params[:id])
+    render json: tenders, status: 200
   end
 
   def buyer_dashboard
 
   end
-
 
   private
 

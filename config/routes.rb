@@ -45,6 +45,8 @@ Rails.application.routes.draw do
           get 'buyers'
           get 'selects'
           put 'send_mails'
+          get 'retailer_dashboard'
+          get 'buyer_dashboard'
         end
         collection do
           get 'obtain'
@@ -98,7 +100,8 @@ Rails.application.routes.draw do
       end
       resource :auction_histories, only: %i[show] do
       end
-
+      resources :auction_attachments, only: %i[index create destroy] do
+      end
       resources :arrangements, only: %i[index show obtain update] do
         collection do
           get 'obtain'
@@ -118,7 +121,14 @@ Rails.application.routes.draw do
           post 'node4_retailer_submit'
           post 'node4_retailer_next'
           post 'node5_retailer_submit'
-
+          get 'node1_retailer'
+          get 'node2_retailer'
+          get 'node3_retailer'
+          get 'node4_retailer'
+          get 'node5_retailer'
+          get 'history'
+          post 'node3_retailer_withdraw'
+          post 'node3_retailer_save'
         end
       end
     end

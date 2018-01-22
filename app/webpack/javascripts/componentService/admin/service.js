@@ -71,6 +71,21 @@ export const deleteStatus = (params) => {
     return Ddelete('/api/admin/'+params.type+'/'+params.id);
 }
 
+export const getRetailerList = (params) => {
+    return get('/api/admin/auctions/'+params+'/retailer_dashboard');
+}
+
+export const adminReject = (params) => {
+    return create('/api/admin/tenders/'+params+'/node4_admin_reject');
+}
+
+export const adminAccept = (params) => {
+    return create('/api/admin/tenders/'+params+'/node4_admin_accept');
+}
+
+export const adminSendResponse = (params) => {
+    return create('/api/admin/tenders/'+params+'/node3_send_response');
+}
 //arrangements
 //consumptions
 export const getHistories = (params) => {

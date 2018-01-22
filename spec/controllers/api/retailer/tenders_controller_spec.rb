@@ -5,7 +5,10 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
   let!(:retailer_user){ create(:user, :with_retailer) }
   let!(:arrangement) { create(:arrangement, user: retailer_user, auction: auction) }
   let!(:tender) { create(:tender_state_machine, arrangement: arrangement, current_node: 1) }
-
+  let!(:rcuu) { create(:auction_attachment, :rcuu, auction: auction)}
+  let!(:btu) { create(:auction_attachment, :btu, auction: auction)}
+  let!(:tdus) { create_list(:auction_attachment, 5, :tdu, auction: auction) }
+  let!(:retailer_tdus) { create_list(:auction_attachment, 7, :tdu, auction: auction, user_id: retailer_user.id) }
   context 'retailer user' do
     before { sign_in retailer_user }
 
@@ -21,7 +24,7 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
             hash_body = JSON.parse(response.body)
             expect(response).to have_http_status(:ok)
             expect(hash_body['current']['current_node']).to eq(1)
-            expect(hash_body['flows'].to_s).to eq('[1]')
+            expect(hash_body['flows'].to_s).to eq('[]')
           end
         end
       end
@@ -37,27 +40,41 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
             expect(response).to have_http_status(:ok)
             expect(hash_body['current']['current_node']).to eq(2)
             expect(hash_body['current']['previous_node']).to eq(1)
-            expect(hash_body['flows'].to_s).to eq('[1, 2]')
+            expect(hash_body['flows'].to_s).to eq('[1]')
           end
         end
       end
 
       describe 'POST node1_retailer_reject' do
-      context 'Reject and closed tender' do
-        def do_request
-          post :node1_retailer_reject, params: { id: arrangement.id }
-        end
-        before { do_request }
-        it 'Success' do
-          hash_body = JSON.parse(response.body)
-          expect(response).to have_http_status(:ok)
-          expect(hash_body['current']['current_node']).to be_nil
-          expect(hash_body['current']['previous_node']).to be_nil
-          expect(hash_body['current']['current_status']).to eq('reject')
-          expect(hash_body['flows'].to_s).to eq('[1]')
+        context 'Reject and closed tender' do
+          def do_request
+            post :node1_retailer_reject, params: { id: arrangement.id }
+          end
+          before { do_request }
+          it 'Success' do
+            hash_body = JSON.parse(response.body)
+            expect(response).to have_http_status(:ok)
+            expect(hash_body['current']['current_node']).to be_nil
+            expect(hash_body['current']['previous_node']).to be_nil
+            expect(hash_body['current']['current_status']).to eq('reject')
+            expect(hash_body['flows'].to_s).to eq('[]')
+          end
         end
       end
-    end
+
+      describe 'GET node1_retailer' do
+        context 'get details' do
+          def do_request
+            post :node1_retailer, params: { id: arrangement.id }
+          end
+          before { do_request }
+          it 'Success' do
+            hash_body = JSON.parse(response.body)
+            expect(response).to have_http_status(:ok)
+            expect(hash_body[0]['file_type']).to eq('retailer_confidentiality_undertaking_upload')
+          end
+        end
+      end
     end
 
     context 'node2' do
@@ -75,7 +92,7 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
             expect(response).to have_http_status(:ok)
             expect(hash_body['current']['current_node']).to eq(4)
             expect(hash_body['current']['previous_node']).to eq(2)
-            expect(hash_body['flows'].to_s).to eq('[1, 2, 4]')
+            expect(hash_body['flows'].to_s).to eq('[1, 2]')
           end
         end
       end
@@ -91,21 +108,41 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
             expect(response).to have_http_status(:ok)
             expect(hash_body['current']['current_node']).to eq(3)
             expect(hash_body['current']['previous_node']).to eq(2)
-            expect(hash_body['flows'].to_s).to eq('[1, 2, 3]')
+            expect(hash_body['flows'].to_s).to eq('[1, 2]')
           end
         end
       end
 
+      describe 'GET node2_retailer' do
+        context 'get details' do
+          def do_request
+            post :node2_retailer, params: { id: arrangement.id }
+          end
+          before { do_request }
+          it 'Success' do
+            hash_body = JSON.parse(response.body)
+            expect(response).to have_http_status(:ok)
+            expect(hash_body['attachments'].size).to eq(5)
+          end
+        end
+      end
     end
 
     context 'node3' do
       let!(:tender_node1_accept) { create(:tender_state_machine, arrangement: arrangement, previous_node: 1, current_node: 2, turn_to_role: 2,current_role: 2) }
       let!(:tender_node2_propose_deviations) { create(:tender_state_machine, arrangement: arrangement, previous_node: 2, current_node: 3, turn_to_role: 2,current_role: 2) }
-      describe 'POST node3_retailer_withdraw_all_deviations' do
 
+      describe 'POST node3_retailer_withdraw_all_deviations' do
+        let!(:chat1) { create(:tender_chat, arrangement: arrangement) }
+        let!(:chat1_detail1) { create(:tender_chat_detail, :with_retailer, tender_chat: chat1) }
         context 'Go to node4' do
           def do_request
-            post :node3_retailer_withdraw_all_deviations, params: { id: arrangement.id }
+            chat1 = { id: 0, item: 1, clause: '1.1', propose_deviation: 'abc1', retailer_response: 'aaa' }
+            chat2 = { id: 0, item: 2, clause: '1.2', propose_deviation: 'abc2', retailer_response: 'bbb' }
+            chat3 = { id: chat1[:id], item: chat1[:item], clause: chat1[:clause], propose_deviation: chat1[:propose_deviation], retailer_response: chat1[:retailer_response] }
+
+            chats = [chat1, chat2, chat3]
+            post :node3_retailer_withdraw_all_deviations, params: { id: arrangement.id, chats: chats.to_json }
           end
           before { do_request }
           it 'Success' do
@@ -114,16 +151,23 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
             expect(hash_body['current']['current_node']).to eq(4)
             expect(hash_body['current']['previous_node']).to eq(3)
             expect(hash_body['current']['turn_to_role']).to eq(2)
-            expect(hash_body['flows'].to_s).to eq('[1, 2, 3, 4]')
+            expect(hash_body['flows'].to_s).to eq('[1, 2, 3]')
+
           end
         end
       end
 
       describe 'POST node3_retailer_submit' do
-
+        let!(:chat1) { create(:tender_chat, arrangement: arrangement) }
+        let!(:chat1_detail1) { create(:tender_chat_detail, :with_retailer, tender_chat: chat1) }
         context 'Still at node3 and turn to admin' do
           def do_request
-            post :node3_retailer_submit_deviations, params: { id: arrangement.id }
+            chat1 = { id: 0, item: 1, clause: '1.1', propose_deviation: 'abc1', retailer_response: 'aaa' }
+            chat2 = { id: 0, item: 2, clause: '1.2', propose_deviation: 'abc2', retailer_response: 'bbb' }
+            chat3 = { id: chat1['id'], item: chat1['item'], clause: chat1['clause'], propose_deviation: chat1['propose_deviation'], retailer_response: chat1['retailer_response'] }
+
+            chats = [chat1, chat2, chat3]
+            post :node3_retailer_submit_deviations, params: { id: arrangement.id, chats: chats.to_json  }
           end
           before { do_request }
           it 'Success' do
@@ -150,8 +194,101 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
             expect(hash_body['current']['current_node']).to eq(4)
             expect(hash_body['current']['previous_node']).to eq(3)
             expect(hash_body['current']['turn_to_role']).to eq(2)
-            expect(hash_body['flows'].to_s).to eq('[1, 2, 3, 4]')
+            expect(hash_body['flows'].to_s).to eq('[1, 2, 3]')
           end
+        end
+
+      end
+
+      describe 'GET node3_retailer' do
+
+        context 'No chat' do
+          def do_request
+            get :node3_retailer, params: { id: arrangement.id }
+          end
+          before { do_request }
+          it 'Success' do
+            hash_body = JSON.parse(response.body)
+            expect(response).to have_http_status(:ok)
+            expect(hash_body['attachments_count']).to eq(5)
+            expect(hash_body['chats'].size).to eq(0)
+          end
+        end
+
+        context 'Has chats' do
+          let!(:chat1) { create(:tender_chat, arrangement: arrangement) }
+          let!(:chat1_detail1) { create(:tender_chat_detail, :with_retailer, tender_chat: chat1) }
+          let!(:chat2) { create(:tender_chat, arrangement: arrangement) }
+          let!(:chat2_detail1) { create(:tender_chat_detail, :with_retailer, tender_chat: chat2) }
+          def do_request
+            get :node3_retailer, params: { id: arrangement.id }
+          end
+          before { do_request }
+          it 'Success' do
+            hash_body = JSON.parse(response.body)
+            expect(response).to have_http_status(:ok)
+            expect(hash_body['attachments_count']).to eq(5)
+            expect(hash_body['chats'].size).to eq(2)
+          end
+        end
+      end
+
+      describe 'GET history' do
+        let!(:chat1) { create(:tender_chat, arrangement: arrangement) }
+        let!(:chat1_detail1) { create(:tender_chat_detail, :with_retailer, tender_chat: chat1) }
+        let!(:chat1_detail2) { create(:tender_chat_detail, :with_sp, :sp_accept, tender_chat: chat1) }
+        let!(:chat1_detail3) { create(:tender_chat_detail, :with_retailer, tender_chat: chat1) }
+        let!(:chat1_detail4) { create(:tender_chat_detail, :with_sp, :sp_accept, tender_chat: chat1) }
+
+        def do_request
+          get :history, params: { id: arrangement.id, chat_id: chat1.id }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash_body = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+          expect(hash_body.size).to eq(4)
+        end
+      end
+
+      describe 'POST node3_retailer_save' do
+        let!(:chat1) { create(:tender_chat, arrangement: arrangement) }
+        let!(:chat1_detail1) { create(:tender_chat_detail, :with_retailer, tender_chat: chat1) }
+        # let!(:chat1_detail2) { create(:tender_chat_detail, :with_sp, :sp_reject, tender_chat: chat1) }
+
+        def do_request
+          chat1 = { id: 0, item: 1, clause: '1.1', propose_deviation: 'abc1', retailer_response: 'aaa' }
+          chat2 = { id: 0, item: 2, clause: '1.2', propose_deviation: 'abc2', retailer_response: 'bbb' }
+          chat3 = { id: chat1['id'], item: chat1['item'], clause: chat1['clause'], propose_deviation: chat1['propose_deviation'], retailer_response: chat1['retailer_response'] }
+
+          chats = [chat1, chat2, chat3]
+          post :node3_retailer_save, params: { id: arrangement.id, chats: chats.to_json }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash_body = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+          count = TenderChat.where('arrangement_id = ?', arrangement.id).count
+          expect(count).to eq(4)
+        end
+      end
+
+      describe 'POST node3_retailer_withdraw' do
+        let!(:chat1) { create(:tender_chat, arrangement: arrangement) }
+        let!(:chat1_detail1) { create(:tender_chat_detail, :with_retailer, tender_chat: chat1) }
+
+        def do_request
+          chat3 = { id: chat1['id'], item: chat1['item'], clause: chat1['clause'], propose_deviation: chat1['propose_deviation'], retailer_response: chat1['retailer_response'] }
+          post :node3_retailer_withdraw, params: { id: arrangement.id, chat: chat3 }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash_body = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+          expect(hash_body['sp_response_status']).to eq('1')
         end
       end
 
@@ -193,7 +330,21 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
             expect(hash_body['current']['current_node']).to eq(5)
             expect(hash_body['current']['previous_node']).to eq(4)
             expect(hash_body['current']['turn_to_role']).to eq(2)
-            expect(hash_body['flows'].to_s).to eq('[1, 2, 3, 4, 5]')
+            expect(hash_body['flows'].to_s).to eq('[1, 2, 3, 4]')
+          end
+        end
+      end
+
+      describe 'GET node4_retailer' do
+        context 'get details' do
+          def do_request
+            post :node4_retailer, params: { id: arrangement.id }
+          end
+          before { do_request }
+          it 'Success' do
+            hash_body = JSON.parse(response.body)
+            expect(response).to have_http_status(:ok)
+            expect(hash_body.size).to eq(7)
           end
         end
       end
@@ -216,8 +367,8 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
           it 'Success' do
             hash_body = JSON.parse(response.body)
             expect(response).to have_http_status(:ok)
-            expect(hash_body['current']['current_node']).to be_nil
-            expect(hash_body['current']['previous_node']).to be_nil
+            expect(hash_body['current']['current_node']).to eq(5)
+            expect(hash_body['current']['previous_node']).to eq(5)
             expect(hash_body['current']['current_status']).to eq('closed')
             expect(hash_body['flows'].to_s).to eq('[1, 2, 3, 4, 5]')
           end

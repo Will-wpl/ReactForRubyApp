@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import {TimeCuntDown} from '../shared/time-cuntdown';
 //import {DuringCountDown} from '../shared/during-countdown';
-import {getRetailerAuctionInVersionOne, retailManageComing} from '../../javascripts/componentService/retailer/service';
+import {getRetailerAuctionInVersionOne, retailManageComing,retailManageComingNode5} from '../../javascripts/componentService/retailer/service';
 import {getAuction} from '../../javascripts/componentService/common/service';
 import {Modal} from '../shared/show-modal';
 import {getLoginUserId} from '../../javascripts/componentService/util';
@@ -31,7 +31,7 @@ export class RetailerManage extends Component {
         this.auctionData = {};
     }
     componentWillMount(){
-        getAuction('retailer').then(res=>{
+        getAuction('retailer',sessionStorage.auction_id).then(res=>{
             this.auction = res;
             this.timerTitle = res ? `${res.name} on ${moment(res.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
 
@@ -74,8 +74,7 @@ export class RetailerManage extends Component {
         if(this.props.doJest){
             auction_id = 1
         }else{
-            auction_id = window.location.href.split("auctions/")[1];
-            auction_id = auction_id.split("/upcoming")[0];
+            auction_id = sessionStorage.auction_id;
         }
         let user_id = getLoginUserId();
         getRetailerAuctionInVersionOne({ auction_id: auction_id, user_id: user_id}).then(res => {
@@ -109,31 +108,18 @@ export class RetailerManage extends Component {
                 this.auctionData = res;
                 this.setState({
                     id:res.id,
-                    main_name:res.main_name,
-                    main_email_address:res.main_email_address,
-                    main_mobile_number:res.main_mobile_number,
-                    main_office_number:res.main_office_number,
-                    alternative_name:res.alternative_name,
-                    alternative_email_address:res.alternative_email_address,
-                    alternative_mobile_number:res.alternative_mobile_number,
-                    alternative_office_number:res.alternative_office_number
+                    main_name:res.main_name ? res.main_name : '',
+                    main_email_address:res.main_email_address ? res.main_email_address :'',
+                    main_mobile_number:res.main_mobile_number ? res.main_mobile_number:'',
+                    main_office_number:res.main_office_number?res.main_office_number:'',
+                    alternative_name:res.alternative_name?res.alternative_name:'',
+                    alternative_email_address:res.alternative_email_address?res.alternative_email_address:'',
+                    alternative_mobile_number:res.alternative_mobile_number?res.alternative_mobile_number:'',
+                    alternative_office_number:res.alternative_office_number?res.alternative_office_number:''
                 })
-                // this.refs.main_name.value = res.main_name;
-                // this.refs.main_email_address.value = res.main_email_address;
-                // this.refs.main_mobile_number.value = res.main_mobile_number;
-                // this.refs.main_office_number.value = res.main_office_number;
-                // this.refs.alternative_name.value = res.alternative_name;
-                // this.refs.alternative_email_address.value = res.alternative_email_address;
-                // this.refs.alternative_mobile_number.value = res.alternative_mobile_number;
-                // this.refs.alternative_office_number.value = res.alternative_office_number;
+    
             }
             
-            //this.refs.lt_peak.value = res.lt_peak == null ? '' : this.padZero(res.lt_peak,4).toString().split('.')[1];
-            //this.refs.lt_off_peak.value = res.lt_off_peak == null ? '' : this.padZero(res.lt_off_peak,4).toString().split('.')[1];
-            //this.refs.hts_peak.value = res.hts_peak == null ? '' : this.padZero(res.hts_peak,4).toString().split('.')[1];
-            //this.refs.hts_off_peak.value = res.hts_off_peak == null ? '' : this.padZero(res.hts_off_peak,4).toString().split('.')[1];
-            //this.refs.htl_peak.value = res.htl_peak == null ? '' : this.padZero(res.htl_peak,4).toString().split('.')[1];
-            //this.refs.htl_off_peak.value = res.htl_off_peak == null ? '' : this.padZero(res.htl_off_peak,4).toString().split('.')[1];
         }, error => {
             console.log(error);
         })
@@ -159,12 +145,7 @@ export class RetailerManage extends Component {
             disabled:true
         })
     }
-    checkSuccess(event,obj){
-        if(this.props.onSubmitjest){
-            this.props.onSubmitjest();
-        }else{
-            event.preventDefault();
-        }
+    retailerManageComing(){
         retailManageComing({
             arrangement: {
                 "id": this.state.id,
@@ -182,6 +163,8 @@ export class RetailerManage extends Component {
                 "hts_off_peak": 0,//+this.refs.hts_off_peak.value
                 "htl_peak": 0.1458,//+this.refs.htl_peak.value
                 "htl_off_peak": 0.1458,//+this.refs.htl_off_peak.value
+                "eht_peak": 0.1458,//+this.refs.htl_peak.value
+                "eht_off_peak": 0.1458,//+this.refs.htl_off_peak.value
                 "accept_status": "1"   // '0':reject '1':accept '2':pending
             }
         }).then(res => {
@@ -202,6 +185,20 @@ export class RetailerManage extends Component {
             }, error => {
                 console.log(error);
             })
+    }
+    checkSuccess(event,obj){
+        if(this.props.onSubmitjest){
+            this.props.onSubmitjest();
+        }else{
+            event.preventDefault();
+        }
+        if(this.props.node){
+            retailManageComingNode5(sessionStorage.arrangement_id).then(res=>{
+                this.retailerManageComing();
+            })
+        }else{
+            this.retailerManageComing();
+        }
     }
     Change(type,e){
         let value = e.target.value;
@@ -240,7 +237,7 @@ export class RetailerManage extends Component {
                 </p>
             </div>
             <div id="retailer_form" className={this.state.live_modal_do}>
-            <TimeCuntDown  title={this.timerTitle} auction={this.auction} countDownOver={()=>{this.setState({disabled:true,allbtnStatus:false})}}/>
+            {!this.props.hiddentimeCount ? <TimeCuntDown auction={this.auction} countDownOver={()=>{this.setState({disabled:true,allbtnStatus:false})}}/> : ''}
             {/* <DuringCountDown /> */}
             <form onSubmit={this.checkSuccess.bind(this)}>
             <div className="u-grid">
@@ -368,9 +365,9 @@ export class RetailerManage extends Component {
             </form>
             <Modal text={this.state.text} ref="Modal" />
             </div>
-            <div className="createRaMain u-grid">
+            {/* <div className="createRaMain u-grid">
             <a className="lm--button lm--button--primary u-mt3" href="/retailer/home" >Back to Homepage</a>
-            </div>
+            </div> */}
             </div>
         )
     }
