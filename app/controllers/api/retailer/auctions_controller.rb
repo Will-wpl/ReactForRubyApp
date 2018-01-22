@@ -22,7 +22,7 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
       arrangement = Arrangement.find_published_auction.find_notify_retailer(current_user.id).where(search_where_array).page(params[:page_index]).per(params[:page_size])
       total = arrangement.total_count
     else
-      arrangement = Arrangement.find_notify_retailer(current_user.id).find_published_auction
+      arrangement = Arrangement.find_published_auction.find_notify_retailer(current_user.id)
       total = arrangement.count
     end
 
