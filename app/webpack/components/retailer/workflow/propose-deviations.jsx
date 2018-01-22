@@ -56,7 +56,7 @@ export class Proposedeviations extends React.Component{
         }
     }
     withdrawDeviations(){
-        retailerWithdrawAllDeviations(this.props.current.current.arrangement_id).then(res=>{
+        retailerWithdrawAllDeviations(this.props.current.current.arrangement_id,this.editData()).then(res=>{
             this.props.page();
             //this.props.tenderFn();
         })
@@ -91,7 +91,7 @@ export class Proposedeviations extends React.Component{
         })
         deviationslist = deviationslist.substr(0, deviationslist.length-1);
         deviationslist = '['+deviationslist+']';
-        console.log(deviationslist);
+        //console.log(deviationslist);
         return deviationslist;
     }
     addDeviations(){
