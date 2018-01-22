@@ -232,7 +232,7 @@ class Api::TendersController < Api::BaseController
     chat_info.retailer_response = chat['retailer_response']
     chat_info.sp_response = nil
     chat_info.response_status = '3'
-    chat_info.sp_response_status = '1'
+    chat_info.sp_response_status = '3'
     chat_info
   end
 
