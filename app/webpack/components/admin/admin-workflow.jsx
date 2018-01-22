@@ -13,7 +13,7 @@ export class Adminworkflow extends Component {
         super(props);
         this.state={
             auction:{},
-            disabled:false,current:{},page:0,
+            disabled:false,current:{},page:1,
             allbtnStatus:true,retailer_list:[]
         }
         this.linklist = [

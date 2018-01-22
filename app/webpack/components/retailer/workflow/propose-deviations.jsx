@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {Modal} from '../../shared/show-modal';
-import {retailerWithdrawAllDeviations,retailerSubmitDeviations,retailerNext} from '../../../javascripts/componentService/retailer/service';
+import {retailerWithdrawAllDeviations,retailerSubmitDeviations,retailerNext,getRetailerDeviationsList,retailerDeviationsSave} from '../../../javascripts/componentService/retailer/service';
 export class Proposedeviations extends React.Component{
     constructor(props){
         super(props);
@@ -9,23 +9,37 @@ export class Proposedeviations extends React.Component{
             peak_lt:0,peak_hts:0,
             peak_htl:0,peak_eht:0,off_peak_lt:0,off_peak_hts:0,
             off_peak_htl:0,off_peak_eht:0,buttonType:'',
-            deviations_list:[
-                {item:1,clause:3.5,select_list:[1,2,3,4,5,6,7,8],propose_deviation:'xxxxxxxxxxxx',retailer_response:'xxxxxx',sp_response:'Accepted : this item should change to 10%',sp_response_status:'0'},
-                {item:2,clause:5.1,select_list:[1,2,3,4,5,6,7,8],propose_deviation:'xxxxxxxxxxxx',retailer_response:'xxxxxx',sp_response:'Accepted : this item should change to 10%',sp_response_status:'1'},
-                {item:3,clause:5.2,select_list:[1,2,3,4,5,6,7,8],propose_deviation:'xxxxxxxxxxxx',retailer_response:'xxxxxx',sp_response:'Accepted : this item should change to 10%',sp_response_status:'1'},
-                {item:4,clause:4.5,select_list:[1,2,3,4,5,6,7,8],propose_deviation:'xxxxxxxxxxxx',retailer_response:'xxxxxx',sp_response:'Accepted : this item should change to 10%',sp_response_status:'1'},
-            ]
+            select_list:[],
+            deviations_list:[]
         }
     }
     componentDidMount() {
-        let showNext = this.state.deviations_list.find(item=>{
-            return item.sp_response_status === "0"
-        })
-        if(!showNext){
-            if(this.props.tenderFn){
-                this.props.tenderFn();
+        getRetailerDeviationsList(sessionStorage.arrangement_id).then(res=>{
+            let select_list = [];
+            for(let i = 0; i<res.attachments_count; i++)
+            {
+                select_list.push(i+1);
             }
-        }
+            this.setState({select_list:select_list})
+            if(res.chats.length > 0){
+                console.log(res.chats);
+                this.setState({deviations_list:res.chats});
+            }else{
+                this.setState({
+                    deviations_list:[
+                        {id:0,item:1,clause:'',propose_deviation:'',retailer_response:'',sp_response:''},
+                    ]
+                })
+                // let showNext = this.state.deviations_list.find(item=>{
+                //     return item.sp_response_status === "0"
+                // })
+                // if(!showNext){
+                //     if(this.props.tenderFn){
+                //         this.props.tenderFn();
+                //     }
+                // }
+            }
+        })
     }
     showConfirm(type){
         this.setState({buttonType:type});
@@ -42,13 +56,14 @@ export class Proposedeviations extends React.Component{
         }
     }
     withdrawDeviations(){
-        retailerWithdrawAllDeviations(this.props.current.current.arrangement_id).then(res=>{
+        retailerWithdrawAllDeviations(this.props.current.current.arrangement_id,this.editData()).then(res=>{
             this.props.page();
             //this.props.tenderFn();
         })
     }
     submitDeviations(){
-        retailerSubmitDeviations(this.props.current.current.arrangement_id).then(res=>{
+        //console.log(this.editData());
+        retailerSubmitDeviations(this.props.current.current.arrangement_id,this.editData()).then(res=>{
             this.refs.Modal.showModal();
             this.setState({
                 text:"Submit deviations successful!"
@@ -57,18 +72,33 @@ export class Proposedeviations extends React.Component{
         })
     }
     save(){
-
+        retailerDeviationsSave(this.props.current.current.arrangement_id,this.editData()).then(res=>{
+            this.refs.Modal.showModal();
+            this.setState({
+                text:"Save deviations successful!"
+            });
+        })
     }
     next(){
         retailerNext(this.props.current.current.arrangement_id,3).then(res=>{
             this.props.page();
         })
     }
+    editData(){
+        let deviationslist = [];
+        this.state.deviations_list.map((item, index) => {
+            deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'"},';
+        })
+        deviationslist = deviationslist.substr(0, deviationslist.length-1);
+        deviationslist = '['+deviationslist+']';
+        //console.log(deviationslist);
+        return deviationslist;
+    }
     addDeviations(){
-        let add_new = {item:'',clause:'',select_list:[1,2,3,4,5,6,7,8],
+        let add_new = {id:0,item:1,clause:'',
                         propose_deviation:'',
                         retailer_response:'',
-                        sp_response:''},list = this.state.deviations_list;
+                        sp_response:'',sp_response_status:'1'},list = this.state.deviations_list;
                         list.push(add_new);
         this.setState({deviations_list:list});
     }
@@ -99,7 +129,7 @@ export class Proposedeviations extends React.Component{
                                     return <tr key={index}>
                                             <td>
                                                 <select id={"item_"+(index)} defaultValue={item.item}>
-                                                    {item.select_list.map((it,i)=>{
+                                                    {this.state.select_list.map((it,i)=>{
                                                         return <option key={i} value={it}>{it}</option>
                                                     })}
                                                 </select>

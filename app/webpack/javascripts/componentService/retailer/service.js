@@ -36,8 +36,16 @@ export const retailerWithdrawAllDeviations = (arrangement) => {
     return create('/api/retailer/tenders/'+arrangement+'/node3_retailer_withdraw_all_deviations');
 }
 
-export const retailerSubmitDeviations = (arrangement) => {
-    return create('/api/retailer/tenders/'+arrangement+'/node3_retailer_submit_deviations');
+export const retailerSubmitDeviations = (arrangement,data) => {
+    return create('/api/retailer/tenders/'+arrangement+'/node3_retailer_submit_deviations',{chats:data});
+}
+
+export const retailerDeviationsSave = (arrangement,data) => {
+    return create('/api/retailer/tenders/'+arrangement+'/node3_retailer_save',{chats:data});
+}
+
+export const retailerWithdraw = (arrangement,data) => {
+    return create('/api/retailer/tenders/'+arrangement+'/node3_retailer_save',data);
 }
 
 export const retailerNext = (arrangement,node) => {
@@ -66,4 +74,8 @@ export const removeRetailerFile = (params) => {
 
 export const retailManageComingNode5 = (params) => {
     return create('/api/retailer/tenders/'+params+'/node5_retailer_submit');
+}
+
+export const getRetailerDeviationsList = (params) => {
+    return get('/api/retailer/tenders/'+params+'/node3_retailer');
 }
