@@ -185,10 +185,6 @@ class Api::TendersController < Api::BaseController
     render json: nil, status: 200
   end
 
-  def node3_admin_send_response
-
-  end
-
 
   private
 
