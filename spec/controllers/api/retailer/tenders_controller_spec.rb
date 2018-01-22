@@ -288,7 +288,7 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
         it 'Success' do
           hash_body = JSON.parse(response.body)
           expect(response).to have_http_status(:ok)
-          expect(hash_body['sp_response_status']).to eq('1')
+          expect(hash_body['sp_response_status']).to eq('4')
         end
       end
 

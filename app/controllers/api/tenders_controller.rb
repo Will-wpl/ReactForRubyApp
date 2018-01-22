@@ -212,7 +212,7 @@ class Api::TendersController < Api::BaseController
     chat_info.retailer_response = 'I have withdrawn this deviation.'
     chat_info.sp_response = nil
     chat_info.response_status = '1'
-    chat_info.sp_response_status = '1'
+    chat_info.sp_response_status = '4'
     chat_info
   end
 
