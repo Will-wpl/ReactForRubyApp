@@ -5,7 +5,9 @@ RSpec.describe Api::Retailer::AuctionsController, type: :controller do
   let!(:admin_user){ create(:user, :with_admin) }
   let!(:retailer_user){ create(:user, :with_retailer) }
   let!(:auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
-  let!(:arrangement) { create(:arrangement, user: retailer_user, auction: auction) }
+  let!(:arrangement) { create(:arrangement, user: retailer_user, auction: auction, action_status: '1') }
+
+
   base_url = 'api/retailer/auctions'
   context 'retailer user' do
     before { sign_in retailer_user }
@@ -65,6 +67,45 @@ RSpec.describe Api::Retailer::AuctionsController, type: :controller do
         expect(patch: "/#{base_url}/#{auction.id}").not_to be_routable
       end
     end
+  end
+
+  describe 'GET retailer published auction list' do
+    before {sign_in retailer_user}
+    context 'Page published auction' do
+      def do_request
+        get :published, params: {page_size: '10', page_index: '1' }
+      end
+
+      before { do_request }
+      it 'Success' do
+        hash = JSON.parse(response.body)
+        expect(hash['headers'].size).to eq(6)
+        expect(hash['bodies']['total']).to eq(1)
+        expect(hash['bodies']['data'].size).to eq(1)
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context 'Params pager published auction' do
+      def do_request
+        get :published, params: { name: [auction.name, 'like', 'auctions'],
+                                  actual_begin_time: [Time.current.strftime("%Y-%m-%d"), 'date_between', 'auctions'],
+                                  publish_status: [auction.publish_status, '=', 'auctions'],
+                                  page_size: '10', page_index: '1' }
+      end
+
+      before { do_request }
+      it 'Success' do
+        hash = JSON.parse(response.body)
+        expect(hash['headers'].size).to eq(6)
+        expect(hash['bodies']['data'].size).to eq(1)
+        expect(hash['bodies']['data'][0]['name']).to eq(auction.name)
+        expect(hash['bodies']['data'][0]['actions']).to eq(1)
+        expect(hash['bodies']['data'][0]['auction_status']).to eq('In Progress')
+      end
+    end
+
+
   end
 
 end
