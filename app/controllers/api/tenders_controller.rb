@@ -193,7 +193,7 @@ class Api::TendersController < Api::BaseController
   end
 
   def set_tender_chat(chat, arrangement_id)
-    if chat['id'] == 0 || chat['id'].nil?
+    if chat['id'] == '0' || chat['id'].nil?
       tender_chat = TenderChat.new
       tender_chat.item = chat['item']
       tender_chat.clause = chat['clause']
