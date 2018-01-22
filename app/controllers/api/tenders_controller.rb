@@ -160,6 +160,9 @@ class Api::TendersController < Api::BaseController
 
   def history
     details = TenderChat.find(params[:chat_id]).tender_chat_details
+    details.reject! do |detail|
+      detail.sp_response_status == '2'
+    end
     render json: details, status: 200
   end
 
