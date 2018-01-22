@@ -70,7 +70,7 @@ const goToCompletePage = (auctionId) => {
 const runes = () => {
     const domNode = document.getElementById('retailerlive');
     if (domNode !== null) {
-        getAuction('retailer').then(auction => {
+        getAuction('retailer',sessionStorage.auction_id).then(auction => {
             getAuctionTimeRule(auction.id).then(res => {
                 renderRoot(auction, res);
             }, error => {
