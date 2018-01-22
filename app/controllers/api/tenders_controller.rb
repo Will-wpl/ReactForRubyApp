@@ -33,10 +33,11 @@ class Api::TendersController < Api::BaseController
     TenderChat.where(arrangement_id: params[:id]).each do |chat|
       last_retailer_response = TenderChatDetail.retailer_response(chat.id).last
       last_sp_response = TenderChatDetail.admin_response(chat.id).last
-      chats.push(item: chat.item, clause: chat.clause, sp_response_status: chat.sp_response_status,
+      chats.push(id: chat.id, item: chat.item, clause: chat.clause, sp_response_status: chat.sp_response_status,
                  retailer_response: last_retailer_response.nil? ? nil : last_retailer_response.retailer_response,
                  propose_deviation: last_retailer_response.nil? ? nil : last_retailer_response.propose_deviation,
-                 sp_response: last_sp_response.nil? ? nil : last_sp_response.sp_response)
+                 sp_response: last_sp_response.nil? ? nil : last_sp_response.sp_response,
+                 response_status: last_sp_response.nil? ? nil : last_sp_response.response_status)
     end
 
     render json: { chats: chats, attachments_count: attachments_count }, status: 200
