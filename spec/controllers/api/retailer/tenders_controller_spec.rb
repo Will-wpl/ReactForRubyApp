@@ -137,9 +137,9 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
         let!(:chat1_detail1) { create(:tender_chat_detail, :with_retailer, tender_chat: chat1) }
         context 'Go to node4' do
           def do_request
-            chat1 = { id: 0, item: 1, clause: '1.1', propose_deviation: 'abc1', retailer_response: 'aaa' }
-            chat2 = { id: 0, item: 2, clause: '1.2', propose_deviation: 'abc2', retailer_response: 'bbb' }
-            chat3 = { id: chat1[:id], item: chat1[:item], clause: chat1[:clause], propose_deviation: chat1[:propose_deviation], retailer_response: chat1[:retailer_response] }
+            chat1 = { id: '0', item: 1, clause: '1.1', propose_deviation: 'abc1', retailer_response: 'aaa' }
+            chat2 = { id: '0', item: 2, clause: '1.2', propose_deviation: 'abc2', retailer_response: 'bbb' }
+            chat3 = { id: chat1[:id].to_s, item: chat1[:item], clause: chat1[:clause], propose_deviation: chat1[:propose_deviation], retailer_response: chat1[:retailer_response] }
 
             chats = [chat1, chat2, chat3]
             post :node3_retailer_withdraw_all_deviations, params: { id: arrangement.id, chats: chats.to_json }
@@ -162,9 +162,9 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
         let!(:chat1_detail1) { create(:tender_chat_detail, :with_retailer, tender_chat: chat1) }
         context 'Still at node3 and turn to admin' do
           def do_request
-            chat0 = { id: 0, item: 1, clause: '1.1', propose_deviation: 'abc1', retailer_response: 'aaa' }
-            chat2 = { id: 0, item: 2, clause: '1.2', propose_deviation: 'abc2', retailer_response: 'bbb' }
-            chat3 = { id: chat1['id'], item: chat1['item'], clause: chat1['clause'], propose_deviation: chat1['propose_deviation'], retailer_response: chat1['retailer_response'] }
+            chat0 = { id: '0', item: 1, clause: '1.1', propose_deviation: 'abc1', retailer_response: 'aaa' }
+            chat2 = { id: '0', item: 2, clause: '1.2', propose_deviation: 'abc2', retailer_response: 'bbb' }
+            chat3 = { id: chat1['id'].to_s, item: chat1['item'], clause: chat1['clause'], propose_deviation: chat1['propose_deviation'], retailer_response: chat1['retailer_response'] }
 
             chats = [chat0, chat2, chat3]
             post :node3_retailer_submit_deviations, params: { id: arrangement.id, chats: chats.to_json  }
@@ -253,14 +253,14 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
       end
 
       describe 'POST node3_retailer_save' do
-        let!(:chat1) { create(:tender_chat, arrangement: arrangement) }
-        let!(:chat1_detail1) { create(:tender_chat_detail, :with_retailer, tender_chat: chat1) }
+        let!(:chat1_1) { create(:tender_chat, arrangement: arrangement) }
+        let!(:chat1_detail1) { create(:tender_chat_detail, :with_retailer, tender_chat: chat1_1) }
         # let!(:chat1_detail2) { create(:tender_chat_detail, :with_sp, :sp_reject, tender_chat: chat1) }
 
         def do_request
-          chat1 = { id: 0, item: 1, clause: '1.1', propose_deviation: 'abc1', retailer_response: 'aaa' }
-          chat2 = { id: 0, item: 2, clause: '1.2', propose_deviation: 'abc2', retailer_response: 'bbb' }
-          chat3 = { id: chat1['id'], item: chat1['item'], clause: chat1['clause'], propose_deviation: chat1['propose_deviation'], retailer_response: chat1['retailer_response'] }
+          chat1 = { id: '0', item: 1, clause: '1.1', propose_deviation: 'abc1', retailer_response: 'aaa' }
+          chat2 = { id: '0', item: 2, clause: '1.2', propose_deviation: 'abc2', retailer_response: 'bbb' }
+          chat3 = { id: chat1_1['id'].to_s, item: chat1_1['item'], clause: chat1_1['clause'], propose_deviation: chat1_1['propose_deviation'], retailer_response: chat1_1['retailer_response'] }
 
           chats = [chat1, chat2, chat3]
           post :node3_retailer_save, params: { id: arrangement.id, chats: chats.to_json }
@@ -271,7 +271,7 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
           hash_body = JSON.parse(response.body)
           expect(response).to have_http_status(:ok)
           count = TenderChat.where('arrangement_id = ?', arrangement.id).count
-          expect(count).to eq(4)
+          expect(count).to eq(3)
         end
       end
 

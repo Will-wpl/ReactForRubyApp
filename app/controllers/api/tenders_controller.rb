@@ -160,8 +160,8 @@ class Api::TendersController < Api::BaseController
 
   def history
     details = TenderChat.find(params[:chat_id]).tender_chat_details
-    details.reject! do |detail|
-      detail.sp_response_status == '2'
+    details = details.reject do |detail|
+      detail.response_status == '2'
     end
     render json: details, status: 200
   end
@@ -214,7 +214,7 @@ class Api::TendersController < Api::BaseController
     chat_info.propose_deviation = chat['propose_deviation']
     chat_info.retailer_response = 'I have withdrawn this deviation.'
     chat_info.sp_response = nil
-    chat_info.response_status = '1'
+    chat_info.response_status = '4'
     chat_info.sp_response_status = '4'
     chat_info
   end
@@ -234,8 +234,8 @@ class Api::TendersController < Api::BaseController
     chat_info.propose_deviation = chat['propose_deviation']
     chat_info.retailer_response = chat['retailer_response']
     chat_info.sp_response = nil
-    chat_info.response_status = '3'
-    chat_info.sp_response_status = '3'
+    chat_info.response_status = chat['sp_response_status']
+    chat_info.sp_response_status = chat['sp_response_status']
     chat_info
   end
 
@@ -243,7 +243,7 @@ class Api::TendersController < Api::BaseController
     chat_info = ChatInfoDto.new(tender_chat)
     chat_info.sp_response = chat['sp_response']
     chat_info.sp_response_status = chat['sp_response_status']
-    chat_info.response_status = '1'
+    chat_info.response_status = chat['sp_response_status']
     chat_info
   end
 
