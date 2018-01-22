@@ -45,7 +45,8 @@ export const retailerDeviationsSave = (arrangement,data) => {
 }
 
 export const retailerWithdraw = (arrangement,data) => {
-    return create('/api/retailer/tenders/'+arrangement+'/node3_retailer_save',data);
+    console.log(data);
+    return create('/api/retailer/tenders/'+arrangement+'/node3_retailer_withdraw',{chat:data});
 }
 
 export const retailerNext = (arrangement,node) => {

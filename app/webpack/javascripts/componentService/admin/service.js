@@ -83,8 +83,12 @@ export const adminAccept = (params) => {
     return create('/api/admin/tenders/'+params+'/node4_admin_accept');
 }
 
-export const adminSendResponse = (params) => {
-    return create('/api/admin/tenders/'+params+'/node3_send_response');
+export const adminSendResponse = (params,data) => {
+    return create('/api/admin/tenders/'+params+'/node3_send_response',{chats:data});
+}
+
+export const getAdminDeviations = (params) => {
+    return get('/api/admin/tenders/'+params+'/node3_admin');
 }
 //arrangements
 //consumptions
