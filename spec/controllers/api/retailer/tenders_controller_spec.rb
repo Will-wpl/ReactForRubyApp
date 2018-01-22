@@ -162,11 +162,11 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
         let!(:chat1_detail1) { create(:tender_chat_detail, :with_retailer, tender_chat: chat1) }
         context 'Still at node3 and turn to admin' do
           def do_request
-            chat1 = { id: 0, item: 1, clause: '1.1', propose_deviation: 'abc1', retailer_response: 'aaa' }
+            chat0 = { id: 0, item: 1, clause: '1.1', propose_deviation: 'abc1', retailer_response: 'aaa' }
             chat2 = { id: 0, item: 2, clause: '1.2', propose_deviation: 'abc2', retailer_response: 'bbb' }
             chat3 = { id: chat1['id'], item: chat1['item'], clause: chat1['clause'], propose_deviation: chat1['propose_deviation'], retailer_response: chat1['retailer_response'] }
 
-            chats = [chat1, chat2, chat3]
+            chats = [chat0, chat2, chat3]
             post :node3_retailer_submit_deviations, params: { id: arrangement.id, chats: chats.to_json  }
           end
           before { do_request }

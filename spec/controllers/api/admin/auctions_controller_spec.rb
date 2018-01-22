@@ -583,10 +583,10 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       let!(:auction_tender) { create(:auction, :for_next_month, :upcoming, :published) }
       let!(:retailer_user){ create(:user, :with_retailer) }
       let!(:arrangement) { create(:arrangement, user: retailer_user, auction: auction_tender) }
-      let!(:tender) { create(:tender_state_machine, arrangement: arrangement, current_node: 1) }
+      let!(:tender) { create(:tender_state_machine, arrangement: arrangement, previous_node: 1, current_node: 1) }
       let!(:retailer_user1){ create(:user, :with_retailer) }
       let!(:arrangement1) { create(:arrangement, user: retailer_user1, auction: auction_tender) }
-      let!(:tender2) { create(:tender_state_machine, arrangement: arrangement1, current_node: 1) }
+      let!(:tender2) { create(:tender_state_machine, arrangement: arrangement1, previous_node: 1, current_node: 1) }
 
 
       context 'Got tenders of auction' do

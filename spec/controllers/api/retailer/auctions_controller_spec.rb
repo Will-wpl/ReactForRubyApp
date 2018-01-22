@@ -19,7 +19,7 @@ RSpec.describe Api::Retailer::AuctionsController, type: :controller do
         it 'success' do
           hash_body = JSON.parse(response.body)
           expect(hash_body['id']).to eq(auction.id)
-          expect(hash_body['name']).to be_nil
+          expect(hash_body['name']).to eq(auction.name)
           expect(response).to have_http_status(:ok)
         end
       end

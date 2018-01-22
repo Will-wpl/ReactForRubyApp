@@ -29,18 +29,13 @@ class Api::TendersController < Api::BaseController
   def node3_retailer
     attachments_count = AuctionAttachment.belong_auction(@arrangement.auction_id)
                       .where(file_type: 'tender_documents_upload').count
-    chats = []
-    TenderChat.where(arrangement_id: params[:id]).each do |chat|
-      last_retailer_response = TenderChatDetail.retailer_response(chat.id).last
-      last_sp_response = TenderChatDetail.admin_response(chat.id).last
-      chats.push(id: chat.id, item: chat.item, clause: chat.clause, sp_response_status: chat.sp_response_status,
-                 retailer_response: last_retailer_response.nil? ? nil : last_retailer_response.retailer_response,
-                 propose_deviation: last_retailer_response.nil? ? nil : last_retailer_response.propose_deviation,
-                 sp_response: last_sp_response.nil? ? nil : last_sp_response.sp_response,
-                 response_status: last_sp_response.nil? ? nil : last_sp_response.response_status)
-    end
-
+    chats = set_node3_chats(params[:id])
     render json: { chats: chats, attachments_count: attachments_count }, status: 200
+  end
+
+  def node3_admin
+    chats = set_node3_chats(params[:id])
+    render json: { chats: chats }, status: 200
   end
 
   def node4_retailer
@@ -119,7 +114,17 @@ class Api::TendersController < Api::BaseController
   end
 
   def node3_send_response
-    workflow = TenderWorkflow.new.execute(:node3, :send_response, params[:id])
+    workflow = nil
+    chats = JSON.parse(params[:chats])
+    ActiveRecord::Base.transaction do
+      chats.each do |chat|
+        tender_chat = TenderChat.find(chat['id'])
+        chat_info = set_admin_send_response(tender_chat, chat)
+        TenderChatDetail.chat_save(tender_chat, chat_info)
+      end
+      workflow = TenderWorkflow.new.execute(:node3, :send_response, params[:id])
+    end
+
     render json: workflow, status: 200
   end
 
@@ -135,11 +140,13 @@ class Api::TendersController < Api::BaseController
 
   def node4_admin_accept
     workflow = TenderWorkflow.new.execute(:node4, :accept, params[:id])
+    @arrangement.update(comments: params[:comments])
     render json: workflow, status: 200
   end
 
   def node4_admin_reject
     workflow = TenderWorkflow.new.execute(:node4, :reject, params[:id])
+    @arrangement.update(comments: params[:comments])
     render json: workflow, status: 200
   end
 
@@ -178,9 +185,10 @@ class Api::TendersController < Api::BaseController
     render json: nil, status: 200
   end
 
-  def node3_admin_accept; end
+  def node3_admin_send_response
 
-  def node3_admin_reject; end
+  end
+
 
   private
 
@@ -230,5 +238,27 @@ class Api::TendersController < Api::BaseController
     chat_info.response_status = '3'
     chat_info.sp_response_status = '1'
     chat_info
+  end
+
+  def set_admin_send_response(tender_chat, chat)
+    chat_info = ChatInfoDto.new(tender_chat)
+    chat_info.sp_response = chat['sp_response']
+    chat_info.sp_response_status = chat['sp_response_status']
+    chat_info.response_status = '1'
+    chat_info
+  end
+
+  def set_node3_chats(arrangement_id)
+    chats = []
+    TenderChat.where(arrangement_id: arrangement_id).each do |chat|
+      last_retailer_response = TenderChatDetail.retailer_response(chat.id).last
+      last_sp_response = TenderChatDetail.admin_response(chat.id).last
+      chats.push(id: chat.id, item: chat.item, clause: chat.clause, sp_response_status: chat.sp_response_status,
+                 retailer_response: last_retailer_response.nil? ? nil : last_retailer_response.retailer_response,
+                 propose_deviation: last_retailer_response.nil? ? nil : last_retailer_response.propose_deviation,
+                 sp_response: last_sp_response.nil? ? nil : last_sp_response.sp_response,
+                 response_status: last_sp_response.nil? ? nil : last_sp_response.response_status)
+    end
+    chats
   end
 end
