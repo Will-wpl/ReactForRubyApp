@@ -2,35 +2,91 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import moment from 'moment';
 import {Modal} from '../../shared/show-modal';
-import {adminSendResponse} from '../../../javascripts/componentService/admin/service';
+import {adminSendResponse,getAdminDeviations} from '../../../javascripts/componentService/admin/service';
 export class Keppelproposedeviations extends Component {
     constructor(props, context){
         super(props);
         this.state={
-            
+            deviations_list:[],
+            buttonType:''
         }
-        this.auction = {};
-        this.holdStatus = false;
     }
     componentDidMount(){
-        
+        getAdminDeviations(this.props.current.current.arrangement_id).then(res=>{
+            console.log(res);
+            if(res.chats.length > 0){
+                console.log(res.chats);
+                this.setState({deviations_list:res.chats});
+            }else{
+                this.setState({
+                    deviations_list:[
+                        {id:0,item:1,clause:'',propose_deviation:'',retailer_response:'',sp_response:''},
+                    ]
+                })
+            }
+        })
     }
-    showConfirm(type){
+    editData(){
+        let deviationslist = [];
+        this.state.deviations_list.map((item, index) => {
+            deviationslist += '{"id":"'+item.id+'","sp_response":"'+$("#sp_response_"+(index)).val()+'","sp_response_status":"'+item.sp_response_status+'"},';
+        })
+        deviationslist = deviationslist.substr(0, deviationslist.length-1);
+        deviationslist = '['+deviationslist+']';
+        //console.log(deviationslist);
+        return deviationslist;
+    }
+    showConfirm(type,obj){
+        this.setState({buttonType:type});
         if(type == "Send_Response"){
+            let send = this.state.deviations_list.find(item=>{
+                return item.sp_response_status ==='2'||item.sp_response_status ==='3'||item.sp_response_status ==='4'
+            })
+            if(send){
+                this.refs.Modal.showModal();
+                this.setState({
+                    text:"Someone have not reject or accept!"
+                });
+                return;
+            }
             this.refs.Modal.showModal("comfirm");
             this.setState({
                 text:"Are you sure want to send response?"
             });
+        }else if(type == "reject"){
+            this.refs.Modal.showModal("comfirm",obj);
+            this.setState({
+                text:"Are you sure want to send reject?"
+            });
+        }else{
+            this.refs.Modal.showModal("comfirm",obj);
+            this.setState({
+                text:"Are you sure want to send accept?"
+            });
         }
     }
     send_response(){
-        adminSendResponse(this.props.current.current.arrangement_id).then(res=>{
-            window.location.href="/admin/auctions/"+sessionStorage.auction_id+"/retailer_dashboard";
+        adminSendResponse(this.props.current.current.arrangement_id,this.editData()).then(res=>{
+            this.refs.Modal.showModal();
+            this.setState({
+                text:"Admin Send Response Successful!"
+            });
+            setTimeout(()=>{
+                window.location.href="/admin/auctions/"+sessionStorage.auction_id+"/retailer_dashboard";
+            },3000)
+            
             //this.props.page(this.props.current.current.arrangement_id);
         })
     }
-    componentWillMount(){
-        
+    do_reject(obj){
+        let deviationslist = this.state.deviations_list;
+        deviationslist[obj.index].sp_response_status = obj.params;
+        this.setState({deviations_list:deviationslist});
+    }
+    do_accept(obj){
+        let deviationslist = this.state.deviations_list;
+        deviationslist[obj.index].sp_response_status = obj.params;
+        this.setState({deviations_list:deviationslist});
     }
     render (){
         return (
@@ -49,29 +105,27 @@ export class Keppelproposedeviations extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td >5.1</td>
-                                <td >xxxxxxxxxxx</td>
-                                <td >xxxxxxxxxxxxxxxxxxxx</td>
-                                <td >Accepted : this item should change to 10%</td>
-                                <td><button>Reject</button><button>Accept</button><button>History</button></td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td >5.1</td>
-                                <td >xxxxxxxxxxx</td>
-                                <td >xxxxxxxxxxxxxxxxxxxx</td>
-                                <td ><input type="text"/></td>
-                                <td><button>Reject</button><button>Accept</button><button>History</button></td>
-                            </tr>
+                            {this.state.deviations_list.map((item,index)=>{
+                                return <tr key={index}>
+                                            <td>{item.item}</td>
+                                            <td >{item.clause}</td>
+                                            <td >{item.propose_deviation}</td>
+                                            <td >{item.retailer_response}</td>
+                                            <td ><input type="text" id={"sp_response_"+index} defaultValue={item.sp_response} /></td>
+                                            <td>
+                                                <button id={"sp_reject_"+index} disabled={item.sp_response_status === '4' ? true:(item.sp_response_status === '0'?true:false)} onClick={this.showConfirm.bind(this,'reject',{params:'0',index:index})}>Reject</button>
+                                                <button id={"sp_accept_"+index} disabled={item.sp_response_status === '4' ? true:(item.sp_response_status === '1'?true:false)} onClick={this.showConfirm.bind(this,'accept',{params:'1',index:index})}>Accept</button>
+                                                <button id={"sp_history_"+index}>History</button>
+                                            </td>
+                                        </tr>
+                            })}
                         </tbody>
                 </table>
                 <div className="workflow_btn u-mt3">    
                     <button className="lm--button lm--button--primary" onClick={this.showConfirm.bind(this,'Send_Response')}>Send Response</button>
                 </div>
             </div>
-            <Modal text={this.state.text} acceptFunction={this.send_response.bind(this)} ref="Modal" />
+            <Modal text={this.state.text} acceptFunction={this.state.buttonType === "Send_Response" ? this.send_response.bind(this) : (this.state.buttonType === "reject" ? this.do_reject.bind(this) : this.do_accept.bind(this))} ref="Modal" />
             </div>
         )}
     }

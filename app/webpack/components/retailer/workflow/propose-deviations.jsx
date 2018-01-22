@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {Modal} from '../../shared/show-modal';
-import {retailerWithdrawAllDeviations,retailerSubmitDeviations,retailerNext,getRetailerDeviationsList,retailerDeviationsSave} from '../../../javascripts/componentService/retailer/service';
+import {retailerWithdrawAllDeviations,retailerSubmitDeviations,retailerNext,getRetailerDeviationsList,retailerDeviationsSave,retailerWithdraw} from '../../../javascripts/componentService/retailer/service';
 export class Proposedeviations extends React.Component{
     constructor(props){
         super(props);
@@ -14,6 +14,7 @@ export class Proposedeviations extends React.Component{
         }
     }
     componentDidMount() {
+        this.changeNext()
         getRetailerDeviationsList(sessionStorage.arrangement_id).then(res=>{
             let select_list = [];
             for(let i = 0; i<res.attachments_count; i++)
@@ -41,12 +42,17 @@ export class Proposedeviations extends React.Component{
             }
         })
     }
-    showConfirm(type){
+    showConfirm(type,obj){
         this.setState({buttonType:type});
         if(type == "Withdraw_Deviations"){
             this.refs.Modal.showModal("comfirm");
             this.setState({
                 text:"Are you sure want to withdraw all deviations?"
+            });
+        }else if(type == "Withdraw"){
+            this.refs.Modal.showModal("comfirm",obj);
+            this.setState({
+                text:"Are you sure want to withdraw this deviations?"
             });
         }else{
             this.refs.Modal.showModal("comfirm");
@@ -55,14 +61,32 @@ export class Proposedeviations extends React.Component{
             });
         }
     }
-    withdrawDeviations(){
+    withdrawAllDeviations(){
         retailerWithdrawAllDeviations(this.props.current.current.arrangement_id,this.editData()).then(res=>{
             this.props.page();
             //this.props.tenderFn();
         })
     }
+    Withdraw(obj){
+        $("#withdraw_"+obj.index).attr("disabled","disabled");
+        retailerWithdraw(this.props.current.current.arrangement_id,{id:obj.id,propose_deviation:$('#deviation_'+obj.index).val()}).then(res=>{
+            this.refs.Modal.showModal();
+            this.setState({
+                text:"This deviation has been withdrawed"
+            });
+        })
+    }
+    changeNext(){
+        if(this.props.current.actions){
+            if(this.props.current.actions.node3_retailer_next){
+                if(this.props.tenderFn){
+                  this.props.tenderFn();
+                }
+            }
+        }
+    }
     submitDeviations(){
-        //console.log(this.editData());
+        console.log(this.editData());
         retailerSubmitDeviations(this.props.current.current.arrangement_id,this.editData()).then(res=>{
             this.refs.Modal.showModal();
             this.setState({
@@ -77,6 +101,7 @@ export class Proposedeviations extends React.Component{
             this.setState({
                 text:"Save deviations successful!"
             });
+            this.props.page();
         })
     }
     next(){
@@ -138,7 +163,7 @@ export class Proposedeviations extends React.Component{
                                             <td ><input type="text" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
                                             <td ><input type="text" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
                                             <td >{item.sp_response}</td>
-                                            <td>{item.item === ""?<button onClick={this.removeDeviations.bind(this,index)}>remove</button>:<div><button>History</button><button>Withdraw</button></div>}</td>
+                                            <td>{item.item === ""?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)}>remove</button>:<div><button id={"history_"+index}>History</button><button disabled={item.sp_response_status === "4" ? true : false} id={"withdraw_"+index} onClick={this.showConfirm.bind(this,'Withdraw',{id:item.id,index:index})}>Withdraw</button></div>}</td>
                                             </tr>
                                         })
                                 :this.state.deviations_list.map((item,index)=>{
@@ -164,7 +189,7 @@ export class Proposedeviations extends React.Component{
                         }
                     </div>
                 </div>
-                <Modal text={this.state.text} acceptFunction={this.state.buttonType === 'Withdraw_Deviations'?this.withdrawDeviations.bind(this):this.submitDeviations.bind(this)} ref="Modal" />
+                <Modal text={this.state.text} acceptFunction={this.state.buttonType === 'Withdraw_Deviations'?this.withdrawAllDeviations.bind(this):(this.state.buttonType === 'Withdraw'? this.Withdraw.bind(this):this.submitDeviations.bind(this))} ref="Modal" />
             </div>
         )
     }
