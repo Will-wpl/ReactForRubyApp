@@ -57,7 +57,7 @@ export class Signconfidentialityundertaking extends React.Component{
         return(
             <div className="sign_box">
                 {this.props.current.current ?
-                <h4>You have {this.props.current.current.current_status ? 'accepted' : 'rejected'} the Confidentiality Undertaking.</h4>
+                <h4>You have {this.props.current.current.current_status === 'reject' ? 'rejected' : 'accepted'} the Confidentiality Undertaking.</h4>
                 :''}
                 <p>Please read attached Confidentiality Undertaking and click on 'Accept' to indicate acceptance. 
                     Tender documents will only be released to you upon your acceptance of Confidentiality Undertaking</p>
@@ -66,8 +66,8 @@ export class Signconfidentialityundertaking extends React.Component{
                     </div>
                 {this.props.current.actions ?
                 <div className="workflow_btn u-mt3">
-                    <button disabled={!this.props.current.actions.node1_retailer_reject} className="lm--button lm--button--primary" onClick={this.showConfirm.bind(this,'Reject')} >Reject</button>
-                    <button disabled={!this.props.current.actions.node1_retailer_accept} className="lm--button lm--button--primary" onClick={this.showConfirm.bind(this,'Accept')} >Accept</button>
+                    <button disabled={this.props.current.actions.node1_retailer_reject?!this.props.current.actions.node1_retailer_reject:false} className="lm--button lm--button--primary" onClick={this.showConfirm.bind(this,'Reject')} >Reject</button>
+                    <button disabled={this.props.current.actions.node1_retailer_accept?!this.props.current.actions.node1_retailer_accept:false} className="lm--button lm--button--primary" onClick={this.showConfirm.bind(this,'Accept')} >Accept</button>
                 </div>
                 : <div></div>}
                 <Modal text={this.state.text} acceptFunction={this.state.buttonType === 'Reject'?this.do_reject.bind(this):this.do_accept.bind(this)} ref="Modal" />

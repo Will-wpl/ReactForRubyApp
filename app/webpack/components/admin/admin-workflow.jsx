@@ -13,7 +13,7 @@ export class Adminworkflow extends Component {
         super(props);
         this.state={
             auction:{},
-            disabled:false,current:{},page:1,
+            disabled:false,current:{},page:0,
             allbtnStatus:true,retailer_list:[]
         }
         this.linklist = [
@@ -41,6 +41,8 @@ export class Adminworkflow extends Component {
     showpage(index){
         let pageDom='';
         switch(index){
+            case 0 : pageDom = <div></div>
+            break
             case 1 : pageDom = <Adminretailerdashboard retailer_list={this.state.retailer_list} page={this.getPageindex.bind(this)} title="Retailer Dashboard" />
             break
             case 3 : pageDom = <Keppelproposedeviations current={this.state.current} page={this.getPageindex.bind(this)} title="keppel Propose Deviations" />
