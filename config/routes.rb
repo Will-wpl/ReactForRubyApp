@@ -80,9 +80,8 @@ Rails.application.routes.draw do
       resources :tenders, only: %i[] do
         member do
           get 'current'
+          get 'node3_admin'
           post 'node3_send_response'
-          post 'node3_admin_accept'
-          post 'node3_admin_reject'
           post 'node4_admin_accept'
           post 'node4_admin_reject'
         end
