@@ -66,7 +66,7 @@ class TenderWorkflow < Workflow
       if node3_retailer_next?(sm)
         {node3_retailer_next: true}
       else
-        { node3_retailer_withdraw_all_deviations: true, node3_retailer_submit_deviations: true }
+        { node3_retailer_withdraw_all_deviations: true, node3_retailer_submit_deviations: true, node3_retailer_save: true }
       end
     elsif node3_admin?(sm)
       { node3_send_response: true }
