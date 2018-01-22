@@ -107,7 +107,11 @@ class TenderWorkflow < Workflow
         index += 1
       end
     end
-    count == index
+    if count != 0
+      count == index
+    else
+      false
+    end
   end
 
   def node3_admin?(sm)
