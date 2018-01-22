@@ -63,7 +63,11 @@ class TenderWorkflow < Workflow
     elsif node2?(sm)
       { node2_retailer_accept_all: true, node2_retailer_propose_deviations: true }
     elsif node3_retailer?(sm)
-      { node3_retailer_withdraw_all_deviations: true, node3_retailer_submit_deviations: true }
+      if node3_retailer_next?(sm)
+        {node3_retailer_next: true}
+      else
+        { node3_retailer_withdraw_all_deviations: true, node3_retailer_submit_deviations: true }
+      end
     elsif node3_admin?(sm)
       { node3_send_response: true }
     elsif node4_retailer?(sm)
@@ -91,6 +95,19 @@ class TenderWorkflow < Workflow
 
   def node3_retailer?(sm)
     sm.current_node == 3 && sm.current_role = 2
+  end
+
+  def node3_retailer_next?(sm)
+    arrangement_id = sm.arrangement_id
+    chats = TenderChat.where('arrangement_id = ?', arrangement_id)
+    count = chats.count
+    index = 0
+    chats.each do |chat|
+      if chat.sp_response_status == '1' || chat.sp_response_status == '4'
+        index += 1
+      end
+    end
+    count == index
   end
 
   def node3_admin?(sm)
