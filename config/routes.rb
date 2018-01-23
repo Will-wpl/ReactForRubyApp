@@ -81,6 +81,7 @@ Rails.application.routes.draw do
         member do
           get 'current'
           get 'node3_admin'
+          get 'node4_admin'
           post 'node3_send_response'
           post 'node4_admin_accept'
           post 'node4_admin_reject'

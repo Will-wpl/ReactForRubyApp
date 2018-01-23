@@ -43,6 +43,12 @@ class Api::TendersController < Api::BaseController
     render json: attachments, status: 200
   end
 
+  def node4_admin
+    attachments = AuctionAttachment.user_auction(@arrangement.auction_id, @arrangement.user_id)
+    chats = set_node3_chats(params[:id])
+    render json: { chats: chats, attachments: attachments }, status: 200
+  end
+
   def node5_retailer
     attachments = []
     @arrangement.auction.auction_attachments.each do |attachment|
