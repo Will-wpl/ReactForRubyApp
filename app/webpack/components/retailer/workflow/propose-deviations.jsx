@@ -161,19 +161,19 @@ export class Proposedeviations extends React.Component{
                                     this.state.deviations_list.map((item,index)=>{
                                         if(item.sp_response_status === "1"){
                                             return <tr key={index}>
-                                            <td>
-                                                <select id={"item_"+(index)} defaultValue={item.item} disabled>
-                                                    {this.state.select_list.map((it,i)=>{
-                                                        return <option key={i} value={it}>{it}</option>
-                                                    })}
-                                                </select>
-                                            </td>
-                                            <td ><input disabled type="text" id={"clause_"+(index)} defaultValue={item.clause}/></td>
-                                            <td ><input disabled type="text" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
-                                            <td ><input disabled type="text" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
-                                            <td >{item.sp_response}</td>
-                                            <td><button id={"history_"+index} onClick={this.showhistory.bind(this,item.id)} >History</button></td>
-                                            </tr>
+                                                    <td>
+                                                        <select id={"item_"+(index)} defaultValue={item.item} disabled>
+                                                            {this.state.select_list.map((it,i)=>{
+                                                                return <option key={i} value={it}>{it}</option>
+                                                            })}
+                                                        </select>
+                                                    </td>
+                                                    <td ><input disabled type="text" id={"clause_"+(index)} defaultValue={item.clause}/></td>
+                                                    <td ><input disabled type="text" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
+                                                    <td ><input disabled type="text" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
+                                                    <td >{item.sp_response}</td>
+                                                    <td><button id={"history_"+index} onClick={this.showhistory.bind(this,item.id)} >History</button></td>
+                                                    </tr>
                                         }else{
                                             return <tr key={index}>
                                             <td>
