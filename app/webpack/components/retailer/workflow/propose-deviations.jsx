@@ -126,7 +126,14 @@ export class Proposedeviations extends React.Component{
                         propose_deviation:'',
                         retailer_response:'',
                         sp_response_status:'3'},list = this.state.deviations_list;
-                        list.push(add_new);
+                        if(list.length < this.state.select_list.length){
+                            list.push(add_new);
+                        }else{
+                            this.refs.Modal.showModal();
+                            this.setState({
+                                text:"Add deviations than the limit!"
+                            });
+                        }                 
         this.setState({deviations_list:list});
     }
     removeDeviations(index){

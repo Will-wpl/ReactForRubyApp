@@ -32,8 +32,8 @@ export const retailerAcceptAll = (arrangement) => {
     return create('/api/retailer/tenders/'+arrangement+'/node2_retailer_accept_all');
 }
 
-export const retailerWithdrawAllDeviations = (arrangement) => {
-    return create('/api/retailer/tenders/'+arrangement+'/node3_retailer_withdraw_all_deviations');
+export const retailerWithdrawAllDeviations = (arrangement,data) => {
+    return create('/api/retailer/tenders/'+arrangement+'/node3_retailer_withdraw_all_deviations',{chats:data});
 }
 
 export const retailerSubmitDeviations = (arrangement,data) => {

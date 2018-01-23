@@ -8,7 +8,7 @@ export class Submittender extends React.Component{
         super(props);
         this.state={
             text:'',
-            params_type:'',
+            params_type:'',submission_status:false,
             fileData:{
                 "upload_tender":[
                     {buttonName:"none",files:[]}
@@ -44,7 +44,10 @@ export class Submittender extends React.Component{
             if(this.send_status){
                 if(this.props.tenderFn){
                     this.props.tenderFn();
+                    this.setState({submission_status:true})
                 }
+            }else{
+                this.setState({submission_status:false})
             }
         }
     }
@@ -202,8 +205,8 @@ export class Submittender extends React.Component{
     render(){
         return(
             <div className="col-sm-12 admin_invitation">
-                <h4 className="u-mt3 u-mb1">{this.props.submit ? <span className="green">Your submission has been approved by administrator.</span> 
-                : <span className="red">Your submission has been rejected by administrator.</span>}</h4>
+                <h4 className="u-mt3 u-mb1">{this.props.current.current.current_status === '0' ?'':(this.state.submission_status ? <span className="green">Your submission has been approved by administrator.</span> 
+                : <span className="red">Your submission has been rejected by administrator.</span>)}</h4>
                 <h4>Please upload the following documents for submission of tender:</h4>
                 <div className="col-sm-12 col-md-8 push-md-2 u-mt3 u-mb3">
                     {this.addinputfile("upload_tender", "required")}
