@@ -65,7 +65,9 @@ export class Proposedeviations extends React.Component{
         })
     }
     Withdraw(obj){
-        $("#withdraw_"+obj.index).attr("disabled","disabled");
+        let withdraw = this.state.deviations_list;
+        withdraw[obj.index].sp_response_status = '4';
+        this.setState({deviations_list:withdraw});
         retailerWithdraw(this.props.current.current.arrangement_id,{id:obj.id,propose_deviation:$('#deviation_'+obj.index).val()}).then(res=>{
             this.refs.Modal.showModal();
             this.setState({
@@ -205,7 +207,7 @@ export class Proposedeviations extends React.Component{
                                 }
                             </tbody>
                     </table>
-                    {!this.props.tender ? <div className="workflow_btn u-mt3 u-mb3"><a onClick={this.addDeviations.bind(this)}>add</a></div> :''}
+                    {!this.props.tender ? <div className="workflow_btn u-mt3 u-mb3"><a className="add_deviation" onClick={this.addDeviations.bind(this)}>add</a></div> :''}
                     <div className="workflow_btn u-mt3">
                         {!this.props.tender ?
                         <div><button className="lm--button lm--button--primary" disabled={!this.props.current.actions.node3_retailer_withdraw_all_deviations} onClick={this.showConfirm.bind(this,'Withdraw_Deviations')}>Withdraw All Deviations</button>
