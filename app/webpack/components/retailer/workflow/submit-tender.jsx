@@ -53,7 +53,7 @@ export class Submittender extends React.Component{
         if(type == "Submit"){
             this.refs.Modal.showModal("comfirm");
             this.setState({
-                text:"Are you sure want to submit?"
+                text:"Are you sure you want to submit this submission?"
             });
         }
     }
@@ -87,7 +87,7 @@ export class Submittender extends React.Component{
     }
     do_submit(){
         retailerSubmit(this.props.current.current.arrangement_id).then(res=>{
-            this.setState({text:'Submit successful!'});
+            this.setState({text:'You have successfully submitted your tender and is pending approval by the administrator. Once approved, you will be notified via email and you may then proceed to provide contact person details for actual day of bidding.'});
             this.refs.Modal.showModal();
             this.props.page();
         })

@@ -44,17 +44,17 @@ export class Proposedeviations extends React.Component{
         if(type == "Withdraw_Deviations"){
             this.refs.Modal.showModal("comfirm");
             this.setState({
-                text:"Are you sure want to withdraw all deviations?"
+                text:"Are you sure you want to withdraw all deviations?"
             });
         }else if(type == "Withdraw"){
             this.refs.Modal.showModal("comfirm",obj);
             this.setState({
-                text:"Are you sure want to withdraw this deviations?"
+                text:"Are you sure you want to withdraw deviation?"
             });
         }else{
             this.refs.Modal.showModal("comfirm");
             this.setState({
-                text:"Are you sure want to submit deviations?"
+                text:"Are you sure you want to submit deviations?"
             });
         }
     }
@@ -71,7 +71,7 @@ export class Proposedeviations extends React.Component{
         retailerWithdraw(this.props.current.current.arrangement_id,{id:obj.id,propose_deviation:$('#deviation_'+obj.index).val()}).then(res=>{
             this.refs.Modal.showModal();
             this.setState({
-                text:"This deviation has been withdrawed"
+                text:"You have successfully updated"
             });
             this.props.page();
             setTimeout(()=>{
@@ -93,7 +93,7 @@ export class Proposedeviations extends React.Component{
         retailerSubmitDeviations(this.props.current.current.arrangement_id,this.editData()).then(res=>{
             this.refs.Modal.showModal();
             this.setState({
-                text:"Submit deviations successful!"
+                text:"You have successfully submitted your deviations and is pending administrator's review."
             });
             this.refresh();
         })
@@ -102,7 +102,7 @@ export class Proposedeviations extends React.Component{
         retailerDeviationsSave(this.props.current.current.arrangement_id,this.editData()).then(res=>{
             this.refs.Modal.showModal();
             this.setState({
-                text:"Save deviations successful!"
+                text:"You have successfully saved deviations."
             });
             this.refresh();
         })

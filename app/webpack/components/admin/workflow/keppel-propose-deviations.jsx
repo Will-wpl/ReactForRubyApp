@@ -45,7 +45,7 @@ export class Keppelproposedeviations extends Component {
             if(send){
                 this.refs.Modal.showModal();
                 this.setState({
-                    text:"Someone have not reject or accept!"
+                    text:"Please accept or reject the deviation!"
                 });
                 return;
             }
@@ -56,12 +56,12 @@ export class Keppelproposedeviations extends Component {
         }else if(type == "reject"){
             this.refs.Modal.showModal("comfirm",obj);
             this.setState({
-                text:"Are you sure want to send reject?"
+                text:"Are you sure want to reject this submission?"
             });
         }else{
             this.refs.Modal.showModal("comfirm",obj);
             this.setState({
-                text:"Are you sure want to send accept?"
+                text:"Are you sure want to accept this submission?"
             });
         }
     }
@@ -69,7 +69,7 @@ export class Keppelproposedeviations extends Component {
         adminSendResponse(this.props.current.current.arrangement_id,this.editData()).then(res=>{
             this.refs.Modal.showModal();
             this.setState({
-                text:"Admin Send Response Successful!"
+                text:"You have sent the response."
             });
             setTimeout(()=>{
                 window.location.href="/admin/auctions/"+sessionStorage.auction_id+"/retailer_dashboard";

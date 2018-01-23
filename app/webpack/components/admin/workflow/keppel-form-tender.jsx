@@ -25,12 +25,12 @@ export class Keppelformtender extends React.Component{
         if(type == "Reject"){
             this.refs.Modal.showModal("comfirm");
             this.setState({
-                text:"Are you sure want to reject?"
+                text:"Are you sure you want to reject this submission?"
             });
         }else{
             this.refs.Modal.showModal("comfirm");
             this.setState({
-                text:"Are you sure want to accept?"
+                text:"Are you sure you want to accept this submission?"
             });
         }
     }
