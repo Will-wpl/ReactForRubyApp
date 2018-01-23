@@ -1,16 +1,24 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {Modal} from '../../shared/show-modal';
-import {arrangementDetail,adminReject,adminAccept} from '../../../javascripts/componentService/admin/service';
+import {Showhistory} from '../../shared/show-history';
+import {arrangementDetail,adminReject,adminAccept,getAdminKeppelForm} from '../../../javascripts/componentService/admin/service';
+import {getTenderhistory} from '../../../javascripts/componentService/common/service';
+
 export class Keppelformtender extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            text:'',buttonType:''
+            text:'',buttonType:'',linklist:[],chats:[]
         }
     }
     componentDidMount() {
-        
+        getAdminKeppelForm(this.props.current.current.arrangement_id).then(res=>{
+            this.setState({
+                linklist:res.attachments,
+                chats:res.chats
+            })
+        })
     }
     showConfirm(type){
         this.setState({buttonType:type});
@@ -27,15 +35,21 @@ export class Keppelformtender extends React.Component{
         }
     }
     admin_reject(){
-        adminReject(this.props.current.current.arrangement_id).then(res=>{
+        adminReject(this.props.current.current.arrangement_id,$("#adminComment").val()).then(res=>{
             //this.props.page(this.props.current.current.arrangement_id);
             window.location.href="/admin/auctions/"+sessionStorage.auction_id+"/retailer_dashboard";
         })
     }
     admin_accept(){
-        adminAccept(this.props.current.current.arrangement_id).then(res=>{
+        adminAccept(this.props.current.current.arrangement_id,$("#adminComment").val()).then(res=>{
             //this.props.page(this.props.current.current.arrangement_id);
             window.location.href="/admin/auctions/"+sessionStorage.auction_id+"/retailer_dashboard";
+        })
+    }
+    showhistory(id){
+        getTenderhistory('admin',id).then(res=>{
+            console.log(res);
+            this.refs.history.showModal();
         })
     }
     render(){
@@ -48,8 +62,8 @@ export class Keppelformtender extends React.Component{
                     </label>
                     <div className="lm--formItem-right lm--formItem-control">
                         <ul className="tender_list">
-                            {this.props.linklist ? this.props.linklist.map((item,index)=>{
-                                return <li key={index}>item {index+1} : <a href={item.file_path}>{item.file_name}</a></li>
+                            {this.state.linklist.length > 0 ? this.state.linklist.map((item,index)=>{
+                                return <li key={index}>item {index+1} : <a download={item.file_name} href={item.file_path}>{item.file_name}</a></li>
                             }) : ''}
                         </ul>
                     </div>
@@ -71,22 +85,16 @@ export class Keppelformtender extends React.Component{
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td >5.1</td>
-                                    <td >xxxxxxxxxxx</td>
-                                    <td >xxxxxxxxxxxxxxxxxxxx</td>
-                                    <td >Accepted : this item should change to 10%</td>
-                                    <td><button>History</button></td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td >5.1</td>
-                                    <td >xxxxxxxxxxx</td>
-                                    <td >xxxxxxxxxxxxxxxxxxxx</td>
-                                    <td >Accepted : this item should change to 10%</td>
-                                    <td><button>History</button></td>
-                                </tr>
+                                {this.state.chats.length>0?this.state.chats.map((item,index)=>{
+                                    return <tr key={index}>
+                                                <td>{item.item}</td>
+                                                <td >{item.clause}</td>
+                                                <td >{item.propose_deviation}</td>
+                                                <td >{item.retailer_response}</td>
+                                                <td >{item.sp_response}</td>
+                                                <td><button onClick={this.showhistory.bind(this,item.id)}>History</button></td>
+                                            </tr>
+                                }):<tr></tr>}
                             </tbody>
                     </table>
                     </div>
@@ -96,7 +104,7 @@ export class Keppelformtender extends React.Component{
                     Comment:
                     </label>
                     <div className="lm--formItem-right lm--formItem-control">
-                        <textarea></textarea>
+                        <textarea id="adminComment"></textarea>
                     </div>
                 </div>
                 <div className="workflow_btn u-mt3">
@@ -104,6 +112,7 @@ export class Keppelformtender extends React.Component{
                         <button className="lm--button lm--button--primary" onClick={this.showConfirm.bind(this,'Accept')}>Accept</button>
                 </div>
                 <Modal text={this.state.text} acceptFunction={this.state.buttonType === 'Reject'?this.admin_reject.bind(this):this.admin_accept.bind(this)} ref="Modal" />
+                <Showhistory ref="history" />
             </div>
         )
     }

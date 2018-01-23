@@ -33,3 +33,7 @@ export const checknetwork = () => create('/api/base/heartbeat')
 export const getTendersCurrent= (type,id) => {
     return get('/api/'+type+'/tenders/'+id+'/current');
 }
+
+export const getTenderhistory= (type,id) => {
+    return get('/api/'+type+'/tenders/history',{chat_id:id});
+}

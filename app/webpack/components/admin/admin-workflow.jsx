@@ -27,15 +27,10 @@ export class Adminworkflow extends Component {
             this.setState({retailer_list:res});
         })
     }
-    componentDidMount(){
-        
-    }
     getPageindex(arrangement_id){
         getTendersCurrent('admin',arrangement_id).then(res=>{
             console.log(res);
             this.setState({current:res,page:res.current.current_node});
-        },error=>{
-
         })
     }
     showpage(index){
