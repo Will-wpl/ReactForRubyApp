@@ -230,8 +230,8 @@ class Api::TendersController < Api::BaseController
     chat_info.propose_deviation = chat['propose_deviation']
     chat_info.retailer_response = chat['retailer_response']
     chat_info.sp_response = nil
-    chat_info.response_status = '2'
-    chat_info.sp_response_status = '2'
+    chat_info.response_status = chat['sp_response_status']
+    chat_info.sp_response_status = chat['sp_response_status']
     chat_info
   end
 
