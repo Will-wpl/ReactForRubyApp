@@ -49,7 +49,7 @@ export class Keppelformtender extends React.Component{
     showhistory(id){
         getTenderhistory('admin',id).then(res=>{
             console.log(res);
-            this.refs.history.showModal();
+            this.refs.history.showModal(res);
         })
     }
     render(){
