@@ -37,7 +37,7 @@ export class Showhistory extends React.Component{
                                     </dd>
                                     <dt>
                                         <dfn><abbr></abbr>SP</dfn>
-                                        <span>{item.sp_response?item.sp_response:'nothing'}</span>
+                                        <span>{item.sp_response?item.sp_response:'No Response'}</span>
                                     </dt>
                                 </dl>
                     })}

@@ -133,7 +133,7 @@ export class Proposedeviations extends React.Component{
         this.setState({deviations_list:list});
     }
     showhistory(id){
-        getTenderhistory('admin',id).then(res=>{
+        getTenderhistory('retailer',id).then(res=>{
             console.log(res);
             this.refs.history.showModal(res);
         })
