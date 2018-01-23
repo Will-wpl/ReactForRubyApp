@@ -44,7 +44,7 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
 
       data.push(id: consumption.id, name: consumption.auction.name, actual_begin_time: consumption.auction.actual_begin_time,
                 publish_status: consumption.auction.publish_status, participation_status: consumption.participation_status,
-                auction_id: consumption.auction_id, actions: action)
+                 actions: action)
     end
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
