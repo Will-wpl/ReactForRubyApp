@@ -17,20 +17,6 @@ export class Submittender extends React.Component{
         }
     }
     componentDidMount() {
-        if(this.props.current.current){
-            if(this.props.current.current.current_status === '3'){
-                this.send_status = true;
-            }else{
-                this.send_status = false;
-            }
-            if(this.send_status){
-                if(this.props.tenderFn){
-                    this.props.tenderFn();
-                }
-            }
-        }
-        
-        
         getSumission(sessionStorage.arrangement_id).then(res=>{
             console.log(res);
             let fileObj;
@@ -45,7 +31,22 @@ export class Submittender extends React.Component{
             this.setState({ 
                 fileData:fileObj
             })
+            this.changeNext();
         })
+    }
+    changeNext(){
+        if(this.props.current.current){
+            if(this.props.current.current.current_status === '3'){
+                this.send_status = true;
+            }else{
+                this.send_status = false;
+            }
+            if(this.send_status){
+                if(this.props.tenderFn){
+                    this.props.tenderFn();
+                }
+            }
+        }
     }
     showConfirm(type){
         this.setState({buttonType:type});

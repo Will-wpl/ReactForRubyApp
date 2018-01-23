@@ -75,12 +75,12 @@ export const getRetailerList = (params) => {
     return get('/api/admin/auctions/'+params+'/retailer_dashboard');
 }
 
-export const adminReject = (params) => {
-    return create('/api/admin/tenders/'+params+'/node4_admin_reject');
+export const adminReject = (params,comments) => {
+    return create('/api/admin/tenders/'+params+'/node4_admin_reject',{comments:comments});
 }
 
-export const adminAccept = (params) => {
-    return create('/api/admin/tenders/'+params+'/node4_admin_accept');
+export const adminAccept = (params,comments) => {
+    return create('/api/admin/tenders/'+params+'/node4_admin_accept',{comments:comments});
 }
 
 export const adminSendResponse = (params,data) => {
@@ -89,6 +89,10 @@ export const adminSendResponse = (params,data) => {
 
 export const getAdminDeviations = (params) => {
     return get('/api/admin/tenders/'+params+'/node3_admin');
+}
+
+export const getAdminKeppelForm = (params) => {
+    return get('/api/admin/tenders/'+params+'/node4_admin');
 }
 //arrangements
 //consumptions

@@ -33,4 +33,13 @@ class Auction < ApplicationRecord
   def self.set_total_volume(*values)
     values.inject(BigDecimal.new('0')) { |sum, n| sum + BigDecimal.new(n) }
   end
+
+  def self.get_days(start_date, end_date)
+    timestamp = (end_date - start_date).to_i + 1
+    timestamp
+  end
+
+  def self.set_c_value(c, days)
+    BigDecimal.new(c) * 12 / 365 * days
+  end
 end

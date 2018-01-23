@@ -86,6 +86,9 @@ Rails.application.routes.draw do
           post 'node4_admin_accept'
           post 'node4_admin_reject'
         end
+        collection do
+          get 'history'
+        end
       end
     end
   end
@@ -126,9 +129,11 @@ Rails.application.routes.draw do
           get 'node3_retailer'
           get 'node4_retailer'
           get 'node5_retailer'
-          get 'history'
           post 'node3_retailer_withdraw'
           post 'node3_retailer_save'
+        end
+        collection do
+          get 'history'
         end
       end
     end

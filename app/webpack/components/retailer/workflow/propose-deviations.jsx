@@ -15,6 +15,9 @@ export class Proposedeviations extends React.Component{
     }
     componentDidMount() {
         this.changeNext()
+        this.refresh();
+    }
+    refresh(){
         getRetailerDeviationsList(sessionStorage.arrangement_id).then(res=>{
             let select_list = [];
             for(let i = 0; i<res.attachments_count; i++)
@@ -31,14 +34,6 @@ export class Proposedeviations extends React.Component{
                         {id:0,item:1,clause:'',propose_deviation:'',retailer_response:'',sp_response:'',sp_response_status:'3'},
                     ]
                 })
-                // let showNext = this.state.deviations_list.find(item=>{
-                //     return item.sp_response_status === "0"
-                // })
-                // if(!showNext){
-                //     if(this.props.tenderFn){
-                //         this.props.tenderFn();
-                //     }
-                // }
             }
         })
     }
@@ -74,6 +69,10 @@ export class Proposedeviations extends React.Component{
             this.setState({
                 text:"This deviation has been withdrawed"
             });
+            this.props.page();
+            setTimeout(()=>{
+                this.changeNext();
+            },100)
         })
     }
     changeNext(){
@@ -92,7 +91,7 @@ export class Proposedeviations extends React.Component{
             this.setState({
                 text:"Submit deviations successful!"
             });
-            this.props.page();
+            this.refresh();
         })
     }
     save(){
@@ -101,7 +100,7 @@ export class Proposedeviations extends React.Component{
             this.setState({
                 text:"Save deviations successful!"
             });
-            this.props.page();
+            this.refresh();
         })
     }
     next(){
@@ -178,7 +177,9 @@ export class Proposedeviations extends React.Component{
                                             <td ><input type="text" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
                                             <td ><input type="text" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
                                             <td >{item.sp_response}</td>
-                                            <td>{item.item === ""?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)}>remove</button>:<div><button id={"history_"+index}>History</button><button disabled={item.sp_response_status === "4" ? true : false} id={"withdraw_"+index} onClick={this.showConfirm.bind(this,'Withdraw',{id:item.id,index:index})}>Withdraw</button></div>}</td>
+                                            <td>{item.item === ""?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)}>remove</button>:
+                                            (item.id===0?'':<div><button id={"history_"+index}>History</button>
+                                            <button disabled={item.sp_response_status === "4" ? true : false} id={"withdraw_"+index} onClick={this.showConfirm.bind(this,'Withdraw',{id:item.id,index:index})}>Withdraw</button></div>)}</td>
                                             </tr>
                                         }
                                     

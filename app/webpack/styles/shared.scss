@@ -163,6 +163,34 @@ abbr[title]{color: #fe0000; text-decoration: none;}
   }
 }
 .u-contain{overflow:hidden;}
+#modal_history{position: absolute; top:0; left: 0; font-size: 12px;
+  width:100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); 
+    .history_box{ width:40%; position: fixed; overflow: hidden; background: #fff; left: 50%; top:15%; margin-left: -20%;
+      h4{font-weight: 500;
+        height: 42px; line-height: 42px; background: #00afb1; width: 100%; margin: 0 auto; font-size: 13px;
+        span{ float: left; padding-left:15px; color:#fff;}
+        a{ float: right; padding-right:15px; color:#fff;}
+      }
+      .history_nr{overflow-y: auto; height:362px;
+        dl{ width: 100%; 
+            dd{ width:92%; display: block; overflow: hidden; margin: 15px auto; font-weight: normal;
+              dfn{
+                float: left; margin-right:15px; text-align: center; 
+                abbr{ width: 42px; height: 42px; font-style: normal;display: block; background: url("../images/retailer.png") no-repeat center; background-size: 42px; }
+              }
+              span{ background: #eee; max-width: 200px; padding: 10px; word-break:break-all; border-radius: 5px; color:#666; float: left;}
+            }
+            dt{width:92%; display: block; overflow: hidden; margin: 15px auto; font-weight: normal;
+              dfn{
+                float: right; margin-left:15px; text-align: center; 
+                abbr{ width: 42px; height: 42px; display: block; background: url("../images/sp.png") no-repeat center; background-size: 42px; }
+              }
+              span{ background: #9fdd9f; max-width: 200px; word-break:break-all; padding: 10px; border-radius: 5px; color:#666; float: right;}
+            }
+        }
+      } 
+  }
+}
 
 
 //retailer ranking
