@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {Modal} from '../../shared/show-modal';
+import {Showhistory} from '../../shared/show-history';
 import {retailerWithdrawAllDeviations,retailerSubmitDeviations,retailerNext,getRetailerDeviationsList,retailerDeviationsSave,retailerWithdraw} from '../../../javascripts/componentService/retailer/service';
+import {getTenderhistory} from '../../../javascripts/componentService/common/service';
 export class Proposedeviations extends React.Component{
     constructor(props){
         super(props);
@@ -130,6 +132,12 @@ export class Proposedeviations extends React.Component{
         list.splice(index,1);
         this.setState({deviations_list:list});
     }
+    showhistory(id){
+        getTenderhistory('admin',id).then(res=>{
+            console.log(res);
+            this.refs.history.showModal(res);
+        })
+    }
     render(){
         return(
             <div className="propose_deviations u-mt3">
@@ -162,7 +170,7 @@ export class Proposedeviations extends React.Component{
                                             <td ><input disabled type="text" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
                                             <td ><input disabled type="text" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
                                             <td >{item.sp_response}</td>
-                                            <td><button id={"history_"+index}>History</button></td>
+                                            <td><button id={"history_"+index} onClick={this.showhistory.bind(this,item.id)} >History</button></td>
                                             </tr>
                                         }else{
                                             return <tr key={index}>
@@ -178,7 +186,7 @@ export class Proposedeviations extends React.Component{
                                             <td ><input type="text" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
                                             <td >{item.sp_response}</td>
                                             <td>{item.item === ""?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)}>remove</button>:
-                                            (item.id===0?'':<div><button id={"history_"+index}>History</button>
+                                            (item.id===0?'':<div><button onClick={this.showhistory.bind(this,item.id)} id={"history_"+index}>History</button>
                                             <button disabled={item.sp_response_status === "4" ? true : false} id={"withdraw_"+index} onClick={this.showConfirm.bind(this,'Withdraw',{id:item.id,index:index})}>Withdraw</button></div>)}</td>
                                             </tr>
                                         }
@@ -191,7 +199,7 @@ export class Proposedeviations extends React.Component{
                                             <td >{item.propose_deviation}</td>
                                             <td >{item.retailer_response}</td>
                                             <td >{item.sp_response}</td>
-                                            <td><button>History</button></td>
+                                            <td><button onClick={this.showhistory.bind(this,item.id)}>History</button></td>
                                             </tr>
                                         })
                                 }
@@ -207,6 +215,7 @@ export class Proposedeviations extends React.Component{
                         }
                     </div>
                 </div>
+                <Showhistory ref="history" />
                 <Modal text={this.state.text} acceptFunction={this.state.buttonType === 'Withdraw_Deviations'?this.withdrawAllDeviations.bind(this):(this.state.buttonType === 'Withdraw'? this.Withdraw.bind(this):this.submitDeviations.bind(this))} ref="Modal" />
             </div>
         )
