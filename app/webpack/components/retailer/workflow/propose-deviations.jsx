@@ -28,7 +28,7 @@ export class Proposedeviations extends React.Component{
             }else{
                 this.setState({
                     deviations_list:[
-                        {id:0,item:1,clause:'',propose_deviation:'',retailer_response:'',sp_response:''},
+                        {id:0,item:1,clause:'',propose_deviation:'',retailer_response:'',sp_response:'',sp_response_status:'3'},
                     ]
                 })
                 // let showNext = this.state.deviations_list.find(item=>{
@@ -112,18 +112,17 @@ export class Proposedeviations extends React.Component{
     editData(){
         let deviationslist = [];
         this.state.deviations_list.map((item, index) => {
-            deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'"},';
+            deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'","sp_response_status":"'+item.sp_response_status+'"},';
         })
         deviationslist = deviationslist.substr(0, deviationslist.length-1);
         deviationslist = '['+deviationslist+']';
-        //console.log(deviationslist);
         return deviationslist;
     }
     addDeviations(){
         let add_new = {id:0,item:1,clause:'',
                         propose_deviation:'',
                         retailer_response:'',
-                        sp_response:'',sp_response_status:'1'},list = this.state.deviations_list;
+                        sp_response_status:'3'},list = this.state.deviations_list;
                         list.push(add_new);
         this.setState({deviations_list:list});
     }
@@ -151,7 +150,23 @@ export class Proposedeviations extends React.Component{
                             <tbody>
                                 {!this.props.tender ? 
                                     this.state.deviations_list.map((item,index)=>{
-                                    return <tr key={index}>
+                                        if(item.sp_response_status === "1"){
+                                            return <tr key={index}>
+                                            <td>
+                                                <select id={"item_"+(index)} defaultValue={item.item} disabled>
+                                                    {this.state.select_list.map((it,i)=>{
+                                                        return <option key={i} value={it}>{it}</option>
+                                                    })}
+                                                </select>
+                                            </td>
+                                            <td ><input disabled type="text" id={"clause_"+(index)} defaultValue={item.clause}/></td>
+                                            <td ><input disabled type="text" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
+                                            <td ><input disabled type="text" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
+                                            <td >{item.sp_response}</td>
+                                            <td><button id={"history_"+index}>History</button></td>
+                                            </tr>
+                                        }else{
+                                            return <tr key={index}>
                                             <td>
                                                 <select id={"item_"+(index)} defaultValue={item.item}>
                                                     {this.state.select_list.map((it,i)=>{
@@ -165,6 +180,8 @@ export class Proposedeviations extends React.Component{
                                             <td >{item.sp_response}</td>
                                             <td>{item.item === ""?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)}>remove</button>:<div><button id={"history_"+index}>History</button><button disabled={item.sp_response_status === "4" ? true : false} id={"withdraw_"+index} onClick={this.showConfirm.bind(this,'Withdraw',{id:item.id,index:index})}>Withdraw</button></div>}</td>
                                             </tr>
+                                        }
+                                    
                                         })
                                 :this.state.deviations_list.map((item,index)=>{
                                     return <tr key={index}>
