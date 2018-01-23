@@ -24,12 +24,12 @@ export class Signconfidentialityundertaking extends React.Component{
         if(type == "Reject"){
             this.refs.Modal.showModal("comfirm");
             this.setState({
-                text:"Are you sure want to reject this auction?"
+                text:"Are you sure you want to reject this auction?"
             });
         }else{
             this.refs.Modal.showModal("comfirm");
             this.setState({
-                text:"Are you sure want to accept this auction?"
+                text:"Are you sure you want to accept this auction?"
             });
         }
     }
@@ -37,7 +37,7 @@ export class Signconfidentialityundertaking extends React.Component{
         retailerReject(this.props.current.current.arrangement_id).then(res=>{
             this.refs.Modal.showModal();
             this.setState({
-                text:"This auction has been rejected!"
+                text:"Thank you for the confirmation. You have rejected this auction."
             });
             setTimeout(()=>{
                 window.location.href="/retailer/auctions";
@@ -48,7 +48,13 @@ export class Signconfidentialityundertaking extends React.Component{
     }
     do_accept(){
         retailerAccept(this.props.current.current.arrangement_id).then(res=>{
-            this.props.page();
+            this.refs.Modal.showModal();
+            this.setState({
+                text:"Congratulations, you have accepted this auction."
+            });
+            setTimeout(()=>{
+                this.props.page();
+            },3000)
         },error=>{
 
         })
