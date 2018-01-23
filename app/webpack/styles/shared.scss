@@ -153,7 +153,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
   h4{
     height: 32px; line-height: 32px; width: 100%; margin: 0 auto; font-size: 13px;
     span{ float: left; padding-left:15px;}
-    a{ float: right; padding-right:15px;}
+    a{ float: right; padding-right:15px; cursor: pointer;}
   }
   .modal_detail{ width:90%; min-height: 112px; margin:0px auto; line-height: 22px; font-size: 16px;}
   .showinfo{ color: red; min-height: auto;}
@@ -169,7 +169,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
       h4{font-weight: 500;
         height: 42px; line-height: 42px; background: #00afb1; width: 100%; margin: 0 auto; font-size: 13px;
         span{ float: left; padding-left:15px; color:#fff;}
-        a{ float: right; padding-right:15px; color:#fff;}
+        a{ float: right; padding-right:15px; color:#fff; cursor: pointer;}
       }
       .history_nr{overflow-y: auto; height:362px;
         dl{ width: 100%; 

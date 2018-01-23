@@ -27,7 +27,7 @@ export class Showhistory extends React.Component{
                     <h4><span>History</span><a onClick={this.closeModal.bind(this)}>X</a></h4>
                     <div className="history_nr">
                     {this.state.props_data.map((item,index)=>{
-                        return <dl>
+                        return <dl key={index}>
                                     <dd>
                                         <dfn><abbr></abbr>Retailer</dfn>
                                         <span>
