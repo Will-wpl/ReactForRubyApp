@@ -8,7 +8,7 @@ export class Adminretailerdashboard extends Component {
         super(props);
         this.state={
             showDetail:{},
-            step:[null,null,null,null,null]
+            step:[1,2,3,4,5]
         }
         this.auction = {};
         this.holdStatus = false;
