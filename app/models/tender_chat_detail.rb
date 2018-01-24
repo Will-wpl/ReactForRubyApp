@@ -2,9 +2,9 @@ class TenderChatDetail < ApplicationRecord
 
   # comments
   # response_status
-  # '0' admin don't need response
-  # '1' admin need response
-  # '2' retailer just input processing, don't show at history list
+  # '2' retailer save
+  # '3' retailer submit deviation
+  # '4' retailer withdraw
 
   # Extends
 
@@ -19,8 +19,8 @@ class TenderChatDetail < ApplicationRecord
   # Validations
 
   # Scopes
-  scope :retailer_response, ->(chat_id) { where("tender_chat_id = ? and (sp_response = '' or sp_response is null)", chat_id) }
-  scope :admin_response, ->(chat_id) { where("tender_chat_id = ? and (retailer_response = '' or retailer_response is null)", chat_id) }
+  scope :retailer_response, ->(chat_id) { where("tender_chat_id = ? and (sp_response = '' or sp_response is null) and response_status != '2'", chat_id) }
+  scope :admin_response, ->(chat_id) { where("tender_chat_id = ? and sp_response not null and (retailer_response = '' or retailer_response is null) and response_status != '2'", chat_id) }
   # Callbacks
 
   # Delegates
