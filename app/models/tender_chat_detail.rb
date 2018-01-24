@@ -20,7 +20,7 @@ class TenderChatDetail < ApplicationRecord
 
   # Scopes
   scope :retailer_response, ->(chat_id) { where("tender_chat_id = ? and (sp_response = '' or sp_response is null) and response_status != '2'", chat_id) }
-  scope :admin_response, ->(chat_id) { where("tender_chat_id = ? and sp_response not null and (retailer_response = '' or retailer_response is null) and response_status != '2'", chat_id) }
+  scope :admin_response, ->(chat_id) { where("tender_chat_id = ? and sp_response is not null and (retailer_response = '' or retailer_response is null) and response_status != '2'", chat_id) }
   # Callbacks
 
   # Delegates
