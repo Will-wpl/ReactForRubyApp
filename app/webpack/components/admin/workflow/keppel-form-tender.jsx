@@ -68,6 +68,7 @@ export class Keppelformtender extends React.Component{
                         </ul>
                     </div>
                 </div>
+                {this.state.chats.length>0?
                 <div className="lm--formItem lm--formItem--inline string u-mt3 role_select">
                     <label className="lm--formItem-left lm--formItem-label string required">
                     Deviation:
@@ -85,7 +86,7 @@ export class Keppelformtender extends React.Component{
                                 </tr>
                             </thead>
                             <tbody>
-                                {this.state.chats.length>0?this.state.chats.map((item,index)=>{
+                                {this.state.chats.map((item,index)=>{
                                     return <tr key={index}>
                                                 <td>{item.item}</td>
                                                 <td >{item.clause}</td>
@@ -94,11 +95,11 @@ export class Keppelformtender extends React.Component{
                                                 <td >{item.sp_response}</td>
                                                 <td><button onClick={this.showhistory.bind(this,item.id)}>History</button></td>
                                             </tr>
-                                }):<tr></tr>}
+                                })}
                             </tbody>
                     </table>
                     </div>
-                </div>
+                </div>:''}
                 <div className="lm--formItem lm--formItem--inline string u-mt3 role_select">
                     <label className="lm--formItem-left lm--formItem-label string required">
                     Comment:
