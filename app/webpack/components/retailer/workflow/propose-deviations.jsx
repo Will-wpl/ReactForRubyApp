@@ -127,7 +127,7 @@ export class Proposedeviations extends React.Component{
         return deviationslist;
     }
     addDeviations(){
-        let add_new = {id:0,item:1,clause:'',
+        let add_new = {id:0,item:"",clause:'',
                         propose_deviation:'',
                         retailer_response:'',
                         sp_response_status:'3'},list = this.state.deviations_list;
