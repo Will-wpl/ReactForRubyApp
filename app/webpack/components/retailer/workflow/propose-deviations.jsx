@@ -36,7 +36,7 @@ export class Proposedeviations extends React.Component{
             }else{
                 this.setState({
                     deviations_list:[
-                        {id:0,item:1,clause:'',propose_deviation:'',retailer_response:'',sp_response:'',sp_response_status:'3'},
+                        {id:0,item:'',clause:'',propose_deviation:'',retailer_response:'',sp_response:'',sp_response_status:'3'},
                     ]
                 })
             }
@@ -55,6 +55,23 @@ export class Proposedeviations extends React.Component{
                 text:"Are you sure you want to withdraw deviation?"
             });
         }else{
+            if(this.state.deviations_list.length <= 0){
+                this.refs.Modal.showModal();
+                this.setState({
+                    text:"No Deviations,please add a new deviation!",
+                });
+                return;
+            }
+            let check = this.state.deviations_list.find((item,index)=>{
+                return $("#item_"+(index)).val() === "" || $("#clause_"+(index)).val() === "" || $("#deviation_"+(index)).val() === "" || $("#response_"+(index)).val() === "";
+            })
+            if(check){
+                this.refs.Modal.showModal();
+                this.setState({
+                    text:"fill out the fields",
+                });
+                return;
+            }
             this.refs.Modal.showModal("comfirm");
             this.setState({
                 text:"Are you sure you want to submit deviations?"
@@ -92,7 +109,8 @@ export class Proposedeviations extends React.Component{
         }
     }
     submitDeviations(){
-        console.log(this.editData());
+        //{id:0,item:'',clause:'',propose_deviation:'',retailer_response:'',sp_response:'',sp_response_status:'3'},
+        //console.log(this.editData());
         retailerSubmitDeviations(this.props.current.current.arrangement_id,this.editData()).then(res=>{
             this.refs.Modal.showModal();
             this.setState({
@@ -104,6 +122,23 @@ export class Proposedeviations extends React.Component{
         })
     }
     save(){
+        if(this.state.deviations_list.length <= 0){
+            this.refs.Modal.showModal();
+            this.setState({
+                text:"No Deviations,please add a new deviation!",
+            });
+            return;
+        }
+        let check = this.state.deviations_list.find((item,index)=>{
+            return $("#item_"+(index)).val() === "" || $("#clause_"+(index)).val() === "" || $("#deviation_"+(index)).val() === "" || $("#response_"+(index)).val() === "";
+        })
+        if(check){
+            this.refs.Modal.showModal();
+            this.setState({
+                text:"fill out the fields",
+            });
+            return;
+        }
         retailerDeviationsSave(this.props.current.current.arrangement_id,this.editData()).then(res=>{
             this.refs.Modal.showModal();
             this.setState({
@@ -127,7 +162,7 @@ export class Proposedeviations extends React.Component{
         return deviationslist;
     }
     addDeviations(){
-        let add_new = {id:0,item:"",clause:'',
+        let add_new = {id:0,item:'',clause:'',
                         propose_deviation:'',
                         retailer_response:'',
                         sp_response_status:'3'},list = this.state.deviations_list;
@@ -143,6 +178,13 @@ export class Proposedeviations extends React.Component{
         this.setState({deviations_list:list});
     }
     removeDeviations(index){
+        if(this.state.deviations_list.length <= 1){
+            this.refs.Modal.showModal();
+            this.setState({
+                text:"At least one deviation."
+            });
+            return;
+        }
         let list  =  this.state.deviations_list;
         list.splice(index,1);
         this.setState({deviations_list:list});
