@@ -215,7 +215,7 @@ export class Submittender extends React.Component{
                 : <span className="red">Your submission has been rejected by administrator.</span>)}</h4>
                 <h4>Please upload the following documents for submission of tender:</h4>
                 <div className="col-sm-12 col-md-8 push-md-2 u-mt3 u-mb3">
-                    {this.addinputfile("upload_tender", "required")}
+                    {this.props.tender ? '':this.addinputfile("upload_tender", "required")}
                     <div className="workflow_btn u-mt3">
                     {this.props.tender ? 
                         <button className="lm--button lm--button--primary" disabled={!this.props.current.actions.node4_retailer_next} onClick={this.do_next.bind(this)}>Next</button> :
