@@ -36,7 +36,7 @@ export class Proposedeviations extends React.Component{
             }else{
                 this.setState({
                     deviations_list:[
-                        {id:0,item:'',clause:'',propose_deviation:'',retailer_response:'',sp_response:'',sp_response_status:'3'},
+                        {id:0,item:'',clause:'',propose_deviation:'',retailer_response:'',sp_response:'',sp_response_status:''},
                     ]
                 })
             }
@@ -109,9 +109,8 @@ export class Proposedeviations extends React.Component{
         }
     }
     submitDeviations(){
-        //{id:0,item:'',clause:'',propose_deviation:'',retailer_response:'',sp_response:'',sp_response_status:'3'},
-        //console.log(this.editData());
-        retailerSubmitDeviations(this.props.current.current.arrangement_id,this.editData()).then(res=>{
+        console.log(this.editData(3));
+        retailerSubmitDeviations(this.props.current.current.arrangement_id,this.editData('3')).then(res=>{
             this.refs.Modal.showModal();
             this.setState({
                 text:"You have successfully submitted your deviations and is pending administrator's review.",
@@ -139,7 +138,8 @@ export class Proposedeviations extends React.Component{
             });
             return;
         }
-        retailerDeviationsSave(this.props.current.current.arrangement_id,this.editData()).then(res=>{
+        console.log(this.editData(2));
+        retailerDeviationsSave(this.props.current.current.arrangement_id,this.editData('2')).then(res=>{
             this.refs.Modal.showModal();
             this.setState({
                 text:"You have successfully saved deviations."
@@ -152,10 +152,20 @@ export class Proposedeviations extends React.Component{
             this.props.page();
         })
     }
-    editData(){
+    editData(sum){
         let deviationslist = [];
         this.state.deviations_list.map((item, index) => {
-            deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'","sp_response_status":"'+item.sp_response_status+'"},';
+            if(item.sp_response_status != sum){
+                if(item.sp_response_status == ""){
+                    deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'","sp_response_status":"'+sum+'"},';
+                }else if(item.sp_response_status == "2"){
+                    deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'","sp_response_status":"'+sum+'"},';
+                }else{
+                    deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'","sp_response_status":"'+item.sp_response_status+'"},';
+                }
+            }else{
+                deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'","sp_response_status":"'+sum+'"},';
+            }       
         })
         deviationslist = deviationslist.substr(0, deviationslist.length-1);
         deviationslist = '['+deviationslist+']';
@@ -165,7 +175,7 @@ export class Proposedeviations extends React.Component{
         let add_new = {id:0,item:'',clause:'',
                         propose_deviation:'',
                         retailer_response:'',
-                        sp_response_status:'3'},list = this.state.deviations_list;
+                        sp_response_status:''},list = this.state.deviations_list;
                         list.push(add_new);
                         // if(list.length < this.state.select_list.length){
                         //     list.push(add_new);
@@ -226,8 +236,11 @@ export class Proposedeviations extends React.Component{
                                                     <td ><input disabled type="text" id={"clause_"+(index)} defaultValue={item.clause}/></td>
                                                     <td ><input disabled type="text" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
                                                     <td ><input disabled type="text" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
-                                                    <td >{item.sp_response_status ?(item.sp_response_status === "2"?"Reject : ":(item.sp_response_status === "1"?"Accept : ":'')):''}{item.sp_response}</td>
-                                                    <td><button id={"history_"+index} onClick={this.showhistory.bind(this,item.id)} disabled={this.state.alldisabled} >History</button></td>
+                                                    <td >{item.sp_response_status ?(item.sp_response_status === "0"?"Rejected : ":(item.sp_response_status === "1"?"Accepted : ":'')):''}{item.sp_response}</td>
+                                                    <td>
+                                                        <button id={"history_"+index} onClick={this.showhistory.bind(this,item.id)} disabled={this.state.alldisabled} >History</button>
+                                                        <button disabled={this.state.alldisabled?true:(item.sp_response_status === "4" ? true : false)} id={"withdraw_"+index} onClick={this.showConfirm.bind(this,'Withdraw',{id:item.id,index:index})}>Withdraw</button>
+                                                    </td>
                                                     </tr>
                                         }else{
                                             return <tr key={index}>
@@ -241,10 +254,14 @@ export class Proposedeviations extends React.Component{
                                             <td ><input type="text" id={"clause_"+(index)} defaultValue={item.clause} disabled={this.state.alldisabled}/></td>
                                             <td ><input type="text" id={"deviation_"+(index)} defaultValue={item.propose_deviation} disabled={this.state.alldisabled}/></td>
                                             <td ><input type="text" id={"response_"+(index)} defaultValue={item.retailer_response} disabled={this.state.alldisabled}/></td>
-                                            <td >{item.sp_response_status ?(item.sp_response_status === "2"?"Reject : ":(item.sp_response_status === "1"?"Accept : ":'')):''}{item.sp_response}</td>
+                                            <td >{item.sp_response_status ?(item.sp_response_status === "0"?"Rejected : ":(item.sp_response_status === "1"?"Accepted : ":'')):''}{item.sp_response}</td>
                                             <td>{item.item === ""?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.state.alldisabled}>remove</button>:
-                                            (item.id===0?'':<div><button disabled={this.state.alldisabled} onClick={this.showhistory.bind(this,item.id) } id={"history_"+index}>History</button>
-                                            <button disabled={this.state.alldisabled?true:(item.sp_response_status === "4" ? true : false)} id={"withdraw_"+index} onClick={this.showConfirm.bind(this,'Withdraw',{id:item.id,index:index})}>Withdraw</button></div>)}</td>
+                                            (item.sp_response_status==='2'?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.state.alldisabled}>remove</button>
+                                            :<div>
+                                                <button disabled={this.state.alldisabled} onClick={this.showhistory.bind(this,item.id) } id={"history_"+index}>History</button>
+                                                <button disabled={this.state.alldisabled?true:(item.sp_response_status === "4" ? true : false)} id={"withdraw_"+index} onClick={this.showConfirm.bind(this,'Withdraw',{id:item.id,index:index})}>Withdraw</button>
+                                            </div>
+                                            )}</td>
                                             </tr>
                                         }
                                     
@@ -255,7 +272,7 @@ export class Proposedeviations extends React.Component{
                                             <td >{item.clause}</td>
                                             <td >{item.propose_deviation}</td>
                                             <td >{item.retailer_response}</td>
-                                            <td >{item.sp_response_status ?(item.sp_response_status === "2"?"Reject : ":(item.sp_response_status === "1"?"Accept : ":'')):''}{item.sp_response}</td>
+                                            <td >{item.sp_response_status ?(item.sp_response_status === "0"?"Rejected : ":(item.sp_response_status === "1"?"Accepted : ":'')):''}{item.sp_response}</td>
                                             <td><button onClick={this.showhistory.bind(this,item.id)}>History</button></td>
                                             </tr>
                                         })

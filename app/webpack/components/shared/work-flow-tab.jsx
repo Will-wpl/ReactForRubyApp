@@ -36,6 +36,11 @@ export class Workflowtab extends React.Component{
             }
         }
     }
+    tab(index){
+        if(this.props.page){
+            this.props.page(index);
+        }
+    }
     render(){
         return(
             <div>
@@ -45,31 +50,31 @@ export class Workflowtab extends React.Component{
                         <tbody>
                             <tr>
                                 <td width="16.8%">
-                                    <div className={"step1"}><span className={this.stepSelect(1)}></span></div>
+                                    <div className={"step1"} onClick={this.tab.bind(this,1)}><span className={this.stepSelect(1)}></span></div>
                                 </td>
                                 <td width="4%">
                                     <div className="step_icon"></div>
                                 </td>
                                 <td width="16.8%">
-                                    <div className={"step2"}><span className={this.stepSelect(2)}></span></div>
+                                    <div className={"step2"} onClick={this.tab.bind(this,2)}><span className={this.stepSelect(2)}></span></div>
                                 </td>
                                 <td width="4%">
                                     <div className="step_icon"></div>
                                 </td>
                                 <td width="16.8%">
-                                    <div className={"step3"}><span className={this.stepSelect(3)}></span></div>
+                                    <div className={"step3"} onClick={this.tab.bind(this,3)}><span className={this.stepSelect(3)}></span></div>
                                 </td>
                                 <td width="4%">
                                     <div className="step_icon"></div>
                                 </td>
                                 <td width="16.8%">
-                                    <div className={"step4"}><span className={this.stepSelect(4)}></span></div>
+                                    <div className={"step4"} onClick={this.tab.bind(this,4)}><span className={this.stepSelect(4)}></span></div>
                                 </td>
                                 <td width="4%">
                                     <div className="step_icon"></div>
                                 </td>
                                 <td width="16.8%">
-                                    <div className={"step5"}><span className={this.stepSelect(5)}></span></div>
+                                    <div className={"step5"} onClick={this.tab.bind(this,5)}><span className={this.stepSelect(5)}></span></div>
                                 </td>
                             </tr>
                         </tbody>
