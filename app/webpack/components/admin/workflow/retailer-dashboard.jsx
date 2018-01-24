@@ -70,9 +70,10 @@ export class Adminretailerdashboard extends Component {
                                                                 return <td key={i}>{
                                                                                 flows[i] ? 
                                                                                 (item.detail.current.current_node === it ? 
-                                                                                    (item.detail.current.current_status === '2' ? <abbr className="step_pending"></abbr> : 
+                                                                                    (item.detail.current.current_status === '2' ? <abbr className="step_pending"></abbr> :
+                                                                                    (item.detail.current.current_status === '0' ? <abbr className="step_pending"></abbr> : 
                                                                                     (item.detail.current.current_status === 'closed' ? <abbr className="step_finished"></abbr>:
-                                                                                    (item.detail.current.current_status === 'rejected' ? '' : <abbr className="step_finished"></abbr>)))
+                                                                                    (item.detail.current.current_status === 'rejected' ? '' : <abbr className="step_finished"></abbr>))))
                                                                                     :<abbr className="step_finished"></abbr>)
                                                                                 : ''}</td>
                                                             })
