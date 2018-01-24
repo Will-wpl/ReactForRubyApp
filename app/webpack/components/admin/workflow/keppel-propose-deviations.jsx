@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import moment from 'moment';
 import {Modal} from '../../shared/show-modal';
+import {Showhistory} from '../../shared/show-history';
 import {adminSendResponse,getAdminDeviations} from '../../../javascripts/componentService/admin/service';
 export class Keppelproposedeviations extends Component {
     constructor(props, context){
@@ -45,7 +46,7 @@ export class Keppelproposedeviations extends Component {
             if(send){
                 this.refs.Modal.showModal();
                 this.setState({
-                    text:"Someone have not reject or accept!"
+                    text:"Please accept or reject the deviation!"
                 });
                 return;
             }
@@ -56,20 +57,26 @@ export class Keppelproposedeviations extends Component {
         }else if(type == "reject"){
             this.refs.Modal.showModal("comfirm",obj);
             this.setState({
-                text:"Are you sure want to send reject?"
+                text:"Are you sure want to reject this submission?"
             });
         }else{
             this.refs.Modal.showModal("comfirm",obj);
             this.setState({
-                text:"Are you sure want to send accept?"
+                text:"Are you sure want to accept this submission?"
             });
         }
+    }
+    showhistory(id){
+        getTenderhistory('admin',id).then(res=>{
+            console.log(res);
+            this.refs.history.showModal(res);
+        })
     }
     send_response(){
         adminSendResponse(this.props.current.current.arrangement_id,this.editData()).then(res=>{
             this.refs.Modal.showModal();
             this.setState({
-                text:"Admin Send Response Successful!"
+                text:"You have sent the response."
             });
             setTimeout(()=>{
                 window.location.href="/admin/auctions/"+sessionStorage.auction_id+"/retailer_dashboard";
@@ -115,7 +122,7 @@ export class Keppelproposedeviations extends Component {
                                             <td>
                                                 <button id={"sp_reject_"+index} disabled={item.sp_response_status === '4' ? true:(item.sp_response_status === '0'?true:false)} onClick={this.showConfirm.bind(this,'reject',{params:'0',index:index})}>Reject</button>
                                                 <button id={"sp_accept_"+index} disabled={item.sp_response_status === '4' ? true:(item.sp_response_status === '1'?true:false)} onClick={this.showConfirm.bind(this,'accept',{params:'1',index:index})}>Accept</button>
-                                                <button id={"sp_history_"+index}>History</button>
+                                                <button id={"sp_history_"+index} onClick={this.showhistory.bind(this,item.id)}>History</button>
                                             </td>
                                         </tr>
                             })}
@@ -125,6 +132,7 @@ export class Keppelproposedeviations extends Component {
                     <button className="lm--button lm--button--primary" onClick={this.showConfirm.bind(this,'Send_Response')}>Send Response</button>
                 </div>
             </div>
+            <Showhistory ref="history" />
             <Modal text={this.state.text} acceptFunction={this.state.buttonType === "Send_Response" ? this.send_response.bind(this) : (this.state.buttonType === "reject" ? this.do_reject.bind(this) : this.do_accept.bind(this))} ref="Modal" />
             </div>
         )}

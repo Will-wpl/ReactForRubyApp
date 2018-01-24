@@ -32,8 +32,8 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
       { name: 'Status of Participation', field_name: 'participation_status' },
       { name: nil, field_name: 'actions' }
     ]
-    actions = [{ url: '/buyer/consumptions/:id/edit', name: 'Edit', icon: 'edit' },
-               { url: '/buyer/consumptions/:id/edit', name: 'View', icon: 'view' }]
+    actions = [{ url: '/buyer/consumptions/:id/edit', name: 'Manage', icon: 'edit', check:'docheck'},
+               { url: '/buyer/consumptions/:id/edit', name: 'View', icon: 'view', check:'docheck' }]
     data = []
     consumption.order('auctions.actual_begin_time asc').each do |consumption|
       if (consumption.auction.publish_status == '1') then
@@ -44,7 +44,7 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
 
       data.push(id: consumption.id, name: consumption.auction.name, actual_begin_time: consumption.auction.actual_begin_time,
                 publish_status: consumption.auction.publish_status, participation_status: consumption.participation_status,
-                auction_id: consumption.auction_id, actions: action)
+                 actions: action)
     end
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200

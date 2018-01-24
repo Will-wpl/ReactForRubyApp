@@ -88,7 +88,7 @@ componentDidMount() {
 }
 upload(type, index){
     if($("#"+type+index).val() === ""){
-        $("#"+type+index).next().fadeIn(300);
+        $("#"+type+index).next().next().fadeIn(300);
         return;
     }
     if(type === "buyer_tc_upload" || type === "retailer_confidentiality_undertaking_upload"){
@@ -150,15 +150,15 @@ upload(type, index){
         checkRequired(){
             let requiredObj = this.state.fileData,result = true; //$("input[type='file'][required]"),
             if(requiredObj['buyer_tc_upload'][0].files.length <=0){
-                $("#buyer_tc_upload0").next().fadeIn(300);
+                $("#buyer_tc_upload0").next().next().fadeIn(300);
                 result = false;
             }
             if(requiredObj['retailer_confidentiality_undertaking_upload'][0].files.length <=0){
-                $("#retailer_confidentiality_undertaking_upload0").next().fadeIn(300);
+                $("#retailer_confidentiality_undertaking_upload0").next().next().fadeIn(300);
                 result = false;
             }
             if(requiredObj['tender_documents_upload'][0].files.length <=0){
-                $("#tender_documents_upload0").next().fadeIn(300);
+                $("#tender_documents_upload0").next().next().fadeIn(300);
                 result = false;
             }
                 // for(let i=0; i<requiredObj.length; i++){

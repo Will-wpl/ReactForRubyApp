@@ -8,7 +8,7 @@ export class Submittender extends React.Component{
         super(props);
         this.state={
             text:'',
-            params_type:'',
+            params_type:'',submission_status:false,disabled:false,
             fileData:{
                 "upload_tender":[
                     {buttonName:"none",files:[]}
@@ -44,7 +44,13 @@ export class Submittender extends React.Component{
             if(this.send_status){
                 if(this.props.tenderFn){
                     this.props.tenderFn();
+                    this.setState({submission_status:true})
                 }
+            }else{
+                this.setState({submission_status:false})
+            }
+            if(this.props.current.current.turn_to_role === 1){
+                this.setState({disabled:true});
             }
         }
     }
@@ -53,7 +59,7 @@ export class Submittender extends React.Component{
         if(type == "Submit"){
             this.refs.Modal.showModal("comfirm");
             this.setState({
-                text:"Are you sure want to submit?"
+                text:"Are you sure you want to submit this submission?"
             });
         }
     }
@@ -87,7 +93,8 @@ export class Submittender extends React.Component{
     }
     do_submit(){
         retailerSubmit(this.props.current.current.arrangement_id).then(res=>{
-            this.setState({text:'Submit successful!'});
+            this.setState({text:'You have successfully submitted your tender and is pending approval by the administrator. Once approved, you will be notified via email and you may then proceed to provide contact person details for actual day of bidding.',
+                           disabled:true});
             this.refs.Modal.showModal();
             this.props.page();
         })
@@ -127,14 +134,16 @@ export class Submittender extends React.Component{
                                             <ul>
                                                 {
                                                     item.files.map((it,i)=>{
-                                                        return <li key={i}><a download={it.file_name} href={"/"+it.file_path}>{it.file_name}</a><span className="remove_file" onClick={this.remove_file.bind(this,type,index,i,it.id)}></span></li>
+                                                        return <li key={i}><a download={it.file_name} href={"/"+it.file_path}>{it.file_name}</a>{this.state.disabled?'':<span className="remove_file" onClick={this.remove_file.bind(this,type,index,i,it.id)}></span>}</li>
                                                     })
                                                 }
                                             </ul>
                                         </div>
                                     </div>
                                     <div className="col-sm-12 col-md-2 u-cell">
-                                    <a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>
+                                        {this.state.disabled?<button className="lm--button lm--button--primary" disabled>Upload</button>
+                                        :<a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>
+                                        }
                                     </div>
                                     {/* <div className="col-sm-12 col-md-2 u-cell">
                                         {item.buttonName === "none" ? "" : <a onClick={this.fileclick.bind(this, index, type, item.buttonName)} className={"lm--button lm--button--primary "+item.buttonName}>{item.buttonText}</a>}
@@ -202,15 +211,15 @@ export class Submittender extends React.Component{
     render(){
         return(
             <div className="col-sm-12 admin_invitation">
-                <h4 className="u-mt3 u-mb1">{this.props.submit ? <span className="green">Your submission has been approved by administrator.</span> 
-                : <span className="red">Your submission has been rejected by administrator.</span>}</h4>
+                <h4 className="u-mt3 u-mb1">{this.props.current.current.current_status === '0'||this.props.current.current.current_status === '2' ?'':(this.state.submission_status ? <span className="green">Your submission has been approved by administrator.</span> 
+                : <span className="red">Your submission has been rejected by administrator.</span>)}</h4>
                 <h4>Please upload the following documents for submission of tender:</h4>
                 <div className="col-sm-12 col-md-8 push-md-2 u-mt3 u-mb3">
                     {this.addinputfile("upload_tender", "required")}
                     <div className="workflow_btn u-mt3">
                     {this.props.tender ? 
                         <button className="lm--button lm--button--primary" disabled={!this.props.current.actions.node4_retailer_next} onClick={this.do_next.bind(this)}>Next</button> :
-                        <button className="lm--button lm--button--primary" disabled={!this.props.current.actions.node4_retailer_submit} onClick={this.showConfirm.bind(this,'Submit')}>Submit</button>
+                        <button className="lm--button lm--button--primary" disabled={this.state.disabled?true:(!this.props.current.actions.node4_retailer_submit)}  onClick={this.showConfirm.bind(this,'Submit')}>Submit</button>
                     }
                     </div>
                 </div>

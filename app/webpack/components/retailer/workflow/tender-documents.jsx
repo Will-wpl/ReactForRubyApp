@@ -23,12 +23,12 @@ export class Tenderdocuments extends React.Component{
         if(type == "Propose_Deviations"){
             this.refs.Modal.showModal("comfirm");
             this.setState({
-                text:"Are you sure want to propose deviations?"
+                text:"Are you sure you want to propose deviations?"
             });
         }else{
             this.refs.Modal.showModal("comfirm");
             this.setState({
-                text:"Are you sure want to accept all?"
+                text:"Are you sure you want to accept all?"
             });
         }
     }

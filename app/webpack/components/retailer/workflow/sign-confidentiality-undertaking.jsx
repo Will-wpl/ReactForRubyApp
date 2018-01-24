@@ -62,7 +62,7 @@ export class Signconfidentialityundertaking extends React.Component{
     render(){
         return(
             <div className="sign_box">
-                {this.props.current.current ?
+                {this.props.current.current.current_status ?
                 <h4>You have {this.props.current.current.current_status === 'reject' ? 'rejected' : 'accepted'} the Confidentiality Undertaking.</h4>
                 :''}
                 <p>Please read attached Confidentiality Undertaking and click on 'Accept' to indicate acceptance. 
