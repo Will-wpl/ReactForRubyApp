@@ -11,7 +11,7 @@ export class Proposedeviations extends React.Component{
             peak_lt:0,peak_hts:0,
             peak_htl:0,peak_eht:0,off_peak_lt:0,off_peak_hts:0,
             off_peak_htl:0,off_peak_eht:0,buttonType:'',
-            select_list:[],
+            select_list:[],alldisabled:false,
             deviations_list:[]
         }
     }
@@ -21,6 +21,9 @@ export class Proposedeviations extends React.Component{
     }
     refresh(){
         getRetailerDeviationsList(sessionStorage.arrangement_id).then(res=>{
+            if(this.props.current.current.turn_to_role === 1){
+                this.setState({alldisabled:true});
+            }
             let select_list = [];
             for(let i = 0; i<res.attachments_count; i++)
             {
@@ -93,9 +96,11 @@ export class Proposedeviations extends React.Component{
         retailerSubmitDeviations(this.props.current.current.arrangement_id,this.editData()).then(res=>{
             this.refs.Modal.showModal();
             this.setState({
-                text:"You have successfully submitted your deviations and is pending administrator's review."
+                text:"You have successfully submitted your deviations and is pending administrator's review.",
+                alldisabled:true
             });
             this.refresh();
+            this.props.page();
         })
     }
     save(){
@@ -179,24 +184,24 @@ export class Proposedeviations extends React.Component{
                                                     <td ><input disabled type="text" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
                                                     <td ><input disabled type="text" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
                                                     <td >{item.sp_response}</td>
-                                                    <td><button id={"history_"+index} onClick={this.showhistory.bind(this,item.id)} >History</button></td>
+                                                    <td><button id={"history_"+index} onClick={this.showhistory.bind(this,item.id)} disabled={this.state.alldisabled} >History</button></td>
                                                     </tr>
                                         }else{
                                             return <tr key={index}>
                                             <td>
-                                                <select id={"item_"+(index)} defaultValue={item.item}>
+                                                <select id={"item_"+(index)} defaultValue={item.item} disabled={this.state.alldisabled}>
                                                     {this.state.select_list.map((it,i)=>{
                                                         return <option key={i} value={it}>{it}</option>
                                                     })}
                                                 </select>
                                             </td>
-                                            <td ><input type="text" id={"clause_"+(index)} defaultValue={item.clause}/></td>
-                                            <td ><input type="text" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
-                                            <td ><input type="text" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
+                                            <td ><input type="text" id={"clause_"+(index)} defaultValue={item.clause} disabled={this.state.alldisabled}/></td>
+                                            <td ><input type="text" id={"deviation_"+(index)} defaultValue={item.propose_deviation} disabled={this.state.alldisabled}/></td>
+                                            <td ><input type="text" id={"response_"+(index)} defaultValue={item.retailer_response} disabled={this.state.alldisabled}/></td>
                                             <td >{item.sp_response}</td>
-                                            <td>{item.item === ""?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)}>remove</button>:
-                                            (item.id===0?'':<div><button onClick={this.showhistory.bind(this,item.id)} id={"history_"+index}>History</button>
-                                            <button disabled={item.sp_response_status === "4" ? true : false} id={"withdraw_"+index} onClick={this.showConfirm.bind(this,'Withdraw',{id:item.id,index:index})}>Withdraw</button></div>)}</td>
+                                            <td>{item.item === ""?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.state.alldisabled}>remove</button>:
+                                            (item.id===0?'':<div><button disabled={this.state.alldisabled} onClick={this.showhistory.bind(this,item.id) } id={"history_"+index}>History</button>
+                                            <button disabled={this.state.alldisabled?true:(item.sp_response_status === "4" ? true : false)} id={"withdraw_"+index} onClick={this.showConfirm.bind(this,'Withdraw',{id:item.id,index:index})}>Withdraw</button></div>)}</td>
                                             </tr>
                                         }
                                     
@@ -214,12 +219,12 @@ export class Proposedeviations extends React.Component{
                                 }
                             </tbody>
                     </table>
-                    {!this.props.tender ? <div className="workflow_btn u-mt3 u-mb3"><a className="add_deviation" onClick={this.addDeviations.bind(this)}>add</a></div> :''}
+                    {!this.props.tender ? <div className="workflow_btn u-mt3 u-mb3"><button className="add_deviation" disabled={this.state.alldisabled} onClick={this.addDeviations.bind(this)}>add</button></div> :''}
                     <div className="workflow_btn u-mt3">
                         {!this.props.tender ?
-                        <div><button className="lm--button lm--button--primary" disabled={!this.props.current.actions.node3_retailer_withdraw_all_deviations} onClick={this.showConfirm.bind(this,'Withdraw_Deviations')}>Withdraw All Deviations</button>
-                        <button className="lm--button lm--button--primary" onClick={this.save.bind(this)}>Save</button>
-                        <button className="lm--button lm--button--primary" disabled={!this.props.current.actions.node3_retailer_submit_deviations} onClick={this.showConfirm.bind(this,'Submit_Deviations')}>Submit Deviations</button></div> :
+                        <div><button className="lm--button lm--button--primary" disabled={this.state.alldisabled?true:(!this.props.current.actions.node3_retailer_withdraw_all_deviations)} onClick={this.showConfirm.bind(this,'Withdraw_Deviations')}>Withdraw All Deviations</button>
+                        <button className="lm--button lm--button--primary" onClick={this.save.bind(this)} disabled={this.state.alldisabled}>Save</button>
+                        <button className="lm--button lm--button--primary" disabled={this.state.alldisabled?true:(!this.props.current.actions.node3_retailer_submit_deviations)} onClick={this.showConfirm.bind(this,'Submit_Deviations')}>Submit Deviations</button></div> :
                         <button className="lm--button lm--button--primary" onClick={this.next.bind(this)}>Next</button>
                         }
                     </div>

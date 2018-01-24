@@ -8,7 +8,7 @@ export class Submittender extends React.Component{
         super(props);
         this.state={
             text:'',
-            params_type:'',submission_status:false,
+            params_type:'',submission_status:false,disabled:false,
             fileData:{
                 "upload_tender":[
                     {buttonName:"none",files:[]}
@@ -48,6 +48,9 @@ export class Submittender extends React.Component{
                 }
             }else{
                 this.setState({submission_status:false})
+            }
+            if(this.props.current.current.turn_to_role === 1){
+                this.setState({disabled:true});
             }
         }
     }
@@ -137,7 +140,9 @@ export class Submittender extends React.Component{
                                         </div>
                                     </div>
                                     <div className="col-sm-12 col-md-2 u-cell">
-                                    <a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>
+                                        {this.state.disabled?<button disabled>Upload</button>
+                                        :<a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>
+                                        }
                                     </div>
                                     {/* <div className="col-sm-12 col-md-2 u-cell">
                                         {item.buttonName === "none" ? "" : <a onClick={this.fileclick.bind(this, index, type, item.buttonName)} className={"lm--button lm--button--primary "+item.buttonName}>{item.buttonText}</a>}
@@ -213,7 +218,7 @@ export class Submittender extends React.Component{
                     <div className="workflow_btn u-mt3">
                     {this.props.tender ? 
                         <button className="lm--button lm--button--primary" disabled={!this.props.current.actions.node4_retailer_next} onClick={this.do_next.bind(this)}>Next</button> :
-                        <button className="lm--button lm--button--primary" disabled={!this.props.current.actions.node4_retailer_submit} onClick={this.showConfirm.bind(this,'Submit')}>Submit</button>
+                        <button className="lm--button lm--button--primary" disabled={this.state.disabled?true:(!this.props.current.actions.node4_retailer_submit)}  onClick={this.showConfirm.bind(this,'Submit')}>Submit</button>
                     }
                     </div>
                 </div>

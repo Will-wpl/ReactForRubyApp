@@ -8,7 +8,7 @@ export class Adminretailerdashboard extends Component {
         super(props);
         this.state={
             showDetail:{},
-            step:[1,2,3,4,5]
+            step:[null,null,null,null,null]
         }
         this.auction = {};
         this.holdStatus = false;
@@ -16,7 +16,6 @@ export class Adminretailerdashboard extends Component {
     componentDidMount(){
         
     }
-    
     componentWillMount(){
         
     }
