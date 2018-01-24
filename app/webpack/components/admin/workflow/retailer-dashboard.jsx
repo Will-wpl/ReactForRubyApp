@@ -63,8 +63,12 @@ export class Adminretailerdashboard extends Component {
                                                     <td>{item.company_name}</td>
                                                         {
                                                             this.state.step.map((it,i)=>{
+                                                                let flows = [null,null,null,null,null];
+                                                                item.detail.flows.map((s,k)=>{
+                                                                    flows[s-1]=s;
+                                                                })
                                                                 return <td key={i}>{
-                                                                                item.detail.flows[i] ? 
+                                                                                flows[i] ? 
                                                                                 (item.detail.current.current_node === it ? 
                                                                                     (item.detail.current.current_status === '2' ? <abbr className="step_pending"></abbr> : 
                                                                                     (item.detail.current.current_status === 'closed' ? <abbr className="step_finished"></abbr>:

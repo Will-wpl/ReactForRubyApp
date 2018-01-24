@@ -24,7 +24,7 @@ export class Proposedeviations extends React.Component{
             if(this.props.current.current.turn_to_role === 1){
                 this.setState({alldisabled:true});
             }
-            let select_list = [];
+            let select_list = [""];
             for(let i = 0; i<res.attachments_count; i++)
             {
                 select_list.push(i+1);
@@ -131,14 +131,15 @@ export class Proposedeviations extends React.Component{
                         propose_deviation:'',
                         retailer_response:'',
                         sp_response_status:'3'},list = this.state.deviations_list;
-                        if(list.length < this.state.select_list.length){
-                            list.push(add_new);
-                        }else{
-                            this.refs.Modal.showModal();
-                            this.setState({
-                                text:"Add deviations than the limit!"
-                            });
-                        }                 
+                        list.push(add_new);
+                        // if(list.length < this.state.select_list.length){
+                        //     list.push(add_new);
+                        // }else{
+                        //     this.refs.Modal.showModal();
+                        //     this.setState({
+                        //         text:"Add deviations than the limit!"
+                        //     });
+                        // }                 
         this.setState({deviations_list:list});
     }
     removeDeviations(index){
@@ -183,7 +184,7 @@ export class Proposedeviations extends React.Component{
                                                     <td ><input disabled type="text" id={"clause_"+(index)} defaultValue={item.clause}/></td>
                                                     <td ><input disabled type="text" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
                                                     <td ><input disabled type="text" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
-                                                    <td >{item.sp_response}</td>
+                                                    <td >{this.props.current.current.current_status ?'':(this.props.current.current.current_status === "2"?"Reject : ":"Accept : ")}{item.sp_response}</td>
                                                     <td><button id={"history_"+index} onClick={this.showhistory.bind(this,item.id)} disabled={this.state.alldisabled} >History</button></td>
                                                     </tr>
                                         }else{
@@ -198,7 +199,7 @@ export class Proposedeviations extends React.Component{
                                             <td ><input type="text" id={"clause_"+(index)} defaultValue={item.clause} disabled={this.state.alldisabled}/></td>
                                             <td ><input type="text" id={"deviation_"+(index)} defaultValue={item.propose_deviation} disabled={this.state.alldisabled}/></td>
                                             <td ><input type="text" id={"response_"+(index)} defaultValue={item.retailer_response} disabled={this.state.alldisabled}/></td>
-                                            <td >{item.sp_response}</td>
+                                            <td >{this.props.current.current.current_status ?'':(this.props.current.current.current_status === "2"?"Reject : ":"Accept : ")}{item.sp_response}</td>
                                             <td>{item.item === ""?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.state.alldisabled}>remove</button>:
                                             (item.id===0?'':<div><button disabled={this.state.alldisabled} onClick={this.showhistory.bind(this,item.id) } id={"history_"+index}>History</button>
                                             <button disabled={this.state.alldisabled?true:(item.sp_response_status === "4" ? true : false)} id={"withdraw_"+index} onClick={this.showConfirm.bind(this,'Withdraw',{id:item.id,index:index})}>Withdraw</button></div>)}</td>
@@ -212,7 +213,7 @@ export class Proposedeviations extends React.Component{
                                             <td >{item.clause}</td>
                                             <td >{item.propose_deviation}</td>
                                             <td >{item.retailer_response}</td>
-                                            <td >{item.sp_response}</td>
+                                            <td >{this.props.current.current.current_status ?'':(this.props.current.current.current_status === "2"?"Reject : ":"Accept : ")}{item.sp_response}</td>
                                             <td><button onClick={this.showhistory.bind(this,item.id)}>History</button></td>
                                             </tr>
                                         })
