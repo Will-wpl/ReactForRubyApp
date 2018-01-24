@@ -56,7 +56,7 @@ export default class LiveHomePage extends Component {
             }).onDisconnected(() => {
                 console.log('---message client disconnected ----')
             }).onReceivedData(data => {
-                // console.log('---message client received data ---', data);
+                console.log('---message client received data ---', data);
                 if (data && data.action) {
                     if (data.action === ACTION_COMMANDS.SET_BID) {
                         let curUserId = Number(getLoginUserId());
@@ -195,15 +195,17 @@ export default class LiveHomePage extends Component {
     }
 
     onBidFormSubmit(configs) {
-        // console.log({
-        //     lt_peak:`0.${configs[1]}`, lt_off_peak: `0.${configs[0]}`
-        //     , hts_peak:`0.${configs[3]}`,hts_off_peak:`0.${configs[2]}`
-        //     ,htl_peak:`0.${configs[5]}`,htl_off_peak:`0.${configs[4]}`
-        // });
+        console.log({
+            lt_peak:`0.${configs[1]}`, lt_off_peak: `0.${configs[0]}`
+            , hts_peak:`0.${configs[3]}`,hts_off_peak:`0.${configs[2]}`
+            ,htl_peak:`0.${configs[5]}`,htl_off_peak:`0.${configs[4]}`
+            ,eht_peak:`0.1111`,eht_off_peak:`0.1112`
+        });
         this.ws.sendMessage(ACTION_COMMANDS.SET_BID, {
             lt_peak:`0.${configs[1]}`, lt_off_peak: `0.${configs[0]}`
             , hts_peak:`0.${configs[3]}`,hts_off_peak:`0.${configs[2]}`
             ,htl_peak:`0.${configs[5]}`,htl_off_peak:`0.${configs[4]}`
+            ,eht_peak:`0.1111`,eht_off_peak:`0.1112`
         })
     }
 

@@ -28,12 +28,16 @@ class AuctionChannel < ApplicationCable::Channel
     calculate_dto.total_hts_off_peak = auction.total_hts_off_peak
     calculate_dto.total_htl_peak = auction.total_htl_peak
     calculate_dto.total_htl_off_peak = auction.total_htl_off_peak
+    calculate_dto.total_eht_peak = auction.total_eht_peak
+    calculate_dto.total_eht_off_peak = auction.total_eht_off_peak
     calculate_dto.lt_peak = data['lt_peak']
     calculate_dto.lt_off_peak = data['lt_off_peak']
     calculate_dto.hts_peak = data['hts_peak']
     calculate_dto.hts_off_peak = data['hts_off_peak']
     calculate_dto.htl_peak = data['htl_peak']
     calculate_dto.htl_off_peak = data['htl_off_peak']
+    calculate_dto.eht_peak = data['eht_peak']
+    calculate_dto.eht_off_peak = data['eht_off_peak']
     calculate_dto.user_id = params[:user_id]
     calculate_dto.auction_id = params[:auction_id]
     args = { auction_id: params[:auction_id], calculate_dto: calculate_dto }.to_json
