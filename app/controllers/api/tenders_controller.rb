@@ -262,7 +262,8 @@ class Api::TendersController < Api::BaseController
                  retailer_response: last_retailer_response.nil? ? nil : last_retailer_response.retailer_response,
                  propose_deviation: last_retailer_response.nil? ? nil : last_retailer_response.propose_deviation,
                  sp_response: last_sp_response.nil? ? nil : last_sp_response.sp_response,
-                 response_status: last_sp_response.nil? ? nil : last_sp_response.response_status)
+                 response_status: [last_retailer_response.nil? ? nil : last_retailer_response.response_status,
+                                   last_sp_response.nil? ? nil : last_sp_response.response_status])
     end
     chats
   end
