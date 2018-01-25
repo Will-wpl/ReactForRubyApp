@@ -80,3 +80,6 @@ export const retailManageComingNode5 = (params) => {
 export const getRetailerDeviationsList = (params) => {
     return get('/api/retailer/tenders/'+params+'/node3_retailer');
 }
+export const getRetailerFiles = (params) => {
+    return get('/api/retailer/tenders/'+params+'/node5_retailer');
+}

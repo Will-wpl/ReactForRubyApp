@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import {TimeCuntDown} from '../shared/time-cuntdown';
 //import {DuringCountDown} from '../shared/during-countdown';
-import {getRetailerAuctionInVersionOne, retailManageComing,retailManageComingNode5} from '../../javascripts/componentService/retailer/service';
+import {getRetailerAuctionInVersionOne, retailManageComing,retailManageComingNode5,getRetailerFiles} from '../../javascripts/componentService/retailer/service';
 import {getAuction} from '../../javascripts/componentService/common/service';
 import {Modal} from '../shared/show-modal';
 import {getLoginUserId} from '../../javascripts/componentService/util';
@@ -26,7 +26,8 @@ export class RetailerManage extends Component {
             alternative_name:"",
             alternative_email_address:"",
             alternative_mobile_number:"",
-            alternative_office_number:""
+            alternative_office_number:"",
+            files:[]
         }
         this.auctionData = {};
     }
@@ -68,6 +69,10 @@ export class RetailerManage extends Component {
     }
     componentDidMount() {
         this.getRetailerAuction();
+        getRetailerFiles(sessionStorage.arrangement_id).then(res=>{
+            this.setState({files:res});
+            //console.log(res);
+        })
     }
     getRetailerAuction(){
         let auction_id = ''
@@ -259,6 +264,20 @@ export class RetailerManage extends Component {
                             <span className="string required link_file">xxx.pdf</span>
                         </div>
                     </div> */}
+                    {this.state.files.length>0?
+                    <div>
+                        <h3 className="u-mt3 u-mb1">Briefing Pack</h3>
+                        <div className="lm--formItem lm--formItem--inline string">
+                            <label className="lm--formItem-left lm--formItem-label string required"></label>
+                            <div className="lm--formItem-right lm--formItem-control">
+                                <ul className="brif_list">
+                                {this.state.files.map((item,index)=>{
+                                    return <li key={index}><a download={item.file_name} href={"/"+item.file_path}>{item.file_name}</a></li>
+                                })}
+                            </ul>
+                            </div>
+                        </div>
+                    </div>:''}
                     <h3 className="u-mt3 u-mb1">Contact Person Details for Actual Day of Reverse Auction</h3>
                     <h4 className="lm--formItem lm--formItem--inline string">Main Contact Person on Actual Bidding Day:</h4>
                     <div className="lm--formItem lm--formItem--inline string">
