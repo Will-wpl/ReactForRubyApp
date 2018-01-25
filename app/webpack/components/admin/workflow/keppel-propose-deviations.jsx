@@ -4,6 +4,7 @@ import moment from 'moment';
 import {Modal} from '../../shared/show-modal';
 import {Showhistory} from '../../shared/show-history';
 import {adminSendResponse,getAdminDeviations} from '../../../javascripts/componentService/admin/service';
+import {getTenderhistory} from '../../../javascripts/componentService/common/service';
 export class Keppelproposedeviations extends Component {
     constructor(props, context){
         super(props);

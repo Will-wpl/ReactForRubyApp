@@ -56,7 +56,7 @@ export class Retailerworkflow extends React.Component{
     render(){
         return(
             <div>
-                <Workflowtab auction={this.state.auction} current={this.state.current} selected={this.state.selected} />
+                <Workflowtab auction={this.state.auction} page={this.getPageindex.bind(this)} current={this.state.current} selected={this.state.selected} />
                 {this.showpage(this.state.page)}
                 <div className="createRaMain u-grid">
                     <a className="lm--button lm--button--primary u-mt3" href="/retailer/home" >Back to Homepage</a>
