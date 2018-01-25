@@ -13,6 +13,7 @@ class Api::AuctionAttachmentsController < Api::BaseController
     file = params[:file]
     mounted_as = [params[:auction_id]]
     mounted_as.push(params[:user_id]) unless params[:user_id].nil?
+    mounted_as.push(Time.current.to_f.to_s.delete('.'))
     uploader = AvatarUploader.new(AuctionAttachment, mounted_as)
     uploader.store!(file)
     attachment = AuctionAttachment.new
