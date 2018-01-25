@@ -182,15 +182,27 @@ class Api::TendersController < Api::BaseController
 
   def node3_retailer_save
     chats = JSON.parse(params[:chats])
+    chat_ids = []
+    chats.each do |chat|
+      chat_ids.push(chat['id']) if chat['id'] != '0'
+    end
+    tenders = TenderChat.where('arrangement_id = ?', params[:id])
+    will_delete_chats = tenders.reject do |tender|
+      chat_ids.include?(tender.id.to_s)
+    end
+    will_delete_chats.each do |chat|
+      TenderChat.find(chat.id).destroy
+    end
+
     ActiveRecord::Base.transaction do
       chats.each do |chat|
+        chat_ids.push(chat['id']) if chat['id'] != '0'
         tender_chat = set_tender_chat(chat, params[:id])
         next unless tender_chat.save
         chat_info = set_save_tender_chat(tender_chat, chat)
         TenderChatDetail.chat_save(tender_chat, chat_info)
       end
     end
-
     render json: nil, status: 200
   end
 
