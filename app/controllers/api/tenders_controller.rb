@@ -274,7 +274,7 @@ class Api::TendersController < Api::BaseController
 
   def set_node3_chats(arrangement_id)
     chats = []
-    TenderChat.where(arrangement_id: arrangement_id).each do |chat|
+    TenderChat.where(arrangement_id: arrangement_id).order(id: :asc).each do |chat|
       last_retailer_response = TenderChatDetail.retailer_response(chat.id).last
       last_sp_response = TenderChatDetail.admin_response(chat.id).last
       chats.push(id: chat.id, item: chat.item, clause: chat.clause, sp_response_status: chat.sp_response_status,
