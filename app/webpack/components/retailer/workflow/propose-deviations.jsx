@@ -245,13 +245,13 @@ export class Proposedeviations extends React.Component{
                                         }else{
                                             return <tr key={index}>
                                                     <td>
-                                                        <select id={"item_"+(index)} defaultValue={item.item} disabled={this.state.alldisabled?this.state.alldisabled:(item.sp_response_status !='2' ? true : false)}>
+                                                        <select id={"item_"+(index)} defaultValue={item.item} disabled={this.state.alldisabled?this.state.alldisabled:(item.sp_response_status !='2' || item.sp_response_status !='0' ? true : false)}>
                                                             {this.state.select_list.map((it,i)=>{
                                                                 return <option key={i} value={it}>{it}</option>
                                                             })}
                                                         </select>
                                                     </td>
-                                                    <td ><input type="text" id={"clause_"+(index)} defaultValue={item.clause} disabled={this.state.alldisabled?this.state.alldisabled:(item.sp_response_status !='2' ? true : false)}/></td>
+                                                    <td ><input type="text" id={"clause_"+(index)} defaultValue={item.clause} disabled={this.state.alldisabled?this.state.alldisabled:(item.sp_response_status !='2' || item.sp_response_status !='0' ? true : false)}/></td>
                                                     <td ><input type="text" id={"deviation_"+(index)} defaultValue={item.propose_deviation} disabled={this.state.alldisabled}/></td>
                                                     <td ><input type="text" id={"response_"+(index)} defaultValue={item.retailer_response} disabled={this.state.alldisabled}/></td>
                                                     <td >{item.sp_response_status ?(item.sp_response_status === "0"?"Rejected : ":(item.sp_response_status === "1"?"Accepted : ":'')):''}{item.sp_response}</td>
