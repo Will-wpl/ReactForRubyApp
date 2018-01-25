@@ -110,6 +110,7 @@ export class Submittender extends React.Component{
                     <form id={type+"_form"} encType="multipart/form-data">
                         {this.state.fileData[type].map((item, index) => 
                                 <div className="u-grid mg0 u-mt1" key={index}>
+                                {!this.props.tender?
                                     <div className="col-sm-12 col-md-10 u-cell">
                                         <a className="upload_file_btn">
                                             <dfn>No file selected...</dfn>
@@ -139,12 +140,22 @@ export class Submittender extends React.Component{
                                                 }
                                             </ul>
                                         </div>
-                                    </div>
-                                    <div className="col-sm-12 col-md-2 u-cell">
-                                        {this.state.disabled?<button className="lm--button lm--button--primary" disabled>Upload</button>
-                                        :<a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>
-                                        }
-                                    </div>
+                                    </div>:<div className="progress_files">
+                                            <ul>
+                                                {
+                                                    item.files.map((it,i)=>{
+                                                        return <li key={i}><a download={it.file_name} href={"/"+it.file_path}>{it.file_name}</a></li>
+                                                    })
+                                                }
+                                            </ul>
+                                        </div>}
+                                        {!this.props.tender?
+                                            <div className="col-sm-12 col-md-2 u-cell">
+                                                {
+                                                    this.state.disabled?<button className="lm--button lm--button--primary" disabled>Upload</button>
+                                                    :<a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>
+                                                }
+                                            </div>:''}
                                     {/* <div className="col-sm-12 col-md-2 u-cell">
                                         {item.buttonName === "none" ? "" : <a onClick={this.fileclick.bind(this, index, type, item.buttonName)} className={"lm--button lm--button--primary "+item.buttonName}>{item.buttonText}</a>}
                                     </div> */}
@@ -215,7 +226,7 @@ export class Submittender extends React.Component{
                 : <span className="red">Your submission has been rejected by administrator.</span>)}</h4>
                 <h4>Please upload the following documents for submission of tender:</h4>
                 <div className="col-sm-12 col-md-8 push-md-2 u-mt3 u-mb3">
-                    {this.props.tender ? '':this.addinputfile("upload_tender", "required")}
+                    {this.addinputfile("upload_tender", "required")}
                     <div className="workflow_btn u-mt3">
                     {this.props.tender ? 
                         <button className="lm--button lm--button--primary" disabled={!this.props.current.actions.node4_retailer_next} onClick={this.do_next.bind(this)}>Next</button> :

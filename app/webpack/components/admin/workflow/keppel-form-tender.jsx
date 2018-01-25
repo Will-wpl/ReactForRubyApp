@@ -63,7 +63,7 @@ export class Keppelformtender extends React.Component{
                     <div className="lm--formItem-right lm--formItem-control">
                         <ul className="tender_list">
                             {this.state.linklist.length > 0 ? this.state.linklist.map((item,index)=>{
-                                return <li key={index}>item {index+1} : <a download={item.file_name} href={item.file_path}>{item.file_name}</a></li>
+                                return <li key={index}>item {index+1} : <a download={item.file_name} href={"/"+item.file_path}>{item.file_name}</a></li>
                             }) : ''}
                         </ul>
                     </div>
