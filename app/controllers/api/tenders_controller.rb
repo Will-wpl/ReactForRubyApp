@@ -165,7 +165,7 @@ class Api::TendersController < Api::BaseController
   # un-workflow function
 
   def history
-    details = TenderChat.find(params[:chat_id]).tender_chat_details
+    details = TenderChatDetail.where('tender_chat_id = ?', params[:chat_id]).order(id: :asc)
     details = details.reject do |detail|
       detail.response_status == '2'
     end

@@ -31,18 +31,18 @@ export class Keppelproposedeviations extends Component {
     editData(){
         let deviationslist = [];
         this.state.deviations_list.map((item, index) => {
-            deviationslist += '{"id":"'+item.id+'","sp_response":"'+$("#sp_response_"+(index)).val()+'","sp_response_status":"'+item.sp_response_status+'"},';
+            deviationslist += '{"id":"'+item.id+'","sp_response":"'+item.sp_response+'","sp_response_status":"'+item.sp_response_status+'"},';
         })
         deviationslist = deviationslist.substr(0, deviationslist.length-1);
         deviationslist = '['+deviationslist+']';
-        //console.log(deviationslist);
+        console.log(deviationslist);
         return deviationslist;
     }
     showConfirm(type,obj){
         this.setState({buttonType:type});
         if(type == "Send_Response"){
             let send = this.state.deviations_list.find(item=>{
-                return item.sp_response_status ==='2'||item.sp_response_status ==='3'||item.sp_response_status ==='4'
+                return item.sp_response_status ==='2'||item.sp_response_status ==='3'
             })
             if(send){
                 this.refs.Modal.showModal();
@@ -89,11 +89,18 @@ export class Keppelproposedeviations extends Component {
     do_reject(obj){
         let deviationslist = this.state.deviations_list;
         deviationslist[obj.index].sp_response_status = obj.params;
+        deviationslist[obj.index].type = obj.type;
+        deviationslist[obj.index].sp_response = "";
+        deviationslist[obj.index].sp_response = "Rejected : "+$("#sp_response_"+obj.index).val();
         this.setState({deviations_list:deviationslist});
+        console.log(this.state.deviations_list);
     }
     do_accept(obj){
         let deviationslist = this.state.deviations_list;
         deviationslist[obj.index].sp_response_status = obj.params;
+        deviationslist[obj.index].type = obj.type;
+        deviationslist[obj.index].sp_response = "";
+        deviationslist[obj.index].sp_response = "Accepted : "+$("#sp_response_"+obj.index).val();
         this.setState({deviations_list:deviationslist});
     }
     render (){
@@ -114,15 +121,31 @@ export class Keppelproposedeviations extends Component {
                         </thead>
                         <tbody>
                             {this.state.deviations_list.map((item,index)=>{
+                                if(!item.type){
+                                    if(item.sp_response_status === '4' || item.sp_response_status === '1'){
+                                        return <tr key={index}>
+                                                <td>{item.item}</td>
+                                                <td >{item.clause}</td>
+                                                <td >{item.propose_deviation}</td>
+                                                <td >{item.retailer_response}</td>
+                                                <td >{item.sp_response}<input type="hidden" id={"sp_response_"+index} defaultValue={item.sp_response} /></td>
+                                                <td>
+                                                    <button id={"sp_reject_"+index} disabled>Reject</button>
+                                                    <button id={"sp_accept_"+index} disabled>Accept</button>
+                                                    <button id={"sp_history_"+index} onClick={this.showhistory.bind(this,item.id)}>History</button>
+                                                </td>
+                                            </tr>
+                                    }
+                                }
                                 return <tr key={index}>
                                             <td>{item.item}</td>
                                             <td >{item.clause}</td>
                                             <td >{item.propose_deviation}</td>
                                             <td >{item.retailer_response}</td>
-                                            <td ><input type="text" id={"sp_response_"+index} defaultValue={item.sp_response} /></td>
+                                            <td ><input type="text" id={"sp_response_"+index} /></td>
                                             <td>
-                                                <button id={"sp_reject_"+index} disabled={item.sp_response_status === '4' ? true:(item.sp_response_status === '0'?true:false)} onClick={this.showConfirm.bind(this,'reject',{params:'0',index:index})}>Reject</button>
-                                                <button id={"sp_accept_"+index} disabled={item.sp_response_status === '4' ? true:(item.sp_response_status === '1'?true:false)} onClick={this.showConfirm.bind(this,'accept',{params:'1',index:index})}>Accept</button>
+                                                <button id={"sp_reject_"+index} disabled={item.type?(item.type=="reject"?true:false):(item.sp_response_status === '4' || item.sp_response_status === '1'?true:false)} onClick={this.showConfirm.bind(this,'reject',{params:'0',index:index,type:'reject'})}>Reject</button>
+                                                <button id={"sp_accept_"+index} disabled={item.type?(item.type=="accept"?true:false):(item.sp_response_status === '4' || item.sp_response_status === '1'?true:false)} onClick={this.showConfirm.bind(this,'accept',{params:'1',index:index,type:'accept'})}>Accept</button>
                                                 <button id={"sp_history_"+index} onClick={this.showhistory.bind(this,item.id)}>History</button>
                                             </td>
                                         </tr>
