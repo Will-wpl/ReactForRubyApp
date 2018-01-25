@@ -86,7 +86,7 @@ class Api::TendersController < Api::BaseController
     chats = JSON.parse(params[:chats])
     ActiveRecord::Base.transaction do
       chats.each do |chat|
-        next if chat['sp_response_status'] == '4'
+        next if chat['sp_response_status'] == '4' || chat['sp_response_status'] == '1'
         tender_chat = set_tender_chat(chat, params[:id])
         next unless tender_chat.save
         chat_info = set_withdraw_tender_chat(tender_chat, chat)
@@ -105,7 +105,7 @@ class Api::TendersController < Api::BaseController
     chats = JSON.parse(params[:chats])
     ActiveRecord::Base.transaction do
       chats.each do |chat|
-        next if chat['sp_response_status'] == '4'
+        next if chat['sp_response_status'] == '4' || chat['sp_response_status'] == '1'
         tender_chat = set_tender_chat(chat, params[:id])
         next unless tender_chat.save
         chat_info = set_submit_deviation_tender_chat(tender_chat, chat)
@@ -127,7 +127,7 @@ class Api::TendersController < Api::BaseController
     chats = JSON.parse(params[:chats])
     ActiveRecord::Base.transaction do
       chats.each do |chat|
-        next if chat['sp_response_status'] == '4'
+        next if chat['sp_response_status'] == '4' || chat['sp_response_status'] == '1'
         tender_chat = TenderChat.find(chat['id'])
         chat_info = set_admin_send_response(tender_chat, chat)
         TenderChatDetail.chat_save(tender_chat, chat_info)
