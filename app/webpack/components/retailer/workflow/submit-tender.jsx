@@ -92,6 +92,11 @@ export class Submittender extends React.Component{
         })
     }
     do_submit(){
+        if(this.state.fileData['upload_tender'][0].files.length<=0){
+            this.setState({text:'You must upload files!'});
+            this.refs.Modal.showModal();
+            return 
+        }
         retailerSubmit(this.props.current.current.arrangement_id).then(res=>{
             this.setState({text:'You have successfully submitted your tender and is pending approval by the administrator. Once approved, you will be notified via email and you may then proceed to provide contact person details for actual day of bidding.',
                            disabled:true});
@@ -170,8 +175,13 @@ export class Submittender extends React.Component{
         fileObj.parent().prev("dfn").text(fileObj.val());
     }
     upload(type, index){
+        let time = null
         if($("#"+type+index).val() === ""){
             $("#"+type+index).next().next().fadeIn(300);
+            clearTimeout(time);
+            time = setTimeout(()=>{
+                $("#"+type+index).next().next().hide();
+            },2000)
             return;
         }
         const barObj = $('#'+type+index).parents("a").next();
