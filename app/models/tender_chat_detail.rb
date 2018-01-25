@@ -21,6 +21,7 @@ class TenderChatDetail < ApplicationRecord
   # Scopes
   scope :retailer_response, ->(chat_id) { where("tender_chat_id = ? and sp_response is null", chat_id) }
   scope :admin_response, ->(chat_id) { where("tender_chat_id = ? and sp_response is not null and retailer_response is null", chat_id) }
+  scope :admin_accept, -> { where(sp_response: '1') }
   # Callbacks
 
   # Delegates

@@ -127,10 +127,13 @@ class Api::TendersController < Api::BaseController
     chats = JSON.parse(params[:chats])
     ActiveRecord::Base.transaction do
       chats.each do |chat|
-        next if chat['sp_response_status'] == '4' || chat['sp_response_status'] == '1'
+        next if chat['sp_response_status'] == '4'
         tender_chat = TenderChat.find(chat['id'])
-        chat_info = set_admin_send_response(tender_chat, chat)
-        TenderChatDetail.chat_save(tender_chat, chat_info)
+        accept_count = TenderChatDetail.admin_response(chat['id']).admin_accept.count
+        if accept_count == 0
+          chat_info = set_admin_send_response(tender_chat, chat)
+          TenderChatDetail.chat_save(tender_chat, chat_info)
+        end
       end
       workflow = TenderWorkflow.new.execute(:node3, :send_response, params[:id])
     end
