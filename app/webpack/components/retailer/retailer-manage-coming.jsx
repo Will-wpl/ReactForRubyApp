@@ -164,8 +164,8 @@ export class RetailerManage extends Component {
                 "alternative_office_number": this.state.alternative_office_number,
                 "lt_peak": 0.1458,//+this.refs.lt_peak.value
                 "lt_off_peak": 0.1458,//+this.refs.lt_off_peak.value
-                "hts_peak":0,//+this.refs.hts_peak.value
-                "hts_off_peak": 0,//+this.refs.hts_off_peak.value
+                "hts_peak":0.1458,//+this.refs.hts_peak.value
+                "hts_off_peak": 0.1458,//+this.refs.hts_off_peak.value
                 "htl_peak": 0.1458,//+this.refs.htl_peak.value
                 "htl_off_peak": 0.1458,//+this.refs.htl_off_peak.value
                 "eht_peak": 0.1458,//+this.refs.htl_peak.value

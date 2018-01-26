@@ -158,11 +158,9 @@ export class Proposedeviations extends React.Component{
             if(item.sp_response_status != sum){
                 if(item.sp_response_status == ""){
                     deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'","sp_response_status":"'+sum+'"},';
-                }else if(item.sp_response_status == "2"){
-                    deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'","sp_response_status":"'+sum+'"},';
                 }else{
                     if(item.sp_response_status == "0"){
-                        deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'","sp_response_status":"'+sum+'"},';
+                        deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'","sp_response_status":"3"},';
                     }else{
                         deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'","sp_response_status":"'+item.sp_response_status+'"},';
                     } 

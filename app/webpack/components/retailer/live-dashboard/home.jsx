@@ -83,6 +83,7 @@ export default class LiveHomePage extends Component {
                             last.template_price['lt'] = `LT(P):$${parseFloat(last.lt_peak).toFixed(4)} LT(OP):$${parseFloat(last.lt_off_peak).toFixed(4)}`;
                             last.template_price['hts'] = `HTS(P):$${parseFloat(last.hts_peak).toFixed(4)} HTS(OP):$${parseFloat(last.hts_off_peak).toFixed(4)}`;
                             last.template_price['htl'] = `HTL(P):$${parseFloat(last.htl_peak).toFixed(4)} HTL(OP):$${parseFloat(last.htl_off_peak).toFixed(4)}`;
+                            last.template_price['eht'] = `EHT(P):$${parseFloat(last.eht_peak).toFixed(4)} EHT(OP):$${parseFloat(last.eht_off_peak).toFixed(4)}`;
                             this.state.chartDatas[0].data = this.state.chartDatas[0].data.concat(last)
                             // }
                             let element = JSON.parse(JSON.stringify(last));
@@ -93,13 +94,16 @@ export default class LiveHomePage extends Component {
                             element.hts_off_peak = parseFloat(element.hts_off_peak).toFixed(4);
                             element.htl_peak = parseFloat(element.htl_peak).toFixed(4);
                             element.htl_off_peak = parseFloat(element.htl_off_peak).toFixed(4);
+                            element.eht_peak = parseFloat(element.eht_peak).toFixed(4);
+                            element.eht_off_peak = parseFloat(element.eht_off_peak).toFixed(4);
 
                             this.setState({
                                 ranking: last.ranking,
                                 priceConfig: last.is_bidder ? [].concat(last.lt_off_peak)
                                     .concat(last.lt_peak).concat(last.hts_off_peak)
                                     .concat(last.hts_peak).concat(last.htl_off_peak)
-                                    .concat(last.htl_peak) : [],//this.state.priceConfig
+                                    .concat(last.htl_peak).concat(last.eht_off_peak)
+                                    .concat(last.eht_peak) : [],//this.state.priceConfig
                                 histories: last.is_bidder ? this.state.histories.concat(element): this.state.histories,
                                 chartDatas: this.state.chartDatas
                             })
@@ -147,6 +151,8 @@ export default class LiveHomePage extends Component {
                 element.hts_off_peak = parseFloat(element.hts_off_peak).toFixed(4);
                 element.htl_peak = parseFloat(element.htl_peak).toFixed(4);
                 element.htl_off_peak = parseFloat(element.htl_off_peak).toFixed(4);
+                element.eht_peak = parseFloat(element.eht_peak).toFixed(4);
+                element.eht_off_peak = parseFloat(element.eht_off_peak).toFixed(4);
                 return element;
             });
             let chartDataTpl = {id: 0, data: [], color: '#e5e816'};
@@ -163,6 +169,7 @@ export default class LiveHomePage extends Component {
                 history.template_price['lt'] = `LT(P):$${parseFloat(history.lt_peak).toFixed(4)} LT(OP):$${parseFloat(history.lt_off_peak).toFixed(4)}`;
                 history.template_price['hts'] = `HTS(P):$${parseFloat(history.hts_peak).toFixed(4)} HTS(OP):$${parseFloat(history.hts_off_peak).toFixed(4)}`;
                 history.template_price['htl'] = `HTL(P):$${parseFloat(history.htl_peak).toFixed(4)} HTL(OP):$${parseFloat(history.htl_off_peak).toFixed(4)}`;
+                history.template_price['eht'] = `EHT(P):$${parseFloat(history.eht_peak).toFixed(4)} EHT(OP):$${parseFloat(history.eht_off_peak).toFixed(4)}`;
                 chartDataTpl.data.push(history)
             });
 
@@ -176,7 +183,8 @@ export default class LiveHomePage extends Component {
                     this.bidForm.initConfigs([]
                         .concat(lastBidden.lt_off_peak).concat(lastBidden.lt_peak)
                         .concat(lastBidden.hts_off_peak).concat(lastBidden.hts_peak)
-                        .concat(lastBidden.htl_off_peak).concat(lastBidden.htl_peak));
+                        .concat(lastBidden.htl_off_peak).concat(lastBidden.htl_peak)
+                        .concat(lastBidden.eht_off_peak).concat(lastBidden.eht_peak));
                 }
             }
             // console.log('last =>>>>',last);
@@ -186,7 +194,8 @@ export default class LiveHomePage extends Component {
                     priceConfig: biddenArr.length > 1 ? []
                     .concat(lastBidden.lt_off_peak).concat(lastBidden.lt_peak)
                     .concat(lastBidden.hts_off_peak).concat(lastBidden.hts_peak)
-                    .concat(lastBidden.htl_off_peak).concat(lastBidden.htl_peak) : [],
+                    .concat(lastBidden.htl_off_peak).concat(lastBidden.htl_peak)
+                    .concat(lastBidden.eht_off_peak).concat(lastBidden.eht_peak): [],
                 histories: res.filter(element => {
                     return element.is_bidder;
                 }), chartDatas: [].concat(chartDataTpl)
@@ -199,13 +208,13 @@ export default class LiveHomePage extends Component {
             lt_peak:`0.${configs[1]}`, lt_off_peak: `0.${configs[0]}`
             , hts_peak:`0.${configs[3]}`,hts_off_peak:`0.${configs[2]}`
             ,htl_peak:`0.${configs[5]}`,htl_off_peak:`0.${configs[4]}`
-            ,eht_peak:`0.1111`,eht_off_peak:`0.1112`
+            ,eht_peak:`0.${configs[7]}`,eht_off_peak:`0.${configs[6]}`
         });
         this.ws.sendMessage(ACTION_COMMANDS.SET_BID, {
             lt_peak:`0.${configs[1]}`, lt_off_peak: `0.${configs[0]}`
             , hts_peak:`0.${configs[3]}`,hts_off_peak:`0.${configs[2]}`
             ,htl_peak:`0.${configs[5]}`,htl_off_peak:`0.${configs[4]}`
-            ,eht_peak:`0.1111`,eht_off_peak:`0.1112`
+            ,eht_peak:`0.${configs[7]}`,eht_off_peak:`0.${configs[6]}`
         })
     }
 
