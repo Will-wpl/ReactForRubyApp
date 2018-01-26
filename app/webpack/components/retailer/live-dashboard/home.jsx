@@ -227,10 +227,10 @@ export default class LiveHomePage extends Component {
     }
 
     render() {
-        const visibility_lt = this.props.auction ? true: this.props.auction.has_lt;
-        const visibility_hts = this.props.auction ? true: this.props.auction.has_hts;
-        const visibility_htl = this.props.auction ? true: this.props.auction.has_htl;
-        const visibility_eht = this.props.auction ? true: this.props.auction.has_eht;
+        const visibility_lt = !this.props.auction ? true: this.props.auction.has_lt;
+        const visibility_hts = !this.props.auction ? true: this.props.auction.has_hts;
+        const visibility_htl = !this.props.auction ? true: this.props.auction.has_htl;
+        const visibility_eht = !this.props.auction ? true: this.props.auction.has_eht;
         return (
             <div>
                 <DuringCountDown auction={this.props.auction} countDownOver={this.goToFinish.bind(this)}>

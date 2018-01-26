@@ -45,7 +45,7 @@ compare(prop) {
     } 
 }
 componentDidMount() {
-    getAuction('admin',localStorage.auction_id).then(auction => {
+    getAuction('admin',sessionStorage.auction_id).then(auction => {
         console.log(auction);
         this.auction = auction;
         this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000'
@@ -114,6 +114,10 @@ confirm_winner(){
 }
 render() {
     //console.log(this.winner.data);
+    const visibility_lt = !this.auction ? true: Number(this.auction.total_lt_peak) > 0 || Number(this.auction.total_lt_off_peak) > 0;
+    const visibility_hts = !this.auction ? true: Number(this.auction.total_hts_peak) > 0 || Number(this.auction.total_hts_off_peak) > 0;
+    const visibility_htl = !this.auction ? true: Number(this.auction.total_htl_peak) > 0 || Number(this.auction.total_htl_off_peak) > 0;
+    const visibility_eht = !this.auction ? true: Number(this.auction.total_eht_peak) > 0 || Number(this.auction.total_eht_off_peak) > 0;
     return (
         <div>
             <div className="time_cuntdown during">
@@ -126,7 +130,7 @@ render() {
                     <div className="col-sm-12 col-md-6 u-cell">
                         <div className="col-sm-12 col-md-10 push-md-1">
                             <ReservePrice auction={this.auction} price={this.startPrice} realtimePrice={this.state.currentPrice} />
-                            <WinnerPrice showOrhide="hide" winner={this.state.winner} />
+                            <WinnerPrice showOrhide="hide" winner={this.state.winner}  isLtVisible={visibility_lt} isHtsVisible={visibility_hts} isHtlVisible={visibility_htl} isEhtVisible={visibility_eht}/>
                             <div className="winnerPrice_main">
                                 <a className="lm--button lm--button--primary u-mt3" onClick={this.showDetail.bind(this,'void')}>Void Reverse Auction</a>
                                 {/* <a className="lm--button lm--button--primary u-mt3" >Alternate Winner</a> */}
