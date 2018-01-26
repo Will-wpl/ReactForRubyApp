@@ -82,8 +82,9 @@ export default class Price extends Component {
 Price.defaultProps = {
     data: [],
     isLtVisible: true,
-    isHtsVisible: false,
-    isHtlVisible: true
+    isHtsVisible: true,
+    isHtlVisible: true,
+    isEhtVisible: true
 }
 
 function getTemplate(props) {
@@ -128,7 +129,8 @@ function getTemplate(props) {
                                 template = `<strong>${d.template_price.company_price}</strong>
                                     <div style="${props.isLtVisible ? '' : 'display:none'}">${d.template_price.lt}</div>
                                     <div style="${props.isHtsVisible ? '' : 'display:none'}">${d.template_price.hts}</div>
-                                    <div style="${props.isHtlVisible ? '' : 'display:none'}">${d.template_price.htl}</div>`;
+                                    <div style="${props.isHtlVisible ? '' : 'display:none'}">${d.template_price.htl}</div>
+                                    <div style="${props.isEhtVisible ? '' : 'display:none'}">${d.template_price.eht}</div>`;
                             }
                         }
                         if (template) {
@@ -273,7 +275,8 @@ function getTemplate(props) {
                             template = `<strong>${d.template_price.company_price}</strong>
                                     <div style="${props.isLtVisible ? '' : 'display:none'}">${d.template_price.lt}</div>
                                     <div style="${props.isHtsVisible ? '' : 'display:none'}">${d.template_price.hts}</div>
-                                    <div style="${props.isHtlVisible ? '' : 'display:none'}">${d.template_price.htl}</div>`;
+                                    <div style="${props.isHtlVisible ? '' : 'display:none'}">${d.template_price.htl}</div>
+                                    <div style="${props.isEhtVisible ? '' : 'display:none'}">${d.template_price.eht}</div>`;
                         }
                     }
                     if (template) {
