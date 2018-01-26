@@ -136,6 +136,7 @@ export default class LiveHomePage extends Component {
     }
 
     makeup(res) {
+        const topRule = Number(this.props.auction ? this.props.auction.retailer_mode : 0) === 0;
         if (res.length > 0 ) {
             // console.log('res ====>', res)
             let copy = JSON.parse(JSON.stringify(res));
@@ -160,8 +161,8 @@ export default class LiveHomePage extends Component {
                 chartDataTpl.id = history.user_id;
                 // chartDataTpl.data.push({time: moment(history.bid_time).format('YYYY-MM-DD HH:mm:ss')
                 //     , ranking: Number(history.ranking) === 1 ? 2 : history.ranking, needMark: history.is_bidder})
-                history.ranking = (this.state.showTop2Rule && Number(history.ranking) === 1) ? 2 : history.ranking;
-                history.template_ranking = `Ranking: ${(this.state.showTop2Rule && Number(history.ranking) <= 2) ? 'TOP 2' : getNumBref(history.ranking)} ${history.is_bidder && history.flag !== null  ? '(Bid Submitter)' : ''}`;
+                history.ranking = (topRule && Number(history.ranking) === 1) ? 2 : history.ranking;
+                history.template_ranking = `Ranking: ${(topRule && Number(history.ranking) <= 2) ? 'TOP 2' : getNumBref(history.ranking)} ${history.is_bidder && history.flag !== null  ? '(Bid Submitter)' : ''}`;
                 if (!history.template_price) {
                     history.template_price = {};
                 }
@@ -177,7 +178,7 @@ export default class LiveHomePage extends Component {
                 return element.is_bidder;
             })
             let lastBidden = biddenArr[biddenArr.length - 1];
-            lastBidden.ranking = this.state.showTop2Rule && Number(lastBidden.ranking) === 1 ? 2 : Number(lastBidden.ranking);
+            lastBidden.ranking = topRule && Number(lastBidden.ranking) === 1 ? 2 : Number(lastBidden.ranking);
             if (biddenArr.length === 1) {
                 if (lastBidden.flag === null) {
                     this.bidForm.initConfigs([]
@@ -190,7 +191,7 @@ export default class LiveHomePage extends Component {
             // console.log('last =>>>>',last);
             let newest = histories[histories.length - 1];
             this.setState({
-                ranking: this.state.showTop2Rule && Number(newest.ranking) === 1 ? 2 : Number(newest.ranking),
+                ranking: topRule && Number(newest.ranking) === 1 ? 2 : Number(newest.ranking),
                     priceConfig: biddenArr.length > 1 ? []
                     .concat(lastBidden.lt_off_peak).concat(lastBidden.lt_peak)
                     .concat(lastBidden.hts_off_peak).concat(lastBidden.hts_peak)
@@ -198,8 +199,11 @@ export default class LiveHomePage extends Component {
                     .concat(lastBidden.eht_off_peak).concat(lastBidden.eht_peak): [],
                 histories: res.filter(element => {
                     return element.is_bidder;
-                }), chartDatas: [].concat(chartDataTpl)
+                }), chartDatas: [].concat(chartDataTpl),
+                showTop2Rule: topRule
             })
+        } else {
+            this.setState({showTop2Rule: topRule})
         }
     }
 

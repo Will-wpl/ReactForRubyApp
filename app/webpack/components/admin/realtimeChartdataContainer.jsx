@@ -64,6 +64,7 @@ export default class ChartRealtimeHoc extends Component {
                         d.template_price['lt'] = `LT(P):$${parseFloat(d.lt_peak).toFixed(4)} LT(OP):$${parseFloat(d.lt_off_peak).toFixed(4)}`;
                         d.template_price['hts'] = `HTS(P):$${parseFloat(d.hts_peak).toFixed(4)} HTS(OP):$${parseFloat(d.hts_off_peak).toFixed(4)}`;
                         d.template_price['htl'] = `HTL(P):$${parseFloat(d.htl_peak).toFixed(4)} HTL(OP):$${parseFloat(d.htl_off_peak).toFixed(4)}`;
+                        d.template_price['eht'] = `EHT(P):$${parseFloat(d.eht_peak).toFixed(4)} EHT(OP):$${parseFloat(d.eht_off_peak).toFixed(4)}`;
                     })
                     results.push(result);
                 }

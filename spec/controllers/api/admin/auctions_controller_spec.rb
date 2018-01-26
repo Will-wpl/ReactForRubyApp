@@ -616,7 +616,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
         it 'Success' do
           hash = JSON.parse(response.body)
           expect(response).to have_http_status(:ok)
-          expect(hash['count']).to eq(4)
+          expect(hash['count_company']).to eq(4)
         end
       end
     end
