@@ -43,6 +43,8 @@ export default class ChartRealtimeHoc extends Component {
 
     updateIndentifications(ids) {
         this.ids = ids ? ids : [];
+        console.log('==================>', ids)
+        console.log('==================>', this.list)
         this.filterData();
     }
 

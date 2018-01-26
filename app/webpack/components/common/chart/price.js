@@ -8,6 +8,10 @@ export default class Price extends Component {
         super(props);
         this.state = {option: getTemplate(this.props)};
         this.onyAxisMouseOver = this.onyAxisMouseOver.bind(this);
+        this.onDataZoom = this.onDataZoom.bind(this);
+        this.onEvents = {
+            'dataZoom': this.onDataZoom
+        }
     }
 
     getChartOption() {
@@ -51,6 +55,20 @@ export default class Price extends Component {
             });
             option.series.push(tmp);
         });
+        if (option.hasOwnProperty('dataZoom')) {
+            if (!Number.isNaN(this.xStart)) {
+                option.dataZoom[0].start = this.xStart;
+            }
+            if (!Number.isNaN(this.xEnd)) {
+                option.dataZoom[0].end = this.xEnd;
+            }
+            if (!Number.isNaN(this.yStart)) {
+                option.dataZoom[1].start = this.yStart;
+            }
+            if (!Number.isNaN(this.yEnd)) {
+                option.dataZoom[1].end = this.yEnd;
+            }
+        }
         return option;
     }
 
@@ -67,14 +85,32 @@ export default class Price extends Component {
         }
     }
 
+    onDataZoom(params) {
+        if (params.type === 'datazoom' && params.dataZoomId.length > 0) {
+            const lastEle = params.dataZoomId.charAt(params.dataZoomId.length - 1);
+            if (lastEle === '1') { //y
+                this.yStart = params.start;
+                this.yEnd = params.end;
+            } else if (lastEle === '0') { //x
+                this.xStart = params.start;
+                this.xEnd = params.end;
+            }
+        }
+    }
+
     render() {
-        return (
-            <ReactEcharts
+        let content = <div></div>;
+        if (this.props.data) {
+            content = <ReactEcharts
                 ref={instance => this.charts_instance = instance}
                 option={this.getChartOption()}
-                notMerge={false}
+                notMerge={true}
                 style={{minHeight: '310px', width: '100%'}}
-                className='react_for_echarts' />
+                className='react_for_echarts'
+                onEvents={this.onEvents}/>
+        }
+        return (
+            content
         );
     }
 }
