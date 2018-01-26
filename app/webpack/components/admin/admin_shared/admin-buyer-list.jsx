@@ -18,14 +18,7 @@ export class BuyerList extends Component {
         if(this.props.onAddturly === 'jest'){
             return;
         }
-        arrangementDetail(id).then(res=>{
-            this.setState({
-                showDetail:res,
-            })
-            this.refs.Modal.showModal();
-        },error=>{
-
-        })
+        window.location.href="/admin/consumptions/"+id;
     }
     render () {
         return (

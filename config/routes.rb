@@ -70,7 +70,7 @@ Rails.application.routes.draw do
           get 'obtain'
         end
       end
-      resources :consumptions, only: %i[index destroy update_status] do
+      resources :consumptions, only: %i[index show destroy update_status] do
         member do
           put 'update_status'
         end
@@ -183,6 +183,7 @@ Rails.application.routes.draw do
         patch 'approval'
       end
     end
+    resources :consumptions,only: %i[show]
     resources :auction_results, only: [:index]
     resources :auction_histories, only: []
     resources :auction_events, only: []

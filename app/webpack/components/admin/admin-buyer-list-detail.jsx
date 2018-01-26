@@ -4,7 +4,7 @@ import moment from 'moment';
 import AdminComsumptionList from './admin_shared/admin-comsumption-list';
 import AdminComsumptionPrice from './admin_shared/admin-comsumption-price';
 import {getSearchType} from '../../javascripts/componentService/util';
-import {getBuyerDetails,getBuyerDetailsConsumptions} from '../../javascripts/componentService/admin/service';
+import {getAdminBuyerListDetails} from '../../javascripts/componentService/admin/service';
 export default class AdminBuyerListDetail extends Component {
   constructor(props){
     super(props);
@@ -23,11 +23,10 @@ export default class AdminBuyerListDetail extends Component {
 }
 
 componentDidMount() {
-    getBuyerDetails({id:sessionStorage.auction_id,type:this.datail_type}).then(res=>{
+    getAdminBuyerListDetails(window.location.href.split("consumptions/")[1]).then(res=>{
         console.log(res);
         this.setState({
-            comsumption_list:res.list,
-            price:res.total_info
+            comsumption_list:[res],
         })
     },error=>{
 
@@ -41,7 +40,7 @@ render() {
     return (
         <div className="u-grid mg0">
             <div className="col-sm-12 u-mb3">
-                <AdminComsumptionList table={this.state.detail} detail_index={this.state.detail_index} type={this.pageType} comsumption_list={this.state.comsumption_list} detail={this.show_detail.bind(this)} />
+                <AdminComsumptionList visible="visible" comsumption_list={this.state.comsumption_list} detail={this.show_detail.bind(this)} />
             </div>
             <div className="createRaMain u-grid">
             <a className="lm--button lm--button--primary u-mt3" href="javascript:javascript:self.location=document.referrer;" >Back</a>

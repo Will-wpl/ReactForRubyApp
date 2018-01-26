@@ -47,6 +47,10 @@ export const getBuyerDetails = (params) => {
     return get('/api/admin/consumptions?id='+params.id+'&consumer_type='+params.type);
 }
 
+export const getAdminBuyerListDetails = (params) => {
+    return get('/api/admin/consumptions/'+params);
+}
+
 export const getBuyerDetailsConsumptions = (params) => {
     return get('/api/admin/consumption_details?consumption_id='+params.id);
 }

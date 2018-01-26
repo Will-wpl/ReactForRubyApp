@@ -37,6 +37,28 @@ class Api::ConsumptionsController < Api::BaseController
     render json: { list: data, total_info: total_info }, status: 200
   end
 
+  def show
+    consumption = Consumption.find(params[:id])
+    details = ConsumptionDetail.find_by_consumption_id(params[:id]).order(id: :asc)
+    count = details.count
+    cons = { auction_id: consumption.auction_id,
+             user_id: consumption.user_id,
+             company_name: consumption.user.company_name,
+             name: consumption.user.name,
+             count: count,
+             lt_peak: consumption.lt_peak.nil? ? 0 : consumption.lt_peak,
+             lt_off_peak: consumption.lt_off_peak.nil? ? 0 : consumption.lt_off_peak,
+             hts_peak: consumption.hts_peak.nil? ? 0 : consumption.hts_peak,
+             hts_off_peak: consumption.hts_off_peak.nil? ? 0 : consumption.hts_off_peak,
+             htl_peak: consumption.htl_peak.nil? ? 0 : consumption.htl_peak,
+             htl_off_peak: consumption.htl_off_peak.nil? ? 0 : consumption.htl_off_peak,
+             eht_peak: consumption.eht_peak.nil? ? 0 : consumption.eht_peak,
+             eht_off_peak: consumption.eht_off_peak.nil? ? 0 : consumption.eht_off_peak,
+             details: details }
+
+    render json: cons, status: 200
+  end
+
   def update_status
     if params[:id] == '0'
       if Consumption.find_by_auction_and_user(params[:auction_id], params[:user_id]).exists?
@@ -52,8 +74,8 @@ class Api::ConsumptionsController < Api::BaseController
       end
     else
       if params['action_status'] == '1'
-      @consumption.update(action_status: params['action_status'])
-      render json: @consumption, status: 200
+        @consumption.update(action_status: params['action_status'])
+        render json: @consumption, status: 200
       else
         @consumption.destroy
         render json: nil, status: 200

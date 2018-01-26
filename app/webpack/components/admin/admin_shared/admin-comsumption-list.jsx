@@ -43,7 +43,7 @@ render() {
                                     <div className="col">EHT(Off-Peak): {item.eht_off_peak}</div>
                                     <div className="col">Unit: kWh</div>
                                 </div>
-                                <div className="comsumption_list_table u-grid" id={"comsumption_list_table_"+index}> 
+                                <div className={this.props.visible?'comsumption_list_table u-grid visible':'comsumption_list_table u-grid'} id={"comsumption_list_table_"+index}> 
                                         <table>
                                             <thead>
                                                 <tr>
