@@ -15,6 +15,8 @@ export default class BidHistory extends Component {
                     <td style={this.props.isHtsVisible ? {} : {display: 'none'}}>$ {element.hts_peak}</td>
                     <td style={this.props.isHtlVisible ? {} : {display: 'none'}}>$ {element.htl_peak}</td>
                     <td style={this.props.isHtlVisible ? {} : {display: 'none'}}>$ {element.htl_off_peak}</td>
+                    <td style={this.props.isEhtVisible ? {} : {display: 'none'}}>$ {element.eht_peak}</td>
+                    <td style={this.props.isEhtVisible ? {} : {display: 'none'}}>$ {element.eht_off_peak}</td>
                 </tr>
             })
         } else {
@@ -31,12 +33,15 @@ export default class BidHistory extends Component {
                     <td style={this.props.isHtsVisible ? {} : {display: 'none'}}>$ {element.hts_peak}</td>
                     <td style={this.props.isHtlVisible ? {} : {display: 'none'}}>$ {element.htl_peak}</td>
                     <td style={this.props.isHtlVisible ? {} : {display: 'none'}}>$ {element.htl_off_peak}</td>
+                    <td style={this.props.isEhtVisible ? {} : {display: 'none'}}>$ {element.eht_peak}</td>
+                    <td style={this.props.isEhtVisible ? {} : {display: 'none'}}>$ {element.eht_off_peak}</td>
                 </tr>)
             }
         }
         const a = this.props.isLtVisible ? 2 : 0;
         const b = this.props.isHtsVisible ? 2 : 0;
         const c = this.props.isHtlVisible ? 2 : 0;
+        const d = this.props.isEhtVisible ? 2 : 0;
         return (
             <form>
                 <h3>My Bid History</h3>
@@ -51,10 +56,12 @@ export default class BidHistory extends Component {
                         <col style={this.props.isHtsVisible ? {width: 50 +'px'} : {display: 'none'}} />
                         <col style={this.props.isHtlVisible ? {width: 50 +'px'} : {display: 'none'}} />
                         <col style={this.props.isHtlVisible ? {width: 50 +'px'} : {display: 'none'}} />
+                        <col style={this.props.isEhtVisible ? {width: 50 +'px'} : {display: 'none'}} />
+                        <col style={this.props.isEhtVisible ? {width: 50 +'px'} : {display: 'none'}} />
                     </colgroup>  
                     <thead>
                     <tr>
-                        <th colSpan={2 + a + b + c} className="table_title">Bid Price</th>
+                        <th colSpan={2 + a + b + c + d} className="table_title">Bid Price</th>
                     </tr>
                     <tr>
                         <th>S/N</th>
@@ -65,6 +72,8 @@ export default class BidHistory extends Component {
                         <th style={this.props.isHtsVisible ? {} : {display: 'none'}}>HTS (Peak)</th>
                         <th style={this.props.isHtlVisible ? {} : {display: 'none'}}>HTL (Peak)</th>
                         <th style={this.props.isHtlVisible ? {} : {display: 'none'}}>HTL (Off-Peak)</th>
+                        <th style={this.props.isEhtVisible ? {} : {display: 'none'}}>EHT (Peak)</th>
+                        <th style={this.props.isEhtVisible ? {} : {display: 'none'}}>EHT (Off-Peak)</th>
                     </tr>
                     </thead>
                 </table>
@@ -72,14 +81,16 @@ export default class BidHistory extends Component {
                 <div className="table-body">
                 <table className="retailer_fill">
                     <colgroup>  
-                    <col style={{width: 50 +'px'}} />  
-                    <col style={{width: 100 +'px'}} />
-                    <col style={this.props.isLtVisible ? {width: 50 +'px'} : {display: 'none'}} />
-                    <col style={this.props.isLtVisible ? {width: 50 +'px'} : {display: 'none'}} />
-                    <col style={this.props.isHtsVisible ? {width: 50 +'px'} : {display: 'none'}} />
-                    <col style={this.props.isHtsVisible ? {width: 50 +'px'} : {display: 'none'}} />
-                    <col style={this.props.isHtlVisible ? {width: 50 +'px'} : {display: 'none'}} />
-                    <col style={this.props.isHtlVisible ? {width: 50 +'px'} : {display: 'none'}} />
+                        <col style={{width: 50 +'px'}} />
+                        <col style={{width: 100 +'px'}} />
+                        <col style={this.props.isLtVisible ? {width: 50 +'px'} : {display: 'none'}} />
+                        <col style={this.props.isLtVisible ? {width: 50 +'px'} : {display: 'none'}} />
+                        <col style={this.props.isHtsVisible ? {width: 50 +'px'} : {display: 'none'}} />
+                        <col style={this.props.isHtsVisible ? {width: 50 +'px'} : {display: 'none'}} />
+                        <col style={this.props.isHtlVisible ? {width: 50 +'px'} : {display: 'none'}} />
+                        <col style={this.props.isHtlVisible ? {width: 50 +'px'} : {display: 'none'}} />
+                        <col style={this.props.isEhtVisible ? {width: 50 +'px'} : {display: 'none'}} />
+                        <col style={this.props.isEhtVisible ? {width: 50 +'px'} : {display: 'none'}} />
                     </colgroup>  
                     <tbody>
                     {trs}
@@ -95,5 +106,6 @@ BidHistory.defaultProps = {
     order : 'asc',
     isLtVisible: true,
     isHtsVisible: true,
-    isHtlVisible: true
+    isHtlVisible: true,
+    isEhtVisible: true
 }
