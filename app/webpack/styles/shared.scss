@@ -651,3 +651,24 @@ button[disabled='']{background: #666 !important; color:#999 !important;}
     }
   }
 }
+
+
+.admin_buyer_list{
+  .buyer_tab{
+    a{ 
+      background: #24425a; color: #fff; display:inline-block; 
+      text-align: center; height:42px; line-height: 42px;
+      border-radius: 5px 5px 0px 0px; margin-right: 5px; transition: 0.5s all; cursor: pointer;
+      &.selected,&:hover{background: #1b3146;}
+    }
+  }
+  .buyer_list{
+    background: #1b3146; padding: 15px 0px; overflow: hidden;
+  }
+  #buyer_individual{ display: none;}
+  .bidderStatus{
+      .bidders_list{ width:96%; margin:0px; margin-top: 5px;
+      li{ background: #304556;}
+      }
+    }
+}

@@ -14,6 +14,7 @@ import "components/search/home-list";
 import "components/admin/admin-invitation";
 import "components/admin/admin-comsumption";
 import "components/admin/admin-workflow";
+import "components/admin/admin-buyer-dashboard";
 // import "./javascripts/ajax-test.js";
 console.log("Admin Webpacker");
 

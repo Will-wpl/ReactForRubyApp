@@ -94,6 +94,10 @@ export const getAdminDeviations = (params) => {
 export const getAdminKeppelForm = (params) => {
     return get('/api/admin/tenders/'+params+'/node4_admin');
 }
+
+export const getAdminBuyerDashboard = (params) => {
+    return get('/api/admin/auctions/'+params+'/buyer_dashboard');
+}
 //arrangements
 //consumptions
 export const getHistories = (params) => {
