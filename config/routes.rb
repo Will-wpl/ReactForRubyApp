@@ -183,6 +183,7 @@ Rails.application.routes.draw do
         patch 'approval'
       end
     end
+    resources :consumptions,only: %i[show]
     resources :auction_results, only: [:index]
     resources :auction_histories, only: []
     resources :auction_events, only: []
