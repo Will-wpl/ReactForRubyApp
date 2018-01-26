@@ -227,6 +227,10 @@ export default class LiveHomePage extends Component {
     }
 
     render() {
+        const visibility_lt = this.props.auction ? true: this.props.auction.has_lt;
+        const visibility_hts = this.props.auction ? true: this.props.auction.has_hts;
+        const visibility_htl = this.props.auction ? true: this.props.auction.has_htl;
+        const visibility_eht = this.props.auction ? true: this.props.auction.has_eht;
         return (
             <div>
                 <DuringCountDown auction={this.props.auction} countDownOver={this.goToFinish.bind(this)}>
@@ -244,12 +248,13 @@ export default class LiveHomePage extends Component {
                 </div>
                 <div className="u-grid u-mt2">
                     <div className="col-sm-12 col-md-5 u-cell">
-                        <div className="col-sm-12 col-md-10 push-md-1"><BidForm data={this.state.priceConfig} ref={instance => this.bidForm = instance} onSubmit={this.onBidFormSubmit.bind(this)}/></div>
+                        <div className="col-sm-12 col-md-10 push-md-1"><BidForm data={this.state.priceConfig} ref={instance => this.bidForm = instance} onSubmit={this.onBidFormSubmit.bind(this)}
+                                                                                isLtVisible={visibility_lt} isHtsVisible={visibility_hts} isHtlVisible={visibility_htl} isEhtVisible={visibility_eht}/></div>
                     </div>
                     <div className="col-sm-12 col-md-7 u-cell">
                         <div className="col-sm-12 col-md-10 push-md-1"><BidHistory data={this.state.histories.filter(element => {
                             return element.flag !== null;
-                        })} order={'desc'}/></div>
+                        })} order={'desc'} isLtVisible={visibility_lt} isHtsVisible={visibility_hts} isHtlVisible={visibility_htl} isEhtVisible={visibility_eht}/></div>
                     </div>
                 </div>
             </div>
