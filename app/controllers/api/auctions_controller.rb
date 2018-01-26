@@ -331,9 +331,11 @@ class Api::AuctionsController < Api::BaseController
   end
 
   def buyer_dashboard
-    consumptions = Consumption.find_by_auction_id(params[:id]).find_by_user_consumer_type(params[:consumer_type]).order(:participation_status)
-    count = consumptions.count
-    render json: { consumptions: consumptions, count: count }, status: 200
+    consumptions_company = Consumption.find_by_auction_id(params[:id]).find_by_user_consumer_type('2').order(:participation_status)
+    count_company = consumptions_company.count
+    consumptions_individual = Consumption.find_by_auction_id(params[:id]).find_by_user_consumer_type('3').order(:participation_status)
+    count_individual = consumptions_individual.count
+    render json: { consumptions_company: consumptions_company, count_company: count_company, consumptions_individual: consumptions_individual, count_individual:count_individual }, status: 200
   end
 
   private
