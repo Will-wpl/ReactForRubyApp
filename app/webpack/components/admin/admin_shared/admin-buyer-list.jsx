@@ -26,7 +26,7 @@ export class BuyerList extends Component {
             <div className="u-grid bidderStatus">
                 <div className="col-sm-12 col-md-12">
                     <div className="lm--formItem lm--formItem--inline string optional">
-                            <span className="lm--formItem-left lm--formItem-label string optional">Total number of company buyers : </span>
+                            <span className="lm--formItem-left lm--formItem-label string optional">Total number of buyers : </span>
                             <label className="lm--formItem-right lm--formItem-label lm--formItem-control">
                                 {this.props.dashboard.count}
                             </label>
