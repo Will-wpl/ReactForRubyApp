@@ -180,7 +180,7 @@ export class Proposedeviations extends React.Component{
                         sp_response_status:''},list = this.state.deviations_list;
                         list.push(add_new);
                         // if(list.length < this.state.select_list.length){
-                        //     list.push(add_new);
+                        //     list.push(add_new)
                         // }else{
                         //     this.refs.Modal.showModal();
                         //     this.setState({
