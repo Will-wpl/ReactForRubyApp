@@ -70,10 +70,12 @@ export class Adminretailerdashboard extends Component {
                                                                 return <td key={i}>{
                                                                                 flows[i] ? 
                                                                                 (item.detail.current.current_node === it ? 
-                                                                                    (item.detail.current.current_status === '2' ? <abbr className="step_pending"></abbr> :
-                                                                                    (item.detail.current.current_status === '0' ? <abbr className="step_pending"></abbr> : 
-                                                                                    (item.detail.current.current_status === 'closed' ? <abbr className="step_finished"></abbr>:
-                                                                                    (item.detail.current.current_status === 'rejected' ? '' : <abbr className="step_finished"></abbr>))))
+                                                                                    (item.detail.current.current_status === '2' ? <abbr className="step_pending"></abbr> : // 2 retailer click submit in step4
+                                                                                    (item.detail.current.current_status === '0' ? <abbr className="step_pending"></abbr> : // 0 in progress
+                                                                                    (item.detail.current.current_status === '4' ? <abbr className="step_pending"></abbr> : //4 admin reject
+                                                                                    (item.detail.current.current_status === '3' ? <abbr className="step_finished"></abbr> ://3 admin accept
+                                                                                    (item.detail.current.current_status === 'closed' ? <abbr className="step_finished"></abbr>: //retailer step 5 submit
+                                                                                    (item.detail.current.current_status === 'rejected' ? '' : <abbr className="step_finished"></abbr>))))))//retailer 1step reject
                                                                                     :<abbr className="step_finished"></abbr>)
                                                                                 : ''}</td>
                                                             })

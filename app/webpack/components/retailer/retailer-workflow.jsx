@@ -27,9 +27,14 @@ export class Retailerworkflow extends React.Component{
 
         })
     }
-    getPageindex(){
+    getPageindex(params){
         getTendersCurrent('retailer',sessionStorage.arrangement_id).then(res=>{
             console.log(res);
+            if(params === 'false'){
+                this.setState({
+                    tender_status:false
+                })
+            }
             this.setState({current:res,page:res.current.current_node?res.current.current_node:1,selected:res.flows});
         },error=>{
 
