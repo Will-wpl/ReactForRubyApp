@@ -48,7 +48,7 @@ class TenderWorkflow < Workflow
 
   def get_action_state_machine(auction_id)
     arrangements = []
-    Arrangement.find_by_auction_id(auction_id).each do |arrangement|
+    Arrangement.find_by_auction_id(auction_id).joins(:user).order('users.company_name asc').each do |arrangement|
       arrangements.push(company_name: arrangement.user.company_name, arrangement_id: arrangement.id, detail: get_arrangement_state_machine(arrangement.id))
     end
     arrangements
