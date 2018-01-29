@@ -69,7 +69,7 @@ render() {
                 </div>
             </div>
             <div className="createRaMain u-grid">
-            <a className="lm--button lm--button--primary u-mt3" href="javascript:javascript:self.location=document.referrer;" >Back</a>
+            <a className="lm--button lm--button--primary u-mt3" href="/admin/auctions/published" >Back</a>
             </div>
         </div>
     )

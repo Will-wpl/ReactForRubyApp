@@ -177,7 +177,7 @@ export class Proposedeviations extends React.Component{
         let add_new = {id:0,item:'',clause:'',
                         propose_deviation:'',
                         retailer_response:'',
-                        sp_response_status:''},list = this.state.deviations_list;
+                        sp_response_status:'',key:this.state.deviations_list.length+1},list = this.state.deviations_list;
                         list.push(add_new);
                         // if(list.length < this.state.select_list.length){
                         //     list.push(add_new)
@@ -245,7 +245,7 @@ export class Proposedeviations extends React.Component{
                                                     </td>
                                                     </tr>)
                                         }else{
-                                            return (<tr key={item.id}>
+                                            return (<tr key={item.id===0?item.key:item.id}>
                                                         <td>
                                                             <select id={"item_"+(index)} defaultValue={item.item} disabled={this.props.propsdisabled?true:(this.state.alldisabled?this.state.alldisabled:(item.sp_response_status !='2'?(item.sp_response_status ==''?false:true):false))}>
                                                                 {this.state.select_list.map((it,i)=>{

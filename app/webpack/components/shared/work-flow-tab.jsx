@@ -21,7 +21,12 @@ export class Workflowtab extends React.Component{
                 }else if(this.props.current.current.current_status === "rejected"){
                     res = '';
                 }else{
-                    res = 'pending';
+                    if(this.props.current.current.current_status === null){
+                        res = '';
+                    }else{
+                        res = 'pending';
+                    }
+                    
                 }
                 return res
             }
