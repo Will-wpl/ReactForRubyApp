@@ -78,8 +78,8 @@ export class Adminretailerdashboard extends Component {
                                                                                 : ''}</td>
                                                             })
                                                         }
-                                                    <td>{item.detail.current.turn_to_role === 2 ? <button disabled={true}>Manage Contact</button> 
-                                                        : <button onClick={this.manage_contact.bind(this,item.arrangement_id)}>Manage Contact</button>}
+                                                    <td>{item.detail.current.turn_to_role === 2 ? <button disabled={true}>Manage Contract</button>
+                                                        : <button onClick={this.manage_contact.bind(this,item.arrangement_id)}>Manage Contract</button>}
                                                         <button onClick={this.showDetail.bind(this,item.arrangement_id)}>Contact Details</button></td>
                                                 </tr>
                                     })

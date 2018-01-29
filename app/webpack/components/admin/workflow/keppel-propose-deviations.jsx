@@ -113,7 +113,7 @@ export class Keppelproposedeviations extends Component {
                         <tr>
                             <th>Item</th>
                             <th>Clause</th>
-                            <th>Proposs Deviation</th>
+                            <th>Propose Deviation</th>
                             <th>Retailer Response</th>
                             <th>SP Response</th>
                             <th></th>
