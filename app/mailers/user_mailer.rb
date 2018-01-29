@@ -40,6 +40,28 @@ class UserMailer < ApplicationMailer
     send_email(user.email, email_body, email_subject)
   end
 
+  def retailer_submit_mail(user)
+    admin_user = User.find(1)
+    mail_template = get_template('6')
+    email_subject = mail_template.subject.gsub(/#user.company_name/, user.company_name)
+    email_body = mail_template.body.gsub(/#user.company_name/, user.company_name)
+    send_email(admin_user.email, email_body, email_subject)
+  end
+
+  def workflow_admin_accept_mail(user)
+    mail_template = get_template('7')
+    email_subject = mail_template.subject
+    email_body = mail_template.body.gsub(/#user.company_name/, user.company_name)
+    send_email(user.email, email_body, email_subject)
+  end
+
+  def workflow_admin_reject_mail(user)
+    mail_template = get_template('8')
+    email_subject = mail_template.subject
+    email_body = mail_template.body.gsub(/#user.company_name/, user.company_name)
+    send_email(user.email, email_body, email_subject)
+  end
+
   private
 
   def send_email(email, body, subject)
