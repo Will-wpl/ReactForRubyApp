@@ -578,7 +578,7 @@ body.choose{
   table{ width: 100%; table-layout: fixed;
     td{height:110px;
       div{ 
-        width: 100%; height: 100%; background: #00afb1; position: relative;
+        width: 100%; height: 100%; background: #00afb1; position: relative; cursor: pointer;
         &.step1{background:#00afb1 url("../images/sign_confidentiality_undertaking.png") no-repeat center; background-size: 100%;}
         &.step2{background:#00afb1 url("../images/ender_documents.png") no-repeat center; background-size: 100%;}
         &.step3{background:#00afb1 url("../images/deviations.png") no-repeat center; background-size: 100%;}
