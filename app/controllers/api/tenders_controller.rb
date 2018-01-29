@@ -143,6 +143,7 @@ class Api::TendersController < Api::BaseController
 
   def node4_retailer_submit
     workflow = TenderWorkflow.new.execute(:node4, :submit, params[:id])
+    retailer_submit_mail params[:id]
     render json: workflow, status: 200
   end
 
@@ -154,12 +155,14 @@ class Api::TendersController < Api::BaseController
   def node4_admin_accept
     workflow = TenderWorkflow.new.execute(:node4, :accept, params[:id])
     @arrangement.update(comments: params[:comments])
+    admin_accept_mail params[:id]
     render json: workflow, status: 200
   end
 
   def node4_admin_reject
     workflow = TenderWorkflow.new.execute(:node4, :reject, params[:id])
     @arrangement.update(comments: params[:comments])
+    admin_reject_mail params[:id]
     render json: workflow, status: 200
   end
 
@@ -215,6 +218,32 @@ class Api::TendersController < Api::BaseController
 
 
   private
+
+  def get_arrangement_user(arrangement_id)
+    return if arrangement_id.empty?
+    this_arrangement = Arrangement.find(arrangement_id)
+    return if this_arrangement.nil?
+    User.find(this_arrangement.user_id)
+  end
+
+  def retailer_submit_mail(arrangement_id)
+    user = get_arrangement_user(arrangement_id)
+    return if user.nil?
+    UserMailer.retailer_submit_mail(user).deliver_later
+  end
+
+  def admin_accept_mail(arrangement_id)
+    user = get_arrangement_user(arrangement_id)
+    return if user.nil?
+    UserMailer.workflow_admin_accept_mail(user).deliver_later
+  end
+
+  def admin_reject_mail(arrangement_id)
+    user = get_arrangement_user(arrangement_id)
+    return if user.nil?
+    UserMailer.workflow_admin_reject_mail(user).deliver_later
+  end
+
 
   def set_arrangement
     @arrangement = Arrangement.find(params[:id])
