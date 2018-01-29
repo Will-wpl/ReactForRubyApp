@@ -44,7 +44,7 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
     ]
     actions = [{ url: '/retailer/arrangements/:id/tender', name: 'Manage', icon: 'edit', interface_type: 'auction', check:'docheck' },
                { url: '/retailer/arrangements/:id/tender', name: 'View', icon: 'view', interface_type: 'auction', check:'docheck' },
-               { url: '/retailer/auctions/:id/live', name: 'Start Bidding', icon: 'bidding', interface_type: 'auction' }]
+               { url: '/retailer/auctions/:id/gotobid', name: 'Start Bidding', icon: 'bidding', interface_type: 'auction' }]
     data = []
 
     arrangement.order('auctions.actual_begin_time asc').each do |arrangement|

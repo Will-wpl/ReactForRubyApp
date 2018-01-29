@@ -32,6 +32,8 @@ class TenderStateMachine < ApplicationRecord
         arrangement.update(accept_status: '0')
       elsif state_machine_params[:status] == 'closed'
         arrangement.update(accept_status: '1')
+      else # pending
+        arrangement.update(accept_status: '2')
       end
     end
   end
