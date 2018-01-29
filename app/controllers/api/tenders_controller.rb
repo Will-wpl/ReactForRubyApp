@@ -162,7 +162,7 @@ class Api::TendersController < Api::BaseController
   def node4_admin_reject
     workflow = TenderWorkflow.new.execute(:node4, :reject, params[:id])
     @arrangement.update(comments: params[:comments])
-    admin_reject_mail params[:id]
+    admin_reject_mail params[:id], params[:comments]
     render json: workflow, status: 200
   end
 
@@ -238,10 +238,10 @@ class Api::TendersController < Api::BaseController
     UserMailer.workflow_admin_accept_mail(user).deliver_later
   end
 
-  def admin_reject_mail(arrangement_id)
+  def admin_reject_mail(arrangement_id, comments)
     user = get_arrangement_user(arrangement_id)
     return if user.nil?
-    UserMailer.workflow_admin_reject_mail(user).deliver_later
+    UserMailer.workflow_admin_reject_mail(user, comments).deliver_later
   end
 
 
