@@ -16,6 +16,18 @@ export class Tenderdocuments extends React.Component{
                 aggregate:res.aggregate_consumptions,
                 attachments:res.attachments
             })
+            if(this.state.aggregate.total_lt_peak === '0.0' && this.state.aggregate.total_lt_off_peak === '0.0'){
+                $(".lt").hide();
+            }
+            if(this.state.aggregate.total_hts_peak === '0.0' && this.state.aggregate.total_hts_off_peak === '0.0'){
+                $(".hts").hide();
+            }
+            if(this.state.aggregate.total_htl_peak === '0.0' && this.state.aggregate.total_htl_off_peak === '0.0'){
+                $(".htl").hide();
+            }
+            if(this.state.aggregate.total_eht_peak === '0.0' && this.state.aggregate.total_eht_off_peak === '0.0'){
+                $(".eht").hide();
+            }
         })
     }
     showConfirm(type){
@@ -59,26 +71,26 @@ export class Tenderdocuments extends React.Component{
                                         <thead>
                                         <tr>
                                             <th></th>
-                                            <th>LT</th>
-                                            <th>HT (Small)</th>
-                                            <th>HT (Large)</th>
-                                            <th>EHT</th>
+                                            <th className="lt">LT</th>
+                                            <th className="hts">HT (Small)</th>
+                                            <th className="htl">HT (Large)</th>
+                                            <th className="eht">EHT</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
                                                 <td>Peak (7am-7pm)</td>
-                                                <td >{this.state.aggregate.total_lt_peak?parseInt(Number(this.state.aggregate.total_lt_peak)):0}</td>
-                                                <td >{this.state.aggregate.total_hts_peak?parseInt(Number(this.state.aggregate.total_hts_peak)):0}</td>
-                                                <td >{this.state.aggregate.total_htl_peak?parseInt(Number(this.state.aggregate.total_htl_peak)):0}</td>
-                                                <td >{this.state.aggregate.total_eht_peak?parseInt(Number(this.state.aggregate.total_eht_peak)):0}</td>
+                                                <td className="lt">{this.state.aggregate.total_lt_peak?parseInt(Number(this.state.aggregate.total_lt_peak)):0}</td>
+                                                <td className="hts">{this.state.aggregate.total_hts_peak?parseInt(Number(this.state.aggregate.total_hts_peak)):0}</td>
+                                                <td className="htl">{this.state.aggregate.total_htl_peak?parseInt(Number(this.state.aggregate.total_htl_peak)):0}</td>
+                                                <td className="eht">{this.state.aggregate.total_eht_peak?parseInt(Number(this.state.aggregate.total_eht_peak)):0}</td>
                                             </tr>
                                             <tr>
                                                 <td>Off-Peak (7pm-7am)</td>
-                                                <td >{this.state.aggregate.total_lt_off_peak?parseInt(Number(this.state.aggregate.total_lt_off_peak)):0}</td>
-                                                <td >{this.state.aggregate.total_hts_off_peak?parseInt(Number(this.state.aggregate.total_hts_off_peak)):0}</td>
-                                                <td >{this.state.aggregate.total_htl_off_peak?parseInt(Number(this.state.aggregate.total_htl_off_peak)):0}</td>
-                                                <td >{this.state.aggregate.total_eht_off_peak?parseInt(Number(this.state.aggregate.total_eht_off_peak)):0}</td>
+                                                <td className="lt">{this.state.aggregate.total_lt_off_peak?parseInt(Number(this.state.aggregate.total_lt_off_peak)):0}</td>
+                                                <td className="hts">{this.state.aggregate.total_hts_off_peak?parseInt(Number(this.state.aggregate.total_hts_off_peak)):0}</td>
+                                                <td className="htl">{this.state.aggregate.total_htl_off_peak?parseInt(Number(this.state.aggregate.total_htl_off_peak)):0}</td>
+                                                <td className="eht">{this.state.aggregate.total_eht_off_peak?parseInt(Number(this.state.aggregate.total_eht_off_peak)):0}</td>
                                             </tr>
                                         </tbody>
                                     </table>
