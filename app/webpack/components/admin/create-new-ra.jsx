@@ -261,8 +261,7 @@ export class CreateNewRA extends Component {
             if(this.props.left_name){
                 this.setState({
                     edit_btn:"lm--button lm--button--primary show",
-                    edit_change:"lm--button lm--button--primary hide",
-                    disabled:true
+                    edit_change:"lm--button lm--button--primary hide"
                 })
             }
         }
