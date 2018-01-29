@@ -200,6 +200,7 @@ export class RetailerManage extends Component {
         if(this.props.node){
             retailManageComingNode5(sessionStorage.arrangement_id).then(res=>{
                 this.retailerManageComing();
+                this.props.page();
             })
         }else{
             this.retailerManageComing();
