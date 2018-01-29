@@ -33,9 +33,9 @@ class Devise::RegistrationsController < DeviseController
         set_flash_message! :notice, :"signed_up_but_#{resource.inactive_message}"
         respond_to_on_destroy
       end
-      if params[:type] == '1'
-        UserMailer.registered_email(resource).deliver_later
-      end
+      # if params[:type] == '1'
+      #   UserMailer.registered_email(resource).deliver_later
+      # end
     else
       clean_up_passwords resource
       set_minimum_password_length

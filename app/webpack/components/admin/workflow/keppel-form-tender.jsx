@@ -58,12 +58,12 @@ export class Keppelformtender extends React.Component{
                 <h2 className="u-mt3 u-mb3">{this.props.title}</h2>
                 <div className="lm--formItem lm--formItem--inline string u-mt3 role_select">
                     <label className="lm--formItem-left lm--formItem-label string required">
-                    Please see attached tender documents:
+                    Please see below for tender submission:
                     </label>
                     <div className="lm--formItem-right lm--formItem-control">
                         <ul className="tender_list">
                             {this.state.linklist.length > 0 ? this.state.linklist.map((item,index)=>{
-                                return <li key={index}>item {index+1} : <a download={item.file_name} href={"/"+item.file_path}>{item.file_name}</a></li>
+                                return <li key={index}>Item {index+1} : <a download={item.file_name} href={"/"+item.file_path}>{item.file_name}</a></li>
                             }) : ''}
                         </ul>
                     </div>
@@ -79,7 +79,7 @@ export class Keppelformtender extends React.Component{
                             <tr>
                                 <th>Item</th>
                                 <th>Clause</th>
-                                <th>Proposs Deviation</th>
+                                <th>Propose Deviation</th>
                                 <th>Retailer Response</th>
                                 <th>SP Response</th>
                                 <th></th>

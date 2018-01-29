@@ -210,7 +210,7 @@ export class Submittender extends React.Component{
             },
             success:(res) => {
                 let fileObj;
-                barObj.find(".progress-bar").text('upload successful!');
+                barObj.find(".progress-bar").text('Upload Successful!');
                 fileObj = this.state.fileData;
                 fileObj[type].map((item,index)=>{
                     item.files.push({
