@@ -92,15 +92,15 @@ export class Tenderdocuments extends React.Component{
                 <div className="lm--formItem-right lm--formItem-control">
                     <ul className="tender_list">
                         {this.state.attachments ? this.state.attachments.map((item,index)=>{
-                            return <li key={index}>item {index+1} : <a download={item.file_name} href={"/"+item.file_path}>{item.file_name}</a></li>
+                            return <li key={index}>item {index+1} : <a disabled={this.props.propsdisabled} download={item.file_name} href={"/"+item.file_path}>{item.file_name}</a></li>
                         }) : ''}
                     </ul>
                 </div>
             </div>
             {this.props.current.actions ?
                 <div className="workflow_btn u-mt3">                
-                        <button disabled={!this.props.current.actions.node2_retailer_propose_deviations} onClick={this.showConfirm.bind(this,'Propose_Deviations')} className="lm--button lm--button--primary">Propose Deviations</button>
-                        <button disabled={!this.props.current.actions.node2_retailer_accept_all} onClick={this.showConfirm.bind(this,'Accept_All')} className="lm--button lm--button--primary">Accept All</button>
+                        <button disabled={this.props.propsdisabled?true:(!this.props.current.actions.node2_retailer_propose_deviations)} onClick={this.showConfirm.bind(this,'Propose_Deviations')} className="lm--button lm--button--primary">Propose Deviations</button>
+                        <button disabled={this.props.propsdisabled?true:(!this.props.current.actions.node2_retailer_accept_all)} onClick={this.showConfirm.bind(this,'Accept_All')} className="lm--button lm--button--primary">Accept All</button>
                 </div>:<div></div>}
                 <Modal text={this.state.text} acceptFunction={this.state.buttonType === 'Propose_Deviations'?this.propose_deviations.bind(this):this.accept_all.bind(this)} ref="Modal" />
             </div>

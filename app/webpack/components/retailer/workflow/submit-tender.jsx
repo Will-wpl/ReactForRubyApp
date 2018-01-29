@@ -122,14 +122,14 @@ export class Submittender extends React.Component{
                                             {/* accept="application/pdf,application/msword" */}
                                             {required === "required" ? 
                                             <div>
-                                                <input type="file" required="required" ref={type+index}  onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.state.disabled} />
+                                                <input type="file" required="required" ref={type+index}  onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.props.propsdisabled?true:(this.state.disabled)} />
                                                 <span>Browse..</span>
                                                 <div className="required_error">
                                                     Please fill out this field and upload this file
                                                 </div>
                                             </div>
                                             :<div>
-                                                <input type="file" ref={type+index} onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.state.disabled} />
+                                                <input type="file" ref={type+index} onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.props.propsdisabled?true:(this.state.disabled)} />
                                                 <span>Browse..</span>
                                             </div>}
                                         </a>
@@ -140,7 +140,7 @@ export class Submittender extends React.Component{
                                             <ul>
                                                 {
                                                     item.files.map((it,i)=>{
-                                                        return <li key={i}><a download={it.file_name} href={"/"+it.file_path}>{it.file_name}</a>{this.state.disabled?'':<span className="remove_file" onClick={this.remove_file.bind(this,type,index,i,it.id)}></span>}</li>
+                                                        return <li key={i}><a download={it.file_name} href={"/"+it.file_path}>{it.file_name}</a>{this.props.propsdisabled?'':(this.state.disabled?'':<span className="remove_file" onClick={this.remove_file.bind(this,type,index,i,it.id)}></span>)}</li>
                                                     })
                                                 }
                                             </ul>
@@ -157,8 +157,8 @@ export class Submittender extends React.Component{
                                         {!this.props.tender?
                                             <div className="col-sm-12 col-md-2 u-cell">
                                                 {
-                                                    this.state.disabled?<button className="lm--button lm--button--primary" disabled>Upload</button>
-                                                    :<a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>
+                                                    this.props.propsdisabled?<button className="lm--button lm--button--primary" disabled>Upload</button>:(this.state.disabled?<button className="lm--button lm--button--primary" disabled>Upload</button>
+                                                    :<a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>)
                                                 }
                                             </div>:''}
                                     {/* <div className="col-sm-12 col-md-2 u-cell">
@@ -239,8 +239,8 @@ export class Submittender extends React.Component{
                     {this.addinputfile("upload_tender", "required")}
                     <div className="workflow_btn u-mt3">
                     {this.props.tender ? 
-                        <button className="lm--button lm--button--primary" disabled={!this.props.current.actions.node4_retailer_next} onClick={this.do_next.bind(this)}>Next</button> :
-                        <button className="lm--button lm--button--primary" disabled={this.state.disabled?true:(!this.props.current.actions.node4_retailer_submit)}  onClick={this.showConfirm.bind(this,'Submit')}>Submit</button>
+                        <button className="lm--button lm--button--primary" disabled={this.props.propsdisabled?true:(!this.props.current.actions.node4_retailer_next)} onClick={this.do_next.bind(this)}>Next</button> :
+                        <button className="lm--button lm--button--primary" disabled={this.props.propsdisabled?true:(this.state.disabled?true:(!this.props.current.actions.node4_retailer_submit))}  onClick={this.showConfirm.bind(this,'Submit')}>Submit</button>
                     }
                     </div>
                 </div>

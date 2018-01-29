@@ -12,7 +12,7 @@ export class Retailerworkflow extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            auction:{},text:'',
+            auction:{},text:'',disabled:false,
             selected:[],current:{},page:0,tender_status:false
         }
         this.submittender = false;
@@ -40,23 +40,33 @@ export class Retailerworkflow extends React.Component{
         switch(index){
             case 0 : pageDom = <div></div>
             break
-            case 1 : pageDom = <Signconfidentialityundertaking page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction}/>
+            case 1 : pageDom = <Signconfidentialityundertaking propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction}/>
             break
-            case 2 : pageDom = <Tenderdocuments page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} />
+            case 2 : pageDom = <Tenderdocuments propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} />
             break
-            case 3 : pageDom = <Proposedeviations page={this.getPageindex.bind(this)} current={this.state.current} tenderFn={()=>{this.setState({tender_status:true})}} auction={this.state.auction} tender={this.state.tender_status} />
+            case 3 : pageDom = <Proposedeviations propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} current={this.state.current} tenderFn={()=>{this.setState({tender_status:true})}} auction={this.state.auction} tender={this.state.tender_status} />
             break
-            case 4 : pageDom = <Submittender page={this.getPageindex.bind(this)} tenderFn={()=>{this.setState({tender_status:true})}} tender={this.state.tender_status} current={this.state.current} auction={this.state.auction} submit={this.submittender}/>
+            case 4 : pageDom = <Submittender propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} tenderFn={()=>{this.setState({tender_status:true})}} tender={this.state.tender_status} current={this.state.current} auction={this.state.auction} submit={this.submittender}/>
             break
-            case 5 : pageDom = <RetailerManage page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} hiddentimeCount={this.hiddentimeCount} node={true}/>
+            case 5 : pageDom = <RetailerManage propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} hiddentimeCount={this.hiddentimeCount} node={true}/>
             break
         }
         return pageDom;
     }
+    changePage(index){
+        let selectedObj = $(".step"+index).find("span").attr("class");
+        if(selectedObj === "selected"){
+            this.setState({page:index,disabled:true});
+        }else if(selectedObj === "pending"){
+            this.setState({page:index,disabled:false});
+        }else{
+            this.setState({disabled:false});
+        }
+    }
     render(){
         return(
             <div>
-                <Workflowtab auction={this.state.auction} page={this.getPageindex.bind(this)} current={this.state.current} selected={this.state.selected} />
+                <Workflowtab auction={this.state.auction} page={this.changePage.bind(this)} current={this.state.current} selected={this.state.selected} />
                 {this.showpage(this.state.page)}
                 <div className="createRaMain u-grid">
                     <a className="lm--button lm--button--primary u-mt3" href="/retailer/home" >Back to Homepage</a>

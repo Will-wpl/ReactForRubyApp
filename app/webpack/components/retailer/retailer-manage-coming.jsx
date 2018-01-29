@@ -229,10 +229,10 @@ export class RetailerManage extends Component {
     render () {
         let btn_html ='';
         !this.state.havedata ? btn_html = <button id="submit_form" className="lm--button lm--button--primary" >Submit</button> 
-        : btn_html = !this.state.btn_status ? <a className="lm--button lm--button--primary" onClick={this.btnStatus.bind(this)}>Edit</a> 
+        : btn_html = this.props.propsdisabled?<button className="lm--button lm--button--primary" disabled>Edit</button> :(!this.state.btn_status ? <a className="lm--button lm--button--primary" onClick={this.btnStatus.bind(this)}>Edit</a> 
                        :<div><button id="submit_form" className="lm--button lm--button--primary" >Submit</button>
                         <a className="lm--button lm--button--primary" onClick={this.cancel.bind(this)}>Cancel</a>
-                        </div>;       
+                        </div>);       
         return (
             <div className="retailer_manage_coming">
             <div id="live_modal" className={this.state.live_modal}>
@@ -375,7 +375,7 @@ export class RetailerManage extends Component {
                         </table>
                     </div> */}
                     <div className="retailer_btn">
-                        {!this.state.allbtnStatus ? <div className="mask"></div> : ''}
+                        {this.props.propsdisabled?<div className="mask"></div>:(!this.state.allbtnStatus ? <div className="mask"></div> : '')}
                         {/* <button className="lm--button lm--button--primary">Reject Participation</button> */}                       
                         {btn_html}
                     </div>
