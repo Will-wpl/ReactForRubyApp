@@ -35,8 +35,8 @@ export class Adminretailerdashboard extends Component {
 
         })
     }
-    manage_contact(id){
-        this.props.page(id);
+    manage_contact(id,name){
+        this.props.page(id,name);
     }
     render (){
         return (
@@ -81,7 +81,7 @@ export class Adminretailerdashboard extends Component {
                                                             })
                                                         }
                                                     <td>{item.detail.current.turn_to_role === 2 ? <button disabled={true}>Manage Contract</button>
-                                                        : <button onClick={this.manage_contact.bind(this,item.arrangement_id)}>Manage Contract</button>}
+                                                        : <button onClick={this.manage_contact.bind(this,item.arrangement_id,item.company_name)}>Manage Contract</button>}
                                                         <button onClick={this.showDetail.bind(this,item.arrangement_id)}>Contact Details</button></td>
                                                 </tr>
                                     })

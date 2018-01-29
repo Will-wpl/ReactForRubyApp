@@ -55,10 +55,10 @@ export class Keppelformtender extends React.Component{
     render(){
         return(
             <div className="col-sm-12 col-md-10 push-md-1 u-mt3 tender_documents">
-                <h2 className="u-mt3 u-mb3">{this.props.title}</h2>
+                <h2 className="u-mt3 u-mb3">{this.props.current.name} - Form of {this.state.chats.length>0?'':'Base'} Tender</h2>
                 <div className="lm--formItem lm--formItem--inline string u-mt3 role_select">
                     <label className="lm--formItem-left lm--formItem-label string required">
-                    Please see below for tender submission:
+                    Please see below for {this.state.chats.length>0?'':'base'} tender submission:
                     </label>
                     <div className="lm--formItem-right lm--formItem-control">
                         <ul className="tender_list">

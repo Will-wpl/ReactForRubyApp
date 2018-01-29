@@ -27,9 +27,10 @@ export class Adminworkflow extends Component {
             this.setState({retailer_list:res});
         })
     }
-    getPageindex(arrangement_id){
+    getPageindex(arrangement_id,name){
         getTendersCurrent('admin',arrangement_id).then(res=>{
             console.log(res);
+            res.name=name;
             this.setState({current:res,page:res.current.current_node});
         })
     }
@@ -42,7 +43,7 @@ export class Adminworkflow extends Component {
             break
             case 3 : pageDom = <Keppelproposedeviations current={this.state.current} page={this.getPageindex.bind(this)} title="keppel Propose Deviations" />
             break
-            case 4 : pageDom = <Keppelformtender current={this.state.current} page={this.getPageindex.bind(this)} title="keppel - Form of Tender" linklist={this.linklist}/>
+            case 4 : pageDom = <Keppelformtender current={this.state.current} page={this.getPageindex.bind(this)}/>
             break
         }
         return pageDom;
