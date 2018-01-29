@@ -227,7 +227,7 @@ export class Proposedeviations extends React.Component{
                                 {!this.props.tender ? 
                                     this.state.deviations_list.map((item,index)=>{
                                         if(item.sp_response_status === "1" || item.sp_response_status === "4"){
-                                            return <tr key={index}>
+                                            return <tr key={item.id}>
                                                     <td>
                                                         <select id={"item_"+(index)} defaultValue={item.item} disabled>
                                                             {this.state.select_list.map((it,i)=>{
@@ -245,7 +245,7 @@ export class Proposedeviations extends React.Component{
                                                     </td>
                                                     </tr>
                                         }else{
-                                            return <tr key={index}>
+                                            return <tr key={item.id}>
                                                     <td>
                                                         <select id={"item_"+(index)} defaultValue={item.item} disabled={this.props.propsdisabled?true:(this.state.alldisabled?this.state.alldisabled:(item.sp_response_status !='2'?(item.sp_response_status ==''?false:true):false))}>
                                                             {this.state.select_list.map((it,i)=>{
@@ -269,7 +269,7 @@ export class Proposedeviations extends React.Component{
                                     
                                         })
                                 :this.state.deviations_list.map((item,index)=>{
-                                    return <tr key={index}>
+                                    return <tr key={item.id}>
                                             <td>{item.item}</td>
                                             <td >{item.clause}</td>
                                             <td >{item.propose_deviation}</td>
