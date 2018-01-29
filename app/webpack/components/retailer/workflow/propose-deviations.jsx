@@ -68,7 +68,7 @@ export class Proposedeviations extends React.Component{
             if(check){
                 this.refs.Modal.showModal();
                 this.setState({
-                    text:"fill out the fields",
+                    text:"Please fill out all the fields",
                 });
                 return;
             }
@@ -134,7 +134,7 @@ export class Proposedeviations extends React.Component{
         if(check){
             this.refs.Modal.showModal();
             this.setState({
-                text:"fill out the fields",
+                text:"Please fill out all the fields",
             });
             return;
         }
@@ -217,7 +217,7 @@ export class Proposedeviations extends React.Component{
                             <tr>
                                 <th>Item</th>
                                 <th>Clause</th>
-                                <th>Proposs Deviation</th>
+                                <th>Propose Deviation</th>
                                 <th>Retailer Response</th>
                                 <th>SP Response</th>
                                 <th></th>
@@ -257,8 +257,8 @@ export class Proposedeviations extends React.Component{
                                                     <td ><input type="text" id={"deviation_"+(index)} defaultValue={item.propose_deviation} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
                                                     <td ><input type="text" id={"response_"+(index)} defaultValue={item.retailer_response} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
                                                     <td >{item.sp_response}</td>
-                                                    <td>{item.item === ""?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>remove</button>:
-                                                    (item.sp_response_status==='2'?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>remove</button>
+                                                    <td>{item.item === ""?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>:
+                                                    (item.sp_response_status==='2'?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>
                                                     :<div>
                                                         <button disabled={this.props.propsdisabled?true:(this.state.alldisabled)} onClick={this.showhistory.bind(this,item.id) } id={"history_"+index}>History</button>
                                                         <button disabled={this.props.propsdisabled?true:(this.state.alldisabled?true:(item.sp_response_status === "4" ? true : false))} id={"withdraw_"+index} onClick={this.showConfirm.bind(this,'Withdraw',{id:item.id,index:index})}>Withdraw</button>
@@ -281,7 +281,7 @@ export class Proposedeviations extends React.Component{
                                 }
                             </tbody>
                     </table>
-                    {!this.props.tender ? <div className="workflow_btn u-mt3 u-mb3"><button className="add_deviation" disabled={this.props.propsdisabled?true:(this.state.alldisabled)} onClick={this.addDeviations.bind(this)}>add</button></div> :''}
+                    {!this.props.tender ? <div className="workflow_btn u-mt3 u-mb3"><button className="add_deviation" disabled={this.props.propsdisabled?true:(this.state.alldisabled)} onClick={this.addDeviations.bind(this)}>Add</button></div> :''}
                     <div className="workflow_btn u-mt3">
                         {!this.props.tender ?
                         <div><button className="lm--button lm--button--primary" disabled={this.props.propsdisabled?true:(this.state.alldisabled?true:(!this.props.current.actions.node3_retailer_withdraw_all_deviations))} onClick={this.showConfirm.bind(this,'Withdraw_Deviations')}>Withdraw All Deviations</button>
