@@ -57,6 +57,14 @@ export class Submittender extends React.Component{
     showConfirm(type){
         this.setState({buttonType:type});
         if(type == "Submit"){
+            this.setState({
+                params_type:"do_submit"
+            })
+            if(this.state.fileData['upload_tender'][0].files.length<=0){
+                this.setState({text:'You must upload files!'});
+                this.refs.Modal.showModal();
+                return 
+            }
             this.refs.Modal.showModal("comfirm");
             this.setState({
                 text:"Are you sure you want to submit this submission?"
@@ -92,11 +100,6 @@ export class Submittender extends React.Component{
         })
     }
     do_submit(){
-        if(this.state.fileData['upload_tender'][0].files.length<=0){
-            this.setState({text:'You must upload files!'});
-            this.refs.Modal.showModal();
-            return 
-        }
         retailerSubmit(this.props.current.current.arrangement_id).then(res=>{
             this.setState({text:'You have successfully submitted your tender and is pending approval by the administrator. Once approved, you will be notified via email and you may then proceed to provide contact person details for actual day of bidding.',
                            disabled:true});
@@ -106,7 +109,7 @@ export class Submittender extends React.Component{
     }
     do_next(){
         retailerNext(this.props.current.current.arrangement_id,4).then(res=>{
-            this.props.page();
+            this.props.page('false');
         })
     }
     addinputfile(type, required){
