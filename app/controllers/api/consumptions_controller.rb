@@ -2,12 +2,17 @@ class Api::ConsumptionsController < Api::BaseController
   before_action :set_consumption, only: %i[update_status destroy]
 
   def index
-    consumptions = Consumption.find_by_user_consumer_type(params[:consumer_type]).find_by_auction_id(params[:id])
+    if params[:consumer_type] == '2'
+      consumptions = Consumption.find_by_user_consumer_type(params[:consumer_type]).find_by_auction_id(params[:id]).order('users.company_name asc')
+    else
+      consumptions = Consumption.find_by_user_consumer_type(params[:consumer_type]).find_by_auction_id(params[:id]).order('users.name asc')
+    end
     data = []
     total_info = { consumption_count: 0, account_count: 0, lt_peak: 0, lt_off_peak: 0,
                    hts_peak: 0, hts_off_peak: 0, htl_peak: 0, htl_off_peak: 0, eht_peak: 0, eht_off_peak: 0 }
     consumptions.each do |consumption|
-      count = ConsumptionDetail.find_by_consumption_id(consumption.id).count
+      details = ConsumptionDetail.find_by_consumption_id(consumption.id).order(account_number: :asc)
+      count = details.count
       data.push(id: consumption.id,
                 auction_id: consumption.auction_id,
                 user_id: consumption.user_id,
@@ -22,7 +27,7 @@ class Api::ConsumptionsController < Api::BaseController
                 htl_off_peak: consumption.htl_off_peak.nil? ? 0 : consumption.htl_off_peak,
                 eht_peak: consumption.eht_peak.nil? ? 0 : consumption.eht_peak,
                 eht_off_peak: consumption.eht_off_peak.nil? ? 0 : consumption.eht_off_peak,
-                details: consumption.consumption_details)
+                details: details)
       total_info[:consumption_count] += 1
       total_info[:account_count] += count
       total_info[:lt_peak] += consumption.lt_peak.nil? ? 0 : consumption.lt_peak
