@@ -18,6 +18,7 @@ export class BuyerList extends Component {
         if(this.props.onAddturly === 'jest'){
             return;
         }
+        sessionStorage.setItem('comsumptiontype', this.props.dashboard.type)
         window.location.href="/admin/consumptions/"+id;
     }
     render () {

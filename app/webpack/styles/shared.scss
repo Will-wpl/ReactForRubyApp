@@ -84,7 +84,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
    tbody{
      overflow:auto; height: 30px;
      tr{
-       td{border:1px solid #314657; text-align: center; height: 40px;
+       td{border:1px solid #314657; text-align: center; height: 40px; padding:5px; word-break: break-all;
         a{ 
           display: block; width: 100%; height: 100%; cursor: pointer;
           &.report{background: url("../images/Reverse_Auction_Report.png") no-repeat center; background-size:19px;}
@@ -175,13 +175,14 @@ abbr[title]{color: #fe0000; text-decoration: none;}
         dl{ width: 100%; 
             dd{ width:92%; display: block; overflow: hidden; margin: 15px auto; font-weight: normal;
               dfn{
+                color:#666;
                 float: left; margin-right:15px; text-align: center; 
                 abbr{ width: 42px; height: 42px; font-style: normal;display: block; background: url("../images/retailer.png") no-repeat center; background-size: 42px; }
               }
               span{ background: #eee; max-width: 200px; padding: 10px; word-break:break-all; border-radius: 5px; color:#666; float: left;}
             }
             dt{width:92%; display: block; overflow: hidden; margin: 15px auto; font-weight: normal;
-              dfn{
+              dfn{color:#666;
                 float: right; margin-left:15px; text-align: center; 
                 abbr{ width: 42px; height: 42px; display: block; background: url("../images/sp.png") no-repeat center; background-size: 42px; }
               }

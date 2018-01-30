@@ -189,7 +189,7 @@ export class SearchList extends Component {
                                                                    </td>
                                                         }else if(it.field_name === 'my_status'){
                                                             return <td key={i}>
-                                                                    {item[`${it.field_name}`] === null ? 'Pending' : (item[`${it.field_name}`] === '0' ? 'Rejected' : (item[`${it.field_name}`] === '1'?'Accepted':"In Prgoress"))}
+                                                                    {item[`${it.field_name}`] === null ? 'Pending' : (item[`${it.field_name}`] === '0' ? 'Rejected' : (item[`${it.field_name}`] === '1'?'Accepted':"In Progress"))}
                                                                    </td>
                                                         }else if(it.field_name === 'actions'){
                                         
@@ -217,7 +217,12 @@ export class SearchList extends Component {
                                                                              {this.props.table_data.actions[item["actions"]].name}</a>
                                                                 }
                                                             }else{
-                                                                return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>{ik.name}</a>
+                                                                if(item['auction_status'] === 'In Progess' && ik.name === 'Manage'){
+                                                                    
+                                                                }else{
+                                                                    return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>{ik.name}</a>
+                                                                }
+                                                                
                                                             }
                                                             
                                                         })

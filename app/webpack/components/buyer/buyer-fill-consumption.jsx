@@ -90,34 +90,6 @@ export class FillConsumption extends Component {
         return false;
     }
     doAccept(){
-        let makeData = {},
-        buyerlist = [];
-        this.state.site_list.map((item, index) => {
-            buyerlist += '{"account_number":"'+$("#account_number"+(index+1)).val()+'","intake_level":"'+$("#intake_level"+(index+1)).val()+'","peak":"'+$("#peak"+(index+1)).val()+'","off_peak":"'+$("#off_peak"+(index+1)).val()+'","consumption_id":"'+this.consumptions_id+'"},';
-        })
-        buyerlist = buyerlist.substr(0, buyerlist.length-1);
-        buyerlist = '['+buyerlist+']';
-        let checkpeak = JSON.parse(buyerlist).find(element=>{
-            return element.peak == '0' && element.off_peak == '0';
-        })
-        if(checkpeak){
-            setTimeout(()=>{
-                this.refs.Modal.showModal();
-                this.setState({text:"You cannot enter 0 kWh for both peak and off-peak volume"});
-            },200)
-            return false;
-        }
-        if(this.nameRepeat(JSON.parse(buyerlist))){
-            setTimeout(()=>{
-                this.refs.Modal.showModal();
-                this.setState({text:"Account number has already been entered!"});
-            },200)
-            return false;
-        }
-        makeData = {
-            consumption_id:this.consumptions_id,
-            details:buyerlist
-        }
         //console.log("---makeData-->"+makeData.details);   
         if(this.state.submit_type === "Reject"){ //do Reject
             setBuyerParticipate({consumption_id:this.consumptions_id}, '/api/buyer/consumption_details/reject').then((res) => {
@@ -127,8 +99,35 @@ export class FillConsumption extends Component {
                 this.refs.Modal.showModal();
                 this.setState({text:"Interface failed"});
             })
-            
         }else{ //do Participate
+            let makeData = {},
+            buyerlist = [];
+            if(checkpeak){
+                setTimeout(()=>{
+                    this.refs.Modal.showModal();
+                    this.setState({text:"You cannot enter 0 kWh for both peak and off-peak volume"});
+                },200)
+                return false;
+            }
+            if(this.nameRepeat(JSON.parse(buyerlist))){
+                setTimeout(()=>{
+                    this.refs.Modal.showModal();
+                    this.setState({text:"Account number has already been entered!"});
+                },200)
+                return false;
+            }
+            this.state.site_list.map((item, index) => {
+                buyerlist += '{"account_number":"'+$("#account_number"+(index+1)).val()+'","intake_level":"'+$("#intake_level"+(index+1)).val()+'","peak":"'+$("#peak"+(index+1)).val()+'","off_peak":"'+$("#off_peak"+(index+1)).val()+'","consumption_id":"'+this.consumptions_id+'"},';
+            })
+            buyerlist = buyerlist.substr(0, buyerlist.length-1);
+            buyerlist = '['+buyerlist+']';
+            let checkpeak = JSON.parse(buyerlist).find(element=>{
+                return element.peak == '0' && element.off_peak == '0';
+            })
+            makeData = {
+                consumption_id:this.consumptions_id,
+                details:buyerlist
+            }
             setBuyerParticipate(makeData, '/api/buyer/consumption_details/participate').then((res) => {
                 this.setState({
                     disabled:'disabled',

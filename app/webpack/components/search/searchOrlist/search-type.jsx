@@ -69,9 +69,10 @@ export class SearchType extends Component {
         }
     }
     goReset(){
-        this.goSearch();
         $(".search_type input").val("");
+        this.setState({start_datetime:''})
         $(".search_type select").val($(".search_type select option:first").val());
+        this.goSearch();
     }
     getAuctionId(type,obj){
         sessionStorage.auction_id=type;

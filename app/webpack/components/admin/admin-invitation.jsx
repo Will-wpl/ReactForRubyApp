@@ -124,7 +124,11 @@ upload(type, index){
         },
         success:(res) => {
             let fileObj;
+            $("#"+type+index).next().next().hide();
             barObj.find(".progress-bar").text('Upload Successful!');
+            setTimeout(()=>{
+                barObj.fadeOut(500);
+            },2000)
             fileObj = this.state.fileData;
             fileObj[type].map((item,index)=>{
                 item.files.push({
@@ -138,7 +142,7 @@ upload(type, index){
             })
             console.log(res);
         },error:() => {
-                    barObj.find(".progress-bar").text('upload failed!');
+                    barObj.find(".progress-bar").text('Upload failed!');
                     barObj.find(".progress-bar").css('background', 'red');
                 }
             })
@@ -214,6 +218,13 @@ upload(type, index){
             //     },5000)
             //     return;
             // }
+            this.refs.Modal.showModal("comfirm");
+            this.setState({
+                text:"Are you sure you want to publish this auction?",
+                params_type:'do_publish'
+            });
+        }
+        ra_publish(){
             raPublish({
                 pagedata:{publish_status: '1'},
                 id:sessionStorage.auction_id
@@ -553,7 +564,7 @@ render() {
                 <div className="createRaMain u-grid">
                     <a className="lm--button lm--button--primary u-mt3" href="/admin/home" >Back to Homepage</a>
                 </div>
-                <Modal text={this.state.text} acceptFunction={this.state.params_type===''?'':(this.state.params_type==='remove_file'?this.do_remove.bind(this):this.send_mail.bind(this))} ref="Modal" />
+                <Modal text={this.state.text} acceptFunction={this.state.params_type===''?'':(this.state.params_type==='remove_file'?this.do_remove.bind(this):(this.state.params_type==='do_publish'?this.ra_publish.bind(this):this.send_mail.bind(this)))} ref="Modal" />
             </div>
     )
   }
