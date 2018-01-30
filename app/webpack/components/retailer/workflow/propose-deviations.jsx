@@ -36,7 +36,7 @@ export class Proposedeviations extends React.Component{
             }else{
                 this.setState({
                     deviations_list:[
-                        {id:0,item:'',clause:'',propose_deviation:'',retailer_response:'',sp_response:'',sp_response_status:''},
+                        {id:0,item:'',clause:'',propose_deviation:'',retailer_response:'',sp_response:'',sp_response_status:'',key:1},
                     ]
                 })
             }
