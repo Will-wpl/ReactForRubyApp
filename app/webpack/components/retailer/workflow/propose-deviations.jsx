@@ -245,13 +245,24 @@ export class Proposedeviations extends React.Component{
                                         }else{
                                             return (<tr key={item.id===0?item.key:item.id}>
                                                         <td>
-                                                            <select id={"item_"+(index)} defaultValue={item.item} disabled={this.props.propsdisabled?true:(this.state.alldisabled?this.state.alldisabled:(item.sp_response_status !='2'?(item.sp_response_status ==''?false:true):false))}>
+                                                            {this.props.propsdisabled?<div>{item.item}<input id={"item_"+(index)} type="hidden" defaultValue={item.item}/></div>
+                                                            :(this.state.alldisabled?<div>{item.item}<input id={"item_"+(index)} type="hidden" defaultValue={item.item}/></div>:(item.sp_response_status !='2'?(item.sp_response_status ==''?<select id={"item_"+(index)} defaultValue={item.item} >
                                                                 {this.state.select_list.map((it,i)=>{
                                                                     return <option key={i} value={it}>{it}</option>
                                                                 })}
-                                                            </select>
+                                                            </select>:<div>{item.item}<input id={"item_"+(index)} type="hidden" defaultValue={item.item}/></div>):<select id={"item_"+(index)} defaultValue={item.item}>
+                                                                {this.state.select_list.map((it,i)=>{
+                                                                    return <option key={i} value={it}>{it}</option>
+                                                                })}
+                                                            </select>))}
                                                         </td>
-                                                        <td ><input type="text" id={"clause_"+(index)} defaultValue={item.clause} disabled={this.props.propsdisabled?true:(this.state.alldisabled?this.state.alldisabled:(item.sp_response_status !='2'?(item.sp_response_status ==''?false:true):false))}/></td>
+                                                        <td >{this.props.propsdisabled?
+                                                            <div>{item.clause}<input type="hidden" id={"clause_"+(index)} defaultValue={item.clause}/></div>:
+                                                            (this.state.alldisabled?<div>{item.clause}<input type="hidden" id={"clause_"+(index)} defaultValue={item.clause}/></div>:
+                                                            (item.sp_response_status !='2'?(item.sp_response_status ==''?
+                                                            <input type="text" id={"clause_"+(index)} defaultValue={item.clause}/>:<div>{item.clause}<input type="hidden" id={"clause_"+(index)} defaultValue={item.clause}/></div>)
+                                                            :<input type="text" id={"clause_"+(index)} defaultValue={item.clause}/>))}
+                                                            </td>
                                                         <td ><input type="text" id={"deviation_"+(index)} defaultValue={item.propose_deviation} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
                                                         <td ><input type="text" id={"response_"+(index)} defaultValue={item.retailer_response} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
                                                         <td >{item.sp_response}</td>
