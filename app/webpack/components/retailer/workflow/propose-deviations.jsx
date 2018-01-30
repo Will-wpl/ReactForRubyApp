@@ -238,7 +238,7 @@ export class Proposedeviations extends React.Component{
                                                     <td >{item.retailer_response}<input disabled type="hidden" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
                                                     <td >{item.sp_response}</td>
                                                     <td>
-                                                        <button id={"history_"+index} onClick={this.showhistory.bind(this,item.id)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)} >History</button>
+                                                        <button id={"history_"+index} onClick={this.showhistory.bind(this,item.id)} disabled={this.props.propsdisabled?true:false} >History</button>
                                                         <button disabled={this.props.propsdisabled?true:(this.state.alldisabled?true:(item.sp_response_status === "4" ? true : false))} id={"withdraw_"+index} onClick={this.showConfirm.bind(this,'Withdraw',{id:item.id,index:index})}>Withdraw</button>
                                                     </td>
                                                     </tr>)
