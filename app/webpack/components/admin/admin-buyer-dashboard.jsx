@@ -28,11 +28,13 @@ componentDidMount() {
         this.setState({
             buyer_company:{
                 count:res.count_company,
-                list:res.consumptions_company
+                list:res.consumptions_company,
+                type:'company'
             },
             buyer_individual:{
                 count:res.count_individual,
-                list:res.consumptions_individual
+                list:res.consumptions_individual,
+                type:'individual'
             }
         });
     })
