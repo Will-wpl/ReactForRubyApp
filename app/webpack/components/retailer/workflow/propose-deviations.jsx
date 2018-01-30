@@ -161,6 +161,10 @@ export class Proposedeviations extends React.Component{
                 }else{
                     if(item.sp_response_status == "0"){
                         deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'","sp_response_status":"3"},';
+                    }else if(item.sp_response_status == "2"){
+                        if(sum == "3"){
+                            deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'","sp_response_status":"3"},';
+                        }
                     }else{
                         deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'","sp_response_status":"'+item.sp_response_status+'"},';
                     } 
@@ -228,16 +232,10 @@ export class Proposedeviations extends React.Component{
                                     this.state.deviations_list.map((item,index)=>{
                                         if(item.sp_response_status === "1" || item.sp_response_status === "4"){
                                             return (<tr key={item.id}>
-                                                    <td>
-                                                        <select id={"item_"+(index)} defaultValue={item.item} disabled>
-                                                            {this.state.select_list.map((it,i)=>{
-                                                                return <option key={i} value={it}>{it}</option>
-                                                            })}
-                                                        </select>
-                                                    </td>
-                                                    <td ><input disabled type="text" id={"clause_"+(index)} defaultValue={item.clause}/></td>
-                                                    <td ><input disabled type="text" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
-                                                    <td ><input disabled type="text" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
+                                                    <td>{item.item}<input id={"item_"+(index)} type="hidden" defaultValue={item.item}/></td>
+                                                    <td >{item.clause}<input type="hidden" id={"clause_"+(index)} defaultValue={item.clause}/></td>
+                                                    <td >{item.propose_deviation}<input type="hidden" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
+                                                    <td >{item.retailer_response}<input disabled type="hidden" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
                                                     <td >{item.sp_response}</td>
                                                     <td>
                                                         <button id={"history_"+index} onClick={this.showhistory.bind(this,item.id)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)} >History</button>
@@ -260,7 +258,7 @@ export class Proposedeviations extends React.Component{
                                                         <td>{item.item === ""?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>:
                                                         (item.sp_response_status==='2'?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>
                                                         :<div>
-                                                            <button disabled={this.props.propsdisabled?true:(this.state.alldisabled)} onClick={this.showhistory.bind(this,item.id) } id={"history_"+index}>History</button>
+                                                            <button disabled={this.props.propsdisabled?true:false} onClick={this.showhistory.bind(this,item.id) } id={"history_"+index}>History</button>
                                                             <button disabled={this.props.propsdisabled?true:(this.state.alldisabled?true:(item.sp_response_status === "4" ? true : false))} id={"withdraw_"+index} onClick={this.showConfirm.bind(this,'Withdraw',{id:item.id,index:index})}>Withdraw</button>
                                                         </div>
                                                         )}</td>
