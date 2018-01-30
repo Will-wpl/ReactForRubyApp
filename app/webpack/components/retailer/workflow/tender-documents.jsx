@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {Modal} from '../../shared/show-modal';
 import {retailerPproposeDeviations,retailerAcceptAll,getTenderdocuments} from '../../../javascripts/componentService/retailer/service';
+import {formatPower} from '../../../javascripts/componentService/util';
 export class Tenderdocuments extends React.Component{
     constructor(props){
         super(props);
@@ -80,17 +81,17 @@ export class Tenderdocuments extends React.Component{
                                         <tbody>
                                             <tr>
                                                 <td>Peak (7am-7pm)</td>
-                                                <td className="lt">{this.state.aggregate.total_lt_peak?parseInt(Number(this.state.aggregate.total_lt_peak)):0}</td>
-                                                <td className="hts">{this.state.aggregate.total_hts_peak?parseInt(Number(this.state.aggregate.total_hts_peak)):0}</td>
-                                                <td className="htl">{this.state.aggregate.total_htl_peak?parseInt(Number(this.state.aggregate.total_htl_peak)):0}</td>
-                                                <td className="eht">{this.state.aggregate.total_eht_peak?parseInt(Number(this.state.aggregate.total_eht_peak)):0}</td>
+                                                <td className="lt">{this.state.aggregate.total_lt_peak?formatPower(parseInt(Number(this.state.aggregate.total_lt_peak)), 0, ''):0}</td>
+                                                <td className="hts">{this.state.aggregate.total_hts_peak?formatPower(parseInt(Number(this.state.aggregate.total_hts_peak)), 0, ''):0}</td>
+                                                <td className="htl">{this.state.aggregate.total_htl_peak?formatPower(parseInt(Number(this.state.aggregate.total_htl_peak)), 0, ''):0}</td>
+                                                <td className="eht">{this.state.aggregate.total_eht_peak?formatPower(parseInt(Number(this.state.aggregate.total_eht_peak)), 0, ''):0}</td>
                                             </tr>
                                             <tr>
                                                 <td>Off-Peak (7pm-7am)</td>
-                                                <td className="lt">{this.state.aggregate.total_lt_off_peak?parseInt(Number(this.state.aggregate.total_lt_off_peak)):0}</td>
-                                                <td className="hts">{this.state.aggregate.total_hts_off_peak?parseInt(Number(this.state.aggregate.total_hts_off_peak)):0}</td>
-                                                <td className="htl">{this.state.aggregate.total_htl_off_peak?parseInt(Number(this.state.aggregate.total_htl_off_peak)):0}</td>
-                                                <td className="eht">{this.state.aggregate.total_eht_off_peak?parseInt(Number(this.state.aggregate.total_eht_off_peak)):0}</td>
+                                                <td className="lt">{this.state.aggregate.total_lt_off_peak?formatPower(parseInt(Number(this.state.aggregate.total_lt_off_peak)), 0, ''):0}</td>
+                                                <td className="hts">{this.state.aggregate.total_hts_off_peak?formatPower(parseInt(Number(this.state.aggregate.total_hts_off_peak)), 0, ''):0}</td>
+                                                <td className="htl">{this.state.aggregate.total_htl_off_peak?formatPower(parseInt(Number(this.state.aggregate.total_htl_off_peak)), 0, ''):0}</td>
+                                                <td className="eht">{this.state.aggregate.total_eht_off_peak?formatPower(parseInt(Number(this.state.aggregate.total_eht_off_peak)), 0, ''):0}</td>
                                             </tr>
                                         </tbody>
                                     </table>

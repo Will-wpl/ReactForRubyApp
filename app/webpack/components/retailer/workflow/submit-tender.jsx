@@ -61,7 +61,7 @@ export class Submittender extends React.Component{
                 params_type:"do_submit"
             })
             if(this.state.fileData['upload_tender'][0].files.length<=0){
-                this.setState({text:'You must upload files!'});
+                this.setState({text:'Please fill out this field.'});
                 this.refs.Modal.showModal();
                 return 
             }
@@ -233,11 +233,12 @@ export class Submittender extends React.Component{
                 })
             }
     render(){
+        const submissionTender = `Please ${this.props.tender ? 'see' : 'upload'} the following documents for submission of tender:`;
         return(
             <div className="col-sm-12 admin_invitation">
                 <h4 className="u-mt3 u-mb1">{this.props.current.current.current_status === '0'||this.props.current.current.current_status === '2' ?'':(this.state.submission_status ? <span className="green">Your submission has been approved by administrator.</span> 
                 : <span className="red">Your submission has been rejected by administrator.</span>)}</h4>
-                <h4>Please upload the following documents for submission of tender:</h4>
+                <h4>{submissionTender}</h4>
                 <div className="col-sm-12 col-md-8 push-md-2 u-mt3 u-mb3">
                     {this.addinputfile("upload_tender", "required")}
                     <div className="workflow_btn u-mt3">

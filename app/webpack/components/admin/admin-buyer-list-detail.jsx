@@ -20,6 +20,10 @@ export default class AdminBuyerListDetail extends Component {
         detail:[],
         detail_index:0
     }
+    this.type = sessionStorage.getItem('comsumptiontype');
+    if (this.type === 'company') {
+        this.type = 'View Company Consumption Details'
+    }
 }
 
 componentDidMount() {
@@ -40,7 +44,7 @@ render() {
     return (
         <div className="u-grid mg0">
             <div className="col-sm-12 u-mb3">
-                <AdminComsumptionList visible="visible" comsumption_list={this.state.comsumption_list} detail={this.show_detail.bind(this)} />
+                <AdminComsumptionList visible="visible" comsumption_list={this.state.comsumption_list} detail={this.show_detail.bind(this)} type={this.type} />
             </div>
             <div className="createRaMain u-grid">
             <a className="lm--button lm--button--primary u-mt3" href="javascript:javascript:self.location=document.referrer;" >Back</a>
