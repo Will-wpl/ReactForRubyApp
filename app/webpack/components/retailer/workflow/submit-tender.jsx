@@ -61,7 +61,7 @@ export class Submittender extends React.Component{
                 params_type:"do_submit"
             })
             if(this.state.fileData['upload_tender'][0].files.length<=0){
-                this.setState({text:'Please fill out this field'});
+                this.setState({text:'Please fill out this field.'});
                 this.refs.Modal.showModal();
                 return 
             }
