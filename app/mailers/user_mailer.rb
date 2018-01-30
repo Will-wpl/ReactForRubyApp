@@ -55,10 +55,10 @@ class UserMailer < ApplicationMailer
     send_email(user.email, email_body, email_subject)
   end
 
-  def workflow_admin_reject_mail(user)
+  def workflow_admin_reject_mail(user, comments)
     mail_template = get_template('8')
     email_subject = mail_template.subject
-    email_body = mail_template.body.gsub(/#user.company_name/, user.company_name)
+    email_body = mail_template.body.gsub(/#user.company_name/, user.company_name).gsub(/#user.comment/, comments)
     send_email(user.email, email_body, email_subject)
   end
 
