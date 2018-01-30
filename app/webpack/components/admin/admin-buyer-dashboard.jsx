@@ -55,7 +55,7 @@ render() {
     return (
         <div className="u-grid mg0">
             <TimeCuntDown auction={this.state.auction} countDownOver={()=>{this.setState({disabled:true,allbtnStatus:false})}} timehidden="countdown_seconds" />
-            <h2 className="u-mt3 u-mb3">Buyers Dashboard</h2>
+            <h2 className="u-mt3 u-mb3">Buyer Dashboard</h2>
             <div className="admin_buyer_list col-sm-12 col-md-12">
                 <div className="col-sm-12 buyer_tab">
                     <a className="col-sm-4 col-md-2 selected" onClick={this.tab.bind(this,'company')} id="tab_company">Company</a>
