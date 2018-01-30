@@ -64,17 +64,17 @@ export class Modal extends React.Component{
                 }     
             secondary = <ol className={"showdetail "+secondStatus}>
                                 <li>Alternative Contact</li>
-                                <li>Name : {this.props.showdetail.alternative_name}</li>
+                                <li>Company Name : {this.props.showdetail.alternative_name}</li>
                                 <li>Email : {this.props.showdetail.alternative_email_address}</li>
-                                <li>Mobile : {this.props.showdetail.alternative_mobile_number}</li>
-                                <li>Office : {this.props.showdetail.alternative_office_number}</li>
+                                <li>Mobile Number : {this.props.showdetail.alternative_mobile_number}</li>
+                                <li>Office Number : {this.props.showdetail.alternative_office_number}</li>
                             </ol>
             showDetail = <ul className="showdetail">
                             <li>Main Contact</li>
-                            <li>Name : {this.props.showdetail.main_name}</li>
+                            <li>Company Name : {this.props.showdetail.main_name}</li>
                             <li>Email : {this.props.showdetail.main_email_address}</li>
-                            <li>Mobile : {this.props.showdetail.main_mobile_number}</li>
-                            <li>Office : {this.props.showdetail.main_office_number}</li>
+                            <li>Mobile Number : {this.props.showdetail.main_mobile_number}</li>
+                            <li>Office Number : {this.props.showdetail.main_office_number}</li>
                             {secondary}
                         </ul>
         }else{

@@ -13,7 +13,7 @@ export class Retailerworkflow extends React.Component{
         super(props);
         this.state={
             auction:{},text:'',disabled:false,
-            selected:[],current:{},page:0,tender_status:false
+            selected:[],current:{},page:0,tender_status:false,tab_page:0
         }
         this.submittender = false;
         this.hiddentimeCount = true;
@@ -35,7 +35,7 @@ export class Retailerworkflow extends React.Component{
                     tender_status:false
                 })
             }
-            this.setState({current:res,page:res.current.current_node?res.current.current_node:1,selected:res.flows});
+            this.setState({current:res,tab_page:res.current.current_node?res.current.current_node:1,page:res.current.current_node?res.current.current_node:1,selected:res.flows});
         },error=>{
 
         })
@@ -65,7 +65,11 @@ export class Retailerworkflow extends React.Component{
         }else if(selectedObj === "pending"){
             this.setState({page:index,disabled:false});
         }else{
-            this.setState({disabled:false});
+            if(this.state.tab_page == index){
+                this.setState({page:index,disabled:false});
+            }else{
+                this.setState({disabled:false});
+            }
         }
     }
     render(){

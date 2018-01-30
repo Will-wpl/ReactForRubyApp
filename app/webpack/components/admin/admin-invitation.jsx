@@ -4,6 +4,7 @@ import moment from 'moment';
 import {adminShowSelects,getFileList,raPublish,sendMail,removeFile} from '../../javascripts/componentService/admin/service';
 import {getAuction} from '../../javascripts/componentService/common/service';
 import {Modal} from '../shared/show-modal';
+import {TimeCuntDown} from '../shared/time-cuntdown';
 export default class AdminInvitation extends Component {
   constructor(props){
     super(props);
@@ -14,7 +15,7 @@ export default class AdminInvitation extends Component {
         buyer_individual_pend:0,peak_lt:0,peak_hts:0,
         peak_htl:0,peak_eht:0,off_peak_lt:0,off_peak_hts:0,
         off_peak_htl:0,off_peak_eht:0,disabled:false,publish_status:0,
-        params_type:"",
+        params_type:"",auction:{},
         fileData:{
                 "buyer_tc_upload":[
                     {buttonName:"none",files:[]}
@@ -61,7 +62,8 @@ componentDidMount() {
             off_peak_hts:res.total_hts_off_peak ? parseInt(Number(res.total_hts_off_peak)) : 0,
             off_peak_htl:res.total_htl_off_peak ? parseInt(Number(res.total_htl_off_peak)) : 0,
             off_peak_eht:res.total_eht_off_peak ? parseInt(Number(res.total_eht_off_peak)) : 0,
-            publish_status:res.publish_status
+            publish_status:res.publish_status,
+            auction:res
         })
     }, (error) => {
         this.setState({text:'Request exception failed!'});
@@ -405,6 +407,7 @@ render() {
     //console.log(this.winner.data);
     return (
         <div className="u-grid admin_invitation">
+            {this.state.publish_status === "1"?<TimeCuntDown auction={this.state.auction} countDownOver={()=>{this.setState({disabled:true})}} />:''}
             {sessionStorage.isAuctionId === "yes"
                 ? <div className="col-sm-12 col-md-8 push-md-2">
                     <h3 className="u-mt3 u-mb1">Invitation</h3>
@@ -553,7 +556,7 @@ render() {
                     <div className="retailer_btn">
                         <a className="lm--button lm--button--primary" href={this.state.publish_status === "0" ? "/admin/auctions/new" : "/admin/auctions/"+sessionStorage.auction_id+"/upcoming"}>Previous</a>
                         {/* <a className="lm--button lm--button--primary">Save</a> */}
-                        <a className="lm--button lm--button--primary" id="doPublish" onClick={this.doPublish.bind(this)}>Publish</a>
+                        <a className="lm--button lm--button--primary" id="doPublish" onClick={this.doPublish.bind(this)}>{this.state.publish_status === "1"?'Published':'Publish'}</a>
                     </div>
                 </div>
                 : <div className="live_modal">

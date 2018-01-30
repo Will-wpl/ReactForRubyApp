@@ -18,7 +18,7 @@ export class Workflowtab extends React.Component{
                     res = '';
                 }else if(this.props.current.current.current_status === "closed"){
                     res = 'selected';
-                }else if(this.props.current.current.current_status === "rejected"){
+                }else if(this.props.current.current.current_status === "reject"){
                     res = '';
                 }else{
                     if(this.props.current.current.current_status === null){

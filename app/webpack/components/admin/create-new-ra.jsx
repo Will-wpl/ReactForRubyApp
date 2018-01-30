@@ -388,6 +388,7 @@ export class CreateNewRA extends Component {
                             <label className="lm--formItem-right lm--formItem-control">
                                 <select ref="time_extension" id="time_extension">
                                     <option value="0">Manual</option>
+                                    <option value="1">Customize</option>
                                 </select>
                             </label>
                     </dd>
