@@ -1,9 +1,10 @@
 import {getLoginUserId} from './componentService/util'
 import {mock} from './mock'
-let test = false,handler;
-if(typeof($) === 'function'){
+
+let test = false, handler;
+if (typeof($) === 'function') {
     test = false;
-}else{
+} else {
     test = true;
 }
 handler = !test ? $ : mock;
@@ -115,28 +116,58 @@ export const put = (path, body, method = 'PUT') => {
 // ActionCable = require('actioncable');
 // ActionCable.startDebugging();
 const cable = test ? '' : ActionCable.createConsumer();
-export const createWS = (auction, methods = {}) => {
-    if(test){
-        return;
+export const createWS = (options = {
+    channel: 'HealthChannel',
+    success: () => {
+
+    },
+    fail: () => {
+
+    },
+    feedback: (data) => {
+
     }
-    let user = getLoginUserId();
-    // console.log(auction, cable);
-    let handler = cable.subscriptions.create({
-        channel: 'AuctionChannel',
-        auction_id: auction.toString(),
-        user_id:user.toString()
-    }, {
+}) => {
+    if (!options.channel) {
+        return null
+    }
+    let status = false;
+    let mCable = ActionCable.createConsumer()
+    let handler = mCable.subscriptions.create({channel: options.channel}, {
         connected() {
-            // console.log('---message client connected ---');
-            handler.perform('check_in', {user_id: user});
+            console.log('message client connected');
+            status = true;
+            if (options.success)
+                options.success()
         },
         disconnected() {
-
+            console.log('message client disconnected');
+            status = false;
         },
         received(data) {
-            // console.log('---message client received data ---', data);
+            console.log('message client received data', data);
+            if (options.feedback)
+                options.feedback(data)
         }
     });
+    (function (times, cable) {
+        let cnt = 1;
+        let mInterval = setInterval(() => {
+            if (status || cnt > times) {
+                clearInterval(mInterval);
+                if (cnt > times) {
+                    if (options.fail) {
+                        options.fail();
+                    }
+                }
+            } else {
+                if (!status) {
+                    cable.connection.reopen();
+                }
+            }
+            cnt++;
+        }, 2500)//normally 2.5 second should be connected
+    })(3, mCable);
     return handler;
 }
 export const Ws = class {
@@ -147,6 +178,7 @@ export const Ws = class {
     connectedFailureCall;
     connected = false;
     cache = [];
+
     constructor(auction) {
         let user = getLoginUserId();
         let mixin = {
@@ -155,7 +187,7 @@ export const Ws = class {
                     this.connectedCall();
                 }
                 this.connected = true;
-                if(this.cache.length > 0){
+                if (this.cache.length > 0) {
                     this.cache.forEach(element => {
                         this.sockHandler.perform(element.action, element.data);
                     })
@@ -168,7 +200,7 @@ export const Ws = class {
                 }
                 this.connected = false;
             },
-            received:(data) => {
+            received: (data) => {
                 if (this.receiveDataCall) {
                     this.receiveDataCall(data);
                 }
@@ -206,7 +238,7 @@ export const Ws = class {
                     cable.connection.reopen();
                 }
             }
-            cnt ++;
+            cnt++;
         }, 2500)//normally 2.5 second should be connected
     }
 
@@ -234,7 +266,7 @@ export const Ws = class {
         // console.log('send', data);
         if (!this.connected) {
             cable.connection.reopen();
-            this.cache.push({action,data})
+            this.cache.push({action, data})
             return;
         }
         this.sockHandler.perform(action, data);

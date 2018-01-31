@@ -72,3 +72,18 @@ import "components/retailer/retailer-workflow";
 // } else {
 //     window.addEventListener('DOMContentLoaded', run, false);
 // }
+
+import {createWS} from './javascripts/http'
+let wsHandler = createWS({
+    channel: 'HealthChannel',
+    success: () => {
+        console.log('connected......', wsHandler)
+        wsHandler.perform('heartbeat', '');
+    },
+    fail: () => {
+        console.log('disconnected......')
+    },
+    feedback: (data) => {
+
+    }
+})
