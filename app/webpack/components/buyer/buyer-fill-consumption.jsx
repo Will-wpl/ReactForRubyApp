@@ -102,6 +102,18 @@ export class FillConsumption extends Component {
         }else{ //do Participate
             let makeData = {},
             buyerlist = [];
+            this.state.site_list.map((item, index) => {
+                buyerlist += '{"account_number":"'+$("#account_number"+(index+1)).val()+'","intake_level":"'+$("#intake_level"+(index+1)).val()+'","peak":"'+$("#peak"+(index+1)).val()+'","off_peak":"'+$("#off_peak"+(index+1)).val()+'","consumption_id":"'+this.consumptions_id+'"},';
+            })
+            buyerlist = buyerlist.substr(0, buyerlist.length-1);
+            buyerlist = '['+buyerlist+']';
+            let checkpeak = JSON.parse(buyerlist).find(element=>{
+                return element.peak == '0' && element.off_peak == '0';
+            })
+            makeData = {
+                consumption_id:this.consumptions_id,
+                details:buyerlist
+            }
             if(checkpeak){
                 setTimeout(()=>{
                     this.refs.Modal.showModal();
@@ -115,18 +127,6 @@ export class FillConsumption extends Component {
                     this.setState({text:"Account number has already been entered!"});
                 },200)
                 return false;
-            }
-            this.state.site_list.map((item, index) => {
-                buyerlist += '{"account_number":"'+$("#account_number"+(index+1)).val()+'","intake_level":"'+$("#intake_level"+(index+1)).val()+'","peak":"'+$("#peak"+(index+1)).val()+'","off_peak":"'+$("#off_peak"+(index+1)).val()+'","consumption_id":"'+this.consumptions_id+'"},';
-            })
-            buyerlist = buyerlist.substr(0, buyerlist.length-1);
-            buyerlist = '['+buyerlist+']';
-            let checkpeak = JSON.parse(buyerlist).find(element=>{
-                return element.peak == '0' && element.off_peak == '0';
-            })
-            makeData = {
-                consumption_id:this.consumptions_id,
-                details:buyerlist
             }
             setBuyerParticipate(makeData, '/api/buyer/consumption_details/participate').then((res) => {
                 this.setState({
