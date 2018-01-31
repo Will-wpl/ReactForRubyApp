@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react'
+import {formatPower} from '../../javascripts/componentService/util';
 export class DoFillConsumption extends Component {
     constructor(props){
         super(props);
