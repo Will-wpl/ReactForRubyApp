@@ -37,7 +37,14 @@ componentDidMount() {
     })
 }
 show_detail(index,consumption_id){
-    $("#comsumption_list_table_"+index).slideToggle(300);
+    let obj = $("#comsumption_list_table_"+index);
+    if(obj.is(":visible")){
+        obj.prev().removeClass("open");
+        obj.slideUp(300);
+    }else{
+        obj.prev().addClass("open");
+        obj.slideDown(300);
+    }
 }
 render() {
     //console.log(this.winner.data);
