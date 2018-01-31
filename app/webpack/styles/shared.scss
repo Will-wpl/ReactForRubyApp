@@ -561,7 +561,10 @@ body.choose{
 
 .comsumption_list{
   font-size: 13px;  padding:10px; text-align:center;
-  .comsumption_list_top{ padding-bottom:10px; border-bottom: 1px solid #314657;}
+  .comsumption_list_top{ 
+    padding:15px 0px 15px 32px; border-bottom: 1px solid #314657; background:url("../images/add_l.png") no-repeat left;
+  }
+  .open{background:url("../images/subtract.png") no-repeat left;}
   .comsumption_list_table{
     display: none;  
     table{
