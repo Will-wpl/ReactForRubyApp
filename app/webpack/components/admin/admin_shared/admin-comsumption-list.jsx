@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import moment from 'moment';
+import {formatPower} from '../../../javascripts/componentService/util';
 export default class AdminComsumptionList extends Component {
   constructor(props){
     super(props);
@@ -33,14 +34,14 @@ render() {
                                 <div className="comsumption_list_top u-grid" onClick={this.show_table.bind(this,index,item.id)}>
                                     <div className="col">{this.props.type === 'View Company Consumption Details' ? item.company_name : item.name}</div>
                                     <div className="col">Accounts: {item.count}</div>
-                                    <div className="col">LT(Peak): {parseInt(Number(item.lt_peak))}</div>
-                                    <div className="col">LT(Off-Peak): {parseInt(Number(item.lt_off_peak))}</div>
-                                    <div className="col">HTS(Peak): {parseInt(Number(item.hts_peak))}</div>
-                                    <div className="col">HTS(Off-Peak): {parseInt(Number(item.hts_off_peak))}</div> 
-                                    <div className="col">HTL(Peak): {parseInt(Number(item.htl_peak))}</div>
-                                    <div className="col">HTL(Off-Peak): {parseInt(Number(item.htl_off_peak))}</div>
-                                    <div className="col">EHT(Peak): {parseInt(Number(item.eht_peak))}</div>
-                                    <div className="col">EHT(Off-Peak): {parseInt(Number(item.eht_off_peak))}</div>
+                                    <div className="col">LT(Peak): {formatPower(parseInt(Number(item.lt_peak)), 0, '')}</div>
+                                    <div className="col">LT(Off-Peak): {formatPower(parseInt(Number(item.lt_off_peak)), 0, '')}</div>
+                                    <div className="col">HTS(Peak): {formatPower(parseInt(Number(item.hts_peak)), 0, '')}</div>
+                                    <div className="col">HTS(Off-Peak): {formatPower(parseInt(Number(item.hts_off_peak)), 0, '')}</div> 
+                                    <div className="col">HTL(Peak): {formatPower(parseInt(Number(item.htl_peak)), 0, '')}</div>
+                                    <div className="col">HTL(Off-Peak): {formatPower(parseInt(Number(item.htl_off_peak)), 0, '')}</div>
+                                    <div className="col">EHT(Peak): {formatPower(parseInt(Number(item.eht_peak)), 0, '')}</div>
+                                    <div className="col">EHT(Off-Peak): {formatPower(parseInt(Number(item.eht_off_peak)), 0, '')}</div>
                                     <div className="col">Unit: kWh</div>
                                 </div>
                                 <div className={this.props.visible?'comsumption_list_table u-grid visible':'comsumption_list_table u-grid'} id={"comsumption_list_table_"+index}> 
@@ -58,8 +59,8 @@ render() {
                                                     return <tr key={i}>
                                                                 <td>{it.account_number}</td>
                                                                 <td>{it.intake_level}</td>
-                                                                <td>{parseInt(Number(it.peak))}</td>
-                                                                <td>{parseInt(Number(it.off_peak))}</td>
+                                                                <td>{formatPower(parseInt(Number(it.peak)), 0, '')}</td>
+                                                                <td>{formatPower(parseInt(Number(it.off_peak)), 0, '')}</td>
                                                             </tr>
                                                 })}
                                             </tbody>

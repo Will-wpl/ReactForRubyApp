@@ -42,7 +42,7 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
       { name: 'My Status', field_name: 'my_status' },
       { name: nil, field_name: 'actions' }
     ]
-    actions = [{ url: '/retailer/arrangements/:id/tender', name: 'Manage', icon: 'edit', interface_type: 'auction', check:'docheck' },
+    actions = [{ url: '/retailer/arrangements/:id/tender', name: 'Manage', icon: 'manage', interface_type: 'auction', check:'docheck' },
                { url: '/retailer/arrangements/:id/tender', name: 'View', icon: 'view', interface_type: 'auction', check:'docheck' },
                { url: '/retailer/auctions/:id/gotobid', name: 'Start Bidding', icon: 'bidding', interface_type: 'auction' }]
     data = []

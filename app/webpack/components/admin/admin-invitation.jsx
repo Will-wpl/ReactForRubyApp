@@ -5,6 +5,7 @@ import {adminShowSelects,getFileList,raPublish,sendMail,removeFile} from '../../
 import {getAuction} from '../../javascripts/componentService/common/service';
 import {Modal} from '../shared/show-modal';
 import {TimeCuntDown} from '../shared/time-cuntdown';
+import {formatPower} from '../../javascripts/componentService/util';
 export default class AdminInvitation extends Component {
   constructor(props){
     super(props);
@@ -54,14 +55,14 @@ componentDidMount() {
     getAuction('admin', sessionStorage.auction_id).then((res) => {
         console.log(res);
         this.setState({
-            peak_lt:res.total_lt_peak ? parseInt(Number(res.total_lt_peak)) : 0,
-            peak_hts:res.total_hts_peak ? parseInt(Number(res.total_hts_peak)) : 0,
-            peak_htl:res.total_htl_peak ? parseInt(Number(res.total_htl_peak)) : 0,
-            peak_eht:res.total_eht_peak ? parseInt(Number(res.total_eht_peak)) : 0,
-            off_peak_lt:res.total_lt_off_peak ? parseInt(Number(res.total_lt_off_peak)) : 0,
-            off_peak_hts:res.total_hts_off_peak ? parseInt(Number(res.total_hts_off_peak)) : 0,
-            off_peak_htl:res.total_htl_off_peak ? parseInt(Number(res.total_htl_off_peak)) : 0,
-            off_peak_eht:res.total_eht_off_peak ? parseInt(Number(res.total_eht_off_peak)) : 0,
+            peak_lt:res.total_lt_peak ? formatPower(parseInt(Number(res.total_lt_peak)), 0, '') : 0,
+            peak_hts:res.total_hts_peak ? formatPower(parseInt(Number(res.total_hts_peak)), 0, '') : 0,
+            peak_htl:res.total_htl_peak ? formatPower(parseInt(Number(res.total_htl_peak)), 0, '') : 0,
+            peak_eht:res.total_eht_peak ? formatPower(parseInt(Number(res.total_eht_peak)), 0, '') : 0,
+            off_peak_lt:res.total_lt_off_peak ? formatPower(parseInt(Number(res.total_lt_off_peak)), 0, '') : 0,
+            off_peak_hts:res.total_hts_off_peak ? formatPower(parseInt(Number(res.total_hts_off_peak)), 0, '') : 0,
+            off_peak_htl:res.total_htl_off_peak ? formatPower(parseInt(Number(res.total_htl_off_peak)), 0, '') : 0,
+            off_peak_eht:res.total_eht_off_peak ? formatPower(parseInt(Number(res.total_eht_off_peak)), 0, '') : 0,
             publish_status:res.publish_status,
             auction:res
         })
@@ -154,17 +155,28 @@ upload(type, index){
             fileObj.parent().prev("dfn").text(fileObj.val());
         }
         checkRequired(){
+            let timeBar;
             let requiredObj = this.state.fileData,result = true; //$("input[type='file'][required]"),
+            clearTimeout(timeBar);
             if(requiredObj['buyer_tc_upload'][0].files.length <=0){
                 $("#buyer_tc_upload0").next().next().fadeIn(300);
+                timeBar = setTimeout(()=>{
+                    $("#buyer_tc_upload0").next().next().fadeOut(300);
+                },3000)
                 result = false;
             }
             if(requiredObj['retailer_confidentiality_undertaking_upload'][0].files.length <=0){
                 $("#retailer_confidentiality_undertaking_upload0").next().next().fadeIn(300);
+                timeBar = setTimeout(()=>{
+                    $("#retailer_confidentiality_undertaking_upload0").next().next().fadeOut(300);
+                },3000)
                 result = false;
             }
             if(requiredObj['tender_documents_upload'][0].files.length <=0){
                 $("#tender_documents_upload0").next().next().fadeIn(300);
+                timeBar = setTimeout(()=>{
+                    $("#tender_documents_upload0").next().next().fadeOut(300);
+                },3000)
                 result = false;
             }
                 // for(let i=0; i<requiredObj.length; i++){
@@ -407,7 +419,7 @@ render() {
     //console.log(this.winner.data);
     return (
         <div className="u-grid admin_invitation">
-            {this.state.publish_status === "1"?<TimeCuntDown auction={this.state.auction} countDownOver={()=>{this.setState({disabled:true})}} />:''}
+            {this.state.publish_status === "1"?<TimeCuntDown auction={this.state.auction} countDownOver={()=>{this.setState({disabled:true})}} timehidden="countdown_seconds"/>:''}
             {sessionStorage.isAuctionId === "yes"
                 ? <div className="col-sm-12 col-md-8 push-md-2">
                     <h3 className="u-mt3 u-mb1">Invitation</h3>
@@ -556,7 +568,7 @@ render() {
                     <div className="retailer_btn">
                         <a className="lm--button lm--button--primary" href={this.state.publish_status === "0" ? "/admin/auctions/new" : "/admin/auctions/"+sessionStorage.auction_id+"/upcoming"}>Previous</a>
                         {/* <a className="lm--button lm--button--primary">Save</a> */}
-                        <a className="lm--button lm--button--primary" id="doPublish" onClick={this.doPublish.bind(this)}>{this.state.publish_status === "1"?'Published':'Publish'}</a>
+                        <a className="lm--button lm--button--primary" id="doPublish" onClick={this.doPublish.bind(this)}>Publish</a>
                     </div>
                 </div>
                 : <div className="live_modal">

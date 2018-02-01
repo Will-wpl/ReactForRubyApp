@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import moment from 'moment';
+import {formatPower} from '../../../javascripts/componentService/util';
 export default class AdminComsumptionPrice extends Component {
   constructor(props){
     super(props);
@@ -31,17 +32,17 @@ render() {
                <tbody>
                    <tr>
                        <td>Peak (7am-7pm)</td>
-                       <td >{this.props.price.lt_peak}</td>
-                       <td >{this.props.price.hts_peak}</td>
-                       <td >{this.props.price.htl_peak}</td>
-                       <td >{this.props.price.eht_peak}</td>
+                       <td >{formatPower(parseInt(Number(this.props.price.lt_peak)), 0, '')}</td>
+                       <td >{formatPower(parseInt(Number(this.props.price.hts_peak)), 0, '')}</td>
+                       <td >{formatPower(parseInt(Number(this.props.price.htl_peak)), 0, '')}</td>
+                       <td >{formatPower(parseInt(Number(this.props.price.eht_peak)), 0, '')}</td>
                    </tr>
                    <tr>
                        <td>Off-Peak (7pm-7am)</td>
-                       <td >{this.props.price.lt_off_peak}</td>
-                       <td >{this.props.price.hts_off_peak}</td>
-                       <td >{this.props.price.htl_off_peak}</td>
-                       <td >{this.props.price.eht_off_peak}</td>
+                       <td >{formatPower(parseInt(Number(this.props.price.lt_off_peak)), 0, '')}</td>
+                       <td >{formatPower(parseInt(Number(this.props.price.hts_off_peak)), 0, '')}</td>
+                       <td >{formatPower(parseInt(Number(this.props.price.htl_off_peak)), 0, '')}</td>
+                       <td >{formatPower(parseInt(Number(this.props.price.eht_off_peak)), 0, '')}</td>
                    </tr>
                </tbody>
            </table>
