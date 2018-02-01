@@ -26,17 +26,17 @@ export const searchTypeData = {
     "Published Auction List":{//connect back end OK
         list_url:"/api/admin/auctions/published",
         list_data:[
-            {title:"ID:",type:"id",species:"input",operator:'like'},
-            {title:"Name:",type:"name",species:"input",operator:'like'},
-            {title:"Date:",type:"start_datetime",species:"datePacker",operator:'date_between'}
+            {title:"ID:",type:"published_gid",species:"input",operator:'like',table:'auctions'},
+            {title:"Name:",type:"name",species:"input",operator:'like',table:'auctions'},
+            {title:"Date:",type:"start_datetime",species:"datePacker",operator:'date_between',table:'auctions'}
         ]
     },
     "Retailer Published Auction List":{
         list_url:"/api/retailer/auctions/published",
         list_data:[
-            {title:"ID:",type:"id",species:"input",operator:'like'},
-            {title:"Name:",type:"name",species:"input",operator:'like'},
-            {title:"Date:",type:"start_datetime",species:"datePacker",operator:'date_between'}
+            {title:"ID:",type:"published_gid",species:"input",operator:'like',table:'auctions'},
+            {title:"Name:",type:"name",species:"input",operator:'like',table:'auctions'},
+            {title:"Date:",type:"start_datetime",species:"datePacker",operator:'date_between',table:'auctions'}
         ]
     },
     "Status of Participation":{
