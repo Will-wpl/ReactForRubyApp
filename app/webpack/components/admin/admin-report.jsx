@@ -136,7 +136,7 @@ export class AdminReport extends Component {
                         </div>
                     </div>
                     <div className="col-sm-12 col-md-5">
-                        <WinnerPrice showOrhide="show" winner={this.state.winner} />
+                        <WinnerPrice showOrhide="show" winner={this.state.winner} isLtVisible={visibility_lt} isHtsVisible={visibility_hts} isHtlVisible={visibility_htl} isEhtVisible={visibility_eht}/>
                         <RetailerRanking ranking={this.state.ranking}/>
                     </div>
                 </div>
