@@ -217,7 +217,7 @@ export class SearchList extends Component {
                                                                              {this.props.table_data.actions[item["actions"]].name}</a>
                                                                 }
                                                             }else{
-                                                                if(item['auction_status'] === 'In Progess' && ik.name === 'Manage'){
+                                                                if(item['auction_status'] === 'In Progess' && ik.name === 'View'){
                                                                     
                                                                 }else{
                                                                     return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>{ik.name}</a>
