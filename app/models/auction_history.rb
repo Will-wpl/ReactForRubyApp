@@ -25,8 +25,8 @@ class AuctionHistory < ApplicationRecord
 
   # set bid, root function
   def self.set_bid(calculate_dto)
-    auction = Auction.find(calculate_dto.auction_id)
-    days = Auction.get_days(auction.contract_period_start_date, @auction.contract_period_end_date)
+
+    days = Auction.get_days(Date.parse(calculate_dto.begin_time), Date.parse(calculate_dto.end_time))
     total_award_sum = AuctionHistory.set_total_award_sum(Auction.set_c_value(calculate_dto.total_lt_peak, days),
                                                          Auction.set_c_value(calculate_dto.total_lt_off_peak, days),
                                                          Auction.set_c_value(calculate_dto.total_hts_peak, days),
