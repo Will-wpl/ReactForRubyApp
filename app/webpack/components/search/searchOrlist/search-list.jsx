@@ -212,19 +212,21 @@ export class SearchList extends Component {
                                                         this.props.table_data.actions.map((ik,k)=>{
                                                             if(ik.check === "docheck"){
                                                                 if(item["actions"] === k){
-                                                                    return <a key={k} className={this.props.table_data.actions[item["actions"]].icon} 
+                                                                    if(item['auction_status'] === 'In Progress' && ik.name === 'View'){
+                                                                    }else{
+                                                                        return <a key={k} className={this.props.table_data.actions[item["actions"]].icon} 
                                                                              onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,this.props.table_data.actions[item["actions"]].url,this.props.table_data.actions[item["actions"]].name,this.props.table_data.actions[item["actions"]].interface_type ? this.props.table_data.actions[item["actions"]].interface_type : "",item.name ? item.name : '',item.auction_id)}>
                                                                              {this.props.table_data.actions[item["actions"]].name}</a>
+                                                                    }
+                                                                    
                                                                 }
                                                             }else{
-                                                                if(item['auction_status'] === 'In Progess' && ik.name === 'View'){
-                                                                    
+                                                                if(item['auction_status'] === 'Upcoming' && ik.name === 'Manage'){
                                                                 }else{
                                                                     return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>{ik.name}</a>
                                                                 }
                                                                 
-                                                            }
-                                                            
+                                                            }                                                           
                                                         })
                                                     //)
                                                     }

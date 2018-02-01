@@ -5,6 +5,7 @@ import {adminShowSelects,getFileList,raPublish,sendMail,removeFile} from '../../
 import {getAuction} from '../../javascripts/componentService/common/service';
 import {Modal} from '../shared/show-modal';
 import {TimeCuntDown} from '../shared/time-cuntdown';
+import {formatPower} from '../../javascripts/componentService/util';
 export default class AdminInvitation extends Component {
   constructor(props){
     super(props);
@@ -54,14 +55,14 @@ componentDidMount() {
     getAuction('admin', sessionStorage.auction_id).then((res) => {
         console.log(res);
         this.setState({
-            peak_lt:res.total_lt_peak ? parseInt(Number(res.total_lt_peak)) : 0,
-            peak_hts:res.total_hts_peak ? parseInt(Number(res.total_hts_peak)) : 0,
-            peak_htl:res.total_htl_peak ? parseInt(Number(res.total_htl_peak)) : 0,
-            peak_eht:res.total_eht_peak ? parseInt(Number(res.total_eht_peak)) : 0,
-            off_peak_lt:res.total_lt_off_peak ? parseInt(Number(res.total_lt_off_peak)) : 0,
-            off_peak_hts:res.total_hts_off_peak ? parseInt(Number(res.total_hts_off_peak)) : 0,
-            off_peak_htl:res.total_htl_off_peak ? parseInt(Number(res.total_htl_off_peak)) : 0,
-            off_peak_eht:res.total_eht_off_peak ? parseInt(Number(res.total_eht_off_peak)) : 0,
+            peak_lt:res.total_lt_peak ? formatPower(parseInt(Number(res.total_lt_peak)), 0, '') : 0,
+            peak_hts:res.total_hts_peak ? formatPower(parseInt(Number(res.total_hts_peak)), 0, '') : 0,
+            peak_htl:res.total_htl_peak ? formatPower(parseInt(Number(res.total_htl_peak)), 0, '') : 0,
+            peak_eht:res.total_eht_peak ? formatPower(parseInt(Number(res.total_eht_peak)), 0, '') : 0,
+            off_peak_lt:res.total_lt_off_peak ? formatPower(parseInt(Number(res.total_lt_off_peak)), 0, '') : 0,
+            off_peak_hts:res.total_hts_off_peak ? formatPower(parseInt(Number(res.total_hts_off_peak)), 0, '') : 0,
+            off_peak_htl:res.total_htl_off_peak ? formatPower(parseInt(Number(res.total_htl_off_peak)), 0, '') : 0,
+            off_peak_eht:res.total_eht_off_peak ? formatPower(parseInt(Number(res.total_eht_off_peak)), 0, '') : 0,
             publish_status:res.publish_status,
             auction:res
         })
