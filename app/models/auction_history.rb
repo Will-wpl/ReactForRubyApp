@@ -155,7 +155,7 @@ class AuctionHistory < ApplicationRecord
                                           calculate_dto.hts_peak, calculate_dto.hts_off_peak,
                                           calculate_dto.htl_peak, calculate_dto.htl_off_peak,
                                           calculate_dto.eht_peak, calculate_dto.eht_off_peak)
-    average_price = set_average_price(new_total_volume, total_volume)
+    average_price = set_average_price(total_award_sum, new_total_volume)
     if @histories.count == 0
       @history = AuctionHistory.new(lt_peak: calculate_dto.lt_peak, lt_off_peak: calculate_dto.lt_off_peak, hts_peak: calculate_dto.hts_peak, hts_off_peak: calculate_dto.hts_off_peak, htl_peak: calculate_dto.htl_peak, htl_off_peak: calculate_dto.htl_off_peak, eht_peak: calculate_dto.eht_peak, eht_off_peak: calculate_dto.eht_off_peak, bid_time: @auction.actual_begin_time, actual_bid_time: @auction.actual_begin_time,
                                     user_id: calculate_dto.user_id, auction_id: calculate_dto.auction_id, average_price: average_price, total_award_sum: total_award_sum, is_bidder: true)
