@@ -17,7 +17,7 @@ class Retailer::AuctionsController < Retailer::BaseController
   def index; end
 
   def empty
-    arrangement = Arrangement.find_by_user_id(current_user.id)
+    arrangement = Arrangement.find_by_auction_and_user(params[:id], current_user.id).first
     auction_name = @auction.name
     progress_message = "#{auction_name} is currently in progress. Please click on 'Start Bidding' button located in homepage to participate."
     empty_message = 'There is no upcoming reverse auction published.'
@@ -67,7 +67,7 @@ class Retailer::AuctionsController < Retailer::BaseController
   end
 
   def gotobid
-    arrangement = Arrangement.find_by_user_id(current_user.id)
+    arrangement = Arrangement.find_by_auction_and_user(params[:id], current_user.id).first
     if @auction.publish_status != '1'
       redirect_to message_retailer_auction_path(@auction.id)
       # There is no upcoming reverse auction published.
@@ -99,7 +99,7 @@ class Retailer::AuctionsController < Retailer::BaseController
   end
 
   def message
-    arrangement = Arrangement.find_by_user_id(current_user.id)
+    arrangement = Arrangement.find_by_auction_and_user(params[:id], current_user.id).first
     empty_message = 'There is no upcoming reverse auction published.'
     progress_message = "Please complete the necessary details under 'Manage Upcoming Reverse Auction' located in homepage."
 

@@ -154,17 +154,28 @@ upload(type, index){
             fileObj.parent().prev("dfn").text(fileObj.val());
         }
         checkRequired(){
+            let timeBar;
             let requiredObj = this.state.fileData,result = true; //$("input[type='file'][required]"),
+            clearTimeout(timeBar);
             if(requiredObj['buyer_tc_upload'][0].files.length <=0){
                 $("#buyer_tc_upload0").next().next().fadeIn(300);
+                timeBar = setTimeout(()=>{
+                    $("#buyer_tc_upload0").next().next().fadeOut(300);
+                },3000)
                 result = false;
             }
             if(requiredObj['retailer_confidentiality_undertaking_upload'][0].files.length <=0){
                 $("#retailer_confidentiality_undertaking_upload0").next().next().fadeIn(300);
+                timeBar = setTimeout(()=>{
+                    $("#retailer_confidentiality_undertaking_upload0").next().next().fadeOut(300);
+                },3000)
                 result = false;
             }
             if(requiredObj['tender_documents_upload'][0].files.length <=0){
                 $("#tender_documents_upload0").next().next().fadeIn(300);
+                timeBar = setTimeout(()=>{
+                    $("#tender_documents_upload0").next().next().fadeOut(300);
+                },3000)
                 result = false;
             }
                 // for(let i=0; i<requiredObj.length; i++){
@@ -407,7 +418,7 @@ render() {
     //console.log(this.winner.data);
     return (
         <div className="u-grid admin_invitation">
-            {this.state.publish_status === "1"?<TimeCuntDown auction={this.state.auction} countDownOver={()=>{this.setState({disabled:true})}} />:''}
+            {this.state.publish_status === "1"?<TimeCuntDown auction={this.state.auction} countDownOver={()=>{this.setState({disabled:true})}} timehidden="countdown_seconds"/>:''}
             {sessionStorage.isAuctionId === "yes"
                 ? <div className="col-sm-12 col-md-8 push-md-2">
                     <h3 className="u-mt3 u-mb1">Invitation</h3>
@@ -556,7 +567,7 @@ render() {
                     <div className="retailer_btn">
                         <a className="lm--button lm--button--primary" href={this.state.publish_status === "0" ? "/admin/auctions/new" : "/admin/auctions/"+sessionStorage.auction_id+"/upcoming"}>Previous</a>
                         {/* <a className="lm--button lm--button--primary">Save</a> */}
-                        <a className="lm--button lm--button--primary" id="doPublish" onClick={this.doPublish.bind(this)}>{this.state.publish_status === "1"?'Published':'Publish'}</a>
+                        <a className="lm--button lm--button--primary" id="doPublish" onClick={this.doPublish.bind(this)}>Publish</a>
                     </div>
                 </div>
                 : <div className="live_modal">
