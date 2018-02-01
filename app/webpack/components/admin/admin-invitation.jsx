@@ -418,7 +418,7 @@ render() {
     //console.log(this.winner.data);
     return (
         <div className="u-grid admin_invitation">
-            {this.state.publish_status === "1"?<TimeCuntDown auction={this.state.auction} countDownOver={()=>{this.setState({disabled:true})}} />:''}
+            {this.state.publish_status === "1"?<TimeCuntDown auction={this.state.auction} countDownOver={()=>{this.setState({disabled:true})}} timehidden="countdown_seconds"/>:''}
             {sessionStorage.isAuctionId === "yes"
                 ? <div className="col-sm-12 col-md-8 push-md-2">
                     <h3 className="u-mt3 u-mb1">Invitation</h3>
@@ -567,7 +567,7 @@ render() {
                     <div className="retailer_btn">
                         <a className="lm--button lm--button--primary" href={this.state.publish_status === "0" ? "/admin/auctions/new" : "/admin/auctions/"+sessionStorage.auction_id+"/upcoming"}>Previous</a>
                         {/* <a className="lm--button lm--button--primary">Save</a> */}
-                        <a className="lm--button lm--button--primary" id="doPublish" onClick={this.doPublish.bind(this)}>{this.state.publish_status === "1"?'Published':'Publish'}</a>
+                        <a className="lm--button lm--button--primary" id="doPublish" onClick={this.doPublish.bind(this)}>Publish</a>
                     </div>
                 </div>
                 : <div className="live_modal">
