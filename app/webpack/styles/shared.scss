@@ -470,9 +470,9 @@ dfn.manage_label{
         a{
           margin: 0px 10px;
         }
-        &.search_list_btn{
+        &.search_list_btn{word-wrap: break-word;
           a{ 
-            padding-left: 20px;
+            padding-left: 20px; display: block;
             &::before{
               display: none;
             }

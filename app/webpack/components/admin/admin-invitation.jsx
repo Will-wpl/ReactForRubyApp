@@ -154,17 +154,28 @@ upload(type, index){
             fileObj.parent().prev("dfn").text(fileObj.val());
         }
         checkRequired(){
+            let timeBar;
             let requiredObj = this.state.fileData,result = true; //$("input[type='file'][required]"),
+            clearTimeout(timeBar);
             if(requiredObj['buyer_tc_upload'][0].files.length <=0){
                 $("#buyer_tc_upload0").next().next().fadeIn(300);
+                timeBar = setTimeout(()=>{
+                    $("#buyer_tc_upload0").next().next().fadeOut(300);
+                },3000)
                 result = false;
             }
             if(requiredObj['retailer_confidentiality_undertaking_upload'][0].files.length <=0){
                 $("#retailer_confidentiality_undertaking_upload0").next().next().fadeIn(300);
+                timeBar = setTimeout(()=>{
+                    $("#retailer_confidentiality_undertaking_upload0").next().next().fadeOut(300);
+                },3000)
                 result = false;
             }
             if(requiredObj['tender_documents_upload'][0].files.length <=0){
                 $("#tender_documents_upload0").next().next().fadeIn(300);
+                timeBar = setTimeout(()=>{
+                    $("#tender_documents_upload0").next().next().fadeOut(300);
+                },3000)
                 result = false;
             }
                 // for(let i=0; i<requiredObj.length; i++){
