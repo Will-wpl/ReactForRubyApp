@@ -71,7 +71,7 @@ render() {
                 </div>
             </div>
             <div className="createRaMain u-grid">
-            <a className="lm--button lm--button--primary u-mt3" href="/admin/auctions/published" >Back</a>
+            <a className="lm--button lm--button--primary u-mt3" href="javascript:window.history.back(-1)" >Back</a>
             </div>
         </div>
     )
