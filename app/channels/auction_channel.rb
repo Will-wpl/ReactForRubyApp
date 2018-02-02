@@ -21,6 +21,8 @@ class AuctionChannel < ApplicationCable::Channel
 
   def set_bid(data)
     auction = Auction.find(params[:auction_id])
+    begin_time = auction.contract_period_start_date
+    end_time = auction.contract_period_end_date
     calculate_dto = CalculateDto.new
     calculate_dto.total_lt_peak = auction.total_lt_peak
     calculate_dto.total_lt_off_peak = auction.total_lt_off_peak
@@ -40,6 +42,8 @@ class AuctionChannel < ApplicationCable::Channel
     calculate_dto.eht_off_peak = data['eht_off_peak']
     calculate_dto.user_id = params[:user_id]
     calculate_dto.auction_id = params[:auction_id]
+    calculate_dto.begin_time = begin_time
+    calculate_dto.end_time = end_time
     args = { auction_id: params[:auction_id], calculate_dto: calculate_dto }.to_json
 
     BidJob.perform_later(args)

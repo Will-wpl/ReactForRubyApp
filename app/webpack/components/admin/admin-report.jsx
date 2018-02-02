@@ -76,6 +76,10 @@ export class AdminReport extends Component {
 
     render () {
         let achieved = parseFloat(this.actualPrice).toFixed(4) <= parseFloat(this.startPrice);
+        const visibility_lt = !this.auction ? true: Number(this.auction.total_lt_peak) > 0 || Number(this.auction.total_lt_off_peak) > 0;
+        const visibility_hts = !this.auction ? true: Number(this.auction.total_hts_peak) > 0 || Number(this.auction.total_hts_off_peak) > 0;
+        const visibility_htl = !this.auction ? true: Number(this.auction.total_htl_peak) > 0 || Number(this.auction.total_htl_off_peak) > 0;
+        const visibility_eht = !this.auction ? true: Number(this.auction.total_eht_peak) > 0 || Number(this.auction.total_eht_off_peak) > 0;
         return (
             <div>
                 <div className="u-grid u-mt2 report_bg">
@@ -99,11 +103,11 @@ export class AdminReport extends Component {
                         <div className="u-grid u-mt2">
                             <div className="col-sm-9">
                                 <ChartRealtimeHoc ref="priceChart" dataStore={this.state.histories}>
-                                    <Price/>
+                                    <Price isLtVisible={visibility_lt} isHtsVisible={visibility_hts} isHtlVisible={visibility_htl} isEhtVisible={visibility_eht}/>
                                 </ChartRealtimeHoc>
                             </div>
                             <div className="col-sm-2 push-md-1">
-                                <CheckboxListItem key={0} id={0} display={'check/uncheck all'} color={'white'} status={true} onCheck={(id, status, color) => {
+                                <CheckboxListItem key={0} id={0} display={'Check All'} color={'white'} status={true} onCheck={(id, status, color) => {
                                     if (status) {
                                         this.priceUsers.selectAll(this.state.users);
                                     } else {
@@ -120,7 +124,7 @@ export class AdminReport extends Component {
                                 </ChartRealtimeHoc>
                             </div>
                             <div className="col-sm-2 push-md-1">
-                                <CheckboxListItem key={0} id={0} display={'check/uncheck all'} color={'white'} status={true} onCheck={(id, status, color) => {
+                                <CheckboxListItem key={0} id={0} display={'Check All'} color={'white'} status={true} onCheck={(id, status, color) => {
                                     if (status) {
                                         this.rankingUsers.selectAll(this.state.users);
                                     } else {
@@ -132,7 +136,7 @@ export class AdminReport extends Component {
                         </div>
                     </div>
                     <div className="col-sm-12 col-md-5">
-                        <WinnerPrice showOrhide="show" winner={this.state.winner} />
+                        <WinnerPrice showOrhide="show" winner={this.state.winner} isLtVisible={visibility_lt} isHtsVisible={visibility_hts} isHtlVisible={visibility_htl} isEhtVisible={visibility_eht}/>
                         <RetailerRanking ranking={this.state.ranking}/>
                     </div>
                 </div>

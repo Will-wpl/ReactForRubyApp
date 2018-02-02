@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180119030408) do
+ActiveRecord::Schema.define(version: 20180201075205) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -246,6 +246,13 @@ ActiveRecord::Schema.define(version: 20180119030408) do
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "logged_in_status"
+    t.datetime "logged_in_last_time"
+    t.string "ws_connected_status"
+    t.datetime "ws_connected_last_time"
+    t.string "ws_send_message_status"
+    t.datetime "ws_send_message_last_time"
+    t.string "current_ip"
     t.index ["user_id"], name: "index_user_extensions_on_user_id"
   end
 
