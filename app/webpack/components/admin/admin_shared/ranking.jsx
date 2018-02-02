@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 export default class RetailerRanking extends Component {
     render() {
-        // console.log('ranking', this.props.ranking)
+        console.log('ranking', this.props.ranking)
         // this.props.ranking.sort((a, b) => {
         //     return parseFloat(a.average_price) > parseFloat(b.average_price)
         // })
@@ -37,7 +37,7 @@ export default class RetailerRanking extends Component {
                             {
                                 this.props.ranking.map((item, index) => {
                                     return (
-                                        <tr key={index} className={item.isbidder?'isbidder':''}>
+                                        <tr key={index} className={item.is_bidder?'isbidder':''}>
                                             <td>{item.ranking}</td>
                                             <td>{item.company_name}</td>
                                             <td>$ {parseFloat(item.average_price).toFixed(4)}/kWh</td>

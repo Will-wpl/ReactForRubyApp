@@ -56,14 +56,14 @@ export class SearchType extends Component {
         this.search_type_data.map((item,index)=>{
             //needData += '"'+item.type+'":"'+$('#'+item.type).val()+'",';
             if(item.table){
-                if(item.type == "start_datetime"){
-                    needData += '"'+item.type+'":["'+this.state.start_datetime+'","'+item.operator+'","'+item.table+'"],';
+                if(item.type == "start_datetime" && this.state.start_datetime != ""){
+                    needData += '"'+item.type+'":["'+this.state.start_datetime.format()+'","'+item.operator+'","'+item.table+'"],';
                 }else{
                     needData += '"'+item.type+'":["'+$('#'+item.type).val()+'","'+item.operator+'","'+item.table+'"],';
                 }      
             }else{
-                if(item.type == "start_datetime"){
-                    needData += '"'+item.type+'":["'+this.state.start_datetime+'","'+item.operator+'"],';
+                if(item.type == "start_datetime" && this.state.start_datetime != ""){
+                    needData += '"'+item.type+'":["'+this.state.start_datetime.format()+'","'+item.operator+'"],';
                 }else{
                     needData += '"'+item.type+'":["'+$('#'+item.type).val()+'","'+item.operator+'"],';
                 }
