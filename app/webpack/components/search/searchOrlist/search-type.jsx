@@ -35,7 +35,7 @@ export class SearchType extends Component {
                        </select>
                 break
                 case 'datePacker':
-                field = <DatePicker selected={this.state.start_datetime} id={type}  onKeyDown={this.noPermitInput.bind(this)} ref={type} shouldCloseOnSelect={true} name={type} dateFormat="DD-MM-YYYY"  className="time_ico"  onChange = {this.timeChange.bind(this)} minDate={moment()} title="Time must not be in the past."  />
+                field = <DatePicker selected={this.state.start_datetime} id={type}  onKeyDown={this.noPermitInput.bind(this)} ref={type} shouldCloseOnSelect={true} name={type} dateFormat="DD-MM-YYYY"  className="time_ico"  onChange = {this.timeChange.bind(this)} title="Time must not be in the past."  />
                 break
                 case 'hidden':
                 field = <input type="hidden" id={type} defaultValue={defaultval}  ref={type}/>
