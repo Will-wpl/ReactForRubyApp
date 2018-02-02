@@ -1,5 +1,5 @@
 admin_user = User.find_or_create_by(name: 'admin') do |user|
-  user.email = 'admin@example.com'
+  user.email = 'revv@spgroup.com.sg'
   user.password = 'password'
   user.password_confirmation = 'password'
   user.company_name = 'SP GROUP'
@@ -27,6 +27,8 @@ Role.first_or_create(name: 'buyer')
 #   auction.publish_status = '0'
 # end
 
+=begin
+# comment testing account
 retailers = [
   { name: 'Will ', email: 'Will.wang@chinasofti.com', company_name: 'Will Electricity', password: 'password',approval_status:'1' },
   { name: 'Mark', email: 'Mark.Liu@chinasofti.com', company_name: 'Mark Electricity', password: 'password',approval_status:'1'  },
@@ -72,7 +74,10 @@ retailers.each do |retailer|
   #   arrangement.accept_status = '2'
   # end
 end
+=end
 
+=begin
+# comment testing account
 company_buyers = [
     { name: 'buyer1', email: 'cbuyer1@example.com', company_name: 'Company Buyer 1', password: 'password' },
     { name: 'buyer2', email: 'cbuyer2@example.com', company_name: 'Company Buyer 2', password: 'password' },
@@ -101,7 +106,10 @@ company_buyers.each do |buyer|
     com_buyer.add_role :buyer
 
 end
+=end
 
+=begin
+# comment testing account
 individual_buyers = [
     { name: 'individual buyer1', email: 'ibuyer1@example.com', account_housing_type: '0', password: 'password' },
     { name: 'individual buyer2', email: 'ibuyer2@example.com', account_housing_type: '0', password: 'password' },
@@ -130,6 +138,7 @@ individual_buyers.each do |buyer|
   ind_buyer.add_role :buyer
 
 end
+=end
 
 
 
