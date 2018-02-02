@@ -27,10 +27,10 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
       search_params = reject_params(params, %w[controller action])
       search_where_array = set_search_params(search_params)
 
-      arrangement = Arrangement.find_published_auction.find_notify_retailer(current_user.id).where(search_where_array).page(params[:page_index]).per(params[:page_size])
+      arrangement = Arrangement.find_published_result_auction.find_notify_retailer(current_user.id).where(search_where_array).page(params[:page_index]).per(params[:page_size])
       total = arrangement.total_count
     else
-      arrangement = Arrangement.find_published_auction.find_notify_retailer(current_user.id)
+      arrangement = Arrangement.find_published_result_auction.find_notify_retailer(current_user.id)
       total = arrangement.count
     end
 

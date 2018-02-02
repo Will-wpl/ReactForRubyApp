@@ -26,7 +26,8 @@ class Arrangement < ApplicationRecord
   scope :find_by_auction_and_user, ->(auction_id, user_id) { where('auction_id = ? and user_id =?', auction_id, user_id) }
   scope :is_not_notify, -> { where("action_status = '2'") }
   scope :find_published_auction, ->{ includes(:auction).where(auctions: { publish_status: '1' }) }
-  scope :find_notify_retailer,  ->(user_id) { where("user_id = ? and action_status = '1'", user_id) }
+  scope :find_published_result_auction, ->{ includes(auction: :auction_result).where(auctions: { publish_status: '1' }, auction_results: { status: nil }) }
+  scope :find_notify_retailer,  ->(user_id) { where("arrangements.user_id = ? and action_status = '1'", user_id) }
 
   # Callbacks
 
