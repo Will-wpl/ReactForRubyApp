@@ -25,7 +25,7 @@ export class SearchType extends Component {
             let field = '';
             switch(species){
                 case 'input':
-                field = <input type="test" id={type}  ref={type}/>
+                field = <input type="text" id={type}  ref={type}/>
                 break
                 case 'select':
                 field = <select ref={type} id={type}>
