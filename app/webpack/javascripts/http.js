@@ -118,6 +118,7 @@ export const put = (path, body, method = 'PUT') => {
 const cable = test ? '' : ActionCable.createConsumer();
 export const createWS = (options = {
     channel: 'HealthChannel',
+    user_id: 0,
     success: () => {
 
     },
@@ -133,7 +134,10 @@ export const createWS = (options = {
     }
     let status = false;
     let mCable = ActionCable.createConsumer()
-    let handler = mCable.subscriptions.create({channel: options.channel}, {
+    let handler = mCable.subscriptions.create({
+        channel: options.channel,
+        user_id: options.user_id
+    }, {
         connected() {
             console.log('message client connected');
             status = true;

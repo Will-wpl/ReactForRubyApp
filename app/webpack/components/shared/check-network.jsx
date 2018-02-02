@@ -17,6 +17,7 @@ export class CheckNetwork extends React.Component{
         const userId = getLoginUserId();
         let wsHandler = createWS({
             channel: 'HealthChannel',
+            user_id: userId,
             success: () => {
                 require('public-ip').v4().then(ip => {
                     // console.log('connected......send  ', ip, userId)
