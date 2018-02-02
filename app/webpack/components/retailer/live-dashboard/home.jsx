@@ -231,6 +231,7 @@ export default class LiveHomePage extends Component {
         const visibility_hts = !this.props.auction ? true: this.props.auction.has_hts;
         const visibility_htl = !this.props.auction ? true: this.props.auction.has_htl;
         const visibility_eht = !this.props.auction ? true: this.props.auction.has_eht;
+        const showTopDescription = this.state.showTop2Rule && this.state.ranking === 2;
         return (
             <div>
                 <DuringCountDown auction={this.props.auction} countDownOver={this.goToFinish.bind(this)}>
@@ -240,7 +241,7 @@ export default class LiveHomePage extends Component {
                 </DuringCountDown>
                 <div className="u-grid u-mt2">
                     <div className="col-sm-12 col-md-5 u-cell">
-                        <div className="col-sm-12 col-md-10 push-md-1"><Description ranking={`${(this.state.showTop2Rule && this.state.ranking === 2) ? 'TOP ' : ''}${getNumBref(this.state.ranking)}`}/></div>
+                        <div className="col-sm-12 col-md-10 push-md-1"><Description ranking={`${showTopDescription ? 'TOP ' : ''}${getNumBref(this.state.ranking, !showTopDescription)}`}/></div>
                     </div>
                     <div className="col-sm-12 col-md-7 u-cell">
                         <div className="col-sm-12 col-md-10 push-md-1"><Ranking data={this.state.chartDatas} yAxisFormatterRule={(this.state.showTop2Rule) ? {0 : ' ', 1 : ' ', 2 : 'Top 2', 'func': getNumBref} : {0 : ' ', 'func': getNumBref}}/></div>
