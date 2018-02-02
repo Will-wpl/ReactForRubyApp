@@ -4,7 +4,7 @@ import Description from './description';
 import Ranking from '../../common/chart/ranking';
 import BidForm from './bid-form';
 import BidHistory from './bid-history';
-import {getLoginUserId, getNumBref} from '../../../javascripts/componentService/util';
+import {getLoginUserId, getNumBref, getStandardNumBref} from '../../../javascripts/componentService/util';
 import {getAuctionHistorys, validateCanBidForm} from '../../../javascripts/componentService/retailer/service';
 import {createWebsocket, ACTION_COMMANDS} from '../../../javascripts/componentService/common/service';
 import moment from 'moment';
@@ -75,7 +75,7 @@ export default class LiveHomePage extends Component {
                             //         , ranking: Number(last.ranking) === 1 ? 2 : last.ranking, needMark: last.is_bidder}
                             // )
                             last.ranking = this.state.showTop2Rule && Number(last.ranking) === 1 ? 2 : last.ranking;
-                            last.template_ranking = `Ranking: ${(this.state.showTop2Rule && Number(last.ranking) <= 2) ? 'TOP 2' : getNumBref(last.ranking)} ${last.is_bidder && last.flag !== null ? '(Bid Submitter)' : ''}`;
+                            last.template_ranking = `Ranking: ${(this.state.showTop2Rule && Number(last.ranking) <= 2) ? 'TOP 2' : getStandardNumBref(last.ranking)} ${last.is_bidder && last.flag !== null ? '(Bid Submitter)' : ''}`;
                             if (!last.template_price) {
                                 last.template_price = {};
                             }
@@ -162,7 +162,7 @@ export default class LiveHomePage extends Component {
                 // chartDataTpl.data.push({time: moment(history.bid_time).format('YYYY-MM-DD HH:mm:ss')
                 //     , ranking: Number(history.ranking) === 1 ? 2 : history.ranking, needMark: history.is_bidder})
                 history.ranking = (topRule && Number(history.ranking) === 1) ? 2 : history.ranking;
-                history.template_ranking = `Ranking: ${(topRule && Number(history.ranking) <= 2) ? 'TOP 2' : getNumBref(history.ranking)} ${history.is_bidder && history.flag !== null  ? '(Bid Submitter)' : ''}`;
+                history.template_ranking = `Ranking: ${(topRule && Number(history.ranking) <= 2) ? 'TOP 2' : getStandardNumBref(history.ranking)} ${history.is_bidder && history.flag !== null  ? '(Bid Submitter)' : ''}`;
                 if (!history.template_price) {
                     history.template_price = {};
                 }
@@ -244,7 +244,7 @@ export default class LiveHomePage extends Component {
                         <div className="col-sm-12 col-md-10 push-md-1"><Description ranking={`${showTopDescription ? 'TOP ' : ''}${getNumBref(this.state.ranking, !showTopDescription)}`}/></div>
                     </div>
                     <div className="col-sm-12 col-md-7 u-cell">
-                        <div className="col-sm-12 col-md-10 push-md-1"><Ranking data={this.state.chartDatas} yAxisFormatterRule={(this.state.showTop2Rule) ? {0 : ' ', 1 : ' ', 2 : 'Top 2', 'func': getNumBref} : {0 : ' ', 'func': getNumBref}}/></div>
+                        <div className="col-sm-12 col-md-10 push-md-1"><Ranking data={this.state.chartDatas} yAxisFormatterRule={(this.state.showTop2Rule) ? {0 : ' ', 1 : ' ', 2 : 'Top 2', 'func': getNumBref} : {0 : ' ', 'func': getStandardNumBref}}/></div>
                     </div>
                 </div>
                 <div className="u-grid u-mt2">

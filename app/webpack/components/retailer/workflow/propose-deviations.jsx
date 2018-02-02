@@ -101,7 +101,7 @@ export class Proposedeviations extends React.Component{
     }
     changeNext(){
         if(this.props.current.actions){
-            if(this.props.current.actions.node3_retailer_next){
+            if(this.props.current.actions.node3_retailer_next || this.props.current.current.current_node>3){
                 if(this.props.tenderFn){
                   this.props.tenderFn();
                 }
@@ -274,18 +274,17 @@ export class Proposedeviations extends React.Component{
                                                         </div>
                                                         )}</td>
                                                 </tr>)
-                                        }
-                                    
+                                            }                                   
                                         })
                                 :this.state.deviations_list.map((item,index)=>{
-                                    return (<tr key={index}>
-                                            <td>{item.item}</td>
-                                            <td >{item.clause}</td>
-                                            <td >{item.propose_deviation}</td>
-                                            <td >{item.retailer_response}</td>
-                                            <td >{item.sp_response}</td> {/*item.sp_response_status ?(item.sp_response_status === "0"?"Rejected : ":(item.sp_response_status === "1"?"Accepted : ":'')):''*/}
-                                            <td><button onClick={this.showhistory.bind(this,item.id)}>History</button></td>
-                                            </tr>)
+                                    return <tr key={index}>
+                                                <td>{item.item}</td>
+                                                <td>{item.clause}</td>
+                                                <td>{item.propose_deviation}</td>
+                                                <td>{item.retailer_response}</td>
+                                                <td>{item.sp_response}</td>
+                                                <td><button onClick={this.showhistory.bind(this,item.id)}>History</button></td>
+                                            </tr>
                                         })
                                 }
                             </tbody>
