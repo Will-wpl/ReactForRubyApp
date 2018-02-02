@@ -39,7 +39,11 @@ export class Submittender extends React.Component{
             if(this.props.current.current.current_status === '3'){
                 this.send_status = true;
             }else{
-                this.send_status = false;
+                if(this.props.current.current.current_node === 5){
+                    this.send_status = true;
+                }else{
+                    this.send_status = false;
+                }               
             }
             if(this.send_status){
                 if(this.props.tenderFn){
@@ -236,7 +240,7 @@ export class Submittender extends React.Component{
         const submissionTender = `Please ${this.props.tender ? 'see' : 'upload'} the following documents for submission of tender:`;
         return(
             <div className="col-sm-12 admin_invitation">
-                <h4 className="u-mt3 u-mb1">{this.props.current.current.current_status === '0'||this.props.current.current.current_status === '2' ?'':(this.state.submission_status ? <span className="green">Your submission has been approved by administrator.</span> 
+                <h4 className="u-mt3 u-mb1">{this.props.current.current.current_status === '0' && this.props.current.current.current_node === 4 || this.props.current.current.current_status === '2' ?'':(this.state.submission_status ? <span className="green">Your submission has been approved by administrator.</span> 
                 : <span className="red">Your submission has been rejected by administrator.</span>)}</h4>
                 <h4>{submissionTender}</h4>
                 <div className="col-sm-12 col-md-8 push-md-2 u-mt3 u-mb3">

@@ -101,7 +101,7 @@ export class Proposedeviations extends React.Component{
     }
     changeNext(){
         if(this.props.current.actions){
-            if(this.props.current.actions.node3_retailer_next){
+            if(this.props.current.actions.node3_retailer_next || this.props.current.current.current_node>3){
                 if(this.props.tenderFn){
                   this.props.tenderFn();
                 }
@@ -238,7 +238,7 @@ export class Proposedeviations extends React.Component{
                                                     <td >{item.retailer_response}<input disabled type="hidden" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
                                                     <td >{item.sp_response}</td>
                                                     <td>
-                                                        <button id={"history_"+index} onClick={this.showhistory.bind(this,item.id)} disabled={this.props.propsdisabled?true:false} >History</button>
+                                                        <button id={"history_"+index} onClick={this.showhistory.bind(this,item.id)} >History</button>
                                                         <button disabled={this.props.propsdisabled?true:(this.state.alldisabled?true:(item.sp_response_status === "4" ? true : false))} id={"withdraw_"+index} onClick={this.showConfirm.bind(this,'Withdraw',{id:item.id,index:index})}>Withdraw</button>
                                                     </td>
                                                     </tr>)
@@ -269,23 +269,22 @@ export class Proposedeviations extends React.Component{
                                                         <td>{item.item === ""?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>:
                                                         (item.sp_response_status==='2'?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>
                                                         :<div>
-                                                            <button disabled={this.props.propsdisabled?true:false} onClick={this.showhistory.bind(this,item.id) } id={"history_"+index}>History</button>
+                                                            <button onClick={this.showhistory.bind(this,item.id) } id={"history_"+index}>History</button>
                                                             <button disabled={this.props.propsdisabled?true:(this.state.alldisabled?true:(item.sp_response_status === "4" ? true : false))} id={"withdraw_"+index} onClick={this.showConfirm.bind(this,'Withdraw',{id:item.id,index:index})}>Withdraw</button>
                                                         </div>
                                                         )}</td>
                                                 </tr>)
-                                        }
-                                    
+                                            }                                   
                                         })
                                 :this.state.deviations_list.map((item,index)=>{
-                                    return (<tr key={index}>
-                                            <td>{item.item}</td>
-                                            <td >{item.clause}</td>
-                                            <td >{item.propose_deviation}</td>
-                                            <td >{item.retailer_response}</td>
-                                            <td >{item.sp_response}</td> {/*item.sp_response_status ?(item.sp_response_status === "0"?"Rejected : ":(item.sp_response_status === "1"?"Accepted : ":'')):''*/}
-                                            <td><button disabled={this.props.propsdisabled} onClick={this.showhistory.bind(this,item.id)}>History</button></td>
-                                            </tr>)
+                                    return <tr key={index}>
+                                                <td>{item.item}</td>
+                                                <td>{item.clause}</td>
+                                                <td>{item.propose_deviation}</td>
+                                                <td>{item.retailer_response}</td>
+                                                <td>{item.sp_response}</td>
+                                                <td><button onClick={this.showhistory.bind(this,item.id)}>History</button></td>
+                                            </tr>
                                         })
                                 }
                             </tbody>

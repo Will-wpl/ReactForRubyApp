@@ -56,9 +56,18 @@ export class SearchType extends Component {
         this.search_type_data.map((item,index)=>{
             //needData += '"'+item.type+'":"'+$('#'+item.type).val()+'",';
             if(item.table){
-                needData += '"'+item.type+'":["'+$('#'+item.type).val()+'","'+item.operator+'","'+item.table+'"],';
+                if(item.type == "start_datetime"){
+                    needData += '"'+item.type+'":["'+this.state.start_datetime+'","'+item.operator+'","'+item.table+'"],';
+                }else{
+                    needData += '"'+item.type+'":["'+$('#'+item.type).val()+'","'+item.operator+'","'+item.table+'"],';
+                }      
             }else{
-                needData += '"'+item.type+'":["'+$('#'+item.type).val()+'","'+item.operator+'"],';
+                if(item.type == "start_datetime"){
+                    needData += '"'+item.type+'":["'+this.state.start_datetime+'","'+item.operator+'"],';
+                }else{
+                    needData += '"'+item.type+'":["'+$('#'+item.type).val()+'","'+item.operator+'"],';
+                }
+                
             }
         })
         needData = needData.substr(0,needData.length-1);
