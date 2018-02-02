@@ -4,7 +4,7 @@ import Description from './description';
 import Ranking from '../../common/chart/ranking';
 import BidForm from './bid-form';
 import BidHistory from './bid-history';
-import {getLoginUserId, getNumBref} from '../../../javascripts/componentService/util';
+import {getLoginUserId, getNumBref, getStandardNumBref} from '../../../javascripts/componentService/util';
 import {getAuctionHistorys, validateCanBidForm} from '../../../javascripts/componentService/retailer/service';
 import {createWebsocket, ACTION_COMMANDS} from '../../../javascripts/componentService/common/service';
 import moment from 'moment';
@@ -244,7 +244,7 @@ export default class LiveHomePage extends Component {
                         <div className="col-sm-12 col-md-10 push-md-1"><Description ranking={`${showTopDescription ? 'TOP ' : ''}${getNumBref(this.state.ranking, !showTopDescription)}`}/></div>
                     </div>
                     <div className="col-sm-12 col-md-7 u-cell">
-                        <div className="col-sm-12 col-md-10 push-md-1"><Ranking data={this.state.chartDatas} yAxisFormatterRule={(this.state.showTop2Rule) ? {0 : ' ', 1 : ' ', 2 : 'Top 2', 'func': getNumBref} : {0 : ' ', 'func': getNumBref}}/></div>
+                        <div className="col-sm-12 col-md-10 push-md-1"><Ranking data={this.state.chartDatas} yAxisFormatterRule={(this.state.showTop2Rule) ? {0 : ' ', 1 : ' ', 2 : 'Top 2', 'func': getNumBref} : {0 : ' ', 'func': getStandardNumBref}}/></div>
                     </div>
                 </div>
                 <div className="u-grid u-mt2">
