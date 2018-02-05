@@ -101,7 +101,7 @@ class Retailer::AuctionsController < Retailer::BaseController
   def message
     arrangement = Arrangement.find_by_auction_and_user(params[:id], current_user.id).first
     empty_message = 'There is no upcoming reverse auction published.'
-    progress_message = "Please complete the necessary details under 'Manage Upcoming Reverse Auction' located in homepage."
+    progress_message = "Please click on 'Manage' in listing page to complete the necessary details";
 
     if @auction.publish_status != '1'
       @message = empty_message
