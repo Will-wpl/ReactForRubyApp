@@ -282,6 +282,12 @@ upload(type, index){
 
             })
         }
+        do_save(){
+            this.refs.Modal.showModal();
+            this.setState({
+                text:this.state.auction.name+" has been successfully updated.",
+            });
+        }
         addinputfile(type, required){
                 let fileHtml = '';
                 fileHtml = <div className="file_box">
@@ -468,7 +474,7 @@ render() {
                                 <div className="col-sm-12 col-md-6 u-cell">
                                     <a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=1`} className="lm--button lm--button--primary col-sm-12"><span>Select Retailers</span></a>
                                 </div>
-                                <div className="col-sm-12 col-md-6 u-cell"><a className="lm--button lm--button--primary col-sm-12 orange" disabled={this.state.retailer_pend==0?true:false} onClick={this.show_send_mail.bind(this,'retailer')}><span>Send Invitation Email</span></a></div>
+                                <div className="col-sm-12 col-md-6 u-cell"><button className="lm--button lm--button--primary col-sm-12 orange" disabled={this.state.retailer_pend==0?true:false} onClick={this.show_send_mail.bind(this,'retailer')}><span>Send Invitation Email</span></button></div>
                             </div>
                         </div>
                         <div className="lm--formItem lm--formItem--inline string u-mt3 role_select">
@@ -503,14 +509,14 @@ render() {
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>Peak (7am-7pm)</td>
+                                                <td>Peak<br/>(7am-7pm)</td>
                                                 <td >{this.state.peak_lt}</td>
                                                 <td >{this.state.peak_hts}</td>
                                                 <td >{this.state.peak_htl}</td>
                                                 <td >{this.state.peak_eht}</td>
                                             </tr>
                                             <tr>
-                                                <td>Off-Peak (7pm-7am)</td>
+                                                <td>Off-Peak<br/>(7pm-7am)</td>
                                                 <td >{this.state.off_peak_lt}</td>
                                                 <td >{this.state.off_peak_hts}</td>
                                                 <td >{this.state.off_peak_htl}</td>
@@ -567,8 +573,8 @@ render() {
                     </div>
                     <div className="retailer_btn">
                         <a className="lm--button lm--button--primary" href={this.state.publish_status === "0" ? "/admin/auctions/new" : "/admin/auctions/"+sessionStorage.auction_id+"/upcoming"}>Previous</a>
-                        {/* <a className="lm--button lm--button--primary">Save</a> */}
-                        <a className="lm--button lm--button--primary" id="doPublish" onClick={this.doPublish.bind(this)}>Publish</a>
+                        <a className="lm--button lm--button--primary" onClick={this.do_save.bind(this)}>Save</a>
+                        {this.state.publish_status==="0"?<a className="lm--button lm--button--primary" id="doPublish" onClick={this.doPublish.bind(this)}>Publish</a>:''}
                     </div>
                 </div>
                 : <div className="live_modal">

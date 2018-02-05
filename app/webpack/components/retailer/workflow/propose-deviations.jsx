@@ -214,7 +214,7 @@ export class Proposedeviations extends React.Component{
     render(){
         return(
             <div className="propose_deviations u-mt3">
-                <h2 className="u-mt3 u-mb1">Propose Deviations</h2>
+                <h2 className="u-mt3 u-mb2">Propose Deviations</h2>
                 {!this.props.tender ? (this.props.current.current.turn_to_role === 1?<h4 className="u-mb3 pending_review">Status : Pending administrator's review</h4>:''):''}
                 <div className="col-sm-12 col-md-10 push-md-1">
                     <table className="retailer_fill w_100" cellPadding="0" cellSpacing="0">
