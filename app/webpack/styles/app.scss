@@ -7,6 +7,8 @@
 .user_form{
   width: 100%; margin: 0 auto;
   background: rgba(255, 255, 255, 0.05); padding: 40px 0px; margin-top: 50px;
+  .rankinglogo{ width:98px; height:72px; margin: 0 auto; background: url("../images/char1.png") no-repeat; background-size: 100%;}
+  .userlogo{ width:66px; height:72px; margin: 0 auto; background: url("../images/user1.png") no-repeat; background-size: 100%;}
   img{ display: block; margin:0px auto;}
   .user_info{ 
     h2{font-size:35px;}

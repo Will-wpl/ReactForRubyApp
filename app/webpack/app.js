@@ -11,9 +11,13 @@ import "atlas/src/index.js";
 //import "./javascripts/shared.js";
 import "./styles/app.scss";
 import "components/retailer/retailer-manage-coming";
-import "components/retailer/retailer-live";
+// import "components/retailer/retailer-live";
+import "components/retailer/retailer-live-container";
 import "components/retailer/retailer-finish";
 import "components/shared/check-network";
+import "components/search/home-list";
+import "components/buyer/buyer-fill-consumption";
+import "components/retailer/retailer-workflow";
 // ActionCable = require('actioncable')
 
 // const cable = ActionCable.createConsumer()

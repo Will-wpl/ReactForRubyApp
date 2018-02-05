@@ -1,7 +1,16 @@
 import {getLoginUserId} from './componentService/util'
+import {mock} from './mock'
+
+let test = false, handler;
+if (typeof($) === 'function') {
+    test = false;
+} else {
+    test = true;
+}
+handler = !test ? $ : mock;
 export const get = (path, params = {}) => {
     return new Promise((resolve, reject) => {
-        $.ajax({
+        handler.ajax({
             type: "GET",
             url: path,
             data: params,
@@ -20,10 +29,10 @@ export const get = (path, params = {}) => {
 
 export const create = (path, body) => {
     return new Promise((resolve, reject) => {
-        $.ajax({
+        handler.ajax({
             type: "POST",
             dataType: 'json',
-            beforeSend: $.rails.CSRFProtection,
+            beforeSend: handler.rails.CSRFProtection,
             url: path,
             data: body,
             success: (data) => {
@@ -39,12 +48,34 @@ export const create = (path, body) => {
 
 }
 
-export const update = (path, body, method = 'PATCH') => {
+export const Ddelete = (path, body, method = 'DELETE') => {
     return new Promise((resolve, reject) => {
-        $.ajax({
+        handler.ajax({
             type: method,
             dataType: 'json',
-            beforeSend: $.rails.CSRFProtection,
+            beforeSend: handler.rails.CSRFProtection,
+            url: path,
+            data: body,
+            success: (data) => {
+                // console.log('update successfully');
+                resolve(data);
+            },
+            error: (data) => {
+                // console.log('fail to update');
+                reject(data);
+            }
+        });
+    })
+
+}
+
+
+export const update = (path, body, method = 'PATCH') => {
+    return new Promise((resolve, reject) => {
+        handler.ajax({
+            type: method,
+            dataType: 'json',
+            beforeSend: handler.rails.CSRFProtection,
             url: path,
             data: body,
             success: (data) => {
@@ -63,10 +94,10 @@ export const update = (path, body, method = 'PATCH') => {
 
 export const put = (path, body, method = 'PUT') => {
     return new Promise((resolve, reject) => {
-        $.ajax({
+        handler.ajax({
             type: method,
             dataType: 'json',
-            beforeSend: $.rails.CSRFProtection,
+            beforeSend: handler.rails.CSRFProtection,
             url: path,
             data: body,
             success: (data) => {
@@ -83,27 +114,64 @@ export const put = (path, body, method = 'PUT') => {
 }
 
 // ActionCable = require('actioncable');
-const cable = ActionCable.createConsumer();
 // ActionCable.startDebugging();
-export const createWS = (auction, methods = {}) => {
-    let user = getLoginUserId();
-    // console.log(auction, cable);
-    let handler = cable.subscriptions.create({
-        channel: 'AuctionChannel',
-        auction_id: auction.toString(),
-        user_id:user.toString()
+const cable = test ? '' : ActionCable.createConsumer();
+export const createWS = (options = {
+    channel: 'HealthChannel',
+    user_id: 0,
+    success: () => {
+
+    },
+    fail: () => {
+
+    },
+    feedback: (data) => {
+
+    }
+}) => {
+    if (!options.channel) {
+        return null
+    }
+    let status = false;
+    let mCable = ActionCable.createConsumer()
+    let handler = mCable.subscriptions.create({
+        channel: options.channel,
+        user_id: options.user_id
     }, {
         connected() {
-            // console.log('---message client connected ---');
-            handler.perform('check_in', {user_id: user});
+            console.log('message client connected');
+            status = true;
+            if (options.success)
+                options.success()
         },
         disconnected() {
-
+            console.log('message client disconnected');
+            status = false;
         },
         received(data) {
-            // console.log('---message client received data ---', data);
+            console.log('message client received data', data);
+            if (options.feedback)
+                options.feedback(data)
         }
     });
+    (function (times, cable) {
+        let cnt = 1;
+        let mInterval = setInterval(() => {
+            if (status || cnt > times) {
+                clearInterval(mInterval);
+                if (cnt > times) {
+                    if (options.fail) {
+                        options.fail();
+                    }
+                }
+            } else {
+                if (!status) {
+                    cable.connection.reopen();
+                }
+            }
+            cnt++;
+        }, 2500)//normally 2.5 second should be connected
+    })(3, mCable);
     return handler;
 }
 export const Ws = class {
@@ -111,8 +179,10 @@ export const Ws = class {
     connectedCall;
     disconnectedCall;
     receiveDataCall;
+    connectedFailureCall;
     connected = false;
     cache = [];
+
     constructor(auction) {
         let user = getLoginUserId();
         let mixin = {
@@ -121,7 +191,7 @@ export const Ws = class {
                     this.connectedCall();
                 }
                 this.connected = true;
-                if(this.cache.length > 0){
+                if (this.cache.length > 0) {
                     this.cache.forEach(element => {
                         this.sockHandler.perform(element.action, element.data);
                     })
@@ -134,7 +204,7 @@ export const Ws = class {
                 }
                 this.connected = false;
             },
-            received:(data) => {
+            received: (data) => {
                 if (this.receiveDataCall) {
                     this.receiveDataCall(data);
                 }
@@ -162,12 +232,17 @@ export const Ws = class {
         let mInterval = setInterval(() => {
             if (this.connected || cnt > times) {
                 clearInterval(mInterval);
+                if (cnt > times) {
+                    if (this.connectedFailureCall) {
+                        this.connectedFailureCall();
+                    }
+                }
             } else {
                 if (!this.connected) {
                     cable.connection.reopen();
                 }
             }
-            cnt ++;
+            cnt++;
         }, 2500)//normally 2.5 second should be connected
     }
 
@@ -186,11 +261,16 @@ export const Ws = class {
         return this;
     }
 
+    onConnectedFailure(callback) {
+        this.connectedFailureCall = callback;
+        return this;
+    }
+
     sendMessage(action, data) {
         // console.log('send', data);
         if (!this.connected) {
             cable.connection.reopen();
-            this.cache.push({action,data})
+            this.cache.push({action, data})
             return;
         }
         this.sockHandler.perform(action, data);

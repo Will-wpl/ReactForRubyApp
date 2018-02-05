@@ -1,6 +1,6 @@
 require 'feature_helper'
 
-RSpec.describe 'retailer bidding page', type: :feature, js: true do
+RSpec.xdescribe 'retailer bidding page', type: :feature, js: true do
   let!(:retailer_user) { create(:user, :with_retailer) }
 
   before do

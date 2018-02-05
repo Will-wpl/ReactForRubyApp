@@ -15,6 +15,10 @@ class Devise::SessionsController < DeviseController
   # POST /resource/sign_in
   def create
     self.resource = warden.authenticate!(auth_options)
+    if resource.approval_status.nil?
+      resource.approval_status = '2'
+      resource.save
+    end
     set_flash_message!(:notice, :signed_in)
     sign_in(resource_name, resource)
     yield resource if block_given?
@@ -79,5 +83,12 @@ class Devise::SessionsController < DeviseController
       format.all { head :no_content }
       format.any(*navigational_formats) { redirect_to after_sign_out_path_for(resource_name) }
     end
+  end
+
+  def no_authentication_sign_in(notice_message)
+    signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
+    set_flash_message! :notice, notice_message if signed_out
+    yield if block_given?
+    respond_to_on_destroy
   end
 end

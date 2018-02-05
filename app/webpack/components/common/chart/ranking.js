@@ -7,6 +7,10 @@ export default class Ranking extends Component {
     constructor(props) {
         super(props);
         this.state = {option: getTemplate(this.props)};
+        this.onDataZoom = this.onDataZoom.bind(this);
+        this.onEvents = {
+            'dataZoom': this.onDataZoom
+        }
     }
 
     getChartOption() {
@@ -32,7 +36,7 @@ export default class Ranking extends Component {
                     value: []
                 } : {
                     symbol: 'circle',
-                    symbolSize: 8,
+                    symbolSize: 6,
                     showSymbol: true,
                     value: []
                 };
@@ -46,16 +50,42 @@ export default class Ranking extends Component {
             });
             option.series.push(tmp);
         });
+        if (option.hasOwnProperty('dataZoom')) {
+            if (!Number.isNaN(this.xStart)) {
+                option.dataZoom.start = this.xStart;
+            }
+            if (!Number.isNaN(this.xEnd)) {
+                option.dataZoom.end = this.xEnd;
+            }
+        }
         return option;
     }
 
+    onDataZoom(params) {
+        if (params.type === 'datazoom' && params.dataZoomId.length > 0) {
+            const lastEle = params.dataZoomId.charAt(params.dataZoomId.length - 1);
+            if (lastEle === '1') { //y
+                this.yStart = params.start;
+                this.yEnd = params.end;
+            } else if (lastEle === '0') { //x
+                this.xStart = params.start;
+                this.xEnd = params.end;
+            }
+        }
+    }
+
     render() {
-        return (
-            <ReactEcharts
+        let content = <div></div>;
+        if (this.props.data) {
+            content = <ReactEcharts
                 option={this.getChartOption()}
                 notMerge={true}
                 style={{minHeight: '310px', width: '100%'}}
-                className='react_for_echarts'/>
+                className='react_for_echarts'
+                onEvents={this.onEvents}/>
+        }
+        return (
+            content
         );
     }
 }

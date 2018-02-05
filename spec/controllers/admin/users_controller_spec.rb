@@ -126,4 +126,25 @@ RSpec.describe Admin::UsersController, type: :controller do
       expect(response).to redirect_to admin_users_path
     end
   end
+
+  describe '#retailers' do
+    let!(:retailer) { create(:user, :with_retailer) }
+    def do_request
+      get :retailers
+    end
+
+    before { do_request }
+
+    it { expect(response).to be_success }
+  end
+
+  describe '#buyers' do
+    let!(:buyer) { create(:user, :with_buyer) }
+    def do_request
+      get :buyers
+    end
+
+    before { do_request }
+    it { expect(response).to be_success }
+  end
 end

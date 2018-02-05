@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import RetailerRanking from './admin_shared/ranking';
 import CheckboxList from '../common/chart/list-checkbox';
+import CheckboxListItem from '../common/chart/list-checkbox-item';
 import {getArrangements, getHistories,getHistoriesLast} from '../../javascripts/componentService/admin/service';
 import {getAuction} from '../../javascripts/componentService/common/service';
 import {findUpLimit, getRandomColor, getStandardNumBref} from '../../javascripts/componentService/util';
@@ -25,7 +26,7 @@ export class AdminReport extends Component {
     }
 
     componentDidMount() {
-        getAuction('admin').then(auction => {
+        getAuction('admin',sessionStorage.auction_id).then(auction => {
             this.auction = auction;
             this.userStartInfo = auction ? `${auction.name} on ${moment(auction.start_datetime).format('D MMM YYYY')}` : '';
             this.startTime = auction ? `${moment(auction.actual_begin_time).format('h:mm A')}` : '';
@@ -65,8 +66,11 @@ export class AdminReport extends Component {
                     return element;
                 });
                 this.setState({users:users});
-                this.priceUsers.selectAll(users);
-                this.rankingUsers.selectAll(users);
+                this.userLen = users.length;
+                this.priceUsers.setList(JSON.parse(JSON.stringify(users)));
+                this.rankingUsers.setList(JSON.parse(JSON.stringify(users)));
+                this.priceUsers.selectAll();
+                this.rankingUsers.selectAll();
             }, error => {
                 //console.log(error);
             });
@@ -75,6 +79,10 @@ export class AdminReport extends Component {
 
     render () {
         let achieved = parseFloat(this.actualPrice).toFixed(4) <= parseFloat(this.startPrice);
+        const visibility_lt = !this.auction ? true: Number(this.auction.total_lt_peak) > 0 || Number(this.auction.total_lt_off_peak) > 0;
+        const visibility_hts = !this.auction ? true: Number(this.auction.total_hts_peak) > 0 || Number(this.auction.total_hts_off_peak) > 0;
+        const visibility_htl = !this.auction ? true: Number(this.auction.total_htl_peak) > 0 || Number(this.auction.total_htl_off_peak) > 0;
+        const visibility_eht = !this.auction ? true: Number(this.auction.total_eht_peak) > 0 || Number(this.auction.total_eht_off_peak) > 0;
         return (
             <div>
                 <div className="u-grid u-mt2 report_bg">
@@ -98,11 +106,28 @@ export class AdminReport extends Component {
                         <div className="u-grid u-mt2">
                             <div className="col-sm-9">
                                 <ChartRealtimeHoc ref="priceChart" dataStore={this.state.histories}>
-                                    <Price/>
+                                    <Price isLtVisible={visibility_lt} isHtsVisible={visibility_hts} isHtlVisible={visibility_htl} isEhtVisible={visibility_eht}/>
                                 </ChartRealtimeHoc>
                             </div>
                             <div className="col-sm-2 push-md-1">
-                                <CheckboxList list={this.state.users} ref={e => this.priceUsers = e} onCheckeds={(ids) => {this.refs.priceChart.updateIndentifications(ids)}}/>
+                                <CheckboxListItem key={0} id={0} display={'Check All'} color={'white'} status={this.priceCheckAllStatus} onCheck={(id, status, color) => {
+                                    this.priceCheckAllStatus = status;
+                                    if (status) {
+                                        this.priceUsers.selectAll();
+                                    } else {
+                                        this.priceUsers.disSelectAll();
+                                    }
+                                }} />
+                                <CheckboxList list={this.state.users} ref={e => this.priceUsers = e} onCheckeds={(ids) => {
+                                    this.refs.priceChart.updateIndentifications(ids);
+                                    if (ids.length === 0) {
+                                        this.priceCheckAllStatus = false;
+                                        this.forceUpdate()
+                                    } else if (ids.length === this.userLen) {
+                                        this.priceCheckAllStatus = true;
+                                        this.forceUpdate()
+                                    }
+                                }}/>
                             </div>
                         </div>
                         <div className="u-grid u-mt2">
@@ -112,12 +137,29 @@ export class AdminReport extends Component {
                                 </ChartRealtimeHoc>
                             </div>
                             <div className="col-sm-2 push-md-1">
-                                <CheckboxList list={this.state.users} ref={e => this.rankingUsers = e} onCheckeds={(ids) => {this.refs.rankingChart.updateIndentifications(ids)}}/>
+                                <CheckboxListItem key={0} id={0} display={'Check All'} color={'white'} status={this.rankingCheckAllStatus} onCheck={(id, status, color) => {
+                                    this.rankingCheckAllStatus = status;
+                                    if (status) {
+                                        this.rankingUsers.selectAll();
+                                    } else {
+                                        this.rankingUsers.disSelectAll();
+                                    }
+                                }} />
+                                <CheckboxList list={this.state.users} ref={e => this.rankingUsers = e} onCheckeds={(ids) => {
+                                    this.refs.rankingChart.updateIndentifications(ids)
+                                    if (ids.length === 0) {
+                                        this.rankingCheckAllStatus = false;
+                                        this.forceUpdate()
+                                    } else if (ids.length === this.userLen) {
+                                        this.rankingCheckAllStatus = true;
+                                        this.forceUpdate()
+                                    }
+                                }}/>
                             </div>
                         </div>
                     </div>
                     <div className="col-sm-12 col-md-5">
-                        <WinnerPrice showOrhide="show" winner={this.state.winner} />
+                        <WinnerPrice showOrhide="show" winner={this.state.winner} isLtVisible={visibility_lt} isHtsVisible={visibility_hts} isHtlVisible={visibility_htl} isEhtVisible={visibility_eht}/>
                         <RetailerRanking ranking={this.state.ranking}/>
                     </div>
                 </div>

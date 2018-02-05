@@ -25,6 +25,8 @@ gem 'webpacker', '~> 2.0'
 
 # App Specific
 
+gem 'carrierwave', '~> 1.0'
+
 ## Utilities
 gem 'breadcrumbs_on_rails'
 gem 'kaminari'
@@ -45,6 +47,9 @@ gem 'rubocop', require: false
 
 # Use Redis adapter to run Action Cable in production
 gem 'redis'
+
+# Use sidekiq to run Action Job
+# gem 'sidekiq'
 
 # Workaround with application in proxy calling external services
 gem 'no_proxy_fix'

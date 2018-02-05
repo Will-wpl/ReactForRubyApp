@@ -1,0 +1,15 @@
+.page-header
+  .pull-right
+    = link_to edit_admin_email_template_path(@email_template), class: "btn btn-warning" do
+      = icon "edit", t("views.actions.edit")
+    ' &nbsp;
+    = link_to admin_email_template_path(@email_template), class: "btn btn-danger", method: :delete, data: { confirm: t('views.confirm'), disable_with: t('views.disable_with') } do
+      = icon "trash", t("views.actions.destroy")
+  h1= page_title(model: EmailTemplate.model_name.human)
+
+dl.dl-horizontal
+  - @email_template.attributes.each do |name, value|
+    dt.attribute-label
+      = t("labels.email_template.#{name}", default: name.titleize)
+    dd.attribute-data
+      = value

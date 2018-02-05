@@ -22,15 +22,36 @@ export default class CheckboxList extends Component {
     //     }
     // }
 
-    selectAll(list) {
+    setList(list) {
+        this.list = list;
+    }
+
+    selectAll() {
         this.filters = [];
-        list.forEach(element => {
-            let id = element.user_id;
-            let color = element.color;
-            this.filters.push({id, color});
-        })
-        if (this.props.onCheckeds) {
-            this.props.onCheckeds(this.filters);
+        if (this.list) {
+            this.list.forEach(element => {
+                let id = element.user_id;
+                let color = element.color;
+                element.status = true;
+                this.filters.push({id, color});
+            })
+            this.forceUpdate();
+            if (this.props.onCheckeds) {
+                this.props.onCheckeds(this.filters);
+            }
+        }
+    }
+
+    disSelectAll() {
+        this.filters = [];
+        if (this.list) {
+            this.list.forEach(element => {
+                element.status = false;
+            })
+            this.forceUpdate();
+            if (this.props.onCheckeds) {
+                this.props.onCheckeds(this.filters);
+            }
         }
     }
 
@@ -44,14 +65,21 @@ export default class CheckboxList extends Component {
         if (this.props.onCheckeds) {
             this.props.onCheckeds(this.filters);
         }
+        let result = this.list.find(element => {
+            return element.user_id === id
+        })
+        if (result) {
+            result.status = status
+        }
     }
 
     render() {
         let checkItems;
-        if (this.props.list) {
-            checkItems = this.props.list.map((obj, index) => {
+        if (this.list) {
+            checkItems = this.list.map((obj, index) => {
                 return (
-                    <CheckboxListItem key={obj.user_id} id={obj.user_id} display={obj.company_name} color={obj.color} onCheck={this.makeCheckeds.bind(this)}/>
+                    <CheckboxListItem key={obj.user_id} id={obj.user_id} display={obj.company_name}
+                                      color={obj.color} status={obj.status} onCheck={this.makeCheckeds.bind(this)}/>
                 );
             })
         }

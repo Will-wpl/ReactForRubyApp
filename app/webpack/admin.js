@@ -10,6 +10,12 @@ import "components/admin/online-status-list";
 import "components/admin/admin-confirm-winner";
 import "components/admin/admin-report";
 import "components/shared/check-network";
+import "components/search/home-list";
+import "components/admin/admin-invitation";
+import "components/admin/admin-comsumption";
+import "components/admin/admin-workflow";
+import "components/admin/admin-buyer-dashboard";
+import "components/admin/admin-buyer-list-detail";
 // import "./javascripts/ajax-test.js";
 console.log("Admin Webpacker");
 

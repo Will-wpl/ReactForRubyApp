@@ -79,6 +79,8 @@ jobs:
           POSTGRES_USER: root
           POSTGRES_DB: reverse_auction_test
 
+      - image: redis:4.0
+
     working_directory: ~/repo
 
     steps:
@@ -145,9 +147,7 @@ jobs:
           name: Deploy Master to Heroku
           command: |
             git push --force git@heroku.com:$HEROKU_STAGING.git HEAD:refs/heads/master
-            heroku run --app $HEROKU_STAGING rake db:migrate VERSION=0
             heroku run --app $HEROKU_STAGING rake db:migrate
-            heroku run --app $HEROKU_STAGING rake db:seed
             heroku restart web --app $HEROKU_STAGING
 
 workflows:
