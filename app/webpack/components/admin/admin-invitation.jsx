@@ -444,7 +444,7 @@ render() {
                                 <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                 <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=2`} className="lm--button lm--button--primary col-sm-12"><span>Select Company Buyers</span></a></div>
                                 <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=3`} className="lm--button lm--button--primary col-sm-12"><span>Select Individual Buyers</span></a></div>
-                                <div className="col-sm-12 col-md-12 u-cell"><a className="lm--button lm--button--primary col-sm-12 orange" onClick={this.show_send_mail.bind(this,'buyer')}><span>Send Invitation Email</span></a></div>
+                                <div className="col-sm-12 col-md-12 u-cell"><button className="lm--button lm--button--primary col-sm-12 orange" disabled={this.state.buyer_company_pend==0&&this.state.buyer_individual_pend==0?true:false} onClick={this.show_send_mail.bind(this,'buyer')}><span>Send Invitation Email</span></button></div>
                                 </div>
                             </div>
                         </div>
@@ -468,7 +468,7 @@ render() {
                                 <div className="col-sm-12 col-md-6 u-cell">
                                     <a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=1`} className="lm--button lm--button--primary col-sm-12"><span>Select Retailers</span></a>
                                 </div>
-                                <div className="col-sm-12 col-md-6 u-cell"><a className="lm--button lm--button--primary col-sm-12 orange" onClick={this.show_send_mail.bind(this,'retailer')}><span>Send Invitation Email</span></a></div>
+                                <div className="col-sm-12 col-md-6 u-cell"><a className="lm--button lm--button--primary col-sm-12 orange" disabled={this.state.retailer_pend==0?true:false} onClick={this.show_send_mail.bind(this,'retailer')}><span>Send Invitation Email</span></a></div>
                             </div>
                         </div>
                         <div className="lm--formItem lm--formItem--inline string u-mt3 role_select">
