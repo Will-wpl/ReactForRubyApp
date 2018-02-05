@@ -142,7 +142,7 @@ class Api::AuctionsController < Api::BaseController
     ]
     actions = [
       { url: '/admin/auctions/:id/buyer_dashboard?unpublished', name: 'Buyer Dashboard', icon: 'view', interface_type: 'auction' },
-      { url: '/admin/auctions/new', name: 'Edit', icon: 'edit', interface_type: 'auction' },
+      { url: '/admin/auctions/new', name: 'Manage', icon: 'manage', interface_type: 'auction' },
       { url: '/admin/auctions/:id', name: 'Delete', icon: 'delete', interface_type: 'auction' }]
     data = auction.order(actual_begin_time: :asc)
     bodies = { data: data, total: total }

@@ -30,7 +30,7 @@
                 td Awarded
             td= auction_result.lowest_price_bidder
             td  #{number_to_currency(auction_result.lowest_average_price,unit: "$ ", precision: 4) }/kWh
-            td  #{number_to_currency(auction_result.total_volume,unit: "", precision: 0) }/kWh
+            td  #{number_to_currency(auction_result.total_volume,unit: "", precision: 0) }kWh
             td
               = link_to report_admin_auction_path(auction_result.auction_id), class: 'report' do
                 = ''

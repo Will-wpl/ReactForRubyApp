@@ -16,7 +16,7 @@ class Api::UsersController < Api::BaseController
       { name: 'License Number', field_name: 'company_license_number' },
       { name: 'Status', field_name: 'approval_status' }
     ]
-    actions = [{ url: '/admin/users/:id/manage', name: 'Manage', icon: 'lm--icon-search' }]
+    actions = [{ url: '/admin/users/:id/manage', name: 'Manage', icon: 'manage' }]
     data = users.order(approval_status: :desc, company_name: :asc).each do |user|
       user.approval_status = if user.approval_status == '0'
                                'Rejected'
@@ -55,7 +55,7 @@ class Api::UsersController < Api::BaseController
       { name: 'Email', field_name: 'email' },
       { name: 'Consumer Type', field_name: 'consumer_type' }
     ]
-    actions = [{ url: '/admin/users/:id/manage', name: 'View', icon: 'lm--icon-search' }]
+    actions = [{ url: '/admin/users/:id/manage', name: 'View', icon: 'view' }]
     unless params[:consumer_type].nil?
       headers.delete_if { |header| header[:field_name] == 'name' } if params[:consumer_type][0] == '2'
       headers.delete_if { |header| header[:field_name] == 'company_name' } if params[:consumer_type][0] == '3'

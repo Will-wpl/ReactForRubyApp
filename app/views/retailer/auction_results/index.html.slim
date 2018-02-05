@@ -9,6 +9,7 @@
         table.table.table-hover.retailer_fill
           thead
             tr
+              th ID
               th Name
               th Date
               th My Result
@@ -16,6 +17,7 @@
             - @auction_results.each do |auction_result|
               tr
                 /td= link_to auction_history.id, admin_auction_history_path(auction_history)
+                td[data-label="ID"]= auction_result.id
                 td[data-label="Name"]= auction_result.name
                 td[data-label="Date"]= auction_result.start_datetime.strftime("%d %b %Y")
                 td[data-label="My Result"]
