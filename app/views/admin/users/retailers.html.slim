@@ -1,0 +1,39 @@
+.page-header
+  h1.search_list_type
+    = 'Retailer List'
+div id='users_search_list'
+div.createRaMain.u-grid
+    a.lm--button.lm--button--primary.u-mt3 href="/admin/home" Back to Homepage
+/.lm--table-container
+/  table.lm--table.lm--table--responsive
+/    thead
+/      tr
+/        th Company Name
+/        th License Number
+/        th Status
+/        th
+/    tbody
+/      - @users.each do |user|
+/        tr
+/          td[data-label="Company Name"]= user.company_name
+/          td[data-label="License Number"]= user.company_license_number
+/          /td[data-label="Status"]= user.approval_status
+/          - if user.approval_status == "0"
+/              td[data-label="Status"]= 'Rejected'
+/          - elsif user.approval_status == "1"
+/              td[data-label="Status"]= 'Approved'
+/          - else
+/              td[data-label="Status"]= 'Pending'
+/          td.u-text-right.lm--table-actions
+/            = link_to edit_admin_user_path(user), class: "lm--button lm--button--text lm--button--small lm--button--warning" do
+/              span.lm--icon-search
+/              = t("views.actions.edit")
+/            ' &nbsp;
+/
+/hr
+/
+/.u-grid
+/  .col-sm-6.u-cell
+/    = page_entries_info @users
+/  .col-sm-6.u-cell
+/    = paginate(@users)

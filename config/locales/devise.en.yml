@@ -44,10 +44,12 @@ en:
       signed_up_but_unconfirmed: "A message with a confirmation link has been sent to your email address. Please follow the link to activate your account."
       update_needs_confirmation: "You updated your account successfully, but we need to verify your new email address. Please check your email and follow the confirm link to confirm your new email address."
       updated: "Your account has been updated successfully."
+      signed_up_but_not_approved: "Your application has been successfully submitted and is pending approval by the administrator. You will be notified via email once approved."
     sessions:
       signed_in: "Logged in successfully."
       signed_out: "Logged out successfully."
       already_signed_out: "Logged out successfully."
+      signed_up_but_not_approved: "Your application has been successfully submitted and is pending approval by the administrator. You will be notified via email once approved."
     unlocks:
       send_instructions: "You will receive an email with instructions for how to unlock your account in a few minutes."
       send_paranoid_instructions: "If your account exists, you will receive an email with instructions for how to unlock it in a few minutes."

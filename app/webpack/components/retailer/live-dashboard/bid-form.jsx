@@ -5,17 +5,18 @@ export default class BidForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            configs: ['', '', '', '', '', ''],
+            configs: ['', '', '', '', '', '', '', ''],
             changed: true,
             samePrice: false,
             thisStatus: false,
-            status: [true, true, true, true, true, true],
+            status: [true, true, true, true, true, true, true, true],
             answered: true
         }
+        this.compareConfigs = ['0.9999', '0.9999', '0.9999', '0.9999', '0.9999', '0.9999', '0.9999', '0.9999'];
     }
 
     initConfigs(configs) {
-        // console.log('initial config', configs);
+        console.log('initial config', configs);
         this.compareConfigs = configs.map(element => {
             return parseFloat(element).toFixed(4).substring(2);
         });
@@ -98,20 +99,36 @@ export default class BidForm extends Component {
     }
 
     onSubmit() {
+        if(this.props.onSubmitjest){
+            this.props.onSubmitjest();
+        }
         this.setState({
             thisStatus: true
         })
+        if(!this.compareConfigs){
+            return;
+        }
+        const mapping = {
+            0:this.props.isLtVisible,1:this.props.isLtVisible,
+            2:this.props.isHtsVisible,3:this.props.isHtsVisible,
+            4:this.props.isHtlVisible,5:this.props.isHtlVisible,
+            6:this.props.isEhtVisible,7:this.props.isEhtVisible
+        }
         let allow = this.state.configs.every((element, index) => {
-            if (index === 2 || index === 3) {
+            // if (index === 2 || index === 3) {
+            //     return true;
+            // }
+            if (!mapping[index])
                 return true;
-            }
             return element.length > 0 && Number(element) !== 0 && Number(`0.${element}`) <= Number(`0.${this.compareConfigs[index]}`);
         })
         let isChanged = this.state.configs.some((element, index) => {
             // console.log("state:" + Number(element) + "--------props:" + Number(this.compareConfigs[index]));
-            if (index === 2 || index === 3) {
+            // if (index === 2 || index === 3) {
+            //     return false;
+            // }
+            if (!mapping[index])
                 return false;
-            }
             return Number(`0.${element}`) < Number(`0.${this.compareConfigs[index]}`);
         })
         if (allow && isChanged) {
@@ -119,7 +136,20 @@ export default class BidForm extends Component {
                 let params = this.state.configs.map(element => {
                     return element;
                 });
-                params.splice(2, 2, "0", "0");
+                const coupleNum = 2;
+                const replaceELes = ["0", "0"];
+                if (!this.props.isLtVisible) {
+                    params.splice(0, coupleNum, ...replaceELes);
+                }
+                if (!this.props.isHtsVisible) {
+                    params.splice(2, coupleNum, ...replaceELes);
+                }
+                if (!this.props.isHtlVisible) {
+                    params.splice(4, coupleNum, ...replaceELes);
+                }
+                if (!this.props.isEhtVisible) {
+                    params.splice(6, coupleNum, ...replaceELes);
+                }
                 // console.log(this.state.configs, params);
                 this.props.onSubmit(params);
                 this.setState({answered: false})
@@ -179,41 +209,50 @@ export default class BidForm extends Component {
                         <thead>
                         <tr>
                             <th></th>
-                            <th>LT ($/kWh)</th>
-                            <th style={{display: 'none'}}>HT(Small)</th>
-                            <th>HT Large ($/kWh)</th>
+                            <th style={this.props.isLtVisible ? {} : {display: 'none'}}>LT ($/kWh)</th>
+                            <th style={this.props.isHtsVisible ? {} : {display: 'none'}}>HT(Small)</th>
+                            <th style={this.props.isHtlVisible ? {} : {display: 'none'}}>HT Large ($/kWh)</th>
+                            <th style={this.props.isEhtVisible ? {} : {display: 'none'}}>EHT ($/kWh)</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
                             <td>Peak (7am-7pm)</td>
-                            <td>$0.<input type="text" name="peak_lt" value={this.state.configs[1]}
+                            <td style={this.props.isLtVisible ? {} : {display: 'none'}}>$0.<input type="text" name="peak_lt" value={this.state.configs[1]}
                                           style={{borderColor: this.state.status[1] ? 'white' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 1)}
                                           maxLength={4}/></td>
-                            <td style={{display: 'none'}}>$0.<input type="text" value={this.state.configs[3]}
+                            <td style={this.props.isHtsVisible ? {} : {display: 'none'}}>$0.<input type="text" name="peak_hts" value={this.state.configs[3]}
                                           style={{borderColor: this.state.status[3] ? 'white' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 3)}
                                           maxLength={4}/></td>
-                            <td>$0.<input type="text" name="peak_ht" value={this.state.configs[5]}
+                            <td style={this.props.isHtlVisible ? {} : {display: 'none'}}>$0.<input type="text" name="peak_htl" value={this.state.configs[5]}
                                           style={{borderColor: this.state.status[5] ? 'white' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 5)}
                                           maxLength={4}/></td>
+                            <td style={this.props.isEhtVisible ? {} : {display: 'none'}}>$0.<input type="text" name="peak_eht" value={this.state.configs[7]}
+                                           style={{borderColor: this.state.status[7] ? 'white' : 'red'}}
+                                           onChange={this.onInputChanged.bind(this, 7)}
+                                           maxLength={4}/></td>
                         </tr>
                         <tr>
                             <td>Off-Peak (7pm-7am)</td>
-                            <td>$0.<input type="text" name="off_peak_lt" value={this.state.configs[0]}
+                            <td style={this.props.isLtVisible ? {} : {display: 'none'}}>$0.<input type="text" name="off_peak_lt" value={this.state.configs[0]}
                                           style={{borderColor: this.state.status[0] ? 'white' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 0)}
                                           maxLength={4}/></td>
-                            <td style={{display: 'none'}}>$0.<input type="text" value={this.state.configs[2]}
+                            <td style={this.props.isHtsVisible ? {} : {display: 'none'}}>$0.<input type="text" name="off_peak_hts" value={this.state.configs[2]}
                                           style={{borderColor: this.state.status[2] ? 'white' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 2)}
                                           maxLength={4}/></td>
-                            <td>$0.<input type="text" name="off_peak_ht" value={this.state.configs[4]}
+                            <td style={this.props.isHtlVisible ? {} : {display: 'none'}}>$0.<input type="text" name="off_peak_htl" value={this.state.configs[4]}
                                           style={{borderColor: this.state.status[4] ? 'white' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 4)}
                                           maxLength={4}/></td>
+                            <td style={this.props.isEhtVisible ? {} : {display: 'none'}}>$0.<input type="text" name="off_peak_eht" value={this.state.configs[6]}
+                                           style={{borderColor: this.state.status[6] ? 'white' : 'red'}}
+                                           onChange={this.onInputChanged.bind(this, 6)}
+                                           maxLength={4}/></td>
                         </tr>
 
                         </tbody>
@@ -228,3 +267,12 @@ export default class BidForm extends Component {
         );
     }
 }
+BidForm.defaultProps = {
+    isLtVisible: true,
+    isHtsVisible: true,
+    isHtlVisible: true,
+    isEhtVisible: true
+}
+BidForm.propTypes = {
+    onSubmitjest: ()=>{}
+};

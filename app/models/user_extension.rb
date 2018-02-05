@@ -26,4 +26,16 @@ class UserExtension < ApplicationRecord
       current_page: current_page
     )
   end
+
+  def self.websocket_monitor(user, ws_monitor)
+    UserExtension.find_or_create_by(user: user).update(
+      logged_in_status: ws_monitor.logged_in_status,
+      logged_in_last_time: ws_monitor.logged_in_last_time,
+      ws_connected_status: ws_monitor.ws_connected_status,
+      ws_connected_last_time: ws_monitor.ws_connected_last_time,
+      ws_send_message_status: ws_monitor.ws_send_message_status,
+      ws_send_message_last_time: ws_monitor.ws_send_message_last_time,
+      current_ip: ws_monitor.current_ip
+    )
+  end
 end

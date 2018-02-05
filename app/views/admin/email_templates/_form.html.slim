@@ -1,0 +1,18 @@
+= simple_form_for [:admin, @email_template] do |f|
+
+  = f.input :subject
+  = f.input :body
+  = f.input :template_type
+
+  .form-action.form-group
+    .form-left-offset.form-right
+      - if f.object.new_record?
+        => f.button :button, class: "btn btn-primary", data: { disable_with: t("views.disable_with") } do
+          = icon "check-square-o", t("views.forms.create", model: f.object.class.model_name.human.titleize)
+        = " or "
+        = link_to t(".cancel", default: t("views.actions.cancel")), admin_email_templates_path
+      - else
+        => f.button :button, class: "btn btn-primary", data: { disable_with: t("views.disable_with") } do
+          = icon "check-square-o", t("views.forms.update", model: f.object.class.model_name.human.titleize)
+        = " or "
+        = link_to t(".cancel", default: t("views.actions.cancel")), admin_email_template_path(f.object)
