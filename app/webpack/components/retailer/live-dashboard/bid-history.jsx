@@ -10,9 +10,9 @@ export default class BidHistory extends Component {
                     <td>{index + 1}</td>
                     <td>{element.bid_time}</td>
                     <td style={this.props.isLtVisible ? {} : {display: 'none'}}>$ {element.lt_peak}</td>
-                    <td style={this.props.isLtVisible ? {} : {display: 'none'}}>$ {element.lt_off_peak}</td>
-                    <td style={this.props.isHtsVisible ? {} : {display: 'none'}}>$ {element.hts_off_peak}</td>
+                    <td style={this.props.isLtVisible ? {} : {display: 'none'}}>$ {element.lt_off_peak}</td>                   
                     <td style={this.props.isHtsVisible ? {} : {display: 'none'}}>$ {element.hts_peak}</td>
+                    <td style={this.props.isHtsVisible ? {} : {display: 'none'}}>$ {element.hts_off_peak}</td>
                     <td style={this.props.isHtlVisible ? {} : {display: 'none'}}>$ {element.htl_peak}</td>
                     <td style={this.props.isHtlVisible ? {} : {display: 'none'}}>$ {element.htl_off_peak}</td>
                     <td style={this.props.isEhtVisible ? {} : {display: 'none'}}>$ {element.eht_peak}</td>
@@ -28,9 +28,9 @@ export default class BidHistory extends Component {
                     <td>{i + 1}</td>
                     <td>{element.bid_time}</td>
                     <td style={this.props.isLtVisible ? {} : {display: 'none'}}>$ {element.lt_peak}</td>
-                    <td style={this.props.isLtVisible ? {} : {display: 'none'}}>$ {element.lt_off_peak}</td>
-                    <td style={this.props.isHtsVisible ? {} : {display: 'none'}}>$ {element.hts_off_peak}</td>
+                    <td style={this.props.isLtVisible ? {} : {display: 'none'}}>$ {element.lt_off_peak}</td>                 
                     <td style={this.props.isHtsVisible ? {} : {display: 'none'}}>$ {element.hts_peak}</td>
+                    <td style={this.props.isHtsVisible ? {} : {display: 'none'}}>$ {element.hts_off_peak}</td>
                     <td style={this.props.isHtlVisible ? {} : {display: 'none'}}>$ {element.htl_peak}</td>
                     <td style={this.props.isHtlVisible ? {} : {display: 'none'}}>$ {element.htl_off_peak}</td>
                     <td style={this.props.isEhtVisible ? {} : {display: 'none'}}>$ {element.eht_peak}</td>
@@ -68,8 +68,8 @@ export default class BidHistory extends Component {
                         <th>Time</th>
                         <th style={this.props.isLtVisible ? {} : {display: 'none'}}>LT (Peak)</th>
                         <th style={this.props.isLtVisible ? {} : {display: 'none'}}>LT (Off-Peak)</th>
-                        <th style={this.props.isHtsVisible ? {} : {display: 'none'}}>HTS (Off-Peak)</th>
                         <th style={this.props.isHtsVisible ? {} : {display: 'none'}}>HTS (Peak)</th>
+                        <th style={this.props.isHtsVisible ? {} : {display: 'none'}}>HTS (Off-Peak)</th>
                         <th style={this.props.isHtlVisible ? {} : {display: 'none'}}>HTL (Peak)</th>
                         <th style={this.props.isHtlVisible ? {} : {display: 'none'}}>HTL (Off-Peak)</th>
                         <th style={this.props.isEhtVisible ? {} : {display: 'none'}}>EHT (Peak)</th>
