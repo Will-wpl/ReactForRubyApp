@@ -50,10 +50,6 @@ var slimModal = {
     confirm_modal:()=>{
         slimModal.dosubmit = false;
         $("#"+slimModal.type).click();
-        setTimeout(()=>{
-            window.location.href="/admin/users/retailers";
-        },0)
-
     }
 }
 function clearStorage(){
