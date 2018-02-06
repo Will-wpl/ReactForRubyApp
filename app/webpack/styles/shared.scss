@@ -1,6 +1,10 @@
 //all
 body a{outline:none; cursor: default;}
+.link_hand a{cursor: pointer;}
 button{ cursor: pointer; transition: 0.5s all;}
+.green{color:green;}
+.red{color:red;}
+button[disabled='']{background: #666 !important; color:#999 !important; cursor: default !important;}
 
 
 //createRaMain or retailer btn
@@ -257,7 +261,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
   }
   .buyer_btn{ text-align: right; width: 100%;
     a{
-      &.disabled{background: #666; color: #aaa;}
+      &.disabled{background: #666; color: #aaa; cursor:default;}
     }
     button{ 
         margin: 0 10px;
@@ -458,9 +462,9 @@ dfn.manage_label{
           &.select_ico_0{background:url("../images/not_invited.png") no-repeat 15px center;}
           &.select_ico_1{background:url("../images/notification_sent.png") no-repeat 15px center;}
           &.select_ico_2{background:url("../images/pending_notification.png") no-repeat 15px center;}
-          &.participation_status_0{ background: red; width: 86%; margin: 3px auto;}
-          &.participation_status_1{ background: #00d900; width: 86%; margin: 3px auto;}
-          &.participation_status_2{ background: yellow; width: 86%; margin: 3px auto;}
+          &.participation_status_0{ background: red; width:60%; margin-top: 3px;}
+          &.participation_status_1{ background: #00d900; width:60%; margin-top: 3px;}
+          &.participation_status_2{ background: yellow; width:60%; margin-top: 3px;}
         }
         span{
           cursor: pointer; padding-left: 20px;
@@ -519,7 +523,8 @@ body.choose{
     position: relative;
     .required_error{ bottom:-36px; width: 70%; right:0; }
   }
-  a{ margin-bottom: 1rem; text-align: center; font-size: 13px;
+  a,button{ margin-bottom: 1rem; font-size: 13px;
+    span{ display: block; width: 100%; text-align: center;}
     &.orange{background:#DF5C28;}
   }
   .lm--formItem-right.lm--formItem-control abbr{
@@ -539,7 +544,7 @@ body.choose{
       border:1px solid #fff;
       input{ position: absolute; width: 100%; opacity: 0; top:0px; left:0px; margin: 0; height: 100%; z-index: 10;}
       dfn{float: left; padding: 0.70rem 1rem 0.70rem; line-height: 1.176470588;}
-      span{ display: block; position: absolute; right:0px; top:0px; z-index: 3; text-align: center; line-height: 1.176470588; padding: 0.70rem 1rem 0.70rem; background: #334859; color: #fff; }
+      b{ display: block; position: absolute; right:0px; top:0px; z-index: 3; text-align: center; line-height: 1.176470588; padding: 0.70rem 1rem 0.70rem; background: #334859; color: #fff; }
       .required_error{top:40px; left:0px; }
     }
     .u-mt2{ margin-bottom:25px;}
@@ -582,8 +587,8 @@ body.choose{
   margin:30px 0px;
   table{ width: 100%; table-layout: fixed;
     td{height:110px;
-      div{ 
-        width: 100%; height: 100%; background: #00afb1; position: relative; cursor: pointer;
+      div{ cursor: pointer;
+        width: 100%; height: 100%; background: #00afb1; position: relative;
         &.step1{background:#00afb1 url("../images/sign_confidentiality_undertaking.png") no-repeat center; background-size: 100%;}
         &.step2{background:#00afb1 url("../images/ender_documents.png") no-repeat center; background-size: 100%;}
         &.step3{background:#00afb1 url("../images/deviations.png") no-repeat center; background-size: 100%;}
@@ -614,7 +619,10 @@ body.choose{
    .sign_btn{ text-align: right;
     a{ margin-left: 15px;}
     }
-  .download_ico{background: url("../images/file.png") no-repeat center; cursor: pointer; display: block; width: 45px; height: 54px;}
+  .download{ overflow: hidden;
+    span{float: left; margin-right: 15px;}
+    .download_ico{background: url("../images/file.png") no-repeat center; cursor: pointer; float: left; width: 45px; height: 54px;}
+  }
 }
 
 .tender_documents{
@@ -626,6 +634,7 @@ body.choose{
 }
 
 .propose_deviations{
+  h4.pending_review{color:#fd6301;}
   table.retailer_fill{
     tbody{
       tr{
@@ -644,9 +653,7 @@ body.choose{
     &.step_pending{ background: url('../images/pigeon_p.png') no-repeat center;}
   }
 }
-.green{color:green;}
-.red{color:red;}
-button[disabled='']{background: #666 !important; color:#999 !important;}
+
 .brif_list{ 
   li{
     list-style:none;

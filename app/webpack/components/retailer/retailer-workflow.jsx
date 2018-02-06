@@ -28,13 +28,13 @@ export class Retailerworkflow extends React.Component{
         })
     }
     getPageindex(params){
+        if(params === 'false'){
+            this.setState({
+                tender_status:false
+            })
+        }
         getTendersCurrent('retailer',sessionStorage.arrangement_id).then(res=>{
             console.log(res);
-            if(params === 'false'){
-                this.setState({
-                    tender_status:false
-                })
-            }
             this.setState({current:res,tab_page:res.current.current_node?res.current.current_node:1,page:res.current.current_node?res.current.current_node:1,selected:res.flows});
         },error=>{
 
@@ -66,7 +66,7 @@ export class Retailerworkflow extends React.Component{
             this.setState({page:index,disabled:false});
         }else{
             if(this.state.tab_page == index){
-                this.setState({page:index,disabled:false});
+                this.setState({page:index,disabled:false,tender_status:false});
             }else{
                 this.setState({disabled:false});
             }

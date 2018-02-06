@@ -41,6 +41,7 @@ export class FillConsumption extends Component {
                 this.site_list.map((item, index) => {
                     this.site_list[index].intake_level_selected = item.intake_level;
                     this.site_list[index].intake_level = ['Low Tension (LT)','High Tension Small (HTS)','High Tension Large (HTL)','Extra High Tension (EHT)'];
+                    this.site_list[index].id = index;
                 })
                 this.setState({site_list:this.site_list})
             }else{
@@ -49,7 +50,8 @@ export class FillConsumption extends Component {
                         account_number:'',
                         intake_level:['Low Tension (LT)','High Tension Small (HTS)','High Tension Large (HTL)','Extra High Tension (EHT)'],
                         peak:'',
-                        off_peak:''
+                        off_peak:'',
+                        id:1
                     }
                 ]
                 this.setState({site_list:this.site_list})
@@ -69,7 +71,8 @@ export class FillConsumption extends Component {
             account_number:'',
             intake_level:['Low Tension (LT)','High Tension Small (HTS)','High Tension Large (HTL)','Extra High Tension (EHT)'],
             peak:'',
-            off_peak:''
+            off_peak:'',
+            id:site_listObj.length+1
         }
         site_listObj.push(list)
         this.setState({site_list:site_listObj})
@@ -98,6 +101,9 @@ export class FillConsumption extends Component {
             setBuyerParticipate({consumption_id:this.consumptions_id}, '/api/buyer/consumption_details/reject').then((res) => {
                 this.refs.Modal.showModal();
                 this.setState({text:"Thank you for the confirmation. You have rejected this auction."});
+                setTimeout(()=>{
+                    window.location.href="/buyer/auctions";
+                },3000)
             }, (error) => {
                 this.refs.Modal.showModal();
                 this.setState({text:"Interface failed"});
@@ -170,9 +176,8 @@ export class FillConsumption extends Component {
                 <h1>Participate in upcoming {this.state.name} exercise on {moment(this.state.time).format('D MMM YYYY hh:mm a')}</h1>
                 <form name="buyer_form" method="post" onSubmit={this.checkSuccess.bind(this)}>
                 <div className="u-grid buyer mg0">
-                <h4 className="u-mb3"><input name="agree_auction" type="checkbox" disabled={this.state.disabled} required /> I agree to the 
-                {this.state.link?<a className="cursor" download={this.state.link.file_name} href={`/${this.state.link.file_path}`}> terms and conditions.</a>:' terms and conditions.'}</h4>
-                    <div className="col-sm-12 col-md-8 push-md-2">
+                <h4 className="col-sm-12 u-mb3"><input name="agree_auction" type="checkbox" disabled={this.state.disabled} required /> I agree to the {this.state.link?<a className="cursor" download={this.state.link.file_name} href={`/${this.state.link.file_path}`}>terms and conditions.</a>:'terms and conditions.'}</h4>
+                    <div className="col-sm-12 col-md-8">
                     <DoFillConsumption site_list={this.state.site_list} checked={this.state.checked} remove={this.remove_site.bind(this)} />
                     {this.state.checked ? '' : <div className="addSite"><a onClick={this.add_site.bind(this)}>Add Account</a></div>}
                     <div className="buyer_btn">

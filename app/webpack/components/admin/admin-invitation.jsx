@@ -282,6 +282,12 @@ upload(type, index){
 
             })
         }
+        do_save(){
+            this.refs.Modal.showModal();
+            this.setState({
+                text:this.state.auction.name+" has been successfully updated.",
+            });
+        }
         addinputfile(type, required){
                 let fileHtml = '';
                 fileHtml = <div className="file_box">
@@ -295,14 +301,14 @@ upload(type, index){
                                                     {required === "required" ? 
                                                     <div>
                                                         <input type="file" required="required" ref={type+index}  onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.state.disabled} />
-                                                        <span>Browse..</span>
+                                                        <b>Browse..</b>
                                                         <div className="required_error">
                                                             Please fill out this field and upload this file
                                                         </div>
                                                     </div>
                                                     :<div>
                                                         <input type="file" ref={type+index} onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.state.disabled} />
-                                                        <span>Browse..</span>
+                                                        <b>Browse..</b>
                                                     </div>}
                                                 </a>
                                                 <div className="progress">
@@ -392,7 +398,7 @@ upload(type, index){
                 })
                 this.refs.Modal.showModal("comfirm");
                 this.setState({
-                    text:"Are you sure want to send this message?",
+                    text:"Are you sure you want to send invitation email(s)?",
                 });
             }
         send_mail(){
@@ -405,7 +411,7 @@ upload(type, index){
                 let timeBar;
                 this.refs.Modal.showModal();
                 this.setState({
-                    text:"Send message has been successful!",
+                    text:"Notification email(s) successfully sent.",
                 });
                 clearTimeout(timeBar);
                 timeBar = setTimeout(()=>{
@@ -442,9 +448,9 @@ render() {
                                 Buyer to Invite:
                                 </label>
                                 <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                                <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=2`} className="lm--button lm--button--primary col-sm-12">Select Company Buyers</a></div>
-                                <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=3`} className="lm--button lm--button--primary col-sm-12">Select Individual Buyers</a></div>
-                                <div className="col-sm-12 col-md-12 u-cell"><a className="lm--button lm--button--primary col-sm-12 orange" onClick={this.show_send_mail.bind(this,'buyer')}>Send Invitation Email</a></div>
+                                <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=2`} className="lm--button lm--button--primary col-sm-12"><span>Select Company Buyers</span></a></div>
+                                <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=3`} className="lm--button lm--button--primary col-sm-12"><span>Select Individual Buyers</span></a></div>
+                                <div className="col-sm-12 col-md-12 u-cell"><button className="lm--button lm--button--primary col-sm-12 orange" disabled={this.state.buyer_company_pend==0&&this.state.buyer_individual_pend==0?true:false} onClick={this.show_send_mail.bind(this,'buyer')}><span>Send Invitation Email</span></button></div>
                                 </div>
                             </div>
                         </div>
@@ -466,9 +472,9 @@ render() {
                             </label>
                             <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                 <div className="col-sm-12 col-md-6 u-cell">
-                                    <a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=1`} className="lm--button lm--button--primary col-sm-12">Select Retailers</a>
+                                    <a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=1`} className="lm--button lm--button--primary col-sm-12"><span>Select Retailers</span></a>
                                 </div>
-                                <div className="col-sm-12 col-md-6 u-cell"><a className="lm--button lm--button--primary col-sm-12 orange" onClick={this.show_send_mail.bind(this,'retailer')}>Send Invitation Email</a></div>
+                                <div className="col-sm-12 col-md-6 u-cell"><button className="lm--button lm--button--primary col-sm-12 orange" disabled={this.state.retailer_pend==0?true:false} onClick={this.show_send_mail.bind(this,'retailer')}><span>Send Invitation Email</span></button></div>
                             </div>
                         </div>
                         <div className="lm--formItem lm--formItem--inline string u-mt3 role_select">
@@ -503,14 +509,14 @@ render() {
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>Peak (7am-7pm)</td>
+                                                <td>Peak<br/>(7am-7pm)</td>
                                                 <td >{this.state.peak_lt}</td>
                                                 <td >{this.state.peak_hts}</td>
                                                 <td >{this.state.peak_htl}</td>
                                                 <td >{this.state.peak_eht}</td>
                                             </tr>
                                             <tr>
-                                                <td>Off-Peak (7pm-7am)</td>
+                                                <td>Off-Peak<br/>(7pm-7am)</td>
                                                 <td >{this.state.off_peak_lt}</td>
                                                 <td >{this.state.off_peak_hts}</td>
                                                 <td >{this.state.off_peak_htl}</td>
@@ -522,8 +528,8 @@ render() {
                                         At least one field in intake level must have value greater than 0 kWh.
                                     </div>
                                 </div>
-                                <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/consumption?type=2`} className="lm--button lm--button--primary col-sm-12">Company Consumption Details</a></div>
-                                <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/consumption?type=3`} className="lm--button lm--button--primary col-sm-12">Individual Consumption Details</a></div>
+                                <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/consumption?type=2`} className="lm--button lm--button--primary col-sm-12"><span>Company Consumption Details</span></a></div>
+                                <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/consumption?type=3`} className="lm--button lm--button--primary col-sm-12"><span>Individual Consumption Details</span></a></div>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string u-mt3">
@@ -567,8 +573,8 @@ render() {
                     </div>
                     <div className="retailer_btn">
                         <a className="lm--button lm--button--primary" href={this.state.publish_status === "0" ? "/admin/auctions/new" : "/admin/auctions/"+sessionStorage.auction_id+"/upcoming"}>Previous</a>
-                        {/* <a className="lm--button lm--button--primary">Save</a> */}
-                        <a className="lm--button lm--button--primary" id="doPublish" onClick={this.doPublish.bind(this)}>Publish</a>
+                        <a className="lm--button lm--button--primary" onClick={this.do_save.bind(this)}>Save</a>
+                        {this.state.publish_status==="0"?<a className="lm--button lm--button--primary" id="doPublish" onClick={this.doPublish.bind(this)}>Publish</a>:''}
                     </div>
                 </div>
                 : <div className="live_modal">
