@@ -130,14 +130,14 @@ export class Submittender extends React.Component{
                                             {required === "required" ? 
                                             <div>
                                                 <input type="file" required="required" ref={type+index}  onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.props.propsdisabled?true:(this.state.disabled)} />
-                                                <span>Browse..</span>
+                                                <b>Browse..</b>
                                                 <div className="required_error">
                                                     Please fill out this field and upload this file
                                                 </div>
                                             </div>
                                             :<div>
                                                 <input type="file" ref={type+index} onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.props.propsdisabled?true:(this.state.disabled)} />
-                                                <span>Browse..</span>
+                                                <b>Browse..</b>
                                             </div>}
                                         </a>
                                         <div className="progress">
@@ -218,6 +218,9 @@ export class Submittender extends React.Component{
             success:(res) => {
                 let fileObj;
                 barObj.find(".progress-bar").text('Upload Successful!');
+                setTimeout(()=>{
+                    barObj.fadeOut(500);
+                },2000);
                 fileObj = this.state.fileData;
                 fileObj[type].map((item,index)=>{
                     item.files.push({

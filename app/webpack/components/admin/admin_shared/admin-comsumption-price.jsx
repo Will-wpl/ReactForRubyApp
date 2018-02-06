@@ -31,14 +31,14 @@ render() {
                </thead>
                <tbody>
                    <tr>
-                       <td>Peak (7am-7pm)</td>
+                       <td>Peak<br/>(7am-7pm)</td>
                        <td >{formatPower(parseInt(Number(this.props.price.lt_peak)), 0, '')}</td>
                        <td >{formatPower(parseInt(Number(this.props.price.hts_peak)), 0, '')}</td>
                        <td >{formatPower(parseInt(Number(this.props.price.htl_peak)), 0, '')}</td>
                        <td >{formatPower(parseInt(Number(this.props.price.eht_peak)), 0, '')}</td>
                    </tr>
                    <tr>
-                       <td>Off-Peak (7pm-7am)</td>
+                       <td>Off-Peak<br/>(7pm-7am)</td>
                        <td >{formatPower(parseInt(Number(this.props.price.lt_off_peak)), 0, '')}</td>
                        <td >{formatPower(parseInt(Number(this.props.price.hts_off_peak)), 0, '')}</td>
                        <td >{formatPower(parseInt(Number(this.props.price.htl_off_peak)), 0, '')}</td>
