@@ -30,7 +30,7 @@ Role.first_or_create(name: 'buyer')
 
 # comment testing account
 retailers = [
-    { name: 'Retailer 1', email: 'retailer@example.com', company_name: 'Retailer1 Company', password: 'password',approval_status:'1'  }
+    { name: 'Retailer 1', email: 'retailer1@example.com', company_name: 'Retailer1 Company', password: 'password',approval_status:'1'  }
 =begin
 #comment testing account
   { name: 'Mark', email: 'Mark.Liu@chinasofti.com', company_name: 'Mark Electricity', password: 'password',approval_status:'1'  },
