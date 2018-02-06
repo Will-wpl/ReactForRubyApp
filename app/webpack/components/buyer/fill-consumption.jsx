@@ -9,7 +9,7 @@ export class DoFillConsumption extends Component {
             <div>
                 {
                     this.props.site_list
-                    ? this.props.site_list.map((item, index) => <div key={index}>
+                    ? this.props.site_list.map((item, index) => <div key={item.id}>
                              <h4 className="site_list_title"><span>{index+1}. My Account Information</span>{index != 0 ? (this.props.checked ? '' : <a onClick={this.props.remove.bind(this, index)}>Delete</a>) : ''}</h4>
                              <table className="retailer_fill u-mb3" cellPadding="0" cellSpacing="0">
                                  <tbody>

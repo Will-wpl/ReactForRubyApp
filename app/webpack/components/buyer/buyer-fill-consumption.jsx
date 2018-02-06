@@ -41,6 +41,7 @@ export class FillConsumption extends Component {
                 this.site_list.map((item, index) => {
                     this.site_list[index].intake_level_selected = item.intake_level;
                     this.site_list[index].intake_level = ['Low Tension (LT)','High Tension Small (HTS)','High Tension Large (HTL)','Extra High Tension (EHT)'];
+                    this.site_list[index].id = index;
                 })
                 this.setState({site_list:this.site_list})
             }else{
@@ -49,7 +50,8 @@ export class FillConsumption extends Component {
                         account_number:'',
                         intake_level:['Low Tension (LT)','High Tension Small (HTS)','High Tension Large (HTL)','Extra High Tension (EHT)'],
                         peak:'',
-                        off_peak:''
+                        off_peak:'',
+                        id:1
                     }
                 ]
                 this.setState({site_list:this.site_list})
@@ -69,7 +71,8 @@ export class FillConsumption extends Component {
             account_number:'',
             intake_level:['Low Tension (LT)','High Tension Small (HTS)','High Tension Large (HTL)','Extra High Tension (EHT)'],
             peak:'',
-            off_peak:''
+            off_peak:'',
+            id:site_listObj.length+1
         }
         site_listObj.push(list)
         this.setState({site_list:site_listObj})
