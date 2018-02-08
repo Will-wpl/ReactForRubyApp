@@ -246,6 +246,7 @@ export class Submittender extends React.Component{
                 <h4 className="u-mt3 u-mb1">{this.props.current.current.current_status === '0' && this.props.current.current.current_node === 4 || this.props.current.current.current_status === '2' ?'':(this.state.submission_status ? <span className="green">Your submission has been approved by administrator.</span> 
                 : <span className="red">Your submission has been rejected by administrator.</span>)}</h4>
                 <h4>{submissionTender}</h4>
+                {!this.props.tender ? (this.props.current.current.turn_to_role === 1?<h4 className="u-mb3 pending_review">Your tender submission is pending administrator's approval</h4>:''):''}
                 <div className="col-sm-12 col-md-8 push-md-2 u-mt3 u-mb3">
                     {this.addinputfile("upload_tender", "required")}
                     <div className="workflow_btn u-mt3">
