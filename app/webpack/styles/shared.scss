@@ -642,9 +642,10 @@ body.choose{
     tbody{
       tr{
         td{
-          input,select{
+          input,select,textarea{
             width:90%; margin: 0px auto; padding: 2px; border:1px solid #fff;
           }
+          textarea{padding:1px 5px;rows:2;resize:none;}
           button{background: #00888a; padding: 4px 8px; width: auto; height: auto; display: inline-block; border-radius: 5px; margin:5px;}
         }
       }
