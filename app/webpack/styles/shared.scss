@@ -518,6 +518,7 @@ body.choose{
 
 .admin_invitation{
   .w_100{ width: 100%;}
+  h4.pending_review{color:#fd6301;}
   .consumption{ position: relative;
     .retailer_fill{ margin-bottom: 1.5rem;}
     .required_error{top:125px; left:0;}
