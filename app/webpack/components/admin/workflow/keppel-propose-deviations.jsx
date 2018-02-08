@@ -144,8 +144,8 @@ export class Keppelproposedeviations extends Component {
                                             <td >{item.retailer_response}</td>
                                             <td ><input type="text" id={"sp_response_"+index} /></td>
                                             <td>
-                                                <button id={"sp_reject_"+index} disabled={item.type?(item.type=="reject"?true:false):(item.sp_response_status === '4' || item.sp_response_status === '1'?true:false)} onClick={this.showConfirm.bind(this,'reject',{params:'0',index:index,type:'reject'})}>Reject</button>
-                                                <button id={"sp_accept_"+index} disabled={item.type?(item.type=="accept"?true:false):(item.sp_response_status === '4' || item.sp_response_status === '1'?true:false)} onClick={this.showConfirm.bind(this,'accept',{params:'1',index:index,type:'accept'})}>Accept</button>
+                                                <button id={"sp_reject_"+index} disabled={item.type?(item.type=="reject"?true:false):(item.sp_response_status === '4' || item.sp_response_status === '1'?true:false)} onClick={this.do_reject.bind(this,{params:'0',index:index,type:'reject'})}>Reject</button>
+                                                <button id={"sp_accept_"+index} disabled={item.type?(item.type=="accept"?true:false):(item.sp_response_status === '4' || item.sp_response_status === '1'?true:false)} onClick={this.do_accept.bind(this,{params:'1',index:index,type:'accept'})}>Accept</button>
                                                 <button id={"sp_history_"+index} onClick={this.showhistory.bind(this,item.id)}>History</button>
                                             </td>
                                         </tr>

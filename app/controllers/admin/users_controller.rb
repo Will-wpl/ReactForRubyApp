@@ -64,7 +64,7 @@ class Admin::UsersController < Admin::BaseController
       elsif approval_status == '0'
         UserMailer.reject_email(@user).deliver_later
       end
-      redirect_to manage_admin_user_path(@user), notice: "#{User.model_name.human} was successfully updated."
+      redirect_to retailers_admin_users_path, notice: "#{User.model_name.human} was successfully updated."
     else
       render :manage
     end
