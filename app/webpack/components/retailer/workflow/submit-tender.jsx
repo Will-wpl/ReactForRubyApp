@@ -96,7 +96,7 @@ export class Submittender extends React.Component{
             fileObj[callbackObj.filetype][callbackObj.typeindex].files.splice(callbackObj.fileindex,1);
             this.setState({
                 fileData:fileObj,
-                text:'Delete this file successful!'
+                text:'File deletion successful!'
             })
             this.refs.Modal.showModal();
         },error=>{
