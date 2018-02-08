@@ -47,7 +47,7 @@ export class Proposedeviations extends React.Component{
         if(type == "Withdraw_Deviations"){
             this.refs.Modal.showModal("comfirm");
             this.setState({
-                text:"Are you sure you want to withdraw all deviations?"
+                text:"Are you sure you want to withdraw all deviations and proceed with base tender submission?"
             });
         }else if(type == "Withdraw"){
             this.refs.Modal.showModal("comfirm",obj);
@@ -142,7 +142,7 @@ export class Proposedeviations extends React.Component{
         retailerDeviationsSave(this.props.current.current.arrangement_id,this.editData('2')).then(res=>{
             this.refs.Modal.showModal();
             this.setState({
-                text:"You have successfully saved deviations."
+                text:"Deviations successfully saved."
             });
             this.refresh();
         })
@@ -197,7 +197,7 @@ export class Proposedeviations extends React.Component{
         if(this.state.deviations_list.length <= 1){
             this.refs.Modal.showModal();
             this.setState({
-                text:"At least one deviation."
+                text:"Please submit at least one deviation."
             });
             return;
         }
