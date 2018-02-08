@@ -90,8 +90,12 @@ componentDidMount() {
     //alert(localStorage.auction_id);
 }
 upload(type, index){
+    let errorObj = $("#"+type+index).next().next();
     if($("#"+type+index).val() === ""){
-        $("#"+type+index).next().next().fadeIn(300);
+        errorObj.fadeIn(300);
+        setTimeout(()=>{
+            errorObj.fadeOut(500);
+        },2000)
         return;
     }
     if(type === "buyer_tc_upload" || type === "retailer_confidentiality_undertaking_upload"){
