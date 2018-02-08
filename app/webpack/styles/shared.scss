@@ -623,7 +623,7 @@ body.choose{
     a{ margin-left: 15px;}
     }
   .download{ overflow: hidden;
-    span{float: left; margin-right: 15px;}
+    span{float: left; margin-right: 15px; line-height: 54px; white-space:nowrap;}
     .download_ico{background: url("../images/file.png") no-repeat center; cursor: pointer; float: left; width: 45px; height: 54px;}
   }
 }
