@@ -271,7 +271,7 @@ upload(type, index){
                 fileindex:fileindex,
                 fileid:fileid
             }
-            this.setState({text:'Are you sure want to delete this file?'});
+            this.setState({text:'Are you sure you want to delete this file?'});
             this.refs.Modal.showModal("comfirm",obj);
         }
         do_remove(callbackObj){
@@ -307,7 +307,7 @@ upload(type, index){
                                                         <input type="file" required="required" ref={type+index}  onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.state.disabled} />
                                                         <b>Browse..</b>
                                                         <div className="required_error">
-                                                            Please fill out this field and upload this file
+                                                            Please upload file.
                                                         </div>
                                                     </div>
                                                     :<div>
@@ -415,7 +415,7 @@ upload(type, index){
                 let timeBar;
                 this.refs.Modal.showModal();
                 this.setState({
-                    text:"Notification email(s) successfully sent.",
+                    text:"Invitation email(s) successfully sent.",
                 });
                 clearTimeout(timeBar);
                 timeBar = setTimeout(()=>{
@@ -444,7 +444,7 @@ render() {
                                     <abbr>Individual Selected : {this.state.buyer_individual_select}&nbsp;&nbsp;&nbsp;&nbsp;Notification Sent : {this.state.buyer_individual_send}&nbsp;&nbsp;&nbsp;&nbsp;Pending Notification : {this.state.buyer_individual_pend}</abbr>
                                 </div>
                                 <div className="required_error">
-                                At least select one Buyer and Upload one file for Buyer T&C Upload.
+                                Select at least one buyer and upload Buyer T&C.
                                 </div>
                             </div>
                             <div className="lm--formItem lm--formItem--inline string">
@@ -467,7 +467,7 @@ render() {
                                 <abbr>Selected : {this.state.retailer_select}&nbsp;&nbsp;&nbsp;&nbsp;Notification Sent : {this.state.retailer_send}&nbsp;&nbsp;&nbsp;&nbsp;Pending Notification : {this.state.retailer_pend}</abbr>
                             </div>
                             <div className="required_error">
-                                Please select at least one retailer and Upload one file for Retailer Confidentiality Undertaking Upload.
+                                Select at least one retailer and upload Retailer Confidentiality Undertaking.
                             </div>
                         </div>
                         <div className="lm--formItem lm--formItem--inline string">
@@ -490,7 +490,7 @@ render() {
                                 <abbr>Individual Invited : {this.state.buyer_individual_select}</abbr>
                             </div>
                             <div className="required_error">
-                                At least select one Buyer and Upload one file for Buyer T&C Upload.
+                                Select at least one buyer and upload Buyer T&C.
                             </div>
                         </div>
                     </div>

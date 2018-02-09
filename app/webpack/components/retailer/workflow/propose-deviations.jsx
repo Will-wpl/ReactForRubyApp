@@ -113,7 +113,7 @@ export class Proposedeviations extends React.Component{
         retailerSubmitDeviations(this.props.current.current.arrangement_id,this.editData('3')).then(res=>{
             this.refs.Modal.showModal();
             this.setState({
-                text:"Pending administrator's review.",
+                text:"Deviations pending administrator's review.",
                 alldisabled:true
             });
             this.refresh();
@@ -124,7 +124,7 @@ export class Proposedeviations extends React.Component{
         if(this.state.deviations_list.length <= 0){
             this.refs.Modal.showModal();
             this.setState({
-                text:"No Deviations,please add a new deviation!",
+                text:"No Deviations,please add a new deviation.",
             });
             return;
         }
@@ -167,16 +167,17 @@ export class Proposedeviations extends React.Component{
                         }
                     }else{
                         deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'","sp_response_status":"'+item.sp_response_status+'"},';
-                    } 
+                    }
                 }
             }else{
                 deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'","sp_response_status":"'+sum+'"},';
-            }       
+            }
         })
         deviationslist = deviationslist.substr(0, deviationslist.length-1);
         deviationslist = '['+deviationslist+']';
         return deviationslist;
     }
+
     addDeviations(){
         let add_new = {id:0,item:'',clause:'',
                         propose_deviation:'',
@@ -215,7 +216,7 @@ export class Proposedeviations extends React.Component{
         return(
             <div className="propose_deviations u-mt3">
                 <h2 className="u-mt3 u-mb2">Propose Deviations</h2>
-                {!this.props.tender ? (this.props.current.current.turn_to_role === 1?<h4 className="u-mb3 pending_review">Status : Pending administrator's review</h4>:''):''}
+                {!this.props.tender ? (this.props.current.current.turn_to_role === 1?<h4 className="u-mb3 pending_review">Status : Deviations pending administrator's review</h4>:''):''}
                 <div className="col-sm-12 col-md-10 push-md-1">
                     <table className="retailer_fill w_100" cellPadding="0" cellSpacing="0">
                             <thead>
@@ -263,9 +264,9 @@ export class Proposedeviations extends React.Component{
                                                             (item.sp_response_status !='2'?(item.sp_response_status ==''?
                                                             <input type="text" id={"clause_"+(index)} defaultValue={item.clause}/>:<div>{item.clause}<input type="hidden" id={"clause_"+(index)} defaultValue={item.clause}/></div>)
                                                             :<input type="text" id={"clause_"+(index)} defaultValue={item.clause}/>))}
-                                                            </td>
-                                                        <td ><input type="text" id={"deviation_"+(index)} defaultValue={item.propose_deviation} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
-                                                        <td ><input type="text" id={"response_"+(index)} defaultValue={item.retailer_response} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
+                                                        </td>
+                                                <td ><input type="text" id={"deviation_"+(index)} defaultValue={item.propose_deviation} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
+                                                <td ><input type="text" id={"response_"+(index)} defaultValue={item.retailer_response} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
                                                         <td >{item.sp_response}</td>
                                                         <td>{item.item === ""?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>:
                                                         (item.sp_response_status==='2'?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>
