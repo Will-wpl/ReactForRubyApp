@@ -155,22 +155,26 @@ export class Proposedeviations extends React.Component{
     editData(sum){
         let deviationslist = [];
         this.state.deviations_list.map((item, index) => {
+            let deviation = $("#deviation_"+(index)).val(),response = $("#response_"+(index)).val();
+            deviation = deviation.replace(/\n/g,"＜br＞");
+            response = response.replace(/\n/g,"＜br＞");
+            //console.log("deviation===>"+deviation,"response====>"+response);
             if(item.sp_response_status != sum){
                 if(item.sp_response_status == ""){
-                    deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'","sp_response_status":"'+sum+'"},';
+                    deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+deviation+'","retailer_response":"'+response+'","sp_response_status":"'+sum+'"},';
                 }else{
                     if(item.sp_response_status == "0"){
-                        deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'","sp_response_status":"3"},';
+                        deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+deviation+'","retailer_response":"'+response+'","sp_response_status":"3"},';
                     }else if(item.sp_response_status == "2"){
                         if(sum == "3"){
-                            deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'","sp_response_status":"3"},';
+                            deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+deviation+'","retailer_response":"'+response+'","sp_response_status":"3"},';
                         }
                     }else{
-                        deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'","sp_response_status":"'+item.sp_response_status+'"},';
+                        deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+deviation+'","retailer_response":"'+response+'","sp_response_status":"'+item.sp_response_status+'"},';
                     } 
                 }
             }else{
-                deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'","sp_response_status":"'+sum+'"},';
+                deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+deviation+'","retailer_response":"'+response+'","sp_response_status":"'+sum+'"},';
             }       
         })
         deviationslist = deviationslist.substr(0, deviationslist.length-1);
@@ -263,9 +267,9 @@ export class Proposedeviations extends React.Component{
                                                             (item.sp_response_status !='2'?(item.sp_response_status ==''?
                                                             <input type="text" id={"clause_"+(index)} defaultValue={item.clause}/>:<div>{item.clause}<input type="hidden" id={"clause_"+(index)} defaultValue={item.clause}/></div>)
                                                             :<input type="text" id={"clause_"+(index)} defaultValue={item.clause}/>))}
-                                                            </td>
-                                                        <td ><input type="text" id={"deviation_"+(index)} defaultValue={item.propose_deviation} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
-                                                        <td ><input type="text" id={"response_"+(index)} defaultValue={item.retailer_response} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
+                                                        </td>
+                                                        <td ><textarea type="text" id={"deviation_"+(index)} defaultValue={item.propose_deviation.replace("＜br＞","\n")} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
+                                                        <td ><textarea type="text" id={"response_"+(index)} defaultValue={item.retailer_response.replace("＜br＞","\n")} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
                                                         <td >{item.sp_response}</td>
                                                         <td>{item.item === ""?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>:
                                                         (item.sp_response_status==='2'?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>
