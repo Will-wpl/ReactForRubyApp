@@ -120,7 +120,7 @@ class TenderWorkflow < Workflow
 
   def node3_retailer_has_chats?(sm)
     arrangement_id = sm.arrangement_id
-    chats = TenderChat.where('arrangement_id = ?', arrangement_id)
+    chats = TenderChat.where("arrangement_id = ? and sp_response_status != '2'", arrangement_id)
     count = chats.count
     count != 0
   end

@@ -83,7 +83,7 @@ export class SearchList extends Component {
     }
     showDelete(auction_name){
         this.refs.Modal.showModal("comfirm");
-        this.setState({text:"Are you sure want to delete?",name:auction_name,params_type:false});
+        this.setState({text:"Are you sure you want to delete?",name:auction_name,params_type:false});
     }
     delete(){
         deleteAuction({ auction: {id:this.auction_id}}).then(res => {

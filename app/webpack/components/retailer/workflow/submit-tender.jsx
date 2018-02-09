@@ -86,7 +86,7 @@ export class Submittender extends React.Component{
             fileid:fileid
         }
         console.log(obj);
-        this.setState({text:'Are you sure want to delete this file?'});
+        this.setState({text:'Are you sure you want to delete this file?'});
         this.refs.Modal.showModal("comfirm",obj);
     }
     do_remove(callbackObj){
@@ -132,7 +132,7 @@ export class Submittender extends React.Component{
                                                 <input type="file" required="required" ref={type+index}  onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.props.propsdisabled?true:(this.state.disabled)} />
                                                 <b>Browse..</b>
                                                 <div className="required_error">
-                                                    Please fill out this field and upload this file
+                                                    Please upload file.
                                                 </div>
                                             </div>
                                             :<div>
