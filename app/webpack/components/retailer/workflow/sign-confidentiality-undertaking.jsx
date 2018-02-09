@@ -50,7 +50,7 @@ export class Signconfidentialityundertaking extends React.Component{
         retailerAccept(this.props.current.current.arrangement_id).then(res=>{
             this.refs.Modal.showModal();
             this.setState({
-                text:"Congratulations, you have accepted the Confidentiality Undertaking."
+                text:"You have accepted the Confidentiality Undertaking."
             });
             setTimeout(()=>{
                 this.props.page();

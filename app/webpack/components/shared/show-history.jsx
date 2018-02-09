@@ -32,7 +32,7 @@ export class Showhistory extends React.Component{
                                     <dd>
                                         <dfn><abbr></abbr>Retailer</dfn>
                                         <span>
-                                            Propose Deviation : {item.propose_deviation}<br/>
+                                            Proposed Deviation : {item.propose_deviation}<br/>
                                             Response : {item.retailer_response}
                                         </span>
                                     </dd>:''}
