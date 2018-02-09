@@ -113,7 +113,7 @@ export class Proposedeviations extends React.Component{
         retailerSubmitDeviations(this.props.current.current.arrangement_id,this.editData('3')).then(res=>{
             this.refs.Modal.showModal();
             this.setState({
-                text:"Pending administrator's review.",
+                text:"Deviations pending administrator's review.",
                 alldisabled:true
             });
             this.refresh();
@@ -124,7 +124,7 @@ export class Proposedeviations extends React.Component{
         if(this.state.deviations_list.length <= 0){
             this.refs.Modal.showModal();
             this.setState({
-                text:"No Deviations,please add a new deviation!",
+                text:"No Deviations,please add a new deviation.",
             });
             return;
         }
@@ -215,7 +215,7 @@ export class Proposedeviations extends React.Component{
         return(
             <div className="propose_deviations u-mt3">
                 <h2 className="u-mt3 u-mb2">Propose Deviations</h2>
-                {!this.props.tender ? (this.props.current.current.turn_to_role === 1?<h4 className="u-mb3 pending_review">Status : Pending administrator's review</h4>:''):''}
+                {!this.props.tender ? (this.props.current.current.turn_to_role === 1?<h4 className="u-mb3 pending_review">Status : Deviations pending administrator's review</h4>:''):''}
                 <div className="col-sm-12 col-md-10 push-md-1">
                     <table className="retailer_fill w_100" cellPadding="0" cellSpacing="0">
                             <thead>
