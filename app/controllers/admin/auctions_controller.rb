@@ -23,7 +23,9 @@ class Admin::AuctionsController < Admin::BaseController
   def confirm; end
 
   # GET result page
-  def result; end
+  def result
+    @company_count = Consumption.find_by_user_consumer_type(User::ConsumerTypeCompany).is_participation.count
+  end
 
   # GET report page
   def report; end
