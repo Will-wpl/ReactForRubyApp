@@ -9,6 +9,7 @@
     table.table.table-hover.retailer_fill.u-mt3
       thead
         tr
+          th ID
           th Name
           th Date
           th Contract Period
@@ -22,6 +23,7 @@
       tbody
         - @auction_results.each do |auction_result|
           tr
+            td= auction_result.published_gid
             td= auction_result.name
             td= auction_result.start_datetime.strftime("%d %b %Y")
             td  #{auction_result.contract_period_start_date.strftime("%d %b %Y")} to #{auction_result.contract_period_end_date.strftime("%d %b %Y")}

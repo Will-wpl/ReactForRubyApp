@@ -193,11 +193,11 @@ Rails.application.routes.draw do
     resources :auctions, only: %i[new empty goto upcoming online dashboard confirm result report log invitation select comsumption unpublished published buyer_dashboard retailer_dashboard tender] do
       member do
         get 'upcoming' # published and pre-auction page
-        get 'online' # published and pre-auciton page to retailer online status page
+        get 'online' # published and pre-auction page to retailer online status page
         get 'dashboard' # live page
         get 'confirm' # confirm or void auction page
-        get 'result' # auciton result page
-        get 'report' # auciton report page
+        get 'result' # auction result page
+        get 'report' # auction report page
         get 'log' # auction activity log page
         get 'award' # auction activity log page
         get 'invitation' # create RA next page
@@ -243,7 +243,13 @@ Rails.application.routes.draw do
 
   namespace :buyer do
     resources :home, only: :index
-    resources :auctions,only: %i[index]
+    resources :auction_results, only: [:index]
+    resources :auctions,only: %i[index] do
+      member do
+        get 'report' # auction report page
+        get 'award' # auction activity log page
+      end
+    end
     resources :consumptions,only: %i[edit]
   end
 end
