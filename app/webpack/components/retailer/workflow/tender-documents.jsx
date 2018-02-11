@@ -103,7 +103,6 @@ export class Tenderdocuments extends React.Component{
                 Please see attached tender documents:
                 </label>
                 <div className="lm--formItem-right lm--formItem-control">
-                    <ul className="tender_list">
                         {this.state.attachments ? this.state.attachments.map((item,index)=>{
                             return <li key={index}>Item {index+1} : <a disabled={this.props.propsdisabled} download={item.file_name} href={"/"+item.file_path}>{item.file_name}</a></li>
                         }) : ''}
