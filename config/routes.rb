@@ -199,6 +199,7 @@ Rails.application.routes.draw do
         get 'result' # auciton result page
         get 'report' # auciton report page
         get 'log' # auction activity log page
+        get 'award' # auction activity log page
         get 'invitation' # create RA next page
         get 'select' # select users page
         get 'consumption' # select users page

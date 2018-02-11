@@ -18,6 +18,7 @@
           th Total Volume
           th Reverse Auction Report
           th Activities Log
+          th Letter of Award
       tbody
         - @auction_results.each do |auction_result|
           tr
@@ -36,6 +37,9 @@
                 = ''
             td
               = link_to log_admin_auction_path(auction_result.auction_id), class: 'log' do
+                = ''
+            td
+              = link_to award_admin_auction_path(auction_result.auction_id), class: 'award' do
                 = ''
             /td= link_to auction_history.id, admin_auction_history_path(auction_history)
             /td.text-right

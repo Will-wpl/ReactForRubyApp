@@ -33,6 +33,8 @@ class Admin::AuctionsController < Admin::BaseController
     @auction_events = AuctionEvent.select('auction_events.* , users.company_name ').left_outer_joins(:user).order(created_at: :desc).page(params[:page])
   end
 
+  def award; end
+
   def goto
     if @auction.publish_status != '1'
       redirect_to empty_admin_auction_path(@auction.id)
