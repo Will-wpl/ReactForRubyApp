@@ -159,7 +159,9 @@ abbr[title]{color: #fe0000; text-decoration: none;}
     span{ float: left; padding-left:15px;}
     a{ float: right; padding-right:15px; cursor: pointer;}
   }
-  .modal_detail{ width:90%; min-height: 112px; margin:0px auto; line-height: 22px; font-size: 16px;}
+  .modal_detail{ width:90%; min-height: 112px; margin:0px auto; line-height: 22px; font-size: 16px;
+    .modal_text{ width: 100%; height: auto; border:0px; background: none; font-size: 16px; color:#fff;rows:2;resize:none;}
+  }
   .showinfo{ color: red; min-height: auto;}
   .modal_btn{ 
     width:100%; margin: 10px auto; overflow: hidden;
@@ -646,7 +648,10 @@ body.choose{
           input,select,textarea{
             width:90%; margin: 0px auto; padding: 2px; border:1px solid #fff;
           }
-          textarea{padding:1px 5px;rows:2;resize:none;}
+          textarea{
+            padding:1px 5px;rows:2;resize:none;
+            &.show_text{ border:0px; color:#fff; font-size: 12px;rows:auto;}
+          }
           button{background: #00888a; padding: 4px 8px; width: auto; height: auto; display: inline-block; border-radius: 5px; margin:5px;}
         }
       }
