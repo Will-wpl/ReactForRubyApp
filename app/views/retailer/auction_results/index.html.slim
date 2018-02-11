@@ -13,6 +13,7 @@
               th Name
               th Date
               th My Result
+              th Letter of Award
           tbody
             - @auction_results.each do |auction_result|
               tr
@@ -28,6 +29,9 @@
                         'Tender Awarded
                     - else
                         'Tender Not Awarded
+                td
+                  = link_to award_retailer_auction_path(auction_result.auction_id), class: 'award' do
+                    = ''
                 /td.text-right
                 /  = link_to admin_auction_history_path(auction_history), class: "btn btn-success btn-sm" do
                 /    = icon "eye", t("views.actions.show")

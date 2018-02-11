@@ -218,7 +218,11 @@ Rails.application.routes.draw do
 
   namespace :retailer do
     resources :home, only: :index
-    resources :auctions,only: %i[index]
+    resources :auctions,only: %i[index] do
+      member do
+        get 'award' # auction activity log page
+      end
+    end
     resources :arrangements, only: %i[tender] do
       member do
         get 'tender'
