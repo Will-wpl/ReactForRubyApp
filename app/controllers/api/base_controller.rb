@@ -32,7 +32,12 @@ class Api::BaseController < ApplicationController
     end
     where = []
     where.push(where_conditions.join(' and '))
-    where + where_attributes
+    condition = where + where_attributes
+    if condition == [""]
+      "1 = 1"
+    else
+      condition
+    end
   end
 
   def reject_params(params, reject_list)

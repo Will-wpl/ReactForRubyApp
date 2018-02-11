@@ -90,6 +90,7 @@ Rails.application.routes.draw do
           get 'history'
         end
       end
+      resources :auction_results, only: %i[index]
     end
   end
 
@@ -136,6 +137,7 @@ Rails.application.routes.draw do
           get 'history'
         end
       end
+      resources :auction_results, only: %i[index]
     end
   end
 
@@ -147,13 +149,13 @@ Rails.application.routes.draw do
           post 'reject'
         end
       end
-
       resources :auctions, only: %i[obtain published] do
         collection do
           get 'obtain'
           get 'published'
         end
       end
+      resources :auction_results, only: %i[index]
     end
   end
 
