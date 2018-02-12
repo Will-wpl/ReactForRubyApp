@@ -2,60 +2,13 @@
   /h1= page_title(model: AuctionResult.model_name.human.pluralize)
 
 
-- if @auction_results.count == 0
+- if @auction_results_count == 0
     div.live_modal
       p You have no past Reverse Auction record.
 - else
-    table.table.table-hover.retailer_fill.u-mt3
-      thead
-        tr
-          th Name
-          th Date
-          th Contract Period
-          th Status
-          th Lowest Price Bidder
-          th Lowest Average Price
-          th Total Volume
-          th Reverse Auction Report
-          th Activities Log
-      tbody
-        - @auction_results.each do |auction_result|
-          tr
-            td= auction_result.name
-            td= auction_result.start_datetime.strftime("%d %b %Y")
-            td  #{auction_result.contract_period_start_date.strftime("%d %b %Y")} to #{auction_result.contract_period_end_date.strftime("%d %b %Y")}
-            - if auction_result.status == "void"
-                td Void
-            - else
-                td Awarded
-            td= auction_result.lowest_price_bidder
-            td  #{number_to_currency(auction_result.lowest_average_price,unit: "$ ", precision: 4) }/kWh
-            td  #{number_to_currency(auction_result.total_volume,unit: "", precision: 0) }kWh
-            td
-              = link_to report_admin_auction_path(auction_result.auction_id), class: 'report' do
-                = ''
-            td
-              = link_to log_admin_auction_path(auction_result.auction_id), class: 'log' do
-                = ''
-            /td= link_to auction_history.id, admin_auction_history_path(auction_history)
-            /td.text-right
-            /  = link_to admin_auction_history_path(auction_history), class: "btn btn-success btn-sm" do
-            /    = icon "eye", t("views.actions.show")
-            /  ' &nbsp;
-            /  = link_to edit_admin_auction_history_path(auction_history), class: "btn btn-warning btn-sm" do
-            /    = icon "edit", t("views.actions.edit")
-            /  ' &nbsp;
-            /  = link_to admin_auction_history_path(auction_history), class: "btn btn-danger btn-sm", method: :delete, data: { confirm: t('views.confirm'), disable_with: t('views.disable_with') } do
-            /    = icon "trash", t("views.actions.destroy")
+    / please add component to here
 
     hr
-
-
-    .u-grid.u-mt3
-      .col-sm-12.col-md-6
-        = page_entries_info @auction_results, entry_name: AuctionResult.model_name.human
-      .col-sm-12.col-md-6
-        = paginate(@auction_results)
 
 
 div.createRaMain.u-grid

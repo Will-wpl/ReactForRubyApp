@@ -22,8 +22,13 @@ class Admin::AuctionsController < Admin::BaseController
   # GET confirm page
   def confirm; end
 
+  # GET choose winner page
+  def choose_winner; end
+
   # GET result page
-  def result; end
+  def result
+    @company_count = Consumption.get_company_user_count(params[:id])
+  end
 
   # GET report page
   def report; end
@@ -32,6 +37,8 @@ class Admin::AuctionsController < Admin::BaseController
   def log
     @auction_events = AuctionEvent.select('auction_events.* , users.company_name ').left_outer_joins(:user).order(created_at: :desc).page(params[:page])
   end
+
+  def award; end
 
   def goto
     if @auction.publish_status != '1'

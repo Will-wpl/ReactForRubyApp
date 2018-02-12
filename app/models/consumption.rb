@@ -6,6 +6,13 @@ class Consumption < ApplicationRecord
   # action_status: admin select buyers in auction creation
   # "1":"Notification sent", "2":"Pending Notification"
 
+  ParticipationStatusReject = '0'.freeze
+  ParticipationStatusParticipate = '1'.freeze
+  ParticipationStatusPending = '2'.freeze
+
+  ActionStatusSent = '1'.freeze
+  ActionStatusPending = '2'.freeze
+
   # Extends
 
   # Includes
@@ -20,12 +27,13 @@ class Consumption < ApplicationRecord
 
   # Scopes
   scope :mine, ->(user_id) { where('user_id = ?', user_id) }
-  scope :find_notify_buyer, ->{ where("action_status = '1'") }
+  scope :find_notify_buyer, ->{ where(action_status: ActionStatusSent) } # "action_status = '1'"
   scope :find_by_auction_id, ->(auction_id) { where('auction_id = ?', auction_id) }
   scope :join_buyer_auction, -> { includes(:auction).where.not(auctions: { publish_status: nil }) }
   scope :find_by_user_consumer_type, ->(consumer_type) { includes(:user).where(users: { consumer_type: consumer_type }) }
+  scope :is_participation, -> { where(participation_status: ParticipationStatusParticipate) }
   scope :find_by_auction_and_user, ->(auction_id, user_id) { where('auction_id = ? and user_id =?', auction_id, user_id) }
-  scope :is_not_notify, -> { where("action_status = '2'") }
+  scope :is_not_notify, -> { where(action_status: ActionStatusPending) } # "action_status = '2'"
   # Callbacks
 
   # Delegates
@@ -33,8 +41,13 @@ class Consumption < ApplicationRecord
   # Custom
 
   # Methods (class methods before instance methods)
+  #
+  def self.get_company_user_count(auction_id)
+    Consumption.find_by_auction_id(auction_id).find_by_user_consumer_type(User::ConsumerTypeCompany).is_participation.count
+  end
+
   def self.update_value(auction_id, _consumption, _intake_values)
-    auction = Auction.find(auction_id)
+    Auction.find(auction_id)
   end
 
   def self.convert_intake_value(intake_level, peak, off_peak)

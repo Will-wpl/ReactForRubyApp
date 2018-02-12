@@ -141,7 +141,7 @@ class Devise::RegistrationsController < DeviseController
                                       keys: %i[name company_name company_address company_unique_entity_number
                                                company_license_number account_mobile_number account_office_number
                                                consumer_type account_fin account_home_number approval_status
-                                               account_housing_type account_home_address])
+                                               account_housing_type account_home_address billing_address gst_no])
   end
 
   def sign_up_params
@@ -165,6 +165,6 @@ class Devise::RegistrationsController < DeviseController
                                  :company_name, :approval_status, :company_address,
                                  :company_unique_entity_number, :company_license_number, :account_fin,
                                  :account_mobile_number, :account_office_number, :account_home_number,
-                                 :account_housing_type, :account_home_address)
+                                 :account_housing_type, :account_home_address, :gst_no, :billing_address)
   end
 end

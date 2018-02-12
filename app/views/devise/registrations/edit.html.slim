@@ -78,6 +78,12 @@
             = f.input :company_license_number,disabled:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
+            b *
+            attr GST No.:
+          .lm--formItem-right.lm--formItem-control
+            = f.input :gst_no, required: true
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label
             font Contact Information:
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label 
@@ -133,6 +139,12 @@
             attr Company Address
           .lm--formItem-right.lm--formItem-control
             = f.input :company_address,required:true
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label
+            b *
+            attr Billing Address
+          .lm--formItem-right.lm--formItem-control
+            = f.input :billing_address, required: true, placeholder: ''
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label 
             b * 
@@ -207,6 +219,12 @@
             attr Home Address
           .lm--formItem-right.lm--formItem-control
             = f.input :account_home_address,required:true
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label
+            b *
+            attr Billing Address
+          .lm--formItem-right.lm--formItem-control
+            = f.input :billing_address, required: true, placeholder: ''
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label 
             b * 
