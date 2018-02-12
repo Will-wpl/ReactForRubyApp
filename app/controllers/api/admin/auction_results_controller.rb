@@ -40,7 +40,7 @@ class Api::Admin::AuctionResultsController < Api::BaseController
                 total_volume: "#{tv}kWh",
                 report: "admin/auctions/#{result.auction_id}/report",
                 log: "admin/auctions/#{result.auction_id}/log",
-                award: company_user_count != 0 ? "admin/auctions/#{result.auction_id}/award" : '')
+                award: company_user_count != 0 && result.status != 'void' ? "admin/auctions/#{result.auction_id}/award" : '')
     end
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: nil }, status: 200

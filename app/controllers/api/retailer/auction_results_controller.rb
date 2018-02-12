@@ -26,15 +26,19 @@ class Api::Retailer::AuctionResultsController < Api::BaseController
                   else
                     result.user_id == current_user.id ? 'Tender Awarded' : 'Tender Not Awarded'
                   end
-      company_user_count = Consumption.get_company_user_count(result.auction_id)
       data.push(published_gid: result.auction.published_gid,
                 name: result.auction.name,
                 start_datetime: result.auction.start_datetime,
                 my_result: my_result,
-                award: company_user_count != 0 ? "admin/auctions/#{result.auction_id}/award" : '')
+                award: show_award?(result, current_user) ? "admin/auctions/#{result.auction_id}/award" : '')
     end
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: nil }, status: 200
+  end
+
+  def show_award?(result, current_user)
+
+    result.user_id == current_user.id
   end
 
 end

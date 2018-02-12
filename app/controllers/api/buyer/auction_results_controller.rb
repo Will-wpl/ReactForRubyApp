@@ -21,15 +21,22 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
     ]
     data = []
     result.order(created_at: :desc).each do |result|
-      company_user_count = Consumption.get_company_user_count(result.auction_id)
       data.push(published_gid: result.auction.published_gid,
                 name: result.auction.name,
                 start_datetime: result.auction.start_datetime,
                 report: "admin/auctions/#{result.auction_id}/report",
-                award: company_user_count != 0 && result.status != 'void' ? "admin/auctions/#{result.auction_id}/award" : '')
+                award: show_award?(result, current_user) ? "admin/auctions/#{result.auction_id}/award" : '')
     end
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: nil }, status: 200
+  end
+
+  private
+
+  def show_award?(result, current_user)
+    consumption = Consumption.find_by_auction_and_user(result.auction_id, current_user.id).first
+    user = User.find(current_user.id)
+    result.status != 'void' && consumption.participation_status == Consumption::ParticipationStatusParticipate && user.consumer_type == User::ConsumerTypeCompany
   end
 
 end
