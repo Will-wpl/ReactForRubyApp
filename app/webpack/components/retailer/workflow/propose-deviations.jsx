@@ -186,6 +186,7 @@ export class Proposedeviations extends React.Component{
         let add_new = {id:0,item:'',clause:'',
                         propose_deviation:'',
                         retailer_response:'',
+                        sp_response:'',
                         sp_response_status:'',key:this.state.deviations_list.length+1},list = this.state.deviations_list;
                         list.push(add_new);
                         // if(list.length < this.state.select_list.length){
@@ -271,7 +272,7 @@ export class Proposedeviations extends React.Component{
                                                     </td>
                                                     <td ><textarea type="text" id={"deviation_"+(index)} defaultValue={item.propose_deviation.replace(/＜br＞/g,"\n")} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
                                                     <td ><textarea type="text" id={"response_"+(index)} defaultValue={item.retailer_response.replace(/＜br＞/g,"\n")} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
-                                                    <td ><textarea className="show_text" defaultValue={item.sp_response.replace(/＜br＞/g,"\n")} disabled/></td>
+                                                    <td ><textarea className="show_text" defaultValue={item.sp_response?item.sp_response.replace(/＜br＞/g,"\n"):""} disabled/></td>
                                                     <td>{item.item === ""?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>:
                                                     (item.sp_response_status==='2'?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>
                                                     :<div>
