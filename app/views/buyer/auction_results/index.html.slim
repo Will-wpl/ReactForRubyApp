@@ -6,35 +6,9 @@
     div.live_modal
       p You have no past Reverse Auction record.
 - else
-    table.table.table-hover.retailer_fill.u-mt3
-      thead
-        tr
-          th ID
-          th Name
-          th Date
-          th Reverse Auction Report
-          th Letter of Award
-      tbody
-        - @auction_results.each do |auction_result|
-          tr
-            td= auction_result.published_gid
-            td= auction_result.name
-            td= auction_result.start_datetime.strftime("%d %b %Y")
-            td
-              = link_to report_buyer_auction_path(auction_result.auction_id), class: 'report' do
-                = ''
-            td
-              = link_to award_buyer_auction_path(auction_result.auction_id), class: 'award' do
-                = ''
+    / please add component to here
 
     hr
-
-
-    .u-grid.u-mt3
-      .col-sm-12.col-md-6
-        = page_entries_info @auction_results, entry_name: AuctionResult.model_name.human
-      .col-sm-12.col-md-6
-        = paginate(@auction_results)
 
 
 div.createRaMain.u-grid
