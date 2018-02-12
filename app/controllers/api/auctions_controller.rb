@@ -118,6 +118,7 @@ class Api::AuctionsController < Api::BaseController
     auction_result.eht_peak = history.eht_peak
     auction_result.eht_off_peak = history.eht_off_peak
     auction_result.user_id = params[:user_id]
+    auction_result.justification = params[:justification]
     # end
     if auction_result.save
       AuctionEvent.set_events(current_user.id, @auction.id, request[:action], auction_result.to_json)
