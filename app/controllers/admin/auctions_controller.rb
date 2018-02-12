@@ -22,6 +22,9 @@ class Admin::AuctionsController < Admin::BaseController
   # GET confirm page
   def confirm; end
 
+  # GET choose winner page
+  def choose_winner; end
+
   # GET result page
   def result
     @company_count = Consumption.get_company_user_count(params[:id])

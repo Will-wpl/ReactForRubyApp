@@ -198,6 +198,7 @@ Rails.application.routes.draw do
         get 'online' # published and pre-auction page to retailer online status page
         get 'dashboard' # live page
         get 'confirm' # confirm or void auction page
+        get 'choose_winner' # choose winner page
         get 'result' # auction result page
         get 'report' # auction report page
         get 'log' # auction activity log page
