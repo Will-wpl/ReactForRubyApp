@@ -92,7 +92,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
         a{ 
           display: block; width: 100%; height: 100%; cursor: pointer;
           &.report{background: url("../images/Reverse_Auction_Report.png") no-repeat center; background-size:19px;}
-          &.log{background: url("../images/Activity_Log.png") no-repeat center; background-size:19px;}
+          &.log,&.award{background: url("../images/Activity_Log.png") no-repeat center; background-size:19px;}
         }
         input{
           width: 60px; display: inline-block; padding:2px; border:1px solid #fff; margin-left: 5px; background: none;
@@ -455,14 +455,15 @@ dfn.manage_label{
       background:#00b0b2 url("../images/reset.png") no-repeat 5px center; background-size: 18px; 
     }       
   }
-  div.lm--table-container{
+  div.lm--table-container{ overflow:hidden;
     a{ text-decoration: none; cursor: pointer;}
     table.lm--table{
       table-layout: fixed;
       th{
-        font-size: 16px;
+        font-size: 14px;
       }
       td{
+        font-size: 13px;
         div{ width: 100%; height:20px;
           &.select_ico_0{background:url("../images/not_invited.png") no-repeat 15px center;}
           &.select_ico_1{background:url("../images/notification_sent.png") no-repeat 15px center;}
@@ -477,7 +478,9 @@ dfn.manage_label{
           &.cancel_invite{background:url("../images/cancel_invite.png") no-repeat left;}
         }
         a{
-          margin: 0px 10px;
+          margin: 0px 10px; display: block; width: 100%; cursor: pointer;
+          &.report{background: url("../images/Reverse_Auction_Report.png") no-repeat center; background-size:19px; height: 20px;}
+          &.log,&.award{background: url("../images/Activity_Log.png") no-repeat center; background-size:19px; height: 20px;}
         }
         &.search_list_btn{word-wrap: break-word;
           a{ 
