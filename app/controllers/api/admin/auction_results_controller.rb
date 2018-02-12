@@ -1,4 +1,5 @@
-class Api::Admin::AuctionResultsController < Api::Admin::BaseController
+class Api::Admin::AuctionResultsController < Api::BaseController
+  before_action :admin_required
   include ActionView::Helpers::NumberHelper
   def index
     if params.key?(:page_size) && params.key?(:page_index)
