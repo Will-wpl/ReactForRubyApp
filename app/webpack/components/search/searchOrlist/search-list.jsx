@@ -151,7 +151,7 @@ export class SearchList extends Component {
                                     
                                 })
                             }
-                        <th/>
+                        {this.props.table_data.actions?<th/>:null}
                         </tr>
                         </thead>
                         <tbody>
@@ -191,11 +191,15 @@ export class SearchList extends Component {
                                                             return <td key={i}>
                                                                     {item[`${it.field_name}`] === null ? 'Pending' : (item[`${it.field_name}`] === '0' ? 'Rejected' : (item[`${it.field_name}`] === '1'?'Accepted':"In Progress"))}
                                                                    </td>
+                                                        }else if(it.field_name === 'report' || it.field_name === 'log' || it.field_name === 'award'){
+                                                            return <td key={i}>
+                                                                    <a className={it.field_name} href={item[`${it.field_name}`]?"/"+item[`${it.field_name}`]:"javascript:void(0);"}></a>
+                                                                   </td>
                                                         }else if(it.field_name === 'actions'){
                                         
                                                         }else{
                                                             return <td key={i}>
-                                                                {it.field_name === "actual_begin_time" 
+                                                                {it.field_name === "actual_begin_time" || it.field_name === "start_datetime"  
                                                                 ? moment(item[`${it.field_name}`]).format('D MMM YYYY hh:mm A') 
                                                                 : item[`${it.field_name}`]}
                                                                 </td>
@@ -203,34 +207,35 @@ export class SearchList extends Component {
                                                         
                                                     })
                                                 }
-                                                <td className="search_list_btn">
-                                                    {
-                                                        // item["actions"] >= 0 ? (<a className={this.props.table_data.actions[item["actions"]].icon} 
-                                                        //                     onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,this.props.table_data.actions[item["actions"]].url,this.props.table_data.actions[item["actions"]].name,this.props.table_data.actions[item["actions"]].interface_type ? this.props.table_data.actions[item["actions"]].interface_type : "",item.name ? item.name : '',item.auction_id)}>
-                                                        //                     {this.props.table_data.actions[item["actions"]].name}</a>)
-                                                        //: (
-                                                        this.props.table_data.actions.map((ik,k)=>{
-                                                            if(ik.check === "docheck"){
-                                                                if(item["actions"] === k){
-                                                                    if(item['auction_status'] === 'In Progress' && ik.name === 'View'){
+                                                {this.props.table_data.actions?
+                                                    <td className="search_list_btn">
+                                                        {
+                                                            // item["actions"] >= 0 ? (<a className={this.props.table_data.actions[item["actions"]].icon} 
+                                                            //                     onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,this.props.table_data.actions[item["actions"]].url,this.props.table_data.actions[item["actions"]].name,this.props.table_data.actions[item["actions"]].interface_type ? this.props.table_data.actions[item["actions"]].interface_type : "",item.name ? item.name : '',item.auction_id)}>
+                                                            //                     {this.props.table_data.actions[item["actions"]].name}</a>)
+                                                            //: (
+                                                            this.props.table_data.actions.map((ik,k)=>{
+                                                                if(ik.check === "docheck"){
+                                                                    if(item["actions"] === k){
+                                                                        if(item['auction_status'] === 'In Progress' && ik.name === 'View'){
+                                                                        }else{
+                                                                            return <a key={k} className={this.props.table_data.actions[item["actions"]].icon} 
+                                                                                onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,this.props.table_data.actions[item["actions"]].url,this.props.table_data.actions[item["actions"]].name,this.props.table_data.actions[item["actions"]].interface_type ? this.props.table_data.actions[item["actions"]].interface_type : "",item.name ? item.name : '',item.auction_id)}>
+                                                                                {this.props.table_data.actions[item["actions"]].name}</a>
+                                                                        }
+                                                                        
+                                                                    }
+                                                                }else{
+                                                                    if(item['auction_status'] === 'Upcoming' && ik.name === 'Manage'){
                                                                     }else{
-                                                                        return <a key={k} className={this.props.table_data.actions[item["actions"]].icon} 
-                                                                             onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,this.props.table_data.actions[item["actions"]].url,this.props.table_data.actions[item["actions"]].name,this.props.table_data.actions[item["actions"]].interface_type ? this.props.table_data.actions[item["actions"]].interface_type : "",item.name ? item.name : '',item.auction_id)}>
-                                                                             {this.props.table_data.actions[item["actions"]].name}</a>
+                                                                        return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>{ik.name}</a>
                                                                     }
                                                                     
-                                                                }
-                                                            }else{
-                                                                if(item['auction_status'] === 'Upcoming' && ik.name === 'Manage'){
-                                                                }else{
-                                                                    return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>{ik.name}</a>
-                                                                }
-                                                                
-                                                            }                                                           
-                                                        })
-                                                    //)
-                                                    }
-                                                </td>
+                                                                }                                                           
+                                                            })
+                                                        //)
+                                                        }
+                                                    </td>:null}
                                             </tr>
                                 })
                             }

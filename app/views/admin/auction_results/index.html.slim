@@ -1,14 +1,11 @@
 .page-header
   /h1= page_title(model: AuctionResult.model_name.human.pluralize)
-
-
 - if @auction_results_count == 0
     div.live_modal
       p You have no past Reverse Auction record.
 - else
-    / please add component to here
-
-    hr
+    h1.search_list_type Past Reverse Auction
+    div id='users_search_list'
 
 
 div.createRaMain.u-grid
