@@ -650,7 +650,7 @@ body.choose{
           }
           textarea{
             padding:1px 5px;rows:2;resize:none;
-            &.show_text{ border:0px; color:#fff; font-size: 12px;rows:auto;}
+            &.show_text{ border:0px; color:#fff; font-size: 12px;}
           }
           button{background: #00888a; padding: 4px 8px; width: auto; height: auto; display: inline-block; border-radius: 5px; margin:5px;}
         }

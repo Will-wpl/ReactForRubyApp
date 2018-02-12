@@ -31,7 +31,7 @@ export class Keppelproposedeviations extends Component {
     editData(){
         let deviationslist = [];
         this.state.deviations_list.map((item, index) => {
-            deviationslist += '{"id":"'+item.id+'","sp_response":"'+item.sp_response+'","sp_response_status":"'+item.sp_response_status+'"},';
+            deviationslist += '{"id":"'+item.id+'","sp_response":"'+item.sp_response.replace(/\n/g,"＜br＞")+'","sp_response_status":"'+item.sp_response_status+'"},';
         })
         deviationslist = deviationslist.substr(0, deviationslist.length-1);
         deviationslist = '['+deviationslist+']';
@@ -126,9 +126,9 @@ export class Keppelproposedeviations extends Component {
                                         return <tr key={index}>
                                                 <td>{item.item}</td>
                                                 <td >{item.clause}</td>
-                                                <td >{item.propose_deviation}</td>
-                                                <td >{item.retailer_response}</td>
-                                                <td >{item.sp_response}<input type="hidden" id={"sp_response_"+index} defaultValue={item.sp_response} /></td>
+                                                <td ><textarea className="show_text" defaultValue={item.propose_deviation.replace(/＜br＞/g,"\n")} disabled/></td>
+                                                <td ><textarea className="show_text" defaultValue={item.retailer_response.replace(/＜br＞/g,"\n")} disabled/></td>
+                                                <td ><textarea className="show_text" defaultValue={item.sp_response.replace(/＜br＞/g,"\n")} disabled/><input type="hidden" id={"sp_response_"+index} defaultValue={item.sp_response} /></td>
                                                 <td>
                                                     <button id={"sp_reject_"+index} disabled>Reject</button>
                                                     <button id={"sp_accept_"+index} disabled>Accept</button>
@@ -140,9 +140,9 @@ export class Keppelproposedeviations extends Component {
                                 return <tr key={index}>
                                             <td>{item.item}</td>
                                             <td >{item.clause}</td>
-                                            <td >{item.propose_deviation}</td>
-                                            <td >{item.retailer_response}</td>
-                                            <td ><input type="text" id={"sp_response_"+index} /></td>
+                                            <td ><textarea className="show_text" defaultValue={item.propose_deviation.replace(/＜br＞/g,"\n")} disabled/></td>
+                                            <td ><textarea className="show_text" defaultValue={item.retailer_response.replace(/＜br＞/g,"\n")} disabled/></td>
+                                            <td ><textarea id={"sp_response_"+index} defaultValue={item.sp_response?item.sp_response.split(": ")[1].replace(/＜br＞/g,"\n"):''} /></td>
                                             <td>
                                                 <button id={"sp_reject_"+index} disabled={item.type?(item.type=="reject"?true:false):(item.sp_response_status === '4' || item.sp_response_status === '1'?true:false)} onClick={this.do_reject.bind(this,{params:'0',index:index,type:'reject'})}>Reject</button>
                                                 <button id={"sp_accept_"+index} disabled={item.type?(item.type=="accept"?true:false):(item.sp_response_status === '4' || item.sp_response_status === '1'?true:false)} onClick={this.do_accept.bind(this,{params:'1',index:index,type:'accept'})}>Accept</button>
