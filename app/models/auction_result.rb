@@ -12,6 +12,7 @@ class AuctionResult < ApplicationRecord
   # Validations
 
   # Scopes
+  scope :find_by_arrangement, ->(user) { joins(auction: :arrangements).where(arrangements: { user_id: user }) }
 
   # Callbacks
 
