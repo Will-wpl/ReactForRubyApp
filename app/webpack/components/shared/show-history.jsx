@@ -32,14 +32,14 @@ export class Showhistory extends React.Component{
                                     <dd>
                                         <dfn><abbr></abbr>Retailer</dfn>
                                         <span>
-                                            Proposed Deviation : {item.propose_deviation}<br/>
-                                            Response : {item.retailer_response}
+                                            Proposed Deviation : {item.propose_deviation?item.propose_deviation.replace(/＜br＞/g,"\n"):""}<br/>
+                                            Response : {item.retailer_response?item.retailer_response.replace(/＜br＞/g,"\n"):""}
                                         </span>
                                     </dd>:''}
                                     {item.sp_response?
                                     <dt>
                                         <dfn><abbr></abbr>SP</dfn>
-                                        <span>{item.sp_response}</span>
+                                        <span>{item.sp_response?item.sp_response.replace(/＜br＞/g,"\n"):""}</span>
                                     </dt>:''}
                                 </dl>
                     })}
