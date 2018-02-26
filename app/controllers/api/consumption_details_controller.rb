@@ -83,6 +83,6 @@ class Api::ConsumptionDetailsController < Api::BaseController
   end
 
   def model_params
-    params.require(:consumption_detail).permit(:account_number, :intake_level, :peak, :off_peak, :consumption_id)
+    params.require(:consumption_detail).permit(:account_number, :intake_level, :peak, :off_peak, :consumption_id, :premise_address, :contracted_capacity)
   end
 end
