@@ -147,6 +147,7 @@ Rails.application.routes.draw do
         collection do
           post 'participate'
           post 'reject'
+          post 'save'
         end
       end
       resources :auctions, only: %i[obtain published] do

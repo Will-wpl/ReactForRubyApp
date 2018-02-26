@@ -3,9 +3,9 @@ class Api::ConsumptionsController < Api::BaseController
 
   def index
     if params[:consumer_type] == '2'
-      consumptions = Consumption.find_by_user_consumer_type(params[:consumer_type]).find_by_auction_id(params[:id]).order('users.company_name asc')
+      consumptions = Consumption.find_by_user_consumer_type(params[:consumer_type]).find_by_auction_id(params[:id]).is_participation.order('users.company_name asc')
     else
-      consumptions = Consumption.find_by_user_consumer_type(params[:consumer_type]).find_by_auction_id(params[:id]).order('users.name asc')
+      consumptions = Consumption.find_by_user_consumer_type(params[:consumer_type]).find_by_auction_id(params[:id]).is_participation.order('users.name asc')
     end
     data = []
     total_info = { consumption_count: 0, account_count: 0, lt_peak: 0, lt_off_peak: 0,
