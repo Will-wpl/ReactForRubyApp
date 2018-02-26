@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180212070828) do
+ActiveRecord::Schema.define(version: 20180226015857) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -166,6 +166,8 @@ ActiveRecord::Schema.define(version: 20180212070828) do
     t.bigint "consumption_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "premise_address"
+    t.decimal "contracted_capacity"
     t.index ["consumption_id"], name: "index_consumption_details_on_consumption_id"
   end
 
