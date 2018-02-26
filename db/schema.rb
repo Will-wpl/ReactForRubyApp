@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180226015857) do
+ActiveRecord::Schema.define(version: 20180226071350) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -156,6 +156,7 @@ ActiveRecord::Schema.define(version: 20180226015857) do
     t.string "retailer_mode"
     t.decimal "total_eht_peak"
     t.decimal "total_eht_off_peak"
+    t.decimal "starting_price"
   end
 
   create_table "consumption_details", force: :cascade do |t|
