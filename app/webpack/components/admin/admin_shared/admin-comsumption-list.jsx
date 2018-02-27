@@ -52,6 +52,8 @@ render() {
                                                     <th>Intake Level</th>
                                                     <th>Peak Volume (kWh/month)</th>
                                                     <th>Off-Peak Volume (kWh/month)</th>
+                                                    <th>Contracted Capacity</th>
+                                                    <th>Premise Address</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -61,6 +63,8 @@ render() {
                                                                 <td>{it.intake_level}</td>
                                                                 <td>{formatPower(parseInt(Number(it.peak)), 0, '')}</td>
                                                                 <td>{formatPower(parseInt(Number(it.off_peak)), 0, '')}</td>
+                                                                <td>{it.contracted_capacity ? formatPower(parseInt(Number(it.contracted_capacity)), 0, '') : ''}</td>
+                                                                <td>{it.premise_address}</td>
                                                             </tr>
                                                 })}
                                             </tbody>
