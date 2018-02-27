@@ -1,5 +1,5 @@
 class Api::ConsumptionsController < Api::BaseController
-  before_action :set_consumption, only: %i[update_status destroy]
+  before_action :set_consumption, only: %i[update_status destroy acknowledge]
 
   def index
     if params[:consumer_type] == '2'
@@ -91,6 +91,23 @@ class Api::ConsumptionsController < Api::BaseController
   def destroy
     @consumption.destroy
     render json: nil, status: 200
+  end
+
+  def acknowledge
+    @consumption.acknowledge = Consumption::Acknowledged
+    @consumption.save
+    render json: { acknowledge: @consumption.acknowledge }, status: 200
+  end
+
+  def acknowledge_all
+    data = []
+    Consumption.find(params[:ids]).each do |consumption|
+      consumption.acknowledge = Consumption::Acknowledged
+      consumption.save
+      data.push(id: consumption.id, acknowledge: consumption.acknowledge)
+    end
+
+    render json: data, status: 200
   end
 
   private
