@@ -64,7 +64,7 @@ render() {
                                                                 <td>{formatPower(parseInt(Number(it.peak)), 0, '')}</td>
                                                                 <td>{formatPower(parseInt(Number(it.off_peak)), 0, '')}</td>
                                                                 <td>{it.contracted_capacity ? formatPower(parseInt(Number(it.contracted_capacity)), 0, '') : '--'}</td>
-                                                                <td>{it.premise_address}</td>
+                                                                <td>{it.premise_address ? it.premise_address : '--'}</td>
                                                             </tr>
                                                 })}
                                             </tbody>
