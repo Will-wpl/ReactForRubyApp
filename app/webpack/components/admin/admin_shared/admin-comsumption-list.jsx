@@ -52,7 +52,7 @@ render() {
                                                     <th>Intake Level</th>
                                                     <th>Peak Volume (kWh/month)</th>
                                                     <th>Off-Peak Volume (kWh/month)</th>
-                                                    <th>Contracted Capacity</th>
+                                                    <th>Contracted Capacity (kW)</th>
                                                     <th>Premise Address</th>
                                                 </tr>
                                             </thead>
