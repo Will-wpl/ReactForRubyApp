@@ -115,3 +115,7 @@ export const getHistoriesLast = (params) => {
 export const createWebsocket = (auction, methods = {}) => {
     return new Ws(window.location.port, auction);
 }
+
+export const getLetterOfAward = (params) => {
+    return get(`/api/admin/auction_results/${params}/award`)
+}
