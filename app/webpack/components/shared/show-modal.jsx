@@ -112,7 +112,43 @@ export class Modal extends React.Component{
                                 <li>Mobile Number : {this.props.listdetail.account_mobile_number}</li>
                                 <li>Office Number : {this.props.listdetail.account_office_number}</li>
                             </ul>
-            }else{
+            }else if(this.props.listdetailtype === "Alternative Winner"){
+                if(this.props.listdetail.length != 0){
+                    showDetail=
+                        <ul className="showdetail">
+                            {((this.props.listdetail.lt_peak ==0.0) && (this.props.listdetail.lt_off_peak == 0.0)) ?
+                                "":
+                                <div>
+                                    <li>LT Peak: $ {parseFloat(this.props.listdetail.lt_peak).toFixed(4)}</li>
+                                    <li>LT Off Peak: $ {parseFloat(this.props.listdetail.lt_off_peak).toFixed(4)}</li>
+                                </div>
+
+                            }
+                            {((this.props.listdetail.hts_peak==0.0) && (this.props.listdetail.hts_off_peak == 0.0)) ?
+                                "":
+                                <div>
+                                    <li>HT (small) Peak: $ {parseFloat(this.props.listdetail.hts_peak).toFixed(4)}</li>
+                                    <li>HT (small) Off Peak: $ {parseFloat(this.props.listdetail.hts_off_peak).toFixed(4)}</li>
+                                </div>
+                            }
+                            {((this.props.listdetail.htl_peak==0.0) && (this.props.listdetail.htl_peak==0.0)) ?
+                                "":
+                                <div>
+                                    <li>HT (large) Peak: $ {parseFloat(this.props.listdetail.htl_peak).toFixed(4)}</li>
+                                    <li>HT (large) Off Peak: $ {parseFloat(this.props.listdetail.htl_peak).toFixed(4)}</li>
+                                </div>
+                            }
+                            {((this.props.listdetail.eht_peak == 0.0) && (this.props.listdetail.eht_off_peak==0.0))?
+                                "":
+                                <div>
+                                    <li>EHT Peak: $ {parseFloat(this.props.listdetail.eht_peak).toFixed(4)}</li>
+                                    <li>EHT Off Peak: $ {parseFloat(this.props.listdetail.eht_off_peak).toFixed(4)}</li>
+                                </div>
+                            }
+
+                        </ul>
+                }
+            } else{
                 showDetail = <ul className="showdetail">
                                 <li>View Account</li>
                                 <li>Email : {this.props.listdetail.email}</li>
