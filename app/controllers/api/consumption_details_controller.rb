@@ -25,7 +25,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
     details = JSON.parse(params[:details])
     ids = []
     details.each do |detail|
-      ids.push(detail['id']) if detail['id'] != 0
+      ids.push(detail['id']) if detail['id'].to_i != 0
     end
     will_del_details = consumption.consumption_details.reject do |detail|
       ids.include?(detail.id.to_s)
@@ -36,7 +36,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
     saved_details = []
     ActiveRecord::Base.transaction do
       details.each do |detail|
-        consumption_detail = if detail['id'] == 0
+        consumption_detail = if detail['id'].to_i == 0
                                ConsumptionDetail.new
                              else
                                ConsumptionDetail.find(detail['id'])

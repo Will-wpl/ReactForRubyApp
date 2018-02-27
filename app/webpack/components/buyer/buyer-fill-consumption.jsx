@@ -41,17 +41,21 @@ export class FillConsumption extends Component {
                 this.site_list.map((item, index) => {
                     this.site_list[index].intake_level_selected = item.intake_level;
                     this.site_list[index].intake_level = ['Low Tension (LT)','High Tension Small (HTS)','High Tension Large (HTL)','Extra High Tension (EHT)'];
-                    this.site_list[index].id = index;
+                    this.site_list[index].cid = index;
                 })
                 this.setState({site_list:this.site_list})
             }else{
                 this.site_list = [
                     {
                         account_number:'',
+                        premise_address:'',
                         intake_level:['Low Tension (LT)','High Tension Small (HTS)','High Tension Large (HTL)','Extra High Tension (EHT)'],
+                        intake_level_selected:'LT',
+                        contracted_capacity:null,
                         peak:'',
                         off_peak:'',
-                        id:1
+                        cid:1,
+                        id:0
                     }
                 ]
                 this.setState({site_list:this.site_list})
@@ -61,6 +65,12 @@ export class FillConsumption extends Component {
             this.setState({text:"Interface failed"});
         })
     }
+    changeSiteList(val,index){
+        console.log(val);
+        let list = this.state.site_list;
+        this.site_list[index].intake_level_selected = val;
+        this.setState({site_list:list})
+    }
     add_site(){
         if(this.props.onAddClick){
             this.props.onAddClick();
@@ -69,10 +79,14 @@ export class FillConsumption extends Component {
         site_listObj = this.state.site_list;
         list = {
             account_number:'',
+            premise_address:'',
             intake_level:['Low Tension (LT)','High Tension Small (HTS)','High Tension Large (HTL)','Extra High Tension (EHT)'],
+            intake_level_selected:'LT',
+            contracted_capacity:null,
             peak:'',
             off_peak:'',
-            id:site_listObj.length+1
+            id:0,
+            cid:site_listObj.length+1
         }
         site_listObj.push(list)
         this.setState({site_list:site_listObj})
@@ -83,7 +97,9 @@ export class FillConsumption extends Component {
         }
         const site_listObj = this.state.site_list;
         site_listObj.splice(index, 1);
-        this.setState({site_list:site_listObj})
+        this.setState({site_list:site_listObj});
+        this.refs.Modal.showModal();
+        this.setState({text:"Please click 'Save' button to effect the change."});
     }
     nameRepeat(arr){
         //console.log(arr);
@@ -94,6 +110,66 @@ export class FillConsumption extends Component {
             hash[arr[i].account_number] = true;
         }
         return false;
+    }
+    doSave(type){
+        let makeData = {},
+        buyerlist = [];
+        this.state.site_list.map((item, index) => {
+            if($("#intake_level"+(index+1)).val() != "LT"){
+                buyerlist += '{"account_number":"'+$("#account_number"+(index+1)).val()+'","id":"'+item.id+'","premise_address":"'+$("#address"+(index+1)).val()+'","intake_level":"'+$("#intake_level"+(index+1)).val()+'","contracted_capacity":"'+$("#capacity"+(index+1)).val()+'","peak":"'+$("#peak"+(index+1)).val()+'","off_peak":"'+$("#off_peak"+(index+1)).val()+'","consumption_id":"'+this.consumptions_id+'"},';
+            }else{
+                buyerlist += '{"account_number":"'+$("#account_number"+(index+1)).val()+'","id":"'+item.id+'","premise_address":"'+$("#address"+(index+1)).val()+'","intake_level":"'+$("#intake_level"+(index+1)).val()+'","peak":"'+$("#peak"+(index+1)).val()+'","off_peak":"'+$("#off_peak"+(index+1)).val()+'","consumption_id":"'+this.consumptions_id+'"},';
+            }
+            
+        })
+        buyerlist = buyerlist.substr(0, buyerlist.length-1);
+        buyerlist = '['+buyerlist+']';
+        let checkpeak = JSON.parse(buyerlist).find(element=>{
+            return element.peak == '0' && element.off_peak == '0';
+        })
+        makeData = {
+            consumption_id:this.consumptions_id,
+            details:buyerlist
+        }
+        if(checkpeak){
+            setTimeout(()=>{
+                this.refs.Modal.showModal();
+                this.setState({text:"You cannot enter 0 kWh for both peak and off-peak volume"});
+            },200)
+            return false;
+        }
+        if(this.nameRepeat(JSON.parse(buyerlist))){
+            setTimeout(()=>{
+                this.refs.Modal.showModal();
+                this.setState({text:"Account number has already been entered!"});
+            },200)
+            return false;
+        }
+        console.log(makeData.consumption_id);
+        setBuyerParticipate(makeData, '/api/buyer/consumption_details/save').then((res) => {
+            if(type != "participate"){
+                this.refs.Modal.showModal();
+                this.setState({text:"Save successful!"});
+            }else{
+                setBuyerParticipate({consumption_id:this.consumptions_id}, '/api/buyer/consumption_details/participate').then((res) => {
+                    this.setState({
+                        disabled:'disabled',
+                        checked:true,
+                    })
+                    this.refs.Modal.showModal();
+                    this.setState({text:"Congratulations, your participation in this auction has been confirmed."});
+                    setTimeout(()=>{
+                        window.location.href="/buyer/auctions";
+                    },3000)
+                }, (error) => {
+                    this.refs.Modal.showModal();
+                    this.setState({text:"Interface failed"});
+                })
+            }
+        }, (error) => {
+            this.refs.Modal.showModal();
+            this.setState({text:"Interface failed"});
+        })
     }
     doAccept(){
         //console.log("---makeData-->"+makeData.details);   
@@ -108,49 +184,8 @@ export class FillConsumption extends Component {
                 this.refs.Modal.showModal();
                 this.setState({text:"Interface failed"});
             })
-        }else{ //do Participate
-            let makeData = {},
-            buyerlist = [];
-            this.state.site_list.map((item, index) => {
-                buyerlist += '{"account_number":"'+$("#account_number"+(index+1)).val()+'","intake_level":"'+$("#intake_level"+(index+1)).val()+'","peak":"'+$("#peak"+(index+1)).val()+'","off_peak":"'+$("#off_peak"+(index+1)).val()+'","consumption_id":"'+this.consumptions_id+'"},';
-            })
-            buyerlist = buyerlist.substr(0, buyerlist.length-1);
-            buyerlist = '['+buyerlist+']';
-            let checkpeak = JSON.parse(buyerlist).find(element=>{
-                return element.peak == '0' && element.off_peak == '0';
-            })
-            makeData = {
-                consumption_id:this.consumptions_id,
-                details:buyerlist
-            }
-            if(checkpeak){
-                setTimeout(()=>{
-                    this.refs.Modal.showModal();
-                    this.setState({text:"You cannot enter 0 kWh for both peak and off-peak volume"});
-                },200)
-                return false;
-            }
-            if(this.nameRepeat(JSON.parse(buyerlist))){
-                setTimeout(()=>{
-                    this.refs.Modal.showModal();
-                    this.setState({text:"Account number has already been entered!"});
-                },200)
-                return false;
-            }
-            setBuyerParticipate(makeData, '/api/buyer/consumption_details/participate').then((res) => {
-                this.setState({
-                    disabled:'disabled',
-                    checked:true,
-                })
-                this.refs.Modal.showModal();
-                this.setState({text:"Congratulations, your participation in this auction has been confirmed."});
-                setTimeout(()=>{
-                    window.location.href="/buyer/auctions";
-                },3000)
-            }, (error) => {
-                this.refs.Modal.showModal();
-                this.setState({text:"Interface failed"});
-            })
+        }else if(this.state.submit_type === "Participate"){ //do Participate
+            this.doSave('participate');
         }
     }
     doSubmit(type){
@@ -168,6 +203,8 @@ export class FillConsumption extends Component {
         if(this.state.submit_type === "Participate"){
             this.refs.Modal.showModal("comfirm");
             this.setState({text:"Are you sure you want to participate in this auction?"});
+        }else if(this.state.submit_type === "save"){
+            this.doSave();
         }
     }
     render () {
@@ -178,9 +215,10 @@ export class FillConsumption extends Component {
                 <div className="u-grid buyer mg0">
                 <h4 className="col-sm-12 u-mb3"><input name="agree_auction" type="checkbox" disabled={this.state.disabled} required /> I agree to the {this.state.link?<a className="cursor" download={this.state.link.file_name} href={`/${this.state.link.file_path}`}>terms and conditions.</a>:'terms and conditions.'}</h4>
                     <div className="col-sm-12 col-md-8">
-                    <DoFillConsumption site_list={this.state.site_list} checked={this.state.checked} remove={this.remove_site.bind(this)} />
+                    <DoFillConsumption changeSiteList={this.changeSiteList.bind(this)} site_list={this.state.site_list} checked={this.state.checked} remove={this.remove_site.bind(this)} />
                     {this.state.checked ? '' : <div className="addSite"><a onClick={this.add_site.bind(this)}>Add Account</a></div>}
                     <div className="buyer_btn">
+                        <button className={"lm--button lm--button--primary "+this.state.disabled} disabled={this.state.disabled} onClick={this.doSubmit.bind(this,'save')}>Save</button>
                         <a className={"lm--button lm--button--primary "+this.state.disabled} onClick={this.state.disabled === "disabled" ? this.doSubmit.bind(this, 'return') : this.doSubmit.bind(this, 'Reject')}>Reject</a>
                         <button className={"lm--button lm--button--primary "+this.state.disabled} disabled={this.state.disabled} onClick={this.doSubmit.bind(this, 'Participate')}>Participate</button>
                     </div>
