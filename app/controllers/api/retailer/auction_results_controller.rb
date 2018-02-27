@@ -36,6 +36,8 @@ class Api::Retailer::AuctionResultsController < Api::AuctionResultsController
     render json: { headers: headers, bodies: bodies, actions: nil }, status: 200
   end
 
+  private
+
   def show_award?(result, current_user)
 
     result.user_id == current_user.id
