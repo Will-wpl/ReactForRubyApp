@@ -271,7 +271,7 @@ export class Proposedeviations extends React.Component{
                                                         </td>
                                                         <td ><textarea id={"deviation_"+(index)} defaultValue={item.propose_deviation.replace(/＜br＞/g,"\n")} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
                                                         <td ><textarea id={"response_"+(index)} defaultValue={item.retailer_response.replace(/＜br＞/g,"\n")} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
-                                                        <td ><textarea className="show_text" defaultValue={item.sp_response.replace(/＜br＞/g,"\n")} disabled/></td>
+                                                        <td ><textarea className="show_text" defaultValue={item.sp_response?item.sp_response.replace(/＜br＞/g,"\n"):''} disabled/></td>
                                                         <td>{item.item === ""?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>:
                                                         (item.sp_response_status==='2'?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>
                                                         :<div>
