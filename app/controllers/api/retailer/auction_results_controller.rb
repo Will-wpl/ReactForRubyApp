@@ -1,4 +1,4 @@
-class Api::Retailer::AuctionResultsController < Api::BaseController
+class Api::Retailer::AuctionResultsController < Api::AuctionResultsController
   before_action :retailer_required
   include ActionView::Helpers::NumberHelper
   def index

@@ -92,7 +92,7 @@ Rails.application.routes.draw do
       end
       resources :auction_results, only: %i[index] do
         member do
-          get 'award' # auction activity log page
+          get 'award'
         end
       end
     end
@@ -141,7 +141,12 @@ Rails.application.routes.draw do
           get 'history'
         end
       end
-      resources :auction_results, only: %i[index]
+      resources :auction_results, only: %i[index] do
+        member do
+          get 'award'
+          post 'acknowledge'
+        end
+      end
     end
   end
 
