@@ -46,4 +46,14 @@ class Api::Admin::AuctionResultsController < Api::BaseController
     render json: { headers: headers, bodies: bodies, actions: nil }, status: 200
   end
 
+  def award
+    consumptions = Consumption.get_company_user(params[:id])
+    data = []
+    consumptions.each do |consumption|
+      data.push(name: consumption.user.company_name, acknowledge: consumption.acknowledge, download_url: nil)
+    end
+    render json: data, status: 200
+
+  end
+
 end
