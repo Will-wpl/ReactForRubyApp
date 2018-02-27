@@ -186,7 +186,6 @@ export class Proposedeviations extends React.Component{
         let add_new = {id:0,item:'',clause:'',
                         propose_deviation:'',
                         retailer_response:'',
-                        sp_response:'',
                         sp_response_status:'',key:this.state.deviations_list.length+1},list = this.state.deviations_list;
                         list.push(add_new);
                         // if(list.length < this.state.select_list.length){
@@ -235,65 +234,65 @@ export class Proposedeviations extends React.Component{
                                 </tr>
                         </thead>
                         <tbody>
-                            {!this.props.tender ? 
-                                this.state.deviations_list.map((item,index)=>{
-                                    if(item.sp_response_status === "1" || item.sp_response_status === "4"){
-                                        return (<tr key={item.id}>
-                                                <td>{item.item}<input id={"item_"+(index)} type="hidden" defaultValue={item.item}/></td>
-                                                <td >{item.clause}<input type="hidden" id={"clause_"+(index)} defaultValue={item.clause}/></td>
-                                                <td ><textarea className="show_text" defaultValue={item.propose_deviation.replace(/＜br＞/g,"\n")} disabled/><input type="hidden" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
-                                                <td ><textarea className="show_text" defaultValue={item.retailer_response.replace(/＜br＞/g,"\n")} disabled/><input disabled type="hidden" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
-                                                <td ><textarea className="show_text" defaultValue={item.sp_response.replace(/＜br＞/g,"\n")} disabled/></td>
-                                                <td>
-                                                    <button id={"history_"+index} onClick={this.showhistory.bind(this,item.id)} >History</button>
-                                                    <button disabled={this.props.propsdisabled?true:(this.state.alldisabled?true:(item.sp_response_status === "4" ? true : false))} id={"withdraw_"+index} onClick={this.showConfirm.bind(this,'Withdraw',{id:item.id,index:index})}>Withdraw</button>
-                                                </td>
-                                                </tr>)
-                                    }else{
-                                        return (<tr key={item.id===0?item.key:item.id}>
+                                {!this.props.tender ? 
+                                    this.state.deviations_list.map((item,index)=>{
+                                        if(item.sp_response_status === "1" || item.sp_response_status === "4"){
+                                            return (<tr key={item.id}>
+                                                    <td>{item.item}<input id={"item_"+(index)} type="hidden" defaultValue={item.item}/></td>
+                                                    <td >{item.clause}<input type="hidden" id={"clause_"+(index)} defaultValue={item.clause}/></td>
+                                                    <td ><textarea className="show_text" defaultValue={item.propose_deviation.replace(/＜br＞/g,"\n")} disabled/><input type="hidden" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
+                                                    <td ><textarea className="show_text" defaultValue={item.retailer_response.replace(/＜br＞/g,"\n")} disabled/><input disabled type="hidden" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
+                                                    <td ><textarea className="show_text" defaultValue={item.sp_response.replace(/＜br＞/g,"\n")} disabled/></td>
                                                     <td>
-                                                        {this.props.propsdisabled?<div>{item.item}<input id={"item_"+(index)} type="hidden" defaultValue={item.item}/></div>
-                                                        :(this.state.alldisabled?<div>{item.item}<input id={"item_"+(index)} type="hidden" defaultValue={item.item}/></div>:(item.sp_response_status !='2'?(item.sp_response_status ==''?<select id={"item_"+(index)} defaultValue={item.item} >
-                                                            {this.state.select_list.map((it,i)=>{
-                                                                return <option key={i} value={it}>{it}</option>
-                                                            })}
-                                                        </select>:<div>{item.item}<input id={"item_"+(index)} type="hidden" defaultValue={item.item}/></div>):<select id={"item_"+(index)} defaultValue={item.item}>
-                                                            {this.state.select_list.map((it,i)=>{
-                                                                return <option key={i} value={it}>{it}</option>
-                                                            })}
-                                                        </select>))}
-                                                    </td>
-                                                    <td >{this.props.propsdisabled?
-                                                        <div>{item.clause}<input type="hidden" id={"clause_"+(index)} defaultValue={item.clause}/></div>:
-                                                        (this.state.alldisabled?<div>{item.clause}<input type="hidden" id={"clause_"+(index)} defaultValue={item.clause}/></div>:
-                                                        (item.sp_response_status !='2'?(item.sp_response_status ==''?
-                                                        <input type="text" id={"clause_"+(index)} defaultValue={item.clause}/>:<div>{item.clause}<input type="hidden" id={"clause_"+(index)} defaultValue={item.clause}/></div>)
-                                                        :<input type="text" id={"clause_"+(index)} defaultValue={item.clause}/>))}
-                                                    </td>
-                                                    <td ><textarea type="text" id={"deviation_"+(index)} defaultValue={item.propose_deviation.replace(/＜br＞/g,"\n")} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
-                                                    <td ><textarea type="text" id={"response_"+(index)} defaultValue={item.retailer_response.replace(/＜br＞/g,"\n")} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
-                                                    <td ><textarea className="show_text" defaultValue={item.sp_response?item.sp_response.replace(/＜br＞/g,"\n"):""} disabled/></td>
-                                                    <td>{item.item === ""?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>:
-                                                    (item.sp_response_status==='2'?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>
-                                                    :<div>
-                                                        <button onClick={this.showhistory.bind(this,item.id) } id={"history_"+index}>History</button>
+                                                        <button id={"history_"+index} onClick={this.showhistory.bind(this,item.id)} >History</button>
                                                         <button disabled={this.props.propsdisabled?true:(this.state.alldisabled?true:(item.sp_response_status === "4" ? true : false))} id={"withdraw_"+index} onClick={this.showConfirm.bind(this,'Withdraw',{id:item.id,index:index})}>Withdraw</button>
-                                                    </div>
-                                                    )}</td>
-                                            </tr>)
-                                        }                                   
-                                    })
-                            :this.state.deviations_list.map((item,index)=>{
-                                return <tr key={index}>
-                                            <td>{item.item}</td>
-                                            <td>{item.clause}</td>
-                                            <td><textarea className="show_text" defaultValue={item.propose_deviation.replace(/＜br＞/g,"\n")} disabled/></td>
-                                            <td><textarea className="show_text" defaultValue={item.retailer_response.replace(/＜br＞/g,"\n")} disabled/></td>
-                                            <td><textarea className="show_text" defaultValue={item.sp_response.replace(/＜br＞/g,"\n")} disabled/></td>
-                                            <td><button onClick={this.showhistory.bind(this,item.id)}>History</button></td>
-                                        </tr>
-                                    })
-                            }
+                                                    </td>
+                                                    </tr>)
+                                        }else{
+                                            return (<tr key={item.id===0?item.key:item.id}>
+                                                        <td>
+                                                            {this.props.propsdisabled?<div>{item.item}<input id={"item_"+(index)} type="hidden" defaultValue={item.item}/></div>
+                                                            :(this.state.alldisabled?<div>{item.item}<input id={"item_"+(index)} type="hidden" defaultValue={item.item}/></div>:(item.sp_response_status !='2'?(item.sp_response_status ==''?<select id={"item_"+(index)} defaultValue={item.item} >
+                                                                {this.state.select_list.map((it,i)=>{
+                                                                    return <option key={i} value={it}>{it}</option>
+                                                                })}
+                                                            </select>:<div>{item.item}<input id={"item_"+(index)} type="hidden" defaultValue={item.item}/></div>):<select id={"item_"+(index)} defaultValue={item.item}>
+                                                                {this.state.select_list.map((it,i)=>{
+                                                                    return <option key={i} value={it}>{it}</option>
+                                                                })}
+                                                            </select>))}
+                                                        </td>
+                                                        <td >{this.props.propsdisabled?
+                                                            <div>{item.clause}<input type="hidden" id={"clause_"+(index)} defaultValue={item.clause}/></div>:
+                                                            (this.state.alldisabled?<div>{item.clause}<input type="hidden" id={"clause_"+(index)} defaultValue={item.clause}/></div>:
+                                                            (item.sp_response_status !='2'?(item.sp_response_status ==''?
+                                                            <input type="text" id={"clause_"+(index)} defaultValue={item.clause}/>:<div>{item.clause}<input type="hidden" id={"clause_"+(index)} defaultValue={item.clause}/></div>)
+                                                            :<input type="text" id={"clause_"+(index)} defaultValue={item.clause}/>))}
+                                                        </td>
+                                                        <td ><textarea id={"deviation_"+(index)} defaultValue={item.propose_deviation.replace(/＜br＞/g,"\n")} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
+                                                        <td ><textarea id={"response_"+(index)} defaultValue={item.retailer_response.replace(/＜br＞/g,"\n")} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
+                                                        <td ><textarea className="show_text" defaultValue={item.sp_response.replace(/＜br＞/g,"\n")} disabled/></td>
+                                                        <td>{item.item === ""?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>:
+                                                        (item.sp_response_status==='2'?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>
+                                                        :<div>
+                                                            <button onClick={this.showhistory.bind(this,item.id) } id={"history_"+index}>History</button>
+                                                            <button disabled={this.props.propsdisabled?true:(this.state.alldisabled?true:(item.sp_response_status === "4" ? true : false))} id={"withdraw_"+index} onClick={this.showConfirm.bind(this,'Withdraw',{id:item.id,index:index})}>Withdraw</button>
+                                                        </div>
+                                                        )}</td>
+                                                </tr>)
+                                            }                                   
+                                        })
+                                :this.state.deviations_list.map((item,index)=>{
+                                    return <tr key={index}>
+                                                <td>{item.item}</td>
+                                                <td>{item.clause}</td>
+                                                <td><textarea className="show_text" defaultValue={item.propose_deviation.replace(/＜br＞/g,"\n")} disabled/></td>
+                                                <td><textarea className="show_text" defaultValue={item.retailer_response.replace(/＜br＞/g,"\n")} disabled/></td>
+                                                <td><textarea className="show_text" defaultValue={item.sp_response.replace(/＜br＞/g,"\n")} disabled/></td>
+                                                <td><button onClick={this.showhistory.bind(this,item.id)}>History</button></td>
+                                            </tr>
+                                        })
+                                }
                         </tbody>
                     </table>
                     {!this.props.tender ? <div className="workflow_btn u-mt3 u-mb3"><button className="add_deviation" disabled={this.props.propsdisabled?true:(this.state.alldisabled)} onClick={this.addDeviations.bind(this)}>Add</button></div> :''}
