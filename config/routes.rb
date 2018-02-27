@@ -144,7 +144,14 @@ Rails.application.routes.draw do
       resources :auction_results, only: %i[index] do
         member do
           get 'award'
+        end
+      end
+      resources :consumptions, only: %i[] do
+        member do
           post 'acknowledge'
+        end
+        collection do
+          post 'acknowledge_all'
         end
       end
     end

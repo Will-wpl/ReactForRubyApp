@@ -6,7 +6,7 @@ class Api::Retailer::AuctionResultsController < Api::AuctionResultsController
       search_params = reject_params(params, %w[controller action])
       search_where_array = set_search_params(search_params)
       result = AuctionResult.find_by_arrangement(current_user).where(search_where_array)
-               .page(params[:page_index]).per(params[:page_size])
+                            .page(params[:page_index]).per(params[:page_size])
       total = result.total_count
     else
       result = AuctionResult.all
@@ -39,8 +39,6 @@ class Api::Retailer::AuctionResultsController < Api::AuctionResultsController
   private
 
   def show_award?(result, current_user)
-
     result.user_id == current_user.id
   end
-
 end
