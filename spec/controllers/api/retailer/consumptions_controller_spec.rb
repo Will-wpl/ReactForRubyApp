@@ -15,7 +15,7 @@ RSpec.describe Api::Retailer::ConsumptionsController, type: :controller do
 
     context 'Set acknowledge' do
       def do_request
-        post :acknowledge, params: { id: consumption.id }
+        post :acknowledge, params: { id: consumption1.id }
       end
       before { do_request }
 
