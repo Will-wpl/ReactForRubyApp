@@ -76,7 +76,8 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     end
     ##### chart 2 end #####
     user_all_hash = hash.clone
-    hash2.each {|key, list|
+    temp_hash2 = hash2.clone
+    temp_hash2.each {|key, list|
       user_all_hash[key] = list unless user_all_hash.has_key?(key)
     }
     chart_color = get_chart_color(user_all_hash)
