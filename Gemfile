@@ -91,3 +91,7 @@ group :test do
 end
 
 gem 'newrelic_rpm', group: :production
+gem 'prawn', '~> 2.2', '>= 2.2.2'
+gem 'prawn-table', '~> 0.2.2'
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary'
