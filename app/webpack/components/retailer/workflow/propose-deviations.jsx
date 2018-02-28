@@ -209,6 +209,8 @@ export class Proposedeviations extends React.Component{
         let list  =  this.state.deviations_list;
         list.splice(index,1);
         this.setState({deviations_list:list});
+        this.refs.Modal.showModal();
+        this.setState({text:"Please click 'Save' button to effect the change."});
     }
     showhistory(id){
         getTenderhistory('retailer',id).then(res=>{
