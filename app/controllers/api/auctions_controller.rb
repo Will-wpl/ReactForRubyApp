@@ -630,122 +630,127 @@ class Api::AuctionsController < Api::BaseController
       fill_color "ffffff"
       #grid.show_all
       # data0 begin
-      if !auction_result.nil? && !auction_result.status.nil?
-        if auction_result.status == 'win'
-          status, status_color = 'Awarded', "228B22"
+      if !auction_result.nil?
+        if !auction_result.status.nil?
+          if auction_result.status == 'win'
+            status, status_color = 'Awarded', "228B22"
+          else
+            status, status_color = 'Void', "dd0000"
+          end
+          lowest_price_bidder = auction_result.lowest_price_bidder
+          lowest_average_price = format("%.4f",auction_result.lowest_average_price)
         else
-          status, status_color = 'Void', "dd0000"
+          if auction_result.is_bidder
+            status, status_color = 'Awarded', "228B22"
+          else
+            status, status_color= 'Not Awarded', "dd0000"
+          end
+          lowest_price_bidder = auction_result.company_name
+          lowest_average_price = format("%.4f",auction_result.average_price)
         end
-        lowest_price_bidder = auction_result.lowest_price_bidder
-        lowest_average_price = format("%.4f",auction_result.lowest_average_price)
-      else
-        if auction_result.is_bidder
-          status, status_color = 'Awarded', "228B22"
+        #~ data0 end
+
+        visibility_lt =  auction.total_lt_peak > 0 || auction.total_lt_off_peak > 0
+        visibility_hts = auction.total_hts_peak > 0 || auction.total_hts_off_peak > 0
+        visibility_htl = auction.total_htl_peak > 0 || auction.total_htl_off_peak > 0
+        visibility_eht = auction.total_eht_peak > 0 || auction.total_eht_off_peak > 0
+
+        table0_head, table0_row1, table0_row2 = [""], ["Peak (7am-7pm)"], ["Off-Peak (7pm-7am)"]
+
+        if visibility_lt
+          table0_head.push('<b>LT</b>')
+          table0_row1.push('$ ' + format("%.4f", auction_result.lt_peak))
+          table0_row2.push('$ ' + format("%.4f", auction_result.lt_off_peak))
         else
-          status, status_color= 'Not Awarded', "dd0000"
+          table0_head.push('')
+          table0_row1.push('')
+          table0_row2.push('')
         end
-        lowest_price_bidder = auction_result.company_name
-        lowest_average_price = format("%.4f",auction_result.average_price)
-      end
-      #~ data0 end
 
-      visibility_lt =  auction.total_lt_peak > 0 || auction.total_lt_off_peak > 0
-      visibility_hts = auction.total_hts_peak > 0 || auction.total_hts_off_peak > 0
-      visibility_htl = auction.total_htl_peak > 0 || auction.total_htl_off_peak > 0
-      visibility_eht = auction.total_eht_peak > 0 || auction.total_eht_off_peak > 0
-
-      table0_head, table0_row1, table0_row2 = [""], ["Peak (7am-7pm)"], ["Off-Peak (7pm-7am)"]
-
-      if visibility_lt
-        table0_head.push('<b>LT</b>')
-        table0_row1.push('$ ' + format("%.4f", auction_result.lt_peak))
-        table0_row2.push('$ ' + format("%.4f", auction_result.lt_off_peak))
-      else
-        table0_head.push('')
-        table0_row1.push('')
-        table0_row2.push('')
-      end
-
-      if visibility_hts
-        table0_head.push('<b>HT (Small)</b>')
-        table0_row1.push('$ ' + format("%.4f", auction_result.hts_peak))
-        table0_row2.push('$ ' + format("%.4f", auction_result.hts_off_peak))
-      else
-        table0_head.push('')
-        table0_row1.push('')
-        table0_row2.push('')
-      end
-
-      if visibility_htl
-        table0_head.push('<b>HT (Large)</b>')
-        table0_row1.push('$ ' + format("%.4f", auction_result.htl_peak))
-        table0_row2.push('$ ' + format("%.4f", auction_result.htl_off_peak))
-      else
-        table0_head.push('')
-        table0_row1.push('')
-        table0_row2.push('')
-      end
-
-      if visibility_eht
-        table0_head.push('<b>EHT (Large)</b>')
-        table0_row1.push('$ ' + format("%.4f", auction_result.eht_peak))
-        table0_row2.push('$ ' + format("%.4f", auction_result.eht_off_peak))
-      else
-        table0_head.push('')
-        table0_row1.push('')
-        table0_row2.push('')
-      end
-
-      #'D MMM YYYY'
-      contract_period_start_date = (auction.contract_period_start_date).strftime("%d %b %Y")
-      contract_period_end_date = (auction.contract_period_end_date).strftime("%d %b %Y")
-
-
-      data0 = [ ["<font size='18'><color rgb='#{status_color}'>Status: #{status}</color></font>"],
-                ["Summary Of Lowest Bidder"],
-                ["Lowest Price Bidder:#{lowest_price_bidder}"],
-                ["Lowest Average Price:$ #{lowest_average_price}/kWh"] ]
-      table0 = [ table0_head,
-                 table0_row1,
-                 table0_row2 ]
-
-      total_volume = ActiveSupport::NumberHelper.number_to_currency(auction.total_volume.round, precision: 0, unit: '')
-      total_award_sum = ActiveSupport::NumberHelper.number_to_currency(auction_result.total_award_sum, precision: 2, unit: '$ ')
-      data1 = [ ["Contract Period: #{contract_period_start_date} to #{contract_period_end_date}"],
-                ["Total Volume: #{total_volume} kWh (forecasted)"],
-                ["Total Award Sum: #{total_award_sum} (forecasted)"] ]
-      table1 = [
-          ["<b>Rank</b>","<b>Retailer</b>", "<b>Average Price</b>"] ]
-      is_bidder_index = -1
-      histories_achieved.each_with_index {|item, index|
-        table1_row = []
-        table1_row.push(item.ranking)
-        table1_row.push(item.company_name)
-        table1_row.push('$ '+format("%.4f",item.average_price)+'/kWh')
-        table1.push(table1_row)
-        is_bidder_index = index+1 if item.is_bidder
-      }
-
-      grid([2,19],[22,29]).bounding_box do
-        move_down 10
-        table(data0, :cell_style => {:inline_format => true, :width => bounds.right, :border_width => 0})
-        move_down 15
-        table(table0, :header => true, :cell_style => {:size => 9, :align => :center, :padding => [11,2], :inline_format => true, :width => bounds.right/table0_head.size, :border_width => 0.01,:border_color => "424242"}) do
-          values = cells.columns(0..-1).rows(0..0)
-          values.background_color = "00394A"
+        if visibility_hts
+          table0_head.push('<b>HT (Small)</b>')
+          table0_row1.push('$ ' + format("%.4f", auction_result.hts_peak))
+          table0_row2.push('$ ' + format("%.4f", auction_result.hts_off_peak))
+        else
+          table0_head.push('')
+          table0_row1.push('')
+          table0_row2.push('')
         end
-        move_down 15
-        table(data1, :cell_style => {:width => bounds.right, :border_width => 0})
-        move_down 15
-        table [["Retailer Ranking"]], :cell_style => {:size => 18, :inline_format => true, :width => bounds.right, :border_width => 0}
 
-        table(table1, :header => true, :cell_style => {:size => 9, :align => :center, :padding => [11,2], :inline_format => true, :width => bounds.right/3,  :border_width => 0.01,:border_color => "424242"}) do
-          values = cells.columns(0..-1).rows(0..0)
-          values.background_color = "00394A"
-          values = cells.columns(0..-1).rows(is_bidder_index..is_bidder_index)
-          values.background_color = "228B22"
+        if visibility_htl
+          table0_head.push('<b>HT (Large)</b>')
+          table0_row1.push('$ ' + format("%.4f", auction_result.htl_peak))
+          table0_row2.push('$ ' + format("%.4f", auction_result.htl_off_peak))
+        else
+          table0_head.push('')
+          table0_row1.push('')
+          table0_row2.push('')
         end
+
+        if visibility_eht
+          table0_head.push('<b>EHT (Large)</b>')
+          table0_row1.push('$ ' + format("%.4f", auction_result.eht_peak))
+          table0_row2.push('$ ' + format("%.4f", auction_result.eht_off_peak))
+        else
+          table0_head.push('')
+          table0_row1.push('')
+          table0_row2.push('')
+        end
+
+        #'D MMM YYYY'
+        contract_period_start_date = (auction.contract_period_start_date).strftime("%d %b %Y")
+        contract_period_end_date = (auction.contract_period_end_date).strftime("%d %b %Y")
+
+
+        data0 = [ ["<font size='18'><color rgb='#{status_color}'>Status: #{status}</color></font>"],
+                  ["Summary Of Lowest Bidder"],
+                  ["Lowest Price Bidder:#{lowest_price_bidder}"],
+                  ["Lowest Average Price:$ #{lowest_average_price}/kWh"] ]
+        table0 = [ table0_head,
+                   table0_row1,
+                   table0_row2 ]
+
+        total_volume = ActiveSupport::NumberHelper.number_to_currency(auction.total_volume.round, precision: 0, unit: '')
+        total_award_sum = ActiveSupport::NumberHelper.number_to_currency(auction_result.total_award_sum, precision: 2, unit: '$ ')
+        data1 = [ ["Contract Period: #{contract_period_start_date} to #{contract_period_end_date}"],
+                  ["Total Volume: #{total_volume} kWh (forecasted)"],
+                  ["Total Award Sum: #{total_award_sum} (forecasted)"] ]
+        table1 = [
+            ["<b>Rank</b>","<b>Retailer</b>", "<b>Average Price</b>"] ]
+        is_bidder_index = -1
+        histories_achieved.each_with_index {|item, index|
+          table1_row = []
+          table1_row.push(item.ranking)
+          table1_row.push(item.company_name)
+          table1_row.push('$ '+format("%.4f",item.average_price)+'/kWh')
+          table1.push(table1_row)
+          is_bidder_index = index+1 if item.is_bidder
+        }
+
+        grid([2,19],[22,29]).bounding_box do
+          move_down 10
+          table(data0, :cell_style => {:inline_format => true, :width => bounds.right, :border_width => 0})
+          move_down 15
+          table(table0, :header => true, :cell_style => {:size => 9, :align => :center, :padding => [11,2], :inline_format => true, :width => bounds.right/table0_head.size, :border_width => 0.01,:border_color => "424242"}) do
+            values = cells.columns(0..-1).rows(0..0)
+            values.background_color = "00394A"
+          end
+          move_down 15
+          table(data1, :cell_style => {:width => bounds.right, :border_width => 0})
+          move_down 15
+          table [["Retailer Ranking"]], :cell_style => {:size => 18, :inline_format => true, :width => bounds.right, :border_width => 0}
+
+          table(table1, :header => true, :cell_style => {:size => 9, :align => :center, :padding => [11,2], :inline_format => true, :width => bounds.right/3,  :border_width => 0.01,:border_color => "424242"}) do
+            values = cells.columns(0..-1).rows(0..0)
+            values.background_color = "00394A"
+            values = cells.columns(0..-1).rows(is_bidder_index..is_bidder_index)
+            values.background_color = "228B22"
+          end
+        end
+      else
+
       end
+
       #grid.show_all
       #go_to_page(1)
     end
