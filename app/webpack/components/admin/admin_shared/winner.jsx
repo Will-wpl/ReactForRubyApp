@@ -40,10 +40,10 @@ export default class WinnerPrice extends Component {
       this.props.winner.data.status ?
                     <div className="winnerPrice_main">
                               <h2 className={this.props.showOrhide}>{this.props.winner.data.status === 'win' ? <span className="green">Status : Awarded</span> : <span className="red">Status : Void</span> }</h2>
-                              <div>{this.props.winner.data.status === 'win' ?<h4 className="u-mt1">Summary of Winner </h4> : <h4 className="u-mt1">Summary of Lowest Bidder</h4>} </div>
+                              <div>{this.props.winner.data.status === 'win' ?<h4 className="u-mt1">Summary of Winner</h4> : <h4 className="u-mt1">Summary of Lowest Bidder</h4>} </div>
                               <ul>
                                 <li>{this.props.winner.data.status === 'win' ? <span>Winner: </span> : <span>Lowest Price Bidder: </span>}<span className="bidder_name">{this.props.winner.data.lowest_price_bidder}</span></li>
-                                  <li>{this.props.winner.data.status === 'win' ? <span>Average Price:</span>:<span>Lowest Average Price: </span>}<span className="bidder_price">$ {Number(this.props.winner.data.lowest_average_price).toFixed(4)}/kWh</span></li>
+                                  <li>{this.props.winner.data.status === 'win' ? <span>Average Price: </span>:<span>Lowest Average Price: </span>}<span className="bidder_price">$ {Number(this.props.winner.data.lowest_average_price).toFixed(4)}/kWh</span></li>
                               </ul>
                               <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                                   <thead>

@@ -16,7 +16,8 @@ import "components/admin/admin-comsumption";
 import "components/admin/admin-workflow";
 import "components/admin/admin-buyer-dashboard";
 import "components/admin/admin-buyer-list-detail";
-import "components/retailer/letter-of-award.jsx"
+import "components/retailer/letter-of-award.jsx";
+import "components/admin/admin-award";
 import "components/admin/admin-choose-alternative-winner"
 // import "./javascripts/ajax-test.js";
 console.log("Admin Webpacker");
