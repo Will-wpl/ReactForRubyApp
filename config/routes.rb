@@ -168,6 +168,9 @@ Rails.application.routes.draw do
         end
       end
       resources :auctions, only: %i[obtain published] do
+        member do
+          get 'pdf'
+        end
         collection do
           get 'obtain'
           get 'published'

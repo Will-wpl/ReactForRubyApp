@@ -379,4 +379,81 @@ class Api::AuctionsController < Api::BaseController
   def set_link(auctionId, addr)
     "/admin/auctions/#{auctionId}/#{addr}"
   end
+
+  protected
+
+  def send_no_data_pdf(page_size, page_layout)
+    pdf_filename = Time.new.strftime("%Y%m%d%H%M%S%L")
+    background_img = Rails.root.join("app","assets", "pdf","bk.png")
+    Prawn::Document.generate(Rails.root.join(pdf_filename),
+                             :background => background_img,
+                             :page_size => page_size,
+                             :page_layout => page_layout) do
+      fill_color "ffffff"
+      draw_text 'no data', :at => [15, bounds.top-22]
+    end
+    send_pdf_data pdf_filename
+  end
+
+  def send_pdf_data(pdf_filename)
+    now_time = Time.new.strftime("%Y%m%d%H%M%S")
+    send_data IO.read(Rails.root.join(pdf_filename)), :filename => "report-#{now_time}.pdf"
+    File.delete Rails.root.join(pdf_filename)
+  end
+
+  def pdf_datetime_zone
+    zone = 8
+    (zone * 60 * 60)
+  end
+
+  def get_price_table_data(auction, auction_result)
+    visibility_lt =  auction.total_lt_peak > 0 || auction.total_lt_off_peak > 0
+    visibility_hts = auction.total_hts_peak > 0 || auction.total_hts_off_peak > 0
+    visibility_htl = auction.total_htl_peak > 0 || auction.total_htl_off_peak > 0
+    visibility_eht = auction.total_eht_peak > 0 || auction.total_eht_off_peak > 0
+
+    table_head, table_row0, table_row1 = [""], ["Peak (7am-7pm)"], ["Off-Peak (7pm-7am)"]
+
+    if visibility_lt
+      table_head.push('<b>LT</b>')
+      table_row0.push('$ ' + format("%.4f", auction_result.lt_peak))
+      table_row1.push('$ ' + format("%.4f", auction_result.lt_off_peak))
+    else
+      table_head.push('')
+      table_row0.push('')
+      table_row1.push('')
+    end
+
+    if visibility_hts
+      table_head.push('<b>HT (Small)</b>')
+      table_row0.push('$ ' + format("%.4f", auction_result.hts_peak))
+      table_row1.push('$ ' + format("%.4f", auction_result.hts_off_peak))
+    else
+      table_head.push('')
+      table_row0.push('')
+      table_row1.push('')
+    end
+
+    if visibility_htl
+      table_head.push('<b>HT (Large)</b>')
+      table_row0.push('$ ' + format("%.4f", auction_result.htl_peak))
+      table_row1.push('$ ' + format("%.4f", auction_result.htl_off_peak))
+    else
+      table_head.push('')
+      table_row0.push('')
+      table_row1.push('')
+    end
+
+    if visibility_eht
+      table_head.push('<b>EHT (Large)</b>')
+      table_row0.push('$ ' + format("%.4f", auction_result.eht_peak))
+      table_row1.push('$ ' + format("%.4f", auction_result.eht_off_peak))
+    else
+      table_head.push('')
+      table_row0.push('')
+      table_row1.push('')
+    end
+    [table_head, table_row0, table_row1]
+  end
+
 end

@@ -15,7 +15,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     end_time2['Z'] = '.999Z'
 
     auction_id = params[:id]
-    img = Rails.root.join("app","assets", "pdf","bk.png")
+    background_img = Rails.root.join("app","assets", "pdf","bk.png")
     #####
     step_number = 6.0
     base_x = 30.0
@@ -37,14 +37,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     # select
     auction = Auction.find_by id:auction_id
     if auction.nil?
-      Prawn::Document.generate(Rails.root.join(pdf_filename),
-                               :background => img,
-                               :page_size => "B4",
-                               :page_layout => :landscape) do
-        fill_color "ffffff"
-        draw_text 'no data', :at => [15, bounds.top-22]
-      end
-      send_pdf_data pdf_filename
+      send_no_data_pdf("B4", :landscape)
       return
     end
     auction_result = AuctionResult.find_by_auction_id(auction_id)
@@ -95,9 +88,10 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     }
     chart_color = get_chart_color(user_all_hash)
     ######
+    price_table = get_price_table_data(auction, auction_result)
 
     Prawn::Document.generate(Rails.root.join(pdf_filename),
-                             :background => img,
+                             :background => background_img,
                              :page_size => "B4",
                              :page_layout => :landscape) do
       define_grid(:columns => 30, :rows => 23, :gutter => 2)
@@ -300,8 +294,8 @@ class Api::Admin::AuctionsController < Api::AuctionsController
       fill_color "ffffff"
       #grid.show_all
       # data0 begin
-      if !auction_result.nil?
-        if !auction_result.status.nil?
+      unless auction_result.nil?
+        unless auction_result.status.nil?
           if auction_result.status == 'win'
             status, status_color = 'Awarded', "228B22"
           else
@@ -320,54 +314,6 @@ class Api::Admin::AuctionsController < Api::AuctionsController
         end
         #~ data0 end
 
-        visibility_lt =  auction.total_lt_peak > 0 || auction.total_lt_off_peak > 0
-        visibility_hts = auction.total_hts_peak > 0 || auction.total_hts_off_peak > 0
-        visibility_htl = auction.total_htl_peak > 0 || auction.total_htl_off_peak > 0
-        visibility_eht = auction.total_eht_peak > 0 || auction.total_eht_off_peak > 0
-
-        table0_head, table0_row1, table0_row2 = [""], ["Peak (7am-7pm)"], ["Off-Peak (7pm-7am)"]
-
-        if visibility_lt
-          table0_head.push('<b>LT</b>')
-          table0_row1.push('$ ' + format("%.4f", auction_result.lt_peak))
-          table0_row2.push('$ ' + format("%.4f", auction_result.lt_off_peak))
-        else
-          table0_head.push('')
-          table0_row1.push('')
-          table0_row2.push('')
-        end
-
-        if visibility_hts
-          table0_head.push('<b>HT (Small)</b>')
-          table0_row1.push('$ ' + format("%.4f", auction_result.hts_peak))
-          table0_row2.push('$ ' + format("%.4f", auction_result.hts_off_peak))
-        else
-          table0_head.push('')
-          table0_row1.push('')
-          table0_row2.push('')
-        end
-
-        if visibility_htl
-          table0_head.push('<b>HT (Large)</b>')
-          table0_row1.push('$ ' + format("%.4f", auction_result.htl_peak))
-          table0_row2.push('$ ' + format("%.4f", auction_result.htl_off_peak))
-        else
-          table0_head.push('')
-          table0_row1.push('')
-          table0_row2.push('')
-        end
-
-        if visibility_eht
-          table0_head.push('<b>EHT (Large)</b>')
-          table0_row1.push('$ ' + format("%.4f", auction_result.eht_peak))
-          table0_row2.push('$ ' + format("%.4f", auction_result.eht_off_peak))
-        else
-          table0_head.push('')
-          table0_row1.push('')
-          table0_row2.push('')
-        end
-
-        #'D MMM YYYY'
         contract_period_start_date = (auction.contract_period_start_date).strftime("%d %b %Y")
         contract_period_end_date = (auction.contract_period_end_date).strftime("%d %b %Y")
 
@@ -376,9 +322,6 @@ class Api::Admin::AuctionsController < Api::AuctionsController
                   ["Summary Of Lowest Bidder"],
                   ["Lowest Price Bidder:#{lowest_price_bidder}"],
                   ["Lowest Average Price:$ #{lowest_average_price}/kWh"] ]
-        table0 = [ table0_head,
-                   table0_row1,
-                   table0_row2 ]
 
         total_volume = ActiveSupport::NumberHelper.number_to_currency(auction.total_volume.round, precision: 0, unit: '')
         total_award_sum = ActiveSupport::NumberHelper.number_to_currency(auction_result.total_award_sum, precision: 2, unit: '$ ')
@@ -401,7 +344,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
           move_down 10
           table(data0, :cell_style => {:inline_format => true, :width => bounds.right, :border_width => 0})
           move_down 15
-          table(table0, :header => true, :cell_style => {:size => 9, :align => :center, :padding => [11,2], :inline_format => true, :width => bounds.right/table0_head.size, :border_width => 0.01,:border_color => "424242"}) do
+          table(price_table, :header => true, :cell_style => {:size => 9, :align => :center, :padding => [11,2], :inline_format => true, :width => bounds.right/price_table[0].size, :border_width => 0.01,:border_color => "424242"}) do
             values = cells.columns(0..-1).rows(0..0)
             values.background_color = "00394A"
           end
@@ -432,11 +375,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
 
   private
 
-  def send_pdf_data(pdf_filename)
-    now_time = Time.new.strftime("%Y%m%d%H%M%S")
-    send_data IO.read(Rails.root.join(pdf_filename)), :filename => "report-#{now_time}.pdf"
-    File.delete Rails.root.join(pdf_filename)
-  end
+
 
   def get_chart_color(user_hash)
     color = ["28FF28","9F35FF", "FF359A", "2828FF", "EAC100", "FF5809"]
@@ -459,11 +398,6 @@ class Api::Admin::AuctionsController < Api::AuctionsController
                         end
                         user_color_hash
                       end
-  end
-
-  def pdf_datetime_zone
-    zone = 8
-    (zone * 60 * 60)
   end
 
   def time_le_3500(start_time_i, end_time_i)
