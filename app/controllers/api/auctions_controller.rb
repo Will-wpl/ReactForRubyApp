@@ -350,6 +350,7 @@ class Api::AuctionsController < Api::BaseController
     render json: { consumptions_company: consumptions_company, count_company: count_company, consumptions_individual: consumptions_individual, count_individual:count_individual }, status: 200
   end
 
+
   private
 
   def retailer_send_mails(user_ids)

@@ -30,7 +30,7 @@ class Api::Retailer::AuctionResultsController < Api::AuctionResultsController
                 name: result.auction.name,
                 start_datetime: result.auction.start_datetime,
                 my_result: my_result,
-                award: show_award?(result, current_user) ? "admin/auctions/#{result.auction_id}/award" : '')
+                award: show_award?(result, current_user) ? "retailer/auctions/#{result.auction_id}/award" : '')
     end
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: nil }, status: 200
