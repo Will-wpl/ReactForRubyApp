@@ -16,7 +16,7 @@ export class CreateNewRA extends Component {
             startDate:"",
             endDate:"",
             duration:"",
-            reserve_price:"",
+            reserve_price:"",starting_price:"",
             left_name:this.props.left_name,
             btn_type:"",text:"",id:"0",
             edit_btn:"lm--button lm--button--primary show",
@@ -105,6 +105,12 @@ export class CreateNewRA extends Component {
         let obj = e.target.value;
         this.setState({
             reserve_price:obj
+        })
+    }
+    startPrice(e){
+        let obj = e.target.value;
+        this.setState({
+            starting_price:obj
         })
     }
     starttimeChange(data) {
@@ -205,6 +211,7 @@ export class CreateNewRA extends Component {
         this.auction.actual_end_time = moment(this.state.start_datetime.toDate()).add(this.refs.duration.value,'minutes').format();
         this.auction.time_extension= this.refs.time_extension.value;
         this.auction.average_price= this.refs.average_price.value;
+        this.auction.starting_price= this.refs.starting_price.value;
         this.auction.retailer_mode= this.refs.retailer_mode.value;
         //console.log(this.state.start_datetime.format('YYYY-MM-DD hh:mm:ss'));
         //console.log(moment(this.auction.actual_end_time).format('YYYY-MM-DD hh:mm:ss'));
@@ -374,6 +381,14 @@ export class CreateNewRA extends Component {
                             <input type="test" ref="duration" onChange={this.doDuration.bind(this)} value={this.state.duration} disabled={this.state.disabled} name="duration" maxLength="50" required aria-required="true" pattern="^[0-9]*[1-9][0-9]*$" title="Duration must be an integer."></input>
                             <abbr ref="ra_duration_error" className="col"></abbr>
                         </label>
+                    </dd>
+                    <dd className="lm--formItem lm--formItem--inline string optional">
+                        <span className="lm--formItem-left lm--formItem-label string optional">
+                            <abbr title="required">*</abbr>Starting Price :</span>
+                            <label className="lm--formItem-right lm--formItem-control">
+                                <input type="test" ref="starting_price" onChange={this.startPrice.bind(this)} value={this.state.starting_price} disabled={this.state.disabled} name="starting_price" maxLength="50" required aria-required="true" pattern="^\d+(\.\d{4})$" title="Reserve Price must be a number with 4 decimal places, e.g. $0.0891/kWh." ></input>
+                                <abbr ref="ra_duration_error" className="col"></abbr>
+                            </label>
                     </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
                         <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Reserve Price ($/kWh):</span>
