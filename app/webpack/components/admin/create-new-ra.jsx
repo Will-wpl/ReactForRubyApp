@@ -69,7 +69,8 @@ export class CreateNewRA extends Component {
                         startDate: res.contract_period_start_date == null ? '' :  moment(res.contract_period_start_date),
                         endDate:res.contract_period_end_date == null ? '' : moment(res.contract_period_end_date),
                         duration:res.duration== null ? '' : res.duration,
-                        reserve_price:res.reserve_price== null ? '' : this.padZero(res.reserve_price,'4')
+                        reserve_price:res.reserve_price== null ? '' : this.padZero(res.reserve_price,'4'),
+                        starting_price:res.starting_price== null ? '' : this.padZero(res.starting_price,'4')
                     });
                 }
                 $("#time_extension option[value='"+res.time_extension+"']").attr("selected",true);
