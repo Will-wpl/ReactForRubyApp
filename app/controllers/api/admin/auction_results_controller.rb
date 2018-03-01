@@ -34,7 +34,7 @@ class Api::Admin::AuctionResultsController < Api::AuctionResultsController
                 name: result.auction.name,
                 start_datetime: result.auction.start_datetime,
                 contract_period: "#{result.contract_period_start_date.strftime('%d %b %Y')} to #{result.contract_period_end_date.strftime('%d %b %Y')}",
-                status: status == 'void' ? 'Void' : 'Awarded',
+                status: result.status == 'void' ? 'Void' : 'Awarded',
                 lowest_price_bidder: result.lowest_price_bidder,
                 lowest_average_price: "#{lap}/kWh",
                 total_volume: "#{tv}kWh",
