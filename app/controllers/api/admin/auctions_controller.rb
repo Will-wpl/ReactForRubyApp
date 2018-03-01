@@ -33,9 +33,22 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     max_price = end_price.to_f
     min_price = start_price.to_f
 
+    pdf_filename = Time.new.strftime("%Y%m%d%H%M%S%L")
     # select
+    auction = Auction.find_by id:auction_id
+    if auction.nil?
+      Prawn::Document.generate(Rails.root.join(pdf_filename),
+                               :background => img,
+                               :page_size => "B4",
+                               :page_layout => :landscape) do
+        fill_color "ffffff"
+        draw_text 'no data', :at => [15, bounds.top-22]
+      end
+      send_pdf_data pdf_filename
+      return
+    end
     auction_result = AuctionResult.find_by_auction_id(auction_id)
-    auction = Auction.find(auction_id)
+
     histories_achieved = AuctionHistory.find_by_sql ['select auction_histories.* ,users.company_name from auction_histories LEFT OUTER JOIN users ON users.id = auction_histories.user_id where flag = (select flag from auction_histories where auction_id = ? and is_bidder = true order by bid_time desc LIMIT 1) order by ranking asc, actual_bid_time asc ', auction_id]
     achieved = histories_achieved[0].average_price <= auction.reserve_price if !histories_achieved.empty?
 
@@ -82,7 +95,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     }
     chart_color = get_chart_color(user_all_hash)
     ######
-    pdf_filename = Time.new.strftime("%Y%m%d%H%M%S%L")
+
     Prawn::Document.generate(Rails.root.join(pdf_filename),
                              :background => img,
                              :page_size => "B4",
@@ -412,14 +425,18 @@ class Api::Admin::AuctionsController < Api::AuctionsController
       #go_to_page(1)
     end
 
-    now_time = Time.new.strftime("%Y%m%d%H%M%S")
-    send_data IO.read(Rails.root.join(pdf_filename)), :filename => "report-#{now_time}.pdf"
-    File.delete Rails.root.join(pdf_filename)
+    send_pdf_data pdf_filename
   end
 
 
 
   private
+
+  def send_pdf_data(pdf_filename)
+    now_time = Time.new.strftime("%Y%m%d%H%M%S")
+    send_data IO.read(Rails.root.join(pdf_filename)), :filename => "report-#{now_time}.pdf"
+    File.delete Rails.root.join(pdf_filename)
+  end
 
   def get_chart_color(user_hash)
     color = ["28FF28","9F35FF", "FF359A", "2828FF", "EAC100", "FF5809"]
