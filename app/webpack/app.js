@@ -16,6 +16,7 @@ import "components/retailer/retailer-live-container";
 import "components/retailer/retailer-finish";
 import "components/shared/check-network";
 import "components/search/home-list";
+import "components/retailer/letter-of-award";
 import "components/buyer/buyer-fill-consumption";
 import "components/retailer/retailer-workflow";
 // ActionCable = require('actioncable')
