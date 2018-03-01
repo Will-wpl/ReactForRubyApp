@@ -47,6 +47,7 @@ Rails.application.routes.draw do
           put 'send_mails'
           get 'retailer_dashboard'
           get 'buyer_dashboard'
+          get 'pdf'
         end
         collection do
           get 'obtain'

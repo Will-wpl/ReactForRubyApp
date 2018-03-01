@@ -10,8 +10,8 @@
       = f.input :reset_password_token, as: :hidden
       = f.full_error :reset_password_token, class: 'alert alert-danger'
 
-      = f.input :password, autofocus: true
-      = f.input :password_confirmation
+      = f.input :password, autofocus: true,placeholder:'Password (Minimum 8 characters)'
+      = f.input :password_confirmation,placeholder:'Password Confirmation'
 
       .lm--formItem
         = f.button :submit, 'Change My Password', class: 'lm--button--primary u-block', data: { disable_with: t('views.disable_with') }
