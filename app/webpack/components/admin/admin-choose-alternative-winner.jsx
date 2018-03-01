@@ -29,7 +29,7 @@ export default class ChooseAlternativeWinner extends React.Component{
             getHistoriesLast({ auction_id: actionId}).then(resp=>{
                 let data = resp.histories;
                 data.map((item,index)=>{
-                    item.disabled=false;
+                    //item.disabled=false;
                     if(index==0){
                         item.disabled=true;
 
@@ -185,7 +185,7 @@ export default class ChooseAlternativeWinner extends React.Component{
                                 <td>
                                     <button
                                         disabled={e.disabled}
-                                        className="lm--button lm--button--primary sBtn"
+                                        className="lm--button lm--button--primary"
                                         onClick={this.selectWinner.bind(this,e,i)} >Select
                                     </button>
                                 </td>

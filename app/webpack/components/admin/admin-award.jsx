@@ -38,15 +38,18 @@ export default class AdminAward extends Component{
     }
 
     render(){
-        //console.log(this.state.awardList);
         return(
-            <div className="u-grid bidderStatus" >
-                <ul className="bidders_list " style={{display:'flex'}}>
+            <div className="u-grid bidderStatus " >
+                <ul className="bidders_list " style={{width:'45%'}}>
                     {this.renderAwardList(this.state.awardList)}
                 </ul>
                 <div className="color_show">
-                    <label><span className="green"></span><dfn>Acknowledge</dfn></label>
+                    <label><dfn>Retailer: </dfn></label>
+                    <label><span className="green"></span><dfn>Acknowledged</dfn></label>
                     <label><span className="yellow"></span><dfn>Pending</dfn></label>
+                </div>
+                <div className="createRaMain u-grid">
+                    <a className="lm--button lm--button--primary u-mt3" href="/admin/home">Back to Homepage</a>
                 </div>
             </div>
         )
