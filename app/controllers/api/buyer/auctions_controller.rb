@@ -49,4 +49,92 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
   end
+
+  def pdf
+    zone_time = pdf_datetime_zone
+    auction_id = params[:id]
+
+    auction = Auction.find_by id:auction_id
+    if auction.nil?
+      send_no_data_pdf("LETTER", :portrait)
+      return
+    end
+    auction_result = AuctionResult.find_by_auction_id(auction_id)
+    price_table = get_price_table_data(auction, auction_result)
+    pdf_filename = Time.new.strftime("%Y%m%d%H%M%S%L")
+    background_img = Rails.root.join("app","assets", "pdf","bk.png")
+    Prawn::Document.generate(pdf_filename,
+                             :background => background_img,
+                             :page_size => "LETTER",
+                             :page_layout => :portrait) do
+      fill_color "183243"
+      fill { rounded_rectangle [-18, bounds.top+18], bounds.absolute_right-1, 756, 15}
+      define_grid(:columns => 22, :rows => 35, :gutter => 1)
+
+      fill_color "ffffff"
+
+      grid([1,1],[1,21]).bounding_box do
+        font_size(32){
+          draw_text "PDF", :at => [bounds.left, bounds.top-18]
+        }
+
+      end
+
+      auction_name_date = auction.name + " on " + (auction.start_datetime + zone_time).strftime("%d %b %Y")
+
+      unless auction_result.nil?
+        lowest_price_bidder =  auction_result.status == nil ?  auction_result.company_name : auction_result.lowest_price_bidder
+      end
+
+      contract_period_start_date = (auction.contract_period_start_date).strftime("%d %b %Y")
+      contract_period_end_date = (auction.contract_period_end_date).strftime("%d %b %Y")
+
+      table0_row0, table0_row1, table0_row2, table0_row3 =
+          ["Lowest Price Bidder:", lowest_price_bidder],["Contract Period:", "#{contract_period_start_date} to #{contract_period_end_date}"],["Total Volume:"],["Total Award Sum:"]
+      auction_result = [table0_row0, table0_row1, table0_row2, table0_row3]
+
+      price_title = [["Price:"]]
+
+      consumption_title = [["Consumption Forecast :"]]
+      consumption_table = [["", "LT", "HT(Small)", "HT(Large)", "EHT(Large)"],["Peak(7am-7pm)"],["Off-Peak(7am-7pm)"]]
+
+      grid([4,1],[35,19]).bounding_box do
+        #font "consola", :style => :bold_italic, :size => 14
+        font_size(16) { draw_text "Reverse Auction #{auction_name_date}.", :at => [bounds.left, bounds.top]}
+
+        move_down 12
+        #:width => bounds.right/2,  :height => 36, :overflow => :shrink_to_fit,
+        col0_len = bounds.right/2-70
+        col1_len = bounds.right - col0_len
+
+        table(auction_result, :column_widths => [col0_len, col1_len], :cell_style => {:size => 16, :padding => [12,2], :inline_format => true, :border_width => 0})
+        move_down 15
+        table(price_title, :cell_style => {:size => 16, :padding => [12,2], :inline_format => true, :width => bounds.right, :border_width => 0})
+        move_down 12
+        table(price_table, :cell_style => {:size => 12, :align => :center, :padding => [10,2], :inline_format => true, :width => bounds.right/price_table[0].size,  :border_width => 0.01,:border_color => "696969"}) do
+          values = cells.columns(0..-1).rows(0..0)
+          values.background_color = "00394A"
+          #values = cells.columns(0..-1).rows(is_bidder_index..is_bidder_index)
+          #values.background_color = "228B22"
+        end
+
+        move_down 22
+        table(consumption_title, :cell_style => {:size => 16, :padding => [12,2], :inline_format => true, :width => bounds.right, :border_width => 0})
+        move_down 12
+        table(consumption_table, :cell_style => {:size => 12, :align => :center, :padding => [10,2], :inline_format => true, :width => bounds.right/5,  :border_width => 0.01,:border_color => "696969"}) do
+          values = cells.columns(0..-1).rows(0..0)
+          values.background_color = "00394A"
+          #values = cells.columns(0..-1).rows(is_bidder_index..is_bidder_index)
+          #values.background_color = "228B22"
+        end
+      end
+      #grid.show_all
+      #fill_color "193344"
+      #fill {rectangle [50, bounds.top-50], bounds.absolute_right-185, 530}
+    end
+
+    now_time = Time.new.strftime("%Y%m%d%H%M%S")
+    send_data IO.read(Rails.root.join(pdf_filename)), :filename => "report-#{now_time}.pdf"
+    File.delete Rails.root.join(pdf_filename)
+  end
 end
