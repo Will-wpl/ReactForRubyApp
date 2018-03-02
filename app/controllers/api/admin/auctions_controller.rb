@@ -10,6 +10,15 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     end_time2 = params[:end_time2]
     start_price = params[:start_price]
     end_price = params[:end_price]
+    uid = params[:uid]
+    uid2 = params[:uid2]
+
+    unless uid.nil?
+      uid = uid.split(',').map!{|item| item = item.to_i}
+    end
+    unless uid2.nil?
+      uid2 = uid2.split(',').map!{|item| item = item.to_i}
+    end
 
     unless end_time.index('.').nil?
       end_time[end_time.index('.'),6] = '.999Z'
@@ -53,11 +62,11 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     histories_achieved = AuctionHistory.find_by_sql ['select auction_histories.* ,users.company_name from auction_histories LEFT OUTER JOIN users ON users.id = auction_histories.user_id where flag = (select flag from auction_histories where auction_id = ? and is_bidder = true order by bid_time desc LIMIT 1) order by ranking asc, actual_bid_time asc ', auction_id]
     achieved = histories_achieved[0].average_price <= auction.reserve_price if !histories_achieved.empty?
 
-    histories = AuctionHistory.select('users.id, users.name, users.company_name, auction_histories.*').joins(:user).where('auction_id = ? and bid_time BETWEEN ? AND ? and average_price BETWEEN ? AND ?', auction_id, start_time, end_time, start_price, end_price).order(bid_time: :asc)
-    histories_2 = AuctionHistory.select('users.id, users.name, users.company_name, auction_histories.*').joins(:user).where('auction_id = ? and bid_time BETWEEN ? AND ?', auction_id, start_time2, end_time2).order(bid_time: :asc)
+    histories = AuctionHistory.select('users.id, users.name, users.company_name, auction_histories.*').joins(:user).where('auction_id = ? and bid_time BETWEEN ? AND ? and average_price BETWEEN ? AND ? AND user_id in (?)', auction_id, start_time, end_time, min_price, max_price, uid).order(bid_time: :asc)
+    histories_2 = AuctionHistory.select('users.id, users.name, users.company_name, auction_histories.*').joins(:user).where('auction_id = ? and bid_time BETWEEN ? AND ? AND user_id in (?)', auction_id, start_time2, end_time2, uid2).order(bid_time: :asc)
     #
     hash, user_company_name_hash = get_histories_hash(histories)
-    hash2, user_company_name_hash2 = get_histories_hash(histories_2)
+    hash2, user_company_name_hash2, ranking = get_histories_hash(histories_2, true)
     ##### chart 1 begin #####
     tmp_x, type_x, len_x, time_format = time_le_3500(start_time_i, end_time_i)
     tmp_y = (max_price - min_price) / 200.0
@@ -85,7 +94,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     number_x2, str_date2, str_time2, len_x2, offset_x2 = get_number_x(step_number, step_time2, zone_time, start_datetime2, start_time2_i, len_x2, tmp_x2, base_x, type_x2, time_format2)
     # number_x end
     number_y2 = []
-    (0..user_company_name_hash2.keys().size).each do |i|
+    (0..ranking).each do |i|
       number_y2[i] = i.to_s
     end
     ##### chart 2 end #####
@@ -242,9 +251,9 @@ class Api::Admin::AuctionsController < Api::AuctionsController
           #font_size(7) { text_box str_time2[0], :at => [base_x-12-len_x2, 20-10]}
           font_size(8) { text_box str_time2[0], :at => [base_x-14-len_x2, 20-5]}
 
-          (1..user_company_name_hash2.keys().size).each do |i|
-            horizontal_line number_x2[0], number_x2[0] + 5, :at => 20 + (200.0/user_company_name_hash2.keys().size) * i
-            font_size(9) { text_box number_y2[i], :at => [base_x-60, 20 + (200/user_company_name_hash2.keys().size)*i + 3],:width => 55,:height => 10, :align => :right}
+          (1..ranking).each do |i|
+            horizontal_line number_x2[0], number_x2[0] + 5, :at => 20 + (200.0/ranking) * i
+            font_size(9) { text_box number_y2[i], :at => [base_x-60, 20 + (200/ranking)*i + 3],:width => 55,:height => 10, :align => :right}
           end
           font_size(9) { text_box number_y2[0], :at => [base_x-60, 26],:width => 55,:height => 10, :align => :right}
         end
@@ -262,7 +271,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
                          data_x =	(item.bid_time.to_i - start_time2_i) / tmp_x2
                          data_x == 0 ? base_x : data_x + offset_x2
                        end
-              data_y = 20 + (200.0/user_company_name_hash2.keys().size) * item.ranking
+              data_y = 20 + (200.0/ranking) * item.ranking
               if item_index == 0
                 move_to data_x, data_y
               else
@@ -423,15 +432,21 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     return tmp_x, type_x, len_x, time_format
   end
 
-  def get_histories_hash(histories)
+  def get_histories_hash(histories, ranking = false)
     hash = {}
     user_company_name_hash = {}
+    ranking = 0
     histories.each {|history|
       user_company_name_hash[history.user_id] = (history.company_name) unless user_company_name_hash.has_key?(history.user_id)
       hash[history.user_id] = [] unless hash.has_key?(history.user_id)
       hash[history.user_id].push(history)
+      ranking = history.ranking if history.ranking > ranking
     }
-    return hash, user_company_name_hash
+    if ranking
+      return hash, user_company_name_hash, ranking
+    else
+      return hash, user_company_name_hash
+    end
   end
 
   def get_number_x(step_number, step_time, zone_time, start_datetime, start_time_i, len_x, tmp_x, base_x, type_x, time_format)
