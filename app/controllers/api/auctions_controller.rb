@@ -432,11 +432,13 @@ class Api::AuctionsController < Api::BaseController
     (zone * 60 * 60)
   end
 
-  def get_price_table_data(auction, auction_result, visibility = false)
+  def get_price_table_data(auction, auction_result, visibility = false, price_data = false)
     table_head, table_row0, table_row1 = [""], ["Peak (7am-7pm)"], ["Off-Peak (7pm-7am)"]
+    price_row0, price_row1 = [],[]
     if auction.nil?
       if visibility
-        return [table_head, table_row0, table_row1], [false, false, false, false]
+        return [table_head, table_row0, table_row1], {visibility_lt:false, visibility_hts:false,
+                                                      visibility_htl:false, visibility_eht:false}
       else
         return [table_head, table_row0, table_row1]
       end
@@ -452,45 +454,62 @@ class Api::AuctionsController < Api::BaseController
       table_head.push('<b>LT</b>')
       table_row0.push('$ ' + format("%.4f", auction_result.lt_peak))
       table_row1.push('$ ' + format("%.4f", auction_result.lt_off_peak))
+      price_row0.push(auction_result.lt_peak)
+      price_row1.push(auction_result.lt_off_peak)
     else
-      table_head.push('')
-      table_row0.push('')
-      table_row1.push('')
+      price_row0.push(0.0)
+      price_row1.push(0.0)
     end
 
     if visibility_hts
       table_head.push('<b>HT (Small)</b>')
       table_row0.push('$ ' + format("%.4f", auction_result.hts_peak))
       table_row1.push('$ ' + format("%.4f", auction_result.hts_off_peak))
+      price_row0.push(auction_result.hts_peak)
+      price_row1.push(auction_result.hts_off_peak)
     else
-      table_head.push('')
-      table_row0.push('')
-      table_row1.push('')
+      price_row0.push(0.0)
+      price_row1.push(0.0)
     end
 
     if visibility_htl
       table_head.push('<b>HT (Large)</b>')
       table_row0.push('$ ' + format("%.4f", auction_result.htl_peak))
       table_row1.push('$ ' + format("%.4f", auction_result.htl_off_peak))
+      price_row0.push(auction_result.htl_peak)
+      price_row1.push(auction_result.htl_off_peak)
     else
-      table_head.push('')
-      table_row0.push('')
-      table_row1.push('')
+      price_row0.push(0.0)
+      price_row1.push(0.0)
     end
 
     if visibility_eht
       table_head.push('<b>EHT (Large)</b>')
       table_row0.push('$ ' + format("%.4f", auction_result.eht_peak))
       table_row1.push('$ ' + format("%.4f", auction_result.eht_off_peak))
+      price_row0.push(auction_result.eht_peak)
+      price_row1.push(auction_result.eht_off_peak)
     else
-      table_head.push('')
-      table_row0.push('')
-      table_row1.push('')
+      price_row0.push(0.0)
+      price_row1.push(0.0)
     end
+    return_value = []
+    return_value.push([table_head,
+                      table_row0,
+                      table_row1])
     if visibility
-      return [table_head, table_row0, table_row1], [visibility_lt, visibility_hts, visibility_htl, visibility_eht]
-    else
-      return [table_head, table_row0, table_row1]
+      return_value.push({visibility_lt:visibility_lt,
+                             visibility_hts:visibility_hts,
+                             visibility_htl:visibility_htl,
+                             visibility_eht:visibility_eht})
     end
+    if price_data
+      return_value.push([price_row0, price_row1])
+    end
+    return_value
+  end
+
+  def get_consumption_table_data()
+
   end
 end

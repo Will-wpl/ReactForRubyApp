@@ -24,7 +24,7 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
       data.push(published_gid: result.auction.published_gid,
                 name: result.auction.name,
                 start_datetime: result.auction.start_datetime,
-                report: "admin/auctions/#{result.auction_id}/report",
+                report: "api/buyer/auctions/#{result.auction_id}/pdf",
                 award: show_award?(result, current_user) ? "admin/auctions/#{result.auction_id}/award" : '')
     end
     bodies = { data: data, total: total }
