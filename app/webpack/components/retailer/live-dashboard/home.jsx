@@ -249,7 +249,7 @@ export default class LiveHomePage extends Component {
                 </div>
                 <div className="u-grid u-mt2">
                     <div className="col-sm-12 col-md-5 u-cell">
-                        <div className="col-sm-12 col-md-10 push-md-1"><BidForm data={this.state.priceConfig} ref={instance => this.bidForm = instance} onSubmit={this.onBidFormSubmit.bind(this)}
+                        <div className="col-sm-12 col-md-10 push-md-1"><BidForm data={this.state.priceConfig} auction={this.props.auction} ref={instance => this.bidForm = instance} onSubmit={this.onBidFormSubmit.bind(this)}
                                                                                 isLtVisible={visibility_lt} isHtsVisible={visibility_hts} isHtlVisible={visibility_htl} isEhtVisible={visibility_eht}/></div>
                     </div>
                     <div className="col-sm-12 col-md-7 u-cell">
