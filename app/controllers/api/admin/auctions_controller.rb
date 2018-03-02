@@ -11,8 +11,16 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     start_price = params[:start_price]
     end_price = params[:end_price]
 
-    #end_time['Z'] = '.999Z'
-    #end_time2['Z'] = '.999Z'
+    unless end_time.index('.').nil?
+      end_time[end_time.index('.'),6] = '.999Z'
+    else
+      end_time['Z'] = '.999Z'
+    end
+    unless end_time2.index('.').nil?
+      end_time2[end_time2.index('.'),6] = '.999Z'
+    else
+      end_time2['Z'] = '.999Z'
+    end
 
     auction_id = params[:id]
     background_img = Rails.root.join("app","assets", "pdf","bk.png")
@@ -45,7 +53,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     histories_achieved = AuctionHistory.find_by_sql ['select auction_histories.* ,users.company_name from auction_histories LEFT OUTER JOIN users ON users.id = auction_histories.user_id where flag = (select flag from auction_histories where auction_id = ? and is_bidder = true order by bid_time desc LIMIT 1) order by ranking asc, actual_bid_time asc ', auction_id]
     achieved = histories_achieved[0].average_price <= auction.reserve_price if !histories_achieved.empty?
 
-    histories = AuctionHistory.select('users.id, users.name, users.company_name, auction_histories.*').joins(:user).where('auction_id = ? and bid_time BETWEEN ? AND ?', auction_id, start_time, end_time).order(bid_time: :asc)
+    histories = AuctionHistory.select('users.id, users.name, users.company_name, auction_histories.*').joins(:user).where('auction_id = ? and bid_time BETWEEN ? AND ? and average_price BETWEEN ? AND ?', auction_id, start_time, end_time, start_price, end_price).order(bid_time: :asc)
     histories_2 = AuctionHistory.select('users.id, users.name, users.company_name, auction_histories.*').joins(:user).where('auction_id = ? and bid_time BETWEEN ? AND ?', auction_id, start_time2, end_time2).order(bid_time: :asc)
     #
     hash, user_company_name_hash = get_histories_hash(histories)
