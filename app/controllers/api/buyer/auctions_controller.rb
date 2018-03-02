@@ -60,9 +60,28 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
       return
     end
     auction_result = AuctionResult.find_by_auction_id(auction_id)
-    price_table = get_price_table_data(auction, auction_result)
+    price_table, visibilities = get_price_table_data(auction, auction_result, true)
+
     pdf_filename = Time.new.strftime("%Y%m%d%H%M%S%L")
     background_img = Rails.root.join("app","assets", "pdf","bk.png")
+
+    auction_name_date = auction.name + " on " + (auction.start_datetime + zone_time).strftime("%d %b %Y")
+    unless auction_result.nil?
+      lowest_price_bidder =  auction_result.status == nil ?  auction_result.company_name : auction_result.lowest_price_bidder
+    end
+
+    contract_period_start_date = (auction.contract_period_start_date).strftime("%d %b %Y")
+    contract_period_end_date = (auction.contract_period_end_date).strftime("%d %b %Y")
+
+    contract_period = (auction.contract_period_end_date - auction.contract_period_start_date).to_i
+    contract_period = contract_period == 0 ? 1 : contract_period + 1
+
+    current_user_consumption = Consumption.find_by auction_id:auction_id, user_id:current_user.id
+
+    unless current_user_consumption.nil?
+
+    end
+
     Prawn::Document.generate(pdf_filename,
                              :background => background_img,
                              :page_size => "LETTER",
@@ -80,23 +99,14 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
 
       end
 
-      auction_name_date = auction.name + " on " + (auction.start_datetime + zone_time).strftime("%d %b %Y")
-
-      unless auction_result.nil?
-        lowest_price_bidder =  auction_result.status == nil ?  auction_result.company_name : auction_result.lowest_price_bidder
-      end
-
-      contract_period_start_date = (auction.contract_period_start_date).strftime("%d %b %Y")
-      contract_period_end_date = (auction.contract_period_end_date).strftime("%d %b %Y")
-
       table0_row0, table0_row1, table0_row2, table0_row3 =
           ["Lowest Price Bidder:", lowest_price_bidder],["Contract Period:", "#{contract_period_start_date} to #{contract_period_end_date}"],["Total Volume:"],["Total Award Sum:"]
-      auction_result = [table0_row0, table0_row1, table0_row2, table0_row3]
+      auction_result_table = [table0_row0, table0_row1, table0_row2, table0_row3]
 
       price_title = [["Price:"]]
 
       consumption_title = [["Consumption Forecast :"]]
-      consumption_table = [["", "LT", "HT(Small)", "HT(Large)", "EHT(Large)"],["Peak(7am-7pm)"],["Off-Peak(7am-7pm)"]]
+      consumption_table = [["", "LT", "HT(Small)", "HT(Large)", "EHT(Large)"],["Peak(7am-7pm)","$ 0.0999"],["Off-Peak(7am-7pm)"*6, "$ 0.0999"]]
 
       grid([4,1],[35,19]).bounding_box do
         #font "consola", :style => :bold_italic, :size => 14
@@ -107,11 +117,11 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
         col0_len = bounds.right/2-70
         col1_len = bounds.right - col0_len
 
-        table(auction_result, :column_widths => [col0_len, col1_len], :cell_style => {:size => 16, :padding => [12,2], :inline_format => true, :border_width => 0})
+        table(auction_result_table, :column_widths => [col0_len, col1_len], :cell_style => {:size => 16, :padding => [12,2], :inline_format => true, :border_width => 0})
         move_down 15
         table(price_title, :cell_style => {:size => 16, :padding => [12,2], :inline_format => true, :width => bounds.right, :border_width => 0})
         move_down 12
-        table(price_table, :cell_style => {:size => 12, :align => :center, :padding => [10,2], :inline_format => true, :width => bounds.right/price_table[0].size,  :border_width => 0.01,:border_color => "696969"}) do
+        table(price_table, :cell_style => {:size => 12, :align => :center, :valign => :center, :padding => [8,2,14], :inline_format => true, :width => bounds.right/price_table[0].size,  :border_width => 0.01,:border_color => "696969"}) do
           values = cells.columns(0..-1).rows(0..0)
           values.background_color = "00394A"
           #values = cells.columns(0..-1).rows(is_bidder_index..is_bidder_index)
@@ -121,7 +131,7 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
         move_down 22
         table(consumption_title, :cell_style => {:size => 16, :padding => [12,2], :inline_format => true, :width => bounds.right, :border_width => 0})
         move_down 12
-        table(consumption_table, :cell_style => {:size => 12, :align => :center, :padding => [10,2], :inline_format => true, :width => bounds.right/5,  :border_width => 0.01,:border_color => "696969"}) do
+        table(consumption_table, :cell_style => {:size => 12, :align => :center, :valign => :center, :padding => [8,2,14], :inline_format => true, :width => bounds.right/5,  :border_width => 0.01,:border_color => "696969"}) do
           values = cells.columns(0..-1).rows(0..0)
           values.background_color = "00394A"
           #values = cells.columns(0..-1).rows(is_bidder_index..is_bidder_index)
@@ -132,9 +142,6 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
       #fill_color "193344"
       #fill {rectangle [50, bounds.top-50], bounds.absolute_right-185, 530}
     end
-
-    now_time = Time.new.strftime("%Y%m%d%H%M%S")
-    send_data IO.read(Rails.root.join(pdf_filename)), :filename => "report-#{now_time}.pdf"
-    File.delete Rails.root.join(pdf_filename)
+    send_pdf_data(pdf_filename)
   end
 end

@@ -406,13 +406,21 @@ class Api::AuctionsController < Api::BaseController
     (zone * 60 * 60)
   end
 
-  def get_price_table_data(auction, auction_result)
+  def get_price_table_data(auction, auction_result, visibility = false)
+    table_head, table_row0, table_row1 = [""], ["Peak (7am-7pm)"], ["Off-Peak (7pm-7am)"]
+    if auction.nil?
+      if visibility
+        return [table_head, table_row0, table_row1], [false, false, false, false]
+      else
+        return [table_head, table_row0, table_row1]
+      end
+    end
     visibility_lt =  auction.total_lt_peak > 0 || auction.total_lt_off_peak > 0
     visibility_hts = auction.total_hts_peak > 0 || auction.total_hts_off_peak > 0
     visibility_htl = auction.total_htl_peak > 0 || auction.total_htl_off_peak > 0
     visibility_eht = auction.total_eht_peak > 0 || auction.total_eht_off_peak > 0
 
-    table_head, table_row0, table_row1 = [""], ["Peak (7am-7pm)"], ["Off-Peak (7pm-7am)"]
+
 
     if visibility_lt
       table_head.push('<b>LT</b>')
@@ -453,7 +461,11 @@ class Api::AuctionsController < Api::BaseController
       table_row0.push('')
       table_row1.push('')
     end
-    [table_head, table_row0, table_row1]
+    if visibility
+      return [table_head, table_row0, table_row1], [visibility_lt, visibility_hts, visibility_htl, visibility_eht]
+    else
+      return [table_head, table_row0, table_row1]
+    end
   end
 
 end
