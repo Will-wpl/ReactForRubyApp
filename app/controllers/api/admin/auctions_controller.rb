@@ -11,8 +11,8 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     start_price = params[:start_price]
     end_price = params[:end_price]
 
-    end_time['Z'] = '.999Z'
-    end_time2['Z'] = '.999Z'
+    #end_time['Z'] = '.999Z'
+    #end_time2['Z'] = '.999Z'
 
     auction_id = params[:id]
     background_img = Rails.root.join("app","assets", "pdf","bk.png")

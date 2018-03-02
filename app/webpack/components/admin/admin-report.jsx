@@ -80,11 +80,12 @@ export class AdminReport extends Component {
         let data = $.extend(this.refs.price.makeXy(),this.refs.ranking.makeXy());
         data.id = this.auction.id;
         console.log(data);
-        doPdf(data).then(res=>{
-            console.log(res);
-        },error=>{
+        window.open(`/api/admin/auctions/${data.id}/pdf?start_time=${data.start_time}&end_time=${data.end_time}&start_time2=${data.start_time2}&end_time2=${data.end_time2}&start_price=${data.start_price}&end_price=${data.end_price}`); 
+        // doPdf(data).then(res=>{
+        //     console.log(res);
+        // },error=>{
 
-        })
+        // })
     }
     render () {
         let achieved = parseFloat(this.actualPrice).toFixed(4) <= parseFloat(this.startPrice);
