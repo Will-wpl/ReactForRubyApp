@@ -6,13 +6,24 @@ export default class Ranking extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {option: getTemplate(this.props)};
+        this.state = {
+            option: getTemplate(this.props),
+            start_time2:"",
+            end_time2:"",
+        };
         this.onDataZoom = this.onDataZoom.bind(this);
         this.onEvents = {
             'dataZoom': this.onDataZoom
         }
     }
-
+    componentDidMount(){
+        setTimeout(()=>{
+            this.setState({
+                     start_time2:this.theStartbidtime,
+                     end_time2:this.theEndbidtime,
+                 })
+        },1000)
+    }
     getChartOption() {
         let option = getTemplate(this.props);
         this.props.data.forEach(element => {
@@ -46,6 +57,8 @@ export default class Ranking extends Component {
                 } else {
                     d.value = [].concat(moment(timeRanking.bid_time).format('YYYY-DD-MM HH:mm:ss')).concat(timeRanking.ranking);
                 }
+                this.theStartbidtime = element.data[0].bid_time;
+                this.theEndbidtime = element.data[element.data.length-1].bid_time;
                 tmp.data.push(d);
             });
             option.series.push(tmp);
@@ -70,10 +83,27 @@ export default class Ranking extends Component {
             } else if (lastEle === '0') { //x
                 this.xStart = params.start;
                 this.xEnd = params.end;
+                let theStartbidtime = this.theStartbidtime
+                let theEndbidtime = this.theEndbidtime
+                let diff = moment(theEndbidtime)-moment(theStartbidtime);
+                let ts = Math.ceil(diff*(params.start/100))+moment(theStartbidtime);
+                let te = Math.ceil(diff*(params.end/100))+moment(theStartbidtime);
+                this.setState({
+                    start_time2:moment(ts).utc().format(),
+                    end_time2:moment(te).utc().format()
+                })
+                //console.log("startBindtime : "+ts);
+                //console.log("theEndbidtime : "+te);
             }
         }
     }
-
+    makeXy(){
+        let data = {
+            start_time2:this.state.start_time2,
+            end_time2:this.state.end_time2,
+        }
+        return data
+    }
     render() {
         let content = <div></div>;
         if (this.props.data) {

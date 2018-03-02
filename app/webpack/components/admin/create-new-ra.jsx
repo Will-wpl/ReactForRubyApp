@@ -385,9 +385,9 @@ export class CreateNewRA extends Component {
                     </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
                         <span className="lm--formItem-left lm--formItem-label string optional">
-                            <abbr title="required">*</abbr>Starting Price :</span>
+                            <abbr title="required">*</abbr>Starting Price ($/kWh):</span>
                             <label className="lm--formItem-right lm--formItem-control">
-                                <input type="test" ref="starting_price" onChange={this.startPrice.bind(this)} value={this.state.starting_price} disabled={this.state.disabled} name="starting_price" maxLength="50" required aria-required="true" pattern="^\d+(\.\d{4})$" title="Reserve Price must be a number with 4 decimal places, e.g. $0.0891/kWh." ></input>
+                                <input type="test" ref="starting_price" onChange={this.startPrice.bind(this)} value={this.state.starting_price} disabled={this.state.disabled} name="starting_price" maxLength="50" required aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891/kWh." ></input>
                                 <abbr ref="ra_duration_error" className="col"></abbr>
                             </label>
                     </dd>
