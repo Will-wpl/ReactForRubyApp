@@ -96,6 +96,7 @@ Rails.application.routes.draw do
           get 'award'
         end
       end
+      resources :user_extensions, only: %i[index]
     end
   end
 
