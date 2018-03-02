@@ -144,7 +144,8 @@ class Api::AuctionsController < Api::BaseController
     actions = [
       { url: '/admin/auctions/:id/buyer_dashboard?unpublished', name: 'Buyer Dashboard', icon: 'view', interface_type: 'auction' },
       { url: '/admin/auctions/new', name: 'Manage', icon: 'manage', interface_type: 'auction' },
-      { url: '/admin/auctions/:id', name: 'Delete', icon: 'delete', interface_type: 'auction' }]
+      { url: '/admin/auctions/:id', name: 'Delete', icon: 'delete', interface_type: 'auction' }
+    ]
     data = auction.order(actual_begin_time: :asc)
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
@@ -347,9 +348,34 @@ class Api::AuctionsController < Api::BaseController
       consumptions_individual.push(id: consumption.id, name: consumption.user.name, participation_status: consumption.participation_status)
     end
     count_individual = consumptions_individual.count
-    render json: { consumptions_company: consumptions_company, count_company: count_company, consumptions_individual: consumptions_individual, count_individual:count_individual }, status: 200
+    render json: { consumptions_company: consumptions_company, count_company: count_company, consumptions_individual: consumptions_individual, count_individual: count_individual }, status: 200
   end
 
+  def log
+    if params.key?(:page_size) && params.key?(:page_index)
+      search_params = reject_params(params, %w[controller action])
+      search_where_array = set_search_params(search_params)
+      result = AuctionEvent.find_by_auction_id(params[:id]).where(search_where_array)
+                           .page(params[:page_index]).per(params[:page_size])
+      total = result.total_count
+    else
+      result = AuctionEvent.all
+      total = result.count
+    end
+    headers = [
+      { name: 'Name', field_name: 'name' },
+      { name: 'Date', field_name: 'auction_when' },
+      { name: 'Action', field_name: 'auction_do' },
+      { name: 'Details', field_name: 'auction_what' }
+    ]
+    data = []
+    result.order(created_at: :desc).each do |event|
+      data.push(name: event.user.company_name, auction_when: event.auction_when,
+                auction_do: event.auction_do, auction_what: event.auction_what)
+    end
+    bodies = { data: data, total: total }
+    render json: { headers: headers, bodies: bodies, actions: nil }, status: 200
+  end
 
   private
 
@@ -384,13 +410,13 @@ class Api::AuctionsController < Api::BaseController
 
   def send_no_data_pdf(page_size, page_layout)
     pdf_filename = Time.new.strftime("%Y%m%d%H%M%S%L")
-    background_img = Rails.root.join("app","assets", "pdf","bk.png")
+    background_img = Rails.root.join("app", "assets", "pdf", "bk.png")
     Prawn::Document.generate(Rails.root.join(pdf_filename),
                              :background => background_img,
                              :page_size => page_size,
                              :page_layout => page_layout) do
       fill_color "ffffff"
-      draw_text 'no data', :at => [15, bounds.top-22]
+      draw_text 'no data', :at => [15, bounds.top - 22]
     end
     send_pdf_data pdf_filename
   end
@@ -455,5 +481,4 @@ class Api::AuctionsController < Api::BaseController
     end
     [table_head, table_row0, table_row1]
   end
-
 end
