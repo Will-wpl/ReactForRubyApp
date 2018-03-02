@@ -493,10 +493,16 @@ class Api::AuctionsController < Api::BaseController
       price_row0.push(0.0)
       price_row1.push(0.0)
     end
-    return_value = []
-    return_value.push([table_head,
-                      table_row0,
-                      table_row1])
+
+    unless visibility && price_data
+      return [table_head,
+              table_row0,
+              table_row1]
+    end
+    return_value = [[table_head,
+                     table_row0,
+                     table_row1]]
+
     if visibility
       return_value.push({visibility_lt:visibility_lt,
                              visibility_hts:visibility_hts,
