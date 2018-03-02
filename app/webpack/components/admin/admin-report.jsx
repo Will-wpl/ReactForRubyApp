@@ -77,15 +77,14 @@ export class AdminReport extends Component {
         })
     }
     dopdf(){
-        let data = $.extend(this.refs.price.makeXy(),this.refs.ranking.makeXy());
-        data.id = this.auction.id;
+        let uid = this.priceUsers.getSelectUid(),
+            uid2 = this.rankingUsers.getSelectUid(),
+            data = $.extend(this.refs.price.makeXy(),this.refs.ranking.makeXy());
+            data.id = this.auction.id;
+            data.uid = (JSON.stringify(uid).split("[")[1]).split("]")[0];
+            data.uid2 = (JSON.stringify(uid2).split("[")[1]).split("]")[0];
         console.log(data);
-        window.open(`/api/admin/auctions/${data.id}/pdf?start_time=${data.start_time}&end_time=${data.end_time}&start_time2=${data.start_time2}&end_time2=${data.end_time2}&start_price=${data.start_price}&end_price=${data.end_price}`); 
-        // doPdf(data).then(res=>{
-        //     console.log(res);
-        // },error=>{
-
-        // })
+        window.open(`/api/admin/auctions/${data.id}/pdf?start_time=${data.start_time}&end_time=${data.end_time}&start_time2=${data.start_time2}&end_time2=${data.end_time2}&start_price=${data.start_price}&end_price=${data.end_price}&uid=${data.uid}&uid2=${data.uid2}`);
     }
     render () {
         let achieved = parseFloat(this.actualPrice).toFixed(4) <= parseFloat(this.startPrice);

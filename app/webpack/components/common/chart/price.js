@@ -69,7 +69,7 @@ export default class Price extends Component {
                 this.theStartbidtime = element.data[0].bid_time;
                 this.theEndbidtime = element.data[element.data.length-1].bid_time;
                 this.theEndPrice = parseFloat(element.data[0].average_price).toFixed(4);
-                this.theStartPrice = parseFloat(element.data[element.data.length-1].average_price).toFixed(4);
+                this.theStartPrice = 0.0000;
                 tmp.data.push(d);
             });
             option.series.push(tmp);
@@ -111,9 +111,8 @@ export default class Price extends Component {
                 this.yStart = params.start;
                 this.yEnd = params.end;
                 let diff = (this.theEndPrice - this.theStartPrice).toFixed(4);
-                let theStartPrice = this.theStartPrice;
-                let ps = (parseFloat(params.start/100*diff) + parseFloat(theStartPrice)).toFixed(4);
-                let pe = (parseFloat(params.end/100*diff) + parseFloat(theStartPrice)).toFixed(4);
+                let ps = (parseFloat(params.start/100*diff)).toFixed(4);
+                let pe = (parseFloat(params.end/100*diff)).toFixed(4);
                 this.setState({
                     start_price:ps,
                     end_price:pe
