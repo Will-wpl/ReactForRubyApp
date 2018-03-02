@@ -16,7 +16,7 @@ RSpec.describe Api::Admin::UserExtensionsController, type: :controller do
   context 'admin user' do
     before { sign_in create(:user, :with_admin) }
 
-    describe 'GET retailers' do
+    describe 'GET Index' do
 
       context 'Base Search' do
         def do_request

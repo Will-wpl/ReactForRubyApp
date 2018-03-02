@@ -48,6 +48,7 @@ Rails.application.routes.draw do
           get 'retailer_dashboard'
           get 'buyer_dashboard'
           get 'pdf'
+          get 'log'
         end
         collection do
           get 'obtain'

@@ -20,7 +20,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
   let! (:consumption_8) { create(:consumption, user: buyer_i_s[4], auction: auction, action_status: '2') }
   let!(:published_upcoming_auction) { create(:auction, :for_next_month, :upcoming, :published) }
   let!(:published_living_auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
-
+  let!(:logs) { create_list(:auction_event, 50, auction: auction, user: retailers[0]) }
 
   base_url = 'api/admin/auctions'
 
@@ -617,6 +617,53 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
           hash = JSON.parse(response.body)
           expect(response).to have_http_status(:ok)
           expect(hash['count_company']).to eq(4)
+        end
+      end
+    end
+
+    describe 'GET buyer_dashbaord' do
+
+      context 'Base Search' do
+        def do_request
+          get :log, params: { id: auction.id}
+        end
+
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash = JSON.parse(response.body)
+          expect(hash['headers'].size).to eq(4)
+          expect(hash['bodies']['total']).to eq(50)
+          expect(hash['bodies']['data'].size).to eq(50)
+        end
+      end
+
+      context 'Pager Search' do
+        def do_request
+          get :log, params: {id: auction.id, page_size: '10', page_index: '1' }
+        end
+
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash = JSON.parse(response.body)
+          expect(hash['headers'].size).to eq(4)
+          expect(hash['bodies']['total']).to eq(50)
+          expect(hash['bodies']['data'].size).to eq(10)
+        end
+      end
+
+      context 'Conditions Pager Search' do
+        def do_request
+          get :log, params: {id: auction.id, company_name: [retailers[0].company_name, 'like', 'users'], page_size: '10', page_index: '1' }
+        end
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash = JSON.parse(response.body)
+          expect(hash['headers'].size).to eq(4)
+          expect(hash['bodies']['total']).to eq(50)
+          expect(hash['bodies']['data'].size).to eq(10)
         end
       end
     end
