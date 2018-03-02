@@ -208,7 +208,7 @@ Rails.application.routes.draw do
     resources :auction_histories, only: []
     resources :auction_events, only: []
     resources :arrangements, only: []
-    resources :user_extensions, only: []
+    resources :user_extensions, only: %i[index]
     resources :auction_extend_times, only: []
     resources :auctions, only: %i[new empty goto upcoming online dashboard confirm result report log invitation select comsumption unpublished published buyer_dashboard retailer_dashboard tender] do
       member do
