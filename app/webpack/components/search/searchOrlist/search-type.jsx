@@ -16,7 +16,11 @@ export class SearchType extends Component {
         }
     }
     componentDidMount(){
-        this.goSearch();
+        if(this.props.type === "User extension list page"){
+            this.goSearch("user_extension");
+        }else {
+            this.goSearch();
+        }
     }
     componentWillMount(){
 
@@ -51,7 +55,7 @@ export class SearchType extends Component {
             start_datetime:data
         })
     }
-    goSearch(){
+    goSearch(type){
         let needData = ''
         this.search_type_data.map((item,index)=>{
             //needData += '"'+item.type+'":"'+$('#'+item.type).val()+'",';
@@ -71,7 +75,11 @@ export class SearchType extends Component {
             }
         })
         needData = needData.substr(0,needData.length-1);
-        needData = '{'+needData+',"page_size":10,"page_index":1}';
+        if(type==="user_extension"){
+            needData = '{"page_size":10,"page_index":1}';
+        }else{
+            needData = '{'+needData+',"page_size":10,"page_index":1}';
+        }
         console.log(JSON.parse(needData))
         if(this.props.doSearch){
             this.props.doSearch(JSON.parse(needData),this.list_url)
