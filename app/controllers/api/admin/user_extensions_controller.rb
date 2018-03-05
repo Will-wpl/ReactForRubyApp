@@ -13,6 +13,7 @@ class Api::Admin::UserExtensionsController < Api::BaseController
     end
 
     headers = [
+      { name: 'Company Name', field_name: 'company_name' },
       { name: 'Login Status', field_name: 'logged_in_status' },
       { name: 'login Last Time', field_name: 'logged_in_last_time' },
       { name: 'WS Status', field_name: 'ws_connected_status' },
