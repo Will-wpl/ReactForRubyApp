@@ -293,12 +293,19 @@ upload(type, index){
             });
         }
         addinputfile(type, required){
+             let uploadStatus = true
+                if(this.state.retailer_send != 0 && type === "retailer_confidentiality_undertaking_upload" 
+                || this.state.buyer_individual_send != 0 && type === "buyer_tc_upload"
+                || this.state.buyer_company_send != 0 && type === "buyer_tc_upload"){
+                    uploadStatus = false;
+                }
                 let fileHtml = '';
                 fileHtml = <div className="file_box">
                             <form id={type+"_form"} encType="multipart/form-data">
                                 {this.state.fileData[type].map((item, index) =>
                                         <div className="u-grid mg0 u-mt1" key={index}>
                                             <div className="col-sm-12 col-md-10 u-cell">
+                                                {uploadStatus?
                                                 <a className="upload_file_btn">
                                                     <dfn>No file selected...</dfn>
                                                     {/* accept="application/pdf,application/msword" */}
@@ -314,23 +321,24 @@ upload(type, index){
                                                         <input type="file" ref={type+index} onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.state.disabled} />
                                                         <b>Browse..</b>
                                                     </div>}
-                                                </a>
+                                                </a>:''}
+                                                {uploadStatus?
                                                 <div className="progress">
                                                     <div className="progress-bar" style={{width:"0%"}}>0%</div>
-                                                </div>
+                                                </div>:''}
                                                 <div className="progress_files">
                                                     <ul>
                                                         {
                                                             item.files.map((it,i)=>{
-                                                                return <li key={i}><a download={it.file_name} href={"/"+it.file_path}>{it.file_name}</a><span className="remove_file" onClick={this.remove_file.bind(this,type,index,i,it.id)}></span></li>
+                                                                return <li key={i}><a download={it.file_name} href={"/"+it.file_path}>{it.file_name}</a>{uploadStatus?<span className="remove_file" onClick={this.remove_file.bind(this,type,index,i,it.id)}></span>:''}</li>
                                                             })
                                                         }
                                                     </ul>
                                                 </div>
                                             </div>
-                                            <div className="col-sm-12 col-md-2 u-cell">
+                                            {uploadStatus?<div className="col-sm-12 col-md-2 u-cell">
                                                 <a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>
-                                            </div>
+                                            </div>:''}
                                             {/* <div className="col-sm-12 col-md-2 u-cell">
                                                 {item.buttonName === "none" ? "" : <a onClick={this.fileclick.bind(this, index, type, item.buttonName)} className={"lm--button lm--button--primary "+item.buttonName}>{item.buttonText}</a>}
                                             </div> */}
@@ -402,7 +410,7 @@ upload(type, index){
                 })
                 this.refs.Modal.showModal("comfirm");
                 this.setState({
-                    text:"Are you sure you want to send invitation email(s)?",
+                    text:"Are you sure you want to send the invitation email(s)? Once you click yes, you can no longer make any changes to the uploaded documents.",
                 });
             }
         send_mail(){
@@ -420,7 +428,7 @@ upload(type, index){
                 clearTimeout(timeBar);
                 timeBar = setTimeout(()=>{
                     location.reload();
-                },5000)
+                },2000)
             },error=>{
 
             })
