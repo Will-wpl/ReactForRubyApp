@@ -127,16 +127,27 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
     total_volume = number_helper.number_to_currency(total_volume, precision: 0, unit: '')
     total_award_sum = number_helper.number_to_currency(total_award_sum, precision: 2, unit: '$')
     table0_row0, table0_row1, table0_row2, table0_row3 =
-        ["Lowest Price Bidder:", lowest_price_bidder],["Contract Period:", "#{contract_period_start_date} to #{contract_period_end_date}"],["Total Volume:", total_volume + " kWh (forecasted)"],["Total Award Sum:", total_award_sum + "(forecasted)"]
+        ["Lowest Price Bidder:", lowest_price_bidder],
+        ["Contract Period:", "#{contract_period_start_date} to #{contract_period_end_date}"],
+        ["Total Volume:", total_volume + " kWh (forecasted)"],
+        ["Total Award Sum:", total_award_sum + "(forecasted)"]
     auction_result_table = [table0_row0, table0_row1, table0_row2, table0_row3]
 
-    col0_len = pdf.bounds.right/2-70
+    col0_len = pdf.bounds.right/2-100
     col1_len = pdf.bounds.right - col0_len
-    pdf.table(auction_result_table, :column_widths => [col0_len, col1_len], :cell_style => {:size => font_size, :padding => [12,2], :inline_format => true, :border_width => 0})
+    pdf.table(auction_result_table, :column_widths => [col0_len, col1_len],
+              :cell_style => {:size => font_size, :padding => [12,2], :inline_format => true, :border_width => 0})
   end
 
   def pdf_price_table(pdf, price_table_data)
-    pdf.table(price_table_data, :cell_style => {:size => 12, :align => :center, :valign => :center, :padding => [8,2,14], :inline_format => true, :width => pdf.bounds.right/price_table_data[0].size,  :border_width => 0.01,:border_color => "696969"}) do
+    pdf.table(price_table_data,
+              :cell_style => {:size => 12,
+                              :align => :center,
+                              :valign => :center,
+                              :padding => [8,2,14],
+                              :inline_format => true,
+                              :width => pdf.bounds.right/price_table_data[0].size,
+                              :border_width => 0.01,:border_color => "696969"}) do
       values = cells.columns(0..-1).rows(0..0)
       values.background_color = "00394A"
     end
@@ -203,7 +214,14 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
   end
 
   def pdf_consumption_table(pdf, consumption_table_data)
-    pdf.table(consumption_table_data, :cell_style => {:size => 12, :align => :center, :valign => :center, :padding => [8,2,14], :inline_format => true, :width => pdf.bounds.right/consumption_table_data[0].size,  :border_width => 0.01,:border_color => "696969"}) do
+    pdf.table(consumption_table_data, :cell_style => {:size => 12,
+                                                      :align => :center,
+                                                      :valign => :center,
+                                                      :padding => [8,2,14],
+                                                      :inline_format => true,
+                                                      :width => pdf.bounds.right/consumption_table_data[0].size,
+                                                      :border_width => 0.01,
+                                                      :border_color => "696969"}) do
       values = cells.columns(0..-1).rows(0..0)
       values.background_color = "00394A"
     end
