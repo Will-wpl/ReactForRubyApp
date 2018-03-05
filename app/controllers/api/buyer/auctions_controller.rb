@@ -62,19 +62,18 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
     auction_result = AuctionResult.find_by_auction_id(auction_id)
     price_table_data, visibilities, price_data = get_price_table_data(auction, auction_result, true, true)
 
-    puts "ppppppprice data = #{price_data}"
-    pdf_filename = Rails.root.join(Time.new.strftime("%Y%m%d%H%M%S%L"))
+    pdf_filename = Time.new.strftime("%Y%m%d%H%M%S%L")
     background_img = Rails.root.join("app","assets", "pdf","bk.png")
 
-    auction_name_date = " exercise on " + (auction.start_datetime + zone_time).strftime("%d %b %Y")#auction.name +
+    auction_date = "on " + (auction.start_datetime + zone_time).strftime("%d %b %Y")#auction.name +
 
     consumption_table_data, total_volume, total_award_sum = get_consumption_table_data(auction, visibilities, price_data)
-    Prawn::Document.generate(pdf_filename,
+    Prawn::Document.generate(Rails.root.join(pdf_filename),
                              :background => background_img,
                              :page_size => "LETTER",
                              :page_layout => :portrait) do |pdf|
       pdf.fill_color "183243"
-      pdf.fill { pdf.rounded_rectangle [-18, pdf.bounds.top+18], pdf.bounds.absolute_right-1, 756, 15}
+      pdf.fill { pdf.rounded_rectangle [-18, pdf.bounds.top+18], pdf.bounds.absolute_right-1, 756, 5}
       pdf.define_grid(:columns => 22, :rows => 35, :gutter => 1)
 
       # text PDF
@@ -82,9 +81,9 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
 
       pdf.grid([4,1],[35,19]).bounding_box do
         #font "consola", :style => :bold_italic, :size => 14
-        pdf.font_size(16) { pdf.draw_text "Reverse Auction #{auction_name_date}.", :at => [pdf.bounds.left, pdf.bounds.top]}
+        pdf.font_size(14) { pdf.draw_text "Reverse Auction exercise #{auction_date}.", :at => [pdf.bounds.left, pdf.bounds.top]}
         pdf.move_down 12
-        pdf_auction_result_table(pdf, auction, auction_result, total_volume, total_award_sum)
+        pdf_auction_result_table(pdf, auction, auction_result, total_volume, total_award_sum, 14)
         pdf.move_down 15
         pdf.table([["Price:"]], :cell_style => {:size => 16, :padding => [12,2],
                                                 :inline_format => true, :width => pdf.bounds.right, :border_width => 0})
@@ -117,7 +116,7 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
     end
   end
 
-  def pdf_auction_result_table(pdf, auction,  auction_result, total_volume, total_award_sum)
+  def pdf_auction_result_table(pdf, auction,  auction_result, total_volume, total_award_sum, font_size)
     unless auction_result.nil?
       lowest_price_bidder =  auction_result.status == nil ?  auction_result.company_name : auction_result.lowest_price_bidder
     end
@@ -133,7 +132,7 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
 
     col0_len = pdf.bounds.right/2-70
     col1_len = pdf.bounds.right - col0_len
-    pdf.table(auction_result_table, :column_widths => [col0_len, col1_len], :cell_style => {:size => 16, :padding => [12,2], :inline_format => true, :border_width => 0})
+    pdf.table(auction_result_table, :column_widths => [col0_len, col1_len], :cell_style => {:size => font_size, :padding => [12,2], :inline_format => true, :border_width => 0})
   end
 
   def pdf_price_table(pdf, price_table_data)
@@ -159,7 +158,6 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
         consumption_table_head.push("LT")
         consumption_table_row0.push(number_helper.number_to_currency(current_user_consumption.lt_peak, precision: 0, unit: ''))
         consumption_table_row1.push(number_helper.number_to_currency(current_user_consumption.lt_off_peak, precision: 0, unit: ''))
-        puts " .... current_user_consumption.lt_peak.to_f = #{current_user_consumption.lt_peak.to_f}"
         value = ((current_user_consumption.lt_peak.to_f*12.0/365.0) * period_days).to_f
         total_volume =  total_volume + value
         total_award_sum += (value * price_data[0][0])

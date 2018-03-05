@@ -135,6 +135,32 @@ export class SearchList extends Component {
             })
         }
     }
+    saveId(url){
+        sessionStorage.uid = url;
+    }
+    showDetails(data){
+        let json = data.auction_what.replace('{',"").replace('}',"").replace(/"/g,'').split(",");
+        let _json =  json.map((e,i)=>{
+            let key = e.split(":")[0];
+            let str;
+            if(key == "created_at"||key == "updated_at"||key=="actual_begin_time"||key == "actual_end_time"||
+                key=="current_time"||key=="actual_bid_time"||key == "bid_time"){
+                e = `${e.split(":")[0]}:${moment(e.split(":")[1]).format('D MMM YYYY hh:mm A')}`;
+                return e
+            }else{
+                return e
+            }
+
+        })
+        let str = _json.join("<br/>")
+        this.setState({
+            text:str,
+            params_type:false
+        },()=>{
+            this.refs.Modal.showModal();
+        });
+
+    }
     render (){
         if(this.props.table_data){
             //console.log(this.props.table_data);
@@ -193,7 +219,7 @@ export class SearchList extends Component {
                                                                    </td>
                                                         }else if(it.field_name === 'report' || it.field_name === 'log' || it.field_name === 'award'){
                                                             return <td key={i}>
-                                                                    <a className={it.field_name} href={item[`${it.field_name}`]?"/"+item[`${it.field_name}`]:"javascript:void(0);"}></a>
+                                                                    <a className={it.field_name} href={item[`${it.field_name}`]?"/"+item[`${it.field_name}`]:"javascript:void(0);"} onClick={this.saveId.bind(this,item[`${it.field_name}`])}></a>
                                                                    </td>
                                                         }else if(it.field_name === 'actions'){
                                         
@@ -209,9 +235,19 @@ export class SearchList extends Component {
                                                             return <td key={i}>
                                                                 {item[`${it.field_name}`]==="1" ? "Success":"Fail"}
                                                             </td>
-                                                        }else{
+                                                        }
+                                                        else if(it.field_name ==="auction_what"){
                                                             return <td key={i}>
-                                                                {it.field_name === "actual_begin_time" || it.field_name === "start_datetime" || it.field_name ==="logged_in_last_time" ||it.field_name ==="ws_connected_last_time" ||it.field_name === "ws_send_message_last_time"
+                                                               <a
+                                                                   className="log"
+                                                                   onClick={this.showDetails.bind(this,item)}
+                                                               ></a>
+                                                            </td>
+                                                        }
+                                                        else{
+                                                            return <td key={i}>
+                                                                {it.field_name === "actual_begin_time" || it.field_name === "start_datetime" || it.field_name ==="logged_in_last_time" ||it.field_name ==="ws_connected_last_time" ||
+                                                                it.field_name === "ws_send_message_last_time"|| it.field_name === "auction_when"
                                                                 ? moment(item[`${it.field_name}`]).format('D MMM YYYY hh:mm A') 
                                                                 : item[`${it.field_name}`]}
                                                                 </td>
