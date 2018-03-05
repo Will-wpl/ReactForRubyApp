@@ -62,7 +62,6 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
     auction_result = AuctionResult.find_by_auction_id(auction_id)
     price_table_data, visibilities, price_data = get_price_table_data(auction, auction_result, true, true)
 
-    puts "ppppppprice data = #{price_data}"
     pdf_filename = Time.new.strftime("%Y%m%d%H%M%S%L")
     background_img = Rails.root.join("app","assets", "pdf","bk.png")
 
@@ -159,7 +158,6 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
         consumption_table_head.push("LT")
         consumption_table_row0.push(number_helper.number_to_currency(current_user_consumption.lt_peak, precision: 0, unit: ''))
         consumption_table_row1.push(number_helper.number_to_currency(current_user_consumption.lt_off_peak, precision: 0, unit: ''))
-        puts " .... current_user_consumption.lt_peak.to_f = #{current_user_consumption.lt_peak.to_f}"
         value = ((current_user_consumption.lt_peak.to_f*12.0/365.0) * period_days).to_f
         total_volume =  total_volume + value
         total_award_sum += (value * price_data[0][0])
