@@ -9,7 +9,8 @@ export default class RetailerLetterOfAward extends React.Component{
             letterOfAward:[],
             text:'',
             currentData:null,
-            currentIndex:null
+            currentIndex:null,
+            acknowledgeAllBtn:true
         };
     }
 
@@ -19,10 +20,19 @@ export default class RetailerLetterOfAward extends React.Component{
         getLetterOfAward(id).then(resp=>{
             console.log(resp);
             resp.map((e,i)=>{
-                e.acknowledge ? e.disabled=true:e.disabled=false
+                e.acknowledge==1 ? e.disabled=true:e.disabled=false
             });
             console.log(resp);
-            this.setState({letterOfAward:resp})
+            this.setState({letterOfAward:resp});
+            let btnDisabled = true;
+            for(let i in resp){
+                if(resp[i].acknowledge != 1){
+                    btnDisabled=false;
+                    break;
+                }
+            }
+            this.setState({acknowledgeAllBtn:btnDisabled});
+            this.forceUpdate()
         })
     }
 
@@ -33,6 +43,7 @@ export default class RetailerLetterOfAward extends React.Component{
             currentIndex:index},()=>{
             this.refs.Modal.showModal('comfirm');
         });
+
         // this.state.letterOfAward[index].disabled = true;
          //this.forceUpdate()
     }
@@ -54,8 +65,17 @@ export default class RetailerLetterOfAward extends React.Component{
        console.log(this.state.currentData);
        let id = this.state.currentData.id;
        retailerAcknowledge(id).then(resp => {
-           console.log(resp);
+           //console.log(resp);
            this.state.letterOfAward[this.state.currentIndex].disabled = true;
+           this.state.letterOfAward[this.state.currentIndex].acknowledge = 1;
+           //console.log(this.state.letterOfAward);
+           let btnDisabled = true;
+           for (let i in this.state.letterOfAward){
+                   if(this.state.letterOfAward[i].acknowledge != 1){
+                       btnDisabled = false
+                   }
+               }
+           this.setState({acknowledgeAllBtn:btnDisabled});
            this.forceUpdate()
        })
     }
@@ -66,7 +86,7 @@ export default class RetailerLetterOfAward extends React.Component{
             list.push(e.id);
         });
         retailerAllAcknowledge({ids: list}).then(resp=>{
-            console.log(resp);
+           this.setState({acknowledgeAllBtn:true});
             this.state.letterOfAward.map((e,i)=>{
                  e.disabled = true
             });
@@ -110,6 +130,7 @@ export default class RetailerLetterOfAward extends React.Component{
                 </div>
                 <div className="all">
                     <button
+                        disabled={this.state.acknowledgeAllBtn}
                         className="lm--button lm--button--primary"
                         onClick={this.acknowledgeAll.bind(this)}
                     >

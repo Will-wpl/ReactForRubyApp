@@ -340,7 +340,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
                   ["Lowest Price Bidder:#{lowest_price_bidder}"],
                   ["Lowest Average Price:$ #{lowest_average_price}/kWh"] ]
 
-        total_volume = ActiveSupport::NumberHelper.number_to_currency(auction.total_volume.round, precision: 0, unit: '')
+        total_volume = ActiveSupport::NumberHelper.number_to_currency(auction.total_volume, precision: 0, unit: '')
         total_award_sum = ActiveSupport::NumberHelper.number_to_currency(auction_result.total_award_sum, precision: 2, unit: '$ ')
         data1 = [ ["Contract Period: #{contract_period_start_date} to #{contract_period_end_date}"],
                   ["Total Volume: #{total_volume} kWh (forecasted)"],
