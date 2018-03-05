@@ -102,4 +102,10 @@ export const searchTypeData = {
              {title:"Company Name:",type:"company_name",species:"input",operator:'like'},
         ]
     },
+    "Auction Log List":{
+        list_url:`/api/admin/auctions/${sessionStorage.uid?sessionStorage.uid.split("/auctions")[1].split("/log")[0]:'1'}/log`,
+        list_data:[
+            {title:"Company Name:",type:"company_name",species:"input",operator:'like'},
+        ]
+    }
 }
