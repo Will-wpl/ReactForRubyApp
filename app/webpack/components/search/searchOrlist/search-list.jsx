@@ -276,7 +276,12 @@ export class SearchList extends Component {
                                                                 }else{
                                                                     if(item['auction_status'] === 'Upcoming' && ik.name === 'Manage'){
                                                                     }else{
-                                                                        return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>{ik.name}</a>
+                                                                        if(item['status'] === 'In Progress' && ik.name === 'Manage'){
+                                                                            return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>View</a>
+                                                                        }else{
+                                                                            return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>{ik.name}</a>
+                                                                        }
+                                                                        
                                                                     }
                                                                     
                                                                 }                                                           

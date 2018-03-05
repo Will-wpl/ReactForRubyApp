@@ -15,7 +15,7 @@ export default class AdminInvitation extends Component {
         buyer_company_pend:0,buyer_individual_select:0,buyer_individual_send:0,
         buyer_individual_pend:0,peak_lt:0,peak_hts:0,
         peak_htl:0,peak_eht:0,off_peak_lt:0,off_peak_hts:0,
-        off_peak_htl:0,off_peak_eht:0,disabled:false,publish_status:0,
+        off_peak_htl:0,off_peak_eht:0,disabled:false,publish_status:0,readOnly:false,
         params_type:"",auction:{},
         fileData:{
                 "buyer_tc_upload":[
@@ -53,6 +53,11 @@ componentDidMount() {
         this.refs.Modal.showModal();
     })
     getAuction('admin', sessionStorage.auction_id).then((res) => {
+        if(moment(res.actual_begin_time) < moment()){
+                    this.setState({
+                        readOnly:true
+                    })
+                }
         console.log(res);
         this.setState({
             peak_lt:res.total_lt_peak ? formatPower(parseInt(Number(res.total_lt_peak)), 0, '') : 0,
@@ -296,7 +301,8 @@ upload(type, index){
              let uploadStatus = true
                 if(this.state.retailer_send != 0 && type === "retailer_confidentiality_undertaking_upload" 
                 || this.state.buyer_individual_send != 0 && type === "buyer_tc_upload"
-                || this.state.buyer_company_send != 0 && type === "buyer_tc_upload"){
+                || this.state.buyer_company_send != 0 && type === "buyer_tc_upload"
+                || this.state.readOnly){
                     uploadStatus = false;
                 }
                 let fileHtml = '';
@@ -455,6 +461,7 @@ render() {
                                 Select at least one buyer and upload Buyer T&C.
                                 </div>
                             </div>
+                            {this.state.readOnly?'':
                             <div className="lm--formItem lm--formItem--inline string">
                                 <label className="lm--formItem-left lm--formItem-label string required">
                                 Buyer to Invite:
@@ -464,7 +471,7 @@ render() {
                                 <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=3`} className="lm--button lm--button--primary col-sm-12"><span>Select Individual Buyers</span></a></div>
                                 <div className="col-sm-12 col-md-12 u-cell"><button className="lm--button lm--button--primary col-sm-12 orange" disabled={this.state.buyer_company_pend==0&&this.state.buyer_individual_pend==0?true:false} onClick={this.show_send_mail.bind(this,'buyer')}><span>Send Invitation Email</span></button></div>
                                 </div>
-                            </div>
+                            </div>}
                         </div>
                      :<div> 
                         <div className="lm--formItem lm--formItem--inline string role_select">
@@ -478,6 +485,7 @@ render() {
                                 Select at least one retailer and upload Retailer Confidentiality Undertaking.
                             </div>
                         </div>
+                        {this.state.readOnly?'':
                         <div className="lm--formItem lm--formItem--inline string">
                             <label className="lm--formItem-left lm--formItem-label string required">
                             Retailer to Invite:
@@ -488,7 +496,7 @@ render() {
                                 </div>
                                 <div className="col-sm-12 col-md-6 u-cell"><button className="lm--button lm--button--primary col-sm-12 orange" disabled={this.state.retailer_pend==0?true:false} onClick={this.show_send_mail.bind(this,'retailer')}><span>Send Invitation Email</span></button></div>
                             </div>
-                        </div>
+                        </div>}
                         <div className="lm--formItem lm--formItem--inline string u-mt3 role_select">
                             <label className="lm--formItem-left lm--formItem-label string required">
                             Buyers:
@@ -585,8 +593,8 @@ render() {
                     </div>
                     <div className="retailer_btn">
                         <a className="lm--button lm--button--primary" href={this.state.publish_status === "0" ? "/admin/auctions/new" : "/admin/auctions/"+sessionStorage.auction_id+"/upcoming"}>Previous</a>
-                        <a className="lm--button lm--button--primary" onClick={this.do_save.bind(this)}>Save</a>
-                        {this.state.publish_status==="0"?<a className="lm--button lm--button--primary" id="doPublish" onClick={this.doPublish.bind(this)}>Publish</a>:''}
+                        {this.state.readOnly?'':<a className="lm--button lm--button--primary" onClick={this.do_save.bind(this)}>Save</a>}
+                        {this.state.readOnly?'':(this.state.publish_status==="0"?<a className="lm--button lm--button--primary" id="doPublish" onClick={this.doPublish.bind(this)}>Publish</a>:'')}
                     </div>
                 </div>
                 : <div className="live_modal">
