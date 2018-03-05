@@ -146,6 +146,10 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
     ActiveSupport::NumberHelper
   end
 
+  def get_total_value(total_volume_base, total_volume, total_award_sum_base, total_award_sum)
+     return total_volume_base + total_volume, total_award_sum_base + total_award_sum
+  end
+
   def get_consumption_table_data(auction, visibilities, price_data)
     current_user_consumption = Consumption.find_by auction_id:auction.id, user_id:current_user.id
     period_days = get_period_days(auction)
@@ -159,55 +163,40 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
         consumption_table_row0.push(number_helper.number_to_currency(current_user_consumption.lt_peak, precision: 0, unit: ''))
         consumption_table_row1.push(number_helper.number_to_currency(current_user_consumption.lt_off_peak, precision: 0, unit: ''))
         value = ((current_user_consumption.lt_peak.to_f*12.0/365.0) * period_days).to_f
-        total_volume =  total_volume + value
-        total_award_sum += (value * price_data[0][0])
+        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][0])
 
         value = (current_user_consumption.lt_off_peak*12.0/365.0) * period_days
-        total_volume += value
-        total_award_sum += (value * price_data[1][0])
-
+        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][0])
       end
-
       if visibilities[:visibility_hts]
         consumption_table_head.push("HT(Small)")
         consumption_table_row0.push(number_helper.number_to_currency(current_user_consumption.hts_peak, precision: 0, unit: ''))
         consumption_table_row1.push(number_helper.number_to_currency(current_user_consumption.hts_off_peak, precision: 0, unit: ''))
         value = (current_user_consumption.hts_peak*12.0/365.0) * period_days
-        total_volume += value
-        total_award_sum += (value * price_data[0][1])
+        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][1])
 
         value = (current_user_consumption.hts_off_peak*12.0/365.0) * period_days
-        total_volume += value
-        total_award_sum += (value * price_data[1][1])
-
+        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][1])
       end
-
       if visibilities[:visibility_htl]
         consumption_table_head.push("HT(Large)")
         consumption_table_row0.push(number_helper.number_to_currency(current_user_consumption.htl_peak, precision: 0, unit: ''))
         consumption_table_row1.push(number_helper.number_to_currency(current_user_consumption.htl_off_peak, precision: 0, unit: ''))
         value = (current_user_consumption.htl_peak*12.0/365.0) * period_days
-        total_volume += value
-        total_award_sum += (value * price_data[0][2])
+        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][2])
 
         value = (current_user_consumption.htl_off_peak*12.0/365.0) * period_days
-        total_volume += value
-        total_award_sum += (value * price_data[0][2])
-
+        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][2])
       end
-
       if visibilities[:visibility_eht]
         consumption_table_head.push("EHT(Large)")
         consumption_table_row0.push(number_helper.number_to_currency(current_user_consumption.eht_peak, precision: 0, unit: ''))
         consumption_table_row1.push(number_helper.number_to_currency(current_user_consumption.eht_off_peak, precision: 0, unit: ''))
         value = (current_user_consumption.eht_peak*12.0/365.0) * period_days
-        total_volume += value
-        total_award_sum += (value * price_data[0][3])
+        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][3])
 
         value = (current_user_consumption.eht_off_peak*12.0/365.0) * period_days
-        total_volume += value
-        total_award_sum += (value * price_data[1][3])
-
+        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][3])
       end
     end
     return [consumption_table_head, consumption_table_row0, consumption_table_row1], total_volume, total_award_sum
