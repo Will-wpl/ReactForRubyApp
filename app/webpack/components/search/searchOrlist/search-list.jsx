@@ -197,9 +197,21 @@ export class SearchList extends Component {
                                                                    </td>
                                                         }else if(it.field_name === 'actions'){
                                         
+                                                        }else if(it.field_name==="logged_in_status"){
+                                                            return <td key={i}>
+                                                                    {item[`${it.field_name}`]==="1" ? "Success":"Fail"}
+                                                                   </td>
+                                                        }else if(it.field_name === "ws_connected_status" ){
+                                                            return <td key={i}>
+                                                                {item[`${it.field_name}`]==="1" ? "Success":"Fail"}
+                                                            </td>
+                                                        }else if(it.field_name === "ws_send_message_status" ){
+                                                            return <td key={i}>
+                                                                {item[`${it.field_name}`]==="1" ? "Success":"Fail"}
+                                                            </td>
                                                         }else{
                                                             return <td key={i}>
-                                                                {it.field_name === "actual_begin_time" || it.field_name === "start_datetime"  
+                                                                {it.field_name === "actual_begin_time" || it.field_name === "start_datetime" || it.field_name ==="logged_in_last_time" ||it.field_name ==="ws_connected_last_time" ||it.field_name === "ws_send_message_last_time"
                                                                 ? moment(item[`${it.field_name}`]).format('D MMM YYYY hh:mm A') 
                                                                 : item[`${it.field_name}`]}
                                                                 </td>

@@ -296,13 +296,13 @@ upload(type, index){
                 let fileHtml = '';
                 fileHtml = <div className="file_box">
                             <form id={type+"_form"} encType="multipart/form-data">
-                                {this.state.fileData[type].map((item, index) => 
+                                {this.state.fileData[type].map((item, index) =>
                                         <div className="u-grid mg0 u-mt1" key={index}>
                                             <div className="col-sm-12 col-md-10 u-cell">
                                                 <a className="upload_file_btn">
                                                     <dfn>No file selected...</dfn>
                                                     {/* accept="application/pdf,application/msword" */}
-                                                    {required === "required" ? 
+                                                    {required === "required" ?
                                                     <div>
                                                         <input type="file" required="required" ref={type+index}  onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.state.disabled} />
                                                         <b>Browse..</b>

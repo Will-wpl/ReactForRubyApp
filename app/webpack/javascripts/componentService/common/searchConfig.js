@@ -96,4 +96,10 @@ export const searchTypeData = {
             {title:"Date:",type:"start_datetime",species:"datePacker",operator:'date_between',table:'auctions'}
         ]
     },
+    "User extension list page":{//connect back end OK
+        list_url:"/api/admin/user_extensions",
+        list_data:[
+             {title:"Company Name:",type:"company_name",species:"input",operator:'like'},
+        ]
+    },
 }
