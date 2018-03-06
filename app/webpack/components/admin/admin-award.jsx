@@ -49,7 +49,7 @@ export default class AdminAward extends Component{
                     <label><span className="yellow"></span><dfn>Pending</dfn></label>
                 </div>
                 <div className="createRaMain u-grid">
-                    <a className="lm--button lm--button--primary u-mt3" href="/admin/home">Back to Homepage</a>
+                    <a className="lm--button lm--button--primary u-mt3" href="/admin/auction_results">Back </a>
                 </div>
             </div>
         )
