@@ -299,7 +299,8 @@ upload(type, index){
         }
         addinputfile(type, required){
              let uploadStatus = true
-                if(this.state.retailer_send != 0 && type === "retailer_confidentiality_undertaking_upload" 
+                if(
+                   this.state.retailer_send != 0 
                 || this.state.buyer_individual_send != 0 && type === "buyer_tc_upload"
                 || this.state.buyer_company_send != 0 && type === "buyer_tc_upload"
                 || this.state.readOnly){
