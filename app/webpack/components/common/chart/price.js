@@ -68,12 +68,13 @@ export default class Price extends Component {
                 }
                 this.theStartbidtime = element.data[0].bid_time;
                 this.theEndbidtime = element.data[element.data.length-1].bid_time;
-                this.theEndPrice = parseFloat(element.data[0].average_price).toFixed(4);
-                this.theStartPrice = 0.0000;
+                this.theEndPrice = parseFloat(Number(element.data[0].average_price).toFixed(2)).toFixed(4);
+                this.theStartPrice = parseFloat(0.0000).toFixed(4);
                 tmp.data.push(d);
             });
             option.series.push(tmp);
         });
+        console.log(option);
         if (option.hasOwnProperty('dataZoom')) {
             if (!Number.isNaN(this.xStart)) {
                 option.dataZoom[0].start = this.xStart;
@@ -105,18 +106,21 @@ export default class Price extends Component {
     }
 
     onDataZoom(params) {
+        let instance = this.charts_instance.getEchartsInstance();
+        let option = instance.getOption();
         if (params.type === 'datazoom' && params.dataZoomId.length > 0) {
             const lastEle = params.dataZoomId.charAt(params.dataZoomId.length - 1);
             if (lastEle === '1') { //y
                 this.yStart = params.start;
                 this.yEnd = params.end;
-                let diff = (this.theEndPrice - this.theStartPrice).toFixed(4);
-                let ps = (parseFloat(params.start/100*diff)).toFixed(4);
-                let pe = (parseFloat(params.end/100*diff)).toFixed(4);
+                let ps = (option.dataZoom[1].startValue).toFixed(4);
+                let pe = (option.dataZoom[1].endValue).toFixed(4);
                 this.setState({
                     start_price:ps,
                     end_price:pe
                 })
+                console.log(option.dataZoom[1]);
+                console.log("start_price : "+ps+" end_price : " +pe);
             } else if (lastEle === '0') { //x
                 this.xStart = params.start;
                 this.xEnd = params.end;

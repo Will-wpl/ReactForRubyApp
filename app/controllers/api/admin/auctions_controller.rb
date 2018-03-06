@@ -145,8 +145,13 @@ class Api::Admin::AuctionsController < Api::AuctionsController
       user_hash[key] = list unless user_hash.has_key?(key)
     }
 
-    color = ["28FF28","9F35FF", "FF359A", "2828FF", "EAC100", "FF5809"]
-    #color = []
+    #color = ["28FF28","9F35FF", "FF359A", "2828FF", "EAC100", "FF5809"]
+    color = ['22ad38', 'ffff00', 'f53d0b', '8ff830', 'f13de8',
+             '37b8ff', 'ffffff', 'ffc000' , '3366ff', '9933ff',
+             '868686', '0ba55c', 'fa9106', 'ffafff', 'c00000',
+             '46f0f0', '49702e', 'ffff99', '993300', '8e8cf4',
+             '28FF28','9F35FF', 'FF359A', '2828FF', 'EAC100',
+             'FF5809']
     user_color_hash = {}
     user_color_hash = if user_hash.size <= color.size
                         user_hash.keys().each_with_index do |key, index|

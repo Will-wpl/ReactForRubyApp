@@ -58,6 +58,12 @@ export class CreateNewRA extends Component {
                         disabled:false
                     })
                 }          
+            }else{
+                if(moment(this.auction.actual_begin_time) < moment()){
+                    this.setState({
+                        disabled:true
+                    })
+                }
             }     
             if(res.name == null){
                     this.setState({id:res.id})
@@ -234,15 +240,18 @@ export class CreateNewRA extends Component {
     checkSuccess(event,obj){
         event.preventDefault();
         let timeBar;
-        if(this.state.start_datetime < moment()){
-            $("#start_datetime .required_error").fadeIn(300);
-            window.location.href="#start_datetime";
-            clearTimeout(timeBar);
-            timeBar = setTimeout(()=>{
-                $("#start_datetime .required_error").fadeOut(300);
-            },5000)
-            return false;
+        if(!this.state.disabled){
+            if(this.state.start_datetime < moment()){
+                $("#start_datetime .required_error").fadeIn(300);
+                window.location.href="#start_datetime";
+                clearTimeout(timeBar);
+                timeBar = setTimeout(()=>{
+                    $("#start_datetime .required_error").fadeOut(300);
+                },5000)
+                return false;
+            }
         }
+        
         if(this.state.btn_type == "save"){
             createRa({auction: this.checkSubmitTruly()}).then(res => {
                             this.auction_data = res;
@@ -275,16 +284,21 @@ export class CreateNewRA extends Component {
         }
         if(this.state.btn_type == "next"){
             sessionStorage.isAuctionId = "yes";
-            createRa({auction: this.checkSubmitTruly()}).then(res => {
-                this.auction = res;
-                sessionStorage.auction_id = res.id;
-                window.location.href=`/admin/auctions/${res.id}/invitation`;
-            }, error => {
-                this.setState({
-                    text:'Request exception,Save failed!'
-                });
-                this.refs.Modal.showModal();
-            })
+            if(this.state.disabled){
+                window.location.href=`/admin/auctions/${this.auction.id}/invitation`;
+            }else{
+                createRa({auction: this.checkSubmitTruly()}).then(res => {
+                    this.auction = res;
+                    sessionStorage.auction_id = res.id;
+                    window.location.href=`/admin/auctions/${res.id}/invitation`;
+                }, error => {
+                    this.setState({
+                        text:'Request exception,Save failed!'
+                    });
+                    this.refs.Modal.showModal();
+                })
+            }
+            
         }
     }
     render () {
@@ -306,13 +320,13 @@ export class CreateNewRA extends Component {
             styleType = "col-sm-12 col-md-8 push-md-2";
             left_name = this.props.left_name;
             btn_html = <div className="createRa_btn">
-                            {this.props.editdisabled ? <div className="mask"></div> : ''}
+                            {/*this.props.editdisabled ? <div className="mask"></div> : ''*/}
                             {/* <a className={this.state.edit_btn} onClick={this.edit.bind(this)}>Edit</a>
                             <button className={this.state.edit_change} onClick={this.auctionCreate.bind(this,'save')}>Save</button>
                             <button className={this.state.edit_change} onClick={this.auctionCreate.bind(this,'next')}>Next</button>
                             <a className={this.state.edit_change} onClick={this.Cancel.bind(this)}>Cancel</a> */}
-                            <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'save')}>Save</button>
-                                <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'next')}>Next</button>
+                            {this.state.disabled?'':<button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'save')}>Save</button>}
+                            <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'next')}>Next</button>
                         </div>
         }
         return (
@@ -402,7 +416,7 @@ export class CreateNewRA extends Component {
                         <span className="lm--formItem-left lm--formItem-label string optional">
                             <abbr title="required">*</abbr>Time Extension :</span>
                             <label className="lm--formItem-right lm--formItem-control">
-                                <select ref="time_extension" id="time_extension">
+                                <select ref="time_extension" id="time_extension" disabled={this.state.disabled}>
                                     <option value="0">Manual</option>
                                     <option value="1">Customize</option>
                                 </select>
@@ -412,7 +426,7 @@ export class CreateNewRA extends Component {
                         <span className="lm--formItem-left lm--formItem-label string optional">
                             <abbr title="required">*</abbr>Average Price :</span>
                             <label className="lm--formItem-right lm--formItem-control">
-                                <select ref="average_price" id="average_price">
+                                <select ref="average_price" id="average_price" disabled={this.state.disabled}>
                                     <option value="0">Weighted Average</option>
                                 </select>
                             </label>
@@ -421,7 +435,7 @@ export class CreateNewRA extends Component {
                         <span className="lm--formItem-left lm--formItem-label string optional">
                             <abbr title="required">*</abbr>Retailer Mode :</span>
                             <label className="lm--formItem-right lm--formItem-control">
-                                <select ref="retailer_mode" id="retailer_mode">
+                                <select ref="retailer_mode" id="retailer_mode" disabled={this.state.disabled}>
                                     <option value="0">Mode 1: Top 2</option>
                                     <option value="1">Mode 2: 1st, 2nd</option>
                                 </select>
