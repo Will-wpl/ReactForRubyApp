@@ -226,7 +226,7 @@ export class FillConsumption extends Component {
                     </div>
                 </div>
                 <div className="createRaMain u-grid">
-                    <a className="lm--button lm--button--primary u-mt3" href="/buyer/auctions" >Back to Listing Page</a>
+                    <a className="lm--button lm--button--primary u-mt3" href="/buyer/auctions" >Back</a>
                 </div>
                 <Modal text={this.state.text} acceptFunction={this.doAccept.bind(this)} ref="Modal" />
                 </form>
