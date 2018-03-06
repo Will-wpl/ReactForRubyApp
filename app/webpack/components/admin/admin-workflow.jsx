@@ -61,7 +61,7 @@ export class Adminworkflow extends Component {
                 <TimeCuntDown auction={this.state.auction} countDownOver={()=>{this.setState({disabled:true,allbtnStatus:false})}} timehidden="countdown_seconds" />
                 {this.showpage(this.state.page)}
                 <div className="createRaMain u-grid">
-                    <a className="lm--button lm--button--primary u-mt3" href="/admin/auctions/published" >Back to List</a>
+                    <a className="lm--button lm--button--primary u-mt3" href="/admin/auctions/published" >Back</a>
                 </div>
             </div>
         )}

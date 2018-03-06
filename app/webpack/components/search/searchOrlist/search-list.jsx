@@ -144,7 +144,7 @@ export class SearchList extends Component {
             let key = e.split(":")[0];
             let str;
             if(key == "created_at"||key == "updated_at"||key=="actual_begin_time"||key == "actual_end_time"||
-                key=="current_time"||key=="actual_bid_time"||key == "bid_time"){
+                key=="current_time"||key=="actual_bid_time"||key == "bid_time"||key =="start_datetime"){
                 e = `${e.split(":")[0]}:${moment(e.split(":")[1]).format('D MMM YYYY hh:mm A')}`;
                 return e
             }else{
@@ -152,7 +152,7 @@ export class SearchList extends Component {
             }
 
         })
-        let str = _json.join("<br/>")
+        let str = _json.join("<br/>");
         this.setState({
             text:str,
             params_type:false

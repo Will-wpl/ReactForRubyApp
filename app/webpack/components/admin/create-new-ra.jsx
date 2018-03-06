@@ -306,6 +306,14 @@ export class CreateNewRA extends Component {
         let btn_html ="";
         let sStorage = {};
         let styleType = "";
+        let publish = window.location.href.split("/");
+        let status = publish[publish.length-1];// new upcoming
+        let url;
+        if(status=="new"){
+            url = "/admin/auctions/unpublished"
+        }else{
+            url = "/admin/auctions/published"
+        }
         if(this.props.left_name == undefined){//Create New Ra
             styleType = "col-sm-12 col-md-8 push-md-2";
             left_name = "Create New Reverse Auction";
@@ -448,7 +456,7 @@ export class CreateNewRA extends Component {
             </div>
             </div>
             <div className="createRaMain u-grid">
-                <a className="lm--button lm--button--primary u-mt3" href="/admin/home" >Back to Homepage</a>
+                <a className="lm--button lm--button--primary u-mt3" href={url}>Back</a>
             </div>
             </div>
         )
