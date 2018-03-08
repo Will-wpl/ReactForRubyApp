@@ -91,9 +91,9 @@ export class Keppelformtender extends React.Component{
                                     return <tr key={index}>
                                                 <td>{item.item}</td>
                                                 <td >{item.clause}</td>
-                                                <td >{item.propose_deviation}</td>
-                                                <td >{item.retailer_response}</td>
-                                                <td >{item.sp_response}</td>
+                                                <td ><textarea className="show_text" defaultValue={item.propose_deviation.replace(/＜br＞/g,"\n")} disabled/></td>
+                                                <td ><textarea className="show_text" defaultValue={item.retailer_response.replace(/＜br＞/g,"\n")} disabled/></td>
+                                                <td ><textarea className="show_text" defaultValue={item.sp_response.replace(/＜br＞/g,"\n")} disabled/></td>
                                                 <td><button onClick={this.showhistory.bind(this,item.id)}>History</button></td>
                                             </tr>
                                 })}
