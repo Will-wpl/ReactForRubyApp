@@ -661,9 +661,14 @@ body.choose{
     }
   }
   abbr{
-    width: 30px; margin: 0 auto; height: 30px; display: block;
+    width: 30px; margin: 0 auto; height: 30px; display: block; transition: 0.5s all; border-radius: 100%;
     &.step_finished{ background: url('../images/pigeon.png') no-repeat center;}
-    &.step_pending{ background: url('../images/pigeon_p.png') no-repeat center;}
+    &.cursor{cursor: pointer;
+      &:hover{box-shadow: 0px 0px 35px #fff}
+    }
+    &.step_pending{ background: url('../images/pigeon_p.png') no-repeat center; cursor: pointer;
+      &:hover{box-shadow: 0px 0px 35px #fff}
+    }
   }
 }
 

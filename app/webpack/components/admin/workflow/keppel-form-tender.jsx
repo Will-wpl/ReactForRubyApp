@@ -19,6 +19,7 @@ export class Keppelformtender extends React.Component{
                 chats:res.chats
             })
         })
+        $(".createRaMain a").attr("href",window.location.href);
     }
     showConfirm(type){
         this.setState({buttonType:type});
@@ -105,12 +106,12 @@ export class Keppelformtender extends React.Component{
                     Comment:
                     </label>
                     <div className="lm--formItem-right lm--formItem-control">
-                        <textarea id="adminComment"></textarea>
+                        <textarea id="adminComment" disabled={this.props.readOnly}></textarea>
                     </div>
                 </div>
                 <div className="workflow_btn u-mt3">
-                        <button className="lm--button lm--button--primary" onClick={this.showConfirm.bind(this,'Reject')}>Reject</button>
-                        <button className="lm--button lm--button--primary" onClick={this.showConfirm.bind(this,'Accept')}>Accept</button>
+                        <button className="lm--button lm--button--primary" disabled={this.props.readOnly} onClick={this.showConfirm.bind(this,'Reject')}>Reject</button>
+                        <button className="lm--button lm--button--primary" disabled={this.props.readOnly} onClick={this.showConfirm.bind(this,'Accept')}>Accept</button>
                 </div>
                 <Modal text={this.state.text} acceptFunction={this.state.buttonType === 'Reject'?this.admin_reject.bind(this):this.admin_accept.bind(this)} ref="Modal" />
                 <Showhistory ref="history" />
