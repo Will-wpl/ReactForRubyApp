@@ -6,7 +6,7 @@ class AuctionResult < ApplicationRecord
   # Associations
 
   belongs_to :auction
-
+  belongs_to :user
   # accepts_nested_attributes
 
   # Validations

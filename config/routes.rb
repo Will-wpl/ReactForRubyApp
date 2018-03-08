@@ -107,6 +107,7 @@ Rails.application.routes.draw do
         collection do
           get 'obtain'
           get 'published'
+          get 'letter_of_award_pdf'
         end
       end
       resource :auction_histories, only: %i[show] do
