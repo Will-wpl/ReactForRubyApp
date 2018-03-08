@@ -138,7 +138,7 @@ export default class RetailerLetterOfAward extends React.Component{
                     </button>
                 </div>
                 <div className="createRaMain u-grid">
-                    <a className="lm--button lm--button--primary u-mt3" href="/retailer/auction_results">Back to List page</a>
+                    <a className="lm--button lm--button--primary u-mt3" href="/retailer/auction_results">Back</a>
                 </div>
                 <Modal
                     text={this.state.text}

@@ -442,6 +442,12 @@ upload(type, index){
         }
 render() {
     //console.log(this.winner.data);
+    let url;
+    if(this.state.publish_status==0){
+        url = "/admin/auctions/unpublished"
+    }else{
+        url = "/admin/auctions/published"
+    }
     return (
         <div className="u-grid admin_invitation">
             {this.state.publish_status === "1"?<TimeCuntDown auction={this.state.auction} countDownOver={()=>{this.setState({disabled:true})}} timehidden="countdown_seconds"/>:''}
@@ -604,7 +610,7 @@ render() {
                             </p>
                         </div>}
                 <div className="createRaMain u-grid">
-                    <a className="lm--button lm--button--primary u-mt3" href="/admin/home" >Back to Homepage</a>
+                    <a className="lm--button lm--button--primary u-mt3" href={url} >Back</a>
                 </div>
                 <Modal text={this.state.text} acceptFunction={this.state.params_type===''?'':(this.state.params_type==='remove_file'?this.do_remove.bind(this):(this.state.params_type==='do_publish'?this.ra_publish.bind(this):this.send_mail.bind(this)))} ref="Modal" />
             </div>
