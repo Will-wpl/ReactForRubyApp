@@ -161,60 +161,66 @@ export default class ChooseAlternativeWinner extends React.Component{
 
     render(){
         let winnerData = this.state.winnerData;
+        let thisId = window.location.href.split("auctions/")[1].split("/choose_winner")[0];
+        let href = `/admin/auctions/${thisId}/confirm`;
         return(
-            <div className='lm--card alternative-winner'>
-                <h2>Retailer Ranking</h2>
-                <table className="retailer_fill w_100">
-                    <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Retailer</th>
-                        <th>Price</th>
-                        <th> </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {winnerData.map((e,i)=>{
-                        return(
-                            <tr key={i}>
-                                <td>{e.ranking}</td>
-                                <td>{e.company_name}</td>
-                                <td onClick={this.showRetailer.bind(this,e)} style={{cursor:'pointer'}}>
-                                    $ {parseFloat(e.average_price).toFixed(4)}/kWh
-                                </td>
-                                <td>
-                                    <button
-                                        disabled={e.disabled}
-                                        className="lm--button lm--button--primary"
-                                        onClick={this.selectWinner.bind(this,e,i)} >Select
-                                    </button>
-                                </td>
-                            </tr>
-                        )})
-                    }
-                    </tbody>
-                </table>
-                {this.renderWinner()}
-                <div className="retailor_justification">
-                    <h2><abbr id='badge'>*</abbr>Justification</h2>
-                    <textarea
-                        value={this.state.justification }
-                        onChange={this.getJustification.bind(this)}
+            <div>
+                <div className='lm--card alternative-winner'>
+                    <h2>Retailer Ranking</h2>
+                    <table className="retailer_fill w_100">
+                        <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Retailer</th>
+                            <th>Price</th>
+                            <th> </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {winnerData.map((e,i)=>{
+                            return(
+                                <tr key={i}>
+                                    <td>{e.ranking}</td>
+                                    <td>{e.company_name}</td>
+                                    <td onClick={this.showRetailer.bind(this,e)} style={{cursor:'pointer'}}>
+                                        $ {parseFloat(e.average_price).toFixed(4)}/kWh
+                                    </td>
+                                    <td>
+                                        <button
+                                            disabled={e.disabled}
+                                            className="lm--button lm--button--primary"
+                                            onClick={this.selectWinner.bind(this,e,i)} >Select
+                                        </button>
+                                    </td>
+                                </tr>
+                            )})
+                        }
+                        </tbody>
+                    </table>
+                    {this.renderWinner()}
+                    <div className="retailor_justification">
+                        <h2><abbr id='badge'>*</abbr>Justification</h2>
+                        <textarea
+                            value={this.state.justification }
+                            onChange={this.getJustification.bind(this)}
+                        />
+                        <button
+                            onClick={this.submit.bind(this)}
+                            className="lm--button lm--button--primary submit"
+                        >Confirm Winner</button>
+                    </div>
+                    <Modal
+                        text={this.state.text}
+                        listdetail={this.state.currentRetailerData}
+                        acceptFunction={this.acceptWinner.bind(this)}
+                        listdetailtype='Alternative Winner'
+                        ref="Modal"
                     />
-                    <button
-                        onClick={this.submit.bind(this)}
-                        className="lm--button lm--button--primary submit"
-                    >Confirm Winner</button>
                 </div>
-                <Modal
-                    text={this.state.text}
-                    listdetail={this.state.currentRetailerData}
-                    acceptFunction={this.acceptWinner.bind(this)}
-                    listdetailtype='Alternative Winner'
-                    ref="Modal"
-                />
+                <div className="createRaMain u-grid">
+                    <a className="lm--button lm--button--primary u-mt3" href={href} >Back</a>
+                </div>
             </div>
-
         )
     }
 }
