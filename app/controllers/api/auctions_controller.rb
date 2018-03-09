@@ -426,6 +426,9 @@ class Api::AuctionsController < Api::BaseController
     price_table_data, visibilities, price_data = get_price_table_data(auction, auction_result[0], true, true)
     consumption_table_data, table_data = get_consumption_table_data(auction, visibilities, price_data, user_id, true)
 
+    table2_head = html_parse(page, '#appendix_table2_head')
+    head = html_parse(table2_head,'#lt_head_id', '#hts_head_id', '#htl_head_id', '#eht_head_id')
+
     table2_tr = html_parse(page, '#appendix_table2_peak')
     row0 = html_parse(table2_tr,'#lt_peak_id', '#hts_peak_id', '#htl_peak_id', '#eht_peak_id')
 
@@ -435,11 +438,13 @@ class Api::AuctionsController < Api::BaseController
     table2_tr2 = html_parse(page, '#appendix_table2_total')
     row2 = html_parse(table2_tr2,'#lt_total_id', '#hts_total_id', '#htl_total_id', '#eht_total_id')
     #
-    row0_string, row1_string, row2_string = get_table2_row_data(row0, row1, row2, visibilities, table_data)
+    head_bool, row0_string, row1_string, row2_string = get_table2_row_data(head, row0, row1, row2, visibilities, table_data)
+    table2_head_string = table2_head.to_s
     table2_tr0_string = table2_tr.to_s
     table2_tr1_string = table2_tr1.to_s
     table2_tr2_string = table2_tr2.to_s
-    for i in 0...row0_string.length
+    for i in 0...head_bool.length
+      table2_head_string[head[i].to_s] = '' unless head_bool[i]
       table2_tr0_string[row0[i].to_s] = row0_string[i]
       table2_tr1_string[row1[i].to_s] = row1_string[i]
       table2_tr2_string[row2[i].to_s] = row2_string[i]
@@ -457,6 +462,7 @@ class Api::AuctionsController < Api::BaseController
     page_content = page_content.gsub(/#retailer_uen_number/, retailer_uen_number)
     page_content = page_content.gsub(/#acknowledge/, acknowledge)
     page_content[tr_string] = tr_text
+    page_content[table2_head.to_s] = table2_head_string
     page_content[table2_tr.to_s] = table2_tr0_string
     page_content[table2_tr1.to_s] = table2_tr1_string
     page_content[table2_tr2.to_s] = table2_tr2_string
@@ -548,46 +554,46 @@ class Api::AuctionsController < Api::BaseController
     send_data(pdf, filename: filename)
   end
 
-  def get_table2_row_data(row0, row1, row2, visibilities, table_data)
+  def get_table2_row_data(head, row0, row1, row2, visibilities, table_data)
     index = 0
-    row0_string, row1_string, row2_string = [], [], []
+    head_bool, row0_string, row1_string, row2_string = [], [], [], []
     if visibilities[:visibility_lt]
       lt_peak = row0[0].to_s.gsub(/#lt_peak/, number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
       lt_off_peak = row1[0].to_s.gsub(/#lt_off_peak/, number_helper.number_to_currency(table_data[1][index], precision: 0, unit: ''))
       lt_total = row2[0].to_s.gsub(/#lt_total/, number_helper.number_to_currency(table_data[0][index].to_f+table_data[1][index].to_f, precision: 0, unit: ''))
-      row0_string.push(lt_peak); row1_string.push(lt_off_peak); row2_string.push(lt_total)
+      head_bool.push(true);row0_string.push(lt_peak); row1_string.push(lt_off_peak); row2_string.push(lt_total)
       index += 1
     else
-      row0_string.push(''); row1_string.push(''); row2_string.push('')
+      head_bool.push(false);row0_string.push(''); row1_string.push(''); row2_string.push('')
     end
     if visibilities[:visibility_hts]
       hts_peak = row0[1].to_s.gsub(/#hts_peak/, number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
       hts_off_peak = row1[1].to_s.gsub(/#hts_off_peak/, number_helper.number_to_currency(table_data[1][index], precision: 0, unit: ''))
       hts_total = row2[1].to_s.gsub(/#hts_total/, number_helper.number_to_currency(table_data[0][index].to_f+table_data[1][index].to_f, precision: 0, unit: ''))
-      row0_string.push(hts_peak); row1_string.push(hts_off_peak); row2_string.push(hts_total)
+      head_bool.push(true);row0_string.push(hts_peak); row1_string.push(hts_off_peak); row2_string.push(hts_total)
       index += 1
     else
-      row0_string.push(''); row1_string.push(''); row2_string.push('')
+      head_bool.push(false);row0_string.push(''); row1_string.push(''); row2_string.push('')
     end
     if visibilities[:visibility_htl]
       htl_peak = row0[2].to_s.gsub(/#htl_peak/, number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
       htl_off_peak = row1[2].to_s.gsub(/#htl_off_peak/, number_helper.number_to_currency(table_data[1][index], precision: 0, unit: ''))
       htl_total = row2[2].to_s.gsub(/#htl_total/, number_helper.number_to_currency(table_data[0][index].to_f+table_data[1][index].to_f, precision: 0, unit: ''))
-      row0_string.push(htl_peak); row1_string.push(htl_off_peak); row2_string.push(htl_total)
+      head_bool.push(true);row0_string.push(htl_peak); row1_string.push(htl_off_peak); row2_string.push(htl_total)
       index += 1
     else
-      row0_string.push(''); row1_string.push(''); row2_string.push('')
+      head_bool.push(false);row0_string.push(''); row1_string.push(''); row2_string.push('')
     end
     if visibilities[:visibility_eht]
       eht_peak = row0[3].to_s.gsub(/#eht_peak/, number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
       eht_off_peak = row1[3].to_s.gsub(/#eht_off_peak/, number_helper.number_to_currency(table_data[1][index], precision: 0, unit: ''))
       eht_total = row2[3].to_s.gsub(/#eht_total/, number_helper.number_to_currency(table_data[0][index].to_f+table_data[1][index].to_f, precision: 0, unit: ''))
-      row0_string.push(eht_peak); row1_string.push(eht_off_peak); row2_string.push(eht_total)
+      head_bool.push(true);row0_string.push(eht_peak); row1_string.push(eht_off_peak); row2_string.push(eht_total)
       index+=1
     else
-      row0_string.push(''); row1_string.push(''); row2_string.push('')
+      head_bool.push(false);row0_string.push(''); row1_string.push(''); row2_string.push('')
     end
-    return row0_string, row1_string, row2_string
+    return head_bool, row0_string, row1_string, row2_string
   end
 
 
