@@ -95,6 +95,24 @@ export default class RetailerLetterOfAward extends React.Component{
             console.log(error)
         })
     }
+    download(data,index){
+        console.log(data);
+        window.open(`/api/retailer/auctions/letter_of_award_pdf?auction_id=${data.auction_id}&user_id=${data.user_id}`);
+        retailerAcknowledge(data.id).then(resp => {
+            //console.log(resp);
+            this.state.letterOfAward[index].disabled = true;
+            this.state.letterOfAward[index].acknowledge = 1;
+            //console.log(this.state.letterOfAward);
+            let btnDisabled = true;
+            for (let i in this.state.letterOfAward){
+                if(this.state.letterOfAward[i].acknowledge != 1){
+                    btnDisabled = false
+                }
+            }
+            this.setState({acknowledgeAllBtn:btnDisabled});
+            this.forceUpdate()
+        })
+    }
 
     renderAwardList(data){
         return(
@@ -103,7 +121,7 @@ export default class RetailerLetterOfAward extends React.Component{
                     <li key={i} className="u-grid center ">
                         <span className="col-sm-4 white">{e.name}</span>
                         <span className="col-sm-4">
-                            <div className="downLoadIcon"></div>
+                            <div className="downLoadIcon" onClick={this.download.bind(this,e,i)}></div>
                         </span>
                         <span className="col-sm-4 ">
                             <button
