@@ -286,9 +286,11 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     pdf.grid([0,19],[1,29]).bounding_box do
       pdf.formatted_text_box [
                                  { :text => reserve_price,
-                                   :color => "FFFFFF"},
+                                   :color => "FFFFFF",
+                                   :size => 12},
                                  { :text => achieved_str,
-                                   :color => achieved_color},
+                                   :color => achieved_color,
+                                   :size => 12},
                              ], :at => [pdf.bounds.left, pdf.bounds.top-21]
     end
     pdf.grid([0,24],[1,29]).bounding_box do
