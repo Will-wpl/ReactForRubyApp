@@ -463,7 +463,6 @@ class Api::AuctionsController < Api::BaseController
     page_content[table2_tr2.to_s] = table2_tr2_string
     #
     send_wicked_pdf_data(page_content, 'LETTER OF AWARD.pdf')
-    return
   end
 
   private
