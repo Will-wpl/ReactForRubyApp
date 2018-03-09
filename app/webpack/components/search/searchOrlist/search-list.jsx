@@ -217,11 +217,19 @@ export class SearchList extends Component {
                                                             return <td key={i}>
                                                                     {item[`${it.field_name}`] === null ? 'Pending' : (item[`${it.field_name}`] === '0' ? 'Rejected' : (item[`${it.field_name}`] === '1'?'Accepted':"In Progress"))}
                                                                    </td>
-                                                        }else if(it.field_name === 'report' || it.field_name === 'log' || it.field_name === 'award'){
+                                                        }else if(it.field_name === 'report' || it.field_name === 'log' ){
                                                             return <td key={i}>
                                                                     <a className={it.field_name} href={item[`${it.field_name}`]?"/"+item[`${it.field_name}`]:"javascript:void(0);"} onClick={this.saveId.bind(this,item[`${it.field_name}`])}></a>
                                                                    </td>
-                                                        }else if(it.field_name === 'actions'){
+                                                        }else if(it.field_name === 'award'){
+                                                            if(item.award != ""){
+                                                                return <td key={i}>
+                                                                    <a className={it.field_name} href={item[`${it.field_name}`]?"/"+item[`${it.field_name}`]:"javascript:void(0);"} onClick={this.saveId.bind(this,item[`${it.field_name}`])}></a>
+                                                                </td>
+                                                            }else{
+                                                                return <td key={i}></td>
+                                                            }
+                                                        } else if(it.field_name === 'actions'){
                                         
                                                         }else if(it.field_name==="logged_in_status"){
                                                             return <td key={i}>

@@ -39,6 +39,6 @@ class Api::Retailer::AuctionResultsController < Api::AuctionResultsController
   private
 
   def show_award?(result, current_user)
-    result.user_id == current_user.id
+    result.user_id == current_user.id && result.status != 'void'
   end
 end
