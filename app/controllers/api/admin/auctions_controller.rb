@@ -279,16 +279,19 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     pdf.draw_text title1, :at => [15, pdf.bounds.top-22]
     pdf.draw_text title2, :at => [15, pdf.bounds.top-40]
 
-    reserve_price = 'Reserve Price = $ '+ auction.reserve_price.to_s + ' /kWh' + ' '*6
+    auction_reserve_price = number_helper.number_to_currency(auction.reserve_price.to_f, precision: 4, unit: '')
+    reserve_price = 'Reserve Price = $ '+ auction_reserve_price + ' /kWh' + ' '*6
 
     achieved_str = achieved ? "Reserve Price Achieved" : "Reserve Price Not Achieved"
     achieved_color = achieved ? "228B22" : "FF0000"
     pdf.grid([0,19],[1,29]).bounding_box do
       pdf.formatted_text_box [
                                  { :text => reserve_price,
-                                   :color => "FFFFFF"},
+                                   :color => "FFFFFF",
+                                   :size => 12},
                                  { :text => achieved_str,
-                                   :color => achieved_color},
+                                   :color => achieved_color,
+                                   :size => 12},
                              ], :at => [pdf.bounds.left, pdf.bounds.top-21]
     end
     pdf.grid([0,24],[1,29]).bounding_box do
