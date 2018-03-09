@@ -6,7 +6,7 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
       search_params = reject_params(params, %w[controller action])
       search_where_array = set_search_params(search_params)
       result = AuctionResult.find_by_consumptions(current_user).where(search_where_array)
-                   .page(params[:page_index]).per(params[:page_size])
+                            .page(params[:page_index]).per(params[:page_size])
       total = result.total_count
     else
       result = AuctionResult.all
@@ -16,9 +16,13 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
       { name: 'ID', field_name: 'published_gid' },
       { name: 'Name', field_name: 'name' },
       { name: 'Date', field_name: 'start_datetime' },
-      { name: 'Reverse Auction Report', field_name: 'report' },
-      { name: 'Letter of Award', field_name: 'award' }
+      { name: 'Reverse Auction Report', field_name: 'report' }
     ]
+    # user = User.find(current_user.id)
+    if current_user.consumer_type == '2'
+      headers.push(name: 'Letter of Award', field_name: 'award')
+    end
+
     data = []
     result.order(created_at: :desc).each do |result|
       data.push(published_gid: result.auction.published_gid,
@@ -38,5 +42,4 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
     user = User.find(current_user.id)
     result.status != 'void' && consumption.participation_status == Consumption::ParticipationStatusParticipate && user.consumer_type == User::ConsumerTypeCompany
   end
-
 end
