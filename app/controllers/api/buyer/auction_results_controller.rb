@@ -25,7 +25,7 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
                 name: result.auction.name,
                 start_datetime: result.auction.start_datetime,
                 report: "api/buyer/auctions/#{result.auction_id}/pdf",
-                award: show_award?(result, current_user) ? "admin/auctions/#{result.auction_id}/award" : '')
+                award: show_award?(result, current_user) ? "api/buyer/auctions/#{result.auction_id}/letter_of_award_pdf" : '')
     end
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: nil }, status: 200

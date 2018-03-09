@@ -67,7 +67,7 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
 
     auction_date = "on " + (auction.start_datetime + zone_time).strftime("%d %b %Y")#auction.name +
 
-    consumption_table_data, total_volume, total_award_sum = get_consumption_table_data(auction, visibilities, price_data)
+    consumption_table_data, total_volume, total_award_sum = get_consumption_table_data(auction, visibilities, price_data, current_user.id)
     Prawn::Document.generate(Rails.root.join(pdf_filename),
                              :background => background_img,
                              :page_size => "LETTER",
@@ -99,13 +99,14 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
     send_pdf_data(pdf_filename)
   end
 
+  def letter_of_award_pdf
+    params[:user_id] = current_user.id
+    params[:auction_id] = params[:id]
+    super
+  end
+
   private
 
-
-  def get_period_days(auction)
-    period_days = (auction.contract_period_end_date - auction.contract_period_start_date).to_i
-    return period_days == 0 ? 1 : period_days + 1
-  end
 
   def pdf_draw_text_pdf(pdf)
     pdf.fill_color "ffffff"
@@ -151,66 +152,6 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
       values = cells.columns(0..-1).rows(0..0)
       values.background_color = "00394A"
     end
-  end
-
-  def number_helper
-    ActiveSupport::NumberHelper
-  end
-
-  def get_total_value(total_volume_base, total_volume, total_award_sum_base, total_award_sum)
-     return total_volume_base + total_volume, total_award_sum_base + total_award_sum
-  end
-
-  def get_consumption_table_data(auction, visibilities, price_data)
-    current_user_consumption = Consumption.find_by auction_id:auction.id, user_id:current_user.id
-    period_days = get_period_days(auction)
-    consumption_table_head, consumption_table_row0, consumption_table_row1 = [""], ["Peak (7am-7pm)"], ["Off-Peak (7pm-7am)"]
-
-    total_volume, total_award_sum  = 0.0, 0.0
-    # C = (Peak*12/365) * period
-    unless current_user_consumption.nil?
-      if visibilities[:visibility_lt]
-        consumption_table_head.push("LT")
-        consumption_table_row0.push(number_helper.number_to_currency(current_user_consumption.lt_peak, precision: 0, unit: ''))
-        consumption_table_row1.push(number_helper.number_to_currency(current_user_consumption.lt_off_peak, precision: 0, unit: ''))
-        value = ((current_user_consumption.lt_peak.to_f*12.0/365.0) * period_days).to_f
-        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][0])
-
-        value = (current_user_consumption.lt_off_peak*12.0/365.0) * period_days
-        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][0])
-      end
-      if visibilities[:visibility_hts]
-        consumption_table_head.push("HT(Small)")
-        consumption_table_row0.push(number_helper.number_to_currency(current_user_consumption.hts_peak, precision: 0, unit: ''))
-        consumption_table_row1.push(number_helper.number_to_currency(current_user_consumption.hts_off_peak, precision: 0, unit: ''))
-        value = (current_user_consumption.hts_peak*12.0/365.0) * period_days
-        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][1])
-
-        value = (current_user_consumption.hts_off_peak*12.0/365.0) * period_days
-        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][1])
-      end
-      if visibilities[:visibility_htl]
-        consumption_table_head.push("HT(Large)")
-        consumption_table_row0.push(number_helper.number_to_currency(current_user_consumption.htl_peak, precision: 0, unit: ''))
-        consumption_table_row1.push(number_helper.number_to_currency(current_user_consumption.htl_off_peak, precision: 0, unit: ''))
-        value = (current_user_consumption.htl_peak*12.0/365.0) * period_days
-        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][2])
-
-        value = (current_user_consumption.htl_off_peak*12.0/365.0) * period_days
-        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][2])
-      end
-      if visibilities[:visibility_eht]
-        consumption_table_head.push("EHT(Large)")
-        consumption_table_row0.push(number_helper.number_to_currency(current_user_consumption.eht_peak, precision: 0, unit: ''))
-        consumption_table_row1.push(number_helper.number_to_currency(current_user_consumption.eht_off_peak, precision: 0, unit: ''))
-        value = (current_user_consumption.eht_peak*12.0/365.0) * period_days
-        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][3])
-
-        value = (current_user_consumption.eht_off_peak*12.0/365.0) * period_days
-        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][3])
-      end
-    end
-    return [consumption_table_head, consumption_table_row0, consumption_table_row1], total_volume, total_award_sum
   end
 
   def pdf_consumption_table(pdf, consumption_table_data)
