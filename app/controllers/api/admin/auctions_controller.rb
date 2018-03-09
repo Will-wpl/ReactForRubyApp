@@ -270,9 +270,9 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     pdf.cap_style = :round
     pdf.fill_color "183243"
     pdf.fill { pdf.rounded_rectangle [0, pdf.bounds.top], pdf.bounds.absolute_right-35, 50, 20 }
-    title1 = auction.name + " on " + (auction.start_datetime + zone_time).strftime("%d %b %Y") #'D MMM YYYY'
+    title1 = auction.name + " on " + (auction.start_datetime + zone_time).strftime("%-d %b %Y") #'D MMM YYYY'
     duration = ((auction.actual_end_time - auction.actual_begin_time)/60).to_i
-    title2 = "Start Time : " + (auction.actual_begin_time + zone_time).strftime("%I:%M %p") + " End Time : " + (auction.actual_end_time + zone_time).strftime("%I:%M %p") + " Total Auction Duration : #{duration} minutes"
+    title2 = (auction.actual_begin_time + zone_time).strftime("Start Time : %l:%M %p") + (auction.actual_end_time + zone_time).strftime(", End Time : %l:%M %p") + " Total Auction Duration : #{duration} minutes"
 
 
     pdf.fill_color "ffffff"
@@ -489,7 +489,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
         bidder_text, bidder_text2, bidder_text3 = 'Summary of Lowest Bidder','Lowest Price Bidder', 'Lowest Average Price:'
       end
       lowest_price_bidder = auction_result.lowest_price_bidder
-      lowest_average_price = format("%.4f",auction_result.lowest_average_price)
+      lowest_average_price = number_helper.number_to_currency(auction_result.lowest_average_price.to_f, precision: 4, unit: '')
     else
       bidder_text, bidder_text2, bidder_text3 = 'Summary of Lowest Bidder','Lowest Price Bidder', 'Lowest Average Price:'
       if auction_result.is_bidder
@@ -498,7 +498,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
         status, status_color= 'Not Awarded', "dd0000"
       end
       lowest_price_bidder = auction_result.company_name
-      lowest_average_price = format("%.4f",auction_result.average_price)
+      lowest_average_price = number_helper.number_to_currency(auction_result.average_price.to_f, precision: 4, unit: '')
     end
     bidder_table = [ ["<font size='18'><color rgb='#{status_color}'>Status: #{status}</color></font>"],
                 [bidder_text],
@@ -517,8 +517,8 @@ class Api::Admin::AuctionsController < Api::AuctionsController
   def pdf_total_info(pdf, auction, auction_result)
     contract_period_start_date = (auction.contract_period_start_date).strftime("%d %b %Y")
     contract_period_end_date = (auction.contract_period_end_date).strftime("%d %b %Y")
-    total_volume = ActiveSupport::NumberHelper.number_to_currency(auction.total_volume, precision: 0, unit: '')
-    total_award_sum = ActiveSupport::NumberHelper.number_to_currency(auction_result.total_award_sum, precision: 2, unit: '$ ')
+    total_volume = number_helper.number_to_currency(auction.total_volume, precision: 0, unit: '')
+    total_award_sum = number_helper.number_to_currency(auction_result.total_award_sum, precision: 2, unit: '$ ')
     total_data = [ ["Contract Period: #{contract_period_start_date} to #{contract_period_end_date}"],
               ["Total Volume: #{total_volume} kWh (forecasted)"],
               ["Total Award Sum: #{total_award_sum} (forecasted)"] ]
@@ -534,7 +534,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
       ranking_table_row = []
       ranking_table_row.push(item.ranking)
       ranking_table_row.push(item.company_name)
-      ranking_table_row.push('$ '+format("%.4f",item.average_price)+'/kWh')
+      ranking_table_row.push('$ '+number_helper.number_to_currency(item.average_price.to_f, precision: 4, unit: '')+'/kWh')
       ranking_table.push(ranking_table_row)
       is_bidder_index = index+1 if item.is_bidder
     }

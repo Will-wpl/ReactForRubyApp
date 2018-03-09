@@ -65,7 +65,7 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
     pdf_filename = Time.new.strftime("%Y%m%d%H%M%S%L")
     background_img = Rails.root.join("app","assets", "pdf","bk.png")
 
-    auction_date = "on " + (auction.start_datetime + zone_time).strftime("%d %b %Y")#auction.name +
+    auction_date = (auction.start_datetime + zone_time).strftime("%d %b %Y")
 
     consumption_table_data, total_volume, total_award_sum = get_consumption_table_data(auction, visibilities, price_data, current_user.id)
     Prawn::Document.generate(Rails.root.join(pdf_filename),
@@ -81,7 +81,7 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
 
       pdf.grid([4,1],[35,19]).bounding_box do
         #font "consola", :style => :bold_italic, :size => 14
-        pdf.font_size(14) { pdf.draw_text "Reverse Auction exercise #{auction_date}.", :at => [pdf.bounds.left, pdf.bounds.top]}
+        pdf.font_size(14) { pdf.draw_text "Reverse Auction exercise on #{auction_date}.", :at => [pdf.bounds.left, pdf.bounds.top]}
         pdf.move_down 12
         pdf_auction_result_table(pdf, auction, auction_result, total_volume, total_award_sum, 14)
         pdf.move_down 15

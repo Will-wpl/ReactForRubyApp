@@ -110,16 +110,18 @@ export class Proposedeviations extends React.Component{
     }
     submitDeviations(){
         console.log(this.editData(3));
-        retailerDeviationsSave(this.props.current.current.arrangement_id,this.editData('2')).then(res=>{
-            this.refresh();
-            retailerSubmitDeviations(this.props.current.current.arrangement_id,this.editData('3')).then(res=>{
-                this.refs.Modal.showModal();
-                this.setState({
-                    text:"Deviations pending administrator's review.",
-                    alldisabled:true
-                });
-                this.refresh();
-                this.props.page();
+        retailerDeviationsSave(this.props.current.current.arrangement_id,this.editData('2')).then(a=>{
+            getRetailerDeviationsList(sessionStorage.arrangement_id).then(b=>{
+                this.setState({deviations_list:b.chats});
+                retailerSubmitDeviations(this.props.current.current.arrangement_id,this.editData('3')).then(c=>{
+                    this.refs.Modal.showModal();
+                    this.setState({
+                        text:"Deviations pending administrator's review.",
+                        alldisabled:true
+                    });
+                    this.refresh();
+                    this.props.page();
+                })
             })
         })
     }

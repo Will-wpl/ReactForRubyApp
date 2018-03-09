@@ -233,7 +233,11 @@ export class CreateNewRA extends Component {
         if(this.auction_data === null){
             data = this.setAuction();
         }else{
-            data = this.auction_data;
+            if(JSON.stringify(this.setAuction()) === JSON.stringify(this.auction_data)){
+                data = this.auction_data;
+            }else{
+                data = this.setAuction();
+            }
         }
         return data;
     }  
