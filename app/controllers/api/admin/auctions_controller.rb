@@ -270,9 +270,9 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     pdf.cap_style = :round
     pdf.fill_color "183243"
     pdf.fill { pdf.rounded_rectangle [0, pdf.bounds.top], pdf.bounds.absolute_right-35, 50, 20 }
-    title1 = auction.name + " on " + (auction.start_datetime + zone_time).strftime("%d %b %Y") #'D MMM YYYY'
+    title1 = auction.name + " on " + (auction.start_datetime + zone_time).strftime("%-d %b %Y") #'D MMM YYYY'
     duration = ((auction.actual_end_time - auction.actual_begin_time)/60).to_i
-    title2 = "Start Time : " + (auction.actual_begin_time + zone_time).strftime("%I:%M %p") + " End Time : " + (auction.actual_end_time + zone_time).strftime("%I:%M %p") + " Total Auction Duration : #{duration} minutes"
+    title2 = (auction.actual_begin_time + zone_time).strftime("Start Time : %l:%M %p") + (auction.actual_end_time + zone_time).strftime(", End Time : %l:%M %p") + " Total Auction Duration : #{duration} minutes"
 
 
     pdf.fill_color "ffffff"
