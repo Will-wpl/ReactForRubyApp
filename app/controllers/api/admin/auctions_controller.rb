@@ -489,7 +489,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
         bidder_text, bidder_text2, bidder_text3 = 'Summary of Lowest Bidder','Lowest Price Bidder', 'Lowest Average Price:'
       end
       lowest_price_bidder = auction_result.lowest_price_bidder
-      lowest_average_price = number_helper.number_to_currency(auction_result.lowest_average_price.to_f, precision: 0, unit: '')
+      lowest_average_price = number_helper.number_to_currency(auction_result.lowest_average_price.to_f, precision: 4, unit: '')
     else
       bidder_text, bidder_text2, bidder_text3 = 'Summary of Lowest Bidder','Lowest Price Bidder', 'Lowest Average Price:'
       if auction_result.is_bidder
@@ -498,7 +498,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
         status, status_color= 'Not Awarded', "dd0000"
       end
       lowest_price_bidder = auction_result.company_name
-      lowest_average_price = number_helper.number_to_currency(auction_result.average_price.to_f, precision: 0, unit: '')
+      lowest_average_price = number_helper.number_to_currency(auction_result.average_price.to_f, precision: 4, unit: '')
     end
     bidder_table = [ ["<font size='18'><color rgb='#{status_color}'>Status: #{status}</color></font>"],
                 [bidder_text],
