@@ -54,6 +54,7 @@ Rails.application.routes.draw do
           get 'obtain'
           get 'unpublished'
           get 'published'
+          get 'letter_of_award_pdf'
         end
       end
       resource :auction_histories, only: %i[list last] do
@@ -173,6 +174,7 @@ Rails.application.routes.draw do
       resources :auctions, only: %i[obtain published] do
         member do
           get 'pdf'
+          get 'letter_of_award_pdf'
         end
         collection do
           get 'obtain'

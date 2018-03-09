@@ -99,6 +99,12 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
     send_pdf_data(pdf_filename)
   end
 
+  def letter_of_award_pdf
+    params[:user_id] = current_user.id
+    params[:auction_id] = params[:id]
+    super
+  end
+
   private
 
 

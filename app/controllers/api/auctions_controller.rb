@@ -385,7 +385,7 @@ class Api::AuctionsController < Api::BaseController
     auction = Auction.find_by id: auction_id
     (send_wicked_pdf_data('no data', 'LETTER OF AWARD.pdf');return) if auction.nil?
     zone_time = pdf_datetime_zone
-    auction_result, consumption, tender_state, consumption_details = get_letter_of_award_pdf_data(auction_id, user_id, consumption_id)
+    auction_result, consumption, tender_state, consumption_details = get_letter_of_award_pdf_data(auction_id, user_id)
     (send_wicked_pdf_data('no data', 'LETTER OF AWARD.pdf');return) if auction_result.empty?
     #
     retailer_user_company_name = auction_result.empty? ? '' : auction_result[0].company_name
@@ -395,26 +395,20 @@ class Api::AuctionsController < Api::BaseController
     auctions_published_gid =  auction.published_gid
 
     buyer_user_company_name = consumption.empty? ? '' : consumption[0].company_name
-
     buyer_uen_number = consumption.empty? ? '' : consumption[0].company_unique_entity_number
-
     #
     admin_accept_date = (tender_state[0].created_at + zone_time).strftime('%-d %B %Y') unless tender_state.empty?
     auctions_contract_period_start_date = auction.contract_period_start_date.strftime('%-d %B %Y')
-
     acknowledge = if consumption.empty?
                     'Pending'
                   else
                     consumption[0].acknowledge.nil? ? 'Pending' : 'Acknowledged'
                   end
-
     # template
     pdf_template = Rails.root.join('app', 'assets', 'pdf', 'letter_of_award_template.html')
     page = Nokogiri::HTML.parse(open(pdf_template), nil, 'UTF-8')
-
     table1_tr = html_parse(page, '#appendix_table1_tr')
     tr_string = table1_tr.to_s
-
     tr_text = ''
     consumption_details.each do |detail|
       tr_text += tr_string
@@ -430,7 +424,6 @@ class Api::AuctionsController < Api::BaseController
                     end))
                .gsub(/#premise_address/, detail.premise_address.to_s)
     end
-
     price_table_data, visibilities, price_data = get_price_table_data(auction, auction_result[0], true, true)
     consumption_table_data, table_data = get_consumption_table_data(auction, visibilities, price_data, user_id, true)
 
@@ -511,7 +504,7 @@ class Api::AuctionsController < Api::BaseController
     elements
   end
 
-  def get_letter_of_award_pdf_data(auction_id, user_id, consumption_id)
+  def get_letter_of_award_pdf_data(auction_id, user_id)
     auction_result = AuctionResult.select("users.id,
                                   users.name,
                                   coalesce(users.company_name, '') company_name,
@@ -531,6 +524,7 @@ class Api::AuctionsController < Api::BaseController
                       .joins(:user)
                       .where('auction_id = ? AND user_id = ?', auction_id, user_id)
 
+    consumption_id = consumption[0].id unless consumption.empty?
     winner_user_id = auction_result[0].user_id unless auction_result.empty?
     tender_state = TenderStateMachine
                        .find_by_sql ["SELECT *
@@ -731,46 +725,46 @@ class Api::AuctionsController < Api::BaseController
     unless current_user_consumption.nil?
       if visibilities[:visibility_lt]
         table_head.push("LT")
-        table_row0.push(number_helper.number_to_currency(current_user_consumption.lt_peak, precision: 0, unit: ''))
-        table_row1.push(number_helper.number_to_currency(current_user_consumption.lt_off_peak, precision: 0, unit: ''))
-        row0_data.push(current_user_consumption.lt_peak); row1_data.push(current_user_consumption.lt_off_peak)
+        table_row0.push(number_helper.number_to_currency(current_user_consumption.lt_peak.to_f, precision: 0, unit: ''))
+        table_row1.push(number_helper.number_to_currency(current_user_consumption.lt_off_peak.to_f, precision: 0, unit: ''))
+        row0_data.push(current_user_consumption.lt_peak.to_f); row1_data.push(current_user_consumption.lt_off_peak.to_f)
         value = ((current_user_consumption.lt_peak.to_f*12.0/365.0) * period_days).to_f
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][0])
 
-        value = (current_user_consumption.lt_off_peak*12.0/365.0) * period_days
+        value = (current_user_consumption.lt_off_peak.to_f*12.0/365.0) * period_days
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][0])
       end
       if visibilities[:visibility_hts]
         table_head.push("HT(Small)")
-        table_row0.push(number_helper.number_to_currency(current_user_consumption.hts_peak, precision: 0, unit: ''))
-        table_row1.push(number_helper.number_to_currency(current_user_consumption.hts_off_peak, precision: 0, unit: ''))
-        row0_data.push(current_user_consumption.hts_peak); row1_data.push(current_user_consumption.hts_off_peak)
-        value = (current_user_consumption.hts_peak*12.0/365.0) * period_days
+        table_row0.push(number_helper.number_to_currency(current_user_consumption.hts_peak.to_f, precision: 0, unit: ''))
+        table_row1.push(number_helper.number_to_currency(current_user_consumption.hts_off_peak.to_f, precision: 0, unit: ''))
+        row0_data.push(current_user_consumption.hts_peak.to_f); row1_data.push(current_user_consumption.hts_off_peak.to_f)
+        value = (current_user_consumption.hts_peak.to_f*12.0/365.0) * period_days
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][1])
 
-        value = (current_user_consumption.hts_off_peak*12.0/365.0) * period_days
+        value = (current_user_consumption.hts_off_peak.to_f*12.0/365.0) * period_days
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][1])
       end
       if visibilities[:visibility_htl]
         table_head.push("HT(Large)")
-        table_row0.push(number_helper.number_to_currency(current_user_consumption.htl_peak, precision: 0, unit: ''))
-        table_row1.push(number_helper.number_to_currency(current_user_consumption.htl_off_peak, precision: 0, unit: ''))
-        row0_data.push(current_user_consumption.htl_peak); row1_data.push(current_user_consumption.htl_off_peak)
-        value = (current_user_consumption.htl_peak*12.0/365.0) * period_days
+        table_row0.push(number_helper.number_to_currency(current_user_consumption.htl_peak.to_f, precision: 0, unit: ''))
+        table_row1.push(number_helper.number_to_currency(current_user_consumption.htl_off_peak.to_f, precision: 0, unit: ''))
+        row0_data.push(current_user_consumption.htl_peak.to_f); row1_data.push(current_user_consumption.htl_off_peak.to_f)
+        value = (current_user_consumption.htl_peak.to_f*12.0/365.0) * period_days
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][2])
 
-        value = (current_user_consumption.htl_off_peak*12.0/365.0) * period_days
+        value = (current_user_consumption.htl_off_peak.to_f*12.0/365.0) * period_days
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][2])
       end
       if visibilities[:visibility_eht]
         table_head.push("EHT(Large)")
-        table_row0.push(number_helper.number_to_currency(current_user_consumption.eht_peak, precision: 0, unit: ''))
-        table_row1.push(number_helper.number_to_currency(current_user_consumption.eht_off_peak, precision: 0, unit: ''))
-        row0_data.push(current_user_consumption.eht_peak); row1_data.push(current_user_consumption.eht_off_peak)
-        value = (current_user_consumption.eht_peak*12.0/365.0) * period_days
+        table_row0.push(number_helper.number_to_currency(current_user_consumption.eht_peak.to_f, precision: 0, unit: ''))
+        table_row1.push(number_helper.number_to_currency(current_user_consumption.eht_off_peak.to_f, precision: 0, unit: ''))
+        row0_data.push(current_user_consumption.eht_peak.to_f); row1_data.push(current_user_consumption.eht_off_peak.to_f)
+        value = (current_user_consumption.eht_peak.to_f*12.0/365.0) * period_days
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][3])
 
-        value = (current_user_consumption.eht_off_peak*12.0/365.0) * period_days
+        value = (current_user_consumption.eht_off_peak.to_f*12.0/365.0) * period_days
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][3])
       end
     end
