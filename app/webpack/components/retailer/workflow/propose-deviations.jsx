@@ -111,7 +111,6 @@ export class Proposedeviations extends React.Component{
     submitDeviations(){
         console.log(this.editData(3));
         retailerDeviationsSave(this.props.current.current.arrangement_id,this.editData('2')).then(res=>{
-            this.refresh();
             retailerSubmitDeviations(this.props.current.current.arrangement_id,this.editData('3')).then(res=>{
                 this.refs.Modal.showModal();
                 this.setState({
