@@ -380,7 +380,6 @@ class Api::AuctionsController < Api::BaseController
   def letter_of_award_pdf
     auction_id = params[:auction_id]
     user_id = params[:user_id]
-    consumption_id = params[:consumption_id]
 
     auction = Auction.find_by id: auction_id
     (send_wicked_pdf_data('no data', 'LETTER OF AWARD.pdf');return) if auction.nil?
