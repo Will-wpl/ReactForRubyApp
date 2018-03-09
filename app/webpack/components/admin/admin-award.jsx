@@ -19,6 +19,11 @@ export default class AdminAward extends Component{
         })
     }
 
+    downLoad(data){
+        console.log(data);
+        window.open(`/api/admin/auctions/letter_of_award_pdf?auction_id=${data.auction_id}&user_id=${data.user_id}`)
+    }
+
     renderAwardList(data){
         return(
             data.map((e,i)=>{
@@ -28,7 +33,7 @@ export default class AdminAward extends Component{
                         <span className="col-sm-4 white">{e.name}</span>
                         <span className="col-sm-4"><abbr className={'color'+status}></abbr></span>
                         <span className="col-sm-4 ">
-                            <div className="downLoadIcon">
+                            <div className="downLoadIcon" onClick={this.downLoad.bind(this,e)}>
                             </div>
                         </span>
                     </li>
