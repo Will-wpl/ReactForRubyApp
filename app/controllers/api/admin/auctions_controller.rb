@@ -505,8 +505,8 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     end
     bidder_table = [ ["<font size='18'><color rgb='#{status_color}'>Status: #{status}</color></font>"],
                 [bidder_text],
-                ["#{bidder_text2}:#{lowest_price_bidder}"],
-                ["#{bidder_text3}:$ #{lowest_average_price}/kWh"] ]
+                ["#{bidder_text2}: #{lowest_price_bidder}"],
+                ["#{bidder_text3}: $ #{lowest_average_price}/kWh"] ]
     pdf.table(bidder_table, :cell_style => {:inline_format => true, :width => pdf.bounds.right, :border_width => 0})
   end
 
