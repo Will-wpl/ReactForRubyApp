@@ -21,6 +21,7 @@ class Api::Retailer::AuctionResultsController < Api::AuctionResultsController
     ]
     data = []
     result.order(created_at: :desc).each do |result|
+      company_user_count = Consumption.get_company_user_count(result.auction_id)
       my_result = if result.status == 'void'
                     'Tender Void'
                   else
@@ -30,7 +31,7 @@ class Api::Retailer::AuctionResultsController < Api::AuctionResultsController
                 name: result.auction.name,
                 start_datetime: result.auction.start_datetime,
                 my_result: my_result,
-                award: show_award?(result, current_user) ? "retailer/auctions/#{result.auction_id}/award" : '')
+                award: company_user_count != 0 && show_award?(result, current_user) ? "retailer/auctions/#{result.auction_id}/award" : '')
     end
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: nil }, status: 200
