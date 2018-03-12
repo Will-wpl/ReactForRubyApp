@@ -56,7 +56,7 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
 
     auction = Auction.find_by id:auction_id
     if auction.nil?
-      send_no_data_pdf("LETTER", :portrait)
+      send_no_data_pdf("LETTER", :portrait, 'NO_DATA_BUYER_REPORT.pdf')
       return
     end
     auction_result = AuctionResult.find_by_auction_id(auction_id)
@@ -96,7 +96,7 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
         pdf_consumption_table(pdf, consumption_table_data)
       end
     end
-    send_pdf_data(pdf_filename)
+    send_pdf_data(pdf_filename, auction.published_gid.to_s + '_BUYER_REPORT.pdf')
   end
 
   def letter_of_award_pdf

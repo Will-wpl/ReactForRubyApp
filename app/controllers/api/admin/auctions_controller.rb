@@ -36,7 +36,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     auction = Auction.find_by id:auction_id
 
     if auction.nil?
-      send_no_data_pdf("B4", :landscape)
+      send_no_data_pdf("B4", :landscape, 'NO_DATA_ADMIN_REPORT.pdf')
       return
     end
 
@@ -101,7 +101,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
         end
       end
     end
-    send_pdf_data pdf_filename
+    send_pdf_data pdf_filename, auction.published_gid.to_s + '_ADMIN_REPORT.pdf'
   end
 
 
