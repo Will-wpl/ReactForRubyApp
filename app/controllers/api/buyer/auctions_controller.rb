@@ -90,7 +90,7 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
         pdf.move_down 12
         pdf_price_table(pdf, price_table_data)
         pdf.move_down 22
-        pdf.table([["Consumption Forecast :"]], :cell_style => {:size => 16, :padding => [12,2],
+        pdf.table([["Consumption Forecast:"]], :cell_style => {:size => 16, :padding => [12,2],
                                                 :inline_format => true, :width => pdf.bounds.right, :border_width => 0})
         pdf.move_down 12
         pdf_consumption_table(pdf, consumption_table_data)
