@@ -728,7 +728,7 @@ class Api::AuctionsController < Api::BaseController
     # C = (Peak*12/365) * period
     unless current_user_consumption.nil?
       if visibilities[:visibility_lt]
-        table_head.push("LT")
+        table_head.push("<b>LT</b>")
         table_row0.push(number_helper.number_to_currency(current_user_consumption.lt_peak.to_f, precision: 0, unit: ''))
         table_row1.push(number_helper.number_to_currency(current_user_consumption.lt_off_peak.to_f, precision: 0, unit: ''))
         row0_data.push(current_user_consumption.lt_peak.to_f); row1_data.push(current_user_consumption.lt_off_peak.to_f)
@@ -739,7 +739,7 @@ class Api::AuctionsController < Api::BaseController
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][0])
       end
       if visibilities[:visibility_hts]
-        table_head.push("HT(Small)")
+        table_head.push("<b>HT (Small)</b>")
         table_row0.push(number_helper.number_to_currency(current_user_consumption.hts_peak.to_f, precision: 0, unit: ''))
         table_row1.push(number_helper.number_to_currency(current_user_consumption.hts_off_peak.to_f, precision: 0, unit: ''))
         row0_data.push(current_user_consumption.hts_peak.to_f); row1_data.push(current_user_consumption.hts_off_peak.to_f)
@@ -750,7 +750,7 @@ class Api::AuctionsController < Api::BaseController
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][1])
       end
       if visibilities[:visibility_htl]
-        table_head.push("HT(Large)")
+        table_head.push("<b>HT (Large)</b>")
         table_row0.push(number_helper.number_to_currency(current_user_consumption.htl_peak.to_f, precision: 0, unit: ''))
         table_row1.push(number_helper.number_to_currency(current_user_consumption.htl_off_peak.to_f, precision: 0, unit: ''))
         row0_data.push(current_user_consumption.htl_peak.to_f); row1_data.push(current_user_consumption.htl_off_peak.to_f)
@@ -761,7 +761,7 @@ class Api::AuctionsController < Api::BaseController
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][2])
       end
       if visibilities[:visibility_eht]
-        table_head.push("EHT(Large)")
+        table_head.push("<b>EHT (Large)</b>")
         table_row0.push(number_helper.number_to_currency(current_user_consumption.eht_peak.to_f, precision: 0, unit: ''))
         table_row1.push(number_helper.number_to_currency(current_user_consumption.eht_off_peak.to_f, precision: 0, unit: ''))
         row0_data.push(current_user_consumption.eht_peak.to_f); row1_data.push(current_user_consumption.eht_off_peak.to_f)
