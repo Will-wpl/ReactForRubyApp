@@ -36,7 +36,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     auction = Auction.find_by id:auction_id
 
     if auction.nil?
-      send_no_data_pdf("B4", :landscape)
+      send_no_data_pdf("B4", :landscape, 'NO_DATA_ADMIN_REPORT.pdf')
       return
     end
 
@@ -101,7 +101,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
         end
       end
     end
-    send_pdf_data pdf_filename
+    send_pdf_data pdf_filename, auction.published_gid.to_s + '_ADMIN_REPORT.pdf'
   end
 
 
@@ -279,16 +279,19 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     pdf.draw_text title1, :at => [15, pdf.bounds.top-22]
     pdf.draw_text title2, :at => [15, pdf.bounds.top-40]
 
-    reserve_price = 'Reserve Price = $ '+ auction.reserve_price.to_s + ' /kWh' + ' '*6
+    auction_reserve_price = number_helper.number_to_currency(auction.reserve_price.to_f, precision: 4, unit: '')
+    reserve_price = 'Reserve Price = $ '+ auction_reserve_price + ' /kWh' + ' '*6
 
     achieved_str = achieved ? "Reserve Price Achieved" : "Reserve Price Not Achieved"
     achieved_color = achieved ? "228B22" : "FF0000"
     pdf.grid([0,19],[1,29]).bounding_box do
       pdf.formatted_text_box [
                                  { :text => reserve_price,
-                                   :color => "FFFFFF"},
+                                   :color => "FFFFFF",
+                                   :size => 12},
                                  { :text => achieved_str,
-                                   :color => achieved_color},
+                                   :color => achieved_color,
+                                   :size => 12},
                              ], :at => [pdf.bounds.left, pdf.bounds.top-21]
     end
     pdf.grid([0,24],[1,29]).bounding_box do
@@ -483,7 +486,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     unless auction_result.status.nil?
       if auction_result.status == 'win'
         status, status_color = 'Awarded', '228B22'
-        bidder_text, bidder_text2, bidder_text3 = 'Summary of Winner', 'Winner', 'Average Price'
+        bidder_text, bidder_text2, bidder_text3 = 'Summary of Winner', 'Winning Bidder', 'Average Price'
       else
         status, status_color = 'Void', 'dd0000'
         bidder_text, bidder_text2, bidder_text3 = 'Summary of Lowest Bidder','Lowest Price Bidder', 'Lowest Average Price:'
@@ -502,8 +505,8 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     end
     bidder_table = [ ["<font size='18'><color rgb='#{status_color}'>Status: #{status}</color></font>"],
                 [bidder_text],
-                ["#{bidder_text2}:#{lowest_price_bidder}"],
-                ["#{bidder_text3}:$ #{lowest_average_price}/kWh"] ]
+                ["#{bidder_text2}: #{lowest_price_bidder}"],
+                ["#{bidder_text3}: $ #{lowest_average_price}/kWh"] ]
     pdf.table(bidder_table, :cell_style => {:inline_format => true, :width => pdf.bounds.right, :border_width => 0})
   end
 
