@@ -68,7 +68,7 @@ export default class Price extends Component {
                 }
                 this.theStartbidtime = element.data[0].bid_time;
                 this.theEndbidtime = element.data[element.data.length-1].bid_time;
-                this.theEndPrice = parseFloat(Number(element.data[0].average_price).toFixed(2)).toFixed(4);
+                this.theEndPrice = parseFloat(element.data[0].average_price).toFixed(4);
                 this.theStartPrice = parseFloat(0.0000).toFixed(4);
                 tmp.data.push(d);
             });

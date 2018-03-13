@@ -31,7 +31,7 @@ render() {
             {this.props.comsumption_list ?
                 this.props.comsumption_list.map((item,index)=>{
                     return  <div className="comsumption_list" key={index}>
-                                <div className="comsumption_list_top u-grid" onClick={this.show_table.bind(this,index,item.id)}>
+                                <div className={this.props.visible?"comsumption_list_top u-grid open":"comsumption_list_top u-grid"} onClick={this.show_table.bind(this,index,item.id)}>
                                     <div className="col">{this.props.type === 'View Company Consumption Details' ? item.company_name : item.name}</div>
                                     <div className="col">Accounts: {item.count}</div>
                                     <div className="col">LT(Peak): {formatPower(parseInt(Number(item.lt_peak)), 0, '')}</div>
