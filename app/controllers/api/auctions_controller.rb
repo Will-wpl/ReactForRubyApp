@@ -675,7 +675,7 @@ class Api::AuctionsController < Api::BaseController
     end
 
     if visibility_eht
-      table_head.push('<b>EHT (Large)</b>')
+      table_head.push('<b>EHT</b>')
       table_row0.push('$ ' + format('%.4f', auction_result.eht_peak))
       table_row1.push('$ ' + format('%.4f', auction_result.eht_off_peak))
       price_row0.push(auction_result.eht_peak)
