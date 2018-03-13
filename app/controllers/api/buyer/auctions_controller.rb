@@ -77,7 +77,7 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
       pdf.define_grid(:columns => 22, :rows => 35, :gutter => 1)
 
       # text PDF
-      pdf_draw_text_pdf(pdf)
+      pdf_draw_title(pdf, auction)
 
       pdf.grid([4,1],[35,19]).bounding_box do
         #font "consola", :style => :bold_italic, :size => 14
@@ -108,11 +108,11 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
   private
 
 
-  def pdf_draw_text_pdf(pdf)
+  def pdf_draw_title(pdf, auction)
     pdf.fill_color "ffffff"
     pdf.grid([1,1],[1,21]).bounding_box do
-      pdf.font_size(32){
-        pdf.draw_text "PDF", :at => [pdf.bounds.left, pdf.bounds.top-18]
+      pdf.font_size(26){
+        pdf.draw_text "Buyer Report - #{auction.published_gid.to_s}", :at => [pdf.bounds.left, pdf.bounds.top-18]
       }
     end
   end
