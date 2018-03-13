@@ -382,10 +382,10 @@ class Api::AuctionsController < Api::BaseController
     user_id = params[:user_id]
 
     auction = Auction.find_by id: auction_id
-    (send_wicked_pdf_data('no data', 'LETTER OF AWARD.pdf');return) if auction.nil?
+    (send_wicked_pdf_data('no data', 'NO_DATA_LETTER_OF_AWARD.pdf');return) if auction.nil?
     zone_time = pdf_datetime_zone
     auction_result, consumption, tender_state, consumption_details = get_letter_of_award_pdf_data(auction_id, user_id)
-    (send_wicked_pdf_data('no data', 'LETTER OF AWARD.pdf');return) if auction_result.empty?
+    (send_wicked_pdf_data('no data', 'NO_DATA_LETTER_OF_AWARD.pdf');return) if auction_result.empty?
     #
     retailer_user_company_name = auction_result.empty? ? '' : auction_result[0].company_name
     retailer_company_address = auction_result.empty? ? '' : auction_result[0].company_address
@@ -467,7 +467,7 @@ class Api::AuctionsController < Api::BaseController
     page_content[table2_tr1.to_s] = table2_tr1_string
     page_content[table2_tr2.to_s] = table2_tr2_string
     #
-    send_wicked_pdf_data(page_content, 'LETTER OF AWARD.pdf')
+    send_wicked_pdf_data(page_content, auction.published_gid.to_s + '_LETTER_OF_AWARD.pdf')
   end
 
   private
@@ -549,9 +549,9 @@ class Api::AuctionsController < Api::BaseController
     return auction_result, consumption, tender_state, consumption_details
   end
 
-  def send_wicked_pdf_data(content, filename, page_size='B5')
+  def send_wicked_pdf_data(content, output_filename, page_size='B5')
     pdf = WickedPdf.new.pdf_from_string(content, encoding: 'UTF-8', page_size: page_size)
-    send_data(pdf, filename: filename)
+    send_data(pdf, filename: output_filename)
   end
 
   def get_table2_row_data(head, row0, row1, row2, visibilities, table_data)
@@ -599,7 +599,7 @@ class Api::AuctionsController < Api::BaseController
 
   protected
 
-  def send_no_data_pdf(page_size, page_layout)
+  def send_no_data_pdf(page_size, page_layout, output_filename)
     pdf_filename = Time.new.strftime('%Y%m%d%H%M%S%L')
     background_img = Rails.root.join('app', 'assets', 'pdf', 'bk.png')
     Prawn::Document.generate(Rails.root.join(pdf_filename),
@@ -609,12 +609,11 @@ class Api::AuctionsController < Api::BaseController
       fill_color 'ffffff'
       draw_text 'no data', at: [15, bounds.top - 22]
     end
-    send_pdf_data pdf_filename
+    send_pdf_data pdf_filename, output_filename
   end
 
-  def send_pdf_data(pdf_filename)
-    now_time = Time.new.strftime('%Y%m%d%H%M%S')
-    send_data IO.read(Rails.root.join(pdf_filename)), filename: "report-#{now_time}.pdf"
+  def send_pdf_data(pdf_filename, output_filename)
+    send_data IO.read(Rails.root.join(pdf_filename)), filename: output_filename
     File.delete Rails.root.join(pdf_filename)
   end
 
