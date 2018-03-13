@@ -50,7 +50,7 @@ render() {
     //console.log(this.winner.data);
     return (
         <div className="u-grid mg0">
-            <h2 className="u-mt2 u-mb2">View Comsumption Details</h2>
+            <h2 className="u-mt2 u-mb2">View Consumption Details</h2>
             <div className="col-sm-12 u-mb3">
                 <AdminComsumptionList visible="visible" comsumption_list={this.state.comsumption_list} detail={this.show_detail.bind(this)} type={this.type} />
             </div>
