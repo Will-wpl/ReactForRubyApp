@@ -128,7 +128,7 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
     total_volume = number_helper.number_to_currency(total_volume, precision: 0, unit: '')
     total_award_sum = number_helper.number_to_currency(total_award_sum, precision: 2, unit: '$')
     table0_row0, table0_row1, table0_row2, table0_row3 =
-        ["Lowest Price Bidder:", lowest_price_bidder],
+        ["Winning Bidder:", lowest_price_bidder],
         ["Contract Period:", "#{contract_period_start_date} to #{contract_period_end_date}"],
         ["Total Volume:", total_volume + " kWh (forecasted)"],
         ["Total Award Sum:", total_award_sum + " (forecasted)"]
