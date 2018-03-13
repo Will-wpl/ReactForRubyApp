@@ -454,6 +454,7 @@ render() {
             {sessionStorage.isAuctionId === "yes"
                 ? <div className="col-sm-12 col-md-8 push-md-2">
                     <h3 className="u-mt3 u-mb1">Invitation</h3>
+                    <div className="invitation_main">
                     {(this.state.publish_status === "0" ? 
                         <div>
                             <div className="lm--formItem lm--formItem--inline string u-mt3 role_select">
@@ -603,6 +604,7 @@ render() {
                         {this.state.readOnly?'':<a className="lm--button lm--button--primary" onClick={this.do_save.bind(this)}>Save</a>}
                         {this.state.readOnly?'':(this.state.publish_status==="0"?<a className="lm--button lm--button--primary" id="doPublish" onClick={this.doPublish.bind(this)}>Publish</a>:'')}
                     </div>
+                    </div>
                 </div>
                 : <div className="live_modal">
                             <p>
@@ -612,6 +614,7 @@ render() {
                 <div className="createRaMain u-grid">
                     <a className="lm--button lm--button--primary u-mt3" href={url} >Back</a>
                 </div>
+                
                 <Modal text={this.state.text} acceptFunction={this.state.params_type===''?'':(this.state.params_type==='remove_file'?this.do_remove.bind(this):(this.state.params_type==='do_publish'?this.ra_publish.bind(this):this.send_mail.bind(this)))} ref="Modal" />
             </div>
     )
