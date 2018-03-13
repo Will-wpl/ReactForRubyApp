@@ -27,7 +27,7 @@ RSpec.describe Api::Admin::UserExtensionsController, type: :controller do
         it 'success' do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
-          expect(hash['headers'].size).to eq(7)
+          expect(hash['headers'].size).to eq(6)
           expect(hash['bodies']['total']).to eq(4)
           expect(hash['bodies']['data'].size).to eq(4)
         end
@@ -42,7 +42,7 @@ RSpec.describe Api::Admin::UserExtensionsController, type: :controller do
         it 'success' do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
-          expect(hash['headers'].size).to eq(7)
+          expect(hash['headers'].size).to eq(6)
           expect(hash['bodies']['total']).to eq(4)
           expect(hash['bodies']['data'].size).to eq(4)
         end
@@ -56,7 +56,7 @@ RSpec.describe Api::Admin::UserExtensionsController, type: :controller do
         it 'success' do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
-          expect(hash['headers'].size).to eq(7)
+          expect(hash['headers'].size).to eq(6)
           expect(hash['bodies']['total']).to eq(1)
           expect(hash['bodies']['data'].size).to eq(1)
         end
