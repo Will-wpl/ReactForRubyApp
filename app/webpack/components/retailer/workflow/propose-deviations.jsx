@@ -110,14 +110,19 @@ export class Proposedeviations extends React.Component{
     }
     submitDeviations(){
         console.log(this.editData(3));
-        retailerSubmitDeviations(this.props.current.current.arrangement_id,this.editData('3')).then(res=>{
-            this.refs.Modal.showModal();
-            this.setState({
-                text:"Deviations pending administrator's review.",
-                alldisabled:true
-            });
-            this.refresh();
-            this.props.page();
+        retailerDeviationsSave(this.props.current.current.arrangement_id,this.editData('2')).then(a=>{
+            getRetailerDeviationsList(sessionStorage.arrangement_id).then(b=>{
+                this.setState({deviations_list:b.chats});
+                retailerSubmitDeviations(this.props.current.current.arrangement_id,this.editData('3')).then(c=>{
+                    this.refs.Modal.showModal();
+                    this.setState({
+                        text:"Deviations pending administrator's review.",
+                        alldisabled:true
+                    });
+                    this.refresh();
+                    this.props.page();
+                })
+            })
         })
     }
     save(){
@@ -155,23 +160,27 @@ export class Proposedeviations extends React.Component{
     editData(sum){
         let deviationslist = [];
         this.state.deviations_list.map((item, index) => {
+            let deviation = $("#deviation_"+(index)).val(),response = $("#response_"+(index)).val();
+            deviation = deviation.replace(/\n/g,"＜br＞");
+            response = response.replace(/\n/g,"＜br＞");
+            //console.log("deviation===>"+deviation,"response====>"+response);
             if(item.sp_response_status != sum){
                 if(item.sp_response_status == ""){
-                    deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'","sp_response_status":"'+sum+'"},';
+                    deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+deviation+'","retailer_response":"'+response+'","sp_response_status":"'+sum+'"},';
                 }else{
                     if(item.sp_response_status == "0"){
-                        deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'","sp_response_status":"3"},';
+                        deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+deviation+'","retailer_response":"'+response+'","sp_response_status":"3"},';
                     }else if(item.sp_response_status == "2"){
                         if(sum == "3"){
-                            deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'","sp_response_status":"3"},';
+                            deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+deviation+'","retailer_response":"'+response+'","sp_response_status":"3"},';
                         }
                     }else{
-                        deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'","sp_response_status":"'+item.sp_response_status+'"},';
-                    }
+                        deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+deviation+'","retailer_response":"'+response+'","sp_response_status":"'+item.sp_response_status+'"},';
+                    } 
                 }
             }else{
-                deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+$("#deviation_"+(index)).val()+'","retailer_response":"'+$("#response_"+(index)).val()+'","sp_response_status":"'+sum+'"},';
-            }
+                deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+deviation+'","retailer_response":"'+response+'","sp_response_status":"'+sum+'"},';
+            }       
         })
         deviationslist = deviationslist.substr(0, deviationslist.length-1);
         deviationslist = '['+deviationslist+']';
@@ -205,6 +214,8 @@ export class Proposedeviations extends React.Component{
         let list  =  this.state.deviations_list;
         list.splice(index,1);
         this.setState({deviations_list:list});
+        this.refs.Modal.showModal();
+        this.setState({text:"Please click 'Save' button to effect the change."});
     }
     showhistory(id){
         getTenderhistory('retailer',id).then(res=>{
@@ -219,7 +230,7 @@ export class Proposedeviations extends React.Component{
                 {!this.props.tender ? (this.props.current.current.turn_to_role === 1?<h4 className="u-mb3 pending_review">Status : Deviations pending administrator's review</h4>:''):''}
                 <div className="col-sm-12 col-md-10 push-md-1">
                     <table className="retailer_fill w_100" cellPadding="0" cellSpacing="0">
-                            <thead>
+                        <thead>
                             <tr>
                                 <th>Item</th>
                                 <th>Clause</th>
@@ -228,17 +239,17 @@ export class Proposedeviations extends React.Component{
                                 <th>SP Response</th>
                                 <th></th>
                                 </tr>
-                            </thead>
-                            <tbody>
+                        </thead>
+                        <tbody>
                                 {!this.props.tender ? 
                                     this.state.deviations_list.map((item,index)=>{
                                         if(item.sp_response_status === "1" || item.sp_response_status === "4"){
                                             return (<tr key={item.id}>
                                                     <td>{item.item}<input id={"item_"+(index)} type="hidden" defaultValue={item.item}/></td>
                                                     <td >{item.clause}<input type="hidden" id={"clause_"+(index)} defaultValue={item.clause}/></td>
-                                                    <td >{item.propose_deviation}<input type="hidden" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
-                                                    <td >{item.retailer_response}<input disabled type="hidden" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
-                                                    <td >{item.sp_response}</td>
+                                                    <td ><textarea className="show_text" defaultValue={item.propose_deviation.replace(/＜br＞/g,"\n")} disabled/><input type="hidden" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
+                                                    <td ><textarea className="show_text" defaultValue={item.retailer_response.replace(/＜br＞/g,"\n")} disabled/><input disabled type="hidden" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
+                                                    <td ><textarea className="show_text" defaultValue={item.sp_response.replace(/＜br＞/g,"\n")} disabled/></td>
                                                     <td>
                                                         <button id={"history_"+index} onClick={this.showhistory.bind(this,item.id)} >History</button>
                                                         <button disabled={this.props.propsdisabled?true:(this.state.alldisabled?true:(item.sp_response_status === "4" ? true : false))} id={"withdraw_"+index} onClick={this.showConfirm.bind(this,'Withdraw',{id:item.id,index:index})}>Withdraw</button>
@@ -265,9 +276,9 @@ export class Proposedeviations extends React.Component{
                                                             <input type="text" id={"clause_"+(index)} defaultValue={item.clause}/>:<div>{item.clause}<input type="hidden" id={"clause_"+(index)} defaultValue={item.clause}/></div>)
                                                             :<input type="text" id={"clause_"+(index)} defaultValue={item.clause}/>))}
                                                         </td>
-                                                <td ><input type="text" id={"deviation_"+(index)} defaultValue={item.propose_deviation} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
-                                                <td ><input type="text" id={"response_"+(index)} defaultValue={item.retailer_response} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
-                                                        <td >{item.sp_response}</td>
+                                                        <td ><textarea id={"deviation_"+(index)} defaultValue={item.propose_deviation.replace(/＜br＞/g,"\n")} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
+                                                        <td ><textarea id={"response_"+(index)} defaultValue={item.retailer_response.replace(/＜br＞/g,"\n")} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
+                                                        <td ><textarea className="show_text" defaultValue={item.sp_response?item.sp_response.replace(/＜br＞/g,"\n"):''} disabled/></td>
                                                         <td>{item.item === ""?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>:
                                                         (item.sp_response_status==='2'?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>
                                                         :<div>
@@ -282,14 +293,14 @@ export class Proposedeviations extends React.Component{
                                     return <tr key={index}>
                                                 <td>{item.item}</td>
                                                 <td>{item.clause}</td>
-                                                <td>{item.propose_deviation}</td>
-                                                <td>{item.retailer_response}</td>
-                                                <td>{item.sp_response}</td>
+                                                <td><textarea className="show_text" defaultValue={item.propose_deviation.replace(/＜br＞/g,"\n")} disabled/></td>
+                                                <td><textarea className="show_text" defaultValue={item.retailer_response.replace(/＜br＞/g,"\n")} disabled/></td>
+                                                <td><textarea className="show_text" defaultValue={item.sp_response.replace(/＜br＞/g,"\n")} disabled/></td>
                                                 <td><button onClick={this.showhistory.bind(this,item.id)}>History</button></td>
                                             </tr>
                                         })
                                 }
-                            </tbody>
+                        </tbody>
                     </table>
                     {!this.props.tender ? <div className="workflow_btn u-mt3 u-mb3"><button className="add_deviation" disabled={this.props.propsdisabled?true:(this.state.alldisabled)} onClick={this.addDeviations.bind(this)}>Add</button></div> :''}
                     <div className="workflow_btn u-mt3">

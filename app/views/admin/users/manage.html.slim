@@ -77,6 +77,11 @@
           dfn.manage_label
             = @user.company_license_number
       .lm--formItem.lm--formItem--inline.string.optional
+        .lm--formItem-left.lm--formItem-label GST No.:
+        .lm--formItem-right.lm--formItem-control
+          dfn.manage_label
+            = @user.gst_no
+      .lm--formItem.lm--formItem--inline.string.optional
         .lm--formItem-left.lm--formItem-label
           font Contact Information:
       .lm--formItem.lm--formItem--inline.string.optional
@@ -129,6 +134,11 @@
           .lm--formItem-right.lm--formItem-control
             dfn.manage_label
               = @user.company_address
+        .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label Billing Address:
+          .lm--formItem-right.lm--formItem-control
+            dfn.manage_label
+              = @user.billing_address
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label Unique Entity Number (UEN):
           .lm--formItem-right.lm--formItem-control
@@ -200,6 +210,11 @@
             dfn.manage_label
               = @user.account_home_address
         .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label Billing Address:
+          .lm--formItem-right.lm--formItem-control
+            dfn.manage_label
+              = @user.billing_address
+        .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label Mobile Number:
           .lm--formItem-right.lm--formItem-control
             dfn.manage_label
@@ -224,4 +239,4 @@
 - else
   /h1 Please select account type before.
 div.createRaMain.u-grid
-    a.lm--button.lm--button--primary.u-mt3 href="/admin/home" Back to Homepage
+    a.lm--button.lm--button--primary.u-mt3 href="/admin/users/retailers" Back

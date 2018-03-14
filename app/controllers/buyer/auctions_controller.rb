@@ -1,7 +1,11 @@
 class Buyer::AuctionsController < Buyer::BaseController
   after_action :set_login_status, only: %i[]
 
-  def index
+  def index; end
 
-  end
+  # GET report page
+  def report; end
+
+  # GET letter of award page
+  def award; end
 end

@@ -16,7 +16,7 @@ export class CreateNewRA extends Component {
             startDate:"",
             endDate:"",
             duration:"",
-            reserve_price:"",
+            reserve_price:"",starting_price:"",
             left_name:this.props.left_name,
             btn_type:"",text:"",id:"0",
             edit_btn:"lm--button lm--button--primary show",
@@ -58,6 +58,12 @@ export class CreateNewRA extends Component {
                         disabled:false
                     })
                 }          
+            }else{
+                if(moment(this.auction.actual_begin_time) < moment()){
+                    this.setState({
+                        disabled:true
+                    })
+                }
             }     
             if(res.name == null){
                     this.setState({id:res.id})
@@ -69,7 +75,8 @@ export class CreateNewRA extends Component {
                         startDate: res.contract_period_start_date == null ? '' :  moment(res.contract_period_start_date),
                         endDate:res.contract_period_end_date == null ? '' : moment(res.contract_period_end_date),
                         duration:res.duration== null ? '' : res.duration,
-                        reserve_price:res.reserve_price== null ? '' : this.padZero(res.reserve_price,'4')
+                        reserve_price:res.reserve_price== null ? '' : this.padZero(res.reserve_price,'4'),
+                        starting_price:res.starting_price== null ? '' : this.padZero(res.starting_price,'4')
                     });
                 }
                 $("#time_extension option[value='"+res.time_extension+"']").attr("selected",true);
@@ -105,6 +112,12 @@ export class CreateNewRA extends Component {
         let obj = e.target.value;
         this.setState({
             reserve_price:obj
+        })
+    }
+    startPrice(e){
+        let obj = e.target.value;
+        this.setState({
+            starting_price:obj
         })
     }
     starttimeChange(data) {
@@ -205,6 +218,7 @@ export class CreateNewRA extends Component {
         this.auction.actual_end_time = moment(this.state.start_datetime.toDate()).add(this.refs.duration.value,'minutes').format();
         this.auction.time_extension= this.refs.time_extension.value;
         this.auction.average_price= this.refs.average_price.value;
+        this.auction.starting_price= this.refs.starting_price.value;
         this.auction.retailer_mode= this.refs.retailer_mode.value;
         //console.log(this.state.start_datetime.format('YYYY-MM-DD hh:mm:ss'));
         //console.log(moment(this.auction.actual_end_time).format('YYYY-MM-DD hh:mm:ss'));
@@ -219,22 +233,29 @@ export class CreateNewRA extends Component {
         if(this.auction_data === null){
             data = this.setAuction();
         }else{
-            data = this.auction_data;
+            if(JSON.stringify(this.setAuction()) === JSON.stringify(this.auction_data)){
+                data = this.auction_data;
+            }else{
+                data = this.setAuction();
+            }
         }
         return data;
     }  
     checkSuccess(event,obj){
         event.preventDefault();
         let timeBar;
-        if(this.state.start_datetime < moment()){
-            $("#start_datetime .required_error").fadeIn(300);
-            window.location.href="#start_datetime";
-            clearTimeout(timeBar);
-            timeBar = setTimeout(()=>{
-                $("#start_datetime .required_error").fadeOut(300);
-            },5000)
-            return false;
+        if(!this.state.disabled){
+            if(this.state.start_datetime < moment()){
+                $("#start_datetime .required_error").fadeIn(300);
+                window.location.href="#start_datetime";
+                clearTimeout(timeBar);
+                timeBar = setTimeout(()=>{
+                    $("#start_datetime .required_error").fadeOut(300);
+                },5000)
+                return false;
+            }
         }
+        
         if(this.state.btn_type == "save"){
             createRa({auction: this.checkSubmitTruly()}).then(res => {
                             this.auction_data = res;
@@ -267,16 +288,21 @@ export class CreateNewRA extends Component {
         }
         if(this.state.btn_type == "next"){
             sessionStorage.isAuctionId = "yes";
-            createRa({auction: this.checkSubmitTruly()}).then(res => {
-                this.auction = res;
-                sessionStorage.auction_id = res.id;
-                window.location.href=`/admin/auctions/${res.id}/invitation`;
-            }, error => {
-                this.setState({
-                    text:'Request exception,Save failed!'
-                });
-                this.refs.Modal.showModal();
-            })
+            if(this.state.disabled){
+                window.location.href=`/admin/auctions/${this.auction.id}/invitation`;
+            }else{
+                createRa({auction: this.checkSubmitTruly()}).then(res => {
+                    this.auction = res;
+                    sessionStorage.auction_id = res.id;
+                    window.location.href=`/admin/auctions/${res.id}/invitation`;
+                }, error => {
+                    this.setState({
+                        text:'Request exception,Save failed!'
+                    });
+                    this.refs.Modal.showModal();
+                })
+            }
+            
         }
     }
     render () {
@@ -284,6 +310,14 @@ export class CreateNewRA extends Component {
         let btn_html ="";
         let sStorage = {};
         let styleType = "";
+        let publish = window.location.href.split("/");
+        let status = publish[publish.length-1];// new upcoming
+        let url;
+        if(status=="new"){
+            url = "/admin/auctions/unpublished"
+        }else{
+            url = "/admin/auctions/published"
+        }
         if(this.props.left_name == undefined){//Create New Ra
             styleType = "col-sm-12 col-md-8 push-md-2";
             left_name = "Create New Reverse Auction";
@@ -298,13 +332,13 @@ export class CreateNewRA extends Component {
             styleType = "col-sm-12 col-md-8 push-md-2";
             left_name = this.props.left_name;
             btn_html = <div className="createRa_btn">
-                            {this.props.editdisabled ? <div className="mask"></div> : ''}
+                            {/*this.props.editdisabled ? <div className="mask"></div> : ''*/}
                             {/* <a className={this.state.edit_btn} onClick={this.edit.bind(this)}>Edit</a>
                             <button className={this.state.edit_change} onClick={this.auctionCreate.bind(this,'save')}>Save</button>
                             <button className={this.state.edit_change} onClick={this.auctionCreate.bind(this,'next')}>Next</button>
                             <a className={this.state.edit_change} onClick={this.Cancel.bind(this)}>Cancel</a> */}
-                            <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'save')}>Save</button>
-                                <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'next')}>Next</button>
+                            {this.state.disabled?'':<button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'save')}>Save</button>}
+                            <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'next')}>Next</button>
                         </div>
         }
         return (
@@ -376,6 +410,14 @@ export class CreateNewRA extends Component {
                         </label>
                     </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
+                        <span className="lm--formItem-left lm--formItem-label string optional">
+                            <abbr title="required">*</abbr>Starting Price ($/kWh):</span>
+                            <label className="lm--formItem-right lm--formItem-control">
+                                <input type="test" ref="starting_price" onChange={this.startPrice.bind(this)} value={this.state.starting_price} disabled={this.state.disabled} name="starting_price" maxLength="50" required aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891/kWh." ></input>
+                                <abbr ref="ra_duration_error" className="col"></abbr>
+                            </label>
+                    </dd>
+                    <dd className="lm--formItem lm--formItem--inline string optional">
                         <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Reserve Price ($/kWh):</span>
                         <label className="lm--formItem-right lm--formItem-control">
                             <input type="test" ref="reserve_price" onChange={this.doPrice.bind(this)} value={this.state.reserve_price} disabled={this.state.disabled} name="reserve_price" maxLength="50" required aria-required="true" pattern="^\d+(\.\d{4})$" title="Reserve Price must be a number with 4 decimal places, e.g. $0.0891/kWh." ></input>
@@ -386,7 +428,7 @@ export class CreateNewRA extends Component {
                         <span className="lm--formItem-left lm--formItem-label string optional">
                             <abbr title="required">*</abbr>Time Extension :</span>
                             <label className="lm--formItem-right lm--formItem-control">
-                                <select ref="time_extension" id="time_extension">
+                                <select ref="time_extension" id="time_extension" disabled={this.state.disabled}>
                                     <option value="0">Manual</option>
                                     <option value="1">Customize</option>
                                 </select>
@@ -396,7 +438,7 @@ export class CreateNewRA extends Component {
                         <span className="lm--formItem-left lm--formItem-label string optional">
                             <abbr title="required">*</abbr>Average Price :</span>
                             <label className="lm--formItem-right lm--formItem-control">
-                                <select ref="average_price" id="average_price">
+                                <select ref="average_price" id="average_price" disabled={this.state.disabled}>
                                     <option value="0">Weighted Average</option>
                                 </select>
                             </label>
@@ -405,7 +447,7 @@ export class CreateNewRA extends Component {
                         <span className="lm--formItem-left lm--formItem-label string optional">
                             <abbr title="required">*</abbr>Retailer Mode :</span>
                             <label className="lm--formItem-right lm--formItem-control">
-                                <select ref="retailer_mode" id="retailer_mode">
+                                <select ref="retailer_mode" id="retailer_mode" disabled={this.state.disabled}>
                                     <option value="0">Mode 1: Top 2</option>
                                     <option value="1">Mode 2: 1st, 2nd</option>
                                 </select>
@@ -418,7 +460,7 @@ export class CreateNewRA extends Component {
             </div>
             </div>
             <div className="createRaMain u-grid">
-                <a className="lm--button lm--button--primary u-mt3" href="/admin/home" >Back to Homepage</a>
+                <a className="lm--button lm--button--primary u-mt3" href={url}>Back</a>
             </div>
             </div>
         )

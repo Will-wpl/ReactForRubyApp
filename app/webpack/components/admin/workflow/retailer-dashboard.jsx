@@ -35,8 +35,8 @@ export class Adminretailerdashboard extends Component {
 
         })
     }
-    manage_contact(id,name){
-        this.props.page(id,name);
+    manage_contact(id,name,truely,index){
+        this.props.page(id,name,truely,index);
     }
     render (){
         return (
@@ -70,26 +70,26 @@ export class Adminretailerdashboard extends Component {
                                                                 return <td key={i}>{
                                                                                 flows[i] ? 
                                                                                 (item.detail.current.current_node === it ? 
-                                                                                    (item.detail.current.current_status === '2' ? <abbr className="step_pending"></abbr> : // 2 retailer click submit in step4
-                                                                                    (item.detail.current.current_status === '0' ? <abbr className="step_pending"></abbr> : // 0 in progress
-                                                                                    (item.detail.current.current_status === '4' ? <abbr className="step_pending"></abbr> : //4 admin reject
-                                                                                    (item.detail.current.current_status === '3' ? <abbr className="step_finished"></abbr> ://3 admin accept
+                                                                                    (item.detail.current.current_status === '2' ? <abbr className="step_pending" onClick={item.detail.current.turn_to_role === 2?this.manage_contact.bind(this,item.arrangement_id,item.company_name,false):this.manage_contact.bind(this,item.arrangement_id,item.company_name,true)}></abbr> : // 2 retailer click submit in step4
+                                                                                    (item.detail.current.current_status === '0' ? <abbr className="step_pending" onClick={item.detail.current.turn_to_role === 2?this.manage_contact.bind(this,item.arrangement_id,item.company_name,false):this.manage_contact.bind(this,item.arrangement_id,item.company_name,true)}></abbr> : // 0 in progress
+                                                                                    (item.detail.current.current_status === '4' ? <abbr className="step_pending" onClick={item.detail.current.turn_to_role === 2?this.manage_contact.bind(this,item.arrangement_id,item.company_name,false):this.manage_contact.bind(this,item.arrangement_id,item.company_name,true)}></abbr> : //4 admin reject
+                                                                                    (item.detail.current.current_status === '3' ? <abbr className="step_pending" onClick={item.detail.current.turn_to_role === 2?this.manage_contact.bind(this,item.arrangement_id,item.company_name,false):this.manage_contact.bind(this,item.arrangement_id,item.company_name,true)}></abbr> ://3 admin accept
                                                                                     (item.detail.current.current_status === 'closed' ? <abbr className="step_finished"></abbr>: //retailer step 5 submit
                                                                                     (item.detail.current.current_status === 'reject' ? '' : <abbr className="step_finished"></abbr>))))))//retailer 1step reject
-                                                                                    :<abbr className="step_finished"></abbr>)
+                                                                                    :(it===3||it===4?<abbr className="step_finished cursor" onClick={this.manage_contact.bind(this,item.arrangement_id,item.company_name,false,it)}></abbr>:<abbr className="step_finished"></abbr>))
                                                                                 : ''}</td>
                                                             })
                                                         }
                                                     <td>{item.detail.current.turn_to_role === 2 ? <button disabled={true}>Manage Contract</button>
                                                         :(item.detail.current.current_status === 'closed' || item.detail.current.current_status === null || item.detail.current.current_status === 'reject'?<button disabled={true}>Manage Contract</button>
-                                                            :<button onClick={this.manage_contact.bind(this,item.arrangement_id,item.company_name)}>Manage Contract</button>)}
+                                                            :<button onClick={this.manage_contact.bind(this,item.arrangement_id,item.company_name,true)}>Manage Contract</button>)}
                                                         <button onClick={this.showDetail.bind(this,item.arrangement_id)}>Contact Details</button></td>
                                                 </tr>
                                     })
                                 }
                             </tbody>
                     </table>
-                    :<div></div>
+                    :<h3 className="u-mt2 u-mb2">Please invite retailers.</h3>
                     }
                 </div>
                 <Modal showdetail={this.state.showDetail} ref="Modal" />

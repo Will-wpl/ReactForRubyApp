@@ -10,7 +10,7 @@ class UserExtension < ApplicationRecord
   # Validations
 
   # Scopes
-
+  scope :retailers, -> { includes(user: :roles).where(roles: { name: 'retailer' }) }
   # Callbacks
 
   # Delegates

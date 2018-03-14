@@ -16,6 +16,9 @@ class Retailer::AuctionsController < Retailer::BaseController
   # Get published auction list page
   def index; end
 
+  # GET letter of award page
+  def award; end
+
   def empty
     arrangement = Arrangement.find_by_auction_and_user(params[:id], current_user.id).first
     auction_name = @auction.name

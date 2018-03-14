@@ -71,5 +71,41 @@ export const searchTypeData = {
             {title:"Status:",type:"status",species:"select",operator:'=',options:[{option:"All",value:""},{option:"Not Invited",value:"0"},{option:"Pending Notification",value:"2"},{option:"Notification Sent",value:"3"},{option:"Invited",value:"1"}]},
             {title:"consumer_type:",type:"consumer_type",operator:'=',defaultval:'3',species:'hidden'}
         ]
+    },
+    "Past Reverse Auction":{//connect back end OK
+        list_url:"/api/admin/auction_results",
+        list_data:[
+            {title:"ID:",type:"published_gid",species:"input",operator:'like',table:'auctions'},
+            {title:"Name:",type:"name",species:"input",operator:'like',table:'auctions'},
+            {title:"Date:",type:"start_datetime",species:"datePacker",operator:'date_between',table:'auctions'}
+        ]
+    },
+    "Retailer Past Reverse Auction":{//connect back end OK
+        list_url:"/api/retailer/auction_results",
+        list_data:[
+            {title:"ID:",type:"published_gid",species:"input",operator:'like',table:'auctions'},
+            {title:"Name:",type:"name",species:"input",operator:'like',table:'auctions'},
+            {title:"Date:",type:"start_datetime",species:"datePacker",operator:'date_between',table:'auctions'}
+        ]
+    },
+    "Buyer Past Reverse Auction":{//connect back end OK
+        list_url:"/api/buyer/auction_results",
+        list_data:[
+            {title:"ID:",type:"published_gid",species:"input",operator:'like',table:'auctions'},
+            {title:"Name:",type:"name",species:"input",operator:'like',table:'auctions'},
+            {title:"Date:",type:"start_datetime",species:"datePacker",operator:'date_between',table:'auctions'}
+        ]
+    },
+    "User Extension List":{//connect back end OK
+        list_url:"/api/admin/user_extensions",
+        list_data:[
+             {title:"Company Name:",type:"company_name",species:"input",operator:'like'},
+        ]
+    },
+    "Auction Log List":{
+        list_url:`/api/admin/auctions/${sessionStorage.uid?sessionStorage.uid.split("/auctions")[1].split("/log")[0]:'1'}/log`,
+        list_data:[
+            {title:"Company Name:",type:"company_name",species:"input",operator:'like'},
+        ]
     }
 }

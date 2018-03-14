@@ -14,7 +14,7 @@ export class Adminworkflow extends Component {
         this.state={
             auction:{},
             disabled:false,current:{},page:1,
-            allbtnStatus:true,retailer_list:[]
+            allbtnStatus:true,retailer_list:[],readOnly:false
         }
         this.linklist = [
             {file_name:"appjafajfajfahsfhafiuahfohhnjnalflal.js",file_path:"#"},
@@ -27,11 +27,16 @@ export class Adminworkflow extends Component {
             this.setState({retailer_list:res});
         })
     }
-    getPageindex(arrangement_id,name){
+    getPageindex(arrangement_id,name,type,index){
         getTendersCurrent('admin',arrangement_id).then(res=>{
             console.log(res);
             res.name=name;
-            this.setState({current:res,page:res.current.current_node});
+            if(index==3||index==4){
+                this.setState({current:res,page:index,readOnly:!type});
+            }else{
+                this.setState({current:res,page:res.current.current_node,readOnly:!type});
+            }
+            
         })
     }
     showpage(index){
@@ -41,9 +46,9 @@ export class Adminworkflow extends Component {
             break
             case 1 : pageDom = <Adminretailerdashboard retailer_list={this.state.retailer_list} page={this.getPageindex.bind(this)} title="Retailer Dashboard" />
             break
-            case 3 : pageDom = <Keppelproposedeviations current={this.state.current} page={this.getPageindex.bind(this)} title="keppel Propose Deviations" />
+            case 3 : pageDom = <Keppelproposedeviations current={this.state.current} readOnly={this.state.readOnly} page={this.getPageindex.bind(this)} title="keppel Propose Deviations" />
             break
-            case 4 : pageDom = <Keppelformtender current={this.state.current} page={this.getPageindex.bind(this)}/>
+            case 4 : pageDom = <Keppelformtender current={this.state.current} readOnly={this.state.readOnly} page={this.getPageindex.bind(this)}/>
             break
         }
         return pageDom;
@@ -61,7 +66,7 @@ export class Adminworkflow extends Component {
                 <TimeCuntDown auction={this.state.auction} countDownOver={()=>{this.setState({disabled:true,allbtnStatus:false})}} timehidden="countdown_seconds" />
                 {this.showpage(this.state.page)}
                 <div className="createRaMain u-grid">
-                    <a className="lm--button lm--button--primary u-mt3" href="/admin/auctions/published" >Back to List</a>
+                    <a className="lm--button lm--button--primary u-mt3" href="/admin/auctions/published" >Back</a>
                 </div>
             </div>
         )}

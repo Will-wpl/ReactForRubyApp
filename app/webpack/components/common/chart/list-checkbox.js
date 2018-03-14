@@ -72,13 +72,22 @@ export default class CheckboxList extends Component {
             result.status = status
         }
     }
-
+    getSelectUid(){
+        let uidArray = [];
+        this.list.map((item,index)=>{
+            if(item.status){
+                uidArray.push(item.user_id);
+            }
+            
+        })
+        return uidArray
+    }
     render() {
         let checkItems;
         if (this.list) {
             checkItems = this.list.map((obj, index) => {
                 return (
-                    <CheckboxListItem key={obj.user_id} id={obj.user_id} display={obj.company_name}
+                    <CheckboxListItem ref="listitem" key={obj.user_id} id={obj.user_id} display={obj.company_name}
                                       color={obj.color} status={obj.status} onCheck={this.makeCheckeds.bind(this)}/>
                 );
             })

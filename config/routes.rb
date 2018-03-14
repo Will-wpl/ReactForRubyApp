@@ -47,11 +47,14 @@ Rails.application.routes.draw do
           put 'send_mails'
           get 'retailer_dashboard'
           get 'buyer_dashboard'
+          get 'pdf'
+          get 'log'
         end
         collection do
           get 'obtain'
           get 'unpublished'
           get 'published'
+          get 'letter_of_award_pdf'
         end
       end
       resource :auction_histories, only: %i[list last] do
@@ -90,6 +93,12 @@ Rails.application.routes.draw do
           get 'history'
         end
       end
+      resources :auction_results, only: %i[index] do
+        member do
+          get 'award'
+        end
+      end
+      resources :user_extensions, only: %i[index]
     end
   end
 
@@ -99,6 +108,7 @@ Rails.application.routes.draw do
         collection do
           get 'obtain'
           get 'published'
+          get 'letter_of_award_pdf'
         end
       end
       resource :auction_histories, only: %i[show] do
@@ -136,6 +146,19 @@ Rails.application.routes.draw do
           get 'history'
         end
       end
+      resources :auction_results, only: %i[index] do
+        member do
+          get 'award'
+        end
+      end
+      resources :consumptions, only: %i[] do
+        member do
+          post 'acknowledge'
+        end
+        collection do
+          post 'acknowledge_all'
+        end
+      end
     end
   end
 
@@ -145,15 +168,20 @@ Rails.application.routes.draw do
         collection do
           post 'participate'
           post 'reject'
+          post 'save'
         end
       end
-
       resources :auctions, only: %i[obtain published] do
+        member do
+          get 'pdf'
+          get 'letter_of_award_pdf'
+        end
         collection do
           get 'obtain'
           get 'published'
         end
       end
+      resources :auction_results, only: %i[index]
     end
   end
 
@@ -188,17 +216,19 @@ Rails.application.routes.draw do
     resources :auction_histories, only: []
     resources :auction_events, only: []
     resources :arrangements, only: []
-    resources :user_extensions, only: []
+    resources :user_extensions, only: %i[index]
     resources :auction_extend_times, only: []
     resources :auctions, only: %i[new empty goto upcoming online dashboard confirm result report log invitation select comsumption unpublished published buyer_dashboard retailer_dashboard tender] do
       member do
         get 'upcoming' # published and pre-auction page
-        get 'online' # published and pre-auciton page to retailer online status page
+        get 'online' # published and pre-auction page to retailer online status page
         get 'dashboard' # live page
         get 'confirm' # confirm or void auction page
-        get 'result' # auciton result page
-        get 'report' # auciton report page
+        get 'choose_winner' # choose winner page
+        get 'result' # auction result page
+        get 'report' # auction report page
         get 'log' # auction activity log page
+        get 'award' # auction activity log page
         get 'invitation' # create RA next page
         get 'select' # select users page
         get 'consumption' # select users page
@@ -217,7 +247,11 @@ Rails.application.routes.draw do
 
   namespace :retailer do
     resources :home, only: :index
-    resources :auctions,only: %i[index]
+    resources :auctions,only: %i[index] do
+      member do
+        get 'award' # auction activity log page
+      end
+    end
     resources :arrangements, only: %i[tender] do
       member do
         get 'tender'
@@ -242,7 +276,13 @@ Rails.application.routes.draw do
 
   namespace :buyer do
     resources :home, only: :index
-    resources :auctions,only: %i[index]
+    resources :auction_results, only: [:index]
+    resources :auctions,only: %i[index] do
+      member do
+        get 'report' # auction report page
+        get 'award' # auction activity log page
+      end
+    end
     resources :consumptions,only: %i[edit]
   end
 end

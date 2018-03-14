@@ -6,20 +6,28 @@ export class BuyerList extends Component {
         super(props);
         this.state={
             showDetail:{},
+            text:""
         }
     }
     componentDidMount() {
         
     }
-    showDetail(id,obj){
+    showDetail(item,obj){
         if(this.props.onAddClick){
             this.props.onAddClick();
         }
         if(this.props.onAddturly === 'jest'){
             return;
         }
-        sessionStorage.setItem('comsumptiontype', this.props.dashboard.type)
-        window.location.href="/admin/consumptions/"+id;
+        if(item.participation_status === "1"){
+            sessionStorage.setItem('comsumptiontype', this.props.dashboard.type)
+            window.location.href="/admin/consumptions/"+item.id;
+        }else{
+            this.setState({
+                text:'This buyer has not confirmed to participate in this auction.'
+                });
+            this.refs.Modal.showModal();
+        }  
     }
     render () {
         return (
@@ -42,7 +50,7 @@ export class BuyerList extends Component {
                                         <li key={index} className="u-grid">
                                             <span className="col-sm-7 white" title={item.name}>{item.name}</span>
                                             <span className="col-sm-3"><abbr className={'color'+item.participation_status}></abbr></span>
-                                            <span className="col-sm-2" id="showDetail" onClick={this.showDetail.bind(this,item.id)}>Consumption Details</span>     
+                                            <span className="col-sm-2" id="showDetail" onClick={this.showDetail.bind(this,item)}>Consumption Details</span>     
                                         </li>)
                                     })
                                 }
@@ -55,7 +63,7 @@ export class BuyerList extends Component {
                             </label>
                     </div>
                 </div>
-                <Modal showdetail={this.state.showDetail} ref="Modal" />
+                <Modal text={this.state.text} ref="Modal" />
             </div>:''
         )
     }

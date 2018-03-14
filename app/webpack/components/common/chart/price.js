@@ -6,16 +6,32 @@ export default class Price extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {option: getTemplate(this.props)};
+        this.state = {
+            option: getTemplate(this.props),
+            start_time:"",
+            end_time:"",
+            start_price:"",
+            end_price:""
+        };
         this.onyAxisMouseOver = this.onyAxisMouseOver.bind(this);
         this.onDataZoom = this.onDataZoom.bind(this);
         this.onEvents = {
             'dataZoom': this.onDataZoom
         }
     }
-
+    componentDidMount(){
+        setTimeout(()=>{
+            this.setState({
+                     start_time:this.theStartbidtime,
+                     end_time:this.theEndbidtime,
+                     start_price:this.theStartPrice,
+                     end_price:this.theEndPrice
+                 })
+        },1000)
+    }
     getChartOption() {
         let option = getTemplate(this.props);
+        console.log(this.props.data);
         this.props.data.forEach(element => {
             let tmp = {
                 type: 'line',
@@ -50,11 +66,15 @@ export default class Price extends Component {
                     d.value = [].concat(moment(timePrice.bid_time).format('YYYY-DD-MM HH:mm:ss'))
                         .concat(parseFloat(timePrice.average_price).toFixed(4));
                 }
-
+                this.theStartbidtime = element.data[0].bid_time;
+                this.theEndbidtime = element.data[element.data.length-1].bid_time;
+                this.theEndPrice = parseFloat(element.data[0].average_price).toFixed(4);
+                this.theStartPrice = parseFloat(0.0000).toFixed(4);
                 tmp.data.push(d);
             });
             option.series.push(tmp);
         });
+        console.log(option);
         if (option.hasOwnProperty('dataZoom')) {
             if (!Number.isNaN(this.xStart)) {
                 option.dataZoom[0].start = this.xStart;
@@ -86,18 +106,45 @@ export default class Price extends Component {
     }
 
     onDataZoom(params) {
+        let instance = this.charts_instance.getEchartsInstance();
+        let option = instance.getOption();
         if (params.type === 'datazoom' && params.dataZoomId.length > 0) {
             const lastEle = params.dataZoomId.charAt(params.dataZoomId.length - 1);
             if (lastEle === '1') { //y
                 this.yStart = params.start;
                 this.yEnd = params.end;
+                let ps = (option.dataZoom[1].startValue).toFixed(4);
+                let pe = (option.dataZoom[1].endValue).toFixed(4);
+                this.setState({
+                    start_price:ps,
+                    end_price:pe
+                })
+                console.log(option.dataZoom[1]);
+                console.log("start_price : "+ps+" end_price : " +pe);
             } else if (lastEle === '0') { //x
                 this.xStart = params.start;
                 this.xEnd = params.end;
+                let theStartbidtime = this.theStartbidtime
+                let theEndbidtime = this.theEndbidtime
+                let diff = moment(theEndbidtime)-moment(theStartbidtime);
+                let ts = Math.ceil(diff*(params.start/100))+moment(theStartbidtime);
+                let te = Math.ceil(diff*(params.end/100))+moment(theStartbidtime);
+                this.setState({
+                    start_time:moment(ts).utc().format(),
+                    end_time:moment(te).utc().format()
+                })
             }
         }
     }
-
+    makeXy(){
+        let data = {
+            start_time:this.state.start_time,
+            end_time:this.state.end_time,
+            start_price:this.state.start_price,
+            end_price:this.state.end_price
+        }
+        return data;
+    }
     render() {
         let content = <div></div>;
         if (this.props.data) {
@@ -229,6 +276,7 @@ function getTemplate(props) {
             series: []
         }
     }
+
     let yAxisMin = 0;
     // if (props.data.length > 0) {
     //     let tmp = 1;

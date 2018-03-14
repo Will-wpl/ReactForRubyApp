@@ -1,11 +1,11 @@
 class Api::ConsumptionsController < Api::BaseController
-  before_action :set_consumption, only: %i[update_status destroy]
+  before_action :set_consumption, only: %i[update_status destroy acknowledge]
 
   def index
     if params[:consumer_type] == '2'
-      consumptions = Consumption.find_by_user_consumer_type(params[:consumer_type]).find_by_auction_id(params[:id]).order('users.company_name asc')
+      consumptions = Consumption.find_by_user_consumer_type(params[:consumer_type]).find_by_auction_id(params[:id]).is_participation.order('users.company_name asc')
     else
-      consumptions = Consumption.find_by_user_consumer_type(params[:consumer_type]).find_by_auction_id(params[:id]).order('users.name asc')
+      consumptions = Consumption.find_by_user_consumer_type(params[:consumer_type]).find_by_auction_id(params[:id]).is_participation.order('users.name asc')
     end
     data = []
     total_info = { consumption_count: 0, account_count: 0, lt_peak: 0, lt_off_peak: 0,
@@ -91,6 +91,23 @@ class Api::ConsumptionsController < Api::BaseController
   def destroy
     @consumption.destroy
     render json: nil, status: 200
+  end
+
+  def acknowledge
+    @consumption.acknowledge = Consumption::Acknowledged
+    @consumption.save
+    render json: { acknowledge: @consumption.acknowledge }, status: 200
+  end
+
+  def acknowledge_all
+    data = []
+    Consumption.find(params[:ids]).each do |consumption|
+      consumption.acknowledge = Consumption::Acknowledged
+      consumption.save
+      data.push(id: consumption.id, acknowledge: consumption.acknowledge)
+    end
+
+    render json: data, status: 200
   end
 
   private

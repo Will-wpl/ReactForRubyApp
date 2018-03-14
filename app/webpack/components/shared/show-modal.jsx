@@ -25,6 +25,12 @@ export class Modal extends React.Component{
             })
         }
     }
+    do_text(text){
+        let show_text = text.replace(/<br>/g,"<br/>");
+        setTimeout(()=>{
+            $("#modal_detail").html(show_text);
+        },50)
+    }
     Accept(){
         if(this.props.acceptFunction){
             this.props.acceptFunction(this.state.props_data);
@@ -89,6 +95,7 @@ export class Modal extends React.Component{
                             <li>Company Address : {this.props.listdetail.company_address}</li>
                             <li>Unique Entity Number (UEN) : {this.props.listdetail.company_unique_entity_number}</li>
                             <li>Retailer Licence Number : {this.props.listdetail.company_license_number}</li>
+                            <li>GST No. : {this.props.listdetail.gst_no}</li>
                             <li>Contact Name : {this.props.listdetail.name}</li>
                             <li>Mobile Number : {this.props.listdetail.account_mobile_number}</li>
                             <li>Office Number : {this.props.listdetail.account_office_number}</li>
@@ -99,12 +106,49 @@ export class Modal extends React.Component{
                                 <li>Email : {this.props.listdetail.email}</li>
                                 <li>Company Name : {this.props.listdetail.company_name}</li>
                                 <li>Company Address : {this.props.listdetail.company_address}</li>
-                                <li>Unique Entity Number (UEN) : {this.props.listdetail.company_unique_entity_number}</li>
+                                <li>Billing Address : {this.props.listdetail.billing_address}</li>
+                    <li>Unique Entity Number (UEN) : {this.props.listdetail.company_unique_entity_number}</li>
                                 <li>Contact Name : {this.props.listdetail.name}</li>
                                 <li>Mobile Number : {this.props.listdetail.account_mobile_number}</li>
                                 <li>Office Number : {this.props.listdetail.account_office_number}</li>
                             </ul>
-            }else{
+            }else if(this.props.listdetailtype === "Alternative Winner"){
+                if(this.props.listdetail.length != 0){
+                    showDetail=
+                        <ul className="showdetail">
+                            {((this.props.listdetail.lt_peak ==0.0) && (this.props.listdetail.lt_off_peak == 0.0)) ?
+                                "":
+                                <div>
+                                    <li>LT Peak: $ {parseFloat(this.props.listdetail.lt_peak).toFixed(4)}</li>
+                                    <li>LT Off Peak: $ {parseFloat(this.props.listdetail.lt_off_peak).toFixed(4)}</li>
+                                </div>
+
+                            }
+                            {((this.props.listdetail.hts_peak==0.0) && (this.props.listdetail.hts_off_peak == 0.0)) ?
+                                "":
+                                <div>
+                                    <li>HT (small) Peak: $ {parseFloat(this.props.listdetail.hts_peak).toFixed(4)}</li>
+                                    <li>HT (small) Off Peak: $ {parseFloat(this.props.listdetail.hts_off_peak).toFixed(4)}</li>
+                                </div>
+                            }
+                            {((this.props.listdetail.htl_peak==0.0) && (this.props.listdetail.htl_peak==0.0)) ?
+                                "":
+                                <div>
+                                    <li>HT (large) Peak: $ {parseFloat(this.props.listdetail.htl_peak).toFixed(4)}</li>
+                                    <li>HT (large) Off Peak: $ {parseFloat(this.props.listdetail.htl_peak).toFixed(4)}</li>
+                                </div>
+                            }
+                            {((this.props.listdetail.eht_peak == 0.0) && (this.props.listdetail.eht_off_peak==0.0))?
+                                "":
+                                <div>
+                                    <li>EHT Peak: $ {parseFloat(this.props.listdetail.eht_peak).toFixed(4)}</li>
+                                    <li>EHT Off Peak: $ {parseFloat(this.props.listdetail.eht_off_peak).toFixed(4)}</li>
+                                </div>
+                            }
+
+                        </ul>
+                }
+            } else{
                 showDetail = <ul className="showdetail">
                                 <li>View Account</li>
                                 <li>Email : {this.props.listdetail.email}</li>
@@ -112,6 +156,7 @@ export class Modal extends React.Component{
                                 <li>NRIC/FIN : {this.props.listdetail.account_fin}</li>
                                 <li>Housing Type : {this.props.listdetail.account_housing_type === '0' ? 'HDB' : (this.props.listdetail.account_housing_type === '1' ? 'Private High-rise' : 'Landed')}</li>
                                 <li>Home Address : {this.props.listdetail.account_home_address}</li>
+                                <li>Billing Address : {this.props.listdetail.billing_address}</li>
                                 <li>Mobile Number : {this.props.listdetail.account_mobile_number}</li>
                                 <li>Home Number : {this.props.listdetail.account_home_number}</li>
                                 <li>Office Number : {this.props.listdetail.account_office_number}</li>
@@ -128,7 +173,7 @@ export class Modal extends React.Component{
         return(
             <div id="modal_main" className={this.state.modalshowhide}>
                 <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
-                <div className="modal_detail">{this.props.text}{showDetail}</div>
+                <div className="modal_detail"><div id="modal_detail">{this.props.text?this.do_text(this.props.text):''}</div>{showDetail}</div>
                 {btn_html}
             </div>
         )

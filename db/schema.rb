@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180201075205) do
+ActiveRecord::Schema.define(version: 20180227062748) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -125,6 +125,7 @@ ActiveRecord::Schema.define(version: 20180201075205) do
     t.datetime "updated_at", null: false
     t.decimal "eht_peak"
     t.decimal "eht_off_peak"
+    t.string "justification"
     t.index ["auction_id"], name: "index_auction_results_on_auction_id"
     t.index ["user_id"], name: "index_auction_results_on_user_id"
   end
@@ -155,6 +156,7 @@ ActiveRecord::Schema.define(version: 20180201075205) do
     t.string "retailer_mode"
     t.decimal "total_eht_peak"
     t.decimal "total_eht_off_peak"
+    t.decimal "starting_price"
   end
 
   create_table "consumption_details", force: :cascade do |t|
@@ -165,6 +167,8 @@ ActiveRecord::Schema.define(version: 20180201075205) do
     t.bigint "consumption_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "premise_address"
+    t.decimal "contracted_capacity"
     t.index ["consumption_id"], name: "index_consumption_details_on_consumption_id"
   end
 
@@ -183,6 +187,7 @@ ActiveRecord::Schema.define(version: 20180201075205) do
     t.datetime "updated_at", null: false
     t.decimal "eht_peak"
     t.decimal "eht_off_peak"
+    t.string "acknowledge"
     t.index ["auction_id"], name: "index_consumptions_on_auction_id"
     t.index ["user_id"], name: "index_consumptions_on_user_id"
   end
@@ -283,6 +288,8 @@ ActiveRecord::Schema.define(version: 20180201075205) do
     t.string "account_housing_type"
     t.string "account_home_address"
     t.text "comment"
+    t.string "billing_address"
+    t.string "gst_no"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

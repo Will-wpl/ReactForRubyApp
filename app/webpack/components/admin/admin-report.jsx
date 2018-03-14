@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import RetailerRanking from './admin_shared/ranking';
 import CheckboxList from '../common/chart/list-checkbox';
 import CheckboxListItem from '../common/chart/list-checkbox-item';
-import {getArrangements, getHistories,getHistoriesLast} from '../../javascripts/componentService/admin/service';
+import {getArrangements, getHistories,getHistoriesLast,doPdf} from '../../javascripts/componentService/admin/service';
 import {getAuction} from '../../javascripts/componentService/common/service';
 import {findUpLimit, getRandomColor, getStandardNumBref} from '../../javascripts/componentService/util';
 import {ACCEPT_STATUS} from '../../javascripts/componentService/constant';
@@ -76,7 +76,16 @@ export class AdminReport extends Component {
             });
         })
     }
-
+    dopdf(){
+        let uid = this.priceUsers.getSelectUid(),
+            uid2 = this.rankingUsers.getSelectUid(),
+            data = $.extend(this.refs.price.makeXy(),this.refs.ranking.makeXy());
+            data.id = this.auction.id;
+            data.uid = (JSON.stringify(uid).split("[")[1]).split("]")[0];
+            data.uid2 = (JSON.stringify(uid2).split("[")[1]).split("]")[0];
+        console.log(data);
+        window.open(`/api/admin/auctions/${data.id}/pdf?start_time=${data.start_time}&end_time=${data.end_time}&start_time2=${data.start_time2}&end_time2=${data.end_time2}&start_price=${data.start_price}&end_price=${data.end_price}&uid=${data.uid}&uid2=${data.uid2}`);
+    }
     render () {
         let achieved = parseFloat(this.actualPrice).toFixed(4) <= parseFloat(this.startPrice);
         const visibility_lt = !this.auction ? true: Number(this.auction.total_lt_peak) > 0 || Number(this.auction.total_lt_off_peak) > 0;
@@ -106,7 +115,7 @@ export class AdminReport extends Component {
                         <div className="u-grid u-mt2">
                             <div className="col-sm-9">
                                 <ChartRealtimeHoc ref="priceChart" dataStore={this.state.histories}>
-                                    <Price isLtVisible={visibility_lt} isHtsVisible={visibility_hts} isHtlVisible={visibility_htl} isEhtVisible={visibility_eht}/>
+                                    <Price isLtVisible={visibility_lt} ref="price" isHtsVisible={visibility_hts} isHtlVisible={visibility_htl} isEhtVisible={visibility_eht}/>
                                 </ChartRealtimeHoc>
                             </div>
                             <div className="col-sm-2 push-md-1">
@@ -133,7 +142,7 @@ export class AdminReport extends Component {
                         <div className="u-grid u-mt2">
                             <div className="col-sm-9">
                                 <ChartRealtimeHoc ref="rankingChart" dataStore={this.state.histories}>
-                                    <Ranking yAxisFormatterRule={{0 : ' ', 'func': getStandardNumBref}}/>
+                                    <Ranking ref="ranking"  yAxisFormatterRule={{0 : ' ', 'func': getStandardNumBref}}/>
                                 </ChartRealtimeHoc>
                             </div>
                             <div className="col-sm-2 push-md-1">
@@ -161,10 +170,11 @@ export class AdminReport extends Component {
                     <div className="col-sm-12 col-md-5">
                         <WinnerPrice showOrhide="show" winner={this.state.winner} isLtVisible={visibility_lt} isHtsVisible={visibility_hts} isHtlVisible={visibility_htl} isEhtVisible={visibility_eht}/>
                         <RetailerRanking ranking={this.state.ranking}/>
+                        <div className="retailrank_main"><a className="lm--button lm--button--primary u-mt3" onClick={this.dopdf.bind(this)} >Download Report</a></div>
                     </div>
                 </div>
                 <div className="createRaMain u-grid">
-                    <a className="lm--button lm--button--primary u-mt3" href="/admin/home" >Back to Homepage</a>
+                    <a className="lm--button lm--button--primary u-mt3" href="/admin/auction_results" >Back</a>
                 </div>
             </div>
         )

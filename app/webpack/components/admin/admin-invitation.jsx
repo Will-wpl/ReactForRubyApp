@@ -15,7 +15,7 @@ export default class AdminInvitation extends Component {
         buyer_company_pend:0,buyer_individual_select:0,buyer_individual_send:0,
         buyer_individual_pend:0,peak_lt:0,peak_hts:0,
         peak_htl:0,peak_eht:0,off_peak_lt:0,off_peak_hts:0,
-        off_peak_htl:0,off_peak_eht:0,disabled:false,publish_status:0,
+        off_peak_htl:0,off_peak_eht:0,disabled:false,publish_status:0,readOnly:false,
         params_type:"",auction:{},
         fileData:{
                 "buyer_tc_upload":[
@@ -53,6 +53,11 @@ componentDidMount() {
         this.refs.Modal.showModal();
     })
     getAuction('admin', sessionStorage.auction_id).then((res) => {
+        if(moment(res.actual_begin_time) < moment()){
+                    this.setState({
+                        readOnly:true
+                    })
+                }
         console.log(res);
         this.setState({
             peak_lt:res.total_lt_peak ? formatPower(parseInt(Number(res.total_lt_peak)), 0, '') : 0,
@@ -293,16 +298,25 @@ upload(type, index){
             });
         }
         addinputfile(type, required){
+             let uploadStatus = true
+                if(
+                   this.state.retailer_send != 0 
+                || this.state.buyer_individual_send != 0 && type === "buyer_tc_upload"
+                || this.state.buyer_company_send != 0 && type === "buyer_tc_upload"
+                || this.state.readOnly){
+                    uploadStatus = false;
+                }
                 let fileHtml = '';
                 fileHtml = <div className="file_box">
                             <form id={type+"_form"} encType="multipart/form-data">
-                                {this.state.fileData[type].map((item, index) => 
+                                {this.state.fileData[type].map((item, index) =>
                                         <div className="u-grid mg0 u-mt1" key={index}>
                                             <div className="col-sm-12 col-md-10 u-cell">
+                                                {uploadStatus?
                                                 <a className="upload_file_btn">
                                                     <dfn>No file selected...</dfn>
                                                     {/* accept="application/pdf,application/msword" */}
-                                                    {required === "required" ? 
+                                                    {required === "required" ?
                                                     <div>
                                                         <input type="file" required="required" ref={type+index}  onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.state.disabled} />
                                                         <b>Browse..</b>
@@ -314,23 +328,24 @@ upload(type, index){
                                                         <input type="file" ref={type+index} onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.state.disabled} />
                                                         <b>Browse..</b>
                                                     </div>}
-                                                </a>
+                                                </a>:''}
+                                                {uploadStatus?
                                                 <div className="progress">
                                                     <div className="progress-bar" style={{width:"0%"}}>0%</div>
-                                                </div>
+                                                </div>:''}
                                                 <div className="progress_files">
                                                     <ul>
                                                         {
                                                             item.files.map((it,i)=>{
-                                                                return <li key={i}><a download={it.file_name} href={"/"+it.file_path}>{it.file_name}</a><span className="remove_file" onClick={this.remove_file.bind(this,type,index,i,it.id)}></span></li>
+                                                                return <li key={i}><a download={it.file_name} href={"/"+it.file_path}>{it.file_name}</a>{uploadStatus?<span className="remove_file" onClick={this.remove_file.bind(this,type,index,i,it.id)}></span>:''}</li>
                                                             })
                                                         }
                                                     </ul>
                                                 </div>
                                             </div>
-                                            <div className="col-sm-12 col-md-2 u-cell">
+                                            {uploadStatus?<div className="col-sm-12 col-md-2 u-cell">
                                                 <a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>
-                                            </div>
+                                            </div>:''}
                                             {/* <div className="col-sm-12 col-md-2 u-cell">
                                                 {item.buttonName === "none" ? "" : <a onClick={this.fileclick.bind(this, index, type, item.buttonName)} className={"lm--button lm--button--primary "+item.buttonName}>{item.buttonText}</a>}
                                             </div> */}
@@ -402,7 +417,7 @@ upload(type, index){
                 })
                 this.refs.Modal.showModal("comfirm");
                 this.setState({
-                    text:"Are you sure you want to send invitation email(s)?",
+                    text:"Are you sure you want to send the invitation email(s)? Once you click yes, you can no longer make any changes to the uploaded documents.",
                 });
             }
         send_mail(){
@@ -420,19 +435,26 @@ upload(type, index){
                 clearTimeout(timeBar);
                 timeBar = setTimeout(()=>{
                     location.reload();
-                },5000)
+                },2000)
             },error=>{
 
             })
         }
 render() {
     //console.log(this.winner.data);
+    let url;
+    if(this.state.publish_status==0){
+        url = "/admin/auctions/unpublished"
+    }else{
+        url = "/admin/auctions/published"
+    }
     return (
         <div className="u-grid admin_invitation">
             {this.state.publish_status === "1"?<TimeCuntDown auction={this.state.auction} countDownOver={()=>{this.setState({disabled:true})}} timehidden="countdown_seconds"/>:''}
             {sessionStorage.isAuctionId === "yes"
                 ? <div className="col-sm-12 col-md-8 push-md-2">
                     <h3 className="u-mt3 u-mb1">Invitation</h3>
+                    <div className="invitation_main">
                     {(this.state.publish_status === "0" ? 
                         <div>
                             <div className="lm--formItem lm--formItem--inline string u-mt3 role_select">
@@ -447,6 +469,7 @@ render() {
                                 Select at least one buyer and upload Buyer T&C.
                                 </div>
                             </div>
+                            {this.state.readOnly?'':
                             <div className="lm--formItem lm--formItem--inline string">
                                 <label className="lm--formItem-left lm--formItem-label string required">
                                 Buyer to Invite:
@@ -456,7 +479,7 @@ render() {
                                 <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=3`} className="lm--button lm--button--primary col-sm-12"><span>Select Individual Buyers</span></a></div>
                                 <div className="col-sm-12 col-md-12 u-cell"><button className="lm--button lm--button--primary col-sm-12 orange" disabled={this.state.buyer_company_pend==0&&this.state.buyer_individual_pend==0?true:false} onClick={this.show_send_mail.bind(this,'buyer')}><span>Send Invitation Email</span></button></div>
                                 </div>
-                            </div>
+                            </div>}
                         </div>
                      :<div> 
                         <div className="lm--formItem lm--formItem--inline string role_select">
@@ -470,6 +493,7 @@ render() {
                                 Select at least one retailer and upload Retailer Confidentiality Undertaking.
                             </div>
                         </div>
+                        {this.state.readOnly?'':
                         <div className="lm--formItem lm--formItem--inline string">
                             <label className="lm--formItem-left lm--formItem-label string required">
                             Retailer to Invite:
@@ -480,7 +504,7 @@ render() {
                                 </div>
                                 <div className="col-sm-12 col-md-6 u-cell"><button className="lm--button lm--button--primary col-sm-12 orange" disabled={this.state.retailer_pend==0?true:false} onClick={this.show_send_mail.bind(this,'retailer')}><span>Send Invitation Email</span></button></div>
                             </div>
-                        </div>
+                        </div>}
                         <div className="lm--formItem lm--formItem--inline string u-mt3 role_select">
                             <label className="lm--formItem-left lm--formItem-label string required">
                             Buyers:
@@ -577,8 +601,9 @@ render() {
                     </div>
                     <div className="retailer_btn">
                         <a className="lm--button lm--button--primary" href={this.state.publish_status === "0" ? "/admin/auctions/new" : "/admin/auctions/"+sessionStorage.auction_id+"/upcoming"}>Previous</a>
-                        <a className="lm--button lm--button--primary" onClick={this.do_save.bind(this)}>Save</a>
-                        {this.state.publish_status==="0"?<a className="lm--button lm--button--primary" id="doPublish" onClick={this.doPublish.bind(this)}>Publish</a>:''}
+                        {this.state.readOnly?'':<a className="lm--button lm--button--primary" onClick={this.do_save.bind(this)}>Save</a>}
+                        {this.state.readOnly?'':(this.state.publish_status==="0"?<a className="lm--button lm--button--primary" id="doPublish" onClick={this.doPublish.bind(this)}>Publish</a>:'')}
+                    </div>
                     </div>
                 </div>
                 : <div className="live_modal">
@@ -587,8 +612,9 @@ render() {
                             </p>
                         </div>}
                 <div className="createRaMain u-grid">
-                    <a className="lm--button lm--button--primary u-mt3" href="/admin/home" >Back to Homepage</a>
+                    <a className="lm--button lm--button--primary u-mt3" href={url} >Back</a>
                 </div>
+                
                 <Modal text={this.state.text} acceptFunction={this.state.params_type===''?'':(this.state.params_type==='remove_file'?this.do_remove.bind(this):(this.state.params_type==='do_publish'?this.ra_publish.bind(this):this.send_mail.bind(this)))} ref="Modal" />
             </div>
     )
