@@ -52,7 +52,7 @@ export default class WinnerPrice extends Component {
                                       <th className={this.props.isLtVisible ? '' : "live_hide"}>LT</th>
                                       <th className={this.props.isHtsVisible ? '' : "live_hide"}>HT (Small)</th>
                                       <th className={this.props.isHtlVisible ? '' : "live_hide"}>HT (Large)</th>
-                                      <th className={this.props.isEhtVisible ? '' : "live_hide"}>EHT (Large)</th>
+                                      <th className={this.props.isEhtVisible ? '' : "live_hide"}>EHT</th>
                                       </tr>
                                   </thead>
                                   <tbody>
@@ -92,7 +92,7 @@ export default class WinnerPrice extends Component {
                               <th className={this.props.isLtVisible ? '' : "live_hide"}>LT</th>
                               <th className={this.props.isHtsVisible ? '' : "live_hide"}>HT (Small)</th>
                               <th className={this.props.isHtlVisible ? '' : "live_hide"}>HT (Large)</th>
-                              <th className={this.props.isEhtVisible ? '' : "live_hide"}>EHT (Large)</th>
+                              <th className={this.props.isEhtVisible ? '' : "live_hide"}>EHT</th>
                               </tr>
                           </thead>
                           <tbody>
@@ -113,7 +113,7 @@ export default class WinnerPrice extends Component {
                     </table>
                       <ul>
                         <li><span>Contract Period: </span><span>{moment(this.props.winner.auction.contract_period_start_date).format('D MMM YYYY')} to {moment(this.props.winner.auction.contract_period_end_date).format('D MMM YYYY')}</span></li>
-                        <li><span>Total Volume: </span><span>{this.toThousands(parseInt(this.props.winner.auction.total_volume))} kWh (forecasted)</span></li>
+                        <li><span>Total Volume: </span><span>{this.toThousands(Math.round(Number(this.props.winner.auction.total_volume)))} kWh (forecasted)</span></li>
                         <li><span>Total Award Sum: </span><span>$ {this.toThousands(Number(this.props.winner.data.total_award_sum).toFixed(2))} (forecasted)</span></li>
                         </ul>
                     </div>                       
