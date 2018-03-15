@@ -32,6 +32,20 @@ RSpec.describe Api::Admin::ConsumptionsController, type: :controller do
           expect(hash['total_info']['lt_peak']).to eq('100.0')
         end
       end
+
+      describe 'got consumption list buy auction_id, consumer_type is 3' do
+        def do_request
+          get :index, params: { id: auction.id, consumer_type: '3' }
+        end
+
+        before { do_request }
+
+        it "return list and total object" do
+          expect(response).to be_success
+          hash = JSON.parse(response.body)
+          expect(hash['list'].size).to eq(0)
+        end
+      end
     end
   end
 
