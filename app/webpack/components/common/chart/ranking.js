@@ -22,6 +22,8 @@ export default class Ranking extends Component {
                 start_time2:nextProps.data[0].data[0].bid_time,
                 end_time2:nextProps.data[0].data[nextProps.data[0].data.length-1].bid_time,
             })
+            this.theStartbidtime = nextProps.data[0].data[0].bid_time;
+            this.theEndbidtime = nextProps.data[0].data[nextProps.data[0].data.length-1].bid_time;
         }
     }
     getChartOption() {

@@ -27,6 +27,8 @@ export default class Price extends Component {
                 start_price:parseFloat(0.0000).toFixed(4),
                 end_price:parseFloat(nextProps.data[0].data[0].average_price).toFixed(4)
             })
+            this.theStartbidtime = nextProps.data[0].data[0].bid_time;
+            this.theEndbidtime = nextProps.data[0].data[nextProps.data[0].data.length-1].bid_time;
         }
     }
     getChartOption() {
