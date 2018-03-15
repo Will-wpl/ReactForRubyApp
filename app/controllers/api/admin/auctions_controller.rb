@@ -29,7 +29,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     start_datetime2, end_datetime2 = Time.parse(start_time2),  Time.parse(end_time2)
     start_time2_i, end_time2_i= start_datetime2.to_i, end_datetime2.to_i
     # price
-    min_price, max_price = start_price.to_f, end_price.to_f
+    min_price, max_price = start_price.to_f, end_price.to_f+0.0001
 
     pdf_filename = Time.new.strftime("%Y%m%d%H%M%S%L")
     # select
