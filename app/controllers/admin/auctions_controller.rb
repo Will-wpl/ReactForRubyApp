@@ -1,5 +1,5 @@
 class Admin::AuctionsController < Admin::BaseController
-  before_action :set_auction, only: %i[show edit update destroy publish]
+  before_action :set_auction, only: %i[show edit update destroy publish ]
   after_action :set_login_status, only: %i[new empty upcoming online dashboard confirm result report log goto]
   # before_action :set_auctions_breadcrumbs
   # before_action :set_action_breadcrumbs
@@ -40,25 +40,25 @@ class Admin::AuctionsController < Admin::BaseController
 
   def award; end
 
-  def goto
-    if @auction.publish_status != '1'
-      redirect_to empty_admin_auction_path(@auction.id)
-    elsif @auction.publish_status == '1' && Time.current < @auction.actual_begin_time
-      redirect_to upcoming_admin_auction_path(@auction.id)
-    elsif @auction.publish_status == '1' && @auction.actual_begin_time < Time.current && Time.current < @auction.actual_end_time && !@auction.hold_status
-      redirect_to dashboard_admin_auction_path(@auction.id)
-    elsif @auction.publish_status == '1' && @auction.actual_begin_time < Time.current && Time.current < @auction.actual_end_time && @auction.hold_status
-      redirect_to upcoming_admin_auction_path(@auction.id)
-    elsif @auction.publish_status == '1' && @auction.actual_end_time < Time.current && @auction.auction_result.nil? && !@auction.hold_status
-      redirect_to confirm_admin_auction_path(@auction.id)
-    elsif @auction.publish_status == '1' && @auction.actual_end_time < Time.current && @auction.auction_result.nil? && @auction.hold_status
-      redirect_to upcoming_admin_auction_path(@auction.id)
-    elsif @auction.publish_status == '1' && @auction.actual_end_time < Time.current && !@auction.auction_result.nil?
-      redirect_to result_admin_auction_path(@auction.id)
-    else
-      redirect_to admin_home_index_path
-    end
-  end
+  # def goto
+  #   if @auction.publish_status != '1'
+  #     redirect_to empty_admin_auction_path(@auction.id)
+  #   elsif @auction.publish_status == '1' && Time.current < @auction.actual_begin_time
+  #     redirect_to upcoming_admin_auction_path(@auction.id)
+  #   elsif @auction.publish_status == '1' && @auction.actual_begin_time < Time.current && Time.current < @auction.actual_end_time && !@auction.hold_status
+  #     redirect_to dashboard_admin_auction_path(@auction.id)
+  #   elsif @auction.publish_status == '1' && @auction.actual_begin_time < Time.current && Time.current < @auction.actual_end_time && @auction.hold_status
+  #     redirect_to upcoming_admin_auction_path(@auction.id)
+  #   elsif @auction.publish_status == '1' && @auction.actual_end_time < Time.current && @auction.auction_result.nil? && !@auction.hold_status
+  #     redirect_to confirm_admin_auction_path(@auction.id)
+  #   elsif @auction.publish_status == '1' && @auction.actual_end_time < Time.current && @auction.auction_result.nil? && @auction.hold_status
+  #     redirect_to upcoming_admin_auction_path(@auction.id)
+  #   elsif @auction.publish_status == '1' && @auction.actual_end_time < Time.current && !@auction.auction_result.nil?
+  #     redirect_to result_admin_auction_path(@auction.id)
+  #   else
+  #     redirect_to admin_home_index_path
+  #   end
+  # end
 
   def published; end
 
