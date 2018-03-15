@@ -16,13 +16,15 @@ export default class Ranking extends Component {
             'dataZoom': this.onDataZoom
         }
     }
-    componentDidMount(){
-        setTimeout(()=>{
+    componentWillReceiveProps(nextProps){
+        if(nextProps.data.length>0){
             this.setState({
-                     start_time2:this.theStartbidtime,
-                     end_time2:this.theEndbidtime,
-                 })
-        },1000)
+                start_time2:nextProps.data[0].data[0].bid_time,
+                end_time2:nextProps.data[0].data[nextProps.data[0].data.length-1].bid_time,
+            })
+            this.theStartbidtime = nextProps.data[0].data[0].bid_time;
+            this.theEndbidtime = nextProps.data[0].data[nextProps.data[0].data.length-1].bid_time;
+        }
     }
     getChartOption() {
         let option = getTemplate(this.props);
@@ -92,8 +94,8 @@ export default class Ranking extends Component {
                     start_time2:moment(ts).utc().format(),
                     end_time2:moment(te).utc().format()
                 })
-                //console.log("startBindtime : "+ts);
-                //console.log("theEndbidtime : "+te);
+                console.log("start_time2 : "+moment(ts).format("YYYY-MM-DD HH:mm:ss"));
+                console.log("end_time2 : "+moment(te).format("YYYY-MM-DD HH:mm:ss"));
             }
         }
     }

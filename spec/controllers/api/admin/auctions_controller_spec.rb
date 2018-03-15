@@ -769,4 +769,18 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       end
     end
   end
+
+  describe 'GET letter of award pdf' do
+    before { sign_in create(:user, :with_admin) }
+
+    context 'GET /api/admin/auctions/letter_of_award_pdf' do
+      it 'admin letter of award pdf', pdf: true do
+        user = create(:user, :with_admin)
+        expect(get: "/api/admin/auctions/letter_of_award_pdf?auction_id=#{auction.id}&user_id=#{user.id}").to be_routable
+
+        get :letter_of_award_pdf, params: {auction_id: auction.id, user_id: user.id}
+        expect(response.headers['Content-Type']).to have_content 'application/pdf'
+      end
+    end
+  end
 end

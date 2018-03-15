@@ -533,11 +533,10 @@ class Api::AuctionsController < Api::BaseController
     tender_state = TenderStateMachine
                        .find_by_sql ["SELECT *
                                   FROM tender_state_machines
-                                  WHERE previous_node = 4
-                                    AND current_node = 4
-                                    AND current_status = '3'
-                                    AND turn_to_role = 2
-                                    AND \"current_role\" = 1
+
+                                  WHERE  current_node = 4
+                                    AND turn_to_role = 1
+                                    AND \"current_role\" = 2
                                     AND arrangement_id = (SELECT id
                                                           FROM arrangements
                                                           WHERE auction_id = ?

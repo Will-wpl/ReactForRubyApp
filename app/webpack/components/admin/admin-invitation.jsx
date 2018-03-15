@@ -487,7 +487,8 @@ render() {
                             Retailers:
                             </label>
                             <div className="lm--formItem-right lm--formItem-control" id="retailer_select_box">
-                                <abbr>Selected : {this.state.retailer_select}&nbsp;&nbsp;&nbsp;&nbsp;Notification Sent : {this.state.retailer_send}&nbsp;&nbsp;&nbsp;&nbsp;Pending Notification : {this.state.retailer_pend}</abbr>
+                                {this.state.readOnly?<abbr>Invited : {this.state.retailer_select}</abbr>:
+                                <abbr>Selected : {this.state.retailer_select}&nbsp;&nbsp;&nbsp;&nbsp;Notification Sent : {this.state.retailer_send}&nbsp;&nbsp;&nbsp;&nbsp;Pending Notification : {this.state.retailer_pend}</abbr>}
                             </div>
                             <div className="required_error">
                                 Select at least one retailer and upload Retailer Confidentiality Undertaking.

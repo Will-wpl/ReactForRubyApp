@@ -28,7 +28,7 @@ export class Modal extends React.Component{
     do_text(text){
         let show_text = text.replace(/<br>/g,"<br/>");
         setTimeout(()=>{
-            $("#modal_detail").html(show_text);
+            $(".modal_detail_nr").html(show_text);
         },50)
     }
     Accept(){
@@ -173,7 +173,7 @@ export class Modal extends React.Component{
         return(
             <div id="modal_main" className={this.state.modalshowhide}>
                 <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
-                <div className="modal_detail"><div id="modal_detail">{this.props.text?this.do_text(this.props.text):''}</div>{showDetail}</div>
+                <div className="modal_detail"><div className="modal_detail_nr">{this.props.text?this.do_text(this.props.text):''}</div>{showDetail}</div>
                 {btn_html}
             </div>
         )
