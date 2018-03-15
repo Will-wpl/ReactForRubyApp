@@ -16,13 +16,13 @@ export default class Ranking extends Component {
             'dataZoom': this.onDataZoom
         }
     }
-    componentDidMount(){
-        setTimeout(()=>{
+    componentWillReceiveProps(nextProps){
+        if(nextProps.data.length>0){
             this.setState({
-                     start_time2:this.theStartbidtime,
-                     end_time2:this.theEndbidtime,
-                 })
-        },1000)
+                start_time2:nextProps.data[0].data[0].bid_time,
+                end_time2:nextProps.data[0].data[nextProps.data[0].data.length-1].bid_time,
+            })
+        }
     }
     getChartOption() {
         let option = getTemplate(this.props);
@@ -57,8 +57,6 @@ export default class Ranking extends Component {
                 } else {
                     d.value = [].concat(moment(timeRanking.bid_time).format('YYYY-DD-MM HH:mm:ss')).concat(timeRanking.ranking);
                 }
-                this.theStartbidtime = element.data[0].bid_time;
-                this.theEndbidtime = element.data[element.data.length-1].bid_time;
                 tmp.data.push(d);
             });
             option.series.push(tmp);
