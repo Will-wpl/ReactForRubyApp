@@ -33,7 +33,7 @@ export default class Price extends Component {
     }
     getChartOption() {
         let option = getTemplate(this.props);
-        console.log(this.props.data);
+        //console.log(this.props.data);
         this.props.data.forEach(element => {
             let tmp = {
                 type: 'line',
@@ -72,7 +72,7 @@ export default class Price extends Component {
             });
             option.series.push(tmp);
         });
-        console.log(option);
+        //console.log(option);
         if (option.hasOwnProperty('dataZoom')) {
             if (!Number.isNaN(this.xStart)) {
                 option.dataZoom[0].start = this.xStart;
@@ -117,8 +117,8 @@ export default class Price extends Component {
                     start_price:ps,
                     end_price:pe
                 })
-                console.log(option.dataZoom[1]);
-                console.log("start_price : "+ps+" end_price : " +pe);
+                //console.log(option.dataZoom[1]);
+                //console.log("start_price : "+ps+" end_price : " +pe);
             } else if (lastEle === '0') { //x
                 this.xStart = params.start;
                 this.xEnd = params.end;
@@ -131,6 +131,8 @@ export default class Price extends Component {
                     start_time:moment(ts).utc().format(),
                     end_time:moment(te).utc().format()
                 })
+                console.log("start_time : "+moment(ts).format("YYYY-MM-DD HH:mm:ss"));
+                console.log("end_time : "+moment(te).format("YYYY-MM-DD HH:mm:ss"));
             }
         }
     }
