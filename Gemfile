@@ -88,6 +88,7 @@ end
 group :test do
   gem 'database_rewinder'
   gem 'rspec_junit_formatter'
+  gem 'email_spec'
 end
 
 gem 'newrelic_rpm', group: :production

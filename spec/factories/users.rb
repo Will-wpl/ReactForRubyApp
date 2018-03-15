@@ -7,7 +7,6 @@ FactoryBot.define do
 
     trait :with_admin do
       company_name { 'SP Group' }
-
       after(:create) do |user|
         user.add_role(:admin)
       end
@@ -54,5 +53,15 @@ FactoryBot.define do
       account_office_number { Faker:: PhoneNumber.phone_number }
       account_home_number { Faker:: PhoneNumber.phone_number }
     end
+
+    trait :with_admin_id_1 do
+      company_name { 'SP Group' }
+      id 1
+      after(:create) do |user|
+        user.add_role(:admin)
+      end
+    end
   end
+
+
 end

@@ -134,6 +134,13 @@ RSpec.describe Api::Buyer::AuctionsController, type: :controller do
         get :pdf, params: {id: auction.id}
         expect(response.headers['Content-Type']).to have_content 'application/pdf'
       end
+
+      it 'buyer ra report pdf auctions id not present', pdf: true do
+        expect(get: "/api/buyer/auctions/9999/pdf").to be_routable
+
+        get :pdf, params: {id: 9999}
+        expect(response.headers['Content-Type']).to have_content 'application/pdf'
+      end
     end
   end
 end
