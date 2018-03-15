@@ -24,8 +24,8 @@ export default class Price extends Component {
             this.setState({
                 start_time:nextProps.data[0].data[0].bid_time,
                 end_time:nextProps.data[0].data[nextProps.data[0].data.length-1].bid_time,
-                start_price:parseFloat(nextProps.data[0].data[0].average_price).toFixed(4),
-                end_price:parseFloat(0.0000).toFixed(4)
+                start_price:parseFloat(0.0000).toFixed(4),
+                end_price:parseFloat(nextProps.data[0].data[0].average_price).toFixed(4)
             })
         }
     }
