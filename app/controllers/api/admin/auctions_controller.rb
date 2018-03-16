@@ -131,9 +131,9 @@ class Api::Admin::AuctionsController < Api::AuctionsController
 
   def datetime_millisecond(datetime)
     unless datetime.index('.').nil?
-      datetime[datetime.index('.'),6] = '.999Z'
+      datetime[datetime.index('.'),6] = '.999999Z'
     else
-      datetime['Z'] = '.999Z'
+      datetime['Z'] = '.999999Z'
     end
     datetime
   end
