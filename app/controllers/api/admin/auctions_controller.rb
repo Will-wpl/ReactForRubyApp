@@ -16,6 +16,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     uid2 = uid2.split(',').map!{|item| item = item.to_i} unless uid2.nil?
 
     end_time, end_time2= datetime_millisecond(end_time), datetime_millisecond(end_time2)
+    start_time, start_time2= datetime_millisecond(start_time, 0), datetime_millisecond(start_time2,0)
 
     auction_id = params[:id]
     background_img = Rails.root.join("app","assets", "pdf","bk.png")
@@ -129,11 +130,11 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     return auction_result, histories_achieved, achieved, histories, histories_2
   end
 
-  def datetime_millisecond(datetime)
+  def datetime_millisecond(datetime, flag=1)
     unless datetime.index('.').nil?
-      datetime[datetime.index('.'),6] = '.999999Z'
+      datetime[datetime.index('.'),6] = flag == 1 ? '.'+'9'*6+'Z':'.'+'0'*6+'Z'
     else
-      datetime['Z'] = '.999999Z'
+      datetime['Z'] = flag == 1 ? '.'+'9'*6+'Z':'.'+'0'*6+'Z'
     end
     datetime
   end
