@@ -29,7 +29,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     start_datetime2, end_datetime2 = Time.parse(start_time2),  Time.parse(end_time2)
     start_time2_i, end_time2_i= start_datetime2.to_i, end_datetime2.to_i
     # price
-    min_price, max_price = start_price.to_f, end_price.to_f+0.0001
+    min_price, max_price = start_price.to_f, end_price.to_f+0.00009
 
     pdf_filename = Time.new.strftime("%Y%m%d%H%M%S%L")
     # select
@@ -259,9 +259,9 @@ class Api::Admin::AuctionsController < Api::AuctionsController
       number_y[0] = min_price.round.to_s
     else
       (1..step_number).each do |i|
-        number_y[i] = format("%.4f",number_y[i])
+        number_y[i] = ((number_y[i].to_f*10000.0).floor/(10000.0)).to_s
       end
-      number_y[0] = format("%.4f", min_price)
+      number_y[0] = ((min_price.to_f*10000.0).floor/(10000.0)).to_s
     end
     number_y
   end
