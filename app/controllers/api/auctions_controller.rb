@@ -620,13 +620,17 @@ class Api::AuctionsController < Api::BaseController
     (zone * 60 * 60)
   end
 
+  def get_format_number(number, unit, precision=0)
+    number_helper.number_to_currency(number, precision: precision, unit: unit)
+  end
+
   def get_price_table_data(auction, auction_result, visibility = false, price_data = false)
     table_head = ['']
     table_row0 = ['Peak (7am-7pm)']
     table_row1 = ['Off-Peak (7pm-7am)']
     price_row0 = []
     price_row1 = []
-    if auction.nil?
+    if auction.nil? || auction_result.nil?
       if visibility
         return [table_head, table_row0, table_row1], { visibility_lt: false, visibility_hts: false,
                                                        visibility_htl: false, visibility_eht: false }
@@ -641,8 +645,9 @@ class Api::AuctionsController < Api::BaseController
 
     if visibility_lt
       table_head.push('<b>LT</b>')
-      table_row0.push('$ ' + format('%.4f', auction_result.lt_peak))
-      table_row1.push('$ ' + format('%.4f', auction_result.lt_off_peak))
+
+      table_row0.push(get_format_number(auction_result.lt_peak.to_f, '$ ', 4))
+      table_row1.push(get_format_number(auction_result.lt_off_peak.to_f, '$ ', 4))
       price_row0.push(auction_result.lt_peak)
       price_row1.push(auction_result.lt_off_peak)
     else
@@ -652,8 +657,8 @@ class Api::AuctionsController < Api::BaseController
 
     if visibility_hts
       table_head.push('<b>HT (Small)</b>')
-      table_row0.push('$ ' + format('%.4f', auction_result.hts_peak))
-      table_row1.push('$ ' + format('%.4f', auction_result.hts_off_peak))
+      table_row0.push(get_format_number(auction_result.hts_peak.to_f, '$ ', 4))
+      table_row1.push(get_format_number(auction_result.hts_off_peak.to_f, '$ ', 4))
       price_row0.push(auction_result.hts_peak)
       price_row1.push(auction_result.hts_off_peak)
     else
@@ -663,8 +668,8 @@ class Api::AuctionsController < Api::BaseController
 
     if visibility_htl
       table_head.push('<b>HT (Large)</b>')
-      table_row0.push('$ ' + format('%.4f', auction_result.htl_peak))
-      table_row1.push('$ ' + format('%.4f', auction_result.htl_off_peak))
+      table_row0.push(get_format_number(auction_result.htl_peak.to_f, '$ ', 4))
+      table_row1.push(get_format_number(auction_result.htl_off_peak.to_f, '$ ', 4))
       price_row0.push(auction_result.htl_peak)
       price_row1.push(auction_result.htl_off_peak)
     else
@@ -674,8 +679,8 @@ class Api::AuctionsController < Api::BaseController
 
     if visibility_eht
       table_head.push('<b>EHT</b>')
-      table_row0.push('$ ' + format('%.4f', auction_result.eht_peak))
-      table_row1.push('$ ' + format('%.4f', auction_result.eht_off_peak))
+      table_row0.push(get_format_number(auction_result.eht_peak.to_f, '$ ', 4))
+      table_row1.push(get_format_number(auction_result.eht_off_peak.to_f, '$ ', 4))
       price_row0.push(auction_result.eht_peak)
       price_row1.push(auction_result.eht_off_peak)
     else
