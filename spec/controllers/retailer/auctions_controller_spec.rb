@@ -115,7 +115,7 @@ RSpec.describe Retailer::AuctionsController, type: :controller do
 
       before { do_request }
 
-      it { expect(response).to redirect_to empty_retailer_auction_path }
+      it { expect(response).to redirect_to upcoming_retailer_auction_path }
     end
 
     context 'else 3' do
@@ -127,7 +127,7 @@ RSpec.describe Retailer::AuctionsController, type: :controller do
 
       before { do_request }
 
-      it { expect(response).to redirect_to empty_retailer_auction_path }
+      it { expect(response).to redirect_to upcoming_retailer_auction_path }
     end
 
     context 'else 4' do
@@ -267,7 +267,7 @@ RSpec.describe Retailer::AuctionsController, type: :controller do
 
       before { do_request }
 
-      it { expect(response).to redirect_to finish_retailer_auction_path }
+      it { expect(response).to redirect_to message_retailer_auction_path }
     end
 
   end
