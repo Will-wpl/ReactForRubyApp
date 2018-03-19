@@ -5,6 +5,7 @@ RSpec.describe UserMailer, type: :mail do
   let!(:company_buyer) { create(:user, :with_buyer, :with_company_buyer) }
   let!(:individual_buyer) { create(:user, :with_buyer, :with_individual_buyer) }
   before :each do
+    User.where(id: 1).delete_all
     @admin_user = create(:user , :with_admin_id_1)
   end
   context 'registered email' do
