@@ -32,3 +32,4 @@ public/assets
 
 #rcov
 coverage
+Gemfile.lock
