@@ -41,4 +41,18 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   ENV["REDISTOGO_URL"] = 'redis://localhost:6379/1'
+
+  config.action_mailer.smtp_settings = {
+      address:              '192.168.15.120',
+      port:                 25,
+      domain:               'dragonite-test.com',
+      user_name:            'noreply@dragonite-test.com',
+      password:             '123456',
+      authentication:       'login',
+      enable_starttls_auto: false,
+      openssl_verify_mode: OpenSSL::SSL::VERIFY_NONE  }
+
+  config.action_mailer.default_options = {
+      from: "noreply@dragonite-test.com"
+  }
 end

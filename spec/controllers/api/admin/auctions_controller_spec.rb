@@ -770,15 +770,38 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
     end
   end
 
-  describe 'GET letter of award pdf' do
+  describe 'GET pdf' do
     before { sign_in create(:user, :with_admin) }
 
-    context 'GET /api/admin/auctions/letter_of_award_pdf' do
+    context 'GET letter of award pdf' do
       it 'admin letter of award pdf', pdf: true do
         user = create(:user, :with_admin)
         expect(get: "/api/admin/auctions/letter_of_award_pdf?auction_id=#{auction.id}&user_id=#{user.id}").to be_routable
 
         get :letter_of_award_pdf, params: {auction_id: auction.id, user_id: user.id}
+        expect(response.headers['Content-Type']).to have_content 'application/pdf'
+      end
+    end
+
+    context 'GET RA report pdf' do
+      before :each do
+        auction = create(:auction, :upcoming, :for_next_month, id: 1)
+        retailer_user =  create(:user, :with_retailer)
+        create(:auction_result, auction: auction, user_id: retailer_user.id, status: 'win')
+        create_list(:auction_history, 25, :set_bid, bid_time: Time.current, user: retailer_user, auction: auction, actual_bid_time:Time.current)
+
+      end
+      it 'admin RA report pdf', pdf: true do
+        expect(get: "/api/admin/auctions/1/pdf").to be_routable
+        get :pdf, params: {id: 1,
+                           start_time: '2000-02-07T08:57:00.000Z',
+                           start_time2: '2000-02-07T08:57:00.000Z',
+                           end_time: '2018-02-07T08:57:15.999Z',
+                           end_time2: '2018-02-07T08:57:15.999Z',
+                           start_price:'0.0012',
+                           end_price:'0.4325',
+                           uid:'5,2,6',
+                           uid2:'5,2,6'}
         expect(response.headers['Content-Type']).to have_content 'application/pdf'
       end
     end

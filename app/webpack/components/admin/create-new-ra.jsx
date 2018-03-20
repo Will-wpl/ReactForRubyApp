@@ -261,6 +261,7 @@ export class CreateNewRA extends Component {
                             this.auction_data = res;
                             this.auction = res;
                             this.refs.Modal.showModal();
+                            this.setState({id:res.id})
                             sessionStorage.auction_id = res.id;
                             if(this.props.left_name){
                                 this.setState({

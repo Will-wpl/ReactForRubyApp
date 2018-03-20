@@ -6,7 +6,7 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
       search_params = reject_params(params, %w[controller action])
       search_where_array = set_search_params(search_params)
       result = AuctionResult.find_by_consumptions(current_user).where(search_where_array)
-                            .page(params[:page_index]).per(params[:page_size])
+                            .page(params[:page_index]).per(params[:page_size]).select("auction_results.*, consumptions.participation_status")
       total = result.total_count
     else
       result = AuctionResult.all
@@ -28,8 +28,8 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
       data.push(published_gid: result.auction.published_gid,
                 name: result.auction.name,
                 start_datetime: result.auction.start_datetime,
-                report: "api/buyer/auctions/#{result.auction_id}/pdf",
-                award: show_award?(result, current_user) ? "api/buyer/auctions/#{result.auction_id}/letter_of_award_pdf" : '')
+                report: result.participation_status=='1' ? "api/buyer/auctions/#{result.auction_id}/pdf" : '',
+                award: show_award?(result, current_user) ? result.participation_status=='1' ? "api/buyer/auctions/#{result.auction_id}/letter_of_award_pdf" : '' : '')
     end
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: nil }, status: 200
