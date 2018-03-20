@@ -85,21 +85,19 @@ class Api::Admin::AuctionsController < Api::AuctionsController
                  percentage_x2, offset_x2, user_company_name_hash2, chart_color, type_x2)
 
       pdf.fill_color "ffffff"
-      unless auction_result.nil?
-        pdf.grid([2,19],[22,29]).bounding_box do
-          pdf.move_down 10
-          # lowest bidder info
-          pdf_lowest_bidder_info(pdf, auction_result)
-          pdf.move_down 15
-          # price table
-          pdf_price_table(pdf, price_table)
-          pdf.move_down 15
-          # total info
-          pdf_total_info(pdf, auction, auction_result)
-          pdf.move_down 15
-          # ranking table
-          pdf_ranking_table(pdf, histories_achieved)
-        end
+      pdf.grid([2,19],[22,29]).bounding_box do
+        pdf.move_down 10
+        # lowest bidder info
+        pdf_lowest_bidder_info(pdf, auction_result)
+        pdf.move_down 15
+        # price table
+        pdf_price_table(pdf, price_table)
+        pdf.move_down 15
+        # total info
+        pdf_total_info(pdf, auction, auction_result)
+        pdf.move_down 15
+        # ranking table
+        pdf_ranking_table(pdf, histories_achieved)
       end
     end
     send_pdf_data pdf_filename, auction.published_gid.to_s + '_ADMIN_REPORT.pdf'
