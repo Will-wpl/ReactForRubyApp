@@ -868,7 +868,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
 
       it 'admin RA report pdf Auction result status is null', pdf: true do
         AuctionResult.where(id: 1).delete_all
-        create(:auction_result, id:1,reserve_price:0.1222,lowest_average_price:0.099900000000000000000075965624999999999999991,lowest_price_bidder:'Judy Electricity',contract_period_start_date:'2018-02-09',contract_period_end_date:'2018-02-23',total_volume:39452.05479452054794521,total_award_sum:3941.260273972602739729476,lt_peak:0.0999,lt_off_peak:0.0999,hts_peak:0.0999,hts_off_peak:0.0999,htl_peak:0.0999,htl_off_peak:0.0999,user_id:5,auction_id:10,created_at:'2018-02-07T07:07:05.951654',updated_at:'2018-02-07T07:07:05.951654',eht_peak:0.0999,eht_off_peak:0.0999)
+        create(:auction_result, :status_nil, id:1,reserve_price:0.1222, lowest_average_price:0.099900000000000000000075965624999999999999991,lowest_price_bidder:'Judy Electricity',contract_period_start_date:'2018-02-09',contract_period_end_date:'2018-02-23',total_volume:39452.05479452054794521,total_award_sum:3941.260273972602739729476,lt_peak:0.0999,lt_off_peak:0.0999,hts_peak:0.0999,hts_off_peak:0.0999,htl_peak:0.0999,htl_off_peak:0.0999,user_id:5,auction_id:10,created_at:'2018-02-07T07:07:05.951654',updated_at:'2018-02-07T07:07:05.951654',eht_peak:0.0999,eht_off_peak:0.0999)
         expect(get: "/api/admin/auctions/10/pdf").to be_routable
         get :pdf, params: {id: 10,
                            start_time: '2000-02-07T08:57:00.000Z',
