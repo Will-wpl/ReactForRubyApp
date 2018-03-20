@@ -482,7 +482,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
   end
 
   def pdf_lowest_bidder_info(pdf, auction_result)
-    unless auction_result.status.nil?
+    unless auction_result.nil? && auction_result.status.nil?
       if auction_result.status == 'win'
         status, status_color = 'Awarded', '228B22'
         bidder_text, bidder_text2, bidder_text3 = 'Summary of Winner', 'Winning Bidder', 'Average Price'
