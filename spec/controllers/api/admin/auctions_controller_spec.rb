@@ -842,10 +842,10 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
 
     context 'GET letter of award pdf' do
       it 'admin letter of award pdf', pdf: true do
-        user = create(:user, :with_admin)
-        expect(get: "/api/admin/auctions/letter_of_award_pdf?auction_id=#{auction.id}&user_id=#{user.id}").to be_routable
+        create(:user, :with_admin)
+        expect(get: "/api/admin/auctions/letter_of_award_pdf?auction_id=10&user_id=14").to be_routable
 
-        get :letter_of_award_pdf, params: {auction_id: auction.id, user_id: user.id}
+        get :letter_of_award_pdf, params: {auction_id: 10, user_id: 14}
         expect(response.headers['Content-Type']).to have_content 'application/pdf'
       end
     end
@@ -853,8 +853,8 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
     context 'GET RA report pdf' do
 
       it 'admin RA report pdf', pdf: true do
-        expect(get: "/api/admin/auctions/1/pdf").to be_routable
-        get :pdf, params: {id: 1,
+        expect(get: "/api/admin/auctions/10/pdf").to be_routable
+        get :pdf, params: {id: 10,
                            start_time: '2000-02-07T08:57:00.000Z',
                            start_time2: '2000-02-07T08:57:00.000Z',
                            end_time: '2018-02-07T10:57:15.999Z',
