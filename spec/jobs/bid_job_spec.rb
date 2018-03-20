@@ -5,8 +5,6 @@ RSpec.describe BidJob, type: :job do
   let!(:auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
   let!(:arrangement) { create(:arrangement, user: retailer_user, auction: auction) }
   describe 'perform' do
-
-
     def do_request(args)
       BidJob.perform_later(args)
     end
@@ -36,7 +34,8 @@ RSpec.describe BidJob, type: :job do
       calculate_dto.begin_time = begin_time
       calculate_dto.end_time = end_time
       args = { auction_id:  auction.id, calculate_dto: calculate_dto }.to_json
-
+      calculate_dto = CalculateDto.new(arrangement)
+      AuctionHistory.save_update_sort_init_auction_histories(calculate_dto)
       expect(do_request(args)).not_to eq(nil)
     end
   end
