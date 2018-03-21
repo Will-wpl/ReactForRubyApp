@@ -84,21 +84,24 @@ class Api::Admin::AuctionsController < Api::AuctionsController
       pdf_chart2(pdf,len_x2, base_x, number_x2, number_y2, str_time2, step_number, ranking, hash2, start_time2_i,
                  percentage_x2, offset_x2, user_company_name_hash2, chart_color, type_x2)
 
-      pdf.fill_color "ffffff"
-      pdf.grid([2,19],[22,29]).bounding_box do
-        pdf.move_down 10
-        # lowest bidder info
-        pdf_lowest_bidder_info(pdf, auction_result)
-        pdf.move_down 15
-        # price table
-        pdf_price_table(pdf, price_table)
-        pdf.move_down 15
-        # total info
-        pdf_total_info(pdf, auction, auction_result)
-        pdf.move_down 15
-        # ranking table
-        pdf_ranking_table(pdf, histories_achieved)
+      unless auction_result.nil?
+        pdf.fill_color "ffffff"
+        pdf.grid([2,19],[22,29]).bounding_box do
+          pdf.move_down 10
+          # lowest bidder info
+          pdf_lowest_bidder_info(pdf, auction_result)
+          pdf.move_down 15
+          # price table
+          pdf_price_table(pdf, price_table)
+          pdf.move_down 15
+          # total info
+          pdf_total_info(pdf, auction, auction_result)
+          pdf.move_down 15
+          # ranking table
+          pdf_ranking_table(pdf, histories_achieved)
+        end
       end
+
     end
     send_pdf_data pdf_filename, auction.published_gid.to_s + '_ADMIN_REPORT.pdf'
   end
@@ -317,8 +320,8 @@ class Api::Admin::AuctionsController < Api::AuctionsController
       font_size = user_company_name_hash.keys().size > 20 ? 9 : 10
       pdf.fill_color "ffffff"
       user_company_name_hash.each do |id,name|
-        pdf.font_size(font_size) {pdf.text name, :color => chart_color[id] }
-        pdf.move_down 1
+        pdf.font_size(font_size) {pdf.text name, :color => chart_color[id], :valign => :center }
+        pdf.move_down 12
       end
     end
   end
@@ -369,9 +372,9 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     #stroke_axis
     pdf.stroke_color "ffffff"
     pdf.stroke do
-      # X
-      pdf.vertical_line 20, 20+210, :at => number_x[0]
       # Y
+      pdf.vertical_line 20, 20+210, :at => number_x[0]
+      # X
       pdf.horizontal_line number_x[0], number_x[0] + 360, :at => 20
 
       (1..number_x.size-1).each do |i|
@@ -406,8 +409,8 @@ class Api::Admin::AuctionsController < Api::AuctionsController
       font_size = user_company_name_hash.keys().size > 20 ? 9 : 10
       user_company_name_hash.each do |id, name|
         pdf.fill_color "ffffff"
-        pdf.font_size(font_size) {pdf.text name, :color => chart_color[id] }
-        pdf.move_down 1
+        pdf.font_size(font_size) {pdf.text name, :color => chart_color[id], :valign => :center }
+        pdf.move_down 12
       end
     end
   end
@@ -482,7 +485,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
   end
 
   def pdf_lowest_bidder_info(pdf, auction_result)
-    unless auction_result.nil? && auction_result.status.nil?
+    unless auction_result.status.nil?
       if auction_result.status == 'win'
         status, status_color = 'Awarded', '228B22'
         bidder_text, bidder_text2, bidder_text3 = 'Summary of Winner', 'Winning Bidder', 'Average Price'
