@@ -25,7 +25,7 @@ export const getFileList = (params) => {
 }
 
 export const createRa = (params) => {
-    return update('/api/admin/auctions/'+params.auction.id, params);
+    return put('/api/admin/auctions/'+params.auction.id, params);
 }
 
 export const deleteAuction = (params) => {
