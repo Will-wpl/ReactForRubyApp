@@ -49,6 +49,20 @@ RSpec.describe Api::Admin::ConsumptionsController, type: :controller do
     end
   end
 
+  describe '#show' do
+    before { sign_in admin_user }
+
+    def do_request
+      get :show, params: { id: consumption.id }
+    end
+
+    before { do_request }
+
+    it "success" do
+      expect(response).to be_success
+    end
+  end
+
 
   describe '#update_status' do
 
