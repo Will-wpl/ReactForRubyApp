@@ -144,7 +144,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
 
   def get_chart_color(user_hash, user_hash2, uid, color)
     unless color.nil?
-      color = color.to_s.gsub(/#e/,'').split(',')
+      color = color.to_s.gsub(/#/,'').split(',')
       user_color_hash = {}
       uid.each_with_index {|user_id, index |
         user_color_hash[user_id] = index < color.size ? color[index]: get_color(user_hash, user_hash2)
