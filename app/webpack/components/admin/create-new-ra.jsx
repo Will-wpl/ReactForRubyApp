@@ -359,9 +359,9 @@ export class CreateNewRA extends Component {
                                 <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'next')}>Next</button>:
                                 <div>
                                     <a className={this.state.edit_btn} onClick={this.edit.bind(this)}>Edit</a>
-                                    <button className={this.state.edit_change} onClick={this.auctionCreate.bind(this,'save')}>Save</button>
-                                    <button className={this.state.edit_change} onClick={this.auctionCreate.bind(this,'next')}>Next</button>
                                     <a className={this.state.edit_change} onClick={this.Cancel.bind(this)}>Cancel</a>
+                                    <button className={this.state.edit_change} onClick={this.auctionCreate.bind(this,'save')}>Save</button>
+                                    <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'next')}>Next</button>
                                 </div>}
                         </div>
         }
