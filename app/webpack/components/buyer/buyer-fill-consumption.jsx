@@ -24,6 +24,8 @@ export class FillConsumption extends Component {
     BuyerParticipateList(){
         getBuyerParticipate('/api/buyer/consumption_details?consumption_id='+this.consumptions_id).then((res) => {
             this.site_list = res.consumption_details;
+            this.status = res.consumption.participation_status === '1'?"Participate":
+                          (res.consumption.participation_status === '2'?"Pending":"Rejected")
             this.setState({
                 name:res.auction.name,
                 time:res.auction.actual_begin_time,
@@ -96,11 +98,9 @@ export class FillConsumption extends Component {
         if(this.props.onAddClick){
             this.props.onAddClick();
         }
-        const site_listObj = this.state.site_list;
-        site_listObj.splice(index, 1);
-        this.setState({site_list:site_listObj});
-        this.refs.Modal.showModal();
-        this.setState({text:"Please click 'Save' button to effect the change."});
+        this.deleteNum = index;
+        this.refs.Modal.showModal("comfirm");
+        this.setState({text:"Are you sure you want to delete ?",submit_type:"delete"});
     }
     nameRepeat(arr){
         //console.log(arr);
@@ -149,8 +149,12 @@ export class FillConsumption extends Component {
         console.log(makeData.consumption_id);
         setBuyerParticipate(makeData, '/api/buyer/consumption_details/save').then((res) => {
             if(type != "participate"){
+                if(type == "delete"){
+                    this.setState({text:"Delete successful!"});
+                }else{
+                    this.setState({text:"Save successful!"});
+                }
                 this.refs.Modal.showModal();
-                this.setState({text:"Save successful!"});
             }else{
                 setBuyerParticipate({consumption_id:this.consumptions_id}, '/api/buyer/consumption_details/participate').then((res) => {
                     this.setState({
@@ -187,6 +191,13 @@ export class FillConsumption extends Component {
             })
         }else if(this.state.submit_type === "Participate"){ //do Participate
             this.doSave('participate');
+        }else if(this.state.submit_type === "delete"){
+            const site_listObj = this.state.site_list;
+            site_listObj.splice(this.deleteNum, 1);
+            this.setState({site_list:site_listObj});
+            setTimeout(()=>{
+                this.doSave('delete');
+            },500); 
         }
     }
     doSubmit(type){
@@ -214,15 +225,16 @@ export class FillConsumption extends Component {
                 <h1>Participate in upcoming {this.state.name} exercise on {moment(this.state.time).format('D MMM YYYY hh:mm a')}</h1>
                 <form name="buyer_form" method="post" onSubmit={this.checkSuccess.bind(this)}>
                 <div className="u-grid buyer mg0">
-                <h4 className="col-sm-12 u-mb3"><input name="agree_auction" type="checkbox" disabled={this.state.disabled} required /> I agree to the {this.state.link?<a className="cursor" download={this.state.link.file_name} href={`/${this.state.link.file_path}`}>terms and conditions.</a>:'terms and conditions.'}</h4>
+                <h4 className="col-sm-12 u-mb2"><input name="agree_auction" type="checkbox" disabled={this.state.disabled} required /> I agree to the {this.state.link?<a className="cursor" download={this.state.link.file_name} href={`/${this.state.link.file_path}`}>terms and conditions.</a>:'terms and conditions.'}</h4>
+                <h4 className="col-sm-12 u-mb2">Last Status : {this.status}</h4>
                     <div className="col-sm-12 col-md-8">
                     <DoFillConsumption changeSiteList={this.changeSiteList.bind(this)} site_list={this.state.site_list} checked={this.state.checked} remove={this.remove_site.bind(this)} />
-                    {this.state.checked ? '' : <div className="addSite"><a onClick={this.add_site.bind(this)}>Add Account</a></div>}
-                    <div className="buyer_btn">
-                        <button className={"lm--button lm--button--primary "+this.state.disabled} disabled={this.state.disabled} onClick={this.doSubmit.bind(this,'save')}>Save</button>
-                        <a className={"lm--button lm--button--primary "+this.state.disabled} onClick={this.state.disabled === "disabled" ? this.doSubmit.bind(this, 'return') : this.doSubmit.bind(this, 'Reject')}>Reject</a>
-                        <button className={"lm--button lm--button--primary "+this.state.disabled} disabled={this.state.disabled} onClick={this.doSubmit.bind(this, 'Participate')}>Participate</button>
-                    </div>
+                        {this.state.checked ? '' : <div className="addSite"><a onClick={this.add_site.bind(this)}>Add Account</a></div>}
+                        <div className="buyer_btn">
+                            <button className={"lm--button lm--button--primary "+this.state.disabled} disabled={this.state.disabled} onClick={this.doSubmit.bind(this,'save')}>Save</button>
+                            <a className={"lm--button lm--button--primary "+this.state.disabled} onClick={this.state.disabled === "disabled" ? this.doSubmit.bind(this, 'return') : this.doSubmit.bind(this, 'Reject')}>Reject</a>
+                            <button className={"lm--button lm--button--primary "+this.state.disabled} disabled={this.state.disabled} onClick={this.doSubmit.bind(this, 'Participate')}>Participate</button>
+                        </div>
                     </div>
                 </div>
                 <div className="createRaMain u-grid">
