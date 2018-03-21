@@ -108,6 +108,7 @@ export default class Price extends Component {
         let option = instance.getOption();
         if (params.type === 'datazoom' && params.dataZoomId.length > 0) {
             const lastEle = params.dataZoomId.charAt(params.dataZoomId.length - 1);
+            console.log(option);
             if (lastEle === '1') { //y
                 this.yStart = params.start;
                 this.yEnd = params.end;
@@ -118,7 +119,8 @@ export default class Price extends Component {
                     end_price:pe
                 })
                 //console.log(option.dataZoom[1]);
-                //console.log("start_price : "+ps+" end_price : " +pe);
+                console.log("start_price : "+ps);
+                console.log("end_price : " +pe);
             } else if (lastEle === '0') { //x
                 this.xStart = params.start;
                 this.xEnd = params.end;
