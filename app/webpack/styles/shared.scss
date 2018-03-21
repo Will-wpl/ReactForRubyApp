@@ -21,7 +21,7 @@ button[disabled='']{background: #666 !important; color:#999 !important; cursor: 
           margin-bottom: 20px;
           .lm--formItem-right{ 
             position: relative;
-            .required_error{position:absolute; display: none; top:45px; left:0; width: 100%; padding:5px 10px; border:2px solid #fbb136; background: #fff; color:#333; font-size: 15px;}
+            .required_error{position:absolute; display: none; top:45px; left:0; width: 100%; padding:5px 10px; border:2px solid #fbb136; background: #fff; color:#333; font-size: 15px;z-index: 10}
           }
           b{ 
               font-weight: normal; font-size: 18px; line-height: 44px; text-align:center; display: block;
