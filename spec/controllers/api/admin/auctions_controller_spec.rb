@@ -866,6 +866,34 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
         expect(response.headers['Content-Type']).to have_content 'application/pdf'
       end
 
+      it 'admin RA report pdf time le 3500', pdf: true do
+        expect(get: "/api/admin/auctions/10/pdf").to be_routable
+        get :pdf, params: {id: 10,
+                           start_time: '2018-02-07T06:57:00Z',
+                           start_time2: '2018-02-07T06:57:00Z',
+                           end_time: '2018-02-07T06:59:15Z',
+                           end_time2: '2018-02-07T06:59:15Z',
+                           start_price:'0.0000',
+                           end_price:'0.1458',
+                           uid:'5,2,6',
+                           uid2:'5,2,6'}
+        expect(response.headers['Content-Type']).to have_content 'application/pdf'
+      end
+
+      it 'admin RA report pdf x-axis', pdf: true do
+        expect(get: "/api/admin/auctions/10/pdf").to be_routable
+        get :pdf, params: {id: 10,
+                           start_time: '2018-02-07T06:57:00Z',
+                           start_time2: '2018-02-07T06:57:00Z',
+                           end_time: '2018-02-07T06:57:54Z',
+                           end_time2: '2018-02-07T06:59:15Z',
+                           start_price:'0.0000',
+                           end_price:'0.1458',
+                           uid:'5,2,6',
+                           uid2:'5,2,6'}
+        expect(response.headers['Content-Type']).to have_content 'application/pdf'
+      end
+
       it 'admin RA report pdf chart color', pdf: true do
         expect(get: "/api/admin/auctions/10/pdf?start_time=2018-02-07T06:57:00.000Z&end_time=2018-02-07T06:59:15.728Z&start_time2=2018-02-07T06:57:00.000Z&end_time2=2018-02-07T06:59:15.728Z&start_price=0.0000&end_price=0.1458&uid=5,2,6&uid2=5,2,6&color=22ad38,ffff00,f53d0b&color2=22ad38,ffff00,f53d0b").to be_routable
         get :pdf, params: {id: 10,
