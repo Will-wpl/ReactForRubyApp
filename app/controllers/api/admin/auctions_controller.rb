@@ -11,6 +11,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     start_time2, end_time2= params[:start_time2], params[:end_time2]
     start_price, end_price= params[:start_price], params[:end_price]
     uid, uid2= params[:uid], params[:uid2]
+    color, color2 = params[:color], params[:color2]
 
     uid = uid.split(',').map!{|item| item = item.to_i} unless uid.nil?
     uid2 = uid2.split(',').map!{|item| item = item.to_i} unless uid2.nil?
@@ -67,7 +68,8 @@ class Api::Admin::AuctionsController < Api::AuctionsController
 
     (0..ranking).each do |i| number_y2[i] = i.to_s end
     # chart 2 end #
-    chart_color = get_chart_color(hash, hash2)
+    chart_color = get_chart_color(hash, hash2, uid, color)
+    chart2_color = get_chart_color(hash, hash2, uid2, color2)
     price_table = get_price_table_data(auction, auction_result)
 
     Prawn::Document.generate(Rails.root.join(pdf_filename),
@@ -82,7 +84,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
                  min_price, percentage_y, user_company_name_hash, chart_color, type_x)
       #~ chart 2
       pdf_chart2(pdf,len_x2, base_x, number_x2, number_y2, str_time2, step_number, ranking, hash2, start_time2_i,
-                 percentage_x2, offset_x2, user_company_name_hash2, chart_color, type_x2)
+                 percentage_x2, offset_x2, user_company_name_hash2, chart2_color, type_x2)
 
       unless auction_result.nil?
         pdf.fill_color "ffffff"
@@ -140,7 +142,20 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     datetime
   end
 
-  def get_chart_color(user_hash, user_hash2)
+  def get_chart_color(user_hash, user_hash2, uid, color)
+    unless color.nil?
+      color = color.split(',')
+      user_color_hash = {}
+      uid.each_with_index {|user_id, index |
+        user_color_hash[user_id] = index < color.size ? color[index]: get_color(user_hash, user_hash2)
+      }
+      user_color_hash
+    else
+      get_color(user_hash, user_hash2)
+    end
+  end
+
+  def get_color(user_hash, user_hash2)
     user_hash = user_hash.clone
     temp_hash2 = user_hash2.clone
     temp_hash2.each {|key, list|
