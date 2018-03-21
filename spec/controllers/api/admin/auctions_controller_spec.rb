@@ -834,7 +834,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       create(:tender_state_machine, id:94,previous_node:4,current_node:4,current_status:2,turn_to_role:1,current_role:2,arrangement_id:21,created_at:'2018-02-07T06:52:09.874848',updated_at:'2018-02-07T06:52:09.874848')
 
       ConsumptionDetail.where('id in (?)', [10,11,12,13]).delete_all
-      create(:consumption_detail, id:10,account_number:111,intake_level:'LT',peak:10000.0,off_peak:10000.0,consumption_id:67,created_at: '2018-02-07T06:51:07.533246' ,updated_at: '2018-02-07T06:51:07.533246' ,premise_address:'address 67 -1')
+      create(:consumption_detail, id:10,account_number:111,intake_level:'LT',peak:10000.0,off_peak:10000.0,consumption_id:67,created_at: '2018-02-07T06:51:07.533246' ,updated_at: '2018-02-07T06:51:07.533246' ,premise_address:'address 67 -1', contracted_capacity: 10000.0)
       create(:consumption_detail,id:11,account_number:222,intake_level:'HTS',peak:10000.0,off_peak:10000.0,consumption_id:67,created_at: '2018-02-07T06:51:07.536357' ,updated_at: '2018-02-07T06:51:07.536357' )
       create(:consumption_detail,id:12,account_number:333,intake_level:'HTL',peak:10000.0,off_peak:10000.0,consumption_id:67,created_at: '2018-02-07T06:51:07.540794' ,updated_at: '2018-02-07T06:51:07.540794' )
       create(:consumption_detail, id:13,account_number:444,intake_level:'EHT',peak:10000.0,off_peak:10000.0,consumption_id:67,created_at: '2018-02-07T06:51:07.544786' ,updated_at: '2018-02-07T06:51:07.544786')
