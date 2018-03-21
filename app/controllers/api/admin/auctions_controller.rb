@@ -11,6 +11,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     start_time2, end_time2= params[:start_time2], params[:end_time2]
     start_price, end_price= params[:start_price], params[:end_price]
     uid, uid2= params[:uid], params[:uid2]
+    color, color2 = params[:color], params[:color2]
 
     uid = uid.split(',').map!{|item| item = item.to_i} unless uid.nil?
     uid2 = uid2.split(',').map!{|item| item = item.to_i} unless uid2.nil?
@@ -67,7 +68,8 @@ class Api::Admin::AuctionsController < Api::AuctionsController
 
     (0..ranking).each do |i| number_y2[i] = i.to_s end
     # chart 2 end #
-    chart_color = get_chart_color(hash, hash2)
+    chart_color = get_chart_color(hash, hash2, uid, color).merge get_chart_color(hash, hash2, uid2, color2)
+
     price_table = get_price_table_data(auction, auction_result)
 
     Prawn::Document.generate(Rails.root.join(pdf_filename),
@@ -79,26 +81,29 @@ class Api::Admin::AuctionsController < Api::AuctionsController
       pdf_title(pdf, achieved, auction, zone_time)
       #~ chart 1
       pdf_chart1(pdf, len_x, base_x, number_x, number_y, str_time, step_number, hash, start_time_i, percentage_x, offset_x,
-                 min_price, percentage_y, user_company_name_hash, chart_color, type_x)
+                 min_price, percentage_y, user_company_name_hash, chart_color, type_x, uid)
       #~ chart 2
       pdf_chart2(pdf,len_x2, base_x, number_x2, number_y2, str_time2, step_number, ranking, hash2, start_time2_i,
-                 percentage_x2, offset_x2, user_company_name_hash2, chart_color, type_x2)
+                 percentage_x2, offset_x2, user_company_name_hash2, chart_color, type_x2, uid2)
 
-      pdf.fill_color "ffffff"
-      pdf.grid([2,19],[22,29]).bounding_box do
-        pdf.move_down 10
-        # lowest bidder info
-        pdf_lowest_bidder_info(pdf, auction_result)
-        pdf.move_down 15
-        # price table
-        pdf_price_table(pdf, price_table)
-        pdf.move_down 15
-        # total info
-        pdf_total_info(pdf, auction, auction_result)
-        pdf.move_down 15
-        # ranking table
-        pdf_ranking_table(pdf, histories_achieved)
+      unless auction_result.nil?
+        pdf.fill_color "ffffff"
+        pdf.grid([2,19],[22,29]).bounding_box do
+          pdf.move_down 10
+          # lowest bidder info
+          pdf_lowest_bidder_info(pdf, auction_result)
+          pdf.move_down 15
+          # price table
+          pdf_price_table(pdf, price_table)
+          pdf.move_down 15
+          # total info
+          pdf_total_info(pdf, auction, auction_result)
+          pdf.move_down 15
+          # ranking table
+          pdf_ranking_table(pdf, histories_achieved)
+        end
       end
+
     end
     send_pdf_data pdf_filename, auction.published_gid.to_s + '_ADMIN_REPORT.pdf'
   end
@@ -137,7 +142,20 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     datetime
   end
 
-  def get_chart_color(user_hash, user_hash2)
+  def get_chart_color(user_hash, user_hash2, uid, color)
+    unless color.nil?
+      color = color.to_s.gsub(/#/,'').split(',')
+      user_color_hash = {}
+      uid.each_with_index {|user_id, index |
+        user_color_hash[user_id] = index < color.size ? color[index]: get_color(user_hash, user_hash2)
+      }
+      user_color_hash
+    else
+      get_color(user_hash, user_hash2)
+    end
+  end
+
+  def get_color(user_hash, user_hash2)
     user_hash = user_hash.clone
     temp_hash2 = user_hash2.clone
     temp_hash2.each {|key, list|
@@ -304,7 +322,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
   end
 
   def pdf_chart1(pdf, len_x, base_x, number_x, number_y, str_time, step_number, hash, start_time_i, percentage_x, offset_x,
-                 min_price, percentage_y, user_company_name_hash, chart_color, type_x)
+                 min_price, percentage_y, user_company_name_hash, chart_color, type_x, uid)
     pdf.grid([2,0],[11,13]).bounding_box do
       # chart
       pdf_draw_chart1(pdf, len_x, base_x,step_number, number_x, number_y, str_time)
@@ -316,10 +334,10 @@ class Api::Admin::AuctionsController < Api::AuctionsController
       pdf.move_down 5
       font_size = user_company_name_hash.keys().size > 20 ? 9 : 10
       pdf.fill_color "ffffff"
-      user_company_name_hash.each do |id,name|
-        pdf.font_size(font_size) {pdf.text name, :color => chart_color[id] }
-        pdf.move_down 1
-      end
+      uid.each {|user_id|
+        pdf.font_size(font_size) {pdf.text user_company_name_hash[user_id], :color => chart_color[user_id], :valign => :center }
+        pdf.move_down 12
+      }
     end
   end
 
@@ -369,9 +387,9 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     #stroke_axis
     pdf.stroke_color "ffffff"
     pdf.stroke do
-      # X
-      pdf.vertical_line 20, 20+210, :at => number_x[0]
       # Y
+      pdf.vertical_line 20, 20+210, :at => number_x[0]
+      # X
       pdf.horizontal_line number_x[0], number_x[0] + 360, :at => 20
 
       (1..number_x.size-1).each do |i|
@@ -393,7 +411,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
   end
 
   def pdf_chart2(pdf,len_x, base_x, number_x, number_y, str_time, step_number, ranking, hash, start_time_i,
-                 percentage_x, offset_x, user_company_name_hash, chart_color, type_x)
+                 percentage_x, offset_x, user_company_name_hash, chart_color, type_x, uid)
     pdf.grid([12,0],[22,17]).bounding_box do
       # chart
       pdf_draw_chart2(pdf, number_x, number_y, str_time, base_x, step_number, len_x, ranking)
@@ -404,11 +422,10 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     pdf.grid([13,14],[22,18]).bounding_box do
       pdf.move_down 5
       font_size = user_company_name_hash.keys().size > 20 ? 9 : 10
-      user_company_name_hash.each do |id, name|
-        pdf.fill_color "ffffff"
-        pdf.font_size(font_size) {pdf.text name, :color => chart_color[id] }
-        pdf.move_down 1
-      end
+      uid.each {|user_id|
+        pdf.font_size(font_size) {pdf.text user_company_name_hash[user_id], :color => chart_color[user_id], :valign => :center }
+        pdf.move_down 12
+      }
     end
   end
 
@@ -482,7 +499,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
   end
 
   def pdf_lowest_bidder_info(pdf, auction_result)
-    unless auction_result.nil? && auction_result.status.nil?
+    unless auction_result.status.nil?
       if auction_result.status == 'win'
         status, status_color = 'Awarded', '228B22'
         bidder_text, bidder_text2, bidder_text3 = 'Summary of Winner', 'Winning Bidder', 'Average Price'

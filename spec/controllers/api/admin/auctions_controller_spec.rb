@@ -834,7 +834,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       create(:tender_state_machine, id:94,previous_node:4,current_node:4,current_status:2,turn_to_role:1,current_role:2,arrangement_id:21,created_at:'2018-02-07T06:52:09.874848',updated_at:'2018-02-07T06:52:09.874848')
 
       ConsumptionDetail.where('id in (?)', [10,11,12,13]).delete_all
-      create(:consumption_detail, id:10,account_number:111,intake_level:'LT',peak:10000.0,off_peak:10000.0,consumption_id:67,created_at: '2018-02-07T06:51:07.533246' ,updated_at: '2018-02-07T06:51:07.533246' ,premise_address:'address 67 -1')
+      create(:consumption_detail, id:10,account_number:111,intake_level:'LT',peak:10000.0,off_peak:10000.0,consumption_id:67,created_at: '2018-02-07T06:51:07.533246' ,updated_at: '2018-02-07T06:51:07.533246' ,premise_address:'address 67 -1', contracted_capacity: 10000.0)
       create(:consumption_detail,id:11,account_number:222,intake_level:'HTS',peak:10000.0,off_peak:10000.0,consumption_id:67,created_at: '2018-02-07T06:51:07.536357' ,updated_at: '2018-02-07T06:51:07.536357' )
       create(:consumption_detail,id:12,account_number:333,intake_level:'HTL',peak:10000.0,off_peak:10000.0,consumption_id:67,created_at: '2018-02-07T06:51:07.540794' ,updated_at: '2018-02-07T06:51:07.540794' )
       create(:consumption_detail, id:13,account_number:444,intake_level:'EHT',peak:10000.0,off_peak:10000.0,consumption_id:67,created_at: '2018-02-07T06:51:07.544786' ,updated_at: '2018-02-07T06:51:07.544786')
@@ -863,6 +863,50 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
                            end_price:'0.4325',
                            uid:'5,2,6',
                            uid2:'5,2,6'}
+        expect(response.headers['Content-Type']).to have_content 'application/pdf'
+      end
+
+      it 'admin RA report pdf time le 3500', pdf: true do
+        expect(get: "/api/admin/auctions/10/pdf").to be_routable
+        get :pdf, params: {id: 10,
+                           start_time: '2018-02-07T06:57:00Z',
+                           start_time2: '2018-02-07T06:57:00Z',
+                           end_time: '2018-02-07T06:59:15Z',
+                           end_time2: '2018-02-07T06:59:15Z',
+                           start_price:'0.0000',
+                           end_price:'0.1458',
+                           uid:'5,2,6',
+                           uid2:'5,2,6'}
+        expect(response.headers['Content-Type']).to have_content 'application/pdf'
+      end
+
+      it 'admin RA report pdf x-axis', pdf: true do
+        expect(get: "/api/admin/auctions/10/pdf").to be_routable
+        get :pdf, params: {id: 10,
+                           start_time: '2018-02-07T06:57:00Z',
+                           start_time2: '2018-02-07T06:57:00Z',
+                           end_time: '2018-02-07T06:57:54Z',
+                           end_time2: '2018-02-07T06:59:15Z',
+                           start_price:'0.0000',
+                           end_price:'0.1458',
+                           uid:'5,2,6',
+                           uid2:'5,2,6'}
+        expect(response.headers['Content-Type']).to have_content 'application/pdf'
+      end
+
+      it 'admin RA report pdf chart color', pdf: true do
+        expect(get: "/api/admin/auctions/10/pdf?start_time=2018-02-07T06:57:00.000Z&end_time=2018-02-07T06:59:15.728Z&start_time2=2018-02-07T06:57:00.000Z&end_time2=2018-02-07T06:59:15.728Z&start_price=0.0000&end_price=0.1458&uid=5,2,6&uid2=5,2,6&color=22ad38,ffff00,f53d0b&color2=22ad38,ffff00,f53d0b").to be_routable
+        get :pdf, params: {id: 10,
+                           start_time: '2000-02-07T08:57:00.000Z',
+                           start_time2: '2000-02-07T08:57:00.000Z',
+                           end_time: '2018-02-07T10:57:15.999Z',
+                           end_time2: '2018-02-07T10:57:15.999Z',
+                           start_price:'0.0012',
+                           end_price:'0.4325',
+                           uid:'5,2,6',
+                           uid2:'5,2,6',
+                           color:'22ad38,ffff00,f53d0b',
+                           color2:'22ad38,ffff00,f53d0b'}
         expect(response.headers['Content-Type']).to have_content 'application/pdf'
       end
 
