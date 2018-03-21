@@ -31,7 +31,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     start_datetime2, end_datetime2 = Time.parse(start_time2),  Time.parse(end_time2)
     start_time2_i, end_time2_i= start_datetime2.to_i, end_datetime2.to_i
     # price
-    min_price, max_price = start_price.to_f, end_price.to_f+0.00009
+    min_price, max_price = start_price.to_f, end_price.to_f
 
     pdf_filename = Time.new.strftime("%Y%m%d%H%M%S%L")
     # select
@@ -43,7 +43,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     end
 
     auction_result, histories_achieved, achieved, histories, histories_2 =
-        get_data(auction, start_time, end_time, min_price, max_price, uid, start_time2, end_time2, uid2)
+        get_data(auction, start_time, end_time, min_price, end_price.to_f+0.00009, uid, start_time2, end_time2, uid2)
     #
     hash, user_company_name_hash = get_histories_hash(histories)
     hash2, user_company_name_hash2, ranking = get_histories_hash(histories_2, true)
