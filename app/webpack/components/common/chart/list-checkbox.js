@@ -77,7 +77,7 @@ export default class CheckboxList extends Component {
         this.list.map((item,index)=>{
             if(item.status){
                 uidArray.push(item.user_id);
-                colorArray.push(item.color);
+                colorArray.push(item.color.split("#")[1]);
             }           
         })
         uidObj.uid = uidArray;
