@@ -12,8 +12,8 @@ class AuctionResult < ApplicationRecord
   # Validations
 
   # Scopes
-  scope :find_by_arrangement, ->(user) { joins(auction: :arrangements).where(arrangements: { user_id: user }) }
-  scope :find_by_consumptions, ->(user) { joins(auction: :consumptions).where(consumptions: { user_id: user }) }
+  scope :find_by_arrangement, ->(user) { joins(auction: :arrangements).where(arrangements: { user_id: user, accept_status: Arrangement::AcceptStatusAccept }) }
+  scope :find_by_consumptions, ->(user) { joins(auction: :consumptions).where(consumptions: { user_id: user, participation_status: Consumption::ParticipationStatusParticipate }) }
   # Callbacks
 
   # Delegates

@@ -6,6 +6,10 @@ class Arrangement < ApplicationRecord
   # action_status: admin select retailers in auction creation
   # "1":"Notification sent", "2":"Pending Notification"
 
+  AcceptStatusReject = '0'.freeze
+  AcceptStatusAccept = '1'.freeze
+  AcceptStatusPending = '2'.freeze
+
   # Extends
 
   # Includes
