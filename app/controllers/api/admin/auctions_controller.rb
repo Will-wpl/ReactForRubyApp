@@ -149,6 +149,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
       uid.each_with_index {|user_id, index |
         user_color_hash[user_id] = index < color.size ? color[index]: get_color(user_hash, user_hash2)
       }
+      puts "==============color = #{user_color_hash}"
       user_color_hash
     else
       get_color(user_hash, user_hash2)
