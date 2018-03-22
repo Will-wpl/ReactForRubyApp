@@ -4,7 +4,7 @@ RSpec.describe Api::Buyer::AuctionResultsController, type: :controller do
   let!(:auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
   let!(:company_buyer) { create(:user, :with_buyer, :with_company_buyer) }
   let!(:individual_buyer) { create(:user, :with_buyer, :with_individual_buyer) }
-  let!(:consumption) { create(:consumption, user: company_buyer, auction: auction, action_status: '1') }
+  let!(:consumption) { create(:consumption, user: company_buyer, auction: auction, action_status: '1', participation_status: '1') }
   let!(:result) { create(:auction_result, auction: auction, user_id: company_buyer.id) }
 
   context 'company buyer user' do
@@ -20,7 +20,7 @@ RSpec.describe Api::Buyer::AuctionResultsController, type: :controller do
         it 'Success' do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
-          expect(hash['headers'].size).to eq(5)
+          expect(hash['headers'].size).to eq(6)
           expect(hash['bodies']['data'].size).to eq(1)
         end
       end
@@ -33,7 +33,7 @@ RSpec.describe Api::Buyer::AuctionResultsController, type: :controller do
         before { do_request }
         it 'Success' do
           hash = JSON.parse(response.body)
-          expect(hash['headers'].size).to eq(5)
+          expect(hash['headers'].size).to eq(6)
           expect(hash['bodies']['data'].size).to eq(1)
         end
       end

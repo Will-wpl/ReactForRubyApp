@@ -15,7 +15,7 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
     headers = [
       { name: 'ID', field_name: 'published_gid' },
       { name: 'Name', field_name: 'name' },
-      { name: 'Date', field_name: 'start_datetime' },
+      { name: 'Date', field_name: 'start_datetime' }
     ]
     # user = User.find(current_user.id)
     if current_user.consumer_type == '2'
