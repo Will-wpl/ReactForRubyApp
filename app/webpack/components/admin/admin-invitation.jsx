@@ -321,7 +321,7 @@ upload(type, index){
                                                         <input type="file" required="required" ref={type+index}  onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.state.disabled} />
                                                         <b>Browse..</b>
                                                         <div className="required_error">
-                                                            Please upload file.
+                                                            Please select file.
                                                         </div>
                                                     </div>
                                                     :<div>

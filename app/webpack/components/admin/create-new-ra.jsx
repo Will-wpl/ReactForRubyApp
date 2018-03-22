@@ -21,7 +21,7 @@ export class CreateNewRA extends Component {
             btn_type:"",text:"",id:"0",
             edit_btn:"lm--button lm--button--primary show",
             edit_change:"lm--button lm--button--primary hide",
-            disabled:"",live_modal:"",live_modal_do:"",holdOrend:"",
+            disabled:false,live_modal:"",live_modal_do:"",holdOrend:"",
         }
         this.auction = {};
         this.auction_data = null;
@@ -32,8 +32,16 @@ export class CreateNewRA extends Component {
     }
     componentDidMount() {
         if(this.props.left_name){//eidt
+            if(this.props.disabled){
+                this.setState({
+                    disabled:this.props.disabled
+                })
+            }else{
+                this.setState({
+                    disabled:true
+                })
+            }
             this.setState({
-                disabled:this.props.disabled,
                 editdisabled:this.props.editdisabled,
                 live_modal:"live_hide"
             })
@@ -254,6 +262,15 @@ export class CreateNewRA extends Component {
                 },5000)
                 return false;
             }
+            if(this.state.reserve_price > this.state.starting_price){
+                $("#reserve_price .required_error").fadeIn(300);
+                window.location.href="#reserve_price";
+                clearTimeout(timeBar);
+                timeBar = setTimeout(()=>{
+                    $("#reserve_price .required_error").fadeOut(300);
+                },5000);
+                return false
+            }
         }
         
         if(this.state.btn_type == "save"){
@@ -338,8 +355,14 @@ export class CreateNewRA extends Component {
                             <button className={this.state.edit_change} onClick={this.auctionCreate.bind(this,'save')}>Save</button>
                             <button className={this.state.edit_change} onClick={this.auctionCreate.bind(this,'next')}>Next</button>
                             <a className={this.state.edit_change} onClick={this.Cancel.bind(this)}>Cancel</a> */}
-                            {this.state.disabled?'':<button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'save')}>Save</button>}
-                            <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'next')}>Next</button>
+                            {this.props.disabled?
+                                <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'next')}>Next</button>:
+                                <div>
+                                    <a className={this.state.edit_btn} onClick={this.edit.bind(this)}>Edit</a>
+                                    <a className={this.state.edit_change} onClick={this.Cancel.bind(this)}>Cancel</a>
+                                    <button className={this.state.edit_change} onClick={this.auctionCreate.bind(this,'save')}>Save</button>
+                                    <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'next')}>Next</button>
+                                </div>}
                         </div>
         }
         return (
@@ -420,10 +443,12 @@ export class CreateNewRA extends Component {
                     </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
                         <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Reserve Price ($/kWh):</span>
-                        <label className="lm--formItem-right lm--formItem-control">
+                        <label className="lm--formItem-right lm--formItem-control" id="reserve_price">
                             <input type="test" ref="reserve_price" onChange={this.doPrice.bind(this)} value={this.state.reserve_price} disabled={this.state.disabled} name="reserve_price" maxLength="50" required aria-required="true" pattern="^\d+(\.\d{4})$" title="Reserve Price must be a number with 4 decimal places, e.g. $0.0891/kWh." ></input>
                             <abbr ref="ra_duration_error" className="col"></abbr>
+                            <div className="required_error">Reserve price must be smaller than or equal to starting price.</div>
                         </label>
+
                     </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
                         <span className="lm--formItem-left lm--formItem-label string optional">

@@ -132,7 +132,7 @@ export class Submittender extends React.Component{
                                                 <input type="file" required="required" ref={type+index}  onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.props.propsdisabled?true:(this.state.disabled)} />
                                                 <b>Browse..</b>
                                                 <div className="required_error">
-                                                    Please upload file.
+                                                    Please select file.
                                                 </div>
                                             </div>
                                             :<div>

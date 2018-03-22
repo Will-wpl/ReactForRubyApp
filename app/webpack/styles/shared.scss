@@ -21,7 +21,7 @@ button[disabled='']{background: #666 !important; color:#999 !important; cursor: 
           margin-bottom: 20px;
           .lm--formItem-right{ 
             position: relative;
-            .required_error{position:absolute; display: none; top:45px; left:0; width: 100%; padding:5px 10px; border:2px solid #fbb136; background: #fff; color:#333; font-size: 15px;}
+            .required_error{position:absolute; display: none; top:45px; left:0; width: 100%; padding:5px 10px; border:2px solid #fbb136; background: #fff; color:#333; font-size: 15px;z-index: 10}
           }
           b{ 
               font-weight: normal; font-size: 18px; line-height: 44px; text-align:center; display: block;
@@ -652,7 +652,7 @@ body.choose{
             width:90%; margin: 0px auto; padding: 2px; border:1px solid #fff;
           }
           textarea{
-            padding:1px 5px;rows:2;resize:none;
+            padding:1px 5px;height:86px;resize:none;white-space: pre;
             &.show_text{ border:0px; color:#fff; font-size: 12px;}
           }
           button{background: #00888a; padding: 4px 8px; width: auto; height: auto; display: inline-block; border-radius: 5px; margin:5px;}

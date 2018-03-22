@@ -772,11 +772,11 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
 
   describe 'GET pdf' do
     before :each do
-      sign_in create(:user, :with_admin)
+      User.where('id in (?)', [1, 2,5,6,14,23,24,33]).delete_all
+      sign_in create(:user, :with_admin_id_1)
       Auction.where(id: 10).delete_all
       create(:auction, id:10,name:'Test0207001',start_datetime:'2018-02-07T06:57:00',contract_period_start_date:'2018-02-09',contract_period_end_date:'2018-02-23',duration:10,reserve_price:0.1222,created_at:'2018-02-07T06:49:44.531577',updated_at:'2018-02-07T06:55:27.423286',actual_begin_time:'2018-02-07T06:57:00',actual_end_time:'2018-02-07T07:07:00',total_volume:39452.05479452054794521,publish_status:1,published_gid:'RA20180009',total_lt_peak:10000.0,total_lt_off_peak:10000.0,total_hts_peak:10000.0,total_hts_off_peak:10000.0,total_htl_peak:10000.0,total_htl_off_peak:10000.0,hold_status:false,time_extension:0,average_price:0,retailer_mode:0,total_eht_peak:10000.0,total_eht_off_peak:10000.0)
 
-      User.where('id in (?)', [2,5,6,14,23,24,33]).delete_all
       create(:user, id:6,name:'Yang Qingxin',email:'yangqingxin@chinasofti.com',encrypted_password:'$2a$11$qSIYYyBxF97DQpxrJv3JtOZ7643w.g/sPsjUJvIjcugDq02Gl61eS',sign_in_count:4,current_sign_in_at:'2018-03-07T07:39:19.749265',last_sign_in_at:'2018-03-07T07:30:13.6502',current_sign_in_ip:'127.0.0.1',last_sign_in_ip:'127.0.0.1',created_at:'2018-01-23T06:45:52.807288',updated_at:'2018-03-07T07:39:19.751447',company_name:'Yang Qingxin Electricity',approval_status:1,company_address:'China DL',company_unique_entity_number:'UEN 02234',company_license_number:'LICENSE 01234',account_mobile_number:'12345678',account_office_number:'87654321')
       create(:user, id:2,name:'Will' ,email:'will.wang@chinasofti.com',encrypted_password:'$2a$11$nibCPeRYZ/ujqpnfJ6Dmc.Q.8kQi/IzJ6dcbJeaQxNGXz34eFg.HC',sign_in_count:4,current_sign_in_at:'2018-02-07T06:55:49.657515',last_sign_in_at:'2018-02-07T06:53:01.014156',current_sign_in_ip:'127.0.0.1',last_sign_in_ip:'127.0.0.1',created_at:'2018-01-23T06:45:52.22272',updated_at:'2018-02-07T06:55:49.658783',company_name:'Will Electricity',approval_status:1,company_address:'China DL',company_unique_entity_number:'UEN 01244',company_license_number:'LICENSE 01234',account_mobile_number:'12345678',account_office_number:'87654321')
       create(:user, id:5,name:'Judy',email:'judy.zhu@chinasofti.com',encrypted_password:'$2a$11$Ee.qBlHtLx3W4iffIPIYQ.HbkioLZLVG/pfjmrHeO7aCKI267wTfu',sign_in_count:11,current_sign_in_at:'2018-03-09T02:24:13.334563',last_sign_in_at:'2018-03-09T01:56:00.396638',current_sign_in_ip:'127.0.0.1',last_sign_in_ip:'127.0.0.1',created_at:'2018-01-23T06:45:52.662046',updated_at:'2018-03-09T02:24:13.335992',company_name:'Judy Electricity',approval_status:1,company_address:'China DL',company_unique_entity_number:'UEN 01234',company_license_number:'LICENSE 01234',account_mobile_number:'12345678',account_office_number:'87654321')
@@ -834,7 +834,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       create(:tender_state_machine, id:94,previous_node:4,current_node:4,current_status:2,turn_to_role:1,current_role:2,arrangement_id:21,created_at:'2018-02-07T06:52:09.874848',updated_at:'2018-02-07T06:52:09.874848')
 
       ConsumptionDetail.where('id in (?)', [10,11,12,13]).delete_all
-      create(:consumption_detail, id:10,account_number:111,intake_level:'LT',peak:10000.0,off_peak:10000.0,consumption_id:67,created_at: '2018-02-07T06:51:07.533246' ,updated_at: '2018-02-07T06:51:07.533246' ,premise_address:'address 67 -1')
+      create(:consumption_detail, id:10,account_number:111,intake_level:'LT',peak:10000.0,off_peak:10000.0,consumption_id:67,created_at: '2018-02-07T06:51:07.533246' ,updated_at: '2018-02-07T06:51:07.533246' ,premise_address:'address 67 -1', contracted_capacity: 10000.0)
       create(:consumption_detail,id:11,account_number:222,intake_level:'HTS',peak:10000.0,off_peak:10000.0,consumption_id:67,created_at: '2018-02-07T06:51:07.536357' ,updated_at: '2018-02-07T06:51:07.536357' )
       create(:consumption_detail,id:12,account_number:333,intake_level:'HTL',peak:10000.0,off_peak:10000.0,consumption_id:67,created_at: '2018-02-07T06:51:07.540794' ,updated_at: '2018-02-07T06:51:07.540794' )
       create(:consumption_detail, id:13,account_number:444,intake_level:'EHT',peak:10000.0,off_peak:10000.0,consumption_id:67,created_at: '2018-02-07T06:51:07.544786' ,updated_at: '2018-02-07T06:51:07.544786')
@@ -852,6 +852,96 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
 
     context 'GET RA report pdf' do
       it 'admin RA report pdf', pdf: true do
+        expect(get: "/api/admin/auctions/10/pdf").to be_routable
+        get :pdf, params: {id: 10,
+                           start_time: '2000-02-07T08:57:00.000Z',
+                           start_time2: '2000-02-07T08:57:00.000Z',
+                           end_time: '2018-02-07T10:57:15.999Z',
+                           end_time2: '2018-02-07T10:57:15.999Z',
+                           start_price:'0.0012',
+                           end_price:'0.4325',
+                           uid:'5,2,6',
+                           uid2:'5,2,6'}
+        expect(response.headers['Content-Type']).to have_content 'application/pdf'
+      end
+
+      it 'admin RA report pdf time le 3500', pdf: true do
+        expect(get: "/api/admin/auctions/10/pdf").to be_routable
+        get :pdf, params: {id: 10,
+                           start_time: '2018-02-07T06:57:00Z',
+                           start_time2: '2018-02-07T06:57:00Z',
+                           end_time: '2018-02-07T06:59:15Z',
+                           end_time2: '2018-02-07T06:59:15Z',
+                           start_price:'0.0000',
+                           end_price:'0.1458',
+                           uid:'5,2,6',
+                           uid2:'5,2,6'}
+        expect(response.headers['Content-Type']).to have_content 'application/pdf'
+      end
+
+      it 'admin RA report pdf x-axis', pdf: true do
+        expect(get: "/api/admin/auctions/10/pdf").to be_routable
+        get :pdf, params: {id: 10,
+                           start_time: '2018-02-07T06:57:00Z',
+                           start_time2: '2018-02-07T06:57:00Z',
+                           end_time: '2018-02-07T06:57:54Z',
+                           end_time2: '2018-02-07T06:59:15Z',
+                           start_price:'0.0000',
+                           end_price:'0.1458',
+                           uid:'5,2,6',
+                           uid2:'5,2,6'}
+        expect(response.headers['Content-Type']).to have_content 'application/pdf'
+      end
+
+      it 'admin RA report pdf y-axis', pdf: true do
+        expect(get: "/api/admin/auctions/10/pdf").to be_routable
+        get :pdf, params: {id: 10,
+                           start_time: '2018-02-07T06:57:00Z',
+                           start_time2: '2018-02-07T06:57:00Z',
+                           end_time: '2018-02-07T06:57:54Z',
+                           end_time2: '2018-02-07T06:59:15Z',
+                           start_price:'0.0000',
+                           end_price:'6.0000',
+                           uid:'5,2,6',
+                           uid2:'5,2,6'}
+        expect(response.headers['Content-Type']).to have_content 'application/pdf'
+      end
+
+      it 'admin RA report pdf chart color', pdf: true do
+        expect(get: "/api/admin/auctions/10/pdf?start_time=2018-02-07T06:57:00.000Z&end_time=2018-02-07T06:59:15.728Z&start_time2=2018-02-07T06:57:00.000Z&end_time2=2018-02-07T06:59:15.728Z&start_price=0.0000&end_price=0.1458&uid=5,2,6&uid2=5,2,6&color=22ad38,ffff00,f53d0b&color2=22ad38,ffff00,f53d0b").to be_routable
+        get :pdf, params: {id: 10,
+                           start_time: '2000-02-07T08:57:00.000Z',
+                           start_time2: '2000-02-07T08:57:00.000Z',
+                           end_time: '2018-02-07T10:57:15.999Z',
+                           end_time2: '2018-02-07T10:57:15.999Z',
+                           start_price:'0.0012',
+                           end_price:'0.4325',
+                           uid:'5,2,6',
+                           uid2:'5,2,6',
+                           color:'22ad38,ffff00,f53d0b',
+                           color2:'22ad38,ffff00,f53d0b'}
+        expect(response.headers['Content-Type']).to have_content 'application/pdf'
+      end
+
+      it 'admin RA report pdf Auction result status is null', pdf: true do
+        AuctionResult.where(id: 1).delete_all
+        create(:auction_result, :status_nil, id:1,reserve_price:0.1222, lowest_average_price:0.099900000000000000000075965624999999999999991,lowest_price_bidder:'Judy Electricity',contract_period_start_date:'2018-02-09',contract_period_end_date:'2018-02-23',total_volume:39452.05479452054794521,total_award_sum:3941.260273972602739729476,lt_peak:0.0999,lt_off_peak:0.0999,hts_peak:0.0999,hts_off_peak:0.0999,htl_peak:0.0999,htl_off_peak:0.0999,user_id:5,auction_id:10,created_at:'2018-02-07T07:07:05.951654',updated_at:'2018-02-07T07:07:05.951654',eht_peak:0.0999,eht_off_peak:0.0999)
+        expect(get: "/api/admin/auctions/10/pdf").to be_routable
+        get :pdf, params: {id: 10,
+                           start_time: '2000-02-07T08:57:00.000Z',
+                           start_time2: '2000-02-07T08:57:00.000Z',
+                           end_time: '2018-02-07T10:57:15.999Z',
+                           end_time2: '2018-02-07T10:57:15.999Z',
+                           start_price:'0.0012',
+                           end_price:'0.4325',
+                           uid:'5,2,6',
+                           uid2:'5,2,6'}
+        expect(response.headers['Content-Type']).to have_content 'application/pdf'
+      end
+
+      it 'admin RA report pdf result status is not "win"', pdf: true do
+        AuctionResult.where(id: 1).delete_all
+        create(:auction_result, id:1,reserve_price:0.1222, status:'Awarded', lowest_average_price:0.099900000000000000000075965624999999999999991,lowest_price_bidder:'Judy Electricity',contract_period_start_date:'2018-02-09',contract_period_end_date:'2018-02-23',total_volume:39452.05479452054794521,total_award_sum:3941.260273972602739729476,lt_peak:0.0999,lt_off_peak:0.0999,hts_peak:0.0999,hts_off_peak:0.0999,htl_peak:0.0999,htl_off_peak:0.0999,user_id:5,auction_id:10,created_at:'2018-02-07T07:07:05.951654',updated_at:'2018-02-07T07:07:05.951654',eht_peak:0.0999,eht_off_peak:0.0999)
         expect(get: "/api/admin/auctions/10/pdf").to be_routable
         get :pdf, params: {id: 10,
                            start_time: '2000-02-07T08:57:00.000Z',
