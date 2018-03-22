@@ -237,6 +237,20 @@ export class SearchList extends Component {
                                                             }else{
                                                                 return <td key={i}></td>
                                                             }
+                                                        } else if(it.field_name === 'acknowledge'){
+                                                            if(item.award == ""){
+                                                                return <td key={i}></td>
+                                                            }else{
+                                                                if(item.acknowledge === "1"){
+                                                                    return<td key={i}>
+                                                                        <div className="participation_status_1"></div>
+                                                                    </td>
+                                                                }else{
+                                                                    return<td key={i}>
+                                                                        <div className="participation_status_2"></div>
+                                                                    </td>
+                                                                }
+                                                            }
                                                         } else if(it.field_name === 'actions'){
                                         
                                                         }else if(it.field_name==="logged_in_status"){

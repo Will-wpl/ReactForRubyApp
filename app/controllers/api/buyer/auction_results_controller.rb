@@ -6,7 +6,7 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
       search_params = reject_params(params, %w[controller action])
       search_where_array = set_search_params(search_params)
       result = AuctionResult.find_by_consumptions(current_user).where(search_where_array)
-                            .page(params[:page_index]).per(params[:page_size]).select("auction_results.*, consumptions.participation_status")
+                            .page(params[:page_index]).per(params[:page_size]).select("auction_results.*, consumptions.participation_status, consumptions.acknowledge")
       total = result.total_count
     else
       result = AuctionResult.all
@@ -16,11 +16,14 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
       { name: 'ID', field_name: 'published_gid' },
       { name: 'Name', field_name: 'name' },
       { name: 'Date', field_name: 'start_datetime' },
-      { name: 'Reverse Auction Report', field_name: 'report' }
     ]
     # user = User.find(current_user.id)
     if current_user.consumer_type == '2'
+      headers.push(name: 'Acknowledgement Status', field_name: 'acknowledge')
+      headers.push(name: 'Reverse Auction Report', field_name: 'report')
       headers.push(name: 'Letter of Award', field_name: 'award')
+    else
+      headers.push(name: 'Reverse Auction Report', field_name: 'report')
     end
 
     data = []
@@ -28,6 +31,7 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
       data.push(published_gid: result.auction.published_gid,
                 name: result.auction.name,
                 start_datetime: result.auction.start_datetime,
+                acknowledge: show_award?(result, current_user) ? result.acknowledge : nil ,
                 report: result.participation_status=='1' ? "api/buyer/auctions/#{result.auction_id}/pdf" : '',
                 award: show_award?(result, current_user) ? result.participation_status=='1' ? "api/buyer/auctions/#{result.auction_id}/letter_of_award_pdf" : '' : '')
     end
