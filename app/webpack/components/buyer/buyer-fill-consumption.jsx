@@ -40,7 +40,7 @@ export class FillConsumption extends Component {
                 })
             }
             if(res.consumption_details.length>0){
-                $("input[type='checkbox']").attr("checked",true);
+                //$("input[type='checkbox']").attr("checked",true);
                 this.site_list.map((item, index) => {
                     this.site_list[index].intake_level_selected = item.intake_level;
                     this.site_list[index].intake_level = ['Low Tension (LT)','High Tension Small (HTS)','High Tension Large (HTL)','Extra High Tension (EHT)'];
