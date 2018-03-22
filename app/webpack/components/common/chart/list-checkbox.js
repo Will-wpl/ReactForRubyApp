@@ -73,14 +73,16 @@ export default class CheckboxList extends Component {
         }
     }
     getSelectUid(){
-        let uidArray = [];
+        let uidArray = [],colorArray=[],uidObj={};
         this.list.map((item,index)=>{
             if(item.status){
                 uidArray.push(item.user_id);
-            }
-            
+                colorArray.push(item.color.split("#")[1]);
+            }           
         })
-        return uidArray
+        uidObj.uid = uidArray;
+        uidObj.color = colorArray;
+        return uidObj;
     }
     render() {
         let checkItems;

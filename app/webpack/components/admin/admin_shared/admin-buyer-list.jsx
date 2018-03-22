@@ -24,7 +24,7 @@ export class BuyerList extends Component {
             window.location.href="/admin/consumptions/"+item.id;
         }else{
             this.setState({
-                text:'This buyer has not confirmed to participate in this auction.'
+                text:'This buyer has yet to confirm participation.'
                 });
             this.refs.Modal.showModal();
         }  

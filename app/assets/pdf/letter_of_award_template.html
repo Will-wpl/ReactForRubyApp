@@ -1,4 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
+<head>
+    <style type="text/css">
+        table.table_data
+        {
+            border-collapse:collapse;
+            width: 100%;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        table.table_data, table.table_data td, table.table_data th
+        {
+            border:1px solid black;
+        }
+
+        table.table_data th
+        {
+            background-color: #cccccc;
+            line-height:17px
+        }
+    </style>
+</head>
 <body style="font-size:12px;">
 <p style="text-align:center;">
     <strong><span style="font-size:14px;">LETTER OF AWARD (ELECTRICITY PROCUREMENT)</span></strong>
@@ -89,8 +112,8 @@
     </li>
 
     <li style="line-height:20px;list-style:none;">
-        <table border="0" width="100%" cellspacing="1" cellpadding="1" bgcolor="#000000" style="font-size:12px;">
-            <thead  bgcolor="cccccc">
+        <table class="table_data">
+            <thead>
             <tr>
                 <th>Account Number</th>
                 <th>Intake Level</th>
@@ -100,8 +123,8 @@
                 <th>Premise Address</th>
             </tr>
             </thead>
-            <tbody style="text-align:center;">
-            <tr id="appendix_table1_tr" bgcolor="ffffff">
+            <tbody>
+            <tr id="appendix_table1_tr">
                 <td>
                     #account_number
                 </td>
@@ -132,11 +155,11 @@
         <b>Summary of Monthly Consumption Forecast: </b>
     </li>
     <li style="line-height:20px;list-style:none;">
-        <table border="0" width="100%" cellspacing="1" cellpadding="1" bgcolor="#000000" style="font-size:12px;">
+        <table class="table_data">
             <colgroup>
                 <col width="150" />
             </colgroup>
-            <thead style="margin-bottom:30px" bgcolor="cccccc">
+            <thead style="margin-bottom:30px" >
             <tr id="appendix_table2_head">
                 <th></th>
                 <th id="lt_head_id">LT</th>
@@ -145,8 +168,8 @@
                 <th id="eht_head_id">EHT</th>
             </tr>
             </thead>
-            <tbody style="text-align:center;">
-            <tr id="appendix_table2_peak" bgcolor="ffffff">
+            <tbody >
+            <tr id="appendix_table2_peak">
                 <td>
                     Peak (kWh/month) <br/>7AM – 7PM
                 </td>
@@ -163,7 +186,7 @@
                     #eht_peak
                 </td>
             </tr>
-            <tr id="appendix_table2_off_peak" bgcolor="ffffff">
+            <tr id="appendix_table2_off_peak">
                 <td>
                     Off-Peak (kWh/month) <br/>7PM – 7AM
                 </td>
@@ -180,7 +203,7 @@
                     #eht_off_peak
                 </td>
             </tr>
-            <tr id="appendix_table2_total" bgcolor="ffffff">
+            <tr id="appendix_table2_total">
                 <td>
                     Total (kWh/month)
                 </td>
