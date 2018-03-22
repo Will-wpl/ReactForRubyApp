@@ -143,7 +143,7 @@ export class Keppelproposedeviations extends Component {
                                             <td >{item.clause}</td>
                                             <td ><textarea className="show_text" defaultValue={decodeURI(item.propose_deviation)} disabled/></td>
                                             <td ><textarea className="show_text" defaultValue={decodeURI(item.retailer_response)} disabled/></td>
-                                            <td ><textarea id={"sp_response_"+index} defaultValue={item.sp_response?decodeURI(item.sp_response.split(": ")[1]):''} disabled={this.props.readOnly} /></td>
+                                            <td ><textarea id={"sp_response_"+index} defaultValue={item.sp_response?decodeURI(item.sp_response).split(": ")[1]:''} disabled={this.props.readOnly} /></td>
                                             <td>
                                                 <button id={"sp_reject_"+index} disabled={this.props.readOnly?this.props.readOnly:(item.type?(item.type=="reject"?true:false):(item.sp_response_status === '4' || item.sp_response_status === '1'?true:false))} onClick={this.do_reject.bind(this,{params:'0',index:index,type:'reject'})}>Reject</button>
                                                 <button id={"sp_accept_"+index} disabled={this.props.readOnly?this.props.readOnly:(item.type?(item.type=="accept"?true:false):(item.sp_response_status === '4' || item.sp_response_status === '1'?true:false))} onClick={this.do_accept.bind(this,{params:'1',index:index,type:'accept'})}>Accept</button>
