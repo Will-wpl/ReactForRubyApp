@@ -30,7 +30,7 @@ export default class AdminConfirmWinner extends Component {
         data:{},
         auction:{}
     }
-    this.auction={}
+    //this.auction={}
 }
 compare(prop) {
     return function (obj1, obj2) {
@@ -45,7 +45,7 @@ compare(prop) {
     } 
 }
 componentDidMount() {
-    getAuction('admin').then(auction => {
+    getAuction('admin',sessionStorage.auction_id).then(auction => {
         console.log(auction);
         this.auction = auction;
         this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000'
@@ -82,7 +82,8 @@ showDetail(type,obj){
 }
 void_auction(){
     let timeFn;
-    auctionConfirm({data:{ user_id: this.state.winner.data.user_id , status:'void'},id:this.auction.id}).then(res=>{
+    auctionConfirm(
+        {data: { user_id: this.state.winner.data.user_id , status:'void'}, id:this.auction.id}).then(res=>{
         //console.log(res);
         clearTimeout(timeFn);
         this.refs.Modal.showModal();
@@ -97,23 +98,28 @@ void_auction(){
     })
 }
 confirm_winner(){
-    let timeFn;
-    auctionConfirm({data:{ user_id: this.state.winner.data.user_id , status:'win'},id:this.auction.id}).then(res=>{
-        //console.log(res);
-        clearTimeout(timeFn);
-        this.refs.Modal.showModal();
-        this.setState({
-            text:"Congratulations! Reverse Auction winner has been confirmed."
-        })
-        timeFn = setTimeout(()=>{
-            window.location.href=`/admin/auctions/${this.auction.id}/result`;
-        },2000)
-    },error=>{
-
-    })
+    window.location.href=`/admin/auctions/${this.auction.id}/choose_winner`;
+    // let timeFn;
+    // auctionConfirm({data:{ user_id: this.state.winner.data.user_id , status:'win'},id:this.auction.id}).then(res=>{
+    //     //console.log(res);
+    //     clearTimeout(timeFn);
+    //     this.refs.Modal.showModal();
+    //     this.setState({
+    //         text:"Congratulations! Reverse Auction winner has been confirmed."
+    //     })
+    //     timeFn = setTimeout(()=>{
+    //         window.location.href=`/admin/auctions/${this.auction.id}/result`;
+    //     },2000)
+    // },error=>{
+    //
+    // })
 }
 render() {
     //console.log(this.winner.data);
+    const visibility_lt = !this.auction ? true: Number(this.auction.total_lt_peak) > 0 || Number(this.auction.total_lt_off_peak) > 0;
+    const visibility_hts = !this.auction ? true: Number(this.auction.total_hts_peak) > 0 || Number(this.auction.total_hts_off_peak) > 0;
+    const visibility_htl = !this.auction ? true: Number(this.auction.total_htl_peak) > 0 || Number(this.auction.total_htl_off_peak) > 0;
+    const visibility_eht = !this.auction ? true: Number(this.auction.total_eht_peak) > 0 || Number(this.auction.total_eht_off_peak) > 0;
     return (
         <div>
             <div className="time_cuntdown during">
@@ -125,11 +131,11 @@ render() {
                     </div>
                     <div className="col-sm-12 col-md-6 u-cell">
                         <div className="col-sm-12 col-md-10 push-md-1">
-                            <ReservePrice name={this.auction.name} price={this.startPrice} realtimePrice={this.state.currentPrice} />
-                            <WinnerPrice showOrhide="hide" winner={this.state.winner} />
+                            <ReservePrice auction={this.auction} price={this.startPrice} realtimePrice={this.state.currentPrice} />
+                            <WinnerPrice showOrhide="hide" winner={this.state.winner}  isLtVisible={visibility_lt} isHtsVisible={visibility_hts} isHtlVisible={visibility_htl} isEhtVisible={visibility_eht}/>
                             <div className="winnerPrice_main">
                                 <a className="lm--button lm--button--primary u-mt3" onClick={this.showDetail.bind(this,'void')}>Void Reverse Auction</a>
-                                {/* <a className="lm--button lm--button--primary u-mt3" >Alternate Winner</a> */}
+                               {/* <a className="lm--button lm--button--primary u-mt3" >Alternate Winner</a>*/}
                                 <a className="lm--button lm--button--primary u-mt3" onClick={this.showDetail.bind(this,'win')} >Confirm Winner</a>
                             </div>
                             

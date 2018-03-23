@@ -1,5 +1,5 @@
 class Admin::UsersController < Admin::BaseController
-  before_action :set_user, only: %i[show edit update destroy]
+  before_action :set_user, only: %i[show edit update destroy manage]
 
   before_action :set_users_breadcrumbs
   before_action :set_action_breadcrumbs
@@ -48,14 +48,26 @@ class Admin::UsersController < Admin::BaseController
     redirect_to admin_users_path, notice: "#{User.model_name.human} was successfully destroyed."
   end
 
-  # user.approval_status['0', '1', '2'] '0':rejected '1':approved '2':pending
-  def retailers
-    @users = User.retailers.order(created_at: :desc).page(params[:page])
-  end
+  def retailers; end
 
-  # user.user_detail.consumer_type['0', '1'] '0':company '1':individual
-  def buyers
-    @users = User.buyers.order(created_at: :desc).page(params[:page])
+  def buyers; end
+
+  def manage; end
+
+  def approval
+    @user = User.find(params[:format])
+    approval_status = params[:approved].nil? ? '0' : '1'
+    comment = params[:user][:comment]
+    if @user.update(approval_status: approval_status, comment: comment)
+      if approval_status == '1'
+        UserMailer.approval_email(@user).deliver_later
+      elsif approval_status == '0'
+        UserMailer.reject_email(@user).deliver_later
+      end
+      redirect_to retailers_admin_users_path, notice: "#{User.model_name.human} was successfully updated."
+    else
+      render :manage
+    end
   end
 
   private

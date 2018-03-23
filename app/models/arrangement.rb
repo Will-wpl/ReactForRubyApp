@@ -1,4 +1,15 @@
 class Arrangement < ApplicationRecord
+
+  # Field description:
+  # accept_status
+  # "0":"Reject", "1":"Accept", "2":"Pending"
+  # action_status: admin select retailers in auction creation
+  # "1":"Notification sent", "2":"Pending Notification"
+
+  AcceptStatusReject = '0'.freeze
+  AcceptStatusAccept = '1'.freeze
+  AcceptStatusPending = '2'.freeze
+
   # Extends
 
   # Includes
@@ -6,11 +17,21 @@ class Arrangement < ApplicationRecord
   # Associations
   belongs_to :user
   belongs_to :auction
+  has_many :tender_state_machines, dependent: :destroy
+  has_many :tender_chats, dependent: :destroy
   # accepts_nested_attributes
 
   # Validations
 
   # Scopes
+
+  scope :auction_of_current_user, ->(auction_id, user_id) { where('auction_id = ? and user_id = ?', auction_id, user_id) }
+  scope :find_by_auction_id, ->(auction_id) { where('auction_id = ?', auction_id) }
+  scope :find_by_auction_and_user, ->(auction_id, user_id) { where('auction_id = ? and user_id =?', auction_id, user_id) }
+  scope :is_not_notify, -> { where("action_status = '2'") }
+  scope :find_published_auction, ->{ includes(:auction).where(auctions: { publish_status: '1' }) }
+  scope :find_published_result_auction, ->{ includes(auction: :auction_result).where(auctions: { publish_status: '1' }, auction_results: { status: nil }) }
+  scope :find_notify_retailer,  ->(user_id) { where("arrangements.user_id = ? and action_status = '1'", user_id) }
 
   # Callbacks
 

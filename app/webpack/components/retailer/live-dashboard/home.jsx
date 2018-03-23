@@ -4,8 +4,8 @@ import Description from './description';
 import Ranking from '../../common/chart/ranking';
 import BidForm from './bid-form';
 import BidHistory from './bid-history';
-import {getLoginUserId, getNumBref} from '../../../javascripts/componentService/util';
-import {getAuctionHistorys} from '../../../javascripts/componentService/retailer/service';
+import {getLoginUserId, getNumBref, getStandardNumBref} from '../../../javascripts/componentService/util';
+import {getAuctionHistorys, validateCanBidForm} from '../../../javascripts/componentService/retailer/service';
 import {createWebsocket, ACTION_COMMANDS} from '../../../javascripts/componentService/common/service';
 import moment from 'moment';
 
@@ -13,7 +13,10 @@ export default class LiveHomePage extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {extendVisible: false, ranking: '', priceConfig: [], histories: [], chartDatas: []};
+        this.state = {
+            extendVisible: false, ranking: '', priceConfig: [], histories: [], chartDatas: [],
+            showTop2Rule: false
+        };
     }
 
     componentDidMount() {
@@ -43,10 +46,17 @@ export default class LiveHomePage extends Component {
                 setTimeout(()=> {
                     this.ws.sendMessage(ACTION_COMMANDS.MAKE_UNIQUE, {timestamp: this.timestamp});
                 }, 1000);
+                // validateCanBidForm(auctionId).then(res => {
+                //
+                // }, err => {
+                //
+                // })
+                // or
+                // this.ws.sendMessage(ACTION_COMMANDS.CAN_BIDDING_FORM, {});
             }).onDisconnected(() => {
                 console.log('---message client disconnected ----')
             }).onReceivedData(data => {
-                // console.log('---message client received data ---', data);
+                console.log('---message client received data ---', data);
                 if (data && data.action) {
                     if (data.action === ACTION_COMMANDS.SET_BID) {
                         let curUserId = Number(getLoginUserId());
@@ -64,15 +74,16 @@ export default class LiveHomePage extends Component {
                             //     {time: moment(last.bid_time).format('YYYY-MM-DD HH:mm:ss')
                             //         , ranking: Number(last.ranking) === 1 ? 2 : last.ranking, needMark: last.is_bidder}
                             // )
-                            last.ranking = Number(last.ranking) === 1 ? 2 : last.ranking;
-                            last.template_ranking = `Ranking: ${Number(last.ranking) <= 2 ? 'TOP 2' : getNumBref(last.ranking)} ${last.is_bidder && last.flag !== null ? '(Bid Submitter)' : ''}`;
+                            last.ranking = this.state.showTop2Rule && Number(last.ranking) === 1 ? 2 : last.ranking;
+                            last.template_ranking = `Ranking: ${(this.state.showTop2Rule && Number(last.ranking) <= 2) ? 'TOP 2' : getStandardNumBref(last.ranking)} ${last.is_bidder && last.flag !== null ? '(Bid Submitter)' : ''}`;
                             if (!last.template_price) {
                                 last.template_price = {};
                             }
-                            last.template_price['company_price'] = `${last.company_name} ${parseFloat(last.average_price).toFixed(4)}/kWh`;
+                            last.template_price['company_price'] = `${last.company_name} $${parseFloat(last.average_price).toFixed(4)}/kWh`;
                             last.template_price['lt'] = `LT(P):$${parseFloat(last.lt_peak).toFixed(4)} LT(OP):$${parseFloat(last.lt_off_peak).toFixed(4)}`;
                             last.template_price['hts'] = `HTS(P):$${parseFloat(last.hts_peak).toFixed(4)} HTS(OP):$${parseFloat(last.hts_off_peak).toFixed(4)}`;
                             last.template_price['htl'] = `HTL(P):$${parseFloat(last.htl_peak).toFixed(4)} HTL(OP):$${parseFloat(last.htl_off_peak).toFixed(4)}`;
+                            last.template_price['eht'] = `EHT(P):$${parseFloat(last.eht_peak).toFixed(4)} EHT(OP):$${parseFloat(last.eht_off_peak).toFixed(4)}`;
                             this.state.chartDatas[0].data = this.state.chartDatas[0].data.concat(last)
                             // }
                             let element = JSON.parse(JSON.stringify(last));
@@ -83,13 +94,16 @@ export default class LiveHomePage extends Component {
                             element.hts_off_peak = parseFloat(element.hts_off_peak).toFixed(4);
                             element.htl_peak = parseFloat(element.htl_peak).toFixed(4);
                             element.htl_off_peak = parseFloat(element.htl_off_peak).toFixed(4);
+                            element.eht_peak = parseFloat(element.eht_peak).toFixed(4);
+                            element.eht_off_peak = parseFloat(element.eht_off_peak).toFixed(4);
 
                             this.setState({
                                 ranking: last.ranking,
                                 priceConfig: last.is_bidder ? [].concat(last.lt_off_peak)
                                     .concat(last.lt_peak).concat(last.hts_off_peak)
                                     .concat(last.hts_peak).concat(last.htl_off_peak)
-                                    .concat(last.htl_peak) : [],//this.state.priceConfig
+                                    .concat(last.htl_peak).concat(last.eht_off_peak)
+                                    .concat(last.eht_peak) : [],//this.state.priceConfig
                                 histories: last.is_bidder ? this.state.histories.concat(element): this.state.histories,
                                 chartDatas: this.state.chartDatas
                             })
@@ -111,11 +125,18 @@ export default class LiveHomePage extends Component {
                         }
                     }
                 }
+            }).onConnectedFailure(() => {
+                this.onRequestForbiddenBy()
             })
         }
     }
 
+    onRequestForbiddenBy() {
+
+    }
+
     makeup(res) {
+        const topRule = Number(this.props.auction ? this.props.auction.retailer_mode : 0) === 0;
         if (res.length > 0 ) {
             // console.log('res ====>', res)
             let copy = JSON.parse(JSON.stringify(res));
@@ -131,6 +152,8 @@ export default class LiveHomePage extends Component {
                 element.hts_off_peak = parseFloat(element.hts_off_peak).toFixed(4);
                 element.htl_peak = parseFloat(element.htl_peak).toFixed(4);
                 element.htl_off_peak = parseFloat(element.htl_off_peak).toFixed(4);
+                element.eht_peak = parseFloat(element.eht_peak).toFixed(4);
+                element.eht_off_peak = parseFloat(element.eht_off_peak).toFixed(4);
                 return element;
             });
             let chartDataTpl = {id: 0, data: [], color: '#e5e816'};
@@ -138,15 +161,16 @@ export default class LiveHomePage extends Component {
                 chartDataTpl.id = history.user_id;
                 // chartDataTpl.data.push({time: moment(history.bid_time).format('YYYY-MM-DD HH:mm:ss')
                 //     , ranking: Number(history.ranking) === 1 ? 2 : history.ranking, needMark: history.is_bidder})
-                history.ranking = Number(history.ranking) === 1 ? 2 : history.ranking;
-                history.template_ranking = `Ranking: ${Number(history.ranking) <= 2 ? 'TOP 2' : getNumBref(history.ranking)} ${history.is_bidder && history.flag !== null  ? '(Bid Submitter)' : ''}`;
+                history.ranking = (topRule && Number(history.ranking) === 1) ? 2 : history.ranking;
+                history.template_ranking = `Ranking: ${(topRule && Number(history.ranking) <= 2) ? 'TOP 2' : getStandardNumBref(history.ranking)} ${history.is_bidder && history.flag !== null  ? '(Bid Submitter)' : ''}`;
                 if (!history.template_price) {
                     history.template_price = {};
                 }
-                history.template_price['company_price'] = `${history.company_name} ${parseFloat(history.average_price).toFixed(4)}/kWh`;
+                history.template_price['company_price'] = `${history.company_name} $${parseFloat(history.average_price).toFixed(4)}/kWh`;
                 history.template_price['lt'] = `LT(P):$${parseFloat(history.lt_peak).toFixed(4)} LT(OP):$${parseFloat(history.lt_off_peak).toFixed(4)}`;
                 history.template_price['hts'] = `HTS(P):$${parseFloat(history.hts_peak).toFixed(4)} HTS(OP):$${parseFloat(history.hts_off_peak).toFixed(4)}`;
                 history.template_price['htl'] = `HTL(P):$${parseFloat(history.htl_peak).toFixed(4)} HTL(OP):$${parseFloat(history.htl_off_peak).toFixed(4)}`;
+                history.template_price['eht'] = `EHT(P):$${parseFloat(history.eht_peak).toFixed(4)} EHT(OP):$${parseFloat(history.eht_off_peak).toFixed(4)}`;
                 chartDataTpl.data.push(history)
             });
 
@@ -154,40 +178,47 @@ export default class LiveHomePage extends Component {
                 return element.is_bidder;
             })
             let lastBidden = biddenArr[biddenArr.length - 1];
-            lastBidden.ranking = Number(lastBidden.ranking) === 1 ? 2 : Number(lastBidden.ranking);
+            lastBidden.ranking = topRule && Number(lastBidden.ranking) === 1 ? 2 : Number(lastBidden.ranking);
             if (biddenArr.length === 1) {
                 if (lastBidden.flag === null) {
                     this.bidForm.initConfigs([]
                         .concat(lastBidden.lt_off_peak).concat(lastBidden.lt_peak)
                         .concat(lastBidden.hts_off_peak).concat(lastBidden.hts_peak)
-                        .concat(lastBidden.htl_off_peak).concat(lastBidden.htl_peak));
+                        .concat(lastBidden.htl_off_peak).concat(lastBidden.htl_peak)
+                        .concat(lastBidden.eht_off_peak).concat(lastBidden.eht_peak));
                 }
             }
             // console.log('last =>>>>',last);
             let newest = histories[histories.length - 1];
             this.setState({
-                ranking: Number(newest.ranking) === 1 ? 2 : Number(newest.ranking),
+                ranking: topRule && Number(newest.ranking) === 1 ? 2 : Number(newest.ranking),
                     priceConfig: biddenArr.length > 1 ? []
                     .concat(lastBidden.lt_off_peak).concat(lastBidden.lt_peak)
                     .concat(lastBidden.hts_off_peak).concat(lastBidden.hts_peak)
-                    .concat(lastBidden.htl_off_peak).concat(lastBidden.htl_peak) : [],
+                    .concat(lastBidden.htl_off_peak).concat(lastBidden.htl_peak)
+                    .concat(lastBidden.eht_off_peak).concat(lastBidden.eht_peak): [],
                 histories: res.filter(element => {
                     return element.is_bidder;
-                }), chartDatas: [].concat(chartDataTpl)
+                }), chartDatas: [].concat(chartDataTpl),
+                showTop2Rule: topRule
             })
+        } else {
+            this.setState({showTop2Rule: topRule})
         }
     }
 
     onBidFormSubmit(configs) {
-        // console.log({
-        //     lt_peak:`0.${configs[1]}`, lt_off_peak: `0.${configs[0]}`
-        //     , hts_peak:`0.${configs[3]}`,hts_off_peak:`0.${configs[2]}`
-        //     ,htl_peak:`0.${configs[5]}`,htl_off_peak:`0.${configs[4]}`
-        // });
+        console.log({
+            lt_peak:`0.${configs[1]}`, lt_off_peak: `0.${configs[0]}`
+            , hts_peak:`0.${configs[3]}`,hts_off_peak:`0.${configs[2]}`
+            ,htl_peak:`0.${configs[5]}`,htl_off_peak:`0.${configs[4]}`
+            ,eht_peak:`0.${configs[7]}`,eht_off_peak:`0.${configs[6]}`
+        });
         this.ws.sendMessage(ACTION_COMMANDS.SET_BID, {
             lt_peak:`0.${configs[1]}`, lt_off_peak: `0.${configs[0]}`
             , hts_peak:`0.${configs[3]}`,hts_off_peak:`0.${configs[2]}`
             ,htl_peak:`0.${configs[5]}`,htl_off_peak:`0.${configs[4]}`
+            ,eht_peak:`0.${configs[7]}`,eht_off_peak:`0.${configs[6]}`
         })
     }
 
@@ -196,6 +227,11 @@ export default class LiveHomePage extends Component {
     }
 
     render() {
+        const visibility_lt = !this.props.auction ? true: this.props.auction.has_lt;
+        const visibility_hts = !this.props.auction ? true: this.props.auction.has_hts;
+        const visibility_htl = !this.props.auction ? true: this.props.auction.has_htl;
+        const visibility_eht = !this.props.auction ? true: this.props.auction.has_eht;
+        const showTopDescription = this.state.showTop2Rule && this.state.ranking === 2;
         return (
             <div>
                 <DuringCountDown auction={this.props.auction} countDownOver={this.goToFinish.bind(this)}>
@@ -205,20 +241,21 @@ export default class LiveHomePage extends Component {
                 </DuringCountDown>
                 <div className="u-grid u-mt2">
                     <div className="col-sm-12 col-md-5 u-cell">
-                        <div className="col-sm-12 col-md-10 push-md-1"><Description ranking={`${this.state.ranking === 2 ? 'TOP ' : ''}${getNumBref(this.state.ranking)}`}/></div>
+                        <div className="col-sm-12 col-md-10 push-md-1 white_bg"><Description ranking={`${showTopDescription ? 'TOP ' : ''}${getNumBref(this.state.ranking, !showTopDescription)}`}/></div>
                     </div>
                     <div className="col-sm-12 col-md-7 u-cell">
-                        <div className="col-sm-12 col-md-10 push-md-1"><Ranking data={this.state.chartDatas} yAxisFormatterRule={{0 : ' ', 1 : ' ', 2 : 'Top 2', 'func': getNumBref}}/></div>
+                        <div className="col-sm-12 col-md-10 push-md-1"><Ranking data={this.state.chartDatas} yAxisFormatterRule={(this.state.showTop2Rule) ? {0 : ' ', 1 : ' ', 2 : 'Top 2', 'func': getNumBref} : {0 : ' ', 'func': getStandardNumBref}}/></div>
                     </div>
                 </div>
                 <div className="u-grid u-mt2">
-                    <div className="col-sm-12 col-md-5 u-cell">
-                        <div className="col-sm-12 col-md-10 push-md-1"><BidForm data={this.state.priceConfig} ref={instance => this.bidForm = instance} onSubmit={this.onBidFormSubmit.bind(this)}/></div>
+                    <div className="col-sm-12 col-md-5 u-cell mh400">
+                        <div className="col-sm-12 col-md-10 push-md-1"><BidForm data={this.state.priceConfig} auction={this.props.auction} ref={instance => this.bidForm = instance} onSubmit={this.onBidFormSubmit.bind(this)}
+                                                                                isLtVisible={visibility_lt} isHtsVisible={visibility_hts} isHtlVisible={visibility_htl} isEhtVisible={visibility_eht}/></div>
                     </div>
                     <div className="col-sm-12 col-md-7 u-cell">
                         <div className="col-sm-12 col-md-10 push-md-1"><BidHistory data={this.state.histories.filter(element => {
                             return element.flag !== null;
-                        })} order={'desc'}/></div>
+                        })} order={'desc'} isLtVisible={visibility_lt} isHtsVisible={visibility_hts} isHtlVisible={visibility_htl} isEhtVisible={visibility_eht}/></div>
                     </div>
                 </div>
             </div>

@@ -1,20 +1,20 @@
-import {get, Ws, create} from '../../../javascripts/http';
+import {Ws, create, get} from '../../../javascripts/http';
 
-export const getAuctionTimeRule = (auction) => {
-    return get(`/api/auctions/${auction}/timer`);
-}
+export const getAuctionTimeRule = (auction) => get(`/api/auctions/${auction}/timer`)
 
-export const createWebsocket = (auction) => {
-    return new Ws(auction); // return createWS(auction);
-}
+export const createWebsocket = (auction) =>
+     new Ws(auction) // return createWS(auction);
 
-export const getAuction = (type) => {
-    return get(`/api/${type}/auctions/obtain`);
-}
 
-export const logout = (id) => {
-    return create('/api/auctions/logout',{user_id:id});
-}
+export const getAuction = (type, id) => get(`/api/${type}/auctions/obtain?id=${id}`)
+
+export const logout = (id) => create('/api/auctions/logout', {user_id:id})
+
+export const getRoleList = (data, url) => get(url, data)
+
+export const setBuyerParticipate = (data, url) => create(url, data)
+
+export const getBuyerParticipate = (url) => get(url)
 
 export const ACTION_COMMANDS = {
     SET_BID: 'set_bid',
@@ -28,6 +28,12 @@ export const AUCTION_PROPS = {
     HOLD_STATUS : 'hold_status'
 }
 
-export const checknetwork = () => {
-    return create('/api/base/heartbeat');
+export const checknetwork = () => create('/api/base/heartbeat')
+
+export const getTendersCurrent= (type,id) => {
+    return get('/api/'+type+'/tenders/'+id+'/current');
+}
+
+export const getTenderhistory= (type,id) => {
+    return get('/api/'+type+'/tenders/history',{chat_id:id});
 }

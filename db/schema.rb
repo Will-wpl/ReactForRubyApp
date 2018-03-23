@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171218103504) do
+ActiveRecord::Schema.define(version: 20180227062748) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,15 +30,29 @@ ActiveRecord::Schema.define(version: 20171218103504) do
     t.decimal "hts_off_peak", precision: 5, scale: 4
     t.decimal "htl_peak", precision: 5, scale: 4
     t.decimal "htl_off_peak", precision: 5, scale: 4
-    t.string "specifications_doc_url"
-    t.string "briefing_pack_doc_url"
     t.bigint "user_id"
     t.bigint "auction_id"
     t.string "accept_status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "action_status"
+    t.decimal "eht_peak"
+    t.decimal "eht_off_peak"
+    t.string "comments"
     t.index ["auction_id"], name: "index_arrangements_on_auction_id"
     t.index ["user_id"], name: "index_arrangements_on_user_id"
+  end
+
+  create_table "auction_attachments", force: :cascade do |t|
+    t.string "file_type"
+    t.string "file_name"
+    t.string "file_path"
+    t.bigint "auction_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["auction_id"], name: "index_auction_attachments_on_auction_id"
+    t.index ["user_id"], name: "index_auction_attachments_on_user_id"
   end
 
   create_table "auction_events", force: :cascade do |t|
@@ -84,6 +98,8 @@ ActiveRecord::Schema.define(version: 20171218103504) do
     t.boolean "is_bidder"
     t.string "flag"
     t.datetime "actual_bid_time"
+    t.decimal "eht_peak"
+    t.decimal "eht_off_peak"
     t.index ["auction_id"], name: "index_auction_histories_on_auction_id"
     t.index ["user_id"], name: "index_auction_histories_on_user_id"
   end
@@ -107,6 +123,9 @@ ActiveRecord::Schema.define(version: 20171218103504) do
     t.bigint "auction_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "eht_peak"
+    t.decimal "eht_off_peak"
+    t.string "justification"
     t.index ["auction_id"], name: "index_auction_results_on_auction_id"
     t.index ["user_id"], name: "index_auction_results_on_user_id"
   end
@@ -132,6 +151,53 @@ ActiveRecord::Schema.define(version: 20171218103504) do
     t.decimal "total_htl_peak"
     t.decimal "total_htl_off_peak"
     t.boolean "hold_status", default: false
+    t.string "time_extension"
+    t.string "average_price"
+    t.string "retailer_mode"
+    t.decimal "total_eht_peak"
+    t.decimal "total_eht_off_peak"
+    t.decimal "starting_price"
+  end
+
+  create_table "consumption_details", force: :cascade do |t|
+    t.string "account_number"
+    t.string "intake_level"
+    t.decimal "peak"
+    t.decimal "off_peak"
+    t.bigint "consumption_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "premise_address"
+    t.decimal "contracted_capacity"
+    t.index ["consumption_id"], name: "index_consumption_details_on_consumption_id"
+  end
+
+  create_table "consumptions", force: :cascade do |t|
+    t.string "action_status"
+    t.string "participation_status"
+    t.decimal "lt_peak"
+    t.decimal "lt_off_peak"
+    t.decimal "hts_peak"
+    t.decimal "hts_off_peak"
+    t.decimal "htl_peak"
+    t.decimal "htl_off_peak"
+    t.bigint "user_id"
+    t.bigint "auction_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.decimal "eht_peak"
+    t.decimal "eht_off_peak"
+    t.string "acknowledge"
+    t.index ["auction_id"], name: "index_consumptions_on_auction_id"
+    t.index ["user_id"], name: "index_consumptions_on_user_id"
+  end
+
+  create_table "email_templates", force: :cascade do |t|
+    t.string "subject"
+    t.text "body"
+    t.string "template_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "roles", id: :serial, force: :cascade do |t|
@@ -145,21 +211,37 @@ ActiveRecord::Schema.define(version: 20171218103504) do
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource_type_and_resource_id"
   end
 
-  create_table "user_details", force: :cascade do |t|
-    t.string "consumer_type"
-    t.string "company_address"
-    t.string "company_unique_entity_number"
-    t.string "company_license_number"
-    t.string "account_fin"
-    t.string "account_mobile_number"
-    t.string "account_office_number"
-    t.string "account_home_number"
-    t.string "account_housing_type"
-    t.string "account_home_address"
-    t.bigint "user_id"
+  create_table "tender_chat_details", force: :cascade do |t|
+    t.string "retailer_response"
+    t.string "sp_response"
+    t.bigint "tender_chat_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_user_details_on_user_id"
+    t.string "response_status"
+    t.string "propose_deviation"
+    t.index ["tender_chat_id"], name: "index_tender_chat_details_on_tender_chat_id"
+  end
+
+  create_table "tender_chats", force: :cascade do |t|
+    t.integer "item"
+    t.string "clause"
+    t.string "sp_response_status"
+    t.bigint "arrangement_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["arrangement_id"], name: "index_tender_chats_on_arrangement_id"
+  end
+
+  create_table "tender_state_machines", force: :cascade do |t|
+    t.integer "previous_node"
+    t.integer "current_node"
+    t.string "current_status"
+    t.integer "turn_to_role"
+    t.integer "current_role"
+    t.bigint "arrangement_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["arrangement_id"], name: "index_tender_state_machines_on_arrangement_id"
   end
 
   create_table "user_extensions", force: :cascade do |t|
@@ -169,6 +251,13 @@ ActiveRecord::Schema.define(version: 20171218103504) do
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "logged_in_status"
+    t.datetime "logged_in_last_time"
+    t.string "ws_connected_status"
+    t.datetime "ws_connected_last_time"
+    t.string "ws_send_message_status"
+    t.datetime "ws_send_message_last_time"
+    t.string "current_ip"
     t.index ["user_id"], name: "index_user_extensions_on_user_id"
   end
 
@@ -187,7 +276,20 @@ ActiveRecord::Schema.define(version: 20171218103504) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "company_name"
-    t.string "approval_status", default: "0"
+    t.string "approval_status"
+    t.string "consumer_type"
+    t.string "company_address"
+    t.string "company_unique_entity_number"
+    t.string "company_license_number"
+    t.string "account_fin"
+    t.string "account_mobile_number"
+    t.string "account_office_number"
+    t.string "account_home_number"
+    t.string "account_housing_type"
+    t.string "account_home_address"
+    t.text "comment"
+    t.string "billing_address"
+    t.string "gst_no"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -202,11 +304,14 @@ ActiveRecord::Schema.define(version: 20171218103504) do
 
   add_foreign_key "arrangements", "auctions"
   add_foreign_key "arrangements", "users"
+  add_foreign_key "auction_attachments", "auctions"
   add_foreign_key "auction_events", "auctions"
   add_foreign_key "auction_events", "users"
   add_foreign_key "auction_histories", "auctions"
   add_foreign_key "auction_histories", "users"
   add_foreign_key "auction_results", "auctions"
-  add_foreign_key "user_details", "users"
+  add_foreign_key "consumption_details", "consumptions"
+  add_foreign_key "consumptions", "auctions"
+  add_foreign_key "consumptions", "users"
   add_foreign_key "user_extensions", "users"
 end

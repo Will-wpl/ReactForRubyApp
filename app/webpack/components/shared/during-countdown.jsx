@@ -10,7 +10,7 @@ export class DuringCountDown extends Component {
         this.state = {hour: 0, minute: 0, second: 0}
     }
     componentDidMount() {
-        this.getAuctionTime(this.props.auction);
+        //this.getAuctionTime(this.props.auction);
         this.interval = setInterval(() => {
             this.getAuctionTime(this.props.auction);
         }, 1000);

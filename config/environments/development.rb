@@ -73,4 +73,18 @@ Rails.application.configure do
     g.view_specs       false
     g.helper_specs     false
   end
+
+  config.action_mailer.smtp_settings = {
+      address:              '192.168.15.120',
+      port:                 25,
+      domain:               'dragonite-test.com',
+      user_name:            'noreply@dragonite-test.com',
+      password:             '123456',
+      authentication:       'login',
+      enable_starttls_auto: false,
+      openssl_verify_mode: OpenSSL::SSL::VERIFY_NONE  }
+
+  config.action_mailer.default_options = {
+      from: "noreply@dragonite-test.com"
+  }
 end

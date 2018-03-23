@@ -25,6 +25,8 @@ gem 'webpacker', '~> 2.0'
 
 # App Specific
 
+gem 'carrierwave', '~> 1.0'
+
 ## Utilities
 gem 'breadcrumbs_on_rails'
 gem 'kaminari'
@@ -86,6 +88,11 @@ end
 group :test do
   gem 'database_rewinder'
   gem 'rspec_junit_formatter'
+  gem 'email_spec'
 end
 
 gem 'newrelic_rpm', group: :production
+gem 'prawn', '~> 2.2', '>= 2.2.2'
+gem 'prawn-table', '~> 0.2.2'
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary'

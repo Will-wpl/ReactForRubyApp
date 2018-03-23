@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {Modal} from './show-modal';
 import {checknetwork} from '../../javascripts/componentService/common/service';
+import {getLoginUserId} from '../../javascripts/componentService/util'
+import {createWS} from '../../javascripts/http';
 
 export class CheckNetwork extends React.Component{
     constructor(props){
@@ -12,6 +14,25 @@ export class CheckNetwork extends React.Component{
         }
     }
     componentDidMount() {
+        const userId = getLoginUserId();
+        let wsHandler = createWS({
+            channel: 'HealthChannel',
+            user_id: userId,
+            success: () => {
+                require('public-ip').v4().then(ip => {
+                    // console.log('connected......send  ', ip, userId)
+                    wsHandler.perform('heartbeat', {user_id: userId, public_ip4: ip});
+                }).catch(err => {
+                    wsHandler.perform('heartbeat', {user_id: userId, public_ip4: 'unknown'});
+                });
+            },
+            fail: () => {
+                // console.log('disconnected......')
+            },
+            feedback: (data) => {
+
+            }
+        })
         checknetwork().then(res => {
             this.setState({
                 networkStatus:true

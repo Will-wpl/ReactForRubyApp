@@ -14,7 +14,12 @@ FactoryBot.define do
     hts_off_peak '9.99'
     htl_peak '9.99'
     htl_off_peak '9.99'
+    eht_peak '9.99'
+    eht_off_peak '9.99'
     user nil
     auction nil
+    trait :status_nil do
+      status nil
+    end
   end
 end

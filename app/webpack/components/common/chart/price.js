@@ -6,12 +6,34 @@ export default class Price extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {option: getTemplate(this.props)};
+        this.state = {
+            option: getTemplate(this.props),
+            start_time:"",
+            end_time:"",
+            start_price:"",
+            end_price:""
+        };
         this.onyAxisMouseOver = this.onyAxisMouseOver.bind(this);
+        this.onDataZoom = this.onDataZoom.bind(this);
+        this.onEvents = {
+            'dataZoom': this.onDataZoom
+        }
     }
-
+    componentWillReceiveProps(nextProps){
+        if(nextProps.data.length>0){
+            this.setState({
+                start_time:nextProps.data[0].data[0].bid_time,
+                end_time:nextProps.data[0].data[nextProps.data[0].data.length-1].bid_time,
+                start_price:parseFloat(0.0000).toFixed(4),
+                end_price:parseFloat(nextProps.data[0].data[0].average_price).toFixed(4)
+            })
+            this.theStartbidtime = nextProps.data[0].data[0].bid_time;
+            this.theEndbidtime = nextProps.data[0].data[nextProps.data[0].data.length-1].bid_time;
+        }
+    }
     getChartOption() {
         let option = getTemplate(this.props);
+        //console.log(this.props.data);
         this.props.data.forEach(element => {
             let tmp = {
                 type: 'line',
@@ -34,7 +56,7 @@ export default class Price extends Component {
                     value: []
                 } : {
                     symbol: 'circle',
-                    symbolSize: 8,
+                    symbolSize: 6,
                     showSymbol: true,
                     value: []
                 };
@@ -46,11 +68,25 @@ export default class Price extends Component {
                     d.value = [].concat(moment(timePrice.bid_time).format('YYYY-DD-MM HH:mm:ss'))
                         .concat(parseFloat(timePrice.average_price).toFixed(4));
                 }
-
                 tmp.data.push(d);
             });
             option.series.push(tmp);
         });
+        //console.log(option);
+        if (option.hasOwnProperty('dataZoom')) {
+            if (!Number.isNaN(this.xStart)) {
+                option.dataZoom[0].start = this.xStart;
+            }
+            if (!Number.isNaN(this.xEnd)) {
+                option.dataZoom[0].end = this.xEnd;
+            }
+            if (!Number.isNaN(this.yStart)) {
+                option.dataZoom[1].start = this.yStart;
+            }
+            if (!Number.isNaN(this.yEnd)) {
+                option.dataZoom[1].end = this.yEnd;
+            }
+        }
         return option;
     }
 
@@ -67,20 +103,73 @@ export default class Price extends Component {
         }
     }
 
+    onDataZoom(params) {
+        let instance = this.charts_instance.getEchartsInstance();
+        let option = instance.getOption();
+        if (params.type === 'datazoom' && params.dataZoomId.length > 0) {
+            const lastEle = params.dataZoomId.charAt(params.dataZoomId.length - 1);
+            console.log(option);
+            if (lastEle === '1') { //y
+                this.yStart = params.start;
+                this.yEnd = params.end;
+                let ps = (option.dataZoom[1].startValue).toFixed(4);
+                let pe = (option.dataZoom[1].endValue).toFixed(4);
+                this.setState({
+                    start_price:ps,
+                    end_price:pe
+                })
+                //console.log(option.dataZoom[1]);
+                console.log("start_price : "+ps);
+                console.log("end_price : " +pe);
+            } else if (lastEle === '0') { //x
+                this.xStart = params.start;
+                this.xEnd = params.end;
+                let theStartbidtime = this.theStartbidtime
+                let theEndbidtime = this.theEndbidtime
+                let diff = moment(theEndbidtime)-moment(theStartbidtime);
+                let ts = Math.ceil(diff*(params.start/100))+moment(theStartbidtime);
+                let te = Math.ceil(diff*(params.end/100))+moment(theStartbidtime);
+                this.setState({
+                    start_time:moment(ts).utc().format(),
+                    end_time:moment(te).utc().format()
+                })
+                console.log("start_time : "+moment(ts).format("YYYY-MM-DD HH:mm:ss"));
+                console.log("end_time : "+moment(te).format("YYYY-MM-DD HH:mm:ss"));
+            }
+        }
+    }
+    makeXy(){
+        let data = {
+            start_time:this.state.start_time,
+            end_time:this.state.end_time,
+            start_price:this.state.start_price,
+            end_price:this.state.end_price
+        }
+        return data;
+    }
     render() {
-        return (
-            <ReactEcharts
+        let content = <div></div>;
+        if (this.props.data) {
+            content = <ReactEcharts
                 ref={instance => this.charts_instance = instance}
                 option={this.getChartOption()}
                 notMerge={true}
                 style={{minHeight: '310px', width: '100%'}}
-                className='react_for_echarts' />
+                className='react_for_echarts'
+                onEvents={this.onEvents}/>
+        }
+        return (
+            content
         );
     }
 }
 
 Price.defaultProps = {
-    data: []
+    data: [],
+    isLtVisible: true,
+    isHtsVisible: true,
+    isHtlVisible: true,
+    isEhtVisible: true
 }
 
 function getTemplate(props) {
@@ -123,8 +212,10 @@ function getTemplate(props) {
                             let d = serObj.data[params.dataIndex];
                             if (d && d.template_price) { //<div>${d.template_price.hts}</div>
                                 template = `<strong>${d.template_price.company_price}</strong>
-                                    <div>${d.template_price.lt}</div>
-                                    <div>${d.template_price.htl}</div>`;
+                                    <div style="${props.isLtVisible ? '' : 'display:none'}">${d.template_price.lt}</div>
+                                    <div style="${props.isHtsVisible ? '' : 'display:none'}">${d.template_price.hts}</div>
+                                    <div style="${props.isHtlVisible ? '' : 'display:none'}">${d.template_price.htl}</div>
+                                    <div style="${props.isEhtVisible ? '' : 'display:none'}">${d.template_price.eht}</div>`;
                             }
                         }
                         if (template) {
@@ -187,6 +278,7 @@ function getTemplate(props) {
             series: []
         }
     }
+
     let yAxisMin = 0;
     // if (props.data.length > 0) {
     //     let tmp = 1;
@@ -267,8 +359,10 @@ function getTemplate(props) {
                         let d = serObj.data[params.dataIndex];
                         if (d && d.template_price) { //<div>${d.template_price.hts}</div>
                             template = `<strong>${d.template_price.company_price}</strong>
-                                    <div>${d.template_price.lt}</div>
-                                    <div>${d.template_price.htl}</div>`;
+                                    <div style="${props.isLtVisible ? '' : 'display:none'}">${d.template_price.lt}</div>
+                                    <div style="${props.isHtsVisible ? '' : 'display:none'}">${d.template_price.hts}</div>
+                                    <div style="${props.isHtlVisible ? '' : 'display:none'}">${d.template_price.htl}</div>
+                                    <div style="${props.isEhtVisible ? '' : 'display:none'}">${d.template_price.eht}</div>`;
                         }
                     }
                     if (template) {

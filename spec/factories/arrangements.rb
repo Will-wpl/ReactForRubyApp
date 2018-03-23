@@ -15,6 +15,8 @@ FactoryBot.define do
     hts_off_peak 0
     htl_peak 0.1458
     htl_off_peak 0.1458
+    eht_peak 0.1458
+    eht_off_peak 0.1458
 
     trait :accepted do
       main_name { Faker::Name.name }

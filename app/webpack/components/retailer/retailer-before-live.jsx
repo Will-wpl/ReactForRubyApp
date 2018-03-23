@@ -12,7 +12,7 @@ export class RetailerBeforeLive extends Component {
         this.state = {holdStatus:false, day: 0, hour: 0, minute: 0, second: 0}
     }
     componentDidMount() {
-        this.getAuctionTime(this.props.auction.id);
+        //this.getAuctionTime(this.props.auction.id);
         this.interval = setInterval(() => {
             this.getAuctionTime(this.props.auction.id);
         }, 1000);
@@ -37,7 +37,7 @@ export class RetailerBeforeLive extends Component {
                     </p>
                 </div>
                 <div className="createRaMain u-grid">
-                    <a className="lm--button lm--button--primary u-mt3" href="/retailer/home">Back to Homepage</a>
+                    <a className="lm--button lm--button--primary u-mt3" href="/retailer/auctions">Back</a>
                 </div>
             </div>
         );

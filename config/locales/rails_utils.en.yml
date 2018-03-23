@@ -2,6 +2,9 @@ en:
   home:
     index:
       title: 'Home'
+    term:
+      title: 'Term'
+
 
   admin_home:
     index:
@@ -16,6 +19,76 @@ en:
       title: 'View User'
     edit:
       title: 'Edit User'
+    buyers:
+      title: 'Buyer List'
+    retailers:
+      title: 'Retailer List'
+    manage:
+      title: 'Manage User'
+
+  admin_auctions:
+    comsumption:
+      title: 'Auction Comsumption'
+    confirm:
+      title: 'Auction Confirm'
+    dashboard:
+      title: 'Auction Dashboard'
+    empty:
+      title: 'Empty'
+    invitation:
+      title: 'Auction Invitation'
+    log:
+      title: 'Auction Log'
+    new:
+      title: 'Auction New'
+    online:
+      title: 'Auction Online'
+    published:
+      title: 'Auction Published List'
+    report:
+      title: 'Auction Report'
+    result:
+      title: 'Auction Result'
+    select:
+      title: 'Auction Select'
+    unpublished:
+      title: 'Auction Unpublished list'
+    upcoming:
+      title: 'Auction Upcoming'
+
+  admin_auction_results:
+    index:
+      title: 'Auction Results'
+
+  buyer_home:
+    index:
+      title: 'Home'
+
+  buyer_auctions:
+    index:
+      title: 'Auction List'
+    new:
+      title: 'New Comsumption'
+
+  retailer_home:
+    index:
+      title: 'Home'
+
+  retailer_auctions:
+    empty:
+      title: 'Empty'
+    finish:
+      title: 'Auction Finish'
+    live:
+      title: 'Auction Live'
+    message:
+      title: 'Message'
+    upcoming:
+      title: 'Auction Upcoming'
+
+  retailer_auction_results:
+    index:
+      title: 'Auction Results'
 
   devise_sessions:
     new:
@@ -24,8 +97,14 @@ en:
   devise_registrations:
     new:
       title: 'Sign Up'
-    edit:
+    edit_account:
       title: 'Manage Account'
+    edit_password:
+      title: 'Manage Password'
+    choose_type:
+      title: 'Choose Account Type'
+    buyer_type:
+      title: 'Choose Buyer Type'
 
   devise_passwords:
     new:

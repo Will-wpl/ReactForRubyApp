@@ -1,6 +1,10 @@
 //all
 body a{outline:none; cursor: default;}
+.link_hand a{cursor: pointer;}
 button{ cursor: pointer; transition: 0.5s all;}
+.green{color:green;}
+.red{color:red;}
+button[disabled='']{background: #666 !important; color:#999 !important; cursor: default !important;}
 
 
 //createRaMain or retailer btn
@@ -15,6 +19,10 @@ button{ cursor: pointer; transition: 0.5s all;}
       .react-datepicker__input-container,.react-datepicker-wrapper{width:100%;}
       dd{
           margin-bottom: 20px;
+          .lm--formItem-right{ 
+            position: relative;
+            .required_error{position:absolute; display: none; top:45px; left:0; width: 100%; padding:5px 10px; border:2px solid #fbb136; background: #fff; color:#333; font-size: 15px;z-index: 10}
+          }
           b{ 
               font-weight: normal; font-size: 18px; line-height: 44px; text-align:center; display: block;
               &.textLeft{text-align: left;}
@@ -23,6 +31,7 @@ button{ cursor: pointer; transition: 0.5s all;}
               display: block;
               width: 100%;
               padding: 0.6875rem 1rem;
+              margin-top: 0px;
               font-size: 1rem;
               font-weight: 300;
               color: #fff;
@@ -64,8 +73,8 @@ abbr[title]{color: #fe0000; text-decoration: none;}
   }
   .mask{ width: 100%; height: 100%; position: absolute; left: 0; top:0;}
 }
-  
-.table-body{width:100%; height:300px;overflow-y:auto; overflow-x:hidden}
+.mh400{min-height:400px;}
+.table-body{width:100%; max-height:300px;overflow-y:auto; overflow-x:hidden}
 .retailer_fill{
    width: 100%; font-size: 12px; table-layout: fixed; border-top:1px solid #314657; border-left:1px solid #314657;
    thead{
@@ -78,12 +87,12 @@ abbr[title]{color: #fe0000; text-decoration: none;}
    }
    tbody{
      overflow:auto; height: 30px;
-     tr{
-       td{border:1px solid #314657; text-align: center; height: 40px;
+     tr{ &.isbidder{background:green; transition: 0.5s all;}
+       td{border:1px solid #314657; text-align: center; height: 40px; padding:5px; word-break: break-all;
         a{ 
           display: block; width: 100%; height: 100%; cursor: pointer;
           &.report{background: url("../images/Reverse_Auction_Report.png") no-repeat center; background-size:19px;}
-          &.log{background: url("../images/Activity_Log.png") no-repeat center; background-size:19px;}
+          &.log,&.award{background: url("../images/Activity_Log.png") no-repeat center; background-size:19px;}
         }
         input{
           width: 60px; display: inline-block; padding:2px; border:1px solid #fff; margin-left: 5px; background: none;
@@ -148,22 +157,53 @@ abbr[title]{color: #fe0000; text-decoration: none;}
   h4{
     height: 32px; line-height: 32px; width: 100%; margin: 0 auto; font-size: 13px;
     span{ float: left; padding-left:15px;}
-    a{ float: right; padding-right:15px;}
+    a{ float: right; padding-right:15px; cursor: pointer;}
   }
-  .modal_detail{ width:90%; min-height: 112px; margin:0px auto; line-height: 22px; font-size: 16px;}
+  .modal_detail{ width:90%; min-height: 112px; margin:0px auto; line-height: 22px; font-size: 16px;word-wrap: break-word;
+    .modal_text{ width: 100%; height: auto; border:0px; background: none; font-size: 16px; color:#fff;rows:2;resize:none;}
+  }
   .showinfo{ color: red; min-height: auto;}
   .modal_btn{ 
     width:100%; margin: 10px auto; overflow: hidden;
-    a{ width: 60px; float:right; margin-right: 10px;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; margin: 0px 10px;}
+    a{ width: 60px; float:right; margin-right: 10px; cursor: pointer;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; margin: 0px 10px;}
   }
 }
 .u-contain{overflow:hidden;}
+#modal_history{position: fixed; top:0; left: 0; font-size: 12px;
+  width:100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); 
+    .history_box{ width:40%; min-width: 300px;  overflow: hidden; background: #fff; margin:8% auto 0;
+      h4{font-weight: 500;
+        height: 42px; line-height: 42px; background: #00afb1; width: 100%; margin: 0 auto; font-size: 13px;
+        span{ float: left; padding-left:15px; color:#fff;}
+        a{ float: right; padding-right:15px; color:#fff; cursor: pointer;}
+      }
+      .history_nr{overflow-y: auto; height:362px;
+        dl{ width: 100%; 
+            dd{ width:92%; display: block; overflow: hidden; margin: 15px auto; font-weight: normal;
+              dfn{
+                color:#666;
+                float: left; margin-right:15px; text-align: center; 
+                abbr{ width: 42px; height: 42px; font-style: normal;display: block; background: url("../images/retailer.png") no-repeat center; background-size: 42px; }
+              }
+              span{ background: #eee; max-width: 200px; padding: 10px; word-break:break-all; border-radius: 5px; color:#666; float: left;}
+            }
+            dt{width:92%; display: block; overflow: hidden; margin: 15px auto; font-weight: normal;
+              dfn{color:#666;
+                float: right; margin-left:15px; text-align: center; 
+                abbr{ width: 42px; height: 42px; display: block; background: url("../images/sp.png") no-repeat center; background-size: 42px; }
+              }
+              span{ background: #9fdd9f; max-width: 200px; word-break:break-all; padding: 10px; border-radius: 5px; color:#666; float: right;}
+            }
+        }
+      } 
+  }
+}
 
 
 //retailer ranking
 .retailrank_main{ width: 86%; margin: 10px auto; font-size: 12px;
   h4{ color:#fff;}
-  .retailrank_box{width: 100%; height: 441px; margin: 10px auto; overflow-y: auto;}
+  .retailrank_box{width: 100%; max-height: 441px; margin: 10px auto; overflow-y: auto;}
 } 
 
 //reservePrice
@@ -209,14 +249,27 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 .live_hide{display: none;}
 
 .buyer{
+  .retailer_fill{
+    input,select{ width:96%; margin: 3px auto; padding: 1px; border:1px solid #fff;}
+  }
+  .cursor{ cursor: pointer;}
+  .site_list_title{
+    width: 100%; overflow: hidden; line-height:42px;
+    span{float: left;}
+    a{ float: right; color: #00888a; font-size: 15px; cursor: pointer; background: url("../images/remove.png") no-repeat left; padding-left:18px;}
+  }
   .addSite{ width: 100%; margin: 10px auto;
-    a{color:#00888a;}
+    a{color:#00888a; cursor: pointer; background: url("../images/add.png") no-repeat left; padding-left:18px;}
   }
   .buyer_btn{ text-align: right; width: 100%;
+    a{
+      &.disabled{background: #666; color: #aaa; cursor:default;}
+    }
     button{ 
         margin: 0 10px;
         &:last-child{margin-right: 0px;}
         &:hover{background:#00888a;}
+        &.disabled{background: #666; color: #aaa;}
     }
   }
 }
@@ -298,6 +351,9 @@ input[type="number"]{
 @media screen and (max-width:1008px){
   .col-md-5,.col-md-7{ width: 100%;} 
   .push-md-1{margin-left: 4.33333%;}
+  .propose_deviations{
+    .push-md-1{margin-left: 0;}
+  }
   .admin_btn{
     .push-md-1{margin-left: 8.33333%;}
   }
@@ -316,14 +372,333 @@ input[type="number"]{
 
 .registration{ margin: 30px auto; min-height: 400px;
   h4{text-align: center; margin: 20px auto;}
-  a{width:170px; margin: 40px auto; border-radius:6px; display: block; transition: 0.3s all; cursor: pointer; height:228px; text-indent: -9999px;
+  a{width:190px; margin: 40px auto; border-radius:6px; display: block; transition: 0.3s all; cursor: pointer; height:248px; text-indent: -9999px;
     &.buyer{  
       background:#3b98de url("../images/buyer_ico.png") no-repeat bottom;
-      &:hover{width:190px; height:248px; box-shadow: 0px 0px 25px #fff;}
+      &:hover{width:200px; height:258px; box-shadow: 0px 0px 25px #fff;}
     }
     &.retailer{  
       background:#D69841 url("../images/retailer_ico.png") no-repeat bottom;
-      &:hover{width:190px; height:248px; box-shadow: 0px 0px 25px #fff;}
+      &:hover{width:200px; height:258px; box-shadow: 0px 0px 25px #fff;}
     }
   }
+}
+
+.buyer_registration form{ margin-top: 25px;}
+.lm--formItem-left.lm--formItem-label{
+  font{font-size: 20px;}
+  b{color:red;}
+  // &:first-letter{color:red;}
+}
+.save-right{ text-align: right;
+  form{ width: 100%;
+    input[type="submit"]{ margin-left:15px;}
+  }
+}
+#edit_user{
+  input[type="submit"]{ margin-left:15px;}
+}
+select{
+  option{
+    color:#333;
+  }
+}
+.title_top{ text-align: center; margin: 40px auto;}
+dfn.manage_label{
+  font-style: normal; display: block;
+  width: 100%;
+  padding: 0.6875rem 1rem;
+  font-size: 1rem;
+  font-weight: 300;
+  color: #fff;
+  line-height: 1.25;
+  background: transparent;
+  border: 1px solid #5d7789; min-height: 42px;
+  border-radius: 0.3125rem;
+}
+
+#users_search_list{ 
+  .mg0{ margin: 0 auto;}
+  width: 100%;
+  div.search_type{
+    dd{ float: left; margin: 0px 5px; margin-bottom: 10px;
+      &.fright{ 
+        float:right; margin: 0;
+        a.create_btn{padding: 0px 20px 0px 30px; background:#00b0b2 url("../images/create_ico.png") no-repeat 5px center; background-size: 18px;}
+      }
+      &.hide{ display: none;}
+      span{font-size: 12px; padding:5px 0px; vertical-align: top;}
+      label{ width: 140px; display: inline-block; margin-left: 10px;
+        .react-datepicker__input-container,.react-datepicker-wrapper{ width: 100%;}
+        input,select{
+          display: block; margin: 0 auto; font-size: 12px; text-indent: 10px;
+          width: 100%;
+          padding: 6px 0px;
+          font-weight: 300;
+          color: #fff;
+          line-height: 1.25;
+          background: transparent;
+          border: 1px solid #5d7789;
+          border-radius: 0.3125rem;
+          &.time_ico{background:url("../images/date.png") no-repeat right;}
+        }
+      }
+      button.lm--button,a.lm--button{
+        height: 30px; font-size: 12px; padding: 0px 20px 0px 30px; margin-left: 10px; line-height: 30px;
+      }
+      a.lm--button{padding: 0px 20px 0px 20px;}
+    }
+    .search_btn{
+      background:#00b0b2 url("../images/search.png") no-repeat 5px center; background-size: 18px; 
+    }
+    .reset_btn{
+      background:#00b0b2 url("../images/reset.png") no-repeat 5px center; background-size: 18px; 
+    }       
+  }
+  div.lm--table-container{ overflow:hidden;
+    a{ text-decoration: none; cursor: pointer;}
+    table.lm--table{
+      table-layout: fixed;
+      th{
+        font-size: 14px;
+      }
+      td{
+        font-size: 13px;
+        div{ width: 100%; height:20px;
+          &.select_ico_0{background:url("../images/not_invited.png") no-repeat 15px center;}
+          &.select_ico_1{background:url("../images/notification_sent.png") no-repeat 15px center;}
+          &.select_ico_2{background:url("../images/pending_notification.png") no-repeat 15px center;}
+          &.participation_status_0{ background: red; width:60%; margin-top: 3px;}
+          &.participation_status_1{ background: #00d900; width:60%; margin-top: 3px;}
+          &.participation_status_2{ background: yellow; width:60%; margin-top: 3px;}
+        }
+        span{
+          cursor: pointer; padding-left: 20px;
+          &.invite{background:url("../images/invite.png") no-repeat left;}
+          &.cancel_invite{background:url("../images/cancel_invite.png") no-repeat left;}
+        }
+        a{
+          margin: 0px auto; display: block; width: 100%; cursor: pointer;
+          &.report{background: url("../images/Reverse_Auction_Report.png") no-repeat left; background-size:19px; height: 20px;}
+          &.log,&.award{background: url("../images/Activity_Log.png") no-repeat left; background-size:19px; height: 20px;}
+        }
+        &.search_list_btn{word-wrap: break-word;
+          a{ 
+            padding-left: 20px; display: block;
+            &::before{
+              display: none;
+            }
+            &.view{background:url("../images/view.png") no-repeat left;}
+            &.delete{background:url("../images/delete.png") no-repeat left;}
+            &.manage{background:url("../images/manage.png") no-repeat left;}
+            &.edit{background:url("../images/edit.png") no-repeat left;}
+            &.bidding{color:#df5c28; background:url("../images/bidding.png") no-repeat left;}
+          }
+        }
+      }
+    }
+    .table_page{ 
+      width: 100%; text-align: left; margin: 30px auto 0px auto;
+      span{ display: inline-block; line-height: 32px; color:#fff; cursor: pointer; padding: 0px 15px; transition: 0.5s all;
+        &.table_page_selected,&:hover{ background:#314657; }
+      }
+    }
+  }
+}
+.select_ico_tab{ overflow: hidden;
+  li{ float: left; list-style: none; padding-left: 20px; margin-right: 3rem;
+    &.select_ico_0{background:url("../images/not_invited.png") no-repeat left;}
+    &.select_ico_1{background:url("../images/notification_sent.png") no-repeat left;}
+    &.select_ico_2{background:url("../images/pending_notification.png") no-repeat left;}
+    &.participation_status_1{background:url("../images/green_ico.png") no-repeat left;}
+    &.participation_status_2{background:url("../images/yellow_ico.png") no-repeat left;}
+    &.participation_status_0{background:url("../images/red_ico.png") no-repeat left;}
+  }
+}
+.mg0{ margin: 0 auto;}
+body.choose{
+  header.lm--header{display: none;}
+}
+
+
+.admin_invitation{
+  .w_100{ width: 100%;}
+  h4.pending_review{color:#fd6301;}
+  .consumption{ position: relative;
+    .retailer_fill{ margin-bottom: 1.5rem;}
+    .required_error{top:125px; left:0;}
+  }
+  .role_select{
+    position: relative;
+    .required_error{ bottom:-36px; width: 70%; right:0; }
+  }
+  a,button{ margin-bottom: 1rem; font-size: 13px;
+    span{ display: block; width: 100%; text-align: center;}
+    &.orange{background:#DF5C28;}
+  }
+  .lm--formItem-right.lm--formItem-control abbr{
+    display: block;
+    padding: 0.6875rem 0.75rem 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 300;
+  }
+  .retailer_btn{
+    a{ margin-right: 0.75rem;}
+  }
+  .required_error{position:absolute; display: none; width: 100%; padding:5px 10px; border:2px solid #fbb136; background: #fff; color:#333; font-size: 15px;}
+  .file_box{ 
+    width: 100%;
+    .upload_file_btn{ 
+      position: relative; width: 100%; display:inline-block; min-height:40px; margin-bottom: 0px;
+      border:1px solid #fff;
+      input{ position: absolute; width: 100%; opacity: 0; top:0px; left:0px; margin: 0; height: 100%; z-index: 10;}
+      dfn{float: left; padding: 0.70rem 1rem 0.70rem; line-height: 1.176470588;}
+      b{ display: block; position: absolute; right:0px; top:0px; z-index: 3; text-align: center; line-height: 1.176470588; padding: 0.70rem 1rem 0.70rem; background: #334859; color: #fff; }
+      .required_error{top:40px; left:0px; }
+    }
+    .u-mt2{ margin-bottom:25px;}
+    .add{ border-radius: 100%; background: none; padding: 0.70rem 0.95rem 0.70rem; border:2px solid #00888a; color:#00888a;}
+    .remove{border-radius: 100%; background: none; padding: 0.70rem 0.95rem 0.70rem; border:2px solid #00888a; color:#00888a;}
+  }
+  .progress{
+    border: 1px solid #00888a; display: none;
+    .progress-bar{ background: #22ad38; text-indent: 5px; transition: 0.5s all;}
+  }
+  .progress_files{
+    ul{
+      li{list-style: none; line-height: 26px; overflow: hidden;
+        a{ cursor: pointer; color: #00b0b2; float: left; margin: 0;}
+        span.remove_file{background:url("../images/remove.png") no-repeat center; cursor: pointer; width: 26px; height: 26px; float: right;}
+      }
+    }
+  } 
+}
+
+.comsumption_list{
+  font-size: 13px;  padding:10px; text-align:center;
+  .comsumption_list_top{ 
+    padding:15px 0px 15px 32px; border-bottom: 1px solid #314657; background:url("../images/add_l.png") no-repeat left;
+  }
+  .open{background:url("../images/subtract.png") no-repeat left;}
+  .comsumption_list_table{
+    display: none;  
+    table{
+      width: 100%; text-align: center;
+      td,th{
+      padding: 10px 0px; border-bottom: 1px solid #314657; word-break: break-word; width:16.6%;
+      }
+    }
+  }
+  .visible{ display: block;}
+}
+
+.workflowtab{
+  margin:30px 0px;
+  table{ width: 100%; table-layout: fixed;
+    td{height:110px;
+      div{ cursor: pointer;
+        width: 100%; height: 100%; background: #00afb1; position: relative;
+        &.step1{background:#00afb1 url("../images/sign_confidentiality_undertaking.png") no-repeat center; background-size: 100%;}
+        &.step2{background:#00afb1 url("../images/ender_documents.png") no-repeat center; background-size: 100%;}
+        &.step3{background:#00afb1 url("../images/deviations.png") no-repeat center; background-size: 100%;}
+        &.step4{background:#00afb1 url("../images/submit_form_of_tender.png") no-repeat center; background-size: 100%;}
+        &.step5{background:#00afb1 url("../images/contact_details.png") no-repeat center; background-size:100%;}
+        span{ 
+          position: absolute; width: 40px; height:40px; right: 0px; top:0px;
+          &.selected{background: url("../images/selected_ico_n.png") no-repeat right top;}
+          &.pending{background: url("../images/selected_ico_p.png") no-repeat right top;}
+        }
+        &.step_icon{background: url("../images/arrows.png") no-repeat center;}
+      }
+    }
+  }
+}
+
+.workflow_btn{
+  text-align: right;
+  button{ margin-left: 15px; outline: none;
+    &.add_deviation{background: url("../images/add_l.png") no-repeat right; padding:6px 30px 6px 0px; cursor: pointer; margin: 0;}
+    &.add_deviation[disabled='']{background: url("../images/add_l.png") no-repeat right !important; color:#666;}
+  }
+}
+.sign_box{
+   width: 100%;
+   h4{color: #fd6301; margin: 15px 0px;}
+   p{ margin: 15px 0px;}
+   .sign_btn{ text-align: right;
+    a{ margin-left: 15px;}
+    }
+  .download{ overflow: hidden;
+    span{float: left; margin-right: 15px; line-height: 54px; white-space:nowrap;}
+    .download_ico{background: url("../images/file.png") no-repeat center; cursor: pointer; float: left; width: 45px; height: 54px;}
+  }
+}
+
+.tender_documents{
+  .tender_list{
+    li{ line-height:45px; list-style: none; overflow:hidden;
+      a{cursor: pointer;}
+    }
+  }
+}
+
+.propose_deviations{
+  h4.pending_review{color:#fd6301;}
+  table.retailer_fill{
+    tbody{
+      tr{
+        td{
+          input,select,textarea{
+            width:90%; margin: 0px auto; padding: 2px; border:1px solid #fff;
+          }
+          textarea{
+            padding:1px 5px;height:86px;resize:none;white-space: pre;
+            &.show_text{ border:0px; color:#fff; font-size: 12px;}
+          }
+          button{background: #00888a; padding: 4px 8px; width: auto; height: auto; display: inline-block; border-radius: 5px; margin:5px;}
+        }
+      }
+    }
+  }
+  abbr{
+    width: 30px; margin: 0 auto; height: 30px; display: block; transition: 0.5s all; border-radius: 100%;
+    &.step_finished{ background: url('../images/pigeon.png') no-repeat center;}
+    &.cursor{cursor: pointer;
+      &:hover{box-shadow: 0px 0px 35px #fff}
+    }
+    &.step_pending{ background: url('../images/pigeon_p.png') no-repeat center; cursor: pointer;
+      &:hover{box-shadow: 0px 0px 35px #fff}
+    }
+  }
+}
+
+.brif_list{ 
+  li{
+    list-style:none;
+    line-height: 42px;
+    a{
+      cursor: pointer; color: #00afb1;
+    }
+  }
+}
+
+
+.admin_buyer_list{
+  .buyer_tab{
+    a{ 
+      background: #24425a; color: #fff; display:inline-block; 
+      text-align: center; height:42px; line-height: 42px;
+      border-radius: 5px 5px 0px 0px; margin-right: 5px; transition: 0.5s all; cursor: pointer;
+      &.selected,&:hover{background: #1b3146;}
+    }
+  }
+  .buyer_list{
+    background: #1b3146; padding: 15px 0px; overflow: hidden;
+  }
+  #buyer_individual{ display: none;}
+  .bidderStatus{
+      .bidders_list{ width:96%; margin:0px; margin-top: 5px;
+      li{ background: #304556;}
+      }
+    }
 }

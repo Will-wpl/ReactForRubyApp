@@ -9,35 +9,42 @@ admin_user.add_role :admin
 Role.first_or_create(name: 'retailer')
 Role.first_or_create(name: 'buyer')
 
-reverse_auction = Auction.find_or_create_by(name: 'SP Reverse Auction') do |auction|
-  auction.start_datetime = nil
-  auction.contract_period_start_date = nil
-  auction.contract_period_end_date = nil
-  auction.duration = nil
-  auction.reserve_price = nil
-  auction.total_volume = nil # TBD SP provide six volumes 6_805_584
-  auction.total_lt_peak = 2_468_375
-  auction.total_lt_off_peak = 1_544_695
-  auction.total_hts_peak = 0
-  auction.total_hts_off_peak = 0
-  auction.total_htl_peak = 1_983_720
-  auction.total_htl_off_peak = 791_712
-  auction.publish_status = '0'
-end
+# reverse_auction = Auction.find_or_create_by(name: 'SP Reverse Auction') do |auction|
+#   auction.start_datetime = nil
+#   auction.contract_period_start_date = nil
+#   auction.contract_period_end_date = nil
+#   auction.duration = nil
+#   auction.reserve_price = nil
+#   auction.total_volume = nil # TBD SP provide six volumes 6_805_584
+#   auction.total_lt_peak = 2_468_375
+#   auction.total_lt_off_peak = 1_544_695
+#   auction.total_hts_peak = 0
+#   auction.total_hts_off_peak = 0
+#   auction.total_htl_peak = 1_983_720
+#   auction.total_htl_off_peak = 791_712
+#   auction.total_eht_peak = 0
+#   auction.total_eht_off_peak = 0
+#   auction.publish_status = '0'
+# end
 
+
+# comment testing account
 retailers = [
-  { name: 'Best Electricity Supply ', email: 'jichong@bestelectricity.com.sg', company_name: 'Best Electricity Supply', password: 'password' },
-  { name: 'Charis Electric', email: 'kenneth.lee@chariselectric.com.sg', company_name: 'Charis Electric', password: 'password'  },
-  { name: 'Energy Supply Solutions', email: 'yap@energysupplysolutions.com.sg', company_name: 'Energy Supply Solutions', password: 'password'  },
-  { name: 'Hyflux Energy', email: 'huixin_tang@hyflux.com', company_name: 'Hyflux Energy', password: 'password'  },
-  { name: 'I Switch', email: 'Jovan.tang@iswitch.com.sg', company_name: 'I Switch', password: 'password'  },
-  { name: 'Dummy Retailer', email: 'retailer@example.com', company_name: 'Dummy Retailer', password: 'password'  },
-  { name: 'PacificLight Energy', email: 'Eugene.he@pacificlight.com.sg', company_name: 'PacificLight Energy', password: 'password'  },
-  { name: 'Red Dot Power', email: 'hafizah.ahmad@reddotpower.com.sg', company_name: 'Red Dot Power', password: 'password'  },
-  { name: 'SembCorp Power', email: 'jenny.lye@sembcorp.com', company_name: 'SembCorp Power', password: 'password'  },
-  { name: 'Sunseap Energy', email: 'Ryan.Ang@sunseap.com', company_name: 'Sunseap Energy', password: 'password'  },
-  { name: 'Tuas Power Supply', email: 'charlainechan@tuaspower.com.sg', company_name: 'Tuas Power Supply', password: 'password'  },
-  { name: 'Union Power', email: 'Hermann@UnionPower.com.sg', company_name: 'Union Power', password: 'password' }
+    { name: 'Retailer 1', email: 'retailer1@example.com', company_name: 'Retailer1 Company', password: 'password',approval_status:'1'  }
+=begin
+#comment testing account
+  { name: 'Mark', email: 'Mark.Liu@chinasofti.com', company_name: 'Mark Electricity', password: 'password',approval_status:'1'  },
+  { name: 'Jason', email: 'Jason.huang@chinasofti.com', company_name: 'Jason Electricity', password: 'password',approval_status:'1'  },
+  { name: 'Judy', email: 'Judy.Zhu@chinasofti.com', company_name: 'Judy Electricity', password: 'password',approval_status:'1'  },
+  { name: 'Yang Qingxin', email: 'yangqingxin@chinasofti.com', company_name: 'Yang Qingxin Electricity', password: 'password',approval_status:'1'  },
+  { name: 'Wang Jingzhu', email: 'jingzhu.wang@chinasofti.com', company_name: 'Wang Jingzhu Electricity', password: 'password',approval_status:'1'  },
+  { name: 'Will ', email: 'Will.wang@chinasofti.com', company_name: 'Will Electricity', password: 'password',approval_status:'1' },
+  { name: 'Retailer 2', email: 'retailer2@example.com', company_name: 'Retailer2 Company', password: 'password',approval_status:'2' },
+  { name: 'Retailer 3', email: 'retailer3@example.com', company_name: 'Retailer3 Company', password: 'password',approval_status:'2'  },
+  { name: 'Retailer 4', email: 'retailer4@example.com', company_name: 'Retailer4 Company', password: 'password',approval_status:'2'  },
+  { name: 'Retailer 5', email: 'retailer5@example.com', company_name: 'Retailer5 Company', password: 'password',approval_status:'0'  },
+  { name: 'Retailer 6', email: 'retailer6@example.com', company_name: 'Retailer6 Company', password: 'password',approval_status:'0' }
+=end
 
 ]
 
@@ -47,23 +54,103 @@ retailers.each do |retailer|
     retail_user.company_name = retailer[:company_name]
     retail_user.password = retailer[:password]
     retail_user.password_confirmation = retailer[:password]
+    retail_user.approval_status = retailer[:approval_status]
+    retail_user.company_address = 'China DL'
+    retail_user.company_unique_entity_number = 'UEN 01234'
+    retail_user.company_license_number = 'LICENSE 01234'
+    retail_user.account_mobile_number = '12345678'
+    retail_user.account_office_number = '87654321'
   end
   retail_user.add_role :retailer
 
-  Arrangement.where(user: retail_user, auction: reverse_auction).first_or_create do |arrangement|
-    arrangement.main_name = ''
-    arrangement.main_email_address = ''
-    arrangement.main_mobile_number = ''
-    arrangement.main_office_number = ''
-    arrangement.lt_peak = nil
-    arrangement.lt_off_peak = nil
-    arrangement.hts_peak = nil
-    arrangement.hts_off_peak = nil
-    arrangement.htl_peak = nil
-    arrangement.htl_off_peak = nil
-    arrangement.accept_status = '2'
-  end
+  # Arrangement.where(user: retail_user, auction: reverse_auction).first_or_create do |arrangement|
+  #   arrangement.main_name = ''
+  #   arrangement.main_email_address = ''
+  #   arrangement.main_mobile_number = ''
+  #   arrangement.main_office_number = ''
+  #   arrangement.lt_peak = nil
+  #   arrangement.lt_off_peak = nil
+  #   arrangement.hts_peak = nil
+  #   arrangement.hts_off_peak = nil
+  #   arrangement.htl_peak = nil
+  #   arrangement.htl_off_peak = nil
+  #   arrangement.accept_status = '2'
+  # end
 end
+
+
+
+
+company_buyers = [
+    { name: 'buyer1', email: 'cbuyer1@example.com', company_name: 'Company Buyer 1', password: 'password' }
+=begin
+#comment testing account
+    { name: 'buyer2', email: 'cbuyer2@example.com', company_name: 'Company Buyer 2', password: 'password' },
+    { name: 'buyer3', email: 'cbuyer3@example.com', company_name: 'Company Buyer 3', password: 'password' },
+    { name: 'buyer4', email: 'cbuyer4@example.com', company_name: 'Company Buyer 4', password: 'password' },
+    { name: 'buyer5', email: 'cbuyer5@example.com', company_name: 'Company Buyer 5', password: 'password' },
+    { name: 'buyer6', email: 'cbuyer6@example.com', company_name: 'Company Buyer 6', password: 'password' },
+    { name: 'buyer7', email: 'cbuyer7@example.com', company_name: 'Company Buyer 7', password: 'password' },
+    { name: 'buyer8', email: 'cbuyer8@example.com', company_name: 'Company Buyer 8', password: 'password' },
+    { name: 'buyer9', email: 'cbuyer9@example.com', company_name: 'Company Buyer 9', password: 'password' },
+    { name: 'buyer10', email: 'cbuyer10@example.com', company_name: 'Company Buyer 10', password: 'password'}
+=end
+]
+
+
+company_buyers.each do |buyer|
+    com_buyer = User.find_or_create_by(email: buyer[:email]) do |com_buyer|
+        com_buyer.name = buyer[:name]
+        com_buyer.company_name = buyer[:company_name]
+        com_buyer.password = buyer[:password]
+        com_buyer.password_confirmation = buyer[:password]
+        com_buyer.consumer_type = '2'
+        com_buyer.company_address = 'China DL'
+        com_buyer.company_unique_entity_number = 'UEN 01234'
+        com_buyer.account_mobile_number = '12345678'
+        com_buyer.account_office_number = '87654321'
+    end
+    com_buyer.add_role :buyer
+
+end
+
+
+
+# comment testing account
+individual_buyers = [
+    { name: 'individual buyer1', email: 'ibuyer1@example.com', account_housing_type: '0', password: 'password' }
+
+=begin
+#comment testing account
+    { name: 'individual buyer2', email: 'ibuyer2@example.com', account_housing_type: '0', password: 'password' },
+    { name: 'individual buyer3', email: 'ibuyer3@example.com', account_housing_type: '0', password: 'password' },
+    { name: 'individual buyer4', email: 'ibuyer4@example.com', account_housing_type: '1', password: 'password' },
+    { name: 'individual buyer5', email: 'ibuyer5@example.com', account_housing_type: '1', password: 'password' },
+    { name: 'individual buyer6', email: 'ibuyer6@example.com', account_housing_type: '1', password: 'password' },
+    { name: 'individual buyer7', email: 'ibuyer7@example.com', account_housing_type: '2', password: 'password' },
+    { name: 'individual buyer8', email: 'ibuyer8@example.com', account_housing_type: '2', password: 'password' },
+    { name: 'individual buyer9', email: 'ibuyer9@example.com', account_housing_type: '2', password: 'password' },
+    { name: 'individual buyer10', email: 'ibuyer10@example.com', account_housing_type: '2', password: 'password'}
+=end
+]
+
+individual_buyers.each do |buyer|
+  ind_buyer = User.find_or_create_by(email: buyer[:email]) do |ind_buyer|
+    ind_buyer.name = buyer[:name]
+    ind_buyer.account_housing_type = buyer[:account_housing_type]
+    ind_buyer.password = buyer[:password]
+    ind_buyer.password_confirmation = buyer[:password]
+    ind_buyer.consumer_type = '3'
+    ind_buyer.account_home_address = 'China DL'
+    ind_buyer.account_fin = 'FIN 01234'
+    ind_buyer.account_mobile_number = '12345678'
+    ind_buyer.account_office_number = '87654321'
+  end
+  ind_buyer.add_role :buyer
+
+end
+
+
 
 _unused_retailers = [
   { name: 'Cleantech Solar Management Company', email: 'contact@cleantechsolar.com', company_name: 'Cleantech Solar Management Company' },
@@ -78,3 +165,26 @@ _unused_retailers = [
   { name: 'Senoko Energy Supply Will', email: 'will@example.com', company_name: 'Senoko Energy Supply Will' },
   { name: 'Cleantech Solar Management Company Judy', email: 'judy@example.com', company_name: 'Cleantech Solar Management Company Judy' }
 ]
+
+email_templates = [
+    {subject: 'REVV account', body: 'Dear Admin,<br/><br/>#user.company_name has registered for a REVV account. <br/><br/>Please proceed to approve/reject the registration at <a href="http://revv.sg">revv.sg</a>.<br/>', template_type: '1'},
+    {subject: 'REVV account registration has been approved', body: 'Dear #user.company_name,<br/><br/>Congratulations, your REVV account registration has been <b>approved</b>.<br/><br/>You may now log in to your account at <a href="http://revv.sg">revv.sg</a>. <br/>', template_type: '2'},
+    {subject: 'REVV account registration has been rejected', body: 'Dear #user.company_name,<br/><br/>Your REVV account registration has been <b>rejected</b>.<br/>Comments: #user.comment <br/><br/>Kindly access your account registration page at <a href="http://revv.sg">revv.sg</a> for further actions.', template_type: '3'},
+    {subject: 'You are invited to participate in an upcoming auction', body: 'Dear #buyer.name,<br/><br/>You are invited to participate in an upcoming auction for aggregated electricity purchase. <br/><br/>Please proceed to view and manage your participation at <a href="http://revv.sg">revv.sg</a>. <br/>', template_type: '4'},
+    {subject: 'An auction for aggregated electricity purchase has been published', body: 'Dear #user.company_name,<br/><br/>An auction for aggregated electricity purchase has been published. You are invited to bid in this auction. <br/><br/>Please proceed to view and manage your participation at <a href="http://revv.sg">revv.sg</a>.<br/>', template_type: '5'},
+    {subject: '#user.company_name has submitted their tender documents', body: 'Dear Admin,<br/><br/>#user.company_name has submitted their tender documents. <br/><br/>Please proceed to approve/reject the tender documents submission at <a href="http://revv.sg">revv.sg</a>.<br/>', template_type: '6'},
+    {subject: 'Your tender documents submission has been approved', body: 'Dear #user.company_name,<br/><br/>Your tender documents submission has been <b>approved</b>.<br/><br/>You may now log in to your account at <a href="http://revv.sg">revv.sg</a> to submit the contact person details for actual day of bidding. <br/>', template_type: '7'},
+    {subject: 'Your tender documents submission has been rejected', body: 'Dear #user.company_name,<br/><br/>Your tender documents submission has been <b>rejected</b>.<br/>Comments: #user.comment <br/><br/>Please log in to your account at <a href="http://revv.sg">revv.sg</a> for further actions.<br/>', template_type: '8'}
+]
+
+
+email_templates.each do |template|
+  EmailTemplate.find_by_template_type(template[:template_type]).destroy
+  EmailTemplate.find_or_create_by(template_type: template[:template_type]) do |this_template|
+    this_template.subject = template[:subject]
+    this_template.body = template[:body]
+    this_template.template_type = template[:template_type]
+
+  end
+
+end

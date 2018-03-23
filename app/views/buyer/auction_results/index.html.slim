@@ -1,0 +1,16 @@
+.page-header
+  /h1= page_title(model: AuctionResult.model_name.human.pluralize)
+
+
+- if @auction_results.count == 0
+    div.live_modal
+      p You have no past Reverse Auction record.
+- else
+    h1.search_list_type Buyer Past Reverse Auction
+    div id='users_search_list'
+ul.select_ico_tab.u-mt3.u-mb2
+  li.participation_status_1 Acknowledged
+  li.participation_status_2 Pending
+
+div.createRaMain.u-grid
+    a.lm--button.lm--button--primary.u-mt3 href="/buyer/home" Back to Homepage
