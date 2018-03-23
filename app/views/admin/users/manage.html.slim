@@ -62,11 +62,6 @@
           dfn.manage_label
             = @user.company_name
       .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label Company Address:
-        .lm--formItem-right.lm--formItem-control
-          dfn.manage_label
-            = @user.company_address
-      .lm--formItem.lm--formItem--inline.string.optional
         .lm--formItem-left.lm--formItem-label Unique Entity Number (UEN):
         .lm--formItem-right.lm--formItem-control
           dfn.manage_label
@@ -81,6 +76,11 @@
         .lm--formItem-right.lm--formItem-control
           dfn.manage_label
             = @user.gst_no
+      .lm--formItem.lm--formItem--inline.string.optional
+        .lm--formItem-left.lm--formItem-label Company Address:
+        .lm--formItem-right.lm--formItem-control
+          dfn.manage_label
+            = @user.company_address
       .lm--formItem.lm--formItem--inline.string.optional
         .lm--formItem-left.lm--formItem-label
           font Contact Information:
@@ -130,6 +130,11 @@
             dfn.manage_label
               = @user.company_name
         .lm--formItem.lm--formItem--inline.string.optional
+          .lm--formItem-left.lm--formItem-label Unique Entity Number (UEN):
+          .lm--formItem-right.lm--formItem-control
+            dfn.manage_label
+              = @user.company_unique_entity_number
+        .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label Company Address:
           .lm--formItem-right.lm--formItem-control
             dfn.manage_label
@@ -139,11 +144,7 @@
           .lm--formItem-right.lm--formItem-control
             dfn.manage_label
               = @user.billing_address
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label Unique Entity Number (UEN):
-          .lm--formItem-right.lm--formItem-control
-            dfn.manage_label
-              = @user.company_unique_entity_number
+
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
             font Contact Information:
