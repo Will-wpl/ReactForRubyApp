@@ -24,7 +24,7 @@ export class FillConsumption extends Component {
     BuyerParticipateList(){
         getBuyerParticipate('/api/buyer/consumption_details?consumption_id='+this.consumptions_id).then((res) => {
             this.site_list = res.consumption_details;
-            this.status = res.consumption.participation_status === '1'?"Participate":
+            this.status = res.consumption.participation_status === '1'?"Confirmed":
                           (res.consumption.participation_status === '2'?"Pending":"Rejected")
             this.setState({
                 name:res.auction.name,
@@ -226,7 +226,7 @@ export class FillConsumption extends Component {
                 <form name="buyer_form" method="post" onSubmit={this.checkSuccess.bind(this)}>
                 <div className="u-grid buyer mg0">
                 <h4 className="col-sm-12 u-mb2"><input name="agree_auction" type="checkbox" disabled={this.state.disabled} required /> I agree to the {this.state.link?<a className="cursor" download={this.state.link.file_name} href={`/${this.state.link.file_path}`}>terms and conditions.</a>:'terms and conditions.'}</h4>
-                <h4 className="col-sm-12 u-mb2">Last Status : {this.status}</h4>
+                <h4 className="col-sm-12 u-mb2">Last Status of Participation : {this.status}</h4>
                     <div className="col-sm-12 col-md-8">
                     <DoFillConsumption changeSiteList={this.changeSiteList.bind(this)} site_list={this.state.site_list} checked={this.state.checked} remove={this.remove_site.bind(this)} />
                         {this.state.checked ? '' : <div className="addSite"><a onClick={this.add_site.bind(this)}>Add Account</a></div>}
