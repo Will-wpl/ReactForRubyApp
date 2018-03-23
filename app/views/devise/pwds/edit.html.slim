@@ -8,6 +8,11 @@ h1.title_top.u-mt2
     = simple_form_for(resource, as: resource_name, url: users_pwds_update_path(resource_name),
             wrapper: :vertical_form, defaults: { label: false }) do |f|
       .lm--formItem.lm--formItem--inline.string.optional
+        .lm--formItem-left.lm--formItem-label Current Password
+        .lm--formItem-right.lm--formItem-control
+          = f.input :current_password, required: true, pattern: '^(.|\n){8,20}$', placeholder: 'Password (Minimum 8 characters)'
+      hr
+      .lm--formItem.lm--formItem--inline.string.optional
         .lm--formItem-left.lm--formItem-label New Password
         .lm--formItem-right.lm--formItem-control
           = f.input :password,required:true,pattern:'^(.|\n){8,20}$',placeholder: 'Password (Minimum 8 characters)'
@@ -15,11 +20,6 @@ h1.title_top.u-mt2
         .lm--formItem-left.lm--formItem-label Confirm New Password
         .lm--formItem-right.lm--formItem-control
           = f.input :password_confirmation,required:true,pattern:'^(.|\n){8,20}$',placeholder: 'Password (Minimum 8 characters)'
-      hr
-      .lm--formItem.lm--formItem--inline.string.optional
-        .lm--formItem-left.lm--formItem-label Current Password
-        .lm--formItem-right.lm--formItem-control
-          = f.input :current_password,required:true,pattern:'^(.|\n){8,20}$',placeholder: 'Password (Minimum 8 characters)'
       .lm--formItem.lm--formItem--inline.string.optional
         .lm--formItem-left.lm--formItem-label
         .lm--formItem-right.lm--formItem-control.save-right

@@ -48,7 +48,7 @@ export default class RetailerRanking extends Component {
                                     this.props.ranking.map((item, index) => {
 
                                         return (
-                                            <tr key={index} className={item.is_bidder?'isbidder':''}>
+                                            <tr key={index} className={this.props.nobidder?'':(item.is_bidder?'isbidder':'')}>
                                                 <td>{item.ranking}</td>
                                                 <td>{item.company_name}</td>
                                                 <td>$ {parseFloat(item.average_price).toFixed(4)}/kWh</td>
