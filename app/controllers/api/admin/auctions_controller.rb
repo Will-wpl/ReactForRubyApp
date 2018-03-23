@@ -295,8 +295,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     pdf.draw_text title1, :at => [15, pdf.bounds.top-22]
     pdf.draw_text title2, :at => [15, pdf.bounds.top-40]
 
-    auction_reserve_price = number_helper.number_to_currency(auction.reserve_price.to_f, precision: 4, unit: '')
-    reserve_price = 'Reserve Price = $ '+ auction_reserve_price + ' /kWh' + ' '*6
+    reserve_price = number_helper.number_to_currency(auction.reserve_price.to_f, precision: 4, unit: '$', format: 'Reserve Price = %u %n /kWh' + ' '*6)
 
     achieved_str = achieved ? "Reserve Price Achieved" : "Reserve Price Not Achieved"
     achieved_color = achieved ? "228B22" : "FF0000"
@@ -507,30 +506,30 @@ class Api::Admin::AuctionsController < Api::AuctionsController
         bidder_text, bidder_text2, bidder_text3 = 'Summary of Lowest Bidder','Lowest Price Bidder', 'Lowest Average Price:'
       end
       lowest_price_bidder = auction_result.lowest_price_bidder
-      lowest_average_price = number_helper.number_to_currency(auction_result.lowest_average_price.to_f, precision: 4, unit: '')
+      lowest_average_price = number_helper.number_to_currency(auction_result.lowest_average_price.to_f, precision: 4, unit: '$ ', format: '%u%n/kWh')
     else
       status, status_color = 'Void', 'dd0000'
       bidder_text, bidder_text2, bidder_text3 = 'Summary of Lowest Bidder','Lowest Price Bidder', 'Lowest Average Price:'
       lowest_price_bidder = auction_result.lowest_price_bidder
-      lowest_average_price = number_helper.number_to_currency(auction_result.lowest_average_price.to_f, precision: 4, unit: '')
+      lowest_average_price = number_helper.number_to_currency(auction_result.lowest_average_price.to_f, precision: 4, unit: '$ ', format: '%u%n/kWh')
     end
     bidder_table = [ ["<font size='18'><color rgb='#{status_color}'>Status: #{status}</color></font>"],
                 [bidder_text],
                 ["#{bidder_text2}: #{lowest_price_bidder}"],
-                ["#{bidder_text3}: $ #{lowest_average_price}/kWh"] ]
+                ["#{bidder_text3}: #{lowest_average_price}"] ]
     pdf.table(bidder_table, :cell_style => {:inline_format => true, :width => pdf.bounds.right, :border_width => 0})
   end
 
   def pdf_price_table(pdf, price_table)
-    pdf.table(price_table, :header => true, :cell_style => {:size => 9, :align => :center, :padding => [11,2], :inline_format => true, :width => pdf.bounds.right/price_table[0].size, :border_width => 0.01,:border_color => "424242"}) do
+    pdf.table(price_table, :header => true, :cell_style => {:size => 9, :align => :center, :valign => :center, :padding => [8,2,14], :inline_format => true, :width => pdf.bounds.right/price_table[0].size, :border_width => 0.01,:border_color => "424242"}) do
       values = cells.columns(0..-1).rows(0..0)
       values.background_color = "00394A"
     end
   end
 
   def pdf_total_info(pdf, auction, auction_result)
-    contract_period_start_date = (auction.contract_period_start_date).strftime("%d %b %Y")
-    contract_period_end_date = (auction.contract_period_end_date).strftime("%d %b %Y")
+    contract_period_start_date = (auction.contract_period_start_date).strftime("%-d %b %Y")
+    contract_period_end_date = (auction.contract_period_end_date).strftime("%-d %b %Y")
     total_volume = number_helper.number_to_currency(auction.total_volume, precision: 0, unit: '')
     total_award_sum = number_helper.number_to_currency(auction_result.total_award_sum, precision: 2, unit: '$ ')
     total_data = [ ["Contract Period: #{contract_period_start_date} to #{contract_period_end_date}"],
@@ -548,16 +547,22 @@ class Api::Admin::AuctionsController < Api::AuctionsController
       ranking_table_row = []
       ranking_table_row.push(item.ranking)
       ranking_table_row.push(item.company_name)
-      ranking_table_row.push('$ '+number_helper.number_to_currency(item.average_price.to_f, precision: 4, unit: '')+'/kWh')
+      ranking_table_row.push(number_helper.number_to_currency(item.average_price.to_f, precision: 4, unit: '$', format: '%u %n/kWh'))
       ranking_table.push(ranking_table_row)
-      is_bidder_index = index+1 if item.is_bidder
+      is_bidder_index = index + 1 if item.is_bidder
     }
     pdf.table [["Retailer Ranking"]], :cell_style => {:size => 18, :inline_format => true, :width => pdf.bounds.right, :border_width => 0}
-    pdf.table(ranking_table, :header => true, :cell_style => {:size => 9, :align => :center, :padding => [11,2], :inline_format => true, :width => pdf.bounds.right/3,  :border_width => 0.01,:border_color => "424242"}) do
+
+    col0_width = pdf.bounds.right/3.0 - 50.0
+    #col1_width = (pdf.bounds.right - col0_width)/2.0 + 20.0
+    #col2_width = pdf.bounds.right - col0_width - col1_width
+    #[col0_width, col1_width, col2_width]
+    pdf.table(ranking_table, :column_widths => {0 => col0_width}, :width => pdf.bounds.right, :header => true, :cell_style => {:size => 9, :align => :center, :valign => :center, :padding => [8,2,14], :inline_format => true, :border_width => 0.01,:border_color => "424242"}) do
       values = cells.columns(0..-1).rows(0..0)
       values.background_color = "00394A"
-      values = cells.columns(0..-1).rows(is_bidder_index..is_bidder_index)
-      values.background_color = "228B22"
+      #~ highlight
+      #values = cells.columns(0..-1).rows(is_bidder_index..is_bidder_index)
+      #values.background_color = "228B22"
     end
   end
 end
