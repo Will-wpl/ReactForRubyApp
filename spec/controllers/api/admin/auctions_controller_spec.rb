@@ -19,6 +19,8 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
   let! (:consumption_7) { create(:consumption, user: buyer_i_s[2], auction: auction, action_status: '2') }
   let! (:consumption_8) { create(:consumption, user: buyer_i_s[4], auction: auction, action_status: '2') }
   let!(:published_upcoming_auction) { create(:auction, :for_next_month, :upcoming, :published) }
+  let! (:arrangement_pua) { create(:arrangement, user: retailers[0], auction: published_upcoming_auction, action_status: '1') }
+  let!(:r1_his_init) { create(:auction_history, bid_time: Date.current, user: retailers[0], auction: published_upcoming_auction) }
   let!(:published_living_auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
   let!(:logs) { create_list(:auction_event, 50, auction: auction, user: retailers[0]) }
 
@@ -184,7 +186,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
     end
 
     describe 'PUT update' do
-      def do_request(id)
+      def do_request(id, auction)
         auction_object = {
           name: 'Hello world',
           start_datetime: auction.start_datetime,
@@ -199,13 +201,14 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
           hold_status: auction.hold_status,
           time_extension: '1',
           average_price: '2',
-          retailer_mode: '3'
+          retailer_mode: '3',
+          starting_price: '0.1666'
         }
         put :update, params: { id: id, auction: auction_object }
       end
 
       context 'Has create an auction' do
-        before { do_request(0) }
+        before { do_request(0, auction) }
         it 'success' do
           hash_body = JSON.parse(response.body)
           expect(hash_body['id']).not_to eq(auction.id)
@@ -216,10 +219,23 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       end
 
       context 'has updated an auction' do
-        before { do_request(auction.id) }
+        before { do_request(auction.id, auction) }
         it 'success' do
           hash_body = JSON.parse(response.body)
           expect(hash_body['id']).to eq(auction.id)
+          expect(hash_body['name']).to eq('Hello world')
+          expect(hash_body['average_price']).to eq('2')
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
+      context 'has updated an auction, has retailers' do
+
+
+        before { do_request(published_upcoming_auction.id, published_upcoming_auction) }
+        it 'success' do
+          hash_body = JSON.parse(response.body)
+          expect(hash_body['id']).to eq(published_upcoming_auction.id)
           expect(hash_body['name']).to eq('Hello world')
           expect(hash_body['average_price']).to eq('2')
           expect(response).to have_http_status(:ok)
