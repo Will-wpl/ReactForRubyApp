@@ -32,7 +32,7 @@
             font Company Information:
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label 
-            b * 
+            b * &nbsp;
             attr Company Name:
           .lm--formItem-right.lm--formItem-control
             = f.input :company_name,required:true,placeholder: ''
@@ -133,7 +133,7 @@
             = f.input :company_name,required:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
-            b *
+            b * &nbsp;
             attr Unique Entity Number (UEN):
           .lm--formItem-right.lm--formItem-control
             = f.input :company_unique_entity_number, required: true
@@ -145,7 +145,7 @@
             = f.input :company_address,required:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
-            b *
+            b * &nbsp;
             attr Billing Address:
           .lm--formItem-right.lm--formItem-control
             = f.input :billing_address, required: true, placeholder: ''
@@ -215,37 +215,37 @@
             font Account Information:
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label 
-            b * 
+            b * &nbsp;
             attr Name:
           .lm--formItem-right.lm--formItem-control
             = f.input :name,required:true,placeholder: ''
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label 
-            b * 
+            b * &nbsp;
             attr NRIC/FIN:
           .lm--formItem-right.lm--formItem-control
             = f.input :account_fin,required:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label 
-            b * 
+            b * &nbsp;
             attr Housing Type:(HDB/Private High-rise/Landed):
           .lm--formItem-right.lm--formItem-control
             = f.input :account_housing_type, collection: [['HDB', 0],['Private High-rise', 1],['Landed', 2]],required:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label 
-            b * 
+            b * &nbsp;
             attr Home Address:
           .lm--formItem-right.lm--formItem-control
             = f.input :account_home_address,required:true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
-            b *
+            b * &nbsp;
             attr Billing Address:
           .lm--formItem-right.lm--formItem-control
             = f.input :billing_address, required: true, placeholder: ''
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label 
-            b * 
+            b * &nbsp;
             attr Mobile Number:
           .lm--formItem-right.lm--formItem-control
             = f.input :account_mobile_number,required:true,pattern:'^(\d{8})$',maxlength:'8',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
