@@ -32,7 +32,7 @@ class Api::AuctionsController < Api::BaseController
       # params[:auction]['total_volume'] = Auction.set_total_volume(model_params[:total_lt_peak], model_params[:total_lt_off_peak], model_params[:total_hts_peak], model_params[:total_hts_off_peak], model_params[:total_htl_peak], model_params[:total_htl_off_peak])
       if @auction.update(model_params)
         unless @auction.published_gid.nil?
-          days = Auction.get_days(Date.parse(@auction.begin_time), Date.parse(@auction.end_time))
+          days = Auction.get_days(@auction.contract_period_start_date, @auction.contract_period_end_date)
           total_award_sum = AuctionHistory.set_total_award_sum(Auction.set_c_value(@auction.total_lt_peak, days),
                                                                Auction.set_c_value(@auction.total_lt_off_peak, days),
                                                                Auction.set_c_value(@auction.total_hts_peak, days),
@@ -41,10 +41,10 @@ class Api::AuctionsController < Api::BaseController
                                                                Auction.set_c_value(@auction.total_htl_off_peak, days),
                                                                Auction.set_c_value(@auction.total_eht_peak, days),
                                                                Auction.set_c_value(@auction.total_eht_off_peak, days),
-                                                               @auction.lt_peak, @auction.lt_off_peak,
-                                                               @auction.hts_peak, @auction.hts_off_peak,
-                                                               @auction.htl_peak, @auction.htl_off_peak,
-                                                               @auction.eht_peak, @auction.eht_off_peak)
+                                                               @auction.starting_price, @auction.starting_price,
+                                                               @auction.starting_price, @auction.starting_price,
+                                                               @auction.starting_price, @auction.starting_price,
+                                                               @auction.starting_price, @auction.starting_price)
           total_volume = Auction.set_total_volume(
               @auction.total_lt_peak, @auction.total_lt_off_peak,
               @auction.total_hts_peak, @auction.total_hts_off_peak,
