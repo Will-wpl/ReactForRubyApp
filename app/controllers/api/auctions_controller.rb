@@ -31,11 +31,48 @@ class Api::AuctionsController < Api::BaseController
     else # update
       # params[:auction]['total_volume'] = Auction.set_total_volume(model_params[:total_lt_peak], model_params[:total_lt_off_peak], model_params[:total_hts_peak], model_params[:total_hts_off_peak], model_params[:total_htl_peak], model_params[:total_htl_off_peak])
       if @auction.update(model_params)
-        AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id).update_all(bid_time: @auction.actual_begin_time, actual_bid_time: @auction.actual_begin_time)
+        unless @auction.published_gid.nil?
+          days = Auction.get_days(Date.parse(@auction.begin_time), Date.parse(@auction.end_time))
+          total_award_sum = AuctionHistory.set_total_award_sum(Auction.set_c_value(@auction.total_lt_peak, days),
+                                                               Auction.set_c_value(@auction.total_lt_off_peak, days),
+                                                               Auction.set_c_value(@auction.total_hts_peak, days),
+                                                               Auction.set_c_value(@auction.total_hts_off_peak, days),
+                                                               Auction.set_c_value(@auction.total_htl_peak, days),
+                                                               Auction.set_c_value(@auction.total_htl_off_peak, days),
+                                                               Auction.set_c_value(@auction.total_eht_peak, days),
+                                                               Auction.set_c_value(@auction.total_eht_off_peak, days),
+                                                               @auction.lt_peak, @auction.lt_off_peak,
+                                                               @auction.hts_peak, @auction.hts_off_peak,
+                                                               @auction.htl_peak, @auction.htl_off_peak,
+                                                               @auction.eht_peak, @auction.eht_off_peak)
+          total_volume = Auction.set_total_volume(
+            @auction.total_lt_peak, @auction.total_lt_off_peak,
+            @auction.total_hts_peak, @auction.total_hts_off_peak,
+            @auction.total_htl_peak, @auction.total_htl_off_peak,
+            @auction.total_eht_peak, @auction.total_eht_off_peak
+          )
+          new_total_volume = Auction.set_c_value(total_volume, days)
 
-        # set sorted histories to redis
-        histories = AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id)
-        RedisHelper.set_current_sorted_histories(@auction.id, histories)
+          average_price = AuctionHistory.set_average_price(total_award_sum, new_total_volume)
+
+          Arrangement.where(auction_id: @auction.id, accept_status: Arrangement::AcceptStatusAccept)
+                     .update_all(lt_peak: @auction.starting_price, lt_off_peak: @auction.starting_price,
+                                 hts_peak: @auction.starting_price, hts_off_peak: @auction.starting_price,
+                                 htl_peak: @auction.starting_price, htl_off_peak: @auction.starting_price,
+                                 eht_peak: @auction.starting_price, eht_off_peak: @auction.starting_price)
+          AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id)
+                        .update_all(bid_time: @auction.actual_begin_time, actual_bid_time: @auction.actual_begin_time,
+                                    lt_peak: @auction.starting_price, lt_off_peak: @auction.starting_price,
+                                    hts_peak: @auction.starting_price, hts_off_peak: @auction.starting_price,
+                                    htl_peak: @auction.starting_price, htl_off_peak: @auction.starting_price,
+                                    eht_peak: @auction.starting_price, eht_off_peak: @auction.starting_price,
+                                    total_award_sum: total_award_sum, average_price: average_price)
+
+          # set sorted histories to redis
+          histories = AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id)
+          RedisHelper.set_current_sorted_histories(@auction.id, histories)
+        end
+
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
       end
       render json: @auction, status: 200
@@ -382,10 +419,10 @@ class Api::AuctionsController < Api::BaseController
     user_id = params[:user_id]
 
     auction = Auction.find_by id: auction_id
-    (send_wicked_pdf_data('no data', 'NO_DATA_LETTER_OF_AWARD.pdf');return) if auction.nil?
+    (send_wicked_pdf_data('no data', 'NO_DATA_LETTER_OF_AWARD.pdf'); return) if auction.nil?
     zone_time = pdf_datetime_zone
     auction_result, consumption, tender_state, consumption_details = get_letter_of_award_pdf_data(auction_id, user_id)
-    (send_wicked_pdf_data('no data', 'NO_DATA_LETTER_OF_AWARD.pdf');return) if auction_result.empty?
+    (send_wicked_pdf_data('no data', 'NO_DATA_LETTER_OF_AWARD.pdf'); return) if auction_result.empty?
     #
     retailer_user_company_name = auction_result.empty? ? '' : auction_result[0].company_name
     retailer_company_address = auction_result.empty? ? '' : auction_result[0].company_address
@@ -411,32 +448,32 @@ class Api::AuctionsController < Api::BaseController
     tr_text = ''
     consumption_details.each do |detail|
       tr_text += tr_string
-               .gsub(/#account_number/, detail.account_number.to_s)
-               .gsub(/#intake_level/, detail.intake_level.to_s)
-               .gsub(/#peak_volume/, number_helper.number_to_currency(detail.peak, precision: 0, unit: ''))
-               .gsub(/#off_peak_volume/, number_helper.number_to_currency(detail.off_peak, precision: 0, unit: ''))
-               .gsub(/#contracted_capacity/, (
+                 .gsub(/#account_number/, detail.account_number.to_s)
+                 .gsub(/#intake_level/, detail.intake_level.to_s)
+                 .gsub(/#peak_volume/, number_helper.number_to_currency(detail.peak, precision: 0, unit: ''))
+                 .gsub(/#off_peak_volume/, number_helper.number_to_currency(detail.off_peak, precision: 0, unit: ''))
+                 .gsub(/#contracted_capacity/, (
                     if detail.contracted_capacity.nil?
                       '---'
                     else
                       number_helper.number_to_currency(detail.contracted_capacity, precision: 0, unit: '')
                     end))
-               .gsub(/#premise_address/, detail.premise_address.to_s)
+                 .gsub(/#premise_address/, detail.premise_address.to_s)
     end
     price_table_data, visibilities, price_data = get_price_table_data(auction, auction_result[0], true, true)
     consumption_table_data, table_data = get_consumption_table_data(auction, visibilities, price_data, user_id, true)
 
     table2_head = html_parse(page, '#appendix_table2_head')
-    head = html_parse(table2_head,'#lt_head_id', '#hts_head_id', '#htl_head_id', '#eht_head_id')
+    head = html_parse(table2_head, '#lt_head_id', '#hts_head_id', '#htl_head_id', '#eht_head_id')
 
     table2_tr = html_parse(page, '#appendix_table2_peak')
-    row0 = html_parse(table2_tr,'#lt_peak_id', '#hts_peak_id', '#htl_peak_id', '#eht_peak_id')
+    row0 = html_parse(table2_tr, '#lt_peak_id', '#hts_peak_id', '#htl_peak_id', '#eht_peak_id')
 
     table2_tr1 = html_parse(page, '#appendix_table2_off_peak')
-    row1 = html_parse(table2_tr1,'#lt_off_peak_id', '#hts_off_peak_id', '#htl_off_peak_id', '#eht_off_peak_id')
+    row1 = html_parse(table2_tr1, '#lt_off_peak_id', '#hts_off_peak_id', '#htl_off_peak_id', '#eht_off_peak_id')
 
     table2_tr2 = html_parse(page, '#appendix_table2_total')
-    row2 = html_parse(table2_tr2,'#lt_total_id', '#hts_total_id', '#htl_total_id', '#eht_total_id')
+    row2 = html_parse(table2_tr2, '#lt_total_id', '#hts_total_id', '#htl_total_id', '#eht_total_id')
     #
     head_bool, row0_string, row1_string, row2_string = get_table2_row_data(head, row0, row1, row2, visibilities, table_data)
     table2_head_string = table2_head.to_s
@@ -500,7 +537,7 @@ class Api::AuctionsController < Api::BaseController
   end
 
   def html_parse(page, *id_name)
-    return page.css(id_name[0]) if id_name.length ==1
+    return page.css(id_name[0]) if id_name.length == 1
     elements = []
     for i in 0...id_name.length
       elements.push(page.css(id_name[i]))
@@ -515,9 +552,9 @@ class Api::AuctionsController < Api::BaseController
                                   coalesce(users.company_address, '') company_address,
                                   coalesce(users.company_unique_entity_number, '') company_unique_entity_number,
                                   auction_results.*")
-                         .joins(:user)
-                         .where('auction_id = ?', auction_id)
-                         .limit 1
+                                  .joins(:user)
+                                  .where('auction_id = ?', auction_id)
+                                  .limit 1
 
     consumption = Consumption.select("users.id,
                                   users.name,
@@ -525,13 +562,13 @@ class Api::AuctionsController < Api::BaseController
                                   coalesce(users.company_address, '') company_address,
                                   coalesce(users.company_unique_entity_number,'') company_unique_entity_number,
                                   consumptions.*")
-                      .joins(:user)
-                      .where('auction_id = ? AND user_id = ?', auction_id, user_id)
+                             .joins(:user)
+                             .where('auction_id = ? AND user_id = ?', auction_id, user_id)
 
     consumption_id = consumption[0].id unless consumption.empty?
     winner_user_id = auction_result[0].user_id unless auction_result.empty?
     tender_state = TenderStateMachine
-                       .find_by_sql ["SELECT *
+                   .find_by_sql ["SELECT *
                                   FROM tender_state_machines
                                   WHERE  current_node = 4
                                     AND turn_to_role = 1
@@ -544,56 +581,58 @@ class Api::AuctionsController < Api::BaseController
                                     ORDER BY created_at DESC LIMIT 1", auction_id, winner_user_id]
 
     consumption_details = ConsumptionDetail.find_by_consumption_id(consumption_id)
-    return auction_result, consumption, tender_state, consumption_details
+    [auction_result, consumption, tender_state, consumption_details]
   end
 
-  def send_wicked_pdf_data(content, output_filename, page_size='B5')
+  def send_wicked_pdf_data(content, output_filename, page_size = 'B5')
     pdf = WickedPdf.new.pdf_from_string(content, encoding: 'UTF-8', page_size: page_size)
     send_data(pdf, filename: output_filename)
   end
 
   def get_table2_row_data(head, row0, row1, row2, visibilities, table_data)
     index = 0
-    head_bool, row0_string, row1_string, row2_string = [], [], [], []
+    head_bool = []
+    row0_string = []
+    row1_string = []
+    row2_string = []
     if visibilities[:visibility_lt]
       lt_peak = row0[0].to_s.gsub(/#lt_peak/, number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
       lt_off_peak = row1[0].to_s.gsub(/#lt_off_peak/, number_helper.number_to_currency(table_data[1][index], precision: 0, unit: ''))
-      lt_total = row2[0].to_s.gsub(/#lt_total/, number_helper.number_to_currency(table_data[0][index].to_f+table_data[1][index].to_f, precision: 0, unit: ''))
-      head_bool.push(true);row0_string.push(lt_peak); row1_string.push(lt_off_peak); row2_string.push(lt_total)
+      lt_total = row2[0].to_s.gsub(/#lt_total/, number_helper.number_to_currency(table_data[0][index].to_f + table_data[1][index].to_f, precision: 0, unit: ''))
+      head_bool.push(true); row0_string.push(lt_peak); row1_string.push(lt_off_peak); row2_string.push(lt_total)
       index += 1
     else
-      head_bool.push(false);row0_string.push(''); row1_string.push(''); row2_string.push('')
+      head_bool.push(false); row0_string.push(''); row1_string.push(''); row2_string.push('')
     end
     if visibilities[:visibility_hts]
       hts_peak = row0[1].to_s.gsub(/#hts_peak/, number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
       hts_off_peak = row1[1].to_s.gsub(/#hts_off_peak/, number_helper.number_to_currency(table_data[1][index], precision: 0, unit: ''))
-      hts_total = row2[1].to_s.gsub(/#hts_total/, number_helper.number_to_currency(table_data[0][index].to_f+table_data[1][index].to_f, precision: 0, unit: ''))
-      head_bool.push(true);row0_string.push(hts_peak); row1_string.push(hts_off_peak); row2_string.push(hts_total)
+      hts_total = row2[1].to_s.gsub(/#hts_total/, number_helper.number_to_currency(table_data[0][index].to_f + table_data[1][index].to_f, precision: 0, unit: ''))
+      head_bool.push(true); row0_string.push(hts_peak); row1_string.push(hts_off_peak); row2_string.push(hts_total)
       index += 1
     else
-      head_bool.push(false);row0_string.push(''); row1_string.push(''); row2_string.push('')
+      head_bool.push(false); row0_string.push(''); row1_string.push(''); row2_string.push('')
     end
     if visibilities[:visibility_htl]
       htl_peak = row0[2].to_s.gsub(/#htl_peak/, number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
       htl_off_peak = row1[2].to_s.gsub(/#htl_off_peak/, number_helper.number_to_currency(table_data[1][index], precision: 0, unit: ''))
-      htl_total = row2[2].to_s.gsub(/#htl_total/, number_helper.number_to_currency(table_data[0][index].to_f+table_data[1][index].to_f, precision: 0, unit: ''))
-      head_bool.push(true);row0_string.push(htl_peak); row1_string.push(htl_off_peak); row2_string.push(htl_total)
+      htl_total = row2[2].to_s.gsub(/#htl_total/, number_helper.number_to_currency(table_data[0][index].to_f + table_data[1][index].to_f, precision: 0, unit: ''))
+      head_bool.push(true); row0_string.push(htl_peak); row1_string.push(htl_off_peak); row2_string.push(htl_total)
       index += 1
     else
-      head_bool.push(false);row0_string.push(''); row1_string.push(''); row2_string.push('')
+      head_bool.push(false); row0_string.push(''); row1_string.push(''); row2_string.push('')
     end
     if visibilities[:visibility_eht]
       eht_peak = row0[3].to_s.gsub(/#eht_peak/, number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
       eht_off_peak = row1[3].to_s.gsub(/#eht_off_peak/, number_helper.number_to_currency(table_data[1][index], precision: 0, unit: ''))
-      eht_total = row2[3].to_s.gsub(/#eht_total/, number_helper.number_to_currency(table_data[0][index].to_f+table_data[1][index].to_f, precision: 0, unit: ''))
-      head_bool.push(true);row0_string.push(eht_peak); row1_string.push(eht_off_peak); row2_string.push(eht_total)
-      index+=1
+      eht_total = row2[3].to_s.gsub(/#eht_total/, number_helper.number_to_currency(table_data[0][index].to_f + table_data[1][index].to_f, precision: 0, unit: ''))
+      head_bool.push(true); row0_string.push(eht_peak); row1_string.push(eht_off_peak); row2_string.push(eht_total)
+      index += 1
     else
-      head_bool.push(false);row0_string.push(''); row1_string.push(''); row2_string.push('')
+      head_bool.push(false); row0_string.push(''); row1_string.push(''); row2_string.push('')
     end
-    return head_bool, row0_string, row1_string, row2_string
+    [head_bool, row0_string, row1_string, row2_string]
   end
-
 
   protected
 
@@ -620,7 +659,7 @@ class Api::AuctionsController < Api::BaseController
     (zone * 60 * 60)
   end
 
-  def get_format_number(number, unit, precision=0)
+  def get_format_number(number, unit, precision = 0)
     number_helper.number_to_currency(number, precision: precision, unit: unit)
   end
 
@@ -709,15 +748,15 @@ class Api::AuctionsController < Api::BaseController
 
   def get_period_days(auction)
     period_days = (auction.contract_period_end_date - auction.contract_period_start_date).to_i
-    return period_days == 0 ? 1 : period_days + 1
+    period_days == 0 ? 1 : period_days + 1
   end
 
   def get_total_value(total_volume_base, total_volume, total_award_sum_base, total_award_sum)
-    return total_volume_base + total_volume, total_award_sum_base + total_award_sum
+    [total_volume_base + total_volume, total_award_sum_base + total_award_sum]
   end
 
-  def get_consumption_table_data(auction, visibilities, price_data, user_id, table_data=false)
-    current_user_consumption = Consumption.find_by auction_id:auction.id, user_id:user_id
+  def get_consumption_table_data(auction, visibilities, price_data, user_id, table_data = false)
+    current_user_consumption = Consumption.find_by auction_id: auction.id, user_id: user_id
     period_days = get_period_days(auction)
 
     table_head = ['']
@@ -730,47 +769,47 @@ class Api::AuctionsController < Api::BaseController
     # C = (Peak*12/365) * period
     unless current_user_consumption.nil?
       if visibilities[:visibility_lt]
-        table_head.push("<b>LT</b>")
+        table_head.push('<b>LT</b>')
         table_row0.push(number_helper.number_to_currency(current_user_consumption.lt_peak.to_f, precision: 0, unit: ''))
         table_row1.push(number_helper.number_to_currency(current_user_consumption.lt_off_peak.to_f, precision: 0, unit: ''))
         row0_data.push(current_user_consumption.lt_peak.to_f); row1_data.push(current_user_consumption.lt_off_peak.to_f)
-        value = ((current_user_consumption.lt_peak.to_f*12.0/365.0) * period_days).to_f
+        value = ((current_user_consumption.lt_peak.to_f * 12.0 / 365.0) * period_days).to_f
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][0])
 
-        value = (current_user_consumption.lt_off_peak.to_f*12.0/365.0) * period_days
+        value = (current_user_consumption.lt_off_peak.to_f * 12.0 / 365.0) * period_days
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][0])
       end
       if visibilities[:visibility_hts]
-        table_head.push("<b>HT (Small)</b>")
+        table_head.push('<b>HT (Small)</b>')
         table_row0.push(number_helper.number_to_currency(current_user_consumption.hts_peak.to_f, precision: 0, unit: ''))
         table_row1.push(number_helper.number_to_currency(current_user_consumption.hts_off_peak.to_f, precision: 0, unit: ''))
         row0_data.push(current_user_consumption.hts_peak.to_f); row1_data.push(current_user_consumption.hts_off_peak.to_f)
-        value = (current_user_consumption.hts_peak.to_f*12.0/365.0) * period_days
+        value = (current_user_consumption.hts_peak.to_f * 12.0 / 365.0) * period_days
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][1])
 
-        value = (current_user_consumption.hts_off_peak.to_f*12.0/365.0) * period_days
+        value = (current_user_consumption.hts_off_peak.to_f * 12.0 / 365.0) * period_days
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][1])
       end
       if visibilities[:visibility_htl]
-        table_head.push("<b>HT (Large)</b>")
+        table_head.push('<b>HT (Large)</b>')
         table_row0.push(number_helper.number_to_currency(current_user_consumption.htl_peak.to_f, precision: 0, unit: ''))
         table_row1.push(number_helper.number_to_currency(current_user_consumption.htl_off_peak.to_f, precision: 0, unit: ''))
         row0_data.push(current_user_consumption.htl_peak.to_f); row1_data.push(current_user_consumption.htl_off_peak.to_f)
-        value = (current_user_consumption.htl_peak.to_f*12.0/365.0) * period_days
+        value = (current_user_consumption.htl_peak.to_f * 12.0 / 365.0) * period_days
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][2])
 
-        value = (current_user_consumption.htl_off_peak.to_f*12.0/365.0) * period_days
+        value = (current_user_consumption.htl_off_peak.to_f * 12.0 / 365.0) * period_days
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][2])
       end
       if visibilities[:visibility_eht]
-        table_head.push("<b>EHT</b>")
+        table_head.push('<b>EHT</b>')
         table_row0.push(number_helper.number_to_currency(current_user_consumption.eht_peak.to_f, precision: 0, unit: ''))
         table_row1.push(number_helper.number_to_currency(current_user_consumption.eht_off_peak.to_f, precision: 0, unit: ''))
         row0_data.push(current_user_consumption.eht_peak.to_f); row1_data.push(current_user_consumption.eht_off_peak.to_f)
-        value = (current_user_consumption.eht_peak.to_f*12.0/365.0) * period_days
+        value = (current_user_consumption.eht_peak.to_f * 12.0 / 365.0) * period_days
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][3])
 
-        value = (current_user_consumption.eht_off_peak.to_f*12.0/365.0) * period_days
+        value = (current_user_consumption.eht_off_peak.to_f * 12.0 / 365.0) * period_days
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][3])
       end
     end
@@ -779,7 +818,6 @@ class Api::AuctionsController < Api::BaseController
     else
       return [table_head, table_row0, table_row1], total_volume, total_award_sum
     end
-
   end
 
   def number_helper
