@@ -5,7 +5,7 @@ class Api::Retailer::AuctionAttachmentsController < Api::AuctionAttachmentsContr
   def index
     auction_id = params[:auction_id]
     user_id = params[:user_id]
-    attachments = AuctionAttachment.user_auction(auction_id, user_id)
+    attachments = AuctionAttachment.user_auction(auction_id, user_id).order(:created_at)
     render json: attachments, status: 200
   end
 
