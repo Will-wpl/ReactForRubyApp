@@ -597,7 +597,7 @@ render() {
                         Birefing Pack Upload :
                         </label>
                         <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                        {this.addinputfile("birefing_pack_upload")}
+                        {this.addinputfile("birefing_pack_upload", "required")}
                         </div>
                     </div>
                     <div className="retailer_btn">

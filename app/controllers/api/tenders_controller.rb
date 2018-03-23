@@ -7,7 +7,7 @@ class Api::TendersController < Api::BaseController
 
   def node1_retailer
     attachments = AuctionAttachment.belong_auction(@arrangement.auction_id)
-                                   .where(file_type: 'retailer_confidentiality_undertaking_upload')
+                                   .where(file_type: 'retailer_confidentiality_undertaking_upload').order(:created_at)
     render json: attachments, status: 200
   end
 
@@ -22,7 +22,7 @@ class Api::TendersController < Api::BaseController
                                total_eht_peak: auction.total_eht_peak,
                                total_eht_off_peak: auction.total_eht_off_peak }
     attachments = AuctionAttachment.belong_auction(@arrangement.auction_id)
-                                   .where(file_type: 'tender_documents_upload')
+                                   .where(file_type: 'tender_documents_upload').order(:created_at)
     render json: { aggregate_consumptions: aggregate_consumptions, attachments: attachments }, status: 200
   end
 
@@ -39,12 +39,12 @@ class Api::TendersController < Api::BaseController
   end
 
   def node4_retailer
-    attachments = AuctionAttachment.user_auction(@arrangement.auction_id, @arrangement.user_id)
+    attachments = AuctionAttachment.user_auction(@arrangement.auction_id, @arrangement.user_id).order(:created_at)
     render json: attachments, status: 200
   end
 
   def node4_admin
-    attachments = AuctionAttachment.user_auction(@arrangement.auction_id, @arrangement.user_id)
+    attachments = AuctionAttachment.user_auction(@arrangement.auction_id, @arrangement.user_id).order(:created_at)
     chats = set_node3_chats(params[:id])
     render json: { chats: chats, attachments: attachments }, status: 200
   end
