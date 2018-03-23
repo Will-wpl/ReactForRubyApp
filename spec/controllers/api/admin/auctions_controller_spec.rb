@@ -851,7 +851,6 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
     end
 
     context 'GET RA report pdf' do
-
       it 'admin RA report pdf', pdf: true do
         expect(get: "/api/admin/auctions/10/pdf").to be_routable
         get :pdf, params: {id: 10,

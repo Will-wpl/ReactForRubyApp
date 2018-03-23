@@ -103,7 +103,6 @@ class Api::Admin::AuctionsController < Api::AuctionsController
           pdf_ranking_table(pdf, histories_achieved)
         end
       end
-
     end
     send_pdf_data pdf_filename, auction.published_gid.to_s + '_ADMIN_REPORT.pdf'
   end

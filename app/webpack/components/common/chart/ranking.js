@@ -59,6 +59,8 @@ export default class Ranking extends Component {
                 } else {
                     d.value = [].concat(moment(timeRanking.bid_time).format('YYYY-DD-MM HH:mm:ss')).concat(timeRanking.ranking);
                 }
+                this.theStartbidtime = element.data[0].bid_time;
+                this.theEndbidtime = element.data[element.data.length-1].bid_time;
                 tmp.data.push(d);
             });
             option.series.push(tmp);
