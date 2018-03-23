@@ -31,7 +31,7 @@ class Api::AuctionsController < Api::BaseController
     else # update
       # params[:auction]['total_volume'] = Auction.set_total_volume(model_params[:total_lt_peak], model_params[:total_lt_off_peak], model_params[:total_hts_peak], model_params[:total_hts_off_peak], model_params[:total_htl_peak], model_params[:total_htl_off_peak])
       if @auction.update(model_params)
-        unless @auction.published_gid.nil?
+        if @auction.publish_status == Auction::PublishStatusPublished
           days = Auction.get_days(@auction.contract_period_start_date, @auction.contract_period_end_date)
           total_award_sum = AuctionHistory.set_total_award_sum(Auction.set_c_value(@auction.total_lt_peak, days),
                                                                Auction.set_c_value(@auction.total_lt_off_peak, days),
