@@ -1,4 +1,6 @@
 class Auction < ApplicationRecord
+
+  PublishStatusPublished = '1'.freeze
   # Extends
 
   # Includes

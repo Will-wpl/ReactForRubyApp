@@ -1,7 +1,7 @@
-import {get, update, create,Ddelete} from '../../../javascripts/http';
+import {get, update, create, Ddelete, put} from '../../../javascripts/http';
 
 export const retailManageComing = (params) => {
-    return update('/api/retailer/arrangements/'+params.arrangement.id, params);
+    return put('/api/retailer/arrangements/'+params.arrangement.id, params);
 }
 
 export const getRetailerAuctionInVersionOne = (params) => {

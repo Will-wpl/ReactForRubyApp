@@ -65,7 +65,7 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
     pdf_filename = Time.new.strftime("%Y%m%d%H%M%S%L")
     background_img = Rails.root.join("app","assets", "pdf","bk.png")
 
-    auction_name_date = auction.name + ' on ' + (auction.start_datetime + zone_time).strftime("%d %b %Y")
+    auction_name_date = auction.name + ' on ' + (auction.start_datetime + zone_time).strftime("%-d %b %Y")
 
     consumption_table_data, total_volume, total_award_sum = get_consumption_table_data(auction, visibilities, price_data, current_user.id)
     Prawn::Document.generate(Rails.root.join(pdf_filename),
@@ -122,8 +122,8 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
       lowest_price_bidder =  auction_result.status == nil ?  auction_result.company_name : auction_result.lowest_price_bidder
     end
 
-    contract_period_start_date = (auction.contract_period_start_date).strftime("%d %b %Y")
-    contract_period_end_date = (auction.contract_period_end_date).strftime("%d %b %Y")
+    contract_period_start_date = (auction.contract_period_start_date).strftime("%-d %b %Y")
+    contract_period_end_date = (auction.contract_period_end_date).strftime("%-d %b %Y")
 
     total_volume = number_helper.number_to_currency(total_volume, precision: 0, unit: '')
     total_award_sum = number_helper.number_to_currency(total_award_sum, precision: 2, unit: '$')
