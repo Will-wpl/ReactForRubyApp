@@ -9,20 +9,29 @@ export class Keppelformtender extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            text:'',buttonType:'',linklist:[],chats:[]
+            text:'',buttonType:'',linklist:[],chats:[],comments:""
         }
     }
     componentDidMount() {
         getAdminKeppelForm(this.props.current.current.arrangement_id).then(res=>{
+            console.log(res);
             this.setState({
                 linklist:res.attachments,
-                chats:res.chats
+                chats:res.chats,
+                comments:(res.comments?res.comments:"")
             })
         })
         $(".createRaMain a").attr("href",window.location.href);
     }
     showConfirm(type){
         this.setState({buttonType:type});
+        if($("#adminComment").val()===""){
+            this.refs.Modal.showModal();
+            this.setState({
+                text:"Please fill in your comments"
+            });
+            return;
+        }
         if(type == "Reject"){
             this.refs.Modal.showModal("comfirm");
             this.setState({
@@ -36,13 +45,13 @@ export class Keppelformtender extends React.Component{
         }
     }
     admin_reject(){
-        adminReject(this.props.current.current.arrangement_id,$("#adminComment").val()).then(res=>{
+        adminReject(this.props.current.current.arrangement_id,encodeURI($("#adminComment").val())).then(res=>{
             //this.props.page(this.props.current.current.arrangement_id);
             window.location.href="/admin/auctions/"+sessionStorage.auction_id+"/retailer_dashboard";
         })
     }
     admin_accept(){
-        adminAccept(this.props.current.current.arrangement_id,$("#adminComment").val()).then(res=>{
+        adminAccept(this.props.current.current.arrangement_id,encodeURI($("#adminComment").val())).then(res=>{
             //this.props.page(this.props.current.current.arrangement_id);
             window.location.href="/admin/auctions/"+sessionStorage.auction_id+"/retailer_dashboard";
         })
@@ -51,6 +60,12 @@ export class Keppelformtender extends React.Component{
         getTenderhistory('admin',id).then(res=>{
             console.log(res);
             this.refs.history.showModal(res);
+        })
+    }
+    changeAdminComment(e){
+        let val = e.target.value;
+        this.setState({
+            comments:val
         })
     }
     render(){
@@ -106,7 +121,7 @@ export class Keppelformtender extends React.Component{
                     Comment:
                     </label>
                     <div className="lm--formItem-right lm--formItem-control">
-                        <textarea id="adminComment" disabled={this.props.readOnly}></textarea>
+                        <textarea id="adminComment" disabled={this.props.readOnly} onChange={this.changeAdminComment.bind(this)} value={decodeURI(this.state.comments)}></textarea>
                     </div>
                 </div>
                 <div className="workflow_btn u-mt3">
