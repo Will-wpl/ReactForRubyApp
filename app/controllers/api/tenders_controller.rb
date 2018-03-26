@@ -40,8 +40,7 @@ class Api::TendersController < Api::BaseController
 
   def node4_retailer
     attachments = AuctionAttachment.user_auction(@arrangement.auction_id, @arrangement.user_id).order(:created_at)
-    comments = @arrangement.comments
-    render json: { attachments: attachments, comments: comments }, status: 200
+    render json: attachments, status: 200
   end
 
   def node4_admin
