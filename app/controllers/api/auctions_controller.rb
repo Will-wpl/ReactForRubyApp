@@ -601,6 +601,7 @@ class Api::AuctionsController < Api::BaseController
       index += 1
     else
       head_bool.push(false); row0_string.push(''); row1_string.push(''); row2_string.push('')
+      index += 1 if lt_total_value == 0.0
     end
     hts_total_value = table_data[0][index].to_f + table_data[1][index].to_f
     if visibilities[:visibility_hts] && hts_total_value != 0.0
@@ -611,6 +612,7 @@ class Api::AuctionsController < Api::BaseController
       index += 1
     else
       head_bool.push(false); row0_string.push(''); row1_string.push(''); row2_string.push('')
+      index += 1 if hts_total_value == 0.0
     end
     htl_total_value = table_data[0][index].to_f + table_data[1][index].to_f
     if visibilities[:visibility_htl] && htl_total_value != 0.0
@@ -621,6 +623,7 @@ class Api::AuctionsController < Api::BaseController
       index += 1
     else
       head_bool.push(false); row0_string.push(''); row1_string.push(''); row2_string.push('')
+      index += 1 if htl_total_value == 0.0
     end
     eht_total_value = table_data[0][index].to_f + table_data[1][index].to_f
     if visibilities[:visibility_eht] && eht_total_value != 0.0
@@ -631,6 +634,7 @@ class Api::AuctionsController < Api::BaseController
       index += 1
     else
       head_bool.push(false); row0_string.push(''); row1_string.push(''); row2_string.push('')
+      index += 1 if eht_total_value == 0.0
     end
     return head_bool, row0_string, row1_string, row2_string
   end
