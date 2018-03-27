@@ -77,7 +77,7 @@ export class Adminretailerdashboard extends Component {
                                                                                     (item.detail.current.current_status === 'closed' ? <abbr className="step_finished"></abbr>: //retailer step 5 submit
                                                                                     (item.detail.current.current_status === 'reject' ? '' : <abbr className="step_finished"></abbr>))))))//retailer 1step reject
                                                                                     :(it===3||it===4?<abbr className="step_finished cursor" onClick={this.manage_contact.bind(this,item.arrangement_id,item.company_name,false,it)}></abbr>:<abbr className="step_finished"></abbr>))
-                                                                                : ''}</td>
+                                                                                : (i==2&&item.detail.current.current_node>3?"—":"")}</td>
                                                             })
                                                         }
                                                     <td>{item.detail.current.turn_to_role === 2 ? <button disabled={true}>Manage Contract</button>

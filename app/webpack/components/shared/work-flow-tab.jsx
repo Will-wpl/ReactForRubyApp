@@ -14,6 +14,7 @@ export class Workflowtab extends React.Component{
         let res = '';
         if(this.props.current.current){
             if(this.props.current.current.current_node === index){
+                $(".step"+index).addClass("current");
                 if(this.props.current.current.current_status === "0"){
                     res = '';
                 }else if(this.props.current.current.current_status === "closed"){
@@ -55,19 +56,19 @@ export class Workflowtab extends React.Component{
                         <tbody>
                             <tr>
                                 <td width="16.8%">
-                                    <div className={"step1"} onClick={this.tab.bind(this,1)}><span className={this.stepSelect(1)}></span></div>
+                                    <div className={"step1"} current={this.state.current} onClick={this.tab.bind(this,1)}><span className={this.stepSelect(1)}></span></div>
                                 </td>
                                 <td width="4%">
                                     <div className="step_icon"></div>
                                 </td>
                                 <td width="16.8%">
-                                    <div className={"step2"} onClick={this.tab.bind(this,2)}><span className={this.stepSelect(2)}></span></div>
+                                    <div className={"step2"} current={this.state.current} onClick={this.tab.bind(this,2)}><span className={this.stepSelect(2)}></span></div>
                                 </td>
                                 <td width="4%">
                                     <div className="step_icon"></div>
                                 </td>
                                 <td width="16.8%">
-                                    <div className={"step3"} onClick={this.tab.bind(this,3)}><span className={this.stepSelect(3)}></span></div>
+                                    <div className={"step3"} current={this.state.current} onClick={this.tab.bind(this,3)}><span className={this.stepSelect(3)}></span></div>
                                 </td>
                                 <td width="4%">
                                     <div className="step_icon"></div>
