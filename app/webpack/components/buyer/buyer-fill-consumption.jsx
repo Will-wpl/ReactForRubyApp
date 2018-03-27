@@ -132,20 +132,23 @@ export class FillConsumption extends Component {
             consumption_id:this.consumptions_id,
             details:buyerlist
         }
-        if(checkpeak){
-            setTimeout(()=>{
-                this.refs.Modal.showModal();
-                this.setState({text:"You cannot enter 0 kWh for both peak and off-peak volume"});
-            },200)
-            return false;
+        if(type != "delete"){
+            if(checkpeak){
+                setTimeout(()=>{
+                    this.refs.Modal.showModal();
+                    this.setState({text:"You cannot enter 0 kWh for both peak and off-peak volume"});
+                },200)
+                return false;
+            }
+            if(this.nameRepeat(JSON.parse(buyerlist))){
+                setTimeout(()=>{
+                    this.refs.Modal.showModal();
+                    this.setState({text:"Account number has already been entered!"});
+                },200)
+                return false;
+            }
         }
-        if(this.nameRepeat(JSON.parse(buyerlist))){
-            setTimeout(()=>{
-                this.refs.Modal.showModal();
-                this.setState({text:"Account number has already been entered!"});
-            },200)
-            return false;
-        }
+        
         console.log(makeData.consumption_id);
         setBuyerParticipate(makeData, '/api/buyer/consumption_details/save').then((res) => {
             if(type != "participate"){

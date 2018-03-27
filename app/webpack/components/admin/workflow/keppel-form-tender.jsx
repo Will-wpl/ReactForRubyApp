@@ -25,7 +25,7 @@ export class Keppelformtender extends React.Component{
     }
     showConfirm(type){
         this.setState({buttonType:type});
-        if($("#adminComment").val().trim()===""){
+        if($("#adminComment").val().trim()==="" && type === "Reject"){
             this.refs.Modal.showModal();
             this.setState({
                 text:"Please fill in your comments."
