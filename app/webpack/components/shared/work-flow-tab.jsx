@@ -30,6 +30,8 @@ export class Workflowtab extends React.Component{
                     
                 }
                 return res
+            }else{
+                $(".step"+index).removeClass("current");
             }
             if(this.props.selected.length>0){
                 let val = this.props.selected.some(item=>{
