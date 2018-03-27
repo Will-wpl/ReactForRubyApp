@@ -592,41 +592,49 @@ class Api::AuctionsController < Api::BaseController
   def get_table2_row_data(head, row0, row1, row2, visibilities, table_data)
     index = 0
     head_bool, row0_string, row1_string, row2_string = [], [], [], []
-    if visibilities[:visibility_lt]
+    lt_total_value = table_data[0][index].to_f + table_data[1][index].to_f
+    if visibilities[:visibility_lt] && lt_total_value != 0.0
       lt_peak = row0[0].to_s.gsub(/#lt_peak/, number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
       lt_off_peak = row1[0].to_s.gsub(/#lt_off_peak/, number_helper.number_to_currency(table_data[1][index], precision: 0, unit: ''))
-      lt_total = row2[0].to_s.gsub(/#lt_total/, number_helper.number_to_currency(table_data[0][index].to_f + table_data[1][index].to_f, precision: 0, unit: ''))
+      lt_total = row2[0].to_s.gsub(/#lt_total/, number_helper.number_to_currency(lt_total_value, precision: 0, unit: ''))
       head_bool.push(true); row0_string.push(lt_peak); row1_string.push(lt_off_peak); row2_string.push(lt_total)
       index += 1
     else
       head_bool.push(false); row0_string.push(''); row1_string.push(''); row2_string.push('')
+      index += 1 if lt_total_value == 0.0
     end
-    if visibilities[:visibility_hts]
+    hts_total_value = table_data[0][index].to_f + table_data[1][index].to_f
+    if visibilities[:visibility_hts] && hts_total_value != 0.0
       hts_peak = row0[1].to_s.gsub(/#hts_peak/, number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
       hts_off_peak = row1[1].to_s.gsub(/#hts_off_peak/, number_helper.number_to_currency(table_data[1][index], precision: 0, unit: ''))
-      hts_total = row2[1].to_s.gsub(/#hts_total/, number_helper.number_to_currency(table_data[0][index].to_f + table_data[1][index].to_f, precision: 0, unit: ''))
+      hts_total = row2[1].to_s.gsub(/#hts_total/, number_helper.number_to_currency(hts_total_value, precision: 0, unit: ''))
       head_bool.push(true); row0_string.push(hts_peak); row1_string.push(hts_off_peak); row2_string.push(hts_total)
       index += 1
     else
       head_bool.push(false); row0_string.push(''); row1_string.push(''); row2_string.push('')
+      index += 1 if hts_total_value == 0.0
     end
-    if visibilities[:visibility_htl]
+    htl_total_value = table_data[0][index].to_f + table_data[1][index].to_f
+    if visibilities[:visibility_htl] && htl_total_value != 0.0
       htl_peak = row0[2].to_s.gsub(/#htl_peak/, number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
       htl_off_peak = row1[2].to_s.gsub(/#htl_off_peak/, number_helper.number_to_currency(table_data[1][index], precision: 0, unit: ''))
-      htl_total = row2[2].to_s.gsub(/#htl_total/, number_helper.number_to_currency(table_data[0][index].to_f + table_data[1][index].to_f, precision: 0, unit: ''))
+      htl_total = row2[2].to_s.gsub(/#htl_total/, number_helper.number_to_currency(htl_total_value, precision: 0, unit: ''))
       head_bool.push(true); row0_string.push(htl_peak); row1_string.push(htl_off_peak); row2_string.push(htl_total)
       index += 1
     else
       head_bool.push(false); row0_string.push(''); row1_string.push(''); row2_string.push('')
+      index += 1 if htl_total_value == 0.0
     end
-    if visibilities[:visibility_eht]
+    eht_total_value = table_data[0][index].to_f + table_data[1][index].to_f
+    if visibilities[:visibility_eht] && eht_total_value != 0.0
       eht_peak = row0[3].to_s.gsub(/#eht_peak/, number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
       eht_off_peak = row1[3].to_s.gsub(/#eht_off_peak/, number_helper.number_to_currency(table_data[1][index], precision: 0, unit: ''))
-      eht_total = row2[3].to_s.gsub(/#eht_total/, number_helper.number_to_currency(table_data[0][index].to_f + table_data[1][index].to_f, precision: 0, unit: ''))
+      eht_total = row2[3].to_s.gsub(/#eht_total/, number_helper.number_to_currency(eht_total_value, precision: 0, unit: ''))
       head_bool.push(true); row0_string.push(eht_peak); row1_string.push(eht_off_peak); row2_string.push(eht_total)
       index += 1
     else
       head_bool.push(false); row0_string.push(''); row1_string.push(''); row2_string.push('')
+      index += 1 if eht_total_value == 0.0
     end
     return head_bool, row0_string, row1_string, row2_string
   end

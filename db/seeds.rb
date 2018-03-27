@@ -177,9 +177,8 @@ email_templates = [
     {subject: 'Your tender documents submission has been rejected', body: 'Dear #user.company_name,<br/><br/>Your tender documents submission has been <b>rejected</b>.<br/>Comments: #user.comment <br/><br/>Please log in to your account at <a href="http://revv.sg">revv.sg</a> for further actions.<br/>', template_type: '8'}
 ]
 
-
+EmailTemplate.all.delete_all
 email_templates.each do |template|
-  EmailTemplate.find_by_template_type(template[:template_type]).destroy
   EmailTemplate.find_or_create_by(template_type: template[:template_type]) do |this_template|
     this_template.subject = template[:subject]
     this_template.body = template[:body]
