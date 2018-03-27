@@ -94,8 +94,8 @@ export default class Ranking extends Component {
                     start_time2:moment(ts).utc().format(),
                     end_time2:moment(te).utc().format()
                 })
-                console.log("start_time2 : "+moment(ts).format("YYYY-MM-DD HH:mm:ss"));
-                console.log("end_time2 : "+moment(te).format("YYYY-MM-DD HH:mm:ss"));
+                //console.log("start_time2 : "+moment(ts).format("YYYY-MM-DD HH:mm:ss"));
+                //console.log("end_time2 : "+moment(te).format("YYYY-MM-DD HH:mm:ss"));
             }
         }
     }
