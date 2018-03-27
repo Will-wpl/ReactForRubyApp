@@ -25,10 +25,10 @@ export class Keppelformtender extends React.Component{
     }
     showConfirm(type){
         this.setState({buttonType:type});
-        if($("#adminComment").val()===""){
+        if($("#adminComment").val().trim()===""){
             this.refs.Modal.showModal();
             this.setState({
-                text:"Please fill in your comments"
+                text:"Please fill in your comments."
             });
             return;
         }
