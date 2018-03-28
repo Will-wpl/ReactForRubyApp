@@ -119,8 +119,8 @@ export default class Price extends Component {
                     end_price:pe
                 })
                 //console.log(option.dataZoom[1]);
-                console.log("start_price : "+ps);
-                console.log("end_price : " +pe);
+                //console.log("start_price : "+ps);
+                //console.log("end_price : " +pe);
             } else if (lastEle === '0') { //x
                 this.xStart = params.start;
                 this.xEnd = params.end;
@@ -133,8 +133,8 @@ export default class Price extends Component {
                     start_time:moment(ts).utc().format(),
                     end_time:moment(te).utc().format()
                 })
-                console.log("start_time : "+moment(ts).format("YYYY-MM-DD HH:mm:ss"));
-                console.log("end_time : "+moment(te).format("YYYY-MM-DD HH:mm:ss"));
+                //console.log("start_time : "+moment(ts).format("YYYY-MM-DD HH:mm:ss"));
+                //console.log("end_time : "+moment(te).format("YYYY-MM-DD HH:mm:ss"));
             }
         }
     }
