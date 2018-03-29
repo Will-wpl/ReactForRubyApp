@@ -1,0 +1,50 @@
+version: "2"
+checks:
+  argument-count:
+    config:
+      threshold: 4
+  complex-logic:
+    config:
+      threshold: 4
+  file-lines:
+    config:
+      threshold: 250
+  method-complexity:
+    config:
+      threshold: 9
+  method-count:
+    config:
+      threshold: 20
+  method-lines:
+    config:
+      threshold: 35
+  nested-control-flow:
+    config:
+      threshold: 4
+  return-statements:
+    config:
+      threshold: 4
+plugins:
+  bundler-audit:
+    enabled: true
+  brakeman-pro:
+    enabled: true
+    config:
+      license_file: .bmp.license
+  git-legal:
+    enabled: true
+
+exclude_patterns:
+- "config/"
+- "db/"
+- "dist/"
+- "bin/"
+- "log/"
+- "features/"
+- "**/node_modules/"
+- "script/"
+- "**/spec/"
+- "**/test/"
+- "**/tests/"
+- "**/vendor/"
+- "**/*.d.ts"
