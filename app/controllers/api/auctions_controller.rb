@@ -766,8 +766,8 @@ class Api::AuctionsController < Api::BaseController
     period_days = get_period_days(auction)
 
     table_head = ['']
-    table_row0 = ['Peak (7am-7pm)']
-    table_row1 = ['Off-Peak (7pm-7am)']
+    table_row0 = ['Peak<br/>(7am-7pm)']
+    table_row1 = ['Off-Peak<br/>(7pm-7am)']
     row0_data = []
     row1_data = []
     total_volume = 0.0
