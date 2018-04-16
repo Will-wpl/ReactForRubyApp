@@ -80,6 +80,7 @@ export class FillConsumption extends Component {
         }
         let list = {},
         site_listObj = this.state.site_list;
+        console.log(site_listObj);
         list = {
             account_number:'',
             premise_address:'',
@@ -89,7 +90,7 @@ export class FillConsumption extends Component {
             peak:'',
             off_peak:'',
             id:0,
-            cid:site_listObj.length+1
+            cid:Math.floor((Math.random()*10000)+1)
         }
         site_listObj.push(list)
         this.setState({site_list:site_listObj})

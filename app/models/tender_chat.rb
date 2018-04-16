@@ -21,7 +21,7 @@ class TenderChat < ApplicationRecord
   # Validations
 
   # Scopes
-
+  scope :admin_find_by_id, ->(id) { where(id: id).take }
   # Callbacks
 
   # Delegates

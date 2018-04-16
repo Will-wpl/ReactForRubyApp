@@ -1,5 +1,5 @@
 class Api::ArrangementsController < Api::BaseController
-  before_action :set_arrangement, only: %i[show edit update destroy update_status]
+  before_action :set_arrangement, only: %i[show update destroy update_status]
 
   # GET arrangement list by auction_id
   # accept_status ['0','1','2'] '0':reject '1':accept '2':pending
@@ -79,7 +79,13 @@ class Api::ArrangementsController < Api::BaseController
   private
 
   def set_arrangement
-    @arrangement = Arrangement.find(params[:id]) unless params[:id] == '0'
+    if current_user.has_role?('admin')
+      @arrangement = Arrangement.admin_find_by_id(params[:id]) unless params[:id] == '0'
+    else
+      arrangements = current_user.arrangements
+      @arrangement = arrangements.count == 0 ? nil : arrangements.find(params[:id]) unless params[:id] == '0'
+    end
+
   end
 
   def model_params

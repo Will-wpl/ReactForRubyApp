@@ -184,7 +184,7 @@ class Api::TendersController < Api::BaseController
 
   def node3_retailer_withdraw
     chat = params[:chat]
-    tender_chat = TenderChat.find(chat['id'])
+    tender_chat = TenderChat.admin_find_by_id(chat['id'])
     chat_info = set_withdraw_tender_chat(tender_chat, chat)
     chat = TenderChatDetail.chat_save(tender_chat, chat_info)
     render json: chat, status: 200
@@ -246,7 +246,12 @@ class Api::TendersController < Api::BaseController
 
 
   def set_arrangement
-    @arrangement = Arrangement.find(params[:id])
+    @arrangement = if current_user.has_role?('admin')
+                     Arrangement.admin_find_by_id(params[:id])
+                   else
+                     current_user.arrangements.find(params[:id])
+                   end
+
   end
 
   def set_tender_chat(chat, arrangement_id)

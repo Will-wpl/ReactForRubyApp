@@ -1,8 +1,9 @@
 class Api::ConsumptionDetailsController < Api::BaseController
+  before_action :set_consumption, only: %i[index save participate reject]
   def index
     unless params[:consumption_id].nil?
-      consumption_details = ConsumptionDetail.find_by_consumption_id(params[:consumption_id])
-      consumption = Consumption.find(params[:consumption_id])
+      consumption = @consumption
+      consumption_details = consumption.consumption_details
       auction = consumption.auction
 
       tc_attachment = AuctionAttachment.find_by(auction_id: consumption.auction_id, file_type: 'buyer_tc_upload')
@@ -12,16 +13,8 @@ class Api::ConsumptionDetailsController < Api::BaseController
     end
   end
 
-  def update
-    if params[:id] == '0' # create
-      render json: @detail, status: 201 if @detail.save
-    else # update
-      render json: @detail, status: 200 if @detail.update(model_params)
-    end
-  end
-
   def save
-    consumption = Consumption.find(params[:consumption_id])
+    consumption = @consumption
     details = JSON.parse(params[:details])
     ids = []
     details.each do |detail|
@@ -56,7 +49,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
   end
 
   def participate
-    consumption = Consumption.find(params[:consumption_id])
+    consumption = @consumption
     auction = Auction.find(consumption.auction_id)
     days = Auction.get_days(auction.contract_period_start_date, auction.contract_period_end_date)
     ActiveRecord::Base.transaction do
@@ -96,7 +89,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
   end
 
   def reject
-    consumption = Consumption.find(params[:consumption_id])
+    consumption = @consumption
     consumption.participation_status = '0'
     consumption.save
     render json: consumption, status: 200
@@ -104,11 +97,11 @@ class Api::ConsumptionDetailsController < Api::BaseController
 
   private
 
-  def set_consumption_detail
-    @detail = params[:id] == '0' ? ConsumptionDetail.new(model_params) : ConsumptionDetail.find(params[:id])
-  end
-
-  def model_params
-    params.require(:consumption_detail).permit(:account_number, :intake_level, :peak, :off_peak, :consumption_id, :premise_address, :contracted_capacity)
+  def set_consumption
+    @consumption = if current_user.has_role?('admin')
+                     Consumption.admin_find_by_id(params[:consumption_id])
+                   else
+                     current_user.consumptions.find(params[:consumption_id])
+                   end
   end
 end

@@ -30,54 +30,6 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
     end
   end
 
-  describe 'PUT update buyer consumption detail' do
-    before { sign_in company_buyer }
-
-    context 'Has updated a consumption detail' do
-      def do_request
-        consumption_lt.peak = '1000'
-        consumption_lt.off_peak = '2000'
-        detail = {
-          account_number: consumption_lt.account_number,
-          intake_level: consumption_lt.intake_level,
-          peak: consumption_lt.peak,
-          off_peak: consumption_lt.off_peak,
-          consumption_id: consumption_lt.consumption_id
-        }
-        put :update, params: { id: consumption_lt.id, consumption_detail: detail }
-      end
-
-      before { do_request }
-      it 'Success' do
-        hash = JSON.parse(response.body)
-        expect(hash['intake_level']).to eq('LT')
-        expect(hash['peak']).to eq('1000.0')
-        expect(hash['off_peak']).to eq('2000.0')
-        expect(response).to have_http_status(:ok)
-      end
-    end
-
-    context 'Has new a consumption detail' do
-      def do_request
-        detail = {
-            account_number: consumption_lt.account_number,
-            intake_level: consumption_lt.intake_level,
-            peak: consumption_lt.peak,
-            off_peak: consumption_lt.off_peak,
-            consumption_id: consumption_lt.consumption_id
-        }
-        put :update, params: { id: 0, consumption_detail: detail }
-      end
-
-      before { do_request }
-      it 'Success' do
-        hash = JSON.parse(response.body)
-        expect(hash['intake_level']).to eq('LT')
-        expect(response).to have_http_status(:created)
-      end
-    end
-
-  end
 
   describe 'PUT buyer consumption save' do
     before { sign_in company_buyer }

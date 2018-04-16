@@ -1,5 +1,4 @@
 class Admin::AuctionsController < Admin::BaseController
-  before_action :set_auction, only: %i[show edit update destroy publish]
   after_action :set_login_status, only: %i[new empty upcoming online dashboard confirm result report log]
   # before_action :set_auctions_breadcrumbs
   # before_action :set_action_breadcrumbs

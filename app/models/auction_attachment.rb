@@ -20,6 +20,7 @@ class AuctionAttachment < ApplicationRecord
   # Scopes
   scope :belong_auction, ->(auction_id) { where('auction_id = ? and user_id is null', auction_id) }
   scope :user_auction, ->(auction_id, user_id) { where('auction_id = ? and user_id = ?', auction_id, user_id) }
+  scope :admin_find_by_id, ->(id) { where(id: id).take }
   # Callbacks
 
   # Delegates

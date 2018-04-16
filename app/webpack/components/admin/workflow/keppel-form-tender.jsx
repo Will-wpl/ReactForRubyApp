@@ -63,7 +63,7 @@ export class Keppelformtender extends React.Component{
         })
     }
     changeAdminComment(e){
-        let val = e.target.value;
+        let val = encodeURI(e.target.value);
         this.setState({
             comments:val
         })

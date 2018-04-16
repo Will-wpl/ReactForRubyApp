@@ -28,7 +28,7 @@ class Api::AuctionAttachmentsController < Api::BaseController
   end
 
   def destroy
-    attachment = AuctionAttachment.find(params[:id])
+    attachment = AuctionAttachment.admin_find_by_id(params[:id])
     attachment.destroy
     render json: nil, status: 200
   end

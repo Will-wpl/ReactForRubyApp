@@ -32,7 +32,7 @@ export class Keppelproposedeviations extends Component {
     editData(){
         let deviationslist = [];
         this.state.deviations_list.map((item, index) => {
-            deviationslist += '{"id":"'+item.id+'","sp_response":"'+encodeURI(item.sp_response)+'","sp_response_status":"'+item.sp_response_status+'"},';
+            deviationslist += '{"id":"'+item.id+'","sp_response":"'+item.sp_response+'","sp_response_status":"'+item.sp_response_status+'"},';
         })
         deviationslist = deviationslist.substr(0, deviationslist.length-1);
         deviationslist = '['+deviationslist+']';
@@ -92,7 +92,7 @@ export class Keppelproposedeviations extends Component {
         deviationslist[obj.index].sp_response_status = obj.params;
         deviationslist[obj.index].type = obj.type;
         deviationslist[obj.index].sp_response = "";
-        deviationslist[obj.index].sp_response = "Rejected : "+$("#sp_response_"+obj.index).val();
+        deviationslist[obj.index].sp_response = "Rejected : "+encodeURI($("#sp_response_"+obj.index).val());
         this.setState({deviations_list:deviationslist});
         console.log(this.state.deviations_list);
     }
@@ -101,7 +101,7 @@ export class Keppelproposedeviations extends Component {
         deviationslist[obj.index].sp_response_status = obj.params;
         deviationslist[obj.index].type = obj.type;
         deviationslist[obj.index].sp_response = "";
-        deviationslist[obj.index].sp_response = "Accepted : "+$("#sp_response_"+obj.index).val();
+        deviationslist[obj.index].sp_response = "Accepted : "+encodeURI($("#sp_response_"+obj.index).val());
         this.setState({deviations_list:deviationslist});
     }
     render (){

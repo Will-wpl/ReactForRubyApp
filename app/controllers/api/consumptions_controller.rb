@@ -1,5 +1,5 @@
 class Api::ConsumptionsController < Api::BaseController
-  before_action :set_consumption, only: %i[update_status destroy acknowledge]
+  before_action :set_consumption, only: %i[show update_status destroy acknowledge]
 
   def index
     if params[:consumer_type] == '2'
@@ -43,7 +43,7 @@ class Api::ConsumptionsController < Api::BaseController
   end
 
   def show
-    consumption = Consumption.find(params[:id])
+    consumption = @consumption
     details = ConsumptionDetail.find_by_consumption_id(params[:id]).order(id: :asc)
     count = details.count
     cons = { auction_id: consumption.auction_id,
@@ -113,6 +113,15 @@ class Api::ConsumptionsController < Api::BaseController
   private
 
   def set_consumption
-    @consumption = Consumption.find(params[:id]) unless params[:id] == '0'
+    if current_user.has_role?('admin') || current_user.has_role?('retailer')
+      @consumption = Consumption.admin_find_by_id(params[:id]) unless params[:id] == '0'
+    else
+      consumptions = current_user.consumptions
+      if consumptions.count > 0
+        @consumption = consumptions.find(params[:id]) unless params[:id] == '0'
+      end
+    end
+    # @consumption = Consumption.find(params[:id]) unless params[:id] == '0'
   end
+
 end
