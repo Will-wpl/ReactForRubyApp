@@ -276,7 +276,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
 
       context 'Params pagers unpublished auction and sort' do
         def do_request
-          get :unpublished, params: { name: [auction.name, 'like'], actual_begin_time: [Time.current.strftime('%Y-%m-%d'), 'date_between'], page_size: '10', page_index: '1', sort_by: ['name' , 'asc'] }
+          get :unpublished, params: { name: [auction.name, 'like'], actual_begin_time: [Time.current.strftime('%Y-%m-%d'), 'date_between'], page_size: '10', page_index: '1', sort_by: ['name', 'asc', ''] }
         end
 
         before { do_request }
@@ -342,7 +342,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
 
       context 'Params pagers published auction and sort' do
         def do_request
-          get :published, params: { name: [auction.name, 'like'], actual_begin_time: [Time.current.strftime('%Y-%m-%d'), 'date_between'], page_size: '10', page_index: '1', sort_by: ['name' , 'asc'] }
+          get :published, params: { name: [auction.name, 'like'], actual_begin_time: [Time.current.strftime('%Y-%m-%d'), 'date_between'], page_size: '10', page_index: '1', sort_by: ['name' , 'asc', ''] }
         end
 
         before { do_request }

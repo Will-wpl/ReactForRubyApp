@@ -44,7 +44,7 @@ class Api::BaseController < ApplicationController
     field_name = sort_by[0]
     order = sort_by[1]
     table_name = sort_by[2]
-    order_by_string = if table_name.nil?
+    order_by_string = if table_name == ''
                         field_name + ' ' + order
                       else
                         table_name + '.' + field_name + ' ' + order
