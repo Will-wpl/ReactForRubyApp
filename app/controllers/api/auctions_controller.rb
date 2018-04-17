@@ -262,14 +262,20 @@ class Api::AuctionsController < Api::BaseController
     end
     headers = [
       { name: 'Company Name', field_name: 'company_name' },
-      { name: 'Status', field_name: 'select_status' },
-      { name: 'Action', field_name: 'select_action' }
+      { name: 'Status', field_name: 'select_status', is_sort: false },
+      { name: 'Action', field_name: 'select_action', is_sort: false }
     ]
     actions = [
       { url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail' }
     ]
     data = []
-    users.order(company_name: :asc).each do |user|
+    users = if params.key?(:sort_by)
+              order_by_string = get_order_by_string(params[:sort_by])
+              users.order(order_by_string)
+            else
+              users.order(company_name: :asc)
+            end
+    users.each do |user|
       index = arrangements.index do |arrangement|
         arrangement.user_id == user.id
       end
@@ -315,24 +321,34 @@ class Api::AuctionsController < Api::BaseController
     if consumer_type == '2'
       headers = [
         { name: 'Company Name', field_name: 'company_name' },
-        { name: 'Status', field_name: 'select_status' },
-        { name: 'Action', field_name: 'select_action' }
+        { name: 'Status', field_name: 'select_status', is_sort: false },
+        { name: 'Action', field_name: 'select_action', is_sort: false }
       ]
       actions = [
         { url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail' }
       ]
-      users = users.order(company_name: :asc)
+      users = if params.key?(:sort_by)
+                order_by_string = get_order_by_string(params[:sort_by])
+                users.order(order_by_string)
+              else
+                users.order(company_name: :asc)
+              end
     elsif consumer_type == '3'
       headers = [
-        { name: 'Name', field_name: 'name' },
+        { name: 'Name', field_name: 'name', table_name: 'users' },
         { name: 'Housing Type', field_name: 'account_housing_type' },
-        { name: 'Status', field_name: 'select_status' },
-        { name: 'Action', field_name: 'select_action' }
+        { name: 'Status', field_name: 'select_status', is_sort: false },
+        { name: 'Action', field_name: 'select_action', is_sort: false }
       ]
       actions = [
         { url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail' }
       ]
-      users = users.order(name: :asc)
+      users = if params.key?(:sort_by)
+                order_by_string = get_order_by_string(params[:sort_by])
+                users.order(order_by_string)
+              else
+                users.order(name: :asc)
+              end
     else
       headers = []
       actions = []
