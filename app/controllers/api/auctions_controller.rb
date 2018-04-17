@@ -46,27 +46,27 @@ class Api::AuctionsController < Api::BaseController
                                                                @auction.starting_price, @auction.starting_price,
                                                                @auction.starting_price, @auction.starting_price)
           total_volume = Auction.set_total_volume(
-              @auction.total_lt_peak, @auction.total_lt_off_peak,
-              @auction.total_hts_peak, @auction.total_hts_off_peak,
-              @auction.total_htl_peak, @auction.total_htl_off_peak,
-              @auction.total_eht_peak, @auction.total_eht_off_peak
+            @auction.total_lt_peak, @auction.total_lt_off_peak,
+            @auction.total_hts_peak, @auction.total_hts_off_peak,
+            @auction.total_htl_peak, @auction.total_htl_off_peak,
+            @auction.total_eht_peak, @auction.total_eht_off_peak
           )
           new_total_volume = Auction.set_c_value(total_volume, days)
 
           average_price = AuctionHistory.set_average_price(total_award_sum, new_total_volume)
 
           Arrangement.where(auction_id: @auction.id, accept_status: Arrangement::AcceptStatusAccept)
-              .update_all(lt_peak: @auction.starting_price, lt_off_peak: @auction.starting_price,
-                          hts_peak: @auction.starting_price, hts_off_peak: @auction.starting_price,
-                          htl_peak: @auction.starting_price, htl_off_peak: @auction.starting_price,
-                          eht_peak: @auction.starting_price, eht_off_peak: @auction.starting_price)
+                     .update_all(lt_peak: @auction.starting_price, lt_off_peak: @auction.starting_price,
+                                 hts_peak: @auction.starting_price, hts_off_peak: @auction.starting_price,
+                                 htl_peak: @auction.starting_price, htl_off_peak: @auction.starting_price,
+                                 eht_peak: @auction.starting_price, eht_off_peak: @auction.starting_price)
           AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id)
-              .update_all(bid_time: @auction.actual_begin_time, actual_bid_time: @auction.actual_begin_time,
-                          lt_peak: @auction.starting_price, lt_off_peak: @auction.starting_price,
-                          hts_peak: @auction.starting_price, hts_off_peak: @auction.starting_price,
-                          htl_peak: @auction.starting_price, htl_off_peak: @auction.starting_price,
-                          eht_peak: @auction.starting_price, eht_off_peak: @auction.starting_price,
-                          total_award_sum: total_award_sum, average_price: average_price)
+                        .update_all(bid_time: @auction.actual_begin_time, actual_bid_time: @auction.actual_begin_time,
+                                    lt_peak: @auction.starting_price, lt_off_peak: @auction.starting_price,
+                                    hts_peak: @auction.starting_price, hts_off_peak: @auction.starting_price,
+                                    htl_peak: @auction.starting_price, htl_off_peak: @auction.starting_price,
+                                    eht_peak: @auction.starting_price, eht_off_peak: @auction.starting_price,
+                                    total_award_sum: total_award_sum, average_price: average_price)
 
           # set sorted histories to redis
           histories = AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id)
@@ -84,7 +84,7 @@ class Api::AuctionsController < Api::BaseController
       @auction.destroy
       render json: nil, status: 200
     else
-      render json: {message: 'The auction already published, you can not delete it!'}, status: 200
+      render json: { message: 'The auction already published, you can not delete it!' }, status: 200
     end
   end
 
@@ -110,25 +110,25 @@ class Api::AuctionsController < Api::BaseController
     if hold_status
       if @auction.update(hold_status: hold_status)
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
-        render json: {hold_status: true, forward: false}, status: 200
+        render json: { hold_status: true, forward: false }, status: 200
       end
     elsif !hold_status && Time.current < @auction.actual_begin_time
       if @auction.update(hold_status: hold_status)
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
-        render json: {hold_status: false, forward: false}, status: 200
+        render json: { hold_status: false, forward: false }, status: 200
       end
     elsif !hold_status && Time.current > @auction.actual_begin_time
       if @auction.update(hold_status: hold_status, actual_begin_time: Time.current, actual_end_time: Time.current + 60 * @auction.duration)
         # link = set_link(@auction.id, 'dashboard')
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
-        render json: {hold_status: false, forward: true}, status: 200
+        render json: { hold_status: false, forward: true }, status: 200
       end
     end
   end
 
   # GET current time by ajax
   def timer
-    render json: {current_time: Time.current, hold_status: @auction.hold_status, actual_begin_time: @auction.actual_begin_time, actual_end_time: @auction.actual_end_time}, status: 200
+    render json: { current_time: Time.current, hold_status: @auction.hold_status, actual_begin_time: @auction.actual_begin_time, actual_end_time: @auction.actual_end_time }, status: 200
   end
 
   # POST confirm
@@ -165,27 +165,32 @@ class Api::AuctionsController < Api::BaseController
 
   def unpublished
     if params.key?(:page_size) && params.key?(:page_index)
-      search_params = reject_params(params, %w[controller action])
+      search_params = reject_params(params, %w[controller action sort_by])
       search_where_array = set_search_params(search_params)
       auction = Auction.unpublished.where(search_where_array)
-                    .page(params[:page_index]).per(params[:page_size])
+                       .page(params[:page_index]).per(params[:page_size])
       total = auction.total_count
     else
       auction = Auction.unpublished
       total = auction.count
     end
     headers = [
-        {name: 'Name', field_name: 'name'},
-        {name: 'Date/Time', field_name: 'actual_begin_time'}
+      { name: 'Name', field_name: 'name' },
+      { name: 'Date/Time', field_name: 'actual_begin_time' }
     ]
     actions = [
-        {url: '/admin/auctions/:id/buyer_dashboard?unpublished', name: 'Buyer Dashboard', icon: 'view', interface_type: 'auction'},
-        {url: '/admin/auctions/new', name: 'Manage', icon: 'manage', interface_type: 'auction'},
-        {url: '/admin/auctions/:id', name: 'Delete', icon: 'delete', interface_type: 'auction'}
+      { url: '/admin/auctions/:id/buyer_dashboard?unpublished', name: 'Buyer Dashboard', icon: 'view', interface_type: 'auction' },
+      { url: '/admin/auctions/new', name: 'Manage', icon: 'manage', interface_type: 'auction' },
+      { url: '/admin/auctions/:id', name: 'Delete', icon: 'delete', interface_type: 'auction' }
     ]
-    data = auction.order(actual_begin_time: :asc)
-    bodies = {data: data, total: total}
-    render json: {headers: headers, bodies: bodies, actions: actions}, status: 200
+    data = if params.key?(:sort_by)
+             order_by_string = get_order_by_string(params[:sort_by])
+             auction.order(order_by_string)
+           else
+             auction.order(actual_begin_time: :asc)
+           end
+    bodies = { data: data, total: total }
+    render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
   end
 
   def published
@@ -193,23 +198,23 @@ class Api::AuctionsController < Api::BaseController
       search_params = reject_params(params, %w[controller action])
       search_where_array = set_search_params(search_params)
       auction = Auction.published.has_auction_result.where(search_where_array)
-                    .page(params[:page_index]).per(params[:page_size])
+                       .page(params[:page_index]).per(params[:page_size])
       total = auction.total_count
     else
       auction = Auction.published
       total = auction.count
     end
     headers = [
-        {name: 'ID', field_name: 'published_gid'},
-        {name: 'Name', field_name: 'name'},
-        {name: 'Date/Time', field_name: 'actual_begin_time'},
-        {name: 'Status', field_name: 'status'}
+      { name: 'ID', field_name: 'published_gid' },
+      { name: 'Name', field_name: 'name' },
+      { name: 'Date/Time', field_name: 'actual_begin_time' },
+      { name: 'Status', field_name: 'status' }
     ]
     actions = [
-        {url: '/admin/auctions/:id/retailer_dashboard', name: 'Retailer Dashboard', icon: 'edit', interface_type: 'auction'},
-        {url: '/admin/auctions/:id/buyer_dashboard?published', name: 'Buyer Dashboard', icon: 'view', interface_type: 'auction'},
-        {url: '/admin/auctions/:id/upcoming', name: 'Manage', icon: 'manage', interface_type: 'auction'},
-        {url: '/admin/auctions/:id/online', name: 'Commence', icon: 'bidding', interface_type: 'auction'}
+      { url: '/admin/auctions/:id/retailer_dashboard', name: 'Retailer Dashboard', icon: 'edit', interface_type: 'auction' },
+      { url: '/admin/auctions/:id/buyer_dashboard?published', name: 'Buyer Dashboard', icon: 'view', interface_type: 'auction' },
+      { url: '/admin/auctions/:id/upcoming', name: 'Manage', icon: 'manage', interface_type: 'auction' },
+      { url: '/admin/auctions/:id/online', name: 'Commence', icon: 'bidding', interface_type: 'auction' }
     ]
     data = []
     auction.order(actual_begin_time: :asc).each do |auction|
@@ -221,8 +226,8 @@ class Api::AuctionsController < Api::BaseController
                end
       data.push(id: auction.id, published_gid: auction.published_gid, name: auction.name, actual_begin_time: auction.actual_begin_time, status: status)
     end
-    bodies = {data: data, total: total}
-    render json: {headers: headers, bodies: bodies, actions: actions}, status: 200
+    bodies = { data: data, total: total }
+    render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
   end
 
   # Admin create auction select retailer. If retailer's account is not approved, can't find
@@ -250,12 +255,12 @@ class Api::AuctionsController < Api::BaseController
       total = users.count
     end
     headers = [
-        {name: 'Company Name', field_name: 'company_name'},
-        {name: 'Status', field_name: 'select_status'},
-        {name: 'Action', field_name: 'select_action'}
+      { name: 'Company Name', field_name: 'company_name' },
+      { name: 'Status', field_name: 'select_status' },
+      { name: 'Action', field_name: 'select_action' }
     ]
     actions = [
-        {url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail'}
+      { url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail' }
     ]
     data = []
     users.order(company_name: :asc).each do |user|
@@ -267,8 +272,8 @@ class Api::AuctionsController < Api::BaseController
       action = arrangement.nil? ? nil : arrangement.id
       data.push(user_id: user.id, company_name: user.company_name, select_status: status, select_action: action)
     end
-    bodies = {data: data, total: total}
-    render json: {headers: headers, bodies: bodies, actions: actions}, status: 200
+    bodies = { data: data, total: total }
+    render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
   end
 
   def buyers
@@ -303,23 +308,23 @@ class Api::AuctionsController < Api::BaseController
     end
     if consumer_type == '2'
       headers = [
-          {name: 'Company Name', field_name: 'company_name'},
-          {name: 'Status', field_name: 'select_status'},
-          {name: 'Action', field_name: 'select_action'}
+        { name: 'Company Name', field_name: 'company_name' },
+        { name: 'Status', field_name: 'select_status' },
+        { name: 'Action', field_name: 'select_action' }
       ]
       actions = [
-          {url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail'}
+        { url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail' }
       ]
       users = users.order(company_name: :asc)
     elsif consumer_type == '3'
       headers = [
-          {name: 'Name', field_name: 'name'},
-          {name: 'Housing Type', field_name: 'account_housing_type'},
-          {name: 'Status', field_name: 'select_status'},
-          {name: 'Action', field_name: 'select_action'}
+        { name: 'Name', field_name: 'name' },
+        { name: 'Housing Type', field_name: 'account_housing_type' },
+        { name: 'Status', field_name: 'select_status' },
+        { name: 'Action', field_name: 'select_action' }
       ]
       actions = [
-          {url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail'}
+        { url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail' }
       ]
       users = users.order(name: :asc)
     else
@@ -341,8 +346,8 @@ class Api::AuctionsController < Api::BaseController
         data.push(user_id: user.id, name: user.name, account_housing_type: user.account_housing_type, select_status: status, select_action: action)
       end
     end
-    bodies = {data: data, total: total}
-    render json: {headers: headers, bodies: bodies, actions: actions}, status: 200
+    bodies = { data: data, total: total }
+    render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
   end
 
   def selects
@@ -350,7 +355,7 @@ class Api::AuctionsController < Api::BaseController
     company_buyers = Consumption.find_by_auction_id(params[:id]).find_by_user_consumer_type('2').group(:action_status).count
     individual_buyers = Consumption.find_by_auction_id(params[:id]).find_by_user_consumer_type('3').group(:action_status).count
 
-    render json: {retailers: retailers, company_buyers: company_buyers, individual_buyers: individual_buyers}, status: 200
+    render json: { retailers: retailers, company_buyers: company_buyers, individual_buyers: individual_buyers }, status: 200
   end
 
   def send_mails
@@ -385,7 +390,7 @@ class Api::AuctionsController < Api::BaseController
       consumptions_individual.push(id: consumption.id, name: consumption.user.name, participation_status: consumption.participation_status)
     end
     count_individual = consumptions_individual.count
-    render json: {consumptions_company: consumptions_company, count_company: count_company, consumptions_individual: consumptions_individual, count_individual: count_individual}, status: 200
+    render json: { consumptions_company: consumptions_company, count_company: count_company, consumptions_individual: consumptions_individual, count_individual: count_individual }, status: 200
   end
 
   def log
@@ -393,25 +398,25 @@ class Api::AuctionsController < Api::BaseController
       search_params = reject_params(params, %w[controller action])
       search_where_array = set_search_params(search_params)
       result = AuctionEvent.find_by_auction_id(params[:id]).where(search_where_array)
-                   .page(params[:page_index]).per(params[:page_size])
+                           .page(params[:page_index]).per(params[:page_size])
       total = result.total_count
     else
       result = AuctionEvent.all
       total = result.count
     end
     headers = [
-        {name: 'Name', field_name: 'name'},
-        {name: 'Date', field_name: 'auction_when'},
-        {name: 'Action', field_name: 'auction_do'},
-        {name: 'Details', field_name: 'auction_what'}
+      { name: 'Name', field_name: 'name' },
+      { name: 'Date', field_name: 'auction_when' },
+      { name: 'Action', field_name: 'auction_do' },
+      { name: 'Details', field_name: 'auction_what' }
     ]
     data = []
     result.order(created_at: :desc).each do |event|
       data.push(name: event.user.company_name, auction_when: event.auction_when,
                 auction_do: event.auction_do, auction_what: event.auction_what)
     end
-    bodies = {data: data, total: total}
-    render json: {headers: headers, bodies: bodies, actions: nil}, status: 200
+    bodies = { data: data, total: total }
+    render json: { headers: headers, bodies: bodies, actions: nil }, status: 200
   end
 
   def letter_of_award_pdf
@@ -423,7 +428,6 @@ class Api::AuctionsController < Api::BaseController
     zone_time = pdf_datetime_zone
     auction_result, consumption, tender_state, consumption_details = get_letter_of_award_pdf_data(auction_id, user_id)
     (send_wicked_pdf_data('no data', 'NO_DATA_LETTER_OF_AWARD.pdf'); return) if auction_result.empty?
-    #
     retailer_user_company_name = auction_result.empty? ? '' : auction_result[0].company_name
     retailer_company_address = auction_result.empty? ? '' : auction_result[0].company_address
     retailer_uen_number = auction_result.empty? ? '' : auction_result[0].company_unique_entity_number
@@ -432,7 +436,6 @@ class Api::AuctionsController < Api::BaseController
 
     buyer_user_company_name = consumption.empty? ? '' : consumption[0].company_name
     buyer_uen_number = consumption.empty? ? '' : consumption[0].company_unique_entity_number
-    #
     admin_accept_date = (tender_state[0].created_at + zone_time).strftime('%-d %B %Y') unless tender_state.empty?
     auctions_contract_period_start_date = auction.contract_period_start_date.strftime('%-d %B %Y')
     acknowledge = if consumption.empty?
@@ -448,17 +451,17 @@ class Api::AuctionsController < Api::BaseController
     tr_text = ''
     consumption_details.each do |detail|
       tr_text += tr_string
-                     .gsub(/#account_number/, detail.account_number.to_s)
-                     .gsub(/#intake_level/, detail.intake_level.to_s)
-                     .gsub(/#peak_volume/, number_helper.number_to_currency(detail.peak.to_f, precision: 0, unit: ''))
-                     .gsub(/#off_peak_volume/, number_helper.number_to_currency(detail.off_peak.to_f, precision: 0, unit: ''))
-                     .gsub(/#contracted_capacity/, (
+                 .gsub(/#account_number/, detail.account_number.to_s)
+                 .gsub(/#intake_level/, detail.intake_level.to_s)
+                 .gsub(/#peak_volume/, number_helper.number_to_currency(detail.peak.to_f, precision: 0, unit: ''))
+                 .gsub(/#off_peak_volume/, number_helper.number_to_currency(detail.off_peak.to_f, precision: 0, unit: ''))
+                 .gsub(/#contracted_capacity/, (
                      if detail.contracted_capacity.nil?
                        '---'
                      else
                        number_helper.number_to_currency(detail.contracted_capacity.to_f, precision: 0, unit: '')
                      end))
-                     .gsub(/#premise_address/, detail.premise_address.to_s)
+                 .gsub(/#premise_address/, detail.premise_address.to_s)
     end
     price_table_data, visibilities, price_data = get_price_table_data(auction, auction_result[0], true, true)
     consumption_table_data, table_data = get_consumption_table_data(auction, visibilities, price_data, user_id, true)
@@ -474,7 +477,6 @@ class Api::AuctionsController < Api::BaseController
 
     table2_tr2 = html_parse(page, '#appendix_table2_total')
     row2 = html_parse(table2_tr2, '#lt_total_id', '#hts_total_id', '#htl_total_id', '#eht_total_id')
-    #
     head_bool, row0_string, row1_string, row2_string = get_table2_row_data(head, row0, row1, row2, visibilities, table_data)
     table2_head_string = table2_head.to_s
     table2_tr0_string = table2_tr.to_s
@@ -503,7 +505,6 @@ class Api::AuctionsController < Api::BaseController
     page_content[table2_tr.to_s] = table2_tr0_string
     page_content[table2_tr1.to_s] = table2_tr1_string
     page_content[table2_tr2.to_s] = table2_tr2_string
-    #
     send_wicked_pdf_data(page_content, auction.published_gid.to_s + '_LETTER_OF_AWARD.pdf')
   end
 
@@ -552,9 +553,9 @@ class Api::AuctionsController < Api::BaseController
                                   coalesce(users.company_address, '') company_address,
                                   coalesce(users.company_unique_entity_number, '') company_unique_entity_number,
                                   auction_results.*")
-                         .joins(:user)
-                         .where('auction_id = ?', auction_id)
-                         .limit 1
+                                  .joins(:user)
+                                  .where('auction_id = ?', auction_id)
+                                  .limit 1
 
     consumption = Consumption.select("users.id,
                                   users.name,
@@ -562,13 +563,13 @@ class Api::AuctionsController < Api::BaseController
                                   coalesce(users.company_address, '') company_address,
                                   coalesce(users.company_unique_entity_number,'') company_unique_entity_number,
                                   consumptions.*")
-                      .joins(:user)
-                      .where('auction_id = ? AND user_id = ?', auction_id, user_id)
+                             .joins(:user)
+                             .where('auction_id = ? AND user_id = ?', auction_id, user_id)
 
     consumption_id = consumption[0].id unless consumption.empty?
     winner_user_id = auction_result[0].user_id unless auction_result.empty?
     tender_state = TenderStateMachine
-                       .find_by_sql ["SELECT *
+                   .find_by_sql ["SELECT *
                                   FROM tender_state_machines
                                   WHERE  current_node = 4
                                     AND turn_to_role = 1
@@ -639,7 +640,6 @@ class Api::AuctionsController < Api::BaseController
     return head_bool, row0_string, row1_string, row2_string
   end
 
-
   protected
 
   def send_no_data_pdf(page_size, page_layout, output_filename)
@@ -677,8 +677,8 @@ class Api::AuctionsController < Api::BaseController
     price_row1 = []
     if auction.nil? || auction_result.nil?
       if visibility
-        return [table_head, table_row0, table_row1], {visibility_lt: false, visibility_hts: false,
-                                                      visibility_htl: false, visibility_eht: false}
+        return [table_head, table_row0, table_row1], { visibility_lt: false, visibility_hts: false,
+                                                       visibility_htl: false, visibility_eht: false }
       else
         return [table_head, table_row0, table_row1]
       end
@@ -824,7 +824,6 @@ class Api::AuctionsController < Api::BaseController
     else
       return [table_head, table_row0, table_row1], total_volume, total_award_sum
     end
-
   end
 
   def number_helper

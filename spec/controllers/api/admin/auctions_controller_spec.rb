@@ -273,6 +273,37 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
           expect(hash['bodies']['data'][0]['name']).to eq(auction.name)
         end
       end
+
+      context 'Params pagers unpublished auction and sort' do
+        def do_request
+          get :unpublished, params: { name: [auction.name, 'like'], actual_begin_time: [Time.current.strftime('%Y-%m-%d'), 'date_between'], page_size: '10', page_index: '1', sort_by: ['name' , 'asc'] }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash = JSON.parse(response.body)
+          expect(hash['headers'].size).to eq(2)
+          expect(hash['bodies']['total']).to eq(1)
+          expect(hash['bodies']['data'].size).to eq(1)
+          expect(hash['bodies']['data'][0]['name']).to eq(auction.name)
+        end
+      end
+
+      context 'Params pagers unpublished auction and sort include table name' do
+        def do_request
+          get :unpublished, params: { name: [auction.name, 'like'], actual_begin_time: [Time.current.strftime('%Y-%m-%d'), 'date_between'], page_size: '10', page_index: '1', sort_by: ['name' , 'asc', 'auctions'] }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash = JSON.parse(response.body)
+          expect(hash['headers'].size).to eq(2)
+          expect(hash['bodies']['total']).to eq(1)
+          expect(hash['bodies']['data'].size).to eq(1)
+          expect(hash['bodies']['data'][0]['name']).to eq(auction.name)
+        end
+      end
+
     end
 
     describe 'GET published auction list' do
