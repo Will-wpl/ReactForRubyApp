@@ -3,7 +3,7 @@ class Api::Admin::AuctionResultsController < Api::AuctionResultsController
   include ActionView::Helpers::NumberHelper
   def index
     if params.key?(:page_size) && params.key?(:page_index)
-      search_params = reject_params(params, %w[controller action])
+      search_params = reject_params(params, %w[controller action sort_by])
       search_where_array = set_search_params(search_params)
       result = AuctionResult.left_outer_joins(:auction).where(search_where_array)
                     .page(params[:page_index]).per(params[:page_size])
@@ -13,20 +13,26 @@ class Api::Admin::AuctionResultsController < Api::AuctionResultsController
       total = result.count
     end
     headers = [
-      { name: 'ID', field_name: 'published_gid' },
-      { name: 'Name', field_name: 'name' },
-      { name: 'Date', field_name: 'start_datetime' },
-      { name: 'Contract Period', field_name: 'contract_period' },
-      { name: 'Status', field_name: 'status' },
-      { name: 'Winning Bidder', field_name: 'lowest_price_bidder' },
-      { name: 'Average Price', field_name: 'lowest_average_price' },
-      { name: 'Total Volume', field_name: 'total_volume' },
-      { name: 'Reverse Auction Report', field_name: 'report' },
-      { name: 'Activities Log', field_name: 'log' },
-      { name: 'Letter of Award', field_name: 'award' }
+      { name: 'ID', field_name: 'published_gid', table_name: 'auctions'},
+      { name: 'Name', field_name: 'name', table_name: 'auctions'},
+      { name: 'Date', field_name: 'start_datetime', table_name: 'auctions'},
+      { name: 'Contract Period', field_name: 'contract_period', is_sort: false },
+      { name: 'Status', field_name: 'status', table_name: 'auctions' },
+      { name: 'Winning Bidder', field_name: 'lowest_price_bidder', table_name: 'auction_results' },
+      { name: 'Average Price', field_name: 'lowest_average_price', table_name: 'auction_results' },
+      { name: 'Total Volume', field_name: 'total_volume', table_name: 'auction_results' },
+      { name: 'Reverse Auction Report', field_name: 'report', is_sort: false },
+      { name: 'Activities Log', field_name: 'log', is_sort: false },
+      { name: 'Letter of Award', field_name: 'award', is_sort: false }
     ]
     data = []
-    result.order(created_at: :desc).each do |result|
+    result = if params.key?(:sort_by)
+               order_by_string = get_order_by_string(params[:sort_by])
+               result.order(order_by_string)
+             else
+               result.order(created_at: :desc)
+             end
+    result.each do |result|
       lap = number_to_currency(result.lowest_average_price, unit: '$ ', precision: 4)
       tv = number_to_currency(result.total_volume, unit: '', precision: 0)
       company_user_count = Consumption.get_company_user_count(result.auction_id)
