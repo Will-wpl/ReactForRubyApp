@@ -31,6 +31,10 @@ html(lang="en")
             = image_tag 'logo-railsbase.png', alt: 'railsbase-logo'
 
         ul.lm--header-menu.lm--header-menu--secondary
+          li
+            div class="lm--header-home-logo"
+              a href="/admin/home"
+                = image_tag 'home.png', alt: 'home'
           - if user_signed_in?
             hidden id='user_id'  value= current_user.id
             li.lm--header-item
