@@ -711,3 +711,10 @@ body.choose{
       }
     }
 }
+.lm--header-menu--secondary{
+  display: inline-flex;
+  align-items: center;
+}
+.lm--header-home-logo > a{
+  &:hover{cursor: pointer}
+}
