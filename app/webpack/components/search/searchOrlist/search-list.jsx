@@ -161,6 +161,19 @@ export class SearchList extends Component {
         });
 
     }
+    dosort(field_name,sort,table_name){
+        $(".lm--table th dfn").removeClass("selected");
+        $(".search_list_"+sort+"."+field_name+"").addClass("selected");
+        let listData = {};
+        if(this.props.list_data){
+            listData = this.props.list_data;
+            listData.sort_by = [field_name,sort,table_name];
+            //console.log(listData);
+            if(this.props.doSearch && this.props.list_url){
+                this.props.doSearch(listData,this.props.list_url);
+            }
+        }
+    }
     render (){
         if(this.props.table_data){
             //console.log(this.props.table_data);
@@ -172,7 +185,12 @@ export class SearchList extends Component {
                             {
                                 this.props.table_data.headers.map((item,index)=>{
                                     if(item.name){
-                                        return <th key={index}>{item.name}</th>
+                                        return <th key={index}>
+                                                    {item.name}
+                                                    {item.is_sort === undefined?
+                                                    <div><dfn className={"search_list_asc "+item.field_name} onClick={this.dosort.bind(this,item.field_name,'asc',item.table_name?item.table_name:'')}></dfn>
+                                                    <dfn className={"search_list_desc "+item.field_name} onClick={this.dosort.bind(this,item.field_name,'desc',item.table_name?item.table_name:'')}></dfn></div>:''}
+                                                </th>
                                     }
                                     
                                 })
