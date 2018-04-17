@@ -16,7 +16,7 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
 
   def published
     if params.key?(:page_size) && params.key?(:page_index)
-      search_params = reject_params(params, %w[controller action])
+      search_params = reject_params(params, %w[controller action sort_by])
       search_where_array = set_search_params(search_params)
       # consumption = Consumption.includes(:auction).where(auctions: { publish_status: '1' }).page(params[:page_index]).per(params[:page_size])
       consumption = Consumption.find_buyer_result_auction.mine(current_user.id).find_notify_buyer.where(search_where_array).page(params[:page_index]).per(params[:page_size])
@@ -26,16 +26,22 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
       total = consumption.count
     end
     headers = [
-      { name: 'Name', field_name: 'name' },
-      { name: 'Date/Time', field_name: 'actual_begin_time' },
-      { name: 'Auction Status', field_name: 'publish_status' },
-      { name: 'Status of Participation', field_name: 'participation_status' },
-      { name: nil, field_name: 'actions' }
+      { name: 'Name', field_name: 'name', table_name: 'auctions' },
+      { name: 'Date/Time', field_name: 'actual_begin_time', table_name: 'auctions' },
+      { name: 'Auction Status', field_name: 'publish_status', table_name: 'auctions' },
+      { name: 'Status of Participation', field_name: 'participation_status', table_name: 'consumptions' },
+      { name: nil, field_name: 'actions', is_sort: false }
     ]
     actions = [{ url: '/buyer/consumptions/:id/edit', name: 'Manage', icon: 'manage', check:'docheck'},
                { url: '/buyer/consumptions/:id/edit', name: 'View', icon: 'view', check:'docheck' }]
     data = []
-    consumption.order('auctions.actual_begin_time asc').each do |consumption|
+    consumptions = if params.key?(:sort_by)
+                     order_by_string = get_order_by_string(params[:sort_by])
+                     consumption.order(order_by_string)
+                   else
+                     consumption.order('auctions.actual_begin_time asc')
+                   end
+    consumptions.each do |consumption|
       if (consumption.auction.publish_status == '1') then
         action = 1
       else

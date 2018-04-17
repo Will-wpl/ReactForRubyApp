@@ -72,6 +72,26 @@ RSpec.describe Api::Buyer::AuctionsController, type: :controller do
         expect(hash['bodies']['data'][0]['actions']).to eq(1)
       end
     end
+
+    context 'Params pagers published auction and sort' do
+      def do_request
+        get :published, params: { name: [auctions[0].name, 'like', 'auctions'],
+                                  actual_begin_time: [Time.current.strftime("%Y-%m-%d"), 'date_between', 'auctions'],
+                                  publish_status: [auctions[0].publish_status, '=', 'auctions'],
+                                  participation_status: ['1', '='],
+                                  page_size: '10', page_index: '1', sort_by: ['participation_status' , 'asc', 'consumptions']}
+      end
+
+      before { do_request }
+      it 'Success' do
+        hash = JSON.parse(response.body)
+        expect(hash['headers'].size).to eq(5)
+        # expect(hash['bodies']['total']).to eq(3)
+        expect(hash['bodies']['data'].size).to eq(3)
+        expect(hash['bodies']['data'][0]['name']).to eq(auction.name)
+        expect(hash['bodies']['data'][0]['actions']).to eq(1)
+      end
+    end
   end
 
   context 'api/retailer/auctions routes' do
