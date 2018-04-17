@@ -20,13 +20,13 @@ class Api::Retailer::AuctionResultsController < Api::AuctionResultsController
       { name: 'Letter of Award', field_name: 'award', is_sort: false }
     ]
     data = []
-    result = if params.key?(:sort_by)
+    results = if params.key?(:sort_by)
                order_by_string = get_order_by_string(params[:sort_by])
                result.order(order_by_string)
              else
                result.order(created_at: :desc)
              end
-    result.each do |result|
+    results.each do |result|
       company_user_count = Consumption.get_company_user_count(result.auction_id)
       my_result = if result.status == 'void'
                     'Tender Void'

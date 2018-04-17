@@ -21,13 +21,13 @@ class Api::Admin::UserExtensionsController < Api::BaseController
       { name: 'Last Login IP', field_name: 'current_ip', table_name: 'user_extensions' },
     ]
     data = []
-    ue = if params.key?(:sort_by)
+    ues = if params.key?(:sort_by)
            order_by_string = get_order_by_string(params[:sort_by])
            ue.order(order_by_string)
          else
            ue.order(created_at: :desc)
          end
-    ue.each do |ue|
+    ues.each do |ue|
       data.push(company_name: ue.user.company_name, logged_in_status: ue.logged_in_status,
                 logged_in_last_time: ue.logged_in_last_time, ws_connected_status: ue.ws_connected_status,
                 ws_connected_last_time: ue.ws_connected_last_time, ws_send_message_status: ue.ws_send_message_status,

@@ -27,13 +27,13 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
     end
 
     data = []
-    result = if params.key?(:sort_by)
+    results = if params.key?(:sort_by)
                order_by_string = get_order_by_string(params[:sort_by])
                result.order(order_by_string)
              else
                result.order(created_at: :desc)
              end
-    result.each do |result|
+    results.each do |result|
       data.push(published_gid: result.auction.published_gid,
                 name: result.auction.name,
                 start_datetime: result.auction.start_datetime,
