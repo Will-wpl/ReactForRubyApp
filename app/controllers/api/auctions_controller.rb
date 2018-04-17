@@ -195,7 +195,7 @@ class Api::AuctionsController < Api::BaseController
 
   def published
     if params.key?(:page_size) && params.key?(:page_index)
-      search_params = reject_params(params, %w[controller action])
+      search_params = reject_params(params, %w[controller action sort_by])
       search_where_array = set_search_params(search_params)
       auction = Auction.published.has_auction_result.where(search_where_array)
                        .page(params[:page_index]).per(params[:page_size])
@@ -217,7 +217,13 @@ class Api::AuctionsController < Api::BaseController
       { url: '/admin/auctions/:id/online', name: 'Commence', icon: 'bidding', interface_type: 'auction' }
     ]
     data = []
-    auction.order(actual_begin_time: :asc).each do |auction|
+    auctions = if params.key?(:sort_by)
+                 order_by_string = get_order_by_string(params[:sort_by])
+                 auction.order(order_by_string)
+               else
+                 auction.order(actual_begin_time: :asc)
+               end
+    auctions.each do |auction|
       status = if Time.current < auction.actual_begin_time
                  'Upcoming'
                  # elsif Time.current >= auction.actual_begin_time && Time.current <= auction.actual_end_time
