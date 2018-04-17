@@ -38,7 +38,7 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
       { name: 'ID', field_name: 'id', table_name:'auctions' },
       { name: 'Name', field_name: 'name', table_name:'auctions' },
       { name: 'Date/Time', field_name: 'actual_begin_time', table_name:'auctions' },
-      { name: 'Auction Status', field_name: 'auction_status', table_name:'auctions' },
+      { name: 'Auction Status', field_name: 'status', table_name:'auctions' },
       { name: 'My Status', field_name: 'my_status', is_sort: false },
       { name: nil, field_name: 'actions', is_sort: false }
     ]
@@ -64,7 +64,7 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
       end
 
       data.push(id_name: arrangement.auction.published_gid, name: arrangement.auction.name, actual_begin_time: arrangement.auction.actual_begin_time,
-                auction_status: auction_status, my_status: arrangement.accept_status,
+                status: auction_status, my_status: arrangement.accept_status,
                 id: arrangement.id, auction_id: arrangement.auction_id, actions: action)
     end
 
