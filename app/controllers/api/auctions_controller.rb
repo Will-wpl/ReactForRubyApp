@@ -208,7 +208,7 @@ class Api::AuctionsController < Api::BaseController
       { name: 'ID', field_name: 'published_gid' },
       { name: 'Name', field_name: 'name' },
       { name: 'Date/Time', field_name: 'actual_begin_time' },
-      { name: 'Status', field_name: 'status' }
+      { name: 'Status', field_name: 'status', is_srot: false }
     ]
     actions = [
       { url: '/admin/auctions/:id/retailer_dashboard', name: 'Retailer Dashboard', icon: 'edit', interface_type: 'auction' },

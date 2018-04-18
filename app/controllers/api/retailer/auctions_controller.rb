@@ -35,11 +35,11 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
     end
 
     headers = [
-      { name: 'ID', field_name: 'id', table_name:'auctions' },
+      { name: 'ID', field_name: 'published_gid', table_name:'auctions' },
       { name: 'Name', field_name: 'name', table_name:'auctions' },
       { name: 'Date/Time', field_name: 'actual_begin_time', table_name:'auctions' },
-      { name: 'Auction Status', field_name: 'auction_status', table_name:'auctions' },
-      { name: 'My Status', field_name: 'my_status', is_sort: false },
+      { name: 'Auction Status', field_name: 'auction_status', is_sort: false },
+      { name: 'My Status', field_name: 'accept_status', table_name: 'arrangements' },
       { name: nil, field_name: 'actions', is_sort: false }
     ]
     actions = [{ url: '/retailer/arrangements/:id/tender', name: 'Manage', icon: 'manage', interface_type: 'auction', check:'docheck' },
@@ -63,8 +63,8 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
       #   'In Progress'
       end
 
-      data.push(id_name: arrangement.auction.published_gid, name: arrangement.auction.name, actual_begin_time: arrangement.auction.actual_begin_time,
-                auction_status: auction_status, my_status: arrangement.accept_status,
+      data.push(published_gid: arrangement.auction.published_gid, name: arrangement.auction.name, actual_begin_time: arrangement.auction.actual_begin_time,
+                auction_status: auction_status, accept_status: arrangement.accept_status,
                 id: arrangement.id, auction_id: arrangement.auction_id, actions: action)
     end
 
