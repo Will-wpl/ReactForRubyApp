@@ -428,9 +428,9 @@ class Api::AuctionsController < Api::BaseController
     end
     headers = [
       { name: 'Name', field_name: 'name', is_sort: false },
-      { name: 'Date', field_name: 'auction_when' },
-      { name: 'Action', field_name: 'auction_do' },
-      { name: 'Details', field_name: 'auction_what' }
+      { name: 'Date', field_name: 'auction_when', is_sort: false },
+      { name: 'Action', field_name: 'auction_do', is_sort: false },
+      { name: 'Details', field_name: 'auction_what', is_sort: false }
     ]
     data = []
     results = if params.key?(:sort_by)

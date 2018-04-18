@@ -774,20 +774,6 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
           expect(hash['bodies']['data'].size).to eq(10)
         end
       end
-
-      context 'Conditions Pager Search and Sort' do
-        def do_request
-          get :log, params: {id: auction.id, company_name: [retailers[0].company_name, 'like', 'users'], page_size: '10', page_index: '1', sort_by: ['auction_when' , 'asc', ''] }
-        end
-        before { do_request }
-        it 'success' do
-          expect(response).to have_http_status(:ok)
-          hash = JSON.parse(response.body)
-          expect(hash['headers'].size).to eq(4)
-          expect(hash['bodies']['total']).to eq(50)
-          expect(hash['bodies']['data'].size).to eq(10)
-        end
-      end
     end
 
 
