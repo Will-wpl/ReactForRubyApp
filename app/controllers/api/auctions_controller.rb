@@ -433,13 +433,7 @@ class Api::AuctionsController < Api::BaseController
       { name: 'Details', field_name: 'auction_what', is_sort: false }
     ]
     data = []
-    results = if params.key?(:sort_by)
-                order_by_string = get_order_by_string(params[:sort_by])
-                result.order(order_by_string)
-              else
-                result.order(created_at: :desc)
-              end
-    results.each do |event|
+    result.order(created_at: :desc).each do |event|
       data.push(name: event.user.company_name, auction_when: event.auction_when,
                 auction_do: event.auction_do, auction_what: event.auction_what)
     end
