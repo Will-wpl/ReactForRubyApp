@@ -417,7 +417,7 @@ class Api::AuctionsController < Api::BaseController
 
   def log
     if params.key?(:page_size) && params.key?(:page_index)
-      search_params = reject_params(params, %w[controller action])
+      search_params = reject_params(params, %w[controller action sort_by])
       search_where_array = set_search_params(search_params)
       result = AuctionEvent.find_by_auction_id(params[:id]).where(search_where_array)
                            .page(params[:page_index]).per(params[:page_size])
@@ -427,10 +427,10 @@ class Api::AuctionsController < Api::BaseController
       total = result.count
     end
     headers = [
-      { name: 'Name', field_name: 'name' },
-      { name: 'Date', field_name: 'auction_when' },
-      { name: 'Action', field_name: 'auction_do' },
-      { name: 'Details', field_name: 'auction_what' }
+      { name: 'Name', field_name: 'name', is_sort: false },
+      { name: 'Date', field_name: 'auction_when', is_sort: false },
+      { name: 'Action', field_name: 'auction_do', is_sort: false },
+      { name: 'Details', field_name: 'auction_what', is_sort: false }
     ]
     data = []
     result.order(created_at: :desc).each do |event|
