@@ -38,22 +38,6 @@ class Api::BaseController < ApplicationController
     end
   end
 
-  def get_order_by_string(sort_by)
-    field_name = sort_by[0]
-    order = sort_by[1]
-    table_name = sort_by[2]
-    order_by_string = if table_name == ''
-                        field_name + ' '
-                      else
-                        table_name + '.' + field_name + ' '
-                      end
-    order_by_string += if order == 'asc'
-                         'ASC'
-                       else
-                         'DESC'
-                       end
-    order_by_string
-  end
 
   def get_order_by_obj_str(sort_by, headers)
     field_name = sort_by[0]
