@@ -18,7 +18,7 @@ class Api::UsersController < Api::BaseController
     ]
     actions = [{ url: '/admin/users/:id/manage', name: 'Manage', icon: 'manage' }]
     users = if params.key?(:sort_by)
-              order_by_string = get_order_by_string(params[:sort_by])
+              order_by_string = get_order_by_obj_str(params[:sort_by], headers)
               users.order(order_by_string)
             else
               users.order(approval_status: :desc, company_name: :asc)
@@ -68,28 +68,28 @@ class Api::UsersController < Api::BaseController
     end
     data = if params[:consumer_type].nil?
              if params.key?(:sort_by)
-               order_by_string = get_order_by_string(params[:sort_by])
+               order_by_string = get_order_by_obj_str(params[:sort_by], headers)
                users.order(order_by_string)
              else
                users
              end
            elsif params[:consumer_type][0] == '2'
              if params.key?(:sort_by)
-               order_by_string = get_order_by_string(params[:sort_by])
+               order_by_string = get_order_by_obj_str(params[:sort_by], headers)
                users.order(order_by_string)
              else
                users.order(company_name: :asc)
              end
            elsif params[:consumer_type][0] == '3'
              if params.key?(:sort_by)
-               order_by_string = get_order_by_string(params[:sort_by])
+               order_by_string = get_order_by_obj_str(params[:sort_by], headers)
                users.order(order_by_string)
              else
                users.order(name: :asc)
              end
            else
              if params.key?(:sort_by)
-               order_by_string = get_order_by_string(params[:sort_by])
+               order_by_string = get_order_by_obj_str(params[:sort_by], headers)
                users.order(order_by_string)
              else
                users

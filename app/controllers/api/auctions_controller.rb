@@ -184,7 +184,7 @@ class Api::AuctionsController < Api::BaseController
       { url: '/admin/auctions/:id', name: 'Delete', icon: 'delete', interface_type: 'auction' }
     ]
     data = if params.key?(:sort_by)
-             order_by_string = get_order_by_string(params[:sort_by])
+             order_by_string = get_order_by_obj_str(params[:sort_by], headers)
              auction.order(order_by_string)
            else
              auction.order(actual_begin_time: :asc)
@@ -218,7 +218,7 @@ class Api::AuctionsController < Api::BaseController
     ]
     data = []
     auctions = if params.key?(:sort_by)
-                 order_by_string = get_order_by_string(params[:sort_by])
+                 order_by_string = get_order_by_obj_str(params[:sort_by], headers)
                  auction.order(order_by_string)
                else
                  auction.order(actual_begin_time: :asc)
@@ -270,7 +270,7 @@ class Api::AuctionsController < Api::BaseController
     ]
     data = []
     users = if params.key?(:sort_by)
-              order_by_string = get_order_by_string(params[:sort_by])
+              order_by_string = get_order_by_obj_str(params[:sort_by], headers)
               users.order(order_by_string)
             else
               users.order(company_name: :asc)
@@ -328,7 +328,7 @@ class Api::AuctionsController < Api::BaseController
         { url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail' }
       ]
       users = if params.key?(:sort_by)
-                order_by_string = get_order_by_string(params[:sort_by])
+                order_by_string = get_order_by_obj_str(params[:sort_by], headers)
                 users.order(order_by_string)
               else
                 users.order(company_name: :asc)
@@ -344,7 +344,7 @@ class Api::AuctionsController < Api::BaseController
         { url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail' }
       ]
       users = if params.key?(:sort_by)
-                order_by_string = get_order_by_string(params[:sort_by])
+                order_by_string = get_order_by_obj_str(params[:sort_by], headers)
                 users.order(order_by_string)
               else
                 users.order(name: :asc)

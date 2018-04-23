@@ -47,7 +47,7 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
                { url: '/retailer/auctions/:id/gotobid', name: 'Start Bidding', icon: 'bidding', interface_type: 'auction' }]
     data = []
     arrangements = if params.key?(:sort_by)
-                     order_by_string = get_order_by_string(params[:sort_by])
+                     order_by_string = get_order_by_obj_str(params[:sort_by], headers)
                      arrangement.order(order_by_string)
                    else
                      arrangement.order('auctions.actual_begin_time asc')

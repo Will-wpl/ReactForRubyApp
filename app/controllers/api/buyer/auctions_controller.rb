@@ -36,7 +36,7 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
                { url: '/buyer/consumptions/:id/edit', name: 'View', icon: 'view', check:'docheck' }]
     data = []
     consumptions = if params.key?(:sort_by)
-                     order_by_string = get_order_by_string(params[:sort_by])
+                     order_by_string = get_order_by_obj_str(params[:sort_by], headers)
                      consumption.order(order_by_string)
                    else
                      consumption.order('auctions.actual_begin_time asc')

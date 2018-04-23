@@ -21,7 +21,7 @@ class Api::Retailer::AuctionResultsController < Api::AuctionResultsController
     ]
     data = []
     results = if params.key?(:sort_by)
-               order_by_string = get_order_by_string(params[:sort_by])
+               order_by_string = get_order_by_obj_str(params[:sort_by], headers)
                result.order(order_by_string)
              else
                result.order(created_at: :desc)
