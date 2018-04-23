@@ -55,6 +55,21 @@ class Api::BaseController < ApplicationController
     order_by_string
   end
 
+  def get_order_by_obj_str(sort_by, headers)
+    field_name = sort_by[0]
+    order = sort_by[1]
+    sort_header = headers.select do |header|
+      header[:field_name] == field_name
+    end
+    unless sort_header.nil?
+      order_by_string = sort_header[0][:table_name].nil? ?
+                            sort_header[0][:field_name] :
+                            "#{sort_header[0][:table_name]}.#{sort_header[0][:field_name]}"
+      order_by_string += (order == 'asc') ? ' ASC' : ' DESC'
+    end
+    order_by_string
+  end
+
   def reject_params(params, reject_list)
     rejected_params = params.reject do |key|
       reject_list.include?(key)
