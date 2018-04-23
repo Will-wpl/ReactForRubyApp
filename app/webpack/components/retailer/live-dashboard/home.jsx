@@ -22,7 +22,6 @@ export default class LiveHomePage extends Component {
     componentDidMount() {
         let auctionId = this.props.auction ? this.props.auction.id : 1;
         getAuctionHistorys(auctionId, getLoginUserId()).then(res => {
-            // console.log('res==========================', res);
             this.makeup(res);
             this.createSocket(auctionId);
         }, error => {
@@ -39,20 +38,12 @@ export default class LiveHomePage extends Component {
     createSocket(auctionId) {
         if (!this.ws) {
             this.ws = createWebsocket(auctionId);
-            // console.log(this.ws)
             this.ws.onConnected(() => {
                 console.log('---message client connected ---');
                 this.timestamp = new Date().getTime() + Math.random();
                 setTimeout(()=> {
                     this.ws.sendMessage(ACTION_COMMANDS.MAKE_UNIQUE, {timestamp: this.timestamp});
                 }, 1000);
-                // validateCanBidForm(auctionId).then(res => {
-                //
-                // }, err => {
-                //
-                // })
-                // or
-                // this.ws.sendMessage(ACTION_COMMANDS.CAN_BIDDING_FORM, {});
             }).onDisconnected(() => {
                 console.log('---message client disconnected ----')
             }).onReceivedData(data => {
@@ -64,16 +55,10 @@ export default class LiveHomePage extends Component {
                             return Number(element.user_id) === curUserId;
                         });
                         if (last) {
-                            // console.log('last ========',last);
-                            // if (last.is_bidder) {
                             if (this.state.chartDatas.length === 0) {
                                 this.state.chartDatas = [].concat({id: curUserId, data: [], color: '#e5e816', template:''});
 
                             }
-                            // this.state.chartDatas[0].data = this.state.chartDatas[0].data.concat(
-                            //     {time: moment(last.bid_time).format('YYYY-MM-DD HH:mm:ss')
-                            //         , ranking: Number(last.ranking) === 1 ? 2 : last.ranking, needMark: last.is_bidder}
-                            // )
                             last.ranking = this.state.showTop2Rule && Number(last.ranking) === 1 ? 2 : last.ranking;
                             last.template_ranking = `Ranking: ${(this.state.showTop2Rule && Number(last.ranking) <= 2) ? 'TOP 2' : getStandardNumBref(last.ranking)} ${last.is_bidder && last.flag !== null ? '(Bid Submitter)' : ''}`;
                             if (!last.template_price) {
@@ -85,7 +70,6 @@ export default class LiveHomePage extends Component {
                             last.template_price['htl'] = `HTL(P):$${parseFloat(last.htl_peak).toFixed(4)} HTL(OP):$${parseFloat(last.htl_off_peak).toFixed(4)}`;
                             last.template_price['eht'] = `EHT(P):$${parseFloat(last.eht_peak).toFixed(4)} EHT(OP):$${parseFloat(last.eht_off_peak).toFixed(4)}`;
                             this.state.chartDatas[0].data = this.state.chartDatas[0].data.concat(last)
-                            // }
                             let element = JSON.parse(JSON.stringify(last));
                             element.bid_time = moment(element.bid_time).format('HH:mm:ss');
                             element.lt_peak = parseFloat(element.lt_peak).toFixed(4);
@@ -103,7 +87,7 @@ export default class LiveHomePage extends Component {
                                     .concat(last.lt_peak).concat(last.hts_off_peak)
                                     .concat(last.hts_peak).concat(last.htl_off_peak)
                                     .concat(last.htl_peak).concat(last.eht_off_peak)
-                                    .concat(last.eht_peak) : [],//this.state.priceConfig
+                                    .concat(last.eht_peak) : [],
                                 histories: last.is_bidder ? this.state.histories.concat(element): this.state.histories,
                                 chartDatas: this.state.chartDatas
                             })
@@ -138,7 +122,6 @@ export default class LiveHomePage extends Component {
     makeup(res) {
         const topRule = Number(this.props.auction ? this.props.auction.retailer_mode : 0) === 0;
         if (res.length > 0 ) {
-            // console.log('res ====>', res)
             let copy = JSON.parse(JSON.stringify(res));
             let histories = res.map((element, index) => {
                 if (index === 0) { // start
@@ -159,8 +142,6 @@ export default class LiveHomePage extends Component {
             let chartDataTpl = {id: 0, data: [], color: '#e5e816'};
             copy.forEach(history => {
                 chartDataTpl.id = history.user_id;
-                // chartDataTpl.data.push({time: moment(history.bid_time).format('YYYY-MM-DD HH:mm:ss')
-                //     , ranking: Number(history.ranking) === 1 ? 2 : history.ranking, needMark: history.is_bidder})
                 history.ranking = (topRule && Number(history.ranking) === 1) ? 2 : history.ranking;
                 history.template_ranking = `Ranking: ${(topRule && Number(history.ranking) <= 2) ? 'TOP 2' : getStandardNumBref(history.ranking)} ${history.is_bidder && history.flag !== null  ? '(Bid Submitter)' : ''}`;
                 if (!history.template_price) {
@@ -188,7 +169,6 @@ export default class LiveHomePage extends Component {
                         .concat(lastBidden.eht_off_peak).concat(lastBidden.eht_peak));
                 }
             }
-            // console.log('last =>>>>',last);
             let newest = histories[histories.length - 1];
             this.setState({
                 ranking: topRule && Number(newest.ranking) === 1 ? 2 : Number(newest.ranking),
