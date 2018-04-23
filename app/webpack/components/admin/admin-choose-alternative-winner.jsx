@@ -29,7 +29,6 @@ export default class ChooseAlternativeWinner extends React.Component{
             getHistoriesLast({ auction_id: actionId}).then(resp=>{
                 let data = resp.histories;
                 data.map((item,index)=>{
-                    //item.disabled=false;
                     if(index==0){
                         item.disabled=true;
 
@@ -37,7 +36,6 @@ export default class ChooseAlternativeWinner extends React.Component{
                         item.disabled=false
                     }
                 })
-                console.log(data);
                 let e={
                     data:{
                         user_id:data[0].user_id,
@@ -126,7 +124,6 @@ export default class ChooseAlternativeWinner extends React.Component{
         let data = this.state.selectedWinner;
         data.data.justification = this.state.justification;
         delete data.index;
-        //console.log(data);
         auctionConfirm(data).then(resp=>{
             clearTimeout(timeFn);
             this.refs.Modal.showModal();

@@ -24,13 +24,10 @@ export default class AdminConfirmWinner extends Component {
             auction:{}
         }
     }
-    //this.winnerdata=[];
-    //this.winnerauction={};
     this.winner = {
         data:{},
         auction:{}
     }
-    //this.auction={}
 }
 compare(prop) {
     return function (obj1, obj2) {
@@ -56,7 +53,6 @@ componentDidMount() {
                     auction:data.auction
                 }
             })
-            //orderRanking.sort(this.compare("average_price"))
             this.setState({realtimeRanking:data.histories,currentPrice : data.histories.length > 0 ? data.histories[0].average_price : this.state.currentPrice});
         })
     })
@@ -84,7 +80,6 @@ void_auction(){
     let timeFn;
     auctionConfirm(
         {data: { user_id: this.state.winner.data.user_id , status:'void'}, id:this.auction.id}).then(res=>{
-        //console.log(res);
         clearTimeout(timeFn);
         this.refs.Modal.showModal();
         this.setState({
@@ -99,23 +94,8 @@ void_auction(){
 }
 confirm_winner(){
     window.location.href=`/admin/auctions/${this.auction.id}/choose_winner`;
-    // let timeFn;
-    // auctionConfirm({data:{ user_id: this.state.winner.data.user_id , status:'win'},id:this.auction.id}).then(res=>{
-    //     //console.log(res);
-    //     clearTimeout(timeFn);
-    //     this.refs.Modal.showModal();
-    //     this.setState({
-    //         text:"Congratulations! Reverse Auction winner has been confirmed."
-    //     })
-    //     timeFn = setTimeout(()=>{
-    //         window.location.href=`/admin/auctions/${this.auction.id}/result`;
-    //     },2000)
-    // },error=>{
-    //
-    // })
 }
 render() {
-    //console.log(this.winner.data);
     const visibility_lt = !this.auction ? true: Number(this.auction.total_lt_peak) > 0 || Number(this.auction.total_lt_off_peak) > 0;
     const visibility_hts = !this.auction ? true: Number(this.auction.total_hts_peak) > 0 || Number(this.auction.total_hts_off_peak) > 0;
     const visibility_htl = !this.auction ? true: Number(this.auction.total_htl_peak) > 0 || Number(this.auction.total_htl_off_peak) > 0;
@@ -142,9 +122,6 @@ render() {
                         </div>
                     </div>
                 </div>
-                {/* <div className="createRaMain u-grid">
-                    <a className="lm--button lm--button--primary u-mt3" href="/admin/home" >Back to Homepage</a>
-                </div> */}
                 <Modal ref="Modal" text={this.state.text} acceptFunction={!this.state.fnStatus ? this.void_auction.bind(this) : this.confirm_winner.bind(this)} />
             </div>
     )

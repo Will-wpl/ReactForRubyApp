@@ -90,7 +90,6 @@ export class CreateNewRA extends Component {
                 $("#time_extension option[value='"+res.time_extension+"']").attr("selected",true);
                 $("#average_price option[value='"+res.average_price+"']").attr("selected",true);
                 $("#retailer_mode option[value='"+res.retailer_mode+"']").attr("selected",true);
-            //console.log(res);;
         })
     }
     padZero(num, n) { 
@@ -228,8 +227,6 @@ export class CreateNewRA extends Component {
         this.auction.average_price= this.refs.average_price.value;
         this.auction.starting_price= this.refs.starting_price.value;
         this.auction.retailer_mode= this.refs.retailer_mode.value;
-        //console.log(this.state.start_datetime.format('YYYY-MM-DD hh:mm:ss'));
-        //console.log(moment(this.auction.actual_end_time).format('YYYY-MM-DD hh:mm:ss'));
         return this.auction;
     }
 
@@ -295,7 +292,6 @@ export class CreateNewRA extends Component {
                                 text:'Request exception,Save failed!'
                             });
                             this.refs.Modal.showModal();
-                            //console.log(error);
                         })
             if(this.props.left_name){
                 this.setState({
@@ -343,18 +339,11 @@ export class CreateNewRA extends Component {
                                 {this.state.disabled ? <div className="mask"></div> : ''}
                                 <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'save')}>Save</button>
                                 <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'next')}>Next</button>
-                                {/* <a className="lm--button lm--button--primary" onClick={this.showDelete.bind(this)}>Delete</a>
-                                <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'publish')}>Publish</button> */}
                             </div>
         }else{//edit
             styleType = "col-sm-12 col-md-8 push-md-2";
             left_name = this.props.left_name;
             btn_html = <div className="createRa_btn">
-                            {/*this.props.editdisabled ? <div className="mask"></div> : ''*/}
-                            {/* <a className={this.state.edit_btn} onClick={this.edit.bind(this)}>Edit</a>
-                            <button className={this.state.edit_change} onClick={this.auctionCreate.bind(this,'save')}>Save</button>
-                            <button className={this.state.edit_change} onClick={this.auctionCreate.bind(this,'next')}>Next</button>
-                            <a className={this.state.edit_change} onClick={this.Cancel.bind(this)}>Cancel</a> */}
                             {this.props.disabled?
                                 <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this,'next')}>Next</button>:
                                 <div>
@@ -367,23 +356,7 @@ export class CreateNewRA extends Component {
         }
         return (
             <div>
-                {/* <div id="live_modal" className={this.state.live_modal}>
-                        <div className={this.state.holdOrend}></div>
-                        <p>
-                        Please standy,bidding will<br></br>
-                        commence soon<br></br>
-                        Page will automatically refresh when<br></br>reverse auction commences
-                        </p>
-                    </div> */}
             <div className={"createRaMain u-grid "+this.state.live_modal_do}>
-                {/* <div id="live_modal">
-                        <div className={this.state.holdOrend}></div>
-                        <p>
-                        Please standy,bidding will<br></br>
-                        commence soon<br></br>
-                        Page will automatically refresh when<br></br>reverse auction commences
-                        </p>
-                    </div> */}
             <div className={styleType}>
                 <h2>{left_name}</h2>
                 <form action="" ref="CreatRaForm" method="post" id="CreatRaForm" onSubmit={this.checkSuccess.bind(this)}>
@@ -392,7 +365,6 @@ export class CreateNewRA extends Component {
                         <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Name of Reverse Auction :</span>
                         <label className="lm--formItem-right lm--formItem-control">
                             <input type="test" value={this.state.name} onChange={this.doName.bind(this)} disabled={this.state.disabled} ref="name" name="name" maxLength="150" className="string optional" title="The length for Name of RA must not be longer than 150 characters." required aria-required="true"></input>
-                            {/* <abbr className="error-block" ref="ra_name_error">{this.state.ra_name_error}</abbr> */}
                         </label>
                     </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
@@ -410,7 +382,6 @@ export class CreateNewRA extends Component {
                                 this.state.start_datetime === '' ? <DatePicker disabled={this.state.disabled} minDate={moment()} shouldCloseOnSelect={true} onKeyDown={this.noPermitInput.bind(this)} required aria-required="true" ref="contract_period_start_date" name="contract_period_start_date" className="date_ico" dateFormat="DD-MM-YYYY" selected={this.state.startDate} selectsStart startDate={this.state.startDate} endDate={this.state.endDate} onChange = {this.starttimeChange}/> 
                                 :<DatePicker disabled={this.state.disabled} minDate={this.state.start_datetime} shouldCloseOnSelect={true} onKeyDown={this.noPermitInput.bind(this)} required aria-required="true" ref="contract_period_start_date" name="contract_period_start_date" className="date_ico" dateFormat="DD-MM-YYYY" selected={this.state.startDate} selectsStart startDate={this.state.startDate} endDate={this.state.endDate} onChange = {this.starttimeChange}/>
                             }
-                        {/* <abbr className="error-block"  ref="ra_time_start_error">{this.state.ra_time_start_error}</abbr> */}
                         </label>
                         <label className="col"><b>to</b></label>
                         <label className="col">
@@ -419,7 +390,6 @@ export class CreateNewRA extends Component {
                                 :<DatePicker disabled={this.state.disabled} minDate={this.state.start_datetime} shouldCloseOnSelect={true} onKeyDown={this.noPermitInput.bind(this)} required aria-required="true" ref="contract_period_end_date" name="contract_period_end_date" className="date_ico" dateFormat="DD-MM-YYYY" selected={this.state.endDate} selectsEnd startDate={this.state.startDate} endDate={this.state.endDate}  onChange = {this.endtimeChange}/>
                             }
                             
-                        {/* <abbr className="error-block" ref="ra_time_end_error">{this.state.ra_time_end_error}</abbr> */}
                         </label>
                     </dd>
                     <dd></dd>

@@ -25,7 +25,6 @@ show_table(index,id){
     }
 }
 render() {
-    //console.log(this.winner.data);
     return (
         <div>
             {this.props.comsumption_list ?

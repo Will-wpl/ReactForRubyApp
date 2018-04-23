@@ -91,8 +91,6 @@ componentDidMount() {
     },error=>{
 
     })
-    //window.location.href='';
-    //alert(localStorage.auction_id);
 }
 upload(type, index){
     let errorObj = $("#"+type+index).next().next();
@@ -121,7 +119,6 @@ upload(type, index){
         xhr:() => {
             var xhr = new window.XMLHttpRequest();
             xhr.upload.addEventListener("progress", function (evt) {
-                //console.log(evt)
                 if (evt.lengthComputable) {
                     const percentComplete = parseInt(evt.loaded / evt.total * 100, 10);
                     barObj.show();
@@ -146,7 +143,7 @@ upload(type, index){
                 item.files.push({
                     id:res.id,
                     file_name:res.file_name,
-                    file_path:res.file_path //replace((res.file_path.split(`uploads/attachments/${res.auction_id}/`)[1]),res.file_name)
+                    file_path:res.file_path
                 })
             })
             this.setState({
@@ -165,7 +162,7 @@ upload(type, index){
         }
         checkRequired(){
             let timeBar;
-            let requiredObj = this.state.fileData,result = true; //$("input[type='file'][required]"),
+            let requiredObj = this.state.fileData,result = true;
             clearTimeout(timeBar);
             if(requiredObj['buyer_tc_upload'][0].files.length <=0){
                 $("#buyer_tc_upload0").next().next().fadeIn(300);
@@ -188,18 +185,6 @@ upload(type, index){
                 },3000)
                 result = false;
             }
-                // for(let i=0; i<requiredObj.length; i++){
-                //     if(requiredObj[i].value === ""){
-                //         //console.log($("#"+requiredObj[i].id).parents("a.upload_file_btn").next().find(".progress-bar").text());
-                //         $("#"+requiredObj[i].id).next().fadeIn(300);
-                //         result = false;
-                //         break;
-                //     }else if($("#"+requiredObj[i].id).parents("a.upload_file_btn").next().find(".progress-bar").text() != "upload successful!"){
-                //         $("#"+requiredObj[i].id).next().fadeIn(300);
-                //         result = false;
-                //         break;
-                //     }
-                // }
             return result;
         }
         doPublish(){
@@ -232,15 +217,6 @@ upload(type, index){
             if(!this.checkRequired()){
                 return;
             }
-            // if(this.state.retailer_select === 0){
-            //     clearTimeout(required);
-            //     $("#retailer_select_box").next().fadeIn(300);
-            //     location.href="#retailer_select_box";
-            //     required = setTimeout(()=>{
-            //         $("#retailer_select_box").next().fadeOut(300);
-            //     },5000)
-            //     return;
-            // }
             this.refs.Modal.showModal("comfirm");
             this.setState({
                 text:"Are you sure you want to publish this auction?",
@@ -441,7 +417,6 @@ upload(type, index){
             })
         }
 render() {
-    //console.log(this.winner.data);
     let url;
     if(this.state.publish_status==0){
         url = "/admin/auctions/unpublished"
