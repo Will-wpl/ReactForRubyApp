@@ -68,7 +68,6 @@ class Api::ConsumptionDetailsController < Api::BaseController
       consumption.eht_peak = intake_values[6]
       consumption.eht_off_peak = intake_values[7]
       if consumption.save
-        # update auction
         auction.total_lt_peak += intake_values[0]
         auction.total_lt_off_peak += intake_values[1]
         auction.total_hts_peak += intake_values[2]
