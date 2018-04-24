@@ -13,20 +13,7 @@ class Api::BaseController < ApplicationController
     where_attributes = []
     where_params.each do |key, value|
       next if value[0] == ''
-      table_name = get_table_name(value[2])
-      if value[1] == 'like'
-        where_conditions.push("#{table_name}#{key} ilike ?")
-        where_attributes.push("%#{value[0]}%")
-      end
-      if value[1] == '='
-        where_conditions.push("#{table_name}#{key} = ?")
-        where_attributes.push(value[0])
-      end
-      next unless value[1] == 'date_between'
-      date_time = Time.parse(value[0])
-      where_conditions.push("#{table_name}#{key} between ? and ?")
-      where_attributes.push(date_time.beginning_of_day)
-      where_attributes.push(date_time.at_end_of_day)
+      set_where_params(key, value, where_conditions, where_attributes)
     end
     where = []
     where.push(where_conditions.join(' and '))
@@ -97,6 +84,24 @@ class Api::BaseController < ApplicationController
       '1 = 1'
     else
       condition
+    end
+  end
+
+  def set_where_params(key, value, where_conditions, where_attributes)
+    table_name = get_table_name(value[2])
+    if value[1] == 'like'
+      where_conditions.push("#{table_name}#{key} ilike ?")
+      where_attributes.push("%#{value[0]}%")
+    end
+    if value[1] == '='
+      where_conditions.push("#{table_name}#{key} = ?")
+      where_attributes.push(value[0])
+    end
+    if value[1] == 'date_between'
+      date_time = Time.parse(value[0])
+      where_conditions.push("#{table_name}#{key} between ? and ?")
+      where_attributes.push(date_time.beginning_of_day)
+      where_attributes.push(date_time.at_end_of_day)
     end
   end
 
