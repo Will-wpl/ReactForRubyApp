@@ -32,25 +32,15 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
       { name: 'Status of Participation', field_name: 'participation_status', table_name: 'consumptions' },
       { name: nil, field_name: 'actions', is_sort: false }
     ]
-    actions = [{ url: '/buyer/consumptions/:id/edit', name: 'Manage', icon: 'manage', check:'docheck'},
-               { url: '/buyer/consumptions/:id/edit', name: 'View', icon: 'view', check:'docheck' }]
+    actions = [{ url: '/buyer/consumptions/:id/edit', name: 'Manage', icon: 'manage', check: 'docheck' },
+               { url: '/buyer/consumptions/:id/edit', name: 'View', icon: 'view', check: 'docheck' }]
     data = []
-    consumptions = if params.key?(:sort_by)
-                     order_by_string = get_order_by_obj_str(params[:sort_by], headers)
-                     consumption.order(order_by_string)
-                   else
-                     consumption.order('auctions.actual_begin_time asc')
-                   end
+    consumptions = get_order_list(params, headers, consumption)
     consumptions.each do |consumption|
-      if (consumption.auction.publish_status == '1') then
-        action = 1
-      else
-        action = consumption.participation_status != '1' ? 0 : 1
-      end
-
+      action = get_action(consumption)
       data.push(id: consumption.id, name: consumption.auction.name, actual_begin_time: consumption.auction.actual_begin_time,
                 publish_status: consumption.auction.publish_status, participation_status: consumption.participation_status,
-                 actions: action)
+                actions: action)
     end
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
@@ -58,13 +48,13 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
 
   def pdf
     auction_id = params[:id]
-    auction = Auction.find_by id:auction_id
+    auction = Auction.find_by id: auction_id
     auction_result = AuctionResult.find_by_auction_id(auction_id)
 
     param = {
-        :auction => auction,
-        :auction_result => auction_result,
-        :current_user => current_user
+      :auction => auction,
+      :auction_result => auction_result,
+      :current_user => current_user
     }
     pdf_filename, output_filename = BuyerReport.new(param).pdf
     send_data IO.read(Rails.root.join(pdf_filename)), filename: output_filename
@@ -77,4 +67,22 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
     super
   end
 
+  private
+
+  def get_order_list(params, headers, consumption)
+    if params.key?(:sort_by)
+      order_by_string = get_order_by_obj_str(params[:sort_by], headers)
+      consumption.order(order_by_string)
+    else
+      consumption.order('auctions.actual_begin_time asc')
+     end
+  end
+
+  def get_action(consumption)
+    if consumption.auction.publish_status == '1' then
+      1
+    else
+      consumption.participation_status != '1' ? 0 : 1
+    end
+  end
 end
