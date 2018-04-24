@@ -109,11 +109,16 @@ class Api::ConsumptionsController < Api::BaseController
     if current_user.has_role?('admin') || current_user.has_role?('retailer')
       @consumption = Consumption.admin_find_by_id(params[:id]) unless params[:id] == '0'
     else
-      consumptions = current_user.consumptions
-      if consumptions.count > 0
-        @consumption = consumptions.find(params[:id]) unless params[:id] == '0'
-      end
+      @consumption = current_user_consumption
     end
+  end
+
+  def current_user_consumption
+    consumptions = current_user.consumptions
+    consumption = if consumptions.count > 0
+                    consumptions.find(params[:id]) unless params[:id] == '0'
+                  end
+    consumption
   end
 
 end
