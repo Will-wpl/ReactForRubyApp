@@ -71,6 +71,29 @@ class PdfUtils
     end
   end
 
+  def self.draw_axis(param)
+    pdf = param[:pdf]
+    len_x = param[:len_x]
+    base_x = param[:base_x]
+    number_x = param[:number_x]
+    str_time = param[:str_time]
+    step_number = param[:step_number]
+    # Y
+    pdf.vertical_line 20, 20 + 210, :at => number_x[0]
+    # X
+    pdf.horizontal_line number_x[0], number_x[0] + 360, :at => 20
+
+    (1..number_x.size - 1).each do |i|
+      pdf.vertical_line 20, 25, :at => number_x[i]
+      #font_size(7) { text_box str_date[i], :at => [base_x + (350.0/step_number)*i-14, 20-4]}
+      #font_size(7) { text_box str_time[i], :at => [base_x + (350.0/step_number)*i-12-len_x, 20-10]}
+      pdf.font_size(8) {pdf.text_box str_time[i], :at => [base_x + (350.0 / step_number) * i - 14 - len_x, 20 - 5]}
+    end
+    #font_size(7) { text_box str_date[0], :at => [base_x-12, 20-3]}
+    #font_size(7) { text_box str_time[0], :at => [base_x-12-len_x, 20-10]}
+    pdf.font_size(8) {pdf.text_box str_time[0], :at => [base_x - 14 - len_x, 20 - 5]}
+  end
+
   private
 
   def self.get_color(param)

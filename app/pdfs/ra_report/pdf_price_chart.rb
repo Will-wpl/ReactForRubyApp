@@ -12,9 +12,9 @@ class PdfPriceChart
     uid = param[:uid]
     pdf.grid([2, 0], [11, 13]).bounding_box do
       # chart
-      pdf_draw_chart
+      draw_chart
       # line
-      pdf_chart_line
+      chart_line
     end
 
     pdf.grid([2, 14], [11, 18]).bounding_box do
@@ -28,20 +28,10 @@ class PdfPriceChart
     end
   end
 
-  def pdf_chart_line
+  def chart_line
     pdf = param[:pdf]
-    base_x = param[:base_x]
-    hash = param[:hash]
-    start_time_i = param[:start_time_i]
-    percentage_x = param[:percentage_x]
-    offset_x = param[:offset_x]
-    min_price = param[:min_price]
-    percentage_y = param[:percentage_y]
     chart_color = param[:chart_color]
-    type_x = param[:type_x]
-    point_hash = {}
-
-    pdf_draw_line(hash, chart_color, type_x, start_time_i, percentage_x, percentage_y, base_x, offset_x ,min_price)
+    point_hash = draw_line
     #point polygon/ellipse
     pdf.stroke do
       point_hash.each_with_index do |(key, list), index|
@@ -57,33 +47,18 @@ class PdfPriceChart
     end
   end
 
-  def pdf_draw_chart
+  def draw_chart
     pdf = param[:pdf]
-    len_x = param[:len_x]
     base_x = param[:base_x]
     number_x = param[:number_x]
     number_y = param[:number_y]
-    str_time = param[:str_time]
     step_number = param[:step_number]
-
     pdf.move_down 10
     #stroke_axis
     pdf.stroke_color "ffffff"
     pdf.stroke do
-      # Y
-      pdf.vertical_line 20, 20 + 210, :at => number_x[0]
-      # X
-      pdf.horizontal_line number_x[0], number_x[0] + 360, :at => 20
-
-      (1..number_x.size - 1).each do |i|
-        pdf.vertical_line 20, 25, :at => number_x[i]
-        #font_size(7) { text_box str_date[i], :at => [base_x + (350.0/step_number)*i-14, 20-4]}
-        #font_size(7) { text_box str_time[i], :at => [base_x + (350.0/step_number)*i-12-len_x, 20-10]}
-        pdf.font_size(8) {pdf.text_box str_time[i], :at => [base_x + (350.0 / step_number) * i - 14 - len_x, 20 - 5]}
-      end
-      #font_size(7) { text_box str_date[0], :at => [base_x-12, 20-3]}
-      #font_size(7) { text_box str_time[0], :at => [base_x-12-len_x, 20-10]}
-      pdf.font_size(8) {pdf.text_box str_time[0], :at => [base_x - 14 - len_x, 20 - 5]}
+      # X Y
+      PdfUtils.draw_axis(param)
 
       (1..step_number).each do |i|
         pdf.horizontal_line number_x[0], number_x[0] + 5, :at => 20 + (200.0 / step_number) * i
@@ -95,7 +70,12 @@ class PdfPriceChart
 
   private
 
-  def get_x(type_x, item, start_time_i, percentage_x, base_x, offset_x)
+  def get_x
+    base_x = param[:base_x]
+    start_time_i = param[:start_time_i]
+    percentage_x = param[:percentage_x]
+    offset_x = param[:offset_x]
+    type_x = param[:type_x]
     if type_x == 0 then
       ((item.bid_time.to_i - start_time_i) * percentage_x).to_f + base_x + offset_x
     else
@@ -104,7 +84,12 @@ class PdfPriceChart
     end
   end
 
-  def pdf_draw_line(hash, chart_color, type_x, start_time_i, percentage_x, percentage_y, base_x, offset_x ,min_price)
+  def draw_line
+    hash = param[:hash]
+    min_price = param[:min_price]
+    percentage_y = param[:percentage_y]
+    chart_color = param[:chart_color]
+
     point_hash = {}
     hash.each_with_index do |(key, list), index|
       point_hash[key] = []
@@ -113,7 +98,7 @@ class PdfPriceChart
         pdf.stroke_color chart_color[key]
         list.each_with_index {|item, item_index|
           # x, y
-          data_x = get_x(type_x, item, start_time_i, percentage_x, base_x, offset_x)
+          data_x = get_x
           data_y = (item.average_price - min_price) / percentage_y + 20.0
           if item_index == 0
             pdf.move_to data_x, data_y
@@ -124,5 +109,6 @@ class PdfPriceChart
         }
       end
     end
+    point_hash
   end
 end
