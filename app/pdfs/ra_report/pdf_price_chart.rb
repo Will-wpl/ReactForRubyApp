@@ -40,25 +40,8 @@ class PdfPriceChart
     chart_color = param[:chart_color]
     type_x = param[:type_x]
     point_hash = {}
-    hash.each_with_index do |(key, list), index|
-      point_hash[key] = []
-      pdf.stroke do
-        pdf.line_width = 1.5
-        pdf.stroke_color chart_color[key]
-        list.each_with_index {|item, item_index|
-          # x, y
-          data_x = get_x(type_x, item, start_time_i, percentage_x, base_x, offset_x)
-          data_y = (item.average_price - min_price) / percentage_y + 20.0
-          if item_index == 0
-            pdf.move_to data_x, data_y
-          else
-            pdf.line_to data_x, data_y
-          end
-          point_hash[key].push({:point_x => data_x, :point_y => data_y, :is_bidder => item.flag == nil ? false : item.is_bidder})
-        }
-      end
-    end
 
+    pdf_draw_line(hash, chart_color, type_x, start_time_i, percentage_x, percentage_y, base_x, offset_x ,min_price)
     #point polygon/ellipse
     pdf.stroke do
       point_hash.each_with_index do |(key, list), index|
@@ -118,6 +101,28 @@ class PdfPriceChart
     else
       data_x = (item.bid_time.to_i - start_time_i) / percentage_x
       data_x == 0 ? base_x : data_x + offset_x
+    end
+  end
+
+  def pdf_draw_line(hash, chart_color, type_x, start_time_i, percentage_x, percentage_y, base_x, offset_x ,min_price)
+    point_hash = {}
+    hash.each_with_index do |(key, list), index|
+      point_hash[key] = []
+      pdf.stroke do
+        pdf.line_width = 1.5
+        pdf.stroke_color chart_color[key]
+        list.each_with_index {|item, item_index|
+          # x, y
+          data_x = get_x(type_x, item, start_time_i, percentage_x, base_x, offset_x)
+          data_y = (item.average_price - min_price) / percentage_y + 20.0
+          if item_index == 0
+            pdf.move_to data_x, data_y
+          else
+            pdf.line_to data_x, data_y
+          end
+          point_hash[key].push({:point_x => data_x, :point_y => data_y, :is_bidder => item.flag == nil ? false : item.is_bidder})
+        }
+      end
     end
   end
 end
