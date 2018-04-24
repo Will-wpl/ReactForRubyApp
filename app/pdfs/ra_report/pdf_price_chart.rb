@@ -30,18 +30,8 @@ class PdfPriceChart
 
   def pdf_chart_line
     pdf = param[:pdf]
-    base_x = param[:base_x]
-    hash = param[:hash]
-    start_time_i = param[:start_time_i]
-    percentage_x = param[:percentage_x]
-    offset_x = param[:offset_x]
-    min_price = param[:min_price]
-    percentage_y = param[:percentage_y]
     chart_color = param[:chart_color]
-    type_x = param[:type_x]
-    point_hash = {}
-
-    pdf_draw_line(hash, chart_color, type_x, start_time_i, percentage_x, percentage_y, base_x, offset_x ,min_price)
+    point_hash = pdf_draw_line
     #point polygon/ellipse
     pdf.stroke do
       point_hash.each_with_index do |(key, list), index|
@@ -95,7 +85,12 @@ class PdfPriceChart
 
   private
 
-  def get_x(type_x, item, start_time_i, percentage_x, base_x, offset_x)
+  def get_x
+    base_x = param[:base_x]
+    start_time_i = param[:start_time_i]
+    percentage_x = param[:percentage_x]
+    offset_x = param[:offset_x]
+    type_x = param[:type_x]
     if type_x == 0 then
       ((item.bid_time.to_i - start_time_i) * percentage_x).to_f + base_x + offset_x
     else
@@ -104,7 +99,12 @@ class PdfPriceChart
     end
   end
 
-  def pdf_draw_line(hash, chart_color, type_x, start_time_i, percentage_x, percentage_y, base_x, offset_x ,min_price)
+  def pdf_draw_line
+    hash = param[:hash]
+    min_price = param[:min_price]
+    percentage_y = param[:percentage_y]
+    chart_color = param[:chart_color]
+
     point_hash = {}
     hash.each_with_index do |(key, list), index|
       point_hash[key] = []
@@ -113,7 +113,7 @@ class PdfPriceChart
         pdf.stroke_color chart_color[key]
         list.each_with_index {|item, item_index|
           # x, y
-          data_x = get_x(type_x, item, start_time_i, percentage_x, base_x, offset_x)
+          data_x = get_x
           data_y = (item.average_price - min_price) / percentage_y + 20.0
           if item_index == 0
             pdf.move_to data_x, data_y
@@ -124,5 +124,6 @@ class PdfPriceChart
         }
       end
     end
+    point_hash
   end
 end
