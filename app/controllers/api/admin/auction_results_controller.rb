@@ -12,19 +12,7 @@ class Api::Admin::AuctionResultsController < Api::AuctionResultsController
       result = AuctionResult.all
       total = result.count
     end
-    headers = [
-      { name: 'ID', field_name: 'published_gid', table_name: 'auctions'},
-      { name: 'Name', field_name: 'name', table_name: 'auctions'},
-      { name: 'Date', field_name: 'start_datetime', table_name: 'auctions'},
-      { name: 'Contract Period', field_name: 'contract_period', is_sort: false },
-      { name: 'Status', field_name: 'status', table_name: 'auction_results' },
-      { name: 'Winning Bidder', field_name: 'lowest_price_bidder', table_name: 'auction_results' },
-      { name: 'Average Price', field_name: 'lowest_average_price', table_name: 'auction_results' },
-      { name: 'Total Volume', field_name: 'total_volume', table_name: 'auction_results' },
-      { name: 'Reverse Auction Report', field_name: 'report', is_sort: false },
-      { name: 'Activities Log', field_name: 'log', is_sort: false },
-      { name: 'Letter of Award', field_name: 'award', is_sort: false }
-    ]
+    headers = get_headers
     data = []
     results = get_order_list(result, params, headers)
     results.each do |result|
@@ -62,6 +50,22 @@ class Api::Admin::AuctionResultsController < Api::AuctionResultsController
 
   def get_status_string(result)
     result.status == 'void' ? 'Void' : 'Awarded'
+  end
+
+  def get_headers
+    [
+        { name: 'ID', field_name: 'published_gid', table_name: 'auctions'},
+        { name: 'Name', field_name: 'name', table_name: 'auctions'},
+        { name: 'Date', field_name: 'start_datetime', table_name: 'auctions'},
+        { name: 'Contract Period', field_name: 'contract_period', is_sort: false },
+        { name: 'Status', field_name: 'status', table_name: 'auction_results' },
+        { name: 'Winning Bidder', field_name: 'lowest_price_bidder', table_name: 'auction_results' },
+        { name: 'Average Price', field_name: 'lowest_average_price', table_name: 'auction_results' },
+        { name: 'Total Volume', field_name: 'total_volume', table_name: 'auction_results' },
+        { name: 'Reverse Auction Report', field_name: 'report', is_sort: false },
+        { name: 'Activities Log', field_name: 'log', is_sort: false },
+        { name: 'Letter of Award', field_name: 'award', is_sort: false }
+    ]
   end
 
 end
