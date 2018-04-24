@@ -90,7 +90,7 @@ class AuctionHistory < ApplicationRecord
     tmp_average_price = nil
     new_histories = []
     sorted_histories.each_with_index do |history, index|
-      (tmp_average_price == history.average_price) ? count += 1 : count = 0
+      count = AuctionHistory.get_count(tmp_average_price, history, count)
       # puts history, index
       # save
       history_new = AuctionHistory.new
@@ -155,14 +155,10 @@ class AuctionHistory < ApplicationRecord
                    user_id: calculate_dto.user_id, auction_id: calculate_dto.auction_id, average_price: average_price, total_award_sum: total_award_sum, is_bidder: true}
     if @histories.count == 0
       @history = AuctionHistory.new(history_obj)
-      if @history.save
-        find_sort_update_auction_histories(calculate_dto.auction_id)
-      end
+      find_sort_update_auction_histories(calculate_dto.auction_id) if @history.save
     else
       @history = @histories.first
-      if @history.update(history_obj)
-        find_sort_update_auction_histories(calculate_dto.auction_id)
-      end
+      find_sort_update_auction_histories(calculate_dto.auction_id) if @history.update(history_obj)
     end
   end
 
@@ -192,11 +188,7 @@ class AuctionHistory < ApplicationRecord
     count = 0
     tmp_average_price = nil
     histories.each_with_index do |history, index|
-      if tmp_average_price == history.average_price
-        count += 1
-      else
-        count = 0
-      end
+      count = AuctionHistory.get_count(tmp_average_price, history, count)
       # puts history, index
       history.update(ranking: index + 1 - count)
       tmp_average_price = history.average_price
@@ -216,11 +208,7 @@ class AuctionHistory < ApplicationRecord
     count = 0
     tmp_average_price = nil
     histories.each_with_index do |history, index|
-      if tmp_average_price == history.average_price
-        count += 1
-      else
-        count = 0
-      end
+      count = AuctionHistory.get_count(tmp_average_price, history, count)
       # puts history, index
       if history.id == current_history.id
         ids.push(history.id) if history.update(ranking: index + 1 - count, flag: flag)
@@ -255,5 +243,16 @@ class AuctionHistory < ApplicationRecord
   # find auction histories by auction ids(array), belong to set_bid function
   def self.find_histories_by_ids(ids)
     AuctionHistory.select('auction_histories.* , users.company_name').joins(:user).find(ids)
+  end
+
+  private
+
+  def self.get_count(tmp_average_price, history, count)
+    if tmp_average_price == history.average_price
+      count += 1
+    else
+      count = 0
+    end
+    count
   end
 end
