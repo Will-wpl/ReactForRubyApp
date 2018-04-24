@@ -74,8 +74,8 @@ class PdfUtils
   private
 
   def self.get_color(param)
-    user_hash = param[:user_hash]
-    user_hash2 = param[:user_hash2]
+    user_hash = param[:hash]
+    user_hash2 = param[:hash2]
     user_hash = user_hash.clone
     temp_hash2 = user_hash2.clone
     temp_hash2.each {|key, list|

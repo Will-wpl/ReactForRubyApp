@@ -14,6 +14,13 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     # auction
     auction = Auction.find_by id: params[:id]
 
+    if auction.nil?
+      pdf_filename, output_filename =PdfUtils.get_no_data_pdf("B4", :landscape, 'NO_DATA_ADMIN_REPORT.pdf')
+      send_data IO.read(Rails.root.join(pdf_filename)), filename: output_filename
+      File.delete Rails.root.join(pdf_filename)
+      return
+    end
+
     uid, uid2 = PdfUtils.to_array(uid), PdfUtils.to_array(uid2)
 
 
