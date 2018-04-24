@@ -20,24 +20,15 @@ class Api::Retailer::AuctionResultsController < Api::AuctionResultsController
       { name: 'Letter of Award', field_name: 'award', is_sort: false }
     ]
     data = []
-    results = if params.key?(:sort_by)
-               order_by_string = get_order_by_obj_str(params[:sort_by], headers)
-               result.order(order_by_string)
-             else
-               result.order(created_at: :desc)
-             end
+    results = get_order_list(params, headers, result)
     results.each do |result|
       company_user_count = Consumption.get_company_user_count(result.auction_id)
-      my_result = if result.status == 'void'
-                    'Tender Void'
-                  else
-                    result.user_id == current_user.id ? 'Tender Awarded' : 'Tender Not Awarded'
-                  end
+      my_result = get_result(result)
       data.push(published_gid: result.auction.published_gid,
                 name: result.auction.name,
                 start_datetime: result.auction.start_datetime,
                 my_result: my_result,
-                award: company_user_count != 0 && show_award?(result, current_user) ? "retailer/auctions/#{result.auction_id}/award" : '')
+                award: get_award(company_user_count, result))
     end
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: nil }, status: 200
@@ -47,5 +38,26 @@ class Api::Retailer::AuctionResultsController < Api::AuctionResultsController
 
   def show_award?(result, current_user)
     result.user_id == current_user.id && result.status != 'void'
+  end
+
+  def get_order_list(params, headers, result)
+    if params.key?(:sort_by)
+      order_by_string = get_order_by_obj_str(params[:sort_by], headers)
+      result.order(order_by_string)
+    else
+      result.order(created_at: :desc)
+    end
+  end
+
+  def get_result(result)
+    if result.status == 'void'
+      'Tender Void'
+    else
+      result.user_id == current_user.id ? 'Tender Awarded' : 'Tender Not Awarded'
+    end
+  end
+
+  def get_award(company_user_count, result)
+    company_user_count != 0 && show_award?(result, current_user) ? "retailer/auctions/#{result.auction_id}/award" : ''
   end
 end
