@@ -12,27 +12,9 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
       result = AuctionResult.all
       total = result.count
     end
-    headers = [
-      { name: 'ID', field_name: 'published_gid', table_name: 'auctions' },
-      { name: 'Name', field_name: 'name', table_name: 'auctions' },
-      { name: 'Date', field_name: 'start_datetime', table_name: 'auctions' }
-    ]
-    # user = User.find(current_user.id)
-    if current_user.consumer_type == '2'
-      headers.push(name: 'Retailer Acknowledgement', field_name: 'acknowledge', table_name: 'consumptions')
-      headers.push(name: 'Reverse Auction Report', field_name: 'report', is_sort: false)
-      headers.push(name: 'Letter of Award', field_name: 'award', is_sort: false)
-    else
-      headers.push(name: 'Reverse Auction Report', field_name: 'report', is_sort: false)
-    end
-
+    headers = get_headers
     data = []
-    results = if params.key?(:sort_by)
-               order_by_string = get_order_by_obj_str(params[:sort_by], headers)
-               result.order(order_by_string)
-             else
-               result.order(created_at: :desc)
-             end
+    results = get_order_list(params, headers, result)
     results.each do |result|
       data.push(published_gid: result.auction.published_gid,
                 name: result.auction.name,
@@ -51,5 +33,30 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
     consumption = Consumption.find_by_auction_and_user(result.auction_id, current_user.id).first
     user = User.find(current_user.id)
     result.status != 'void' && consumption.participation_status == Consumption::ParticipationStatusParticipate && user.consumer_type == User::ConsumerTypeCompany
+  end
+
+  def get_headers
+    headers = [
+      { name: 'ID', field_name: 'published_gid', table_name: 'auctions'},
+      { name: 'Name', field_name: 'name', table_name: 'auctions' },
+      { name: 'Date', field_name: 'start_datetime', table_name: 'auctions' }
+    ]
+    # user = User.find(current_user.id)
+    if current_user.consumer_type == '2'
+      headers.push(name: 'Retailer Acknowledgement', field_name: 'acknowledge', table_name: 'consumptions')
+      headers.push(name: 'Reverse Auction Report', field_name: 'report', is_sort: false)
+      headers.push(name: 'Letter of Award', field_name: 'award', is_sort: false)
+    else
+      headers.push(name: 'Reverse Auction Report', field_name: 'report', is_sort: false)
+    end
+  end
+
+  def get_order_list(params, headers, result)
+    if params.key?(:sort_by)
+      order_by_string = get_order_by_obj_str(params[:sort_by], headers)
+      result.order(order_by_string)
+    else
+      result.order(created_at: :desc)
+    end
   end
 end
