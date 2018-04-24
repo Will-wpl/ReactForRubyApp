@@ -3,23 +3,15 @@ class Api::ConsumptionsController < Api::BaseController
 
   def index
     consumptions = Consumption.find_by_user_consumer_type(params[:consumer_type]).find_by_auction_id(params[:id]).is_participation
-    if params[:consumer_type] == '2'
-      consumptions = consumptions.order('users.company_name asc')
-    else
-      consumptions = consumptions.order('users.name asc')
-    end
+    consumptions = (params[:consumer_type] == '2') ? consumptions.order('users.company_name asc') : consumptions.order('users.name asc')
     data = []
     total_info = { consumption_count: 0, account_count: 0, lt_peak: 0, lt_off_peak: 0,
                    hts_peak: 0, hts_off_peak: 0, htl_peak: 0, htl_off_peak: 0, eht_peak: 0, eht_off_peak: 0 }
     consumptions.each do |consumption|
       details = ConsumptionDetail.find_by_consumption_id(consumption.id).order(account_number: :asc)
       count = details.count
-      data.push(id: consumption.id,
-                auction_id: consumption.auction_id,
-                user_id: consumption.user_id,
-                company_name: consumption.user.company_name,
-                name: consumption.user.name,
-                count: count,
+      data.push(id: consumption.id, auction_id: consumption.auction_id, user_id: consumption.user_id,
+                company_name: consumption.user.company_name, name: consumption.user.name, count: count,
                 lt_peak: Consumption.get_lt_peak(consumption.lt_peak),
                 lt_off_peak: Consumption.get_lt_off_peak(consumption.lt_off_peak),
                 hts_peak: Consumption.get_hts_peak(consumption.hts_peak),
@@ -122,7 +114,6 @@ class Api::ConsumptionsController < Api::BaseController
         @consumption = consumptions.find(params[:id]) unless params[:id] == '0'
       end
     end
-    # @consumption = Consumption.find(params[:id]) unless params[:id] == '0'
   end
 
 end
