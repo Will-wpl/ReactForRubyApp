@@ -41,17 +41,8 @@ class Api::UsersController < Api::BaseController
       users = User.buyers
       total = users.count
     end
-    headers = [
-      { name: 'Company Name', field_name: 'company_name' },
-      { name: 'Name', field_name: 'name', table_name: 'users' },
-      { name: 'Email', field_name: 'email' },
-      { name: 'Consumer Type', field_name: 'consumer_type', is_sort: false }
-    ]
+    headers = get_buyer_headers(params)
     actions = [{ url: '/admin/users/:id/manage', name: 'View', icon: 'view' }]
-    unless params[:consumer_type].nil?
-      headers.delete_if { |header| header[:field_name] == 'name' } if params[:consumer_type][0] == '2'
-      headers.delete_if { |header| header[:field_name] == 'company_name' } if params[:consumer_type][0] == '3'
-    end
     data = get_data(params, headers, users)
     data = data.each do |user|
       user.consumer_type = user.consumer_type == '2' ? 'Company' : 'Individual'
@@ -67,6 +58,20 @@ class Api::UsersController < Api::BaseController
   end
 
   private
+
+  def get_buyer_headers(params)
+    headers = [
+        { name: 'Company Name', field_name: 'company_name' },
+        { name: 'Name', field_name: 'name', table_name: 'users' },
+        { name: 'Email', field_name: 'email' },
+        { name: 'Consumer Type', field_name: 'consumer_type', is_sort: false }
+    ]
+    unless params[:consumer_type].nil?
+      headers.delete_if { |header| header[:field_name] == 'name' } if params[:consumer_type][0] == '2'
+      headers.delete_if { |header| header[:field_name] == 'company_name' } if params[:consumer_type][0] == '3'
+    end
+    headers
+  end
 
   def get_retailer_order_list(params, headers, users)
     if params.key?(:sort_by)
