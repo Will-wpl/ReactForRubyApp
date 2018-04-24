@@ -13,7 +13,7 @@ class Api::BaseController < ApplicationController
     where_attributes = []
     where_params.each do |key, value|
       next if value[0] == ''
-      table_name = value[2].nil? ? nil : value[2] + '.'
+      table_name = get_table_name(value[2])
       if value[1] == 'like'
         where_conditions.push("#{table_name}#{key} ilike ?")
         where_attributes.push("%#{value[0]}%")
@@ -31,11 +31,7 @@ class Api::BaseController < ApplicationController
     where = []
     where.push(where_conditions.join(' and '))
     condition = where + where_attributes
-    if condition == ['']
-      '1 = 1'
-    else
-      condition
-    end
+    get_condition_last(condition)
   end
 
 
@@ -89,4 +85,19 @@ class Api::BaseController < ApplicationController
   def buyer_required
     head :unauthorized unless current_user&.has_role?(:buyer)
   end
+
+  private
+
+  def get_table_name(value)
+    value.nil? ? nil : value + '.'
+  end
+
+  def get_condition_last(condition)
+    if condition == ['']
+      '1 = 1'
+    else
+      condition
+    end
+  end
+
 end
