@@ -19,9 +19,9 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
       data.push(published_gid: result.auction.published_gid,
                 name: result.auction.name,
                 start_datetime: result.auction.start_datetime,
-                acknowledge: show_award?(result, current_user) ? result.acknowledge : nil ,
-                report: result.participation_status=='1' ? "api/buyer/auctions/#{result.auction_id}/pdf" : '',
-                award: show_award?(result, current_user) ? result.participation_status=='1' ? "api/buyer/auctions/#{result.auction_id}/letter_of_award_pdf" : '' : '')
+                acknowledge: get_acknowledge(result) ,
+                report: get_report(result) ,
+                award: get_award(result))
     end
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: nil }, status: 200
@@ -58,5 +58,17 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
     else
       result.order(created_at: :desc)
     end
+  end
+
+  def get_acknowledge(result)
+    show_award?(result, current_user) ? result.acknowledge : nil
+  end
+
+  def get_report(result)
+    result.participation_status=='1' ? "api/buyer/auctions/#{result.auction_id}/pdf" : ''
+  end
+
+  def get_award(result)
+    show_award?(result, current_user) ? result.participation_status=='1' ? "api/buyer/auctions/#{result.auction_id}/letter_of_award_pdf" : '' : ''
   end
 end
