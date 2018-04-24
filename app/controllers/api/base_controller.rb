@@ -7,6 +7,11 @@ class Api::BaseController < ApplicationController
 
   protected
 
+  def get_search_where_array(params)
+    search_params = reject_params(params, %w[controller action sort_by])
+    set_search_params(search_params)
+  end
+
   def set_search_params(params)
     where_params = reject_params(params, %w[page_size page_index])
     where_conditions = []

@@ -2,8 +2,7 @@ class Api::UsersController < Api::BaseController
   # user.approval_status['0', '1', '2'] '0':rejected '1':approved '2':pending
   def retailers
     if params.key?(:page_size) && params.key?(:page_index)
-      search_params = reject_params(params, %w[controller action sort_by])
-      search_where_array = set_search_params(search_params)
+      search_where_array = get_search_where_array(params)
       users = User.retailers.where(search_where_array)
                   .page(params[:page_index]).per(params[:page_size])
       total = users.total_count
@@ -17,22 +16,9 @@ class Api::UsersController < Api::BaseController
       { name: 'Status', field_name: 'approval_status' }
     ]
     actions = [{ url: '/admin/users/:id/manage', name: 'Manage', icon: 'manage' }]
-    users = if params.key?(:sort_by)
-              order_by_string = get_order_by_obj_str(params[:sort_by], headers)
-              users.order(order_by_string)
-            else
-              users.order(approval_status: :desc, company_name: :asc)
-            end
+    users = get_retailer_order_list(params, headers, users)
     data = users.each do |user|
-      user.approval_status = if user.approval_status == '0'
-                               'Rejected'
-                             elsif user.approval_status == '1'
-                               'Approved'
-                             elsif user.approval_status == '2'
-                               'Pending'
-                             else
-                               ''
-                             end
+      user.approval_status = get_approval_status_string(user)
     end
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
@@ -66,35 +52,7 @@ class Api::UsersController < Api::BaseController
       headers.delete_if { |header| header[:field_name] == 'name' } if params[:consumer_type][0] == '2'
       headers.delete_if { |header| header[:field_name] == 'company_name' } if params[:consumer_type][0] == '3'
     end
-    data = if params[:consumer_type].nil?
-             if params.key?(:sort_by)
-               order_by_string = get_order_by_obj_str(params[:sort_by], headers)
-               users.order(order_by_string)
-             else
-               users
-             end
-           elsif params[:consumer_type][0] == '2'
-             if params.key?(:sort_by)
-               order_by_string = get_order_by_obj_str(params[:sort_by], headers)
-               users.order(order_by_string)
-             else
-               users.order(company_name: :asc)
-             end
-           elsif params[:consumer_type][0] == '3'
-             if params.key?(:sort_by)
-               order_by_string = get_order_by_obj_str(params[:sort_by], headers)
-               users.order(order_by_string)
-             else
-               users.order(name: :asc)
-             end
-           else
-             if params.key?(:sort_by)
-               order_by_string = get_order_by_obj_str(params[:sort_by], headers)
-               users.order(order_by_string)
-             else
-               users
-             end
-           end
+    data = get_data(params, headers, users)
     data = data.each do |user|
       user.consumer_type = user.consumer_type == '2' ? 'Company' : 'Individual'
     end
@@ -106,5 +64,60 @@ class Api::UsersController < Api::BaseController
   def show
     user = User.find(params[:id])
     render json: user, status: 200
+  end
+
+  private
+
+  def get_retailer_order_list(params, headers, users)
+    if params.key?(:sort_by)
+      order_by_string = get_order_by_obj_str(params[:sort_by], headers)
+      users.order(order_by_string)
+    else
+      users.order(approval_status: :desc, company_name: :asc)
+    end
+  end
+
+  def get_approval_status_string(user)
+    if user.approval_status == '0'
+      'Rejected'
+    elsif user.approval_status == '1'
+      'Approved'
+    elsif user.approval_status == '2'
+      'Pending'
+    else
+      ''
+    end
+  end
+
+  def get_data(params, headers, users)
+    if params[:consumer_type].nil?
+      if params.key?(:sort_by)
+        order_by_string = get_order_by_obj_str(params[:sort_by], headers)
+        users.order(order_by_string)
+      else
+        users
+      end
+    elsif params[:consumer_type][0] == '2'
+      if params.key?(:sort_by)
+        order_by_string = get_order_by_obj_str(params[:sort_by], headers)
+        users.order(order_by_string)
+      else
+        users.order(company_name: :asc)
+      end
+    elsif params[:consumer_type][0] == '3'
+      if params.key?(:sort_by)
+        order_by_string = get_order_by_obj_str(params[:sort_by], headers)
+        users.order(order_by_string)
+      else
+        users.order(name: :asc)
+      end
+    else
+      if params.key?(:sort_by)
+        order_by_string = get_order_by_obj_str(params[:sort_by], headers)
+        users.order(order_by_string)
+      else
+        users
+      end
+    end
   end
 end
