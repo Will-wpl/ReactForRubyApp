@@ -41,17 +41,8 @@ class Api::UsersController < Api::BaseController
       users = User.buyers
       total = users.count
     end
-    headers = [
-      { name: 'Company Name', field_name: 'company_name' },
-      { name: 'Name', field_name: 'name', table_name: 'users' },
-      { name: 'Email', field_name: 'email' },
-      { name: 'Consumer Type', field_name: 'consumer_type', is_sort: false }
-    ]
+    headers = get_buyer_headers(params)
     actions = [{ url: '/admin/users/:id/manage', name: 'View', icon: 'view' }]
-    unless params[:consumer_type].nil?
-      headers.delete_if { |header| header[:field_name] == 'name' } if params[:consumer_type][0] == '2'
-      headers.delete_if { |header| header[:field_name] == 'company_name' } if params[:consumer_type][0] == '3'
-    end
     data = get_data(params, headers, users)
     data = data.each do |user|
       user.consumer_type = user.consumer_type == '2' ? 'Company' : 'Individual'
@@ -67,6 +58,20 @@ class Api::UsersController < Api::BaseController
   end
 
   private
+
+  def get_buyer_headers(params)
+    headers = [
+        { name: 'Company Name', field_name: 'company_name' },
+        { name: 'Name', field_name: 'name', table_name: 'users' },
+        { name: 'Email', field_name: 'email' },
+        { name: 'Consumer Type', field_name: 'consumer_type', is_sort: false }
+    ]
+    unless params[:consumer_type].nil?
+      headers.delete_if { |header| header[:field_name] == 'name' } if params[:consumer_type][0] == '2'
+      headers.delete_if { |header| header[:field_name] == 'company_name' } if params[:consumer_type][0] == '3'
+    end
+    headers
+  end
 
   def get_retailer_order_list(params, headers, users)
     if params.key?(:sort_by)
@@ -89,35 +94,43 @@ class Api::UsersController < Api::BaseController
     end
   end
 
+  def get_default_order(params, headers, users)
+    if params.key?(:sort_by)
+      order_by_string = get_order_by_obj_str(params[:sort_by], headers)
+      users.order(order_by_string)
+    else
+      users
+    end
+  end
+
+  def get_company_order(params, headers, users)
+    if params.key?(:sort_by)
+      order_by_string = get_order_by_obj_str(params[:sort_by], headers)
+      users.order(order_by_string)
+    else
+      users.order(company_name: :asc)
+    end
+  end
+
+  def get_individual_order(params, headers, users)
+    if params.key?(:sort_by)
+      order_by_string = get_order_by_obj_str(params[:sort_by], headers)
+      users.order(order_by_string)
+    else
+      users.order(name: :asc)
+    end
+  end
+
   def get_data(params, headers, users)
     if params[:consumer_type].nil?
-      if params.key?(:sort_by)
-        order_by_string = get_order_by_obj_str(params[:sort_by], headers)
-        users.order(order_by_string)
-      else
-        users
-      end
+      get_default_order(params, headers, users)
     elsif params[:consumer_type][0] == '2'
-      if params.key?(:sort_by)
-        order_by_string = get_order_by_obj_str(params[:sort_by], headers)
-        users.order(order_by_string)
-      else
-        users.order(company_name: :asc)
-      end
+      get_company_order(params, headers, users)
     elsif params[:consumer_type][0] == '3'
-      if params.key?(:sort_by)
-        order_by_string = get_order_by_obj_str(params[:sort_by], headers)
-        users.order(order_by_string)
-      else
-        users.order(name: :asc)
-      end
+      get_individual_order(params, headers, users)
     else
-      if params.key?(:sort_by)
-        order_by_string = get_order_by_obj_str(params[:sort_by], headers)
-        users.order(order_by_string)
-      else
-        users
-      end
+      get_default_order(params, headers, users)
     end
+      
   end
 end
