@@ -58,7 +58,6 @@ export class SearchType extends Component {
     goSearch(type){
         let needData = ''
         this.search_type_data.map((item,index)=>{
-            //needData += '"'+item.type+'":"'+$('#'+item.type).val()+'",';
             if(item.table){
                 if(item.type == "start_datetime" && this.state.start_datetime != ""){
                     needData += '"'+item.type+'":["'+this.state.start_datetime.format()+'","'+item.operator+'","'+item.table+'"],';

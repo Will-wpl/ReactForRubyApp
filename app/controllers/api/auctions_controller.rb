@@ -46,27 +46,27 @@ class Api::AuctionsController < Api::BaseController
                                                                @auction.starting_price, @auction.starting_price,
                                                                @auction.starting_price, @auction.starting_price)
           total_volume = Auction.set_total_volume(
-            @auction.total_lt_peak, @auction.total_lt_off_peak,
-            @auction.total_hts_peak, @auction.total_hts_off_peak,
-            @auction.total_htl_peak, @auction.total_htl_off_peak,
-            @auction.total_eht_peak, @auction.total_eht_off_peak
+              @auction.total_lt_peak, @auction.total_lt_off_peak,
+              @auction.total_hts_peak, @auction.total_hts_off_peak,
+              @auction.total_htl_peak, @auction.total_htl_off_peak,
+              @auction.total_eht_peak, @auction.total_eht_off_peak
           )
           new_total_volume = Auction.set_c_value(total_volume, days)
 
           average_price = AuctionHistory.set_average_price(total_award_sum, new_total_volume)
 
           Arrangement.where(auction_id: @auction.id, accept_status: Arrangement::AcceptStatusAccept)
-                     .update_all(lt_peak: @auction.starting_price, lt_off_peak: @auction.starting_price,
-                                 hts_peak: @auction.starting_price, hts_off_peak: @auction.starting_price,
-                                 htl_peak: @auction.starting_price, htl_off_peak: @auction.starting_price,
-                                 eht_peak: @auction.starting_price, eht_off_peak: @auction.starting_price)
+              .update_all(lt_peak: @auction.starting_price, lt_off_peak: @auction.starting_price,
+                          hts_peak: @auction.starting_price, hts_off_peak: @auction.starting_price,
+                          htl_peak: @auction.starting_price, htl_off_peak: @auction.starting_price,
+                          eht_peak: @auction.starting_price, eht_off_peak: @auction.starting_price)
           AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id)
-                        .update_all(bid_time: @auction.actual_begin_time, actual_bid_time: @auction.actual_begin_time,
-                                    lt_peak: @auction.starting_price, lt_off_peak: @auction.starting_price,
-                                    hts_peak: @auction.starting_price, hts_off_peak: @auction.starting_price,
-                                    htl_peak: @auction.starting_price, htl_off_peak: @auction.starting_price,
-                                    eht_peak: @auction.starting_price, eht_off_peak: @auction.starting_price,
-                                    total_award_sum: total_award_sum, average_price: average_price)
+              .update_all(bid_time: @auction.actual_begin_time, actual_bid_time: @auction.actual_begin_time,
+                          lt_peak: @auction.starting_price, lt_off_peak: @auction.starting_price,
+                          hts_peak: @auction.starting_price, hts_off_peak: @auction.starting_price,
+                          htl_peak: @auction.starting_price, htl_off_peak: @auction.starting_price,
+                          eht_peak: @auction.starting_price, eht_off_peak: @auction.starting_price,
+                          total_award_sum: total_award_sum, average_price: average_price)
 
           # set sorted histories to redis
           histories = AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id)
@@ -84,7 +84,7 @@ class Api::AuctionsController < Api::BaseController
       @auction.destroy
       render json: nil, status: 200
     else
-      render json: { message: 'The auction already published, you can not delete it!' }, status: 200
+      render json: {message: 'The auction already published, you can not delete it!'}, status: 200
     end
   end
 
@@ -110,25 +110,25 @@ class Api::AuctionsController < Api::BaseController
     if hold_status
       if @auction.update(hold_status: hold_status)
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
-        render json: { hold_status: true, forward: false }, status: 200
+        render json: {hold_status: true, forward: false}, status: 200
       end
     elsif !hold_status && Time.current < @auction.actual_begin_time
       if @auction.update(hold_status: hold_status)
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
-        render json: { hold_status: false, forward: false }, status: 200
+        render json: {hold_status: false, forward: false}, status: 200
       end
     elsif !hold_status && Time.current > @auction.actual_begin_time
       if @auction.update(hold_status: hold_status, actual_begin_time: Time.current, actual_end_time: Time.current + 60 * @auction.duration)
         # link = set_link(@auction.id, 'dashboard')
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
-        render json: { hold_status: false, forward: true }, status: 200
+        render json: {hold_status: false, forward: true}, status: 200
       end
     end
   end
 
   # GET current time by ajax
   def timer
-    render json: { current_time: Time.current, hold_status: @auction.hold_status, actual_begin_time: @auction.actual_begin_time, actual_end_time: @auction.actual_end_time }, status: 200
+    render json: {current_time: Time.current, hold_status: @auction.hold_status, actual_begin_time: @auction.actual_begin_time, actual_end_time: @auction.actual_end_time}, status: 200
   end
 
   # POST confirm
@@ -168,29 +168,29 @@ class Api::AuctionsController < Api::BaseController
       search_params = reject_params(params, %w[controller action sort_by])
       search_where_array = set_search_params(search_params)
       auction = Auction.unpublished.where(search_where_array)
-                       .page(params[:page_index]).per(params[:page_size])
+                    .page(params[:page_index]).per(params[:page_size])
       total = auction.total_count
     else
       auction = Auction.unpublished
       total = auction.count
     end
     headers = [
-      { name: 'Name', field_name: 'name' },
-      { name: 'Date/Time', field_name: 'actual_begin_time' }
+        {name: 'Name', field_name: 'name'},
+        {name: 'Date/Time', field_name: 'actual_begin_time'}
     ]
     actions = [
-      { url: '/admin/auctions/:id/buyer_dashboard?unpublished', name: 'Buyer Dashboard', icon: 'view', interface_type: 'auction' },
-      { url: '/admin/auctions/new', name: 'Manage', icon: 'manage', interface_type: 'auction' },
-      { url: '/admin/auctions/:id', name: 'Delete', icon: 'delete', interface_type: 'auction' }
+        {url: '/admin/auctions/:id/buyer_dashboard?unpublished', name: 'Buyer Dashboard', icon: 'view', interface_type: 'auction'},
+        {url: '/admin/auctions/new', name: 'Manage', icon: 'manage', interface_type: 'auction'},
+        {url: '/admin/auctions/:id', name: 'Delete', icon: 'delete', interface_type: 'auction'}
     ]
     data = if params.key?(:sort_by)
-             order_by_string = get_order_by_string(params[:sort_by])
+             order_by_string = get_order_by_obj_str(params[:sort_by], headers)
              auction.order(order_by_string)
            else
              auction.order(actual_begin_time: :asc)
            end
-    bodies = { data: data, total: total }
-    render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
+    bodies = {data: data, total: total}
+    render json: {headers: headers, bodies: bodies, actions: actions}, status: 200
   end
 
   def published
@@ -198,27 +198,27 @@ class Api::AuctionsController < Api::BaseController
       search_params = reject_params(params, %w[controller action sort_by])
       search_where_array = set_search_params(search_params)
       auction = Auction.published.has_auction_result.where(search_where_array)
-                       .page(params[:page_index]).per(params[:page_size])
+                    .page(params[:page_index]).per(params[:page_size])
       total = auction.total_count
     else
       auction = Auction.published
       total = auction.count
     end
     headers = [
-      { name: 'ID', field_name: 'published_gid' },
-      { name: 'Name', field_name: 'name' },
-      { name: 'Date/Time', field_name: 'actual_begin_time' },
-      { name: 'Status', field_name: 'status', is_sort: false }
+        {name: 'ID', field_name: 'published_gid'},
+        {name: 'Name', field_name: 'name'},
+        {name: 'Date/Time', field_name: 'actual_begin_time'},
+        {name: 'Status', field_name: 'status', is_sort: false}
     ]
     actions = [
-      { url: '/admin/auctions/:id/retailer_dashboard', name: 'Retailer Dashboard', icon: 'edit', interface_type: 'auction' },
-      { url: '/admin/auctions/:id/buyer_dashboard?published', name: 'Buyer Dashboard', icon: 'view', interface_type: 'auction' },
-      { url: '/admin/auctions/:id/upcoming', name: 'Manage', icon: 'manage', interface_type: 'auction' },
-      { url: '/admin/auctions/:id/online', name: 'Commence', icon: 'bidding', interface_type: 'auction' }
+        {url: '/admin/auctions/:id/retailer_dashboard', name: 'Retailer Dashboard', icon: 'edit', interface_type: 'auction'},
+        {url: '/admin/auctions/:id/buyer_dashboard?published', name: 'Buyer Dashboard', icon: 'view', interface_type: 'auction'},
+        {url: '/admin/auctions/:id/upcoming', name: 'Manage', icon: 'manage', interface_type: 'auction'},
+        {url: '/admin/auctions/:id/online', name: 'Commence', icon: 'bidding', interface_type: 'auction'}
     ]
     data = []
     auctions = if params.key?(:sort_by)
-                 order_by_string = get_order_by_string(params[:sort_by])
+                 order_by_string = get_order_by_obj_str(params[:sort_by], headers)
                  auction.order(order_by_string)
                else
                  auction.order(actual_begin_time: :asc)
@@ -232,8 +232,8 @@ class Api::AuctionsController < Api::BaseController
                end
       data.push(id: auction.id, published_gid: auction.published_gid, name: auction.name, actual_begin_time: auction.actual_begin_time, status: status)
     end
-    bodies = { data: data, total: total }
-    render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
+    bodies = {data: data, total: total}
+    render json: {headers: headers, bodies: bodies, actions: actions}, status: 200
   end
 
   # Admin create auction select retailer. If retailer's account is not approved, can't find
@@ -261,16 +261,16 @@ class Api::AuctionsController < Api::BaseController
       total = users.count
     end
     headers = [
-      { name: 'Company Name', field_name: 'company_name' },
-      { name: 'Status', field_name: 'select_status', is_sort: false },
-      { name: 'Action', field_name: 'select_action', is_sort: false }
+        {name: 'Company Name', field_name: 'company_name'},
+        {name: 'Status', field_name: 'select_status', is_sort: false},
+        {name: 'Action', field_name: 'select_action', is_sort: false}
     ]
     actions = [
-      { url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail' }
+        {url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail'}
     ]
     data = []
     users = if params.key?(:sort_by)
-              order_by_string = get_order_by_string(params[:sort_by])
+              order_by_string = get_order_by_obj_str(params[:sort_by], headers)
               users.order(order_by_string)
             else
               users.order(company_name: :asc)
@@ -284,8 +284,8 @@ class Api::AuctionsController < Api::BaseController
       action = arrangement.nil? ? nil : arrangement.id
       data.push(user_id: user.id, company_name: user.company_name, select_status: status, select_action: action)
     end
-    bodies = { data: data, total: total }
-    render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
+    bodies = {data: data, total: total}
+    render json: {headers: headers, bodies: bodies, actions: actions}, status: 200
   end
 
   def buyers
@@ -320,31 +320,31 @@ class Api::AuctionsController < Api::BaseController
     end
     if consumer_type == '2'
       headers = [
-        { name: 'Company Name', field_name: 'company_name' },
-        { name: 'Status', field_name: 'select_status', is_sort: false },
-        { name: 'Action', field_name: 'select_action', is_sort: false }
+          {name: 'Company Name', field_name: 'company_name'},
+          {name: 'Status', field_name: 'select_status', is_sort: false},
+          {name: 'Action', field_name: 'select_action', is_sort: false}
       ]
       actions = [
-        { url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail' }
+          {url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail'}
       ]
       users = if params.key?(:sort_by)
-                order_by_string = get_order_by_string(params[:sort_by])
+                order_by_string = get_order_by_obj_str(params[:sort_by], headers)
                 users.order(order_by_string)
               else
                 users.order(company_name: :asc)
               end
     elsif consumer_type == '3'
       headers = [
-        { name: 'Name', field_name: 'name', table_name: 'users' },
-        { name: 'Housing Type', field_name: 'account_housing_type' },
-        { name: 'Status', field_name: 'select_status', is_sort: false },
-        { name: 'Action', field_name: 'select_action', is_sort: false }
+          {name: 'Name', field_name: 'name', table_name: 'users'},
+          {name: 'Housing Type', field_name: 'account_housing_type'},
+          {name: 'Status', field_name: 'select_status', is_sort: false},
+          {name: 'Action', field_name: 'select_action', is_sort: false}
       ]
       actions = [
-        { url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail' }
+          {url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail'}
       ]
       users = if params.key?(:sort_by)
-                order_by_string = get_order_by_string(params[:sort_by])
+                order_by_string = get_order_by_obj_str(params[:sort_by], headers)
                 users.order(order_by_string)
               else
                 users.order(name: :asc)
@@ -368,8 +368,8 @@ class Api::AuctionsController < Api::BaseController
         data.push(user_id: user.id, name: user.name, account_housing_type: user.account_housing_type, select_status: status, select_action: action)
       end
     end
-    bodies = { data: data, total: total }
-    render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
+    bodies = {data: data, total: total}
+    render json: {headers: headers, bodies: bodies, actions: actions}, status: 200
   end
 
   def selects
@@ -377,7 +377,7 @@ class Api::AuctionsController < Api::BaseController
     company_buyers = Consumption.find_by_auction_id(params[:id]).find_by_user_consumer_type('2').group(:action_status).count
     individual_buyers = Consumption.find_by_auction_id(params[:id]).find_by_user_consumer_type('3').group(:action_status).count
 
-    render json: { retailers: retailers, company_buyers: company_buyers, individual_buyers: individual_buyers }, status: 200
+    render json: {retailers: retailers, company_buyers: company_buyers, individual_buyers: individual_buyers}, status: 200
   end
 
   def send_mails
@@ -412,7 +412,7 @@ class Api::AuctionsController < Api::BaseController
       consumptions_individual.push(id: consumption.id, name: consumption.user.name, participation_status: consumption.participation_status)
     end
     count_individual = consumptions_individual.count
-    render json: { consumptions_company: consumptions_company, count_company: count_company, consumptions_individual: consumptions_individual, count_individual: count_individual }, status: 200
+    render json: {consumptions_company: consumptions_company, count_company: count_company, consumptions_individual: consumptions_individual, count_individual: count_individual}, status: 200
   end
 
   def log
@@ -420,31 +420,25 @@ class Api::AuctionsController < Api::BaseController
       search_params = reject_params(params, %w[controller action sort_by])
       search_where_array = set_search_params(search_params)
       result = AuctionEvent.find_by_auction_id(params[:id]).where(search_where_array)
-                           .page(params[:page_index]).per(params[:page_size])
+                   .page(params[:page_index]).per(params[:page_size])
       total = result.total_count
     else
       result = AuctionEvent.all
       total = result.count
     end
     headers = [
-      { name: 'Name', field_name: 'name', is_sort: false },
-      { name: 'Date', field_name: 'auction_when', is_sort: false },
-      { name: 'Action', field_name: 'auction_do', is_sort: false },
-      { name: 'Details', field_name: 'auction_what', is_sort: false }
+        {name: 'Name', field_name: 'name', is_sort: false},
+        {name: 'Date', field_name: 'auction_when', is_sort: false},
+        {name: 'Action', field_name: 'auction_do', is_sort: false},
+        {name: 'Details', field_name: 'auction_what', is_sort: false}
     ]
     data = []
-    results = if params.key?(:sort_by)
-                order_by_string = get_order_by_string(params[:sort_by])
-                result.order(order_by_string)
-              else
-                result.order(created_at: :desc)
-              end
-    results.each do |event|
+    result.order(created_at: :desc).each do |event|
       data.push(name: event.user.company_name, auction_when: event.auction_when,
                 auction_do: event.auction_do, auction_what: event.auction_what)
     end
-    bodies = { data: data, total: total }
-    render json: { headers: headers, bodies: bodies, actions: nil }, status: 200
+    bodies = {data: data, total: total}
+    render json: {headers: headers, bodies: bodies, actions: nil}, status: 200
   end
 
   def letter_of_award_pdf
@@ -452,88 +446,18 @@ class Api::AuctionsController < Api::BaseController
     user_id = params[:user_id]
 
     auction = Auction.find_by id: auction_id
-    (send_wicked_pdf_data('no data', 'NO_DATA_LETTER_OF_AWARD.pdf'); return) if auction.nil?
-    zone_time = pdf_datetime_zone
+
     auction_result, consumption, tender_state, consumption_details = get_letter_of_award_pdf_data(auction_id, user_id)
-    (send_wicked_pdf_data('no data', 'NO_DATA_LETTER_OF_AWARD.pdf'); return) if auction_result.empty?
-    retailer_user_company_name = auction_result.empty? ? '' : auction_result[0].company_name
-    retailer_company_address = auction_result.empty? ? '' : auction_result[0].company_address
-    retailer_uen_number = auction_result.empty? ? '' : auction_result[0].company_unique_entity_number
-    auction_start_datetime = (auction.start_datetime + zone_time).strftime('%-d %B %Y')
-    auctions_published_gid = auction.published_gid
-
-    buyer_user_company_name = consumption.empty? ? '' : consumption[0].company_name
-    buyer_uen_number = consumption.empty? ? '' : consumption[0].company_unique_entity_number
-    admin_accept_date = (tender_state[0].created_at + zone_time).strftime('%-d %B %Y') unless tender_state.empty?
-    auctions_contract_period_start_date = auction.contract_period_start_date.strftime('%-d %B %Y')
-    acknowledge = if consumption.empty?
-                    'Pending'
-                  else
-                    consumption[0].acknowledge.nil? ? 'Pending' : 'Acknowledged'
-                  end
-    # template
-    pdf_template = Rails.root.join('app', 'assets', 'pdf', 'letter_of_award_template.html')
-    page = Nokogiri::HTML.parse(open(pdf_template), nil, 'UTF-8')
-    table1_tr = html_parse(page, '#appendix_table1_tr')
-    tr_string = table1_tr.to_s
-    tr_text = ''
-    consumption_details.each do |detail|
-      tr_text += tr_string
-                 .gsub(/#account_number/, detail.account_number.to_s)
-                 .gsub(/#intake_level/, detail.intake_level.to_s)
-                 .gsub(/#peak_volume/, number_helper.number_to_currency(detail.peak.to_f, precision: 0, unit: ''))
-                 .gsub(/#off_peak_volume/, number_helper.number_to_currency(detail.off_peak.to_f, precision: 0, unit: ''))
-                 .gsub(/#contracted_capacity/, (
-                     if detail.contracted_capacity.nil?
-                       '---'
-                     else
-                       number_helper.number_to_currency(detail.contracted_capacity.to_f, precision: 0, unit: '')
-                     end))
-                 .gsub(/#premise_address/, detail.premise_address.to_s)
-    end
-    price_table_data, visibilities, price_data = get_price_table_data(auction, auction_result[0], true, true)
-    consumption_table_data, table_data = get_consumption_table_data(auction, visibilities, price_data, user_id, true)
-
-    table2_head = html_parse(page, '#appendix_table2_head')
-    head = html_parse(table2_head, '#lt_head_id', '#hts_head_id', '#htl_head_id', '#eht_head_id')
-
-    table2_tr = html_parse(page, '#appendix_table2_peak')
-    row0 = html_parse(table2_tr, '#lt_peak_id', '#hts_peak_id', '#htl_peak_id', '#eht_peak_id')
-
-    table2_tr1 = html_parse(page, '#appendix_table2_off_peak')
-    row1 = html_parse(table2_tr1, '#lt_off_peak_id', '#hts_off_peak_id', '#htl_off_peak_id', '#eht_off_peak_id')
-
-    table2_tr2 = html_parse(page, '#appendix_table2_total')
-    row2 = html_parse(table2_tr2, '#lt_total_id', '#hts_total_id', '#htl_total_id', '#eht_total_id')
-    head_bool, row0_string, row1_string, row2_string = get_table2_row_data(head, row0, row1, row2, visibilities, table_data)
-    table2_head_string = table2_head.to_s
-    table2_tr0_string = table2_tr.to_s
-    table2_tr1_string = table2_tr1.to_s
-    table2_tr2_string = table2_tr2.to_s
-    for i in 0...head_bool.length
-      table2_head_string[head[i].to_s] = '' unless head_bool[i]
-      table2_tr0_string[row0[i].to_s] = row0_string[i]
-      table2_tr1_string[row1[i].to_s] = row1_string[i]
-      table2_tr2_string[row2[i].to_s] = row2_string[i]
-    end
-
-    page_content = page.to_s
-    page_content = page_content.gsub(/#retailer_user_company_name/, retailer_user_company_name)
-    page_content = page_content.gsub(/#auction_start_datetime/, auction_start_datetime)
-    page_content = page_content.gsub(/#retailer_company_address/, retailer_company_address)
-    page_content = page_content.gsub(/#auctions_published_gid/, auctions_published_gid)
-    page_content = page_content.gsub(/#buyer_user_company_name/, buyer_user_company_name)
-    page_content = page_content.gsub(/#admin_accept_date/, admin_accept_date.to_s)
-    page_content = page_content.gsub(/#auctions_contract_period_start_date/, auctions_contract_period_start_date)
-    page_content = page_content.gsub(/#buyer_uen_number/, buyer_uen_number)
-    page_content = page_content.gsub(/#retailer_uen_number/, retailer_uen_number)
-    page_content = page_content.gsub(/#acknowledge/, acknowledge)
-    page_content[tr_string] = tr_text
-    page_content[table2_head.to_s] = table2_head_string
-    page_content[table2_tr.to_s] = table2_tr0_string
-    page_content[table2_tr1.to_s] = table2_tr1_string
-    page_content[table2_tr2.to_s] = table2_tr2_string
-    send_wicked_pdf_data(page_content, auction.published_gid.to_s + '_LETTER_OF_AWARD.pdf')
+    pdf_param = {
+        :user_id => user_id,
+        :auction => auction,
+        :auction_result => auction_result,
+        :consumption => consumption,
+        :tender_state => tender_state,
+        :consumption_details => consumption_details
+    }
+    pdf, output_filename = LetterOfAward.new(pdf_param).pdf
+    send_data(pdf, filename: output_filename)
   end
 
   private
@@ -565,39 +489,26 @@ class Api::AuctionsController < Api::BaseController
     "/admin/auctions/#{auctionId}/#{addr}"
   end
 
-  def html_parse(page, *id_name)
-    return page.css(id_name[0]) if id_name.length == 1
-    elements = []
-    for i in 0...id_name.length
-      elements.push(page.css(id_name[i]))
-    end
-    elements
-  end
-
   def get_letter_of_award_pdf_data(auction_id, user_id)
-    auction_result = AuctionResult.select("users.id,
-                                  users.name,
-                                  coalesce(users.company_name, '') company_name,
+    auction_result = AuctionResult.select("users.id, users.name, coalesce(users.company_name, '') company_name,
                                   coalesce(users.company_address, '') company_address,
                                   coalesce(users.company_unique_entity_number, '') company_unique_entity_number,
                                   auction_results.*")
-                                  .joins(:user)
-                                  .where('auction_id = ?', auction_id)
-                                  .limit 1
+                         .joins(:user)
+                         .where('auction_id = ?', auction_id)
+                         .limit 1
 
-    consumption = Consumption.select("users.id,
-                                  users.name,
-                                  coalesce(users.company_name, '') company_name,
+    consumption = Consumption.select("users.id, users.name, coalesce(users.company_name, '') company_name,
                                   coalesce(users.company_address, '') company_address,
                                   coalesce(users.company_unique_entity_number,'') company_unique_entity_number,
                                   consumptions.*")
-                             .joins(:user)
-                             .where('auction_id = ? AND user_id = ?', auction_id, user_id)
+                      .joins(:user)
+                      .where('auction_id = ? AND user_id = ?', auction_id, user_id)
 
     consumption_id = consumption[0].id unless consumption.empty?
     winner_user_id = auction_result[0].user_id unless auction_result.empty?
     tender_state = TenderStateMachine
-                   .find_by_sql ["SELECT *
+                       .find_by_sql ["SELECT *
                                   FROM tender_state_machines
                                   WHERE  current_node = 4
                                     AND turn_to_role = 1
@@ -613,248 +524,4 @@ class Api::AuctionsController < Api::BaseController
     return auction_result, consumption, tender_state, consumption_details
   end
 
-  def send_wicked_pdf_data(content, output_filename, page_size = 'B5')
-    pdf = WickedPdf.new.pdf_from_string(content, encoding: 'UTF-8', page_size: page_size)
-    send_data(pdf, filename: output_filename)
-  end
-
-  def get_table2_row_data(head, row0, row1, row2, visibilities, table_data)
-    index = 0
-    head_bool, row0_string, row1_string, row2_string = [], [], [], []
-    lt_total_value = table_data[0][index].to_f + table_data[1][index].to_f
-    if visibilities[:visibility_lt] && lt_total_value != 0.0
-      lt_peak = row0[0].to_s.gsub(/#lt_peak/, number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
-      lt_off_peak = row1[0].to_s.gsub(/#lt_off_peak/, number_helper.number_to_currency(table_data[1][index], precision: 0, unit: ''))
-      lt_total = row2[0].to_s.gsub(/#lt_total/, number_helper.number_to_currency(lt_total_value, precision: 0, unit: ''))
-      head_bool.push(true); row0_string.push(lt_peak); row1_string.push(lt_off_peak); row2_string.push(lt_total)
-      index += 1
-    else
-      head_bool.push(false); row0_string.push(''); row1_string.push(''); row2_string.push('')
-      index += 1 if lt_total_value == 0.0
-    end
-    hts_total_value = table_data[0][index].to_f + table_data[1][index].to_f
-    if visibilities[:visibility_hts] && hts_total_value != 0.0
-      hts_peak = row0[1].to_s.gsub(/#hts_peak/, number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
-      hts_off_peak = row1[1].to_s.gsub(/#hts_off_peak/, number_helper.number_to_currency(table_data[1][index], precision: 0, unit: ''))
-      hts_total = row2[1].to_s.gsub(/#hts_total/, number_helper.number_to_currency(hts_total_value, precision: 0, unit: ''))
-      head_bool.push(true); row0_string.push(hts_peak); row1_string.push(hts_off_peak); row2_string.push(hts_total)
-      index += 1
-    else
-      head_bool.push(false); row0_string.push(''); row1_string.push(''); row2_string.push('')
-      index += 1 if hts_total_value == 0.0
-    end
-    htl_total_value = table_data[0][index].to_f + table_data[1][index].to_f
-    if visibilities[:visibility_htl] && htl_total_value != 0.0
-      htl_peak = row0[2].to_s.gsub(/#htl_peak/, number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
-      htl_off_peak = row1[2].to_s.gsub(/#htl_off_peak/, number_helper.number_to_currency(table_data[1][index], precision: 0, unit: ''))
-      htl_total = row2[2].to_s.gsub(/#htl_total/, number_helper.number_to_currency(htl_total_value, precision: 0, unit: ''))
-      head_bool.push(true); row0_string.push(htl_peak); row1_string.push(htl_off_peak); row2_string.push(htl_total)
-      index += 1
-    else
-      head_bool.push(false); row0_string.push(''); row1_string.push(''); row2_string.push('')
-      index += 1 if htl_total_value == 0.0
-    end
-    eht_total_value = table_data[0][index].to_f + table_data[1][index].to_f
-    if visibilities[:visibility_eht] && eht_total_value != 0.0
-      eht_peak = row0[3].to_s.gsub(/#eht_peak/, number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
-      eht_off_peak = row1[3].to_s.gsub(/#eht_off_peak/, number_helper.number_to_currency(table_data[1][index], precision: 0, unit: ''))
-      eht_total = row2[3].to_s.gsub(/#eht_total/, number_helper.number_to_currency(eht_total_value, precision: 0, unit: ''))
-      head_bool.push(true); row0_string.push(eht_peak); row1_string.push(eht_off_peak); row2_string.push(eht_total)
-      index += 1
-    else
-      head_bool.push(false); row0_string.push(''); row1_string.push(''); row2_string.push('')
-      index += 1 if eht_total_value == 0.0
-    end
-    return head_bool, row0_string, row1_string, row2_string
-  end
-
-  protected
-
-  def send_no_data_pdf(page_size, page_layout, output_filename)
-    pdf_filename = Time.new.strftime('%Y%m%d%H%M%S%L')
-    background_img = Rails.root.join('app', 'assets', 'pdf', 'bk.png')
-    Prawn::Document.generate(Rails.root.join(pdf_filename),
-                             background: background_img,
-                             page_size: page_size,
-                             page_layout: page_layout) do
-      fill_color 'ffffff'
-      draw_text 'no data', at: [15, bounds.top - 22]
-    end
-    send_pdf_data pdf_filename, output_filename
-  end
-
-  def send_pdf_data(pdf_filename, output_filename)
-    send_data IO.read(Rails.root.join(pdf_filename)), filename: output_filename
-    File.delete Rails.root.join(pdf_filename)
-  end
-
-  def pdf_datetime_zone
-    zone = 8
-    (zone * 60 * 60)
-  end
-
-  def get_format_number(number, unit, precision = 0)
-    number_helper.number_to_currency(number, precision: precision, unit: unit)
-  end
-
-  def get_price_table_data(auction, auction_result, visibility = false, price_data = false)
-    table_head = ['']
-    table_row0 = ['Peak<br/>(7am-7pm)']
-    table_row1 = ['Off-Peak<br/>(7pm-7am)']
-    price_row0 = []
-    price_row1 = []
-    if auction.nil? || auction_result.nil?
-      if visibility
-        return [table_head, table_row0, table_row1], { visibility_lt: false, visibility_hts: false,
-                                                       visibility_htl: false, visibility_eht: false }
-      else
-        return [table_head, table_row0, table_row1]
-      end
-    end
-    visibility_lt = auction.total_lt_peak > 0 || auction.total_lt_off_peak > 0
-    visibility_hts = auction.total_hts_peak > 0 || auction.total_hts_off_peak > 0
-    visibility_htl = auction.total_htl_peak > 0 || auction.total_htl_off_peak > 0
-    visibility_eht = auction.total_eht_peak > 0 || auction.total_eht_off_peak > 0
-
-    if visibility_lt
-      table_head.push('<b>LT</b>')
-
-      table_row0.push(get_format_number(auction_result.lt_peak.to_f, '$ ', 4))
-      table_row1.push(get_format_number(auction_result.lt_off_peak.to_f, '$ ', 4))
-      price_row0.push(auction_result.lt_peak)
-      price_row1.push(auction_result.lt_off_peak)
-    else
-      price_row0.push(0.0)
-      price_row1.push(0.0)
-    end
-
-    if visibility_hts
-      table_head.push('<b>HT (Small)</b>')
-      table_row0.push(get_format_number(auction_result.hts_peak.to_f, '$ ', 4))
-      table_row1.push(get_format_number(auction_result.hts_off_peak.to_f, '$ ', 4))
-      price_row0.push(auction_result.hts_peak)
-      price_row1.push(auction_result.hts_off_peak)
-    else
-      price_row0.push(0.0)
-      price_row1.push(0.0)
-    end
-
-    if visibility_htl
-      table_head.push('<b>HT (Large)</b>')
-      table_row0.push(get_format_number(auction_result.htl_peak.to_f, '$ ', 4))
-      table_row1.push(get_format_number(auction_result.htl_off_peak.to_f, '$ ', 4))
-      price_row0.push(auction_result.htl_peak)
-      price_row1.push(auction_result.htl_off_peak)
-    else
-      price_row0.push(0.0)
-      price_row1.push(0.0)
-    end
-
-    if visibility_eht
-      table_head.push('<b>EHT</b>')
-      table_row0.push(get_format_number(auction_result.eht_peak.to_f, '$ ', 4))
-      table_row1.push(get_format_number(auction_result.eht_off_peak.to_f, '$ ', 4))
-      price_row0.push(auction_result.eht_peak)
-      price_row1.push(auction_result.eht_off_peak)
-    else
-      price_row0.push(0.0)
-      price_row1.push(0.0)
-    end
-
-    unless visibility && price_data
-      return [table_head,
-              table_row0,
-              table_row1]
-    end
-    return_value = [[table_head,
-                     table_row0,
-                     table_row1]]
-
-    if visibility
-      return_value.push(visibility_lt: visibility_lt,
-                        visibility_hts: visibility_hts,
-                        visibility_htl: visibility_htl,
-                        visibility_eht: visibility_eht)
-    end
-    return_value.push([price_row0, price_row1]) if price_data
-    return_value
-  end
-
-  def get_period_days(auction)
-    period_days = (auction.contract_period_end_date - auction.contract_period_start_date).to_i
-    return period_days == 0 ? 1 : period_days + 1
-  end
-
-  def get_total_value(total_volume_base, total_volume, total_award_sum_base, total_award_sum)
-    return total_volume_base + total_volume, total_award_sum_base + total_award_sum
-  end
-
-  def get_consumption_table_data(auction, visibilities, price_data, user_id, table_data = false)
-    current_user_consumption = Consumption.find_by auction_id: auction.id, user_id: user_id
-    period_days = get_period_days(auction)
-
-    table_head = ['']
-    table_row0 = ['Peak<br/>(7am-7pm)']
-    table_row1 = ['Off-Peak<br/>(7pm-7am)']
-    row0_data = []
-    row1_data = []
-    total_volume = 0.0
-    total_award_sum = 0.0
-    # C = (Peak*12/365) * period
-    unless current_user_consumption.nil?
-      if visibilities[:visibility_lt]
-        table_head.push("<b>LT</b>")
-        table_row0.push(number_helper.number_to_currency(current_user_consumption.lt_peak.to_f, precision: 0, unit: ''))
-        table_row1.push(number_helper.number_to_currency(current_user_consumption.lt_off_peak.to_f, precision: 0, unit: ''))
-        row0_data.push(current_user_consumption.lt_peak.to_f); row1_data.push(current_user_consumption.lt_off_peak.to_f)
-        value = ((current_user_consumption.lt_peak.to_f * 12.0 / 365.0) * period_days).to_f
-        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][0])
-
-        value = (current_user_consumption.lt_off_peak.to_f * 12.0 / 365.0) * period_days
-        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][0])
-      end
-      if visibilities[:visibility_hts]
-        table_head.push("<b>HT (Small)</b>")
-        table_row0.push(number_helper.number_to_currency(current_user_consumption.hts_peak.to_f, precision: 0, unit: ''))
-        table_row1.push(number_helper.number_to_currency(current_user_consumption.hts_off_peak.to_f, precision: 0, unit: ''))
-        row0_data.push(current_user_consumption.hts_peak.to_f); row1_data.push(current_user_consumption.hts_off_peak.to_f)
-        value = (current_user_consumption.hts_peak.to_f * 12.0 / 365.0) * period_days
-        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][1])
-
-        value = (current_user_consumption.hts_off_peak.to_f * 12.0 / 365.0) * period_days
-        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][1])
-      end
-      if visibilities[:visibility_htl]
-        table_head.push("<b>HT (Large)</b>")
-        table_row0.push(number_helper.number_to_currency(current_user_consumption.htl_peak.to_f, precision: 0, unit: ''))
-        table_row1.push(number_helper.number_to_currency(current_user_consumption.htl_off_peak.to_f, precision: 0, unit: ''))
-        row0_data.push(current_user_consumption.htl_peak.to_f); row1_data.push(current_user_consumption.htl_off_peak.to_f)
-        value = (current_user_consumption.htl_peak.to_f * 12.0 / 365.0) * period_days
-        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][2])
-
-        value = (current_user_consumption.htl_off_peak.to_f * 12.0 / 365.0) * period_days
-        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][2])
-      end
-      if visibilities[:visibility_eht]
-        table_head.push("<b>EHT</b>")
-        table_row0.push(number_helper.number_to_currency(current_user_consumption.eht_peak.to_f, precision: 0, unit: ''))
-        table_row1.push(number_helper.number_to_currency(current_user_consumption.eht_off_peak.to_f, precision: 0, unit: ''))
-        row0_data.push(current_user_consumption.eht_peak.to_f); row1_data.push(current_user_consumption.eht_off_peak.to_f)
-        value = (current_user_consumption.eht_peak.to_f * 12.0 / 365.0) * period_days
-        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][3])
-
-        value = (current_user_consumption.eht_off_peak.to_f * 12.0 / 365.0) * period_days
-        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][3])
-      end
-    end
-    if table_data
-      return [table_head, table_row0, table_row1], [row0_data, row1_data]
-    else
-      return [table_head, table_row0, table_row1], total_volume, total_award_sum
-    end
-  end
-
-  def number_helper
-    ActiveSupport::NumberHelper
-  end
 end

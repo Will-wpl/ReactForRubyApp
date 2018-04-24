@@ -23,9 +23,6 @@ export default class BidForm extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        // console.log('newest config', nextProps.data);
-        //alert('newest config', nextProps.data);
-        //alert(nextProps.data.length);
         if (nextProps.data.length > 0) {
             this.compareConfigs = nextProps.data.map(element => {
                 return parseFloat(element).toFixed(4).substring(2);
@@ -37,23 +34,12 @@ export default class BidForm extends Component {
             });
         }
     }
-    componentWillUnmount() {
-        //clearInterval(this.configTime);
-    }
-    componentDidMount() {
-        // this.configTime = setTimeout(()=>{
-        //     this.refs.configs1.value = this.state.configs[1];
-        //     this.refs.configs5.value = this.state.configs[5];
-        //     this.refs.configs0.value = this.state.configs[0];
-        //     this.refs.configs4.value = this.state.configs[4];
-        // },1000)
-    }
+
     onInputChanged(i, e) {
         let formatNum = e.target.value.replace(/\D/, '');
         let target = this.compareConfigs.find((element, index) => {
             return index === i;
         });
-        // console.log(Number(formatNum), formatNum, target);
         let status = this.state.status;
         if (formatNum === '' || Number(`0.${formatNum}`) <= Number(`0.${target}`)) {
             status[i] = true;
@@ -68,34 +54,6 @@ export default class BidForm extends Component {
                 return element;
             }), status: status
         });
-        // let num = parseInt(e.target.value);
-        // if (num < 10000) {
-        //     if (num > 0) {
-        //         num = parseFloat(num * 1.0 / 10000).toFixed(4).substring(2);
-        //     } else {
-        //         num = '0000';
-        //     }
-        //     let target = this.compareConfigs.find((element, index) => {
-        //         return index === i;
-        //     });
-        //     let status = this.state.status;
-        //     console.log('target ===>', target)
-        //     if (target) {
-        //         if (Number(num) * 1.0 / 10000 > Number(target)) {
-        //             status[i] = false;
-        //         } else {
-        //             status[i] = true;
-        //         }
-        //     }
-        //     this.setState({
-        //         configs: this.state.configs.map((element, index) => {
-        //             if (index === i) {
-        //                 element = num;
-        //             }
-        //             return element;
-        //         }), status: status
-        //     });
-        // }
     }
 
     onSubmit() {
@@ -115,18 +73,11 @@ export default class BidForm extends Component {
             6:this.props.isEhtVisible,7:this.props.isEhtVisible
         }
         let allow = this.state.configs.every((element, index) => {
-            // if (index === 2 || index === 3) {
-            //     return true;
-            // }
             if (!mapping[index])
                 return true;
             return element.length > 0 && Number(element) !== 0 && Number(`0.${element}`) <= Number(`0.${this.compareConfigs[index]}`);
         })
         let isChanged = this.state.configs.some((element, index) => {
-            // console.log("state:" + Number(element) + "--------props:" + Number(this.compareConfigs[index]));
-            // if (index === 2 || index === 3) {
-            //     return false;
-            // }
             if (!mapping[index])
                 return false;
             return Number(`0.${element}`) < Number(`0.${this.compareConfigs[index]}`);
@@ -150,7 +101,6 @@ export default class BidForm extends Component {
                 if (!this.props.isEhtVisible) {
                     params.splice(6, coupleNum, ...replaceELes);
                 }
-                // console.log(this.state.configs, params);
                 this.props.onSubmit(params);
                 this.setState({answered: false})
             }
@@ -192,7 +142,6 @@ export default class BidForm extends Component {
         if (this.state.status.some(element => {
                 return !element
             })) {
-            // illegal = <p className="number_error" style={{color: 'red'}}>Prices submitted must be lower than the energy cost component of prevailing SPS LT Tariff ($0.1458/kWh)</p>;
 
             illegal = <div className="number_error" style={{color: 'red'}}>Invalid submission. Please check that your submission fulfils the following criteria:<br/><br/>
                         1.	Prices submitted must be lower than the energy cost component of prevailing SPS LT Tariff (${this.props.auction.starting_price?this.props.auction.starting_price:"0.1458"}/kWh)<br/>

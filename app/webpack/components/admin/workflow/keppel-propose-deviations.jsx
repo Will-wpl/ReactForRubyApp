@@ -84,7 +84,6 @@ export class Keppelproposedeviations extends Component {
                 window.location.href="/admin/auctions/"+sessionStorage.auction_id+"/retailer_dashboard";
             },3000)
             
-            //this.props.page(this.props.current.current.arrangement_id);
         })
     }
     do_reject(obj){

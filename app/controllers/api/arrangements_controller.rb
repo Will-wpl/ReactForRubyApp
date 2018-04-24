@@ -82,10 +82,13 @@ class Api::ArrangementsController < Api::BaseController
     if current_user.has_role?('admin')
       @arrangement = Arrangement.admin_find_by_id(params[:id]) unless params[:id] == '0'
     else
-      arrangements = current_user.arrangements
-      @arrangement = arrangements.count == 0 ? nil : arrangements.find(params[:id]) unless params[:id] == '0'
+      @arrangement = current_user_arrangement
     end
+  end
 
+  def current_user_arrangement
+    arrangements = current_user.arrangements
+    arrangements.count == 0 ? nil : arrangements.find(params[:id]) unless params[:id] == '0'
   end
 
   def model_params

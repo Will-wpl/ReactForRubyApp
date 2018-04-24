@@ -40,7 +40,6 @@ export class FillConsumption extends Component {
                 })
             }
             if(res.consumption_details.length>0){
-                //$("input[type='checkbox']").attr("checked",true);
                 this.site_list.map((item, index) => {
                     this.site_list[index].intake_level_selected = item.intake_level;
                     this.site_list[index].intake_level = ['Low Tension (LT)','High Tension Small (HTS)','High Tension Large (HTL)','Extra High Tension (EHT)'];
@@ -104,7 +103,6 @@ export class FillConsumption extends Component {
         this.setState({text:"Are you sure you want to delete ?",submit_type:"delete"});
     }
     nameRepeat(arr){
-        //console.log(arr);
         let hash = {};
         for(let i in arr) {
             if(hash[arr[i].account_number])
@@ -181,7 +179,6 @@ export class FillConsumption extends Component {
         })
     }
     doAccept(){
-        //console.log("---makeData-->"+makeData.details);   
         if(this.state.submit_type === "Reject"){ //do Reject
             setBuyerParticipate({consumption_id:this.consumptions_id}, '/api/buyer/consumption_details/reject').then((res) => {
                 this.refs.Modal.showModal();

@@ -81,7 +81,6 @@ export class Proposedeviations extends React.Component{
     withdrawAllDeviations(){
         retailerWithdrawAllDeviations(this.props.current.current.arrangement_id,this.editData()).then(res=>{
             this.props.page();
-            //this.props.tenderFn();
         })
     }
     Withdraw(obj){
@@ -161,9 +160,6 @@ export class Proposedeviations extends React.Component{
         let deviationslist = [];
         this.state.deviations_list.map((item, index) => {
             let deviation = encodeURI($("#deviation_"+(index)).val()),response = encodeURI($("#response_"+(index)).val());
-            //deviation = deviation.replace(/\n/g,"＜br＞");
-            //response = response.replace(/\n/g,"＜br＞");
-            //console.log("deviation===>"+deviation,"response====>"+response);
             if(item.sp_response_status != sum){
                 if(item.sp_response_status == ""){
                     deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+deviation+'","retailer_response":"'+response+'","sp_response_status":"'+sum+'"},';
@@ -193,14 +189,6 @@ export class Proposedeviations extends React.Component{
                         retailer_response:'',
                         sp_response_status:'',key:this.state.deviations_list.length+1},list = this.state.deviations_list;
                         list.push(add_new);
-                        // if(list.length < this.state.select_list.length){
-                        //     list.push(add_new)
-                        // }else{
-                        //     this.refs.Modal.showModal();
-                        //     this.setState({
-                        //         text:"Add deviations than the limit!"
-                        //     });
-                        // }                 
         this.setState({deviations_list:list});
     }
     removeDeviations(index){

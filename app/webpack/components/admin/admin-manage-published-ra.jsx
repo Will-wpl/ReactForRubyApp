@@ -15,16 +15,6 @@ export class AdminManagePublishedRa extends Component {
             name:""
         }
     }
-
-    // componentWillMount(){
-    //     getAuction('admin',sessionStorage.auction_id).then(res => {
-    //         this.setState({
-    //             name:res.name
-    //         })
-    //     }, error => {
-    //         //console.log(error);
-    //     })
-    // }
     render () {
         let content = <div></div>;
         if (this.props.auction) {
@@ -36,14 +26,6 @@ export class AdminManagePublishedRa extends Component {
                         <div className="col-sm-12 col-md-12">
                             <CreateNewRA left_name={this.props.auction.name} disabled={this.state.disabled} editdisabled={this.state.editdisabled} />
                         </div>
-                        {/* <div className="col-sm-12 col-md-5">
-                            <BidderStatus auction={this.props.auction} />
-                            <div className="createRaMain w_8">
-                            <div className="createRa_btn u-mt3">
-                                    <a href={`/admin/auctions/${this.props.auction.id}/online`} className="lm--button lm--button--primary">Commence</a>
-                            </div>
-                            </div>
-                        </div> */}
                     </div>
                     </div>
                 </div>
@@ -62,10 +44,6 @@ function run() {
         }, error => {
             renderRoot();
         })
-        // ReactDOM.render(
-        //     React.createElement(AdminManagePublishedRa),
-        //     domNode
-        // );
     }
 }
 

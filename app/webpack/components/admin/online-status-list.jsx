@@ -32,11 +32,9 @@ export class OnlineStatusMain extends Component {
     }
     timegetBidderStatus(){
         getBidderStatus({auction_id:this.auction.id}).then(res => {
-            //console.log(res);
             this.setState({
                 dataList:res,
             })
-            //console.log("当前auction： "+this.auction.id)
             let data_outline=[],data_online=[],data_pedding=[];
                 this.state.dataList.map((item,index)=>{
                     if(item.login_status == "logout"){
@@ -62,12 +60,10 @@ export class OnlineStatusMain extends Component {
                 data_pedding:data_pedding,
             })
         }, error => {
-            //console.log(error);
         })
     }
     componentWillMount(){
         getAuction('admin',sessionStorage.auction_id).then(res => {
-            //console.log(res);
             this.auction = res;
             this.timerTitle = this.auction ? `${this.auction.name} on ${moment(this.auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
             getAuctionTimeRule(this.auction.id).then(status => {
@@ -78,14 +74,12 @@ export class OnlineStatusMain extends Component {
             })
             this.timegetBidderStatus();
         }, error => {
-            //console.log(error);
         })
     }
     goToDashboard(){
         window.location.href=`/admin/auctions/${this.auction.id}/dashboard`
     }
-    hold(type,obj) {
-        //this.holdStatus = !this.holdStatus;
+    hold(type,obj) {//this.holdStatus = !this.holdStatus;
         this.setState({
             holdStatus:type
         })

@@ -12,7 +12,6 @@ export class RetailerBeforeLive extends Component {
         this.state = {holdStatus:false, day: 0, hour: 0, minute: 0, second: 0}
     }
     componentDidMount() {
-        //this.getAuctionTime(this.props.auction.id);
         this.interval = setInterval(() => {
             this.getAuctionTime(this.props.auction.id);
         }, 1000);

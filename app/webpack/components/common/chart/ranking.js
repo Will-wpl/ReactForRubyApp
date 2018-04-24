@@ -53,7 +53,6 @@ export default class Ranking extends Component {
                     showSymbol: true,
                     value: []
                 };
-                // d.value = [].concat(timeRanking.time).concat(timeRanking.ranking);
                 if (element.data.length === 1) {
                     d.value = [].concat(0).concat(timeRanking.ranking);
                 } else {
@@ -94,8 +93,6 @@ export default class Ranking extends Component {
                     start_time2:moment(ts).utc().format(),
                     end_time2:moment(te).utc().format()
                 })
-                //console.log("start_time2 : "+moment(ts).format("YYYY-MM-DD HH:mm:ss"));
-                //console.log("end_time2 : "+moment(te).format("YYYY-MM-DD HH:mm:ss"));
             }
         }
     }
@@ -156,7 +153,6 @@ const getTemplate = (props) => {
                         }
                     }
                     return [xPosition, yPosition];
-                    // return [point[0] - dom.scrollWidth / 2, point[1] - dom.scrollHeight - 16];
                 },
                 formatter: (params) => {
                     let content = `${params.value[1]}`;
@@ -219,7 +215,6 @@ const getTemplate = (props) => {
                 max: (value) => {
                     return value.max + 1;
                 },
-                // min: 1,
                 splitNumber: 100,
                 axisLabel: {
                     formatter: (value, index) => {
@@ -275,7 +270,6 @@ const getTemplate = (props) => {
                     }
                 }
                 return [xPosition, yPosition];
-                // return [point[0] - dom.scrollWidth / 2, point[1] - dom.scrollHeight - 16];
             },
             formatter: (params) => {
                 let content = `${params.value[1]}`;
@@ -333,7 +327,6 @@ const getTemplate = (props) => {
             max: (value) => {
                 return value.max + 1;
             },
-            // min: 1,
             splitNumber: 100,
             axisLabel: {
                 formatter: (value, index) => {

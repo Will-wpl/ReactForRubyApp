@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-//import {getAuctionTimeRule} from '../../javascripts/componentService/common/service';
 import moment from 'moment';
 import {Modal} from '../../shared/show-modal';
 import {deleteAuction,updateStatus,deleteStatus,getUsersDetail} from '../../../javascripts/componentService/admin/service';
@@ -19,7 +18,6 @@ export class SearchList extends Component {
         if(this.props.list_data){
             listData = this.props.list_data;
             listData.page_index = index;
-            //console.log(listData);
             if(this.props.doSearch && this.props.list_url){
                 this.props.doSearch(listData,this.props.list_url);
             }
@@ -168,7 +166,6 @@ export class SearchList extends Component {
         if(this.props.list_data){
             listData = this.props.list_data;
             listData.sort_by = [field_name,sort,table_name];
-            //console.log(listData);
             if(this.props.doSearch && this.props.list_url){
                 this.props.doSearch(listData,this.props.list_url);
             }
@@ -176,7 +173,6 @@ export class SearchList extends Component {
     }
     render (){
         if(this.props.table_data){
-            //console.log(this.props.table_data);
             return (
                 <div className="lm--table-container">
                     <table className="lm--table lm--table--responsive">
@@ -306,10 +302,6 @@ export class SearchList extends Component {
                                                 {this.props.table_data.actions?
                                                     <td className="search_list_btn">
                                                         {
-                                                            // item["actions"] >= 0 ? (<a className={this.props.table_data.actions[item["actions"]].icon} 
-                                                            //                     onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,this.props.table_data.actions[item["actions"]].url,this.props.table_data.actions[item["actions"]].name,this.props.table_data.actions[item["actions"]].interface_type ? this.props.table_data.actions[item["actions"]].interface_type : "",item.name ? item.name : '',item.auction_id)}>
-                                                            //                     {this.props.table_data.actions[item["actions"]].name}</a>)
-                                                            //: (
                                                             this.props.table_data.actions.map((ik,k)=>{
                                                                 if(ik.check === "docheck"){
                                                                     if(item["actions"] === k){
@@ -334,7 +326,6 @@ export class SearchList extends Component {
                                                                     
                                                                 }                                                           
                                                             })
-                                                        //)
                                                         }
                                                     </td>:null}
                                             </tr>
@@ -349,8 +340,6 @@ export class SearchList extends Component {
                                 return <span key={index} className={this.props.list_data.page_index === item ? 'table_page_selected' : ''} onClick={this.dosearch.bind(this,item)} id={"table_page_"+item}>{item}</span>
                             })
                         }
-                        {/* <span className="table_page_selected">1</span>
-                        <span>2</span> */}
                         <span onClick={this.gotopage.bind(this,'next')}>{">"}</span>
                     </div>
                     <Modal text={this.state.text} listdetail={this.state.params_type ? this.state.showDetail : null} listdetailtype={this.props.type} dodelete={this.delete.bind(this)} ref="Modal" />

@@ -7,7 +7,6 @@ export default class ReservePrice extends Component {
         }else{
             matched = false
         } 
-        // console.log(this.props.realtimePrice, this.props.price)
         if(this.props.auction){
             reservePrice = <dl className="reservePrice">
                                 <dd id="reservePrice_name">{this.props.auction.name}</dd>

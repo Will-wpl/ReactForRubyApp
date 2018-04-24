@@ -44,7 +44,6 @@ show_detail(index,consumption_id){
     }
 }
 render() {
-    //console.log(this.winner.data);
     return (
         <div className="u-grid mg0">
             <div className="col-sm-12 u-mb3">

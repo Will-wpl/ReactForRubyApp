@@ -144,7 +144,7 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
 
       context 'Conditions Pager Search and sort' do
         def do_request
-          get :buyers, params: { name: [company_buyers[0].company_name, 'like'], consumer_type: ['2', '='], page_size: '10', page_index: '1', sort_by: ['name' , 'asc', 'users'] }
+          get :buyers, params: { name: [company_buyers[0].company_name, 'like'], consumer_type: ['2', '='], page_size: '10', page_index: '1', sort_by: ['company_name' , 'asc', 'users'] }
         end
         before { do_request }
         it 'success' do

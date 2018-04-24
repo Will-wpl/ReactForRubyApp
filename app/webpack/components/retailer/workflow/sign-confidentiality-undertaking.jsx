@@ -12,7 +12,6 @@ export class Signconfidentialityundertaking extends React.Component{
     }
     componentDidMount() {
         getUndertaking(sessionStorage.arrangement_id).then(res=>{
-            //console.log(res);
             this.setState({
                 file_path:res[0].file_path,
                 file_name:res[0].file_name

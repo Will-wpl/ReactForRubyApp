@@ -43,7 +43,6 @@ componentWillMount(){
     getAuction('admin',sessionStorage.auction_id).then(res => {//sessionStorage.auction_id
         this.setState({auction:res})
     }, error => {
-        //console.log(error);
     })
 }
 tab(type){
@@ -53,7 +52,6 @@ tab(type){
     $("#buyer_"+type).fadeIn(500);
 }
 render() {
-    //console.log(this.winner.data);
     return (
         <div className="u-grid mg0">
             <TimeCuntDown auction={this.state.auction} countDownOver={()=>{this.setState({disabled:true,allbtnStatus:false})}} timehidden="countdown_seconds" />

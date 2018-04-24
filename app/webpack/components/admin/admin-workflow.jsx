@@ -54,10 +54,9 @@ export class Adminworkflow extends Component {
         return pageDom;
     }
     componentWillMount(){
-        getAuction('admin',sessionStorage.auction_id).then(res => {//sessionStorage.auction_id
+        getAuction('admin',sessionStorage.auction_id).then(res => {
             this.setState({auction:res})
         }, error => {
-            //console.log(error);
         })
     }
     render (){

@@ -46,13 +46,11 @@ export class Keppelformtender extends React.Component{
     }
     admin_reject(){
         adminReject(this.props.current.current.arrangement_id,encodeURI($("#adminComment").val())).then(res=>{
-            //this.props.page(this.props.current.current.arrangement_id);
             window.location.href="/admin/auctions/"+sessionStorage.auction_id+"/retailer_dashboard";
         })
     }
     admin_accept(){
         adminAccept(this.props.current.current.arrangement_id,encodeURI($("#adminComment").val())).then(res=>{
-            //this.props.page(this.props.current.current.arrangement_id);
             window.location.href="/admin/auctions/"+sessionStorage.auction_id+"/retailer_dashboard";
         })
     }

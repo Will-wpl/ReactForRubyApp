@@ -44,8 +44,6 @@ export default class RetailerLetterOfAward extends React.Component{
             this.refs.Modal.showModal('comfirm');
         });
 
-        // this.state.letterOfAward[index].disabled = true;
-         //this.forceUpdate()
     }
 
     acknowledgeAll(){
@@ -56,19 +54,14 @@ export default class RetailerLetterOfAward extends React.Component{
             this.refs.Modal.showModal('comfirm');
         });
         this.forceUpdate()
-        // this.state.letterOfAward.map((e,i)=>{
-        //     e.disabled = true
-        // });
     }
 
     acknowledgeRetailer(){
        console.log(this.state.currentData);
        let id = this.state.currentData.id;
        retailerAcknowledge(id).then(resp => {
-           //console.log(resp);
            this.state.letterOfAward[this.state.currentIndex].disabled = true;
            this.state.letterOfAward[this.state.currentIndex].acknowledge = 1;
-           //console.log(this.state.letterOfAward);
            let btnDisabled = true;
            for (let i in this.state.letterOfAward){
                    if(this.state.letterOfAward[i].acknowledge != 1){
@@ -98,20 +91,6 @@ export default class RetailerLetterOfAward extends React.Component{
     download(data,index){
         console.log(data);
         window.open(`/api/retailer/auctions/letter_of_award_pdf?auction_id=${data.auction_id}&user_id=${data.user_id}`);
-        // retailerAcknowledge(data.id).then(resp => {
-        //     //console.log(resp);
-        //     this.state.letterOfAward[index].disabled = true;
-        //     this.state.letterOfAward[index].acknowledge = 1;
-        //     //console.log(this.state.letterOfAward);
-        //     let btnDisabled = true;
-        //     for (let i in this.state.letterOfAward){
-        //         if(this.state.letterOfAward[i].acknowledge != 1){
-        //             btnDisabled = false
-        //         }
-        //     }
-        //     this.setState({acknowledgeAllBtn:btnDisabled});
-        //     this.forceUpdate()
-        // })
     }
 
     renderAwardList(data){

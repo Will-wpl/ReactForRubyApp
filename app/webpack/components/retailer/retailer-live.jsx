@@ -20,17 +20,14 @@ export class RetailerLive extends Component {
 
     componentDidMount() {
         if (this.props.auction) {
-            // this.createSocket(this.props.auction.id);
             if (this.props.rule) {
                 if (!this.props.rule[HOLD_STATUS]) {
                     let beforeStartSpace = calTwoTimeSpace(this.props.rule[ACTUAL_BEGIN_TIME], this.props.rule[ACTUAL_CURRENT_TIME]);
                     if (beforeStartSpace > 0) {
-                        // console.log('not start yet');
                         this.setState({showLive: false});
                     } else {
                         let alreadyStartSpace = calTwoTimeSpace(this.props.rule[ACTUAL_END_TIME], this.props.rule[ACTUAL_CURRENT_TIME]);
                         if (alreadyStartSpace <= 0) {
-                            // console.log('already completed')
                             this.goToFinish();
                         } else {
                             this.setState({showLive: true});
@@ -46,32 +43,6 @@ export class RetailerLive extends Component {
 
     }
 
-    // componentWillUnmount() {
-    //     if (this.ws) {
-    //         this.ws.stopConnect();
-    //     }
-    // }
-    //
-    // createSocket(auction) {
-    //     this.ws = createWebsocket(auction);
-    //     this.ws.onConnected(() => {
-    //         console.log('---message client connected ---');
-    //     }).onDisconnected(() => {
-    //         console.log('---message client disconnected ----')
-    //     }).onReceivedData(data => {
-    //         console.log('---message client received data ---', data);
-    //         if (data.action === 'extend') {
-    //             this.setState({extendVisible : data.data.minutes});
-    //             if (this.extendTimeout) {
-    //                 clearTimeout(this.extendTimeout);
-    //             }
-    //             this.extendTimeout = setTimeout(() => {
-    //                 this.setState({extendVisible : false});
-    //             }, 5000);
-    //         }
-    //     })
-    // }
-
     goToFinish() {
         window.location.href=`/retailer/auctions/${this.props.auction ? this.props.auction.id : 1}/finish`;
     }
@@ -79,7 +50,6 @@ export class RetailerLive extends Component {
     nofityHoldStatus(status, isOver) {
         if (isOver) {
             if (this.localHoldStatus !== status) {
-                //console.log('status ====>', status, this.localHoldStatus);
                 this.setState({holdStatus: status});
                 this.localHoldStatus = status;
             }
@@ -87,7 +57,6 @@ export class RetailerLive extends Component {
     }
 
     render() {
-        // console.log('this.props', this.props);
         let content;
         if (this.props.auction) {
             if (this.state.hasOwnProperty('showLive')) {
@@ -112,11 +81,6 @@ export class RetailerLive extends Component {
                     </div>
                 ) : (
                     <div>
-                        {/*<DuringCountDown auction={this.props.auction} countDownOver={this.goToFinish.bind(this)}>*/}
-                            {/*<div id="retailer_hold" className={this.state.extendVisible ? '' : 'live_hide'}>*/}
-                                {/*<b>Admin has extended auction duration by {this.state.extendVisible} minuties</b>*/}
-                            {/*</div>*/}
-                        {/*</DuringCountDown>*/}
                         <LiveHomePage auction={this.props.auction}/>
                     </div>
                 )

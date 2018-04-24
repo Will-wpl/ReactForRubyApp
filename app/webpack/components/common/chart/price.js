@@ -33,7 +33,6 @@ export default class Price extends Component {
     }
     getChartOption() {
         let option = getTemplate(this.props);
-        //console.log(this.props.data);
         this.props.data.forEach(element => {
             let tmp = {
                 type: 'line',
@@ -48,7 +47,6 @@ export default class Price extends Component {
                 }
             };
             element.data.forEach((timePrice) => {
-                // console.log('timePrice.is_bidder', timePrice.is_bidder)
                 let d = timePrice.is_bidder && timePrice.flag !== null ? {
                     symbol: 'triangle',
                     symbolSize: 15,
@@ -60,7 +58,6 @@ export default class Price extends Component {
                     showSymbol: true,
                     value: []
                 };
-                // d.value = [].concat(timePrice.time).concat(timePrice.price);
                 if (element.data.length === 1) {
                     d.value = [].concat(0)
                         .concat(parseFloat(timePrice.average_price).toFixed(4));
@@ -72,7 +69,6 @@ export default class Price extends Component {
             });
             option.series.push(tmp);
         });
-        //console.log(option);
         if (option.hasOwnProperty('dataZoom')) {
             if (!Number.isNaN(this.xStart)) {
                 option.dataZoom[0].start = this.xStart;
@@ -118,9 +114,6 @@ export default class Price extends Component {
                     start_price:ps,
                     end_price:pe
                 })
-                //console.log(option.dataZoom[1]);
-                //console.log("start_price : "+ps);
-                //console.log("end_price : " +pe);
             } else if (lastEle === '0') { //x
                 this.xStart = params.start;
                 this.xEnd = params.end;
@@ -133,8 +126,6 @@ export default class Price extends Component {
                     start_time:moment(ts).utc().format(),
                     end_time:moment(te).utc().format()
                 })
-                //console.log("start_time : "+moment(ts).format("YYYY-MM-DD HH:mm:ss"));
-                //console.log("end_time : "+moment(te).format("YYYY-MM-DD HH:mm:ss"));
             }
         }
     }
@@ -201,7 +192,6 @@ function getTemplate(props) {
                         }
                     }
                     return [xPosition, yPosition];
-                    // return [point[0] - dom.scrollWidth / 2, point[1] - dom.scrollHeight - 16];
                 },
                 formatter: (params) => {
                     let content = `<div>${params.value[1]}</div>`;
@@ -210,7 +200,7 @@ function getTemplate(props) {
                         let serObj = props.data[params.seriesIndex];
                         if (serObj && serObj.data) {
                             let d = serObj.data[params.dataIndex];
-                            if (d && d.template_price) { //<div>${d.template_price.hts}</div>
+                            if (d && d.template_price) {
                                 template = `<strong>${d.template_price.company_price}</strong>
                                     <div style="${props.isLtVisible ? '' : 'display:none'}">${d.template_price.lt}</div>
                                     <div style="${props.isHtsVisible ? '' : 'display:none'}">${d.template_price.hts}</div>
@@ -265,10 +255,6 @@ function getTemplate(props) {
                 axisTick: {
                     show: false
                 },
-                // max: function (value) {
-                //     return 1;
-                // },
-                // min: yAxisMin,
                 axisLine: {
                     lineStyle: {
                         color: 'white'
@@ -280,22 +266,6 @@ function getTemplate(props) {
     }
 
     let yAxisMin = 0;
-    // if (props.data.length > 0) {
-    //     let tmp = 1;
-    //     props.data.forEach(element => {
-    //         let result =  Math.min.apply(null, element.data.map(el => {
-    //             return Number(el.average_price);
-    //         }));
-    //         if (result < tmp) {
-    //             tmp = result;
-    //         }
-    //     })
-    //     if (tmp < 1) {
-    //         if (tmp > 0.2) {
-    //             yAxisMin = parseFloat(tmp - 0.1).toFixed(1);
-    //         }
-    //     }
-    // }
     return {
         calculable: true,
         dataZoom: [{
@@ -348,7 +318,6 @@ function getTemplate(props) {
                     }
                 }
                 return [xPosition, yPosition];
-                // return [point[0] - dom.scrollWidth / 2, point[1] - dom.scrollHeight - 16];
             },
             formatter: (params) => {
                 let content = `<div>${params.value[1]}</div>`;
@@ -357,7 +326,7 @@ function getTemplate(props) {
                     let serObj = props.data[params.seriesIndex];
                     if (serObj && serObj.data) {
                         let d = serObj.data[params.dataIndex];
-                        if (d && d.template_price) { //<div>${d.template_price.hts}</div>
+                        if (d && d.template_price) {
                             template = `<strong>${d.template_price.company_price}</strong>
                                     <div style="${props.isLtVisible ? '' : 'display:none'}">${d.template_price.lt}</div>
                                     <div style="${props.isHtsVisible ? '' : 'display:none'}">${d.template_price.hts}</div>
@@ -407,10 +376,6 @@ function getTemplate(props) {
             axisTick: {
                 show: false
             },
-            // max: function (value) {
-            //     return 1;
-            // },
-            // min: yAxisMin,
             axisLabel: {
                 formatter: (value, index) => {
                     if (typeof value === 'number') {
