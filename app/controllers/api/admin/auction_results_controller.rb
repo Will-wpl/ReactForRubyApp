@@ -26,31 +26,42 @@ class Api::Admin::AuctionResultsController < Api::AuctionResultsController
       { name: 'Letter of Award', field_name: 'award', is_sort: false }
     ]
     data = []
-    results = if params.key?(:sort_by)
-               order_by_string = get_order_by_obj_str(params[:sort_by], headers)
-               result.order(order_by_string)
-             else
-               result.order(created_at: :desc)
-             end
+    results = get_order_list(result, params, headers)
     results.each do |result|
       lap = number_to_currency(result.lowest_average_price, unit: '$ ', precision: 4)
       tv = number_to_currency(result.total_volume, unit: '', precision: 0)
       company_user_count = Consumption.get_company_user_count(result.auction_id)
-      data.push(published_gid: result.auction.published_gid,
-                name: result.auction.name,
-                start_datetime: result.auction.start_datetime,
+      data.push(published_gid: result.auction.published_gid, name: result.auction.name, start_datetime: result.auction.start_datetime,
                 contract_period: "#{result.contract_period_start_date.strftime('%d %b %Y')} to #{result.contract_period_end_date.strftime('%d %b %Y')}",
-                status: result.status == 'void' ? 'Void' : 'Awarded',
+                status: get_status_string(result),
                 lowest_price_bidder: result.lowest_price_bidder,
                 lowest_average_price: "#{lap}/kWh",
                 total_volume: "#{tv}kWh",
                 report: "admin/auctions/#{result.auction_id}/report",
                 log: "admin/auctions/#{result.auction_id}/log",
-                award: company_user_count != 0 && result.status != 'void' ? "admin/auctions/#{result.auction_id}/award" : '')
+                award: get_award_url(company_user_count, result))
     end
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: nil }, status: 200
   end
 
+  private
+
+  def get_order_list(result, params, headers)
+    if params.key?(:sort_by)
+      order_by_string = get_order_by_obj_str(params[:sort_by], headers)
+      result.order(order_by_string)
+    else
+      result.order(created_at: :desc)
+    end
+  end
+
+  def get_award_url(company_user_count, result)
+    company_user_count != 0 && result.status != 'void' ? "admin/auctions/#{result.auction_id}/award" : ''
+  end
+
+  def get_status_string(result)
+    result.status == 'void' ? 'Void' : 'Awarded'
+  end
 
 end
