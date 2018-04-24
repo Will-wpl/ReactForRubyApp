@@ -94,35 +94,43 @@ class Api::UsersController < Api::BaseController
     end
   end
 
+  def get_default_order(params, headers, users)
+    if params.key?(:sort_by)
+      order_by_string = get_order_by_obj_str(params[:sort_by], headers)
+      users.order(order_by_string)
+    else
+      users
+    end
+  end
+
+  def get_company_order(params, headers, users)
+    if params.key?(:sort_by)
+      order_by_string = get_order_by_obj_str(params[:sort_by], headers)
+      users.order(order_by_string)
+    else
+      users.order(company_name: :asc)
+    end
+  end
+
+  def get_individual_order(params, headers, users)
+    if params.key?(:sort_by)
+      order_by_string = get_order_by_obj_str(params[:sort_by], headers)
+      users.order(order_by_string)
+    else
+      users.order(name: :asc)
+    end
+  end
+
   def get_data(params, headers, users)
     if params[:consumer_type].nil?
-      if params.key?(:sort_by)
-        order_by_string = get_order_by_obj_str(params[:sort_by], headers)
-        users.order(order_by_string)
-      else
-        users
-      end
+      get_default_order(params, headers, users)
     elsif params[:consumer_type][0] == '2'
-      if params.key?(:sort_by)
-        order_by_string = get_order_by_obj_str(params[:sort_by], headers)
-        users.order(order_by_string)
-      else
-        users.order(company_name: :asc)
-      end
+      get_company_order(params, headers, users)
     elsif params[:consumer_type][0] == '3'
-      if params.key?(:sort_by)
-        order_by_string = get_order_by_obj_str(params[:sort_by], headers)
-        users.order(order_by_string)
-      else
-        users.order(name: :asc)
-      end
+      get_individual_order(params, headers, users)
     else
-      if params.key?(:sort_by)
-        order_by_string = get_order_by_obj_str(params[:sort_by], headers)
-        users.order(order_by_string)
-      else
-        users
-      end
+      get_default_order(params, headers, users)
     end
+      
   end
 end
