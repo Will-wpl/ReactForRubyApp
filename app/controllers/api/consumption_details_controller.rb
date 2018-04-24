@@ -78,8 +78,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
         auction.total_eht_off_peak += intake_values[7]
         total_volume = Auction.set_total_volume(
           auction.total_lt_peak, auction.total_lt_off_peak, auction.total_hts_peak, auction.total_hts_off_peak,
-          auction.total_htl_peak, auction.total_htl_off_peak, auction.total_eht_peak, auction.total_eht_off_peak
-        )
+          auction.total_htl_peak, auction.total_htl_off_peak, auction.total_eht_peak, auction.total_eht_off_peak )
         auction.total_volume = Auction.set_c_value(total_volume, days)
         auction.save
       end
