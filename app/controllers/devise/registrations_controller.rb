@@ -17,11 +17,7 @@ class Devise::RegistrationsController < DeviseController
   # POST /resource
   def create
     build_resource(sign_up_params)
-    role = if params[:type] == '1'
-             :retailer
-           else
-             :buyer
-           end
+    role = get_role(params)
     resource.add_role(role) if resource.save
     yield resource if block_given?
     if resource.persisted?
@@ -166,5 +162,15 @@ class Devise::RegistrationsController < DeviseController
                                  :company_unique_entity_number, :company_license_number, :account_fin,
                                  :account_mobile_number, :account_office_number, :account_home_number,
                                  :account_housing_type, :account_home_address, :gst_no, :billing_address)
+  end
+
+  private
+
+  def get_role(params)
+    if params[:type] == '1'
+      :retailer
+    else
+      :buyer
+    end
   end
 end
