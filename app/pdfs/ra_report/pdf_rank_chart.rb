@@ -46,20 +46,7 @@ class PdfRankChart
     pdf.line_width = 1.0
     pdf.stroke do
       # X
-      pdf.vertical_line 20, 20 + 210, :at => number_x[0]
-      # Y
-      pdf.horizontal_line number_x[0], number_x[0] + 360, :at => 20
-
-      (1..number_x.size - 1).each do |i|
-        pdf.vertical_line 20, 25, :at => number_x[i]
-        #font_size(7) { text_box str_date2[i], :at => [base_x + (350.0/step_number)*i-14, 20-4]}
-        #font_size(7) { text_box str_time[i], :at => [base_x + (350.0/step_number)*i-12-len_x, 20-10]}
-        pdf.font_size(8) {pdf.text_box str_time[i], :at => [base_x + (350.0 / step_number) * i - 14 - len_x, 20 - 5]}
-      end
-      #font_size(7) { text_box str_date2[0], :at => [base_x-12, 20-3]}
-      #font_size(7) { text_box str_time[0], :at => [base_x-12-len_x, 20-10]}
-      pdf.font_size(8) {pdf.text_box str_time[0], :at => [base_x - 14 - len_x, 20 - 5]}
-
+      PdfUtils.draw_axis(param)
       (1..ranking).each do |i|
         pdf.horizontal_line number_x[0], number_x[0] + 5, :at => 20 + (200.0 / ranking) * i
         pdf.font_size(9) {pdf.text_box number_y[i], :at => [base_x - 60, 20 + (200 / ranking) * i + 3], :width => 55, :height => 10, :align => :right}
