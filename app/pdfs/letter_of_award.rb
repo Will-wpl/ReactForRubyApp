@@ -42,16 +42,44 @@ class LetterOfAward < Pdf
   private
 
   def get_content_gsub(param, page_content)
-    page_content = page_content.gsub(/#retailer_user_company_name/, param[:auction_result].empty? ? '' : param[:auction_result][0].company_name)
-    page_content = page_content.gsub(/#auction_start_datetime/, (param[:auction].start_datetime + get_pdf_datetime_zone).strftime('%-d %B %Y'))
-    page_content = page_content.gsub(/#retailer_company_address/, param[:auction_result].empty? ? '' : param[:auction_result][0].company_address)
+    page_content = page_content.gsub(/#retailer_user_company_name/, get_retailer_user_company_name(param))
+    page_content = page_content.gsub(/#auction_start_datetime/, get_auction_start_datetime(param))
+    page_content = page_content.gsub(/#retailer_company_address/, get_retailer_company_address(param))
     page_content = page_content.gsub(/#auctions_published_gid/, param[:auction].published_gid)
-    page_content = page_content.gsub(/#buyer_user_company_name/, param[:consumption].empty? ? '' : param[:consumption][0].company_name)
-    page_content = page_content.gsub(/#admin_accept_date/, ((param[:tender_state][0].created_at + get_pdf_datetime_zone).strftime('%-d %B %Y') unless param[:tender_state].empty?).to_s)
+    page_content = page_content.gsub(/#buyer_user_company_name/, get_buyer_user_company_name(param))
+    page_content = page_content.gsub(/#admin_accept_date/, get_admin_accept_date(param))
     page_content = page_content.gsub(/#auctions_contract_period_start_date/, param[:auction].contract_period_start_date.strftime('%-d %B %Y'))
-    page_content = page_content.gsub(/#buyer_uen_number/, param[:consumption].empty? ? '' : param[:consumption][0].company_unique_entity_number)
-    page_content = page_content.gsub(/#retailer_uen_number/, param[:auction_result].empty? ? '' : param[:auction_result][0].company_unique_entity_number)
+    page_content = page_content.gsub(/#buyer_uen_number/, get_buyer_uen_number(param))
+    page_content = page_content.gsub(/#retailer_uen_number/, get_retailer_uen_number(param))
     page_content = page_content.gsub(/#acknowledge/, get_acknowledge_text(param[:consumption]))
+  end
+
+  def get_retailer_user_company_name(param)
+    param[:auction_result].empty? ? '' : param[:auction_result][0].company_name
+  end
+
+  def get_auction_start_datetime(param)
+    (param[:auction].start_datetime + get_pdf_datetime_zone).strftime('%-d %B %Y')
+  end
+
+  def get_retailer_company_address(param)
+    param[:auction_result].empty? ? '' : param[:auction_result][0].company_address
+  end
+
+  def get_buyer_user_company_name(param)
+    param[:consumption].empty? ? '' : param[:consumption][0].company_name
+  end
+
+  def get_admin_accept_date(param)
+    ((param[:tender_state][0].created_at + get_pdf_datetime_zone).strftime('%-d %B %Y') unless param[:tender_state].empty?).to_s
+  end
+
+  def get_buyer_uen_number(param)
+    param[:consumption].empty? ? '' : param[:consumption][0].company_unique_entity_number
+  end
+
+  def get_retailer_uen_number(param)
+    param[:auction_result].empty? ? '' : param[:auction_result][0].company_unique_entity_number
   end
 
   def get_table_string(param)
@@ -137,12 +165,17 @@ class LetterOfAward < Pdf
     return head_bool, row0_string, row1_string, row2_string
   end
 
-  def get_lt_data(param)
+  def get_data_param(param)
     visibilities = param[:visibilities]
     table_data = param[:table_data]
     row0, row1, row2 = param[:row0], param[:row1], param[:row2]
-    lt_total_value = param[:lt_total_value]
     index = param[:index]
+    return index, visibilities,table_data,row0, row1, row2
+  end
+
+  def get_lt_data(param)
+    index, visibilities,table_data,row0, row1, row2 = get_data_param(param)
+    lt_total_value = param[:lt_total_value]
 
     if visibilities[:visibility_lt] && lt_total_value != 0.0
       lt_peak = row0[0].to_s.gsub(/#lt_peak/, PdfUtils.number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
@@ -157,11 +190,8 @@ class LetterOfAward < Pdf
   end
 
   def get_hts_data(param)
-    visibilities = param[:visibilities]
-    table_data = param[:table_data]
-    row0, row1, row2 = param[:row0], param[:row1], param[:row2]
+    index, visibilities,table_data,row0, row1, row2 = get_data_param(param)
     hts_total_value = param[:hts_total_value]
-    index = param[:index]
     if visibilities[:visibility_hts] && hts_total_value != 0.0
       hts_peak = row0[1].to_s.gsub(/#hts_peak/, PdfUtils.number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
       hts_off_peak = row1[1].to_s.gsub(/#hts_off_peak/, PdfUtils.number_helper.number_to_currency(table_data[1][index], precision: 0, unit: ''))
@@ -175,11 +205,8 @@ class LetterOfAward < Pdf
   end
 
   def get_htl_data(param)
-    visibilities = param[:visibilities]
-    table_data = param[:table_data]
-    row0, row1, row2 = param[:row0], param[:row1], param[:row2]
+    index, visibilities,table_data,row0, row1, row2 = get_data_param(param)
     htl_total_value = param[:htl_total_value]
-    index = param[:index]
     if visibilities[:visibility_htl] && htl_total_value != 0.0
       htl_peak = row0[2].to_s.gsub(/#htl_peak/, PdfUtils.number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
       htl_off_peak = row1[2].to_s.gsub(/#htl_off_peak/, PdfUtils.number_helper.number_to_currency(table_data[1][index], precision: 0, unit: ''))
@@ -193,11 +220,9 @@ class LetterOfAward < Pdf
   end
 
   def get_eht_data(param)
-    visibilities = param[:visibilities]
-    table_data = param[:table_data]
-    row0, row1, row2 = param[:row0], param[:row1], param[:row2]
+    index, visibilities,table_data,row0, row1, row2 = get_data_param(param)
     eht_total_value = param[:eht_total_value]
-    index = param[:index]
+
     if visibilities[:visibility_eht] && eht_total_value != 0.0
       eht_peak = row0[3].to_s.gsub(/#eht_peak/, PdfUtils.number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
       eht_off_peak = row1[3].to_s.gsub(/#eht_off_peak/, PdfUtils.number_helper.number_to_currency(table_data[1][index], precision: 0, unit: ''))
