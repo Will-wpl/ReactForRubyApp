@@ -81,6 +81,21 @@ class Pdf
     return total_volume_base + total_volume, total_award_sum_base + total_award_sum
   end
 
+  def push_consumption_data(param)
+    title = param[:title]
+    peak = param[:peak]
+    off_peak = param[:off_peak]
+    table_head = param[:table_head]
+    table_row0 = param[:table_row0]
+    table_row1 = param[:table_row1]
+    row0_data= param[:row0_data]
+    row1_data = param[:row1_data]
+    table_head.push(title)
+    table_row0.push(PdfUtils.number_helper.number_to_currency(peak, precision: 0, unit: ''))
+    table_row1.push(PdfUtils.number_helper.number_to_currency(off_peak, precision: 0, unit: ''))
+    row0_data.push(peak); row1_data.push(off_peak)
+  end
+
   def get_consumption_table_data(param)
     auction = param[:auction]
     visibilities = param[:visibilities]
@@ -102,10 +117,9 @@ class Pdf
     # C = (Peak*12/365) * period
     unless current_user_consumption.nil?
       if visibilities[:visibility_lt]
-        table_head.push("<b>LT</b>")
-        table_row0.push(PdfUtils.number_helper.number_to_currency(current_user_consumption.lt_peak.to_f, precision: 0, unit: ''))
-        table_row1.push(PdfUtils.number_helper.number_to_currency(current_user_consumption.lt_off_peak.to_f, precision: 0, unit: ''))
-        row0_data.push(current_user_consumption.lt_peak.to_f); row1_data.push(current_user_consumption.lt_off_peak.to_f)
+        lt_param = {:title => "<b>LT</b>", :peak => current_user_consumption.lt_peak.to_f, :off_peak => current_user_consumption.lt_off_peak.to_f,
+                    :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :row0_data => row0_data, :row1_data => row1_data}
+        push_consumption_data(lt_param)
         value = ((current_user_consumption.lt_peak.to_f * 12.0 / 365.0) * period_days).to_f
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][0])
 
@@ -113,10 +127,9 @@ class Pdf
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][0])
       end
       if visibilities[:visibility_hts]
-        table_head.push("<b>HT (Small)</b>")
-        table_row0.push(PdfUtils.number_helper.number_to_currency(current_user_consumption.hts_peak.to_f, precision: 0, unit: ''))
-        table_row1.push(PdfUtils.number_helper.number_to_currency(current_user_consumption.hts_off_peak.to_f, precision: 0, unit: ''))
-        row0_data.push(current_user_consumption.hts_peak.to_f); row1_data.push(current_user_consumption.hts_off_peak.to_f)
+        hts_param = {:title => "<b>HT (Small)</b>", :peak => current_user_consumption.hts_peak.to_f, :off_peak => current_user_consumption.hts_off_peak.to_f,
+                     :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :row0_data => row0_data, :row1_data => row1_data}
+        push_consumption_data(hts_param)
         value = (current_user_consumption.hts_peak.to_f * 12.0 / 365.0) * period_days
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][1])
 
@@ -124,10 +137,9 @@ class Pdf
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][1])
       end
       if visibilities[:visibility_htl]
-        table_head.push("<b>HT (Large)</b>")
-        table_row0.push(PdfUtils.number_helper.number_to_currency(current_user_consumption.htl_peak.to_f, precision: 0, unit: ''))
-        table_row1.push(PdfUtils.number_helper.number_to_currency(current_user_consumption.htl_off_peak.to_f, precision: 0, unit: ''))
-        row0_data.push(current_user_consumption.htl_peak.to_f); row1_data.push(current_user_consumption.htl_off_peak.to_f)
+        htl_param = {:title => "<b>HT (Large)</b>", :peak => current_user_consumption.htl_peak.to_f, :off_peak => current_user_consumption.htl_off_peak.to_f,
+                     :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :row0_data => row0_data, :row1_data => row1_data}
+        push_consumption_data(htl_param)
         value = (current_user_consumption.htl_peak.to_f * 12.0 / 365.0) * period_days
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][2])
 
@@ -135,10 +147,9 @@ class Pdf
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][2])
       end
       if visibilities[:visibility_eht]
-        table_head.push("<b>EHT</b>")
-        table_row0.push(PdfUtils.number_helper.number_to_currency(current_user_consumption.eht_peak.to_f, precision: 0, unit: ''))
-        table_row1.push(PdfUtils.number_helper.number_to_currency(current_user_consumption.eht_off_peak.to_f, precision: 0, unit: ''))
-        row0_data.push(current_user_consumption.eht_peak.to_f); row1_data.push(current_user_consumption.eht_off_peak.to_f)
+        eht_param = {:title => "<b>EHT</b>", :peak => current_user_consumption.eht_peak.to_f, :off_peak => current_user_consumption.eht_off_peak.to_f,
+                     :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :row0_data => row0_data, :row1_data => row1_data}
+        push_consumption_data(eht_param)
         value = (current_user_consumption.eht_peak.to_f * 12.0 / 365.0) * period_days
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][3])
 
