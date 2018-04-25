@@ -15,86 +15,61 @@ class Pdf
   end
 
   def get_price_table_data(auction, auction_result, visibility = false, price_data = false)
-    table_head = ['']
-    table_row0 = ['Peak<br/>(7am-7pm)']
-    table_row1 = ['Off-Peak<br/>(7pm-7am)']
-    price_row0 = []
-    price_row1 = []
+    table_head, table_row0, table_row1, price_row0, price_row1= [''], ['Peak<br/>(7am-7pm)'], ['Off-Peak<br/>(7pm-7am)'], [], []
     if auction.nil? || auction_result.nil?
-      if visibility
-        return [table_head, table_row0, table_row1], {visibility_lt: false, visibility_hts: false,
-                                                      visibility_htl: false, visibility_eht: false}
-      else
-        return [table_head, table_row0, table_row1]
-      end
+      return [table_head, table_row0, table_row1], {visibility_lt: false, visibility_hts: false,
+                                                    visibility_htl: false, visibility_eht: false} if visibility
+
+      return [table_head, table_row0, table_row1] unless visibility
+
     end
     visibility_lt = auction.total_lt_peak > 0 || auction.total_lt_off_peak > 0
     visibility_hts = auction.total_hts_peak > 0 || auction.total_hts_off_peak > 0
     visibility_htl = auction.total_htl_peak > 0 || auction.total_htl_off_peak > 0
     visibility_eht = auction.total_eht_peak > 0 || auction.total_eht_off_peak > 0
-
-    if visibility_lt
-      table_head.push('<b>LT</b>')
-
-      table_row0.push(PdfUtils.get_format_number(auction_result.lt_peak.to_f, '$ ', 4))
-      table_row1.push(PdfUtils.get_format_number(auction_result.lt_off_peak.to_f, '$ ', 4))
-      price_row0.push(auction_result.lt_peak)
-      price_row1.push(auction_result.lt_off_peak)
-    else
-      price_row0.push(0.0)
-      price_row1.push(0.0)
-    end
-
-    if visibility_hts
-      table_head.push('<b>HT (Small)</b>')
-      table_row0.push(PdfUtils.get_format_number(auction_result.hts_peak.to_f, '$ ', 4))
-      table_row1.push(PdfUtils.get_format_number(auction_result.hts_off_peak.to_f, '$ ', 4))
-      price_row0.push(auction_result.hts_peak)
-      price_row1.push(auction_result.hts_off_peak)
-    else
-      price_row0.push(0.0)
-      price_row1.push(0.0)
-    end
-
-    if visibility_htl
-      table_head.push('<b>HT (Large)</b>')
-      table_row0.push(PdfUtils.get_format_number(auction_result.htl_peak.to_f, '$ ', 4))
-      table_row1.push(PdfUtils.get_format_number(auction_result.htl_off_peak.to_f, '$ ', 4))
-      price_row0.push(auction_result.htl_peak)
-      price_row1.push(auction_result.htl_off_peak)
-    else
-      price_row0.push(0.0)
-      price_row1.push(0.0)
-    end
-
-    if visibility_eht
-      table_head.push('<b>EHT</b>')
-      table_row0.push(PdfUtils.get_format_number(auction_result.eht_peak.to_f, '$ ', 4))
-      table_row1.push(PdfUtils.get_format_number(auction_result.eht_off_peak.to_f, '$ ', 4))
-      price_row0.push(auction_result.eht_peak)
-      price_row1.push(auction_result.eht_off_peak)
-    else
-      price_row0.push(0.0)
-      price_row1.push(0.0)
-    end
-
+    lt_param = {:visibility => visibility_lt, :title => '<b>LT</b>', :peak => auction_result.lt_peak.to_f, :off_peak => auction_result.lt_off_peak.to_f,
+                :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :price_row0 => price_row0, :price_row1 => price_row1}
+    push_data(lt_param)
+    hts_param = {:visibility => visibility_hts, :title => '<b>HT (Small)</b>', :peak => auction_result.hts_peak.to_f, :off_peak => auction_result.hts_off_peak.to_f,
+                 :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :price_row0 => price_row0, :price_row1 => price_row1}
+    push_data(hts_param)
+    htl_param = {:visibility => visibility_htl, :title => '<b>HT (Large)</b>', :peak => auction_result.htl_peak.to_f, :off_peak => auction_result.htl_off_peak.to_f,
+                 :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :price_row0 => price_row0, :price_row1 => price_row1}
+    push_data(htl_param)
+    eht_param = {:visibility => visibility_eht, :title => '<b>EHT</b>', :peak => auction_result.eht_peak.to_f, :off_peak => auction_result.eht_off_peak.to_f,
+                 :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :price_row0 => price_row0, :price_row1 => price_row1}
+    push_data(eht_param)
     unless visibility && price_data
-      return [table_head,
-              table_row0,
-              table_row1]
+      return [table_head, table_row0, table_row1]
     end
-    return_value = [[table_head,
-                     table_row0,
-                     table_row1]]
-
+    return_value = [[table_head, table_row0, table_row1]]
     if visibility
-      return_value.push(visibility_lt: visibility_lt,
-                        visibility_hts: visibility_hts,
-                        visibility_htl: visibility_htl,
-                        visibility_eht: visibility_eht)
+      return_value.push(visibility_lt: visibility_lt, visibility_hts: visibility_hts, visibility_htl: visibility_htl, visibility_eht: visibility_eht)
     end
     return_value.push([price_row0, price_row1]) if price_data
     return_value
+  end
+
+  def push_data(param)
+    visibility = param[:visibility]
+    title = param[:title]
+    peak = param[:peak]
+    off_peak = param[:off_peak]
+    table_head = param[:table_head]
+    table_row0 = param[:table_row0]
+    table_row1 = param[:table_row1]
+    price_row0 = param[:price_row0]
+    price_row1 = param[:price_row1]
+    if visibility
+      table_head.push(title)
+      table_row0.push(PdfUtils.get_format_number(peak, '$ ', 4))
+      table_row1.push(PdfUtils.get_format_number(off_peak, '$ ', 4))
+      price_row0.push(peak)
+      price_row1.push(off_peak)
+    else
+      price_row0.push(0.0)
+      price_row1.push(0.0)
+    end
   end
 
   def get_period_days(auction)
