@@ -28,7 +28,7 @@ class LetterOfAward < Pdf
     row2 = html_parse(table2_tr2, '#lt_total_id', '#hts_total_id', '#htl_total_id', '#eht_total_id')
     head_bool, row0_string, row1_string, row2_string = get_table2_row_data({:head => head, :row0 => row0, :row1 => row1, :row2 => row2, :visibilities => visibilities, :table_data => table_data})
     table2_head_string, table2_tr0_string, table2_tr1_string, table2_tr2_string =
-        get_table_string({:table2_head => table2_head, :table2_tr => table2_tr, :table2_tr1 => table2_tr1, :table2_tr2 => table2_tr2,  :head_bool => head_bool, :row0_string => row0_string, :row1_string => row1_string, :row2_string => row2_string, :head => head, :row0 => row0, :row1 => row1, :row2 => row2})
+        get_table_string({:table2_head => table2_head, :table2_tr => table2_tr, :table2_tr1 => table2_tr1, :table2_tr2 => table2_tr2, :head_bool => head_bool, :row0_string => row0_string, :row1_string => row1_string, :row2_string => row2_string, :head => head, :row0 => row0, :row1 => row1, :row2 => row2})
 
     page_content = get_content_gsub(param, page.to_s)
     page_content[tr_string] = tr_text
@@ -42,16 +42,44 @@ class LetterOfAward < Pdf
   private
 
   def get_content_gsub(param, page_content)
-    page_content = page_content.gsub(/#retailer_user_company_name/, param[:auction_result].empty? ? '' : param[:auction_result][0].company_name)
-    page_content = page_content.gsub(/#auction_start_datetime/, (param[:auction].start_datetime + get_pdf_datetime_zone).strftime('%-d %B %Y'))
-    page_content = page_content.gsub(/#retailer_company_address/, param[:auction_result].empty? ? '' : param[:auction_result][0].company_address)
+    page_content = page_content.gsub(/#retailer_user_company_name/, get_retailer_user_company_name(param))
+    page_content = page_content.gsub(/#auction_start_datetime/, get_auction_start_datetime(param))
+    page_content = page_content.gsub(/#retailer_company_address/, get_retailer_company_address(param))
     page_content = page_content.gsub(/#auctions_published_gid/, param[:auction].published_gid)
-    page_content = page_content.gsub(/#buyer_user_company_name/, param[:consumption].empty? ? '' : param[:consumption][0].company_name)
-    page_content = page_content.gsub(/#admin_accept_date/, ((param[:tender_state][0].created_at + get_pdf_datetime_zone).strftime('%-d %B %Y') unless param[:tender_state].empty?).to_s)
+    page_content = page_content.gsub(/#buyer_user_company_name/, get_buyer_user_company_name(param))
+    page_content = page_content.gsub(/#admin_accept_date/, get_admin_accept_date(param))
     page_content = page_content.gsub(/#auctions_contract_period_start_date/, param[:auction].contract_period_start_date.strftime('%-d %B %Y'))
-    page_content = page_content.gsub(/#buyer_uen_number/, param[:consumption].empty? ? '' : param[:consumption][0].company_unique_entity_number)
-    page_content = page_content.gsub(/#retailer_uen_number/, param[:auction_result].empty? ? '' : param[:auction_result][0].company_unique_entity_number)
+    page_content = page_content.gsub(/#buyer_uen_number/, get_buyer_uen_number(param))
+    page_content = page_content.gsub(/#retailer_uen_number/, get_retailer_uen_number(param))
     page_content = page_content.gsub(/#acknowledge/, get_acknowledge_text(param[:consumption]))
+  end
+
+  def get_retailer_user_company_name(param)
+    param[:auction_result].empty? ? '' : param[:auction_result][0].company_name
+  end
+
+  def get_auction_start_datetime(param)
+    (param[:auction].start_datetime + get_pdf_datetime_zone).strftime('%-d %B %Y')
+  end
+
+  def get_retailer_company_address(param)
+    param[:auction_result].empty? ? '' : param[:auction_result][0].company_address
+  end
+
+  def get_buyer_user_company_name(param)
+    param[:consumption].empty? ? '' : param[:consumption][0].company_name
+  end
+
+  def get_admin_accept_date(param)
+    ((param[:tender_state][0].created_at + get_pdf_datetime_zone).strftime('%-d %B %Y') unless param[:tender_state].empty?).to_s
+  end
+
+  def get_buyer_uen_number(param)
+    param[:consumption].empty? ? '' : param[:consumption][0].company_unique_entity_number
+  end
+
+  def get_retailer_uen_number(param)
+    param[:auction_result].empty? ? '' : param[:auction_result][0].company_unique_entity_number
   end
 
   def get_table_string(param)
@@ -112,54 +140,98 @@ class LetterOfAward < Pdf
     row2 = param[:row2]
     visibilities = param[:visibilities]
     table_data = param[:table_data]
-
-
     index = 0
     head_bool, row0_string, row1_string, row2_string = [], [], [], []
     lt_total_value = table_data[0][index].to_f + table_data[1][index].to_f
+    lt_param = {:index => index, :lt_total_value => lt_total_value, :visibilities => visibilities,
+                :table_data => table_data, :row0 => row0, :row1 => row1, :row2 => row2}
+    idx, headbool, lt_peak, lt_off_peak, lt_total = get_lt_data(lt_param)
+    index += idx; head_bool.push(headbool); row0_string.push(lt_peak); row1_string.push(lt_off_peak); row2_string.push(lt_total)
+    hts_total_value = table_data[0][index].to_f + table_data[1][index].to_f
+    hts_param = {:index => index, :hts_total_value => hts_total_value, :visibilities => visibilities,
+                 :table_data => table_data, :row0 => row0, :row1 => row1, :row2 => row2}
+    idx, headbool, hts_peak, hts_off_peak, hts_total = get_hts_data(hts_param)
+    index += idx; head_bool.push(headbool); row0_string.push(hts_peak); row1_string.push(hts_off_peak); row2_string.push(hts_total)
+    htl_total_value = table_data[0][index].to_f + table_data[1][index].to_f
+    htl_param = {:index => index, :htl_total_value => htl_total_value, :visibilities => visibilities,
+                 :table_data => table_data, :row0 => row0, :row1 => row1, :row2 => row2}
+    idx, headbool, htl_peak, htl_off_peak, htl_total = get_htl_data(htl_param)
+    index += idx; head_bool.push(headbool); row0_string.push(htl_peak); row1_string.push(htl_off_peak); row2_string.push(htl_total)
+    eht_total_value = table_data[0][index].to_f + table_data[1][index].to_f
+    eht_param = {:index => index, :eht_total_value => eht_total_value, :visibilities => visibilities,
+                 :table_data => table_data, :row0 => row0, :row1 => row1, :row2 => row2}
+    idx, headbool, eht_peak, eht_off_peak, eht_total = get_eht_data(eht_param)
+    index += idx; head_bool.push(headbool); row0_string.push(eht_peak); row1_string.push(eht_off_peak); row2_string.push(eht_total)
+    return head_bool, row0_string, row1_string, row2_string
+  end
+
+  def get_data_param(param)
+    visibilities = param[:visibilities]
+    table_data = param[:table_data]
+    row0, row1, row2 = param[:row0], param[:row1], param[:row2]
+    index = param[:index]
+    return index, visibilities,table_data,row0, row1, row2
+  end
+
+  def get_lt_data(param)
+    index, visibilities,table_data,row0, row1, row2 = get_data_param(param)
+    lt_total_value = param[:lt_total_value]
+
     if visibilities[:visibility_lt] && lt_total_value != 0.0
       lt_peak = row0[0].to_s.gsub(/#lt_peak/, PdfUtils.number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
       lt_off_peak = row1[0].to_s.gsub(/#lt_off_peak/, PdfUtils.number_helper.number_to_currency(table_data[1][index], precision: 0, unit: ''))
       lt_total = row2[0].to_s.gsub(/#lt_total/, PdfUtils.number_helper.number_to_currency(lt_total_value, precision: 0, unit: ''))
-      head_bool.push(true); row0_string.push(lt_peak); row1_string.push(lt_off_peak); row2_string.push(lt_total)
-      index += 1
+      return 1, true, lt_peak, lt_off_peak, lt_total
     else
-      head_bool.push(false); row0_string.push(''); row1_string.push(''); row2_string.push('')
-      index += 1 if lt_total_value == 0.0
+      idx = 0
+      idx = 1 if lt_total_value == 0.0
+      return idx, false, '', '', ''
     end
-    hts_total_value = table_data[0][index].to_f + table_data[1][index].to_f
+  end
+
+  def get_hts_data(param)
+    index, visibilities,table_data,row0, row1, row2 = get_data_param(param)
+    hts_total_value = param[:hts_total_value]
     if visibilities[:visibility_hts] && hts_total_value != 0.0
       hts_peak = row0[1].to_s.gsub(/#hts_peak/, PdfUtils.number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
       hts_off_peak = row1[1].to_s.gsub(/#hts_off_peak/, PdfUtils.number_helper.number_to_currency(table_data[1][index], precision: 0, unit: ''))
       hts_total = row2[1].to_s.gsub(/#hts_total/, PdfUtils.number_helper.number_to_currency(hts_total_value, precision: 0, unit: ''))
-      head_bool.push(true); row0_string.push(hts_peak); row1_string.push(hts_off_peak); row2_string.push(hts_total)
-      index += 1
+      return 1, true, (hts_peak), (hts_off_peak), (hts_total)
     else
-      head_bool.push(false); row0_string.push(''); row1_string.push(''); row2_string.push('')
-      index += 1 if hts_total_value == 0.0
+      idx = 0
+      idx += 1 if hts_total_value == 0.0
+      return idx, false, '', '', ''
     end
-    htl_total_value = table_data[0][index].to_f + table_data[1][index].to_f
+  end
+
+  def get_htl_data(param)
+    index, visibilities,table_data,row0, row1, row2 = get_data_param(param)
+    htl_total_value = param[:htl_total_value]
     if visibilities[:visibility_htl] && htl_total_value != 0.0
       htl_peak = row0[2].to_s.gsub(/#htl_peak/, PdfUtils.number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
       htl_off_peak = row1[2].to_s.gsub(/#htl_off_peak/, PdfUtils.number_helper.number_to_currency(table_data[1][index], precision: 0, unit: ''))
       htl_total = row2[2].to_s.gsub(/#htl_total/, PdfUtils.number_helper.number_to_currency(htl_total_value, precision: 0, unit: ''))
-      head_bool.push(true); row0_string.push(htl_peak); row1_string.push(htl_off_peak); row2_string.push(htl_total)
-      index += 1
+      return 1, true, htl_peak, htl_off_peak, htl_total
     else
-      head_bool.push(false); row0_string.push(''); row1_string.push(''); row2_string.push('')
-      index += 1 if htl_total_value == 0.0
+      idx = 0
+      idx += 1 if htl_total_value == 0.0
+      return idx, false, '', '', ''
     end
-    eht_total_value = table_data[0][index].to_f + table_data[1][index].to_f
+  end
+
+  def get_eht_data(param)
+    index, visibilities,table_data,row0, row1, row2 = get_data_param(param)
+    eht_total_value = param[:eht_total_value]
+
     if visibilities[:visibility_eht] && eht_total_value != 0.0
       eht_peak = row0[3].to_s.gsub(/#eht_peak/, PdfUtils.number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
       eht_off_peak = row1[3].to_s.gsub(/#eht_off_peak/, PdfUtils.number_helper.number_to_currency(table_data[1][index], precision: 0, unit: ''))
       eht_total = row2[3].to_s.gsub(/#eht_total/, PdfUtils.number_helper.number_to_currency(eht_total_value, precision: 0, unit: ''))
-      head_bool.push(true); row0_string.push(eht_peak); row1_string.push(eht_off_peak); row2_string.push(eht_total)
-      index += 1
+      return 1, true, eht_peak, eht_off_peak, eht_total
     else
-      head_bool.push(false); row0_string.push(''); row1_string.push(''); row2_string.push('')
-      index += 1 if eht_total_value == 0.0
+      idx = 0
+      idx += 1 if eht_total_value == 0.0
+      return idx, false, '', '', ''
     end
-    return head_bool, row0_string, row1_string, row2_string
   end
 end
