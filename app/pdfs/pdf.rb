@@ -96,24 +96,14 @@ class Pdf
     row0_data.push(peak); row1_data.push(off_peak)
   end
 
-  def get_consumption_table_data(param)
-    auction = param[:auction]
-    visibilities = param[:visibilities]
-    price_data = param[:price_data]
-    user_id = param[:user_id]
-    table_data = param[:table_data]
-    table_data = false if table_data.nil?
 
+  def get_consumption_table_data(param)
+    auction, visibilities, price_data, user_id = param[:auction], param[:visibilities], param[:price_data], param[:user_id]
+    table_data = param[:table_data]; table_data = false if table_data.nil?
     current_user_consumption = Consumption.find_by auction_id: auction.id, user_id: user_id
     period_days = get_period_days(auction)
-
-    table_head = ['']
-    table_row0 = ['Peak<br/>(7am-7pm)']
-    table_row1 = ['Off-Peak<br/>(7pm-7am)']
-    row0_data = []
-    row1_data = []
-    total_volume = 0.0
-    total_award_sum = 0.0
+    table_head, table_row0, table_row1, row0_data, row1_data= [''], ['Peak<br/>(7am-7pm)'], ['Off-Peak<br/>(7pm-7am)'], [], []
+    total_volume = total_award_sum = 0.0
     # C = (Peak*12/365) * period
     unless current_user_consumption.nil?
       if visibilities[:visibility_lt]
@@ -122,7 +112,6 @@ class Pdf
         push_consumption_data(lt_param)
         value = ((current_user_consumption.lt_peak.to_f * 12.0 / 365.0) * period_days).to_f
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][0])
-
         value = (current_user_consumption.lt_off_peak.to_f * 12.0 / 365.0) * period_days
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][0])
       end
@@ -132,7 +121,6 @@ class Pdf
         push_consumption_data(hts_param)
         value = (current_user_consumption.hts_peak.to_f * 12.0 / 365.0) * period_days
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][1])
-
         value = (current_user_consumption.hts_off_peak.to_f * 12.0 / 365.0) * period_days
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][1])
       end
@@ -142,7 +130,6 @@ class Pdf
         push_consumption_data(htl_param)
         value = (current_user_consumption.htl_peak.to_f * 12.0 / 365.0) * period_days
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][2])
-
         value = (current_user_consumption.htl_off_peak.to_f * 12.0 / 365.0) * period_days
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][2])
       end
@@ -152,7 +139,6 @@ class Pdf
         push_consumption_data(eht_param)
         value = (current_user_consumption.eht_peak.to_f * 12.0 / 365.0) * period_days
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][3])
-
         value = (current_user_consumption.eht_off_peak.to_f * 12.0 / 365.0) * period_days
         total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][3])
       end
