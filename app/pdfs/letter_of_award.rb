@@ -26,7 +26,7 @@ class LetterOfAward < Pdf
     row1 = html_parse(table2_tr1, '#lt_off_peak_id', '#hts_off_peak_id', '#htl_off_peak_id', '#eht_off_peak_id')
     table2_tr2 = html_parse(page, '#appendix_table2_total')
     row2 = html_parse(table2_tr2, '#lt_total_id', '#hts_total_id', '#htl_total_id', '#eht_total_id')
-    head_bool, row0_string, row1_string, row2_string = get_table2_row_data({:head => head, :row0 => row0, :row1 => row1, :row2 => row2, :visibilities => visibilities, :table_data => table_data})
+    head_bool, row0_string, row1_string, row2_string = get_table2_row_data({:row0 => row0, :row1 => row1, :row2 => row2, :visibilities => visibilities, :table_data => table_data})
     table2_head_string, table2_tr0_string, table2_tr1_string, table2_tr2_string =
         get_table_string({:table2_head => table2_head, :table2_tr => table2_tr, :table2_tr1 => table2_tr1, :table2_tr2 => table2_tr2, :head_bool => head_bool, :row0_string => row0_string, :row1_string => row1_string, :row2_string => row2_string, :head => head, :row0 => row0, :row1 => row1, :row2 => row2})
 
@@ -134,7 +134,6 @@ class LetterOfAward < Pdf
   end
 
   def get_table2_row_data(param)
-    head = param[:head]
     row0 = param[:row0]
     row1 = param[:row1]
     row2 = param[:row2]
@@ -165,22 +164,13 @@ class LetterOfAward < Pdf
     return head_bool, row0_string, row1_string, row2_string
   end
 
-  def get_data_param(param)
-    visibilities = param[:visibilities]
-    table_data = param[:table_data]
-    row0, row1, row2 = param[:row0], param[:row1], param[:row2]
-    index = param[:index]
-    return index, visibilities,table_data,row0, row1, row2
-  end
-
   def get_lt_data(param)
-    index, visibilities,table_data,row0, row1, row2 = get_data_param(param)
     lt_total_value = param[:lt_total_value]
 
-    if visibilities[:visibility_lt] && lt_total_value != 0.0
-      lt_peak = row0[0].to_s.gsub(/#lt_peak/, PdfUtils.number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
-      lt_off_peak = row1[0].to_s.gsub(/#lt_off_peak/, PdfUtils.number_helper.number_to_currency(table_data[1][index], precision: 0, unit: ''))
-      lt_total = row2[0].to_s.gsub(/#lt_total/, PdfUtils.number_helper.number_to_currency(lt_total_value, precision: 0, unit: ''))
+    if param[:visibilities][:visibility_lt] && lt_total_value != 0.0
+      lt_peak = param[:row0][0].to_s.gsub(/#lt_peak/, PdfUtils.number_helper.number_to_currency(param[:table_data][0][param[:index]], precision: 0, unit: ''))
+      lt_off_peak = param[:row1][0].to_s.gsub(/#lt_off_peak/, PdfUtils.number_helper.number_to_currency(param[:table_data][1][param[:index]], precision: 0, unit: ''))
+      lt_total = param[:row2][0].to_s.gsub(/#lt_total/, PdfUtils.number_helper.number_to_currency(lt_total_value, precision: 0, unit: ''))
       return 1, true, lt_peak, lt_off_peak, lt_total
     else
       idx = 0
@@ -190,12 +180,11 @@ class LetterOfAward < Pdf
   end
 
   def get_hts_data(param)
-    index, visibilities,table_data,row0, row1, row2 = get_data_param(param)
     hts_total_value = param[:hts_total_value]
-    if visibilities[:visibility_hts] && hts_total_value != 0.0
-      hts_peak = row0[1].to_s.gsub(/#hts_peak/, PdfUtils.number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
-      hts_off_peak = row1[1].to_s.gsub(/#hts_off_peak/, PdfUtils.number_helper.number_to_currency(table_data[1][index], precision: 0, unit: ''))
-      hts_total = row2[1].to_s.gsub(/#hts_total/, PdfUtils.number_helper.number_to_currency(hts_total_value, precision: 0, unit: ''))
+    if param[:visibilities][:visibility_hts] && hts_total_value != 0.0
+      hts_peak = param[:row0][1].to_s.gsub(/#hts_peak/, PdfUtils.number_helper.number_to_currency(param[:table_data][0][param[:index]], precision: 0, unit: ''))
+      hts_off_peak = param[:row1][1].to_s.gsub(/#hts_off_peak/, PdfUtils.number_helper.number_to_currency(param[:table_data][1][param[:index]], precision: 0, unit: ''))
+      hts_total = param[:row2][1].to_s.gsub(/#hts_total/, PdfUtils.number_helper.number_to_currency(hts_total_value, precision: 0, unit: ''))
       return 1, true, (hts_peak), (hts_off_peak), (hts_total)
     else
       idx = 0
@@ -205,12 +194,11 @@ class LetterOfAward < Pdf
   end
 
   def get_htl_data(param)
-    index, visibilities,table_data,row0, row1, row2 = get_data_param(param)
     htl_total_value = param[:htl_total_value]
-    if visibilities[:visibility_htl] && htl_total_value != 0.0
-      htl_peak = row0[2].to_s.gsub(/#htl_peak/, PdfUtils.number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
-      htl_off_peak = row1[2].to_s.gsub(/#htl_off_peak/, PdfUtils.number_helper.number_to_currency(table_data[1][index], precision: 0, unit: ''))
-      htl_total = row2[2].to_s.gsub(/#htl_total/, PdfUtils.number_helper.number_to_currency(htl_total_value, precision: 0, unit: ''))
+    if param[:visibilities][:visibility_htl] && htl_total_value != 0.0
+      htl_peak = param[:row0][2].to_s.gsub(/#htl_peak/, PdfUtils.number_helper.number_to_currency(param[:table_data][0][param[:index]], precision: 0, unit: ''))
+      htl_off_peak = param[:row1][2].to_s.gsub(/#htl_off_peak/, PdfUtils.number_helper.number_to_currency(param[:table_data][1][param[:index]], precision: 0, unit: ''))
+      htl_total = param[:row2][2].to_s.gsub(/#htl_total/, PdfUtils.number_helper.number_to_currency(htl_total_value, precision: 0, unit: ''))
       return 1, true, htl_peak, htl_off_peak, htl_total
     else
       idx = 0
@@ -220,13 +208,11 @@ class LetterOfAward < Pdf
   end
 
   def get_eht_data(param)
-    index, visibilities,table_data,row0, row1, row2 = get_data_param(param)
     eht_total_value = param[:eht_total_value]
-
-    if visibilities[:visibility_eht] && eht_total_value != 0.0
-      eht_peak = row0[3].to_s.gsub(/#eht_peak/, PdfUtils.number_helper.number_to_currency(table_data[0][index], precision: 0, unit: ''))
-      eht_off_peak = row1[3].to_s.gsub(/#eht_off_peak/, PdfUtils.number_helper.number_to_currency(table_data[1][index], precision: 0, unit: ''))
-      eht_total = row2[3].to_s.gsub(/#eht_total/, PdfUtils.number_helper.number_to_currency(eht_total_value, precision: 0, unit: ''))
+    if param[:visibilities][:visibility_eht] && eht_total_value != 0.0
+      eht_peak = param[:row0][3].to_s.gsub(/#eht_peak/, PdfUtils.number_helper.number_to_currency(param[:table_data][0][param[:index]], precision: 0, unit: ''))
+      eht_off_peak = param[:row1][3].to_s.gsub(/#eht_off_peak/, PdfUtils.number_helper.number_to_currency(param[:table_data][1][param[:index]], precision: 0, unit: ''))
+      eht_total = param[:row2][3].to_s.gsub(/#eht_total/, PdfUtils.number_helper.number_to_currency(eht_total_value, precision: 0, unit: ''))
       return 1, true, eht_peak, eht_off_peak, eht_total
     else
       idx = 0
