@@ -198,6 +198,15 @@ class Api::TendersController < Api::BaseController
 
   private
 
+  def set_arrangement
+    @arrangement = if current_user.has_role?('admin')
+                     Arrangement.admin_find_by_id(params[:id])
+                   else
+                     current_user.arrangements.find(params[:id])
+                   end
+
+  end
+
   def get_arrangement_user(arrangement_id)
     return if arrangement_id.empty?
     this_arrangement = Arrangement.find(arrangement_id)
@@ -222,17 +231,7 @@ class Api::TendersController < Api::BaseController
     return if user.nil?
     UserMailer.workflow_admin_reject_mail(user, comments).deliver_later
   end
-
-
-  def set_arrangement
-    @arrangement = if current_user.has_role?('admin')
-                     Arrangement.admin_find_by_id(params[:id])
-                   else
-                     current_user.arrangements.find(params[:id])
-                   end
-
-  end
-
+  
   def set_tender_chat(chat, arrangement_id)
     if chat['id'] == '0' || chat['id'].nil?
       tender_chat = TenderChat.new
