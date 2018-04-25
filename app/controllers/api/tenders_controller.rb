@@ -86,14 +86,7 @@ class Api::TendersController < Api::BaseController
     workflow = nil
     chats = JSON.parse(params[:chats])
     ActiveRecord::Base.transaction do
-      chats.each do |chat|
-        next if chat['sp_response_status'] == '4' || chat['sp_response_status'] == '2'
-        tender_chat = set_tender_chat(chat, params[:id])
-        next unless tender_chat.save
-        chat_info = set_withdraw_tender_chat(tender_chat, chat)
-        TenderChatDetail.chat_save(tender_chat, chat_info)
-      end
-
+      node3_retailer_withdraw_all_deviations_biz(chats, params)
       workflow = TenderWorkflow.new.execute(:node3, :withdraw_all_deviations, params[:id])
     end
 
@@ -104,14 +97,7 @@ class Api::TendersController < Api::BaseController
     workflow = nil
     chats = JSON.parse(params[:chats])
     ActiveRecord::Base.transaction do
-      chats.each do |chat|
-        next if chat['sp_response_status'] == '4' || chat['sp_response_status'] == '1'
-        tender_chat = set_tender_chat(chat, params[:id])
-        next unless tender_chat.save
-        chat_info = set_submit_deviation_tender_chat(tender_chat, chat)
-        TenderChatDetail.chat_save(tender_chat, chat_info)
-      end
-
+      node3_retailer_submit_deviations_biz(chats, params)
       workflow = TenderWorkflow.new.execute(:node3, :submit_deviations, params[:id])
     end
     render json: workflow, status: 200
@@ -203,15 +189,8 @@ class Api::TendersController < Api::BaseController
     will_delete_chats.each do |chat|
       TenderChat.find(chat.id).destroy
     end
-
     ActiveRecord::Base.transaction do
-      chats.each do |chat|
-        chat_ids.push(chat['id']) if chat['id'] != '0'
-        tender_chat = set_tender_chat(chat, params[:id])
-        next unless tender_chat.save
-        chat_info = set_save_tender_chat(tender_chat, chat)
-        TenderChatDetail.chat_save(tender_chat, chat_info)
-      end
+      node3_retailer_save_biz(chats, params, chat_ids)
     end
     render json: nil, status: 200
   end
@@ -312,12 +291,58 @@ class Api::TendersController < Api::BaseController
       last_retailer_response = TenderChatDetail.retailer_response(chat.id).last
       last_sp_response = TenderChatDetail.admin_response(chat.id).last
       chats.push(id: chat.id, item: chat.item, clause: chat.clause, sp_response_status: chat.sp_response_status,
-                 retailer_response: last_retailer_response.nil? ? nil : last_retailer_response.retailer_response,
-                 propose_deviation: last_retailer_response.nil? ? nil : last_retailer_response.propose_deviation,
-                 sp_response: last_sp_response.nil? ? nil : last_sp_response.sp_response,
-                 response_status: [last_retailer_response.nil? ? nil : last_retailer_response.response_status,
-                                   last_sp_response.nil? ? nil : last_sp_response.response_status])
+                 retailer_response: get_retailer_response_value(last_retailer_response),
+                 propose_deviation: get_propose_deviation_value(last_retailer_response),
+                 sp_response: get_sp_response_value(last_sp_response),
+                 response_status: get_response_status_values(last_retailer_response, last_sp_response))
     end
     chats
+  end
+
+  def get_retailer_response_value(last_retailer_response)
+    last_retailer_response.nil? ? nil : last_retailer_response.retailer_response
+  end
+
+  def get_propose_deviation_value(last_retailer_response)
+    last_retailer_response.nil? ? nil : last_retailer_response.propose_deviation
+  end
+
+  def get_sp_response_value(last_sp_response)
+    last_sp_response.nil? ? nil : last_sp_response.sp_response
+  end
+
+  def get_response_status_values(last_retailer_response, last_sp_response)
+    [last_retailer_response.nil? ? nil : last_retailer_response.response_status,
+     last_sp_response.nil? ? nil : last_sp_response.response_status]
+  end
+
+  def node3_retailer_submit_deviations_biz(chats, params)
+    chats.each do |chat|
+      next if chat['sp_response_status'] == '4' || chat['sp_response_status'] == '1'
+      tender_chat = set_tender_chat(chat, params[:id])
+      next unless tender_chat.save
+      chat_info = set_submit_deviation_tender_chat(tender_chat, chat)
+      TenderChatDetail.chat_save(tender_chat, chat_info)
+    end
+  end
+
+  def node3_retailer_withdraw_all_deviations_biz(chats, params)
+    chats.each do |chat|
+      next if chat['sp_response_status'] == '4' || chat['sp_response_status'] == '2'
+      tender_chat = set_tender_chat(chat, params[:id])
+      next unless tender_chat.save
+      chat_info = set_withdraw_tender_chat(tender_chat, chat)
+      TenderChatDetail.chat_save(tender_chat, chat_info)
+    end
+  end
+
+  def node3_retailer_save_biz(chats, params, chat_ids)
+    chats.each do |chat|
+      chat_ids.push(chat['id']) if chat['id'] != '0'
+      tender_chat = set_tender_chat(chat, params[:id])
+      next unless tender_chat.save
+      chat_info = set_save_tender_chat(tender_chat, chat)
+      TenderChatDetail.chat_save(tender_chat, chat_info)
+    end
   end
 end
