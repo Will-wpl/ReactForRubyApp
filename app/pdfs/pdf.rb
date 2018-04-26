@@ -5,15 +5,6 @@ class Pdf
     (zone * 60 * 60)
   end
 
-  def datetime_millisecond(datetime, flag = 1)
-    unless datetime.index('.').nil?
-      datetime[datetime.index('.'), 6] = flag == 1 ? '.' + '9' * 6 + 'Z' : '.' + '0' * 6 + 'Z'
-    else
-      datetime['Z'] = flag == 1 ? '.' + '9' * 6 + 'Z' : '.' + '0' * 6 + 'Z'
-    end
-    datetime
-  end
-
   def get_price_table_data(auction, auction_result, visibility = false, price_data = false)
     table_head, table_row0, table_row1, price_row0, price_row1= [''], ['Peak<br/>(7am-7pm)'], ['Off-Peak<br/>(7pm-7am)'], [], []
     if auction.nil? || auction_result.nil?
