@@ -1,4 +1,5 @@
 require 'ra_report/pdf_lowest_didder_info'
+require 'ra_report/pdf_chart'
 require 'ra_report/pdf_price_chart'
 require 'ra_report/pdf_price_table'
 require 'ra_report/pdf_rank_chart'

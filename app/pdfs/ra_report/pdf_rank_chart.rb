@@ -1,4 +1,5 @@
-class PdfRankChart
+
+class PdfRankChart < PdfChart
   attr_reader :param
 
   def initialize(param)
@@ -14,9 +15,9 @@ class PdfRankChart
     uid = param[:uid]
     pdf.grid([12, 0], [22, 17]).bounding_box do
       # chart
-      pdf_draw_chart2
+      draw_chart
       # line
-      pdf_chart2_line
+      chart_line
     end
 
     pdf.grid([13, 14], [22, 18]).bounding_box do
@@ -29,7 +30,7 @@ class PdfRankChart
     end
   end
 
-  def pdf_draw_chart2
+  def draw_chart
 
     pdf = param[:pdf]
     len_x = param[:len_x]
@@ -55,53 +56,10 @@ class PdfRankChart
     end
   end
 
-  def pdf_chart2_line
-    pdf = param[:pdf]
-    base_x = param[:base_x]
-    hash = param[:hash]
-    start_time_i = param[:start_time_i]
-    percentage_x = param[:percentage_x]
-    offset_x = param[:offset_x]
-    chart_color = param[:chart_color]
-    type_x = param[:type_x]
+  def get_y(item)
     ranking = param[:ranking]
-    point_hash = {}
-    hash.each_with_index do |(key, list), index|
-      point_hash[key] = []
-      pdf.stroke do
-        pdf.line_width = 1.5
-        pdf.stroke_color chart_color[key]
-        list.each_with_index {|item, item_index|
-          data_x = if type_x == 0
-                     ((item.bid_time.to_i - start_time_i) * percentage_x).to_f + base_x + offset_x
-                   else
-                     data_x = (item.bid_time.to_i - start_time_i) / percentage_x
-                     data_x == 0 ? base_x : data_x + offset_x
-                   end
-          data_y = 20 + (200.0 / ranking) * item.ranking
-          if item_index == 0
-            pdf.move_to data_x, data_y
-          else
-            pdf.line_to data_x, data_y
-          end
-          point_hash[key].push({:point_x => data_x, :point_y => data_y, :is_bidder => item.flag == nil ? false : item.is_bidder})
-        }
-      end
-    end
-
-    #point
-    pdf.stroke do
-      point_hash.each_with_index do |(key, list), index|
-        pdf.fill_color chart_color[key]
-        list.each {|item|
-          if item[:is_bidder]
-            pdf.fill_polygon [item[:point_x], item[:point_y] + 4], [item[:point_x] + 4, item[:point_y] - 2], [item[:point_x] - 4, item[:point_y] - 2]
-          else
-            pdf.fill_ellipse [item[:point_x], item[:point_y]], 2.5
-          end
-        }
-      end
-    end
+    20 + (200.0 / ranking) * item.ranking
   end
+
 
 end
