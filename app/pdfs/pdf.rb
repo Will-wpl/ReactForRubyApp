@@ -112,21 +112,18 @@ class Pdf
                :period_days => period_days, :price_data => price_data, :total_volume => total_volume, :total_award_sum => total_award_sum, :visibility => visibilities[:visibility_lt]
       }
       total_volume, total_award_sum = get_consumption_data(param, 0)
-
       param = {:title => "<b>HT (Small)</b>", :current_user_consumption => current_user_consumption,
                :peak => current_user_consumption.hts_peak.to_f, :off_peak => current_user_consumption.hts_off_peak.to_f,
                :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :row0_data => row0_data, :row1_data => row1_data,
                :period_days => period_days, :price_data => price_data, :total_volume => total_volume, :total_award_sum => total_award_sum, :visibility => visibilities[:visibility_hts]
       }
       total_volume, total_award_sum = get_consumption_data(param, 1)
-
       param = {:title => "<b>HT (Large)</b>", :current_user_consumption => current_user_consumption,
                :peak => current_user_consumption.htl_peak.to_f, :off_peak => current_user_consumption.htl_off_peak.to_f,
                :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :row0_data => row0_data, :row1_data => row1_data,
                :period_days => period_days, :price_data => price_data, :total_volume => total_volume, :total_award_sum => total_award_sum, :visibility => visibilities[:visibility_htl]
       }
       total_volume, total_award_sum = get_consumption_data(param, 2)
-
       param = {:title => "<b>EHT</b>", :current_user_consumption => current_user_consumption,
                :peak => current_user_consumption.eht_peak.to_f, :off_peak => current_user_consumption.eht_off_peak.to_f,
                :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :row0_data => row0_data, :row1_data => row1_data,
