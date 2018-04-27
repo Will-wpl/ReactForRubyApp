@@ -86,9 +86,9 @@ export class SearchType extends Component {
     }
     goReset(){
         $(".search_type input[type='text']").val("");
-        this.setState({start_datetime:''})
+        this.setState({start_datetime:""})
         $(".search_type select").val($(".search_type select option:first").val());
-        this.goSearch();
+        setTimeout(()=>{this.goSearch();},200);
     }
     getAuctionId(type,obj){
         sessionStorage.auction_id=type;

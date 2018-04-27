@@ -87,7 +87,7 @@ export class Proposedeviations extends React.Component{
         let withdraw = this.state.deviations_list;
         withdraw[obj.index].sp_response_status = '4';
         this.setState({deviations_list:withdraw});
-        retailerWithdraw(this.props.current.current.arrangement_id,{id:obj.id,propose_deviation:$('#deviation_'+obj.index).val()}).then(res=>{
+        retailerWithdraw(this.props.current.current.arrangement_id,{id:obj.id,propose_deviation:encodeURI($('#deviation_'+obj.index).val())}).then(res=>{
             this.refs.Modal.showModal();
             this.setState({
                 text:"You have successfully updated"
