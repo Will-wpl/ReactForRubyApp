@@ -87,6 +87,38 @@ class Consumption < ApplicationRecord
     intake_values
   end
 
+  def self.get_lt_peak(lt_peak)
+    lt_peak.nil? ? 0 : lt_peak
+  end
+
+  def self.get_lt_off_peak(lt_off_peak)
+    lt_off_peak.nil? ? 0 : lt_off_peak
+  end
+
+  def self.get_hts_peak(hts_peak)
+    hts_peak.nil? ? 0 : hts_peak
+  end
+
+  def self.get_hts_off_peak(hts_off_peak)
+    hts_off_peak.nil? ? 0 : hts_off_peak
+  end
+
+  def self.get_htl_peak(htl_peak)
+    htl_peak.nil? ? 0 : htl_peak
+  end
+
+  def self.get_htl_off_peak(htl_off_peak)
+    htl_off_peak.nil? ? 0 : htl_off_peak
+  end
+
+  def self.get_eht_peak(eht_peak)
+    eht_peak.nil? ? 0 : eht_peak
+  end
+
+  def self.get_eht_off_peak(eht_off_peak)
+    eht_off_peak.nil? ? 0 : eht_off_peak
+  end
+
   private
 
   def self.get_company_user_by_auction(auction_id)

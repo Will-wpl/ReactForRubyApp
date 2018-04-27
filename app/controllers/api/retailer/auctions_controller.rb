@@ -46,12 +46,7 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
                { url: '/retailer/arrangements/:id/tender', name: 'View', icon: 'view', interface_type: 'auction', check:'docheck' },
                { url: '/retailer/auctions/:id/gotobid', name: 'Start Bidding', icon: 'bidding', interface_type: 'auction' }]
     data = []
-    arrangements = if params.key?(:sort_by)
-                     order_by_string = get_order_by_string(params[:sort_by])
-                     arrangement.order(order_by_string)
-                   else
-                     arrangement.order('auctions.actual_begin_time asc')
-                   end
+    arrangements = get_order_list(params, headers, arrangement)
     arrangements.each do |arrangement|
       auction_status = 'In Progress'
       action = 1
@@ -64,8 +59,7 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
       end
 
       data.push(published_gid: arrangement.auction.published_gid, name: arrangement.auction.name, actual_begin_time: arrangement.auction.actual_begin_time,
-                auction_status: auction_status, accept_status: arrangement.accept_status,
-                id: arrangement.id, auction_id: arrangement.auction_id, actions: action)
+                auction_status: auction_status, accept_status: arrangement.accept_status, id: arrangement.id, auction_id: arrangement.auction_id, actions: action)
     end
 
     bodies = { data: data, total: total }
@@ -79,5 +73,16 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
     is_zero = false
     is_zero = true if intake_peak == 0 && intake_off_peak == 0
     is_zero
+  end
+
+  private
+
+  def get_order_list(params, headers, arrangement)
+    if params.key?(:sort_by)
+      order_by_string = get_order_by_obj_str(params[:sort_by], headers)
+      arrangement.order(order_by_string)
+    else
+      arrangement.order('auctions.actual_begin_time asc')
+    end
   end
 end
