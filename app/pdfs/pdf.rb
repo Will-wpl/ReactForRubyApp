@@ -5,15 +5,6 @@ class Pdf
     (zone * 60 * 60)
   end
 
-  def datetime_millisecond(datetime, flag = 1)
-    unless datetime.index('.').nil?
-      datetime[datetime.index('.'), 6] = flag == 1 ? '.' + '9' * 6 + 'Z' : '.' + '0' * 6 + 'Z'
-    else
-      datetime['Z'] = flag == 1 ? '.' + '9' * 6 + 'Z' : '.' + '0' * 6 + 'Z'
-    end
-    datetime
-  end
-
   def get_price_table_data(auction, auction_result, visibility = false, price_data = false)
     table_head, table_row0, table_row1, price_row0, price_row1= [''], ['Peak<br/>(7am-7pm)'], ['Off-Peak<br/>(7pm-7am)'], [], []
     if auction.nil? || auction_result.nil?
@@ -106,42 +97,28 @@ class Pdf
     total_volume = total_award_sum = 0.0
     # C = (Peak*12/365) * period
     unless current_user_consumption.nil?
-      if visibilities[:visibility_lt]
-        lt_param = {:title => "<b>LT</b>", :peak => current_user_consumption.lt_peak.to_f, :off_peak => current_user_consumption.lt_off_peak.to_f,
-                    :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :row0_data => row0_data, :row1_data => row1_data}
-        push_consumption_data(lt_param)
-        value = ((current_user_consumption.lt_peak.to_f * 12.0 / 365.0) * period_days).to_f
-        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][0])
-        value = (current_user_consumption.lt_off_peak.to_f * 12.0 / 365.0) * period_days
-        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][0])
-      end
-      if visibilities[:visibility_hts]
-        hts_param = {:title => "<b>HT (Small)</b>", :peak => current_user_consumption.hts_peak.to_f, :off_peak => current_user_consumption.hts_off_peak.to_f,
-                     :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :row0_data => row0_data, :row1_data => row1_data}
-        push_consumption_data(hts_param)
-        value = (current_user_consumption.hts_peak.to_f * 12.0 / 365.0) * period_days
-        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][1])
-        value = (current_user_consumption.hts_off_peak.to_f * 12.0 / 365.0) * period_days
-        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][1])
-      end
-      if visibilities[:visibility_htl]
-        htl_param = {:title => "<b>HT (Large)</b>", :peak => current_user_consumption.htl_peak.to_f, :off_peak => current_user_consumption.htl_off_peak.to_f,
-                     :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :row0_data => row0_data, :row1_data => row1_data}
-        push_consumption_data(htl_param)
-        value = (current_user_consumption.htl_peak.to_f * 12.0 / 365.0) * period_days
-        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][2])
-        value = (current_user_consumption.htl_off_peak.to_f * 12.0 / 365.0) * period_days
-        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][2])
-      end
-      if visibilities[:visibility_eht]
-        eht_param = {:title => "<b>EHT</b>", :peak => current_user_consumption.eht_peak.to_f, :off_peak => current_user_consumption.eht_off_peak.to_f,
-                     :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :row0_data => row0_data, :row1_data => row1_data}
-        push_consumption_data(eht_param)
-        value = (current_user_consumption.eht_peak.to_f * 12.0 / 365.0) * period_days
-        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][3])
-        value = (current_user_consumption.eht_off_peak.to_f * 12.0 / 365.0) * period_days
-        total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[1][3])
-      end
+      total_volume, total_award_sum = get_consumption_data({:peak => current_user_consumption.lt_peak.to_f, :off_peak => current_user_consumption.lt_off_peak.to_f,
+                                                            :title => "<b>LT</b>", :current_user_consumption => current_user_consumption,
+                                                            :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :row0_data => row0_data, :row1_data => row1_data,
+                                                            :period_days => period_days, :price_data => price_data, :total_volume => total_volume, :total_award_sum => total_award_sum, :visibility => visibilities[:visibility_lt]
+                                                           }, 0)
+
+      total_volume, total_award_sum = get_consumption_data({:title => "<b>HT (Small)</b>", :current_user_consumption => current_user_consumption,
+                                                            :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :row0_data => row0_data, :row1_data => row1_data,
+                                                            :peak => current_user_consumption.hts_peak.to_f, :off_peak => current_user_consumption.hts_off_peak.to_f,
+                                                            :period_days => period_days, :price_data => price_data, :total_volume => total_volume, :total_award_sum => total_award_sum, :visibility => visibilities[:visibility_hts]
+                                                           }, 1)
+      total_volume, total_award_sum = get_consumption_data({:title => "<b>HT (Large)</b>", :current_user_consumption => current_user_consumption,
+                                                            :peak => current_user_consumption.htl_peak.to_f, :off_peak => current_user_consumption.htl_off_peak.to_f,
+                                                            :table_head => table_head, :price_data => price_data, :total_volume => total_volume, :row0_data => row0_data, :row1_data => row1_data,
+                                                            :period_days => period_days, :table_row0 => table_row0, :table_row1 => table_row1, :total_award_sum => total_award_sum, :visibility => visibilities[:visibility_htl]
+                                                           }, 2)
+
+      total_volume, total_award_sum = get_consumption_data({:title => "<b>EHT</b>", :current_user_consumption => current_user_consumption, :total_award_sum => total_award_sum, :visibility => visibilities[:visibility_eht],
+                                                            :peak => current_user_consumption.eht_peak.to_f, :off_peak => current_user_consumption.eht_off_peak.to_f,
+                                                            :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :row0_data => row0_data, :row1_data => row1_data,
+                                                            :period_days => period_days, :price_data => price_data, :total_volume => total_volume,
+                                                           }, 3)
     end
     if table_data
       return [table_head, table_row0, table_row1], [row0_data, row1_data]
@@ -150,5 +127,27 @@ class Pdf
     end
   end
 
+  private
+
+  def get_consumption_data(param, index)
+    current_user_consumption = param[:current_user_consumption]
+    period_days = param[:period_days]
+    price_data = param[:price_data]
+    total_volume = param[:total_volume]
+    total_award_sum = param[:total_award_sum]
+    visibility = param[:visibility]
+    peak = param[:peak]
+
+    if visibility
+      push_consumption_data(param)
+      value = ((peak * 12.0 / 365.0) * period_days).to_f
+      total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][index])
+      value = (current_user_consumption.lt_off_peak.to_f * 12.0 / 365.0) * period_days
+      get_total_value(total_volume, value, total_award_sum, value * price_data[1][index])
+    else
+      return total_volume, total_award_sum
+    end
+
+  end
 
 end
