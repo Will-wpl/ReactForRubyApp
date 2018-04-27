@@ -14,16 +14,7 @@ class Api::AuctionsController < Api::BaseController
   # PATCH update auction by ajax
   def update
     if params[:id] == '0' # create
-      @auction.publish_status = '0'
-      @auction.total_lt_peak = 0
-      @auction.total_lt_off_peak = 0
-      @auction.total_hts_peak = 0
-      @auction.total_hts_off_peak = 0
-      @auction.total_htl_peak = 0
-      @auction.total_htl_off_peak = 0
-      @auction.total_eht_peak = 0
-      @auction.total_eht_off_peak = 0
-      @auction.total_volume = 0
+      create_auction_at_update
       if @auction.save
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
         render json: @auction, status: 201
@@ -32,47 +23,8 @@ class Api::AuctionsController < Api::BaseController
       # params[:auction]['total_volume'] = Auction.set_total_volume(model_params[:total_lt_peak], model_params[:total_lt_off_peak], model_params[:total_hts_peak], model_params[:total_hts_off_peak], model_params[:total_htl_peak], model_params[:total_htl_off_peak])
       if @auction.update(model_params)
         if @auction.publish_status == Auction::PublishStatusPublished
-          days = Auction.get_days(@auction.contract_period_start_date, @auction.contract_period_end_date)
-          total_award_sum = AuctionHistory.set_total_award_sum(Auction.set_c_value(@auction.total_lt_peak, days),
-                                                               Auction.set_c_value(@auction.total_lt_off_peak, days),
-                                                               Auction.set_c_value(@auction.total_hts_peak, days),
-                                                               Auction.set_c_value(@auction.total_hts_off_peak, days),
-                                                               Auction.set_c_value(@auction.total_htl_peak, days),
-                                                               Auction.set_c_value(@auction.total_htl_off_peak, days),
-                                                               Auction.set_c_value(@auction.total_eht_peak, days),
-                                                               Auction.set_c_value(@auction.total_eht_off_peak, days),
-                                                               @auction.starting_price, @auction.starting_price,
-                                                               @auction.starting_price, @auction.starting_price,
-                                                               @auction.starting_price, @auction.starting_price,
-                                                               @auction.starting_price, @auction.starting_price)
-          total_volume = Auction.set_total_volume(
-              @auction.total_lt_peak, @auction.total_lt_off_peak,
-              @auction.total_hts_peak, @auction.total_hts_off_peak,
-              @auction.total_htl_peak, @auction.total_htl_off_peak,
-              @auction.total_eht_peak, @auction.total_eht_off_peak
-          )
-          new_total_volume = Auction.set_c_value(total_volume, days)
-
-          average_price = AuctionHistory.set_average_price(total_award_sum, new_total_volume)
-
-          Arrangement.where(auction_id: @auction.id, accept_status: Arrangement::AcceptStatusAccept)
-              .update_all(lt_peak: @auction.starting_price, lt_off_peak: @auction.starting_price,
-                          hts_peak: @auction.starting_price, hts_off_peak: @auction.starting_price,
-                          htl_peak: @auction.starting_price, htl_off_peak: @auction.starting_price,
-                          eht_peak: @auction.starting_price, eht_off_peak: @auction.starting_price)
-          AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id)
-              .update_all(bid_time: @auction.actual_begin_time, actual_bid_time: @auction.actual_begin_time,
-                          lt_peak: @auction.starting_price, lt_off_peak: @auction.starting_price,
-                          hts_peak: @auction.starting_price, hts_off_peak: @auction.starting_price,
-                          htl_peak: @auction.starting_price, htl_off_peak: @auction.starting_price,
-                          eht_peak: @auction.starting_price, eht_off_peak: @auction.starting_price,
-                          total_award_sum: total_award_sum, average_price: average_price)
-
-          # set sorted histories to redis
-          histories = AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id)
-          RedisHelper.set_current_sorted_histories(@auction.id, histories)
+          update_auction_at_update
         end
-
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
       end
       render json: @auction, status: 200
@@ -217,12 +169,7 @@ class Api::AuctionsController < Api::BaseController
         {url: '/admin/auctions/:id/online', name: 'Commence', icon: 'bidding', interface_type: 'auction'}
     ]
     data = []
-    auctions = if params.key?(:sort_by)
-                 order_by_string = get_order_by_obj_str(params[:sort_by], headers)
-                 auction.order(order_by_string)
-               else
-                 auction.order(actual_begin_time: :asc)
-               end
+    auctions = get_published_order_list(params, headers, auction)
     auctions.each do |auction|
       status = if Time.current < auction.actual_begin_time
                  'Upcoming'
@@ -245,15 +192,7 @@ class Api::AuctionsController < Api::BaseController
       users = User.retailers.retailer_approved.where(search_where_array)
       arrangements = Arrangement.find_by_auction_id(params[:id])
       ids = get_user_ids(arrangements)
-      if !params[:status].nil? && params[:status][0] == '0'
-        users = users.exclude(ids) unless ids.empty?
-      elsif !params[:status].nil? && params[:status][0] == '1'
-        users = users.selected_retailers(params[:id])
-      elsif !params[:status].nil? && (params[:status][0] == '2' || params[:status][0] == '3')
-        action_status = params[:status][0] == '2' ? '2' : '1'
-        users = users.selected_retailers_action_status(params[:id], action_status)
-      end
-
+      users = get_retailer_users(params, users, ids)
       users = users.page(params[:page_index]).per(params[:page_size])
       total = users.total_count
     else
@@ -269,19 +208,12 @@ class Api::AuctionsController < Api::BaseController
         {url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail'}
     ]
     data = []
-    users = if params.key?(:sort_by)
-              order_by_string = get_order_by_obj_str(params[:sort_by], headers)
-              users.order(order_by_string)
-            else
-              users.order(company_name: :asc)
-            end
+    users = get_retailer_order_list(params, headers, users)
     users.each do |user|
-      index = arrangements.index do |arrangement|
-        arrangement.user_id == user.id
-      end
-      arrangement = index.nil? ? nil : arrangements[index]
-      status = arrangement.nil? ? nil : arrangement.action_status
-      action = arrangement.nil? ? nil : arrangement.id
+      index = get_retailer_index(arrangements, user)
+      arrangement = get_retailer_arrangement_value(index, arrangements)
+      status = get_retailer_status_value(arrangement)
+      action = get_retailer_action_value(arrangement)
       data.push(user_id: user.id, company_name: user.company_name, select_status: status, select_action: action)
     end
     bodies = {data: data, total: total}
@@ -302,16 +234,7 @@ class Api::AuctionsController < Api::BaseController
       users = User.buyers.where(search_where_array)
       consumptions = Consumption.find_by_auction_id(params[:id])
       ids = get_user_ids(consumptions)
-
-      if !params[:status].nil? && params[:status][0] == '0'
-        users = users.exclude(ids) unless ids.empty?
-      elsif !params[:status].nil? && params[:status][0] == '1'
-        users = users.selected_buyers(params[:id])
-      elsif !params[:status].nil? && (params[:status][0] == '2' || params[:status][0] == '3')
-        action_status = params[:status][0] == '2' ? '2' : '1'
-        users = users.selected_buyers_action_status(params[:id], action_status)
-      end
-
+      users = get_buyer_users(params, users, ids)
       users = users.page(params[:page_index]).per(params[:page_size])
       total = users.total_count
     else
@@ -327,12 +250,7 @@ class Api::AuctionsController < Api::BaseController
       actions = [
           {url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail'}
       ]
-      users = if params.key?(:sort_by)
-                order_by_string = get_order_by_obj_str(params[:sort_by], headers)
-                users.order(order_by_string)
-              else
-                users.order(company_name: :asc)
-              end
+      users = get_company_buyer_order_list(params, headers, users)
     elsif consumer_type == '3'
       headers = [
           {name: 'Name', field_name: 'name', table_name: 'users'},
@@ -343,12 +261,7 @@ class Api::AuctionsController < Api::BaseController
       actions = [
           {url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail'}
       ]
-      users = if params.key?(:sort_by)
-                order_by_string = get_order_by_obj_str(params[:sort_by], headers)
-                users.order(order_by_string)
-              else
-                users.order(name: :asc)
-              end
+      users = get_individual_buyer_order_list(params, headers, users)
     else
       headers = []
       actions = []
@@ -356,12 +269,10 @@ class Api::AuctionsController < Api::BaseController
     data = []
     users.each do |user|
       # status = ids.include?(user.id) ? '1' : '0'
-      index = consumptions.index do |consumption|
-        consumption.user_id == user.id
-      end
-      consumption = index.nil? ? nil : consumptions[index]
-      status = consumption.nil? ? nil : consumption.action_status
-      action = consumption.nil? ? nil : consumption.id
+      index = get_buyer_index(consumptions, user)
+      consumption = get_buyer_consumption_value(index, consumptions)
+      status = get_buyer_status_value(consumption)
+      action = get_buyer_action_value(consumption)
       if consumer_type == '2'
         data.push(user_id: user.id, company_name: user.company_name, select_status: status, select_action: action)
       elsif consumer_type == '3'
@@ -402,13 +313,14 @@ class Api::AuctionsController < Api::BaseController
 
   def buyer_dashboard
     consumptions_company = []
-    Consumption.find_by_auction_id(params[:id]).find_by_user_consumer_type('2').order(:participation_status).each do |consumption|
+    consumptions = Consumption.find_by_auction_id(params[:id])
+    consumptions.find_by_user_consumer_type('2').order(:participation_status).each do |consumption|
       consumptions_company.push(id: consumption.id, name: consumption.user.company_name, participation_status: consumption.participation_status)
     end
     count_company = consumptions_company.count
 
     consumptions_individual = []
-    Consumption.find_by_auction_id(params[:id]).find_by_user_consumer_type('3').order(:participation_status).each do |consumption|
+    consumptions.find_by_user_consumer_type('3').order(:participation_status).each do |consumption|
       consumptions_individual.push(id: consumption.id, name: consumption.user.name, participation_status: consumption.participation_status)
     end
     count_individual = consumptions_individual.count
@@ -524,4 +436,155 @@ class Api::AuctionsController < Api::BaseController
     return auction_result, consumption, tender_state, consumption_details
   end
 
+  def create_auction_at_update
+    @auction.publish_status = '0'
+    @auction.total_lt_peak = 0
+    @auction.total_lt_off_peak = 0
+    @auction.total_hts_peak = 0
+    @auction.total_hts_off_peak = 0
+    @auction.total_htl_peak = 0
+    @auction.total_htl_off_peak = 0
+    @auction.total_eht_peak = 0
+    @auction.total_eht_off_peak = 0
+    @auction.total_volume = 0
+  end
+
+  def update_auction_at_update
+    days = Auction.get_days(@auction.contract_period_start_date, @auction.contract_period_end_date)
+    total_award_sum = AuctionHistory.set_total_award_sum(Auction.set_c_value(@auction.total_lt_peak, days),
+                                                         Auction.set_c_value(@auction.total_lt_off_peak, days),
+                                                         Auction.set_c_value(@auction.total_hts_peak, days),
+                                                         Auction.set_c_value(@auction.total_hts_off_peak, days),
+                                                         Auction.set_c_value(@auction.total_htl_peak, days),
+                                                         Auction.set_c_value(@auction.total_htl_off_peak, days),
+                                                         Auction.set_c_value(@auction.total_eht_peak, days),
+                                                         Auction.set_c_value(@auction.total_eht_off_peak, days),
+                                                         @auction.starting_price, @auction.starting_price,
+                                                         @auction.starting_price, @auction.starting_price,
+                                                         @auction.starting_price, @auction.starting_price,
+                                                         @auction.starting_price, @auction.starting_price)
+    total_volume = Auction.set_total_volume(
+        @auction.total_lt_peak, @auction.total_lt_off_peak,
+        @auction.total_hts_peak, @auction.total_hts_off_peak,
+        @auction.total_htl_peak, @auction.total_htl_off_peak,
+        @auction.total_eht_peak, @auction.total_eht_off_peak
+    )
+    new_total_volume = Auction.set_c_value(total_volume, days)
+
+    average_price = AuctionHistory.set_average_price(total_award_sum, new_total_volume)
+
+    Arrangement.where(auction_id: @auction.id, accept_status: Arrangement::AcceptStatusAccept)
+        .update_all(lt_peak: @auction.starting_price, lt_off_peak: @auction.starting_price,
+                    hts_peak: @auction.starting_price, hts_off_peak: @auction.starting_price,
+                    htl_peak: @auction.starting_price, htl_off_peak: @auction.starting_price,
+                    eht_peak: @auction.starting_price, eht_off_peak: @auction.starting_price)
+    AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id)
+        .update_all(bid_time: @auction.actual_begin_time, actual_bid_time: @auction.actual_begin_time,
+                    lt_peak: @auction.starting_price, lt_off_peak: @auction.starting_price,
+                    hts_peak: @auction.starting_price, hts_off_peak: @auction.starting_price,
+                    htl_peak: @auction.starting_price, htl_off_peak: @auction.starting_price,
+                    eht_peak: @auction.starting_price, eht_off_peak: @auction.starting_price,
+                    total_award_sum: total_award_sum, average_price: average_price)
+
+    # set sorted histories to redis
+    histories = AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id)
+    RedisHelper.set_current_sorted_histories(@auction.id, histories)
+  end
+
+  def get_published_order_list(params, headers, auction)
+    if params.key?(:sort_by)
+      order_by_string = get_order_by_obj_str(params[:sort_by], headers)
+      auction.order(order_by_string)
+    else
+      auction.order(actual_begin_time: :asc)
+    end
+  end
+
+  def get_retailer_users(params, users, ids)
+    if !params[:status].nil? && params[:status][0] == '0'
+      users = users.exclude(ids) unless ids.empty?
+    elsif !params[:status].nil? && params[:status][0] == '1'
+      users = users.selected_retailers(params[:id])
+    elsif !params[:status].nil? && (params[:status][0] == '2' || params[:status][0] == '3')
+      action_status = params[:status][0] == '2' ? '2' : '1'
+      users = users.selected_retailers_action_status(params[:id], action_status)
+    end
+    users
+  end
+
+  def get_retailer_order_list(params, headers, users)
+    if params.key?(:sort_by)
+      order_by_string = get_order_by_obj_str(params[:sort_by], headers)
+      users.order(order_by_string)
+    else
+      users.order(company_name: :asc)
+    end
+  end
+
+  def get_retailer_index(arrangements, user)
+    arrangements.index do |arrangement|
+      arrangement.user_id == user.id
+    end
+  end
+
+  def get_retailer_arrangement_value(index, arrangements)
+    index.nil? ? nil : arrangements[index]
+  end
+
+  def get_retailer_status_value(arrangement)
+    arrangement.nil? ? nil : arrangement.action_status
+  end
+
+  def get_retailer_action_value(arrangement)
+    arrangement.nil? ? nil : arrangement.id
+  end
+
+
+  def get_buyer_users(params, users, ids)
+    if !params[:status].nil? && params[:status][0] == '0'
+      users = users.exclude(ids) unless ids.empty?
+    elsif !params[:status].nil? && params[:status][0] == '1'
+      users = users.selected_buyers(params[:id])
+    elsif !params[:status].nil? && (params[:status][0] == '2' || params[:status][0] == '3')
+      action_status = params[:status][0] == '2' ? '2' : '1'
+      users = users.selected_buyers_action_status(params[:id], action_status)
+    end
+    users
+  end
+
+  def get_company_buyer_order_list(params, headers, users)
+    if params.key?(:sort_by)
+      order_by_string = get_order_by_obj_str(params[:sort_by], headers)
+      users.order(order_by_string)
+    else
+      users.order(company_name: :asc)
+    end
+  end
+
+  def get_individual_buyer_order_list(params, headers, users)
+    if params.key?(:sort_by)
+      order_by_string = get_order_by_obj_str(params[:sort_by], headers)
+      users.order(order_by_string)
+    else
+      users.order(name: :asc)
+    end
+  end
+
+  def get_buyer_index(consumptions, user)
+    consumptions.index do |consumption|
+      consumption.user_id == user.id
+    end
+  end
+
+  def get_buyer_consumption_value(index, consumptions)
+    index.nil? ? nil : consumptions[index]
+  end
+
+  def get_buyer_status_value(consumption)
+    consumption.nil? ? nil : consumption.action_status
+  end
+
+  def get_buyer_action_value(consumption)
+    consumption.nil? ? nil : consumption.id
+  end
 end
