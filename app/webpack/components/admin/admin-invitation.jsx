@@ -292,18 +292,22 @@ upload(type, index){
                                                 <a className="upload_file_btn">
                                                     <dfn>No file selected...</dfn>
                                                     {/* accept="application/pdf,application/msword" */}
-                                                    {required === "required" ?
+                                                    {/*{required === "required" ?*/}
+                                                    {/*<div>*/}
+                                                        {/*<input type="file" required="required" ref={type+index}  onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.state.disabled} />*/}
+                                                        {/*<b>Browse..</b>*/}
+                                                        {/*<div className="required_error">*/}
+                                                            {/*Please select file.*/}
+                                                        {/*</div>*/}
+                                                    {/*</div>*/}
+                                                    {/*:<div>*/}
+                                                        {/*<input type="file" ref={type+index} onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.state.disabled} />*/}
+                                                        {/*<b>Browse..</b>*/}
+                                                    {/*</div>}*/}
                                                     <div>
-                                                        <input type="file" required="required" ref={type+index}  onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.state.disabled} />
-                                                        <b>Browse..</b>
-                                                        <div className="required_error">
-                                                            Please select file.
-                                                        </div>
-                                                    </div>
-                                                    :<div>
                                                         <input type="file" ref={type+index} onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.state.disabled} />
                                                         <b>Browse..</b>
-                                                    </div>}
+                                                    </div>
                                                 </a>:''}
                                                 {uploadStatus?
                                                 <div className="progress">
@@ -378,10 +382,12 @@ upload(type, index){
                     if(this.state.buyer_company_select === 0 && this.state.buyer_individual_select === 0){
                         this.timeBar(type);
                         doSend = false;
-                    }else if(this.state.fileData["buyer_tc_upload"][0].files <= 0){
-                        this.timeBar(type);
-                        doSend = false;
-                    }else{
+                    }
+                    // else if(this.state.fileData["buyer_tc_upload"][0].files <= 0){
+                    //     this.timeBar(type);
+                    //     doSend = false;
+                    // }
+                    else{
                         doSend = true;
                     }
                 }
@@ -545,7 +551,7 @@ render() {
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
                         <label className="lm--formItem-left lm--formItem-label string required">
-                        <abbr title="required">*</abbr> Buyer T&C Upload :
+                         Buyer T&C Upload :
                         </label>
                         <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                         {this.addinputfile("buyer_tc_upload", "required")}

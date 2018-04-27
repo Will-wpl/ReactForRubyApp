@@ -27,6 +27,7 @@ export class Showhistory extends React.Component{
                     <h4><span>History</span><a onClick={this.closeModal.bind(this)}>X</a></h4>
                     <div className="history_nr">
                     {this.state.props_data.map((item,index)=>{
+                        console.log(item);
                         return <dl key={index}>
                                     {item.propose_deviation && item.retailer_response ?
                                     <dd>
@@ -38,7 +39,7 @@ export class Showhistory extends React.Component{
                                     </dd>:''}
                                     {item.sp_response?
                                     <dt>
-                                        <dfn><abbr></abbr>SP</dfn>
+                                        <dfn><abbr></abbr>SP Group</dfn>
                                         <span>{item.sp_response?decodeURI(item.sp_response):""}</span>
                                     </dt>:''}
                                 </dl>
