@@ -226,7 +226,15 @@ export class FillConsumption extends Component {
                 <h1>Participate in upcoming {this.state.name} exercise on {moment(this.state.time).format('D MMM YYYY hh:mm a')}</h1>
                 <form name="buyer_form" method="post" onSubmit={this.checkSuccess.bind(this)}>
                 <div className="u-grid buyer mg0">
-                <h4 className="col-sm-12 u-mb2"><input name="agree_auction" type="checkbox" disabled={this.state.disabled} required /> I agree to the {this.state.link?<a className="cursor" download={this.state.link.file_name} href={`/${this.state.link.file_path}`}>terms and conditions.</a>:'terms and conditions.'}</h4>
+                    {this.state.link ?
+                        <h4 className="col-sm-12 u-mb2">
+                            <input name="agree_auction" type="checkbox" disabled={this.state.disabled} required />&nbsp;&nbsp;
+                            I agree to the <a className="cursor" download={this.state.link.file_name} href={`/${this.state.link.file_path}`}>terms and conditions.</a>
+                        </h4>:""
+                    }
+
+                {/*<h4 className="col-sm-12 u-mb2"><input name="agree_auction" type="checkbox" disabled={this.state.disabled} required /> I agree to the {this.state.link?<a className="cursor" download={this.state.link.file_name} href={`/${this.state.link.file_path}`}>terms and conditions.</a>:'terms and conditions.'}</h4>*/}
+
                 <h4 className="col-sm-12 u-mb2">Last Status of Participation : {this.status}</h4>
                     <div className="col-sm-12 col-md-8">
                     <DoFillConsumption changeSiteList={this.changeSiteList.bind(this)} site_list={this.state.site_list} checked={this.state.checked} remove={this.remove_site.bind(this)} />
