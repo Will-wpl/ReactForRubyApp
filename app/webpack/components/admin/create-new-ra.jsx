@@ -279,16 +279,13 @@ export class CreateNewRA extends Component {
                             sessionStorage.auction_id = res.id;
                             if(this.props.left_name){
                                 this.setState({
-                                    text:this.auction.name + " has been successfully updated. ",
-                                    disabled:true
+                                    text:this.auction.name + " has been successfully updated. "
                                 });
                             }else{
                                 this.setState({
-                                    text:this.auction.name + " has been successfully saved. ",
-                                    disabled:true
+                                    text:this.auction.name + " has been successfully saved. "
                                 });
-                            }
-                            
+                            }                    
                         }, error => {
                             this.setState({
                                 text:'Request exception,Save failed!'
