@@ -12,7 +12,9 @@ export class Proposedeviations extends React.Component{
             peak_htl:0,peak_eht:0,off_peak_lt:0,off_peak_hts:0,
             off_peak_htl:0,off_peak_eht:0,buttonType:'',
             select_list:[],alldisabled:false,
-            deviations_list:[]
+            deviations_list:[],detailType:'',
+            title:'',detail:'',detail_id:'',textdisabled:false,
+            status:null
         }
     }
     componentDidMount() {
@@ -63,7 +65,7 @@ export class Proposedeviations extends React.Component{
                 return;
             }
             let check = this.state.deviations_list.find((item,index)=>{
-                return $("#item_"+(index)).val() === "" || $("#clause_"+(index)).val() === "" || $("#deviation_"+(index)).val() === "" || $("#response_"+(index)).val() === "";
+                return $("#item_"+(index)).val() === "" || $("#clause_"+(index)).val() === "" || this.state.deviations_list[index].propose_deviation === "" || this.state.deviations_list[index].retailer_response === "";
             })
             if(check){
                 this.refs.Modal.showModal();
@@ -133,7 +135,7 @@ export class Proposedeviations extends React.Component{
             return;
         }
         let check = this.state.deviations_list.find((item,index)=>{
-            return $("#item_"+(index)).val() === "" || $("#clause_"+(index)).val() === "" || $("#deviation_"+(index)).val() === "" || $("#response_"+(index)).val() === "";
+            return $("#item_"+(index)).val() === "" || $("#clause_"+(index)).val() === "" || this.state.deviations_list[index].propose_deviation === "" || this.state.deviations_list[index].retailer_response === "";
         })
         if(check){
             this.refs.Modal.showModal();
@@ -159,7 +161,7 @@ export class Proposedeviations extends React.Component{
     editData(sum){
         let deviationslist = [];
         this.state.deviations_list.map((item, index) => {
-            let deviation = encodeURI($("#deviation_"+(index)).val()),response = encodeURI($("#response_"+(index)).val());
+            let deviation = item.propose_deviation,response = item.retailer_response;
             if(item.sp_response_status != sum){
                 if(item.sp_response_status == ""){
                     deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+deviation+'","retailer_response":"'+response+'","sp_response_status":"'+sum+'"},';
@@ -206,19 +208,36 @@ export class Proposedeviations extends React.Component{
         this.setState({text:"Please click 'Save' button to effect the change."});
     }
     showhistory(id){
+        this.setState({detailType:"history"})
         getTenderhistory('retailer',id).then(res=>{
             console.log(res);
             this.refs.history.showModal(res);
         })
     }
-
-    showDetails(text){
-        console.log(text);
-        this.setState({text:text},()=>{
-            this.refs.Modal.showModal();
-        });
+    showpropose(title,detail,id,disabled,status){
+        this.setState({
+            detailType:"propose",
+            title:title,
+            detail:detail,
+            detail_id:id,
+            textdisabled:disabled,
+            status:status
+        })
+        this.refs.history.showModal();
     }
-
+    editDetail(detail){
+        console.log(detail);
+        if(this.state.detail_id != ''){
+            let list = this.state.deviations_list,id=this.state.detail_id;
+            //$("#"+this.state.detail_id).val(detail);
+            if(id.split("_")[0] == "deviation"){
+                list[id.split("_")[1]].propose_deviation = detail;
+            }else{
+                list[id.split("_")[1]].retailer_response = detail;
+            }
+            this.setState({deviations_list:list});
+        }   
+    }
     render(){
         return(
             <div className="propose_deviations u-mt3">
@@ -243,9 +262,9 @@ export class Proposedeviations extends React.Component{
                                             return (<tr key={item.id}>
                                                     <td>{item.item}<input id={"item_"+(index)} type="hidden" defaultValue={item.item}/></td>
                                                     <td >{item.clause}<input type="hidden" id={"clause_"+(index)} defaultValue={item.clause}/></td>
-                                                    <td ><textarea className="show_text" defaultValue={decodeURI(item.propose_deviation)}  disabled/><input type="hidden" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
-                                                    <td ><textarea className="show_text" defaultValue={decodeURI(item.retailer_response)} disabled/><input disabled type="hidden" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
-                                                    <td ><textarea className="show_text" defaultValue={decodeURI(item.sp_response)} disabled/></td>
+                                                    <td><button onClick={this.showpropose.bind(this,"Propose Deviation",item.propose_deviation,'',true,false)}>Details</button><input type="hidden" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
+                                                    <td><button onClick={this.showpropose.bind(this,"Retailer Response",item.retailer_response,'',true,false)} >Details</button><input disabled type="hidden" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
+                                                    <td><button onClick={this.showpropose.bind(this,"SP Response",item.sp_response,'',true,item.response_status)} >Details</button></td>
                                                     <td>
                                                         <button id={"history_"+index} onClick={this.showhistory.bind(this,item.id)} >History</button>
                                                         <button disabled={this.props.propsdisabled?true:(this.state.alldisabled?true:(item.sp_response_status === "4" ? true : false))} id={"withdraw_"+index} onClick={this.showConfirm.bind(this,'Withdraw',{id:item.id,index:index})}>Withdraw</button>
@@ -272,9 +291,9 @@ export class Proposedeviations extends React.Component{
                                                             <input type="text" id={"clause_"+(index)} defaultValue={item.clause}/>:<div>{item.clause}<input type="hidden" id={"clause_"+(index)} defaultValue={item.clause}/></div>)
                                                             :<input type="text" id={"clause_"+(index)} defaultValue={item.clause}/>))}
                                                         </td>
-                                                        <td ><textarea id={"deviation_"+(index)} defaultValue={decodeURI(item.propose_deviation)}  disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
-                                                        <td ><textarea id={"response_"+(index)} defaultValue={decodeURI(item.retailer_response)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
-                                                        <td ><textarea className="show_text" defaultValue={item.sp_response?decodeURI(item.sp_response):''} disabled/></td>
+                                                        <td><button id={"deviation_"+(index)} onClick={this.showpropose.bind(this,"Propose Deviation",item.propose_deviation,'deviation_'+index,this.props.propsdisabled?true:(this.state.alldisabled),false)}>Details</button></td>
+                                                        <td><button id={"response_"+(index)} onClick={this.showpropose.bind(this,"Retailer Response",item.retailer_response,'response_'+index,this.props.propsdisabled?true:(this.state.alldisabled),false)} >Details</button></td>
+                                                        <td><button onClick={this.showpropose.bind(this,"SP Response",item.sp_response,'',true,item.response_status)} >Details</button></td>
                                                         <td>{item.item === ""?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>:
                                                         (item.sp_response_status==='2'?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>
                                                         :<div>
@@ -289,9 +308,9 @@ export class Proposedeviations extends React.Component{
                                     return <tr key={index}>
                                                 <td>{item.item}</td>
                                                 <td>{item.clause}</td>
-                                                <td><textarea className="show_text" defaultValue={decodeURI(item.propose_deviation)} onClick={this.showDetails.bind(this,decodeURI(item.propose_deviation))}/></td>
-                                                <td><textarea className="show_text" defaultValue={decodeURI(item.retailer_response)} onClick={this.showDetails.bind(this,decodeURI(item.retailer_response))}/></td>
-                                                <td><textarea className="show_text" defaultValue={decodeURI(item.sp_response)} onClick={this.showDetails.bind(this,decodeURI(item.sp_response))}/></td>
+                                                <td><button onClick={this.showpropose.bind(this,"Propose Deviation",item.propose_deviation,'',true,false)}>Details</button><input type="hidden" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
+                                                <td><button onClick={this.showpropose.bind(this,"Retailer Response",item.retailer_response,'',true,false)} >Details</button><input disabled type="hidden" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
+                                                <td><button onClick={this.showpropose.bind(this,"SP Response",item.sp_response,'',true,item.response_status)} >Details</button></td>
                                                 <td><button onClick={this.showhistory.bind(this,item.id)}>History</button></td>
                                             </tr>
                                         })
@@ -308,7 +327,7 @@ export class Proposedeviations extends React.Component{
                         }
                     </div>
                 </div>
-                <Showhistory ref="history" />
+                <Showhistory ref="history" status={this.state.status} textdisabled={this.state.textdisabled} type={this.state.detailType} title={this.state.title} detail={this.state.detail} detail_id={this.state.detail_id} editDetail={this.editDetail.bind(this)} />
                 <Modal text={this.state.text} acceptFunction={this.state.buttonType === 'Withdraw_Deviations'?this.withdrawAllDeviations.bind(this):(this.state.buttonType === 'Withdraw'? this.Withdraw.bind(this):this.submitDeviations.bind(this))} ref="Modal" />
             </div>
         )

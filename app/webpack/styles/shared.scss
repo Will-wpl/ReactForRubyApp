@@ -177,6 +177,10 @@ abbr[title]{color: #fe0000; text-decoration: none;}
         span{ float: left; padding-left:15px; color:#fff;}
         a{ float: right; padding-right:15px; color:#fff; cursor: pointer;}
       }
+      textarea.detail_show{
+        width: 96%; margin:10px auto; height:300px; color:#333;
+      }
+      a.detail_show_btn{ float: right; width:80px; border-radius: 5px; display: block; height:24px; background:#00b0b2; line-height: 24px; text-align: center; margin: 0px 2% 10px 0px; color: #fff;}
       .history_nr{overflow-y: auto; height:362px;
         dl{ width: 100%; 
             dd{ width:92%; display: block; overflow: hidden; margin: 15px auto; font-weight: normal;
@@ -196,6 +200,9 @@ abbr[title]{color: #fe0000; text-decoration: none;}
             }
         }
       } 
+  }
+  .showbig{ width: 96%; margin: 2% auto;
+    textarea.detail_show{ height: 420px;}
   }
 }
 
@@ -606,7 +613,7 @@ body.choose{
     td{height:110px;
       div{ cursor: pointer;
         width: 100%; height: 100%; background: #00afb1; position: relative;
-        &.current{box-shadow: 0px 0px 20px yellow;}
+        &.current{box-shadow: 0px 0px 20px yellow !important;}
         &.step1{background:#00afb1 url("../images/sign_confidentiality_undertaking.png") no-repeat center; background-size: 100%;}
         &.step2{background:#00afb1 url("../images/ender_documents.png") no-repeat center; background-size: 100%;}
         &.step3{background:#00afb1 url("../images/deviations.png") no-repeat center; background-size: 100%;}
