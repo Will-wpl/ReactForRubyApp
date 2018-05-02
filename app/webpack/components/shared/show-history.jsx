@@ -6,13 +6,15 @@ export class Showhistory extends React.Component{
             modalshowhide:"modal_hide",
             type:'default',
             secondStatus:"live_hide",
+            retailer_name:'',
             props_data:[]
         }
     }
     showModal(data){
         this.setState({
             modalshowhide:"modal_show",
-            props_data:data?data:[]
+            props_data:data?data.details:[],
+            retailer_name:data?data.retailer_name:''
         })
     }
     closeModal(){
@@ -30,7 +32,7 @@ export class Showhistory extends React.Component{
                         return <dl key={index}>
                                     {item.propose_deviation && item.retailer_response ?
                                     <dd>
-                                        <dfn><abbr></abbr>Retailer</dfn>
+                                        <dfn><abbr></abbr>{this.state.retailer_name}</dfn>
                                         <span>
                                             Proposed Deviation : {item.propose_deviation?decodeURI(item.propose_deviation):""}<br/>
                                             Response : {item.retailer_response?decodeURI(item.retailer_response):""}
@@ -38,7 +40,7 @@ export class Showhistory extends React.Component{
                                     </dd>:''}
                                     {item.sp_response?
                                     <dt>
-                                        <dfn><abbr></abbr>SP</dfn>
+                                        <dfn><abbr></abbr>SP Group</dfn>
                                         <span>{item.sp_response?decodeURI(item.sp_response):""}</span>
                                     </dt>:''}
                                 </dl>

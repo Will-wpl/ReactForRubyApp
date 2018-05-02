@@ -158,15 +158,27 @@ export default class BidForm extends Component {
                         <thead>
                         <tr>
                             <th></th>
-                            <th style={this.props.isLtVisible ? {} : {display: 'none'}}>LT ($/kWh)</th>
-                            <th style={this.props.isHtsVisible ? {} : {display: 'none'}}>HT Small ($/kWh)</th>
-                            <th style={this.props.isHtlVisible ? {} : {display: 'none'}}>HT Large ($/kWh)</th>
-                            <th style={this.props.isEhtVisible ? {} : {display: 'none'}}>EHT ($/kWh)</th>
+                            <th style={this.props.isLtVisible ? {} : {display: 'none'}}>
+                                <div>LT</div>
+                                <div>($/kWh)</div>
+                            </th>
+                            <th style={this.props.isHtsVisible ? {} : {display: 'none'}}>
+                                <div>HT Small</div>
+                                <div>($/kWh)</div>
+                            </th>
+                            <th style={this.props.isHtlVisible ? {} : {display: 'none'}}>
+                                <div>HT Large</div>
+                                <div>($/kWh)</div>
+                            </th>
+                            <th style={this.props.isEhtVisible ? {} : {display: 'none'}}>
+                                <div>EHT</div>
+                                <div>($/kWh)</div>
+                            </th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
-                            <td>Peak (7am-7pm)</td>
+                            <td>Peak<br/>(7am-7pm)</td>
                             <td style={this.props.isLtVisible ? {} : {display: 'none'}}>$0.<input type="text" name="peak_lt" value={this.state.configs[1]}
                                           style={{borderColor: this.state.status[1] ? 'white' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 1)}
@@ -185,7 +197,7 @@ export default class BidForm extends Component {
                                            maxLength={4}/></td>
                         </tr>
                         <tr>
-                            <td>Off-Peak (7pm-7am)</td>
+                            <td>Off-Peak <br/>(7pm-7am)</td>
                             <td style={this.props.isLtVisible ? {} : {display: 'none'}}>$0.<input type="text" name="off_peak_lt" value={this.state.configs[0]}
                                           style={{borderColor: this.state.status[0] ? 'white' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 0)}

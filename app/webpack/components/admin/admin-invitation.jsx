@@ -545,7 +545,7 @@ render() {
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
                         <label className="lm--formItem-left lm--formItem-label string required">
-                        <abbr title="required">*</abbr> Buyer T&C Upload :
+                            <abbr title="required">*</abbr>Buyer T&C Upload :
                         </label>
                         <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                         {this.addinputfile("buyer_tc_upload", "required")}

@@ -162,10 +162,11 @@ class Api::TendersController < Api::TendersBaseController
 
   def history
     details = TenderChatDetail.where('tender_chat_id = ?', params[:chat_id]).order(id: :asc)
+    company_name = TenderChat.find(params[:chat_id]).arrangement.user.company_name
     details = details.reject do |detail|
       detail.response_status == '2'
     end
-    render json: details, status: 200
+    render json: { details: details, retailer_name: company_name }, status: 200
   end
 
   def node3_retailer_withdraw

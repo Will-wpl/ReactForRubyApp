@@ -211,6 +211,14 @@ export class Proposedeviations extends React.Component{
             this.refs.history.showModal(res);
         })
     }
+
+    showDetails(text){
+        console.log(text);
+        this.setState({text:text},()=>{
+            this.refs.Modal.showModal();
+        });
+    }
+
     render(){
         return(
             <div className="propose_deviations u-mt3">
@@ -235,7 +243,7 @@ export class Proposedeviations extends React.Component{
                                             return (<tr key={item.id}>
                                                     <td>{item.item}<input id={"item_"+(index)} type="hidden" defaultValue={item.item}/></td>
                                                     <td >{item.clause}<input type="hidden" id={"clause_"+(index)} defaultValue={item.clause}/></td>
-                                                    <td ><textarea className="show_text" defaultValue={decodeURI(item.propose_deviation)} disabled/><input type="hidden" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
+                                                    <td ><textarea className="show_text" defaultValue={decodeURI(item.propose_deviation)}  disabled/><input type="hidden" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
                                                     <td ><textarea className="show_text" defaultValue={decodeURI(item.retailer_response)} disabled/><input disabled type="hidden" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
                                                     <td ><textarea className="show_text" defaultValue={decodeURI(item.sp_response)} disabled/></td>
                                                     <td>
@@ -264,7 +272,7 @@ export class Proposedeviations extends React.Component{
                                                             <input type="text" id={"clause_"+(index)} defaultValue={item.clause}/>:<div>{item.clause}<input type="hidden" id={"clause_"+(index)} defaultValue={item.clause}/></div>)
                                                             :<input type="text" id={"clause_"+(index)} defaultValue={item.clause}/>))}
                                                         </td>
-                                                        <td ><textarea id={"deviation_"+(index)} defaultValue={decodeURI(item.propose_deviation)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
+                                                        <td ><textarea id={"deviation_"+(index)} defaultValue={decodeURI(item.propose_deviation)}  disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
                                                         <td ><textarea id={"response_"+(index)} defaultValue={decodeURI(item.retailer_response)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
                                                         <td ><textarea className="show_text" defaultValue={item.sp_response?decodeURI(item.sp_response):''} disabled/></td>
                                                         <td>{item.item === ""?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>:
@@ -281,9 +289,9 @@ export class Proposedeviations extends React.Component{
                                     return <tr key={index}>
                                                 <td>{item.item}</td>
                                                 <td>{item.clause}</td>
-                                                <td><textarea className="show_text" defaultValue={decodeURI(item.propose_deviation)} disabled/></td>
-                                                <td><textarea className="show_text" defaultValue={decodeURI(item.retailer_response)} disabled/></td>
-                                                <td><textarea className="show_text" defaultValue={decodeURI(item.sp_response)} disabled/></td>
+                                                <td><textarea className="show_text" defaultValue={decodeURI(item.propose_deviation)} onClick={this.showDetails.bind(this,decodeURI(item.propose_deviation))}/></td>
+                                                <td><textarea className="show_text" defaultValue={decodeURI(item.retailer_response)} onClick={this.showDetails.bind(this,decodeURI(item.retailer_response))}/></td>
+                                                <td><textarea className="show_text" defaultValue={decodeURI(item.sp_response)} onClick={this.showDetails.bind(this,decodeURI(item.sp_response))}/></td>
                                                 <td><button onClick={this.showhistory.bind(this,item.id)}>History</button></td>
                                             </tr>
                                         })

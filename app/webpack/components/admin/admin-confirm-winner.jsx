@@ -63,7 +63,7 @@ showDetail(type,obj){
             fnStatus:true
         })
         this.setState({
-            text:"Are you sure you want to confirm the winner?"
+            text:"Are you sure you want to select the winner?"
         })
         this.refs.Modal.showModal("comfirm");
     }else{
@@ -116,7 +116,7 @@ render() {
                             <div className="winnerPrice_main">
                                 <a className="lm--button lm--button--primary u-mt3" onClick={this.showDetail.bind(this,'void')}>Void Reverse Auction</a>
                                {/* <a className="lm--button lm--button--primary u-mt3" >Alternate Winner</a>*/}
-                                <a className="lm--button lm--button--primary u-mt3" onClick={this.showDetail.bind(this,'win')} >Confirm Winner</a>
+                                <a className="lm--button lm--button--primary u-mt3" onClick={this.showDetail.bind(this,'win')} >Select Winner</a>
                             </div>
                             
                         </div>
