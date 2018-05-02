@@ -164,13 +164,13 @@ upload(type, index){
             let timeBar;
             let requiredObj = this.state.fileData,result = true;
             clearTimeout(timeBar);
-            if(requiredObj['buyer_tc_upload'][0].files.length <=0){
-                $("#buyer_tc_upload0").next().next().fadeIn(300);
-                timeBar = setTimeout(()=>{
-                    $("#buyer_tc_upload0").next().next().fadeOut(300);
-                },3000)
-                result = false;
-            }
+            // if(requiredObj['buyer_tc_upload'][0].files.length <=0){
+            //     $("#buyer_tc_upload0").next().next().fadeIn(300);
+            //     timeBar = setTimeout(()=>{
+            //         $("#buyer_tc_upload0").next().next().fadeOut(300);
+            //     },3000)
+            //     result = false;
+            // }
             if(requiredObj['retailer_confidentiality_undertaking_upload'][0].files.length <=0){
                 $("#retailer_confidentiality_undertaking_upload0").next().next().fadeIn(300);
                 timeBar = setTimeout(()=>{
@@ -276,9 +276,9 @@ upload(type, index){
         addinputfile(type, required){
              let uploadStatus = true
                 if(
-                   this.state.retailer_send != 0 
-                || this.state.buyer_individual_send != 0 && type === "buyer_tc_upload"
-                || this.state.buyer_company_send != 0 && type === "buyer_tc_upload"
+                  this.state.retailer_send != 0
+                //   || this.state.buyer_individual_send != 0 && type === "buyer_tc_upload"
+                // || this.state.buyer_company_send != 0 && type === "buyer_tc_upload"
                 || this.state.readOnly){
                     uploadStatus = false;
                 }
@@ -304,7 +304,7 @@ upload(type, index){
                                                         <input type="file" ref={type+index} onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.state.disabled} />
                                                         <b>Browse..</b>
                                                     </div>}
-                                                </a>:''}
+                                                </a>:""}
                                                 {uploadStatus?
                                                 <div className="progress">
                                                     <div className="progress-bar" style={{width:"0%"}}>0%</div>
@@ -378,10 +378,12 @@ upload(type, index){
                     if(this.state.buyer_company_select === 0 && this.state.buyer_individual_select === 0){
                         this.timeBar(type);
                         doSend = false;
-                    }else if(this.state.fileData["buyer_tc_upload"][0].files <= 0){
-                        this.timeBar(type);
-                        doSend = false;
-                    }else{
+                    }
+                    // else if(this.state.fileData["buyer_tc_upload"][0].files <= 0){
+                    //     this.timeBar(type);
+                    //     doSend = false;
+                    // }
+                    else{
                         doSend = true;
                     }
                 }
@@ -545,7 +547,8 @@ render() {
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
                         <label className="lm--formItem-left lm--formItem-label string required">
-                            <abbr title="required">*</abbr>Buyer T&C Upload :
+                           {/* <abbr title="required">*</abbr>*/}
+                            Buyer T&C Upload :
                         </label>
                         <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                         {this.addinputfile("buyer_tc_upload", "required")}
