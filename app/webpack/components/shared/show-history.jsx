@@ -14,24 +14,21 @@ export class Showhistory extends React.Component{
     }
     componentWillReceiveProps(next) {
         this.setState({textVal:''});
-        if(next.detail){
-            if(next.textdisabled && next.status){
-                if(next.status[1] == "0"){
-                    this.setState({textVal:"Rejected : "+decodeURI(next.detail)});
-                }else{
-                    this.setState({textVal:"Accepted : "+decodeURI(next.detail)});
-                }                
+        this.checkShowdetail(next);
+    }
+    checkShowdetail(next){
+        if(next.textdisabled && next.status){
+            if(next.status[1] == "0"){
+                this.setState({textVal:"Rejected : "+decodeURI(next.detail)});
+            }else if(next.status[1] == "1"){
+                this.setState({textVal:"Accepted : "+decodeURI(next.detail)});
             }else{
-                this.setState({textVal:decodeURI(next.detail)});
-            }           
+                this.setState({textVal:next.detail!=null?decodeURI(next.detail):''});
+            }                
         }else{
-            if(next.textdisabled && next.status){
-                if(next.status[1] == "0"){
-                    this.setState({textVal:"Rejected : "+decodeURI(next.detail)});
-                }else{
-                    this.setState({textVal:"Accepted : "+decodeURI(next.detail)});
-                }
-            }
+            if(next.detail){
+                this.setState({textVal:next.detail!=null?decodeURI(next.detail):''});
+            }    
         }
     }
     changeVal(e){
