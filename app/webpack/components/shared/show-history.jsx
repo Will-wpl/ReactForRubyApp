@@ -24,6 +24,14 @@ export class Showhistory extends React.Component{
             }else{
                 this.setState({textVal:decodeURI(next.detail)});
             }           
+        }else{
+            if(next.textdisabled && next.status){
+                if(next.status[1] == "0"){
+                    this.setState({textVal:"Rejected : "+decodeURI(next.detail)});
+                }else{
+                    this.setState({textVal:"Accepted : "+decodeURI(next.detail)});
+                }
+            }
         }
     }
     changeVal(e){
@@ -31,7 +39,7 @@ export class Showhistory extends React.Component{
         this.setState({textVal:val});
     }
     showModal(data){
-        //console.log(data);
+        console.log(data);
         this.setState({
             modalshowhide:"modal_show",
             props_data:data?data.details:[],
@@ -70,12 +78,12 @@ export class Showhistory extends React.Component{
                                             Response : {item.retailer_response?decodeURI(item.retailer_response):""}
                                         </span>
                                     </dd>:''}
-                                    {item.sp_response?
+                                    {item.sp_response!=null?
                                     <dt>
                                         <dfn><abbr></abbr>SP</dfn>
                                         <span>{item.response_status == "0"?
-                                        (item.sp_response?"Rejected : "+decodeURI(item.sp_response):""):
-                                        (item.sp_response?"Accepted : "+decodeURI(item.sp_response):"")}</span>
+                                        (item.sp_response!=null?"Rejected : "+decodeURI(item.sp_response):""):
+                                        (item.sp_response!=null?"Accepted : "+decodeURI(item.sp_response):"")}</span>
                                     </dt>:''}
                                 </dl>
                     })}
