@@ -189,7 +189,7 @@ export class Proposedeviations extends React.Component{
         let add_new = {id:0,item:'',clause:'',
                         propose_deviation:'',
                         retailer_response:'',
-                        sp_response_status:'',key:this.state.deviations_list.length+1},list = this.state.deviations_list;
+                        sp_response_status:'',key:Math.floor((Math.random()*10000)+1)},list = this.state.deviations_list;
                         list.push(add_new);
         this.setState({deviations_list:list});
     }
@@ -305,7 +305,7 @@ export class Proposedeviations extends React.Component{
                                             }                                   
                                         })
                                 :this.state.deviations_list.map((item,index)=>{
-                                    return <tr key={index}>
+                                    return <tr key={item.id}>
                                                 <td>{item.item}</td>
                                                 <td>{item.clause}</td>
                                                 <td><button onClick={this.showpropose.bind(this,"Propose Deviation",item.propose_deviation,'',true,false)}>Details</button><input type="hidden" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
