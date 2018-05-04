@@ -28,9 +28,9 @@
               span.lm--icon-edit
               = t("views.actions.edit")
             ' &nbsp;
-            = link_to admin_user_path(user), class: "lm--button lm--button--text lm--button--small lm--button--danger ", method: :delete, data: { confirm: t('views.confirm'), disable_with: t('views.disable_with') } do
-              span.lm--icon-trash
-              = t("views.actions.destroy")
+            / = link_to admin_user_path(user), class: "lm--button lm--button--text lm--button--small lm--button--danger ", method: :delete, data: { confirm: t('views.confirm'), disable_with: t('views.disable_with') } do
+            /   span.lm--icon-trash
+            /   = t("views.actions.destroy")
 
 hr
 
