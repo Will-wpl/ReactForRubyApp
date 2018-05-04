@@ -202,7 +202,8 @@ abbr[title]{color: #fe0000; text-decoration: none;}
       } 
   }
   .showbig{ width: 96%; margin: 2% auto;
-    textarea.detail_show{ height: 420px;}
+    textarea.detail_show,.history_nr{ height: 420px;}
+    .history_nr dl dd span{max-width: 350px;}
   }
 }
 
