@@ -1,3 +1,7 @@
+- if breadcrumbs.present?
+ ol.lm--breadcrumb
+   = render_breadcrumbs tag: :li, separator: " "
+
 .page-header
   .u-pull-right
     = link_to icon("plus", t("views.actions.new", model: User.model_name.human)), new_admin_user_path, class: "lm--button lm--button--primary"
@@ -28,9 +32,9 @@
               span.lm--icon-edit
               = t("views.actions.edit")
             ' &nbsp;
-            / = link_to admin_user_path(user), class: "lm--button lm--button--text lm--button--small lm--button--danger ", method: :delete, data: { confirm: t('views.confirm'), disable_with: t('views.disable_with') } do
-            /   span.lm--icon-trash
-            /   = t("views.actions.destroy")
+            = link_to admin_user_path(user), class: "lm--button lm--button--text lm--button--small lm--button--danger ", method: :delete, data: { confirm: t('views.confirm'), disable_with: t('views.disable_with') } do
+              span.lm--icon-trash
+              = t("views.actions.destroy")
 
 hr
 
