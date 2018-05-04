@@ -16,12 +16,15 @@ export class Showhistory extends React.Component{
         this.setState({textVal:''});
         this.checkShowdetail(next);
     }
+    clearTextarea(){
+        $(".detail_show").val("");
+    }
     checkShowdetail(next){
         if(next.textdisabled && next.status){
             if(next.status[1] == "0"){
-                this.setState({textVal:"Rejected : "+decodeURI(next.detail)});
+                this.setState({textVal:"Rejected : \n"+decodeURI(next.detail)});
             }else if(next.status[1] == "1"){
-                this.setState({textVal:"Accepted : "+decodeURI(next.detail)});
+                this.setState({textVal:"Accepted : \n"+decodeURI(next.detail)});
             }else{
                 this.setState({textVal:next.detail!=null?decodeURI(next.detail):''});
             }                
@@ -36,7 +39,7 @@ export class Showhistory extends React.Component{
         this.setState({textVal:val});
     }
     showModal(data){
-        console.log(data);
+        //console.log(data);
         this.setState({
             modalshowhide:"modal_show",
             props_data:data?data.details:[],
@@ -62,8 +65,8 @@ export class Showhistory extends React.Component{
         return(
             <div id="modal_history" className={this.state.modalshowhide}>
             {this.props.type === "history"?
-                <div className="history_box">
-                    <h4><span>History</span><a onClick={this.closeModal.bind(this)}>X</a></h4>
+                <div className={this.state.showWindow?"history_box showbig":"history_box"}>
+                    <h4><span>History</span><a onClick={this.closeModal.bind(this)}>X</a><a onClick={this.showWindow.bind(this)}>口</a></h4>
                     <div className="history_nr">
                     {this.state.props_data.map((item,index)=>{
                         return <dl key={index}>
@@ -71,8 +74,8 @@ export class Showhistory extends React.Component{
                                     <dd>
                                         <dfn><abbr></abbr>{this.state.ratailer_name}</dfn>
                                         <span>
-                                            Proposed Deviation : {item.propose_deviation?decodeURI(item.propose_deviation):""}<br/>
-                                            Response : {item.retailer_response?decodeURI(item.retailer_response):""}
+                                            <b>Proposed Deviation : </b>{item.propose_deviation?decodeURI(item.propose_deviation):""}<br/>
+                                            <b>Response : </b>{item.retailer_response?decodeURI(item.retailer_response):""}
                                         </span>
                                     </dd>:''}
                                     {item.sp_response!=null?
