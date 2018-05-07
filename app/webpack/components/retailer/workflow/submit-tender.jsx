@@ -12,6 +12,9 @@ export class Submittender extends React.Component{
             fileData:{
                 "upload_tender":[
                     {buttonName:"none",files:[]}
+                ],
+                "attachment_deviation":[
+                    {buttonName:"none",files:[]}
                 ]
             }
         }
@@ -31,6 +34,7 @@ export class Submittender extends React.Component{
             this.setState({ 
                 fileData:fileObj
             })
+            console.log(this.state.fileData);
             this.changeNext();
         })
     }

@@ -322,7 +322,7 @@ export class Proposedeviations extends React.Component{
                     <div className="col-sm-12 col-md-12">
                         <div className="lm--formItem lm--formItem--inline string u-mt2 deviation">
                             <label className="lm--formItem-left lm--formItem-label string required">
-                                Upload Appendix of Agreed Deviations :
+                                Download Appendix of Agreed Deviations :
                             </label>
                             <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                 <ul className="brif_list">
