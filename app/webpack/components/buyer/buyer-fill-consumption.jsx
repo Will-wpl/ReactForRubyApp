@@ -139,13 +139,13 @@ export class FillConsumption extends Component {
                 },200)
                 return false;
             }
-            if(this.nameRepeat(JSON.parse(buyerlist))){
-                setTimeout(()=>{
-                    this.refs.Modal.showModal();
-                    this.setState({text:"Account number has already been entered!"});
-                },200)
-                return false;
-            }
+            // if(this.nameRepeat(JSON.parse(buyerlist))){
+            //     setTimeout(()=>{
+            //         this.refs.Modal.showModal();
+            //         this.setState({text:"Account number has already been entered!"});
+            //     },200)
+            //     return false;
+            // }
         }
         
         console.log(makeData.consumption_id);
@@ -213,11 +213,30 @@ export class FillConsumption extends Component {
     }
     checkSuccess(event, obj){
         event.preventDefault();
-        if(this.state.submit_type === "Participate"){
-            this.refs.Modal.showModal("comfirm");
-            this.setState({text:"Are you sure you want to participate in this auction?"});
-        }else if(this.state.submit_type === "save"){
-            this.doSave();
+        let makeData = {},
+            buyerlist = [];
+        this.state.site_list.map((item, index) => {
+            if($("#intake_level"+(index+1)).val() != "LT"){
+                buyerlist += '{"account_number":"'+$("#account_number"+(index+1)).val()+'","id":"'+item.id+'","premise_address":"'+$("#address"+(index+1)).val()+'","intake_level":"'+$("#intake_level"+(index+1)).val()+'","contracted_capacity":"'+$("#capacity"+(index+1)).val()+'","peak":"'+$("#peak"+(index+1)).val()+'","off_peak":"'+$("#off_peak"+(index+1)).val()+'","consumption_id":"'+this.consumptions_id+'"},';
+            }else{
+                buyerlist += '{"account_number":"'+$("#account_number"+(index+1)).val()+'","id":"'+item.id+'","premise_address":"'+$("#address"+(index+1)).val()+'","intake_level":"'+$("#intake_level"+(index+1)).val()+'","peak":"'+$("#peak"+(index+1)).val()+'","off_peak":"'+$("#off_peak"+(index+1)).val()+'","consumption_id":"'+this.consumptions_id+'"},';
+            }
+        })
+        buyerlist = buyerlist.substr(0, buyerlist.length-1);
+        buyerlist = '['+buyerlist+']';
+        if(this.nameRepeat(JSON.parse(buyerlist))){
+            setTimeout(()=>{
+                this.refs.Modal.showModal();
+                this.setState({text:"Account number has already been entered!"});
+            },200)
+            return false;
+        }else{
+            if(this.state.submit_type === "Participate"){
+                this.refs.Modal.showModal("comfirm");
+                this.setState({text:"Are you sure you want to participate in this auction?"});
+            }else if(this.state.submit_type === "save"){
+                this.doSave();
+            }
         }
     }
     render () {
