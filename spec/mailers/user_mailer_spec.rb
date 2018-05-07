@@ -11,7 +11,7 @@ RSpec.describe UserMailer, type: :mail do
   context 'registered email' do
     before :each do
       @template = create(:email_template, subject: 'subject1', body: 'body1 #user.company_name ,text ', template_type: '1')
-      UserMailer.registered_email(retailer).deliver_now
+      UserMailer.registered_email(admin_user, retailer).deliver_now
     end
     it 'be_delivered_to', mail: true do
       expect(open_last_email).to be_delivered_to @admin_user.email
@@ -103,7 +103,7 @@ RSpec.describe UserMailer, type: :mail do
   context 'retailer_submit_mail' do
     before :each do
       @template = create(:email_template, subject: 'subject6 #user.company_name', body: 'body6,#user.company_name', template_type: '6')
-      UserMailer.retailer_submit_mail(retailer).deliver_now
+      UserMailer.retailer_submit_mail(admin_user, retailer).deliver_now
     end
     it 'be_delivered_to', mail: true do
       expect(open_last_email).to be_delivered_to @admin_user.email
