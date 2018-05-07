@@ -30,12 +30,16 @@ class Api::TendersController < Api::TendersBaseController
     attachments_count = AuctionAttachment.belong_auction(@arrangement.auction_id)
                       .where(file_type: 'tender_documents_upload').count
     chats = set_node3_chats(params[:id])
-    render json: { chats: chats, attachments_count: attachments_count }, status: 200
+    attachments = AuctionAttachment.user_auction(@arrangement.auction_id, @arrangement.user_id)
+                      .where(file_type: 'attachment_deviation').order(:created_at)
+    render json: { chats: chats, attachments_count: attachments_count, attachments: attachments }, status: 200
   end
 
   def node3_admin
     chats = set_node3_chats(params[:id])
-    render json: { chats: chats }, status: 200
+    attachments = AuctionAttachment.user_auction(@arrangement.auction_id, @arrangement.user_id)
+                      .where(file_type: 'attachment_deviation').order(:created_at)
+    render json: { chats: chats, attachments: attachments }, status: 200
   end
 
   def node4_retailer
