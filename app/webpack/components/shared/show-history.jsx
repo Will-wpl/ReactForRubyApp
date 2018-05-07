@@ -75,7 +75,7 @@ export class Showhistory extends React.Component{
                                         <dfn><abbr></abbr>{this.state.ratailer_name}</dfn>
                                         <span>
                                             <b>Proposed Deviation : </b>{item.propose_deviation?decodeURI(item.propose_deviation):""}<br/>
-                                            <b>Response : </b>{item.retailer_response?decodeURI(item.retailer_response):""}
+                                            <b>Comments : </b>{item.retailer_response?decodeURI(item.retailer_response):""}
                                         </span>
                                     </dd>:''}
                                     {item.sp_response!=null?
