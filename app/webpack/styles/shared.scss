@@ -532,6 +532,8 @@ dfn.manage_label{
   }
 }
 .mg0{ margin: 0 auto;}
+.w_50{ width: 50%;}
+.w_35{ width: 35%;}
 body.choose{
   header.lm--header{display: none;}
 }
@@ -698,7 +700,9 @@ body.choose{
     }
   }
 }
-
+.deviation{
+  label{text-align: left; padding-right: 0px;}
+}
 
 .admin_buyer_list{
   .buyer_tab{

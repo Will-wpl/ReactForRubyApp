@@ -39,8 +39,8 @@ class Api::TendersController < Api::TendersBaseController
     chats = set_node3_chats(params[:id])
     attachments = AuctionAttachment.user_auction(@arrangement.auction_id, @arrangement.user_id)
                       .where(file_type: 'attachment_deviation').order(:created_at)
-    retailer = @arrangement
-    render json: { chats: chats, attachments: attachments, retailer: retailer }, status: 200
+    retailer_id = @arrangement.user_id
+    render json: { chats: chats, attachments: attachments, retailer_id: retailer_id }, status: 200
   end
 
   def node4_retailer

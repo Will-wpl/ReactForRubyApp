@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import moment from 'moment';
 import {Modal} from '../../shared/show-modal';
 import {Showhistory} from '../../shared/show-history';
-import {adminSendResponse,getAdminDeviations} from '../../../javascripts/componentService/admin/service';
+import {adminSendResponse,getAdminDeviations,removeAdminFile} from '../../../javascripts/componentService/admin/service';
 import {getTenderhistory} from '../../../javascripts/componentService/common/service';
 export class Keppelproposedeviations extends Component {
     constructor(props, context){
@@ -12,7 +12,12 @@ export class Keppelproposedeviations extends Component {
             deviations_list:[],
             buttonType:'',detailType:'',
             title:'',detail:'',detail_id:'',textdisabled:false,
-            status:null,params_detail:''
+            status:null,user_id:0,
+            fileData:{
+                "attachment_deviation":[
+                    {buttonName:"none",files:[]}
+                ]
+            }
         }
     }
     componentDidMount(){
@@ -20,8 +25,16 @@ export class Keppelproposedeviations extends Component {
             console.log(res);
             if(res.chats.length > 0){
                 console.log(res.chats);
-                this.setState({deviations_list:res.chats});
-                this.list_clone = res.chats;
+                let fileObj;
+                fileObj = this.state.fileData;
+                res.attachments.map((item,index)=>{
+                    fileObj[item.file_type][0].files.push({
+                        id:item.id,
+                        file_name:item.file_name,
+                        file_path:item.file_path 
+                    })
+                })
+                this.setState({deviations_list:res.chats,fileData:fileObj,user_id:res.retailer_id});
             }else{
                 this.setState({
                     deviations_list:[
@@ -91,7 +104,6 @@ export class Keppelproposedeviations extends Component {
     }
     editDetail(detail){
         console.log(this.state.detail_id);
-        this.setState({params_detail:detail})
         if(this.state.detail_id != ''){
             let list = this.state.deviations_list,id=this.state.detail_id;
             list[id.split("_")[1]].sp_response = detail;
@@ -118,6 +130,157 @@ export class Keppelproposedeviations extends Component {
         this.setState({deviations_list:deviationslist});
         //console.log(this.state.deviations_list);
     }
+    addinputfile(type, required){
+        let fileHtml = '';
+        fileHtml = <div className="file_box">
+                    <form id={type+"_form"} encType="multipart/form-data">
+                        {this.state.fileData[type].map((item, index) => 
+                                <div className="u-grid mg0 u-mt1" key={index}>
+                                {!this.props.readOnly?
+                                    <div className="col-sm-12 col-md-10 u-cell">
+                                        <a className="upload_file_btn">
+                                            <dfn>No file selected...</dfn>
+                                            {/* accept="application/pdf,application/msword" */}
+                                            {required === "required" ? 
+                                            <div>
+                                                <input type="file" required="required" ref={type+index}  onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.props.propsdisabled?true:(this.state.disabled)} />
+                                                <b>Browse..</b>
+                                                <div className="required_error">
+                                                    Please select file.
+                                                </div>
+                                            </div>
+                                            :<div>
+                                                <input type="file" ref={type+index} onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.props.propsdisabled?true:(this.state.disabled)} />
+                                                <b>Browse..</b>
+                                            </div>}
+                                        </a>
+                                        <div className="progress">
+                                            <div className="progress-bar" style={{width:"0%"}}>0%</div>
+                                        </div>
+                                        <div className="progress_files">
+                                            <ul>
+                                                {
+                                                    item.files.map((it,i)=>{
+                                                        return <li key={i}><a download={it.file_name} href={"/"+it.file_path}>{it.file_name}</a>{this.props.propsdisabled?'':(this.state.disabled?'':<span className="remove_file" onClick={this.remove_file.bind(this,type,index,i,it.id)}></span>)}</li>
+                                                    })
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>:<div className="progress_files">
+                                            <ul>
+                                                {
+                                                    item.files.map((it,i)=>{
+                                                        return <li key={i}><a download={it.file_name} href={"/"+it.file_path}>{it.file_name}</a></li>
+                                                    })
+                                                }
+                                            </ul>
+                                        </div>}
+                                        {!this.props.readOnly?
+                                            <div className="col-sm-12 col-md-2 u-cell">
+                                                {
+                                                    this.props.propsdisabled?<button className="lm--button lm--button--primary" disabled>Upload</button>:(this.state.disabled?<button className="lm--button lm--button--primary" disabled>Upload</button>
+                                                    :<a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>)
+                                                }
+                                            </div>:''}
+                                    {/* <div className="col-sm-12 col-md-2 u-cell">
+                                        {item.buttonName === "none" ? "" : <a onClick={this.fileclick.bind(this, index, type, item.buttonName)} className={"lm--button lm--button--primary "+item.buttonName}>{item.buttonText}</a>}
+                                    </div> */}
+                                </div>
+                                )}
+                     </form>
+                    </div>
+        return fileHtml;
+    }
+    changefileval(id){
+        const fileObj = $("#"+id);
+        fileObj.parent().prev("dfn").text(fileObj.val());
+    }
+    upload(type, index){
+        let time = null
+        if($("#"+type+index).val() === ""){
+            $("#"+type+index).next().next().fadeIn(300);
+            clearTimeout(time);
+            time = setTimeout(()=>{
+                $("#"+type+index).next().next().hide();
+            },2000)
+            return;
+        }
+        const barObj = $('#'+type+index).parents("a").next();
+        $.ajax({
+            url: '/api/admin/auction_attachments?auction_id='+sessionStorage.auction_id+'&file_type='+type+'&user_id='+this.state.user_id,
+            type: 'POST',
+            cache: false,
+            data: new FormData($('#'+type+"_form")[0]),
+            processData: false,
+            contentType: false,
+            xhr:() => {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function (evt) {
+                    if (evt.lengthComputable) {
+                        const percentComplete = parseInt(evt.loaded / evt.total * 100, 10);
+                        barObj.show();
+                        barObj.find(".progress-bar").css('width', percentComplete + '%');
+                        barObj.find(".progress-bar").text(percentComplete + '%');
+                        if(percentComplete == 100){
+                            barObj.find(".progress-bar").text('Processing..');
+                        }
+                    }
+                }, false);
+                return xhr;
+            },
+            success:(res) => {
+                let fileObj;
+                barObj.find(".progress-bar").text('Upload Successful!');
+                setTimeout(()=>{
+                    barObj.fadeOut(500);
+                },2000);
+                fileObj = this.state.fileData;
+                fileObj[type].map((item,index)=>{
+                    item.files.push({
+                        id:res.id,
+                        file_name:res.file_name,
+                        file_path:res.file_path
+                    })
+                })
+                this.setState({
+                    fileData:fileObj
+                })
+                console.log(res);
+            },error:() => {
+                        barObj.find(".progress-bar").text('upload failed!');
+                        barObj.find(".progress-bar").css('background', 'red');
+                    }
+                })
+            }
+            remove_file(filetype,typeindex,fileindex,fileid){
+                this.setState({
+                    buttonType:"remove_file"
+                })
+                let obj = {
+                    filetype:filetype,
+                    typeindex:typeindex,
+                    fileindex:fileindex,
+                    fileid:fileid
+                }
+                console.log(obj);
+                this.setState({text:'Are you sure you want to delete this file?'});
+                this.refs.Modal.showModal("comfirm",obj);
+            }
+            do_remove(callbackObj){
+                console.log(callbackObj);
+                let fileObj;
+                removeAdminFile(callbackObj.fileid).then(res=>{
+                    fileObj = this.state.fileData;
+                    fileObj[callbackObj.filetype][callbackObj.typeindex].files.splice(callbackObj.fileindex,1);
+                    this.setState({
+                        fileData:fileObj,
+                        text:'File deletion successful!'
+                    })
+                    this.refs.Modal.showModal();
+                },error=>{
+        
+                })
+            }
     render (){
         return (
             <div className="col-sm-12">
@@ -129,7 +292,7 @@ export class Keppelproposedeviations extends Component {
                             <th>Item</th>
                             <th>Clause</th>
                             <th>Propose Deviation</th>
-                            <th>Retailer Response</th>
+                            <th>Retailer Comments</th>
                             <th>SP Response</th>
                             <th></th>
                             </tr>
@@ -170,12 +333,23 @@ export class Keppelproposedeviations extends Component {
                             })}
                     </tbody>
                 </table>
-                <div className="workflow_btn u-mt3">    
+                <div className="col-sm-12 col-md-8">
+                    <div className="lm--formItem lm--formItem--inline string admin_invitation deviation u-mt2">
+                        <label className="lm--formItem-left lm--formItem-label string required w_35">
+                            {/* <abbr title="required">*</abbr>*/}
+                            Upload Appendix of Agreed Deviations :
+                        </label>
+                        <div className="lm--formItem-right lm--formItem-control u-grid mg0 w_35">
+                            {this.addinputfile("attachment_deviation", "")}
+                        </div>
+                    </div>
+                </div>
+                <div className="workflow_btn u-mt2">    
                     <button className="lm--button lm--button--primary" disabled={this.props.readOnly} onClick={this.showConfirm.bind(this,'Send_Response')}>Send Response</button>
                 </div>
             </div>
             <Showhistory ref="history" status={this.state.status} textdisabled={this.state.textdisabled} type={this.state.detailType} title={this.state.title} detail={this.state.detail} detail_id={this.state.detail_id} editDetail={this.editDetail.bind(this)} />
-            <Modal text={this.state.text} acceptFunction={this.state.buttonType === "Send_Response" ? this.send_response.bind(this) : (this.state.buttonType === "reject" ? this.do_keppel.bind(this) : this.do_keppel.bind(this))} ref="Modal" />
+            <Modal text={this.state.text} acceptFunction={this.state.buttonType === "Send_Response" ? this.send_response.bind(this) : this.do_remove.bind(this)} ref="Modal" />
             </div>
         )}
     }

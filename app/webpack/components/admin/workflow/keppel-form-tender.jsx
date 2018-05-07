@@ -108,7 +108,7 @@ export class Keppelformtender extends React.Component{
                                 <th>Item</th>
                                 <th>Clause</th>
                                 <th>Propose Deviation</th>
-                                <th>Retailer Response</th>
+                                <th>Retailer Comments</th>
                                 <th>SP Response</th>
                                 <th></th>
                                 </tr>
