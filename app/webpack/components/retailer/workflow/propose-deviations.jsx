@@ -14,7 +14,7 @@ export class Proposedeviations extends React.Component{
             select_list:[],alldisabled:false,
             deviations_list:[],detailType:'',
             title:'',detail:'',detail_id:'',textdisabled:false,
-            status:null
+            status:null,attachments:[]
         }
     }
     componentDidMount() {
@@ -33,8 +33,8 @@ export class Proposedeviations extends React.Component{
             }
             this.setState({select_list:select_list})
             if(res.chats.length > 0){
-                console.log(res.chats);
-                this.setState({deviations_list:res.chats});
+                console.log(res);
+                this.setState({deviations_list:res.chats,attachments:res.attachments});
             }else{
                 this.setState({
                     deviations_list:[
@@ -318,6 +318,21 @@ export class Proposedeviations extends React.Component{
                                 }
                         </tbody>
                     </table>
+                    {this.state.attachments.length>0?
+                    <div className="col-sm-12 col-md-12">
+                        <div className="lm--formItem lm--formItem--inline string u-mt2 deviation">
+                            <label className="lm--formItem-left lm--formItem-label string required">
+                                Upload Appendix of Agreed Deviations :
+                            </label>
+                            <div className="lm--formItem-right lm--formItem-control u-grid mg0">
+                                <ul className="brif_list">
+                                    {this.state.attachments ? this.state.attachments.map((item,index)=>{
+                                        return <li key={index}><a disabled={this.props.propsdisabled} download={item.file_name} href={"/"+item.file_path}>{item.file_name}</a></li>
+                                    }) : ''}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>:''}
                     {!this.props.tender ? <div className="workflow_btn u-mt3 u-mb3"><button className="add_deviation" disabled={this.props.propsdisabled?true:(this.state.alldisabled)} onClick={this.addDeviations.bind(this)}>Add</button></div> :''}
                     <div className="workflow_btn u-mt3">
                         {!this.props.tender ?

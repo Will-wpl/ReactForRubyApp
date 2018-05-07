@@ -532,6 +532,8 @@ dfn.manage_label{
   }
 }
 .mg0{ margin: 0 auto;}
+.w_50{ width: 50%;}
+.w_35{ width: 35%;}
 body.choose{
   header.lm--header{display: none;}
 }
@@ -583,6 +585,7 @@ body.choose{
   .progress_files{
     ul{
       li{list-style: none; line-height: 26px; overflow: hidden;
+        &.lineHeight42{line-height: 42px;}
         a{ cursor: pointer; color: #00b0b2; float: left; margin: 0;}
         span.remove_file{background:url("../images/remove.png") no-repeat center; cursor: pointer; width: 26px; height: 26px; float: right;}
       }
@@ -698,7 +701,9 @@ body.choose{
     }
   }
 }
-
+.deviation{
+  label{text-align: left; padding-right: 0px;}
+}
 
 .admin_buyer_list{
   .buyer_tab{

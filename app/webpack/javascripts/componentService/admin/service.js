@@ -12,6 +12,10 @@ export const arrangementDetail = (params) => {
     return get('/api/admin/arrangements/'+params);
 }
 
+export const removeAdminFile = (params) => {
+    return Ddelete('/api/admin/auction_attachments/'+params);
+}
+
 export const getUsersDetail = (params) => {
     return get('/api/admin/users/'+params);
 }
