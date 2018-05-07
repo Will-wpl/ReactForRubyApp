@@ -122,7 +122,7 @@ export class Keppelformtender extends React.Component{
                                                 <td>{item.item}</td>
                                                 <td >{item.clause}</td>
                                                 <td><button onClick={this.showpropose.bind(this,"Propose Deviation",item.propose_deviation,'',true,false)}>Details</button></td>
-                                                <td><button onClick={this.showpropose.bind(this,"Retailer Response",item.retailer_response,'',true,false)} >Details</button></td>
+                                                <td><button onClick={this.showpropose.bind(this,"Retailer Comments",item.retailer_response,'',true,false)} >Details</button></td>
                                                 <td><button onClick={this.showpropose.bind(this,"SP Response",item.sp_response,'',true,item.response_status)} >Details</button></td>
                                                 <td><button onClick={this.showhistory.bind(this,item.id)}>History</button></td>
                                             </tr>

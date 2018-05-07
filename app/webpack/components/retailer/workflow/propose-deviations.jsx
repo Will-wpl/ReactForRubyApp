@@ -242,7 +242,7 @@ export class Proposedeviations extends React.Component{
         return(
             <div className="propose_deviations u-mt3">
                 <h2 className="u-mt3 u-mb2">Propose Deviations</h2>
-                <h4>Submit only deviations for Conditions of Contract. Deviations for other items will not be accepted.</h4>
+                <h4 className="u-mb2">Submit only deviations for Conditions of Contract. Deviations for other items will not be accepted.</h4>
                 {!this.props.tender ? (this.props.current.current.turn_to_role === 1?<h4 className="u-mb3 pending_review">Status : Deviations pending administrator's review</h4>:''):''}
                 <div className="col-sm-12 col-md-10 push-md-1">
                     <table className="retailer_fill w_100" cellPadding="0" cellSpacing="0">
@@ -264,7 +264,7 @@ export class Proposedeviations extends React.Component{
                                                     <td>{item.item}<input id={"item_"+(index)} type="hidden" defaultValue={item.item}/></td>
                                                     <td >{item.clause}<input type="hidden" id={"clause_"+(index)} defaultValue={item.clause}/></td>
                                                     <td><button onClick={this.showpropose.bind(this,"Propose Deviation",item.propose_deviation,'',true,false)}>Details</button><input type="hidden" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
-                                                    <td><button onClick={this.showpropose.bind(this,"Retailer Response",item.retailer_response,'',true,false)} >Details</button><input disabled type="hidden" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
+                                                    <td><button onClick={this.showpropose.bind(this,"Retailer Comments",item.retailer_response,'',true,false)} >Details</button><input disabled type="hidden" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
                                                     <td><button onClick={this.showpropose.bind(this,"SP Response",item.sp_response,'',true,item.response_status)} >Details</button></td>
                                                     <td>
                                                         <button id={"history_"+index} onClick={this.showhistory.bind(this,item.id)} >History</button>
@@ -293,7 +293,7 @@ export class Proposedeviations extends React.Component{
                                                             :<input type="text" id={"clause_"+(index)} defaultValue={item.clause}/>))}
                                                         </td>
                                                         <td><button id={"deviation_"+(index)} onClick={this.showpropose.bind(this,"Propose Deviation",item.propose_deviation,'deviation_'+index,this.props.propsdisabled?true:(this.state.alldisabled),false)}>Details</button></td>
-                                                        <td><button id={"response_"+(index)} onClick={this.showpropose.bind(this,"Retailer Response",item.retailer_response,'response_'+index,this.props.propsdisabled?true:(this.state.alldisabled),false)} >Details</button></td>
+                                                        <td><button id={"response_"+(index)} onClick={this.showpropose.bind(this,"Retailer Comments",item.retailer_response,'response_'+index,this.props.propsdisabled?true:(this.state.alldisabled),false)} >Details</button></td>
                                                         <td><button onClick={this.showpropose.bind(this,"SP Response",item.sp_response,'',true,item.response_status)} >Details</button></td>
                                                         <td>{item.item === ""?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>:
                                                         (item.sp_response_status==='2'?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>
@@ -310,7 +310,7 @@ export class Proposedeviations extends React.Component{
                                                 <td>{item.item}</td>
                                                 <td>{item.clause}</td>
                                                 <td><button onClick={this.showpropose.bind(this,"Propose Deviation",item.propose_deviation,'',true,false)}>Details</button><input type="hidden" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
-                                                <td><button onClick={this.showpropose.bind(this,"Retailer Response",item.retailer_response,'',true,false)} >Details</button><input disabled type="hidden" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
+                                                <td><button onClick={this.showpropose.bind(this,"Retailer Comments",item.retailer_response,'',true,false)} >Details</button><input disabled type="hidden" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
                                                 <td><button onClick={this.showpropose.bind(this,"SP Response",item.sp_response,'',true,item.response_status)} >Details</button></td>
                                                 <td><button onClick={this.showhistory.bind(this,item.id)}>History</button></td>
                                             </tr>

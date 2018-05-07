@@ -305,7 +305,7 @@ export class Keppelproposedeviations extends Component {
                                                 <td>{item.item}</td>
                                                 <td >{item.clause}</td>
                                                 <td><button onClick={this.showpropose.bind(this,"Propose Deviation",item.propose_deviation,'',true,false)}>Details</button></td>
-                                                <td><button onClick={this.showpropose.bind(this,"Retailer Response",item.retailer_response,'',true,false)} >Details</button></td>
+                                                <td><button onClick={this.showpropose.bind(this,"Retailer Comments",item.retailer_response,'',true,false)} >Details</button></td>
                                                 <td><button onClick={this.showpropose.bind(this,"SP Response",item.sp_response,'',true,item.response_status)} >Details</button></td>
                                                 <td>
                                                     <button id={"sp_reject_"+index} disabled>Reject</button>
@@ -319,7 +319,7 @@ export class Keppelproposedeviations extends Component {
                                             <td>{item.item}</td>
                                             <td >{item.clause}</td>
                                             <td><button onClick={this.showpropose.bind(this,"Propose Deviation",item.propose_deviation,'',true,false)}>Details</button></td>
-                                            <td><button onClick={this.showpropose.bind(this,"Retailer Response",item.retailer_response,'',true,false)} >Details</button></td>
+                                            <td><button onClick={this.showpropose.bind(this,"Retailer Comments",item.retailer_response,'',true,false)} >Details</button></td>
                                             <td>
                                             <button id={"spResponse_"+index} onClick={this.showpropose.bind(this,"SP Response",item.sp_response!=null?item.sp_response:'',"spResponse_"+index,this.props.readOnly,item.response_status)} >Details</button>
                                             {/* <textarea id={"spResponse_"+index} defaultValue={item.sp_response?decodeURI(item.sp_response).split(": ")[1]:''} />*/}
@@ -341,7 +341,7 @@ export class Keppelproposedeviations extends Component {
                             Upload Appendix of Agreed Deviations :
                         </label>
                         <div className="lm--formItem-right lm--formItem-control u-grid mg0 w_35">
-                            {this.addinputfile("attachment_deviation", "")}
+                            {this.addinputfile("attachment_deviation", "required")}
                         </div>
                     </div>
                 </div>}
