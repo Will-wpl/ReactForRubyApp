@@ -17,8 +17,11 @@ export class Keppelformtender extends React.Component{
     componentDidMount() {
         getAdminKeppelForm(this.props.current.current.arrangement_id).then(res=>{
             console.log(res);
+            let attachments = res.attachments.filter((item)=>{
+                return item.file_type === "upload_tender";
+            })
             this.setState({
-                linklist:res.attachments,
+                linklist:attachments,
                 chats:res.chats,
                 comments:(res.comments?res.comments:"")
             })
@@ -91,7 +94,7 @@ export class Keppelformtender extends React.Component{
                     <div className="lm--formItem-right lm--formItem-control">
                         <ul className="tender_list">
                             {this.state.linklist.length > 0 ? this.state.linklist.map((item,index)=>{
-                                return <li key={index}>Item {index+1} : <a download={item.file_name} href={"/"+item.file_path}>{item.file_name}</a></li>
+                                    return <li key={index}>Item {index+1} : <a download={item.file_name} href={"/"+item.file_path}>{item.file_name}</a></li>                         
                             }) : ''}
                         </ul>
                     </div>
@@ -119,7 +122,7 @@ export class Keppelformtender extends React.Component{
                                                 <td>{item.item}</td>
                                                 <td >{item.clause}</td>
                                                 <td><button onClick={this.showpropose.bind(this,"Propose Deviation",item.propose_deviation,'',true,false)}>Details</button></td>
-                                                <td><button onClick={this.showpropose.bind(this,"Retailer Response",item.retailer_response,'',true,false)} >Details</button></td>
+                                                <td><button onClick={this.showpropose.bind(this,"Retailer Comments",item.retailer_response,'',true,false)} >Details</button></td>
                                                 <td><button onClick={this.showpropose.bind(this,"SP Response",item.sp_response,'',true,item.response_status)} >Details</button></td>
                                                 <td><button onClick={this.showhistory.bind(this,item.id)}>History</button></td>
                                             </tr>
