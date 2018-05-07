@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {Modal} from '../../shared/show-modal';
 import {Showhistory} from '../../shared/show-history';
-import {retailerWithdrawAllDeviations,retailerSubmitDeviations,retailerNext,getRetailerDeviationsList,retailerDeviationsSave,retailerWithdraw,getTenderdocuments} from '../../../javascripts/componentService/retailer/service';
+import {retailerWithdrawAllDeviations,retailerSubmitDeviations,retailerNext,getRetailerDeviationsList,retailerDeviationsSave,retailerWithdraw} from '../../../javascripts/componentService/retailer/service';
 import {getTenderhistory} from '../../../javascripts/componentService/common/service';
 export class Proposedeviations extends React.Component{
     constructor(props){
@@ -20,12 +20,6 @@ export class Proposedeviations extends React.Component{
     componentDidMount() {
         this.changeNext()
         this.refresh();
-        getTenderdocuments(sessionStorage.arrangement_id).then(res=>{
-            console.log(res);
-            this.setState({
-                attachments:res.attachments
-            })
-        })
     }
     refresh(){
         getRetailerDeviationsList(sessionStorage.arrangement_id).then(res=>{
@@ -39,8 +33,8 @@ export class Proposedeviations extends React.Component{
             }
             this.setState({select_list:select_list})
             if(res.chats.length > 0){
-                console.log(res.chats);
-                this.setState({deviations_list:res.chats});
+                console.log(res);
+                this.setState({deviations_list:res.chats,attachments:res.attachments});
             }else{
                 this.setState({
                     deviations_list:[

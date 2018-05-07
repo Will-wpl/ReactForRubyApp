@@ -170,7 +170,7 @@ export class Keppelproposedeviations extends Component {
                                             <ul>
                                                 {
                                                     item.files.map((it,i)=>{
-                                                        return <li key={i}><a download={it.file_name} href={"/"+it.file_path}>{it.file_name}</a></li>
+                                                        return <li className={this.props.readOnly?"lineHeight42":""} key={i}><a download={it.file_name} href={"/"+it.file_path}>{it.file_name}</a></li>
                                                     })
                                                 }
                                             </ul>
@@ -333,7 +333,8 @@ export class Keppelproposedeviations extends Component {
                             })}
                     </tbody>
                 </table>
-                <div className="col-sm-12 col-md-8">
+                {this.props.readOnly && this.state.fileData['attachment_deviation'][0].files.length<=0?
+                '':<div className="col-sm-12 col-md-8">
                     <div className="lm--formItem lm--formItem--inline string admin_invitation deviation u-mt2">
                         <label className="lm--formItem-left lm--formItem-label string required w_35">
                             {/* <abbr title="required">*</abbr>*/}
@@ -343,7 +344,7 @@ export class Keppelproposedeviations extends Component {
                             {this.addinputfile("attachment_deviation", "")}
                         </div>
                     </div>
-                </div>
+                </div>}
                 <div className="workflow_btn u-mt2">    
                     <button className="lm--button lm--button--primary" disabled={this.props.readOnly} onClick={this.showConfirm.bind(this,'Send_Response')}>Send Response</button>
                 </div>
