@@ -21,7 +21,10 @@ class Api::TendersBaseController < Api::BaseController
   def retailer_submit_mail(arrangement_id)
     user = get_arrangement_user(arrangement_id)
     return if user.nil?
-    UserMailer.retailer_submit_mail(user).deliver_later
+    User.admins.each do |admin_user|
+      UserMailer.retailer_submit_mail(admin_user, user).deliver_later
+    end
+
   end
 
   def admin_accept_mail(arrangement_id)

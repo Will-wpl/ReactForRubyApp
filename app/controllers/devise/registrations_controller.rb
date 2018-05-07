@@ -30,7 +30,10 @@ class Devise::RegistrationsController < DeviseController
         respond_to_on_destroy
       end
       if params[:type] == '1'
-        UserMailer.registered_email(resource).deliver_later
+        User.admins.each do |admin_user|
+          UserMailer.registered_email(admin_user, resource).deliver_later
+        end
+
       end
     else
       clean_up_passwords resource

@@ -1,6 +1,5 @@
 class UserMailer < ApplicationMailer
-  def registered_email(user)
-    admin_user = User.find(1)
+  def registered_email(admin_user, user)
     mail_template = get_template('1')
     email_subject = mail_template.subject
     email_body = mail_template.body.gsub(/#user.company_name/, user.company_name)
@@ -40,8 +39,7 @@ class UserMailer < ApplicationMailer
     send_email(user.email, email_body, email_subject)
   end
 
-  def retailer_submit_mail(user)
-    admin_user = User.find(1)
+  def retailer_submit_mail(admin_user, user)
     mail_template = get_template('6')
     email_subject = mail_template.subject.gsub(/#user.company_name/, user.company_name)
     email_body = mail_template.body.gsub(/#user.company_name/, user.company_name)
