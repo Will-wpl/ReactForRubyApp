@@ -12,7 +12,7 @@ export class Keppelproposedeviations extends Component {
             deviations_list:[],
             buttonType:'',detailType:'',
             title:'',detail:'',detail_id:'',textdisabled:false,
-            status:null
+            status:null,params_detail:''
         }
     }
     componentDidMount(){
@@ -21,6 +21,7 @@ export class Keppelproposedeviations extends Component {
             if(res.chats.length > 0){
                 console.log(res.chats);
                 this.setState({deviations_list:res.chats});
+                this.list_clone = res.chats;
             }else{
                 this.setState({
                     deviations_list:[
@@ -90,6 +91,7 @@ export class Keppelproposedeviations extends Component {
     }
     editDetail(detail){
         console.log(this.state.detail_id);
+        this.setState({params_detail:detail})
         if(this.state.detail_id != ''){
             let list = this.state.deviations_list,id=this.state.detail_id;
             list[id.split("_")[1]].sp_response = detail;
@@ -112,6 +114,7 @@ export class Keppelproposedeviations extends Component {
         let deviationslist = this.state.deviations_list;
         deviationslist[obj.index].sp_response_status = obj.params;
         deviationslist[obj.index].type = obj.type;
+        //deviationslist[obj.index].sp_response = '';
         this.setState({deviations_list:deviationslist});
         //console.log(this.state.deviations_list);
     }

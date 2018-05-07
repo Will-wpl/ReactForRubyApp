@@ -65,7 +65,7 @@ export class Proposedeviations extends React.Component{
                 return;
             }
             let check = this.state.deviations_list.find((item,index)=>{
-                return $("#item_"+(index)).val() === "" || $("#clause_"+(index)).val() === "" || this.state.deviations_list[index].propose_deviation === "" || this.state.deviations_list[index].retailer_response === "";
+                return $("#item_"+(index)).val() === "" || $("#clause_"+(index)).val() === "" || this.state.deviations_list[index].propose_deviation === "";
             })
             if(check){
                 this.refs.Modal.showModal();
@@ -135,7 +135,7 @@ export class Proposedeviations extends React.Component{
             return;
         }
         let check = this.state.deviations_list.find((item,index)=>{
-            return $("#item_"+(index)).val() === "" || $("#clause_"+(index)).val() === "" || this.state.deviations_list[index].propose_deviation === "" || this.state.deviations_list[index].retailer_response === "";
+            return $("#item_"+(index)).val() === "" || $("#clause_"+(index)).val() === "" || this.state.deviations_list[index].propose_deviation === "";
         })
         if(check){
             this.refs.Modal.showModal();
@@ -242,6 +242,7 @@ export class Proposedeviations extends React.Component{
         return(
             <div className="propose_deviations u-mt3">
                 <h2 className="u-mt3 u-mb2">Propose Deviations</h2>
+                <h4>Submit only deviations for Conditions of Contract. Deviations for other items will not be accepted.</h4>
                 {!this.props.tender ? (this.props.current.current.turn_to_role === 1?<h4 className="u-mb3 pending_review">Status : Deviations pending administrator's review</h4>:''):''}
                 <div className="col-sm-12 col-md-10 push-md-1">
                     <table className="retailer_fill w_100" cellPadding="0" cellSpacing="0">
@@ -250,7 +251,7 @@ export class Proposedeviations extends React.Component{
                                 <th>Item</th>
                                 <th>Clause</th>
                                 <th>Propose Deviation</th>
-                                <th>Retailer Response</th>
+                                <th>Retailer Comments</th>
                                 <th>SP Response</th>
                                 <th></th>
                                 </tr>

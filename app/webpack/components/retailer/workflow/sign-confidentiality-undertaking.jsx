@@ -56,6 +56,7 @@ export class Signconfidentialityundertaking extends React.Component{
                 :''}
                 <p>Please read attached Confidentiality Undertaking and click on 'Accept' to indicate acceptance. 
                     Tender documents will only be released to you upon your acceptance of Confidentiality Undertaking.</p>
+                <p>By clicking Accept, you confirm that you have read the terms and conditions, that you understand them and that you agree to be bound by them.</p>
                     <div className="u-mt3 u-mb3 download">
                         <span>Click to Download : </span>
                         <a className="download_ico" download={this.state.file_name} href={"/"+this.state.file_path}></a>
