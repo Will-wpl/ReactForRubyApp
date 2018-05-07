@@ -70,7 +70,7 @@ export class Showhistory extends React.Component{
                     <div className="history_nr">
                     {this.state.props_data.map((item,index)=>{
                         return <dl key={index}>
-                                    {item.propose_deviation && item.retailer_response ?
+                                    {item.propose_deviation ?
                                     <dd>
                                         <dfn><abbr></abbr>{this.state.ratailer_name}</dfn>
                                         <span>
