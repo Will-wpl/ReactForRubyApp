@@ -23,14 +23,28 @@ RSpec.describe Api::Admin::ArrangementsController, type: :controller do
     context 'with admin role' do
       before { sign_in admin_user }
 
-      before { do_request }
+      context 'has not accept status' do
+        def do_request
+          get :index, params: { auction_id: auction.id }
+        end
+        before { do_request }
+        it {
+          expect(response).to be_success
+          list_body = JSON.parse(response.body)
+          expect(list_body.count).to eq 0
+        }
+      end
 
-      it {
-        expect(response).to be_success
-        list_body = JSON.parse(response.body)
-        expect(list_body[0]['id']).to eq arrangement.id
-        expect(list_body[0]['user_id']).to eq retailer_user.id
-      }
+      context 'has accept status' do
+        before { do_request }
+        it {
+          expect(response).to be_success
+          list_body = JSON.parse(response.body)
+          expect(list_body[0]['id']).to eq arrangement.id
+          expect(list_body[0]['user_id']).to eq retailer_user.id
+        }
+      end
+
     end
   end
 
