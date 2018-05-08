@@ -57,13 +57,6 @@ export default class RankingRealtimeHoc extends Component {
     render() {
         return (
             <div><Ranking data={this.state.data}/></div>
-            // <div>
-            //     {
-            //         React.Children.map(this.props.children
-            //             , (child) => React.cloneElement(child, {data: this.state.data}
-            //             ))
-            //     }
-            // </div>
         )
     }
 }

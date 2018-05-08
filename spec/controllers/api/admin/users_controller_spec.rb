@@ -58,6 +58,21 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
         end
       end
 
+      context 'Conditions Pager Search and sort' do
+        def do_request
+          get :retailers, params: { company_name: [retailers[0].company_name, 'like'], company_license_number: [retailers[0].company_license_number, 'like'], approval_status: [retailers[0].approval_status, '='], page_size: '10', page_index: '1', sort_by: ['company_name' , 'asc', ''] }
+        end
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash = JSON.parse(response.body)
+          expect(hash['headers'].size).to eq(3)
+          expect(hash['bodies']['total']).to eq(1)
+          expect(hash['bodies']['data'].size).to eq(1)
+          expect(hash['actions'].size).to eq(1)
+        end
+      end
+
     end
 
     describe 'GET buyers' do
@@ -113,6 +128,23 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
       context 'Conditions Pager Search' do
         def do_request
           get :buyers, params: { name: [company_buyers[0].company_name, 'like'], consumer_type: ['2', '='], page_size: '10', page_index: '1' }
+        end
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash = JSON.parse(response.body)
+          expect(hash['headers'].size).to eq(3)
+          expect(hash['headers'][0]['field_name']).to eq('company_name')
+          expect(hash['bodies']['total']).to eq(1)
+          expect(hash['bodies']['data'].size).to eq(1)
+          expect(hash['bodies']['data'][0]['company_name']).to eq(company_buyers[0].company_name)
+          expect(hash['actions'].size).to eq(1)
+        end
+      end
+
+      context 'Conditions Pager Search and sort' do
+        def do_request
+          get :buyers, params: { name: [company_buyers[0].company_name, 'like'], consumer_type: ['2', '='], page_size: '10', page_index: '1', sort_by: ['company_name' , 'asc', 'users'] }
         end
         before { do_request }
         it 'success' do

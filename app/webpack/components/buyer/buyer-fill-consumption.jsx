@@ -40,7 +40,6 @@ export class FillConsumption extends Component {
                 })
             }
             if(res.consumption_details.length>0){
-                //$("input[type='checkbox']").attr("checked",true);
                 this.site_list.map((item, index) => {
                     this.site_list[index].intake_level_selected = item.intake_level;
                     this.site_list[index].intake_level = ['Low Tension (LT)','High Tension Small (HTS)','High Tension Large (HTL)','Extra High Tension (EHT)'];
@@ -104,7 +103,6 @@ export class FillConsumption extends Component {
         this.setState({text:"Are you sure you want to delete ?",submit_type:"delete"});
     }
     nameRepeat(arr){
-        //console.log(arr);
         let hash = {};
         for(let i in arr) {
             if(hash[arr[i].account_number])
@@ -141,13 +139,13 @@ export class FillConsumption extends Component {
                 },200)
                 return false;
             }
-            if(this.nameRepeat(JSON.parse(buyerlist))){
-                setTimeout(()=>{
-                    this.refs.Modal.showModal();
-                    this.setState({text:"Account number has already been entered!"});
-                },200)
-                return false;
-            }
+            // if(this.nameRepeat(JSON.parse(buyerlist))){
+            //     setTimeout(()=>{
+            //         this.refs.Modal.showModal();
+            //         this.setState({text:"Account number has already been entered!"});
+            //     },200)
+            //     return false;
+            // }
         }
         
         console.log(makeData.consumption_id);
@@ -181,7 +179,6 @@ export class FillConsumption extends Component {
         })
     }
     doAccept(){
-        //console.log("---makeData-->"+makeData.details);   
         if(this.state.submit_type === "Reject"){ //do Reject
             setBuyerParticipate({consumption_id:this.consumptions_id}, '/api/buyer/consumption_details/reject').then((res) => {
                 this.refs.Modal.showModal();
@@ -216,11 +213,30 @@ export class FillConsumption extends Component {
     }
     checkSuccess(event, obj){
         event.preventDefault();
-        if(this.state.submit_type === "Participate"){
-            this.refs.Modal.showModal("comfirm");
-            this.setState({text:"Are you sure you want to participate in this auction?"});
-        }else if(this.state.submit_type === "save"){
-            this.doSave();
+        let makeData = {},
+            buyerlist = [];
+        this.state.site_list.map((item, index) => {
+            if($("#intake_level"+(index+1)).val() != "LT"){
+                buyerlist += '{"account_number":"'+$("#account_number"+(index+1)).val()+'","id":"'+item.id+'","premise_address":"'+$("#address"+(index+1)).val()+'","intake_level":"'+$("#intake_level"+(index+1)).val()+'","contracted_capacity":"'+$("#capacity"+(index+1)).val()+'","peak":"'+$("#peak"+(index+1)).val()+'","off_peak":"'+$("#off_peak"+(index+1)).val()+'","consumption_id":"'+this.consumptions_id+'"},';
+            }else{
+                buyerlist += '{"account_number":"'+$("#account_number"+(index+1)).val()+'","id":"'+item.id+'","premise_address":"'+$("#address"+(index+1)).val()+'","intake_level":"'+$("#intake_level"+(index+1)).val()+'","peak":"'+$("#peak"+(index+1)).val()+'","off_peak":"'+$("#off_peak"+(index+1)).val()+'","consumption_id":"'+this.consumptions_id+'"},';
+            }
+        })
+        buyerlist = buyerlist.substr(0, buyerlist.length-1);
+        buyerlist = '['+buyerlist+']';
+        if(this.nameRepeat(JSON.parse(buyerlist))){
+            setTimeout(()=>{
+                this.refs.Modal.showModal();
+                this.setState({text:"Account number has already been entered!"});
+            },200)
+            return false;
+        }else{
+            if(this.state.submit_type === "Participate"){
+                this.refs.Modal.showModal("comfirm");
+                this.setState({text:"Are you sure you want to participate in this auction?"});
+            }else if(this.state.submit_type === "save"){
+                this.doSave();
+            }
         }
     }
     render () {
@@ -229,7 +245,15 @@ export class FillConsumption extends Component {
                 <h1>Participate in upcoming {this.state.name} exercise on {moment(this.state.time).format('D MMM YYYY hh:mm a')}</h1>
                 <form name="buyer_form" method="post" onSubmit={this.checkSuccess.bind(this)}>
                 <div className="u-grid buyer mg0">
-                <h4 className="col-sm-12 u-mb2"><input name="agree_auction" type="checkbox" disabled={this.state.disabled} required /> I agree to the {this.state.link?<a className="cursor" download={this.state.link.file_name} href={`/${this.state.link.file_path}`}>terms and conditions.</a>:'terms and conditions.'}</h4>
+                    {this.state.link ?
+                        <h4 className="col-sm-12 u-mb2">
+                            <input name="agree_auction" type="checkbox" disabled={this.state.disabled} required />&nbsp;&nbsp;
+                            I agree to the <a className="cursor" download={this.state.link.file_name} href={`/${this.state.link.file_path}`}>terms and conditions.</a>
+                        </h4>:""
+                    }
+
+                {/*<h4 className="col-sm-12 u-mb2"><input name="agree_auction" type="checkbox" disabled={this.state.disabled} required /> I agree to the {this.state.link?<a className="cursor" download={this.state.link.file_name} href={`/${this.state.link.file_path}`}>terms and conditions.</a>:'terms and conditions.'}</h4>*/}
+
                 <h4 className="col-sm-12 u-mb2">Last Status of Participation : {this.status}</h4>
                     <div className="col-sm-12 col-md-8">
                     <DoFillConsumption changeSiteList={this.changeSiteList.bind(this)} site_list={this.state.site_list} checked={this.state.checked} remove={this.remove_site.bind(this)} />

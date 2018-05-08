@@ -35,17 +35,12 @@ export class AdminDashboard extends Component {
             let auctionId = auction? auction.id : 1;
 
             getHistories({ auction_id: auctionId}).then(histories => {
-                // console.log('histories', histories, isEmptyJsonObj(histories));
                 if (!isEmptyJsonObj(histories)) {
                     let orderRanking = histories.filter(element => {
                         return element.data.length > 0;
                     }).map(element => {
                         return element.data[element.data.length - 1];
                     })
-                    // let orderRanking = histories.map(element => {
-                    //     return element.data.length > 0 ? element.data[element.data.length - 1] : []
-                    // })
-                    // console.log('orderRanking', orderRanking);
                      try {
                          orderRanking.sort((a, b) => {
                              const ar = Number(a.ranking);
@@ -65,16 +60,12 @@ export class AdminDashboard extends Component {
                                      return 0;
                                  }
                              }
-                             // return Number(a.average_price) > Number(b.average_price)
                          })
                      } catch (error) {
                          console.log(error);
                      }
-                    // console.log('history======>', histories)
                     this.setState({realtimeData: histories, realtimeRanking: orderRanking
                         , currentPrice : orderRanking.length > 0 ? orderRanking[0].average_price : this.state.currentPrice});
-                    // this.refs.priceChart.setChartData(histories, 'price');
-                    // this.refs.rankingChart.setChartData(histories, 'ranking');
                 }
                 this.createWebsocket(auctionId);
             }, error => {
@@ -84,17 +75,15 @@ export class AdminDashboard extends Component {
             getArrangements(auctionId, ACCEPT_STATUS.ACCEPT).then(res => {
                 let limit = findUpLimit(res.length);
                 let users = res.map((element, index) => {
-                    element['color'] = getRandomColor(index + 1, limit); //getRandomColor((index + 1) * 1.0 / limit);
+                    element['color'] = getRandomColor(index + 1, limit);
                     return element;
                 });
-                // this.setState({users:users});
                 this.userLen = users.length;
                 this.priceUsers.setList(JSON.parse(JSON.stringify(users)));
                 this.rankingUsers.setList(JSON.parse(JSON.stringify(users)));
                 this.priceUsers.selectAll();
                 this.rankingUsers.selectAll();
             }, error => {
-                //console.log(error);
             });
         })
     }
@@ -102,22 +91,16 @@ export class AdminDashboard extends Component {
     createWebsocket(auction) {
         this.ws = createWebsocket(auction);
         this.ws.onConnected(() => {
-            //console.log('---message client connected ---');
         }).onDisconnected(() => {
-            //console.log('---message client disconnected ----')
         }).onReceivedData(data => {
-            //console.log('---message client received data ---', data);
             if (data.action === 'set_bid') {
                 if (data.data.length > 0) {
                     let histories = [];
                     data.data.forEach((element, index) => {
                         histories.push({id: element.user_id, data:[].concat(element)})
                     })
-                    // console.log('realtime ===> ', histories);
                     this.setState({realtimeData: histories, realtimeRanking: data.data
                         , currentPrice : data.data[0].average_price});
-                    // this.refs.priceChart.setChartData(histories, 'price');
-                    // this.refs.rankingChart.setChartData(histories, 'ranking');
                 }
             }
             if (data.action === 'extend_time') {

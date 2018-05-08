@@ -54,15 +54,11 @@ export class AdminReport extends Component {
                     this.setState({histories: histories});
                 })
             })
-            // getHistories({ auction_id: auction? auction.id : 1}).then(histories => {
-            //     // console.log('histories', histories);
-            //     this.setState({histories: histories});
-            // })
 
             getArrangements(auctionId, ACCEPT_STATUS.ACCEPT).then(res => {
                 let limit = findUpLimit(res.length);
                 let users = res.map((element, index) => {
-                    element['color'] = getRandomColor(index + 1, limit); //getRandomColor((index + 1) * 1.0 / limit);
+                    element['color'] = getRandomColor(index + 1, limit);
                     return element;
                 });
                 this.setState({users:users});
@@ -72,7 +68,6 @@ export class AdminReport extends Component {
                 this.priceUsers.selectAll();
                 this.rankingUsers.selectAll();
             }, error => {
-                //console.log(error);
             });
         })
     }

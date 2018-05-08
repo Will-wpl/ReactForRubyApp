@@ -14,7 +14,6 @@ componentDidMount() {
     
 }
 render() {
-    //console.log(this.winner.data);
     return (
         <div className="u-grid mg0">
                <div className="col-sm-12 u-mb1" id="price_title">{this.props.type === 'View Company Consumption Details' ? 'Company' : 'Individual'} Consumption Total Summary:</div>

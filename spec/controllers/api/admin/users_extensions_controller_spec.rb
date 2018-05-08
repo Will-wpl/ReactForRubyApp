@@ -62,6 +62,20 @@ RSpec.describe Api::Admin::UserExtensionsController, type: :controller do
         end
       end
 
+      context 'Conditions Pager Search and sort' do
+        def do_request
+          get :index, params: { company_name: [r1.company_name, 'like'], page_size: '10', page_index: '1', sort_by: ['company_name' , 'asc', 'users'] }
+        end
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash = JSON.parse(response.body)
+          expect(hash['headers'].size).to eq(6)
+          expect(hash['bodies']['total']).to eq(1)
+          expect(hash['bodies']['data'].size).to eq(1)
+        end
+      end
+
     end
 
   end

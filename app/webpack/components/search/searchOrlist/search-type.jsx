@@ -58,7 +58,6 @@ export class SearchType extends Component {
     goSearch(type){
         let needData = ''
         this.search_type_data.map((item,index)=>{
-            //needData += '"'+item.type+'":"'+$('#'+item.type).val()+'",';
             if(item.table){
                 if(item.type == "start_datetime" && this.state.start_datetime != ""){
                     needData += '"'+item.type+'":["'+this.state.start_datetime.format()+'","'+item.operator+'","'+item.table+'"],';
@@ -87,9 +86,9 @@ export class SearchType extends Component {
     }
     goReset(){
         $(".search_type input[type='text']").val("");
-        this.setState({start_datetime:''})
+        this.setState({start_datetime:""})
         $(".search_type select").val($(".search_type select option:first").val());
-        this.goSearch();
+        setTimeout(()=>{this.goSearch();},200);
     }
     getAuctionId(type,obj){
         sessionStorage.auction_id=type;

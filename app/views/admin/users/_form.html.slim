@@ -1,3 +1,7 @@
+- if breadcrumbs.present?
+  ol.lm--breadcrumb
+    = render_breadcrumbs tag: :li, separator: " "
+
 .u-wrap
   = simple_form_for [:admin, @user] do |f|
 

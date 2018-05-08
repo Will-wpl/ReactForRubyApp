@@ -12,6 +12,9 @@ export class Submittender extends React.Component{
             fileData:{
                 "upload_tender":[
                     {buttonName:"none",files:[]}
+                ],
+                "attachment_deviation":[
+                    {buttonName:"none",files:[]}
                 ]
             }
         }
@@ -31,6 +34,7 @@ export class Submittender extends React.Component{
             this.setState({ 
                 fileData:fileObj
             })
+            console.log(this.state.fileData);
             this.changeNext();
         })
     }
@@ -202,7 +206,6 @@ export class Submittender extends React.Component{
             xhr:() => {
                 var xhr = new window.XMLHttpRequest();
                 xhr.upload.addEventListener("progress", function (evt) {
-                    //console.log(evt)
                     if (evt.lengthComputable) {
                         const percentComplete = parseInt(evt.loaded / evt.total * 100, 10);
                         barObj.show();
@@ -226,7 +229,7 @@ export class Submittender extends React.Component{
                     item.files.push({
                         id:res.id,
                         file_name:res.file_name,
-                        file_path:res.file_path //replace((res.file_path.split(`uploads/attachments/${res.auction_id}/`)[1]),res.file_name)
+                        file_path:res.file_path
                     })
                 })
                 this.setState({

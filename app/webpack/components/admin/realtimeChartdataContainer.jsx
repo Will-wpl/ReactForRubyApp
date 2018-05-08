@@ -8,43 +8,34 @@ export default class ChartRealtimeHoc extends Component {
         this.ids = [];
         this.list = [];
         this.state = {data: []};
-
     }
 
     componentWillReceiveProps(next) {
         if (this.list.length === 0) {
             this.list = this.list.concat(next.dataStore);
         } else {
-            // let dataCopy = JSON.parse(JSON.stringify(next.dataStore));
             next.dataStore.forEach(newData => {
                 let result = this.list.find(oldData => {
                     return oldData.id === newData.id;
                 })
                 if (result) {
-                    // result.data = result.data.concat(newData.data);
-                    // console.error('result ====>', result.id, newData.id)
                     if (result.data.length > 0 && newData.data.length > 0) {
                         let oldLast = result.data[result.data.length - 1];
                         let newLast = newData.data[newData.data.length - 1];
-                        // console.error('oldLast, newLast ====>', oldLast, newLast)
                         if (oldLast.flag !== newLast.flag && moment(newLast.bid_time) > moment(oldLast.bid_time)) {
                             result.data = result.data.concat(newData.data);
                         } else {
-                            // console.error('chart append error ====>', result, 'connect new data ===>', newData)
                         }
                     }
 
                 }
             })
         }
-        // console.log('chart data ====>', this.list);
         this.filterData();
     }
 
     updateIndentifications(ids) {
         this.ids = ids ? ids : [];
-        // console.log('==================>', ids)
-        // console.log('==================>', this.list)
         this.filterData();
     }
 

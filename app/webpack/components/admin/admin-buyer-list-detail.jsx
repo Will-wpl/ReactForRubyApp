@@ -47,7 +47,6 @@ show_detail(index,consumption_id){
     }
 }
 render() {
-    //console.log(this.winner.data);
     return (
         <div className="u-grid mg0">
             <h2 className="u-mt2 u-mb2">View Consumption Details</h2>

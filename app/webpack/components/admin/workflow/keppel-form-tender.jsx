@@ -9,14 +9,19 @@ export class Keppelformtender extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            text:'',buttonType:'',linklist:[],chats:[],comments:""
+            text:'',buttonType:'',linklist:[],chats:[],comments:"",
+            detailType:'',title:'',detail:'',detail_id:'',textdisabled:false,
+            status:null
         }
     }
     componentDidMount() {
         getAdminKeppelForm(this.props.current.current.arrangement_id).then(res=>{
             console.log(res);
+            let attachments = res.attachments.filter((item)=>{
+                return item.file_type === "upload_tender";
+            })
             this.setState({
-                linklist:res.attachments,
+                linklist:attachments,
                 chats:res.chats,
                 comments:(res.comments?res.comments:"")
             })
@@ -46,17 +51,16 @@ export class Keppelformtender extends React.Component{
     }
     admin_reject(){
         adminReject(this.props.current.current.arrangement_id,encodeURI($("#adminComment").val())).then(res=>{
-            //this.props.page(this.props.current.current.arrangement_id);
             window.location.href="/admin/auctions/"+sessionStorage.auction_id+"/retailer_dashboard";
         })
     }
     admin_accept(){
         adminAccept(this.props.current.current.arrangement_id,encodeURI($("#adminComment").val())).then(res=>{
-            //this.props.page(this.props.current.current.arrangement_id);
             window.location.href="/admin/auctions/"+sessionStorage.auction_id+"/retailer_dashboard";
         })
     }
     showhistory(id){
+        this.setState({detailType:"history"})
         getTenderhistory('admin',id).then(res=>{
             console.log(res);
             this.refs.history.showModal(res);
@@ -67,6 +71,17 @@ export class Keppelformtender extends React.Component{
         this.setState({
             comments:val
         })
+    }
+    showpropose(title,detail,id,disabled,status){
+        this.setState({
+            detailType:"propose",
+            title:title,
+            detail:detail,
+            detail_id:id,
+            textdisabled:disabled,
+            status:status
+        })
+        this.refs.history.showModal();
     }
     render(){
         return(
@@ -79,7 +94,7 @@ export class Keppelformtender extends React.Component{
                     <div className="lm--formItem-right lm--formItem-control">
                         <ul className="tender_list">
                             {this.state.linklist.length > 0 ? this.state.linklist.map((item,index)=>{
-                                return <li key={index}>Item {index+1} : <a download={item.file_name} href={"/"+item.file_path}>{item.file_name}</a></li>
+                                    return <li key={index}>Item {index+1} : <a download={item.file_name} href={"/"+item.file_path}>{item.file_name}</a></li>                         
                             }) : ''}
                         </ul>
                     </div>
@@ -96,7 +111,7 @@ export class Keppelformtender extends React.Component{
                                 <th>Item</th>
                                 <th>Clause</th>
                                 <th>Propose Deviation</th>
-                                <th>Retailer Response</th>
+                                <th>Retailer Comments</th>
                                 <th>SP Response</th>
                                 <th></th>
                                 </tr>
@@ -106,9 +121,9 @@ export class Keppelformtender extends React.Component{
                                     return <tr key={index}>
                                                 <td>{item.item}</td>
                                                 <td >{item.clause}</td>
-                                                <td ><textarea className="show_text" defaultValue={decodeURI(item.propose_deviation)} disabled/></td>
-                                                <td ><textarea className="show_text" defaultValue={decodeURI(item.retailer_response)} disabled/></td>
-                                                <td ><textarea className="show_text" defaultValue={decodeURI(item.sp_response)} disabled/></td>
+                                                <td><button onClick={this.showpropose.bind(this,"Propose Deviation",item.propose_deviation,'',true,false)}>Details</button></td>
+                                                <td><button onClick={this.showpropose.bind(this,"Retailer Comments",item.retailer_response,'',true,false)} >Details</button></td>
+                                                <td><button onClick={this.showpropose.bind(this,"SP Response",item.sp_response,'',true,item.response_status)} >Details</button></td>
                                                 <td><button onClick={this.showhistory.bind(this,item.id)}>History</button></td>
                                             </tr>
                                 })}
@@ -129,7 +144,7 @@ export class Keppelformtender extends React.Component{
                         <button className="lm--button lm--button--primary" disabled={this.props.readOnly} onClick={this.showConfirm.bind(this,'Accept')}>Accept</button>
                 </div>
                 <Modal text={this.state.text} acceptFunction={this.state.buttonType === 'Reject'?this.admin_reject.bind(this):this.admin_accept.bind(this)} ref="Modal" />
-                <Showhistory ref="history" />
+                <Showhistory ref="history" status={this.state.status} textdisabled={this.state.textdisabled} type={this.state.detailType} title={this.state.title} detail={this.state.detail} detail_id={this.state.detail_id} />
             </div>
         )
     }

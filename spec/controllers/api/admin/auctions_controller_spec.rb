@@ -273,6 +273,37 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
           expect(hash['bodies']['data'][0]['name']).to eq(auction.name)
         end
       end
+
+      context 'Params pagers unpublished auction and sort' do
+        def do_request
+          get :unpublished, params: { name: [auction.name, 'like'], actual_begin_time: [Time.current.strftime('%Y-%m-%d'), 'date_between'], page_size: '10', page_index: '1', sort_by: ['name', 'asc', ''] }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash = JSON.parse(response.body)
+          expect(hash['headers'].size).to eq(2)
+          expect(hash['bodies']['total']).to eq(1)
+          expect(hash['bodies']['data'].size).to eq(1)
+          expect(hash['bodies']['data'][0]['name']).to eq(auction.name)
+        end
+      end
+
+      context 'Params pagers unpublished auction and sort include table name' do
+        def do_request
+          get :unpublished, params: { name: [auction.name, 'like'], actual_begin_time: [Time.current.strftime('%Y-%m-%d'), 'date_between'], page_size: '10', page_index: '1', sort_by: ['name' , 'asc', 'auctions'] }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash = JSON.parse(response.body)
+          expect(hash['headers'].size).to eq(2)
+          expect(hash['bodies']['total']).to eq(1)
+          expect(hash['bodies']['data'].size).to eq(1)
+          expect(hash['bodies']['data'][0]['name']).to eq(auction.name)
+        end
+      end
+
     end
 
     describe 'GET published auction list' do
@@ -297,6 +328,21 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       context 'Params pagers published auction' do
         def do_request
           get :published, params: { name: [auction.name, 'like'], actual_begin_time: [Time.current.strftime('%Y-%m-%d'), 'date_between'], page_size: '10', page_index: '1' }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash = JSON.parse(response.body)
+          expect(hash['headers'].size).to eq(4)
+          expect(hash['bodies']['total']).to eq(2)
+          expect(hash['bodies']['data'].size).to eq(2)
+          expect(hash['bodies']['data'][0]['name']).to eq(auction.name)
+        end
+      end
+
+      context 'Params pagers published auction and sort' do
+        def do_request
+          get :published, params: { name: [auction.name, 'like'], actual_begin_time: [Time.current.strftime('%Y-%m-%d'), 'date_between'], page_size: '10', page_index: '1', sort_by: ['name' , 'asc', ''] }
         end
 
         before { do_request }
@@ -373,6 +419,22 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
         end
       end
 
+      context 'Pager got pending notification user list and sort' do
+        def do_request
+          get :retailers, params: { id: auction.id, status: ['2', '='], page_size: '10', page_index: '1', sort_by: ['company_name' , 'asc', ''] }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+          expect(hash['headers'].size).to eq(3)
+          expect(hash['bodies']['total']).to eq(2)
+          expect(hash['bodies']['data'].size).to eq(2)
+        end
+      end
+
+
       context 'Pager got pending notification user list' do
         def do_request
           get :retailers, params: { id: auction.id, status: ['2', '='], page_size: '10', page_index: '1' }
@@ -409,6 +471,36 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       context 'Pager got individual buyer user list' do
         def do_request
           get :buyers, params: { id: auction.id, consumer_type: ['3', '='], status: ['', '='], page_size: '10', page_index: '1' }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+          expect(hash['headers'].size).to eq(4)
+          expect(hash['bodies']['total']).to eq(25)
+          expect(hash['bodies']['data'].size).to eq(10)
+        end
+      end
+
+      context 'Pager got company buyer user list and sort' do
+        def do_request
+          get :buyers, params: { id: auction.id, consumer_type: ['2', '='], status: ['', '='], page_size: '10', page_index: '1', sort_by: ['company_name' , 'asc', ''] }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+          expect(hash['headers'].size).to eq(3)
+          expect(hash['bodies']['total']).to eq(25)
+          expect(hash['bodies']['data'].size).to eq(10)
+        end
+      end
+
+      context 'Pager got individual buyer user list and sort' do
+        def do_request
+          get :buyers, params: { id: auction.id, consumer_type: ['3', '='], status: ['', '='], page_size: '10', page_index: '1', sort_by: ['name' , 'asc', 'users'] }
         end
 
         before { do_request }

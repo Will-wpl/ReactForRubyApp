@@ -48,24 +48,7 @@ class Retailer::AuctionsController < Retailer::BaseController
     if @auction.publish_status != '1'
       redirect_to empty_retailer_auction_path(@auction.id)
     else
-      if arrangement.accept_status != '1'
-        if @auction.actual_begin_time < Time.current # auction started
-          redirect_to empty_retailer_auction_path(@auction.id)
-          #   We regret to inform that you are unable to participate as you have not submitted the necessary contact person details. We hpe to see you again in future reverse auctions.
-        elsif Time.current < @auction.actual_begin_time
-          redirect_to upcoming_retailer_auction_path(@auction.id)
-        end
-      else
-        if Time.current < @auction.actual_begin_time
-          redirect_to upcoming_retailer_auction_path(@auction.id)
-        elsif @auction.actual_begin_time < Time.current && Time.current < @auction.actual_end_time
-          redirect_to empty_retailer_auction_path(@auction.id)
-        elsif @auction.auction_result.nil? && Time.current > @auction.actual_end_time
-          redirect_to empty_retailer_auction_path(@auction.id)
-        elsif !@auction.auction_result.nil?
-          redirect_to empty_retailer_auction_path(@auction.id)
-        end
-      end
+      (arrangement.accept_status != '1') ? goto_published_and_not_accepted : goto_published_and_accepted
     end
   end
 
@@ -75,29 +58,7 @@ class Retailer::AuctionsController < Retailer::BaseController
       redirect_to message_retailer_auction_path(@auction.id)
       # There is no upcoming reverse auction published.
     else
-      if arrangement.accept_status != '1'
-        if @auction.actual_begin_time < Time.current
-          redirect_to message_retailer_auction_path(@auction.id)
-          # We regret to inform that you are unable to participate as you have not submitted the necessary contact person details. We hpe to see you again in future reverse auctions.
-        elsif Time.current < @auction.actual_begin_time
-          redirect_to message_retailer_auction_path(@auction.id)
-          # Please complete the necessary details under 'Manage Upcoming Reverse Auction' located in homepage.
-        end
-      else
-        if Time.current < @auction.actual_begin_time
-          redirect_to live_retailer_auction_path(@auction.id)
-          # stand by page
-        elsif @auction.actual_begin_time < Time.current && Time.current < @auction.actual_end_time
-          redirect_to live_retailer_auction_path(@auction.id)
-        elsif @auction.auction_result.nil? && Time.current > @auction.actual_end_time && @auction.hold_status
-          redirect_to live_retailer_auction_path(@auction.id)
-        elsif @auction.auction_result.nil? && Time.current > @auction.actual_end_time && !@auction.hold_status
-          redirect_to finish_retailer_auction_path(@auction.id)
-        elsif !@auction.auction_result.nil?
-          redirect_to message_retailer_auction_path(@auction.id)
-          # There is no upcoming reverse auction published.
-        end
-      end
+      (arrangement.accept_status != '1') ? gotobid_published_and_not_accepted : gotobid_published_and_accepted
     end
   end
 
@@ -130,4 +91,52 @@ class Retailer::AuctionsController < Retailer::BaseController
   def set_auction
     @auction = Auction.find(params[:id])
   end
+
+  def gotobid_published_and_not_accepted
+    if @auction.actual_begin_time < Time.current
+      redirect_to message_retailer_auction_path(@auction.id)
+      # We regret to inform that you are unable to participate as you have not submitted the necessary contact person details. We hpe to see you again in future reverse auctions.
+    elsif Time.current < @auction.actual_begin_time
+      redirect_to message_retailer_auction_path(@auction.id)
+      # Please complete the necessary details under 'Manage Upcoming Reverse Auction' located in homepage.
+    end
+  end
+
+  def gotobid_published_and_accepted
+    if Time.current < @auction.actual_begin_time
+      redirect_to live_retailer_auction_path(@auction.id)
+      # stand by page
+    elsif @auction.actual_begin_time < Time.current && Time.current < @auction.actual_end_time
+      redirect_to live_retailer_auction_path(@auction.id)
+    elsif @auction.auction_result.nil? && Time.current > @auction.actual_end_time && @auction.hold_status
+      redirect_to live_retailer_auction_path(@auction.id)
+    elsif @auction.auction_result.nil? && Time.current > @auction.actual_end_time && !@auction.hold_status
+      redirect_to finish_retailer_auction_path(@auction.id)
+    elsif !@auction.auction_result.nil?
+      redirect_to message_retailer_auction_path(@auction.id)
+      # There is no upcoming reverse auction published.
+    end
+  end
+
+  def goto_published_and_not_accepted
+    if @auction.actual_begin_time < Time.current # auction started
+      redirect_to empty_retailer_auction_path(@auction.id)
+      #   We regret to inform that you are unable to participate as you have not submitted the necessary contact person details. We hpe to see you again in future reverse auctions.
+    elsif Time.current < @auction.actual_begin_time
+      redirect_to upcoming_retailer_auction_path(@auction.id)
+    end
+  end
+
+  def goto_published_and_accepted
+    if Time.current < @auction.actual_begin_time
+      redirect_to upcoming_retailer_auction_path(@auction.id)
+    elsif @auction.actual_begin_time < Time.current && Time.current < @auction.actual_end_time
+      redirect_to empty_retailer_auction_path(@auction.id)
+    elsif @auction.auction_result.nil? && Time.current > @auction.actual_end_time
+      redirect_to empty_retailer_auction_path(@auction.id)
+    elsif !@auction.auction_result.nil?
+      redirect_to empty_retailer_auction_path(@auction.id)
+    end
+  end
+
 end

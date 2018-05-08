@@ -13,15 +13,21 @@ class Api::Admin::UserExtensionsController < Api::BaseController
     end
 
     headers = [
-      { name: 'Company Name', field_name: 'company_name' },
-      { name: 'Login Status', field_name: 'logged_in_status' },
-      { name: 'Last Login', field_name: 'logged_in_last_time' },
-      { name: 'Live Connectivity', field_name: 'ws_send_message_status' },
-      { name: 'Last Live Connection', field_name: 'ws_send_message_last_time' },
-      { name: 'Last Login IP', field_name: 'current_ip' },
+      { name: 'Company Name', field_name: 'company_name', table_name: 'users' },
+      { name: 'Login Status', field_name: 'logged_in_status', table_name: 'user_extensions' },
+      { name: 'Last Login', field_name: 'logged_in_last_time', table_name: 'user_extensions' },
+      { name: 'Live Connectivity', field_name: 'ws_send_message_status', table_name: 'user_extensions' },
+      { name: 'Last Live Connection', field_name: 'ws_send_message_last_time', table_name: 'user_extensions' },
+      { name: 'Last Login IP', field_name: 'current_ip', table_name: 'user_extensions' },
     ]
     data = []
-    ue.order(created_at: :desc).each do |ue|
+    ues = if params.key?(:sort_by)
+           order_by_string = get_order_by_obj_str(params[:sort_by], headers)
+           ue.order(order_by_string)
+         else
+           ue.order(created_at: :desc)
+         end
+    ues.each do |ue|
       data.push(company_name: ue.user.company_name, logged_in_status: ue.logged_in_status,
                 logged_in_last_time: ue.logged_in_last_time, ws_connected_status: ue.ws_connected_status,
                 ws_connected_last_time: ue.ws_connected_last_time, ws_send_message_status: ue.ws_send_message_status,

@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import CheckboxListItem from './list-checkbox-item';
-// import {findUpLimit, getRandomColor} from '../../../javascripts/componentService/util';
 
 export default class CheckboxList extends Component {
 
@@ -8,19 +7,6 @@ export default class CheckboxList extends Component {
         super(props);
         this.filters = [];
     }
-
-    // componentWillReceiveProps(next) {
-    //     if (this.filters.length === 0 && next.list) {
-    //         next.list.forEach(element => {
-    //             let id = element.user_id;
-    //             let color = element.color;
-    //             this.filters.push({id, color});
-    //         })
-    //         if (this.props.onCheckeds) {
-    //             this.props.onCheckeds(this.filters);
-    //         }
-    //     }
-    // }
 
     setList(list) {
         this.list = list;

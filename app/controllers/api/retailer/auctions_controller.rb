@@ -24,7 +24,7 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
   # Retailer search published auction list
   def published
     if params.key?(:page_size) && params.key?(:page_index)
-      search_params = reject_params(params, %w[controller action])
+      search_params = reject_params(params, %w[controller action sort_by])
       search_where_array = set_search_params(search_params)
 
       arrangement = Arrangement.find_published_result_auction.find_notify_retailer(current_user.id).where(search_where_array).page(params[:page_index]).per(params[:page_size])
@@ -35,19 +35,19 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
     end
 
     headers = [
-      { name: 'ID', field_name: 'id_name' },
-      { name: 'Name', field_name: 'name' },
-      { name: 'Date/Time', field_name: 'actual_begin_time' },
-      { name: 'Auction Status', field_name: 'auction_status' },
-      { name: 'My Status', field_name: 'my_status' },
-      { name: nil, field_name: 'actions' }
+      { name: 'ID', field_name: 'published_gid', table_name:'auctions' },
+      { name: 'Name', field_name: 'name', table_name:'auctions' },
+      { name: 'Date/Time', field_name: 'actual_begin_time', table_name:'auctions' },
+      { name: 'Auction Status', field_name: 'auction_status', is_sort: false },
+      { name: 'My Status', field_name: 'accept_status', table_name: 'arrangements' },
+      { name: nil, field_name: 'actions', is_sort: false }
     ]
     actions = [{ url: '/retailer/arrangements/:id/tender', name: 'Manage', icon: 'manage', interface_type: 'auction', check:'docheck' },
                { url: '/retailer/arrangements/:id/tender', name: 'View', icon: 'view', interface_type: 'auction', check:'docheck' },
                { url: '/retailer/auctions/:id/gotobid', name: 'Start Bidding', icon: 'bidding', interface_type: 'auction' }]
     data = []
-
-    arrangement.order('auctions.actual_begin_time asc').each do |arrangement|
+    arrangements = get_order_list(params, headers, arrangement)
+    arrangements.each do |arrangement|
       auction_status = 'In Progress'
       action = 1
       if Time.current < arrangement.auction.actual_begin_time
@@ -58,9 +58,8 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
       #   'In Progress'
       end
 
-      data.push(id_name: arrangement.auction.published_gid, name: arrangement.auction.name, actual_begin_time: arrangement.auction.actual_begin_time,
-                auction_status: auction_status, my_status: arrangement.accept_status,
-                id: arrangement.id, auction_id: arrangement.auction_id, actions: action)
+      data.push(published_gid: arrangement.auction.published_gid, name: arrangement.auction.name, actual_begin_time: arrangement.auction.actual_begin_time,
+                auction_status: auction_status, accept_status: arrangement.accept_status, id: arrangement.id, auction_id: arrangement.auction_id, actions: action)
     end
 
     bodies = { data: data, total: total }
@@ -74,5 +73,16 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
     is_zero = false
     is_zero = true if intake_peak == 0 && intake_off_peak == 0
     is_zero
+  end
+
+  private
+
+  def get_order_list(params, headers, arrangement)
+    if params.key?(:sort_by)
+      order_by_string = get_order_by_obj_str(params[:sort_by], headers)
+      arrangement.order(order_by_string)
+    else
+      arrangement.order('auctions.actual_begin_time asc')
+    end
   end
 end

@@ -1,3 +1,7 @@
+- if breadcrumbs.present?
+  ol.lm--breadcrumb
+    = render_breadcrumbs tag: :li, separator: " "
+
 .page-header
   .u-pull-right
     = link_to edit_admin_user_path(@user), class: "lm--button lm--button--warning" do

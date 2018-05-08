@@ -90,11 +90,7 @@ class AuctionHistory < ApplicationRecord
     tmp_average_price = nil
     new_histories = []
     sorted_histories.each_with_index do |history, index|
-      if tmp_average_price == history.average_price
-        count += 1
-      else
-        count = 0
-      end
+      count = AuctionHistory.get_count(tmp_average_price, history, count)
       # puts history, index
       # save
       history_new = AuctionHistory.new
@@ -140,8 +136,7 @@ class AuctionHistory < ApplicationRecord
       @auction.total_lt_peak, @auction.total_lt_off_peak,
       @auction.total_hts_peak, @auction.total_hts_off_peak,
       @auction.total_htl_peak, @auction.total_htl_off_peak,
-      @auction.total_eht_peak, @auction.total_eht_off_peak
-    )
+      @auction.total_eht_peak, @auction.total_eht_off_peak )
     new_total_volume = Auction.set_c_value(total_volume, days)
     total_award_sum = set_total_award_sum(Auction.set_c_value(@auction.total_lt_peak, days),
                                           Auction.set_c_value(@auction.total_lt_off_peak, days),
@@ -156,18 +151,14 @@ class AuctionHistory < ApplicationRecord
                                           calculate_dto.htl_peak, calculate_dto.htl_off_peak,
                                           calculate_dto.eht_peak, calculate_dto.eht_off_peak)
     average_price = set_average_price(total_award_sum, new_total_volume)
+    history_obj = {lt_peak: calculate_dto.lt_peak, lt_off_peak: calculate_dto.lt_off_peak, hts_peak: calculate_dto.hts_peak, hts_off_peak: calculate_dto.hts_off_peak, htl_peak: calculate_dto.htl_peak, htl_off_peak: calculate_dto.htl_off_peak, eht_peak: calculate_dto.eht_peak, eht_off_peak: calculate_dto.eht_off_peak, bid_time: @auction.actual_begin_time, actual_bid_time: @auction.actual_begin_time,
+                   user_id: calculate_dto.user_id, auction_id: calculate_dto.auction_id, average_price: average_price, total_award_sum: total_award_sum, is_bidder: true}
     if @histories.count == 0
-      @history = AuctionHistory.new(lt_peak: calculate_dto.lt_peak, lt_off_peak: calculate_dto.lt_off_peak, hts_peak: calculate_dto.hts_peak, hts_off_peak: calculate_dto.hts_off_peak, htl_peak: calculate_dto.htl_peak, htl_off_peak: calculate_dto.htl_off_peak, eht_peak: calculate_dto.eht_peak, eht_off_peak: calculate_dto.eht_off_peak, bid_time: @auction.actual_begin_time, actual_bid_time: @auction.actual_begin_time,
-                                    user_id: calculate_dto.user_id, auction_id: calculate_dto.auction_id, average_price: average_price, total_award_sum: total_award_sum, is_bidder: true)
-      if @history.save
-        find_sort_update_auction_histories(calculate_dto.auction_id)
-      end
+      @history = AuctionHistory.new(history_obj)
+      find_sort_update_auction_histories(calculate_dto.auction_id) if @history.save
     else
       @history = @histories.first
-      if @history.update(lt_peak: calculate_dto.lt_peak, lt_off_peak: calculate_dto.lt_off_peak, hts_peak: calculate_dto.hts_peak, hts_off_peak: calculate_dto.hts_off_peak, htl_peak: calculate_dto.htl_peak, htl_off_peak: calculate_dto.htl_off_peak, eht_peak: calculate_dto.eht_peak, eht_off_peak: calculate_dto.eht_off_peak, bid_time: @auction.actual_begin_time, actual_bid_time: @auction.actual_begin_time,
-                         user_id: calculate_dto.user_id, auction_id: calculate_dto.auction_id, average_price: average_price, total_award_sum: total_award_sum, is_bidder: true)
-        find_sort_update_auction_histories(calculate_dto.auction_id)
-      end
+      find_sort_update_auction_histories(calculate_dto.auction_id) if @history.update(history_obj)
     end
   end
 
@@ -197,11 +188,7 @@ class AuctionHistory < ApplicationRecord
     count = 0
     tmp_average_price = nil
     histories.each_with_index do |history, index|
-      if tmp_average_price == history.average_price
-        count += 1
-      else
-        count = 0
-      end
+      count = AuctionHistory.get_count(tmp_average_price, history, count)
       # puts history, index
       history.update(ranking: index + 1 - count)
       tmp_average_price = history.average_price
@@ -221,11 +208,7 @@ class AuctionHistory < ApplicationRecord
     count = 0
     tmp_average_price = nil
     histories.each_with_index do |history, index|
-      if tmp_average_price == history.average_price
-        count += 1
-      else
-        count = 0
-      end
+      count = AuctionHistory.get_count(tmp_average_price, history, count)
       # puts history, index
       if history.id == current_history.id
         ids.push(history.id) if history.update(ranking: index + 1 - count, flag: flag)
@@ -260,5 +243,16 @@ class AuctionHistory < ApplicationRecord
   # find auction histories by auction ids(array), belong to set_bid function
   def self.find_histories_by_ids(ids)
     AuctionHistory.select('auction_histories.* , users.company_name').joins(:user).find(ids)
+  end
+
+  private
+
+  def self.get_count(tmp_average_price, history, count)
+    if tmp_average_price == history.average_price
+      count += 1
+    else
+      count = 0
+    end
+    count
   end
 end

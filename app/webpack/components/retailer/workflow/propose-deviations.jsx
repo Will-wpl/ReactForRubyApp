@@ -12,7 +12,9 @@ export class Proposedeviations extends React.Component{
             peak_htl:0,peak_eht:0,off_peak_lt:0,off_peak_hts:0,
             off_peak_htl:0,off_peak_eht:0,buttonType:'',
             select_list:[],alldisabled:false,
-            deviations_list:[]
+            deviations_list:[],detailType:'',
+            title:'',detail:'',detail_id:'',textdisabled:false,
+            status:null,attachments:[]
         }
     }
     componentDidMount() {
@@ -31,8 +33,8 @@ export class Proposedeviations extends React.Component{
             }
             this.setState({select_list:select_list})
             if(res.chats.length > 0){
-                console.log(res.chats);
-                this.setState({deviations_list:res.chats});
+                console.log(res);
+                this.setState({deviations_list:res.chats,attachments:res.attachments});
             }else{
                 this.setState({
                     deviations_list:[
@@ -63,7 +65,7 @@ export class Proposedeviations extends React.Component{
                 return;
             }
             let check = this.state.deviations_list.find((item,index)=>{
-                return $("#item_"+(index)).val() === "" || $("#clause_"+(index)).val() === "" || $("#deviation_"+(index)).val() === "" || $("#response_"+(index)).val() === "";
+                return $("#item_"+(index)).val() === "" || $("#clause_"+(index)).val() === "" || this.state.deviations_list[index].propose_deviation === "";
             })
             if(check){
                 this.refs.Modal.showModal();
@@ -81,14 +83,13 @@ export class Proposedeviations extends React.Component{
     withdrawAllDeviations(){
         retailerWithdrawAllDeviations(this.props.current.current.arrangement_id,this.editData()).then(res=>{
             this.props.page();
-            //this.props.tenderFn();
         })
     }
     Withdraw(obj){
         let withdraw = this.state.deviations_list;
         withdraw[obj.index].sp_response_status = '4';
         this.setState({deviations_list:withdraw});
-        retailerWithdraw(this.props.current.current.arrangement_id,{id:obj.id,propose_deviation:$('#deviation_'+obj.index).val()}).then(res=>{
+        retailerWithdraw(this.props.current.current.arrangement_id,{id:obj.id,propose_deviation:this.state.deviations_list[obj.index].propose_deviation}).then(res=>{
             this.refs.Modal.showModal();
             this.setState({
                 text:"You have successfully updated"
@@ -134,7 +135,7 @@ export class Proposedeviations extends React.Component{
             return;
         }
         let check = this.state.deviations_list.find((item,index)=>{
-            return $("#item_"+(index)).val() === "" || $("#clause_"+(index)).val() === "" || $("#deviation_"+(index)).val() === "" || $("#response_"+(index)).val() === "";
+            return $("#item_"+(index)).val() === "" || $("#clause_"+(index)).val() === "" || this.state.deviations_list[index].propose_deviation === "";
         })
         if(check){
             this.refs.Modal.showModal();
@@ -160,10 +161,7 @@ export class Proposedeviations extends React.Component{
     editData(sum){
         let deviationslist = [];
         this.state.deviations_list.map((item, index) => {
-            let deviation = encodeURI($("#deviation_"+(index)).val()),response = encodeURI($("#response_"+(index)).val());
-            //deviation = deviation.replace(/\n/g,"＜br＞");
-            //response = response.replace(/\n/g,"＜br＞");
-            //console.log("deviation===>"+deviation,"response====>"+response);
+            let deviation = item.propose_deviation,response = item.retailer_response;
             if(item.sp_response_status != sum){
                 if(item.sp_response_status == ""){
                     deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+deviation+'","retailer_response":"'+response+'","sp_response_status":"'+sum+'"},';
@@ -191,16 +189,8 @@ export class Proposedeviations extends React.Component{
         let add_new = {id:0,item:'',clause:'',
                         propose_deviation:'',
                         retailer_response:'',
-                        sp_response_status:'',key:this.state.deviations_list.length+1},list = this.state.deviations_list;
+                        sp_response_status:'',key:Math.floor((Math.random()*10000)+1)},list = this.state.deviations_list;
                         list.push(add_new);
-                        // if(list.length < this.state.select_list.length){
-                        //     list.push(add_new)
-                        // }else{
-                        //     this.refs.Modal.showModal();
-                        //     this.setState({
-                        //         text:"Add deviations than the limit!"
-                        //     });
-                        // }                 
         this.setState({deviations_list:list});
     }
     removeDeviations(index){
@@ -218,15 +208,41 @@ export class Proposedeviations extends React.Component{
         this.setState({text:"Please click 'Save' button to effect the change."});
     }
     showhistory(id){
+        this.setState({detailType:"history"})
         getTenderhistory('retailer',id).then(res=>{
             console.log(res);
             this.refs.history.showModal(res);
         })
     }
+    showpropose(title,detail,id,disabled,status){
+        this.setState({
+            detailType:"propose",
+            title:title,
+            detail:detail,
+            detail_id:id,
+            textdisabled:disabled,
+            status:status
+        })
+        this.refs.history.showModal();
+    }
+    editDetail(detail){
+        console.log(detail);
+        if(this.state.detail_id != ''){
+            let list = this.state.deviations_list,id=this.state.detail_id;
+            //$("#"+this.state.detail_id).val(detail);
+            if(id.split("_")[0] == "deviation"){
+                list[id.split("_")[1]].propose_deviation = detail;
+            }else{
+                list[id.split("_")[1]].retailer_response = detail;
+            }
+            this.setState({deviations_list:list});
+        }   
+    }
     render(){
         return(
             <div className="propose_deviations u-mt3">
                 <h2 className="u-mt3 u-mb2">Propose Deviations</h2>
+                <h4 className="u-mb2">Submit only deviations for Conditions of Contract. Deviations for other items will not be accepted.</h4>
                 {!this.props.tender ? (this.props.current.current.turn_to_role === 1?<h4 className="u-mb3 pending_review">Status : Deviations pending administrator's review</h4>:''):''}
                 <div className="col-sm-12 col-md-10 push-md-1">
                     <table className="retailer_fill w_100" cellPadding="0" cellSpacing="0">
@@ -235,7 +251,7 @@ export class Proposedeviations extends React.Component{
                                 <th>Item</th>
                                 <th>Clause</th>
                                 <th>Propose Deviation</th>
-                                <th>Retailer Response</th>
+                                <th>Retailer Comments</th>
                                 <th>SP Response</th>
                                 <th></th>
                                 </tr>
@@ -247,9 +263,9 @@ export class Proposedeviations extends React.Component{
                                             return (<tr key={item.id}>
                                                     <td>{item.item}<input id={"item_"+(index)} type="hidden" defaultValue={item.item}/></td>
                                                     <td >{item.clause}<input type="hidden" id={"clause_"+(index)} defaultValue={item.clause}/></td>
-                                                    <td ><textarea className="show_text" defaultValue={decodeURI(item.propose_deviation)} disabled/><input type="hidden" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
-                                                    <td ><textarea className="show_text" defaultValue={decodeURI(item.retailer_response)} disabled/><input disabled type="hidden" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
-                                                    <td ><textarea className="show_text" defaultValue={decodeURI(item.sp_response)} disabled/></td>
+                                                    <td><button onClick={this.showpropose.bind(this,"Propose Deviation",item.propose_deviation,'',true,false)}>Details</button><input type="hidden" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
+                                                    <td><button onClick={this.showpropose.bind(this,"Retailer Comments",item.retailer_response,'',true,false)} >Details</button><input disabled type="hidden" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
+                                                    <td><button onClick={this.showpropose.bind(this,"SP Response",item.sp_response,'',true,item.response_status)} >Details</button></td>
                                                     <td>
                                                         <button id={"history_"+index} onClick={this.showhistory.bind(this,item.id)} >History</button>
                                                         <button disabled={this.props.propsdisabled?true:(this.state.alldisabled?true:(item.sp_response_status === "4" ? true : false))} id={"withdraw_"+index} onClick={this.showConfirm.bind(this,'Withdraw',{id:item.id,index:index})}>Withdraw</button>
@@ -276,9 +292,9 @@ export class Proposedeviations extends React.Component{
                                                             <input type="text" id={"clause_"+(index)} defaultValue={item.clause}/>:<div>{item.clause}<input type="hidden" id={"clause_"+(index)} defaultValue={item.clause}/></div>)
                                                             :<input type="text" id={"clause_"+(index)} defaultValue={item.clause}/>))}
                                                         </td>
-                                                        <td ><textarea id={"deviation_"+(index)} defaultValue={decodeURI(item.propose_deviation)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
-                                                        <td ><textarea id={"response_"+(index)} defaultValue={decodeURI(item.retailer_response)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}/></td>
-                                                        <td ><textarea className="show_text" defaultValue={item.sp_response?decodeURI(item.sp_response):''} disabled/></td>
+                                                        <td><button id={"deviation_"+(index)} onClick={this.showpropose.bind(this,"Propose Deviation",item.propose_deviation,'deviation_'+index,this.props.propsdisabled?true:(this.state.alldisabled),false)}>Details</button></td>
+                                                        <td><button id={"response_"+(index)} onClick={this.showpropose.bind(this,"Retailer Comments",item.retailer_response,'response_'+index,this.props.propsdisabled?true:(this.state.alldisabled),false)} >Details</button></td>
+                                                        <td><button onClick={this.showpropose.bind(this,"SP Response",item.sp_response,'',true,item.response_status)} >Details</button></td>
                                                         <td>{item.item === ""?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>:
                                                         (item.sp_response_status==='2'?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>
                                                         :<div>
@@ -290,18 +306,33 @@ export class Proposedeviations extends React.Component{
                                             }                                   
                                         })
                                 :this.state.deviations_list.map((item,index)=>{
-                                    return <tr key={index}>
+                                    return <tr key={item.id}>
                                                 <td>{item.item}</td>
                                                 <td>{item.clause}</td>
-                                                <td><textarea className="show_text" defaultValue={decodeURI(item.propose_deviation)} disabled/></td>
-                                                <td><textarea className="show_text" defaultValue={decodeURI(item.retailer_response)} disabled/></td>
-                                                <td><textarea className="show_text" defaultValue={decodeURI(item.sp_response)} disabled/></td>
+                                                <td><button onClick={this.showpropose.bind(this,"Propose Deviation",item.propose_deviation,'',true,false)}>Details</button><input type="hidden" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
+                                                <td><button onClick={this.showpropose.bind(this,"Retailer Comments",item.retailer_response,'',true,false)} >Details</button><input disabled type="hidden" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
+                                                <td><button onClick={this.showpropose.bind(this,"SP Response",item.sp_response,'',true,item.response_status)} >Details</button></td>
                                                 <td><button onClick={this.showhistory.bind(this,item.id)}>History</button></td>
                                             </tr>
                                         })
                                 }
                         </tbody>
                     </table>
+                    {this.state.attachments.length>0?
+                    <div className="col-sm-12 col-md-12">
+                        <div className="lm--formItem lm--formItem--inline string u-mt2 deviation">
+                            <label className="lm--formItem-left lm--formItem-label string required">
+                                Download Appendix of Agreed Deviations :
+                            </label>
+                            <div className="lm--formItem-right lm--formItem-control u-grid mg0">
+                                <ul className="brif_list">
+                                    {this.state.attachments ? this.state.attachments.map((item,index)=>{
+                                        return <li key={index}><a disabled={this.props.propsdisabled} download={item.file_name} href={"/"+item.file_path}>{item.file_name}</a></li>
+                                    }) : ''}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>:''}
                     {!this.props.tender ? <div className="workflow_btn u-mt3 u-mb3"><button className="add_deviation" disabled={this.props.propsdisabled?true:(this.state.alldisabled)} onClick={this.addDeviations.bind(this)}>Add</button></div> :''}
                     <div className="workflow_btn u-mt3">
                         {!this.props.tender ?
@@ -312,7 +343,7 @@ export class Proposedeviations extends React.Component{
                         }
                     </div>
                 </div>
-                <Showhistory ref="history" />
+                <Showhistory ref="history" status={this.state.status} textdisabled={this.state.textdisabled} type={this.state.detailType} title={this.state.title} detail={this.state.detail} detail_id={this.state.detail_id} editDetail={this.editDetail.bind(this)} />
                 <Modal text={this.state.text} acceptFunction={this.state.buttonType === 'Withdraw_Deviations'?this.withdrawAllDeviations.bind(this):(this.state.buttonType === 'Withdraw'? this.Withdraw.bind(this):this.submitDeviations.bind(this))} ref="Modal" />
             </div>
         )

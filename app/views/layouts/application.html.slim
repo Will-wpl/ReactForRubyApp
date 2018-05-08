@@ -31,6 +31,18 @@ html(lang="en")
             = image_tag 'logo-railsbase.png', alt: 'railsbase-logo'
 
         ul.lm--header-menu.lm--header-menu--secondary
+          li
+            div class="lm--header-home-logo"
+             -if user_signed_in?
+              - if current_user.has_role?(:buyer) && (current_user.consumer_type == '2' || current_user.consumer_type == '3')
+                a href="/buyer/home"
+                  = image_tag 'home.png', alt: 'home'
+              - elsif current_user.has_role?(:retailer)
+                a href="/retailer/home"
+                  = image_tag 'home.png', alt: 'home'
+              -else current_user.has_role?(:admin)
+                a href="/admin/home"
+                  = image_tag 'home.png', alt: 'home'
           - if user_signed_in?
             hidden id='user_id'  value= current_user.id
             li.lm--header-item

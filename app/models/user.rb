@@ -50,6 +50,7 @@ class User < ApplicationRecord
   scope :selected_buyers, ->(auction_id) { includes(:consumptions).where(consumptions: { auction_id: auction_id }) }
   scope :selected_buyers_action_status, ->(auction_id, action_status) { includes(:consumptions).where(consumptions: { auction_id: auction_id, action_status: action_status }) }
   scope :exclude, ->(ids) { where('users.id not in (?)', ids) }
+  scope :admins, -> { includes(:roles).where(roles: { name: 'admin' }) }
   # Callbacks
 
   # Delegates
