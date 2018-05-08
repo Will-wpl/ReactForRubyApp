@@ -368,7 +368,7 @@ upload(type, index){
                     if(this.state.retailer_select === 0){
                         this.timeBar(type);
                         doSend = false;
-                    }else if(this.state.fileData["retailer_confidentiality_undertaking_upload"][0].files <= 0){
+                    }else if(this.state.fileData["retailer_confidentiality_undertaking_upload"][0].files <= 0 || this.state.fileData["tender_documents_upload"][0].files <= 0 ){
                         this.timeBar(type);
                         doSend = false;
                     }else{
@@ -468,7 +468,7 @@ render() {
                                 <abbr>Selected : {this.state.retailer_select}&nbsp;&nbsp;&nbsp;&nbsp;Notification Sent : {this.state.retailer_send}&nbsp;&nbsp;&nbsp;&nbsp;Pending Notification : {this.state.retailer_pend}</abbr>}
                             </div>
                             <div className="required_error">
-                                Select at least one retailer and upload Retailer Confidentiality Undertaking.
+                                Please upload Retailer Confidentiality Undertaking and Tender Documents.
                             </div>
                         </div>
                         {this.state.readOnly?'':
