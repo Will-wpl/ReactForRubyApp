@@ -44,7 +44,7 @@ class Arrangement < ApplicationRecord
   def self.query_list(auction_id, accept_status)
     query = Arrangement.select('arrangements.*, users.company_name , user_extensions.login_status , user_extensions.current_room , user_extensions.current_page').left_outer_joins(user: :user_extension).order('arrangements.accept_status ASC, users.company_name ASC')
     if accept_status.nil?
-      query.where('auction_id': auction_id)
+      query.where('auction_id = :auction_id and accept_status = :accept_status ', auction_id: auction_id, accept_status: '1')
     else
       query.where('auction_id = :auction_id and accept_status = :accept_status ', auction_id: auction_id, accept_status: accept_status)
     end
