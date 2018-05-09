@@ -24,7 +24,7 @@ class PdfUtils
   end
 
   def self.get_wicked_pdf_data(content, output_filename, page_size = 'B5')
-    pdf = WickedPdf.new.pdf_from_string(content, encoding: 'UTF-8', page_size: page_size)
+    pdf = WickedPdf.new.pdf_from_string(content, encoding: 'UTF-8', page_size: page_size, default_header: false)
     return pdf, output_filename
   end
 
