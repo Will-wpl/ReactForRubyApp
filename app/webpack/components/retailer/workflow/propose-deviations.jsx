@@ -105,8 +105,10 @@ export class Proposedeviations extends React.Component{
             if(next.current.actions.node3_retailer_next || next.current.current.current_node>3){
                 if(next.tenderFn){
                     if(!next.tender){
-                        next.tenderFn();
-                    }
+                        if(next.update){
+                            next.tenderFn();
+                        }
+                    }                    
                 }
             }
         }

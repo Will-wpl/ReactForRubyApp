@@ -13,7 +13,8 @@ export class Retailerworkflow extends React.Component{
         super(props);
         this.state={
             auction:{},text:'',disabled:false,
-            selected:[],current:{},page:0,tender_status:false,tab_page:0
+            selected:[],current:{},page:0,tender_status:false,tab_page:0,
+            update:true
         }
         this.submittender = false;
         this.hiddentimeCount = true;
@@ -30,6 +31,7 @@ export class Retailerworkflow extends React.Component{
     getPageindex(params){
         if(params === 'false'){
             this.setState({
+                update:false,
                 tender_status:false
             })
         }
@@ -49,7 +51,7 @@ export class Retailerworkflow extends React.Component{
             break
             case 2 : pageDom = <Tenderdocuments propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} />
             break
-            case 3 : pageDom = <Proposedeviations propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} current={this.state.current} tenderFn={()=>{this.setState({tender_status:true})}} auction={this.state.auction} tender={this.state.tender_status} />
+            case 3 : pageDom = <Proposedeviations update={this.state.update} propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} current={this.state.current} tenderFn={()=>{this.setState({tender_status:true})}} auction={this.state.auction} tender={this.state.tender_status} />
             break
             case 4 : pageDom = <Submittender propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} tenderFn={()=>{this.setState({tender_status:true})}} tender={this.state.tender_status} current={this.state.current} auction={this.state.auction} submit={this.submittender}/>
             break
