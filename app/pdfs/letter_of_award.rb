@@ -142,25 +142,25 @@ class LetterOfAward < Pdf
     index = 0
     head_bool, row0_string, row1_string, row2_string = [], [], [], []
     lt_total_value = table_data[0][index].to_f + table_data[1][index].to_f
-    lt_param = {:index => index, :lt_total_value => lt_total_value, :visibilities => visibilities,
+    lt_param = {:index => index, :lt_total_value => lt_total_value, :visibilities => visibilities[:visibility_lt],
                 :table_data => table_data, :row0 => row0, :row1 => row1, :row2 => row2,
                 :total_value => lt_total_value, :var_name1 => '#lt_peak', :var_name2 => '#lt_off_peak', :var_name3 => '#lt_total'}
     idx, headbool, lt_peak, lt_off_peak, lt_total = get_data(0,  lt_param)
     index += idx; head_bool.push(headbool); row0_string.push(lt_peak); row1_string.push(lt_off_peak); row2_string.push(lt_total)
     hts_total_value = table_data[0][index].to_f + table_data[1][index].to_f
-    hts_param = {:index => index, :hts_total_value => hts_total_value, :visibilities => visibilities,
+    hts_param = {:index => index, :hts_total_value => hts_total_value, :visibilities => visibilities[:visibility_hts],
                  :table_data => table_data, :row0 => row0, :row1 => row1, :row2 => row2,
                  :total_value => hts_total_value, :var_name1 => '#hts_peak', :var_name2 => '#hts_off_peak', :var_name3 => '#hts_total'}
     idx, headbool, hts_peak, hts_off_peak, hts_total = get_data(1,  hts_param)
     index += idx; head_bool.push(headbool); row0_string.push(hts_peak); row1_string.push(hts_off_peak); row2_string.push(hts_total)
     htl_total_value = table_data[0][index].to_f + table_data[1][index].to_f
-    htl_param = {:index => index, :htl_total_value => htl_total_value, :visibilities => visibilities,
+    htl_param = {:index => index, :htl_total_value => htl_total_value, :visibilities => visibilities[:visibility_htl],
                  :table_data => table_data, :row0 => row0, :row1 => row1, :row2 => row2,
                  :total_value => htl_total_value, :var_name1 => '#htl_peak', :var_name2 => '#htl_off_peak', :var_name3 => '#htl_total'}
     idx, headbool, htl_peak, htl_off_peak, htl_total = get_data(2,  htl_param)
     index += idx; head_bool.push(headbool); row0_string.push(htl_peak); row1_string.push(htl_off_peak); row2_string.push(htl_total)
     eht_total_value = table_data[0][index].to_f + table_data[1][index].to_f
-    eht_param = {:index => index, :eht_total_value => eht_total_value, :visibilities => visibilities,
+    eht_param = {:index => index, :eht_total_value => eht_total_value, :visibilities => visibilities[:visibility_eht],
                  :table_data => table_data, :row0 => row0, :row1 => row1, :row2 => row2,
                  :total_value => eht_total_value, :var_name1 => '#eht_peak', :var_name2 => '#eht_off_peak', :var_name3 => '#eht_total'}
     idx, headbool, eht_peak, eht_off_peak, eht_total = get_data(3,  eht_param)
@@ -175,7 +175,7 @@ class LetterOfAward < Pdf
     var_name2 = param[:var_name2]
     var_name3 = param[:var_name3]
 
-    if param[:visibilities][:visibility_lt] && total_value != 0.0
+    if param[:visibilities] && total_value != 0.0
       peak = param[:row0][position].to_s.gsub(Regexp.new(var_name1), PdfUtils.number_helper.number_to_currency(param[:table_data][0][param[:index]], precision: 0, unit: ''))
       off_peak = param[:row1][position].to_s.gsub(Regexp.new(var_name2), PdfUtils.number_helper.number_to_currency(param[:table_data][1][param[:index]], precision: 0, unit: ''))
       total = param[:row2][position].to_s.gsub(Regexp.new(var_name3), PdfUtils.number_helper.number_to_currency(total_value, precision: 0, unit: ''))
