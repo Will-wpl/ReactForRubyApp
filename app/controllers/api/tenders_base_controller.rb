@@ -126,7 +126,7 @@ class Api::TendersBaseController < Api::BaseController
     chats.each do |chat|
       next if chat['sp_response_status'] == '4' || chat['sp_response_status'] == '1'
       tender_chat = set_tender_chat(chat, params[:id])
-      next unless tender_chat.save
+      next unless tender_chat.save!
       chat_info = set_submit_deviation_tender_chat(tender_chat, chat)
       TenderChatDetail.chat_save(tender_chat, chat_info)
     end
@@ -136,7 +136,7 @@ class Api::TendersBaseController < Api::BaseController
     chats.each do |chat|
       next if chat['sp_response_status'] == '4' || chat['sp_response_status'] == '2'
       tender_chat = set_tender_chat(chat, params[:id])
-      next unless tender_chat.save
+      next unless tender_chat.save!
       chat_info = set_withdraw_tender_chat(tender_chat, chat)
       TenderChatDetail.chat_save(tender_chat, chat_info)
     end
@@ -146,7 +146,7 @@ class Api::TendersBaseController < Api::BaseController
     chats.each do |chat|
       chat_ids.push(chat['id']) if chat['id'] != '0'
       tender_chat = set_tender_chat(chat, params[:id])
-      next unless tender_chat.save
+      next unless tender_chat.save!
       chat_info = set_save_tender_chat(tender_chat, chat)
       TenderChatDetail.chat_save(tender_chat, chat_info)
     end
