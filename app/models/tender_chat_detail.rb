@@ -38,9 +38,9 @@ class TenderChatDetail < ApplicationRecord
       chat_detail.retailer_response = chat_info.retailer_response
       chat_detail.response_status = chat_info.response_status
       chat_detail.sp_response = chat_info.sp_response
-      if chat_detail.save
+      if chat_detail.save!
         chat.sp_response_status = chat_info.sp_response_status
-        chat.save
+        chat.save!
       end
     end
     chat
