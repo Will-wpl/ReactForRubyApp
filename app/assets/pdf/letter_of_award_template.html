@@ -15,10 +15,11 @@
             border:1px solid black;
         }
 
-        table.table_data th
+        .table_th
         {
             background-color: #cccccc;
-            line-height:17px
+            line-height:17px;
+            font-weight:bold
         }
     </style>
 </head>
@@ -121,16 +122,16 @@
                 <col width="17%" />
                 <col width="17%" />
             </colgroup>
-            <thead>
+            <!--thead-->
             <tr>
-                <th>Account Number</th>
-                <th>Intake Level</th>
-                <th>Peak Volume (kWh/month)</th>
-                <th>Off-Peak Volume (kWh/month)</th>
-                <th>Contracted Capacity (kW)</th>
-                <th>Premise Address</th>
+                <td class="table_th">Account Number</td>
+                <td class="table_th">Intake Level</td>
+                <td class="table_th">Peak Volume (kWh/month)</td>
+                <td class="table_th">Off-Peak Volume (kWh/month)</td>
+                <td class="table_th">Contracted Capacity (kW)</td>
+                <td class="table_th">Premise Address</td>
             </tr>
-            </thead>
+            <!--/thead-->
             <tbody>
             <tr id="appendix_table1_tr">
                 <td>
@@ -171,15 +172,15 @@
                 <col width="300" />
                 <col width="300" />
             </colgroup>
-            <thead style="margin-bottom:30px" >
+            <!--thead style="margin-bottom:30px" -->
             <tr id="appendix_table2_head">
-                <th>&nbsp;</th>
-                <th id="lt_head_id">LT</th>
-                <th id="hts_head_id">HT (Small)</th>
-                <th id="htl_head_id">HT (Large)</th>
-                <th id="eht_head_id">EHT</th>
+                <td class="table_th">&nbsp;</td>
+                <td class="table_th" id="lt_head_id">LT</td>
+                <td class="table_th" id="hts_head_id">HT (Small)</td>
+                <td class="table_th" id="htl_head_id">HT (Large)</td>
+                <td class="table_th" id="eht_head_id">EHT</td>
             </tr>
-            </thead>
+            <!--/thead-->
             <tbody >
             <tr id="appendix_table2_peak">
                 <td>
