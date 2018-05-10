@@ -346,7 +346,7 @@ export class SearchList extends Component {
                 </div>
             )
         }else{
-            return <div>interface bad!!</div>
+            return <div className="list_loading">Loading...</div>
         }
     }
 }

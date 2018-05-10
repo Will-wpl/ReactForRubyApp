@@ -95,10 +95,23 @@ export class Proposedeviations extends React.Component{
                 text:"You have successfully updated"
             });
             this.props.page();
-            setTimeout(()=>{
-                this.changeNext();
-            },100)
+            // setTimeout(()=>{
+            //     this.changeNext();
+            // },500)
         })
+    }
+    componentWillReceiveProps(next) {
+        if(next.current.actions){
+            if(next.current.actions.node3_retailer_next || next.current.current.current_node>3){
+                if(next.tenderFn){
+                    if(!next.tender){
+                        if(next.update){
+                            next.tenderFn();
+                        }
+                    }                    
+                }
+            }
+        }
     }
     changeNext(){
         if(this.props.current.actions){
