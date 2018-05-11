@@ -2,6 +2,8 @@ class TenderChatDetail < ApplicationRecord
 
   # comments
   # response_status
+  # '0' admin reject
+  # '1' admin accept
   # '2' retailer save
   # '3' retailer submit deviation
   # '4' retailer withdraw
