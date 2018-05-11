@@ -16,7 +16,7 @@ class UserMailer < ApplicationMailer
   def reject_email(user)
     mail_template = get_template('3')
     email_subject = mail_template.subject
-    email_body = mail_template.body.gsub(/#user.company_name/, user.company_name).gsub(/#user.comment/, user.comment.to_s)
+    email_body = mail_template.body.gsub(/#user.company_name/, user.company_name).gsub(/#user.comment/, nl2br(CGI.unescape(user.comment.to_s)))
     send_email(user.email, email_body, email_subject)
   end
 
@@ -56,7 +56,7 @@ class UserMailer < ApplicationMailer
   def workflow_admin_reject_mail(user, comments)
     mail_template = get_template('8')
     email_subject = mail_template.subject
-    email_body = mail_template.body.gsub(/#user.company_name/, user.company_name).gsub(/#user.comment/, comments)
+    email_body = mail_template.body.gsub(/#user.company_name/, user.company_name).gsub(/#user.comment/, nl2br(CGI.unescape(comments.to_s)))
     send_email(user.email, email_body, email_subject)
   end
 
@@ -71,5 +71,9 @@ class UserMailer < ApplicationMailer
 
   def get_template(type)
     EmailTemplate.find_by_template_type(type)
+  end
+
+  def nl2br(s)
+    s.gsub(/\n/, '<br>')
   end
 end
