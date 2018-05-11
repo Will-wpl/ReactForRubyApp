@@ -5,7 +5,7 @@ button{ cursor: pointer; transition: 0.5s all;}
 .green{color:green;}
 .red{color:red;}
 button[disabled='']{background: #666 !important; color:#999 !important; cursor: default !important;}
-
+textarea{resize: none;}
 
 //createRaMain or retailer btn
 .createRaMain{
@@ -183,29 +183,31 @@ abbr[title]{color: #fe0000; text-decoration: none;}
       a.detail_show_btn{ float: right; width:80px; border-radius: 5px; display: block; height:24px; background:#00b0b2; line-height: 24px; text-align: center; margin: 0px 2% 10px 0px; color: #fff;}
       .history_nr{overflow-y: auto; height:362px;
         dl{ width: 100%; 
+            textarea{border:1px dashed #ddd; padding: 5px; font-size: 12px; color:#666;}
             dd{ width:92%; display: block; overflow: hidden; margin: 15px auto; font-weight: normal;
               dfn{
                 color:#666;
-                float: left; margin-right:15px; text-align: center;
+                float: left; margin-right:15px; text-align: center; overflow: hidden;
                 display: flex;flex-direction: column;align-items: center;
                 abbr{ width: 42px; height: 42px; font-style: normal;display: block; background: url("../images/retailer_icon.png") no-repeat center; background-size: 42px; }
               }
-              span{ background: #eee; max-width: 200px; padding: 10px; word-break:break-all; border-radius: 5px; color:#666; float: left;}
+              span{ background: #eee; overflow: hidden;  padding: 10px; word-break:break-all; border-radius: 5px; color:#666; display: block}
             }
             dt{width:92%; display: block; overflow: hidden; margin: 15px auto; font-weight: normal;
               dfn{color:#666;
-                float: right; margin-left:15px; text-align: center;
+                float: right; margin-left:15px; text-align: center; overflow: hidden;
                 display: flex;flex-direction: column;align-items: center;
-                abbr{ width: 42px; height: 42px; display: block; background: url("../images/SP_Group_Logo.jpg") no-repeat center; background-size: 42px; }
+                abbr{ width: 52px; height: 42px; display: block; background: url("../images/SP_Group_Logo.jpg") no-repeat center; background-size: 42px; }
               }
-              span{ background: #9fdd9f; max-width: 200px; word-break:break-all; padding: 10px; border-radius: 5px; color:#666; float: right;}
+              span{ background: #9fdd9f;  word-break:break-all; padding: 10px; border-radius: 5px; color:#666; display: block; overflow: hidden;
+                &.short{min-width:80px; max-width: 350px; float: right;}
+              }
             }
         }
       } 
   }
   .showbig{ width: 96%; margin: 2% auto;
     textarea.detail_show,.history_nr{ height: 420px;}
-    .history_nr dl dd span{max-width: 350px;}
   }
 }
 
