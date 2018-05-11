@@ -164,6 +164,7 @@ export default class ChooseAlternativeWinner extends React.Component{
             <div>
                 <div className='lm--card alternative-winner'>
                     <h2>Retailer Ranking</h2>
+                    <div style={{marginBottom:'10px',marginTop:'-10px',fontSize:'16px'}}>{this.renderWinner()}</div>
                     <table className="retailer_fill w_100">
                         <thead>
                         <tr>
@@ -194,7 +195,7 @@ export default class ChooseAlternativeWinner extends React.Component{
                         }
                         </tbody>
                     </table>
-                    {this.renderWinner()}
+
                     <div className="retailor_justification">
                         <h2><abbr id='badge'>*</abbr>Justification</h2>
                         <textarea

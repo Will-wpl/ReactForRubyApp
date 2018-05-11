@@ -36,6 +36,7 @@ class Api::TendersController < Api::TendersBaseController
   end
 
   def node3_admin
+
     chats = set_node3_chats(params[:id])
     attachments = AuctionAttachment.user_auction(@arrangement.auction_id, @arrangement.user_id)
                       .where(file_type: 'attachment_deviation').order(:created_at)
@@ -129,7 +130,7 @@ class Api::TendersController < Api::TendersBaseController
       end
       workflow = TenderWorkflow.new.execute(:node3, :send_response, params[:id])
     end
-
+    admin_response_mail(params[:id])
     render json: workflow, status: 200
   end
 

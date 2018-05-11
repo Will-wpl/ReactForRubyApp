@@ -136,7 +136,6 @@ export class Keppelproposedeviations extends Component {
                     <form id={type+"_form"} encType="multipart/form-data">
                         {this.state.fileData[type].map((item, index) => 
                                 <div className="u-grid mg0 u-mt1" key={index}>
-                                {!this.props.readOnly?
                                     <div className="col-sm-12 col-md-10 u-cell">
                                         <a className="upload_file_btn">
                                             <dfn>No file selected...</dfn>
@@ -166,22 +165,13 @@ export class Keppelproposedeviations extends Component {
                                                 }
                                             </ul>
                                         </div>
-                                    </div>:<div className="progress_files">
-                                            <ul>
-                                                {
-                                                    item.files.map((it,i)=>{
-                                                        return <li className={this.props.readOnly?"lineHeight42":""} key={i}><a download={it.file_name} href={"/"+it.file_path}>{it.file_name}</a></li>
-                                                    })
-                                                }
-                                            </ul>
-                                        </div>}
-                                        {!this.props.readOnly?
-                                            <div className="col-sm-12 col-md-2 u-cell">
-                                                {
-                                                    this.props.propsdisabled?<button className="lm--button lm--button--primary" disabled>Upload</button>:(this.state.disabled?<button className="lm--button lm--button--primary" disabled>Upload</button>
-                                                    :<a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>)
-                                                }
-                                            </div>:''}
+                                    </div>                      
+                                    <div className="col-sm-12 col-md-2 u-cell">
+                                        {
+                                            this.props.propsdisabled?<button className="lm--button lm--button--primary" disabled>Upload</button>:(this.state.disabled?<button className="lm--button lm--button--primary" disabled>Upload</button>
+                                            :<a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>)
+                                        }
+                                    </div>
                                     {/* <div className="col-sm-12 col-md-2 u-cell">
                                         {item.buttonName === "none" ? "" : <a onClick={this.fileclick.bind(this, index, type, item.buttonName)} className={"lm--button lm--button--primary "+item.buttonName}>{item.buttonText}</a>}
                                     </div> */}
@@ -294,6 +284,7 @@ export class Keppelproposedeviations extends Component {
                             <th>Propose Deviation</th>
                             <th>Retailer Comments</th>
                             <th>SP Response</th>
+                            <th>Deviation Status</th>
                             <th></th>
                             </tr>
                     </thead>
@@ -307,6 +298,7 @@ export class Keppelproposedeviations extends Component {
                                                 <td><button onClick={this.showpropose.bind(this,"Propose Deviation",item.propose_deviation,'',true,false)}>Details</button></td>
                                                 <td><button onClick={this.showpropose.bind(this,"Retailer Comments",item.retailer_response,'',true,false)} >Details</button></td>
                                                 <td><button onClick={this.showpropose.bind(this,"SP Response",item.sp_response,'',true,item.response_status)} >Details</button></td>
+                                                <td>{item.sp_response_status === "1"?"Accepted":"Withdrawn"}</td>
                                                 <td>
                                                     <button id={"sp_reject_"+index} disabled>Reject</button>
                                                     <button id={"sp_accept_"+index} disabled>Accept</button>
@@ -324,6 +316,7 @@ export class Keppelproposedeviations extends Component {
                                             <button id={"spResponse_"+index} onClick={this.showpropose.bind(this,"SP Response",item.sp_response!=null?item.sp_response:'',"spResponse_"+index,this.props.readOnly,item.response_status)} >Details</button>
                                             {/* <textarea id={"spResponse_"+index} defaultValue={item.sp_response?decodeURI(item.sp_response).split(": ")[1]:''} />*/}
                                             </td>
+                                            <td>{item.sp_response_status === "1"?"Accepted":(item.sp_response_status === "0"?"Rejected":(item.sp_response_status === "4"?"Withdrawn":""))}</td>
                                             <td>
                                                 <button id={"sp_reject_"+index} disabled={this.props.readOnly?this.props.readOnly:(item.type?(item.type=="reject"?true:false):(item.sp_response_status === '4' || item.sp_response_status === '1'?true:false))} onClick={this.do_keppel.bind(this,{params:'0',index:index,type:'reject'})}>Reject</button>
                                                 <button id={"sp_accept_"+index} disabled={this.props.readOnly?this.props.readOnly:(item.type?(item.type=="accept"?true:false):(item.sp_response_status === '4' || item.sp_response_status === '1'?true:false))} onClick={this.do_keppel.bind(this,{params:'1',index:index,type:'accept'})}>Accept</button>
@@ -333,8 +326,7 @@ export class Keppelproposedeviations extends Component {
                             })}
                     </tbody>
                 </table>
-                {this.props.readOnly && this.state.fileData['attachment_deviation'][0].files.length<=0?
-                '':<div className="col-sm-12 col-md-8">
+                <div className="col-sm-12 col-md-8">
                     <div className="lm--formItem lm--formItem--inline string admin_invitation deviation u-mt2">
                         <label className="lm--formItem-left lm--formItem-label string required w_35">
                             {/* <abbr title="required">*</abbr>*/}
@@ -344,7 +336,7 @@ export class Keppelproposedeviations extends Component {
                             {this.addinputfile("attachment_deviation", "required")}
                         </div>
                     </div>
-                </div>}
+                </div>
                 <div className="workflow_btn u-mt2">    
                     <button className="lm--button lm--button--primary" disabled={this.props.readOnly} onClick={this.showConfirm.bind(this,'Send_Response')}>Send Response</button>
                 </div>
