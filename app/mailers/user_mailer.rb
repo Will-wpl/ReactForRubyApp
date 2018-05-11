@@ -60,6 +60,13 @@ class UserMailer < ApplicationMailer
     send_email(user.email, email_body, email_subject)
   end
 
+  def workflow_admin_response_mail(user)
+    mail_template = get_template('9')
+    email_subject = mail_template.subject
+    email_body = mail_template.body.gsub(/#user.company_name/, user.company_name)
+    send_email(user.email, email_body, email_subject)
+  end
+
   private
 
   def send_email(email, body, subject)
