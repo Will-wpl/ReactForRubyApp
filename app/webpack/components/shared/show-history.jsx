@@ -15,6 +15,14 @@ export class Showhistory extends React.Component{
     componentWillReceiveProps(next) {
         this.setState({textVal:''});
         this.checkShowdetail(next);
+        if(next.type === "history"){
+            setTimeout(()=>{
+                $(".history_nr textarea").css("height","auto");
+                $(".history_nr textarea").each((e)=>{
+                    $(".history_nr textarea").eq(e).height($(".history_nr textarea")[e].scrollHeight-10);
+                })
+            },200)
+        }
     }
     clearTextarea(){
         $(".detail_show").val("");
@@ -74,16 +82,16 @@ export class Showhistory extends React.Component{
                                     <dd>
                                         <dfn><abbr></abbr>{this.state.ratailer_name}</dfn>
                                         <span>
-                                            <b>Proposed Deviation : </b>{item.propose_deviation?decodeURI(item.propose_deviation):""}<br/>
-                                            <b>Comments : </b>{item.retailer_response?decodeURI(item.retailer_response):""}
+                                            <b>Proposed Deviation : </b><textarea className={"devation_text_"+index} readOnly="readOnly" defaultValue={item.propose_deviation?decodeURI(item.propose_deviation):""}/><br/>
+                                            <b>Comments : </b><textarea className={"comments_text_"+index} readOnly="readOnly" defaultValue={item.retailer_response?decodeURI(item.retailer_response):""}/>
                                         </span>
                                     </dd>:''}
                                     {item.sp_response!=null?
                                     <dt>
                                         <dfn><abbr></abbr>SP Group</dfn>
-                                        <span>{item.response_status == "0"?
-                                        (item.sp_response!=null?"Rejected : "+decodeURI(item.sp_response):""):
-                                        (item.sp_response!=null?"Accepted : "+decodeURI(item.sp_response):"")}</span>
+                                        {item.response_status == "0"?
+                                        <span className={item.sp_response===""?"short":""}><b>Rejected : </b>{item.sp_response===""?"":<textarea className={"sp_text_"+index} readOnly="readOnly" defaultValue={decodeURI(item.sp_response)} />}</span>:
+                                        <span className={item.sp_response===""?"short":""}><b>Accepted : </b>{item.sp_response===""?"":<textarea className={"sp_text_"+index} readOnly="readOnly" defaultValue={decodeURI(item.sp_response)} />}</span>}
                                     </dt>:''}
                                 </dl>
                     })}
