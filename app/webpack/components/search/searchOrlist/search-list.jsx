@@ -137,19 +137,18 @@ export class SearchList extends Component {
         sessionStorage.uid = url;
     }
     showDetails(data){
-        let json = data.auction_what.replace('{',"").replace('}',"").replace(/"/g,'').split(",");
-        let _json =  json.map((e,i)=>{
-            let key = e.split(":")[0];
-            let str;
+        let json = JSON.parse(data.auction_what);
+        let _json=[];
+        for(let key in json){
             if(key == "created_at"||key == "updated_at"||key=="actual_begin_time"||key == "actual_end_time"||
                 key=="current_time"||key=="actual_bid_time"||key == "bid_time"||key =="start_datetime"){
-                e = `${e.split(":")[0]}:${moment(e.split(":")[1]).format('D MMM YYYY hh:mm A')}`;
-                return e
+                let time = `${key} : ${moment(json[key]).format('D MMM YYYY hh:mm A')}`;
+                _json.push(time)
             }else{
-                return e
+                let label = `${key} : ${json[key]}`;
+                _json.push(label)
             }
-
-        })
+        }
         let str = _json.join("<br/>");
         this.setState({
             text:str,
@@ -157,7 +156,18 @@ export class SearchList extends Component {
         },()=>{
             this.refs.Modal.showModal();
         });
-
+    }
+    dosort(field_name,sort,table_name){
+        $(".lm--table th dfn").removeClass("selected");
+        $(".search_list_"+sort+"."+field_name+"").addClass("selected");
+        let listData = {};
+        if(this.props.list_data){
+            listData = this.props.list_data;
+            listData.sort_by = [field_name,sort,table_name];
+            if(this.props.doSearch && this.props.list_url){
+                this.props.doSearch(listData,this.props.list_url);
+            }
+        }
     }
     dosort(field_name,sort,table_name){
         $(".lm--table th dfn").removeClass("selected");

@@ -10,7 +10,7 @@ export class Keppelformtender extends React.Component{
         super(props);
         this.state={
             text:'',buttonType:'',linklist:[],chats:[],comments:"",
-            detailType:'',title:'',detail:'',detail_id:'',textdisabled:false,
+            detailType:'',title:'',detail:'',detail_id:'',textdisabled:false,prev_status:'',
             status:null
         }
     }
@@ -23,7 +23,8 @@ export class Keppelformtender extends React.Component{
             this.setState({
                 linklist:attachments,
                 chats:res.chats,
-                comments:(res.comments?res.comments:"")
+                comments:(res.comments?res.comments:""),
+                prev_status:res.pre_state_machine!=null?res.pre_state_machine.current_status:''
             })
         })
         $(".createRaMain a").attr("href",window.location.href);
@@ -86,7 +87,9 @@ export class Keppelformtender extends React.Component{
     render(){
         return(
             <div className="col-sm-12 col-md-10 push-md-1 u-mt3 tender_documents">
-                <h2 className="u-mt3 u-mb3">{this.props.current.name} - Form of {this.state.chats.length>0?'':'Base'} Tender</h2>
+                <h2 className="u-mt2 u-mb2">{this.props.current.name} - Form of {this.state.chats.length>0?'':'Base'} Tender</h2>
+                <h3 className="u-mt1 u-mb1">Tender Submission Status : {this.state.prev_status === '3' ? <span className="green">Accepted</span> 
+                :(this.state.prev_status === '4'?<span className="red">Rejected</span>:"Pending") }</h3>
                 <div className="lm--formItem lm--formItem--inline string u-mt3 role_select">
                     <label className="lm--formItem-left lm--formItem-label string required">
                     Please see below for {this.state.chats.length>0?'':'base'} tender submission:
@@ -113,6 +116,7 @@ export class Keppelformtender extends React.Component{
                                 <th>Propose Deviation</th>
                                 <th>Retailer Comments</th>
                                 <th>SP Response</th>
+                                <th>Deviation Status</th>
                                 <th></th>
                                 </tr>
                             </thead>
@@ -124,6 +128,7 @@ export class Keppelformtender extends React.Component{
                                                 <td><button onClick={this.showpropose.bind(this,"Propose Deviation",item.propose_deviation,'',true,false)}>Details</button></td>
                                                 <td><button onClick={this.showpropose.bind(this,"Retailer Comments",item.retailer_response,'',true,false)} >Details</button></td>
                                                 <td><button onClick={this.showpropose.bind(this,"SP Response",item.sp_response,'',true,item.response_status)} >Details</button></td>
+                                                <td>{item.sp_response_status === "1"?"Accepted":(item.sp_response_status === "0" || item.sp_response_status === "3"?(item.response_status[1]=='0'?"Rejected":''):(item.sp_response_status === "4"?"Withdrawn":""))}</td>
                                                 <td><button onClick={this.showhistory.bind(this,item.id)}>History</button></td>
                                             </tr>
                                 })}

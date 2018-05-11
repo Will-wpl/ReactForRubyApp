@@ -36,6 +36,7 @@ class Api::TendersController < Api::TendersBaseController
   end
 
   def node3_admin
+
     chats = set_node3_chats(params[:id])
     attachments = AuctionAttachment.user_auction(@arrangement.auction_id, @arrangement.user_id)
                       .where(file_type: 'attachment_deviation').order(:created_at)
@@ -52,7 +53,8 @@ class Api::TendersController < Api::TendersBaseController
     attachments = AuctionAttachment.user_auction(@arrangement.auction_id, @arrangement.user_id).order(:created_at)
     chats = set_node3_chats(params[:id])
     comments = @arrangement.comments
-    render json: { chats: chats, attachments: attachments, comments: comments }, status: 200
+    pre_state_machine = TenderStateMachine.find_by_arrangement_id(params[:id]).where(previous_node: 4, current_node: 4, turn_to_role: 2, current_role: 1).last
+    render json: { chats: chats, attachments: attachments, comments: comments, pre_state_machine: pre_state_machine }, status: 200
   end
 
   def node5_retailer
@@ -128,7 +130,7 @@ class Api::TendersController < Api::TendersBaseController
       end
       workflow = TenderWorkflow.new.execute(:node3, :send_response, params[:id])
     end
-
+    admin_response_mail(params[:id])
     render json: workflow, status: 200
   end
 

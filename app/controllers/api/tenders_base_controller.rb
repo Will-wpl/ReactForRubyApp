@@ -13,7 +13,7 @@ class Api::TendersBaseController < Api::BaseController
 
   def get_arrangement_user(arrangement_id)
     return if arrangement_id.empty?
-    this_arrangement = Arrangement.find(arrangement_id)
+    this_arrangement = Arrangement.find_by id:arrangement_id
     return if this_arrangement.nil?
     User.find(this_arrangement.user_id)
   end
@@ -37,6 +37,12 @@ class Api::TendersBaseController < Api::BaseController
     user = get_arrangement_user(arrangement_id)
     return if user.nil?
     UserMailer.workflow_admin_reject_mail(user, comments).deliver_later
+  end
+
+  def admin_response_mail(arrangement_id)
+    user = get_arrangement_user(arrangement_id)
+    return if user.nil?
+    UserMailer.workflow_admin_response_mail(user).deliver_later
   end
   
   def set_tender_chat(chat, arrangement_id)
