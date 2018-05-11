@@ -64,7 +64,7 @@ export class Tenderdocuments extends React.Component{
             <div className="col-sm-12 col-md-8 push-md-2 u-mt3 tender_documents">
                 <div className="lm--formItem lm--formItem--inline string">
                         <label className="lm--formItem-left lm--formItem-label string required">
-                        Aggregate Consumption:
+                            Aggregate Consumption<br/> (kWh/month):
                         </label>
                         <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                             <div className="col-sm-12">
