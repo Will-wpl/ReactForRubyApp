@@ -24,7 +24,7 @@ export class Keppelformtender extends React.Component{
                 linklist:attachments,
                 chats:res.chats,
                 comments:(res.comments?res.comments:""),
-                prev_status:res.pre_state_machine.current_status
+                prev_status:res.pre_state_machine!=null?res.pre_state_machine.current_status:''
             })
         })
         $(".createRaMain a").attr("href",window.location.href);
@@ -89,7 +89,7 @@ export class Keppelformtender extends React.Component{
             <div className="col-sm-12 col-md-10 push-md-1 u-mt3 tender_documents">
                 <h2 className="u-mt2 u-mb2">{this.props.current.name} - Form of {this.state.chats.length>0?'':'Base'} Tender</h2>
                 <h3 className="u-mt1 u-mb1">Tender Submission Status : {this.state.prev_status === '3' ? <span className="green">Accepted</span> 
-                :(this.state.prev_status === '4'?<span className="red">Rejected</span>:"") }</h3>
+                :(this.state.prev_status === '4'?<span className="red">Rejected</span>:"Pending") }</h3>
                 <div className="lm--formItem lm--formItem--inline string u-mt3 role_select">
                     <label className="lm--formItem-left lm--formItem-label string required">
                     Please see below for {this.state.chats.length>0?'':'base'} tender submission:
