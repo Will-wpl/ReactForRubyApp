@@ -126,6 +126,7 @@ export class Keppelproposedeviations extends Component {
         let deviationslist = this.state.deviations_list;
         deviationslist[obj.index].sp_response_status = obj.params;
         deviationslist[obj.index].type = obj.type;
+        deviationslist[obj.index].response_status[1] = obj.params;
         //deviationslist[obj.index].sp_response = '';
         this.setState({deviations_list:deviationslist});
         //console.log(this.state.deviations_list);
