@@ -21,6 +21,9 @@
             line-height:17px;
             font-weight:bold
         }
+        table, tr, td, th, tbody, thead, tfoot {
+            page-break-inside: avoid !important;
+        }
     </style>
 </head>
 <body style="font-size:12px;">
@@ -122,7 +125,7 @@
                 <col width="17%" />
                 <col width="17%" />
             </colgroup>
-            <!--thead-->
+            <thead>
             <tr>
                 <td class="table_th">Account Number</td>
                 <td class="table_th">Intake Level</td>
@@ -131,7 +134,7 @@
                 <td class="table_th">Contracted Capacity (kW)</td>
                 <td class="table_th">Premise Address</td>
             </tr>
-            <!--/thead-->
+            </thead>
             <tbody>
             <tr id="appendix_table1_tr">
                 <td>
@@ -172,7 +175,7 @@
                 <col width="300" />
                 <col width="300" />
             </colgroup>
-            <!--thead style="margin-bottom:30px" -->
+            <thead style="margin-bottom:30px">
             <tr id="appendix_table2_head">
                 <td class="table_th">&nbsp;</td>
                 <td class="table_th" id="lt_head_id">LT</td>
@@ -180,7 +183,7 @@
                 <td class="table_th" id="htl_head_id">HT (Large)</td>
                 <td class="table_th" id="eht_head_id">EHT</td>
             </tr>
-            <!--/thead-->
+            </thead>
             <tbody >
             <tr id="appendix_table2_peak">
                 <td>
