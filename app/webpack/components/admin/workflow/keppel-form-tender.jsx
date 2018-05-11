@@ -127,7 +127,7 @@ export class Keppelformtender extends React.Component{
                                                 <td><button onClick={this.showpropose.bind(this,"Propose Deviation",item.propose_deviation,'',true,false)}>Details</button></td>
                                                 <td><button onClick={this.showpropose.bind(this,"Retailer Comments",item.retailer_response,'',true,false)} >Details</button></td>
                                                 <td><button onClick={this.showpropose.bind(this,"SP Response",item.sp_response,'',true,item.response_status)} >Details</button></td>
-                                                <td>{item.sp_response_status === "1"?"Accepted":(item.sp_response_status === "0" || item.sp_response_status === "3"?"Rejected":(item.sp_response_status === "4"?"Withdrawn":""))}</td>
+                                                <td>{item.sp_response_status === "1"?"Accepted":(item.sp_response_status === "0" || item.sp_response_status === "3"?(item.response_status[1]=='0'?"Rejected":''):(item.sp_response_status === "4"?"Withdrawn":""))}</td>
                                                 <td><button onClick={this.showhistory.bind(this,item.id)}>History</button></td>
                                             </tr>
                                 })}
