@@ -316,7 +316,7 @@ export class Keppelproposedeviations extends Component {
                                             <button id={"spResponse_"+index} onClick={this.showpropose.bind(this,"SP Response",item.sp_response!=null?item.sp_response:'',"spResponse_"+index,this.props.readOnly,item.response_status)} >Details</button>
                                             {/* <textarea id={"spResponse_"+index} defaultValue={item.sp_response?decodeURI(item.sp_response).split(": ")[1]:''} />*/}
                                             </td>
-                                            <td>{item.sp_response_status === "1"?"Accepted":(item.sp_response_status === "0"?"Rejected":(item.sp_response_status === "4"?"Withdrawn":""))}</td>
+                                            <td>{item.sp_response_status === "1"?"Accepted":(item.sp_response_status === "0" || item.sp_response_status === "3"?"Rejected":(item.sp_response_status === "4"?"Withdrawn":""))}</td>
                                             <td>
                                                 <button id={"sp_reject_"+index} disabled={this.props.readOnly?this.props.readOnly:(item.type?(item.type=="reject"?true:false):(item.sp_response_status === '4' || item.sp_response_status === '1'?true:false))} onClick={this.do_keppel.bind(this,{params:'0',index:index,type:'reject'})}>Reject</button>
                                                 <button id={"sp_accept_"+index} disabled={this.props.readOnly?this.props.readOnly:(item.type?(item.type=="accept"?true:false):(item.sp_response_status === '4' || item.sp_response_status === '1'?true:false))} onClick={this.do_keppel.bind(this,{params:'1',index:index,type:'accept'})}>Accept</button>

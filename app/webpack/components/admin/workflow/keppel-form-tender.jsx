@@ -87,8 +87,8 @@ export class Keppelformtender extends React.Component{
         return(
             <div className="col-sm-12 col-md-10 push-md-1 u-mt3 tender_documents">
                 <h2 className="u-mt2 u-mb2">{this.props.current.name} - Form of {this.state.chats.length>0?'':'Base'} Tender</h2>
-                <h3 className="u-mt1 u-mb1">Tender Submission Status : {this.props.current.current.current_status === '0' && this.props.current.current.current_node === 4 || this.props.current.current.current_status === '2' ?'Pending':(this.state.submission_status ? <span className="green">Accepted</span> 
-                : <span className="red">Rejected</span>)}</h3>
+                {/* <h3 className="u-mt1 u-mb1">Tender Submission Status : {this.props.current.current.current_status === '0' && this.props.current.current.current_node === 4 || this.props.current.current.current_status === '2' ?'Pending':(this.state.submission_status ? <span className="green">Accepted</span> 
+                : <span className="red">Rejected</span>)}</h3> */}
                 <div className="lm--formItem lm--formItem--inline string u-mt3 role_select">
                     <label className="lm--formItem-left lm--formItem-label string required">
                     Please see below for {this.state.chats.length>0?'':'base'} tender submission:
@@ -127,7 +127,7 @@ export class Keppelformtender extends React.Component{
                                                 <td><button onClick={this.showpropose.bind(this,"Propose Deviation",item.propose_deviation,'',true,false)}>Details</button></td>
                                                 <td><button onClick={this.showpropose.bind(this,"Retailer Comments",item.retailer_response,'',true,false)} >Details</button></td>
                                                 <td><button onClick={this.showpropose.bind(this,"SP Response",item.sp_response,'',true,item.response_status)} >Details</button></td>
-                                                <td>{item.sp_response_status === "1"?"Accepted":(item.sp_response_status === "0"?"Rejected":(item.sp_response_status === "4"?"Withdrawn":""))}</td>
+                                                <td>{item.sp_response_status === "1"?"Accepted":(item.sp_response_status === "0" || item.sp_response_status === "3"?"Rejected":(item.sp_response_status === "4"?"Withdrawn":""))}</td>
                                                 <td><button onClick={this.showhistory.bind(this,item.id)}>History</button></td>
                                             </tr>
                                 })}
