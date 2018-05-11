@@ -136,7 +136,6 @@ export class Keppelproposedeviations extends Component {
                     <form id={type+"_form"} encType="multipart/form-data">
                         {this.state.fileData[type].map((item, index) => 
                                 <div className="u-grid mg0 u-mt1" key={index}>
-                                {!this.props.readOnly?
                                     <div className="col-sm-12 col-md-10 u-cell">
                                         <a className="upload_file_btn">
                                             <dfn>No file selected...</dfn>
@@ -166,22 +165,13 @@ export class Keppelproposedeviations extends Component {
                                                 }
                                             </ul>
                                         </div>
-                                    </div>:<div className="progress_files">
-                                            <ul>
-                                                {
-                                                    item.files.map((it,i)=>{
-                                                        return <li className={this.props.readOnly?"lineHeight42":""} key={i}><a download={it.file_name} href={"/"+it.file_path}>{it.file_name}</a></li>
-                                                    })
-                                                }
-                                            </ul>
-                                        </div>}
-                                        {!this.props.readOnly?
-                                            <div className="col-sm-12 col-md-2 u-cell">
-                                                {
-                                                    this.props.propsdisabled?<button className="lm--button lm--button--primary" disabled>Upload</button>:(this.state.disabled?<button className="lm--button lm--button--primary" disabled>Upload</button>
-                                                    :<a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>)
-                                                }
-                                            </div>:''}
+                                    </div>                      
+                                    <div className="col-sm-12 col-md-2 u-cell">
+                                        {
+                                            this.props.propsdisabled?<button className="lm--button lm--button--primary" disabled>Upload</button>:(this.state.disabled?<button className="lm--button lm--button--primary" disabled>Upload</button>
+                                            :<a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>)
+                                        }
+                                    </div>
                                     {/* <div className="col-sm-12 col-md-2 u-cell">
                                         {item.buttonName === "none" ? "" : <a onClick={this.fileclick.bind(this, index, type, item.buttonName)} className={"lm--button lm--button--primary "+item.buttonName}>{item.buttonText}</a>}
                                     </div> */}
