@@ -80,7 +80,7 @@ export class Showhistory extends React.Component{
                                     </dd>:''}
                                     {item.sp_response!=null?
                                     <dt>
-                                        <dfn><abbr></abbr>SP</dfn>
+                                        <dfn><abbr></abbr>SP Group</dfn>
                                         <span>{item.response_status == "0"?
                                         (item.sp_response!=null?"Rejected : "+decodeURI(item.sp_response):""):
                                         (item.sp_response!=null?"Accepted : "+decodeURI(item.sp_response):"")}</span>
