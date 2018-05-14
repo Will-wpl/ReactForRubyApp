@@ -169,18 +169,6 @@ export class SearchList extends Component {
             }
         }
     }
-    dosort(field_name,sort,table_name){
-        $(".lm--table th dfn").removeClass("selected");
-        $(".search_list_"+sort+"."+field_name+"").addClass("selected");
-        let listData = {};
-        if(this.props.list_data){
-            listData = this.props.list_data;
-            listData.sort_by = [field_name,sort,table_name];
-            if(this.props.doSearch && this.props.list_url){
-                this.props.doSearch(listData,this.props.list_url);
-            }
-        }
-    }
     render (){
         if(this.props.table_data){
             return (
