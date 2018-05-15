@@ -14,7 +14,7 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
         has_eht = !is_zero(auction.total_eht_peak, auction.total_eht_off_peak)
 
         render json: { id: auction.id, publish_status: auction.publish_status, name: auction.name, retailer_mode: auction.retailer_mode,
-                       has_lt: has_lt, has_hts: has_hts, has_htl: has_htl, has_eht: has_eht, starting_price: auction.starting_price }, status: 200
+                       has_lt: has_lt, has_hts: has_hts, has_htl: has_htl, has_eht: has_eht, starting_price: auction.starting_price, start_datetime: auction.actual_begin_time }, status: 200
       else
         render json: { message: 'you can not get the auction information.' }, status: 400
       end
