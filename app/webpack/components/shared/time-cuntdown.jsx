@@ -17,7 +17,7 @@ export class TimeCuntDown extends Component {
         //this.getAuctionTime(this.props.auction);
         if (this.props.auction) {
             console.log(this.props.auction);
-            this.timerTitle = this.props.auction.start_datetime ? `${this.props.auction.name} on ${moment(this.props.auction.start_datetime).format('D MMM YYYY hh:mm a')}` : '';
+            this.timerTitle = this.props.auction.actual_begin_time ? `${this.props.auction.name} on ${moment(this.props.auction.actual_begin_time).format('D MMM YYYY hh:mm a')}` : '';
         }
         this.interval = setInterval(() => {
             this.getAuctionTime(this.props.auction);
