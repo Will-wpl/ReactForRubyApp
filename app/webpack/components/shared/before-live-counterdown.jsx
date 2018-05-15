@@ -5,7 +5,7 @@ import moment from 'moment';
 export class CounterDownShowBeforeLive extends Component {
 
     render() {
-        let title = `${this.props.auction.name} on ${moment(this.props.auction.actual_begin_time).format('D MMM YYYY hh:mm a')}`;
+        let title = `${this.props.auction.name} on ${moment(this.props.auction.start_datetime).format('D MMM YYYY hh:mm a')}`;
         return (
             <div className="time_cuntdown">
                 <p>{title}</p>
