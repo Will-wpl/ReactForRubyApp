@@ -48,7 +48,7 @@ export class Adminretailerdashboard extends Component {
                             <thead>
                             <tr>
                                 <th></th>
-                                <th>Sign Confidentiality Undertaking</th>
+                                <th>Confidentiality Undertaking</th>
                                 <th>Tender Documents</th>
                                 <th>Deviations (if any)</th>
                                 <th>Submit Form of Tender</th>
