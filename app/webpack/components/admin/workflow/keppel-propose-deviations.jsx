@@ -38,7 +38,7 @@ export class Keppelproposedeviations extends Component {
             }else{
                 this.setState({
                     deviations_list:[
-                        {id:0,item:1,clause:'',propose_deviation:'',retailer_response:'',sp_response:''},
+                        {id:0,item:1,clause:'',propose_deviation:'',retailer_response:'',sp_response:'',response_status:["",""]},
                     ]
                 })
             }
@@ -126,6 +126,7 @@ export class Keppelproposedeviations extends Component {
         let deviationslist = this.state.deviations_list;
         deviationslist[obj.index].sp_response_status = obj.params;
         deviationslist[obj.index].type = obj.type;
+        deviationslist[obj.index].response_status[1] = obj.params;
         //deviationslist[obj.index].sp_response = '';
         this.setState({deviations_list:deviationslist});
         //console.log(this.state.deviations_list);
@@ -136,7 +137,6 @@ export class Keppelproposedeviations extends Component {
                     <form id={type+"_form"} encType="multipart/form-data">
                         {this.state.fileData[type].map((item, index) => 
                                 <div className="u-grid mg0 u-mt1" key={index}>
-                                {!this.props.readOnly?
                                     <div className="col-sm-12 col-md-10 u-cell">
                                         <a className="upload_file_btn">
                                             <dfn>No file selected...</dfn>
@@ -166,22 +166,13 @@ export class Keppelproposedeviations extends Component {
                                                 }
                                             </ul>
                                         </div>
-                                    </div>:<div className="progress_files">
-                                            <ul>
-                                                {
-                                                    item.files.map((it,i)=>{
-                                                        return <li className={this.props.readOnly?"lineHeight42":""} key={i}><a download={it.file_name} href={"/"+it.file_path}>{it.file_name}</a></li>
-                                                    })
-                                                }
-                                            </ul>
-                                        </div>}
-                                        {!this.props.readOnly?
-                                            <div className="col-sm-12 col-md-2 u-cell">
-                                                {
-                                                    this.props.propsdisabled?<button className="lm--button lm--button--primary" disabled>Upload</button>:(this.state.disabled?<button className="lm--button lm--button--primary" disabled>Upload</button>
-                                                    :<a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>)
-                                                }
-                                            </div>:''}
+                                    </div>                      
+                                    <div className="col-sm-12 col-md-2 u-cell">
+                                        {
+                                            this.props.propsdisabled?<button className="lm--button lm--button--primary" disabled>Upload</button>:(this.state.disabled?<button className="lm--button lm--button--primary" disabled>Upload</button>
+                                            :<a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>)
+                                        }
+                                    </div>
                                     {/* <div className="col-sm-12 col-md-2 u-cell">
                                         {item.buttonName === "none" ? "" : <a onClick={this.fileclick.bind(this, index, type, item.buttonName)} className={"lm--button lm--button--primary "+item.buttonName}>{item.buttonText}</a>}
                                     </div> */}
@@ -326,7 +317,7 @@ export class Keppelproposedeviations extends Component {
                                             <button id={"spResponse_"+index} onClick={this.showpropose.bind(this,"SP Response",item.sp_response!=null?item.sp_response:'',"spResponse_"+index,this.props.readOnly,item.response_status)} >Details</button>
                                             {/* <textarea id={"spResponse_"+index} defaultValue={item.sp_response?decodeURI(item.sp_response).split(": ")[1]:''} />*/}
                                             </td>
-                                            <td>{item.sp_response_status === "1"?"Accepted":(item.sp_response_status === "2"?"Rejected":(item.sp_response_status === "4"?"Withdrawn":""))}</td>
+                                            <td>{item.sp_response_status === "1"?"Accepted":(item.sp_response_status === "0" || item.sp_response_status === "3"?(item.response_status[1]=='0'?"Rejected":''):(item.sp_response_status === "4"?"Withdrawn":""))}</td>
                                             <td>
                                                 <button id={"sp_reject_"+index} disabled={this.props.readOnly?this.props.readOnly:(item.type?(item.type=="reject"?true:false):(item.sp_response_status === '4' || item.sp_response_status === '1'?true:false))} onClick={this.do_keppel.bind(this,{params:'0',index:index,type:'reject'})}>Reject</button>
                                                 <button id={"sp_accept_"+index} disabled={this.props.readOnly?this.props.readOnly:(item.type?(item.type=="accept"?true:false):(item.sp_response_status === '4' || item.sp_response_status === '1'?true:false))} onClick={this.do_keppel.bind(this,{params:'1',index:index,type:'accept'})}>Accept</button>

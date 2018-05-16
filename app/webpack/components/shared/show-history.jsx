@@ -15,14 +15,17 @@ export class Showhistory extends React.Component{
     componentWillReceiveProps(next) {
         this.setState({textVal:''});
         this.checkShowdetail(next);
+    }
+    componentDidUpdate(next){
         if(next.type === "history"){
-            setTimeout(()=>{
-                $(".history_nr textarea").css("height","auto");
-                $(".history_nr textarea").each((e)=>{
-                    $(".history_nr textarea").eq(e).height($(".history_nr textarea")[e].scrollHeight-10);
-                })
-            },200)
+            this.autoHeight("history_nr textarea");
         }
+    }
+    autoHeight(obj){
+        $("."+obj).css("height","auto");
+        $("."+obj).each((e)=>{
+            $("."+obj).eq(e).height($("."+obj)[e].scrollHeight-10);
+        })
     }
     clearTextarea(){
         $(".detail_show").val("");
@@ -47,7 +50,8 @@ export class Showhistory extends React.Component{
         this.setState({textVal:val});
     }
     showModal(data){
-        //console.log(data);
+        console.log(data);
+        this.setState({props_data:[]});
         this.setState({
             modalshowhide:"modal_show",
             props_data:data?data.details:[],
