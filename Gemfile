@@ -51,7 +51,7 @@ gem 'rubocop', require: false
 gem 'redis'
 
 # Use sidekiq to run Action Job
-# gem 'sidekiq'
+gem 'sidekiq'
 
 # Workaround with application in proxy calling external services
 gem 'no_proxy_fix'
