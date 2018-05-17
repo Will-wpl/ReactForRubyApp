@@ -286,6 +286,8 @@ Rails.application.routes.draw do
     resources :consumptions,only: %i[edit]
   end
 
-  require 'sidekiq/web'
-  mount Sidekiq::Web => '/sidekiq'
+  if ENV['DEBUG_SIDEKIQ'] == 'true'
+    require 'sidekiq/web'
+    mount Sidekiq::Web => '/sidekiq'
+  end
 end
