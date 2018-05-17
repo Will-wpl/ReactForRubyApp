@@ -285,4 +285,7 @@ Rails.application.routes.draw do
     end
     resources :consumptions,only: %i[edit]
   end
+
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
 end
