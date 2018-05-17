@@ -52,6 +52,14 @@ GEM
       public_suffix (>= 2.0.2, < 4.0)
     arel (8.0.0)
     ast (2.4.0)
+    azure-core (0.1.14)
+      faraday (~> 0.9)
+      faraday_middleware (~> 0.10)
+      nokogiri (~> 1.6)
+    azure-storage (0.12.3.preview)
+      azure-core (~> 0.1)
+      faraday (~> 0.9)
+      faraday_middleware (~> 0.10)
     bcrypt (3.1.11)
     bindex (0.5.0)
     breadcrumbs_on_rails (3.0.1)
@@ -68,6 +76,9 @@ GEM
       activemodel (>= 4.0.0)
       activesupport (>= 4.0.0)
       mime-types (>= 1.16)
+    carrierwave-azure_rm (0.1.2)
+      azure-storage (~> 0.12.1.preview)
+      carrierwave
     childprocess (0.9.0)
       ffi (~> 1.0, >= 1.0.11)
     choice (0.2.0)
@@ -103,6 +114,10 @@ GEM
       railties (>= 3.0.0)
     faker (1.8.7)
       i18n (>= 0.7)
+    faraday (0.15.1)
+      multipart-post (>= 1.2, < 3)
+    faraday_middleware (0.12.2)
+      faraday (>= 0.7.4, < 1.0)
     ffi (1.9.23)
     font-awesome-sass (4.7.0)
       sass (>= 3.2)
@@ -149,6 +164,7 @@ GEM
     mini_portile2 (2.3.0)
     minitest (5.11.3)
     multi_json (1.13.1)
+    multipart-post (2.0.0)
     newrelic_rpm (5.0.0.342)
     nio4r (2.3.0)
     no_proxy_fix (0.1.2)
@@ -324,6 +340,7 @@ DEPENDENCIES
   byebug
   capybara
   carrierwave (~> 1.0)
+  carrierwave-azure_rm
   codecov
   database_rewinder
   devise
@@ -373,4 +390,4 @@ RUBY VERSION
    ruby 2.4.1p111
 
 BUNDLED WITH
-   1.16.0
+   1.16.1

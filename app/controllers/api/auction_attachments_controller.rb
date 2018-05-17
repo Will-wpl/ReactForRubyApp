@@ -14,16 +14,22 @@ class Api::AuctionAttachmentsController < Api::BaseController
     mounted_as = [params[:auction_id]]
     mounted_as.push(params[:user_id]) unless params[:user_id].nil?
     mounted_as.push(Time.current.to_f.to_s.delete('.'))
+
     uploader = AvatarUploader.new(AuctionAttachment, mounted_as)
     uploader.store!(file)
+
     attachment = AuctionAttachment.new
     attachment.auction_id = params[:auction_id]
     attachment.file_name = uploader.filename
     attachment.file_type = params[:file_type]
-    attachment.file_path = uploader.store_dir + '/' + uploader.filename
+    attachment.file_path = uploader.url
+    if ENV['CARRIERWAVE_STORAGE'] != 'azure'
+      attachment.file_path = '/' + uploader.url
+    end
     attachment.user_id = params[:user_id] unless params[:user_id].nil?
 
     attachment.save
+
     render json: attachment, status: 200
   end
 

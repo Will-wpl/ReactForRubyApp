@@ -161,12 +161,12 @@ export class Keppelproposedeviations extends Component {
                                             <ul>
                                                 {
                                                     item.files.map((it,i)=>{
-                                                        return <li key={i}><a download={it.file_name} href={"/"+it.file_path}>{it.file_name}</a>{this.props.propsdisabled?'':(this.state.disabled?'':<span className="remove_file" onClick={this.remove_file.bind(this,type,index,i,it.id)}></span>)}</li>
+                                                        return <li key={i}><a download={it.file_name} href={it.file_path}>{it.file_name}</a>{this.props.propsdisabled?'':(this.state.disabled?'':<span className="remove_file" onClick={this.remove_file.bind(this,type,index,i,it.id)}></span>)}</li>
                                                     })
                                                 }
                                             </ul>
                                         </div>
-                                    </div>                      
+                                    </div>
                                     <div className="col-sm-12 col-md-2 u-cell">
                                         {
                                             this.props.propsdisabled?<button className="lm--button lm--button--primary" disabled>Upload</button>:(this.state.disabled?<button className="lm--button lm--button--primary" disabled>Upload</button>
