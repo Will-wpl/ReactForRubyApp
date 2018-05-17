@@ -248,11 +248,11 @@ export class FillConsumption extends Component {
                     {this.state.link ?
                         <h4 className="col-sm-12 u-mb2">
                             <input name="agree_auction" type="checkbox" disabled={this.state.disabled} required />&nbsp;&nbsp;
-                            I agree to the <a className="cursor" download={this.state.link.file_name} href={`/${this.state.link.file_path}`}>terms and conditions.</a>
+                            I agree to the <a className="cursor" download={this.state.link.file_name} href={`${this.state.link.file_path}`}>terms and conditions.</a>
                         </h4>:""
                     }
 
-                {/*<h4 className="col-sm-12 u-mb2"><input name="agree_auction" type="checkbox" disabled={this.state.disabled} required /> I agree to the {this.state.link?<a className="cursor" download={this.state.link.file_name} href={`/${this.state.link.file_path}`}>terms and conditions.</a>:'terms and conditions.'}</h4>*/}
+                {/*<h4 className="col-sm-12 u-mb2"><input name="agree_auction" type="checkbox" disabled={this.state.disabled} required /> I agree to the {this.state.link?<a className="cursor" download={this.state.link.file_name} href={`${this.state.link.file_path}`}>terms and conditions.</a>:'terms and conditions.'}</h4>*/}
 
                 <h4 className="col-sm-12 u-mb2">Last Status of Participation : {this.status}</h4>
                     <div className="col-sm-12 col-md-8">

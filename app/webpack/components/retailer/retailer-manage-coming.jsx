@@ -251,7 +251,7 @@ export class RetailerManage extends Component {
                             <div className="lm--formItem-right lm--formItem-control">
                                 <ul className="brif_list">
                                 {this.state.files.map((item,index)=>{
-                                    return <li key={index}><a download={item.file_name} href={"/"+item.file_path}>{item.file_name}</a></li>
+                                    return <li key={index}><a download={item.file_name} href={item.file_path}>{item.file_name}</a></li>
                                 })}
                             </ul>
                             </div>
