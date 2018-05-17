@@ -128,6 +128,8 @@ If you want to debug by rubymine, can do:
 - In terminal run : `./bin/webpack-dev-server --hot`
 - In menu click : Run -> Debug -> Development:reverse-auction
 - http://localhost:3000
+- bundle exec sidekiq -t 25 -C config/sidekiq.yml
+
 
 
 If you want to unit test, can do:
