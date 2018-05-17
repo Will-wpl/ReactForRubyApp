@@ -23,9 +23,6 @@ class Api::AuctionAttachmentsController < Api::BaseController
     attachment.file_name = uploader.filename
     attachment.file_type = params[:file_type]
     attachment.file_path = uploader.url
-    if ENV['CARRIERWAVE_STORAGE'] != 'azure'
-      attachment.file_path = uploader.url
-    end
     attachment.user_id = params[:user_id] unless params[:user_id].nil?
 
     attachment.save
