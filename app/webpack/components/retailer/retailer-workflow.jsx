@@ -65,7 +65,7 @@ export class Retailerworkflow extends React.Component{
         if(selectedObj === "selected"){
             this.setState({page:index,disabled:true});
         }else if(selectedObj === "pending"){
-            this.setState({page:index,disabled:false,tender_status:this.state.current.actions.node3_retailer_next?true:false});
+            this.setState({page:index,disabled:false,tender_status:this.state.current.actions.node3_retailer_next || this.state.current.actions.node4_retailer_next?true:false});
         }else{
             if(this.state.tab_page == index){
                 this.setState({page:index,disabled:false,tender_status:false});
