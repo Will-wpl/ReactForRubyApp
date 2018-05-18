@@ -344,7 +344,7 @@ export class Proposedeviations extends React.Component{
                             <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                 <ul className="brif_list">
                                     {this.state.attachments ? this.state.attachments.map((item,index)=>{
-                                        return <li key={index}><a disabled={this.props.propsdisabled} download={item.file_name} href={item.file_path}>{item.file_name}</a></li>
+                                        return <li key={index}><a target="_blank" disabled={this.props.propsdisabled} download={item.file_name} href={item.file_path}>{item.file_name}</a></li>
                                     }) : ''}
                                 </ul>
                             </div>
