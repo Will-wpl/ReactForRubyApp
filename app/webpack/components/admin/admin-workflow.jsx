@@ -16,12 +16,6 @@ export class Adminworkflow extends Component {
             disabled:false,current:{},page:1,
             allbtnStatus:true,retailer_list:[],readOnly:false
         }
-        this.linklist = [
-            {file_name:"appjafajfajfahsfhafiuahfohhnjnalflal.js",file_path:"#"},
-            {file_name:"appjafajfajfahsfhafiuahfohhnjnalflalagag.pdf",file_path:"#"},
-            {file_name:"appjafajfajhfohhnjnalflal.pdf",file_path:"#"},
-            {file_name:"appjafajfajfahsfhafiuahfohhnjnalflaldhahhhahhhhahafaaw.xlcs",file_path:"#"}
-        ]
         getRetailerList(sessionStorage.auction_id).then(res=>{
             console.log(res);
             this.setState({retailer_list:res});

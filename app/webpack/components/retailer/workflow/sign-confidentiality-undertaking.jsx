@@ -59,7 +59,7 @@ export class Signconfidentialityundertaking extends React.Component{
                 <p>By clicking Accept, you confirm that you have read the terms and conditions, that you understand them and that you agree to be bound by them.</p>
                     <div className="u-mt3 u-mb3 download">
                         <span>Click to Download : </span>
-                        <a className="download_ico" download={this.state.file_name} href={this.state.file_path}></a>
+                        <a className="download_ico" target="_blank" download={this.state.file_name} href={this.state.file_path}></a>
                     </div>
                 {this.props.current.actions ?
                 <div className="workflow_btn u-mt3">
