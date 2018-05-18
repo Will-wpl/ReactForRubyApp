@@ -76,6 +76,8 @@ class TenderWorkflow < Workflow
       { node3_send_response: true }
     elsif node4_retailer?(sm)
       { node4_retailer_submit: true, node4_retailer_next: true }
+    elsif node4_retailer_submit?(sm)
+      { node4_retailer_next: true }
     elsif node4_admin?(sm)
       { node4_admin_accept: true, node4_admin_reject: true }
     elsif node5?(sm)
@@ -131,6 +133,10 @@ class TenderWorkflow < Workflow
 
   def node4_retailer?(sm)
     sm.current_node == 4 && sm.current_role = 2
+  end
+
+  def node4_retailer_submit?(sm)
+    sm.current_node == 4 && sm.previous_node = 4 && sm.current_status = 2 && sm.current_role = 1
   end
 
   def node4_admin?(sm)
