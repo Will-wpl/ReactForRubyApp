@@ -313,7 +313,7 @@ upload(type, index){
                                                     <ul>
                                                         {
                                                             item.files.map((it,i)=>{
-                                                                return <li key={i}><a download={it.file_name} href={it.file_path}>{it.file_name}</a>{uploadStatus?<span className="remove_file" onClick={this.remove_file.bind(this,type,index,i,it.id)}></span>:''}</li>
+                                                                return <li key={i}><a target="_blank" download={it.file_name} href={it.file_path}>{it.file_name}</a>{uploadStatus?<span className="remove_file" onClick={this.remove_file.bind(this,type,index,i,it.id)}></span>:''}</li>
                                                             })
                                                         }
                                                     </ul>
