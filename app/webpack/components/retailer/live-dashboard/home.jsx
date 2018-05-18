@@ -47,7 +47,6 @@ export default class LiveHomePage extends Component {
             }).onDisconnected(() => {
                 console.log('---message client disconnected ----')
             }).onReceivedData(data => {
-                console.log('---message client received data ---', data);
                 if (data && data.action) {
                     if (data.action === ACTION_COMMANDS.SET_BID) {
                         let curUserId = Number(getLoginUserId());
