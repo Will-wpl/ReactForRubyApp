@@ -46,10 +46,10 @@ export class Proposedeviations extends React.Component{
     }
     showConfirm(type,obj){
         this.setState({buttonType:type});
+        let thistype = this.state.deviations_list.find((item)=>{
+            return item.id === 0;
+        })
         if(type == "Withdraw_Deviations"){
-            let thistype = this.state.deviations_list.find((item)=>{
-                return item.id === 0;
-            })
             if(thistype){
                 this.refs.Modal.showModal();
                 this.setState({
@@ -62,9 +62,6 @@ export class Proposedeviations extends React.Component{
                 text:"Are you sure you want to withdraw all deviations and proceed with base tender submission?"
             });
         }else if(type == "Withdraw"){
-            let thistype = this.state.deviations_list.find((item)=>{
-                return item.id === 0;
-            })
             if(thistype){
                 this.refs.Modal.showModal();
                 this.setState({
