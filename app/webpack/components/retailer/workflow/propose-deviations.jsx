@@ -46,12 +46,29 @@ export class Proposedeviations extends React.Component{
     }
     showConfirm(type,obj){
         this.setState({buttonType:type});
+        let thistype = this.state.deviations_list.find((item)=>{
+            return item.id === 0 || item.sp_response_status==='2';
+        })
         if(type == "Withdraw_Deviations"){
+            if(thistype){
+                this.refs.Modal.showModal();
+                this.setState({
+                    text:"You added new deviation(s) that have not been submitted. Please submit or remove the new deviation(s) first."
+                });
+                return;
+            }
             this.refs.Modal.showModal("comfirm");
             this.setState({
                 text:"Are you sure you want to withdraw all deviations and proceed with base tender submission?"
             });
         }else if(type == "Withdraw"){
+            if(thistype){
+                this.refs.Modal.showModal();
+                this.setState({
+                    text:"You added new deviation(s) that have not been submitted. Please submit or remove the new deviation(s) first."
+                });
+                return;
+            }
             this.refs.Modal.showModal("comfirm",obj);
             this.setState({
                 text:"Are you sure you want to withdraw deviation?"
@@ -81,9 +98,9 @@ export class Proposedeviations extends React.Component{
         }
     }
     withdrawAllDeviations(){
-        retailerWithdrawAllDeviations(this.props.current.current.arrangement_id,this.editData()).then(res=>{
-            this.props.page();
-        })
+            retailerWithdrawAllDeviations(this.props.current.current.arrangement_id,this.editData()).then(res=>{
+                this.props.page();
+            })
     }
     Withdraw(obj){
         let withdraw = this.state.deviations_list;
@@ -94,6 +111,7 @@ export class Proposedeviations extends React.Component{
             this.setState({
                 text:"You have successfully updated"
             });
+            this.refresh();
             this.props.page();
             // setTimeout(()=>{
             //     this.changeNext();

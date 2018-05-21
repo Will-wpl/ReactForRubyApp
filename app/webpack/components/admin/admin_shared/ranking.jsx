@@ -11,7 +11,7 @@ export default class RetailerRanking extends Component {
 
 
     render() {
-        console.log('ranking', this.props.ranking)
+        //console.log('ranking', this.props.ranking)
         return (
             <div>
                 <div className="retailrank_main">
