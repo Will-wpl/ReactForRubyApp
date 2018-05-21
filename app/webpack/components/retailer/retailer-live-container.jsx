@@ -51,7 +51,7 @@ export class RetailerLiveContainer extends Component {
                 <div className={'live_show'} id="live_modal">
                     <div className={'live_hold'}></div>
                     <p>
-                        Auction may be not illegal, please fix auction configuration.
+                        Action not allowed.
                     </p>
                 </div>
                 <div className="createRaMain u-grid">

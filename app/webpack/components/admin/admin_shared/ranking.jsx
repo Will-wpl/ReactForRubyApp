@@ -8,8 +8,6 @@ export default class RetailerRanking extends Component {
         }
     }
 
-
-
     render() {
         //console.log('ranking', this.props.ranking)
         return (
