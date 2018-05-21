@@ -47,13 +47,13 @@ export class Proposedeviations extends React.Component{
     showConfirm(type,obj){
         this.setState({buttonType:type});
         let thistype = this.state.deviations_list.find((item)=>{
-            return item.id === 0;
+            return item.id === 0 || item.sp_response_status==='2';
         })
         if(type == "Withdraw_Deviations"){
             if(thistype){
                 this.refs.Modal.showModal();
                 this.setState({
-                    text:"You have unsaved deviations,Please save or delete."
+                    text:"You added new deviation(s) that have not been submitted. Please submit or remove the new deviation(s) first."
                 });
                 return;
             }
@@ -65,7 +65,7 @@ export class Proposedeviations extends React.Component{
             if(thistype){
                 this.refs.Modal.showModal();
                 this.setState({
-                    text:"You have unsaved deviations,Please save or delete."
+                    text:"You added new deviation(s) that have not been submitted. Please submit or remove the new deviation(s) first."
                 });
                 return;
             }
