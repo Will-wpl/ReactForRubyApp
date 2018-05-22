@@ -63,13 +63,13 @@
             b * &nbsp;
             attr Unique Entity Number (UEN)
           .lm--formItem-right.lm--formItem-control
-            = f.input :company_unique_entity_number, disabled: true
+            = f.input :company_unique_entity_number, required: true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label 
             b * &nbsp;
             attr Retailer Licence Number
           .lm--formItem-right.lm--formItem-control
-            = f.input :company_license_number,disabled:true
+            = f.input :company_license_number, required: true
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
             b * &nbsp;
