@@ -63,4 +63,22 @@ class PdfChart
     end
     point_hash
   end
+
+  def get_name_string(user_name, color)
+    "<color rgb='#{color}'>#{user_name}</color><br/>"
+  end
+
+  def get_font_size(size)
+    if size > 50 then
+      return 4.8
+    elsif size >= 40 then
+      return 4.5
+    elsif size > 30 then
+      return 5.8
+    elsif size >= 24 then
+      return 8
+    else
+      return 10
+    end
+  end
 end

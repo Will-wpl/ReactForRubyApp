@@ -19,14 +19,12 @@ class PdfRankChart < PdfChart
       # line
       chart_line
     end
-
-    pdf.grid([13, 14], [22, 18]).bounding_box do
-      pdf.move_down 5
-      font_size = user_company_name_hash.keys().size > 20 ? 9 : 10
+    pdf.grid([13, 13], [22, 18]).bounding_box do
+      name_string  = ""
       uid.each {|user_id|
-        pdf.font_size(font_size) {pdf.text user_company_name_hash[user_id], :color => chart_color[user_id], :valign => :center}
-        pdf.move_down 12
+        name_string += get_name_string(user_company_name_hash[user_id] , chart_color[user_id])
       }
+      pdf.font_size(get_font_size(user_company_name_hash.keys().size)) {pdf.text name_string,  :inline_format => true, :valign => :center}
     end
   end
 
