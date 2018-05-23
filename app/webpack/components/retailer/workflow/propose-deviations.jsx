@@ -53,7 +53,7 @@ export class Proposedeviations extends React.Component{
             if(thistype){
                 this.refs.Modal.showModal();
                 this.setState({
-                    text:"You have unsubmit deviations,Please submit or delete for the deviation."
+                    text:"You added new deviation(s) that have not been submitted. Please submit or remove the new deviation(s) first."
                 });
                 return;
             }
@@ -65,7 +65,7 @@ export class Proposedeviations extends React.Component{
             if(thistype){
                 this.refs.Modal.showModal();
                 this.setState({
-                    text:"You have unsubmit deviations,Please submit or delete for the deviation."
+                    text:"You added new deviation(s) that have not been submitted. Please submit or remove the new deviation(s) first."
                 });
                 return;
             }
