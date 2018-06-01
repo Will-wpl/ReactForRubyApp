@@ -6,7 +6,7 @@ class Admin::UsersController < Admin::BaseController
 
   def index
     # @users = User.admins.exclude(1).order(created_at: :desc).page(params[:page])
-    @users = User.all.order(created_at: :desc).page(params[:page])
+    @users = User.admins.exclude(1).order(created_at: :desc).page(params[:page])
   end
 
   def new
