@@ -27,7 +27,7 @@ export class AdminDashboard extends Component {
     componentDidMount() {
         getAuction('admin',sessionStorage.auction_id).then(auction => {
             this.auction = auction;
-            console.log(this.auction.name);
+            //console.log(this.auction.name);
             this.timerTitle = auction ? `${auction.name} on ${moment(auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
             this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000'
             this.forceUpdate(); // only once no need to use state
@@ -62,7 +62,7 @@ export class AdminDashboard extends Component {
                              }
                          })
                      } catch (error) {
-                         console.log(error);
+                         //console.log(error);
                      }
                     this.setState({realtimeData: histories, realtimeRanking: orderRanking
                         , currentPrice : orderRanking.length > 0 ? orderRanking[0].average_price : this.state.currentPrice});

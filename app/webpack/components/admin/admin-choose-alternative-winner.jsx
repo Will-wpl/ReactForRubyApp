@@ -21,10 +21,10 @@ export default class ChooseAlternativeWinner extends React.Component{
 
     componentDidMount(){
         let thisId = window.location.href.split("auctions/")[1].split("/choose_winner")[0];
-        console.log(thisId);
+        //console.log(thisId);
         document.getElementById('badge').style.display = 'none'
         getAuction('admin',thisId).then(resp=>{
-            console.log(resp);
+            //console.log(resp);
             let actionId = resp.id;
             getHistoriesLast({ auction_id: actionId}).then(resp=>{
                 let data = resp.histories;
@@ -44,7 +44,7 @@ export default class ChooseAlternativeWinner extends React.Component{
                     id:data[0].auction_id,
                     index:0
                 };
-                console.log(e);
+                //console.log(e);
                 this.setState({winnerData:data,selectedWinner:e})
             })
         })
@@ -118,7 +118,7 @@ export default class ChooseAlternativeWinner extends React.Component{
     }
 
     acceptWinner(){
-        console.log('sure');
+        //console.log('sure');
         let thisId = window.location.href.split("auctions/")[1].split("/choose_winner")[0];
         let timeFn;
         let data = this.state.selectedWinner;

@@ -36,7 +36,7 @@ export default class AdminInvitation extends Component {
 
 componentDidMount() {
     adminShowSelects().then((res) => {
-        console.log(res);
+        //console.log(res);
         this.setState({
             retailer_select:(res.retailers['2'] ? res.retailers['2'] : 0)+(res.retailers['1'] ? res.retailers['1'] : 0),
             retailer_send:res.retailers['1'] ? res.retailers['1'] : 0,
@@ -58,7 +58,7 @@ componentDidMount() {
                         readOnly:true
                     })
                 }
-        console.log(res);
+        //console.log(res);
         this.setState({
             peak_lt:res.total_lt_peak ? formatPower(parseInt(Number(res.total_lt_peak)), 0, '') : 0,
             peak_hts:res.total_hts_peak ? formatPower(parseInt(Number(res.total_hts_peak)), 0, '') : 0,
@@ -149,7 +149,7 @@ upload(type, index){
             this.setState({
                 fileData:fileObj
             })
-            console.log(res);
+            //console.log(res);
         },error:() => {
                     barObj.find(".progress-bar").text('Upload failed!');
                     barObj.find(".progress-bar").css('background', 'red');
@@ -348,7 +348,7 @@ upload(type, index){
                         allfileObj[type] = fileArray;
                         this.setState({fileData:allfileObj})
                     }
-                    console.log(this.state.fileData);
+                    //console.log(this.state.fileData);
 
             }
             timeBar(type){

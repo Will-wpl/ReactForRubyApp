@@ -57,7 +57,7 @@ export class SearchList extends Component {
                 params_type:true
             })
             getUsersDetail(id).then(res=>{
-                console.log(res);
+                //console.log(res);
                 this.setState({
                     showDetail:res,
                 })

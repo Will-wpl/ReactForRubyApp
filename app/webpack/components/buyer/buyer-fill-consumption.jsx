@@ -31,7 +31,7 @@ export class FillConsumption extends Component {
                 time:res.auction.actual_begin_time,
                 link:res.tc_attachment,
             })
-            console.log(this.site_list);
+            //console.log(this.site_list);
             if(res.consumption.participation_status === '1' || res.auction.publish_status === "1"){
                 $("input[type='checkbox']").attr("checked",true);
                 this.setState({
@@ -68,7 +68,7 @@ export class FillConsumption extends Component {
         })
     }
     changeSiteList(val,index){
-        console.log(val);
+       // console.log(val);
         let list = this.state.site_list;
         this.site_list[index].intake_level_selected = val;
         this.setState({site_list:list})
@@ -79,7 +79,7 @@ export class FillConsumption extends Component {
         }
         let list = {},
         site_listObj = this.state.site_list;
-        console.log(site_listObj);
+        //console.log(site_listObj);
         list = {
             account_number:'',
             premise_address:'',
@@ -148,7 +148,7 @@ export class FillConsumption extends Component {
             // }
         }
         
-        console.log(makeData.consumption_id);
+        //console.log(makeData.consumption_id);
         setBuyerParticipate(makeData, '/api/buyer/consumption_details/save').then((res) => {
             if(type != "participate"){
                 if(type == "delete"){

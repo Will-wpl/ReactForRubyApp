@@ -64,7 +64,7 @@ export class RetailerManage extends Component {
             
             
         }, error => {
-            console.log(error);
+           // console.log(error);
         })
     }
     componentDidMount() {
@@ -124,7 +124,7 @@ export class RetailerManage extends Component {
             }
             
         }, error => {
-            console.log(error);
+            //console.log(error);
         })
     }
     padZero(num, n) { 
@@ -183,7 +183,7 @@ export class RetailerManage extends Component {
                     disabled:true
                 })
             }, error => {
-                console.log(error);
+                //console.log(error);
             })
     }
     checkSuccess(event,obj){

@@ -17,7 +17,7 @@ export class BidderStatus extends Component {
                         dataList:res,
                     })
                 }, error => {
-                    console.log(error);
+                    //console.log(error);
                 })
             }
         }, 1000);

@@ -12,7 +12,7 @@ export default class AdminAward extends Component{
     componentDidMount(){
         let thisId = window.location.href.split("auctions/")[1].split("/award")[0];
         getLetterOfAward(thisId).then(resp=>{
-            console.log(resp)
+            //console.log(resp)
             this.setState({awardList:resp})
         },error=>{
 
@@ -20,7 +20,7 @@ export default class AdminAward extends Component{
     }
 
     downLoad(data){
-        console.log(data);
+        //console.log(data);
         window.open(`/api/admin/auctions/letter_of_award_pdf?auction_id=${data.auction_id}&user_id=${data.user_id}`)
     }
 

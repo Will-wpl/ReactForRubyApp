@@ -16,13 +16,13 @@ export default class RetailerLetterOfAward extends React.Component{
 
     componentDidMount(){
         let id = window.location.href.split("retailer/")[1].split("auctions/")[1].split('/')[0];
-        console.log(id);
+        //console.log(id);
         getLetterOfAward(id).then(resp=>{
-            console.log(resp);
+           // console.log(resp);
             resp.map((e,i)=>{
                 e.acknowledge==1 ? e.disabled=true:e.disabled=false
             });
-            console.log(resp);
+            //console.log(resp);
             this.setState({letterOfAward:resp});
             let btnDisabled = true;
             for(let i in resp){
@@ -57,7 +57,7 @@ export default class RetailerLetterOfAward extends React.Component{
     }
 
     acknowledgeRetailer(){
-       console.log(this.state.currentData);
+      // console.log(this.state.currentData);
        let id = this.state.currentData.id;
        retailerAcknowledge(id).then(resp => {
            this.state.letterOfAward[this.state.currentIndex].disabled = true;
@@ -85,11 +85,11 @@ export default class RetailerLetterOfAward extends React.Component{
             });
             this.forceUpdate()
         },error=>{
-            console.log(error)
+           // console.log(error)
         })
     }
     download(data,index){
-        console.log(data);
+        //console.log(data);
         window.open(`/api/retailer/auctions/letter_of_award_pdf?auction_id=${data.auction_id}&user_id=${data.user_id}`);
     }
 

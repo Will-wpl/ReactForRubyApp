@@ -21,5 +21,5 @@ import "components/admin/admin-award";
 import "components/admin/admin-choose-alternative-winner";
 import "components/admin/admin-user-extends";
 // import "./javascripts/ajax-test.js";
-console.log("Admin Webpacker");
+//console.log("Admin Webpacker");
 

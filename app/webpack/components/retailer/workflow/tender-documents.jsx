@@ -12,7 +12,7 @@ export class Tenderdocuments extends React.Component{
     }
     componentDidMount() {
         getTenderdocuments(sessionStorage.arrangement_id).then(res=>{
-            console.log(res);
+            //console.log(res);
             this.setState({
                 aggregate:res.aggregate_consumptions,
                 attachments:res.attachments

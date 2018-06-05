@@ -104,7 +104,7 @@ export default class Price extends Component {
         let option = instance.getOption();
         if (params.type === 'datazoom' && params.dataZoomId.length > 0) {
             const lastEle = params.dataZoomId.charAt(params.dataZoomId.length - 1);
-            console.log(option);
+            //console.log(option);
             if (lastEle === '1') { //y
                 this.yStart = params.start;
                 this.yEnd = params.end;

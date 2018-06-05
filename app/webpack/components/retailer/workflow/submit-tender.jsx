@@ -21,7 +21,7 @@ export class Submittender extends React.Component{
     }
     componentDidMount() {
         getSumission(sessionStorage.arrangement_id).then(res=>{
-            console.log(res);
+            //console.log(res);
             let fileObj;
             fileObj = this.state.fileData;
             res.map((item,index)=>{
@@ -34,7 +34,7 @@ export class Submittender extends React.Component{
             this.setState({ 
                 fileData:fileObj
             })
-            console.log(this.state.fileData);
+            //console.log(this.state.fileData);
             this.changeNext();
         })
     }
@@ -89,7 +89,7 @@ export class Submittender extends React.Component{
             fileindex:fileindex,
             fileid:fileid
         }
-        console.log(obj);
+        //console.log(obj);
         this.setState({text:'Are you sure you want to delete this file?'});
         this.refs.Modal.showModal("comfirm",obj);
     }
@@ -235,7 +235,7 @@ export class Submittender extends React.Component{
                 this.setState({
                     fileData:fileObj
                 })
-                console.log(res);
+                //console.log(res);
             },error:() => {
                         barObj.find(".progress-bar").text('upload failed!');
                         barObj.find(".progress-bar").css('background', 'red');

@@ -17,13 +17,13 @@ export class Adminworkflow extends Component {
             allbtnStatus:true,retailer_list:[],readOnly:false
         }
         getRetailerList(sessionStorage.auction_id).then(res=>{
-            console.log(res);
+            //console.log(res);
             this.setState({retailer_list:res});
         })
     }
     getPageindex(arrangement_id,name,type,index){
         getTendersCurrent('admin',arrangement_id).then(res=>{
-            console.log(res);
+            //console.log(res);
             res.name=name;
             if(index==3||index==4){
                 this.setState({current:res,page:index,readOnly:!type});

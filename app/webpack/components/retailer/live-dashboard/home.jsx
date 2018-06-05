@@ -39,13 +39,13 @@ export default class LiveHomePage extends Component {
         if (!this.ws) {
             this.ws = createWebsocket(auctionId);
             this.ws.onConnected(() => {
-                console.log('---message client connected ---');
+                //console.log('---message client connected ---');
                 this.timestamp = new Date().getTime() + Math.random();
                 setTimeout(()=> {
                     this.ws.sendMessage(ACTION_COMMANDS.MAKE_UNIQUE, {timestamp: this.timestamp});
                 }, 1000);
             }).onDisconnected(() => {
-                console.log('---message client disconnected ----')
+                //console.log('---message client disconnected ----')
             }).onReceivedData(data => {
                 if (data && data.action) {
                     if (data.action === ACTION_COMMANDS.SET_BID) {
