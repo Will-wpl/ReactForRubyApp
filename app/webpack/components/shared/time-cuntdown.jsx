@@ -54,7 +54,7 @@ export class TimeCuntDown extends Component {
                     }
                 }
             }, error => {
-                //console.log('whoops , server connection down')
+                console.log(error)
             })
         }
     }

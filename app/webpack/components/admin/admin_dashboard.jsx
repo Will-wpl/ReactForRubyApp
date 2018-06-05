@@ -62,7 +62,7 @@ export class AdminDashboard extends Component {
                              }
                          })
                      } catch (error) {
-                         //console.log(error);
+                         console.log(error);
                      }
                     this.setState({realtimeData: histories, realtimeRanking: orderRanking
                         , currentPrice : orderRanking.length > 0 ? orderRanking[0].average_price : this.state.currentPrice});

@@ -85,7 +85,7 @@ export default class RetailerLetterOfAward extends React.Component{
             });
             this.forceUpdate()
         },error=>{
-           // console.log(error)
+            console.log(error)
         })
     }
     download(data,index){

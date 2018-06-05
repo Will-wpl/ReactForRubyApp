@@ -41,7 +41,7 @@ export class ListHome extends Component {
                 list_url:url,
             })
         }, error => {
-            //console.log(error);
+            console.log(error);
             this.setState({
                 table_data:null
             })

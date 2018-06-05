@@ -33,7 +33,7 @@ export class DuringCountDown extends Component {
                     }
                 }
             }, error => {
-                //console.log(error)
+                console.log(error)
             })
         }
 

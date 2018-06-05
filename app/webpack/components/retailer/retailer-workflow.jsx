@@ -25,7 +25,7 @@ export class Retailerworkflow extends React.Component{
             this.setState({auction:res});
             //console.log(res);
         },error=>{
-
+            console.log(erroe)
         })
     }
     getPageindex(params){
@@ -39,7 +39,7 @@ export class Retailerworkflow extends React.Component{
             //console.log(res);
             this.setState({current:res,tab_page:res.current.current_node?res.current.current_node:1,page:res.current.current_node?res.current.current_node:1,selected:res.flows});
         },error=>{
-
+            console.log(error)
         })
     }
     showpage(index){
