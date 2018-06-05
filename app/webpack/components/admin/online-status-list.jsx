@@ -67,7 +67,7 @@ export class OnlineStatusMain extends Component {
             this.auction = res;
             this.timerTitle = this.auction ? `${this.auction.name} on ${moment(this.auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
             getAuctionTimeRule(this.auction.id).then(status => {
-                console.log(status[HOLD_STATUS]);
+                //console.log(status[HOLD_STATUS]);
                 this.setState({
                     holdStatus:status[HOLD_STATUS]
                 })

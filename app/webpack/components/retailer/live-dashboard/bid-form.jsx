@@ -16,7 +16,7 @@ export default class BidForm extends Component {
     }
 
     initConfigs(configs) {
-        console.log('initial config', configs);
+        //console.log('initial config', configs);
         this.compareConfigs = configs.map(element => {
             return parseFloat(element).toFixed(4).substring(2);
         });

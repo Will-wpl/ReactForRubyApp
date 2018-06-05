@@ -41,7 +41,7 @@ export default class RankingRealtimeHoc extends Component {
                     return element.id === idColor.id;
                 });
                 if (result) {
-                    console.log(result)
+                    //console.log(result)
                     result.color = idColor.color
                     results.push(result);
                 }

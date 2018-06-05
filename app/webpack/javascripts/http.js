@@ -139,17 +139,17 @@ export const createWS = (options = {
         user_id: options.user_id
     }, {
         connected() {
-            console.log('message client connected');
+            //console.log('message client connected');
             status = true;
             if (options.success)
                 options.success()
         },
         disconnected() {
-            console.log('message client disconnected');
+            //console.log('message client disconnected');
             status = false;
         },
         received(data) {
-            console.log('message client received data', data);
+            //console.log('message client received data', data);
             if (options.feedback)
                 options.feedback(data)
         }

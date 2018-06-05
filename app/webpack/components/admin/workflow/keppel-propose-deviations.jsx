@@ -22,9 +22,9 @@ export class Keppelproposedeviations extends Component {
     }
     componentDidMount(){
         getAdminDeviations(this.props.current.current.arrangement_id).then(res=>{
-            console.log(res);
+            //console.log(res);
             if(res.chats.length > 0){
-                console.log(res.chats);
+                //console.log(res.chats);
                 let fileObj;
                 fileObj = this.state.fileData;
                 res.attachments.map((item,index)=>{
@@ -52,7 +52,7 @@ export class Keppelproposedeviations extends Component {
         })
         deviationslist = deviationslist.substr(0, deviationslist.length-1);
         deviationslist = '['+deviationslist+']';
-        console.log(deviationslist);
+        //console.log(deviationslist);
         return deviationslist;
     }
     showConfirm(type,obj){
@@ -87,7 +87,7 @@ export class Keppelproposedeviations extends Component {
     showhistory(id){
         this.setState({detailType:"history"})
         getTenderhistory('admin',id).then(res=>{
-            console.log(res);
+            //console.log(res);
             this.refs.history.showModal(res);
         })
     }
@@ -103,7 +103,7 @@ export class Keppelproposedeviations extends Component {
         this.refs.history.showModal();
     }
     editDetail(detail){
-        console.log(this.state.detail_id);
+        //console.log(this.state.detail_id);
         if(this.state.detail_id != ''){
             let list = this.state.deviations_list,id=this.state.detail_id;
             list[id.split("_")[1]].sp_response = detail;
@@ -236,7 +236,7 @@ export class Keppelproposedeviations extends Component {
                 this.setState({
                     fileData:fileObj
                 })
-                console.log(res);
+                //console.log(res);
             },error:() => {
                         barObj.find(".progress-bar").text('upload failed!');
                         barObj.find(".progress-bar").css('background', 'red');
@@ -253,12 +253,12 @@ export class Keppelproposedeviations extends Component {
                     fileindex:fileindex,
                     fileid:fileid
                 }
-                console.log(obj);
+                //console.log(obj);
                 this.setState({text:'Are you sure you want to delete this file?'});
                 this.refs.Modal.showModal("comfirm",obj);
             }
             do_remove(callbackObj){
-                console.log(callbackObj);
+                //console.log(callbackObj);
                 let fileObj;
                 removeAdminFile(callbackObj.fileid).then(res=>{
                     fileObj = this.state.fileData;

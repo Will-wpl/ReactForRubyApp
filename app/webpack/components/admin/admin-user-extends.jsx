@@ -11,7 +11,7 @@ export default class UserExtends extends Component{
         this.searchType = getSearchType();
     }
     doSearch(){
-        console.log("11111")
+        //console.log("11111")
     }
 
     render(){

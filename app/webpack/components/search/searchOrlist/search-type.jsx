@@ -79,7 +79,7 @@ export class SearchType extends Component {
         }else{
             needData = '{'+needData+',"page_size":10,"page_index":1}';
         }
-        console.log(JSON.parse(needData))
+        //console.log(JSON.parse(needData))
         if(this.props.doSearch){
             this.props.doSearch(JSON.parse(needData),this.list_url)
         }

@@ -50,7 +50,7 @@ export class Showhistory extends React.Component{
         this.setState({textVal:val});
     }
     showModal(data){
-        console.log(data);
+        //console.log(data);
         this.setState({props_data:[]});
         this.setState({
             modalshowhide:"modal_show",

@@ -33,7 +33,7 @@ export class Proposedeviations extends React.Component{
             }
             this.setState({select_list:select_list})
             if(res.chats.length > 0){
-                console.log(res);
+                //console.log(res);
                 this.setState({deviations_list:res.chats,attachments:res.attachments});
             }else{
                 this.setState({
@@ -141,7 +141,7 @@ export class Proposedeviations extends React.Component{
         }
     }
     submitDeviations(){
-        console.log(this.editData(3));
+        //console.log(this.editData(3));
         retailerDeviationsSave(this.props.current.current.arrangement_id,this.editData('2')).then(a=>{
             getRetailerDeviationsList(sessionStorage.arrangement_id).then(b=>{
                 this.setState({deviations_list:b.chats});
@@ -175,7 +175,7 @@ export class Proposedeviations extends React.Component{
             });
             return;
         }
-        console.log(this.editData(2));
+        //console.log(this.editData(2));
         retailerDeviationsSave(this.props.current.current.arrangement_id,this.editData('2')).then(res=>{
             this.refs.Modal.showModal();
             this.setState({
@@ -241,7 +241,7 @@ export class Proposedeviations extends React.Component{
     showhistory(id){
         this.setState({detailType:"history"})
         getTenderhistory('retailer',id).then(res=>{
-            console.log(res);
+            //console.log(res);
             this.refs.history.showModal(res);
         })
     }
@@ -257,7 +257,7 @@ export class Proposedeviations extends React.Component{
         this.refs.history.showModal();
     }
     editDetail(detail){
-        console.log(detail);
+        //console.log(detail);
         if(this.state.detail_id != ''){
             let list = this.state.deviations_list,id=this.state.detail_id;
             //$("#"+this.state.detail_id).val(detail);

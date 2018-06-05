@@ -45,7 +45,7 @@ export const retailerDeviationsSave = (arrangement,data) => {
 }
 
 export const retailerWithdraw = (arrangement,data) => {
-    console.log(data);
+    //console.log(data);
     return create('/api/retailer/tenders/'+arrangement+'/node3_retailer_withdraw',{chat:data});
 }
 

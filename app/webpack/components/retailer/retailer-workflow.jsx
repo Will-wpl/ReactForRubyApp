@@ -23,9 +23,9 @@ export class Retailerworkflow extends React.Component{
     componentDidMount() {
         getAuction('retailer',sessionStorage.auction_id).then(res=>{
             this.setState({auction:res});
-            console.log(res);
+            //console.log(res);
         },error=>{
-
+            console.log(error)
         })
     }
     getPageindex(params){
@@ -36,10 +36,10 @@ export class Retailerworkflow extends React.Component{
             })
         }
         getTendersCurrent('retailer',sessionStorage.arrangement_id).then(res=>{
-            console.log(res);
+            //console.log(res);
             this.setState({current:res,tab_page:res.current.current_node?res.current.current_node:1,page:res.current.current_node?res.current.current_node:1,selected:res.flows});
         },error=>{
-
+            console.log(error)
         })
     }
     showpage(index){

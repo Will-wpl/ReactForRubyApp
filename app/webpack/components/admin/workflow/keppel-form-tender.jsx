@@ -16,7 +16,7 @@ export class Keppelformtender extends React.Component{
     }
     componentDidMount() {
         getAdminKeppelForm(this.props.current.current.arrangement_id).then(res=>{
-            console.log(res);
+            //console.log(res);
             let attachments = res.attachments.filter((item)=>{
                 return item.file_type === "upload_tender";
             })
@@ -63,7 +63,7 @@ export class Keppelformtender extends React.Component{
     showhistory(id){
         this.setState({detailType:"history"})
         getTenderhistory('admin',id).then(res=>{
-            console.log(res);
+            //console.log(res);
             this.refs.history.showModal(res);
         })
     }

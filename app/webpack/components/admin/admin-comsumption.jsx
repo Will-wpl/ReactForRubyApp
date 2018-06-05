@@ -24,7 +24,7 @@ export default class AdminComsumption extends Component {
 
 componentDidMount() {
     getBuyerDetails({id:sessionStorage.auction_id,type:this.datail_type}).then(res=>{
-        console.log(res);
+        //console.log(res);
         this.setState({
             comsumption_list:res.list,
             price:res.total_info

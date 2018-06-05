@@ -43,7 +43,7 @@ compare(prop) {
 }
 componentDidMount() {
     getAuction('admin',sessionStorage.auction_id).then(auction => {
-        console.log(auction);
+        //console.log(auction);
         this.auction = auction;
         this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000'
         getHistoriesLast({ auction_id: auction? auction.id : 1}).then(data => {

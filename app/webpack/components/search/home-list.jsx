@@ -17,7 +17,7 @@ export class ListHome extends Component {
     doSearch(data,url){
         getRoleList(data,url).then(res => {
             let total = [],total_size=1;
-            console.log(res);
+            //console.log(res);
             if(res.bodies.total%data.page_size != 0){
                 if(res.bodies.total%data.page_size > 0){
                     total_size = parseInt(res.bodies.total/data.page_size)+1;
