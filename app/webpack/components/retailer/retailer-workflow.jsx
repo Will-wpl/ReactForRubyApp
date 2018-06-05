@@ -25,7 +25,7 @@ export class Retailerworkflow extends React.Component{
             this.setState({auction:res});
             //console.log(res);
         },error=>{
-            console.log(erroe)
+            console.log(error)
         })
     }
     getPageindex(params){
