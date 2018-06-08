@@ -6,7 +6,7 @@ class Api::Admin::AuctionResultsController < Api::AuctionResultsController
       search_params = reject_params(params, %w[controller action sort_by])
       search_where_array = set_search_params(search_params)
       result = AuctionResult.left_outer_joins(:auction).where(search_where_array)
-                    .page(params[:page_index]).per(params[:page_size])
+                   .page(params[:page_index]).per(params[:page_size])
       total = result.total_count
     else
       result = AuctionResult.all
@@ -19,7 +19,8 @@ class Api::Admin::AuctionResultsController < Api::AuctionResultsController
       lap = number_to_currency(result.lowest_average_price, unit: '$ ', precision: 4)
       tv = number_to_currency(result.total_volume, unit: '', precision: 0)
       company_user_count = Consumption.get_company_user_count(result.auction_id)
-      data.push(published_gid: result.auction.published_gid, name: result.auction.name, start_datetime: result.auction.start_datetime,
+      data.push(id: result.auction.id,
+                published_gid: result.auction.published_gid, name: result.auction.name, start_datetime: result.auction.start_datetime,
                 contract_period: "#{result.contract_period_start_date.strftime('%d %b %Y')} to #{result.contract_period_end_date.strftime('%d %b %Y')}",
                 status: get_status_string(result),
                 lowest_price_bidder: result.lowest_price_bidder,
@@ -29,8 +30,12 @@ class Api::Admin::AuctionResultsController < Api::AuctionResultsController
                 log: "admin/auctions/#{result.auction_id}/log",
                 award: get_award_url(company_user_count, result))
     end
+    actions = [
+        {url: '/admin/auctions/:id/retailer_dashboard', name: 'Retailer Dashboard', icon: 'edit', interface_type: 'auction'},
+        {url: '/admin/auctions/:id/buyer_dashboard?published', name: 'Buyer Dashboard', icon: 'view', interface_type: 'auction'}
+    ]
     bodies = { data: data, total: total }
-    render json: { headers: headers, bodies: bodies, actions: nil }, status: 200
+    render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
   end
 
   private

@@ -28,10 +28,13 @@ class Api::Retailer::AuctionResultsController < Api::AuctionResultsController
                 name: result.auction.name,
                 start_datetime: result.auction.start_datetime,
                 my_result: my_result,
-                award: get_award(company_user_count, result))
+                award: get_award(company_user_count, result),
+                id: Arrangement.auction_of_current_user(result.auction.id, current_user.id).first.id,
+                auction_id: result.auction.id)
     end
     bodies = { data: data, total: total }
-    render json: { headers: headers, bodies: bodies, actions: nil }, status: 200
+    actions = [{url: '/retailer/arrangements/:id/tender', name: 'View History', icon:'view', interface_type: 'auction'}]
+    render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
   end
 
   private
