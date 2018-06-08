@@ -6,7 +6,7 @@ class Api::Admin::AuctionResultsController < Api::AuctionResultsController
       search_params = reject_params(params, %w[controller action sort_by])
       search_where_array = set_search_params(search_params)
       result = AuctionResult.left_outer_joins(:auction).where(search_where_array)
-                    .page(params[:page_index]).per(params[:page_size])
+                   .page(params[:page_index]).per(params[:page_size])
       total = result.total_count
     else
       result = AuctionResult.all
@@ -29,8 +29,12 @@ class Api::Admin::AuctionResultsController < Api::AuctionResultsController
                 log: "admin/auctions/#{result.auction_id}/log",
                 award: get_award_url(company_user_count, result))
     end
+    actions = [
+        {url: '/admin/auctions/:id/retailer_dashboard', name: 'Retailer Dashboard', icon: 'edit', interface_type: 'auction'},
+        {url: '/admin/auctions/:id/buyer_dashboard?published', name: 'Buyer Dashboard', icon: 'view', interface_type: 'auction'}
+    ]
     bodies = { data: data, total: total }
-    render json: { headers: headers, bodies: bodies, actions: nil }, status: 200
+    render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
   end
 
   private
