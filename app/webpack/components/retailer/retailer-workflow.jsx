@@ -80,7 +80,7 @@ export class Retailerworkflow extends React.Component{
                 <Workflowtab auction={this.state.auction} page={this.changePage.bind(this)} current={this.state.current} selected={this.state.selected} />
                 {this.showpage(this.state.page)}
                 <div className="createRaMain u-grid">
-                    <a className="lm--button lm--button--primary u-mt3" href="/retailer/auctions" >Back</a>
+                    <a className="lm--button lm--button--primary u-mt3" href="javascript:history.go(-1)" >Back</a>
                 </div>
             </div>
         )
