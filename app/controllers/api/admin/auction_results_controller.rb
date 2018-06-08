@@ -19,7 +19,8 @@ class Api::Admin::AuctionResultsController < Api::AuctionResultsController
       lap = number_to_currency(result.lowest_average_price, unit: '$ ', precision: 4)
       tv = number_to_currency(result.total_volume, unit: '', precision: 0)
       company_user_count = Consumption.get_company_user_count(result.auction_id)
-      data.push(published_gid: result.auction.published_gid, name: result.auction.name, start_datetime: result.auction.start_datetime,
+      data.push(id: result.auction.id,
+                published_gid: result.auction.published_gid, name: result.auction.name, start_datetime: result.auction.start_datetime,
                 contract_period: "#{result.contract_period_start_date.strftime('%d %b %Y')} to #{result.contract_period_end_date.strftime('%d %b %Y')}",
                 status: get_status_string(result),
                 lowest_price_bidder: result.lowest_price_bidder,
