@@ -161,7 +161,7 @@ export class Keppelproposedeviations extends Component {
                                             <ul>
                                                 {
                                                     item.files.map((it,i)=>{
-                                                        return <li key={i}><a target="_blank" download={it.file_name} href={it.file_path}>{it.file_name}</a>{this.props.propsdisabled?'':(this.state.disabled?'':<span className="remove_file" onClick={this.remove_file.bind(this,type,index,i,it.id)}></span>)}</li>
+                                                        return <li key={i}><a target="_blank" download={it.file_name} href={it.file_path}>{it.file_name}</a>{this.props.propsdisabled?'':(this.state.disabled?'':(window.location.href.indexOf("past")>0?'':<span className="remove_file" onClick={this.remove_file.bind(this,type,index,i,it.id)}></span>))}</li>
                                                     })
                                                 }
                                             </ul>
