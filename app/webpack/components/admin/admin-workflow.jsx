@@ -30,7 +30,9 @@ export class Adminworkflow extends Component {
             }else{
                 this.setState({current:res,page:res.current.current_node,readOnly:!type});
             }
-            
+            if(window.location.href.indexOf("past")>0){
+                this.setState({readOnly:true});
+            }
         })
     }
     showpage(index){

@@ -38,6 +38,9 @@ export class Retailerworkflow extends React.Component{
         getTendersCurrent('retailer',sessionStorage.arrangement_id).then(res=>{
             //console.log(res);
             this.setState({current:res,tab_page:res.current.current_node?res.current.current_node:1,page:res.current.current_node?res.current.current_node:1,selected:res.flows});
+            if(window.location.href.indexOf("past")>0){
+                this.setState({disabled:true});
+            }
         },error=>{
             console.log(error)
         })
