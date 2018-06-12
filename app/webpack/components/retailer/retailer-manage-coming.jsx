@@ -225,7 +225,7 @@ export class RetailerManage extends Component {
     render () {
         let btn_html ='';
         !this.state.havedata ? btn_html = <button id="submit_form" className="lm--button lm--button--primary" >Submit</button> 
-        : btn_html = !this.state.btn_status ? <a className="lm--button lm--button--primary" onClick={this.btnStatus.bind(this)}>Edit</a> 
+        : btn_html = !this.state.btn_status ? (window.location.href.indexOf("past")>0?<button className="lm--button lm--button--primary" disabled>Edit</button>:<a className="lm--button lm--button--primary" onClick={this.btnStatus.bind(this)}>Edit</a> )
                        :<div>
                         <a className="lm--button lm--button--primary" onClick={this.cancel.bind(this)}>Cancel</a>
                         <button id="submit_form" className="lm--button lm--button--primary" >Submit</button>
