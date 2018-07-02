@@ -22,7 +22,7 @@ class Api::UserAttachmentsController < Api::BaseController
     attachment.file_name = uploader.filename
     attachment.file_type = params[:file_type]
     attachment.file_path = uploader.url
-    attachment.user_id = params[:user_id] unless params[:user_id].nil?
+    attachment.user_id = current_user.id unless current_user&.has_role?(:admin)
 
     attachment.save
 
