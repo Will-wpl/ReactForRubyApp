@@ -23,23 +23,6 @@ export default class AdminContact extends Component {
 
  componentDidMount() {
 
-    //这块是回显上传的文件需要做的，到时候问马克要接口
-    // getFileList(sessionStorage.auction_id).then(res=>{
-    //     let fileObj;
-    //     fileObj = this.state.fileData;
-    //     res.map((item,index)=>{
-    //         fileObj[item.file_type][0].files.push({
-    //             id:item.id,
-    //             file_name:item.file_name,
-    //             file_path:item.file_path
-    //         })
-    //     })
-    //     this.setState({
-    //         fileData:fileObj
-    //     })
-    // },error=>{
-    //
-    // })
 
 }
 
@@ -47,14 +30,26 @@ show_history(type){
       //拿到类别传给后台，后台返回对应res列表数据后，塞进listdetail中
     　//this.setState({listdetail:res});
       let res=[ //例子
-          {file_name:"老于 I have a dream", file_path:"#"},
-          {file_name:"焦虑哥 I have a dream", file_path:"#"},
-          {file_name:"老卢 I have a dream", file_path:"#"},
-          {file_name:"子元 I have a dream", file_path:"#"}
+          {file_name:"老于 I have a dream", file_path:"#",fileid:"1"},
+          {file_name:"焦虑哥 I have a dream", file_path:"#",fileid:"2"},
+          {file_name:"老卢 I have a dream", file_path:"#",fileid:"3"},
+          {file_name:"子元 I have a dream", file_path:"#",fileid:"4"}
         ];
       this.setState({listdetail:res})
-      this.refs.Modal.showModal();
+      this.refs.Modal.showModal('default',{},type);
 }
+    remove_file(filetype,fileindex,fileid) {
+        let fileObj;
+        removeFile(fileid).then(res => {
+            fileObj = this.state.fileData;
+            fileObj[filetype][0].files.splice(fileindex, 1);
+            this.setState({
+                fileData: fileObj
+            })
+        }, error => {
+
+        })
+    }
 render() {
     return (
         <div className="u-grid admin_invitation">
@@ -100,7 +95,7 @@ render() {
                     </div>
                 </div>
             </div>
-            <Modal listdetail={this.state.listdetail} listdetailtype="Link History" ref="Modal" />
+            <Modal otherFunction={this.remove_file.bind(this)} listdetail={this.state.listdetail} listdetailtype="Link History" ref="Modal" />
         </div>
     )
   }

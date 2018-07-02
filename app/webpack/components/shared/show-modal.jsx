@@ -7,10 +7,14 @@ export class Modal extends React.Component{
             modalshowhide:"modal_hide",
             type:'default',
             secondStatus:"live_hide",
-            props_data:{}
+            props_data:{},
+            strtype:''
         }
     }
-    showModal(type,data){
+    showModal(type,data,str){
+        if(str){
+            this.setState({strtype:str})
+        }
         this.setState({
             modalshowhide:"modal_show",
             props_data:data?data:{}
@@ -42,6 +46,11 @@ export class Modal extends React.Component{
         this.setState({
             type:"default"
         })
+    }
+    removefile(type,index,id){
+        if(this.props.otherFunction){
+            this.props.otherFunction(type,index,id)
+        }
     }
     closeModal(){
         this.setState({
@@ -101,9 +110,9 @@ export class Modal extends React.Component{
                             <li>Office Number : {this.props.listdetail.account_office_number}</li>
                          </ul>
             }else if(this.props.listdetailtype === "Link History"){
-                showDetail = <ul className="showdetail">
+                showDetail = <ul className="showdetail history_files">
                                 {this.props.listdetail.map((item,index)=>{
-                                  return <li key={index}><a target="_blank" download={item.file_name} href={item.file_path}>{item.file_name}</a></li>
+                                  return <li key={index}><a target="_blank" download={item.file_name} href={item.file_path}>{item.file_name}</a><span className="remove_file" onClick={this.removefile.bind(this,this.state.strtype,index,item.fileid)}></span></li>
                                 })}
                             </ul>
             }else if(this.props.listdetailtype === "Select Company Buyers"){

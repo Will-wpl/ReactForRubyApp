@@ -6,7 +6,15 @@ button{ cursor: pointer; transition: 0.5s all;}
 .red{color:red;}
 button[disabled='']{background: #666 !important; color:#999 !important; cursor: default !important;}
 textarea{resize: none;}
-
+ul, menu, dir {
+  display: block;
+  list-style-type: disc;
+  -webkit-margin-before: 0em;
+  -webkit-margin-after: 0em;
+  -webkit-margin-start: 0px;
+  -webkit-margin-end: 0px;
+  -webkit-padding-start: 0px;
+}
 //createRaMain or retailer btn
 .createRaMain{
   margin: 0px auto;
@@ -597,6 +605,13 @@ body.choose{
       }
     }
   } 
+}
+ul.history_files{
+    li{list-style: none; line-height: 26px; overflow: hidden;
+      &.lineHeight42{line-height: 42px;}
+      a{ cursor: pointer; color: #00b0b2; float: left; margin: 0;}
+      span.remove_file{background:url("../images/remove.png") no-repeat center; cursor: pointer; width: 26px; height: 26px; float: right;}
+    }
 }
 
 .comsumption_list{
