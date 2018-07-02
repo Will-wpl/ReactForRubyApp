@@ -5,7 +5,8 @@ export class UploadFile extends React.Component{
         super(props);
         this.state={
             disabled:false,
-            fileData:this.props.fileData
+            fileData:this.props.fileData,
+            showList:this.props.showList,
         }
     }
     componentDidMount() {
@@ -37,13 +38,17 @@ export class UploadFile extends React.Component{
                                 <div className="progress-bar" style={{width:"0%"}}>0%</div>
                             </div>
                             <div className="progress_files">
-                                <ul>
-                                    {
-                                        item.files.map((it,i)=>{
-                                            return <li key={i}><a target="_blank" download={it.file_name} href={it.file_path}>{it.file_name}</a>{this.props.propsdisabled?'':(this.state.disabled?'':(window.location.href.indexOf("past")>0?'':<span className="remove_file" onClick={this.remove_file.bind(this,type,index,i,it.id)}></span>))}</li>
-                                        })
-                                    }
-                                </ul>
+                                {this.state.showList===true ?
+                                    <ul>
+                                        {
+                                            item.files.map((it,i)=>{
+                                                return <li key={i}><a target="_blank" download={it.file_name} href={it.file_path}>{it.file_name}</a>{this.props.propsdisabled?'':(this.state.disabled?'':(window.location.href.indexOf("past")>0?'':<span className="remove_file" onClick={this.remove_file.bind(this,type,index,i,it.id)}></span>))}</li>
+                                            })
+                                        }
+                                    </ul>:
+                                    <div></div>
+                                }
+
                             </div>
                         </div>
                         <div className="col-sm-12 col-md-2 u-cell">

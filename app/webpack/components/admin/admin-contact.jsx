@@ -21,7 +21,8 @@ export default class AdminContact extends Component {
     }
  }
 
-componentDidMount() {
+ componentDidMount() {
+
     //这块是回显上传的文件需要做的，到时候问马克要接口
     // getFileList(sessionStorage.auction_id).then(res=>{
     //     let fileObj;
@@ -39,7 +40,9 @@ componentDidMount() {
     // },error=>{
     //
     // })
+
 }
+
 show_history(type){
       //拿到类别传给后台，后台返回对应res列表数据后，塞进listdetail中
     　//this.setState({listdetail:res});
@@ -68,7 +71,7 @@ render() {
                         <abbr title="required">*</abbr> Seller - Buyer T&C :
                     </label>
                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                        <UploadFile type="SELLER_BUYER_TC" required="required" fileData={this.state.fileData.SELLER_BUYER_TC} propsdisabled={false} />
+                        <UploadFile type="SELLER_BUYER_TC" required="required" showlist={false} fileData={this.state.fileData.SELLER_BUYER_TC} propsdisabled={false} />
                         <div className="col-sm-12 col-md-2 u-cell">
                             <button className="lm--button lm--button--primary" onClick={this.show_history.bind(this,'SELLER_BUYER_TC')} >History</button>
                         </div>
@@ -79,7 +82,7 @@ render() {
                         <abbr title="required">*</abbr> Seller - Revv T&C :
                     </label>
                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                        <UploadFile type="SELLER_REVV_TC" required="required" fileData={this.state.fileData.SELLER_REVV_TC} propsdisabled={false} />
+                        <UploadFile type="SELLER_REVV_TC" required="required" showlist={false} fileData={this.state.fileData.SELLER_REVV_TC} propsdisabled={false} />
                         <div className="col-sm-12 col-md-2 u-cell">
                             <button className="lm--button lm--button--primary" onClick={this.show_history.bind(this,'SELLER_REVV_TC')} >History</button>
                         </div>
@@ -90,7 +93,7 @@ render() {
                         <abbr title="required">*</abbr> Buyer - Revv T&C :
                     </label>
                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                        <UploadFile type="BUYER_REVV_TC" required="required" fileData={this.state.fileData.BUYER_REVV_TC} propsdisabled={false} />
+                        <UploadFile type="BUYER_REVV_TC" required="required" showlist={false} fileData={this.state.fileData.BUYER_REVV_TC} propsdisabled={false} />
                         <div className="col-sm-12 col-md-2 u-cell">
                             <button className="lm--button lm--button--primary" onClick={this.show_history.bind(this,'BUYER_REVV_TC')} >History</button>
                         </div>
