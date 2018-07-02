@@ -5,9 +5,7 @@ export class UploadFile extends React.Component{
         super(props);
         this.state={
             disabled:false,
-            fileData:[
-                {buttonName:"none",files:[]}
-            ]
+            fileData:this.props.fileData
         }
     }
     componentDidMount() {
@@ -16,7 +14,7 @@ export class UploadFile extends React.Component{
     addinputfile(type, required){
         let fileHtml = '';
         fileHtml = <form id={type+"_form"} encType="multipart/form-data">
-                {this.props.fileData.map((item, index) =>
+                {this.state.fileData.map((item, index) =>
                     <div className="col-sm-12 col-md-12 u-grid" key={index}>
                         <div className="col-sm-12 col-md-10 u-cell">
                             <a className="upload_file_btn">
@@ -69,7 +67,7 @@ export class UploadFile extends React.Component{
     remove_file(filetype,typeindex,fileindex,fileid) {
         let fileObj;
         removeFile(fileid).then(res => {
-            fileObj = this.props.fileData;
+            fileObj = this.state.fileData;
             fileObj[filetype][typeindex].files.splice(fileindex, 1);
             this.setState({
                 fileData: fileObj
