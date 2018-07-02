@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom';
 import {UploadFile} from '../shared/upload';
 import {Modal} from '../shared/show-modal';
+import {getContractAttachmentsByType , deleteContractAttachmentById}  from '../../javascripts/componentService/admin/service';
 export default class AdminContact extends Component {
   constructor(props){
     super(props);
@@ -45,15 +46,24 @@ export default class AdminContact extends Component {
 
 show_history(type){
       //拿到类别传给后台，后台返回对应res列表数据后，塞进listdetail中
-    　//this.setState({listdetail:res});
-      let res=[ //例子
-          {file_name:"老于 I have a dream", file_path:"#"},
-          {file_name:"焦虑哥 I have a dream", file_path:"#"},
-          {file_name:"老卢 I have a dream", file_path:"#"},
-          {file_name:"子元 I have a dream", file_path:"#"}
-        ];
-      this.setState({listdetail:res})
-      this.refs.Modal.showModal();
+
+    let attachements=[];
+    getContractAttachmentsByType(type).then( res => {
+        res.map((item,index)=>{
+            attachements.push(
+                {
+                file_name:item.file_name,
+                file_path:item.file_path,
+                file_id:item.id,
+                file_time:item.created_at
+                }
+            )
+        })
+        this.setState({listdetail:attachements});
+        this.refs.Modal.showModal();
+
+    },error=>{
+    })
 }
 render() {
     return (

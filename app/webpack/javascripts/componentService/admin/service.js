@@ -127,3 +127,14 @@ export const getLetterOfAward = (params) => {
 export const doPdf = (params) => {
     return get(`/api/admin/auctions/${params.id}/pdf?start_time=${params.start_time}&end_time=${params.end_time}&start_time2=${params.start_time2}&end_time2=${params.end_time2}&start_price=${params.start_price}&end_price=${params.end_price}`)
 }
+
+export const  getContractAttachmentsByType = (params) => {
+    // return get(`/api/admin/auction_attachments/`, params)
+    return get(`/api/admin/user_attachments/?file_type=${params}`)
+
+
+}
+
+export  const  deleteContractAttachmentById = (param) => {
+    return Ddelete('/api/admin/user_attachments/' + params.id);
+}
