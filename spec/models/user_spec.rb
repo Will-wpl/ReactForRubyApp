@@ -11,6 +11,7 @@ RSpec.describe User, type: :model do
 
   describe 'associations' do
     it { is_expected.to have_one(:user_extension) }
+    it { is_expected.to have_many(:company_buyer_entities) }
     it { is_expected.to have_many(:arrangements) }
     it { is_expected.to have_many(:auctions).through(:arrangements) }
     it { is_expected.to have_many(:auction_events) }

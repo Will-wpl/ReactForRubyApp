@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180702023644) do
+ActiveRecord::Schema.define(version: 20180702033941) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -157,6 +157,22 @@ ActiveRecord::Schema.define(version: 20180702023644) do
     t.decimal "total_eht_peak"
     t.decimal "total_eht_off_peak"
     t.decimal "starting_price"
+  end
+
+  create_table "company_buyer_entities", force: :cascade do |t|
+    t.string "company_name"
+    t.string "company_uen"
+    t.string "company_address"
+    t.string "billing_address"
+    t.string "bill_attention_to"
+    t.string "contact_name"
+    t.string "contact_email"
+    t.string "contact_mobile_no"
+    t.string "contact_office_no"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_company_buyer_entities_on_user_id"
   end
 
   create_table "consumption_details", force: :cascade do |t|
@@ -321,6 +337,7 @@ ActiveRecord::Schema.define(version: 20180702023644) do
   add_foreign_key "auction_histories", "auctions"
   add_foreign_key "auction_histories", "users"
   add_foreign_key "auction_results", "auctions"
+  add_foreign_key "company_buyer_entities", "users"
   add_foreign_key "consumption_details", "consumptions"
   add_foreign_key "consumptions", "auctions"
   add_foreign_key "consumptions", "users"
