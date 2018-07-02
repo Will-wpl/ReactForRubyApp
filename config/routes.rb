@@ -97,6 +97,8 @@ Rails.application.routes.draw do
         member do
           get 'award'
         end
+        end
+      resources :user_attachments, only: %i[index create destroy] do
       end
       resources :user_extensions, only: %i[index]
     end
