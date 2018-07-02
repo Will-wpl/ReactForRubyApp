@@ -100,6 +100,12 @@ export class Modal extends React.Component{
                             <li>Mobile Number : {this.props.listdetail.account_mobile_number}</li>
                             <li>Office Number : {this.props.listdetail.account_office_number}</li>
                          </ul>
+            }else if(this.props.listdetailtype === "Link History"){
+                showDetail = <ul className="showdetail">
+                                {this.props.listdetail.map((item,index)=>{
+                                  return <li key={index}><a target="_blank" download={item.file_name} href={item.file_path}>{item.file_name}</a></li>
+                                })}
+                            </ul>
             }else if(this.props.listdetailtype === "Select Company Buyers"){
                 showDetail = <ul className="showdetail">
                                 <li>View Account</li>
