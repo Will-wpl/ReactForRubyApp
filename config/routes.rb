@@ -244,6 +244,7 @@ Rails.application.routes.draw do
       end
     end
     resources :contract, only: %i[index]
+    resources :templates, only: %i[index]
   end
 
   namespace :retailer do
