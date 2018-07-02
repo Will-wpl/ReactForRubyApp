@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180227062748) do
+ActiveRecord::Schema.define(version: 20180702023644) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -198,6 +198,7 @@ ActiveRecord::Schema.define(version: 20180227062748) do
     t.string "template_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
   end
 
   create_table "roles", id: :serial, force: :cascade do |t|
@@ -242,6 +243,16 @@ ActiveRecord::Schema.define(version: 20180227062748) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["arrangement_id"], name: "index_tender_state_machines_on_arrangement_id"
+  end
+
+  create_table "user_attachments", force: :cascade do |t|
+    t.string "file_type"
+    t.string "file_name"
+    t.string "file_path"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_user_attachments_on_user_id"
   end
 
   create_table "user_extensions", force: :cascade do |t|
