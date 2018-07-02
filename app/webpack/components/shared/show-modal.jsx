@@ -112,7 +112,7 @@ export class Modal extends React.Component{
             }else if(this.props.listdetailtype === "Link History"){
                 showDetail = <ul className="showdetail history_files">
                                 {this.props.listdetail.map((item,index)=>{
-                                  return <li key={index}><a target="_blank" download={item.file_name} href={item.file_path}>{item.file_name}</a><span className="remove_file" onClick={this.removefile.bind(this,this.state.strtype,index,item.fileid)}></span></li>
+                                  return <li key={index}><a target="_blank" download={item.file_name} href={item.file_path}>{item.file_name} | {item.file_time}</a><span className="remove_file" onClick={this.removefile.bind(this,this.state.strtype,index,item.fileid)}></span></li>
                                 })}
                             </ul>
             }else if(this.props.listdetailtype === "Select Company Buyers"){
