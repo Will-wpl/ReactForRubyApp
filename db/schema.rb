@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180702053908) do
+ActiveRecord::Schema.define(version: 20180702074350) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,40 @@ ActiveRecord::Schema.define(version: 20180702053908) do
     t.bigint "user_id"
     t.index ["auction_id"], name: "index_auction_attachments_on_auction_id"
     t.index ["user_id"], name: "index_auction_attachments_on_user_id"
+  end
+
+  create_table "auction_contracts", force: :cascade do |t|
+    t.string "contract_duration"
+    t.date "contract_period_end_date"
+    t.decimal "total_volume"
+    t.decimal "total_lt_peak"
+    t.decimal "total_lt_off_peak"
+    t.decimal "total_hts_peak"
+    t.decimal "total_hts_off_peak"
+    t.decimal "total_htl_peak"
+    t.decimal "total_htl_off_peak"
+    t.decimal "total_eht_peak"
+    t.decimal "total_eht_off_peak"
+    t.decimal "starting_price_lt_peak"
+    t.decimal "starting_price_lt_off_peak"
+    t.decimal "starting_price_hts_peak"
+    t.decimal "starting_price_hts_off_peak"
+    t.decimal "starting_price_htl_peak"
+    t.decimal "starting_price_htl_off_peak"
+    t.decimal "starting_price_eht_peak"
+    t.decimal "starting_price_eht_off_peak"
+    t.decimal "reserve_price_lt_peak"
+    t.decimal "reserve_price_lt_off_peak"
+    t.decimal "reserve_price_hts_peak"
+    t.decimal "reserve_price_hts_off_peak"
+    t.decimal "reserve_price_htl_peak"
+    t.decimal "reserve_price_htl_off_peak"
+    t.decimal "reserve_price_eht_peak"
+    t.decimal "reserve_price_eht_off_peak"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "auction_id"
+    t.index ["auction_id"], name: "index_auction_contracts_on_auction_id"
   end
 
   create_table "auction_events", force: :cascade do |t|
@@ -157,6 +191,9 @@ ActiveRecord::Schema.define(version: 20180702053908) do
     t.decimal "total_eht_peak"
     t.decimal "total_eht_off_peak"
     t.decimal "starting_price"
+    t.integer "starting_price_time"
+    t.string "buyer_type"
+    t.string "allow_deviation"
   end
 
   create_table "company_buyer_entities", force: :cascade do |t|
@@ -337,6 +374,7 @@ ActiveRecord::Schema.define(version: 20180702053908) do
   add_foreign_key "arrangements", "auctions"
   add_foreign_key "arrangements", "users"
   add_foreign_key "auction_attachments", "auctions"
+  add_foreign_key "auction_contracts", "auctions"
   add_foreign_key "auction_events", "auctions"
   add_foreign_key "auction_events", "users"
   add_foreign_key "auction_histories", "auctions"

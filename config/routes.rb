@@ -101,6 +101,7 @@ Rails.application.routes.draw do
       resources :user_attachments, only: %i[index create destroy] do
       end
       resources :user_extensions, only: %i[index]
+      resources :email_templates, only: %i[index show update]
     end
   end
 
