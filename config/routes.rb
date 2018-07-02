@@ -243,6 +243,7 @@ Rails.application.routes.draw do
         get 'published'
       end
     end
+    resources :contract, only: %i[index]
   end
 
   namespace :retailer do
