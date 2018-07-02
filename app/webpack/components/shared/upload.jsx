@@ -115,7 +115,7 @@ export class UploadFile extends React.Component{
                 setTimeout(()=>{
                     barObj.fadeOut(500);
                 },2000);
-                fileObj = this.props.fileData;
+                fileObj = this.state.fileData;
                 fileObj.map((item,index)=>{
                     item.files.push({
                         id:res.id,
