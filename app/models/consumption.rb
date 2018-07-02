@@ -32,7 +32,7 @@ class Consumption < ApplicationRecord
   scope :find_notify_buyer, ->{ where(action_status: ActionStatusSent) } # "action_status = '1'"
   scope :find_by_auction_id, ->(auction_id) { where('auction_id = ?', auction_id) }
   scope :join_buyer_auction, -> { includes(:auction).where.not(auctions: { publish_status: nil }) }
-  scope :find_buyer_result_auction, -> { includes(auction: :auction_result).where(auction_results: { status: nil }).where.not(auctions: { publish_status: nil })}
+  scope :find_buyer_result_auction, -> { includes(auction: :auction_results).where(auction_results: { status: nil }).where.not(auctions: { publish_status: nil })}
   scope :find_by_user_consumer_type, ->(consumer_type) { includes(:user).where(users: { consumer_type: consumer_type }) }
   scope :is_participation, -> { where(participation_status: ParticipationStatusParticipate) }
   scope :find_by_auction_and_user, ->(auction_id, user_id) { where('auction_id = ? and user_id =?', auction_id, user_id) }
