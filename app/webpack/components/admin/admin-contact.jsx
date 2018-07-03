@@ -76,7 +76,7 @@ render() {
             <div className="col-sm-12 col-md-8 push-md-2">
                 <div className="lm--formItem lm--formItem--inline string u-mt3">
                     <label className="lm--formItem-left lm--formItem-label string required">
-                        Admin Contract:
+                        Manage Contract:
                     </label>
                     <div className="lm--formItem-right lm--formItem-control">
                     </div>
