@@ -1,6 +1,10 @@
 class Auction < ApplicationRecord
 
-  PublishStatusPublished = '1'.freeze
+  # Important
+  # Discarded fields: lt_peak lt_off_peak hts_peak hts_off_peak htl_peak htl_off_peak eht_peak eht_off_peak
+
+
+PublishStatusPublished = '1'.freeze
   # Extends
 
   # Includes
