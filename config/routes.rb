@@ -102,6 +102,7 @@ Rails.application.routes.draw do
       end
       resources :user_extensions, only: %i[index]
       resources :email_templates, only: %i[index show update]
+      resources :la_templates, only: %i[show update]
     end
   end
 
