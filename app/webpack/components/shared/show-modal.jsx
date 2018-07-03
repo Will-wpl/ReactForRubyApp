@@ -48,11 +48,16 @@ export class Modal extends React.Component{
         })
     }
     removefile(type,index,id){
-        if(this.props.otherFunction){
-            this.props.otherFunction(type,index,id)
+        if(confirm("Are you sure you want to delete this file?"))
+        {
+            if(this.props.otherFunction){
+                this.props.otherFunction(type,index,id)
+            }
         }
+
     }
     closeModal(){
+
         this.setState({
             modalshowhide:"modal_hide"
         })

@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom';
 import {UploadFile} from '../shared/upload';
 import {Modal} from '../shared/show-modal';
+import moment from 'moment';
 import {getContractAttachmentsByType , deleteContractAttachmentById}  from '../../javascripts/componentService/admin/service';
 export default class AdminContact extends Component {
   constructor(props){
@@ -18,7 +19,7 @@ export default class AdminContact extends Component {
                 "BUYER_REVV_TC":[
                     {buttonName:"none",files:[]}
                 ]
-            }
+            },
     }
  }
 
@@ -38,17 +39,18 @@ show_history(type){
                 file_name:item.file_name,
                 file_path:item.file_path,
                 fileid:item.id,
-                file_time:item.created_at,
+                file_time:moment(item.created_at).format('YYYY-DD-MM HH:mm:ss'),
                 file_type:item.file_type
             }
-
             fileObj[item.file_type][0].files.push(obj);
             attachements.push(obj);
         });
         this.setState({
             fileData:fileObj,
-            listdetail : attachements
+            listdetail : attachements,
+
         })
+
         this.refs.Modal.showModal('default',{},type);
     },error=>{
     })
@@ -74,7 +76,7 @@ render() {
             <div className="col-sm-12 col-md-8 push-md-2">
                 <div className="lm--formItem lm--formItem--inline string u-mt3">
                     <label className="lm--formItem-left lm--formItem-label string required">
-                        Admin Contract:
+                        Manage Contract:
                     </label>
                     <div className="lm--formItem-right lm--formItem-control">
                     </div>
@@ -113,7 +115,7 @@ render() {
                     </div>
                 </div>
             </div>
-            <Modal otherFunction={this.removeFile.bind(this)} listdetail={this.state.listdetail} listdetailtype="Link History" ref="Modal" />
+            <Modal text={this.state.text} otherFunction={this.removeFile.bind(this)} listdetail={this.state.listdetail} listdetailtype="Link History" ref="Modal" />
         </div>
     )
   }

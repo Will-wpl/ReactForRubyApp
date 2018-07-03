@@ -8,7 +8,7 @@
         wrapper: :vertical_form,id:'registration_form', defaults: { label: false }) do |f|
         input name='type' type="hidden" value=params['type']
         input name='user[consumer_type]' type="hidden" value=params['type']
-        input name='user[approval_status]' type="hidden" value='2'
+        input name='user[approval_status]' type="hidden" value='3'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
             b *  
@@ -102,7 +102,7 @@
         wrapper: :vertical_form, defaults: { label: false }) do |f|
         input name='type' type="hidden" value=params['type']
         input name='user[consumer_type]' type="hidden" value=params['type']
-        input name='user[approval_status]' type="hidden" value='1'
+        input name='user[approval_status]' type="hidden" value='3'
         /= f.input :consumer_type, as: :hidden
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label 
@@ -191,7 +191,7 @@
       wrapper: :vertical_form, defaults: { label: false }) do |f|
         input name='type' type="hidden" value=params['type']
         input name='user[consumer_type]' type="hidden" value=params['type']
-        input name='user[approval_status]' type="hidden" value='1'
+        input name='user[approval_status]' type="hidden" value='3'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label 
             b * 
