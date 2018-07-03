@@ -277,6 +277,7 @@ Rails.application.routes.draw do
       collection do
       end
     end
+    resources :register, only: [:index]
   end
 
   namespace :buyer do
@@ -289,6 +290,7 @@ Rails.application.routes.draw do
       end
     end
     resources :consumptions,only: %i[edit]
+    resources :register, only: [:index]
   end
 
   require 'sidekiq/web'
