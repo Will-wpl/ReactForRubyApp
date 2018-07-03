@@ -20,7 +20,7 @@ import "components/retailer/letter-of-award";
 import "components/buyer/buyer-fill-consumption";
 import "components/retailer/retailer-workflow";
 import "components/retailer/retailer-register";
-import "components/retailer/buyer-register";
+import "components/buyer/buyer-register";
 
 
 // ActionCable = require('actioncable')
