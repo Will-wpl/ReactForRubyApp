@@ -42,6 +42,8 @@
         .lm--formItem-left.lm--formItem-label Approval Status:
         .lm--formItem-right.lm--formItem-control
           dfn.manage_label
+            - if @user.approval_status == '3'
+              = 'Registering'
             - if @user.approval_status == '2'
               = 'Pending'
             - if @user.approval_status == '0'

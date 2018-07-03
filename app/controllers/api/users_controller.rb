@@ -89,6 +89,8 @@ class Api::UsersController < Api::BaseController
       'Approved'
     elsif user.approval_status == '2'
       'Pending'
+    elsif user.approval_status == '3'
+      'Registering'
     else
       ''
     end
