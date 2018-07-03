@@ -28,31 +28,40 @@ export default class AdminContact extends Component {
 
 show_history(type){
     let attachements=[];
+
     getContractAttachmentsByType(type).then( res => {
+        let fileObj;
+        fileObj = this.state.fileData;
+        fileObj[type][0].files=[];
         res.map((item,index)=>{
-            attachements.push(
-                {
+            let obj={
                 file_name:item.file_name,
                 file_path:item.file_path,
-                file_id:item.id,
-                file_time:item.created_at
-                }
-            )
-        })
-        this.setState({listdetail:attachements});
-        this.refs.Modal.showModal();
+                fileid:item.id,
+                file_time:item.created_at,
+                file_type:item.file_type
+            }
 
+            fileObj[item.file_type][0].files.push(obj);
+            attachements.push(obj);
+        });
+        this.setState({
+            fileData:fileObj,
+            listdetail : attachements
+        })
+        this.refs.Modal.showModal('default',{},type);
     },error=>{
     })
 }
 
-remove_file(filetype,fileindex,fileid) {
-    let fileObj;
-    removeFile(fileid).then(res => {
+    removeFile(filetype,fileindex,fileid) {
+        let fileObj;
+        deleteContractAttachmentById(fileid).then(res => {
         fileObj = this.state.fileData;
         fileObj[filetype][0].files.splice(fileindex, 1);
         this.setState({
-            fileData: fileObj
+            listdetail: fileObj[filetype][0].files,
+            fileData:fileObj
         })
     }, error => {
 
@@ -104,7 +113,7 @@ render() {
                     </div>
                 </div>
             </div>
-            <Modal listdetail={this.state.listdetail} listdetailtype="Link History" ref="Modal" />
+            <Modal otherFunction={this.removeFile.bind(this)} listdetail={this.state.listdetail} listdetailtype="Link History" ref="Modal" />
         </div>
     )
   }
