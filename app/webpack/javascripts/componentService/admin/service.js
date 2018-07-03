@@ -136,5 +136,5 @@ export const  getContractAttachmentsByType = (params) => {
 }
 
 export  const  deleteContractAttachmentById = (param) => {
-    return Ddelete('/api/admin/user_attachments/' + params.id);
+    return Ddelete('/api/admin/user_attachments/' + param);
 }

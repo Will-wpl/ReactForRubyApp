@@ -13,6 +13,7 @@ class Auction < ApplicationRecord
   has_many :auction_attachments, dependent: :destroy
   has_many :consumptions, dependent: :destroy
   has_many :users, through: :consumptions
+  has_many :auction_contracts, dependent: :destroy
   has_one :auction_result, dependent: :destroy
   # accepts_nested_attributes
 

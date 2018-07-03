@@ -24,29 +24,9 @@ export default class AdminContact extends Component {
 
  componentDidMount() {
 
-    //这块是回显上传的文件需要做的，到时候问马克要接口
-    // getFileList(sessionStorage.auction_id).then(res=>{
-    //     let fileObj;
-    //     fileObj = this.state.fileData;
-    //     res.map((item,index)=>{
-    //         fileObj[item.file_type][0].files.push({
-    //             id:item.id,
-    //             file_name:item.file_name,
-    //             file_path:item.file_path
-    //         })
-    //     })
-    //     this.setState({
-    //         fileData:fileObj
-    //     })
-    // },error=>{
-    //
-    // })
-
-}
+ }
 
 show_history(type){
-      //拿到类别传给后台，后台返回对应res列表数据后，塞进listdetail中
-
     let attachements=[];
     getContractAttachmentsByType(type).then( res => {
         res.map((item,index)=>{
@@ -65,6 +45,20 @@ show_history(type){
     },error=>{
     })
 }
+
+remove_file(filetype,fileindex,fileid) {
+    let fileObj;
+    removeFile(fileid).then(res => {
+        fileObj = this.state.fileData;
+        fileObj[filetype][0].files.splice(fileindex, 1);
+        this.setState({
+            fileData: fileObj
+        })
+    }, error => {
+
+    })
+}
+
 render() {
     return (
         <div className="u-grid admin_invitation">
