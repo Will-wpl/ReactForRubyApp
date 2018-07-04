@@ -52,7 +52,6 @@ export class UploadFile extends React.Component {
                                                     let length=item.files.length;
                                                     if(i==(length-1))
                                                     {
-                                                        console.log(11);
                                                         return <li key={i}><a target="_blank" download={it.file_name} href={it.file_path}>{it.file_name}</a></li>
                                                     }
                                                 })
