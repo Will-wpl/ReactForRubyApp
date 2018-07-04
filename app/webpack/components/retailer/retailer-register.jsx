@@ -12,7 +12,7 @@ export class RetailerRegister extends Component {
             disabled: false,
             havedata: false,
             allbtnStatus: true,
-
+            text: "",
             email_address: "",
             company_name: "",
             unique_entity_number: "",
@@ -21,7 +21,6 @@ export class RetailerRegister extends Component {
             contact_name: "",
             mobile_number: "",
             office_number: "",
-
             files: [],
             fileData: {
                 "RETAILER_DOCUMENTS": [
@@ -29,9 +28,13 @@ export class RetailerRegister extends Component {
                 ]
             },
             uploadUrl: '/api/retailer/user_attachments?file_type=',
-            showAttachmentFlag: 1
+            showAttachmentFlag: 1,
+            buyerTCurl: "",
+            buyerTCname: "",
+            revvTCurl: "",
+            revvTCname: ""
         }
-        this.auctionData = {};
+
     }
     componentWillMount() {
 
@@ -67,6 +70,22 @@ export class RetailerRegister extends Component {
                     fileData: fileObj
                 })
             }
+            if (res.seller_buyer_tc_attachment) {
+                let buyer = res.seller_buyer_tc_attachment;
+                this.setState({
+                    buyerTCurl: buyer.file_path,
+                    buyerTCname: buyer.file_name
+                })
+
+
+            }
+            if (res.seller_revv_tc_attachment) {
+                let revv = res.seller_revv_tc_attachment;
+                this.setState({
+                    revvTCurl: revv.file_path,
+                    revvTCname: revv.file_name
+                })
+            }
 
         })
     }
@@ -75,7 +94,7 @@ export class RetailerRegister extends Component {
     }
     submit() {
         submitRetailManageInfo({
-            registration: {
+            user: {
                 'id': this.state.id,
                 'email': this.state.email_address,
                 'company_name': this.state.company_name,
@@ -86,52 +105,32 @@ export class RetailerRegister extends Component {
                 'account_mobile_number': this.state.mobile_number,
                 'account_office_number': this.state.office_number
             }
-
         }).then(res => {
-            console.log(res)
-            // if(!this.props.doJest){
-            //     this.refs.Modal.showModal();
-            // }
-            //     this.setState({
-            //         text:"Your details have been successfully submitted. You may click on 'Start Bidding' in the published auction list to standby for the live reverse auction."
-            //     });
-            //     this.getRetailerAuction();
-            //     this.setState({
-            //         btn_status:false,
-            //         disabled:true
-            //     })
-            // }, error => {
-            //     console.log(error);
-            // })
+            this.refs.Modal.showModal();
+            this.setState({
+                text: "Your details have been successfully saved. "
+            });
+
         })
     }
     save() {
         saveRetailManageInfo({
-            'id': this.state.id,
-            'email': this.state.email_address,
-            'company_name': this.state.company_name,
-            'company_unique_entity_number': this.state.unique_entity_number,
-            'company_address': this.state.company_address,
-            'billing_address': this.state.billing_address,
-            'name': this.state.contact_name,
-            'account_mobile_number': this.state.mobile_number,
-            'account_office_number': this.state.office_number
+            user: {
+                'id': this.state.id,
+                'email': this.state.email_address,
+                'company_name': this.state.company_name,
+                'company_unique_entity_number': this.state.unique_entity_number,
+                'company_address': this.state.company_address,
+                'billing_address': this.state.billing_address,
+                'name': this.state.contact_name,
+                'account_mobile_number': this.state.mobile_number,
+                'account_office_number': this.state.office_number
+            }
         }).then(res => {
-            console.log(res)
-            // if(!this.props.doJest){
-            //     this.refs.Modal.showModal();
-            // }
-            //     this.setState({
-            //         text:"Your details have been successfully submitted. You may click on 'Start Bidding' in the published auction list to standby for the live reverse auction."
-            //     });
-            //     this.getRetailerAuction();
-            //     this.setState({
-            //         btn_status:false,
-            //         disabled:true
-            //     })
-            // }, error => {
-            //     console.log(error);
-            // })
+            this.refs.Modal.showModal();
+            this.setState({
+                text: "Your details have been successfully submitted. "
+            });
         })
     }
     Change(type, e) {
@@ -256,12 +255,13 @@ export class RetailerRegister extends Component {
                                     </div>
                                 </div>
 
-                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" name={"seller_buyer_tc"} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href="">adfasdfsafd</a></h4>
-                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" name={"seller_revv_tc"} />  I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href="">adfasdfsafd</a></h4>
+                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" name={"seller_buyer_tc"} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href={this.state.buyerTCurl}>{this.state.buyerTCname}</a></h4>
+                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" name={"seller_revv_tc"} />  I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href={this.state.revvTCurl}>{this.state.revvTCname}</a></h4>
 
                                 <div className="retailer_btn">
                                     {btn_html}
                                 </div>
+                                <Modal text={this.state.text} ref="Modal" />
                             </div>
                         </div>
                     </div>
