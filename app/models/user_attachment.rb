@@ -1,5 +1,12 @@
 class UserAttachment < ApplicationRecord
 
+  # Field Descriptions
+  FileType_Seller_Buyer_TC = 'SELLER_BUYER_TC'.freeze
+  FileType_Seller_REVV_TC = 'SELLER_REVV_TC'.freeze
+  FileType_Buyer_REVV_TC = 'BUYER_REVV_TC'.freeze
+  FileType_Retailer_Doc = 'RETAILER_DOCUMENTS'.freeze
+  FileType_Buyer_Doc = 'BUYER_DOCUMENTS'.freeze
+
   # Extends
 
   # Includes
@@ -29,5 +36,9 @@ class UserAttachment < ApplicationRecord
 
   def self.find_last_by_user(user_id)
     UserAttachment.find_by_user(user_id).order(updated_at: :desc).last
+  end
+
+  def self.find_last_by_type(file_type)
+    UserAttachment.find_by_type(file_type).order(updated_at: :desc).last
   end
 end
