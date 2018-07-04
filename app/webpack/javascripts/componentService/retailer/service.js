@@ -98,10 +98,10 @@ export const getRetailerUserInfo =()=>{
 }
 
 export const saveRetailManageInfo = (params) => {  //save
-    return put('/api/retailer/registrations/'+params.id, params);
+    return put('/api/retailer/registrations/'+params.user.id, params);
 }
 export const submitRetailManageInfo = (params) => {  //submit
-    return put('/api/retailer/registrations/'+params.id+'/sign_up', params);
+    return put('/api/retailer/registrations/'+params.user.id+'/sign_up', params);
 }
 
 
