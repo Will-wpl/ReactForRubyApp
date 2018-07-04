@@ -1,5 +1,5 @@
 class TenderHelper
-  def self.get_current_workflow(arrangement_id)
+  def self.current(arrangement_id)
     auction = get_auction(arrangement_id)
     workflow = if auction.auction_contracts.blank?
                  TenderWorkflow.new.get_arrangement_state_machine(arrangement_id)
@@ -17,7 +17,7 @@ class TenderHelper
     workflow
   end
 
-  def self.get_execute_workflow(node_name, event_name, arrangement_id)
+  def self.execute(node_name, event_name, arrangement_id)
     auction = get_auction(arrangement_id)
     workflow = if auction.auction_contracts.blank?
                  TenderWorkflow.new.execute(node_name, event_name, arrangement_id)
