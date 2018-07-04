@@ -7,14 +7,10 @@ class Api::Retailer::RegistrationsController < Api::RegistrationsController
     user_attachment = UserAttachment.find_last_by_user(current_user.id)
 
     # get seller-buyer-t&c document
-    if current_user.agree_seller_buyer == User::AgreeSellerBuyerYes
-      seller_buyer_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)
-    end
+    seller_buyer_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)
 
     # get buyer-revv-t&c document
-    if current_user.agree_seller_revv == User::AgreeSellerRevvYes
-      seller_revv_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_REVV_TC)
-    end
+    seller_revv_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_REVV_TC)
 
     # return json
     render json: { user_base_info: current_user,
