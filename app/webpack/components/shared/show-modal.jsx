@@ -148,18 +148,18 @@ export class Modal extends React.Component{
                 if(this.props.text === ''){
                     showDetail = <div>
                         <div className="lm--formItem lm--formItem--inline string">
-                            <label className="lm--formItem-label string required">
-                                <abbr title="required">*</abbr> Subject:
+                            <label className="lm--formItem-left lm--formItem-label string required">
+                                 Subject:
                             </label>
-                            <div className="lm--formItem-control">
+                            <div className="lm--formItem-right lm--formItem-control">
                                 <input type="text" name="email_subject" value={this.state.email_subject} onChange={this.Change.bind(this,'email_subject')} disabled={this.state.disabled} ref="email_subject" maxLength="50" required aria-required="true" />
                             </div>
                         </div>
                         <div className="lm--formItem lm--formItem--inline string">
-                            <label className="lm--formItem-label string required">
-                                <abbr title="required">*</abbr> Body:
+                            <label className="lm--formItem-left lm--formItem-label string required">
+                                 Body:
                             </label>
-                            <div className="lm--formItem-control">
+                            <div className="lm--formItem-right lm--formItem-control">
                                 <textarea name="email_body" value={this.state.email_body} onChange={this.Change.bind(this,'email_body')} disabled={this.state.disabled} ref="email_body" required aria-required="true" />
                             </div>
                         </div>
