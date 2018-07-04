@@ -26,7 +26,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     # update buyer entity registration information
     buyer_entities = JSON.parse(params[:buyer_entities])
     update_buyer_entities(buyer_entities)
-    render json: { obj: @user }, status: 200
+    render json: { user: @user }, status: 200
 
   end
 
@@ -41,7 +41,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     buyer_entities = JSON.parse(params[:buyer_entities])
     update_buyer_entities(buyer_entities)
 
-    render json: { obj: @user }, status: 200
+    render json: { user: @user }, status: 200
   end
 
   private

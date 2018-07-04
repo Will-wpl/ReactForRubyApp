@@ -37,7 +37,7 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
       before { do_request }
       it 'success' do
         hash_body = JSON.parse(response.body)
-        expect(hash_body).to have_content('obj')
+        expect(hash_body).to have_content('user')
         expect(response).to have_http_status(:ok)
       end
     end
@@ -61,7 +61,7 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
       before { do_request }
       it 'success' do
         hash_body = JSON.parse(response.body)
-        expect(hash_body).to have_content('obj')
+        expect(hash_body).to have_content('user')
         expect(response).to have_http_status(:ok)
       end
     end

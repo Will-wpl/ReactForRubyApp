@@ -14,7 +14,7 @@ class Api::Retailer::RegistrationsController < Api::RegistrationsController
     update_user_params = model_params
     update_user_params = filter_user_password(update_user_params)
     @user.update(update_user_params)
-    render json: {obj: @user}, status: 200
+    render json: { user: @user }, status: 200
   end
 
   # Complete Sign up retailer registration information
@@ -23,7 +23,7 @@ class Api::Retailer::RegistrationsController < Api::RegistrationsController
     update_user_params = filter_user_password(update_user_params)
     update_user_params['approval_status'] = User::ApprovalStatusPending
     @user.update(update_user_params)
-    render json: {obj: @user}, status: 200
+    render json: { user: @user }, status: 200
   end
 
 end
