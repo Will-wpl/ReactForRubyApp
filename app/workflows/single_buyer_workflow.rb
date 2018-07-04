@@ -10,7 +10,7 @@ class SingleBuyerWorkflow < Workflow
     @node1 = Node.new(:node1, 1, 'begin',
                       accept: Event.new(:accept, :node2, 2, 2, '0'))
     @node2 = Node.new(:node2, 2, 'in processing',
-                      proceed: Event.new(:proceed, :node5, 2, 2, '0'),
+                      accept_all: Event.new(:accept_all, :node5, 2, 2, '0'),
                       propose_deviations: Event.new(:propose_deviations, :node3, 2, 2, '0'))
     @node3 = Node.new(:node3, 3, 'in processing',
                       withdraw_all_deviations: Event.new(:withdraw_all_deviations, :node4, 2, 2, '0'),
@@ -25,9 +25,9 @@ class SingleBuyerWorkflow < Workflow
   def get_current_action_status(arrangement_id)
     sm = TenderStateMachine.find_by_arrangement_id(arrangement_id).last
     if node1?(sm)
-      { node1_retailer_proceed: true }
+      { node1_retailer_accept: true }
     elsif node2?(sm)
-      { node2_retailer_proceed: true, node2_retailer_propose_deviations: true }
+      { node2_retailer_accept_all: true, node2_retailer_propose_deviations: true }
     elsif node3_retailer?(sm)
       if node3_retailer_next?(sm)
         { node3_retailer_next: true}
