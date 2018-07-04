@@ -13,15 +13,10 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     buyer_entities = user.company_buyer_entities
 
     # get seller-buyer-t&c document
-    if @user.agree_seller_buyer == User::AgreeSellerBuyerYes
-      seller_buyer_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)
-    end
+    seller_buyer_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)
 
     # get buyer-revv-t&c document
-    if @user.agree_buyer_revv == User::AgreeBuyerRevvYes
-      buyer_revv_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
-    end
-
+    buyer_revv_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
 
     # return json
     render json: { user_base_info: user,
