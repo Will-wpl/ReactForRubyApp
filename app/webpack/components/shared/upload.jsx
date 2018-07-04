@@ -7,10 +7,10 @@ export class UploadFile extends React.Component{
             disabled:false,
             fileData:this.props.fileData,
             showList:this.props.showList,
+            uploadUrl:this.props.uploadUrl
         }
     }
     componentDidMount() {
-
     }
     addinputfile(type, required){
         let fileHtml = '';
@@ -82,7 +82,7 @@ export class UploadFile extends React.Component{
         })
     }
     upload(type, index){
-        let time = null
+        let time = null;
         if($("#"+type+index).val() === ""){
             $("#"+type+index).next().next().fadeIn(300);
             clearTimeout(time);
@@ -93,7 +93,7 @@ export class UploadFile extends React.Component{
         }
         const barObj = $('#'+type+index).parents("a").next();
         $.ajax({
-            url: '/api/admin/user_attachments?file_type='+type,
+            url: this.state.uploadUrl+type,
             type: 'POST',
             cache: false,
             data: new FormData($('#'+type+"_form")[0]),
