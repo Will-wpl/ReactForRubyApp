@@ -1,21 +1,24 @@
 import React, { Component } from 'react';
-import {removeFile} from '../../javascripts/componentService/admin/service';
-export class UploadFile extends React.Component{
-    constructor(props){
+import { removeFile } from '../../javascripts/componentService/admin/service';
+export class UploadFile extends React.Component {
+    constructor(props) {
         super(props);
-        this.state={
-            disabled:false,
-            fileData:this.props.fileData,
-            showList:this.props.showList,
-            uploadUrl:this.props.uploadUrl
+        this.state = {
+            disabled: false,
+            fileData: this.props.fileData,
+            showList: this.props.showList, //1  attachement list show,// 2 attachment list hide
+            showWay: this.props.showWay, //1 attachment list show all , attachment show only last one 
+            uploadUrl: this.props.uploadUrl
         }
     }
     componentDidMount() {
     }
-    addinputfile(type, required){
+    addinputfile(type, required) {
+
         let fileHtml = '';
-        fileHtml = <form id={type+"_form"} encType="multipart/form-data">
-                {this.state.fileData.map((item, index) =>
+        fileHtml = <form id={type + "_form"} encType="multipart/form-data">
+            {
+                this.state.fileData.map((item, index) =>
                     <div className="col-sm-12 col-md-12 u-grid" key={index}>
                         <div className="col-sm-12 col-md-10 u-cell">
                             <a className="upload_file_btn">
@@ -23,29 +26,38 @@ export class UploadFile extends React.Component{
                                 {/* accept="application/pdf,application/msword" */}
                                 {required === "required" ?
                                     <div>
-                                        <input type="file" required="required" ref={type+index}  onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.props.propsdisabled?true:(window.location.href.indexOf("past")>0?true:this.state.disabled)} />
+                                        <input type="file" required="required" ref={type + index} onChange={this.changefileval.bind(this, type + index)} id={type + index} name="file" disabled={this.props.propsdisabled ? true : (window.location.href.indexOf("past") > 0 ? true : this.state.disabled)} />
                                         <b>Browse..</b>
                                         <div className="required_error">
                                             Please select file.
                                         </div>
                                     </div>
-                                    :<div>
-                                        <input type="file" ref={type+index} onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.props.propsdisabled?true:(window.location.href.indexOf("past")>0?true:this.state.disabled)} />
+                                    : <div>
+                                        <input type="file" ref={type + index} onChange={this.changefileval.bind(this, type + index)} id={type + index} name="file" disabled={this.props.propsdisabled ? true : (window.location.href.indexOf("past") > 0 ? true : this.state.disabled)} />
                                         <b>Browse..</b>
                                     </div>}
                             </a>
                             <div className="progress">
-                                <div className="progress-bar" style={{width:"0%"}}>0%</div>
+                                <div className="progress-bar" style={{ width: "0%" }}>0%</div>
                             </div>
                             <div className="progress_files">
-                                {this.state.showList===true ?
+                                {this.state.showList == 1 ?
                                     <ul>
                                         {
-                                            item.files.map((it,i)=>{
-                                                return <li key={i}><a target="_blank" download={it.file_name} href={it.file_path}>{it.file_name}</a>{this.props.propsdisabled?'':(this.state.disabled?'':(window.location.href.indexOf("past")>0?'':<span className="remove_file" onClick={this.remove_file.bind(this,type,index,i,it.id)}></span>))}</li>
-                                            })
+                                            this.state.showWay == 1 ?
+                                                item.files.map((it, i) => {
+                                                    return <li key={i}><a target="_blank" download={it.file_name} href={it.file_path}>{it.file_name}</a>{this.props.propsdisabled ? '' : (this.state.disabled ? '' : (window.location.href.indexOf("past") > 0 ? '' : <span className="remove_file" onClick={this.remove_file.bind(this, type, index, i, it.id)}></span>))}</li>
+                                                })
+                                                : item.files.map((it, i) => {
+                                                    let length=item.files.length;
+                                                    if(i==(length-1))
+                                                    {
+                                                        console.log(11);
+                                                        return <li key={i}><a target="_blank" download={it.file_name} href={it.file_path}>{it.file_name}</a></li>
+                                                    }
+                                                })
                                         }
-                                    </ul>:
+                                    </ul> :
                                     <div></div>
                                 }
 
@@ -53,8 +65,8 @@ export class UploadFile extends React.Component{
                         </div>
                         <div className="col-sm-12 col-md-2 u-cell">
                             {
-                                this.props.propsdisabled?<button className="lm--button lm--button--primary" disabled>Upload</button>:(this.state.disabled?<button className="lm--button lm--button--primary" disabled>Upload</button>
-                                    :(window.location.href.indexOf("past")>0?<button className="lm--button lm--button--primary" disabled>Upload</button>:<a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>))
+                                this.props.propsdisabled ? <button className="lm--button lm--button--primary" disabled>Upload</button> : (this.state.disabled ? <button className="lm--button lm--button--primary" disabled>Upload</button>
+                                    : (window.location.href.indexOf("past") > 0 ? <button className="lm--button lm--button--primary" disabled>Upload</button> : <a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>))
                             }
                         </div>
                         {/* <div className="col-sm-12 col-md-2 u-cell">
@@ -62,14 +74,15 @@ export class UploadFile extends React.Component{
                                     </div> */}
                     </div>
                 )}
-            </form>
+        </form>
         return fileHtml;
     }
-    changefileval(id){
-        const fileObj = $("#"+id);
+    changefileval(id) {
+        const fileObj = $("#" + id);
         fileObj.parent().prev("dfn").text(fileObj.val());
     }
-    remove_file(filetype,typeindex,fileindex,fileid) {
+    remove_file(filetype, typeindex, fileindex, fileid) {
+      
         let fileObj;
         removeFile(fileid).then(res => {
             fileObj = this.state.fileData;
@@ -81,25 +94,25 @@ export class UploadFile extends React.Component{
 
         })
     }
-    upload(type, index){
+    upload(type, index) {
         let time = null;
-        if($("#"+type+index).val() === ""){
-            $("#"+type+index).next().next().fadeIn(300);
+        if ($("#" + type + index).val() === "") {
+            $("#" + type + index).next().next().fadeIn(300);
             clearTimeout(time);
-            time = setTimeout(()=>{
-                $("#"+type+index).next().next().hide();
-            },2000)
+            time = setTimeout(() => {
+                $("#" + type + index).next().next().hide();
+            }, 2000)
             return;
         }
-        const barObj = $('#'+type+index).parents("a").next();
+        const barObj = $('#' + type + index).parents("a").next();
         $.ajax({
-            url: this.state.uploadUrl+type,
+            url: this.state.uploadUrl + type,
             type: 'POST',
             cache: false,
-            data: new FormData($('#'+type+"_form")[0]),
+            data: new FormData($('#' + type + "_form")[0]),
             processData: false,
             contentType: false,
-            xhr:() => {
+            xhr: () => {
                 var xhr = new window.XMLHttpRequest();
                 xhr.upload.addEventListener("progress", function (evt) {
                     if (evt.lengthComputable) {
@@ -107,39 +120,39 @@ export class UploadFile extends React.Component{
                         barObj.show();
                         barObj.find(".progress-bar").css('width', percentComplete + '%');
                         barObj.find(".progress-bar").text(percentComplete + '%');
-                        if(percentComplete == 100){
+                        if (percentComplete == 100) {
                             barObj.find(".progress-bar").text('Processing..');
                         }
                     }
                 }, false);
                 return xhr;
             },
-            success:(res) => {
+            success: (res) => {
                 let fileObj;
                 barObj.find(".progress-bar").text('Upload Successful!');
-                setTimeout(()=>{
+                setTimeout(() => {
                     barObj.fadeOut(500);
-                },2000);
+                }, 2000);
                 fileObj = this.state.fileData;
-                fileObj.map((item,index)=>{
+                fileObj.map((item, index) => {
                     item.files.push({
-                        id:res.id,
-                        file_name:res.file_name,
-                        file_path:res.file_path
+                        id: res.id,
+                        file_name: res.file_name,
+                        file_path: res.file_path
                     })
                 })
                 this.setState({
-                    fileData:fileObj
+                    fileData: fileObj
                 })
                 //console.log(res);
-            },error:() => {
+            }, error: () => {
                 barObj.find(".progress-bar").text('upload failed!');
                 barObj.find(".progress-bar").css('background', 'red');
             }
         })
     }
-    render(){
-        return(
+    render() {
+        return (
             <div className="col-sm-12 col-md-10">
                 <div className="file_box">
                     {this.addinputfile(this.props.type, this.props.required)}
