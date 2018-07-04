@@ -8,17 +8,27 @@ export class Modal extends React.Component{
             type:'default',
             secondStatus:"live_hide",
             props_data:{},
-            strtype:''
+            strtype:'',
+            email_subject:'',
+            email_body:''
         }
     }
     showModal(type,data,str){
         if(str){
-            this.setState({strtype:str})
+            this.setState({strtype:str});
         }
         this.setState({
             modalshowhide:"modal_show",
             props_data:data?data:{}
         })
+        if(data){
+            if(data.subject && data.body){
+                this.setState({
+                    email_subject:data.subject,
+                    email_body:decodeURI(data.body)
+                })
+            }
+        }
         if(type == "comfirm"){
             this.setState({
                 type:"comfirm"
@@ -36,6 +46,12 @@ export class Modal extends React.Component{
         },50)
     }
     Accept(){
+        if(this.state.strtype === "email_template"){
+            let data = this.state.props_data;
+            data.subject = this.state.email_subject;
+            data.body = encodeURI(this.state.email_body);
+            this.setState({props_data:data});
+        }
         if(this.props.acceptFunction){
             this.props.acceptFunction(this.state.props_data);
             this.closeModal();
@@ -55,6 +71,14 @@ export class Modal extends React.Component{
             }
         }
 
+    }
+    Change(type,e){
+        let obj = e.target.value;
+        if(type == "email_subject"){
+            this.setState({email_subject:obj});
+        }else{
+            this.setState({email_body:obj})
+        }
     }
     closeModal(){
 
@@ -120,6 +144,29 @@ export class Modal extends React.Component{
                                   return <li key={index}><a className="overflow_text" target="_blank" download={item.file_name} href={item.file_path}>{item.file_name}</a><abbr><font>|</font>{item.file_time}</abbr><span className="remove_file" onClick={this.removefile.bind(this,this.state.strtype,index,item.fileid)}></span></li>
                                 })}
                             </ul>
+            }else if(this.props.listdetailtype === "Email Template"){
+                if(this.props.text === ''){
+                    showDetail = <div>
+                        <div className="lm--formItem lm--formItem--inline string">
+                            <label className="lm--formItem-label string required">
+                                <abbr title="required">*</abbr> Subject:
+                            </label>
+                            <div className="lm--formItem-control">
+                                <input type="text" name="email_subject" value={this.state.email_subject} onChange={this.Change.bind(this,'email_subject')} disabled={this.state.disabled} ref="email_subject" maxLength="50" required aria-required="true" />
+                            </div>
+                        </div>
+                        <div className="lm--formItem lm--formItem--inline string">
+                            <label className="lm--formItem-label string required">
+                                <abbr title="required">*</abbr> Body:
+                            </label>
+                            <div className="lm--formItem-control">
+                                <textarea name="email_body" value={this.state.email_body} onChange={this.Change.bind(this,'email_body')} disabled={this.state.disabled} ref="email_body" required aria-required="true" />
+                            </div>
+                        </div>
+                    </div>
+                }else{
+                    showDetail=<div></div>
+                }
             }else if(this.props.listdetailtype === "Select Company Buyers"){
                 showDetail = <ul className="showdetail">
                                 <li>View Account</li>

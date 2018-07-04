@@ -138,3 +138,12 @@ export const  getContractAttachmentsByType = (params) => {
 export  const  deleteContractAttachmentById = (param) => {
     return Ddelete('/api/admin/user_attachments/' + param);
 }
+export  const  getEmailList = () => {
+    return get('/api/admin/email_templates/');
+}
+export  const  getEmailListItem = (id) => {
+    return get('/api/admin/email_templates/'+id);
+}
+export  const  getEmailItemUpdate = (param) => {
+    return get('/api/admin/email_templates/'+param.id,{subject:param.subject, body:param.body});
+}
