@@ -8,10 +8,6 @@ export class RetailerRegister extends Component {
         super(props);
         this.state = {
             id: "",
-            // text: "",
-            // type: "",
-            // live_modal: "",
-            // live_modal_do: "",
             btn_status: false,
             disabled: false,
             havedata: false,
@@ -32,7 +28,8 @@ export class RetailerRegister extends Component {
                     { buttonName: "none", files: [] }
                 ]
             },
-            uploadUrl: ''
+            uploadUrl: '/api/retailer/user_attachments?file_type=',
+            showAttachmentFlag: 1
         }
         this.auctionData = {};
     }
@@ -40,27 +37,33 @@ export class RetailerRegister extends Component {
 
     }
     componentDidMount() {
-        // getRetailerUserInfo(1).then(res => {
-        //     if (true) {
-        //         this.setState({
-        //             email_address: res.email ? res.email : '',
-        //             company_name: res.company_name ? res.company_name : '',
-        //             unique_entity_number: res.company_unique_entity_number ? res.company_unique_entity_number : '',
-        //             company_address: res.company_address ? res.company_address : '',
-        //             billing_address: res.billing_address ? res.billing_address : '',
-        //             contact_name: res.name ? res.name : '',
-        //             mobile_number: res.account_mobile_number ? res.account_mobile_number : '',
-        //             office_number: res.account_office_number ? res.account_office_number : '',
+        let fileObj;
+        fileObj = this.state.fileData;
+        getRetailerUserInfo().then(res => {
+            console.log(res);
+            if (res.retailer_base_info) {
 
-        //         })
-        //     }
-        // })
+                let item = res.retailer_base_info;
+                this.setState({
+                    id: item.id,
+                    email_address: item.email ? item.email : '',
+                    company_name: item.company_name ? item.company_name : '',
+                    unique_entity_number: item.company_unique_entity_number ? item.company_unique_entity_number : '',
+                    company_address: item.company_address ? item.company_address : '',
+                    billing_address: item.billing_address ? item.billing_address : '',
+                    contact_name: item.name ? item.name : '',
+                    mobile_number: item.account_mobile_number ? item.account_mobile_number : '',
+                    office_number: item.account_office_number ? item.account_office_number : '',
+
+                })
+            }
+        })
     }
     checkValidation() {
 
     }
     submit() {
-
+        console.log(this.state)
     }
     save() {
 
@@ -83,6 +86,16 @@ export class RetailerRegister extends Component {
             case 'billing_address':
                 this.setState({ billing_address: itemValue });
                 break;
+            case 'contact_name':
+                this.setState({ contact_name: itemValue });
+                break;
+            case 'mobile_number':
+                this.setState({ mobile_number: itemValue });
+                break;
+            case 'office_number':
+                this.setState({ office_number: itemValue });
+                break;
+
         }
     }
     showView() {
@@ -91,8 +104,8 @@ export class RetailerRegister extends Component {
     }
     render() {
         let btn_html = <div>
-            <button id="save_form" className="lm--button lm--button--primary"   >Save</button>
-            <button id="submit_form" className="lm--button lm--button--primary"  >Complete Sign Up</button>
+            <button id="save_form" className="lm--button lm--button--primary" onClick={this.save.bind(this)}>Save</button>
+            <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this)} >Complete Sign Up</button>
         </div>;
         return (
             <div className="retailer_manage_coming">
@@ -173,19 +186,19 @@ export class RetailerRegister extends Component {
                                         Upload Documents:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <UploadFile type="RETAILER_DOCUMENTS" required="required" showlist={true} fileData={this.state.fileData.RETAILER_DOCUMENTS} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
+                                        <UploadFile type="RETAILER_DOCUMENTS" required="required" showList="1" showWay="2" fileData={this.state.fileData.RETAILER_DOCUMENTS} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
                                     </div>
                                 </div>
 
                                 <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" name={"seller_buyer_tc"} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href="">adfasdfsafd</a></h4>
-                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" name={"seller_revv_tc"} />  I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href="">adfasdfsafd</a></h4><a target="_blank" href="">adfasdfsafd</a>
+                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" name={"seller_revv_tc"} />  I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href="">adfasdfsafd</a></h4>
+                                 
                                 <div className="retailer_btn">
                                     {btn_html}
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <Modal text={this.state.text} ref="Modal" />
                 </div>
             </div>
         )
