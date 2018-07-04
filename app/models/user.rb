@@ -13,6 +13,15 @@ class User < ApplicationRecord
   ConsumerTypeCompany = '2'.freeze
   ConsumerTypeIndividual = '3'.freeze
 
+  AgreeSellerBuyerYes='1'.freeze
+  AgreeSellerBuyerNo='0'.freeze
+  AgreeSellerRevvYes='1'.freeze
+  AgreeSellerRevvNo='0'.freeze
+  AgreeBuyerRevvYes='1'.freeze
+  AgreeBuyerRevvNo='0'.freeze
+  RequireTenants='1'.freeze
+  NotRequireTenants='0'.freeze
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,

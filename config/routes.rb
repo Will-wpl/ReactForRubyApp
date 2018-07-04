@@ -162,6 +162,16 @@ Rails.application.routes.draw do
           post 'acknowledge_all'
         end
       end
+      resources :registrations, only: %i[index update sign_up] do
+        member do
+          put 'sign_up'
+        end
+      end
+      resources :user_attachments, only: %i[create update find_attachment_by_user] do
+        member do
+          get 'find_attachment_by_user'
+        end
+      end
     end
   end
 
@@ -184,7 +194,19 @@ Rails.application.routes.draw do
           get 'published'
         end
       end
-      resources :auction_results, only: %i[index]
+      resources :auction_results, only: %i[index] do
+
+      end
+      resources :registrations, only: %i[index update sign_up] do
+        member do
+          put 'sign_up'
+        end
+      end
+      resources :user_attachments, only: %i[create update find_attachment_by_user] do
+        member do
+          get 'find_attachment_by_user'
+        end
+      end
     end
   end
 

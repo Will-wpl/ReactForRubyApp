@@ -19,4 +19,5 @@ FactoryBot.define do
   trait :tmtc do
     file_type 'TENANT_MGMT_TC'
   end
+
 end

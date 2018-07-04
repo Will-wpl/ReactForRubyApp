@@ -1,0 +1,27 @@
+require 'rails_helper'
+
+RSpec.describe Api::Buyer::UserAttachmentsController, type: :controller do
+  let!(:company_buyer) { create(:user, :with_buyer, :with_company_buyer) }
+  let!(:tc) { create(:user_attachment, :sbtc, file_name: 'test', file_path: 'test')}
+  context 'buy user' do
+    before { sign_in company_buyer }
+
+    describe 'buyer registration' do
+      context 'create attachment' do
+        def do_request
+          file = fixture_file_upload('files/test.jpg', 'image/jpg')
+          post :create, params: { file: file, file_type: 'BUY_BUSINESS' }
+        end
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash_body = JSON.parse(response.body)
+          expect(hash_body['file_type']).to eq('BUY_BUSINESS')
+          expect(hash_body['file_name']).to eq('test.jpg')
+          expect(hash_body['user_id']).to eq(company_buyer.id)
+        end
+      end
+
+    end
+  end
+end
