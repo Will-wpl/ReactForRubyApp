@@ -21,9 +21,9 @@ RSpec.describe Api::Admin::EmailTemplatesController, type: :controller do
     end
   end
 
-  describe "GET #update" do
+  describe "PUT #update" do
     it "returns http success", emailctrl: true do
-      get :update, params: { id: @email_template.id, email_template: {subject: "test subject3", body: "test body3"} }
+      put :update, params: { id: @email_template.id, email_template: {subject: "test subject3", body: "test body3"} }
       expect(response).to have_http_status(:success)
     end
   end

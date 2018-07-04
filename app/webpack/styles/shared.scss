@@ -609,8 +609,14 @@ body.choose{
 ul.history_files{
     li{list-style: none; line-height: 26px; overflow: hidden;
       &.lineHeight42{line-height: 42px;}
-      a{ cursor: pointer; color: #00b0b2; float: left; margin: 0;}
-      abbr{font-style: normal; float: left; color: #00b0b2; margin-left:10px;}
+      a{ cursor: pointer; color: #00b0b2; float: left; margin: 0;
+        &.overflow_text{
+          overflow: hidden; white-space: nowrap; text-overflow: ellipsis; width:220px;
+        }
+      }
+      abbr{font-style: normal; float: left; color: #00b0b2; font-size: 12px;
+        font{margin:0px 10px;}
+      }
       span.remove_file{background:url("../images/remove.png") no-repeat center; cursor: pointer; width: 26px; height: 26px; float: right;}
     }
 }
