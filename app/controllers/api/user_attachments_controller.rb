@@ -3,7 +3,7 @@ class Api::UserAttachmentsController < Api::BaseController
   # get user attachments by user id
   def index
     file_type = params[:file_type]
-    attachments = UserAttachment.find_by_type(file_type).order(:created_at)
+    attachments = UserAttachment.find_by_type(file_type).order(created_at: :desc)
     render json: attachments, status: 200
   end
 

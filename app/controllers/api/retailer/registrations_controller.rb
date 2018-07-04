@@ -5,8 +5,22 @@ class Api::Retailer::RegistrationsController < Api::RegistrationsController
   def index
     # get the last updated attachment
     user_attachment = UserAttachment.find_last_by_user(current_user.id)
+
+    # get seller-buyer-t&c document
+    if current_user.agree_seller_buyer == User::AgreeSellerBuyerYes
+      seller_buyer_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)
+    end
+
+    # get buyer-revv-t&c document
+    if current_user.agree_seller_revv == User::AgreeSellerRevvYes
+      seller_revv_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_REVV_TC)
+    end
+
     # return json
-    render json: { retailer_base_info: current_user, attachment: user_attachment }, status: 200
+    render json: { user_base_info: current_user,
+                   self_attachment: user_attachment,
+                   seller_buyer_tc_attachment: seller_buyer_tc_attachment,
+                   seller_revv_tc_attachment: seller_revv_tc_attachment }, status: 200
   end
 
   # update retailer registration information

@@ -12,7 +12,7 @@ RSpec.describe Api::Retailer::RegistrationsController, type: :controller do
       before { do_request }
       it 'success' do
         hash_body = JSON.parse(response.body)
-        expect(hash_body).to have_content('retailer_base_info')
+        expect(hash_body).to have_content('user_base_info')
         expect(response).to have_http_status(:ok)
       end
     end
