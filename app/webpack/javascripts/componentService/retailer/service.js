@@ -92,3 +92,17 @@ export const retailerAcknowledge = (id) => {
 export const retailerAllAcknowledge = (data) => {
     return create(`/api/retailer/consumptions/acknowledge_all`,data)
 }
+
+export const getRetailerUserInfo =()=>{
+    return get('/api/retailer/registrations/');
+}
+
+export const saveRetailManageInfo = (params) => {  //save
+    return put('/api/retailer/registrations/'+params.id, params);
+}
+export const submitRetailManageInfo = (params) => {  //submit
+    return put('/api/retailer/registrations/'+params.id+'/sign_up', params);
+}
+
+
+ 
