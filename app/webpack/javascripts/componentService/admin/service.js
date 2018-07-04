@@ -145,5 +145,5 @@ export  const  getEmailListItem = (id) => {
     return get('/api/admin/email_templates/'+id);
 }
 export  const  getEmailItemUpdate = (param) => {
-    return get('/api/admin/email_templates/'+param.id,{subject:param.subject, body:param.body});
+    return put('/api/admin/email_templates/'+param.id,{subject:param.subject, body:param.body});
 }
