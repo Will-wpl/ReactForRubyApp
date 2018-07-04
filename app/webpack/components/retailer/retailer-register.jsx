@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import { UploadFile } from '../shared/upload';
 import { Modal } from '../shared/show-modal';
-import { getRetailerUserInfo, retailManageInfo } from '../../javascripts/componentService/retailer/service'
+import { getRetailerUserInfo, saveRetailManageInfo, submitRetailManageInfo } from '../../javascripts/componentService/retailer/service'
 export class RetailerRegister extends Component {
     constructor(props) {
         super(props);
@@ -41,9 +41,8 @@ export class RetailerRegister extends Component {
         fileObj = this.state.fileData;
         getRetailerUserInfo().then(res => {
             console.log(res);
-            if (res.retailer_base_info) {
-
-                let item = res.retailer_base_info;
+            if (res.user_base_info) {
+                let item = res.user_base_info;
                 this.setState({
                     id: item.id,
                     email_address: item.email ? item.email : '',
@@ -54,19 +53,86 @@ export class RetailerRegister extends Component {
                     contact_name: item.name ? item.name : '',
                     mobile_number: item.account_mobile_number ? item.account_mobile_number : '',
                     office_number: item.account_office_number ? item.account_office_number : '',
-
                 })
             }
+            if (res.self_attachment) {
+                let attachment = res.self_attachment
+                let obj = {
+                    file_name: attachment.file_name,
+                    file_path: attachment.file_path,
+                    file_type: attachment.file_type
+                }
+                fileObj[attachment.file_type][0].files.push(obj);
+                this.setState({
+                    fileData: fileObj
+                })
+            }
+
         })
     }
     checkValidation() {
 
     }
     submit() {
-        console.log(this.state)
+        submitRetailManageInfo({
+            registration: {
+                'id': this.state.id,
+                'email': this.state.email_address,
+                'company_name': this.state.company_name,
+                'company_unique_entity_number': this.state.unique_entity_number,
+                'company_address': this.state.company_address,
+                'billing_address': this.state.billing_address,
+                'name': this.state.contact_name,
+                'account_mobile_number': this.state.mobile_number,
+                'account_office_number': this.state.office_number
+            }
+
+        }).then(res => {
+            console.log(res)
+            // if(!this.props.doJest){
+            //     this.refs.Modal.showModal();
+            // }
+            //     this.setState({
+            //         text:"Your details have been successfully submitted. You may click on 'Start Bidding' in the published auction list to standby for the live reverse auction."
+            //     });
+            //     this.getRetailerAuction();
+            //     this.setState({
+            //         btn_status:false,
+            //         disabled:true
+            //     })
+            // }, error => {
+            //     console.log(error);
+            // })
+        })
     }
     save() {
-
+        saveRetailManageInfo({
+            'id': this.state.id,
+            'email': this.state.email_address,
+            'company_name': this.state.company_name,
+            'company_unique_entity_number': this.state.unique_entity_number,
+            'company_address': this.state.company_address,
+            'billing_address': this.state.billing_address,
+            'name': this.state.contact_name,
+            'account_mobile_number': this.state.mobile_number,
+            'account_office_number': this.state.office_number
+        }).then(res => {
+            console.log(res)
+            // if(!this.props.doJest){
+            //     this.refs.Modal.showModal();
+            // }
+            //     this.setState({
+            //         text:"Your details have been successfully submitted. You may click on 'Start Bidding' in the published auction list to standby for the live reverse auction."
+            //     });
+            //     this.getRetailerAuction();
+            //     this.setState({
+            //         btn_status:false,
+            //         disabled:true
+            //     })
+            // }, error => {
+            //     console.log(error);
+            // })
+        })
     }
     Change(type, e) {
         let itemValue = e.target.value;
@@ -192,7 +258,7 @@ export class RetailerRegister extends Component {
 
                                 <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" name={"seller_buyer_tc"} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href="">adfasdfsafd</a></h4>
                                 <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" name={"seller_revv_tc"} />  I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href="">adfasdfsafd</a></h4>
-                                 
+
                                 <div className="retailer_btn">
                                     {btn_html}
                                 </div>
