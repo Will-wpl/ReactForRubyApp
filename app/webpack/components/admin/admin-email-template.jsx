@@ -2,13 +2,20 @@ import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom';
 import {Modal} from '../shared/show-modal';
 import {getEmailList,getEmailListItem,getEmailItemUpdate} from '../../javascripts/componentService/admin/service';
+import { UploadFile } from '../shared/upload';
 export default class EmailTemplates extends Component {
     constructor(props) {
         super(props);
         this.state = {
             text: "",
             email_list:[],
-            listdetail:{}
+            listdetail:{},
+            uploadUrl:'/api/admin/user_attachments?file_type=',
+            fileData:{
+                "LETTER_OF_AUTHORISATION":[
+                    {buttonName:"none",files:[]}
+                ]
+            }
         }
     }
     componentDidMount(){
@@ -40,7 +47,7 @@ export default class EmailTemplates extends Component {
             <div>
                 <div className="retailrank_main">
                     <h3>List of Templates</h3>
-                    <div className="retailrank_box">
+                    <div className="retailrank_box admin_invitation">
                         <div className="table-head">
                             <table className="retailer_fill">
                                 <thead>
@@ -66,6 +73,14 @@ export default class EmailTemplates extends Component {
                                 }
                                 </tbody>
                             </table>
+                        </div>
+                        <div className="lm--formItem lm--formItem--inline string u-mt3">
+                            <label className="lm--formItem-left lm--formItem-label string required">
+                                <abbr title="required">*</abbr> Letter Of Authorisation :
+                            </label>
+                            <div className="lm--formItem-right lm--formItem-control u-grid mg0">
+                                <UploadFile type="LETTER_OF_AUTHORISATION" required="required" showList="2" col_width="12"  showWay="0" fileData={this.state.fileData.LETTER_OF_AUTHORISATION} propsdisabled={false}  uploadUrl={this.state.uploadUrl}/>
+                            </div>
                         </div>
                     </div>
                 </div>
