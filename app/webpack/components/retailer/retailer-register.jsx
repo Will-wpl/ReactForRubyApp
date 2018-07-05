@@ -251,7 +251,7 @@ export class RetailerRegister extends Component {
                                         Upload Documents:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <UploadFile type="RETAILER_DOCUMENTS" required="required" showList="1" showWay="2" fileData={this.state.fileData.RETAILER_DOCUMENTS} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
+                                        <UploadFile type="RETAILER_DOCUMENTS" required="required" showList="1" col_width="12" showWay="2" fileData={this.state.fileData.RETAILER_DOCUMENTS} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
                                     </div>
                                 </div>
 
