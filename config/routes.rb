@@ -30,10 +30,11 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :admin do
-      resources :users, only: %i[show retailers buyers] do
+      resources :users, only: %i[show retailers buyers approval_user] do
         collection do
           get 'retailers'
           get 'buyers'
+          post 'approval_user'
         end
       end
       resources :auctions, only: %i[obtain link create update delete publish hold confirm destroy unpublished published retailers buyers selects send_mails] do

@@ -75,7 +75,7 @@ export class RetailerRegister extends Component {
     }
     submit() {
         submitRetailManageInfo({
-            registration: {
+
                 'id': this.state.id,
                 'email': this.state.email_address,
                 'company_name': this.state.company_name,
@@ -85,7 +85,7 @@ export class RetailerRegister extends Component {
                 'name': this.state.contact_name,
                 'account_mobile_number': this.state.mobile_number,
                 'account_office_number': this.state.office_number
-            }
+
 
         }).then(res => {
             console.log(res)

@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Api::Admin::UsersController, type: :controller do
-
+  let! (:temp_retailer) { create(:user, :with_retailer)}
+  let! (:temp_buyer) { create(:user, :with_buyer, :with_company_buyer)  }
   let!(:retailers) { create_list(:user, 50, :with_retailer) }
   let!(:company_buyers) { create_list(:user, 30, :with_buyer, :with_company_buyer) }
   let!(:individual_buyers) { create_list(:user, 30, :with_buyer, :with_individual_buyer) }
@@ -159,6 +160,34 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
         end
       end
 
+    end
+
+    describe 'Post Approval User' do
+      context 'Approval' do
+        def do_request
+          post :approval_user, params: {user_id: temp_buyer.id, approved: '1', comment: 'user test - approval'}
+        end
+
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash = JSON.parse(response.body)
+          expect(hash['user_base_info']['approval_status']).to eq('1')
+        end
+      end
+
+      context 'Reject' do
+        def do_request
+          post :approval_user, params: {user_id: temp_retailer.id, approved: nil, comment: 'user test - reject'}
+        end
+
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash = JSON.parse(response.body)
+          expect(hash['user_base_info']['approval_status']).to eq('0')
+        end
+      end
     end
   end
 

@@ -57,6 +57,19 @@ class Api::UsersController < Api::BaseController
     render json: user, status: 200
   end
 
+  def approval_user
+    target_user = User.find(params[:user_id])
+    approval_status = params[:approved].blank? ? User::ApprovalStatusReject : User::ApprovalStatusApproved
+    comment = params[:comment]
+    target_user.update(approval_status: approval_status, comment: comment)
+    if approval_status == User::ApprovalStatusApproved
+      UserMailer.approval_email(target_user).deliver_later
+    elsif approval_status == User::ApprovalStatusReject
+      UserMailer.reject_email(target_user).deliver_later
+    end
+    render json: {user_base_info: target_user}, status:200
+  end
+
   private
 
   def get_buyer_headers(params)
@@ -133,6 +146,5 @@ class Api::UsersController < Api::BaseController
     else
       get_default_order(params, headers, users)
     end
-      
   end
 end
