@@ -147,3 +147,6 @@ export  const  getEmailListItem = (id) => {
 export  const  getEmailItemUpdate = (param) => {
     return put('/api/admin/email_templates/'+param.id,{subject:param.subject, body:param.body});
 }
+export  const  getEmailFile = (type) => {
+    return get('/api/admin/user_attachments?file_type='+type);
+}
