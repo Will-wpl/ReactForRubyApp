@@ -2,7 +2,7 @@ require 'engine/workflow'
 require 'engine/node'
 require 'engine/event'
 
-class MultBuyerTenderWorkflow < Workflow
+class MultBuyerTenderWorkflow < BaseTenderWorkflow
   def initialize
     # from 1 is admin , 2 is retailer
     # status 0 is begin(don't do any action), 1 is passed, 2 is pending
