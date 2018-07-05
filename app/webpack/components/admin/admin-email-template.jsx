@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom';
 import {Modal} from '../shared/show-modal';
-import {getEmailList,getEmailListItem,getEmailItemUpdate} from '../../javascripts/componentService/admin/service';
+import {getEmailList,getEmailListItem,getEmailItemUpdate,getEmailFile} from '../../javascripts/componentService/admin/service';
 import { UploadFile } from '../shared/upload';
 export default class EmailTemplates extends Component {
     constructor(props) {
@@ -23,6 +23,13 @@ export default class EmailTemplates extends Component {
             this.setState({email_list:res});
         },error=>{
 
+        })
+        getEmailFile('LETTER_OF_AUTHORISATION').then(res=>{
+            let file = this.state.fileData;
+            file.LETTER_OF_AUTHORISATION[0].files = res;
+            this.setState({
+                fileData:file
+            })
         })
     }
     showEmail(id){
