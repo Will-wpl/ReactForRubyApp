@@ -54,7 +54,7 @@ export default class EmailTemplates extends Component {
             <div>
                 <div className="retailrank_main">
                     <h3>List of Templates</h3>
-                    <div className="retailrank_box admin_invitation">
+                    <div className="admin_invitation u-mt2">
                         <div className="table-head">
                             <table className="retailer_fill">
                                 <thead>
