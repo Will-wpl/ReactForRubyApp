@@ -22,8 +22,8 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
           expect(hash['headers'].size).to eq(3)
-          expect(hash['bodies']['total']).to eq(50)
-          expect(hash['bodies']['data'].size).to eq(50)
+          expect(hash['bodies']['total']).to eq(51)
+          expect(hash['bodies']['data'].size).to eq(51)
           expect(hash['actions'].size).to eq(1)
         end
       end
@@ -38,7 +38,7 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
           expect(hash['headers'].size).to eq(3)
-          expect(hash['bodies']['total']).to eq(50)
+          expect(hash['bodies']['total']).to eq(51)
           expect(hash['bodies']['data'].size).to eq(10)
           expect(hash['actions'].size).to eq(1)
         end
@@ -88,7 +88,7 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
           expect(hash['headers'].size).to eq(4)
-          expect(hash['bodies']['data'].size).to eq(60)
+          expect(hash['bodies']['data'].size).to eq(61)
           expect(hash['actions'].size).to eq(1)
         end
       end
@@ -104,7 +104,7 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
           expect(hash['headers'].size).to eq(4)
-          expect(hash['bodies']['total']).to eq(60)
+          expect(hash['bodies']['total']).to eq(61)
           expect(hash['bodies']['data'].size).to eq(10)
           expect(hash['actions'].size).to eq(1)
         end
@@ -120,7 +120,7 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
           expect(hash['headers'].size).to eq(3)
-          expect(hash['bodies']['total']).to eq(30)
+          expect(hash['bodies']['total']).to eq(31)
           expect(hash['bodies']['data'].size).to eq(10)
           expect(hash['actions'].size).to eq(1)
         end
