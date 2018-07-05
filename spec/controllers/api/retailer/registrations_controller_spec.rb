@@ -19,7 +19,16 @@ RSpec.describe Api::Retailer::RegistrationsController, type: :controller do
 
     describe 'Put update' do
       def do_request
-        put :update, params: { id: retailer_user.id, user: {agree_seller_buyer: '1', agree_seller_revv: '0' } }
+        put :update, params: { id: retailer_user.id, user: {id: '10',
+                                                            email: 'retailer3@example.com',
+                                                            company_name: 'Retailer3 Company',
+                                                            company_unique_entity_number: 'UEN 01234',
+                                                            company_address: 'China DL',
+                                                            billing_address: 'asdf',
+                                                            name: 'Retailer 3',
+                                                            account_mobile_number: '12345678',
+                                                            account_office_number: '87654321',
+                                                            agree_seller_buyer: '1', agree_seller_revv: '0' } }
       end
       before { do_request }
       it 'success' do

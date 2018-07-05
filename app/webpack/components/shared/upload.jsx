@@ -152,7 +152,7 @@ export class UploadFile extends React.Component {
     }
     render() {
         return (
-            <div className={`col-sm-12 col-md-${this.props.col_width?this.props.col_width:"12"}`}>
+            <div className="col-sm-12 col-md-10">
                 <div className="file_box">
                     {this.addinputfile(this.props.type, this.props.required)}
                 </div>

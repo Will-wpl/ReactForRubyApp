@@ -12,7 +12,7 @@ export class RetailerRegister extends Component {
             disabled: false,
             havedata: false,
             allbtnStatus: true,
-            text: "",
+
             email_address: "",
             company_name: "",
             unique_entity_number: "",
@@ -21,6 +21,7 @@ export class RetailerRegister extends Component {
             contact_name: "",
             mobile_number: "",
             office_number: "",
+
             files: [],
             fileData: {
                 "RETAILER_DOCUMENTS": [
@@ -28,13 +29,9 @@ export class RetailerRegister extends Component {
                 ]
             },
             uploadUrl: '/api/retailer/user_attachments?file_type=',
-            showAttachmentFlag: 1,
-            buyerTCurl: "",
-            buyerTCname: "",
-            revvTCurl: "",
-            revvTCname: ""
+            showAttachmentFlag: 1
         }
-
+        this.auctionData = {};
     }
     componentWillMount() {
 
@@ -70,22 +67,6 @@ export class RetailerRegister extends Component {
                     fileData: fileObj
                 })
             }
-            if (res.seller_buyer_tc_attachment) {
-                let buyer = res.seller_buyer_tc_attachment;
-                this.setState({
-                    buyerTCurl: buyer.file_path,
-                    buyerTCname: buyer.file_name
-                })
-
-
-            }
-            if (res.seller_revv_tc_attachment) {
-                let revv = res.seller_revv_tc_attachment;
-                this.setState({
-                    revvTCurl: revv.file_path,
-                    revvTCname: revv.file_name
-                })
-            }
 
         })
     }
@@ -94,7 +75,7 @@ export class RetailerRegister extends Component {
     }
     submit() {
         submitRetailManageInfo({
-            user: {
+
                 'id': this.state.id,
                 'email': this.state.email_address,
                 'company_name': this.state.company_name,
@@ -104,33 +85,53 @@ export class RetailerRegister extends Component {
                 'name': this.state.contact_name,
                 'account_mobile_number': this.state.mobile_number,
                 'account_office_number': this.state.office_number
-            }
-        }).then(res => {
-            this.refs.Modal.showModal();
-            this.setState({
-                text: "Your details have been successfully saved. "
-            });
 
+
+        }).then(res => {
+            console.log(res)
+            // if(!this.props.doJest){
+            //     this.refs.Modal.showModal();
+            // }
+            //     this.setState({
+            //         text:"Your details have been successfully submitted. You may click on 'Start Bidding' in the published auction list to standby for the live reverse auction."
+            //     });
+            //     this.getRetailerAuction();
+            //     this.setState({
+            //         btn_status:false,
+            //         disabled:true
+            //     })
+            // }, error => {
+            //     console.log(error);
+            // })
         })
     }
     save() {
         saveRetailManageInfo({
-            user: {
-                'id': this.state.id,
-                'email': this.state.email_address,
-                'company_name': this.state.company_name,
-                'company_unique_entity_number': this.state.unique_entity_number,
-                'company_address': this.state.company_address,
-                'billing_address': this.state.billing_address,
-                'name': this.state.contact_name,
-                'account_mobile_number': this.state.mobile_number,
-                'account_office_number': this.state.office_number
-            }
+            'id': this.state.id,
+            'email': this.state.email_address,
+            'company_name': this.state.company_name,
+            'company_unique_entity_number': this.state.unique_entity_number,
+            'company_address': this.state.company_address,
+            'billing_address': this.state.billing_address,
+            'name': this.state.contact_name,
+            'account_mobile_number': this.state.mobile_number,
+            'account_office_number': this.state.office_number
         }).then(res => {
-            this.refs.Modal.showModal();
-            this.setState({
-                text: "Your details have been successfully submitted. "
-            });
+            console.log(res)
+            // if(!this.props.doJest){
+            //     this.refs.Modal.showModal();
+            // }
+            //     this.setState({
+            //         text:"Your details have been successfully submitted. You may click on 'Start Bidding' in the published auction list to standby for the live reverse auction."
+            //     });
+            //     this.getRetailerAuction();
+            //     this.setState({
+            //         btn_status:false,
+            //         disabled:true
+            //     })
+            // }, error => {
+            //     console.log(error);
+            // })
         })
     }
     Change(type, e) {
@@ -251,17 +252,16 @@ export class RetailerRegister extends Component {
                                         Upload Documents:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <UploadFile type="RETAILER_DOCUMENTS" required="required" showList="1" col_width="12" showWay="2" fileData={this.state.fileData.RETAILER_DOCUMENTS} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
+                                        <UploadFile type="RETAILER_DOCUMENTS" required="required" showList="1" showWay="2" fileData={this.state.fileData.RETAILER_DOCUMENTS} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
                                     </div>
                                 </div>
 
-                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" name={"seller_buyer_tc"} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href={this.state.buyerTCurl}>{this.state.buyerTCname}</a></h4>
-                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" name={"seller_revv_tc"} />  I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href={this.state.revvTCurl}>{this.state.revvTCname}</a></h4>
+                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" name={"seller_buyer_tc"} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href="">adfasdfsafd</a></h4>
+                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" name={"seller_revv_tc"} />  I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href="">adfasdfsafd</a></h4>
 
                                 <div className="retailer_btn">
                                     {btn_html}
                                 </div>
-                                <Modal text={this.state.text} ref="Modal" />
                             </div>
                         </div>
                     </div>

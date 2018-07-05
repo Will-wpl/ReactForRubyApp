@@ -42,11 +42,10 @@ class Api::UsersController < Api::BaseController
       total = users.count
     end
     headers = get_buyer_headers(params)
-    actions = [{ url: '/admin/users/:id/manage', name: 'Manage', icon: 'manage' }]
+    actions = [{ url: '/admin/users/:id/manage', name: 'View', icon: 'view' }]
     data = get_data(params, headers, users)
     data = data.each do |user|
       user.consumer_type = user.consumer_type == '2' ? 'Company' : 'Individual'
-      user.approval_status = get_approval_status_string(user)
     end
     bodies = { data: data, total: total }
 
@@ -58,6 +57,19 @@ class Api::UsersController < Api::BaseController
     render json: user, status: 200
   end
 
+  def approval_user
+    target_user = User.find(params[:user_id])
+    approval_status = params[:approved].blank? ? User::ApprovalStatusReject : User::ApprovalStatusApproved
+    comment = params[:comment]
+    target_user.update(approval_status: approval_status, comment: comment)
+    if approval_status == User::ApprovalStatusApproved
+      UserMailer.approval_email(target_user).deliver_later
+    elsif approval_status == User::ApprovalStatusReject
+      UserMailer.reject_email(target_user).deliver_later
+    end
+    render json: {user_base_info: target_user}, status:200
+  end
+
   private
 
   def get_buyer_headers(params)
@@ -65,8 +77,7 @@ class Api::UsersController < Api::BaseController
         { name: 'Company Name', field_name: 'company_name' },
         { name: 'Name', field_name: 'name', table_name: 'users' },
         { name: 'Email', field_name: 'email' },
-        { name: 'Consumer Type', field_name: 'consumer_type', is_sort: false },
-        { name: 'Status', field_name: 'approval_status' }
+        { name: 'Consumer Type', field_name: 'consumer_type', is_sort: false }
     ]
     unless params[:consumer_type].nil?
       headers.delete_if { |header| header[:field_name] == 'name' } if params[:consumer_type][0] == '2'
@@ -135,6 +146,5 @@ class Api::UsersController < Api::BaseController
     else
       get_default_order(params, headers, users)
     end
-      
   end
 end

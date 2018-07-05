@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Api::Admin::UsersController, type: :controller do
-
+  let! (:temp_retailer) { create(:user, :with_retailer)}
+  let! (:temp_buyer) { create(:user, :with_buyer, :with_company_buyer)  }
   let!(:retailers) { create_list(:user, 50, :with_retailer) }
   let!(:company_buyers) { create_list(:user, 30, :with_buyer, :with_company_buyer) }
   let!(:individual_buyers) { create_list(:user, 30, :with_buyer, :with_individual_buyer) }
@@ -21,8 +22,8 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
           expect(hash['headers'].size).to eq(3)
-          expect(hash['bodies']['total']).to eq(50)
-          expect(hash['bodies']['data'].size).to eq(50)
+          expect(hash['bodies']['total']).to eq(51)
+          expect(hash['bodies']['data'].size).to eq(51)
           expect(hash['actions'].size).to eq(1)
         end
       end
@@ -37,7 +38,7 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
           expect(hash['headers'].size).to eq(3)
-          expect(hash['bodies']['total']).to eq(50)
+          expect(hash['bodies']['total']).to eq(51)
           expect(hash['bodies']['data'].size).to eq(10)
           expect(hash['actions'].size).to eq(1)
         end
@@ -86,8 +87,8 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
         it 'success' do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
-          expect(hash['headers'].size).to eq(5)
-          expect(hash['bodies']['data'].size).to eq(60)
+          expect(hash['headers'].size).to eq(4)
+          expect(hash['bodies']['data'].size).to eq(61)
           expect(hash['actions'].size).to eq(1)
         end
       end
@@ -102,8 +103,8 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
         it 'success' do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
-          expect(hash['headers'].size).to eq(5)
-          expect(hash['bodies']['total']).to eq(60)
+          expect(hash['headers'].size).to eq(4)
+          expect(hash['bodies']['total']).to eq(61)
           expect(hash['bodies']['data'].size).to eq(10)
           expect(hash['actions'].size).to eq(1)
         end
@@ -118,8 +119,8 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
         it 'success' do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
-          expect(hash['headers'].size).to eq(4)
-          expect(hash['bodies']['total']).to eq(30)
+          expect(hash['headers'].size).to eq(3)
+          expect(hash['bodies']['total']).to eq(31)
           expect(hash['bodies']['data'].size).to eq(10)
           expect(hash['actions'].size).to eq(1)
         end
@@ -133,7 +134,7 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
         it 'success' do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
-          expect(hash['headers'].size).to eq(4)
+          expect(hash['headers'].size).to eq(3)
           expect(hash['headers'][0]['field_name']).to eq('company_name')
           expect(hash['bodies']['total']).to eq(1)
           expect(hash['bodies']['data'].size).to eq(1)
@@ -150,7 +151,7 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
         it 'success' do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
-          expect(hash['headers'].size).to eq(4)
+          expect(hash['headers'].size).to eq(3)
           expect(hash['headers'][0]['field_name']).to eq('company_name')
           expect(hash['bodies']['total']).to eq(1)
           expect(hash['bodies']['data'].size).to eq(1)
@@ -159,6 +160,34 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
         end
       end
 
+    end
+
+    describe 'Post Approval User' do
+      context 'Approval' do
+        def do_request
+          post :approval_user, params: {user_id: temp_buyer.id, approved: '1', comment: 'user test - approval'}
+        end
+
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash = JSON.parse(response.body)
+          expect(hash['user_base_info']['approval_status']).to eq('1')
+        end
+      end
+
+      context 'Reject' do
+        def do_request
+          post :approval_user, params: {user_id: temp_retailer.id, approved: nil, comment: 'user test - reject'}
+        end
+
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash = JSON.parse(response.body)
+          expect(hash['user_base_info']['approval_status']).to eq('0')
+        end
+      end
     end
   end
 

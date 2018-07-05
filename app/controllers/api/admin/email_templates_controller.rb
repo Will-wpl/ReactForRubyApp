@@ -17,10 +17,13 @@ class Api::Admin::EmailTemplatesController < Api::BaseController
     return render json: nil, status: 400 if id.nil?
     template = EmailTemplate.find_by(id: id)
     return render json: nil, status: 400 if template.nil?
-
-    template.update(subject: params[:subject], body: params[:body])
+    template.update(model_params)
     render json: nil, status: 200
   end
 
+  private
 
+  def model_params
+    params.require(:email_template).permit(:subject, :body)
+  end
 end

@@ -12,11 +12,15 @@ class Api::Retailer::RegistrationsController < Api::RegistrationsController
     # get buyer-revv-t&c document
     seller_revv_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_REVV_TC)
 
+    # get letter-of-authorisation document
+    letter_of_authorisation_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Letter_Authorisation)
+
     # return json
     render json: { user_base_info: current_user,
                    self_attachment: user_attachment,
                    seller_buyer_tc_attachment: seller_buyer_tc_attachment,
-                   seller_revv_tc_attachment: seller_revv_tc_attachment }, status: 200
+                   seller_revv_tc_attachment: seller_revv_tc_attachment,
+                   letter_of_authorisation_attachment: letter_of_authorisation_attachment }, status: 200
   end
 
   # update retailer registration information

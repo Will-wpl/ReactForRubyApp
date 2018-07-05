@@ -4,11 +4,7 @@ class Auction < ApplicationRecord
   # Discarded fields: lt_peak lt_off_peak hts_peak hts_off_peak htl_peak htl_off_peak eht_peak eht_off_peak
 
 
-  PublishStatusPublished = '1'.freeze
-  SingleBuyerType = '0'.freeze
-  MultipleBuyerType = '1'.freeze
-  AllowDeviation = '1'.freeze
-  NotAllowDeviation = '0'.freeze
+PublishStatusPublished = '1'.freeze
   # Extends
 
   # Includes
