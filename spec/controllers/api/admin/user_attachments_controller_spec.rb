@@ -8,6 +8,18 @@ RSpec.describe Api::Admin::UserAttachmentsController, type: :controller do
   context 'admin user' do
     before { sign_in admin_user }
 
+    describe 'GET last file by type' do
+      context 'Base get' do
+        def do_request
+          put :find_last_by_type, params: {id: tc.id, file_type:'SELLER_BUYER_TC'}
+        end
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+        end
+      end
+    end
+
     describe 'GET index' do
       context 'Base get' do
         def do_request

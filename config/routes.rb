@@ -99,7 +99,10 @@ Rails.application.routes.draw do
           get 'award'
         end
         end
-      resources :user_attachments, only: %i[index create destroy] do
+      resources :user_attachments, only: %i[index create destroy find_last_by_type] do
+        member do
+          put 'find_last_by_type'
+        end
       end
       resources :user_extensions, only: %i[index]
       resources :email_templates, only: %i[index show update]
@@ -164,9 +167,10 @@ Rails.application.routes.draw do
           post 'acknowledge_all'
         end
       end
-      resources :registrations, only: %i[index update sign_up] do
+      resources :registrations, only: %i[index update sign_up validate] do
         member do
           put 'sign_up'
+          put 'validate'
         end
       end
       resources :user_attachments, only: %i[create update find_attachment_by_user] do
@@ -199,9 +203,10 @@ Rails.application.routes.draw do
       resources :auction_results, only: %i[index] do
 
       end
-      resources :registrations, only: %i[index update sign_up] do
+      resources :registrations, only: %i[index update sign_up validate] do
         member do
           put 'sign_up'
+          put 'validate'
         end
       end
       resources :user_attachments, only: %i[create update find_attachment_by_user] do

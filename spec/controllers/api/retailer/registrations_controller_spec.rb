@@ -5,6 +5,24 @@ RSpec.describe Api::Retailer::RegistrationsController, type: :controller do
 
   context 'save retailer information' do
     before { sign_in retailer_user }
+
+    describe 'Validate user info' do
+      def do_request
+        put :validate, params: { id: retailer_user.id, user: {user_id: retailer_user.id,
+                                                              company_name: 'abc',
+                                                              company_unique_entity_number: 'UEN',
+                                                              email: 'abc@email.com'} }
+      end
+      before { do_request }
+      it 'success' do
+        hash_body = JSON.parse(response.body)
+        expect(hash_body).to have_content('validate_result')
+        expect(hash_body).to have_content('message')
+        expect(hash_body['validate_result']).to eq(true)
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
     describe 'Get index' do
       def do_request
         get :index

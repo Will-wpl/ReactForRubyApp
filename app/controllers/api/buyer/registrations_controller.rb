@@ -57,7 +57,65 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     render json: { user: @user }, status: 200
   end
 
+  # validate retailer info
+  # params:
+  #   user: {id: 'Buyer Id', company_name:'Company_name', email:'Email',company_unique_entity_number:'UEN'}
+  #   buyer_entities: JSON array -> [{contact_email:'Entity email'}]
+  # Logic:
+  #   Unique check: User-> Company Name, Company UEN, Email
+  #   Email Check:
+  #     a. Buyer email must be difference with it's entity contact email.
+  #     b. Buyer entities's emails must be unique.
+  def validate
+    validation_user = params[:user]
+    validate_final_result = true
+    final_message = ''
+    # validate Company name field
+    validate_result, message = validate_user_field('company_name',
+                                                   validation_user['company_name'],
+                                                   [validation_user['id']])
+    validate_final_result = validate_final_result & validate_result
+    final_message = final_message + message + '\r' unless message.blank?
+
+    # validate Email field
+    validate_result, message = validate_user_field('email',
+                                                   validation_user['email'],
+                                                   [validation_user['id']])
+    validate_final_result = validate_final_result & validate_result
+    final_message = final_message + message + '\r' unless message.blank?
+
+    # validate Company UEN field
+    validate_result, message = validate_user_field('company_unique_entity_number',
+                                                   validation_user['company_unique_entity_number'],
+                                                   [validation_user['id']])
+
+    validate_final_result = validate_final_result & validate_result
+    final_message = final_message + message + '\r' unless message.blank?
+
+    # validate user entities
+    buyer_entities = JSON.parse(params[:buyer_entities])
+    validate_result, message = validate_buyer_entities_info(validation_user, buyer_entities)
+    validate_final_result = validate_final_result & validate_result
+    final_message = final_message + message unless message.blank?
+
+    render json: { validate_result: validate_final_result, message: final_message }, status: 200
+  end
+
   private
+  def validate_buyer_entities_info(buyer, buyer_entities)
+    entity_emails = []
+    buyer_entities.each { |x| entity_emails.push(x['contact_email']) }
+    message = 'Buyer entity contact email cannot same with buyers email.\r' unless entity_emails.find { |x| x == buyer['email'] }.blank?
+
+    original_entiies_size = entity_emails.size
+    entity_emails = entity_emails.uniq
+     filted_entiies_size = entity_emails.size
+
+    message = '' if message.blank?
+    message = message + 'Buyer entity contact email duplicated' if original_entiies_size > filted_entiies_size
+
+    [message.blank?, message]
+  end
 
   def update_buyer_entities(buyer_entities)
     ids = []

@@ -40,4 +40,37 @@ class Api::Retailer::RegistrationsController < Api::RegistrationsController
     render json: { user: @user }, status: 200
   end
 
+  # validate retailer info
+  # params:
+  #   user: {id: 'Buyer Id', company_name:'Company_name', email:'Email',company_unique_entity_number:'UEN'}
+  # Logic:
+  #   Unique check: User-> Company Name, Company UEN, Email
+  def validate
+    validation_user = params[:user]
+    validate_final_result = true
+    final_message = ''
+    # validate Company name field
+    validate_result, message = validate_user_field('company_name',
+                                                   validation_user['company_name'],
+                                                   [validation_user['id']])
+    validate_final_result = validate_final_result & validate_result
+    final_message = final_message + message + '\r' unless message.blank?
+
+    # validate Email field
+    validate_result, message = validate_user_field('email',
+                                                   validation_user['email'],
+                                                   [validation_user['id']])
+    validate_final_result = validate_final_result & validate_result
+    final_message = final_message + message + '\r' unless message.blank?
+
+    # validate Company UEN field
+    validate_result, message = validate_user_field('company_unique_entity_number',
+                                                   validation_user['company_unique_entity_number'],
+                                                   [validation_user['id']])
+
+    validate_final_result = validate_final_result & validate_result
+    final_message = final_message + message + '\r' unless message.blank?
+
+    render json: { validate_result: validate_final_result, message: final_message }, status: 200
+  end
 end

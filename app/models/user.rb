@@ -62,6 +62,7 @@ class User < ApplicationRecord
   scope :selected_buyers_action_status, ->(auction_id, action_status) { includes(:consumptions).where(consumptions: { auction_id: auction_id, action_status: action_status }) }
   scope :exclude, ->(ids) { where('users.id not in (?)', ids) }
   scope :admins, -> { includes(:roles).where(roles: { name: 'admin' }) }
+  scope :find_by_field_value, ->(field_name, field_value) { where(' ? = ? ', field_name, field_value)}
   # Callbacks
 
   # Delegates
@@ -69,4 +70,11 @@ class User < ApplicationRecord
   # Custom
 
   # Methods (class methods before instance methods)
+  def self.duplicated_field_value(field_name, field_value, except_ids)
+    is_duplicated = false
+    same_field_value_users = User.find_by_field_value(field_name, field_value).where.not(id: except_ids)
+    # same_field_value_users.delete_if { |x| except_ids.include?(x.id) } unless except_ids.blank?
+    is_duplicated = true unless same_field_value_users.blank?
+    is_duplicated
+  end
 end
