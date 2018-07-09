@@ -14,8 +14,8 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
                                           company_name: 'abc',
                                           company_unique_entity_number: 'UEN',
                                           email: 'test_email@email.com'},
-                                   buyer_entities: [ {contact_email: 'test_email1@email.com'},
-                                                     {contact_email: 'test_email1@email.com'} ].to_json}
+                                   buyer_entities: [{ contact_email: 'test_email1@email.com' },
+                                                    {contact_email: 'test_email1@email.com' }].to_json}
         end
         before { do_request }
         it 'success' do
@@ -34,8 +34,8 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
                                           company_name: 'abc',
                                           company_unique_entity_number: 'UEN',
                                           email: 'test_email@email.com'},
-                                   buyer_entities: [ {contact_email: 'test_email@email.com'},
-                                                     {contact_email: 'test_email1@email.com'} ].to_json}
+                                   buyer_entities: [{ contact_email: 'test_email@email.com' },
+                                                    { contact_email: 'test_email1@email.com' }].to_json}
         end
         before { do_request }
         it 'success' do
@@ -54,8 +54,8 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
                                           company_name: 'abc',
                                           company_unique_entity_number: 'UEN',
                                           email: 'test_email@email.com'},
-                                   buyer_entities: [ {contact_email: 'test_email1@email.com'},
-                                                     {contact_email: 'test_email2@email.com'} ].to_json}
+                                   buyer_entities: [{ contact_email: 'test_email1@email.com' },
+                                                    { contact_email: 'test_email2@email.com' }].to_json}
         end
         before { do_request }
         it 'success' do
@@ -96,7 +96,16 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
 
         buyer_entities = [buyer_entity_1, buyer_entity_2 ]
 
-        put :update, params: { id: company_buyer.id, user: {agree_seller_buyer: '1', agree_buyer_revv: '0' }, buyer_entities: buyer_entities.to_json}
+        put :update, params: { id: company_buyer.id,
+                               user: { name: 'buyer3',
+                                       email: 'cbuyer3@example.com',
+                                       company_name: 'Dalian Buyer',
+                                       company_address: 'cbuyer3@example.com',
+                                       company_unique_entity_number: 'UEN 01234',
+                                       email: 'cbuyer3@example.com',
+                                       agree_seller_buyer: '1',
+                                       agree_buyer_revv: '0' },
+                               buyer_entities: buyer_entities.to_json}
       end
       before { do_request }
       it 'success' do
