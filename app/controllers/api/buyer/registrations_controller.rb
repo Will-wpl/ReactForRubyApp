@@ -10,7 +10,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     user_attachment = UserAttachment.find_last_by_user(@user.id)
 
     # get buyer entities
-    buyer_entities = user.company_buyer_entities
+    buyer_entities = user.company_buyer_entities.order(updated_at: :asc)
 
     # get seller-buyer-t&c document
     seller_buyer_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)
