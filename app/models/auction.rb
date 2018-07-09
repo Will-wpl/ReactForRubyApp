@@ -5,6 +5,10 @@ class Auction < ApplicationRecord
 
 
 PublishStatusPublished = '1'.freeze
+SingleBuyerType = '0'.freeze
+MultipleBuyerType = '1'.freeze
+AllowDeviation = '1'.freeze
+NotAllowDeviation = '0'.freeze
   # Extends
 
   # Includes

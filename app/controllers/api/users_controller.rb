@@ -11,9 +11,9 @@ class Api::UsersController < Api::BaseController
       total = users.count
     end
     headers = [
-      { name: 'Company Name', field_name: 'company_name' },
-      { name: 'License Number', field_name: 'company_license_number' },
-      { name: 'Status', field_name: 'approval_status' }
+        { name: 'Company Name', field_name: 'company_name' },
+        { name: 'License Number', field_name: 'company_license_number' },
+        { name: 'Status', field_name: 'approval_status' }
     ]
     actions = [{ url: '/admin/users/:id/manage', name: 'Manage', icon: 'manage' }]
     users = get_retailer_order_list(params, headers, users)
@@ -42,10 +42,11 @@ class Api::UsersController < Api::BaseController
       total = users.count
     end
     headers = get_buyer_headers(params)
-    actions = [{ url: '/admin/users/:id/manage', name: 'View', icon: 'view' }]
+    actions = [{ url: '/admin/users/:id/manage', name: 'Manage', icon: 'manage' }]
     data = get_data(params, headers, users)
     data = data.each do |user|
       user.consumer_type = user.consumer_type == '2' ? 'Company' : 'Individual'
+      user.approval_status = get_approval_status_string(user)
     end
     bodies = { data: data, total: total }
 
@@ -77,7 +78,8 @@ class Api::UsersController < Api::BaseController
         { name: 'Company Name', field_name: 'company_name' },
         { name: 'Name', field_name: 'name', table_name: 'users' },
         { name: 'Email', field_name: 'email' },
-        { name: 'Consumer Type', field_name: 'consumer_type', is_sort: false }
+        { name: 'Consumer Type', field_name: 'consumer_type', is_sort: false },
+        { name: 'Status', field_name: 'approval_status' }
     ]
     unless params[:consumer_type].nil?
       headers.delete_if { |header| header[:field_name] == 'name' } if params[:consumer_type][0] == '2'
@@ -146,5 +148,6 @@ class Api::UsersController < Api::BaseController
     else
       get_default_order(params, headers, users)
     end
+
   end
 end
