@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180702074350) do
+ActiveRecord::Schema.define(version: 20180706094723) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -222,7 +222,19 @@ ActiveRecord::Schema.define(version: 20180702074350) do
     t.datetime "updated_at", null: false
     t.string "premise_address"
     t.decimal "contracted_capacity"
+    t.string "existing_plan"
+    t.string "contract_expiry"
+    t.string "blk_or_unit"
+    t.string "street"
+    t.string "unit_number"
+    t.string "postal_code"
+    t.decimal "totals"
+    t.decimal "peak_pct"
+    t.bigint "company_buyer_entity_id"
+    t.bigint "user_attachment_id"
+    t.index ["company_buyer_entity_id"], name: "index_consumption_details_on_company_buyer_entity_id"
     t.index ["consumption_id"], name: "index_consumption_details_on_consumption_id"
+    t.index ["user_attachment_id"], name: "index_consumption_details_on_user_attachment_id"
   end
 
   create_table "consumptions", force: :cascade do |t|
@@ -241,6 +253,7 @@ ActiveRecord::Schema.define(version: 20180702074350) do
     t.decimal "eht_peak"
     t.decimal "eht_off_peak"
     t.string "acknowledge"
+    t.string "contract_duration"
     t.index ["auction_id"], name: "index_consumptions_on_auction_id"
     t.index ["user_id"], name: "index_consumptions_on_user_id"
   end
@@ -381,7 +394,9 @@ ActiveRecord::Schema.define(version: 20180702074350) do
   add_foreign_key "auction_histories", "users"
   add_foreign_key "auction_results", "auctions"
   add_foreign_key "company_buyer_entities", "users"
+  add_foreign_key "consumption_details", "company_buyer_entities"
   add_foreign_key "consumption_details", "consumptions"
+  add_foreign_key "consumption_details", "user_attachments"
   add_foreign_key "consumptions", "auctions"
   add_foreign_key "consumptions", "users"
   add_foreign_key "user_extensions", "users"

@@ -87,7 +87,7 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
         it 'success' do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
-          expect(hash['headers'].size).to eq(4)
+          expect(hash['headers'].size).to eq(5)
           expect(hash['bodies']['data'].size).to eq(61)
           expect(hash['actions'].size).to eq(1)
         end
@@ -103,7 +103,7 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
         it 'success' do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
-          expect(hash['headers'].size).to eq(4)
+          expect(hash['headers'].size).to eq(5)
           expect(hash['bodies']['total']).to eq(61)
           expect(hash['bodies']['data'].size).to eq(10)
           expect(hash['actions'].size).to eq(1)
@@ -119,7 +119,7 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
         it 'success' do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
-          expect(hash['headers'].size).to eq(3)
+          expect(hash['headers'].size).to eq(4)
           expect(hash['bodies']['total']).to eq(31)
           expect(hash['bodies']['data'].size).to eq(10)
           expect(hash['actions'].size).to eq(1)
@@ -134,7 +134,7 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
         it 'success' do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
-          expect(hash['headers'].size).to eq(3)
+          expect(hash['headers'].size).to eq(4)
           expect(hash['headers'][0]['field_name']).to eq('company_name')
           expect(hash['bodies']['total']).to eq(1)
           expect(hash['bodies']['data'].size).to eq(1)
@@ -151,7 +151,7 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
         it 'success' do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
-          expect(hash['headers'].size).to eq(3)
+          expect(hash['headers'].size).to eq(4)
           expect(hash['headers'][0]['field_name']).to eq('company_name')
           expect(hash['bodies']['total']).to eq(1)
           expect(hash['bodies']['data'].size).to eq(1)
@@ -159,6 +159,7 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
           expect(hash['actions'].size).to eq(1)
         end
       end
+
 
     end
 
