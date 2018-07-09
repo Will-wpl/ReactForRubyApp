@@ -249,53 +249,56 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
 
     describe 'PUT new update' do
       def do_request(id, auction)
-        common_contract = {
-                           starting_price_lt_peak: 0.1888,
-                           starting_price_lt_off_peak: 0.1888,
-                           starting_price_hts_peak: 0.1888,
-                           starting_price_hts_off_peak: 0.1888,
-                           starting_price_htl_peak: 0.1888,
-                           starting_price_htl_off_peak: 0.1888,
-                           starting_price_eht_peak: 0.1888,
-                           starting_price_eht_off_peak: 0.1888,
-                           reserve_price_lt_peak: 0.0988,
-                           reserve_price_lt_off_peak: 0.0988,
-                           reserve_price_hts_peak: 0.0988,
-                           reserve_price_hts_off_peak: 0.0988,
-                           reserve_price_htl_peak: 0.0988,
-                           reserve_price_htl_off_peak: 0.0988,
-                           reserve_price_eht_peak: 0.0988,
-                           reserve_price_eht_off_peak: 0.0988}
-        contract_6 = common_contract
-        contract_6[:contract_duration] = '6'
-        contract_12 = common_contract
-        contract_12[:contract_duration] = '12'
-        contract_24 = common_contract
-        contract_24[:contract_duration] = '24'
-        contracts = [contract_6 , contract_12, contract_24]
-        auction_object = {
-            name: 'Hello world',
-            start_datetime: auction.start_datetime,
-            contract_period_start_date: auction.contract_period_start_date,
-            duration: auction.duration,
-            actual_begin_time: auction.actual_begin_time,
-            actual_end_time: auction.actual_end_time,
-            publish_status: auction.publish_status,
-            hold_status: auction.hold_status,
-            time_extension: '0',
-            average_price: '2',
-            retailer_mode: '3',
-            starting_price_time: 2,
-            buyer_type: '0',
-            allow_deviation: '1',
-            auction_contracts: contracts.to_json
-        }
-
-        put :update, params: { id: id, auction: auction_object }
+        put :update, params: { id: id, auction: auction }
       end
 
       context 'Has create an auction' do
-        before { do_request(0, auction) }
+        before do
+          common_contract = {
+              starting_price_lt_peak: 0.1888,
+              starting_price_lt_off_peak: 0.1888,
+              starting_price_hts_peak: 0.1888,
+              starting_price_hts_off_peak: 0.1888,
+              starting_price_htl_peak: 0.1888,
+              starting_price_htl_off_peak: 0.1888,
+              starting_price_eht_peak: 0.1888,
+              starting_price_eht_off_peak: 0.1888,
+              reserve_price_lt_peak: 0.0988,
+              reserve_price_lt_off_peak: 0.0988,
+              reserve_price_hts_peak: 0.0988,
+              reserve_price_hts_off_peak: 0.0988,
+              reserve_price_htl_peak: 0.0988,
+              reserve_price_htl_off_peak: 0.0988,
+              reserve_price_eht_peak: 0.0988,
+              reserve_price_eht_off_peak: 0.0988}
+          contract_6 = common_contract
+          contract_6[:contract_duration] = '6'
+          contract_12 = common_contract
+          contract_12[:contract_duration] = '12'
+          contract_24 = common_contract
+          contract_24[:contract_duration] = '24'
+          contracts = [contract_6 , contract_12, contract_24]
+          auction_object = {
+              name: 'Hello world',
+              start_datetime: auction.start_datetime,
+              contract_period_start_date: auction.contract_period_start_date,
+              duration: auction.duration,
+              actual_begin_time: auction.actual_begin_time,
+              actual_end_time: auction.actual_end_time,
+              publish_status: auction.publish_status,
+              hold_status: auction.hold_status,
+              time_extension: '0',
+              average_price: '2',
+              retailer_mode: '3',
+              starting_price_time: 2,
+              buyer_type: '0',
+              allow_deviation: '1',
+              auction_contracts: contracts.to_json
+          }
+
+
+          do_request(0, auction_object)
+        end
         it 'success' do
           hash_body = JSON.parse(response.body)
           expect(hash_body['id']).not_to eq(auction.id)
@@ -305,17 +308,45 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
           expect(response).to have_http_status(201)
         end
       end
-      #
-      # context 'has updated an auction' do
-      #   before { do_request(auction.id, auction) }
-      #   it 'success' do
-      #     hash_body = JSON.parse(response.body)
-      #     expect(hash_body['id']).to eq(auction.id)
-      #     expect(hash_body['name']).to eq('Hello world')
-      #     expect(hash_body['average_price']).to eq('2')
-      #     expect(response).to have_http_status(:ok)
-      #   end
-      # end
+
+      context 'has updated an auction' do
+        let! (:auction_new) { create(:auction, :for_next_month, :upcoming) }
+        let!(:six_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '6') }
+        let!(:twelve_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '12') }
+        let!(:twenty_four_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '24') }
+        before do
+          contract_6 = six_month_contract
+          contracts = [contract_6]
+          auction_object = {
+              id: auction_new.id,
+              name: 'Hello world',
+              start_datetime: auction_new.start_datetime,
+              contract_period_start_date: auction_new.contract_period_start_date,
+              duration: auction_new.duration,
+              actual_begin_time: auction_new.actual_begin_time,
+              actual_end_time: auction_new.actual_end_time,
+              publish_status: auction_new.publish_status,
+              hold_status: auction_new.hold_status,
+              time_extension: '0',
+              average_price: '2',
+              retailer_mode: '3',
+              starting_price_time: 2,
+              buyer_type: '0',
+              allow_deviation: '1',
+              auction_contracts: contracts.to_json
+          }
+          do_request(auction_new.id, auction_object)
+        end
+
+        it 'success' do
+          hash_body = JSON.parse(response.body)
+          expect(hash_body['id']).to eq(auction_new.id)
+          expect(hash_body['name']).to eq('Hello world')
+          expect(hash_body['average_price']).to eq('2')
+          expect(hash_body['auction_contracts'].count).to eq(1)
+          expect(response).to have_http_status(:ok)
+        end
+      end
       #
       # context 'has updated an auction, has retailers' do
       #
