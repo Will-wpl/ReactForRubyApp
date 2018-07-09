@@ -14,16 +14,7 @@ class Api::AuctionsController < Api::BaseController
   # PATCH update auction by ajax
   def update
     if params[:id] == '0' # create
-      ActiveRecord::Base.transaction do
-        create_auction_at_update
-        if @auction.save!
-          unless params[:auction][:auction_contracts].nil?
-            save_auction_contracts(params[:auction][:auction_contracts] , @auction)
-          end
-          AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
-          render json: get_auction_details(@auction), status: 201
-        end
-      end
+      auction_update_create_func
     else # update
       # params[:auction]['total_volume'] = Auction.set_total_volume(model_params[:total_lt_peak], model_params[:total_lt_off_peak], model_params[:total_hts_peak], model_params[:total_hts_off_peak], model_params[:total_htl_peak], model_params[:total_htl_off_peak])
       if @auction.update(model_params)
@@ -464,6 +455,19 @@ class Api::AuctionsController < Api::BaseController
       AuctionContract.create!(contract)
     end
 
+  end
+
+  def auction_update_create_func
+    ActiveRecord::Base.transaction do
+      create_auction_at_update
+      if @auction.save!
+        unless params[:auction][:auction_contracts].nil?
+          save_auction_contracts(params[:auction][:auction_contracts] , @auction)
+        end
+        AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
+        render json: get_auction_details(@auction), status: 201
+      end
+    end
   end
 
   def update_auction_at_update

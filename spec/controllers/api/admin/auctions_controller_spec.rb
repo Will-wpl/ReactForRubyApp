@@ -301,6 +301,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
           expect(hash_body['id']).not_to eq(auction.id)
           expect(hash_body['name']).to eq('Hello world')
           expect(hash_body['average_price']).to eq('2')
+          expect(hash_body['auction_contracts'].count).to eq(3)
           expect(response).to have_http_status(201)
         end
       end
