@@ -10,6 +10,8 @@ export class UploadFile extends React.Component {
             showWay: this.props.showWay, //1 attachment list show all , attachment show only last one 
             uploadUrl: this.props.uploadUrl
         }
+        // console.log("this.props.fileData")
+        // console.log(this.props.fileData)
     }
     componentDidMount() {
     }
@@ -20,7 +22,7 @@ export class UploadFile extends React.Component {
             {
                 this.state.fileData.map((item, index) =>
                     <div className="col-sm-12 col-md-12 u-grid" key={index}>
-                        <div className="col-sm-12 col-md-10 u-cell">
+                        <div className={`col-sm-12 col-md-${this.props.col_width?this.props.col_width:"10"} u-cell`}>
                             <a className="upload_file_btn">
                                 <dfn>No file selected...</dfn>
                                 {/* accept="application/pdf,application/msword" */}
