@@ -485,7 +485,9 @@ class Api::AuctionsController < Api::BaseController
   def auction_update_update_func
     ActiveRecord::Base.transaction do
       if @auction.update!(model_params)
-        update_auction_contracts(params[:auction][:auction_contracts] , @auction)
+        unless params[:auction][:auction_contracts].nil?
+          update_auction_contracts(params[:auction][:auction_contracts] , @auction)
+        end
         if @auction.publish_status == Auction::PublishStatusPublished
           update_auction_at_update
         end
