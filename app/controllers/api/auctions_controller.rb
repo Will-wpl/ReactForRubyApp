@@ -7,18 +7,14 @@ class Api::AuctionsController < Api::BaseController
       render json: nil
     else
       auction = Auction.find(params[:id])
-      render json: auction, status: 200
+      render json: get_auction_details(auction), status: 200
     end
   end
 
   # PATCH update auction by ajax
   def update
     if params[:id] == '0' # create
-      create_auction_at_update
-      if @auction.save
-        AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
-        render json: @auction, status: 201
-      end
+      auction_update_create_func
     else # update
       # params[:auction]['total_volume'] = Auction.set_total_volume(model_params[:total_lt_peak], model_params[:total_lt_off_peak], model_params[:total_hts_peak], model_params[:total_hts_off_peak], model_params[:total_htl_peak], model_params[:total_htl_off_peak])
       if @auction.update(model_params)
@@ -394,7 +390,8 @@ class Api::AuctionsController < Api::BaseController
 
   def model_params
     params.require(:auction).permit(:name, :start_datetime, :contract_period_start_date, :contract_period_end_date, :duration, :reserve_price, :actual_begin_time, :actual_end_time, :total_volume, :publish_status, :published_gid,
-                                    :total_lt_peak, :total_lt_off_peak, :total_hts_peak, :total_hts_off_peak, :total_htl_peak, :total_htl_off_peak, :total_eht_peak, :total_eht_off_peak, :hold_status, :time_extension, :average_price, :retailer_mode, :starting_price)
+                                    :total_lt_peak, :total_lt_off_peak, :total_hts_peak, :total_hts_off_peak, :total_htl_peak, :total_htl_off_peak, :total_eht_peak, :total_eht_off_peak, :hold_status, :time_extension, :average_price, :retailer_mode, :starting_price,
+                                    :starting_price_time, :buyer_type, :allow_deviation )
   end
 
   def set_link(auctionId, addr)
@@ -447,6 +444,30 @@ class Api::AuctionsController < Api::BaseController
     @auction.total_eht_peak = 0
     @auction.total_eht_off_peak = 0
     @auction.total_volume = 0
+  end
+
+  def save_auction_contracts(auction_contracts, auction)
+    contracts = JSON.parse(auction_contracts)
+    contracts.each do |contract|
+      contract[:auction_id] = auction.id
+      month = contract[:contract_duration].to_i
+      contract[:contract_period_end_date] = DateTime.now.advance(months: month).advance(days: -1)
+      AuctionContract.create!(contract)
+    end
+
+  end
+
+  def auction_update_create_func
+    ActiveRecord::Base.transaction do
+      create_auction_at_update
+      if @auction.save!
+        unless params[:auction][:auction_contracts].nil?
+          save_auction_contracts(params[:auction][:auction_contracts] , @auction)
+        end
+        AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
+        render json: get_auction_details(@auction), status: 201
+      end
+    end
   end
 
   def update_auction_at_update
@@ -586,5 +607,11 @@ class Api::AuctionsController < Api::BaseController
 
   def get_buyer_action_value(consumption)
     consumption.nil? ? nil : consumption.id
+  end
+
+  def get_auction_details(auction)
+    auction_json = auction.attributes.dup
+    auction_json[:auction_contracts] = auction.auction_contracts
+    auction_json
   end
 end

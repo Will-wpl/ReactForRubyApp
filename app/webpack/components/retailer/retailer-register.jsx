@@ -183,13 +183,13 @@ export class RetailerRegister extends Component {
                         <div className="u-grid admin_invitation">
                             <div className="col-sm-12 col-md-6 push-md-3">
                                 <h3 className="u-mt3 u-mb1">Retailer Register Page</h3>
-                                {/* <h4 className="u-mt1 u-mb1">Account Info</h4> */}
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
                                         <abbr title="required">*</abbr> Email:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="email_address" value={this.state.email_address} onChange={this.Change.bind(this, 'email_address')} disabled={this.state.disabled} ref="email_address" maxLength="50" required aria-required="true" pattern="\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" placeholder="Email" />
+                                        <div className='errormessage' id='email_address_message'>9999</div>
                                     </div>
                                 </div>
                                 <h4 className="u-mt1 u-mb1">Company Info</h4>

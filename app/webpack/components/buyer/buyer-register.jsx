@@ -55,6 +55,7 @@ export class BuyerRegister extends Component {
         fileObj = this.state.fileData;
         entityObj = this.state.user_entity_data;
         getBuyerUserInfo().then(res => {
+            console.log(res)
             if (res.user_base_info) {
                 let item = res.user_base_info;
                 this.setState({
@@ -86,41 +87,38 @@ export class BuyerRegister extends Component {
                 })
             }
 
-            let entity = [
-                {
-                    user_company_name: "1",
-                    user_company_uen: "2",
-                    user_company_address: "3",
-                    user_billing_address: "4",
-                    user_bill_attention_to: "5",
-                    user_contact_name: "6",
-                    user_contact_email: "7",
-                    user_contact_mobile_no: "8",
-                    user_contact_office_no: "9",
+            if (res.buyer_entities) {
+                let entity = res.buyer_entities;
+                let user_entity=[];
+                if (entity.length > 0) {
+                    this.setState({
+                        user_company_name: entity[0].company_name,
+                        user_company_uen: entity[0].company_uen,
+                        user_company_address: entity[0].company_address,
+                        user_billing_address: entity[0].billing_address,
+                        user_bill_attention_to: entity[0].bill_attention_to,
+                        user_contact_name: entity[0].contact_name,
+                        user_contact_email: entity[0].contact_email,
+                        user_contact_mobile_no: entity[0].contact_mobile_no,
+                        user_contact_office_no: entity[0].contact_office_no
+                    })
+
+                    if(entity.length>1)
+                    {
+                        res.buyer_entities.map((item,index)=>{
+                            if(index>0)
+                            {
+                                user_entity.push(item);
+                            }
+                        })
+
+                        entityObj['ENTITY_LIST'][0].entities = user_entity;
+                        this.setState({
+                            user_entity_data: entityObj
+                        })      
+                    }
                 }
-                ,
-                {
-                    user_company_name: "11",
-                    user_company_uen: "12",
-                    user_company_address: "12",
-                    user_billing_address: "14",
-                    user_bill_attention_to: "15",
-                    user_contact_name: "16",
-                    user_contact_email: "17",
-                    user_contact_mobile_no: "18",
-                    user_contact_office_no: "19",
-                }
-            ]
-            entityObj['ENTITY_LIST'][0].entities = entity;
-            this.setState({
-                user_entity_data: entityObj
-            })
-
-            // if(res.buyer_entities)
-            // {
-
-            // }
-
+            }
 
             if (res.seller_buyer_tc_attachment) {
                 let buyer = res.seller_buyer_tc_attachment;
@@ -184,17 +182,15 @@ export class BuyerRegister extends Component {
                 'billing_address': this.state.billing_address,
                 'name': this.state.contact_name,
                 'account_mobile_number': this.state.mobile_number,
-                'account_office_number': this.state.office_number,
-                buyer_entities: JSON.stringify(entity)
-
-            }
+                'account_office_number': this.state.office_number
+            },
+            buyer_entities: JSON.stringify(entity)
         };
         return params;
     }
     save() {
-       let buyerParam = this.setParams();
-        console.log(buyerParam);
-       saveBuyerUserInfo(buyerParam).then(res => {
+        let buyerParam = this.setParams();
+        saveBuyerUserInfo(buyerParam).then(res => {
             this.refs.Modal.showModal();
             this.setState({
                 text: "Your details have been successfully saved. "
@@ -205,8 +201,7 @@ export class BuyerRegister extends Component {
     }
     submit() {
         let buyerParam = this.setParams();
-        
-        submitBuyerUserInfo(params).then(res => {
+        submitBuyerUserInfo(buyerParam).then(res => {
             this.refs.Modal.showModal();
             this.setState({
                 text: "Your details have been successfully submitted. "
@@ -217,15 +212,15 @@ export class BuyerRegister extends Component {
         let entityObj;
         entityObj = this.state.user_entity_data;
         let entity = {
-            user_company_name: "21",
-            user_company_uen: "22",
-            user_company_address: "23",
-            user_billing_address: "24",
-            user_bill_attention_to: "25",
-            user_contact_name: "26",
-            user_contact_email: "27",
-            user_contact_mobile_no: "28",
-            user_contact_office_no: "29",
+            company_name: "",
+            company_uen: "",
+            company_address: "",
+            billing_address: "",
+            bill_attention_to: "",
+            contact_name: "",
+            contact_email: "",
+            contact_mobile_no: "",
+            contact_office_no: "",
         }
         entityObj['ENTITY_LIST'][0].entities.splice(0, 0, entity);
         this.setState({
