@@ -12,27 +12,11 @@ class Api::RegistrationsController < Api::BaseController
                                  :agree_seller_buyer, :agree_buyer_revv, :agree_seller_revv, :has_tenants )
   end
 
-
   protected
-  # # validate user base info [ duplicate -> email, UEN, Company name; ]
-  # def validate_user_base_info(user)
-  #   message = 'Company name is existed.' if User.duplicated_field_value('company_name',
-  #                                                                       user.company_name,
-  #                                                                       [user.id])
-  #
-  #   message = 'User email is existed.' if User.duplicated_field_value('email',
-  #                                                                     user.email,
-  #                                                                     [user.id])
-  #
-  #   message = 'Company UEN is existed.' if User.duplicated_field_value('company_unique_entity_number',
-  #                                                                      user.company_unique_entity_number,
-  #                                                                      [user.id])
-  #   [message.blank?, message]
-  # end
+
   def validate_user_field(field_name, field_value, except_ids)
-    message = 'Company name is existed.' if User.duplicated_field_value(field_name,
-                                                                      field_value,
-                                                                      except_ids)
+    check_result = User.where(field_name + ' = \'' + field_value + '\'').where(' id not in (?)', except_ids).blank?
+    message = field_name + ' is exist. please change it' unless check_result
     [message.blank?, message]
   end
 

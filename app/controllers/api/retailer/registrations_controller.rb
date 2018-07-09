@@ -42,9 +42,13 @@ class Api::Retailer::RegistrationsController < Api::RegistrationsController
 
   # validate retailer info
   # params:
-  #   user: {id: 'Buyer Id', company_name:'Company_name', email:'Email',company_unique_entity_number:'UEN'}
+  #   user: {id: 'Buyer Id',
+  #         company_name:'Company_name',
+  #         email:'Email',
+  #         company_unique_entity_number:'UEN',
+  #         company_license_number:'License Number'}
   # Logic:
-  #   Unique check: User-> Company Name, Company UEN, Email
+  #   Unique check: User-> Company Name, Company UEN, Email, License Number
   def validate
     validation_user = params[:user]
     validate_final_result = true
@@ -67,7 +71,13 @@ class Api::Retailer::RegistrationsController < Api::RegistrationsController
     validate_result, message = validate_user_field('company_unique_entity_number',
                                                    validation_user['company_unique_entity_number'],
                                                    [validation_user['id']])
+    validate_final_result = validate_final_result & validate_result
+    final_message = final_message + message + '\r' unless message.blank?
 
+    # validate Company Licesnce Number
+    validate_result, message = validate_user_field('company_license_number',
+                                                   validation_user['company_license_number'],
+                                                   [validation_user['id']])
     validate_final_result = validate_final_result & validate_result
     final_message = final_message + message + '\r' unless message.blank?
 

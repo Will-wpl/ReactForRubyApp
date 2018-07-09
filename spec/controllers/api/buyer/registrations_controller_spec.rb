@@ -10,7 +10,7 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
       context 'test buyer entity emails duplicated' do
         def do_request
           put :validate, params: { id: company_buyer.id,
-                                   user: {user_id: company_buyer.id,
+                                   user: {id: company_buyer.id,
                                           company_name: 'abc',
                                           company_unique_entity_number: 'UEN',
                                           email: 'test_email@email.com'},
@@ -30,7 +30,7 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
       context 'test buyer email is same with entity contact email' do
         def do_request
           put :validate, params: { id: company_buyer.id,
-                                   user: {user_id: company_buyer.id,
+                                   user: {id: company_buyer.id,
                                           company_name: 'abc',
                                           company_unique_entity_number: 'UEN',
                                           email: 'test_email@email.com'},
@@ -50,7 +50,7 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
       context 'test buyer email valicate succss' do
         def do_request
           put :validate, params: { id: company_buyer.id,
-                                   user: {user_id: company_buyer.id,
+                                   user: {id: company_buyer.id,
                                           company_name: 'abc',
                                           company_unique_entity_number: 'UEN',
                                           email: 'test_email@email.com'},
