@@ -12,16 +12,16 @@ export class RetailerRegister extends Component {
             disabled: false,
             havedata: false,
             allbtnStatus: true,
-
+            text: "",
             email_address: "",
             company_name: "",
             unique_entity_number: "",
             company_address: "",
-            billing_address: "",
+            licence_number: "",
+            gst_num: "",
             contact_name: "",
             mobile_number: "",
             office_number: "",
-
             files: [],
             fileData: {
                 "RETAILER_DOCUMENTS": [
@@ -29,9 +29,13 @@ export class RetailerRegister extends Component {
                 ]
             },
             uploadUrl: '/api/retailer/user_attachments?file_type=',
-            showAttachmentFlag: 1
+            showAttachmentFlag: 1,
+            buyerTCurl: "",
+            buyerTCname: "",
+            revvTCurl: "",
+            revvTCname: ""
         }
-        this.auctionData = {};
+
     }
     componentWillMount() {
 
@@ -49,7 +53,8 @@ export class RetailerRegister extends Component {
                     company_name: item.company_name ? item.company_name : '',
                     unique_entity_number: item.company_unique_entity_number ? item.company_unique_entity_number : '',
                     company_address: item.company_address ? item.company_address : '',
-                    billing_address: item.billing_address ? item.billing_address : '',
+                    licence_number: item.company_license_number ? item.company_license_number : '',
+                    gst_num: item.gst_no ? item.gst_no : '',
                     contact_name: item.name ? item.name : '',
                     mobile_number: item.account_mobile_number ? item.account_mobile_number : '',
                     office_number: item.account_office_number ? item.account_office_number : '',
@@ -67,6 +72,20 @@ export class RetailerRegister extends Component {
                     fileData: fileObj
                 })
             }
+            if (res.seller_buyer_tc_attachment) {
+                let buyer = res.seller_buyer_tc_attachment;
+                this.setState({
+                    buyerTCurl: buyer.file_path,
+                    buyerTCname: buyer.file_name
+                })
+            }
+            if (res.seller_revv_tc_attachment) {
+                let revv = res.seller_revv_tc_attachment;
+                this.setState({
+                    revvTCurl: revv.file_path,
+                    revvTCname: revv.file_name
+                })
+            }
 
         })
     }
@@ -75,63 +94,45 @@ export class RetailerRegister extends Component {
     }
     submit() {
         submitRetailManageInfo({
-
+            user: {
                 'id': this.state.id,
                 'email': this.state.email_address,
                 'company_name': this.state.company_name,
                 'company_unique_entity_number': this.state.unique_entity_number,
                 'company_address': this.state.company_address,
-                'billing_address': this.state.billing_address,
+                'company_license_number': this.state.license_number,
+                'gst_no': this.state.gst_num,
                 'name': this.state.contact_name,
                 'account_mobile_number': this.state.mobile_number,
                 'account_office_number': this.state.office_number
-
-
+            }
         }).then(res => {
-            console.log(res)
-            // if(!this.props.doJest){
-            //     this.refs.Modal.showModal();
-            // }
-            //     this.setState({
-            //         text:"Your details have been successfully submitted. You may click on 'Start Bidding' in the published auction list to standby for the live reverse auction."
-            //     });
-            //     this.getRetailerAuction();
-            //     this.setState({
-            //         btn_status:false,
-            //         disabled:true
-            //     })
-            // }, error => {
-            //     console.log(error);
-            // })
+            this.refs.Modal.showModal();
+            this.setState({
+                text: "Your details have been successfully saved. "
+            });
+
         })
     }
     save() {
         saveRetailManageInfo({
-            'id': this.state.id,
-            'email': this.state.email_address,
-            'company_name': this.state.company_name,
-            'company_unique_entity_number': this.state.unique_entity_number,
-            'company_address': this.state.company_address,
-            'billing_address': this.state.billing_address,
-            'name': this.state.contact_name,
-            'account_mobile_number': this.state.mobile_number,
-            'account_office_number': this.state.office_number
+            user: {
+                'id': this.state.id,
+                'email': this.state.email_address,
+                'company_name': this.state.company_name,
+                'company_unique_entity_number': this.state.unique_entity_number,
+                'company_address': this.state.company_address,
+                'company_license_number': this.state.license_number,
+                'gst_no': this.state.gst_num,
+                'name': this.state.contact_name,
+                'account_mobile_number': this.state.mobile_number,
+                'account_office_number': this.state.office_number
+            }
         }).then(res => {
-            console.log(res)
-            // if(!this.props.doJest){
-            //     this.refs.Modal.showModal();
-            // }
-            //     this.setState({
-            //         text:"Your details have been successfully submitted. You may click on 'Start Bidding' in the published auction list to standby for the live reverse auction."
-            //     });
-            //     this.getRetailerAuction();
-            //     this.setState({
-            //         btn_status:false,
-            //         disabled:true
-            //     })
-            // }, error => {
-            //     console.log(error);
-            // })
+            this.refs.Modal.showModal();
+            this.setState({
+                text: "Your details have been successfully submitted. "
+            });
         })
     }
     Change(type, e) {
@@ -149,8 +150,11 @@ export class RetailerRegister extends Component {
             case 'company_address':
                 this.setState({ company_address: itemValue });
                 break;
-            case 'billing_address':
-                this.setState({ billing_address: itemValue });
+            case 'license_number':
+                this.setState({ license_number: itemValue });
+                break;
+            case 'gst_num':
+                this.setState({ gst_num: itemValue });
                 break;
             case 'contact_name':
                 this.setState({ contact_name: itemValue });
@@ -165,8 +169,7 @@ export class RetailerRegister extends Component {
         }
     }
     showView() {
-        this.setState({ text: "This is upload Documents" });
-        this.refs.Modal.showModal();
+        this.refs.Modal_upload.showModal();
     }
     render() {
         let btn_html = <div>
@@ -179,7 +182,8 @@ export class RetailerRegister extends Component {
                     <div>
                         <div className="u-grid admin_invitation">
                             <div className="col-sm-12 col-md-6 push-md-3">
-
+                                <h3 className="u-mt3 u-mb1">Retailer Register Page</h3>
+                                {/* <h4 className="u-mt1 u-mb1">Account Info</h4> */}
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
                                         <abbr title="required">*</abbr> Email:
@@ -199,12 +203,30 @@ export class RetailerRegister extends Component {
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr> Unique Entity Number:
+                                        <abbr title="required">*</abbr> Unique Entity Number(UEN):
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="unique_entity_number" value={this.state.unique_entity_number} onChange={this.Change.bind(this, 'unique_entity_number')} disabled={this.state.disabled} ref="unique_entity_number" maxLength="50" required aria-required="true" ></input>
                                     </div>
                                 </div>
+
+                                <div className="lm--formItem lm--formItem--inline string">
+                                    <label className="lm--formItem-left lm--formItem-label string required">
+                                        <abbr title="required">*</abbr> Retailer Licence Number:
+                                    </label>
+                                    <div className="lm--formItem-right lm--formItem-control">
+                                        <input type="text" name="billing_address" value={this.state.licence_number} onChange={this.Change.bind(this, 'licence_number')} disabled={this.state.disabled} ref="licence_number" maxLength="50" required aria-required="true" ></input>
+                                    </div>
+                                </div>
+                                <div className="lm--formItem lm--formItem--inline string">
+                                    <label className="lm--formItem-left lm--formItem-label string required">
+                                        <abbr title="required">*</abbr> GST No.:
+                                    </label>
+                                    <div className="lm--formItem-right lm--formItem-control">
+                                        <input type="text" name="billing_address" value={this.state.gst_num} onChange={this.Change.bind(this, 'gst_num')} disabled={this.state.disabled} ref="gst_num" maxLength="50" required aria-required="true" ></input>
+                                    </div>
+                                </div>
+
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
                                         <abbr title="required">*</abbr> Company Address
@@ -213,14 +235,7 @@ export class RetailerRegister extends Component {
                                         <input type="text" name="company_address" value={this.state.company_address} onChange={this.Change.bind(this, 'company_address')} disabled={this.state.disabled} ref="company_address" maxLength="50" required aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
                                     </div>
                                 </div>
-                                <div className="lm--formItem lm--formItem--inline string">
-                                    <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr> Billing Address:
-                                    </label>
-                                    <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="billing_address" value={this.state.billing_address} onChange={this.Change.bind(this, 'billing_address')} disabled={this.state.disabled} ref="billing_address" maxLength="50" required aria-required="true" ></input>
-                                    </div>
-                                </div>
+
                                 <h4 className="u-mt1 u-mb1">Contact Information</h4>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
@@ -249,19 +264,25 @@ export class RetailerRegister extends Component {
 
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        Upload Documents:
+                                        <abbr title="required">*</abbr> Upload Documents:
                                     </label>
-                                    <div className="lm--formItem-right lm--formItem-control">
-                                        <UploadFile type="RETAILER_DOCUMENTS" required="required" showList="1" showWay="2" fileData={this.state.fileData.RETAILER_DOCUMENTS} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
+                                    <div className="lm--formItem-right lm--formItem-control u-grid mg0">
+                                        <UploadFile type="RETAILER_DOCUMENTS" required="required" showList="1" col_width="10" showWay="2" fileData={this.state.fileData.RETAILER_DOCUMENTS} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
+                                        <div className="col-sm-12 col-md-2 u-cell">
+                                            <button className="lm--button lm--button--primary" onClick={this.showView.bind(this)}  >?</button>
+                                        </div>
                                     </div>
+
                                 </div>
 
-                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" name={"seller_buyer_tc"} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href="">adfasdfsafd</a></h4>
-                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" name={"seller_revv_tc"} />  I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href="">adfasdfsafd</a></h4>
+                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" name={"seller_buyer_tc"} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href={this.state.buyerTCurl}>{this.state.buyerTCname}</a></h4>
+                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" name={"seller_revv_tc"} />  I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href={this.state.revvTCurl}>{this.state.revvTCname}</a></h4>
 
                                 <div className="retailer_btn">
                                     {btn_html}
                                 </div>
+                                <Modal listdetailtype="Retailer Documents Message" ref="Modal_upload" />
+                                <Modal text={this.state.text} ref="Modal" />
                             </div>
                         </div>
                     </div>
