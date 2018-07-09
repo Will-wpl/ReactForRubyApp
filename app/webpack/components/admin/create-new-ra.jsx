@@ -23,7 +23,7 @@ export class CreateNewRA extends Component {
             edit_change:"lm--button lm--button--primary hide",contractArray:[],
             disabled:false,live_modal:"",live_modal_do:"",holdOrend:"",checkArray:[],
             contract_duration_6:false,contract_duration_12:false,contract_duration_24:false,
-            required:false,check_required:true
+            required:false,check_required:true,single_multiple:"0",allow_deviation:"1"
         }
 
         this.auction = {};
@@ -92,7 +92,9 @@ export class CreateNewRA extends Component {
                         endDate:res.contract_period_end_date == null ? '' : moment(res.contract_period_end_date),
                         duration:res.duration== null ? '' : res.duration,
                         reserve_price:res.reserve_price== null ? '' : this.padZero(res.reserve_price,'4'),
-                        starting_price:res.starting_price== null ? '' : this.padZero(res.starting_price,'4')
+                        starting_price:res.starting_price== null ? '' : this.padZero(res.starting_price,'4'),
+                        allow_deviation:res.allow_deviation,
+                        single_multiple:res.buyer_type
                     });
                     let arr = res.auction_contracts.map((item)=>{
                         return item.contract_duration;
@@ -125,6 +127,7 @@ export class CreateNewRA extends Component {
                         $("#starting_price_eht_off_peak_"+index).val(item.starting_price_eht_off_peak);
                         $("#reserve_price_eht_off_peak_"+index).val(item.reserve_price_eht_off_peak);
                     })
+                    $("#starting_price_time").val(res.starting_price_time);
                 }
                 $("#time_extension option[value='"+res.time_extension+"']").attr("selected",true);
                 $("#average_price option[value='"+res.average_price+"']").attr("selected",true);
@@ -277,6 +280,9 @@ export class CreateNewRA extends Component {
         //this.auction.starting_price= this.refs.starting_price.value;
         this.auction.retailer_mode= this.refs.retailer_mode.value;
         this.auction.auction_contracts = this.somefield();
+        this.auction.buyer_type=this.state.single_multiple;
+        this.auction.allow_deviation=this.state.allow_deviation;
+        this.auction.starting_price_time=this.refs.starting_price_time.value;
         return this.auction;
     }
     somefield(){
@@ -412,7 +418,11 @@ export class CreateNewRA extends Component {
             }
         }
         return data;
-    }  
+    }
+    single_multiple(type,e){
+        let val = e.target.value;
+        type=="single_multiple"?this.setState({single_multiple:val}):this.setState({allow_deviation:val})
+    }
     checkSuccess(event,obj){
         event.preventDefault();
         let timeBar;
@@ -546,7 +556,7 @@ export class CreateNewRA extends Component {
                         <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Reverse Auction Contract Period :</span>
                         <label className="col">
                             {
-                                this.state.start_datetime === '' ? <DatePicker disabled={this.state.disabled} minDate={moment()} shouldCloseOnSelect={true} onKeyDown={this.noPermitInput.bind(this)} required aria-required="true" ref="contract_period_start_date" name="contract_period_start_date" className="date_ico" dateFormat="DD-MM-YYYY" selected={this.state.startDate} selectsStart startDate={this.state.startDate} endDate={this.state.endDate} onChange = {this.starttimeChange}/> 
+                                this.state.start_datetime === '' ? <DatePicker disabled={this.state.disabled} minDate={moment()} shouldCloseOnSelect={true} onKeyDown={this.noPermitInput.bind(this)} required aria-required="true" ref="contract_period_start_date" name="contract_period_start_date" className="date_ico" dateFormat="DD-MM-YYYY" selected={this.state.startDate} selectsStart startDate={this.state.startDate} endDate={this.state.endDate} onChange = {this.starttimeChange}/>
                                 :<DatePicker disabled={this.state.disabled} minDate={this.state.start_datetime} shouldCloseOnSelect={true} onKeyDown={this.noPermitInput.bind(this)} required aria-required="true" ref="contract_period_start_date" name="contract_period_start_date" className="date_ico" dateFormat="DD-MM-YYYY" selected={this.state.startDate} selectsStart startDate={this.state.startDate} endDate={this.state.endDate} onChange = {this.starttimeChange}/>
                             }
                         </label>
@@ -559,6 +569,25 @@ export class CreateNewRA extends Component {
                             {/**/}
                         {/*</label>*/}
                     </dd>
+                    <dd className="lm--formItem lm--formItem--inline string optional">
+                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Single / Multiple :</span>
+                        <label className="lm--formItem-right lm--formItem-control">
+                            <select ref="single_multiple" id="single_multiple" onChange={this.single_multiple.bind(this,'single_multiple')} value={this.state.single_multiple} disabled={this.state.disabled}>
+                                <option value="0">Single</option>
+                                <option value="1">Multiple</option>
+                            </select>
+                        </label>
+                    </dd>
+                    {this.state.single_multiple=="0"?
+                    <dd className="lm--formItem lm--formItem--inline string optional">
+                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Allow Deviations :</span>
+                        <label className="lm--formItem-right lm--formItem-control">
+                            <select ref="allow_deviation" id="allow_deviation" onChange={this.single_multiple.bind(this,'allow_deviation')} value={this.state.allow_deviation} disabled={this.state.disabled}>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </label>
+                    </dd>:''}
                     <dd className="lm--formItem lm--formItem--inline string optional">
                         <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Contract Duration:</span>
                         <div className="lm--formItem-right lm--formItem-label lm--formItem-control">
@@ -640,7 +669,7 @@ export class CreateNewRA extends Component {
                         <span className="lm--formItem-left lm--formItem-label string optional">
                             <abbr title="required">*</abbr>Display Starting Price (hours):</span>
                         <label className="lm--formItem-right lm--formItem-control">
-                            <select ref="display_starting_price" id="display_starting_price" disabled={this.state.disabled}>
+                            <select ref="starting_price_time" id="starting_price_time" disabled={this.state.disabled}>
                                 {this.hours.map((item)=>{
                                     return <option key={item} value={item}>{item}</option>
                                 })}
