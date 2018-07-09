@@ -57,6 +57,11 @@ class Api::UsersController < Api::BaseController
     render json: user, status: 200
   end
 
+  # Approval User
+  # Params:
+  #   user_id  -> Indicate a user's id which will be approved or rejected
+  #   approved -> Indicate this is approval operation if this param is not nil. Otherwise, it is reject operation.
+  #   comment -> Indicate a comment to this operation.
   def approval_user
     target_user = User.find(params[:user_id])
     approval_status = params[:approved].blank? ? User::ApprovalStatusReject : User::ApprovalStatusApproved

@@ -173,10 +173,7 @@ Rails.application.routes.draw do
           put 'validate'
         end
       end
-      resources :user_attachments, only: %i[create update find_attachment_by_user] do
-        member do
-          get 'find_attachment_by_user'
-        end
+      resources :user_attachments, only: %i[create] do
       end
     end
   end
@@ -209,10 +206,7 @@ Rails.application.routes.draw do
           put 'validate'
         end
       end
-      resources :user_attachments, only: %i[create update find_attachment_by_user] do
-        member do
-          get 'find_attachment_by_user'
-        end
+      resources :user_attachments, only: %i[create] do
       end
     end
   end
