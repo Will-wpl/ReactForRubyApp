@@ -7,7 +7,7 @@ class Api::AuctionsController < Api::BaseController
       render json: nil
     else
       auction = Auction.find(params[:id])
-      render json: auction, status: 200
+      render json: get_auction_details(auction), status: 200
     end
   end
 
@@ -17,11 +17,11 @@ class Api::AuctionsController < Api::BaseController
       ActiveRecord::Base.transaction do
         create_auction_at_update
         if @auction.save!
-          unless params[:auction_contracts].nil?
-            save_auction_contracts(params[:auction_contracts])
+          unless params[:auction][:auction_contracts].nil?
+            save_auction_contracts(params[:auction][:auction_contracts] , @auction)
           end
           AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
-          render json: { auction: @auction, auction_contracts: @auction.auction_contracts  }, status: 201
+          render json: get_auction_details(@auction), status: 201
         end
       end
     else # update
@@ -455,10 +455,11 @@ class Api::AuctionsController < Api::BaseController
     @auction.total_volume = 0
   end
 
-  def save_auction_contracts(auction_contracts)
+  def save_auction_contracts(auction_contracts, auction)
     contracts = JSON.parse(auction_contracts)
     contracts.each do |contract|
-      month = contract.contract_duration.to_i
+      contract[:auction_id] = auction.id
+      month = contract[:contract_duration].to_i
       contract[:contract_period_end_date] = DateTime.now.advance(months: month).advance(days: -1)
       AuctionContract.create!(contract)
     end
@@ -602,5 +603,11 @@ class Api::AuctionsController < Api::BaseController
 
   def get_buyer_action_value(consumption)
     consumption.nil? ? nil : consumption.id
+  end
+
+  def get_auction_details(auction)
+    auction_json = auction.attributes.dup
+    auction_json[:auction_contracts] = auction.auction_contracts
+    auction_json
   end
 end

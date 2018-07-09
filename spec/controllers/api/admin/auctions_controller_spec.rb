@@ -23,10 +23,10 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
   let!(:r1_his_init) { create(:auction_history, bid_time: Date.current, user: retailers[0], auction: published_upcoming_auction) }
   let!(:published_living_auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
   let!(:logs) { create_list(:auction_event, 50, auction: auction, user: retailers[0]) }
-  let! (:auction_new) { create(:auction, :for_next_month, :upcoming) }
-  let!(:six_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '6') }
-  let!(:twelve_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '12') }
-  let!(:twenty_four_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '24') }
+  # let! (:auction_new) { create(:auction, :for_next_month, :upcoming) }
+  # let!(:six_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '6') }
+  # let!(:twelve_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '12') }
+  # let!(:twenty_four_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '24') }
 
   base_url = 'api/admin/auctions'
 
@@ -249,6 +249,30 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
 
     describe 'PUT new update' do
       def do_request(id, auction)
+        common_contract = {
+                           starting_price_lt_peak: 0.1888,
+                           starting_price_lt_off_peak: 0.1888,
+                           starting_price_hts_peak: 0.1888,
+                           starting_price_hts_off_peak: 0.1888,
+                           starting_price_htl_peak: 0.1888,
+                           starting_price_htl_off_peak: 0.1888,
+                           starting_price_eht_peak: 0.1888,
+                           starting_price_eht_off_peak: 0.1888,
+                           reserve_price_lt_peak: 0.0988,
+                           reserve_price_lt_off_peak: 0.0988,
+                           reserve_price_hts_peak: 0.0988,
+                           reserve_price_hts_off_peak: 0.0988,
+                           reserve_price_htl_peak: 0.0988,
+                           reserve_price_htl_off_peak: 0.0988,
+                           reserve_price_eht_peak: 0.0988,
+                           reserve_price_eht_off_peak: 0.0988}
+        contract_6 = common_contract
+        contract_6[:contract_duration] = '6'
+        contract_12 = common_contract
+        contract_12[:contract_duration] = '12'
+        contract_24 = common_contract
+        contract_24[:contract_duration] = '24'
+        contracts = [contract_6 , contract_12, contract_24]
         auction_object = {
             name: 'Hello world',
             start_datetime: auction.start_datetime,
@@ -263,20 +287,20 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
             retailer_mode: '3',
             starting_price_time: 2,
             buyer_type: '0',
-            allow_deviation: '1'
+            allow_deviation: '1',
+            auction_contracts: contracts.to_json
         }
-        contracts = [six_month_contract, twelve_month_contract, twenty_four_month_contract]
 
-        put :update, params: { id: id, auction: auction_object, auction_contracts: contracts }
+        put :update, params: { id: id, auction: auction_object }
       end
 
       context 'Has create an auction' do
         before { do_request(0, auction) }
         it 'success' do
           hash_body = JSON.parse(response.body)
-          expect(hash_body['auction']['id']).not_to eq(auction.id)
-          expect(hash_body['auction']['name']).to eq('Hello world')
-          expect(hash_body['auction']['average_price']).to eq('2')
+          expect(hash_body['id']).not_to eq(auction.id)
+          expect(hash_body['name']).to eq('Hello world')
+          expect(hash_body['average_price']).to eq('2')
           expect(response).to have_http_status(201)
         end
       end
