@@ -23,6 +23,10 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
   let!(:r1_his_init) { create(:auction_history, bid_time: Date.current, user: retailers[0], auction: published_upcoming_auction) }
   let!(:published_living_auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
   let!(:logs) { create_list(:auction_event, 50, auction: auction, user: retailers[0]) }
+  let! (:auction_new) { create(:auction, :for_next_month, :upcoming) }
+  let!(:six_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '6') }
+  let!(:twelve_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '12') }
+  let!(:twenty_four_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '24') }
 
   base_url = 'api/admin/auctions'
 
@@ -241,6 +245,65 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
           expect(response).to have_http_status(:ok)
         end
       end
+    end
+
+    describe 'PUT new update' do
+      def do_request(id, auction)
+        auction_object = {
+            name: 'Hello world',
+            start_datetime: auction.start_datetime,
+            contract_period_start_date: auction.contract_period_start_date,
+            duration: auction.duration,
+            actual_begin_time: auction.actual_begin_time,
+            actual_end_time: auction.actual_end_time,
+            publish_status: auction.publish_status,
+            hold_status: auction.hold_status,
+            time_extension: '0',
+            average_price: '2',
+            retailer_mode: '3',
+            starting_price_time: 2,
+            buyer_type: '0',
+            allow_deviation: '1'
+        }
+        contracts = [six_month_contract, twelve_month_contract, twenty_four_month_contract]
+
+        put :update, params: { id: id, auction: auction_object, auction_contracts: contracts }
+      end
+
+      context 'Has create an auction' do
+        before { do_request(0, auction) }
+        it 'success' do
+          hash_body = JSON.parse(response.body)
+          expect(hash_body['auction']['id']).not_to eq(auction.id)
+          expect(hash_body['auction']['name']).to eq('Hello world')
+          expect(hash_body['auction']['average_price']).to eq('2')
+          expect(response).to have_http_status(201)
+        end
+      end
+      #
+      # context 'has updated an auction' do
+      #   before { do_request(auction.id, auction) }
+      #   it 'success' do
+      #     hash_body = JSON.parse(response.body)
+      #     expect(hash_body['id']).to eq(auction.id)
+      #     expect(hash_body['name']).to eq('Hello world')
+      #     expect(hash_body['average_price']).to eq('2')
+      #     expect(response).to have_http_status(:ok)
+      #   end
+      # end
+      #
+      # context 'has updated an auction, has retailers' do
+      #
+      #
+      #   before { do_request(published_upcoming_auction.id, published_upcoming_auction) }
+      #   it 'success' do
+      #     hash_body = JSON.parse(response.body)
+      #     expect(hash_body['id']).to eq(published_upcoming_auction.id)
+      #     expect(hash_body['name']).to eq('Hello world')
+      #     expect(hash_body['average_price']).to eq('2')
+      #     expect(response).to have_http_status(:ok)
+      #   end
+      # end
     end
 
     describe 'GET unpublished auction list' do
