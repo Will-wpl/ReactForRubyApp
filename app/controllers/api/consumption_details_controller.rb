@@ -5,11 +5,11 @@ class Api::ConsumptionDetailsController < Api::BaseController
       consumption = @consumption
       consumption_details = consumption.consumption_details
       auction = consumption.auction
-
+      contract_duration = auction.auction_contracts.select('contract_duration').sort_by {|contract| contract.contract_duration.to_i}
       tc_attachment = AuctionAttachment.find_by(auction_id: consumption.auction_id, file_type: 'buyer_tc_upload')
       render json: { consumption_details: consumption_details, consumption: consumption,
                      auction: { id: auction.id, name: auction.name, actual_begin_time: auction.actual_begin_time, publish_status: auction.publish_status },
-                     tc_attachment: tc_attachment }, status: 200
+                     tc_attachment: tc_attachment, contract_duration: contract_duration }, status: 200
     end
   end
 
@@ -181,4 +181,5 @@ class Api::ConsumptionDetailsController < Api::BaseController
                      current_user.consumptions.find(params[:consumption_id])
                    end
   end
+
 end

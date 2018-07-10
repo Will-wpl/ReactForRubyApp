@@ -8,6 +8,8 @@ admin_user.add_role :admin
 
 Role.first_or_create(name: 'retailer')
 Role.first_or_create(name: 'buyer')
+Role.first_or_create(name: 'entity')
+Role.first_or_create(name: 'tenant')
 
 # reverse_auction = Auction.find_or_create_by(name: 'SP Reverse Auction') do |auction|
 #   auction.start_datetime = nil

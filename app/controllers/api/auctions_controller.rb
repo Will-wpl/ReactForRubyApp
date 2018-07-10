@@ -629,7 +629,8 @@ class Api::AuctionsController < Api::BaseController
                       hts_peak: calculate_dto.hts_peak, hts_off_peak: calculate_dto.hts_off_peak,
                       htl_peak: calculate_dto.htl_peak, htl_off_peak: calculate_dto.htl_off_peak,
                       eht_peak: calculate_dto.eht_peak, eht_off_peak: calculate_dto.eht_off_peak,
-                      total_award_sum: total_award_sum, average_price: average_price)
+                      total_award_sum: total_award_sum, average_price: average_price,
+                      contract_duration: calculate_dto.contract_duration)
       # set sorted histories to redis
       histories = AuctionHistory.find_init_bidder(calculate_dto.auction_id).find_contract_duration(calculate_dto.contract_duration)
       RedisHelper.set_current_sorted_histories_duration(@auction.id, histories, calculate_dto.contract_duration)
@@ -759,7 +760,15 @@ class Api::AuctionsController < Api::BaseController
                          starting_price_eht_peak: contract.starting_price_eht_peak,
                          starting_price_eht_off_peak: contract.starting_price_eht_off_peak,
                          contract_period_end_date: contract.contract_period_end_date,
-                         contract_duration: contract.contract_duration}
+                         contract_duration: contract.contract_duration,
+                         total_lt_peak: contract.total_lt_peak,
+                         total_lt_off_peak: contract.total_lt_off_peak,
+                         total_hts_peak: contract.total_hts_peak,
+                         total_hts_off_peak: contract.total_hts_off_peak,
+                         total_htl_peak: contract.total_htl_peak,
+                         total_htl_off_peak: contract.total_htl_off_peak,
+                         total_eht_peak: contract.total_eht_peak,
+                         total_eht_off_peak: contract.total_eht_off_peak}
         admin_contract = {
             reserve_price_lt_peak: contract.reserve_price_lt_peak,
             reserve_price_lt_off_peak:contract.reserve_price_lt_off_peak,
