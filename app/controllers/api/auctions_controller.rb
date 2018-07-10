@@ -17,13 +17,7 @@ class Api::AuctionsController < Api::BaseController
       auction_update_create_func
     else # update
       # params[:auction]['total_volume'] = Auction.set_total_volume(model_params[:total_lt_peak], model_params[:total_lt_off_peak], model_params[:total_hts_peak], model_params[:total_hts_off_peak], model_params[:total_htl_peak], model_params[:total_htl_off_peak])
-      if @auction.update(model_params)
-        if @auction.publish_status == Auction::PublishStatusPublished
-          update_auction_at_update
-        end
-        AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
-      end
-      render json: @auction, status: 200
+      auction_update_update_func
     end
   end
 
@@ -449,12 +443,30 @@ class Api::AuctionsController < Api::BaseController
   def save_auction_contracts(auction_contracts, auction)
     contracts = JSON.parse(auction_contracts)
     contracts.each do |contract|
-      contract[:auction_id] = auction.id
-      month = contract[:contract_duration].to_i
-      contract[:contract_period_end_date] = DateTime.now.advance(months: month).advance(days: -1)
-      AuctionContract.create!(contract)
+      month = contract['contract_duration'].to_i
+      contract['contract_period_end_date'] = DateTime.now.advance(months: month).advance(days: -1)
+      if contract['id'].to_i == 0
+        contract['auction_id'] = auction.id
+        AuctionContract.create!(contract)
+      else
+        AuctionContract.find(contract['id']).update!(contract)
+      end
     end
+  end
 
+  def update_auction_contracts(auction_contracts, auction)
+    contracts = JSON.parse(auction_contracts)
+    ids = []
+    contracts.each do |contract|
+      ids.push(contract['id']) if contract['id'].to_i != 0
+    end
+    will_del_contracts = auction.auction_contracts.reject do |contract|
+      ids.include?(contract['id'].to_i)
+    end
+    will_del_contracts.each do |contract|
+      AuctionContract.find(contract['id']).destroy
+    end
+    save_auction_contracts(auction_contracts, auction)
   end
 
   def auction_update_create_func
@@ -467,6 +479,21 @@ class Api::AuctionsController < Api::BaseController
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
         render json: get_auction_details(@auction), status: 201
       end
+    end
+  end
+
+  def auction_update_update_func
+    ActiveRecord::Base.transaction do
+      if @auction.update!(model_params)
+        unless params[:auction][:auction_contracts].nil?
+          update_auction_contracts(params[:auction][:auction_contracts] , @auction)
+        end
+        if @auction.publish_status == Auction::PublishStatusPublished
+          update_auction_at_update
+        end
+        AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
+      end
+      render json: get_auction_details(@auction), status: 200
     end
   end
 
@@ -611,7 +638,7 @@ class Api::AuctionsController < Api::BaseController
 
   def get_auction_details(auction)
     auction_json = auction.attributes.dup
-    auction_json[:auction_contracts] = auction.auction_contracts
+    auction_json[:auction_contracts] = Auction.find(auction.id).auction_contracts
     auction_json
   end
 end
