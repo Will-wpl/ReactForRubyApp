@@ -82,12 +82,11 @@ export class UserEntity extends React.Component {
         }
     }
     removeEntity(index) {
-
         let entityObj, entityData;
         entityObj = this.state.itemList;
         entityData = this.state.entity_data;
-        let entityList = entityObj[0].entities.splice(index, 1);
-        entityData['ENTITY_LIST'][0].entities = entityList;
+        entityObj[0].entities.splice(index, 1);
+        entityData['ENTITY_LIST'][0].entities=entityObj[0].entities
         this.setState({
             itemList: entityData['ENTITY_LIST']
         })
@@ -174,8 +173,11 @@ export class UserEntity extends React.Component {
                                             <div className="lm--formItem-right lm--formItem-control">
                                                 <input type="text" name="contact_office_no" value={it.contact_office_no} onChange={this.Change.bind(this, 'contact_office_no', i)} disabled={this.state.disabled} ref="contact_office_no" maxLength="50" aria-required="true"></input>
                                             </div>
+                                            <div>
+                                                <button className="lm--button lm--button--primary" onClick={this.removeEntity.bind(this, i)}>-</button>
+                                            </div>
                                         </div>
-                                        <div className="lm--formItem lm--formItem--inline string">
+                                        {/* <div className="lm--formItem lm--formItem--inline string">
                                             <label className="lm--formItem-left lm--formItem-label string required">
 
                                             </label>
@@ -185,7 +187,7 @@ export class UserEntity extends React.Component {
                                                     <button className="lm--button lm--button--primary" onClick={this.removeEntity.bind(this, i)}>-</button>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 })
                             }
@@ -199,7 +201,7 @@ export class UserEntity extends React.Component {
         </div>
         return entityHtml;
     }
-    
+
     render() {
         return (
             <div className="col-sm-12 col-md-12" >

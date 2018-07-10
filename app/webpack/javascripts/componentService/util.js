@@ -76,6 +76,23 @@ export const getStandardNumBref = (num) => {
 
 }
 
+
+export const validateNum = (value) => {
+    let num = /^(\d{8})$/g;
+    if (!num.test(value)) {
+        return false;
+    }
+    return true;
+}
+export const validateEmail = (value) => {
+    let num = /^([a-zA-Z0-9._-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
+    if (!num.test(value)) {
+        return false;
+    }
+    return true;
+}
+
+
 export const isEmptyJsonObj = (obj) => {
     if (!obj) {
         return true;
@@ -93,7 +110,7 @@ export const getDHMSbetweenTwoTimes = (startSeq, nowSeq) => {
         const hour = Math.floor((divider - day * 24 * 60 * 60) / 3600);
         const minute = Math.floor((divider - day * 24 * 60 * 60 - hour * 3600) / 60);
         const second = Math.floor(divider - day * 24 * 60 * 60 - hour * 3600 - minute * 60);
-        return {day, hour, minute, second, divider}
+        return { day, hour, minute, second, divider }
     }
     return {
         day: 0,

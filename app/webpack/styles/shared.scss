@@ -761,3 +761,10 @@ ul.history_files{
   &:hover{cursor: pointer}
   margin-right: 10px;
 }
+.errormessage{
+  color:red;
+  display: block;
+}
+.isPassValidate{
+  display: none;
+}
