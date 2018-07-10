@@ -28,6 +28,31 @@ RSpec.describe Api::Retailer::AuctionsController, type: :controller do
     end
   end
 
+  describe '#new logic obtain' do
+    let!(:auction_new) { create(:auction, :for_next_month, :upcoming, :published) }
+    let!(:arrangement_new) { create(:arrangement, user: retailer_user, auction: auction_new) }
+    let!(:six_month_contract) { create(:auction_contract, :total, :six_month, auction: auction_new) }
+    let!(:twelve_month_contract) { create(:auction_contract, :twelve_month, auction: auction_new) }
+    let!(:twenty_four_month_contract) { create(:auction_contract, :total, :twenty_four_month, auction: auction_new) }
+    def do_request
+      get :obtain, params: { id: auction_new.id }
+    end
+
+
+    context 'authorize as an retailer' do
+      before { sign_in retailer_user }
+
+      before { do_request }
+
+      it "return retailer auction" do
+        expect(response).to be_success
+        expect(JSON.parse(response.body)['id']).to eq auction_new.id
+        expect(JSON.parse(response.body)['auction_contracts'].count).to eq(2)
+      end
+    end
+
+  end
+
   context 'api/retailer/auctions routes' do
     describe 'GET timer' do
       it 'success' do

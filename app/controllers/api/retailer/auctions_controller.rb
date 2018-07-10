@@ -4,20 +4,7 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
     if params[:id].nil?
       render json: nil
     else
-      auction = Auction.find(params[:id])
-      if Arrangement.auction_of_current_user(auction.id, current_user.id).exists?
-
-        # if two volumes of one intake level are 0, then no need to handle this field during whole auction process.
-        has_lt = !is_zero(auction.total_lt_peak, auction.total_lt_off_peak)
-        has_hts = !is_zero(auction.total_hts_peak, auction.total_hts_off_peak)
-        has_htl = !is_zero(auction.total_htl_peak, auction.total_htl_off_peak)
-        has_eht = !is_zero(auction.total_eht_peak, auction.total_eht_off_peak)
-
-        render json: { id: auction.id, publish_status: auction.publish_status, name: auction.name, retailer_mode: auction.retailer_mode,
-                       has_lt: has_lt, has_hts: has_hts, has_htl: has_htl, has_eht: has_eht, starting_price: auction.starting_price, start_datetime: auction.actual_begin_time }, status: 200
-      else
-        render json: { message: 'you can not get the auction information.' }, status: 400
-      end
+      get_obtain(params)
     end
   end
 
@@ -67,15 +54,9 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
 
   end
 
-  # @param [Object] intake_peak
-  # @param [Object] intake_off_peak
-  def is_zero(intake_peak, intake_off_peak)
-    is_zero = false
-    is_zero = true if intake_peak == 0 && intake_off_peak == 0
-    is_zero
-  end
-
   private
+
+
 
   def get_order_list(params, headers, arrangement)
     if params.key?(:sort_by)
@@ -83,6 +64,30 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
       arrangement.order(order_by_string)
     else
       arrangement.order('auctions.actual_begin_time asc')
+    end
+  end
+
+
+  def get_obtain(params)
+    auction = Auction.find(params[:id])
+    if Arrangement.auction_of_current_user(auction.id, current_user.id).exists?
+      if auction.auction_contracts.blank?
+          # if two volumes of one intake level are 0, then no need to handle this field during whole auction process.
+          has_lt = !is_zero(auction.total_lt_peak, auction.total_lt_off_peak)
+          has_hts = !is_zero(auction.total_hts_peak, auction.total_hts_off_peak)
+          has_htl = !is_zero(auction.total_htl_peak, auction.total_htl_off_peak)
+          has_eht = !is_zero(auction.total_eht_peak, auction.total_eht_off_peak)
+
+          render json: { id: auction.id, publish_status: auction.publish_status, name: auction.name, retailer_mode: auction.retailer_mode,
+                         has_lt: has_lt, has_hts: has_hts, has_htl: has_htl, has_eht: has_eht, starting_price: auction.starting_price, start_datetime: auction.actual_begin_time }, status: 200
+      else
+        auction_contracts = get_lived_auction_contracts(auction)
+        render json: { id: auction.id, publish_status: auction.publish_status, name: auction.name, retailer_mode: auction.retailer_mode,
+                       has_lt: has_lt, has_hts: has_hts, has_htl: has_htl, has_eht: has_eht, starting_price: auction.starting_price,
+                       start_datetime: auction.actual_begin_time, auction_contracts: auction_contracts }
+      end
+    else
+      render json: { message: 'you can not get the auction information.' }, status: 400
     end
   end
 end

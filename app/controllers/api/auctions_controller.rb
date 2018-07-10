@@ -696,6 +696,41 @@ class Api::AuctionsController < Api::BaseController
   def get_auction_details(auction)
     auction_json = auction.attributes.dup
     auction_json[:auction_contracts] = Auction.find(auction.id).auction_contracts
+    auction_json[:live_auction_contracts] = get_lived_auction_contracts(auction)
     auction_json
   end
+
+  # @param [Object] intake_peak
+  # @param [Object] intake_off_peak
+  def is_zero(intake_peak, intake_off_peak)
+    is_zero = false
+    is_zero = true if (intake_peak == 0 || intake_peak.blank?) && (intake_off_peak == 0 || intake_off_peak.blank?)
+    is_zero
+  end
+
+  def get_lived_auction_contracts(auction)
+    contracts = auction.auction_contracts
+    auction_contracts = []
+    contracts.each do |contract|
+      has_lt = !is_zero(contract.total_lt_peak, contract.total_lt_off_peak)
+      has_hts = !is_zero(contract.total_hts_peak, contract.total_hts_off_peak)
+      has_htl = !is_zero(contract.total_htl_peak, contract.total_htl_off_peak)
+      has_eht = !is_zero(contract.total_eht_peak, contract.total_eht_off_peak)
+      if has_lt && has_hts && has_htl && has_eht
+        auction_contracts.push({has_lt: has_lt, has_hts: has_hts, has_htl: has_htl, has_eht: has_eht,
+                                starting_price_lt_peak: contract.starting_price_lt_peak,
+                                starting_price_lt_off_peak: contract.starting_price_lt_off_peak,
+                                starting_price_hts_peak: contract.starting_price_hts_peak,
+                                starting_price_hts_off_peak: contract.starting_price_hts_off_peak,
+                                starting_price_htl_peak: contract.starting_price_htl_peak,
+                                starting_price_htl_off_peak: contract.starting_price_htl_off_peak,
+                                starting_price_eht_peak: contract.starting_price_eht_peak,
+                                starting_price_eht_off_peak: contract.starting_price_eht_off_peak,
+                                contract_period_end_date: contract.contract_period_end_date,
+                                contract_duration: contract.contract_duration})
+      end
+    end
+    auction_contracts
+  end
+
 end
