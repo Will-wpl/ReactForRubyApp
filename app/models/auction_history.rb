@@ -53,7 +53,7 @@ class AuctionHistory < ApplicationRecord
     # unless has_less_than_or_equal_to_average_price(calculate_dto.auction_id, calculate_dto.user_id, average_price)
     current_time = Time.current
     history = AuctionHistory.new(lt_peak: calculate_dto.lt_peak, lt_off_peak: calculate_dto.lt_off_peak, hts_peak: calculate_dto.hts_peak, hts_off_peak: calculate_dto.hts_off_peak, htl_peak: calculate_dto.htl_peak, htl_off_peak: calculate_dto.htl_off_peak, eht_peak: calculate_dto.eht_peak, eht_off_peak: calculate_dto.eht_off_peak, bid_time: current_time, actual_bid_time: current_time,
-                                  user_id: calculate_dto.user_id, auction_id: calculate_dto.auction_id, average_price: average_price, total_award_sum: total_award_sum, is_bidder: true)
+                                  user_id: calculate_dto.user_id, auction_id: calculate_dto.auction_id, average_price: average_price, total_award_sum: total_award_sum, is_bidder: true, contract_duration: calculate_dto.contract_duration)
       # AuctionEvent.set_events(@history.user_id, @history.auction_id, 'set bid', @history.to_json)
       # if @history.save
       #   # update sort
@@ -114,6 +114,7 @@ class AuctionHistory < ApplicationRecord
       history_new.bid_time = current_time
       history_new.actual_bid_time = history.actual_bid_time
       history_new.total_award_sum = history.total_award_sum
+      history_new.contract_duration = history.contract_duration
       history_new.is_bidder = history.user_id == current_history.user_id
       history_new.flag = flag
       new_histories.push(history_new)
