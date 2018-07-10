@@ -476,6 +476,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
           expect(hash['headers'].size).to eq(4)
           expect(hash['bodies']['total']).to eq(2)
           expect(hash['bodies']['data'].size).to eq(2)
+          expect(hash['actions'][2]['name']).to eq('Manange !Starting Price Incomplete')
           # hash['bodies']['data'].each do |auction|
           #   if auction.publish_status == '0'
           # end

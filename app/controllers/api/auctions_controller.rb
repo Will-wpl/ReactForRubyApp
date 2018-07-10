@@ -167,6 +167,9 @@ class Api::AuctionsController < Api::BaseController
                else
                  'In Progress'
                end
+      if auction.starting_price_time.blank?
+        actions[2]['name'] = 'Manange !Starting Price Incomplete'
+      end
       data.push(id: auction.id, published_gid: auction.published_gid, name: auction.name, actual_begin_time: auction.actual_begin_time, status: status)
     end
     bodies = {data: data, total: total}
