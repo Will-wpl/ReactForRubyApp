@@ -47,7 +47,7 @@ RSpec.describe Api::Retailer::AuctionsController, type: :controller do
       it "return retailer auction" do
         expect(response).to be_success
         expect(JSON.parse(response.body)['id']).to eq auction_new.id
-        expect(JSON.parse(response.body)['auction_contracts'].count).to eq(2)
+        expect(JSON.parse(response.body)['live_auction_contracts'].count).to eq(2)
       end
     end
 

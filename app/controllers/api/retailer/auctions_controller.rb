@@ -84,7 +84,7 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
         auction_contracts = get_lived_auction_contracts(auction)
         render json: { id: auction.id, publish_status: auction.publish_status, name: auction.name, retailer_mode: auction.retailer_mode,
                        has_lt: has_lt, has_hts: has_hts, has_htl: has_htl, has_eht: has_eht, starting_price: auction.starting_price,
-                       start_datetime: auction.actual_begin_time, auction_contracts: auction_contracts }
+                       start_datetime: auction.actual_begin_time, live_auction_contracts: auction_contracts }
       end
     else
       render json: { message: 'you can not get the auction information.' }, status: 400
