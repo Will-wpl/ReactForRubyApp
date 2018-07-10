@@ -104,7 +104,7 @@ export const submitRetailManageInfo = (params) => {  //submit
     return put('/api/retailer/registrations/'+params.id+'/sign_up', params);
 }
 export const getRetailerUserInfoByUserId=(id)=>{
-    return get(`/api/retailer/registrations//${id}/retailer_info`);
+    return get(`/api/admin/registrations/${id}/retailer_info?user_id=${id}`);
 }
 
  

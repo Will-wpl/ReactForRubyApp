@@ -21,7 +21,9 @@ export const getBuyerUserInfo=()=>{
 }
 
 export const getBuyerUserInfoByUserId=(id)=>{
-    return get(`/api/buyer/registrations/${id}/retailer_info`);
+    return get(`/api/admin/registrations/${id}/buyer_info?user_id=${id}`);
+
+    // return get(''${id}/buyer_info`);
 }
 
 export const saveBuyerUserInfo=(params)=>{
@@ -30,6 +32,7 @@ export const saveBuyerUserInfo=(params)=>{
 export const submitBuyerUserInfo=(params)=>{
     return put('/api/buyer/registrations/'+params.user.id+'/sign_up',params);
 }
+
 
 
 export const ACTION_COMMANDS = {

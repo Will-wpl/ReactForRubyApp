@@ -166,7 +166,7 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
     describe 'Post Approval User' do
       context 'Approval' do
         def do_request
-          post :approval_user, params: {user_id: temp_buyer.id, approved: '1', comment: 'user test - approval'}
+          put :approval_user, params: {user_id: temp_buyer.id, approved: '1', comment: 'user test - approval'}
         end
 
         before { do_request }
