@@ -103,6 +103,23 @@ RSpec.describe Api::Admin::AuctionHistoriesController, type: :controller do
       end
     end
 
+    describe '#last' do
+      def do_request
+        get :last, params: { auction_id: auction.id }
+      end
+      context 'admin' do
+        before { sign_in admin_user }
+        before { do_request }
+        it "got auction history last list" do
+          expect(response).to be_success
+          list_body = JSON.parse(response.body)
+          expect(list_body.size).to eq(2)
+          expect(list_body['duration_6'].size).to eq(3)
+        end
+      end
+    end
+
+
   end
 
 end
