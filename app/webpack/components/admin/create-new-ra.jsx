@@ -316,6 +316,14 @@ export class CreateNewRA extends Component {
     noPermitInput(event){
         event.preventDefault();
     }
+    clearNoNum(obj){
+        obj.target.value = obj.target.value.replace(/[^\d.]/g,"");
+        obj.target.value = obj.target.value.replace(/\.{2,}/g,".");
+        obj.target.value = obj.target.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+        if(obj.target.value.indexOf(".")< 0 && obj.target.value !=""){
+            obj.target.value= parseFloat(obj.target.value);
+        }
+    }
     mouthsHtml(mouth){
         const html = <div key={mouth}>
                 <h3 className={"u-mt2 u-mb2"}>{mouth} mouths</h3>
@@ -334,39 +342,39 @@ export class CreateNewRA extends Component {
                         <tr>
                             <td>Peak</td>
                             <td>
-                                Starting:<input type="text" id={"starting_price_lt_peak_"+mouth} required={this.state.required} /><br/>
-                                Reserve:<input type="text" id={"reserve_price_lt_peak_"+mouth} required={this.state.required} />
+                                Starting:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"starting_price_lt_peak_"+mouth} required={this.state.required} /><br/>
+                                Reserve:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"reserve_price_lt_peak_"+mouth} required={this.state.required} />
                             </td>
                             <td>
-                                Starting:<input type="text" id={"starting_price_hts_peak_"+mouth} required={this.state.required} /><br/>
-                                Reserve:<input type="text" id={"reserve_price_hts_peak_"+mouth} required={this.state.required} />
+                                Starting:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"starting_price_hts_peak_"+mouth} required={this.state.required} /><br/>
+                                Reserve:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"reserve_price_hts_peak_"+mouth} required={this.state.required} />
                             </td>
                             <td>
-                                Starting:<input type="text" id={"starting_price_htl_peak_"+mouth} required={this.state.required} /><br/>
-                                Reserve:<input type="text" id={"reserve_price_htl_peak_"+mouth} required={this.state.required} />
+                                Starting:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"starting_price_htl_peak_"+mouth} required={this.state.required} /><br/>
+                                Reserve:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"reserve_price_htl_peak_"+mouth} required={this.state.required} />
                             </td>
                             <td>
-                                Starting:<input type="text" id={"starting_price_eht_peak_"+mouth} required={this.state.required} /><br/>
-                                Reserve:<input type="text" id={"reserve_price_eht_peak_"+mouth} required={this.state.required} />
+                                Starting:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"starting_price_eht_peak_"+mouth} required={this.state.required} /><br/>
+                                Reserve:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"reserve_price_eht_peak_"+mouth} required={this.state.required} />
                             </td>
                         </tr>
                         <tr>
                             <td>Off Peak</td>
                             <td>
-                                Starting:<input type="text" id={"starting_price_lt_off_peak_"+mouth} required={this.state.required} /><br/>
-                                Reserve:<input type="text" id={"reserve_price_lt_off_peak_"+mouth} required={this.state.required} />
+                                Starting:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"starting_price_lt_off_peak_"+mouth} required={this.state.required} /><br/>
+                                Reserve:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"reserve_price_lt_off_peak_"+mouth} required={this.state.required} />
                             </td>
                             <td>
-                                Starting:<input type="text" id={"starting_price_hts_off_peak_"+mouth} required={this.state.required} /><br/>
-                                Reserve:<input type="text" id={"reserve_price_hts_off_peak_"+mouth} required={this.state.required} />
+                                Starting:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"starting_price_hts_off_peak_"+mouth} required={this.state.required} /><br/>
+                                Reserve:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"reserve_price_hts_off_peak_"+mouth} required={this.state.required} />
                             </td>
                             <td>
-                                Starting:<input type="text" id={"starting_price_htl_off_peak_"+mouth} required={this.state.required} /><br/>
-                                Reserve:<input type="text" id={"reserve_price_htl_off_peak_"+mouth} required={this.state.required} />
+                                Starting:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"starting_price_htl_off_peak_"+mouth} required={this.state.required} /><br/>
+                                Reserve:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"reserve_price_htl_off_peak_"+mouth} required={this.state.required} />
                             </td>
                             <td>
-                                Starting:<input type="text" id={"starting_price_eht_off_peak_"+mouth} required={this.state.required} /><br/>
-                                Reserve:<input type="text" id={"reserve_price_eht_off_peak_"+mouth} required={this.state.required} />
+                                Starting:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"starting_price_eht_off_peak_"+mouth} required={this.state.required} /><br/>
+                                Reserve:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"reserve_price_eht_off_peak_"+mouth} required={this.state.required} />
                             </td>
                         </tr>
                         </tbody>
