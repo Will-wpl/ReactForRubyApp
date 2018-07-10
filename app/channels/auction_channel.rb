@@ -22,7 +22,7 @@ class AuctionChannel < ApplicationCable::Channel
   def set_bid(data)
     auction = Auction.find(params[:auction_id])
     calculate_dto = CalculateDto.new
-    contract = auction.auction_contracts.where(contract_duration: data['contract_duration']).take
+    contract = auction.auction_contracts.where('contract_duration = ?', data['contract_duration']).take
     if contract.blank?
       begin_time = auction.contract_period_start_date
       end_time = auction.contract_period_end_date

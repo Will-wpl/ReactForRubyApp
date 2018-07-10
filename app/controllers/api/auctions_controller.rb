@@ -112,7 +112,7 @@ class Api::AuctionsController < Api::BaseController
       status = params[:status]
       auction_result = AuctionResult.find_by_auction_contract_duration(params[:id], params[:contract_duration]).take
       auction_result = AuctionResult.new if auction_result.nil?
-      auction_contract = @auction.auction_contracts.where(contract_duration: params[:contract_duration]).first
+      auction_contract = @auction.auction_contracts.where('contract_duration = ?', params[:contract_duration]).first
       auction_result.auction_id = params[:id].to_i
       history = AuctionHistory.select('auction_histories.* ,users.company_name').joins(:user).where('auction_id = ? and user_id = ? and is_bidder = true and contract_duration = ?', params[:id], params[:user_id], params[:contract_duration]).order(actual_bid_time: :desc).first
       auction_result.reserve_price_lt_peak = auction_contract.reserve_price_lt_peak

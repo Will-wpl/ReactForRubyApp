@@ -14,6 +14,8 @@ class Api::ConsumptionDetailsController < Api::BaseController
   end
 
   def save
+    @consumption.contract_duration = params[:contract_duration]
+    @consumption.update(contract_duration: params[:contract_duration])
     consumption = @consumption
     details = JSON.parse(params[:details])
     ids = []
@@ -66,7 +68,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
       consumption = @consumption
       auction = Auction.find(consumption.auction_id)
       raise ActiveRecord::RecordNotFound if auction.nil?
-      days = Auction.get_days(auction.contract_period_start_date, auction.contract_period_end_date)
+
       values = []
       consumption.consumption_details.each do |consumption_detail|
         values.push(Consumption.convert_intake_value(consumption_detail.intake_level, consumption_detail.peak, consumption_detail.off_peak))
@@ -82,22 +84,23 @@ class Api::ConsumptionDetailsController < Api::BaseController
       consumption.eht_peak = intake_values[6]
       consumption.eht_off_peak = intake_values[7]
       if consumption.save!
-        auction.total_lt_peak += intake_values[0]
-        auction.total_lt_off_peak += intake_values[1]
-        auction.total_hts_peak += intake_values[2]
-        auction.total_hts_off_peak += intake_values[3]
-        auction.total_htl_peak += intake_values[4]
-        auction.total_htl_off_peak += intake_values[5]
-        auction.total_eht_peak += intake_values[6]
-        auction.total_eht_off_peak += intake_values[7]
-        total_volume = Auction.set_total_volume(
-          auction.total_lt_peak, auction.total_lt_off_peak, auction.total_hts_peak, auction.total_hts_off_peak,
-          auction.total_htl_peak, auction.total_htl_off_peak, auction.total_eht_peak, auction.total_eht_off_peak )
-        auction.total_volume = Auction.set_c_value(total_volume, days)
-        if auction.save!
-          render json: consumption, status: 200
+        if consumption.contract_duration.blank?
+          days = Auction.get_days(auction.contract_period_start_date, auction.contract_period_end_date)
+          auction = set_participate_auction_total(auction, intake_values, days)
+          if auction.save!
+            render json: consumption, status: 200
+          else
+            render json: nil, status: 500
+          end
         else
-          render json: nil, status: 500
+          auction_contract = auction.auction_contracts.where('contract_duration = ?', consumption.contract_duration).take
+          days = Auction.get_days(auction.contract_period_start_date, auction_contract.contract_period_end_date)
+          auction_contract = set_participate_auction_contract_total(auction_contract, intake_values, days)
+          if auction_contract.save!
+            render json: consumption, status: 200
+          else
+            render json: nil, status: 500
+          end
         end
       else
         render json: nil, status: 500
@@ -180,6 +183,38 @@ class Api::ConsumptionDetailsController < Api::BaseController
                    else
                      current_user.consumptions.find(params[:consumption_id])
                    end
+  end
+
+  def set_participate_auction_total(auction, intake_values, days)
+    auction.total_lt_peak += intake_values[0]
+    auction.total_lt_off_peak += intake_values[1]
+    auction.total_hts_peak += intake_values[2]
+    auction.total_hts_off_peak += intake_values[3]
+    auction.total_htl_peak += intake_values[4]
+    auction.total_htl_off_peak += intake_values[5]
+    auction.total_eht_peak += intake_values[6]
+    auction.total_eht_off_peak += intake_values[7]
+    total_volume = Auction.set_total_volume(
+        auction.total_lt_peak, auction.total_lt_off_peak, auction.total_hts_peak, auction.total_hts_off_peak,
+        auction.total_htl_peak, auction.total_htl_off_peak, auction.total_eht_peak, auction.total_eht_off_peak )
+    auction.total_volume = Auction.set_c_value(total_volume, days)
+    auction
+  end
+
+  def set_participate_auction_contract_total(auction_contract, intake_values, days)
+    auction_contract.total_lt_peak += intake_values[0]
+    auction_contract.total_lt_off_peak += intake_values[1]
+    auction_contract.total_hts_peak += intake_values[2]
+    auction_contract.total_hts_off_peak += intake_values[3]
+    auction_contract.total_htl_peak += intake_values[4]
+    auction_contract.total_htl_off_peak += intake_values[5]
+    auction_contract.total_eht_peak += intake_values[6]
+    auction_contract.total_eht_off_peak += intake_values[7]
+    total_volume = Auction.set_total_volume(
+        auction_contract.total_lt_peak, auction_contract.total_lt_off_peak, auction_contract.total_hts_peak, auction_contract.total_hts_off_peak,
+        auction_contract.total_htl_peak, auction_contract.total_htl_off_peak, auction_contract.total_eht_peak, auction_contract.total_eht_off_peak )
+    auction_contract.total_volume = Auction.set_c_value(total_volume, days)
+    auction_contract
   end
 
 end
