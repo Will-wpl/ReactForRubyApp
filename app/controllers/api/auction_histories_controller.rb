@@ -1,8 +1,25 @@
 class Api::AuctionHistoriesController < Api::BaseController
   # get histories by user_id and auction_id
   def show
-    @histories = AuctionHistory.select('users.name, users.company_name, auction_histories.*').joins(:user).where('auction_id = ? and user_id = ?', params[:auction_id], current_user.id).order(bid_time: :asc)
-    render json: @histories, status: 200
+    auction = Auction.find(params[:auction_id])
+    @histories = AuctionHistory.select('users.name, users.company_name, auction_histories.*').joins(:user).where('auction_id = ? and user_id = ?', params[:auction_id], current_user.id)
+    if auction.auction_contracts.blank?
+      @histories = @histories.order(bid_time: :asc)
+      render json: @histories, status: 200
+    else
+      hash = {}
+      auction.auction_contracts.each do |contract|
+        if has_live_contract(contract)
+          duration = contract.contract_duration
+          @histories.where(contract_duration: duration).order(bid_time: :asc)
+          hash.merge!({ "duration_#{duration}": @histories.where(contract_duration: duration).order(bid_time: :asc)})
+        end
+      end
+      render json: hash, status: 200
+
+    end
+
+
   end
 
   # get all users history list by auction_id
@@ -14,11 +31,7 @@ class Api::AuctionHistoriesController < Api::BaseController
     else
       hash = {}
       auction.auction_contracts.each do |contract|
-        has_lt = !is_zero(contract.total_lt_peak, contract.total_lt_off_peak)
-        has_hts = !is_zero(contract.total_hts_peak, contract.total_hts_off_peak)
-        has_htl = !is_zero(contract.total_htl_peak, contract.total_htl_off_peak)
-        has_eht = !is_zero(contract.total_eht_peak, contract.total_eht_off_peak)
-        if has_lt && has_hts && has_htl && has_eht
+        if has_live_contract(contract)
           duration = contract.contract_duration
           hash.merge!({ "duration_#{duration}": list_logic(params[:auction_id], contract.contract_duration)})
         end

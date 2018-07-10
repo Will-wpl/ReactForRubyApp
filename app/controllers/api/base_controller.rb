@@ -118,4 +118,12 @@ class Api::BaseController < ApplicationController
     is_zero
   end
 
+  def has_live_contract(contract)
+    has_lt = !is_zero(contract.total_lt_peak, contract.total_lt_off_peak)
+    has_hts = !is_zero(contract.total_hts_peak, contract.total_hts_off_peak)
+    has_htl = !is_zero(contract.total_htl_peak, contract.total_htl_off_peak)
+    has_eht = !is_zero(contract.total_eht_peak, contract.total_eht_off_peak)
+    has_lt && has_hts && has_htl && has_eht
+  end
+
 end
