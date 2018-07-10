@@ -8,21 +8,23 @@ export class UploadFile extends React.Component {
             fileData: this.props.fileData,
             showList: this.props.showList, //1  attachement list show,// 2 attachment list hide
             showWay: this.props.showWay, //1 attachment list show all , attachment show only last one 
-            uploadUrl: this.props.uploadUrl
+            uploadUrl: this.props.uploadUrl,
+            validate:this.props.validate
         }
-        // console.log("this.props.fileData")
-        // console.log(this.props.fileData)
     }
     componentDidMount() {
+        // this.setState({
+        //     validate:this.props.validate
+        // })
     }
     addinputfile(type, required) {
-
+       
         let fileHtml = '';
         fileHtml = <form id={type + "_form"} encType="multipart/form-data">
             {
                 this.state.fileData.map((item, index) =>
                     <div className="col-sm-12 col-md-12 u-grid" key={index}>
-                        <div className={`col-sm-12 col-md-${this.props.col_width?this.props.col_width:"10"} u-cell`}>
+                        <div className={`col-sm-12 col-md-${this.props.col_width ? this.props.col_width : "10"} u-cell`}>
                             <a className="upload_file_btn">
                                 <dfn>No file selected...</dfn>
                                 {/* accept="application/pdf,application/msword" */}
@@ -34,7 +36,7 @@ export class UploadFile extends React.Component {
                                             Please select file.
                                         </div>
                                     </div>
-                                    : <div>
+                                    : <div> 
                                         <input type="file" ref={type + index} onChange={this.changefileval.bind(this, type + index)} id={type + index} name="file" disabled={this.props.propsdisabled ? true : (window.location.href.indexOf("past") > 0 ? true : this.state.disabled)} />
                                         <b>Browse..</b>
                                     </div>}
@@ -43,6 +45,7 @@ export class UploadFile extends React.Component {
                                 <div className="progress-bar" style={{ width: "0%" }}>0%</div>
                             </div>
                             <div className="progress_files">
+                                <div id="showMessage" className={this.props.validate ? 'isPassValidate' : 'errormessage'}>This field is required!</div>
                                 {this.state.showList == 1 ?
                                     <ul>
                                         {
@@ -51,9 +54,8 @@ export class UploadFile extends React.Component {
                                                     return <li key={i}><a target="_blank" download={it.file_name} href={it.file_path}>{it.file_name}</a>{this.props.propsdisabled ? '' : (this.state.disabled ? '' : (window.location.href.indexOf("past") > 0 ? '' : <span className="remove_file" onClick={this.remove_file.bind(this, type, index, i, it.id)}></span>))}</li>
                                                 })
                                                 : item.files.map((it, i) => {
-                                                    let length=item.files.length;
-                                                    if(i==(length-1))
-                                                    {
+                                                    let length = item.files.length;
+                                                    if (i == (length - 1)) {
                                                         return <li key={i}><a target="_blank" download={it.file_name} href={it.file_path}>{it.file_name}</a></li>
                                                     }
                                                 })
@@ -61,7 +63,6 @@ export class UploadFile extends React.Component {
                                     </ul> :
                                     <div></div>
                                 }
-
                             </div>
                         </div>
                         <div className="col-sm-12 col-md-2 u-cell">
@@ -83,7 +84,7 @@ export class UploadFile extends React.Component {
         fileObj.parent().prev("dfn").text(fileObj.val());
     }
     remove_file(filetype, typeindex, fileindex, fileid) {
-      
+
         let fileObj;
         removeFile(fileid).then(res => {
             fileObj = this.state.fileData;
@@ -144,7 +145,9 @@ export class UploadFile extends React.Component {
                 })
                 this.setState({
                     fileData: fileObj
+
                 })
+                $('#showMessage').removeClass('errormessage').addClass('isPassValidate')
                 //console.log(res);
             }, error: () => {
                 barObj.find(".progress-bar").text('upload failed!');

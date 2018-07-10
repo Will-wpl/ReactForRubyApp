@@ -55,7 +55,7 @@ export class BuyerRegister extends Component {
         fileObj = this.state.fileData;
         entityObj = this.state.user_entity_data;
         getBuyerUserInfo().then(res => {
-            console.log(res)
+             console.log(res)
             if (res.user_base_info) {
                 let item = res.user_base_info;
                 this.setState({
@@ -89,7 +89,7 @@ export class BuyerRegister extends Component {
 
             if (res.buyer_entities) {
                 let entity = res.buyer_entities;
-                let user_entity=[];
+                let user_entity = [];
                 if (entity.length > 0) {
                     this.setState({
                         user_company_name: entity[0].company_name,
@@ -103,19 +103,16 @@ export class BuyerRegister extends Component {
                         user_contact_office_no: entity[0].contact_office_no
                     })
 
-                    if(entity.length>1)
-                    {
-                        res.buyer_entities.map((item,index)=>{
-                            if(index>0)
-                            {
+                    if (entity.length > 1) {
+                        res.buyer_entities.map((item, index) => {
+                            if (index > 0) {
                                 user_entity.push(item);
                             }
                         })
-
                         entityObj['ENTITY_LIST'][0].entities = user_entity;
                         this.setState({
                             user_entity_data: entityObj
-                        })      
+                        })
                     }
                 }
             }
@@ -451,18 +448,20 @@ export class BuyerRegister extends Component {
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="user_contact_office_no" value={this.state.user_contact_office_no} onChange={this.Change.bind(this, 'user_contact_office_no')} disabled={this.state.disabled} ref="user_contact_office_no" maxLength="50" aria-required="true"></input>
                                     </div>
+                                    <div>
+                                        <button className="lm--button lm--button--primary" title="this is retailer upload documents" onClick={this.addUserEntity.bind(this)} >+</button>
+                                    </div>
                                 </div>
-                                <div className="lm--formItem lm--formItem--inline string">
+                                {/* <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
 
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-
                                         <div className="col-sm-12 col-md-2 u-cell">
                                             <button className="lm--button lm--button--primary" title="this is retailer upload documents" onClick={this.addUserEntity.bind(this)} >+</button>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
                                 <UserEntity disabled={false} entityList={this.state.user_entity_data} ref="userEntity" />
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
