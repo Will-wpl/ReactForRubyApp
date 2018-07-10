@@ -12,7 +12,7 @@ export default class BidForm extends Component {
             status: [true, true, true, true, true, true, true, true],
             answered: true
         }
-        this.compareConfigs = ['0.9999', '0.9999', '0.9999', '0.9999', '0.9999', '0.9999', '0.9999', '0.9999'];
+        this.compareConfigs = ['9999', '9999', '9999', '9999', '9999', '9999', '9999', '9999'];
     }
 
     initConfigs(configs) {
