@@ -700,14 +700,6 @@ class Api::AuctionsController < Api::BaseController
     auction_json
   end
 
-  # @param [Object] intake_peak
-  # @param [Object] intake_off_peak
-  def is_zero(intake_peak, intake_off_peak)
-    is_zero = false
-    is_zero = true if (intake_peak == 0 || intake_peak.blank?) && (intake_off_peak == 0 || intake_off_peak.blank?)
-    is_zero
-  end
-
   def get_lived_auction_contracts(auction, is_admin)
     contracts = auction.auction_contracts
     auction_contracts = []
