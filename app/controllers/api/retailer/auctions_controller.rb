@@ -81,7 +81,7 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
           render json: { id: auction.id, publish_status: auction.publish_status, name: auction.name, retailer_mode: auction.retailer_mode,
                          has_lt: has_lt, has_hts: has_hts, has_htl: has_htl, has_eht: has_eht, starting_price: auction.starting_price, start_datetime: auction.actual_begin_time }, status: 200
       else
-        auction_contracts = get_lived_auction_contracts(auction)
+        auction_contracts = get_lived_auction_contracts(auction , false)
         render json: { id: auction.id, publish_status: auction.publish_status, name: auction.name, retailer_mode: auction.retailer_mode,
                        has_lt: has_lt, has_hts: has_hts, has_htl: has_htl, has_eht: has_eht, starting_price: auction.starting_price,
                        start_datetime: auction.actual_begin_time, live_auction_contracts: auction_contracts }
