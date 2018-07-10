@@ -14,7 +14,8 @@ class AuctionHistory < ApplicationRecord
   # Validations
 
   # Scopes
-
+  scope :find_init_bidder, ->(auction_id) { where('auction_id = ? and is_bidder = true and flag is null', auction_id) }
+  scope :find_contract_duration, ->(contract_duration) { where(contract_duration: contract_duration) }
   # Callbacks
 
   # Delegates

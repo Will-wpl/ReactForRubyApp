@@ -483,60 +483,114 @@ class Api::AuctionsController < Api::BaseController
   end
 
   def auction_update_update_func
-    ActiveRecord::Base.transaction do
       if @auction.update!(model_params)
         unless params[:auction][:auction_contracts].nil?
           update_auction_contracts(params[:auction][:auction_contracts] , @auction)
         end
-        if @auction.publish_status == Auction::PublishStatusPublished
-          update_auction_at_update
+        auction = Auction.find(@auction.id)
+        if auction.publish_status == Auction::PublishStatusPublished
+          calculate_dto = CalculateDto.new
+          calculate_dto.auction_id = auction.id
+          calculate_dto.begin_time = auction.contract_period_start_date
+          if auction.auction_contracts.blank? # old
+            calculate_dto.total_lt_peak = auction.total_lt_peak
+            calculate_dto.total_lt_off_peak = auction.total_lt_off_peak
+            calculate_dto.total_hts_peak = auction.total_hts_peak
+            calculate_dto.total_hts_off_peak = auction.total_hts_off_peak
+            calculate_dto.total_htl_peak = auction.total_htl_peak
+            calculate_dto.total_htl_off_peak = auction.total_htl_off_peak
+            calculate_dto.total_eht_peak = auction.total_eht_peak
+            calculate_dto.total_eht_off_peak = auction.total_eht_off_peak
+            calculate_dto.lt_peak = auction.starting_price
+            calculate_dto.lt_off_peak = auction.starting_price
+            calculate_dto.hts_peak = auction.starting_price
+            calculate_dto.hts_off_peak = auction.starting_price
+            calculate_dto.htl_peak = auction.starting_price
+            calculate_dto.htl_off_peak = auction.starting_price
+            calculate_dto.eht_peak = auction.starting_price
+            calculate_dto.eht_off_peak = auction.starting_price
+            calculate_dto.end_time = auction.contract_period_end_date
+            update_auction_at_update(calculate_dto)
+          else
+            contracts = auction.auction_contracts
+            contracts.each do | contract |
+              calculate_dto.total_lt_peak = contract.total_lt_peak
+              calculate_dto.total_lt_off_peak = contract.total_lt_off_peak
+              calculate_dto.total_hts_peak = contract.total_hts_peak
+              calculate_dto.total_hts_off_peak = contract.total_hts_off_peak
+              calculate_dto.total_htl_peak = contract.total_htl_peak
+              calculate_dto.total_htl_off_peak = contract.total_htl_off_peak
+              calculate_dto.total_eht_peak = contract.total_eht_peak
+              calculate_dto.total_eht_off_peak = contract.total_eht_off_peak
+              calculate_dto.lt_peak = contract.starting_price_lt_peak
+              calculate_dto.lt_off_peak = contract.starting_price_lt_off_peak
+              calculate_dto.hts_peak = contract.starting_price_hts_peak
+              calculate_dto.hts_off_peak = contract.starting_price_hts_off_peak
+              calculate_dto.htl_peak = contract.starting_price_htl_peak
+              calculate_dto.htl_off_peak = contract.starting_price_htl_off_peak
+              calculate_dto.eht_peak = contract.starting_price_eht_peak
+              calculate_dto.eht_off_peak = contract.starting_price_eht_off_peak
+              calculate_dto.end_time = contract.contract_period_end_date
+              calculate_dto.contract_duration = contract.contract_duration
+              update_auction_at_update(calculate_dto)
+            end
+          end
         end
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
       end
       render json: get_auction_details(@auction), status: 200
-    end
   end
 
-  def update_auction_at_update
-    days = Auction.get_days(@auction.contract_period_start_date, @auction.contract_period_end_date)
-    total_award_sum = AuctionHistory.set_total_award_sum(Auction.set_c_value(@auction.total_lt_peak, days),
-                                                         Auction.set_c_value(@auction.total_lt_off_peak, days),
-                                                         Auction.set_c_value(@auction.total_hts_peak, days),
-                                                         Auction.set_c_value(@auction.total_hts_off_peak, days),
-                                                         Auction.set_c_value(@auction.total_htl_peak, days),
-                                                         Auction.set_c_value(@auction.total_htl_off_peak, days),
-                                                         Auction.set_c_value(@auction.total_eht_peak, days),
-                                                         Auction.set_c_value(@auction.total_eht_off_peak, days),
-                                                         @auction.starting_price, @auction.starting_price,
-                                                         @auction.starting_price, @auction.starting_price,
-                                                         @auction.starting_price, @auction.starting_price,
-                                                         @auction.starting_price, @auction.starting_price)
+  def update_auction_at_update(calculate_dto)
+    days = Auction.get_days(calculate_dto.begin_time, calculate_dto.end_time)
+    total_award_sum = AuctionHistory.set_total_award_sum(Auction.set_c_value(calculate_dto.total_lt_peak, days),
+                                          Auction.set_c_value(calculate_dto.total_lt_off_peak, days),
+                                          Auction.set_c_value(calculate_dto.total_hts_peak, days),
+                                          Auction.set_c_value(calculate_dto.total_hts_off_peak, days),
+                                          Auction.set_c_value(calculate_dto.total_htl_peak, days),
+                                          Auction.set_c_value(calculate_dto.total_htl_off_peak, days),
+                                          Auction.set_c_value(calculate_dto.total_eht_peak, days),
+                                          Auction.set_c_value(calculate_dto.total_eht_off_peak, days),
+                                          calculate_dto.lt_peak, calculate_dto.lt_off_peak,
+                                          calculate_dto.hts_peak, calculate_dto.hts_off_peak,
+                                          calculate_dto.htl_peak, calculate_dto.htl_off_peak,
+                                          calculate_dto.eht_peak, calculate_dto.eht_off_peak)
     total_volume = Auction.set_total_volume(
-        @auction.total_lt_peak, @auction.total_lt_off_peak,
-        @auction.total_hts_peak, @auction.total_hts_off_peak,
-        @auction.total_htl_peak, @auction.total_htl_off_peak,
-        @auction.total_eht_peak, @auction.total_eht_off_peak
-    )
+        calculate_dto.total_lt_peak, calculate_dto.total_lt_off_peak,
+        calculate_dto.total_hts_peak, calculate_dto.total_hts_off_peak,
+        calculate_dto.total_htl_peak, calculate_dto.total_htl_off_peak,
+        calculate_dto.total_eht_peak, calculate_dto.total_eht_off_peak )
     new_total_volume = Auction.set_c_value(total_volume, days)
 
     average_price = AuctionHistory.set_average_price(total_award_sum, new_total_volume)
-
-    Arrangement.where(auction_id: @auction.id, accept_status: Arrangement::AcceptStatusAccept)
-        .update_all(lt_peak: @auction.starting_price, lt_off_peak: @auction.starting_price,
-                    hts_peak: @auction.starting_price, hts_off_peak: @auction.starting_price,
-                    htl_peak: @auction.starting_price, htl_off_peak: @auction.starting_price,
-                    eht_peak: @auction.starting_price, eht_off_peak: @auction.starting_price)
-    AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id)
-        .update_all(bid_time: @auction.actual_begin_time, actual_bid_time: @auction.actual_begin_time,
-                    lt_peak: @auction.starting_price, lt_off_peak: @auction.starting_price,
-                    hts_peak: @auction.starting_price, hts_off_peak: @auction.starting_price,
-                    htl_peak: @auction.starting_price, htl_off_peak: @auction.starting_price,
-                    eht_peak: @auction.starting_price, eht_off_peak: @auction.starting_price,
-                    total_award_sum: total_award_sum, average_price: average_price)
-
-    # set sorted histories to redis
-    histories = AuctionHistory.where('auction_id = ? and is_bidder = true and flag is null', @auction.id)
-    RedisHelper.set_current_sorted_histories(@auction.id, histories)
+    if calculate_dto.contract_duration.blank?
+      Arrangement.where(auction_id: calculate_dto.auction_id, accept_status: Arrangement::AcceptStatusAccept)
+          .update_all(lt_peak: @auction.starting_price, lt_off_peak: @auction.starting_price,
+                      hts_peak: @auction.starting_price, hts_off_peak: @auction.starting_price,
+                      htl_peak: @auction.starting_price, htl_off_peak: @auction.starting_price,
+                      eht_peak: @auction.starting_price, eht_off_peak: @auction.starting_price)
+      AuctionHistory.find_init_bidder(calculate_dto.auction_id)
+          .update_all(bid_time: @auction.actual_begin_time, actual_bid_time: @auction.actual_begin_time,
+                      lt_peak: @auction.starting_price, lt_off_peak: @auction.starting_price,
+                      hts_peak: @auction.starting_price, hts_off_peak: @auction.starting_price,
+                      htl_peak: @auction.starting_price, htl_off_peak: @auction.starting_price,
+                      eht_peak: @auction.starting_price, eht_off_peak: @auction.starting_price,
+                      total_award_sum: total_award_sum, average_price: average_price)
+      # set sorted histories to redis
+      histories = AuctionHistory.find_init_bidder(calculate_dto.auction_id)
+      RedisHelper.set_current_sorted_histories(@auction.id, histories)
+    else
+      AuctionHistory.find_init_bidder(calculate_dto.auction_id).find_contract_duration(calculate_dto.contract_duration)
+          .update_all(bid_time: @auction.actual_begin_time, actual_bid_time: @auction.actual_begin_time,
+                      lt_peak: calculate_dto.lt_peak, lt_off_peak: calculate_dto.lt_off_peak,
+                      hts_peak: calculate_dto.hts_peak, hts_off_peak: calculate_dto.hts_off_peak,
+                      htl_peak: calculate_dto.htl_peak, htl_off_peak: calculate_dto.htl_off_peak,
+                      eht_peak: calculate_dto.eht_peak, eht_off_peak: calculate_dto.eht_off_peak,
+                      total_award_sum: total_award_sum, average_price: average_price)
+      # set sorted histories to redis
+      histories = AuctionHistory.find_init_bidder(calculate_dto.auction_id).find_contract_duration(calculate_dto.contract_duration)
+      RedisHelper.set_current_sorted_histories_duration(@auction.id, histories, calculate_dto.contract_duration)
+    end
   end
 
   def get_published_order_list(params, headers, auction)

@@ -35,7 +35,7 @@ FactoryBot.define do
   end
 
   trait :total do
-    total_volume 60000
+    total_volume 80000
     total_lt_peak 1000
     total_lt_off_peak 1000
     total_hts_peak 1000
