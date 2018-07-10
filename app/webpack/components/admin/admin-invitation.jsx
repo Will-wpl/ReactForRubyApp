@@ -448,6 +448,7 @@ upload(type, index){
             </tr>
             </tbody>
         </table>
+            <div className="col-sm-12 col-md-6"><a href={`/admin/auctions/${sessionStorage.auction_id}/consumption?type=2&contract_duration=${data.contract_duration}`} className="lm--button lm--button--primary col-sm-12"><span>Company Consumption Details</span></a></div>
         </div>
         return html
     }
@@ -486,7 +487,7 @@ render() {
                                 </label>
                                 <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                 <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=2`} className="lm--button lm--button--primary col-sm-12"><span>Select Company Buyers</span></a></div>
-                                <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=3`} className="lm--button lm--button--primary col-sm-12"><span>Select Individual Buyers</span></a></div>
+                                {/*<div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=3`} className="lm--button lm--button--primary col-sm-12"><span>Select Individual Buyers</span></a></div>*/}
                                 <div className="col-sm-12 col-md-12 u-cell"><button className="lm--button lm--button--primary col-sm-12 orange" disabled={this.state.buyer_company_pend==0&&this.state.buyer_individual_pend==0?true:false} onClick={this.show_send_mail.bind(this,'buyer')}><span>Send Invitation Email</span></button></div>
                                 </div>
                             </div>}
@@ -572,8 +573,7 @@ render() {
                                         At least one field in intake level must have value greater than 0 kWh.
                                     </div>
                                 </div>
-                                <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/consumption?type=2`} className="lm--button lm--button--primary col-sm-12"><span>Company Consumption Details</span></a></div>
-                                <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/consumption?type=3`} className="lm--button lm--button--primary col-sm-12"><span>Individual Consumption Details</span></a></div>
+                                {/*<div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/consumption?type=3`} className="lm--button lm--button--primary col-sm-12"><span>Individual Consumption Details</span></a></div>*/}
                         </div>
                     </div>
                     {/*<div className="lm--formItem lm--formItem--inline string u-mt3">*/}
