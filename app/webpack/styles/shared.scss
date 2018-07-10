@@ -107,6 +107,9 @@ abbr[title]{color: #fe0000; text-decoration: none;}
      overflow:auto; height: 30px;
      tr{ &.isbidder{background:green; transition: 0.5s all;}
        td{border:1px solid #314657; text-align: center; height: 40px; padding:5px; word-break: break-all;
+         span.fill_yes{
+           background: url("../images/notification_sent.png") no-repeat left; background-size:15px;  width:30px; display: inline-block; height:40px;
+         }
         a{ 
           display: block; width: 100%; height: 100%; cursor: pointer;
           &.report{background: url("../images/Reverse_Auction_Report.png") no-repeat center; background-size:19px;}
@@ -166,7 +169,9 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 
 
 
-
+.mouth_tab{
+  .selected{background:#E60013}
+}
 //var modal css by will
 .modal_hide{ opacity: 0; z-index: -1;}
 .modal_show{  opacity: 1; z-index: 10; transition: 0.8s all;}
@@ -777,17 +782,4 @@ ul.history_files{
 }
 .isPassValidate{
   display: none;
-}
-.isDisplay{
-  display: block;
-}
-.isHide{
-  display: none;
-}
-.isDisabled{
-  
-}
-.isActived
-{
-
 }
