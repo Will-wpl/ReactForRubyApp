@@ -31,6 +31,15 @@ ul, menu, dir {
             position: relative;
             .required_error{position:absolute; display: none; top:45px; left:0; width: 100%; padding:5px 10px; border:2px solid #fbb136; background: #fff; color:#333; font-size: 15px;z-index: 10}
           }
+          label{
+            abbr{display: inline-block;}
+            a{
+              font-size: 12px;
+              padding: 4px 15px;
+              margin-left: 10px;
+              }
+            &.checkbox_div{margin:12px 10px;}
+          }
           b{ 
               font-weight: normal; font-size: 18px; line-height: 44px; text-align:center; display: block;
               &.textLeft{text-align: left;}
@@ -49,6 +58,7 @@ ul, menu, dir {
               border-radius: 0.3125rem;
               &.date_ico{background:url("../images/date.png") no-repeat right;}
               &.time_ico{background:url("../images/time.png") no-repeat right;}
+              &.checkbox{ display: inline-block; width: auto;}
             }
       }
   }

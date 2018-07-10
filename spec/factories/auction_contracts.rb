@@ -33,4 +33,16 @@ FactoryBot.define do
     contract_duration '24'
     contract_period_end_date { DateTime.now.advance(months: 24).advance(days: -1) }
   end
+
+  trait :total do
+    total_volume 80000
+    total_lt_peak 1000
+    total_lt_off_peak 1000
+    total_hts_peak 1000
+    total_hts_off_peak 1000
+    total_htl_peak 1000
+    total_htl_off_peak 1000
+    total_eht_peak 1000
+    total_eht_off_peak 1000
+  end
 end
