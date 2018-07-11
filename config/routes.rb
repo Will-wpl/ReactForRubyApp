@@ -107,6 +107,12 @@ Rails.application.routes.draw do
       resources :user_extensions, only: %i[index]
       resources :email_templates, only: %i[index show update]
       resources :la_templates, only: %i[show update]
+      resources :registrations, only: %i[index retailer_info buyer_info] do
+        member do
+          get 'retailer_info'
+          get 'buyer_info'
+        end
+      end
     end
   end
 
@@ -167,11 +173,10 @@ Rails.application.routes.draw do
           post 'acknowledge_all'
         end
       end
-      resources :registrations, only: %i[index update sign_up validate retailer_info] do
+      resources :registrations, only: %i[index update sign_up validate] do
         member do
           put 'sign_up'
           put 'validate'
-          get 'retailer_info'
         end
       end
       resources :user_attachments, only: %i[create] do
@@ -202,11 +207,10 @@ Rails.application.routes.draw do
       resources :auction_results, only: %i[index] do
 
       end
-      resources :registrations, only: %i[index update sign_up validate buyer_info] do
+      resources :registrations, only: %i[index update sign_up validate] do
         member do
           put 'sign_up'
           put 'validate'
-          get 'buyer_info'
         end
       end
       resources :user_attachments, only: %i[create] do
