@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom';
 import {RetailerBeforeLive} from './retailer-before-live';
+import {DuringCountDown} from '../shared/during-countdown';
 import LiveHomePage from './live-dashboard/home';
 import {AUCTION_PROPS, getAuction, getAuctionTimeRule} from '../../javascripts/componentService/common/service';
 import {calTwoTimeSpace} from '../../javascripts/componentService/util';
@@ -9,10 +10,13 @@ export class RetailerLiveContainer extends Component {
 
     constructor(props) {
         super(props);
-        this.state={};
+        this.state = {extendVisible: false, holdStatus:false,livetype:'6'};
     }
     componentDidMount() {
         if (this.props.auction) {
+            if(this.props.auction.live_auction_contracts){
+                this.setState({livetype:this.props.auction.live_auction_contracts.length>0?this.props.auction.live_auction_contracts[0].contract_duration:'6'});
+            }
             if (this.props.rule) {
                 if (!this.props.rule[AUCTION_PROPS.HOLD_STATUS]) {
                     const beforeStartSpace = calTwoTimeSpace(this.props.rule[AUCTION_PROPS.ACTUAL_BEGIN_TIME], this.props.rule[AUCTION_PROPS.ACTUAL_CURRENT_TIME]);
@@ -35,7 +39,13 @@ export class RetailerLiveContainer extends Component {
         }
 
     }
-
+    goToFinish() {
+        window.location.href=`/retailer/auctions/${this.props.auction ? this.props.auction.id : 1}/finish`;
+    }
+    liveTab(index){
+        this.setState({livetype:index});
+        this.refs.LiveHomePage.getHistory();
+    }
     render() {
         let content = <div></div>;
         if (this.props.auction) {
@@ -43,7 +53,26 @@ export class RetailerLiveContainer extends Component {
                 content = !this.state.showLive ? (
                     <RetailerBeforeLive countDownOver={() => this.setState({showLive: true})} auction={this.props.auction}/>
                 ) : (
-                    <LiveHomePage auction={this.props.auction}/>
+                    <div>
+                        <DuringCountDown auction={this.props.auction} countDownOver={this.goToFinish.bind(this)}>
+                            <div id="retailer_hold" className={this.state.extendVisible ? '' : 'live_hide'}>
+                                <b>Admin has extended auction duration by {this.state.extendVisible} min.</b>
+                            </div>
+                        </DuringCountDown>
+                        {this.props.auction.live_auction_contracts?
+                        <div className="u-grid u-mt2 mouth_tab">
+                            {
+                                this.props.auction.live_auction_contracts.map((item,index)=>{
+                                    return <div key={index} className={"col-sm-12 col-md-3 u-cell"}>
+                                        <a className={this.state.livetype===item.contract_duration?"col-sm-12 lm--button lm--button--primary selected"
+                                            :"col-sm-12 lm--button lm--button--primary"}
+                                           onClick={this.liveTab.bind(this,item.contract_duration)} >{item.contract_duration} Mouths</a>
+                                    </div>
+                                })
+                            }
+                        </div>:''}
+                    <LiveHomePage ref="LiveHomePage" auction={this.props.auction} livetype={this.state.livetype} extend={(min)=>{this.setState({extendVisible:min})}}/>
+                    </div>
                 )
             }
         } else {
