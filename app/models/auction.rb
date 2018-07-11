@@ -42,7 +42,7 @@ NotAllowDeviation = '0'.freeze
   # Methods (class methods before instance methods)
 
   def self.set_total_volume(*values)
-    values.inject(BigDecimal.new('0')) { |sum, n| sum + BigDecimal.new(n) }
+    values.inject(BigDecimal.new('0')) { |sum, n| sum + BigDecimal.new(n.nil? ? 0 : n) }
   end
 
   def self.get_days(start_date, end_date)
@@ -51,6 +51,6 @@ NotAllowDeviation = '0'.freeze
   end
 
   def self.set_c_value(c, days)
-    BigDecimal.new(c) * 12 / 365 * days
+    BigDecimal.new(c.nil? ? 0 : c) * 12 / 365 * days
   end
 end

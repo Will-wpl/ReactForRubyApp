@@ -227,7 +227,8 @@ class AuctionHistory < ApplicationRecord
   end
 
   def self.set_average_price(total_award_sum, total_volume)
-    BigDecimal.new(total_award_sum) / BigDecimal.new(total_volume)
+    average_price = BigDecimal.new(total_award_sum) / BigDecimal.new(total_volume)
+    average_price.nan? ? 0 : average_price
   end
 
   # for init history data, belong to root function 2
