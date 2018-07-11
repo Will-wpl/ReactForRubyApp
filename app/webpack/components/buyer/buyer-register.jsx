@@ -261,7 +261,7 @@ export class BuyerRegister extends Component {
         return flag;
     }
 
-    
+
     checkSuccess() {
         let flag = true, hasDoc = true;
         let arr = validator_Object(this.state, this.validatorItem);
@@ -506,7 +506,7 @@ export class BuyerRegister extends Component {
     }
 
     showView() {
-         this.refs.Modal_upload.showModal();
+        this.refs.Modal_upload.showModal();
     }
 
     save() {
@@ -558,7 +558,7 @@ export class BuyerRegister extends Component {
             this.refs.Modal_Option.showModal('comfirm', { action: 'approve' }, '');
         }
     }
-    
+
     doAction(obj) {
         let param = {
             user_id: this.state.userid,
@@ -567,13 +567,11 @@ export class BuyerRegister extends Component {
         };
 
         if (obj.action === 'reject') {
-            if(this.checkRejectAction())
-            {
+            if (this.checkRejectAction()) {
                 approveUser(param).then(res => {
                     location.href = "/admin/users/buyers";
                 })
             }
-           
         }
         else {
             approveUser(param).then(res => {
@@ -801,13 +799,15 @@ export class BuyerRegister extends Component {
                                         </select>
                                     </div>
                                 </div>
-                                <div className="lm--formItem lm--formItem--inline string" className={this.state.use_type === 'admin_approve' ? 'isDisplay' : 'isHide'} >
-                                    <label className="lm--formItem-left lm--formItem-label string required">
-                                        Comment:
+                                <div className={this.state.use_type === 'admin_approve' ? 'isDisplay' : 'isHide'}>
+                                    <div className="lm--formItem lm--formItem--inline string">
+                                        <label className="lm--formItem-left lm--formItem-label string required">
+                                            Comment:
                                     </label>
-                                    <div className="lm--formItem-right lm--formItem-control">
-                                        <textarea name="comment" value={this.state.comment} onChange={this.Change.bind(this, 'comment')} ref="comment" aria-required="true"></textarea>
-                                        <div className='isPassValidate' id='comment_message' >This field is required!</div>
+                                        <div className="lm--formItem-right lm--formItem-control">
+                                            <textarea name="comment" value={this.state.comment} onChange={this.Change.bind(this, 'comment')} ref="comment" aria-required="true"></textarea>
+                                            <div className='isPassValidate' id='comment_message' >This field is required!</div>
+                                        </div>
                                     </div>
                                 </div>
 
