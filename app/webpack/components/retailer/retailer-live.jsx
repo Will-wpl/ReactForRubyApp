@@ -55,7 +55,41 @@ export class RetailerLive extends Component {
             }
         }
     }
-
+    mouthsHtml(data,index){
+        const html = <div key={index} className="col-sm-12 col-md-6 push-md-3">
+            <h3 className={"u-mt2 u-mb2"}>{data.contract_duration} mouths</h3>
+            <div className="lm--formItem lm--formItem--inline string optional">
+                <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        {data.has_lt?<th>LT</th>:''}
+                        {data.has_hts?<th>HTS</th>:''}
+                        {data.has_htl?<th>HTL</th>:''}
+                        {data.has_eht?<th>EHT</th>:''}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Peak</td>
+                        {data.has_lt?<td>{data.starting_price_lt_peak}</td>:''}
+                        {data.has_hts?<td>{data.starting_price_hts_peak}</td>:''}
+                        {data.has_htl?<td>{data.starting_price_htl_peak}</td>:''}
+                        {data.has_eht?<td>{data.starting_price_eht_peak}</td>:''}
+                    </tr>
+                    <tr>
+                        <td>Off Peak</td>
+                        {data.has_lt?<td>{data.starting_price_lt_off_peak}</td>:''}
+                        {data.has_hts?<td>{data.starting_price_hts_off_peak}</td>:''}
+                        {data.has_htl?<td>{data.starting_price_htl_off_peak}</td>:''}
+                        {data.has_eht?<td>{data.starting_price_eht_off_peak}</td>:''}
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        return html;
+    }
     render() {
         let content;
         if (this.props.auction) {
@@ -75,6 +109,16 @@ export class RetailerLive extends Component {
                                 Page will automatically refresh when<br></br>Reverse Auction commences.
                             </p>
                         </div>
+                        {this.props.auction.live_auction_contracts?
+                            <div className="createRaMain u-grid">
+                                <h2>Starting Price</h2>
+                                {this.props.auction.live_auction_contracts.length>0?
+                                    this.props.auction.live_auction_contracts.map((item,index)=>{
+                                        this.mouthsHtml(item,index);
+                                    }):''
+                                }
+                            </div>:''
+                        }
                         <div className="createRaMain u-grid">
                             <a className="lm--button lm--button--primary u-mt3" href="/retailer/home" >Back to Homepage</a>
                         </div>
