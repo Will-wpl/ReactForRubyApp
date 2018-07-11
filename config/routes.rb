@@ -171,7 +171,7 @@ Rails.application.routes.draw do
         member do
           put 'sign_up'
           put 'validate'
-          put 'retailer_info'
+          get 'retailer_info'
         end
       end
       resources :user_attachments, only: %i[create] do
@@ -206,7 +206,7 @@ Rails.application.routes.draw do
         member do
           put 'sign_up'
           put 'validate'
-          put 'buyer_info'
+          get 'buyer_info'
         end
       end
       resources :user_attachments, only: %i[create] do
