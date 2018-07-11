@@ -39,151 +39,13 @@
 - if @user.has_role?(:retailer)
   h1.title_top.u-mt2
    = 'Manage Account'
-  .u-grid.u-mb3
-    .col-sm-12.col-md-8.u-mha
-      = simple_form_for(resource, as: resource_name, url: registration_path(resource_name),
-        wrapper: :vertical_form, defaults: { label: false }) do |f|
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label 
-            b * 
-            attr Email
-          .lm--formItem-right.lm--formItem-control
-            = f.input :email,required:true
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label
-            font Company Information:
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label 
-            b * &nbsp;
-            attr Company Name
-          .lm--formItem-right.lm--formItem-control
-            = f.input :company_name,required:true,placeholder: ''
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label
-            b * &nbsp;
-            attr Unique Entity Number (UEN)
-          .lm--formItem-right.lm--formItem-control
-            - if @user.approval_status == '1'
-              = f.input :company_unique_entity_number, disabled: true
-            - else
-              = f.input :company_unique_entity_number, required: true
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label 
-            b * &nbsp;
-            attr Retailer Licence Number
-          .lm--formItem-right.lm--formItem-control
-            - if @user.approval_status == '1'
-              = f.input :company_license_number, disabled: true
-            - else
-              = f.input :company_license_number, required: true
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label
-            b * &nbsp;
-            attr GST No.:
-          .lm--formItem-right.lm--formItem-control
-            = f.input :gst_no, required: true
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label
-            b * &nbsp;
-            attr Company Address
-          .lm--formItem-right.lm--formItem-control
-            = f.input :company_address, required: true
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label
-            font Contact Information:
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label 
-            b * 
-            attr Contact Name
-          .lm--formItem-right.lm--formItem-control
-            = f.input :name,required:true,placeholder: ''
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label 
-            b * 
-            attr Mobile Number
-          .lm--formItem-right.lm--formItem-control
-            = f.input :account_mobile_number,required:true,pattern:'^(\d{8})$',maxlength:'8',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label 
-            b * 
-            attr Office Number
-          .lm--formItem-right.lm--formItem-control
-            = f.input :account_office_number,required:true,pattern:'^(\d{8})$',maxlength:'8',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label
-          .lm--formItem-right.lm--formItem-control.save-right
-            a.lm--button href="/users/edit" Cancel
-            = f.button :submit, 'Save', class: 'lm--button lm--button lm--button--primary', data: { disable_with: t('views.disable_with') }
+  div id="retailer_register"
   div.createRaMain.u-grid
     a.lm--button.lm--button--primary.u-mt3 href="/retailer/home" Back to Homepage
 - if @user.has_role?(:buyer) and  @user.consumer_type == '2'
   h1.title_top.u-mt2
    = 'Manage Account'
-  .u-grid.u-mb3.buyer_registration
-    .col-sm-12.col-md-8.u-mha
-      = simple_form_for(resource, as: resource_name, url: registration_path(resource_name),
-        wrapper: :vertical_form, defaults: { label: false }) do |f|
-        /= f.input :consumer_type, as: :hidden
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label 
-            b * 
-            attr Email
-          .lm--formItem-right.lm--formItem-control
-            = f.input :email,required:true
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label
-            font Company Information:
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label 
-            b * &nbsp;
-            attr Company Name
-          .lm--formItem-right.lm--formItem-control
-            = f.input :company_name,required:true
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label
-            b * &nbsp;
-            attr Unique Entity Number (UEN)
-          .lm--formItem-right.lm--formItem-control
-            = f.input :company_unique_entity_number, required: true
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label 
-            b * &nbsp;
-            attr Company Address
-          .lm--formItem-right.lm--formItem-control
-            = f.input :company_address,required:true
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label
-            b * &nbsp;
-            attr Billing Address
-          .lm--formItem-right.lm--formItem-control
-            = f.input :billing_address, required: true, placeholder: ''
-
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label
-            font Contact Information:
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label 
-            b * 
-            attr Contact Name
-          .lm--formItem-right.lm--formItem-control
-            = f.input :name,required:true,placeholder: ''
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label 
-            b * 
-            attr Mobile Number
-          .lm--formItem-right.lm--formItem-control
-            = f.input :account_mobile_number,required:true,pattern:'^(\d{8})$',maxlength:'8',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label 
-            b * 
-            attr Office Number
-          .lm--formItem-right.lm--formItem-control
-            = f.input :account_office_number,required:true,pattern:'^(\d{8})$',maxlength:'8',placeholder:'Number should contain 8 integers.',title:'Number should contain 8 integers.'
-        .lm--formItem.lm--formItem--inline.string.optional
-          .lm--formItem-left.lm--formItem-label
-          .lm--formItem-right.lm--formItem-control.save-right
-            a.lm--button href="/users/edit" Cancel
-            = f.button :submit, 'Save', class: 'lm--button lm--button lm--button--primary', data: { disable_with: t('views.disable_with') }
+  div id="buyer_register"
   div.createRaMain.u-grid
     a.lm--button.lm--button--primary.u-mt3 href="/buyer/home" Back to Homepage
 - if @user.has_role?(:buyer) and @user.consumer_type == '3'
@@ -196,7 +58,7 @@
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label 
             b * 
-            attr Email
+            attr Email 
           .lm--formItem-right.lm--formItem-control
             = f.input :email,required:true
         .lm--formItem.lm--formItem--inline.string.optional

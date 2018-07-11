@@ -11,12 +11,14 @@ export class BuyerRegister extends Component {
         super(props);
         this.state = {
             id: "",
+            userid: "",
             text: "",
             btn_status: false,
             disabled: false,
             havedata: false,
             allbtnStatus: true,
             validate: true,
+            use_type: this.props.use_type,
 
             email_address: "",
             company_name: "",
@@ -36,6 +38,8 @@ export class BuyerRegister extends Component {
             user_contact_email: "",
             user_contact_mobile_no: "",
             user_contact_office_no: "",
+
+            comment: "",
 
             buyerTCurl: "",
             buyerTCname: "",
@@ -91,117 +95,148 @@ export class BuyerRegister extends Component {
 
     }
     componentWillMount() {
+        let userid;
+        if (window.location.href.indexOf("admin/users/") > -1) {
+            userid = window.location.href.split("admin/users/")[1].split("/manage")[0];
+        }
+        if (userid) {
+            this.setState({ userid: userid });
+        }
+        if (window.location.href.indexOf('buyer/home') > 0) {
+            this.setState({ use_type: 'sign_up' });
+        }
+        else if (window.location.href.indexOf('users/edit') > 0) {
+            this.setState({ use_type: 'manage_acount' });
+        }
+        else {
+            this.setState({ use_type: 'admin_approve' });
+            this.setState({ disabled: true });
+        }
+    }
+
+    componentDidMount() {
+        if (this.state.userid) {
+
+        }
+        else {
+            getBuyerUserInfo().then(res => {
+                this.setDefault(res);
+            })
+        }
 
     }
-    componentDidMount() {
+
+
+    setDefault(param) {
         let fileObj, entityObj;
         fileObj = this.state.fileData;
         entityObj = this.state.user_entity_data;
-        getBuyerUserInfo().then(res => {
-            if (res.user_base_info) {
-                let item = res.user_base_info;
-                this.setState({
-                    id: item.id,
-                    email_address: item.email ? item.email : '',
-                    company_name: item.company_name ? item.company_name : '',
-                    unique_entity_number: item.company_unique_entity_number ? item.company_unique_entity_number : '',
-                    company_address: item.company_address ? item.company_address : '',
-                    billing_address: item.billing_address ? item.billing_address : '',
-                    contact_name: item.name ? item.name : '',
-                    mobile_number: item.account_mobile_number ? item.account_mobile_number : '',
-                    office_number: item.account_office_number ? item.account_office_number : '',
-                    user_company_name: item.company_name ? item.company_name : '',
-                    user_company_uen: item.company_unique_entity_number ? item.company_unique_entity_number : '',
-                    user_company_address: item.company_address ? item.company_address : '',
-                    agree_seller_buyer: item.agree_seller_buyer ? item.agree_seller_buyer : '0',
-                    agree_buyer_revv: item.agree_buyer_revv ? item.agree_buyer_revv : '0',
-                    has_tenants: item.has_tenants ? item.has_tenants : '1'
-                })
-                $('#buyer_management').val(this.state.has_tenants);
-                if (this.state.agree_seller_buyer === "1") {
-                    $('#chkBuyer').attr("checked", true);
-                }
-                else {
-                    $('#chkBuyer').attr("checked", false);
-                }
-                if (this.state.agree_buyer_revv === "1") {
-                    $('#chkRevv').attr("checked", true);
-                }
-                else {
-                    $('#chkRevv').attr("checked", false);
-                }
+
+        if (param.user_base_info) {
+            let item = param.user_base_info;
+            this.setState({
+                id: item.id,
+                email_address: item.email ? item.email : '',
+                company_name: item.company_name ? item.company_name : '',
+                unique_entity_number: item.company_unique_entity_number ? item.company_unique_entity_number : '',
+                company_address: item.company_address ? item.company_address : '',
+                billing_address: item.billing_address ? item.billing_address : '',
+                contact_name: item.name ? item.name : '',
+                mobile_number: item.account_mobile_number ? item.account_mobile_number : '',
+                office_number: item.account_office_number ? item.account_office_number : '',
+                user_company_name: item.company_name ? item.company_name : '',
+                user_company_uen: item.company_unique_entity_number ? item.company_unique_entity_number : '',
+                user_company_address: item.company_address ? item.company_address : '',
+                agree_seller_buyer: item.agree_seller_buyer ? item.agree_seller_buyer : '0',
+                agree_buyer_revv: item.agree_buyer_revv ? item.agree_buyer_revv : '0',
+                has_tenants: item.has_tenants ? item.has_tenants : '1'
+            })
+            $('#buyer_management').val(this.state.has_tenants);
+            if (this.state.agree_seller_buyer === "1") {
+                $('#chkBuyer').attr("checked", true);
+            }
+            else {
+                $('#chkBuyer').attr("checked", false);
+            }
+            if (this.state.agree_buyer_revv === "1") {
+                $('#chkRevv').attr("checked", true);
+            }
+            else {
+                $('#chkRevv').attr("checked", false);
+            }
+        }
+
+        if (param.self_attachment) {
+            let attachment = param.self_attachment
+            let obj = {
+                file_name: attachment.file_name,
+                file_path: attachment.file_path,
+                file_type: attachment.file_type
             }
 
-            if (res.self_attachment) {
-                let attachment = res.self_attachment
-                let obj = {
-                    file_name: attachment.file_name,
-                    file_path: attachment.file_path,
-                    file_type: attachment.file_type
-                }
-                fileObj[attachment.file_type][0].files.push(obj);
-                this.setState({
-                    fileData: fileObj
-                })
-            }
+            fileObj[attachment.file_type][0].files.push(obj);
+            this.setState({
+                fileData: fileObj
+            })
+        }
 
-            if (res.buyer_entities) {
-                let entity = res.buyer_entities;
-                let user_entity = [];
-                if (entity.length > 0) {
-                    this.setState({
-                        user_company_name: entity[0].company_name ? entity[0].company_name : '',
-                        user_company_uen: entity[0].company_uen ? entity[0].company_uen : '',
-                        user_company_address: entity[0].company_address ? entity[0].company_address : '',
-                        user_billing_address: entity[0].billing_address ? entity[0].billing_address : '',
-                        user_bill_attention_to: entity[0].bill_attention_to ? entity[0].bill_attention_to : '',
-                        user_contact_name: entity[0].contact_name ? entity[0].contact_name : '',
-                        user_contact_email: entity[0].contact_email ? entity[0].contact_email : '',
-                        user_contact_mobile_no: entity[0].contact_mobile_no ? entity[0].contact_mobile_no : '',
-                        user_contact_office_no: entity[0].contact_office_no ? entity[0].contact_office_no : ''
+        if (param.buyer_entities) {
+            let entity = param.buyer_entities;
+            let user_entity = [];
+            if (entity.length > 0) {
+                this.setState({
+                    user_company_name: entity[0].company_name ? entity[0].company_name : '',
+                    user_company_uen: entity[0].company_uen ? entity[0].company_uen : '',
+                    user_company_address: entity[0].company_address ? entity[0].company_address : '',
+                    user_billing_address: entity[0].billing_address ? entity[0].billing_address : '',
+                    user_bill_attention_to: entity[0].bill_attention_to ? entity[0].bill_attention_to : '',
+                    user_contact_name: entity[0].contact_name ? entity[0].contact_name : '',
+                    user_contact_email: entity[0].contact_email ? entity[0].contact_email : '',
+                    user_contact_mobile_no: entity[0].contact_mobile_no ? entity[0].contact_mobile_no : '',
+                    user_contact_office_no: entity[0].contact_office_no ? entity[0].contact_office_no : ''
+                })
+
+                if (entity.length > 1) {
+                    param.buyer_entities.map((item, index) => {
+                        if (index > 0) {
+                            user_entity.push({
+                                user_company_name: entity[index].company_name ? entity[index].company_name : '',
+                                user_company_uen: entity[index].company_uen ? entity[index].company_uen : '',
+                                user_company_address: entity[index].company_address ? entity[index].company_address : '',
+                                user_billing_address: entity[index].billing_address ? entity[index].billing_address : '',
+                                user_bill_attention_to: entity[index].bill_attention_to ? entity[index].bill_attention_to : '',
+                                user_contact_name: entity[index].contact_name ? entity[index].contact_name : '',
+                                user_contact_email: entity[index].contact_email ? entity[index].contact_email : '',
+                                user_contact_mobile_no: entity[index].contact_mobile_no ? entity[index].contact_mobile_no : '',
+                                user_contact_office_no: entity[index].contact_office_no ? entity[index].contact_office_no : ''
+                            });
+                        }
                     })
-
-                    if (entity.length > 1) {
-                        res.buyer_entities.map((item, index) => {
-                            if (index > 0) {
-                                user_entity.push({
-                                    user_company_name: entity[index].company_name ? entity[index].company_name : '',
-                                    user_company_uen: entity[index].company_uen ? entity[index].company_uen : '',
-                                    user_company_address: entity[index].company_address ? entity[index].company_address : '',
-                                    user_billing_address: entity[index].billing_address ? entity[index].billing_address : '',
-                                    user_bill_attention_to: entity[index].bill_attention_to ? entity[index].bill_attention_to : '',
-                                    user_contact_name: entity[index].contact_name ? entity[index].contact_name : '',
-                                    user_contact_email: entity[index].contact_email ? entity[index].contact_email : '',
-                                    user_contact_mobile_no: entity[index].contact_mobile_no ? entity[index].contact_mobile_no : '',
-                                    user_contact_office_no: entity[index].contact_office_no ? entity[index].contact_office_no : ''
-                                });
-                            }
-                        })
-                        entityObj['ENTITY_LIST'][0].entities = user_entity;
-                        this.setState({
-                            user_entity_data: entityObj
-                        })
-                    }
+                    entityObj['ENTITY_LIST'][0].entities = user_entity;
+                    this.setState({
+                        user_entity_data: entityObj
+                    })
                 }
             }
+        }
 
-            if (res.seller_buyer_tc_attachment) {
-                let buyer = res.seller_buyer_tc_attachment;
-                this.setState({
-                    buyerTCurl: buyer.file_path,
-                    buyerTCname: buyer.file_name
-                })
-            }
+        if (param.seller_buyer_tc_attachment) {
+            let buyer = param.seller_buyer_tc_attachment;
+            this.setState({
+                buyerTCurl: buyer.file_path,
+                buyerTCname: buyer.file_name
+            })
+        }
 
-            if (res.buyer_revv_tc_attachment) {
-                let revv = res.buyer_revv_tc_attachment;
-                this.setState({
-                    buyerRevvTCurl: revv.file_path,
-                    buyerRevvTCname: revv.file_name
-                })
-            }
-        })
+        if (param.buyer_revv_tc_attachment) {
+            let revv = param.buyer_revv_tc_attachment;
+            this.setState({
+                buyerRevvTCurl: revv.file_path,
+                buyerRevvTCname: revv.file_name
+            })
+        }
     }
+
     checkSuccess() {
         let flag = true, hasDoc = true;
         let arr = validator_Object(this.state, this.validatorItem);
@@ -218,8 +253,8 @@ export class BuyerRegister extends Component {
                 item.map((it, i) => {
                     let column = it.column;
                     let cate = it.cate;
-                    let ind = it.ind; 
-                    setValidationFaild(column +"_"+ ind, cate)
+                    let ind = it.ind;
+                    setValidationFaild(column + "_" + ind, cate)
                 })
             })
         }
@@ -237,8 +272,6 @@ export class BuyerRegister extends Component {
             })
         }
 
-
-
         $('.validate_message').find('div').each(function () {
             let className = $(this).attr('class');
             if (className === 'errormessage') {
@@ -248,8 +281,6 @@ export class BuyerRegister extends Component {
         })
         return flag && hasDoc;
     }
-
-
 
     setParams() {
         let entity = [
@@ -322,6 +353,7 @@ export class BuyerRegister extends Component {
             user_entity_data: entityObj,
         })
     }
+
     Change(type, e) {
         let itemValue = e.target.value;
         switch (type) {
@@ -440,9 +472,12 @@ export class BuyerRegister extends Component {
                     setValidationFaild('chkRevv', 1);
                 }
                 break;
-
+            case 'comment':
+                this.setState({ comment: itemValue });
+                break;
         }
     }
+
     showView() {
         this.refs.Modal_upload.showModal();
     }
@@ -455,8 +490,6 @@ export class BuyerRegister extends Component {
                 text: "Your details have been successfully saved. "
             });
         })
-
-
     }
     submit() {
         let isValidator = this.checkSuccess();
@@ -471,18 +504,45 @@ export class BuyerRegister extends Component {
         }
 
     }
+    cancel() {
+        window.location.href = `/users/edit`;
+    }
+    reject() {
+
+    }
+    approve() {
+
+    }
     render() {
-        let btn_html = <div>
-            <button id="save_form" className="lm--button lm--button--primary" onClick={this.save.bind(this)}>Save</button>
-            <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this)}>Complete Sign Up</button>
-        </div>;
+
+        let btn_html;
+        if (this.state.use_type === 'admin_approve') {
+            btn_html = <div>
+                <button id="save_form" className="lm--button lm--button--primary" onClick={this.reject.bind(this)}>Reject</button>
+                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.approve.bind(this)}>Approve</button>
+            </div>;
+        }
+        else if (this.state.use_type === 'manage_acount') {
+            btn_html = <div>
+                <button id="save_form" className="lm--button lm--button--primary" onClick={this.cancel.bind(this)}>Cancel</button>
+                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this)}>Save</button>
+            </div>;
+            $('#chkBuyer').attr('disabled', true);
+            $('#chkRevv').attr('disabled', true);
+        }
+        else {
+            btn_html = <div>
+                <button id="save_form" className="lm--button lm--button--primary" onClick={this.save.bind(this)}>Save</button>
+                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this)}>Complete Sign Up</button>
+            </div>;
+        }
         return (
             <div className="retailer_manage_coming">
                 <div id="buyer_form" >
                     <div>
                         <div className="u-grid admin_invitation">
                             <div className="col-sm-12 col-md-6 push-md-3 validate_message">
-                                <h3 className="u-mt3 u-mb1">Buyer Register Page</h3>
+                                {/* <h3 className="u-mt3 u-mb1">Buyer Register Page</h3> */}
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
                                         <abbr title="required">*</abbr> Email:
@@ -566,9 +626,9 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Upload Documents:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                                        <UploadFile type="BUYER_DOCUMENTS" required="required" showlist={false} validate={this.state.validate} showList="1" col_width="10" showWay="2" fileData={this.state.fileData.BUYER_DOCUMENTS} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
+                                        <UploadFile type="BUYER_DOCUMENTS" required="required" showlist={false} validate={this.state.validate} showList="1" col_width="10" showWay="2" fileData={this.state.fileData.BUYER_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
                                         <div className="col-sm-12 col-md-2 u-cell">
-                                            <button className="lm--button lm--button--primary" title="this is retailer upload documents" onClick={this.showView.bind(this)} >?</button>
+                                            <button className="lm--button lm--button--primary" title="this is retailer upload documents" disabled={this.state.disabled} onClick={this.showView.bind(this)} >?</button>
                                         </div>
                                     </div>
                                 </div>
@@ -587,7 +647,7 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr>  Company UEN:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="user_company_uen" style={{ background: '#35404c' }} value={this.state.user_company_uen} onChange={this.Change.bind(this, 'user_company_uen')} disabled={true} ref="user_company_uen" aria-required="true"></input>
+                                        <input type="text" name="user_company_uen" style={{ background: '#35404c' }} disabled={true} value={this.state.user_company_uen} onChange={this.Change.bind(this, 'user_company_uen')} ref="user_company_uen" aria-required="true"></input>
                                         <div className='isPassValidate' id='user_company_uen_message' >This field is required!</div>
                                     </div>
                                 </div>
@@ -657,10 +717,10 @@ export class BuyerRegister extends Component {
                                         <div className='isPassValidate' id='user_contact_office_no_format' >Number should contain 8 integers.</div>
                                     </div>
                                     <div>
-                                        <button className="lm--button lm--button--primary" title="this is retailer upload documents" onClick={this.addUserEntity.bind(this)} >+</button>
+                                        <button className="lm--button lm--button--primary" title="this is retailer upload documents" disabled={this.state.disabled} onClick={this.addUserEntity.bind(this)} >+</button>
                                     </div>
                                 </div>
-                                <UserEntity disabled={false} entityList={this.state.user_entity_data} ref="userEntity" />
+                                <UserEntity disabled={false} entityList={this.state.user_entity_data} ref="userEntity" className={this.state.disabled === 'admin_approve' ? '' : ''} />
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
                                         <abbr title="required">*</abbr> Tenent Management Sences Required:
@@ -673,9 +733,29 @@ export class BuyerRegister extends Component {
                                     </div>
                                 </div>
 
-                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href={this.state.buyerTCurl}>{this.state.buyerTCname}</a></h4>
+                                {/* <div className="lm--formItem lm--formItem--inline string" className={this.state.use_type==='admin_approve'? 'isDisplay':'isHide'} >
+                                    <label className="lm--formItem-left lm--formItem-label string required">
+                                        Comment:
+                                  </label>
+                                    <div className="lm--formItem-right lm--formItem-control">
+                                        <textarea  name="comment" value={this.state.comment} onChange={this.Change.bind(this, 'comment')} ref="comment" aria-required="true"></textarea>
+                                    </div>
+                                </div> */}
+
+
+
+                                <div className="lm--formItem lm--formItem--inline string" className={this.state.use_type === 'admin_approve' ? 'isDisplay' : 'isHide'} >
+                                    <label className="lm--formItem-left lm--formItem-label string required">
+                                        Comment:
+                                    </label>
+                                    <div className="lm--formItem-right lm--formItem-control">
+                                        <textarea name="comment" value={this.state.comment} onChange={this.Change.bind(this, 'comment')} ref="comment" aria-required="true"></textarea>
+                                    </div>
+                                </div>
+                                
+                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href={this.state.buyerTCurl}>{this.state.buyerTCname}</a></h4>
                                 <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
-                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} /> I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href={this.state.buyerRevvTCurl}>{this.state.buyerRevvTCname}</a></h4>
+                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} /> I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href={this.state.buyerRevvTCurl}>{this.state.buyerRevvTCname}</a></h4>
                                 <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                                 <div className="retailer_btn">
                                     {btn_html}

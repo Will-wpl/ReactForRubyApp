@@ -9,21 +9,25 @@ export class RetailerRegister extends Component {
         super(props);
         this.state = {
             id: "",
+            userid: "",
             btn_status: false,
-            disabled: false,
+            disabled: this.props.disabled ? this.props.disabled : false,
             havedata: false,
             allbtnStatus: true,
             text: "",
+            use_type: this.props.use_type,
             email_address: "",
             company_name: "",
             unique_entity_number: "",
             company_address: "",
             licence_number: "",
-            gst_num: "",
+            gst_no: "",
             contact_name: "",
             mobile_number: "",
             office_number: "",
+            comment: "",
             validate: true,
+
             fileData: {
                 "RETAILER_DOCUMENTS": [
                     { buttonName: "none", files: [] }
@@ -37,6 +41,7 @@ export class RetailerRegister extends Component {
             revvTCurl: "",
             revvTCname: "",
             agree_seller_revv: "0"
+
         }
         this.validatorItem = {
             email_address: { cate: 'email' },
@@ -44,77 +49,107 @@ export class RetailerRegister extends Component {
             unique_entity_number: { cate: 'required' },
             company_address: { cate: 'required' },
             licence_number: { cate: 'required' },
-            gst_num: { cate: 'required' },
+            gst_no: { cate: 'required' },
             contact_name: { cate: 'required' },
             mobile_number: { cate: 'num' },
             office_number: { cate: 'num' }
         }
     }
     componentWillMount() {
+        let userid;
+        if (window.location.href.indexOf("admin/users/") > -1) {
+            userid = window.location.href.split("admin/users/")[1].split("/manage")[0];
+        }
+        if (userid) {
+            this.setState({ userid: userid });
+        }
+        
+        if (window.location.href.indexOf('retailer/home') > 0) {
+            this.setState({ use_type: 'sign_up' });
+        }
+        else if (window.location.href.indexOf('users/edit') > 0) {
+            this.setState({ use_type: 'manage_acount' });
+        }
+        else {
+            this.setState({ use_type: 'admin_approve' });
+            this.setState({ disabled: true });
+        }
+    }
+
+    componentDidMount() {
+        if (this.state.userid) {
+            
+        }
+        else {
+            getRetailerUserInfo().then(res => {
+                this.setDefult(res)
+            })
+        }
 
     }
-    componentDidMount() {
+
+    setDefult(param) {
         let fileObj;
         fileObj = this.state.fileData;
-        getRetailerUserInfo().then(res => {
-            if (res.user_base_info) {
-                let item = res.user_base_info;
-                this.setState({
-                    id: item.id,
-                    email_address: item.email ? item.email : '',
-                    company_name: item.company_name ? item.company_name : '',
-                    unique_entity_number: item.company_unique_entity_number ? item.company_unique_entity_number : '',
-                    company_address: item.company_address ? item.company_address : '',
-                    licence_number: item.company_license_number ? item.company_license_number : '',
-                    gst_num: item.gst_no ? item.gst_no : '',
-                    contact_name: item.name ? item.name : '',
-                    mobile_number: item.account_mobile_number ? item.account_mobile_number : '',
-                    office_number: item.account_office_number ? item.account_office_number : '',
-                    agree_seller_buyer: item.agree_seller_buyer ? item.agree_seller_buyer : '0',
-                    agree_seller_revv: item.agree_seller_revv ? item.agree_seller_revv : '0'
-                })
-                if (this.state.agree_seller_buyer === '1') {
-                    $('#chkBuyer').attr("checked", true);
-                }
-                else {
-                    $('#chkBuyer').attr("checked", false);
-                }
-                if (this.state.agree_seller_revv === '1') {
-                    $('#chkRevv').attr("checked", true);
-                }
-                else {
-                    $('#chkRevv').attr("checked", false);
-                }
+        if (param.user_base_info) {
+            let item = param.user_base_info;
+            this.setState({
+                id: item.id,
+                email_address: item.email ? item.email : '',
+                company_name: item.company_name ? item.company_name : '',
+                unique_entity_number: item.company_unique_entity_number ? item.company_unique_entity_number : '',
+                company_address: item.company_address ? item.company_address : '',
+                licence_number: item.company_license_number ? item.company_license_number : '',
+                gst_no: item.gst_no ? item.gst_no : '',
+                contact_name: item.name ? item.name : '',
+                mobile_number: item.account_mobile_number ? item.account_mobile_number : '',
+                office_number: item.account_office_number ? item.account_office_number : '',
+                agree_seller_buyer: item.agree_seller_buyer ? item.agree_seller_buyer : '0',
+                agree_seller_revv: item.agree_seller_revv ? item.agree_seller_revv : '0'
+            })
+            if (this.state.agree_seller_buyer === '1') {
+                $('#chkBuyer').attr("checked", true);
+            }
+            else {
+                $('#chkBuyer').attr("checked", false);
+            }
+            if (this.state.agree_seller_revv === '1') {
+                $('#chkRevv').attr("checked", true);
+            }
+            else {
+                $('#chkRevv').attr("checked", false);
+            }
 
+        }
+        if (param.self_attachment) {
+            let attachment = param.self_attachment
+            let obj = {
+                file_name: attachment.file_name,
+                file_path: attachment.file_path,
+                file_type: attachment.file_type
             }
-            if (res.self_attachment) {
-                let attachment = res.self_attachment
-                let obj = {
-                    file_name: attachment.file_name,
-                    file_path: attachment.file_path,
-                    file_type: attachment.file_type
-                }
-                fileObj[attachment.file_type][0].files.push(obj);
-                this.setState({
-                    fileData: fileObj
-                })
-            }
-            if (res.seller_buyer_tc_attachment) {
-                let seller = res.seller_buyer_tc_attachment;
-                this.setState({
-                    sellerTCurl: seller.file_path,
-                    sellerTCname: seller.file_name
-                })
-            }
-            if (res.seller_revv_tc_attachment) {
-                let revv = res.seller_revv_tc_attachment;
-                this.setState({
-                    revvTCurl: revv.file_path,
-                    revvTCname: revv.file_name
-                })
-            }
-        })
+            fileObj[attachment.file_type][0].files.push(obj);
+            this.setState({
+                fileData: fileObj
+            })
+        }
+        if (param.seller_buyer_tc_attachment) {
+            let seller = param.seller_buyer_tc_attachment;
+            this.setState({
+                sellerTCurl: seller.file_path,
+                sellerTCname: seller.file_name
+            })
+        }
+        if (param.seller_revv_tc_attachment) {
+            let revv = param.seller_revv_tc_attachment;
+            this.setState({
+                revvTCurl: revv.file_path,
+                revvTCname: revv.file_name
+            })
+        }
     }
+
+
     checkValidation() {
         let flag = true, hasDoc = true;
 
@@ -132,12 +167,12 @@ export class RetailerRegister extends Component {
             setValidationPass('chkBuyer', 1);
 
         } else {
-           setValidationFaild('chkBuyer', 1);
+            setValidationFaild('chkBuyer', 1);
         }
         if ($('#chkRevv').is(':checked')) {
             setValidationPass('chkRevv', 1);
         } else {
-           setValidationFaild('chkRevv', 1);
+            setValidationFaild('chkRevv', 1);
         }
 
         $('.validate_message').find('div').each(function () {
@@ -162,14 +197,14 @@ export class RetailerRegister extends Component {
         }
         return flag && hasDoc;
     }
- 
+
     Change(type, e) {
         let itemValue = e.target.value;
         switch (type) {
             case 'email_address':
                 this.setState({ email_address: itemValue });
                 if (!validateEmail(itemValue)) {
-                   setValidationFaild('email_address', 2)
+                    setValidationFaild('email_address', 2)
                 } else {
                     setValidationPass('email_address', 2)
                 }
@@ -190,8 +225,8 @@ export class RetailerRegister extends Component {
                 this.setState({ licence_number: itemValue });
                 changeValidate('licence_number', itemValue);
                 break;
-            case 'gst_num':
-                this.setState({ gst_num: itemValue });
+            case 'gst_no':
+                this.setState({ gst_no: itemValue });
                 changeValidate('gst_no', itemValue);
                 break;
             case 'contact_name':
@@ -201,7 +236,7 @@ export class RetailerRegister extends Component {
             case 'mobile_number':
                 this.setState({ mobile_number: itemValue });
                 if (!validateNum(itemValue)) {
-                   setValidationFaild('mobile_number', 2)
+                    setValidationFaild('mobile_number', 2)
                 } else {
                     setValidationPass('mobile_number', 2)
                 }
@@ -209,7 +244,7 @@ export class RetailerRegister extends Component {
             case 'office_number':
                 this.setState({ office_number: itemValue });
                 if (!validateNum(itemValue)) {
-                   setValidationFaild('office_number', 2)
+                    setValidationFaild('office_number', 2)
                 } else {
                     setValidationPass('office_number', 2)
                 }
@@ -220,7 +255,7 @@ export class RetailerRegister extends Component {
                     setValidationPass('chkBuyer', 1)
                 } else {
                     this.setState({ agree_seller_buyer: 0 });
-                   setValidationFaild('chkBuyer', 1);
+                    setValidationFaild('chkBuyer', 1);
                 }
                 break;
             case 'chkRevv':
@@ -228,10 +263,16 @@ export class RetailerRegister extends Component {
                     this.setState({ agree_seller_revv: 1 });
                     setValidationPass('chkRevv', 1)
                 } else {
-                   setValidationFaild('chkRevv', 1);
+                    setValidationFaild('chkRevv', 1);
                     this.setState({ agree_seller_revv: 0 });
                 }
                 break;
+
+            case "comment":
+                this.setState({ comment: itemValue });
+                break;
+
+
         }
     }
     submit() {
@@ -244,7 +285,7 @@ export class RetailerRegister extends Component {
                     'company_unique_entity_number': this.state.unique_entity_number,
                     'company_address': this.state.company_address,
                     'company_license_number': this.state.license_number,
-                    'gst_no': this.state.gst_num,
+                    'gst_no': this.state.gst_no,
                     'name': this.state.contact_name,
                     'account_mobile_number': this.state.mobile_number,
                     'account_office_number': this.state.office_number,
@@ -270,7 +311,7 @@ export class RetailerRegister extends Component {
                 'company_unique_entity_number': this.state.unique_entity_number,
                 'company_address': this.state.company_address,
                 'company_license_number': this.state.license_number,
-                'gst_no': this.state.gst_num,
+                'gst_no': this.state.gst_no,
                 'name': this.state.contact_name,
                 'account_mobile_number': this.state.mobile_number,
                 'account_office_number': this.state.office_number,
@@ -285,21 +326,51 @@ export class RetailerRegister extends Component {
             });
         })
     }
+    cancel() {
+        window.location.href = `/users/edit`;
+    }
+    reject() {
+
+    }
+    approve() {
+
+    }
     showView() {
         this.refs.Modal_upload.showModal();
     }
     render() {
-        let btn_html = <div>
-            <button id="save_form" className="lm--button lm--button--primary" onClick={this.save.bind(this)}>Save</button>
-            <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this)} >Complete Sign Up</button>
-        </div>;
+        // let btn_html = <div>
+        //     <button id="save_form" className="lm--button lm--button--primary" onClick={this.save.bind(this)}>Save</button>
+        //     <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this)} >Complete Sign Up</button>
+        // </div>;
+        let btn_html;
+        if (this.state.use_type === 'admin_approve') {
+            btn_html = <div>
+                <button id="save_form" className="lm--button lm--button--primary" onClick={this.reject.bind(this)}>Reject</button>
+                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.approve.bind(this)}>Approve</button>
+            </div>;
+        }
+        else if (this.state.use_type === 'manage_acount') {
+            btn_html = <div>
+                <button id="save_form" className="lm--button lm--button--primary" onClick={this.cancel.bind(this)}>Cancel</button>
+                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this)}>Save</button>
+            </div>;
+            $('#chkBuyer').attr('disabled', true);
+            $('#chkRevv').attr('disabled', true);
+        }
+        else {
+            btn_html = <div>
+                <button id="save_form" className="lm--button lm--button--primary" onClick={this.save.bind(this)}>Save</button>
+                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this)}>Complete Sign Up</button>
+            </div>;
+        }
         return (
             <div className="retailer_manage_coming">
                 <div id="retailer_form" >
                     <div>
                         <div className="u-grid admin_invitation">
                             <div className="col-sm-12 col-md-6 push-md-3 validate_message ">
-                                <h3 className="u-mt3 u-mb1">Retailer Register Page</h3>
+                                {/* <h3 className="u-mt3 u-mb1">Retailer Register Page</h3> */}
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
                                         <abbr title="required">*</abbr> Email:
@@ -344,7 +415,7 @@ export class RetailerRegister extends Component {
                                         <abbr title="required">*</abbr> GST No.:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="gst_no" value={this.state.gst_num} onChange={this.Change.bind(this, 'gst_num')} disabled={this.state.disabled} ref="gst_num" required aria-required="true" title="Please fill out this field"></input>
+                                        <input type="text" name="gst_no" value={this.state.gst_no} onChange={this.Change.bind(this, 'gst_no')} disabled={this.state.disabled} ref="gst_no" required aria-required="true" title="Please fill out this field"></input>
                                         <div className='isPassValidate' id='gst_no_message' >This field is required!</div>
                                     </div>
                                 </div>
@@ -395,16 +466,23 @@ export class RetailerRegister extends Component {
                                         <abbr title="required">*</abbr> Upload Documents:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                                        <UploadFile type="RETAILER_DOCUMENTS" required="required" validate={this.state.validate} showList="1" col_width="10" showWay="2" fileData={this.state.fileData.RETAILER_DOCUMENTS} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
+                                        <UploadFile type="RETAILER_DOCUMENTS" required="required" validate={this.state.validate} showList="1" col_width="10" showWay="2" fileData={this.state.fileData.RETAILER_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
                                         <div className="col-sm-12 col-md-2 u-cell">
-                                            <button className="lm--button lm--button--primary" onClick={this.showView.bind(this)}  >?</button>
+                                            <button className="lm--button lm--button--primary" onClick={this.showView.bind(this)} disabled={this.state.disabled} >?</button>
                                         </div>
                                     </div>
                                 </div>
-
-                                <h4 className="lm--formItem lm--formItem--inline string"><input id="chkBuyer" type="checkbox" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href={this.state.sellerTCurl}>{this.state.sellerTCname}</a></h4>
+                                <div className="lm--formItem lm--formItem--inline string" className={this.state.use_type==='admin_approve'? 'isDisplay':'isHide'} >
+                                    <label className="lm--formItem-left lm--formItem-label string required">
+                                        Comment:
+                                  </label>
+                                    <div className="lm--formItem-right lm--formItem-control">
+                                        <textarea  name="comment" value={this.state.comment} onChange={this.Change.bind(this, 'comment')} ref="comment" aria-required="true"></textarea>
+                                    </div>
+                                </div>
+                                <h4 className="lm--formItem lm--formItem--inline string"><input id="chkBuyer" type="checkbox" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href={this.state.sellerTCurl}>{this.state.sellerTCname}</a></h4>
                                 <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
-                                <h4 className="lm--formItem lm--formItem--inline string"><input id="chkRevv" type="checkbox" onChange={this.Change.bind(this, 'chkRevv')} name={"seller_revv_tc"} />  I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href={this.state.revvTCurl}>{this.state.revvTCname}</a></h4>
+                                <h4 className="lm--formItem lm--formItem--inline string"><input id="chkRevv" type="checkbox" onChange={this.Change.bind(this, 'chkRevv')} name={"seller_revv_tc"} disabled={this.state.disabled} />  I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href={this.state.revvTCurl}>{this.state.revvTCname}</a></h4>
                                 <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                                 <div className="retailer_btn">
                                     {btn_html}

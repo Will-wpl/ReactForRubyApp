@@ -17,7 +17,7 @@ export class UserEntity extends React.Component {
 
     }
     componentDidMount() {
-
+ 
     }
     Change(type, index, e) {
         let entityObj, entityData;;
@@ -208,7 +208,7 @@ export class UserEntity extends React.Component {
                                     <div className='isPassValidate' id={"user_contact_office_no_" + (i) + "_format"} >Number should contain 8 integers.</div>
                                 </div>
                                 <div>
-                                    <button className="lm--button lm--button--primary" onClick={this.removeEntity.bind(this, i)}>-</button>
+                                    <button className="lm--button lm--button--primary" disabled={this.state.disabled} onClick={this.removeEntity.bind(this, i)}>-</button>
                                 </div>
                             </div>
                         </div>

@@ -22,6 +22,8 @@ import "components/admin/admin-choose-alternative-winner";
 import "components/admin/admin-user-extends";
 import "components/admin/admin-contact";
 import "components/admin/admin-email-template";
+import "components/buyer/buyer-register";
+import "components/retailer/retailer-register";
 // import "./javascripts/ajax-test.js";
 //console.log("Admin Webpacker");
 
