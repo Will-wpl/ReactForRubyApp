@@ -103,6 +103,8 @@ export const saveRetailManageInfo = (params) => {  //save
 export const submitRetailManageInfo = (params) => {  //submit
     return put('/api/retailer/registrations/'+params.id+'/sign_up', params);
 }
-
+export const getRetailerUserInfoByUserId=(id)=>{
+    return get(`/api/retailer/registrations//${id}/retailer_info`);
+}
 
  

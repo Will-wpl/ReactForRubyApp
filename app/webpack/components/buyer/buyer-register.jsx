@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { UploadFile } from '../shared/upload';
 import { UserEntity } from '../shared/user-entity';
 import { Modal } from '../shared/show-modal';
-import { getBuyerUserInfo, saveBuyerUserInfo, submitBuyerUserInfo } from '../../javascripts/componentService/common/service';
+import { getBuyerUserInfo, saveBuyerUserInfo, submitBuyerUserInfo ,getBuyerUserInfoByUserId} from '../../javascripts/componentService/common/service';
 import { validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
 
 export class BuyerRegister extends Component {
@@ -116,6 +116,9 @@ export class BuyerRegister extends Component {
 
     componentDidMount() {
         if (this.state.userid) {
+            getBuyerUserInfoByUserId(this.state.userid).then(res=>{
+                console.log(res)
+            })
 
         }
         else {
@@ -752,7 +755,7 @@ export class BuyerRegister extends Component {
                                         <textarea name="comment" value={this.state.comment} onChange={this.Change.bind(this, 'comment')} ref="comment" aria-required="true"></textarea>
                                     </div>
                                 </div>
-                                
+
                                 <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href={this.state.buyerTCurl}>{this.state.buyerTCname}</a></h4>
                                 <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                                 <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} /> I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href={this.state.buyerRevvTCurl}>{this.state.buyerRevvTCname}</a></h4>
