@@ -78,6 +78,7 @@ export const getStandardNumBref = (num) => {
 
 
 export const validateNum = (value) => {
+    console.log(value);
     let num = /^(\d{8})$/g;
     if (!num.test(value)) {
         return false;
@@ -92,6 +93,110 @@ export const validateEmail = (value) => {
     return true;
 }
 
+export const validator_Object = (param, paramType) => {
+    let errArr = [];
+    for (let key in paramType) {
+        var value = param[key];
+        var type = paramType[key];
+
+        if (value == null) continue;
+        if (type.cate === 'email') {
+            if (value === null || value.length === 0) {
+                errArr.push({ column: key, cate: 1 });
+            }
+            else {
+                if (!validateEmail(value)) {
+                    errArr.push({ column: key, cate: 2 })
+                }
+            }
+        }
+        else if (type.cate === 'num') {
+            if (value === null || value.length === 0) {
+                errArr.push({ column: key, cate: 1 });
+            }
+            else {
+                if (!validateNum(value)) {
+                    errArr.push({ column: key, cate: 2 })
+                }
+            }
+        }
+        else {
+            let require = /^$/g;
+            if (value === null || value.length === 0 || require.test(value)) {
+                errArr.push({ column: key, cate: 1 })
+            }
+        }
+    }
+    return errArr;
+}
+export const validator_Array= (param, paramType) => {
+    let errArr = [];
+    for (let i = 0; i < param.length; i++) {
+        let entityArr = [];
+        for (let key in paramType) {
+            var value = param[i][key];
+            var type = paramType[key];
+            if (value == null) continue;
+            if (type.cate === 'email') {
+                if (value === null || value.length === 0) {
+                    entityArr.push({ column: key, cate: 1, ind: i });
+                }
+                else {
+                    if (!validateEmail(value)) {
+                        entityArr.push({ column: key, cate: 2, ind: i })
+                    }
+                }
+            }
+            else if (type.cate === 'num') {
+                if (value === null || value.length === 0) {
+                    entityArr.push({ column: key, cate: 1, ind: i });
+                }
+                else {
+                    if (!validateNum(value)) {
+                        entityArr.push({ column: key, cate: 2, ind: i })
+                    }
+                }
+            }
+            else {
+                let require = /^$/g;
+                if (value === null || value.length === 0 || require.test(value)) {
+                    entityArr.push({ column: key, cate: 1,ind:i })
+                }
+            }
+        }
+        errArr.push(entityArr);
+    }
+    return errArr;
+
+}
+
+export const setValidationFaild = (item, type) => {
+    if (type === 1) {
+        $('#' + item + "_message").removeClass('isPassValidate').addClass('errormessage');
+        $('#' + item + "_format").removeClass('errormessage').addClass('isPassValidate');
+    }
+    else {
+        $('#' + item + "_message").removeClass('errormessage').addClass('isPassValidate');
+        $('#' + item + "_format").removeClass('isPassValidate').addClass('errormessage');
+    }
+}
+export const setValidationPass = (item, type) => {
+    if (type === 1) {
+        $('#' + item + "_message").removeClass('errormessage').addClass('isPassValidate');
+    }
+    else {
+        $('#' + item + "_format").removeClass('errormessage').addClass('isPassValidate');
+
+    }
+}
+export const changeValidate = (type, value) => {
+    if (value) {
+        setValidationPass(type, 1);
+    }
+    else {
+        setValidationFaild(type, 1);
+    }
+}
 
 export const isEmptyJsonObj = (obj) => {
     if (!obj) {
