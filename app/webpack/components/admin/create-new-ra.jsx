@@ -23,7 +23,8 @@ export class CreateNewRA extends Component {
             edit_change:"lm--button lm--button--primary hide",contractArray:[],
             disabled:false,live_modal:"",live_modal_do:"",holdOrend:"",checkArray:[],
             contract_duration_6:false,contract_duration_12:false,contract_duration_24:false,
-            required:false,check_required:true,single_multiple:"0",allow_deviation:"1"
+            required:false,check_required:true,single_multiple:"0",allow_deviation:"1",
+            contract_6:'0',contract_12:'0',contract_24:'0'
         }
 
         this.auction = {};
@@ -103,11 +104,11 @@ export class CreateNewRA extends Component {
                     res.auction_contracts.map((item)=>{
                         let index = item.contract_duration;
                         switch (index){
-                            case "6": this.setState({contract_duration_6:true});
+                            case "6": this.setState({contract_duration_6:true,contract_6:item.id});
                             break
-                            case "12": this.setState({contract_duration_12:true});
+                            case "12": this.setState({contract_duration_12:true,contract_12:item.id});
                             break
-                            case "24": this.setState({contract_duration_24:true});
+                            case "24": this.setState({contract_duration_24:true,contract_24:item.id});
                             break
                         }
                         $("#starting_price_lt_peak_"+index).val(item.starting_price_lt_peak);
@@ -305,7 +306,8 @@ export class CreateNewRA extends Component {
                 reserve_price_htl_off_peak:$("#reserve_price_htl_off_peak_"+item).val(),
                 starting_price_eht_off_peak:$("#starting_price_eht_off_peak_"+item).val(),
                 reserve_price_eht_off_peak:$("#reserve_price_eht_off_peak_"+item).val(),
-                contract_duration:item
+                contract_duration:item,
+                id:item==='6'?this.state.contract_6:(item==='12'?this.state.contract_12:this.state.contract_24)
             }
             somefield.push(obj);
         })
@@ -341,7 +343,7 @@ export class CreateNewRA extends Component {
                             </td>
                             <td>
                                 Starting:<input type="text" id={"starting_price_htl_peak_"+mouth} required={this.state.required} /><br/>
-                                Reserve:<input type="text" id={"reserve_price_hlt_peak_"+mouth} required={this.state.required} />
+                                Reserve:<input type="text" id={"reserve_price_htl_peak_"+mouth} required={this.state.required} />
                             </td>
                             <td>
                                 Starting:<input type="text" id={"starting_price_eht_peak_"+mouth} required={this.state.required} /><br/>
