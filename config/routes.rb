@@ -34,7 +34,7 @@ Rails.application.routes.draw do
         collection do
           get 'retailers'
           get 'buyers'
-          post 'approval_user'
+          put 'approval_user'
         end
       end
       resources :auctions, only: %i[obtain link create update delete publish hold confirm destroy unpublished published retailers buyers selects send_mails] do

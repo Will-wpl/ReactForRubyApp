@@ -12,6 +12,7 @@ export class Modal extends React.Component {
             email_subject: '',
             email_body: ''
         }
+        console.log()
     }
     showModal(type, data, str) {
         if (str) {
