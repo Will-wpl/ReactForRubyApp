@@ -14,15 +14,17 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
                                           company_name: 'abc',
                                           company_unique_entity_number: 'UEN',
                                           email: 'test_email@email.com'},
-                                   buyer_entities: [{ contact_email: 'test_email1@email.com' },
-                                                    {contact_email: 'test_email1@email.com' }].to_json}
+                                   buyer_entities: [{ contact_email: 'test_email1@email.com', index: 'a' },
+                                                    { contact_email: 'test_email1@email.com', index: 'b' }].to_json}
         end
         before { do_request }
         it 'success' do
           hash_body = JSON.parse(response.body)
           expect(hash_body).to have_content('validate_result')
-          expect(hash_body).to have_content('message')
+          expect(hash_body).to have_content('error_fields')
+          expect(hash_body).to have_content('error_entity_indexes')
           expect(hash_body['validate_result']).to eq(false)
+          expect(hash_body['error_entity_indexes']).to eq([0,1])
           expect(response).to have_http_status(:ok)
         end
       end
@@ -41,7 +43,8 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
         it 'success' do
           hash_body = JSON.parse(response.body)
           expect(hash_body).to have_content('validate_result')
-          expect(hash_body).to have_content('message')
+          expect(hash_body).to have_content('error_fields')
+          expect(hash_body).to have_content('error_entity_indexes')
           expect(hash_body['validate_result']).to eq(false)
           expect(response).to have_http_status(:ok)
         end
@@ -61,7 +64,8 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
         it 'success' do
           hash_body = JSON.parse(response.body)
           expect(hash_body).to have_content('validate_result')
-          expect(hash_body).to have_content('message')
+          expect(hash_body).to have_content('error_fields')
+          expect(hash_body).to have_content('error_entity_indexes')
           expect(hash_body['validate_result']).to eq(true)
           expect(response).to have_http_status(:ok)
         end

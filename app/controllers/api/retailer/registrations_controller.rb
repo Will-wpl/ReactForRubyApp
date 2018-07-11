@@ -52,35 +52,35 @@ class Api::Retailer::RegistrationsController < Api::RegistrationsController
   def validate
     validation_user = params[:user]
     validate_final_result = true
-    final_message = ''
+    error_fields = []
     # validate Company name field
-    validate_result, message = validate_user_field('company_name',
+    validate_result = validate_user_field('company_name',
                                                    validation_user['company_name'],
                                                    [validation_user['id']])
     validate_final_result = validate_final_result & validate_result
-    final_message = final_message + message + '\r' unless message.blank?
+    error_fields.push('company_name') unless validate_result
 
     # validate Email field
-    validate_result, message = validate_user_field('email',
+    validate_result = validate_user_field('email',
                                                    validation_user['email'],
                                                    [validation_user['id']])
     validate_final_result = validate_final_result & validate_result
-    final_message = final_message + message + '\r' unless message.blank?
+    error_fields.push('email') unless validate_result
 
     # validate Company UEN field
-    validate_result, message = validate_user_field('company_unique_entity_number',
+    validate_result = validate_user_field('company_unique_entity_number',
                                                    validation_user['company_unique_entity_number'],
                                                    [validation_user['id']])
     validate_final_result = validate_final_result & validate_result
-    final_message = final_message + message + '\r' unless message.blank?
+    error_fields.push('company_unique_entity_number') unless validate_result
 
     # validate Company Licesnce Number
-    validate_result, message = validate_user_field('company_license_number',
+    validate_result = validate_user_field('company_license_number',
                                                    validation_user['company_license_number'],
                                                    [validation_user['id']])
     validate_final_result = validate_final_result & validate_result
-    final_message = final_message + message + '\r' unless message.blank?
+    error_fields.push('company_license_number') unless validate_result
 
-    render json: { validate_result: validate_final_result, message: final_message }, status: 200
+    render json: { validate_result: validate_final_result, error_fields: error_fields }, status: 200
   end
 end

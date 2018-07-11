@@ -1,5 +1,5 @@
 class Api::ConsumptionDetailsController < Api::BaseController
-  before_action :set_consumption, only: %i[index save participate reject]
+  before_action :set_consumption, only: %i[index save participate reject validate]
   def index
     unless params[:consumption_id].nil?
       consumption = @consumption
@@ -40,6 +40,19 @@ class Api::ConsumptionDetailsController < Api::BaseController
         consumption_detail.off_peak = detail['off_peak']
         consumption_detail.premise_address = detail['premise_address']
         consumption_detail.contracted_capacity = detail['contracted_capacity']
+        #update - new fields (20180709) - Start
+        consumption_detail.existing_plan = detail['existing_plan']
+        consumption_detail.totals = detail['totals']
+        consumption_detail.peak_pct = detail['peak_pct']
+        consumption_detail.peak = detail['totals'].to_f * detail['peak_pct'].to_f unless detail['peak_pct'].blank?
+        consumption_detail.off_peak = detail['totals'].to_f - consumption_detail.peak unless detail['peak_pct'].blank?
+        consumption_detail.contract_expiry = detail['contract_expiry']
+        consumption_detail.blk_or_unit = detail['blk_or_unit']
+        consumption_detail.street = detail['street']
+        consumption_detail.unit_number = detail['unit_number']
+        consumption_detail.postal_code = detail['postal_code']
+        consumption_detail.company_buyer_entity_id = params[:company_buyer_entity_id]
+        #Update -new fields (20180709) - End
         consumption_detail.consumption_id = params[:consumption_id]
         saved_details.push(consumption_detail) if consumption_detail.save!
       end
@@ -68,8 +81,8 @@ class Api::ConsumptionDetailsController < Api::BaseController
       consumption.htl_off_peak = intake_values[5]
       consumption.eht_peak = intake_values[6]
       consumption.eht_off_peak = intake_values[7]
-      auction.total_lt_peak += intake_values[0]
       if consumption.save!
+        auction.total_lt_peak += intake_values[0]
         auction.total_lt_off_peak += intake_values[1]
         auction.total_hts_peak += intake_values[2]
         auction.total_hts_off_peak += intake_values[3]
@@ -91,6 +104,65 @@ class Api::ConsumptionDetailsController < Api::BaseController
       end
     end
     
+  end
+
+  # Validate consumption detail
+  # Loginc:
+  #   1. Account number must be unique within a RA.
+  #   2. Account number cannot be same with any unexpired contracts of this buyer.
+  #   3. contract expiry date > RA's contract start date.
+  #   4. If both Unit Number and Postal Code are the same, then fail the check.
+  def validate
+    messages = []
+    error_detail_indexes = []
+    consumption = @consumption
+    details = JSON.parse(params[:details])
+    auction = Auction.find(consumption.auction_id)
+    raise ActiveRecord::RecordNotFound if auction.nil?
+    # Account must be unique within a RA.
+    account_numbers = []
+    auction.consumptions.each do |consumption|
+      consumption.consumption_details.each do |consumption_detail|
+        account_numbers.push(consumption_detail.account_number)
+      end
+    end
+    had_error_msg_acc = false
+    details.each_index do |index|
+      if account_numbers.any? { |v| v == details[index]['account_number'] }
+        error_detail_indexes.push(index)
+        messages.push('There is already an existing contract for this Account Number.') unless had_error_msg_acc
+        had_error_msg_acc = true
+      end
+    end
+    # Account number cannot be same with any unexpired contracts of this buyer.
+    # contract expiry date > RA's contract start date.
+    had_error_msg_addr = false
+    details.each_index do |index|
+      details.each do |temp_detail|
+        if details[index].object_id != temp_detail.object_id && details[index]['account_number'] == temp_detail['account_number']
+          error_detail_indexes.push(index)
+          messages.push('There is already an existing contract for this Account Number.') unless had_error_msg_acc
+          had_error_msg_acc = true
+        end
+        # If both Unit Number and Postal Code are the same, then fail the check.
+        if details[index].object_id != temp_detail.object_id && details[index]['unit_number'] == temp_detail['unit_number'] && details[index]['postal_code'] == temp_detail['postal_code'] then
+          error_detail_indexes.push(index)
+          messages.push('There is already an existing contract for this premise address.') unless had_error_msg_addr
+          had_error_msg_addr = true
+        end
+      end
+      # contract expiry date > RA's contract start date.
+      if !details[index]['contract_expiry'].blank? &&
+          Time.parse(details[index]['contract_expiry']) <= auction.contract_period_start_date
+        error_detail_indexes.push(index)
+      end
+    end
+
+    error_detail_indexes = error_detail_indexes.uniq
+    return_json = {validate_result: error_detail_indexes.blank?,
+                   error_detail_indexes: error_detail_indexes,
+                   error_messages: messages}
+    render json: return_json, status: 200
   end
 
   def reject

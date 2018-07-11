@@ -20,7 +20,7 @@ RSpec.describe Api::Retailer::RegistrationsController, type: :controller do
         it 'success' do
           hash_body = JSON.parse(response.body)
           expect(hash_body).to have_content('validate_result')
-          expect(hash_body).to have_content('message')
+          expect(hash_body).to have_content('error_fields')
           expect(hash_body['validate_result']).to eq(true)
           expect(response).to have_http_status(:ok)
         end
@@ -37,7 +37,7 @@ RSpec.describe Api::Retailer::RegistrationsController, type: :controller do
         it 'success' do
           hash_body = JSON.parse(response.body)
           expect(hash_body).to have_content('validate_result')
-          expect(hash_body).to have_content('message')
+          expect(hash_body).to have_content('error_fields')
           expect(hash_body['validate_result']).to eq(false)
           expect(response).to have_http_status(:ok)
         end

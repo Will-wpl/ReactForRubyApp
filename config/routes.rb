@@ -180,11 +180,12 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :buyer do
-      resources :consumption_details, only: %i[index update participate reject] do
+      resources :consumption_details, only: %i[index update participate reject validate] do
         collection do
           post 'participate'
           post 'reject'
           post 'save'
+          post 'validate'
         end
       end
       resources :auctions, only: %i[obtain published] do

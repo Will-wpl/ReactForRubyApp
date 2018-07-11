@@ -16,8 +16,8 @@ class Api::RegistrationsController < Api::BaseController
 
   def validate_user_field(field_name, field_value, except_ids)
     check_result = User.where(field_name + ' = \'' + field_value + '\'').where(' id not in (?)', except_ids).blank?
-    message = field_name + ' is exist. please change it' unless check_result
-    [message.blank?, message]
+
+    check_result
   end
 
   # Remove password & password_confirm if update existed user
