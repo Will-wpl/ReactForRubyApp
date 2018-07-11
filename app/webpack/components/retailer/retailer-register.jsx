@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom';
 import { UploadFile } from '../shared/upload';
 import { Modal } from '../shared/show-modal';
 import { getRetailerUserInfo, saveRetailManageInfo, submitRetailManageInfo } from '../../javascripts/componentService/retailer/service'
-// import { emitKeypressEvents } from 'readline';
-import { validateNum, validateEmail } from '../../javascripts/componentService/util';
+import { validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
 export class RetailerRegister extends Component {
     constructor(props) {
         super(props);
@@ -32,14 +31,24 @@ export class RetailerRegister extends Component {
             },
             uploadUrl: '/api/retailer/user_attachments?file_type=',
             showAttachmentFlag: 1,
-            buyerTCurl: "",
-            buyerTCname: "",
+            sellerTCurl: "",
+            sellerTCname: "",
             agree_seller_buyer: "0",
             revvTCurl: "",
             revvTCname: "",
             agree_seller_revv: "0"
         }
-
+        this.validatorItem = {
+            email_address: { cate: 'email' },
+            company_name: { cate: 'required' },
+            unique_entity_number: { cate: 'required' },
+            company_address: { cate: 'required' },
+            licence_number: { cate: 'required' },
+            gst_num: { cate: 'required' },
+            contact_name: { cate: 'required' },
+            mobile_number: { cate: 'num' },
+            office_number: { cate: 'num' }
+        }
     }
     componentWillMount() {
 
@@ -48,7 +57,6 @@ export class RetailerRegister extends Component {
         let fileObj;
         fileObj = this.state.fileData;
         getRetailerUserInfo().then(res => {
-            console.log(res);
             if (res.user_base_info) {
                 let item = res.user_base_info;
                 this.setState({
@@ -65,7 +73,6 @@ export class RetailerRegister extends Component {
                     agree_seller_buyer: item.agree_seller_buyer ? item.agree_seller_buyer : '0',
                     agree_seller_revv: item.agree_seller_revv ? item.agree_seller_revv : '0'
                 })
-                console.log(this.state.agree_seller_buyer)
                 if (this.state.agree_seller_buyer === '1') {
                     $('#chkBuyer').attr("checked", true);
                 }
@@ -93,10 +100,10 @@ export class RetailerRegister extends Component {
                 })
             }
             if (res.seller_buyer_tc_attachment) {
-                let buyer = res.seller_buyer_tc_attachment;
+                let seller = res.seller_buyer_tc_attachment;
                 this.setState({
-                    buyerTCurl: buyer.file_path,
-                    buyerTCname: buyer.file_name
+                    sellerTCurl: seller.file_path,
+                    sellerTCname: seller.file_name
                 })
             }
             if (res.seller_revv_tc_attachment) {
@@ -106,96 +113,31 @@ export class RetailerRegister extends Component {
                     revvTCname: revv.file_name
                 })
             }
-
         })
     }
     checkValidation() {
         let flag = true, hasDoc = true;
-        if (this.state.email_address) {
-            if (!validateEmail(this.state.email_address)) { this.setValidationFaild('email_address', 2) }
-            else {
-                this.setValidationPass('email_address', 2);
-            }
-        }
-        else {
-            this.setValidationFaild('email_address', 1);
-        }
 
-        if (!this.state.company_name) {
-            this.setValidationFaild('company_name', 1);
-        }
-        else {
-            this.setValidationPass('company_name', 1);
-        }
-
-        if (!this.state.unique_entity_number) {
-            this.setValidationFaild('unique_entity_number', 1);
-        }
-        else {
-            this.setValidationPass('unique_entity_number', 1);
-        }
-
-        if (!this.state.licence_number) {
-            this.setValidationFaild('licence_number', 1);
-        }
-        else {
-            this.setValidationPass('licence_number', 1);
-        }
-
-        if (!this.state.gst_num) {
-            this.setValidationFaild('gst_no', 1);
-        }
-        else {
-            this.setValidationPass('gst_no', 1);
-        }
-
-        if (!this.state.company_address) {
-            this.setValidationFaild('company_address', 1);
-        }
-        else {
-            this.setValidationPass('company_address', 1);
-        }
-
-        if (!this.state.contact_name) {
-            this.setValidationFaild('contact_name', 1);
-        }
-        else {
-            this.setValidationPass('contact_name', 1);
-        }
-
-        if (this.state.mobile_number) {
-
-            if (!validateNum(this.state.mobile_number)) {
-                this.setValidationFaild('mobile_number', 2)
-            } else {
-                this.setValidationPass('mobile_number', 2);
-            }
-        }
-        else {
-            this.setValidationFaild('mobile_number', 1);
-        }
-
-        if (this.state.office_number) {
-            if (!validateNum(this.state.office_number)) {
-                this.setValidationFaild('office_number', 2)
-            } else {
-                this.setValidationPass('office_number', 2)
-            }
-        }
-        else {
-            this.setValidationFaild('office_number', 1);
+        //validate form 
+        let arr = validator_Object(this.state, this.validatorItem);
+        if (arr) {
+            arr.map((item, index) => {
+                let column = item.column;
+                let cate = item.cate;
+                setValidationFaild(column, cate)
+            })
         }
 
         if ($('#chkBuyer').is(':checked')) {
-            this.setValidationPass('chkBuyer', 1);
+            setValidationPass('chkBuyer', 1);
 
         } else {
-            this.setValidationFaild('chkBuyer', 1);
+           setValidationFaild('chkBuyer', 1);
         }
         if ($('#chkRevv').is(':checked')) {
-            this.setValidationPass('chkRevv', 1);
+            setValidationPass('chkRevv', 1);
         } else {
-            this.setValidationFaild('chkRevv', 1);
+           setValidationFaild('chkRevv', 1);
         }
 
         $('.validate_message').find('div').each(function () {
@@ -205,8 +147,7 @@ export class RetailerRegister extends Component {
                 return false;
             }
         })
-
-
+        //validate upload form 
         if (this.state.fileData['RETAILER_DOCUMENTS'][0].files.length > 0) {
             hasDoc = true;
             this.setState({
@@ -219,33 +160,79 @@ export class RetailerRegister extends Component {
                 validate: false
             })
         }
-
-
-
         return flag && hasDoc;
     }
-
-    setValidationFaild(item, type) {
-        if (type === 1) {
-            $('#' + item + "_message").removeClass('isPassValidate').addClass('errormessage');
-            $('#' + item + "_format").removeClass('errormessage').addClass('isPassValidate');
+ 
+    Change(type, e) {
+        let itemValue = e.target.value;
+        switch (type) {
+            case 'email_address':
+                this.setState({ email_address: itemValue });
+                if (!validateEmail(itemValue)) {
+                   setValidationFaild('email_address', 2)
+                } else {
+                    setValidationPass('email_address', 2)
+                }
+                break;
+            case 'company_name':
+                this.setState({ company_name: itemValue });
+                changeValidate('company_name', itemValue);
+                break;
+            case 'unique_entity_number':
+                this.setState({ unique_entity_number: itemValue });
+                changeValidate('unique_entity_number', itemValue);
+                break;
+            case 'company_address':
+                this.setState({ company_address: itemValue });
+                changeValidate('company_address', itemValue);
+                break;
+            case 'licence_number':
+                this.setState({ licence_number: itemValue });
+                changeValidate('licence_number', itemValue);
+                break;
+            case 'gst_num':
+                this.setState({ gst_num: itemValue });
+                changeValidate('gst_no', itemValue);
+                break;
+            case 'contact_name':
+                this.setState({ contact_name: itemValue });
+                changeValidate('contact_name', itemValue);
+                break;
+            case 'mobile_number':
+                this.setState({ mobile_number: itemValue });
+                if (!validateNum(itemValue)) {
+                   setValidationFaild('mobile_number', 2)
+                } else {
+                    setValidationPass('mobile_number', 2)
+                }
+                break;
+            case 'office_number':
+                this.setState({ office_number: itemValue });
+                if (!validateNum(itemValue)) {
+                   setValidationFaild('office_number', 2)
+                } else {
+                    setValidationPass('office_number', 2)
+                }
+                break;
+            case 'chkBuyer':
+                if ($('#chkBuyer').is(':checked')) {
+                    this.setState({ agree_seller_buyer: 1 });
+                    setValidationPass('chkBuyer', 1)
+                } else {
+                    this.setState({ agree_seller_buyer: 0 });
+                   setValidationFaild('chkBuyer', 1);
+                }
+                break;
+            case 'chkRevv':
+                if ($('#chkRevv').is(':checked')) {
+                    this.setState({ agree_seller_revv: 1 });
+                    setValidationPass('chkRevv', 1)
+                } else {
+                   setValidationFaild('chkRevv', 1);
+                    this.setState({ agree_seller_revv: 0 });
+                }
+                break;
         }
-        else {
-            $('#' + item + "_message").removeClass('errormessage').addClass('isPassValidate');
-            $('#' + item + "_format").removeClass('isPassValidate').addClass('errormessage');
-        }
-
-    }
-    setValidationPass(item, type) {
-        if (type === 1) {
-            $('#' + item + "_message").removeClass('errormessage').addClass('isPassValidate');
-        }
-        else {
-            $('#' + item + "_format").removeClass('errormessage').addClass('isPassValidate');
-
-        }
-
-
     }
     submit() {
         if (this.checkValidation()) {
@@ -298,85 +285,6 @@ export class RetailerRegister extends Component {
             });
         })
     }
-    changeValidate(type, value) {
-        if (value) {
-            this.setValidationPass(type, 1);
-        }
-        else {
-            this.setValidationFaild(type, 1);
-        }
-    }
-    Change(type, e) {
-        let itemValue = e.target.value;
-        switch (type) {
-            case 'email_address':
-                this.setState({ email_address: itemValue });
-                if (!validateEmail(itemValue)) {
-                    this.setValidationFaild('email_address', 2)
-                } else {
-                    this.setValidationPass('email_address', 2)
-                }
-                break;
-            case 'company_name':
-                this.setState({ company_name: itemValue });
-                this.changeValidate('company_name', itemValue);
-                break;
-            case 'unique_entity_number':
-                this.setState({ unique_entity_number: itemValue });
-                this.changeValidate('unique_entity_number', itemValue);
-                break;
-            case 'company_address':
-                this.setState({ company_address: itemValue });
-                this.changeValidate('company_address', itemValue);
-                break;
-            case 'licence_number':
-                this.setState({ licence_number: itemValue });
-                this.changeValidate('licence_number', itemValue);
-                break;
-            case 'gst_num':
-                this.setState({ gst_num: itemValue });
-                this.changeValidate('gst_no', itemValue);
-                break;
-            case 'contact_name':
-                this.setState({ contact_name: itemValue });
-                this.changeValidate('contact_name', itemValue);
-                break;
-            case 'mobile_number':
-                this.setState({ mobile_number: itemValue });
-                if (!validateNum(itemValue)) {
-                    this.setValidationFaild('mobile_number', 2)
-                } else {
-                    this.setValidationPass('mobile_number', 2)
-                }
-                break;
-            case 'office_number':
-                this.setState({ office_number: itemValue });
-                if (!validateNum(itemValue)) {
-                    this.setValidationFaild('office_number', 2)
-                } else {
-                    this.setValidationPass('office_number', 2)
-                }
-                break;
-            case 'chkBuyer':
-                if ($('#chkBuyer').is(':checked')) {
-                    this.setState({ agree_seller_buyer: 1 });
-                    this.setValidationPass('chkBuyer', 1)
-                } else {
-                    this.setState({ agree_seller_buyer: 0 });
-                    this.setValidationFaild('chkBuyer', 1);
-                }
-                break;
-            case 'chkRevv':
-                if ($('#chkRevv').is(':checked')) {
-                    this.setState({ agree_seller_revv: 1 });
-                    this.setValidationPass('chkRevv', 1)
-                } else {
-                    this.setValidationFaild('chkRevv', 1);
-                    this.setState({ agree_seller_revv: 0 });
-                }
-                break;
-        }
-    }
     showView() {
         this.refs.Modal_upload.showModal();
     }
@@ -397,7 +305,7 @@ export class RetailerRegister extends Component {
                                         <abbr title="required">*</abbr> Email:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="email_address" value={this.state.email_address} onChange={this.Change.bind(this, 'email_address')} disabled={this.state.disabled} ref="email_address" placeholder="Email" required aria-required="true" title="Please fill out this field" placeholder="Email" />
+                                        <input type="text" name="email_address" value={this.state.email_address} onChange={this.Change.bind(this, 'email_address')} disabled={this.state.disabled} ref="email_address" placeholder="Email" required aria-required="true" title="Please fill out this field" />
                                         <div className='isPassValidate' id='email_address_message' >This field is required!</div>
                                         <div className='isPassValidate' id='email_address_format' >Incorrect mail format.</div>
                                     </div>
@@ -494,7 +402,7 @@ export class RetailerRegister extends Component {
                                     </div>
                                 </div>
 
-                                <h4 className="lm--formItem lm--formItem--inline string"><input id="chkBuyer" type="checkbox" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href={this.state.buyerTCurl}>{this.state.buyerTCname}</a></h4>
+                                <h4 className="lm--formItem lm--formItem--inline string"><input id="chkBuyer" type="checkbox" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href={this.state.sellerTCurl}>{this.state.sellerTCname}</a></h4>
                                 <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                                 <h4 className="lm--formItem lm--formItem--inline string"><input id="chkRevv" type="checkbox" onChange={this.Change.bind(this, 'chkRevv')} name={"seller_revv_tc"} />  I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href={this.state.revvTCurl}>{this.state.revvTCname}</a></h4>
                                 <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
