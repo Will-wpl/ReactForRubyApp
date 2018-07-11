@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { UploadFile } from '../shared/upload';
 import { UserEntity } from '../shared/user-entity';
 import { Modal } from '../shared/show-modal';
-import { getBuyerUserInfo, saveBuyerUserInfo, submitBuyerUserInfo ,getBuyerUserInfoByUserId} from '../../javascripts/componentService/common/service';
+import { getBuyerUserInfo, saveBuyerUserInfo, submitBuyerUserInfo, getBuyerUserInfoByUserId } from '../../javascripts/componentService/common/service';
 import { validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
 
 export class BuyerRegister extends Component {
@@ -116,7 +116,7 @@ export class BuyerRegister extends Component {
 
     componentDidMount() {
         if (this.state.userid) {
-            getBuyerUserInfoByUserId(this.state.userid).then(res=>{
+            getBuyerUserInfoByUserId(this.state.userid).then(res => {
                 console.log(res)
             })
 
@@ -288,9 +288,9 @@ export class BuyerRegister extends Component {
     setParams() {
         let entity = [
             {
-                company_name: this.state.user_company_name,
-                company_uen: this.state.user_company_uen,
-                company_address: this.state.user_company_address,
+                company_name: this.state.company_name,
+                company_uen: this.state.unique_entity_number,
+                company_address: this.state.company_address,
                 billing_address: this.state.user_billing_address,
                 bill_attention_to: this.state.user_bill_attention_to,
                 contact_name: this.state.user_contact_name,
@@ -299,6 +299,7 @@ export class BuyerRegister extends Component {
                 contact_office_no: this.state.user_contact_office_no
             }
         ];
+
         if (this.state.user_entity_data['ENTITY_LIST'][0].entities) {
             let list = this.state.user_entity_data['ENTITY_LIST'][0].entities;
             list.map((item, index) => {
@@ -316,6 +317,8 @@ export class BuyerRegister extends Component {
                 entity.push(paramObj);
             })
         }
+        // console.log(entity);
+        // console.log(this.state.user_entity_data['ENTITY_LIST'][0].entities);
 
         let params = {
             user: {
@@ -488,21 +491,32 @@ export class BuyerRegister extends Component {
     save() {
         let buyerParam = this.setParams();
         saveBuyerUserInfo(buyerParam).then(res => {
+            this.setState(
+                {
+                    user_company_name: this.state.company_name,
+                    user_company_uen: this.state.unique_entity_number,
+                    user_company_address: this.state.company_address,
+                    text: "Your details have been successfully saved. "
+                }
+            );
             this.refs.Modal.showModal();
-            this.setState({
-                text: "Your details have been successfully saved. "
-            });
         })
     }
-    submit() {
+    submit(type) {
         let isValidator = this.checkSuccess();
         if (isValidator) {
             let buyerParam = this.setParams();
             submitBuyerUserInfo(buyerParam).then(res => {
+
+                this.setState(
+                    {
+                        user_company_name: this.state.company_name,
+                        user_company_uen: this.state.unique_entity_number,
+                        user_company_address: this.state.company_address,
+                        text: "Your details have been successfully submitted. "
+                    }
+                );
                 this.refs.Modal.showModal();
-                this.setState({
-                    text: "Your details have been successfully submitted. "
-                });
             })
         }
 
@@ -528,7 +542,7 @@ export class BuyerRegister extends Component {
         else if (this.state.use_type === 'manage_acount') {
             btn_html = <div>
                 <button id="save_form" className="lm--button lm--button--primary" onClick={this.cancel.bind(this)}>Cancel</button>
-                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this)}>Save</button>
+                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this, 'edit')}>Save</button>
             </div>;
             $('#chkBuyer').attr('disabled', true);
             $('#chkRevv').attr('disabled', true);
@@ -536,7 +550,7 @@ export class BuyerRegister extends Component {
         else {
             btn_html = <div>
                 <button id="save_form" className="lm--button lm--button--primary" onClick={this.save.bind(this)}>Save</button>
-                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this)}>Complete Sign Up</button>
+                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this, 'insert')}>Complete Sign Up</button>
             </div>;
         }
         return (

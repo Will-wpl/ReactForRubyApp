@@ -21,7 +21,9 @@ export const getBuyerUserInfo=()=>{
 }
 
 export const getBuyerUserInfoByUserId=(id)=>{
-    return get(`/api/buyer/registrations/${id}/retailer_info`);
+    return get(`/api/buyer/registrations/1/buyer_info?user_id=${id}`);
+
+    // return get(''${id}/buyer_info`);
 }
 
 export const saveBuyerUserInfo=(params)=>{
