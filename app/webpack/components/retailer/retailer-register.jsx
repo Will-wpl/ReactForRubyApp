@@ -154,7 +154,7 @@ export class RetailerRegister extends Component {
             })
         }
     }
-    
+
     checkRejectAction() {
         let flag = true;
         let arr = validator_Object(this.state, this.validatorComment);
@@ -375,8 +375,7 @@ export class RetailerRegister extends Component {
         };
 
         if (obj.action === 'reject') {
-            if(this.checkRejectAction())
-            {
+            if (this.checkRejectAction()) {
                 approveUser(param).then(res => {
                     location.href = "/admin/users/retailers";
                 })
@@ -523,15 +522,22 @@ export class RetailerRegister extends Component {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="lm--formItem lm--formItem--inline string" className={this.state.use_type === 'admin_approve' ? 'isDisplay' : 'isHide'} >
-                                    <label className="lm--formItem-left lm--formItem-label string required">
-                                        Comment:
-                                  </label>
-                                    <div className="lm--formItem-right lm--formItem-control">
-                                        <textarea name="comment" value={this.state.comment} onChange={this.Change.bind(this, 'comment')} ref="comment" aria-required="true"></textarea>
-                                        <div className='isPassValidate' id='comment_message' >This field is required!</div>
+                                <div className={this.state.use_type === 'admin_approve' ? 'isDisplay' : 'isHide'}>
+                                    <div className="lm--formItem lm--formItem--inline string optional"  >
+                                        <label className="lm--formItem-left lm--formItem-label">
+                                            Comment:
+                                    </label>
+                                        <div className="lm--formItem-right lm--formItem-control">
+                                            <div className="lm--formItem text optional user_comment">
+                                                <div className="lm--formItem-control">
+                                                    <textarea name="comment" value={this.state.comment} onChange={this.Change.bind(this, 'comment')} ref="comment" aria-required="true"></textarea>
+                                                    <div className='isPassValidate' id='comment_message' >This field is required!</div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+
                                 <h4 className="lm--formItem lm--formItem--inline string"><input id="chkBuyer" type="checkbox" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href={this.state.sellerTCurl}>{this.state.sellerTCname}</a></h4>
                                 <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                                 <h4 className="lm--formItem lm--formItem--inline string"><input id="chkRevv" type="checkbox" onChange={this.Change.bind(this, 'chkRevv')} name={"seller_revv_tc"} disabled={this.state.disabled} />  I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href={this.state.revvTCurl}>{this.state.revvTCname}</a></h4>
