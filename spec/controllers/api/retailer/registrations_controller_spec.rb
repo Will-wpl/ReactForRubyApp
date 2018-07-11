@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Api::Retailer::RegistrationsController, type: :controller do
+  let!(:admin_user) { create(:user, :with_admin) }
   let!(:retailer_user) { create(:user, :with_retailer) }
   let!(:retailer_user1) { create(:user, :with_retailer, company_name: 'Retailer1 Company') }
 
@@ -47,6 +48,18 @@ RSpec.describe Api::Retailer::RegistrationsController, type: :controller do
     describe 'Get index' do
       def do_request
         get :index
+      end
+      before { do_request }
+      it 'success' do
+        hash_body = JSON.parse(response.body)
+        expect(hash_body).to have_content('user_base_info')
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    describe 'Get retailer info by user id' do
+      def do_request
+        get :retailer_info, params: { id: admin_user.id, user_id: retailer_user1.id }
       end
       before { do_request }
       it 'success' do

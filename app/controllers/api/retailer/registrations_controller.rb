@@ -3,24 +3,16 @@ class Api::Retailer::RegistrationsController < Api::RegistrationsController
 
   # get retailer registration information
   def index
-    # get the last updated attachment
-    user_attachment = UserAttachment.find_last_by_user(current_user.id)
-
-    # get seller-buyer-t&c document
-    seller_buyer_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)
-
-    # get buyer-revv-t&c document
-    seller_revv_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_REVV_TC)
-
-    # get letter-of-authorisation document
-    letter_of_authorisation_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Letter_Authorisation)
-
+    user_json = get_retailer_by_id(current_user.id)
     # return json
-    render json: { user_base_info: current_user,
-                   self_attachment: user_attachment,
-                   seller_buyer_tc_attachment: seller_buyer_tc_attachment,
-                   seller_revv_tc_attachment: seller_revv_tc_attachment,
-                   letter_of_authorisation_attachment: letter_of_authorisation_attachment }, status: 200
+    render json: user_json, status: 200
+  end
+
+  # get retailer registration information by user id
+  def retailer_info
+    user_json = get_retailer_by_id(params[:user_id])
+    # return json
+    render json: user_json, status: 200
   end
 
   # update retailer registration information
@@ -82,5 +74,29 @@ class Api::Retailer::RegistrationsController < Api::RegistrationsController
     error_fields.push('company_license_number') unless validate_result
 
     render json: { validate_result: validate_final_result, error_fields: error_fields }, status: 200
+  end
+
+  private
+
+  def get_retailer_by_id(user_id)
+    # get the last updated attachment
+    user_attachment = UserAttachment.find_last_by_user(user_id)
+
+    # get seller-buyer-t&c document
+    seller_buyer_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)
+
+    # get buyer-revv-t&c document
+    seller_revv_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_REVV_TC)
+
+    # get letter-of-authorisation document
+    letter_of_authorisation_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Letter_Authorisation)
+
+    # return json
+    user_json = { user_base_info: current_user,
+                   self_attachment: user_attachment,
+                   seller_buyer_tc_attachment: seller_buyer_tc_attachment,
+                   seller_revv_tc_attachment: seller_revv_tc_attachment,
+                   letter_of_authorisation_attachment: letter_of_authorisation_attachment }
+    user_json
   end
 end
