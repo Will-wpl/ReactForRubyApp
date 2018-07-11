@@ -10,6 +10,7 @@ export default class AdminContact extends Component {
     this.state={
         listdetail:[],
         uploadUrl:'/api/admin/user_attachments?file_type=',
+        validate:true,
         fileData:{
                 "SELLER_BUYER_TC":[
                     {buttonName:"none",files:[]}
@@ -87,7 +88,7 @@ render() {
                         <abbr title="required">*</abbr> Seller - Buyer T&C :
                     </label>
                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                        <UploadFile type="SELLER_BUYER_TC" required="required" col_width="10" showList="2" showWay="0" fileData={this.state.fileData.SELLER_BUYER_TC} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
+                        <UploadFile type="SELLER_BUYER_TC" required="required" validate={this.state.validate} col_width="10" showList="2" showWay="0" fileData={this.state.fileData.SELLER_BUYER_TC} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
                         <div className="col-sm-12 col-md-2 u-cell">
                             <button className="lm--button lm--button--primary" onClick={this.show_history.bind(this,'SELLER_BUYER_TC')} >History</button>
                         </div>
@@ -98,7 +99,7 @@ render() {
                         <abbr title="required">*</abbr> Seller - Revv T&C :
                     </label>
                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                        <UploadFile type="SELLER_REVV_TC" required="required" showList="2" col_width="10"  showWay="0" fileData={this.state.fileData.SELLER_REVV_TC} propsdisabled={false}  uploadUrl={this.state.uploadUrl}/>
+                        <UploadFile type="SELLER_REVV_TC" required="required" validate={this.state.validate} showList="2" col_width="10"  showWay="0" fileData={this.state.fileData.SELLER_REVV_TC} propsdisabled={false}  uploadUrl={this.state.uploadUrl}/>
                         <div className="col-sm-12 col-md-2 u-cell">
                             <button className="lm--button lm--button--primary" onClick={this.show_history.bind(this,'SELLER_REVV_TC')} >History</button>
                         </div>
@@ -109,7 +110,7 @@ render() {
                         <abbr title="required">*</abbr> Buyer - Revv T&C :
                     </label>
                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                        <UploadFile type="BUYER_REVV_TC" required="required" showList="2" col_width="10"  showWay="0" fileData={this.state.fileData.BUYER_REVV_TC} propsdisabled={false}  uploadUrl={this.state.uploadUrl}/>
+                        <UploadFile type="BUYER_REVV_TC" required="required" validate={this.state.validate} showList="2" col_width="10"  showWay="0" fileData={this.state.fileData.BUYER_REVV_TC} propsdisabled={false}  uploadUrl={this.state.uploadUrl}/>
                         <div className="col-sm-12 col-md-2 u-cell">
                             <button className="lm--button lm--button--primary" onClick={this.show_history.bind(this,'BUYER_REVV_TC')} >History</button>
                         </div>
