@@ -14,7 +14,8 @@ class AuctionHistory < ApplicationRecord
   # Validations
 
   # Scopes
-
+  scope :find_init_bidder, ->(auction_id) { where('auction_id = ? and is_bidder = true and flag is null', auction_id) }
+  scope :find_contract_duration, ->(contract_duration) { where(contract_duration: contract_duration) }
   # Callbacks
 
   # Delegates
@@ -60,19 +61,23 @@ class AuctionHistory < ApplicationRecord
       #   ids = create_bid_slice_up(calculate_dto.auction_id, @history, current_time)
       #   find_histories_by_ids(ids)
       # end
-    ids = create_bid_slice_up_cache(calculate_dto.auction_id, history, current_time)
+    ids = create_bid_slice_up_cache(calculate_dto.auction_id, history, current_time, calculate_dto.contract_duration)
     find_histories_by_ids(ids)
     # end
   end
 
   # create history slice up by redis when retailer set bid, belong to set_bid function
-  def self.create_bid_slice_up_cache(auction_id, current_history, current_time)
-    histories = RedisHelper.get_current_sorted_histories(auction_id)
+  def self.create_bid_slice_up_cache(auction_id, current_history, current_time, contract_duration)
+    histories = if contract_duration.blank?
+                  RedisHelper.get_current_sorted_histories(auction_id)
+                else
+                  RedisHelper.get_current_sorted_histories_duration(auction_id, contract_duration)
+                end
     new_histories = histories.reject do |history|
       history.user_id == current_history.user_id
     end
     new_histories.push(current_history)
-    sort_ids(new_histories, current_history, current_time)
+    sort_ids(new_histories, current_history, current_time, contract_duration)
   end
 
   # sort by average_price and actual_bid_time when retailer set bid, belong to set_bid function
@@ -82,7 +87,7 @@ class AuctionHistory < ApplicationRecord
 
   # sort, set redis cache and save to db, return ids, belong to set_bid function
   # @return [ids] the ids of slice up histories
-  def self.sort_ids(histories, current_history, current_time)
+  def self.sort_ids(histories, current_history, current_time, contract_duration)
     sorted_histories = bid_and_sort(histories)
     ids = []
     flag = SecureRandom.uuid
@@ -114,7 +119,11 @@ class AuctionHistory < ApplicationRecord
       new_histories.push(history_new)
       tmp_average_price = history.average_price
     end
-    RedisHelper.set_current_sorted_histories(current_history.auction_id, new_histories)
+    if contract_duration.blank?
+      RedisHelper.set_current_sorted_histories(current_history.auction_id, new_histories)
+    else
+      RedisHelper.set_current_sorted_histories_duration(current_history.auction_id, new_histories, contract_duration)
+    end
     new_histories.each do |history|
       ids.push(history.id) if history.save
       AuctionEvent.set_events(history.user_id, history.auction_id, 'set bid', history.to_json) if history.user_id == current_history.user_id
