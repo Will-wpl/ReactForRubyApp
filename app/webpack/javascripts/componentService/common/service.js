@@ -19,6 +19,7 @@ export const getBuyerParticipate = (url) => get(url)
 export const getBuyerUserInfo=()=>{
     return get('/api/buyer/registrations');
 }
+
 export const getBuyerUserInfoByUserId=(id)=>{
     return get(`/api/buyer/registrations/${id}/retailer_info`);
 }
