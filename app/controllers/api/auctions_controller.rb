@@ -487,30 +487,31 @@ class Api::AuctionsController < Api::BaseController
     contracts = JSON.parse(auction_contracts)
     contracts.each do |contract|
       month = contract['contract_duration'].to_i
-      contract['contract_period_end_date'] = DateTime.now.advance(months: month).advance(days: -1)
+      contract['contract_period_end_date'] = auction.contract_period_start_date.advance(months: month).advance(days: -1)
       if contract['id'].to_i == 0
         contract['auction_id'] = auction.id
         AuctionContract.create!(contract)
       else
-        old_contract = AuctionContract.find(contract['id'])
-        old_contract.contract_period_end_date = contract['contract_period_end_date']
-        old_contract.starting_price_lt_peak = contract['starting_price_lt_peak']
-        old_contract.starting_price_lt_off_peak = contract['starting_price_lt_off_peak']
-        old_contract.starting_price_hts_peak = contract['starting_price_hts_peak']
-        old_contract.starting_price_hts_off_peak = contract['starting_price_hts_off_peak']
-        old_contract.starting_price_htl_peak = contract['starting_price_htl_peak']
-        old_contract.starting_price_htl_off_peak = contract['starting_price_htl_off_peak']
-        old_contract.starting_price_eht_peak = contract['starting_price_eht_peak']
-        old_contract.starting_price_eht_off_peak = contract['starting_price_eht_off_peak']
-        old_contract.reserve_price_lt_peak = contract['reserve_price_lt_peak']
-        old_contract.reserve_price_lt_off_peak = contract['reserve_price_lt_off_peak']
-        old_contract.reserve_price_hts_peak = contract['reserve_price_hts_peak']
-        old_contract.reserve_price_hts_off_peak = contract['reserve_price_hts_off_peak']
-        old_contract.reserve_price_htl_peak = contract['reserve_price_htl_peak']
-        old_contract.reserve_price_htl_off_peak = contract['reserve_price_htl_off_peak']
-        old_contract.reserve_price_eht_peak = contract['reserve_price_eht_peak']
-        old_contract.reserve_price_eht_off_peak = contract['reserve_price_eht_off_peak']
-        old_contract.save!
+        AuctionContract.find(contract['id']).update!(contract)
+        # old_contract = AuctionContract.find(contract['id'])
+        # old_contract.contract_period_end_date = contract['contract_period_end_date']
+        # old_contract.starting_price_lt_peak = contract['starting_price_lt_peak']
+        # old_contract.starting_price_lt_off_peak = contract['starting_price_lt_off_peak']
+        # old_contract.starting_price_hts_peak = contract['starting_price_hts_peak']
+        # old_contract.starting_price_hts_off_peak = contract['starting_price_hts_off_peak']
+        # old_contract.starting_price_htl_peak = contract['starting_price_htl_peak']
+        # old_contract.starting_price_htl_off_peak = contract['starting_price_htl_off_peak']
+        # old_contract.starting_price_eht_peak = contract['starting_price_eht_peak']
+        # old_contract.starting_price_eht_off_peak = contract['starting_price_eht_off_peak']
+        # old_contract.reserve_price_lt_peak = contract['reserve_price_lt_peak']
+        # old_contract.reserve_price_lt_off_peak = contract['reserve_price_lt_off_peak']
+        # old_contract.reserve_price_hts_peak = contract['reserve_price_hts_peak']
+        # old_contract.reserve_price_hts_off_peak = contract['reserve_price_hts_off_peak']
+        # old_contract.reserve_price_htl_peak = contract['reserve_price_htl_peak']
+        # old_contract.reserve_price_htl_off_peak = contract['reserve_price_htl_off_peak']
+        # old_contract.reserve_price_eht_peak = contract['reserve_price_eht_peak']
+        # old_contract.reserve_price_eht_off_peak = contract['reserve_price_eht_off_peak']
+        # old_contract.save!
       end
     end
   end
