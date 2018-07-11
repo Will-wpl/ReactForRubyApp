@@ -341,7 +341,7 @@ export class CreateNewRA extends Component {
                             </td>
                             <td>
                                 Starting:<input type="text" id={"starting_price_htl_peak_"+mouth} required={this.state.required} /><br/>
-                                Reserve:<input type="text" id={"reserve_price_hlt_peak_"+mouth} required={this.state.required} />
+                                Reserve:<input type="text" id={"reserve_price_htl_peak_"+mouth} required={this.state.required} />
                             </td>
                             <td>
                                 Starting:<input type="text" id={"starting_price_eht_peak_"+mouth} required={this.state.required} /><br/>
