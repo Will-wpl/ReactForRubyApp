@@ -4,6 +4,8 @@ import { UploadFile } from '../shared/upload';
 import { UserEntity } from '../shared/user-entity';
 import { Modal } from '../shared/show-modal';
 import { getBuyerUserInfo, saveBuyerUserInfo, submitBuyerUserInfo } from '../../javascripts/componentService/common/service';
+import { validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
+
 export class BuyerRegister extends Component {
     constructor(props) {
         super(props);
@@ -14,6 +16,8 @@ export class BuyerRegister extends Component {
             disabled: false,
             havedata: false,
             allbtnStatus: true,
+            validate: true,
+
             email_address: "",
             company_name: "",
             unique_entity_number: "",
@@ -33,12 +37,19 @@ export class BuyerRegister extends Component {
             user_contact_mobile_no: "",
             user_contact_office_no: "",
 
+            buyerTCurl: "",
+            buyerTCname: "",
+            agree_seller_buyer: "0",
+
+            buyerRevvTCurl: "",
+            buyerRevvTCname: "",
+            agree_buyer_revv: "0",
+            has_tenants: "1",
             user_entity_data: {
                 "ENTITY_LIST": [
                     { buttonName: "none", entities: [] }
                 ]
             },
-
             fileData: {
                 "BUYER_DOCUMENTS": [
                     { buttonName: "none", files: [] }
@@ -46,6 +57,38 @@ export class BuyerRegister extends Component {
             },
             uploadUrl: "/api/buyer/user_attachments?file_type="
         };
+        this.validatorItem = {
+            email_address: { cate: 'email' },
+            company_name: { cate: 'required' },
+            unique_entity_number: { cate: 'required' },
+            company_address: { cate: 'required' },
+            billing_address: { cate: 'required' },
+            contact_name: { cate: 'required' },
+            mobile_number: { cate: 'num' },
+            office_number: { cate: 'num' },
+
+            user_company_name: { cate: 'required' },
+            user_company_uen: { cate: 'required' },
+            user_company_address: { cate: 'required' },
+            user_billing_address: { cate: 'required' },
+            user_bill_attention_to: { cate: 'required' },
+            user_contact_name: { cate: 'required' },
+            user_contact_email: { cate: 'email' },
+            user_contact_mobile_no: { cate: 'num' },
+            user_contact_office_no: { cate: 'num' }
+        }
+        this.validatorEntity = {
+            user_company_name: { cate: 'required' },
+            user_company_uen: { cate: 'required' },
+            user_company_address: { cate: 'required' },
+            user_billing_address: { cate: 'required' },
+            user_bill_attention_to: { cate: 'required' },
+            user_contact_name: { cate: 'required' },
+            user_contact_email: { cate: 'email' },
+            user_contact_mobile_no: { cate: 'num' },
+            user_contact_office_no: { cate: 'num' },
+        }
+
     }
     componentWillMount() {
 
@@ -55,7 +98,6 @@ export class BuyerRegister extends Component {
         fileObj = this.state.fileData;
         entityObj = this.state.user_entity_data;
         getBuyerUserInfo().then(res => {
-             console.log(res)
             if (res.user_base_info) {
                 let item = res.user_base_info;
                 this.setState({
@@ -70,8 +112,24 @@ export class BuyerRegister extends Component {
                     office_number: item.account_office_number ? item.account_office_number : '',
                     user_company_name: item.company_name ? item.company_name : '',
                     user_company_uen: item.company_unique_entity_number ? item.company_unique_entity_number : '',
-                    user_company_address: item.company_address ? item.company_address : ''
+                    user_company_address: item.company_address ? item.company_address : '',
+                    agree_seller_buyer: item.agree_seller_buyer ? item.agree_seller_buyer : '0',
+                    agree_buyer_revv: item.agree_buyer_revv ? item.agree_buyer_revv : '0',
+                    has_tenants: item.has_tenants ? item.has_tenants : '1'
                 })
+                $('#buyer_management').val(this.state.has_tenants);
+                if (this.state.agree_seller_buyer === "1") {
+                    $('#chkBuyer').attr("checked", true);
+                }
+                else {
+                    $('#chkBuyer').attr("checked", false);
+                }
+                if (this.state.agree_buyer_revv === "1") {
+                    $('#chkRevv').attr("checked", true);
+                }
+                else {
+                    $('#chkRevv').attr("checked", false);
+                }
             }
 
             if (res.self_attachment) {
@@ -92,21 +150,31 @@ export class BuyerRegister extends Component {
                 let user_entity = [];
                 if (entity.length > 0) {
                     this.setState({
-                        user_company_name: entity[0].company_name,
-                        user_company_uen: entity[0].company_uen,
-                        user_company_address: entity[0].company_address,
-                        user_billing_address: entity[0].billing_address,
-                        user_bill_attention_to: entity[0].bill_attention_to,
-                        user_contact_name: entity[0].contact_name,
-                        user_contact_email: entity[0].contact_email,
-                        user_contact_mobile_no: entity[0].contact_mobile_no,
-                        user_contact_office_no: entity[0].contact_office_no
+                        user_company_name: entity[0].company_name ? entity[0].company_name : '',
+                        user_company_uen: entity[0].company_uen ? entity[0].company_uen : '',
+                        user_company_address: entity[0].company_address ? entity[0].company_address : '',
+                        user_billing_address: entity[0].billing_address ? entity[0].billing_address : '',
+                        user_bill_attention_to: entity[0].bill_attention_to ? entity[0].bill_attention_to : '',
+                        user_contact_name: entity[0].contact_name ? entity[0].contact_name : '',
+                        user_contact_email: entity[0].contact_email ? entity[0].contact_email : '',
+                        user_contact_mobile_no: entity[0].contact_mobile_no ? entity[0].contact_mobile_no : '',
+                        user_contact_office_no: entity[0].contact_office_no ? entity[0].contact_office_no : ''
                     })
 
                     if (entity.length > 1) {
                         res.buyer_entities.map((item, index) => {
                             if (index > 0) {
-                                user_entity.push(item);
+                                user_entity.push({
+                                    user_company_name: entity[index].company_name ? entity[index].company_name : '',
+                                    user_company_uen: entity[index].company_uen ? entity[index].company_uen : '',
+                                    user_company_address: entity[index].company_address ? entity[index].company_address : '',
+                                    user_billing_address: entity[index].billing_address ? entity[index].billing_address : '',
+                                    user_bill_attention_to: entity[index].bill_attention_to ? entity[index].bill_attention_to : '',
+                                    user_contact_name: entity[index].contact_name ? entity[index].contact_name : '',
+                                    user_contact_email: entity[index].contact_email ? entity[index].contact_email : '',
+                                    user_contact_mobile_no: entity[index].contact_mobile_no ? entity[index].contact_mobile_no : '',
+                                    user_contact_office_no: entity[index].contact_office_no ? entity[index].contact_office_no : ''
+                                });
                             }
                         })
                         entityObj['ENTITY_LIST'][0].entities = user_entity;
@@ -128,15 +196,61 @@ export class BuyerRegister extends Component {
             if (res.buyer_revv_tc_attachment) {
                 let revv = res.buyer_revv_tc_attachment;
                 this.setState({
-                    revvTCurl: revv.file_path,
-                    revvTCname: revv.file_name
+                    buyerRevvTCurl: revv.file_path,
+                    buyerRevvTCname: revv.file_name
                 })
             }
         })
     }
     checkSuccess() {
+        let flag = true, hasDoc = true;
+        let arr = validator_Object(this.state, this.validatorItem);
+        if (arr) {
+            arr.map((item, index) => {
+                let column = item.column;
+                let cate = item.cate;
+                setValidationFaild(column, cate)
+            })
+        }
+        let entity = validator_Array(this.state.user_entity_data['ENTITY_LIST'][0].entities, this.validatorEntity);
+        if (entity) {
+            entity.map((item, index) => {
+                item.map((it, i) => {
+                    let column = it.column;
+                    let cate = it.cate;
+                    let ind = it.ind; 
+                    setValidationFaild(column +"_"+ ind, cate)
+                })
+            })
+        }
 
+        if (this.state.fileData['BUYER_DOCUMENTS'][0].files.length > 0) {
+            hasDoc = true;
+            this.setState({
+                validate: true
+            })
+        }
+        else {
+            hasDoc = false;
+            this.setState({
+                validate: false
+            })
+        }
+
+
+
+        $('.validate_message').find('div').each(function () {
+            let className = $(this).attr('class');
+            if (className === 'errormessage') {
+                flag = false;
+                return false;
+            }
+        })
+        return flag && hasDoc;
     }
+
+
+
     setParams() {
         let entity = [
             {
@@ -179,32 +293,16 @@ export class BuyerRegister extends Component {
                 'billing_address': this.state.billing_address,
                 'name': this.state.contact_name,
                 'account_mobile_number': this.state.mobile_number,
-                'account_office_number': this.state.office_number
+                'account_office_number': this.state.office_number,
+                'agree_seller_buyer': this.state.agree_seller_buyer,
+                'agree_buyer_revv': this.state.agree_buyer_revv,
+                'has_tenants': this.state.has_tenants
             },
             buyer_entities: JSON.stringify(entity)
         };
         return params;
     }
-    save() {
-        let buyerParam = this.setParams();
-        saveBuyerUserInfo(buyerParam).then(res => {
-            this.refs.Modal.showModal();
-            this.setState({
-                text: "Your details have been successfully saved. "
-            });
-        })
 
-
-    }
-    submit() {
-        let buyerParam = this.setParams();
-        submitBuyerUserInfo(buyerParam).then(res => {
-            this.refs.Modal.showModal();
-            this.setState({
-                text: "Your details have been successfully submitted. "
-            });
-        })
-    }
     addUserEntity() {
         let entityObj;
         entityObj = this.state.user_entity_data;
@@ -229,60 +327,149 @@ export class BuyerRegister extends Component {
         switch (type) {
             case 'email_address':
                 this.setState({ email_address: itemValue });
+                if (!validateEmail(itemValue)) {
+                    setValidationFaild('email_address', 2)
+                } else {
+                    setValidationPass('email_address', 2)
+                }
                 break;
             case 'company_name':
                 this.setState({ company_name: itemValue });
+                changeValidate('company_name', itemValue);
                 break;
             case 'unique_entity_number':
                 this.setState({ unique_entity_number: itemValue });
+                changeValidate('unique_entity_number', itemValue);
                 break;
             case 'company_address':
                 this.setState({ company_address: itemValue });
+                changeValidate('company_address', itemValue);
                 break;
             case 'billing_address':
                 this.setState({ billing_address: itemValue });
+                changeValidate('billing_address', itemValue);
                 break;
             case 'contact_name':
                 this.setState({ contact_name: itemValue });
+                changeValidate('contact_name', itemValue);
                 break;
             case 'mobile_number':
                 this.setState({ mobile_number: itemValue });
+                if (!validateNum(itemValue)) {
+                    setValidationFaild('mobile_number', 2)
+                } else {
+                    setValidationPass('mobile_number', 2)
+                }
                 break;
             case 'office_number':
                 this.setState({ office_number: itemValue });
+                if (!validateNum(itemValue)) {
+                    setValidationFaild('office_number', 2)
+                } else {
+                    setValidationPass('office_number', 2)
+                }
                 break;
             case 'user_company_name':
                 this.setState({ user_company_name: itemValue });
+                changeValidate('user_company_name', itemValue);
                 break;
             case 'user_company_uen':
                 this.setState({ user_company_uen: itemValue });
+                changeValidate('user_company_uen', itemValue);
                 break;
             case 'user_company_address':
                 this.setState({ user_company_address: itemValue });
+                changeValidate('user_company_address', itemValue);
                 break;
             case 'user_billing_address':
                 this.setState({ user_billing_address: itemValue });
+                changeValidate('user_billing_address', itemValue);
                 break;
             case 'user_bill_attention_to':
                 this.setState({ user_bill_attention_to: itemValue });
+                changeValidate('user_bill_attention_to', itemValue);
                 break;
             case 'user_contact_name':
                 this.setState({ user_contact_name: itemValue });
+                changeValidate('user_contact_name', itemValue);
                 break;
             case 'user_contact_email':
                 this.setState({ user_contact_email: itemValue });
+                if (!validateEmail(itemValue)) {
+                    setValidationFaild('user_contact_email', 2)
+                } else {
+                    setValidationPass('user_contact_email', 2)
+                }
                 break;
             case 'user_contact_mobile_no':
                 this.setState({ user_contact_mobile_no: itemValue });
+                if (!validateNum(itemValue)) {
+                    setValidationFaild('user_contact_mobile_no', 2)
+                } else {
+                    setValidationPass('user_contact_mobile_no', 2)
+                }
                 break;
             case 'user_contact_office_no':
                 this.setState({ user_contact_office_no: itemValue });
+                if (!validateNum(itemValue)) {
+                    setValidationFaild('user_contact_office_no', 2)
+                } else {
+                    setValidationPass('user_contact_office_no', 2)
+                }
+                break;
+
+            case 'buyer_management':
+                let val = $('#buyer_management').val();
+                this.setState({ has_tenants: val });
+                break;
+            case 'chkBuyer':
+                if ($('#chkBuyer').is(':checked')) {
+                    this.setState({ agree_seller_buyer: 1 });
+                    setValidationPass('chkBuyer', 1)
+                } else {
+                    this.setState({ agree_seller_buyer: 0 });
+                    setValidationFaild('chkBuyer', 1);
+                }
+                break;
+            case 'chkRevv':
+                if ($('#chkRevv').is(':checked')) {
+                    this.setState({ agree_buyer_revv: 1 });
+                    setValidationPass('chkRevv', 1)
+                } else {
+                    this.setState({ agree_buyer_revv: 0 });
+                    setValidationFaild('chkRevv', 1);
+                }
                 break;
 
         }
     }
     showView() {
         this.refs.Modal_upload.showModal();
+    }
+
+    save() {
+        let buyerParam = this.setParams();
+        saveBuyerUserInfo(buyerParam).then(res => {
+            this.refs.Modal.showModal();
+            this.setState({
+                text: "Your details have been successfully saved. "
+            });
+        })
+
+
+    }
+    submit() {
+        let isValidator = this.checkSuccess();
+        if (isValidator) {
+            let buyerParam = this.setParams();
+            submitBuyerUserInfo(buyerParam).then(res => {
+                this.refs.Modal.showModal();
+                this.setState({
+                    text: "Your details have been successfully submitted. "
+                });
+            })
+        }
+
     }
     render() {
         let btn_html = <div>
@@ -294,14 +481,16 @@ export class BuyerRegister extends Component {
                 <div id="buyer_form" >
                     <div>
                         <div className="u-grid admin_invitation">
-                            <div className="col-sm-12 col-md-6 push-md-3">
+                            <div className="col-sm-12 col-md-6 push-md-3 validate_message">
                                 <h3 className="u-mt3 u-mb1">Buyer Register Page</h3>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
                                         <abbr title="required">*</abbr> Email:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="email_address" value={this.state.email_address} onChange={this.Change.bind(this, 'email_address')} disabled={this.state.disabled} ref="email_address" maxLength="50" required aria-required="true" pattern="\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" placeholder="Email" />
+                                        <input type="text" name="email_address" value={this.state.email_address} onChange={this.Change.bind(this, 'email_address')} disabled={this.state.disabled} ref="email_address" required aria-required="true" title="Please fill out this field" placeholder="Email" />
+                                        <div className='isPassValidate' id='email_address_message' >This field is required!</div>
+                                        <div className='isPassValidate' id='email_address_format' >Incorrect mail format.</div>
                                     </div>
                                 </div>
                                 <h4 className="u-mt1 u-mb1">Company Info</h4>
@@ -310,7 +499,8 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Company Name:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="company_name" value={this.state.company_name} onChange={this.Change.bind(this, 'company_name')} disabled={this.state.disabled} ref="company_name" maxLength="50" required aria-required="true" ></input>
+                                        <input type="text" name="company_name" value={this.state.company_name} onChange={this.Change.bind(this, 'company_name')} disabled={this.state.disabled} ref="company_name" required aria-required="true" title="Please fill out this field" ></input>
+                                        <div className='isPassValidate' id='company_name_message' >This field is required!</div>
                                     </div>
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
@@ -318,7 +508,8 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Unique Entity Number:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="unique_entity_number" value={this.state.unique_entity_number} onChange={this.Change.bind(this, 'unique_entity_number')} disabled={this.state.disabled} ref="unique_entity_number" maxLength="50" required aria-required="true" ></input>
+                                        <input type="text" name="unique_entity_number" value={this.state.unique_entity_number} onChange={this.Change.bind(this, 'unique_entity_number')} disabled={this.state.disabled} ref="unique_entity_number" required aria-required="true" title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id='unique_entity_number_message' >This field is required!</div>
                                     </div>
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
@@ -326,7 +517,8 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Company Address
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="company_address" value={this.state.company_address} onChange={this.Change.bind(this, 'company_address')} disabled={this.state.disabled} ref="company_address" maxLength="50" required aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
+                                        <input type="text" name="company_address" value={this.state.company_address} onChange={this.Change.bind(this, 'company_address')} disabled={this.state.disabled} ref="company_address" required aria-required="true" title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id='company_address_message' >This field is required!</div>
                                     </div>
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
@@ -334,7 +526,8 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Billing Address:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="billing_address" value={this.state.billing_address} onChange={this.Change.bind(this, 'billing_address')} disabled={this.state.disabled} ref="billing_address" maxLength="50" required aria-required="true" ></input>
+                                        <input type="text" name="billing_address" value={this.state.billing_address} onChange={this.Change.bind(this, 'billing_address')} disabled={this.state.disabled} ref="billing_address" required aria-required="true" title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id='billing_address_message' >This field is required!</div>
                                     </div>
                                 </div>
                                 <h4 className="u-mt1 u-mb1">Contact Information</h4>
@@ -343,7 +536,8 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Contact Name:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="contact_name" value={this.state.contact_name} onChange={this.Change.bind(this, 'contact_name')} disabled={this.state.disabled} ref="contact_name" maxLength="50" required aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
+                                        <input type="text" name="contact_name" value={this.state.contact_name} onChange={this.Change.bind(this, 'contact_name')} disabled={this.state.disabled} ref="contact_name" required aria-required="true" title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id='contact_name_message' >This field is required!</div>
                                     </div>
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
@@ -351,7 +545,9 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Mobile Number:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="mobile_number" value={this.state.mobile_number} onChange={this.Change.bind(this, 'mobile_number')} disabled={this.state.disabled} ref="mobile_number" maxLength="50" pattern="^(\d{8})$" required aria-required="true" ></input>
+                                        <input type="text" name="mobile_number" value={this.state.mobile_number} onChange={this.Change.bind(this, 'mobile_number')} disabled={this.state.disabled} ref="mobile_number" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field" required aria-required="true" ></input>
+                                        <div className='isPassValidate' id='mobile_number_message' >This field is required!</div>
+                                        <div className='isPassValidate' id='mobile_number_format' >Number should contain 8 integers.</div>
                                     </div>
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
@@ -359,18 +555,18 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Office Number:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="office_number" value={this.state.office_number} onChange={this.Change.bind(this, 'office_number')} disabled={this.state.disabled} ref="office_number" maxLength="50" pattern="^(\d{8})$" required aria-required="true" ></input>
+                                        <input type="text" name="office_number" value={this.state.office_number} onChange={this.Change.bind(this, 'office_number')} disabled={this.state.disabled} ref="office_number" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field" required aria-required="true" ></input>
+                                        <div className='isPassValidate' id='office_number_message' >This field is required!</div>
+                                        <div className='isPassValidate' id='office_number_format' >Number should contain 8 integers.</div>
                                     </div>
                                 </div>
-
-
                                 <h3 className="lm--formItem lm--formItem--inline string">Add Individial Info:</h3>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
                                         <abbr title="required">*</abbr> Upload Documents:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                                        <UploadFile type="BUYER_DOCUMENTS" required="required" showlist={false} showList="1" col_width="10" showWay="2" fileData={this.state.fileData.BUYER_DOCUMENTS} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
+                                        <UploadFile type="BUYER_DOCUMENTS" required="required" showlist={false} validate={this.state.validate} showList="1" col_width="10" showWay="2" fileData={this.state.fileData.BUYER_DOCUMENTS} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
                                         <div className="col-sm-12 col-md-2 u-cell">
                                             <button className="lm--button lm--button--primary" title="this is retailer upload documents" onClick={this.showView.bind(this)} >?</button>
                                         </div>
@@ -382,7 +578,8 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr>  Puchese Entity/Company Name:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="user_company_name" style={{ background: '#35404c' }} value={this.state.user_company_name} onChange={this.Change.bind(this, 'user_company_name')} disabled={true} ref="user_company_name" maxLength="50" aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
+                                        <input type="text" name="user_company_name" style={{ background: '#35404c' }} value={this.state.user_company_name} onChange={this.Change.bind(this, 'user_company_name')} disabled={true} ref="user_company_name" aria-required="true" ></input>
+
                                     </div>
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
@@ -390,7 +587,8 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr>  Company UEN:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="user_company_uen" style={{ background: '#35404c' }} value={this.state.user_company_uen} onChange={this.Change.bind(this, 'user_company_uen')} disabled={true} ref="user_company_uen" maxLength="50" aria-required="true"></input>
+                                        <input type="text" name="user_company_uen" style={{ background: '#35404c' }} value={this.state.user_company_uen} onChange={this.Change.bind(this, 'user_company_uen')} disabled={true} ref="user_company_uen" aria-required="true"></input>
+                                        <div className='isPassValidate' id='user_company_uen_message' >This field is required!</div>
                                     </div>
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
@@ -398,7 +596,8 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Company Address:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="user_company_address" style={{ background: '#35404c' }} value={this.state.user_company_address} onChange={this.Change.bind(this, 'user_company_address')} disabled={true} ref="user_company_address" maxLength="50" aria-required="true"></input>
+                                        <input type="text" name="user_company_address" style={{ background: '#35404c' }} value={this.state.user_company_address} onChange={this.Change.bind(this, 'user_company_address')} disabled={true} ref="user_company_address" aria-required="true"></input>
+                                        <div className='isPassValidate' id='user_company_address_message' >This field is required!</div>
                                     </div>
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
@@ -406,7 +605,8 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Billing Address:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="user_billing_address" value={this.state.user_billing_address} onChange={this.Change.bind(this, 'user_billing_address')} disabled={this.state.disabled} ref="user_billing_address" maxLength="50" aria-required="true"></input>
+                                        <input type="text" name="user_billing_address" value={this.state.user_billing_address} onChange={this.Change.bind(this, 'user_billing_address')} disabled={this.state.disabled} ref="user_billing_address" aria-required="true" title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id='user_billing_address_message' >This field is required!</div>
                                     </div>
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
@@ -414,7 +614,8 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Bill Attention To:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="user_bill_attention_to" value={this.state.user_bill_attention_to} onChange={this.Change.bind(this, 'user_bill_attention_to')} disabled={this.state.disabled} ref="user_bill_attention_to" maxLength="50" aria-required="true"></input>
+                                        <input type="text" name="user_bill_attention_to" value={this.state.user_bill_attention_to} onChange={this.Change.bind(this, 'user_bill_attention_to')} disabled={this.state.disabled} ref="user_bill_attention_to" aria-required="true" title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id='user_bill_attention_to_message' >This field is required!</div>
                                     </div>
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
@@ -422,7 +623,8 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Contact Name:
                                </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="user_contact_name" value={this.state.user_contact_name} onChange={this.Change.bind(this, 'user_contact_name')} disabled={this.state.disabled} ref="user_contact_name" maxLength="50" aria-required="true"></input>
+                                        <input type="text" name="user_contact_name" value={this.state.user_contact_name} onChange={this.Change.bind(this, 'user_contact_name')} disabled={this.state.disabled} ref="user_contact_name" aria-required="true" title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id='user_contact_name_message' >This field is required!</div>
                                     </div>
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
@@ -430,7 +632,9 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr>  Contact Email:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="buyer_attention" value={this.state.user_contact_email} onChange={this.Change.bind(this, 'user_contact_email')} disabled={this.state.disabled} ref="user_contact_email" maxLength="50" aria-required="true"></input>
+                                        <input type="text" name="user_contact_email" value={this.state.user_contact_email} onChange={this.Change.bind(this, 'user_contact_email')} disabled={this.state.disabled} ref="user_contact_email" aria-required="true" title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id='user_contact_email_message' >This field is required!</div>
+                                        <div className='isPassValidate' id='user_contact_email_format' >Incorrect mail format.</div>
                                     </div>
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
@@ -438,7 +642,9 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Contact Mobile No.:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="user_contact_mobile_no" value={this.state.user_contact_mobile_no} onChange={this.Change.bind(this, 'user_contact_mobile_no')} disabled={this.state.disabled} ref="user_contact_mobile_no" maxLength="50" aria-required="true"></input>
+                                        <input type="text" name="user_contact_mobile_no" value={this.state.user_contact_mobile_no} onChange={this.Change.bind(this, 'user_contact_mobile_no')} disabled={this.state.disabled} ref="user_contact_mobile_no" maxLength="8" aria-required="true" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id='user_contact_mobile_no_message' >This field is required!</div>
+                                        <div className='isPassValidate' id='user_contact_mobile_no_format' >Number should contain 8 integers.</div>
                                     </div>
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
@@ -446,36 +652,31 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Contact Office No.:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="user_contact_office_no" value={this.state.user_contact_office_no} onChange={this.Change.bind(this, 'user_contact_office_no')} disabled={this.state.disabled} ref="user_contact_office_no" maxLength="50" aria-required="true"></input>
+                                        <input type="text" name="user_contact_office_no" value={this.state.user_contact_office_no} onChange={this.Change.bind(this, 'user_contact_office_no')} disabled={this.state.disabled} ref="user_contact_office_no" maxLength="8" aria-required="true" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id='user_contact_office_no_message' >This field is required!</div>
+                                        <div className='isPassValidate' id='user_contact_office_no_format' >Number should contain 8 integers.</div>
                                     </div>
                                     <div>
                                         <button className="lm--button lm--button--primary" title="this is retailer upload documents" onClick={this.addUserEntity.bind(this)} >+</button>
                                     </div>
                                 </div>
-                                {/* <div className="lm--formItem lm--formItem--inline string">
-                                    <label className="lm--formItem-left lm--formItem-label string required">
-
-                                    </label>
-                                    <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                                        <div className="col-sm-12 col-md-2 u-cell">
-                                            <button className="lm--button lm--button--primary" title="this is retailer upload documents" onClick={this.addUserEntity.bind(this)} >+</button>
-                                        </div>
-                                    </div>
-                                </div> */}
                                 <UserEntity disabled={false} entityList={this.state.user_entity_data} ref="userEntity" />
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
                                         <abbr title="required">*</abbr> Tenent Management Sences Required:
                                </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <select name="buyer_management" onChange={this.Change.bind(this, 'buyer_management')} defaultValue={this.state.buyer_management} disabled={this.state.disabled} ref="buyer_management" aria-required="true">
+                                        <select name="buyer_management" id="buyer_management" onChange={this.Change.bind(this, 'buyer_management')} defaultValue={this.state.buyer_management} disabled={this.state.disabled} ref="buyer_management" aria-required="true">
                                             <option value="1">Yes</option>
                                             <option value="0">No</option>
                                         </select>
                                     </div>
                                 </div>
-                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" name={"seller_buyer_tc"} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href={this.state.buyerTCurl}>{this.state.buyerTCname}</a></h4>
-                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" name={"seller_revv_tc"} /> I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href={this.state.revvTCurl}>{this.state.revvTCname}</a></h4>
+
+                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href={this.state.buyerTCurl}>{this.state.buyerTCname}</a></h4>
+                                <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
+                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} /> I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href={this.state.buyerRevvTCurl}>{this.state.buyerRevvTCname}</a></h4>
+                                <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                                 <div className="retailer_btn">
                                     {btn_html}
                                 </div>
@@ -484,7 +685,6 @@ export class BuyerRegister extends Component {
                     </div>
                     <Modal text={this.state.text} ref="Modal" />
                     <Modal listdetailtype="Buyer Documents Message" ref="Modal_upload" />
-
                 </div>
             </div>
         )
