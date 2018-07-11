@@ -2,7 +2,8 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import { UploadFile } from '../shared/upload';
 import { Modal } from '../shared/show-modal';
-import { getRetailerUserInfo, saveRetailManageInfo, submitRetailManageInfo } from '../../javascripts/componentService/retailer/service'
+import { getRetailerUserInfo, saveRetailManageInfo, submitRetailManageInfo } from '../../javascripts/componentService/retailer/service';
+import { approveUser } from '../../javascripts/componentService/admin/service';
 import { validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
 export class RetailerRegister extends Component {
     constructor(props) {
@@ -329,25 +330,39 @@ export class RetailerRegister extends Component {
     cancel() {
         window.location.href = `/users/edit`;
     }
-    reject() {
-
+    judgeAction()
+    {
+        let param = {};
+        if (obj.action === 'reject') {
+            param = {
+                user_id: this.state.userid,
+                comment: this.state.comment,
+                approved: ""
+            }
+        }
+        else {
+            param = {
+                user_id: this.state.userid,
+                comment: this.state.comment,
+                approved: "1"
+            }
+        }
+        approveUser(param).then(res => {
+            console.log(res);
+        })
     }
-    approve() {
-
-    }
+    doAction(obj)
+    {}
     showView() {
         this.refs.Modal_upload.showModal();
     }
     render() {
-        // let btn_html = <div>
-        //     <button id="save_form" className="lm--button lm--button--primary" onClick={this.save.bind(this)}>Save</button>
-        //     <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this)} >Complete Sign Up</button>
-        // </div>;
+      
         let btn_html;
         if (this.state.use_type === 'admin_approve') {
             btn_html = <div>
-                <button id="save_form" className="lm--button lm--button--primary" onClick={this.reject.bind(this)}>Reject</button>
-                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.approve.bind(this)}>Approve</button>
+            <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'reject')}>Reject</button>
+                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'approve')}>Approve</button>
             </div>;
         }
         else if (this.state.use_type === 'manage_acount') {
@@ -478,6 +493,7 @@ export class RetailerRegister extends Component {
                                   </label>
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <textarea  name="comment" value={this.state.comment} onChange={this.Change.bind(this, 'comment')} ref="comment" aria-required="true"></textarea>
+                                        <div className='isPassValidate' id='comment_message' >This field is required!</div>
                                     </div>
                                 </div>
                                 <h4 className="lm--formItem lm--formItem--inline string"><input id="chkBuyer" type="checkbox" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href={this.state.sellerTCurl}>{this.state.sellerTCname}</a></h4>
@@ -489,6 +505,7 @@ export class RetailerRegister extends Component {
                                 </div>
                                 <Modal listdetailtype="Retailer Documents Message" ref="Modal_upload" />
                                 <Modal text={this.state.text} ref="Modal" />
+                                <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
                             </div>
                         </div>
                     </div>

@@ -4,6 +4,7 @@ import { UploadFile } from '../shared/upload';
 import { UserEntity } from '../shared/user-entity';
 import { Modal } from '../shared/show-modal';
 import { getBuyerUserInfo, saveBuyerUserInfo, submitBuyerUserInfo, getBuyerUserInfoByUserId } from '../../javascripts/componentService/common/service';
+import { approveUser } from '../../javascripts/componentService/admin/service';
 import { validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
 
 export class BuyerRegister extends Component {
@@ -117,7 +118,7 @@ export class BuyerRegister extends Component {
     componentDidMount() {
         if (this.state.userid) {
             getBuyerUserInfoByUserId(this.state.userid).then(res => {
-                console.log(res)
+                this.setDefault(res);
             })
 
         }
@@ -317,8 +318,6 @@ export class BuyerRegister extends Component {
                 entity.push(paramObj);
             })
         }
-        // console.log(entity);
-        // console.log(this.state.user_entity_data['ENTITY_LIST'][0].entities);
 
         let params = {
             user: {
@@ -524,19 +523,47 @@ export class BuyerRegister extends Component {
     cancel() {
         window.location.href = `/users/edit`;
     }
-    reject() {
-
+    judgeAction(type) {
+        if (type === 'reject') {
+            this.setState({
+                text: 'Are you sure you want to reject the request?',
+            }, () => {
+                this.refs.Modal_Option.showModal('comfirm', { action: 'reject' }, '');
+            });
+        }
+        else {
+            this.setState({ text: "Are you sure you want to approve the request?" });
+            this.refs.Modal_Option.showModal('comfirm', { action: 'approve' }, '');
+        }
     }
-    approve() {
-
+    doAction(obj) {
+        console.log(obj);
+        let param = {};
+        if (obj.action === 'reject') {
+            param = {
+                user_id: this.state.userid,
+                comment: this.state.comment,
+                approved: ""
+            }
+        }
+        else {
+            param = {
+                user_id: this.state.userid,
+                comment: this.state.comment,
+                approved: "1"
+            }
+        }
+        approveUser(param).then(res => {
+            console.log(res);
+        })
     }
     render() {
 
         let btn_html;
         if (this.state.use_type === 'admin_approve') {
             btn_html = <div>
-                <button id="save_form" className="lm--button lm--button--primary" onClick={this.reject.bind(this)}>Reject</button>
-                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.approve.bind(this)}>Approve</button>
+                <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'reject')}>Reject</button>
+                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'approve')}>Approve</button>
             </div>;
         }
         else if (this.state.use_type === 'manage_acount') {
@@ -749,24 +776,13 @@ export class BuyerRegister extends Component {
                                         </select>
                                     </div>
                                 </div>
-
-                                {/* <div className="lm--formItem lm--formItem--inline string" className={this.state.use_type==='admin_approve'? 'isDisplay':'isHide'} >
-                                    <label className="lm--formItem-left lm--formItem-label string required">
-                                        Comment:
-                                  </label>
-                                    <div className="lm--formItem-right lm--formItem-control">
-                                        <textarea  name="comment" value={this.state.comment} onChange={this.Change.bind(this, 'comment')} ref="comment" aria-required="true"></textarea>
-                                    </div>
-                                </div> */}
-
-
-
                                 <div className="lm--formItem lm--formItem--inline string" className={this.state.use_type === 'admin_approve' ? 'isDisplay' : 'isHide'} >
                                     <label className="lm--formItem-left lm--formItem-label string required">
                                         Comment:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <textarea name="comment" value={this.state.comment} onChange={this.Change.bind(this, 'comment')} ref="comment" aria-required="true"></textarea>
+                                        <div className='isPassValidate' id='comment_message' >This field is required!</div>
                                     </div>
                                 </div>
 
@@ -782,6 +798,7 @@ export class BuyerRegister extends Component {
                     </div>
                     <Modal text={this.state.text} ref="Modal" />
                     <Modal listdetailtype="Buyer Documents Message" ref="Modal_upload" />
+                    <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
                 </div>
             </div>
         )
