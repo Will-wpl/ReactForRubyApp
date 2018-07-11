@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180711031529) do
+ActiveRecord::Schema.define(version: 20180711075542) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -264,6 +264,7 @@ ActiveRecord::Schema.define(version: 20180711031529) do
     t.decimal "eht_off_peak"
     t.string "acknowledge"
     t.string "contract_duration"
+    t.string "accept_status"
     t.index ["auction_id"], name: "index_consumptions_on_auction_id"
     t.index ["user_id"], name: "index_consumptions_on_user_id"
   end
