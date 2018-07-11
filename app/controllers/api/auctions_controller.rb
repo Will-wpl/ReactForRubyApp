@@ -82,7 +82,7 @@ class Api::AuctionsController < Api::BaseController
   def confirm
     if params[:contract_duration].blank?
       status = params[:status]
-      auction_result = AuctionResult.find_by_auction_id(params[:id]).first
+      auction_result = AuctionResult.find_by_auction_id(params[:id])
       auction_result = AuctionResult.new if auction_result.nil?
       auction_result.auction_id = params[:id].to_i
       history = AuctionHistory.select('auction_histories.* ,users.company_name').joins(:user).where('auction_id = ? and user_id = ? and is_bidder = true ', params[:id], params[:user_id]).order(actual_bid_time: :desc).first
@@ -110,11 +110,19 @@ class Api::AuctionsController < Api::BaseController
       end
     else
       status = params[:status]
-      auction_result = AuctionResult.find_by_auction_contract_duration(params[:id], params[:contract_duration])
+      auction_result = AuctionResult.find_by_auction_contract_duration(params[:id], params[:contract_duration]).take
       auction_result = AuctionResult.new if auction_result.nil?
-      auction_contract = @auction.auction_contracts.where(contract_duration: contract_duration).first
+      auction_contract = @auction.auction_contracts.where(contract_duration: params[:contract_duration]).first
       auction_result.auction_id = params[:id].to_i
       history = AuctionHistory.select('auction_histories.* ,users.company_name').joins(:user).where('auction_id = ? and user_id = ? and is_bidder = true and contract_duration = ?', params[:id], params[:user_id], params[:contract_duration]).order(actual_bid_time: :desc).first
+      auction_result.reserve_price_lt_peak = auction_contract.reserve_price_lt_peak
+      auction_result.reserve_price_lt_off_peak = auction_contract.reserve_price_lt_off_peak
+      auction_result.reserve_price_hts_peak = auction_contract.reserve_price_hts_peak
+      auction_result.reserve_price_hts_off_peak = auction_contract.reserve_price_hts_off_peak
+      auction_result.reserve_price_htl_peak = auction_contract.reserve_price_htl_peak
+      auction_result.reserve_price_htl_off_peak = auction_contract.reserve_price_htl_off_peak
+      auction_result.reserve_price_eht_peak = auction_contract.reserve_price_eht_peak
+      auction_result.reserve_price_eht_off_peak = auction_contract.reserve_price_eht_off_peak
       auction_result.lowest_average_price = history.average_price
       auction_result.status = status
       auction_result.lowest_price_bidder = history.company_name
@@ -733,7 +741,7 @@ class Api::AuctionsController < Api::BaseController
   end
 
   def get_lived_auction_contracts(auction, is_admin)
-    contracts = auction.auction_contracts
+    contracts = auction.auction_contracts.sort_by {|contract| contract.contract_duration.to_i}
     auction_contracts = []
     contracts.each do |contract|
       has_lt = !is_zero(contract.total_lt_peak, contract.total_lt_off_peak)
@@ -767,6 +775,7 @@ class Api::AuctionsController < Api::BaseController
       end
     end
     auction_contracts
+    # auction_contracts.sort! {|a,b| a.contract_duration.to_i <=> b.contract_duration.to_i}
   end
 
 end
