@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import { UploadFile } from '../shared/upload';
 import { Modal } from '../shared/show-modal';
-import { getRetailerUserInfo, saveRetailManageInfo, submitRetailManageInfo } from '../../javascripts/componentService/retailer/service';
+import { getRetailerUserInfo, saveRetailManageInfo, submitRetailManageInfo, getRetailerUserInfoByUserId } from '../../javascripts/componentService/retailer/service';
 import { approveUser } from '../../javascripts/componentService/admin/service';
 import { validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
 export class RetailerRegister extends Component {
@@ -16,7 +16,7 @@ export class RetailerRegister extends Component {
             havedata: false,
             allbtnStatus: true,
             text: "",
-            use_type: this.props.use_type,
+            use_type: "",
             email_address: "",
             company_name: "",
             unique_entity_number: "",
@@ -55,6 +55,9 @@ export class RetailerRegister extends Component {
             mobile_number: { cate: 'num' },
             office_number: { cate: 'num' }
         }
+        this.validatorComment = {
+            comment: { cate: 'email' }
+        }
     }
     componentWillMount() {
         let userid;
@@ -64,7 +67,7 @@ export class RetailerRegister extends Component {
         if (userid) {
             this.setState({ userid: userid });
         }
-        
+
         if (window.location.href.indexOf('retailer/home') > 0) {
             this.setState({ use_type: 'sign_up' });
         }
@@ -79,11 +82,13 @@ export class RetailerRegister extends Component {
 
     componentDidMount() {
         if (this.state.userid) {
-            
+            getRetailerUserInfoByUserId(this.state.userid).then(res => {
+                this.setDefult(res);
+            })
         }
         else {
             getRetailerUserInfo().then(res => {
-                this.setDefult(res)
+                this.setDefult(res);
             })
         }
 
@@ -149,7 +154,27 @@ export class RetailerRegister extends Component {
             })
         }
     }
-
+    
+    checkRejectAction() {
+        let flag = true;
+        let arr = validator_Object(this.state, this.validatorComment);
+        if (arr) {
+            arr.map((item, index) => {
+                let column = item.column;
+                let cate = item.cate;
+                setValidationFaild(column, cate)
+            })
+        }
+        $('.validate_message').find('div').each(function () {
+            let className = $(this).attr('class');
+            if (className === 'errormessage') {
+                flag = false;
+                return false;
+            }
+        })
+        this.refs.Modal_Option.closeModal();
+        return flag;
+    }
 
     checkValidation() {
         let flag = true, hasDoc = true;
@@ -271,9 +296,8 @@ export class RetailerRegister extends Component {
 
             case "comment":
                 this.setState({ comment: itemValue });
+                changeValidate('comment', itemValue);
                 break;
-
-
         }
     }
     submit() {
@@ -330,38 +354,50 @@ export class RetailerRegister extends Component {
     cancel() {
         window.location.href = `/users/edit`;
     }
-    judgeAction()
-    {
-        let param = {};
+    judgeAction(type) {
+        if (type === 'reject') {
+            this.setState({
+                text: 'Are you sure you want to reject the request?',
+            }, () => {
+                this.refs.Modal_Option.showModal('comfirm', { action: 'reject' }, '');
+            });
+        }
+        else {
+            this.setState({ text: "Are you sure you want to approve the request?" });
+            this.refs.Modal_Option.showModal('comfirm', { action: 'approve' }, '');
+        }
+    }
+    doAction(obj) {
+        let param = {
+            user_id: this.state.userid,
+            comment: this.state.comment,
+            approved: obj.action === 'reject' ? "" : 1
+        };
+
         if (obj.action === 'reject') {
-            param = {
-                user_id: this.state.userid,
-                comment: this.state.comment,
-                approved: ""
+            if(this.checkRejectAction())
+            {
+                approveUser(param).then(res => {
+                    location.href = "/admin/users/retailers";
+                })
             }
         }
         else {
-            param = {
-                user_id: this.state.userid,
-                comment: this.state.comment,
-                approved: "1"
-            }
+            approveUser(param).then(res => {
+                location.href = "/admin/users/retailers";
+            })
         }
-        approveUser(param).then(res => {
-            console.log(res);
-        })
     }
-    doAction(obj)
-    {}
+
     showView() {
         this.refs.Modal_upload.showModal();
     }
     render() {
-      
+
         let btn_html;
         if (this.state.use_type === 'admin_approve') {
             btn_html = <div>
-            <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'reject')}>Reject</button>
+                <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'reject')}>Reject</button>
                 <button id="submit_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'approve')}>Approve</button>
             </div>;
         }
@@ -487,12 +523,12 @@ export class RetailerRegister extends Component {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="lm--formItem lm--formItem--inline string" className={this.state.use_type==='admin_approve'? 'isDisplay':'isHide'} >
+                                <div className="lm--formItem lm--formItem--inline string" className={this.state.use_type === 'admin_approve' ? 'isDisplay' : 'isHide'} >
                                     <label className="lm--formItem-left lm--formItem-label string required">
                                         Comment:
                                   </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <textarea  name="comment" value={this.state.comment} onChange={this.Change.bind(this, 'comment')} ref="comment" aria-required="true"></textarea>
+                                        <textarea name="comment" value={this.state.comment} onChange={this.Change.bind(this, 'comment')} ref="comment" aria-required="true"></textarea>
                                         <div className='isPassValidate' id='comment_message' >This field is required!</div>
                                     </div>
                                 </div>

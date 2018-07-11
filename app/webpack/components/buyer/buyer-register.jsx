@@ -19,7 +19,7 @@ export class BuyerRegister extends Component {
             havedata: false,
             allbtnStatus: true,
             validate: true,
-            use_type: this.props.use_type,
+            use_type: "",
 
             email_address: "",
             company_name: "",
@@ -93,7 +93,9 @@ export class BuyerRegister extends Component {
             user_contact_mobile_no: { cate: 'num' },
             user_contact_office_no: { cate: 'num' },
         }
-
+        this.validatorComment = {
+            comment: { cate: 'email' }
+        }
     }
     componentWillMount() {
         let userid;
@@ -120,16 +122,13 @@ export class BuyerRegister extends Component {
             getBuyerUserInfoByUserId(this.state.userid).then(res => {
                 this.setDefault(res);
             })
-
         }
         else {
             getBuyerUserInfo().then(res => {
                 this.setDefault(res);
             })
         }
-
     }
-
 
     setDefault(param) {
         let fileObj, entityObj;
@@ -241,6 +240,28 @@ export class BuyerRegister extends Component {
         }
     }
 
+    checkRejectAction() {
+        let flag = true;
+        let arr = validator_Object(this.state, this.validatorComment);
+        if (arr) {
+            arr.map((item, index) => {
+                let column = item.column;
+                let cate = item.cate;
+                setValidationFaild(column, cate)
+            })
+        }
+        $('.validate_message').find('div').each(function () {
+            let className = $(this).attr('class');
+            if (className === 'errormessage') {
+                flag = false;
+                return false;
+            }
+        })
+        this.refs.Modal_Option.closeModal();
+        return flag;
+    }
+
+    
     checkSuccess() {
         let flag = true, hasDoc = true;
         let arr = validator_Object(this.state, this.validatorItem);
@@ -479,12 +500,13 @@ export class BuyerRegister extends Component {
                 break;
             case 'comment':
                 this.setState({ comment: itemValue });
+                changeValidate('comment', itemValue);
                 break;
         }
     }
 
     showView() {
-        this.refs.Modal_upload.showModal();
+         this.refs.Modal_upload.showModal();
     }
 
     save() {
@@ -536,27 +558,30 @@ export class BuyerRegister extends Component {
             this.refs.Modal_Option.showModal('comfirm', { action: 'approve' }, '');
         }
     }
+    
     doAction(obj) {
-        console.log(obj);
-        let param = {};
+        let param = {
+            user_id: this.state.userid,
+            comment: this.state.comment,
+            approved: obj.action === 'reject' ? "" : 1
+        };
+
         if (obj.action === 'reject') {
-            param = {
-                user_id: this.state.userid,
-                comment: this.state.comment,
-                approved: ""
+            if(this.checkRejectAction())
+            {
+                approveUser(param).then(res => {
+                    location.href = "/admin/users/buyers";
+                })
             }
+           
         }
         else {
-            param = {
-                user_id: this.state.userid,
-                comment: this.state.comment,
-                approved: "1"
-            }
+            approveUser(param).then(res => {
+                location.href = "/admin/users/buyers";
+            })
         }
-        approveUser(param).then(res => {
-            console.log(res);
-        })
     }
+
     render() {
 
         let btn_html;
@@ -796,6 +821,7 @@ export class BuyerRegister extends Component {
                             </div>
                         </div>
                     </div>
+
                     <Modal text={this.state.text} ref="Modal" />
                     <Modal listdetailtype="Buyer Documents Message" ref="Modal_upload" />
                     <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
