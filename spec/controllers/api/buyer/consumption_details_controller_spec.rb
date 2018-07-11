@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
   let!(:admin_user){ create(:user, :with_admin) }
-  let!(:auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
+  let!(:auction) { create(:auction, :for_next_month, :upcoming, :published, :started, contract_period_start_date: '2018-07-01') }
   let!(:company_buyer) { create(:user, :with_buyer, :with_company_buyer) }
   let!(:consumption) { create(:consumption, user: company_buyer, auction: auction, participation_status: '1') }
   let!(:consumption_lt) { create(:consumption_detail, :for_lt, consumption_id: consumption.id) }
@@ -30,7 +30,6 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
     end
   end
 
-
   describe 'PUT buyer consumption save' do
     before { sign_in company_buyer }
 
@@ -49,7 +48,6 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
         expect(array.length).to eq(2)
       end
     end
-
   end
 
   describe 'PUT buyer consumption participate' do
@@ -94,4 +92,93 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
       end
     end
   end
+
+  describe 'Validate consumption detail' do
+    before { sign_in company_buyer }
+
+    context 'Account number do not unique' do
+      def do_request
+        details = []
+        details.push({id: 0, account_number: '000001', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 1', postal_code: '4001'})
+        details.push({id: 0, account_number: '000001', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 2', postal_code: '4002'})
+        details.push({id: 0, account_number: '000002', intake_level: 'HTS' , peak: 100, off_peak: 100, unit_number: 'UN 3', postal_code: '4003'})
+        put :validate, params: { consumption_id: consumption.id , details: details.to_json}
+      end
+
+      before { do_request }
+      it 'Success' do
+        hash_body = JSON.parse(response.body)
+        expect(response).to have_http_status(:ok)
+        expect(hash_body).to have_content('validate_result')
+        expect(hash_body).to have_content('error_detail_indexes')
+        expect(hash_body).to have_content('error_messages')
+        expect(hash_body['validate_result']).to eq(false)
+        expect(hash_body['error_detail_indexes']).to eq([0, 1])
+      end
+    end
+
+    context 'unit number and postal code do not unique' do
+      def do_request
+        details = []
+        details.push({id: 0, account_number: '000001', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 1', postal_code: '4001'})
+        details.push({id: 0, account_number: '000002', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 2', postal_code: '4002'})
+        details.push({id: 0, account_number: '000003', intake_level: 'HTS' , peak: 100, off_peak: 100, unit_number: 'UN 2', postal_code: '4002'})
+        put :validate, params: { consumption_id: consumption.id , details: details.to_json}
+      end
+
+      before { do_request }
+      it 'Success' do
+        hash_body = JSON.parse(response.body)
+        expect(response).to have_http_status(:ok)
+        expect(hash_body).to have_content('validate_result')
+        expect(hash_body).to have_content('error_detail_indexes')
+        expect(hash_body).to have_content('error_messages')
+        expect(hash_body['validate_result']).to eq(false)
+        expect(hash_body['error_detail_indexes']).to eq([1, 2])
+      end
+    end
+
+
+    context 'contract expiry data > RA contract start date' do
+      def do_request
+        details = []
+        details.push({id: 0, account_number: '000001', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 1', postal_code: '4001', contract_expiry: '2018-08-01'})
+        details.push({id: 0, account_number: '000002', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 2', postal_code: '4002', contract_expiry: '2018-06-01'})
+        details.push({id: 0, account_number: '000003', intake_level: 'HTS' , peak: 100, off_peak: 100, unit_number: 'UN 3', postal_code: '4003', contract_expiry: '2018-08-01'})
+        put :validate, params: { consumption_id: consumption.id , details: details.to_json}
+      end
+
+      before { do_request }
+      it 'Success' do
+        hash_body = JSON.parse(response.body)
+        expect(response).to have_http_status(:ok)
+        expect(hash_body).to have_content('validate_result')
+        expect(hash_body).to have_content('error_detail_indexes')
+        expect(hash_body).to have_content('error_messages')
+        expect(hash_body['validate_result']).to eq(false)
+        expect(hash_body['error_detail_indexes']).to eq([1])
+      end
+    end
+    context 'success' do
+      def do_request
+        details = []
+        details.push({id: 0, account_number: '000001', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 1', postal_code: '4001'})
+        details.push({id: 0, account_number: '000002', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 2', postal_code: '4002'})
+        details.push({id: 0, account_number: '000003', intake_level: 'HTS' , peak: 100, off_peak: 100, unit_number: 'UN 3', postal_code: '4003'})
+        put :validate, params: { consumption_id: consumption.id , details: details.to_json}
+      end
+
+      before { do_request }
+      it 'Success' do
+        hash_body = JSON.parse(response.body)
+        expect(response).to have_http_status(:ok)
+        expect(hash_body).to have_content('validate_result')
+        expect(hash_body).to have_content('error_detail_indexes')
+        expect(hash_body).to have_content('error_messages')
+        expect(hash_body['validate_result']).to eq(true)
+        expect(hash_body['error_detail_indexes']).to eq([])
+      end
+    end
+  end
+
 end

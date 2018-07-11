@@ -19,12 +19,18 @@ export const getBuyerParticipate = (url) => get(url)
 export const getBuyerUserInfo=()=>{
     return get('/api/buyer/registrations');
 }
+
+export const getBuyerUserInfoByUserId=(id)=>{
+    return get(`/api/buyer/registrations/${id}/retailer_info`);
+}
+
 export const saveBuyerUserInfo=(params)=>{
     return put('/api/buyer/registrations/'+params.user.id,params);
 }
 export const submitBuyerUserInfo=(params)=>{
     return put('/api/buyer/registrations/'+params.user.id+'/sign_up',params);
 }
+
 
 export const ACTION_COMMANDS = {
     SET_BID: 'set_bid',

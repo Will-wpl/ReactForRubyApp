@@ -78,7 +78,7 @@ export const getStandardNumBref = (num) => {
 
 
 export const validateNum = (value) => {
-    console.log(value);
+    
     let num = /^(\d{8})$/g;
     if (!num.test(value)) {
         return false;

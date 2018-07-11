@@ -1,31 +1,65 @@
 require 'rails_helper'
 
 RSpec.describe Api::Retailer::RegistrationsController, type: :controller do
+  let!(:admin_user) { create(:user, :with_admin) }
   let!(:retailer_user) { create(:user, :with_retailer) }
+  let!(:retailer_user1) { create(:user, :with_retailer, company_name: 'Retailer1 Company') }
 
   context 'save retailer information' do
     before { sign_in retailer_user }
 
     describe 'Validate user info' do
-      def do_request
-        put :validate, params: { id: retailer_user.id, user: {user_id: retailer_user.id,
-                                                              company_name: 'abc',
-                                                              company_unique_entity_number: 'UEN',
-                                                              email: 'abc@email.com'} }
+      context 'success' do
+        def do_request
+          put :validate, params: { id: retailer_user.id, user: { id: retailer_user.id,
+                                                                 company_name: 'Retailer Company',
+                                                                 company_unique_entity_number: 'UEN',
+                                                                 email: 'abc@emaiol.com',
+                                                                 company_license_number: 'abc'} }
+        end
+        before { do_request }
+        it 'success' do
+          hash_body = JSON.parse(response.body)
+          expect(hash_body).to have_content('validate_result')
+          expect(hash_body).to have_content('error_fields')
+          expect(hash_body['validate_result']).to eq(true)
+          expect(response).to have_http_status(:ok)
+        end
       end
-      before { do_request }
-      it 'success' do
-        hash_body = JSON.parse(response.body)
-        expect(hash_body).to have_content('validate_result')
-        expect(hash_body).to have_content('message')
-        expect(hash_body['validate_result']).to eq(true)
-        expect(response).to have_http_status(:ok)
+      context 'Failed  - company name is exist.' do
+        def do_request
+          put :validate, params: { id: retailer_user.id, user: { id: retailer_user.id,
+                                                                 company_name: 'Retailer1 Company',
+                                                                 company_unique_entity_number: 'UEN',
+                                                                 email: 'abc@emaiol.com',
+                                                                 company_license_number: 'abc'} }
+        end
+        before { do_request }
+        it 'success' do
+          hash_body = JSON.parse(response.body)
+          expect(hash_body).to have_content('validate_result')
+          expect(hash_body).to have_content('error_fields')
+          expect(hash_body['validate_result']).to eq(false)
+          expect(response).to have_http_status(:ok)
+        end
       end
     end
 
     describe 'Get index' do
       def do_request
         get :index
+      end
+      before { do_request }
+      it 'success' do
+        hash_body = JSON.parse(response.body)
+        expect(hash_body).to have_content('user_base_info')
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    describe 'Get retailer info by user id' do
+      def do_request
+        get :retailer_info, params: { id: admin_user.id, user_id: retailer_user1.id }
       end
       before { do_request }
       it 'success' do

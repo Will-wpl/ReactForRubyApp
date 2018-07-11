@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
+  let!(:admin_user) { create(:user, :with_admin) }
   let!(:company_buyer) { create(:user, :with_buyer, :with_company_buyer) }
 
   context 'save retailer information' do
@@ -10,19 +11,21 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
       context 'test buyer entity emails duplicated' do
         def do_request
           put :validate, params: { id: company_buyer.id,
-                                   user: {user_id: company_buyer.id,
+                                   user: {id: company_buyer.id,
                                           company_name: 'abc',
                                           company_unique_entity_number: 'UEN',
                                           email: 'test_email@email.com'},
-                                   buyer_entities: [{ contact_email: 'test_email1@email.com' },
-                                                    {contact_email: 'test_email1@email.com' }].to_json}
+                                   buyer_entities: [{ contact_email: 'test_email1@email.com', index: 'a' },
+                                                    { contact_email: 'test_email1@email.com', index: 'b' }].to_json}
         end
         before { do_request }
         it 'success' do
           hash_body = JSON.parse(response.body)
           expect(hash_body).to have_content('validate_result')
-          expect(hash_body).to have_content('message')
+          expect(hash_body).to have_content('error_fields')
+          expect(hash_body).to have_content('error_entity_indexes')
           expect(hash_body['validate_result']).to eq(false)
+          expect(hash_body['error_entity_indexes']).to eq([0,1])
           expect(response).to have_http_status(:ok)
         end
       end
@@ -30,7 +33,7 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
       context 'test buyer email is same with entity contact email' do
         def do_request
           put :validate, params: { id: company_buyer.id,
-                                   user: {user_id: company_buyer.id,
+                                   user: {id: company_buyer.id,
                                           company_name: 'abc',
                                           company_unique_entity_number: 'UEN',
                                           email: 'test_email@email.com'},
@@ -41,7 +44,8 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
         it 'success' do
           hash_body = JSON.parse(response.body)
           expect(hash_body).to have_content('validate_result')
-          expect(hash_body).to have_content('message')
+          expect(hash_body).to have_content('error_fields')
+          expect(hash_body).to have_content('error_entity_indexes')
           expect(hash_body['validate_result']).to eq(false)
           expect(response).to have_http_status(:ok)
         end
@@ -50,7 +54,7 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
       context 'test buyer email valicate succss' do
         def do_request
           put :validate, params: { id: company_buyer.id,
-                                   user: {user_id: company_buyer.id,
+                                   user: {id: company_buyer.id,
                                           company_name: 'abc',
                                           company_unique_entity_number: 'UEN',
                                           email: 'test_email@email.com'},
@@ -61,7 +65,8 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
         it 'success' do
           hash_body = JSON.parse(response.body)
           expect(hash_body).to have_content('validate_result')
-          expect(hash_body).to have_content('message')
+          expect(hash_body).to have_content('error_fields')
+          expect(hash_body).to have_content('error_entity_indexes')
           expect(hash_body['validate_result']).to eq(true)
           expect(response).to have_http_status(:ok)
         end
@@ -72,6 +77,19 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
     describe 'Get index' do
       def do_request
         get :index
+      end
+      before { do_request }
+      it 'success' do
+        hash_body = JSON.parse(response.body)
+        expect(hash_body).to have_content('user_base_info')
+        expect(hash_body).to have_content('buyer_entities')
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    describe 'Get buyer info by user id' do
+      def do_request
+        get :buyer_info, params: { id: admin_user.id, user_id: company_buyer.id  }
       end
       before { do_request }
       it 'success' do
