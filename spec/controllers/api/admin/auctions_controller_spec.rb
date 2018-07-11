@@ -185,6 +185,49 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       end
     end
 
+    describe 'POST new confirm' do
+      current_time = Time.current
+      bid_time = Time.current + 10
+      let! (:auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
+      let!(:six_month_contract) { create(:auction_contract, :six_month, :total, auction: auction ) }
+      let!(:retailer1) { create(:user, :with_retailer) }
+      let!(:retailer2) { create(:user, :with_retailer) }
+      let!(:retailer3) { create(:user, :with_retailer) }
+      let!(:r1_his_init) { create(:auction_history, bid_time: current_time, user: retailer1, auction: auction, actual_bid_time: current_time, contract_duration: '6') }
+      let!(:r2_his_init) { create(:auction_history, bid_time: current_time, user: retailer2, auction: auction, actual_bid_time: current_time, contract_duration: '6') }
+      let!(:r3_his_init) { create(:auction_history, bid_time: current_time, user: retailer3, auction: auction, actual_bid_time: current_time, contract_duration: '6') }
+      let!(:r1_his_bid) { create(:auction_history, :set_bid, bid_time: bid_time, user: retailer1, auction: auction, actual_bid_time: bid_time, contract_duration: '6') }
+      let!(:r2_his_bid) { create(:auction_history, :not_bid, bid_time: bid_time, user: retailer2, auction: auction, actual_bid_time: current_time, contract_duration: '6') }
+      let!(:r3_his_bid) { create(:auction_history, :not_bid, bid_time: bid_time, user: retailer3, auction: auction, actual_bid_time: current_time, contract_duration: '6') }
+
+      def do_request_void
+        post :confirm, params: { id: auction.id, user_id: retailer1, status: 'void', contract_duration: '6'  }
+      end
+
+      def do_request_winner
+        post :confirm, params: { id: auction.id, user_id: retailer1, status: 'win', contract_duration: '6' }
+      end
+
+      context 'confirm void' do
+        before { do_request_void }
+        it 'success' do
+          hash_body = JSON.parse(response.body)
+          expect(hash_body['status']).to eq('void')
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
+      context 'confirm winner' do
+        before { do_request_winner }
+        it 'success' do
+          hash_body = JSON.parse(response.body)
+          expect(hash_body['status']).to eq('win')
+          expect(hash_body['lowest_average_price'].to_s).to eq(r1_his_bid.average_price.to_s)
+          expect(response).to have_http_status(:ok)
+        end
+      end
+    end
+
     describe 'PUT update' do
       def do_request(id, auction)
         auction_object = {

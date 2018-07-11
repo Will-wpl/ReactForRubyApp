@@ -167,10 +167,11 @@ Rails.application.routes.draw do
           post 'acknowledge_all'
         end
       end
-      resources :registrations, only: %i[index update sign_up validate] do
+      resources :registrations, only: %i[index update sign_up validate retailer_info] do
         member do
           put 'sign_up'
           put 'validate'
+          put 'retailer_info'
         end
       end
       resources :user_attachments, only: %i[create] do
@@ -180,11 +181,12 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :buyer do
-      resources :consumption_details, only: %i[index update participate reject] do
+      resources :consumption_details, only: %i[index update participate reject validate] do
         collection do
           post 'participate'
           post 'reject'
           post 'save'
+          post 'validate'
         end
       end
       resources :auctions, only: %i[obtain published] do
@@ -200,10 +202,11 @@ Rails.application.routes.draw do
       resources :auction_results, only: %i[index] do
 
       end
-      resources :registrations, only: %i[index update sign_up validate] do
+      resources :registrations, only: %i[index update sign_up validate buyer_info] do
         member do
           put 'sign_up'
           put 'validate'
+          put 'buyer_info'
         end
       end
       resources :user_attachments, only: %i[create] do

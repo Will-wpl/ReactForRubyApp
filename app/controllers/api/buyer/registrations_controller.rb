@@ -6,29 +6,19 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
   def index
     # get buyer base information
     user = @user
-    # get the last uploaded business file
-    user_attachment = UserAttachment.find_last_by_user(@user.id)
-
-    # get buyer entities
-    buyer_entities = user.company_buyer_entities.order(updated_at: :asc)
-
-    # get seller-buyer-t&c document
-    seller_buyer_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)
-
-    # get buyer-revv-t&c document
-    buyer_revv_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
-
-    # get letter-of-authorisation document
-    letter_of_authorisation_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Letter_Authorisation)
+    user_json = get_buyer_by_id(user)
     # return json
-    render json: { user_base_info: user,
-                   buyer_entities: buyer_entities,
-                   self_attachment: user_attachment,
-                   seller_buyer_tc_attachment: seller_buyer_tc_attachment,
-                   buyer_revv_tc_attachment: buyer_revv_tc_attachment,
-                   letter_of_authorisation_attachment: letter_of_authorisation_attachment}, status: 200
+    render json: user_json, status: 200
   end
 
+  # get buyer registration information by user id
+  def buyer_info
+    # get buyer base information
+    user = User.find(params[:user_id])
+    user_json = get_buyer_by_id(user)
+    # return json
+    render json: user_json, status: 200
+  end
   # update buyer registration information
   def update
     # update buyer registration information
@@ -69,52 +59,79 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
   def validate
     validation_user = params[:user]
     validate_final_result = true
-    final_message = ''
+    error_fields = []
+    error_entity_indexes = []
     # validate Company name field
-    validate_result, message = validate_user_field('company_name',
+    validate_result = validate_user_field('company_name',
                                                    validation_user['company_name'],
                                                    [validation_user['id']])
     validate_final_result = validate_final_result & validate_result
-    final_message = final_message + message + '\r' unless message.blank?
+    error_fields.push('company_name') unless validate_result
 
     # validate Email field
-    validate_result, message = validate_user_field('email',
+    validate_result = validate_user_field('email',
                                                    validation_user['email'],
                                                    [validation_user['id']])
     validate_final_result = validate_final_result & validate_result
-    final_message = final_message + message + '\r' unless message.blank?
+    error_fields.push('email') unless validate_result
 
     # validate Company UEN field
-    validate_result, message = validate_user_field('company_unique_entity_number',
+    validate_result = validate_user_field('company_unique_entity_number',
                                                    validation_user['company_unique_entity_number'],
                                                    [validation_user['id']])
 
     validate_final_result = validate_final_result & validate_result
-    final_message = final_message + message + '\r' unless message.blank?
+    error_fields.push('company_unique_entity_number') unless validate_result
 
     # validate user entities
     buyer_entities = JSON.parse(params[:buyer_entities])
-    validate_result, message = validate_buyer_entities_info(validation_user, buyer_entities)
+    validate_result, entity_indexes = validate_buyer_entities_info(validation_user, buyer_entities)
     validate_final_result = validate_final_result & validate_result
-    final_message = final_message + message unless message.blank?
-
-    render json: { validate_result: validate_final_result, message: final_message }, status: 200
+    error_entity_indexes = entity_indexes unless validate_result
+    render json: { validate_result: validate_final_result, error_fields: error_fields, error_entity_indexes: error_entity_indexes }, status: 200
   end
 
   private
+
+  # get buyer registration information
+  def get_buyer_by_id(user)
+    # get the last uploaded business file
+    user_attachment = UserAttachment.find_last_by_user(user.id)
+    # get buyer entities
+    buyer_entities = user.company_buyer_entities.order(updated_at: :asc)
+    # get seller-buyer-t&c document
+    seller_buyer_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)
+    # get buyer-revv-t&c document
+    buyer_revv_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
+    # get letter-of-authorisation document
+    letter_of_authorisation_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Letter_Authorisation)
+    # return json
+    user_json = { user_base_info: user,
+                   buyer_entities: buyer_entities,
+                   self_attachment: user_attachment,
+                   seller_buyer_tc_attachment: seller_buyer_tc_attachment,
+                   buyer_revv_tc_attachment: buyer_revv_tc_attachment,
+                   letter_of_authorisation_attachment: letter_of_authorisation_attachment}
+    user_json
+  end
+
   def validate_buyer_entities_info(buyer, buyer_entities)
-    entity_emails = []
-    buyer_entities.each { |x| entity_emails.push(x['contact_email']) }
-    message = 'Buyer entity contact email cannot same with buyers email.\r' unless entity_emails.find { |x| x == buyer['email'] }.blank?
+    entity_indexes = []
+    # validate Entity' email must not be same with Buyer' email
+    buyer_entities.each_index do |index|
+      entity_indexes.push(index) if buyer_entities[index]['contact_email'] == buyer['email']
+    end
 
-    original_entiies_size = entity_emails.size
-    entity_emails = entity_emails.uniq
-     filted_entiies_size = entity_emails.size
-
-    message = '' if message.blank?
-    message = message + 'Buyer entity contact email duplicated' if original_entiies_size > filted_entiies_size
-
-    [message.blank?, message]
+    # validate Entity' email must be unique
+    buyer_entities.each_index do |index| #entity_emails.push(x['contact_email'])
+      buyer_entities.each do |temp_entity|
+        if buyer_entities[index] != temp_entity && buyer_entities[index]['contact_email'] == temp_entity['contact_email']
+          entity_indexes.push(index)
+        end
+      end
+    end
+    entity_indexes = entity_indexes.uniq
+    [entity_indexes.blank?, entity_indexes]
   end
 
   def update_buyer_entities(buyer_entities)
