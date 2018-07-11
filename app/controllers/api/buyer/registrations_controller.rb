@@ -11,14 +11,6 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     render json: user_json, status: 200
   end
 
-  # get buyer registration information by user id
-  def buyer_info
-    # get buyer base information
-    user = User.find(params[:user_id])
-    user_json = get_buyer_by_id(user)
-    # return json
-    render json: user_json, status: 200
-  end
   # update buyer registration information
   def update
     # update buyer registration information
@@ -92,28 +84,6 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
   end
 
   private
-
-  # get buyer registration information
-  def get_buyer_by_id(user)
-    # get the last uploaded business file
-    user_attachment = UserAttachment.find_last_by_user(user.id)
-    # get buyer entities
-    buyer_entities = user.company_buyer_entities.order(updated_at: :asc)
-    # get seller-buyer-t&c document
-    seller_buyer_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)
-    # get buyer-revv-t&c document
-    buyer_revv_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
-    # get letter-of-authorisation document
-    letter_of_authorisation_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Letter_Authorisation)
-    # return json
-    user_json = { user_base_info: user,
-                   buyer_entities: buyer_entities,
-                   self_attachment: user_attachment,
-                   seller_buyer_tc_attachment: seller_buyer_tc_attachment,
-                   buyer_revv_tc_attachment: buyer_revv_tc_attachment,
-                   letter_of_authorisation_attachment: letter_of_authorisation_attachment}
-    user_json
-  end
 
   def validate_buyer_entities_info(buyer, buyer_entities)
     entity_indexes = []

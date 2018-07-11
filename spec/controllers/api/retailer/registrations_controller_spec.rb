@@ -57,18 +57,6 @@ RSpec.describe Api::Retailer::RegistrationsController, type: :controller do
       end
     end
 
-    describe 'Get retailer info by user id' do
-      def do_request
-        get :retailer_info, params: { id: admin_user.id, user_id: retailer_user1.id }
-      end
-      before { do_request }
-      it 'success' do
-        hash_body = JSON.parse(response.body)
-        expect(hash_body).to have_content('user_base_info')
-        expect(response).to have_http_status(:ok)
-      end
-    end
-
     describe 'Put update' do
       def do_request
         put :update, params: { id: retailer_user.id, user: {id: '10',
