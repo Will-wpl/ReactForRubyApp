@@ -98,13 +98,14 @@ export const getRetailerUserInfo =()=>{
 }
 
 export const saveRetailManageInfo = (params) => {  //save
-    return put('/api/retailer/registrations/'+params.id, params);
+    return put('/api/retailer/registrations/'+params.user.id, params);
 }
 export const submitRetailManageInfo = (params) => {  //submit
-    return put('/api/retailer/registrations/'+params.id+'/sign_up', params);
+    return put('/api/retailer/registrations/'+params.user.id+'/sign_up', params);
+}
+export const validateIsExist=(params)=>{
+    return put('/api/retailer/registrations/'+params.user.id+'/validate', params);
 }
 export const getRetailerUserInfoByUserId=(id)=>{
     return get(`/api/admin/registrations/${id}/retailer_info?user_id=${id}`);
 }
-
- 
