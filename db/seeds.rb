@@ -6,11 +6,10 @@ admin_user = User.find_or_create_by(name: 'admin') do |user|
 end
 admin_user.add_role :admin
 
-Role.first_or_create(name: 'retailer')
-Role.first_or_create(name: 'buyer')
-Role.first_or_create(name: 'entity')
-Role.first_or_create(name: 'tenant')
-
+Role.create(name: 'retailer') unless Role.any?{ |r| r.name == 'retailer' }
+Role.create(name: 'buyer') unless Role.any?{ |r| r.name == 'buyer' }
+Role.create(name: 'entity') unless Role.any?{ |r| r.name == 'entity' }
+Role.create(name: 'tenant') unless Role.any?{ |r| r.name == 'tenant' }
 # reverse_auction = Auction.find_or_create_by(name: 'SP Reverse Auction') do |auction|
 #   auction.start_datetime = nil
 #   auction.contract_period_start_date = nil
