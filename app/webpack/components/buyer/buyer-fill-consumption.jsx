@@ -7,23 +7,53 @@ import { getBuyerParticipate, setBuyerParticipate } from '../../javascripts/comp
 export class FillConsumption extends Component {
     constructor(props) {
         super(props);
+
+        this.accountItem = {
+            account_number: '',
+            existing_plan: '',
+            contract_expiry: '',
+            purchasing_entity: [],
+            premise_address: '',
+            intake_level: ['Low Tension (LT)', 'High Tension Small (HTS)', 'High Tension Large (HTL)', 'Extra High Tension (EHT)'],
+            intake_level_selected: 'LT',
+            contracted_capacity: null,
+            blk_or_unit: '',
+            street: '',
+            unit_number: '',
+            postal_code: '',
+            totals: '',
+            peak_pct: '',
+            peak: '',
+            off_peak: '',
+            id: 0,
+            cid: Math.floor((Math.random() * 10000) + 1)
+        }
         this.state = {
             text: "",
             submit_type: "",
             site_list: [],
+            purchasing_entity: [],
             disabled: '',
             checked: false,
             name: "",
             time: "", link: "",
-            durationList: ['6 month', '12 month', '24 month']
+            durationList: [],
+            durtioanItem: "",
+            account_detail: this.accountItem,
+            account_list: []
         }
         this.consumptions_id = (window.location.href.split("consumptions/")[1]).split("/edit")[0];
     }
     componentDidMount() {
         this.BuyerParticipateList();
+        this.buyerPurchseList();
+    }
+    buyerPurchseList() {
+
     }
     BuyerParticipateList() {
         getBuyerParticipate('/api/buyer/consumption_details?consumption_id=' + this.consumptions_id).then((res) => {
+            console.log(res);
             this.site_list = res.consumption_details;
             this.status = res.consumption.participation_status === '1' ? "Confirmed" :
                 (res.consumption.participation_status === '2' ? "Pending" : "Rejected")
@@ -38,6 +68,11 @@ export class FillConsumption extends Component {
                 this.setState({
                     disabled: 'disabled',
                     checked: true,
+                })
+            }
+            if (res.contract_duration) {
+                this.setState({
+                    durationList: res.contract_duration
                 })
             }
             if (res.consumption_details.length > 0) {
@@ -95,6 +130,28 @@ export class FillConsumption extends Component {
         site_listObj.push(list)
         this.setState({ site_list: site_listObj })
     }
+
+    add_account() {
+        if (this.props.onAddClick) {
+            this.props.onAddClick();
+        }
+        // let list = {},
+        //     site_listObj = this.state.site_list;
+        // list = {
+
+        // }
+        // this.setState({ account_detail: list });
+        // console.log(this.state.account_detail);
+        this.accountItem.purchasing_entity=[]
+        this.setState({
+            account_detail: []
+        })
+        this.refs.consumption.showModal('custom', {}, '')
+    }
+    doAddAccountAction(item) {
+
+    }
+
     remove_site(index) {
         if (this.props.onAddClick) {
             this.props.onAddClick();
@@ -240,25 +297,34 @@ export class FillConsumption extends Component {
             }
         }
     }
+    durationChange(e) {
+        let itemValue = e.target.value
+        console.log(itemValue)
+        this.setState({
+            durtioanItem: itemValue
+        })
+
+    }
     render() {
         return (
             <div>
                 <h1>Buyer Participation</h1>
                 <h4 className="col-sm-12 u-mb2">Invitation: {this.state.name}</h4>
                 <h4 className="col-sm-12 u-mb2">Contract Start Date: {moment(this.state.time).format('D MMM YYYY hh:mm a')}</h4>
-                <h4 className="col-sm-12 u-mb2">
-                    <div>Purchase Duration:</div>
-                    <div>
-                        <select id="selDuration" style={{ 'width': '200px' }}>
-                            {
-                                this.state.durationList.map(item => {
-                                    return <option key={item} value={item}>{item}</option>
-                                })
-                            }
-                        </select>
+                <h4 >
+                    <div className="row col-sm-12 u-mb2">
+                        <div className="col-sm-2 u-mb2">Purchase Duration:</div>
+                        <div className="col-sm-5 u-mb2">
+                            <select id="selDuration" style={{ 'width': '200px' }} onChange={this.durationChange.bind(this)}>
+                                {
+                                    this.state.durationList.map(item => {
+                                        return <option key={item.contract_duration} value={item.contract_duration}>{item.contract_duration + " months"}</option>
+                                    })
+                                }
+                            </select>
+                        </div>
                     </div>
                 </h4>
-
 
                 {/* <h1>Participate in upcoming {this.state.name} exercise on {moment(this.state.time).format('D MMM YYYY hh:mm a')}</h1> */}
                 <form name="buyer_form" method="post" onSubmit={this.checkSuccess.bind(this)}>
@@ -268,14 +334,33 @@ export class FillConsumption extends Component {
                                 <input name="agree_auction" type="checkbox" disabled={this.state.disabled} required />&nbsp;&nbsp;
                             I agree to the <a className="cursor" target="_blank" download={this.state.link.file_name} href={`${this.state.link.file_path}`}>terms and conditions.</a>
                             </h4> : ""
+
                         }
 
                         {/*<h4 className="col-sm-12 u-mb2"><input name="agree_auction" type="checkbox" disabled={this.state.disabled} required /> I agree to the {this.state.link?<a className="cursor" download={this.state.link.file_name} href={`${this.state.link.file_path}`}>terms and conditions.</a>:'terms and conditions.'}</h4>*/}
 
                         <h4 className="col-sm-12 u-mb2">Last Status of Participation : {this.status}</h4>
-                        <div className="col-sm-12 col-md-8">
-                            <DoFillConsumption changeSiteList={this.changeSiteList.bind(this)} site_list={this.state.site_list} checked={this.state.checked} remove={this.remove_site.bind(this)} />
-                            {this.state.checked ? '' : <div className="addSite"><a onClick={this.add_site.bind(this)}>Add Account</a></div>}
+                        <div className="col-sm-12 col-md-10">
+                            {/* <DoFillConsumption changeSiteList={this.changeSiteList.bind(this)} site_list={this.state.site_list} checked={this.state.checked} remove={this.remove_site.bind(this)} /> */}
+                            <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Account No.</th>
+                                        <th>Existing Plan</th>
+                                        <th>Contract Expiry</th>
+                                        <th>Purchasing Entity</th>
+                                        <th>Intake Level</th>
+                                        <th>Contract Capacity</th>
+                                        <th>Permise Address</th>
+                                        <th>Consumption Details</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                            {this.state.checked ? '' : <div className="addSite"><a onClick={this.add_account.bind(this)}>Add Account</a></div>}
                             <div className="buyer_btn">
                                 <button className={"lm--button lm--button--primary " + this.state.disabled} disabled={this.state.disabled} onClick={this.doSubmit.bind(this, 'save')}>Save</button>
                                 <a className={"lm--button lm--button--primary " + this.state.disabled} onClick={this.state.disabled === "disabled" ? this.doSubmit.bind(this, 'return') : this.doSubmit.bind(this, 'Reject')}>Reject</a>
@@ -287,6 +372,7 @@ export class FillConsumption extends Component {
                         <a className="lm--button lm--button--primary u-mt3" href="/buyer/auctions" >Back</a>
                     </div>
                     <Modal text={this.state.text} acceptFunction={this.doAccept.bind(this)} ref="Modal" />
+                    <Modal changeSize="1" acceptFunction={this.doAddAccountAction.bind(this)} consumption_account_item={this.state.account_detail} listdetailtype='consumption_detail' ref="consumption" />
                 </form>
             </div>
         )
