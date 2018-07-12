@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import RetailerRanking from './admin_shared/ranking';
 import ReservePrice from './admin_shared/reserveprice';
+import ReservePriceCompare from './admin_shared/reserveprice-compare';
 import CheckboxList from '../common/chart/list-checkbox';
 import CheckboxListItem from '../common/chart/list-checkbox-item';
 import {getArrangements, getHistories} from '../../javascripts/componentService/admin/service';
@@ -18,61 +19,30 @@ import {Modal} from '../shared/show-modal';
 export class AdminDashboard extends Component {
     constructor(props){
         super(props);
-        this.state = {users:[], realtimeData:[], realtimeRanking:[], currentPrice:'0.0000'};
+        this.state = {
+            users:[], realtimeData:[], realtimeRanking:[],
+            currentPrice:'0.0000',livetype:'6',compare:{},
+            live_auction_contracts:[],contracts:[],auction:{},livetab:false}
         this.lastInput = 1;
         this.priceCheckAllStatus = true;
         this.rankingCheckAllStatus = true;
     }
 
     componentDidMount() {
-        getAuction('admin',sessionStorage.auction_id).then(auction => {
-            this.auction = auction;
-            //console.log(this.auction.name);
-            this.timerTitle = auction ? `${auction.name} on ${moment(auction.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
-            this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000'
-            this.forceUpdate(); // only once no need to use state
-
-            let auctionId = auction? auction.id : 1;
-
-            getHistories({ auction_id: auctionId}).then(histories => {
-                if (!isEmptyJsonObj(histories)) {
-                    let orderRanking = histories.filter(element => {
-                        return element.data.length > 0;
-                    }).map(element => {
-                        return element.data[element.data.length - 1];
-                    })
-                     try {
-                         orderRanking.sort((a, b) => {
-                             const ar = Number(a.ranking);
-                             const br = Number(b.ranking);
-                             if (ar < br) {
-                                 return -1;
-                             } else if (ar > br) {
-                                 return 1;
-                             } else {
-                                 const at = moment(a.actual_bid_time);
-                                 const bt = moment(b.actual_bid_time);
-                                 if (at < bt) {
-                                     return -1;
-                                 } else if (at > bt) {
-                                     return 1;
-                                 } else {
-                                     return 0;
-                                 }
-                             }
-                         })
-                     } catch (error) {
-                         console.log(error);
-                     }
-                    this.setState({realtimeData: histories, realtimeRanking: orderRanking
-                        , currentPrice : orderRanking.length > 0 ? orderRanking[0].average_price : this.state.currentPrice});
-                }
-                this.createWebsocket(auctionId);
-            }, error => {
-                this.createWebsocket(auctionId);
-            });
-
-            getArrangements(auctionId, ACCEPT_STATUS.ACCEPT).then(res => {
+        getAuction('admin',sessionStorage.auction_id).then(res => {
+            this.setState({auction:res});
+            this.auction = res;
+            //console.log(this.auction.live_auction_contracts);
+            this.timerTitle = res ? `${res.name} on ${moment(res.start_datetime).format('D MMM YYYY, h:mm a')}` : '';
+            this.startPrice = res ? parseFloat(res.reserve_price).toFixed(4) : '0.0000'
+            this.forceUpdate();
+            if(res.live_auction_contracts){
+                this.setState({
+                    live_auction_contracts:res.live_auction_contracts,
+                    livetype:res.live_auction_contracts[0].contract_duration
+                });
+            }
+            getArrangements(res.id, ACCEPT_STATUS.ACCEPT).then(res => {
                 let limit = findUpLimit(res.length);
                 let users = res.map((element, index) => {
                     element['color'] = getRandomColor(index + 1, limit);
@@ -86,8 +56,73 @@ export class AdminDashboard extends Component {
             }, error => {
             });
         })
+        setTimeout(()=>{
+            this.refresh();
+        },200)
     }
+    refresh(){
+            let auctionId = this.state.auction? this.state.auction.id : 1;
+            if(this.state.auction.live_auction_contracts){
+                let live = this.state.auction.live_auction_contracts.filter(item=>{
+                    return this.state.livetype === item.contract_duration
+                })
+                this.setState({contracts:live});
+            }
+            getHistories({ auction_id: auctionId}).then(res => {
+                let histories;
+                if(res.duration_6 || res.duration_12 || res.duration_24){
+                    console.log(this.state.livetype);
+                    switch (this.state.livetype){
+                        case '6' : histories = res.duration_6;
+                            break;
+                        case '12' : histories = res.duration_12;
+                            break;
+                        case '24' : histories = res.duration_24;
+                            break;
+                    }
+                }else{
+                    histories=res;
+                }
 
+                if (!isEmptyJsonObj(histories)) {
+                    let orderRanking = histories.filter(element => {
+                        return element.data.length > 0;
+                    }).map(element => {
+                        return element.data[element.data.length - 1];
+                    })
+                    try {
+                        orderRanking.sort((a, b) => {
+                            const ar = Number(a.ranking);
+                            const br = Number(b.ranking);
+                            if (ar < br) {
+                                return -1;
+                            } else if (ar > br) {
+                                return 1;
+                            } else {
+                                const at = moment(a.actual_bid_time);
+                                const bt = moment(b.actual_bid_time);
+                                if (at < bt) {
+                                    return -1;
+                                } else if (at > bt) {
+                                    return 1;
+                                } else {
+                                    return 0;
+                                }
+                            }
+                        })
+                    } catch (error) {
+                        console.log(error);
+                    }
+                    //console.log(histories);
+                    this.setState({realtimeData: [].concat(histories), realtimeRanking: orderRanking
+                         , currentPrice : orderRanking.length > 0 ? orderRanking[0].average_price : this.state.currentPrice,
+                         compare:orderRanking[0]});
+                }
+                this.createWebsocket(auctionId);
+            }, error => {
+                this.createWebsocket(auctionId);
+            });
+    }
     createWebsocket(auction) {
         this.ws = createWebsocket(auction);
         this.ws.onConnected(() => {
@@ -99,8 +134,16 @@ export class AdminDashboard extends Component {
                     data.data.forEach((element, index) => {
                         histories.push({id: element.user_id, data:[].concat(element)})
                     })
-                    this.setState({realtimeData: histories, realtimeRanking: data.data
-                        , currentPrice : data.data[0].average_price});
+                    if(data.data[0].contract_duration){
+                        if(data.data[0].contract_duration === this.state.livetype){
+                            this.setState({livetab:false,realtimeData: histories, realtimeRanking: data.data
+                                , currentPrice : data.data[0].average_price,compare:data.data[0]});
+                        }
+                    }else{
+                        this.setState({realtimeData: histories, realtimeRanking: data.data
+                            , currentPrice : data.data[0].average_price});
+                    }
+
                 }
             }
             if (data.action === 'extend_time') {
@@ -132,9 +175,17 @@ export class AdminDashboard extends Component {
     }
 
     goToFinish() {
-        window.location.href=`/admin/auctions/${this.auction.id}/confirm`
+        //window.location.href=`/admin/auctions/${this.auction.id}/confirm`
     }
-
+    liveTab(index){
+        let arr = this.state.live_auction_contracts.filter(item=>{
+            return index === item.contract_duration
+        })
+        this.setState({livetype:index,livetab:true,contracts:arr});
+        this.refresh();
+        this.priceUsers.selectAll();
+        this.rankingUsers.selectAll();
+    }
     render () {
         const visibility_lt = !this.auction ? true: Number(this.auction.total_lt_peak) > 0 || Number(this.auction.total_lt_off_peak) > 0;
         const visibility_hts = !this.auction ? true: Number(this.auction.total_hts_peak) > 0 || Number(this.auction.total_hts_off_peak) > 0;
@@ -150,11 +201,23 @@ export class AdminDashboard extends Component {
                         <input type="button" className="hold_submit" value="Submit" onClick={this.showModal.bind(this)} ref="submitBtn" />
                     </div>
                 </DuringCountDown>
+                {this.state.live_auction_contracts.length>0?
+                    <div className="u-grid u-mt2 mouth_tab">
+                        {
+                            this.state.live_auction_contracts.map((item,index)=>{
+                                return <div key={index} className={"col-sm-12 col-md-3 u-cell"}>
+                                    <a className={this.state.livetype===item.contract_duration?"col-sm-12 lm--button lm--button--primary selected"
+                                        :"col-sm-12 lm--button lm--button--primary"}
+                                       onClick={this.liveTab.bind(this,item.contract_duration)} >{item.contract_duration} Mouths</a>
+                                </div>
+                            })
+                        }
+                    </div>:''}
                 <div className="u-grid u-mt3">
                     <div className="col-sm-12 col-md-7">
                         <div className="u-grid u-mt2">
                             <div className="col-sm-9">
-                                <ChartRealtimeHoc ref="priceChart" dataStore={this.state.realtimeData}>
+                                <ChartRealtimeHoc ref="priceChart" livetab={this.state.livetab} dataStore={this.state.realtimeData}>
                                     <Price isLtVisible={visibility_lt} isHtsVisible={visibility_hts} isHtlVisible={visibility_htl} isEhtVisible={visibility_eht}/>
                                 </ChartRealtimeHoc>
                             </div>
@@ -181,7 +244,7 @@ export class AdminDashboard extends Component {
                         </div>
                         <div className="u-grid u-mt2">
                             <div className="col-sm-9">
-                                <ChartRealtimeHoc ref="rankingChart" dataStore={this.state.realtimeData}>
+                                <ChartRealtimeHoc ref="rankingChart" livetab={this.state.livetab} dataStore={this.state.realtimeData}>
                                     <Ranking yAxisFormatterRule={{0 : ' ', 'func': getStandardNumBref}}/>
                                 </ChartRealtimeHoc>
                             </div>
@@ -210,6 +273,7 @@ export class AdminDashboard extends Component {
                     <div className="col-sm-12 col-md-5">
                         <ReservePrice auction={this.auction} price={this.startPrice} realtimePrice={this.state.currentPrice}/>
                         <RetailerRanking ranking={this.state.realtimeRanking}/>
+                        {this.state.live_auction_contracts.length>0?<ReservePriceCompare livetype={this.state.livetype} contracts={this.state.contracts} compare={this.state.compare} />:''}
                     </div>
                 </div>
                 <Modal text="Please confirm your time extension." acceptFunction={this.extendTime.bind(this)} ref="Modal" />
