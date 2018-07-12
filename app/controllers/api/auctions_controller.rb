@@ -760,7 +760,15 @@ class Api::AuctionsController < Api::BaseController
                          starting_price_eht_peak: contract.starting_price_eht_peak,
                          starting_price_eht_off_peak: contract.starting_price_eht_off_peak,
                          contract_period_end_date: contract.contract_period_end_date,
-                         contract_duration: contract.contract_duration}
+                         contract_duration: contract.contract_duration,
+                         total_lt_peak: contract.total_lt_peak,
+                         total_lt_off_peak: contract.total_lt_off_peak,
+                         total_hts_peak: contract.total_hts_peak,
+                         total_hts_off_peak: contract.total_hts_off_peak,
+                         total_htl_peak: contract.total_htl_peak,
+                         total_htl_off_peak: contract.total_htl_off_peak,
+                         total_eht_peak: contract.total_eht_peak,
+                         total_eht_off_peak: contract.total_eht_off_peak}
         admin_contract = {
             reserve_price_lt_peak: contract.reserve_price_lt_peak,
             reserve_price_lt_off_peak:contract.reserve_price_lt_off_peak,

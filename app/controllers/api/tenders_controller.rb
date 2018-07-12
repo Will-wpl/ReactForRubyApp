@@ -27,6 +27,12 @@ class Api::TendersController < Api::TendersBaseController
     render json: { aggregate_consumptions: aggregate_consumptions, attachments: attachments }, status: 200
   end
 
+  def simple_node2_retailer
+    auction = @arrangement.auction
+    data = get_lived_auction_contracts(auction, false)
+    render json: { aggregate_consumptions: data }, status: 200
+  end
+
   def node3_retailer
     attachments_count = AuctionAttachment.belong_auction(@arrangement.auction_id)
                             .where(file_type: 'tender_documents_upload').count
