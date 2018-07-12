@@ -138,4 +138,37 @@ RSpec.describe Api::Admin::ConsumptionsController, type: :controller do
       it { expect(response).to have_http_status(401) }
     end
   end
+
+  describe 'approval/reject consumption' do
+    before { sign_in admin_user }
+
+    context 'approval' do
+      def do_request
+        put :approval_consumption, params: { consumption_id: consumption.id, approved: '1', comment: 'consumption - approval'}
+      end
+
+      before { do_request }
+
+      it 'success' do
+        temp_consumption = Consumption.find(consumption.id)
+        expect(response).to have_http_status(:ok)
+        expect(temp_consumption.accept_status).to eq('1')
+      end
+    end
+
+
+    context 'reject' do
+      def do_request
+        put :approval_consumption, params: { consumption_id: consumption.id, approved: nil, comment: 'consumption - approval'}
+      end
+
+      before { do_request }
+
+      it 'success' do
+        temp_consumption = Consumption.find(consumption.id)
+        expect(response).to have_http_status(:ok)
+        expect(temp_consumption.accept_status).to eq('0')
+      end
+    end
+  end
 end

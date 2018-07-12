@@ -30,11 +30,12 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :admin do
-      resources :users, only: %i[show retailers buyers approval_user] do
+      resources :users, only: %i[show retailers buyers approval_retailer approval_buyer] do
         collection do
           get 'retailers'
           get 'buyers'
-          put 'approval_user'
+          put 'approval_retailer'
+          put 'approval_buyer'
         end
       end
       resources :auctions, only: %i[obtain link create update delete publish hold confirm destroy unpublished published retailers buyers selects send_mails] do
@@ -74,9 +75,12 @@ Rails.application.routes.draw do
           get 'obtain'
         end
       end
-      resources :consumptions, only: %i[index show destroy update_status] do
+      resources :consumptions, only: %i[index show destroy update_status approval_consumption] do
         member do
           put 'update_status'
+        end
+        collection do
+          put 'approval_consumption'
         end
       end
       resources :consumption_details, only: %i[index] do

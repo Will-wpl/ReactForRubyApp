@@ -65,8 +65,11 @@ class Api::ConsumptionsController < Api::BaseController
         @consumption = Consumption.new
         @consumption.auction_id = params[:auction_id]
         @consumption.user_id = params[:user_id]
-        @consumption.action_status = '2'
-        @consumption.participation_status = '2'
+        @consumption.action_status = Consumption::ActionStatusPending
+        @consumption.participation_status = Consumption::ParticipationStatusPending
+        #update - new field (20180711) - Start
+        @consumption.accept_status = Consumption::AcceptStatusPending
+        #update - new field (20180711) - End
         @consumption.save
         render json: @consumption, status: 201
       end

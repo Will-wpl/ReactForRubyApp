@@ -5,11 +5,12 @@ class Api::ConsumptionDetailsController < Api::BaseController
       consumption = @consumption
       consumption_details = consumption.consumption_details
       auction = consumption.auction
-
+      buyer_entities = CompanyBuyerEntity.find_by_user(consumption.user_id)
       tc_attachment = AuctionAttachment.find_by(auction_id: consumption.auction_id, file_type: 'buyer_tc_upload')
       render json: { consumption_details: consumption_details, consumption: consumption,
                      auction: { id: auction.id, name: auction.name, actual_begin_time: auction.actual_begin_time, publish_status: auction.publish_status },
-                     tc_attachment: tc_attachment }, status: 200
+                     tc_attachment: tc_attachment,
+                     buyer_entities: buyer_entities }, status: 200
     end
   end
 
@@ -44,7 +45,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
         consumption_detail.existing_plan = detail['existing_plan']
         consumption_detail.totals = detail['totals']
         consumption_detail.peak_pct = detail['peak_pct']
-        consumption_detail.peak = detail['totals'].to_f * detail['peak_pct'].to_f unless detail['peak_pct'].blank?
+        consumption_detail.peak = detail['totals'].to_f * detail['peak_pct'].to_f / 100 unless detail['peak_pct'].blank?
         consumption_detail.off_peak = detail['totals'].to_f - consumption_detail.peak unless detail['peak_pct'].blank?
         consumption_detail.contract_expiry = detail['contract_expiry']
         consumption_detail.blk_or_unit = detail['blk_or_unit']
