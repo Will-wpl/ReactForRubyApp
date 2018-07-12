@@ -11,6 +11,7 @@ RSpec.describe Api::Admin::ConsumptionsController, type: :controller do
   let!(:consumption_htl) { create(:consumption_detail, :for_htl, consumption_id: consumption.id) }
   let!(:consumption_eht) { create(:consumption_detail, :for_eht, consumption_id: consumption.id) }
 
+
   describe '#index' do
 
     describe 'admin ' do
@@ -44,6 +45,32 @@ RSpec.describe Api::Admin::ConsumptionsController, type: :controller do
           expect(response).to be_success
           hash = JSON.parse(response.body)
           expect(hash['list'].size).to eq(0)
+        end
+      end
+
+      describe 'got consumption list buy auction_id ,consumer_type is 2 and contract duration is 6' do
+        let!(:auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
+        let!(:six_month_contract) { create(:auction_contract, :six_month, :total, auction: auction ) }
+        let!(:consumption) { create(:consumption, :init, user: buyer_user, auction: auction, participation_status: '1', contract_duration: '6' ) }
+        let!(:consumption_lt) { create(:consumption_detail, :for_lt, consumption_id: consumption.id) }
+        let!(:consumption_hts) { create(:consumption_detail, :for_hts, consumption_id: consumption.id) }
+        let!(:consumption_htl) { create(:consumption_detail, :for_htl, consumption_id: consumption.id) }
+        let!(:consumption_eht) { create(:consumption_detail, :for_eht, consumption_id: consumption.id) }
+
+
+        def do_request
+          get :index, params: { id: auction.id, consumer_type: '2', contract_duration: '6' }
+        end
+
+        before { do_request }
+
+        it "return list and total object" do
+          expect(response).to be_success
+          hash = JSON.parse(response.body)
+          expect(hash['list'].size).to eq(1)
+          expect(hash['list'][0]['lt_peak']).to eq('100.0')
+          expect(hash['list'][0]['company_name']).to eq(buyer_user.company_name)
+          expect(hash['total_info']['lt_peak']).to eq('100.0')
         end
       end
     end
@@ -136,6 +163,39 @@ RSpec.describe Api::Admin::ConsumptionsController, type: :controller do
       before { do_request }
 
       it { expect(response).to have_http_status(401) }
+    end
+  end
+
+  describe 'approval/reject consumption' do
+    before { sign_in admin_user }
+
+    context 'approval' do
+      def do_request
+        put :approval_consumption, params: { consumption_id: consumption.id, approved: '1', comment: 'consumption - approval'}
+      end
+
+      before { do_request }
+
+      it 'success' do
+        temp_consumption = Consumption.find(consumption.id)
+        expect(response).to have_http_status(:ok)
+        expect(temp_consumption.accept_status).to eq('1')
+      end
+    end
+
+
+    context 'reject' do
+      def do_request
+        put :approval_consumption, params: { consumption_id: consumption.id, approved: nil, comment: 'consumption - approval'}
+      end
+
+      before { do_request }
+
+      it 'success' do
+        temp_consumption = Consumption.find(consumption.id)
+        expect(response).to have_http_status(:ok)
+        expect(temp_consumption.accept_status).to eq('0')
+      end
     end
   end
 end

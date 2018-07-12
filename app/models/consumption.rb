@@ -15,6 +15,10 @@ class Consumption < ApplicationRecord
 
   Acknowledged = '1'.freeze
 
+  AcceptStatusReject = '0'.freeze
+  AcceptStatusApproved = '1'.freeze
+  AcceptStatusPending = '2'.freeze
+
   # Extends
 
   # Includes

@@ -34,7 +34,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
 
     # update buyer entity registration information
     buyer_entities = JSON.parse(params[:buyer_entities])
-    update_buyer_entities(buyer_entities)
+    update_buyer_entities(buyer_entities, true)
 
     render json: { user: @user }, status: 200
   end
@@ -77,25 +77,32 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
 
     # validate user entities
     buyer_entities = JSON.parse(params[:buyer_entities])
-    validate_result, entity_indexes = validate_buyer_entities_info(validation_user, buyer_entities)
+    validate_result, entity_indexes = validate_buyer_entities_info(validation_user['email'], buyer_entities)
     validate_final_result = validate_final_result & validate_result
     error_entity_indexes = entity_indexes unless validate_result
-    render json: { validate_result: validate_final_result, error_fields: error_fields, error_entity_indexes: error_entity_indexes }, status: 200
+    render json: { validate_result: validate_final_result,
+                   error_fields: error_fields,
+                   error_entity_indexes: error_entity_indexes }, status: 200
   end
 
   private
 
-  def validate_buyer_entities_info(buyer, buyer_entities)
+  def validate_buyer_entities_info(buyer_email, buyer_entities)
     entity_indexes = []
-    # validate Entity' email must not be same with Buyer' email
+    user_emails = User.select(:email)
+    # validate Entity' email must not be same with any user's email
     buyer_entities.each_index do |index|
-      entity_indexes.push(index) if buyer_entities[index]['contact_email'] == buyer['email']
+      buyer_entity = buyer_entities[index]
+      if user_emails.any?{ |v| v.email == buyer_entity['contact_email'] } || buyer_email==buyer_entity['contact_email']
+        entity_indexes.push(index)
+      end
     end
 
     # validate Entity' email must be unique
     buyer_entities.each_index do |index| #entity_emails.push(x['contact_email'])
+      target_entity = buyer_entities[index]
       buyer_entities.each do |temp_entity|
-        if buyer_entities[index] != temp_entity && buyer_entities[index]['contact_email'] == temp_entity['contact_email']
+        if target_entity.object_id != temp_entity.object_id && target_entity['contact_email'] == temp_entity['contact_email']
           entity_indexes.push(index)
         end
       end
@@ -104,7 +111,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     [entity_indexes.blank?, entity_indexes]
   end
 
-  def update_buyer_entities(buyer_entities)
+  def update_buyer_entities( buyer_entities, need_create_user=false )
     ids = []
     buyer_entities.each do |buyer_entity|
       ids.push(buyer_entity['id']) if buyer_entity['id'].to_i != 0
@@ -133,7 +140,20 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
         target_buyer_entity.contact_mobile_no = buyer_entity['contact_mobile_no'] unless buyer_entity['contact_mobile_no'].blank?
         target_buyer_entity.contact_office_no = buyer_entity['contact_office_no'] unless buyer_entity['contact_office_no'].blank?
         target_buyer_entity.user = current_user
-        saved_buyer_entities.push(target_buyer_entity) if target_buyer_entity.save!
+        if target_buyer_entity.save!
+          saved_buyer_entities.push(target_buyer_entity)
+          if need_create_user then
+            new_entity_user = User.new
+            new_entity_user.name = target_buyer_entity.company_name
+            new_entity_user.email = target_buyer_entity.contact_email
+            new_entity_user.consumer_type = User::ConsumerTypeBuyerEntity
+            new_entity_user.approval_status = User::ApprovalStatusDisable
+            new_entity_user.password = 'password'
+            new_entity_user.password_confirmation = 'password'
+            new_entity_user.entity_id = target_buyer_entity.id
+            new_entity_user.add_role(:entity) if new_entity_user.save
+          end
+        end
       end
     end
     saved_buyer_entities

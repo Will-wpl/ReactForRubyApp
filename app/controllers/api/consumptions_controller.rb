@@ -3,6 +3,9 @@ class Api::ConsumptionsController < Api::BaseController
 
   def index
     consumptions = Consumption.find_by_user_consumer_type(params[:consumer_type]).find_by_auction_id(params[:id]).is_participation
+    unless params[:contract_duration].blank?
+      consumptions.where('consumptions = ?', params[:contract_duration])
+    end
     consumptions = (params[:consumer_type] == '2') ? consumptions.order('users.company_name asc') : consumptions.order('users.name asc')
     data = []
     total_info = { consumption_count: 0, account_count: 0, lt_peak: 0, lt_off_peak: 0,
@@ -65,8 +68,11 @@ class Api::ConsumptionsController < Api::BaseController
         @consumption = Consumption.new
         @consumption.auction_id = params[:auction_id]
         @consumption.user_id = params[:user_id]
-        @consumption.action_status = '2'
-        @consumption.participation_status = '2'
+        @consumption.action_status = Consumption::ActionStatusPending
+        @consumption.participation_status = Consumption::ParticipationStatusPending
+        #update - new field (20180711) - Start
+        @consumption.accept_status = Consumption::AcceptStatusPending
+        #update - new field (20180711) - End
         @consumption.save
         render json: @consumption, status: 201
       end
