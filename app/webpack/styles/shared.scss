@@ -107,8 +107,10 @@ abbr[title]{color: #fe0000; text-decoration: none;}
      overflow:auto; height: 30px;
      tr{ &.isbidder{background:green; transition: 0.5s all;}
        td{border:1px solid #314657; text-align: center; height: 40px; padding:5px; word-break: break-all;
-         span.fill_yes{
-           background: url("../images/notification_sent.png") no-repeat left; background-size:15px;  width:30px; display: inline-block; height:40px;
+         abbr{
+           display: inline-block; line-height: 40px; font-style: normal; transition: 0.5s all;
+           background: url("../images/notification_sent.png") no-repeat -20px 11px;
+           &.fill_yes{ background-position: 0px 11px; background-size:15px; padding-left: 20px;}
          }
         a{ 
           display: block; width: 100%; height: 100%; cursor: pointer;
@@ -170,7 +172,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 
 
 .mouth_tab{
-  .selected{background:#E60013}
+  .selected{background:forestgreen;}
 }
 //var modal css by will
 .modal_hide{ opacity: 0; z-index: -1;}
