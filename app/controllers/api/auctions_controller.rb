@@ -737,7 +737,7 @@ class Api::AuctionsController < Api::BaseController
 
   def get_auction_details(auction)
     auction_json = auction.attributes.dup
-    auction_json[:auction_contracts] = Auction.find(auction.id).auction_contracts
+    auction_json[:auction_contracts] = Auction.find(auction.id).auction_contracts.sort_by {|contract| contract.contract_duration.to_i}
     auction_json[:live_auction_contracts] = get_lived_auction_contracts(auction, true)
     auction_json
   end
@@ -784,8 +784,8 @@ class Api::AuctionsController < Api::BaseController
         auction_contracts.push(result)
       end
     end
-    auction_contracts
     # auction_contracts.sort! {|a,b| a.contract_duration.to_i <=> b.contract_duration.to_i}
+    auction_contracts
   end
 
 end
