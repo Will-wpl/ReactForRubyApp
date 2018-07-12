@@ -11,8 +11,12 @@ export default class ChartRealtimeHoc extends Component {
     }
 
     componentWillReceiveProps(next) {
+        console.log(next.dataStore);
+        if(next.livetab){
+            this.list=[];
+        }
         if (this.list.length === 0) {
-            this.list = this.list.concat(next.dataStore);
+            this.list = [].concat(next.dataStore);
         } else {
             next.dataStore.forEach(newData => {
                 let result = this.list.find(oldData => {

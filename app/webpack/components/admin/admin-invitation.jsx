@@ -418,6 +418,40 @@ upload(type, index){
 
             })
         }
+    auction_contracts(data,index){
+        let html = <div key={index}>
+            <h4 className="u-mt1 u-mb1">{data.contract_duration} Mouths</h4>
+            <table className="retailer_fill w_100" cellPadding="0" cellSpacing="0">
+            <thead>
+            <tr>
+                <th></th>
+                <th>LT</th>
+                <th>HT (Small)</th>
+                <th>HT (Large)</th>
+                <th>EHT</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Peak<br/>(7am-7pm)</td>
+                <td >{data.total_lt_peak ? formatPower(parseInt(Number(data.total_lt_peak)), 0, '') : 0}</td>
+                <td >{data.total_hts_peak ? formatPower(parseInt(Number(data.total_hts_peak)), 0, '') : 0}</td>
+                <td >{data.total_htl_peak ? formatPower(parseInt(Number(data.total_htl_peak)), 0, '') : 0}</td>
+                <td >{data.total_eht_peak ? formatPower(parseInt(Number(data.total_eht_peak)), 0, '') : 0}</td>
+            </tr>
+            <tr>
+                <td>Off-Peak<br/>(7pm-7am)</td>
+                <td >{data.total_lt_off_peak ? formatPower(parseInt(Number(data.total_lt_off_peak)), 0, '') : 0}</td>
+                <td >{data.total_hts_off_peak ? formatPower(parseInt(Number(data.total_hts_off_peak)), 0, '') : 0}</td>
+                <td >{data.total_htl_off_peak ? formatPower(parseInt(Number(data.total_htl_off_peak)), 0, '') : 0}</td>
+                <td >{data.total_eht_off_peak ? formatPower(parseInt(Number(data.total_eht_off_peak)), 0, '') : 0}</td>
+            </tr>
+            </tbody>
+        </table>
+            <div className="col-sm-12 col-md-6"><a href={`/admin/auctions/${sessionStorage.auction_id}/consumption?type=2&contract_duration=${data.contract_duration}`} className="lm--button lm--button--primary col-sm-12"><span>Company Consumption Details</span></a></div>
+        </div>
+        return html
+    }
 render() {
     let url;
     if(this.state.publish_status==0){
@@ -453,7 +487,7 @@ render() {
                                 </label>
                                 <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                 <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=2`} className="lm--button lm--button--primary col-sm-12"><span>Select Company Buyers</span></a></div>
-                                <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=3`} className="lm--button lm--button--primary col-sm-12"><span>Select Individual Buyers</span></a></div>
+                                {/*<div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=3`} className="lm--button lm--button--primary col-sm-12"><span>Select Individual Buyers</span></a></div>*/}
                                 <div className="col-sm-12 col-md-12 u-cell"><button className="lm--button lm--button--primary col-sm-12 orange" disabled={this.state.buyer_company_pend==0&&this.state.buyer_individual_pend==0?true:false} onClick={this.show_send_mail.bind(this,'buyer')}><span>Send Invitation Email</span></button></div>
                                 </div>
                             </div>}
@@ -503,7 +537,12 @@ render() {
                         </label>
                         <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                             <div className="col-sm-12 u-cell consumption" id="aggregate_consumption">
-                                <table className="retailer_fill w_100" cellPadding="0" cellSpacing="0">
+                                {this.state.auction.auction_contracts?(this.state.auction.auction_contracts.length>0?
+                                        this.state.auction.auction_contracts.map((item,index)=>{
+                                            return this.auction_contracts(item,index);
+                                        }):''
+                                )
+                                :<table className="retailer_fill w_100" cellPadding="0" cellSpacing="0">
                                         <thead>
                                         <tr>
                                             <th></th>
@@ -529,22 +568,21 @@ render() {
                                                 <td >{this.state.off_peak_eht}</td>
                                             </tr>
                                         </tbody>
-                                    </table>
+                                    </table>}
                                     <div className="required_error">
                                         At least one field in intake level must have value greater than 0 kWh.
                                     </div>
                                 </div>
-                                <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/consumption?type=2`} className="lm--button lm--button--primary col-sm-12"><span>Company Consumption Details</span></a></div>
-                                <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/consumption?type=3`} className="lm--button lm--button--primary col-sm-12"><span>Individual Consumption Details</span></a></div>
+                                {/*<div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/consumption?type=3`} className="lm--button lm--button--primary col-sm-12"><span>Individual Consumption Details</span></a></div>*/}
                         </div>
                     </div>
-                    <div className="lm--formItem lm--formItem--inline string u-mt3">
-                        <label className="lm--formItem-left lm--formItem-label string required">
-                        Upload files:
-                        </label>
-                        <div className="lm--formItem-right lm--formItem-control">
-                        </div>
-                    </div>
+                    {/*<div className="lm--formItem lm--formItem--inline string u-mt3">*/}
+                        {/*<label className="lm--formItem-left lm--formItem-label string required">*/}
+                        {/*Upload files:*/}
+                        {/*</label>*/}
+                        {/*<div className="lm--formItem-right lm--formItem-control">*/}
+                        {/*</div>*/}
+                    {/*</div>*/}
                     <div className="lm--formItem lm--formItem--inline string">
                         <label className="lm--formItem-left lm--formItem-label string required">
                            {/* <abbr title="required">*</abbr>*/}
@@ -554,30 +592,30 @@ render() {
                         {this.addinputfile("buyer_tc_upload", "required")}
                         </div>
                     </div>
-                    <div className="lm--formItem lm--formItem--inline string">
-                        <label className="lm--formItem-left lm--formItem-label string required">
-                        <abbr title="required">*</abbr> Retailer Confidentiality Undertaking Upload :
-                        </label>
-                        <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                        {this.addinputfile("retailer_confidentiality_undertaking_upload", "required")}
-                        </div>
-                    </div>
-                    <div className="lm--formItem lm--formItem--inline string">
-                        <label className="lm--formItem-left lm--formItem-label string required">
-                        <abbr title="required">*</abbr> Tender Documents Upload :
-                        </label>
-                        <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                        {this.addinputfile("tender_documents_upload", "required")}
-                        </div>
-                    </div>
-                    <div className="lm--formItem lm--formItem--inline string">
-                        <label className="lm--formItem-left lm--formItem-label string required">
-                        Birefing Pack Upload :
-                        </label>
-                        <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                        {this.addinputfile("birefing_pack_upload", "required")}
-                        </div>
-                    </div>
+                    {/*<div className="lm--formItem lm--formItem--inline string">*/}
+                        {/*<label className="lm--formItem-left lm--formItem-label string required">*/}
+                        {/*<abbr title="required">*</abbr> Retailer Confidentiality Undertaking Upload :*/}
+                        {/*</label>*/}
+                        {/*<div className="lm--formItem-right lm--formItem-control u-grid mg0">*/}
+                        {/*{this.addinputfile("retailer_confidentiality_undertaking_upload", "required")}*/}
+                        {/*</div>*/}
+                    {/*</div>*/}
+                    {/*<div className="lm--formItem lm--formItem--inline string">*/}
+                        {/*<label className="lm--formItem-left lm--formItem-label string required">*/}
+                        {/*<abbr title="required">*</abbr> Tender Documents Upload :*/}
+                        {/*</label>*/}
+                        {/*<div className="lm--formItem-right lm--formItem-control u-grid mg0">*/}
+                        {/*{this.addinputfile("tender_documents_upload", "required")}*/}
+                        {/*</div>*/}
+                    {/*</div>*/}
+                    {/*<div className="lm--formItem lm--formItem--inline string">*/}
+                        {/*<label className="lm--formItem-left lm--formItem-label string required">*/}
+                        {/*Birefing Pack Upload :*/}
+                        {/*</label>*/}
+                        {/*<div className="lm--formItem-right lm--formItem-control u-grid mg0">*/}
+                        {/*{this.addinputfile("birefing_pack_upload", "required")}*/}
+                        {/*</div>*/}
+                    {/*</div>*/}
                     <div className="retailer_btn">
                         <a className="lm--button lm--button--primary" href={this.state.publish_status === "0" ? "/admin/auctions/new" : "/admin/auctions/"+sessionStorage.auction_id+"/upcoming"}>Previous</a>
                         {this.state.readOnly?'':<a className="lm--button lm--button--primary" onClick={this.do_save.bind(this)}>Save</a>}

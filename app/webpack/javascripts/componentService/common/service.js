@@ -22,16 +22,21 @@ export const getBuyerUserInfo=()=>{
 
 export const getBuyerUserInfoByUserId=(id)=>{
     return get(`/api/admin/registrations/${id}/buyer_info?user_id=${id}`);
-
-    // return get(''${id}/buyer_info`);
 }
 
+export const validateIsExist=(params)=>{
+    console.log(params)
+    return put('/api/buyer/registrations/'+params.user.id+'/validate', params);
+}
+ 
 export const saveBuyerUserInfo=(params)=>{
     return put('/api/buyer/registrations/'+params.user.id,params);
 }
+
 export const submitBuyerUserInfo=(params)=>{
     return put('/api/buyer/registrations/'+params.user.id+'/sign_up',params);
 }
+
 
 
 

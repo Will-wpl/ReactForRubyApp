@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { UploadFile } from '../shared/upload';
 import { UserEntity } from '../shared/user-entity';
 import { Modal } from '../shared/show-modal';
-import { getBuyerUserInfo, saveBuyerUserInfo, submitBuyerUserInfo, getBuyerUserInfoByUserId } from '../../javascripts/componentService/common/service';
+import { getBuyerUserInfo, saveBuyerUserInfo, submitBuyerUserInfo, getBuyerUserInfoByUserId, validateIsExist } from '../../javascripts/componentService/common/service';
 import { approveUser } from '../../javascripts/componentService/admin/service';
 import { validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
 
@@ -20,7 +20,6 @@ export class BuyerRegister extends Component {
             allbtnStatus: true,
             validate: true,
             use_type: "",
-
             email_address: "",
             company_name: "",
             unique_entity_number: "",
@@ -39,13 +38,10 @@ export class BuyerRegister extends Component {
             user_contact_email: "",
             user_contact_mobile_no: "",
             user_contact_office_no: "",
-
             comment: "",
-
             buyerTCurl: "",
             buyerTCname: "",
             agree_seller_buyer: "0",
-
             buyerRevvTCurl: "",
             buyerRevvTCname: "",
             agree_buyer_revv: "0",
@@ -203,15 +199,15 @@ export class BuyerRegister extends Component {
                     param.buyer_entities.map((item, index) => {
                         if (index > 0) {
                             user_entity.push({
-                                user_company_name: entity[index].company_name ? entity[index].company_name : '',
-                                user_company_uen: entity[index].company_uen ? entity[index].company_uen : '',
-                                user_company_address: entity[index].company_address ? entity[index].company_address : '',
-                                user_billing_address: entity[index].billing_address ? entity[index].billing_address : '',
-                                user_bill_attention_to: entity[index].bill_attention_to ? entity[index].bill_attention_to : '',
-                                user_contact_name: entity[index].contact_name ? entity[index].contact_name : '',
-                                user_contact_email: entity[index].contact_email ? entity[index].contact_email : '',
-                                user_contact_mobile_no: entity[index].contact_mobile_no ? entity[index].contact_mobile_no : '',
-                                user_contact_office_no: entity[index].contact_office_no ? entity[index].contact_office_no : ''
+                                company_name: entity[index].company_name ? entity[index].company_name : '',
+                                company_uen: entity[index].company_uen ? entity[index].company_uen : '',
+                                company_address: entity[index].company_address ? entity[index].company_address : '',
+                                billing_address: entity[index].billing_address ? entity[index].billing_address : '',
+                                bill_attention_to: entity[index].bill_attention_to ? entity[index].bill_attention_to : '',
+                                contact_name: entity[index].contact_name ? entity[index].contact_name : '',
+                                contact_email: entity[index].contact_email ? entity[index].contact_email : '',
+                                contact_mobile_no: entity[index].contact_mobile_no ? entity[index].contact_mobile_no : '',
+                                contact_office_no: entity[index].contact_office_no ? entity[index].contact_office_no : ''
                             });
                         }
                     })
@@ -240,7 +236,7 @@ export class BuyerRegister extends Component {
         }
     }
 
-    checkRejectAction() {
+    checkRejectAction() { //when admin reject the request 
         let flag = true;
         let arr = validator_Object(this.state, this.validatorComment);
         if (arr) {
@@ -262,8 +258,8 @@ export class BuyerRegister extends Component {
     }
 
 
-    checkSuccess() {
-        let flag = true, hasDoc = true;
+    checkSuccess() { //buyer register or manage account 
+        let flag = true, hasDoc = true, checkSelect = true;
         let arr = validator_Object(this.state, this.validatorItem);
         if (arr) {
             arr.map((item, index) => {
@@ -304,7 +300,19 @@ export class BuyerRegister extends Component {
                 return false;
             }
         })
-        return flag && hasDoc;
+        if ($('#chkBuyer').is(':checked') && $('#chkRevv').is(':checked')) {
+            checkSelect = true;
+        }
+        else {
+            checkSelect = false;
+            if (!$('#chkBuyer').is(':checked')) {
+                $("#chkBuyer_message").removeClass('isPassValidate').addClass('errormessage');
+            }
+            if (!$('#chkRevv').is(':checked')) {
+                $("#chkRevv_message").removeClass('isPassValidate').addClass('errormessage');
+            }
+        }
+        return flag && hasDoc && checkSelect;
     }
 
     setParams() {
@@ -326,15 +334,15 @@ export class BuyerRegister extends Component {
             let list = this.state.user_entity_data['ENTITY_LIST'][0].entities;
             list.map((item, index) => {
                 let paramObj = {
-                    company_name: item.user_company_name,
-                    company_uen: item.user_company_uen,
-                    company_address: item.user_company_address,
-                    billing_address: item.user_billing_address,
-                    bill_attention_to: item.user_bill_attention_to,
-                    contact_name: item.user_contact_name,
-                    contact_email: item.user_contact_email,
-                    contact_mobile_no: item.user_contact_mobile_no,
-                    contact_office_no: item.user_contact_office_no
+                    company_name: item.company_name,
+                    company_uen: item.company_uen,
+                    company_address: item.company_address,
+                    billing_address: item.billing_address,
+                    bill_attention_to: item.bill_attention_to,
+                    contact_name: item.contact_name,
+                    contact_email: item.contact_email,
+                    contact_mobile_no: item.contact_mobile_no,
+                    contact_office_no: item.contact_office_no
                 }
                 entity.push(paramObj);
             })
@@ -527,18 +535,28 @@ export class BuyerRegister extends Component {
         let isValidator = this.checkSuccess();
         if (isValidator) {
             let buyerParam = this.setParams();
-            submitBuyerUserInfo(buyerParam).then(res => {
+            validateIsExist(buyerParam).then(res => {
+                if (true) {
+                    submitBuyerUserInfo(buyerParam).then(res => {
+                        this.setState(
+                            {
+                                user_company_name: this.state.company_name,
+                                user_company_uen: this.state.unique_entity_number,
+                                user_company_address: this.state.company_address,
+                                text: "Your details have been successfully submitted. "
+                            }
+                        );
+                        this.refs.Modal.showModal();
+                    })
+                }
+                else {
 
-                this.setState(
-                    {
-                        user_company_name: this.state.company_name,
-                        user_company_uen: this.state.unique_entity_number,
-                        user_company_address: this.state.company_address,
-                        text: "Your details have been successfully submitted. "
-                    }
-                );
-                this.refs.Modal.showModal();
+                }
             })
+
+
+
+
         }
 
     }
@@ -609,7 +627,6 @@ export class BuyerRegister extends Component {
                     <div>
                         <div className="u-grid admin_invitation">
                             <div className="col-sm-12 col-md-6 push-md-3 validate_message">
-                                {/* <h3 className="u-mt3 u-mb1">Buyer Register Page</h3> */}
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
                                         <abbr title="required">*</abbr> Email:
