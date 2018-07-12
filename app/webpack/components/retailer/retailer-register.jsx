@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import { UploadFile } from '../shared/upload';
 import { Modal } from '../shared/show-modal';
-import { getRetailerUserInfo, saveRetailManageInfo, submitRetailManageInfo, getRetailerUserInfoByUserId } from '../../javascripts/componentService/retailer/service';
+import { getRetailerUserInfo, saveRetailManageInfo, submitRetailManageInfo, getRetailerUserInfoByUserId, validateIsExist } from '../../javascripts/componentService/retailer/service';
 import { approveUser } from '../../javascripts/componentService/admin/service';
 import { validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
 export class RetailerRegister extends Component {
@@ -21,7 +21,7 @@ export class RetailerRegister extends Component {
             company_name: "",
             unique_entity_number: "",
             company_address: "",
-            licence_number: "",
+            license_number: "",
             gst_no: "",
             contact_name: "",
             mobile_number: "",
@@ -49,7 +49,7 @@ export class RetailerRegister extends Component {
             company_name: { cate: 'required' },
             unique_entity_number: { cate: 'required' },
             company_address: { cate: 'required' },
-            licence_number: { cate: 'required' },
+            license_number: { cate: 'required' },
             gst_no: { cate: 'required' },
             contact_name: { cate: 'required' },
             mobile_number: { cate: 'num' },
@@ -105,7 +105,7 @@ export class RetailerRegister extends Component {
                 company_name: item.company_name ? item.company_name : '',
                 unique_entity_number: item.company_unique_entity_number ? item.company_unique_entity_number : '',
                 company_address: item.company_address ? item.company_address : '',
-                licence_number: item.company_license_number ? item.company_license_number : '',
+                license_number: item.company_license_number ? item.company_license_number : '',
                 gst_no: item.gst_no ? item.gst_no : '',
                 contact_name: item.name ? item.name : '',
                 mobile_number: item.account_mobile_number ? item.account_mobile_number : '',
@@ -178,7 +178,6 @@ export class RetailerRegister extends Component {
 
     checkValidation() {
         let flag = true, hasDoc = true;
-
         //validate form 
         let arr = validator_Object(this.state, this.validatorItem);
         if (arr) {
@@ -247,9 +246,9 @@ export class RetailerRegister extends Component {
                 this.setState({ company_address: itemValue });
                 changeValidate('company_address', itemValue);
                 break;
-            case 'licence_number':
-                this.setState({ licence_number: itemValue });
-                changeValidate('licence_number', itemValue);
+            case 'license_number':
+                this.setState({ license_number: itemValue });
+                changeValidate('license_number', itemValue);
                 break;
             case 'gst_no':
                 this.setState({ gst_no: itemValue });
@@ -302,7 +301,7 @@ export class RetailerRegister extends Component {
     }
     submit() {
         if (this.checkValidation()) {
-            submitRetailManageInfo({
+            validateIsExist({
                 user: {
                     'id': this.state.id,
                     'email': this.state.email_address,
@@ -318,12 +317,44 @@ export class RetailerRegister extends Component {
                     'agree_seller_revv': this.state.agree_seller_revv
                 }
             }).then(res => {
-                this.refs.Modal.showModal();
-                this.setState({
-                    text: "Your details have been successfully submitted. "
-                });
-
+                if (res.validate_result)//validate pass
+                {
+                    submitRetailManageInfo({
+                        user: {
+                            'id': this.state.id,
+                            'email': this.state.email_address,
+                            'company_name': this.state.company_name,
+                            'company_unique_entity_number': this.state.unique_entity_number,
+                            'company_address': this.state.company_address,
+                            'company_license_number': this.state.license_number,
+                            'gst_no': this.state.gst_no,
+                            'name': this.state.contact_name,
+                            'account_mobile_number': this.state.mobile_number,
+                            'account_office_number': this.state.office_number,
+                            'agree_seller_buyer': this.state.agree_seller_buyer,
+                            'agree_seller_revv': this.state.agree_seller_revv
+                        }
+                    }).then(res => {
+                        this.refs.Modal.showModal();
+                        $('#license_number_repeat').removeClass('errormessage').addClass('isPassValidate');
+                        this.setState({
+                            text: "Your details have been successfully submitted. "
+                        });
+                    })
+                }
+                else {
+                    if (res.error_fields) {
+                        for (let item of res.error_fields) {
+                            if (item === 'company_license_number') {
+                                $('#license_number_repeat').removeClass('isPassValidate').addClass('errormessage');
+                            }
+                        }
+                    }
+                }
             })
+
+
+
         }
 
     }
@@ -453,11 +484,12 @@ export class RetailerRegister extends Component {
 
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr> Retailer Licence Number:
+                                        <abbr title="required">*</abbr> Retailer License Number:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="licence_number" value={this.state.licence_number} onChange={this.Change.bind(this, 'licence_number')} disabled={this.state.disabled} ref="licence_number" required aria-required="true" title="Please fill out this field" ></input>
-                                        <div className='isPassValidate' id='licence_number_message' >This field is required!</div>
+                                        <input type="text" name="license_number" value={this.state.license_number} onChange={this.Change.bind(this, 'license_number')} disabled={this.state.disabled} ref="license_number" required aria-required="true" title="Please fill out this field" ></input>
+                                        <div className='isPassValidate' id='license_number_message' >This field is required!</div>
+                                        <div className='isPassValidate' id='license_number_repeat' >Retailer license number has already been taken.</div>
                                     </div>
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
