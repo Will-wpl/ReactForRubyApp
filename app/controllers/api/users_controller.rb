@@ -58,6 +58,8 @@ class Api::UsersController < Api::BaseController
     render json: user, status: 200
   end
 
+  protected
+
   # Approval User
   # Params:
   #   user_id  -> Indicate a user's id which will be approved or rejected
@@ -73,7 +75,8 @@ class Api::UsersController < Api::BaseController
     elsif approval_status == User::ApprovalStatusReject
       UserMailer.reject_email(target_user).deliver_later
     end
-    render json: {user_base_info: target_user}, status:200
+    result_json = {user_base_info: target_user}
+    result_json
   end
 
   private

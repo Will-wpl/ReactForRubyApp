@@ -10,9 +10,13 @@ export class Modal extends React.Component {
             props_data: {},
             strtype: '',
             email_subject: '',
-            email_body: ''
+            email_body: '',
+            consumption_account_list: [],
+            consumption_account_item: this.props.consumption_account_item,
+            model_width: '',
+            model_height: ''
         }
-        console.log()
+        console.log(this.props.consumption_account_item)
     }
     showModal(type, data, str) {
         if (str) {
@@ -34,7 +38,12 @@ export class Modal extends React.Component {
             this.setState({
                 type: "comfirm"
             })
-        } else {
+        } else if (type === 'custom') {
+            this.setState({
+                type: "custom"
+            })
+        }
+        else {
             this.setState({
                 type: "default"
             })
@@ -64,6 +73,12 @@ export class Modal extends React.Component {
             type: "default"
         })
     }
+    Add() {
+
+    }
+    changelevel() {
+
+    }
     removefile(type, index, id) {
         if (confirm("Are you sure you want to delete this file?")) {
             if (this.props.otherFunction) {
@@ -81,12 +96,14 @@ export class Modal extends React.Component {
         }
     }
     closeModal() {
-
         this.setState({
             modalshowhide: "modal_hide"
         })
     }
     componentDidMount() {
+
+    }
+    checkConsumption() {
 
     }
     render() {
@@ -247,28 +264,110 @@ export class Modal extends React.Component {
             }
             if (this.props.listdetailtype === 'Buyer Documents Message') {
                 showDetail = <ul className="showdetail">
-                <li>Please upload the following documentations:</li>
-                <li>1) A print-out of this <a href='#'> Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
-                <li>2a) Your company's Accounting & Corporate Regulatory Authority (ACRA) Business Profile.</li>
-                <li>or</li>
-                <li>2b) Your company's Certificate of Incorporation if you are not registered with Accounting & Corporate Regulatory Authority (ACRA).</li>
-                <li>3) Directors' Resolution authorising the Authorised Representative to transact for and on behalf of the Company in this platform.</li>
-                <li>4) A copy of the Applicant's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
-                <li>5) A copy of the Authorised Representative's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
-                <li>All supporting documents submitted should be in English only.</li>
-            </ul>
+                    <li>Please upload the following documentations:</li>
+                    <li>1) A print-out of this <a href='#'> Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
+                    <li>2a) Your company's Accounting & Corporate Regulatory Authority (ACRA) Business Profile.</li>
+                    <li>or</li>
+                    <li>2b) Your company's Certificate of Incorporation if you are not registered with Accounting & Corporate Regulatory Authority (ACRA).</li>
+                    <li>3) Directors' Resolution authorising the Authorised Representative to transact for and on behalf of the Company in this platform.</li>
+                    <li>4) A copy of the Applicant's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
+                    <li>5) A copy of the Authorised Representative's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
+                    <li>All supporting documents submitted should be in English only.</li>
+                </ul>
+            }
+            if (this.props.listdetailtype === 'consumption_detail') {
+                showDetail = <div>
+                    <h3>My Account Information</h3>
+                    <table className="consumption_table  u-mb3" cellPadding="0" cellSpacing="0" style={{ marginTop: "15px" }}>
+                        <tbody>
+                            <tr>
+                                <td>Account No.</td>
+                                <td>
+                                    <input type="text" disabled={this.props.checked} defaultValue={this.props.consumption_account_item.account_number} id="account_number" required aria-required="true" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Existing Plan</td>
+                                <td>
+                                    <select>
+                                        <option value="SPS tariff">SPS tariff</option>
+                                        <option value="SPS wholesale">SPS wholesale</option>
+                                        <option value="Retailer plan">Retailer plan</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Contract Expiry</td>
+                                <td>
+                                    <input type="text" disabled={this.props.checked} defaultValue={this.props.consumption_account_item.account_number} id="account_number" required aria-required="true" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Purchasing Entity</td>
+                                <td>
+                                    {/* <select >
+                                        {
+                                            this.props.consuption_account_item.map(item => {
+                                                return <option key={item.company_name} value={item.company_name}>{item.company_name}</option>
+                                            })
+                                        }
+                                    </select> */}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Intake Level</td>
+                                <td>
+                                    {/* <select id="intake_level" onChange={this.changelevel.bind(this)} disabled={this.props.checked} name="intake_level" defaultValue={this.props.consuption_account_item.intake_level_selected}>
+                                        {
+                                            this.props.consuption_account_item.intake_level.map((it, i) => <option key={i} value={(it.split("(")[1]).split(")")[0]}>{it}</option>)
+                                        }
+                                    </select> */}
+                                    {
+
+                                    
+                                    //  this.props.consuption_account_item.intake_level.map((it, i) => <option key={i} value={(it.split("(")[1]).split(")")[0]}>{it}</option>)
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Contract Capacity</td>
+                                <td>
+                                    <input type="text" disabled={this.props.checked} defaultValue={this.props.consumption_account_item.account_number} id="account_number" required aria-required="true" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Permise Address</td>
+                                <td>
+                                    <input type="text" disabled={this.props.checked} defaultValue={this.props.consumption_account_item.account_number} id="account_number" required aria-required="true" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Consumption Details</td>
+                                <td>
+                                    <input type="text" disabled={this.props.checked} defaultValue={this.props.consumption_account_item.account_number} id="account_number" required aria-required="true" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             }
         }
         let btn_html = '';
         if (this.state.type == "default") {
             btn_html = <div className="modal_btn"><a onClick={this.closeModal.bind(this)}>OK</a></div>;
-        } else {
-            btn_html = <div className="modal_btn"><a onClick={this.Accept.bind(this)}>Yes</a><a onClick={this.closeModal.bind(this)}>No</a></div>;
+        } else if (this.state.type == "custom") {
+            btn_html =
+                <div className="modal_btn"><a onClick={this.Accept.bind(this)}>Yes</a><a onClick={this.closeModal.bind(this)}>No</a></div>;
+        }
+        else {
+            btn_html = <div className="modal_btn"><a onClick={this.Add.bind(this)}>Add</a><a onClick={this.closeModal.bind(this)}>Cancel</a></div>;
         }
         return (
-            <div id="modal_main" className={this.state.modalshowhide}>
+            <div id="modal_main" className={` ${this.props.changeSize === "1" ? 'consumption_model' : ''}  ${this.state.modalshowhide}`}   >
                 <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
-                <div className="modal_detail"><div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}</div>
+                <div className="modal_detail">
+                    <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
+                </div>
                 {btn_html}
             </div>
         )
