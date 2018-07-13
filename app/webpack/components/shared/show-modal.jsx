@@ -356,11 +356,11 @@ export class Modal extends React.Component {
         if (this.state.type == "default") {
             btn_html = <div className="modal_btn"><a onClick={this.closeModal.bind(this)}>OK</a></div>;
         } else if (this.state.type == "custom") {
-            btn_html =
-                <div className="modal_btn"><a onClick={this.Accept.bind(this)}>Yes</a><a onClick={this.closeModal.bind(this)}>No</a></div>;
+            btn_html = <div className="modal_btn"><a onClick={this.Add.bind(this)}>Add</a><a onClick={this.closeModal.bind(this)}>Cancel</a></div>;
         }
         else {
-            btn_html = <div className="modal_btn"><a onClick={this.Add.bind(this)}>Add</a><a onClick={this.closeModal.bind(this)}>Cancel</a></div>;
+            btn_html =
+                <div className="modal_btn"><a onClick={this.Accept.bind(this)}>Yes</a><a onClick={this.closeModal.bind(this)}>No</a></div>;
         }
         return (
             <div id="modal_main" className={` ${this.props.changeSize === "1" ? 'consumption_model' : ''}  ${this.state.modalshowhide}`}   >
