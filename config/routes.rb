@@ -169,7 +169,7 @@ Rails.application.routes.draw do
           get 'award'
         end
       end
-      resources :consumptions, only: %i[] do
+      resources :consumptions, only: %i[index] do
         member do
           post 'acknowledge'
         end
@@ -297,7 +297,7 @@ Rails.application.routes.draw do
       end
     end
     resources :auction_results, only: [:index]
-    resources :auctions, only: %i[upcoming live finish result empty goto message gotobid] do
+    resources :auctions, only: %i[upcoming live finish result empty goto message gotobid consumption] do
       member do
         get 'upcoming' # upcoming auction page
         get 'live' # standby and live page
@@ -307,6 +307,7 @@ Rails.application.routes.draw do
         get 'goto'
         get 'message' # no published auction page
         get 'gotobid'
+        get 'consumption' # select users page
       end
       collection do
       end
