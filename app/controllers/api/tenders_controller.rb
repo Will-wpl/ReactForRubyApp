@@ -15,14 +15,14 @@ class Api::TendersController < Api::TendersBaseController
   def node2_retailer
     auction = @arrangement.auction
     if auction.auction_contracts.blank?
-      aggregate_consumptions = { total_lt_peak: auction.total_lt_peak,
+      aggregate_consumptions = [{ total_lt_peak: auction.total_lt_peak,
                                  total_lt_off_peak: auction.total_lt_off_peak,
                                  total_hts_peak: auction.total_hts_peak,
                                  total_hts_off_peak: auction.total_hts_off_peak,
                                  total_htl_peak: auction.total_htl_peak,
                                  total_htl_off_peak: auction.total_htl_off_peak,
                                  total_eht_peak: auction.total_eht_peak,
-                                 total_eht_off_peak: auction.total_eht_off_peak }
+                                 total_eht_off_peak: auction.total_eht_off_peak }]
     else
       aggregate_consumptions = get_lived_auction_contracts(auction, false)
     end
