@@ -14,24 +14,23 @@ class Api::TendersController < Api::TendersBaseController
 
   def node2_retailer
     auction = @arrangement.auction
-    aggregate_consumptions = { total_lt_peak: auction.total_lt_peak,
-                               total_lt_off_peak: auction.total_lt_off_peak,
-                               total_hts_peak: auction.total_hts_peak,
-                               total_hts_off_peak: auction.total_hts_off_peak,
-                               total_htl_peak: auction.total_htl_peak,
-                               total_htl_off_peak: auction.total_htl_off_peak,
-                               total_eht_peak: auction.total_eht_peak,
-                               total_eht_off_peak: auction.total_eht_off_peak }
+    if auction.auction_contracts.blank?
+      aggregate_consumptions = { total_lt_peak: auction.total_lt_peak,
+                                 total_lt_off_peak: auction.total_lt_off_peak,
+                                 total_hts_peak: auction.total_hts_peak,
+                                 total_hts_off_peak: auction.total_hts_off_peak,
+                                 total_htl_peak: auction.total_htl_peak,
+                                 total_htl_off_peak: auction.total_htl_off_peak,
+                                 total_eht_peak: auction.total_eht_peak,
+                                 total_eht_off_peak: auction.total_eht_off_peak }
+    else
+      aggregate_consumptions = get_lived_auction_contracts(auction, false)
+    end
     attachments = AuctionAttachment.belong_auction(@arrangement.auction_id)
                       .where(file_type: 'tender_documents_upload').order(:created_at)
     render json: { aggregate_consumptions: aggregate_consumptions, attachments: attachments }, status: 200
   end
 
-  def simple_node2_retailer
-    auction = @arrangement.auction
-    data = get_lived_auction_contracts(auction, false)
-    render json: { aggregate_consumptions: data }, status: 200
-  end
 
   def node3_retailer
     attachments_count = AuctionAttachment.belong_auction(@arrangement.auction_id)
