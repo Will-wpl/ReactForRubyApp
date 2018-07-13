@@ -583,15 +583,15 @@ render() {
                         {/*<div className="lm--formItem-right lm--formItem-control">*/}
                         {/*</div>*/}
                     {/*</div>*/}
-                    <div className="lm--formItem lm--formItem--inline string">
-                        <label className="lm--formItem-left lm--formItem-label string required">
-                           {/* <abbr title="required">*</abbr>*/}
-                            Buyer T&C Upload :
-                        </label>
-                        <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                        {this.addinputfile("buyer_tc_upload", "required")}
-                        </div>
-                    </div>
+                    {/*<div className="lm--formItem lm--formItem--inline string">*/}
+                        {/*<label className="lm--formItem-left lm--formItem-label string required">*/}
+                           {/*/!* <abbr title="required">*</abbr>*!/*/}
+                            {/*Buyer T&C Upload :*/}
+                        {/*</label>*/}
+                        {/*<div className="lm--formItem-right lm--formItem-control u-grid mg0">*/}
+                        {/*{this.addinputfile("buyer_tc_upload", "required")}*/}
+                        {/*</div>*/}
+                    {/*</div>*/}
                     {/*<div className="lm--formItem lm--formItem--inline string">*/}
                         {/*<label className="lm--formItem-left lm--formItem-label string required">*/}
                         {/*<abbr title="required">*</abbr> Retailer Confidentiality Undertaking Upload :*/}
@@ -608,14 +608,14 @@ render() {
                         {/*{this.addinputfile("tender_documents_upload", "required")}*/}
                         {/*</div>*/}
                     {/*</div>*/}
-                    {/*<div className="lm--formItem lm--formItem--inline string">*/}
-                        {/*<label className="lm--formItem-left lm--formItem-label string required">*/}
-                        {/*Birefing Pack Upload :*/}
-                        {/*</label>*/}
-                        {/*<div className="lm--formItem-right lm--formItem-control u-grid mg0">*/}
-                        {/*{this.addinputfile("birefing_pack_upload", "required")}*/}
-                        {/*</div>*/}
-                    {/*</div>*/}
+                    <div className="lm--formItem lm--formItem--inline string">
+                        <label className="lm--formItem-left lm--formItem-label string required">
+                        Birefing Pack Upload :
+                        </label>
+                        <div className="lm--formItem-right lm--formItem-control u-grid mg0">
+                        {this.addinputfile("birefing_pack_upload", "required")}
+                        </div>
+                    </div>
                     <div className="retailer_btn">
                         <a className="lm--button lm--button--primary" href={this.state.publish_status === "0" ? "/admin/auctions/new" : "/admin/auctions/"+sessionStorage.auction_id+"/upcoming"}>Previous</a>
                         {this.state.readOnly?'':<a className="lm--button lm--button--primary" onClick={this.do_save.bind(this)}>Save</a>}
