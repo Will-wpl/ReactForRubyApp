@@ -7,8 +7,14 @@ class Api::TendersController < Api::TendersBaseController
   end
 
   def node1_retailer
-    attachments = AuctionAttachment.belong_auction(@arrangement.auction_id)
-                      .where(file_type: 'retailer_confidentiality_undertaking_upload').order(:created_at)
+    auction = @arrangement.auction
+    if auction.auction_contracts.blank?
+      attachments = AuctionAttachment.belong_auction(@arrangement.auction_id)
+                        .where(file_type: 'retailer_confidentiality_undertaking_upload').order(:created_at)
+    else
+      attachments = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_REVV_TC)
+    end
+
     render json: attachments, status: 200
   end
 
@@ -23,11 +29,13 @@ class Api::TendersController < Api::TendersBaseController
                                  total_htl_off_peak: auction.total_htl_off_peak,
                                  total_eht_peak: auction.total_eht_peak,
                                  total_eht_off_peak: auction.total_eht_off_peak }]
+      attachments = AuctionAttachment.belong_auction(@arrangement.auction_id)
+                        .where(file_type: 'tender_documents_upload').order(:created_at)
     else
       aggregate_consumptions = get_lived_auction_contracts(auction, false)
+      attachments = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)
     end
-    attachments = AuctionAttachment.belong_auction(@arrangement.auction_id)
-                      .where(file_type: 'tender_documents_upload').order(:created_at)
+
     render json: { aggregate_consumptions: aggregate_consumptions, attachments: attachments }, status: 200
   end
 
