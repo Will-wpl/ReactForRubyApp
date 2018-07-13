@@ -23,7 +23,8 @@ export default class AdminComsumption extends Component {
 }
 
 componentDidMount() {
-    getBuyerDetails({id:sessionStorage.auction_id,type:this.datail_type}).then(res=>{
+      let role = window.location.href.indexOf('admin')>0?'admin':(window.location.href.indexOf('retailer')>0?'retailer':'admin');
+    getBuyerDetails({id:sessionStorage.auction_id,type:this.datail_type,role:role}).then(res=>{
         //console.log(res);
         this.setState({
             comsumption_list:res.list,

@@ -48,7 +48,7 @@ export const sendMail = (params) => {
 }
 
 export const getBuyerDetails = (params) => {
-    return get('/api/admin/consumptions?id='+params.id+'&consumer_type='+params.type);
+    return get('/api/'+params.role+'/consumptions?id='+params.id+'&consumer_type='+params.type);
 }
 
 export const getAdminBuyerListDetails = (params) => {
