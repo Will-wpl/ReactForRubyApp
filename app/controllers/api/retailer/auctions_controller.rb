@@ -71,23 +71,40 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
   def get_obtain(params)
     auction = Auction.find(params[:id])
     if Arrangement.auction_of_current_user(auction.id, current_user.id).exists?
+      step = get_workflow_steps(auction)
       if auction.auction_contracts.blank?
           # if two volumes of one intake level are 0, then no need to handle this field during whole auction process.
-          has_lt = !is_zero(auction.total_lt_peak, auction.total_lt_off_peak)
+        has_lt = !is_zero(auction.total_lt_peak, auction.total_lt_off_peak)
           has_hts = !is_zero(auction.total_hts_peak, auction.total_hts_off_peak)
           has_htl = !is_zero(auction.total_htl_peak, auction.total_htl_off_peak)
           has_eht = !is_zero(auction.total_eht_peak, auction.total_eht_off_peak)
 
           render json: { id: auction.id, publish_status: auction.publish_status, name: auction.name, retailer_mode: auction.retailer_mode,
-                         has_lt: has_lt, has_hts: has_hts, has_htl: has_htl, has_eht: has_eht, starting_price: auction.starting_price, start_datetime: auction.actual_begin_time }, status: 200
+                         has_lt: has_lt, has_hts: has_hts, has_htl: has_htl, has_eht: has_eht, starting_price: auction.starting_price, start_datetime: auction.actual_begin_time, step: step }, status: 200
       else
         auction_contracts = get_lived_auction_contracts(auction , false)
         render json: { id: auction.id, publish_status: auction.publish_status, name: auction.name, retailer_mode: auction.retailer_mode,
                        has_lt: has_lt, has_hts: has_hts, has_htl: has_htl, has_eht: has_eht, starting_price: auction.starting_price,
-                       start_datetime: auction.actual_begin_time, live_auction_contracts: auction_contracts }
+                       start_datetime: auction.actual_begin_time, live_auction_contracts: auction_contracts, step: step }
       end
     else
       render json: { message: 'you can not get the auction information.' }, status: 400
+    end
+  end
+
+  def get_workflow_steps(auction)
+    if auction.auction_contracts.blank?
+      5
+    else
+      if auction.buyer_type == Auction::SingleBuyerType
+        if auction.allow_deviation == Auction::AllowDeviation
+          4
+        else
+          3
+        end
+      else
+        3
+      end
     end
   end
 end
