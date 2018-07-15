@@ -2,32 +2,14 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import { Modal } from '../shared/show-modal';
 import { DoFillConsumption } from './fill-consumption'
-import moment from 'moment';
+
 import { getBuyerParticipate, setBuyerParticipate } from '../../javascripts/componentService/common/service';
+import moment from 'moment';
+
 export class FillConsumption extends Component {
     constructor(props) {
         super(props);
 
-        this.accountItem = {
-            account_number: '',
-            existing_plan: '',
-            contract_expiry: '',
-            purchasing_entity: [],
-            premise_address: '',
-            intake_level: ['Low Tension (LT)', 'High Tension Small (HTS)', 'High Tension Large (HTL)', 'Extra High Tension (EHT)'],
-            intake_level_selected: 'LT',
-            contracted_capacity: null,
-            blk_or_unit: '',
-            street: '',
-            unit_number: '',
-            postal_code: '',
-            totals: '',
-            peak_pct: '',
-            peak: '',
-            off_peak: '',
-            id: 0,
-            cid: Math.floor((Math.random() * 10000) + 1)
-        }
         this.state = {
             text: "",
             submit_type: "",
@@ -40,18 +22,45 @@ export class FillConsumption extends Component {
             durationList: [],
             durtioanItem: "",
             account_detail: this.accountItem,
-            account_list: []
+            account_list: [],
+            contract_capacity_disabled: true,
+            contract_expiry_disabled: true,
+            dateIssuecount: 0
         }
+        this.accountItem = {
+            account_number: '',
+            existing_plan: ['SPS tariff', 'SPS wholesale', 'Retailer plan'],
+            existing_plan_selected: 'SPS tariff',
+            contract_expiry: '',
+            purchasing_entity: this.purchaseList,
+            purchasing_entity_selectd: '',
+            premise_address: '',
+            intake_level: ['Low Tension (LT)', 'High Tension Small (HTS)', 'High Tension Large (HTL)', 'Extra High Tension (EHT)'],
+            intake_level_selected: 'LT',
+            contracted_capacity: '',
+            blk_or_unit: '',
+            street: '',
+            unit_number: '',
+            postal_code: '',
+            totals: '',
+            peak_pct: '',
+            peak: '',
+            off_peak: '',
+            id: 0,
+            cid: Math.floor((Math.random() * 10000) + 1),
+            option: 'insert'
+        };
+        this.purchaseList = [];
         this.consumptions_id = (window.location.href.split("consumptions/")[1]).split("/edit")[0];
     }
     componentDidMount() {
         this.BuyerParticipateList();
-        this.buyerPurchseList();
     }
     buyerPurchseList() {
 
     }
     BuyerParticipateList() {
+        console.log(this.consumptions_id);
         getBuyerParticipate('/api/buyer/consumption_details?consumption_id=' + this.consumptions_id).then((res) => {
             console.log(res);
             this.site_list = res.consumption_details;
@@ -62,7 +71,7 @@ export class FillConsumption extends Component {
                 time: res.auction.actual_begin_time,
                 link: res.tc_attachment,
             })
-            //console.log(this.site_list);
+
             if (res.consumption.participation_status === '1' || res.auction.publish_status === "1") {
                 $("input[type='checkbox']").attr("checked", true);
                 this.setState({
@@ -75,81 +84,75 @@ export class FillConsumption extends Component {
                     durationList: res.contract_duration
                 })
             }
+            if (res.buyer_entities) {
+                this.purchaseList = res.buyer_entities;
+            }
             if (res.consumption_details.length > 0) {
-                this.site_list.map((item, index) => {
-                    this.site_list[index].intake_level_selected = item.intake_level;
-                    this.site_list[index].intake_level = ['Low Tension (LT)', 'High Tension Small (HTS)', 'High Tension Large (HTL)', 'Extra High Tension (EHT)'];
-                    this.site_list[index].cid = index;
-                })
-                this.setState({ site_list: this.site_list })
-            } else {
-                this.site_list = [
-                    {
-                        account_number: '',
-                        premise_address: '',
-                        intake_level: ['Low Tension (LT)', 'High Tension Small (HTS)', 'High Tension Large (HTL)', 'Extra High Tension (EHT)'],
-                        intake_level_selected: 'LT',
-                        contracted_capacity: null,
-                        peak: '',
-                        off_peak: '',
-                        cid: 1,
-                        id: 0
-                    }
-                ]
-                this.setState({ site_list: this.site_list })
+                this.setState({ site_list: res.consumption_details });
             }
         }, (error) => {
             this.refs.Modal.showModal();
-            this.setState({ text: "Interface failed" });
+            this.setState({ text: "Interface failed4" });
         })
     }
     changeSiteList(val, index) {
-        // console.log(val);
         let list = this.state.site_list;
         this.site_list[index].intake_level_selected = val;
         this.setState({ site_list: list })
     }
+
+    // doCheck() {
+    //     let validateItem = {
+    //         account_number: { cate: "required" },
+    //         existing_plan: { cate: "required" },
+    //         contract_expiry: { cate: "required" },
+    //         purchasing_entity: { cate: "required" },
+    //         intake_level: { cate: "required" },
+    //         contract_capacity: { cate: "num" },
+    //         blk_or_unit: { cate: "required" },
+    //         street: { cate: "required" },
+    //         unit_number: { cate: "required" },
+    //         postal_code: { cate: "required" },
+    //         totals: { cate: "num" },
+    //         peak_pct: { cate: "less100" },
+    //     }
+    // }
+
     add_site() {
         if (this.props.onAddClick) {
             this.props.onAddClick();
         }
-        let list = {},
-            site_listObj = this.state.site_list;
-        //console.log(site_listObj);
-        list = {
-            account_number: '',
-            premise_address: '',
-            intake_level: ['Low Tension (LT)', 'High Tension Small (HTS)', 'High Tension Large (HTL)', 'Extra High Tension (EHT)'],
-            intake_level_selected: 'LT',
-            contracted_capacity: null,
-            peak: '',
-            off_peak: '',
-            id: 0,
-            cid: Math.floor((Math.random() * 10000) + 1)
-        }
-        site_listObj.push(list)
-        this.setState({ site_list: site_listObj })
-    }
+        this.accountItem.purchasing_entity = this.purchaseList;
 
-    add_account() {
-        if (this.props.onAddClick) {
-            this.props.onAddClick();
-        }
-        // let list = {},
-        //     site_listObj = this.state.site_list;
-        // list = {
-
-        // }
-        // this.setState({ account_detail: list });
-        // console.log(this.state.account_detail);
-        this.accountItem.purchasing_entity=[]
         this.setState({
-            account_detail: []
+            account_detail: this.accountItem
         })
-        this.refs.consumption.showModal('custom', {}, '')
+        this.refs.consumption.showModal('custom', {}, '', '-1')
     }
-    doAddAccountAction(item) {
 
+    edit_site(item, index) {
+        this.accountItem.account_number = item.account_number;
+        this.accountItem.existing_plan = ['SPS tariff', 'SPS wholesale', 'Retailer plan'];
+        this.accountItem.existing_plan_selected = item.existing_plan;
+        this.accountItem.contract_expiry = moment(item.contract_expiry);
+        this.accountItem.purchasing_entity = this.purchaseList;
+        this.accountItem.purchasing_entity_selectd = item.company_buyer_entity_id;
+        this.accountItem.intake_level = ['Low Tension (LT)', 'High Tension Small (HTS)', 'High Tension Large (HTL)', 'Extra High Tension (EHT)'];
+        this.accountItem.intake_level_selected = item.intake_level;
+        this.accountItem.contracted_capacity = item.contracted_capacity;
+        this.accountItem.blk_or_unit = item.blk_or_unit;
+        this.accountItem.street = item.street;
+        this.accountItem.unit_number = item.unit_number;
+        this.accountItem.postal_code = item.postal_code;
+        this.accountItem.totals = item.totals;
+        this.accountItem.peak_pct = item.peak_pct;
+        this.accountItem.peak = 10;
+        this.accountItem.option = 'update';
+
+        this.setState({
+            account_detail: this.accountItem
+        })
+        this.refs.consumption.showModal('custom', {}, '', index)
     }
 
     remove_site(index) {
@@ -169,44 +172,61 @@ export class FillConsumption extends Component {
         }
         return false;
     }
+
+    dateCompare(arr) {
+        let count = 0;
+        let startDate = moment(this.state.time).format('YYYY-MM-DD HH:mm:ss');
+        for (let i in arr) {
+            let contract_expiry_date = moment(arr[i].contract_expiry).format('YYYY-MM-DD HH:mm:ss');
+            if (contract_expiry_date >= startDate) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+
     doSave(type) {
         let makeData = {},
             buyerlist = [];
-        this.state.site_list.map((item, index) => {
-            if ($("#intake_level" + (index + 1)).val() != "LT") {
-                buyerlist += '{"account_number":"' + $("#account_number" + (index + 1)).val() + '","id":"' + item.id + '","premise_address":"' + $("#address" + (index + 1)).val() + '","intake_level":"' + $("#intake_level" + (index + 1)).val() + '","contracted_capacity":"' + $("#capacity" + (index + 1)).val() + '","peak":"' + $("#peak" + (index + 1)).val() + '","off_peak":"' + $("#off_peak" + (index + 1)).val() + '","consumption_id":"' + this.consumptions_id + '"},';
-            } else {
-                buyerlist += '{"account_number":"' + $("#account_number" + (index + 1)).val() + '","id":"' + item.id + '","premise_address":"' + $("#address" + (index + 1)).val() + '","intake_level":"' + $("#intake_level" + (index + 1)).val() + '","peak":"' + $("#peak" + (index + 1)).val() + '","off_peak":"' + $("#off_peak" + (index + 1)).val() + '","consumption_id":"' + this.consumptions_id + '"},';
-            }
+        let checkpeak = this.state.site_list.map((item, index) => {
+            return parseFloat(item.totals) > 0 && parseFloat(item.peak_pct) > 0;
+        })
 
+        this.state.site_list.map((item, index) => {
+            let siteItem = {
+                account_number: item.account_number,
+                existing_plan: item.existing_plan,
+                contract_expiry: moment(item.contract_expiry).format(),
+                company_buyer_entity_id: item.company_buyer_entity_id,
+                intake_level: item.intake_level,
+                contracted_capacity: item.contracted_capacity,
+                blk_or_unit: item.blk_or_unit,
+                street: item.street,
+                unit_number: item.unit_number,
+                postal_code: item.postal_code,
+                totals: item.totals,
+                peak_pct: item.peak_pct
+            }
+            buyerlist.push(siteItem);
         })
-        buyerlist = buyerlist.substr(0, buyerlist.length - 1);
-        buyerlist = '[' + buyerlist + ']';
-        let checkpeak = JSON.parse(buyerlist).find(element => {
-            return element.peak == '0' && element.off_peak == '0';
-        })
+
         makeData = {
             consumption_id: this.consumptions_id,
-            details: buyerlist
+            details: JSON.stringify(buyerlist),
+            contract_duration: $("#selDuration").val()
         }
+        console.log(makeData);
         if (type != "delete") {
-            if (checkpeak) {
+            if (!checkpeak) {
                 setTimeout(() => {
                     this.refs.Modal.showModal();
                     this.setState({ text: "You cannot enter 0 kWh for both peak and off-peak volume" });
                 }, 200)
                 return false;
             }
-            // if(this.nameRepeat(JSON.parse(buyerlist))){
-            //     setTimeout(()=>{
-            //         this.refs.Modal.showModal();
-            //         this.setState({text:"Account number has already been entered!"});
-            //     },200)
-            //     return false;
-            // }
         }
 
-        //console.log(makeData.consumption_id);
         setBuyerParticipate(makeData, '/api/buyer/consumption_details/save').then((res) => {
             if (type != "participate") {
                 if (type == "delete") {
@@ -228,12 +248,12 @@ export class FillConsumption extends Component {
                     }, 3000)
                 }, (error) => {
                     this.refs.Modal.showModal();
-                    this.setState({ text: "Interface failed" });
+                    this.setState({ text: "Interface failed1" });
                 })
             }
         }, (error) => {
             this.refs.Modal.showModal();
-            this.setState({ text: "Interface failed" });
+            this.setState({ text: "Interface failed2" });
         })
     }
     doAccept() {
@@ -246,7 +266,7 @@ export class FillConsumption extends Component {
                 }, 3000)
             }, (error) => {
                 this.refs.Modal.showModal();
-                this.setState({ text: "Interface failed" });
+                this.setState({ text: "Interface failed3" });
             })
         } else if (this.state.submit_type === "Participate") { //do Participate
             this.doSave('participate');
@@ -269,41 +289,86 @@ export class FillConsumption extends Component {
             this.setState({ text: "Are you sure you want to reject this auction?" });
         }
     }
+
+    doAddAccountAction(siteInfo) {
+        let item = {
+            account_number: siteInfo.account_number,
+            existing_plan: siteInfo.existing_plan_selected,
+            contract_expiry: moment(siteInfo.contract_expiry),
+            company_buyer_entity_id: siteInfo.purchasing_entity_selectd,
+            intake_level: siteInfo.intake_level_selected,
+            contracted_capacity: siteInfo.contracted_capacity,
+            blk_or_unit: siteInfo.blk_or_unit,
+            street: siteInfo.street,
+            unit_number: siteInfo.unit_number,
+            postal_code: siteInfo.postal_code,
+            totals: siteInfo.totals,
+            peak_pct: siteInfo.peak_pct
+        };
+        console.log(siteInfo);
+        let entity = this.state.site_list;
+        if (siteInfo.index >= 0) {
+            // console.log('update')
+            // console.log(siteInfo.index)
+            entity[siteInfo.index] = item;
+        }
+        else {
+            entity.push(item)
+        }
+
+        this.setState({
+            site_list: entity
+        })
+    }
+
+
     checkSuccess(event, obj) {
         event.preventDefault();
-        let makeData = {},
-            buyerlist = [];
-        this.state.site_list.map((item, index) => {
-            if ($("#intake_level" + (index + 1)).val() != "LT") {
-                buyerlist += '{"account_number":"' + $("#account_number" + (index + 1)).val() + '","id":"' + item.id + '","premise_address":"' + $("#address" + (index + 1)).val() + '","intake_level":"' + $("#intake_level" + (index + 1)).val() + '","contracted_capacity":"' + $("#capacity" + (index + 1)).val() + '","peak":"' + $("#peak" + (index + 1)).val() + '","off_peak":"' + $("#off_peak" + (index + 1)).val() + '","consumption_id":"' + this.consumptions_id + '"},';
-            } else {
-                buyerlist += '{"account_number":"' + $("#account_number" + (index + 1)).val() + '","id":"' + item.id + '","premise_address":"' + $("#address" + (index + 1)).val() + '","intake_level":"' + $("#intake_level" + (index + 1)).val() + '","peak":"' + $("#peak" + (index + 1)).val() + '","off_peak":"' + $("#off_peak" + (index + 1)).val() + '","consumption_id":"' + this.consumptions_id + '"},';
-            }
+        let count = this.dateCompare(this.state.site_list);
+        this.setState({
+            dateIssuecount: count
         })
-        buyerlist = buyerlist.substr(0, buyerlist.length - 1);
-        buyerlist = '[' + buyerlist + ']';
-        if (this.nameRepeat(JSON.parse(buyerlist))) {
-            setTimeout(() => {
-                this.refs.Modal.showModal();
-                this.setState({ text: "Account number has already been entered!" });
-            }, 200)
-            return false;
-        } else {
-            if (this.state.submit_type === "Participate") {
-                this.refs.Modal.showModal("comfirm");
-                this.setState({ text: "Are you sure you want to participate in this auction?" });
-            } else if (this.state.submit_type === "save") {
-                this.doSave();
+        if (count > 0) {
+            if ($("#div_warning").is(":visible")) {
+                if ($("#chk_Warning").is(":checked")) {
+                    this.passValidateSave();
+                }
+                else {
+                    return false;
+                }
             }
         }
+        else {
+            this.passValidateSave();
+        }
     }
+    passValidateSave() {
+        if (this.state.submit_type === "Participate") {
+            this.refs.Modal.showModal("comfirm");
+            this.setState({ text: "Are you sure you want to participate in this auction?" });
+        } else if (this.state.submit_type === "save") {
+            this.doSave();
+        }
+    }
+
     durationChange(e) {
         let itemValue = e.target.value
-        console.log(itemValue)
         this.setState({
             durtioanItem: itemValue
         })
-
+    }
+    getPurchase(id) {
+        let name = "";
+        if (this.purchaseList) {
+            for (let i = 0; i < this.purchaseList.length; i++) {
+                if (this.purchaseList[i].id == id) {
+                    name = this.purchaseList[i].company_name;
+                    return name;
+                    break;
+                }
+            }
+        }
+        return name;
     }
     render() {
         return (
@@ -357,10 +422,41 @@ export class FillConsumption extends Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-
+                                    {
+                                        this.state.site_list.map((item, index) => {
+                                            return <tr key={index}>
+                                                <td>{item.account_number} </td>
+                                                <td>{item.existing_plan}</td>
+                                                <td>{moment(item.contract_expiry).format('YYYY-MM-DD HH:mm')}</td>
+                                                <td>{this.getPurchase(item.company_buyer_entity_id)} </td>
+                                                <td>{item.intake_level}</td>
+                                                <td>{item.contracted_capacity}</td>
+                                                <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
+                                                <td>{item.account_number}</td>
+                                                <td>
+                                                    {this.state.checked ? '' : <div className="editSite"><a onClick={this.edit_site.bind(this, item, index)}>Edit </a></div>}
+                                                    {this.state.checked ? '' : <div className="delSite"><a onClick={this.remove_site.bind(this, index)}>Delete </a></div>}
+                                                </td>
+                                            </tr>
+                                        })
+                                    }
                                 </tbody>
                             </table>
-                            {this.state.checked ? '' : <div className="addSite"><a onClick={this.add_account.bind(this)}>Add Account</a></div>}
+                            {this.state.checked ? '' : <div className="addSite"><a onClick={this.add_site.bind(this)}>Add Account</a></div>}
+                            <div id="div_warning">
+                                {
+                                    this.state.dateIssuecount > 0 ?
+                                        <h4 className="lm--formItem lm--formItem--inline string" >
+                                            <input type="checkbox" id="chkBuyer" id="chk_Warning" required /> Warning:[{this.state.dateIssuecount}] account(s) detected to have expiry date on  or after new contract start date. Please tick the checkbox
+                                             to confirm that you aware and would like to proceed with including such account(s) in this auction.</h4> : <div></div>
+                                }
+                            </div>
+                            <div>
+                                <h4 className="lm--formItem lm--formItem--inline string">
+                                    <input name="agree_declare" type="checkbox" id="chkAgree_declare" required />
+                                    I declare that all data submited is true and shall be used for the auction,and that i am bounded by the  <span>Buyer T&C.</span>(can click on Buyer T&C link to view/download it).
+                                </h4>
+                            </div>
                             <div className="buyer_btn">
                                 <button className={"lm--button lm--button--primary " + this.state.disabled} disabled={this.state.disabled} onClick={this.doSubmit.bind(this, 'save')}>Save</button>
                                 <a className={"lm--button lm--button--primary " + this.state.disabled} onClick={this.state.disabled === "disabled" ? this.doSubmit.bind(this, 'return') : this.doSubmit.bind(this, 'Reject')}>Reject</a>
@@ -372,8 +468,8 @@ export class FillConsumption extends Component {
                         <a className="lm--button lm--button--primary u-mt3" href="/buyer/auctions" >Back</a>
                     </div>
                     <Modal text={this.state.text} acceptFunction={this.doAccept.bind(this)} ref="Modal" />
-                    <Modal changeSize="1" acceptFunction={this.doAddAccountAction.bind(this)} consumption_account_item={this.state.account_detail} listdetailtype='consumption_detail' ref="consumption" />
                 </form>
+                <Modal acceptFunction={this.doAddAccountAction.bind(this)} contract_capacity_disabled={this.state.contract_capacity_disabled} contract_expiry_disabled={this.state.contract_expiry_disabled} consumption_account_item={this.state.account_detail} listdetailtype='consumption_detail' ref="consumption" />
             </div>
         )
     }
