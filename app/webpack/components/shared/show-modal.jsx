@@ -16,7 +16,7 @@ export class Modal extends React.Component {
             strtype: '',
             email_subject: '',
             email_body: '',
-            consumptionItem: {},
+            consumptionItem: this.props.siteList,
             contract_capacity_disabled: true,
             contract_expiry_disabled: true,
             disabled: false,
@@ -47,7 +47,7 @@ export class Modal extends React.Component {
                 account_number: next.consumption_account_item.account_number,
                 existing_plan: next.consumption_account_item.existing_plan,
                 existing_plan_selected: next.consumption_account_item.existing_plan_selected,
-                contract_expiry: moment(next.consumption_account_item.contract_expiry),
+                contract_expiry: next.consumption_account_item.contract_expiry === null ? "" : moment(next.consumption_account_item.contract_expiry),
                 purchasing_entity: next.consumption_account_item.purchasing_entity,
                 purchasing_entity_selectd: next.consumption_account_item.purchasing_entity_selectd ? next.consumption_account_item.purchasing_entity_selectd : next.consumption_account_item.purchasing_entity[0].id,
                 premise_address: next.consumption_account_item.premise_address,
@@ -151,14 +151,14 @@ export class Modal extends React.Component {
             peak_pct: this.state.peak_pct,
             index: this.state.itemIndex
         }
-        console.log(this.state.itemIndex);
-        if (this.props.acceptFunction) {
-            this.props.acceptFunction(siteItem);
-        }
+        console.log(this.state.siteList);
+        // if (this.props.acceptFunction) {
+        //     this.props.acceptFunction(siteItem);
+        // }
 
     }
     changeConsumption(type, e) {
-        let value = e.target.value;//consumptionItem=this.state.consumptionItem;
+        let value = e.target.value;
         switch (type) {
             case "account_number":
                 this.setState({
@@ -478,7 +478,6 @@ export class Modal extends React.Component {
                                     <td><abbr title="required">*</abbr>Contract Expiry</td>
                                     <td>
                                         <DatePicker selected={this.state.contract_expiry} disabled={this.state.contract_expiry_disabled} onKeyDown={this.noPermitInput.bind(this)} ref="contract_expiry_date" shouldCloseOnSelect={true} name="contract_expiry_date" minDate={moment()} showTimeSelect required aria-required="true" className="date_ico" dateFormat="DD-MM-YYYY HH:mm" selectsStart onChange={this.dateChange.bind(this)} title="Time must not be in the past." />
-                                        {/* <DatePicker selected={this.state.start_datetime}  disabled={this.state.disabled}                  onKeyDown={this.noPermitInput.bind(this)}  ref="start_datetime"        shouldCloseOnSelect={true} name="start_datetime" showTimeSelect dateFormat="DD-MM-YYYY HH:mm" timeFormat="HH:mm" timeIntervals={1}  className="time_ico"  onChange = {this.timeChange} minDate={moment()} title="Time must not be in the past."  required aria-required="true"/> */}
                                     </td>
                                 </tr>
                                 <tr>
@@ -527,7 +526,7 @@ export class Modal extends React.Component {
                                             <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} id="peak_pct" required aria-required="true" /> %
                                         ,Off-Peak:<input type="text" value="" disabled="true" onChange={this.changeConsumption.bind(this, "pack")} id="pack" required aria-required="true" /><span></span>
                                             %(auot calculate).<span>Upload bill(s) compulsory for Category 3 (New Accounts)</span>.
-                                              Click on "?" to see Admin's reference information on peak/offpeak ratio.
+                                            <div title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">?</div>
                                         </div>
                                     </td>
                                 </tr>

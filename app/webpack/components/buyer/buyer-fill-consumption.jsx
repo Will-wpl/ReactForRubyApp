@@ -405,7 +405,7 @@ export class FillConsumption extends Component {
                         {/*<h4 className="col-sm-12 u-mb2"><input name="agree_auction" type="checkbox" disabled={this.state.disabled} required /> I agree to the {this.state.link?<a className="cursor" download={this.state.link.file_name} href={`${this.state.link.file_path}`}>terms and conditions.</a>:'terms and conditions.'}</h4>*/}
 
                         <h4 className="col-sm-12 u-mb2">Last Status of Participation : {this.status}</h4>
-                        <div className="col-sm-12 col-md-10">
+                        <div className="col-sm-12 col-md-12">
                             {/* <DoFillConsumption changeSiteList={this.changeSiteList.bind(this)} site_list={this.state.site_list} checked={this.state.checked} remove={this.remove_site.bind(this)} /> */}
                             <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                                 <thead>
@@ -432,7 +432,10 @@ export class FillConsumption extends Component {
                                                 <td>{item.intake_level}</td>
                                                 <td>{item.contracted_capacity}</td>
                                                 <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
-                                                <td>{item.account_number}</td>
+                                                <td>
+                                                    <span className="textBold">Total Monthly:<div>{item.totals}</div>kWh/month,Peak:<div>{item.peak_pct}</div></span>,Off-Peak:<span className="textNormal"><div>{100 - item.peak_pct}</div></span>(auto calculate).<span className="textBold">Upload bill(s) compulsory for Category 3(new Accounts)</span>. 
+                                                    <div title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">?</div>
+                                                </td>
                                                 <td>
                                                     {this.state.checked ? '' : <div className="editSite"><a onClick={this.edit_site.bind(this, item, index)}>Edit </a></div>}
                                                     {this.state.checked ? '' : <div className="delSite"><a onClick={this.remove_site.bind(this, index)}>Delete </a></div>}
@@ -469,7 +472,7 @@ export class FillConsumption extends Component {
                     </div>
                     <Modal text={this.state.text} acceptFunction={this.doAccept.bind(this)} ref="Modal" />
                 </form>
-                <Modal acceptFunction={this.doAddAccountAction.bind(this)} contract_capacity_disabled={this.state.contract_capacity_disabled} contract_expiry_disabled={this.state.contract_expiry_disabled} consumption_account_item={this.state.account_detail} listdetailtype='consumption_detail' ref="consumption" />
+                <Modal acceptFunction={this.doAddAccountAction.bind(this)} contract_capacity_disabled={this.state.contract_capacity_disabled} contract_expiry_disabled={this.state.contract_expiry_disabled} siteList={this.state.site_list} consumption_account_item={this.state.account_detail} listdetailtype='consumption_detail' ref="consumption" />
             </div>
         )
     }
