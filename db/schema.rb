@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180712023347) do
+ActiveRecord::Schema.define(version: 20180716055827) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -139,6 +139,42 @@ ActiveRecord::Schema.define(version: 20180712023347) do
     t.index ["user_id"], name: "index_auction_histories_on_user_id"
   end
 
+  create_table "auction_result_contracts", force: :cascade do |t|
+    t.decimal "reserve_price"
+    t.decimal "lowest_average_price"
+    t.string "status"
+    t.string "lowest_price_bidder"
+    t.date "contract_period_end_date"
+    t.decimal "total_volume"
+    t.decimal "total_award_sum"
+    t.decimal "lt_peak"
+    t.decimal "lt_off_peak"
+    t.decimal "hts_peak"
+    t.decimal "hts_off_peak"
+    t.decimal "htl_peak"
+    t.decimal "htl_off_peak"
+    t.decimal "eht_peak"
+    t.decimal "eht_off_peak"
+    t.text "justification"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "auction_result_id"
+    t.string "contract_duration"
+    t.bigint "auction_id"
+    t.bigint "user_id"
+    t.decimal "reserve_price_lt_peak"
+    t.decimal "reserve_price_lt_off_peak"
+    t.decimal "reserve_price_hts_peak"
+    t.decimal "reserve_price_hts_off_peak"
+    t.decimal "reserve_price_htl_peak"
+    t.decimal "reserve_price_htl_off_peak"
+    t.decimal "reserve_price_eht_peak"
+    t.decimal "reserve_price_eht_off_peak"
+    t.index ["auction_id"], name: "index_auction_result_contracts_on_auction_id"
+    t.index ["auction_result_id"], name: "index_auction_result_contracts_on_auction_result_id"
+    t.index ["user_id"], name: "index_auction_result_contracts_on_user_id"
+  end
+
   create_table "auction_results", force: :cascade do |t|
     t.decimal "reserve_price"
     t.decimal "lowest_average_price"
@@ -161,15 +197,6 @@ ActiveRecord::Schema.define(version: 20180712023347) do
     t.decimal "eht_peak"
     t.decimal "eht_off_peak"
     t.string "justification"
-    t.string "contract_duration"
-    t.decimal "reserve_price_lt_peak"
-    t.decimal "reserve_price_lt_off_peak"
-    t.decimal "reserve_price_hts_peak"
-    t.decimal "reserve_price_hts_off_peak"
-    t.decimal "reserve_price_htl_peak"
-    t.decimal "reserve_price_htl_off_peak"
-    t.decimal "reserve_price_eht_peak"
-    t.decimal "reserve_price_eht_off_peak"
     t.index ["auction_id"], name: "index_auction_results_on_auction_id"
     t.index ["user_id"], name: "index_auction_results_on_user_id"
   end
@@ -406,6 +433,7 @@ ActiveRecord::Schema.define(version: 20180712023347) do
   add_foreign_key "auction_events", "users"
   add_foreign_key "auction_histories", "auctions"
   add_foreign_key "auction_histories", "users"
+  add_foreign_key "auction_result_contracts", "auctions"
   add_foreign_key "auction_results", "auctions"
   add_foreign_key "company_buyer_entities", "users"
   add_foreign_key "consumption_details", "company_buyer_entities"

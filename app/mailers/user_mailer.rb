@@ -77,14 +77,14 @@ class UserMailer < ApplicationMailer
   def buyer_participate_approved(user, param)
     mail_template = get_template('27')
     email_subject = mail_template.subject.gsub(/#name_of_ra/, param[:name_of_ra].to_s).gsub(/#date_time/, param[:date_time])
-    email_body = mail_template.body.gsub(/#buyer_company_name/, param[:buyer_company_name].to_s).gsub(/#name_of_ra/, param[:name_of_ra].to_s).gsub(/#date_time/, param[:date_time])
+    email_body = mail_template.body.gsub(/#buyer_company_name/, user.company_name).gsub(/#name_of_ra/, param[:name_of_ra].to_s).gsub(/#date_time/, param[:date_time])
     send_email(user.email, email_body, email_subject)
   end
 
   def buyer_participate_rejected(user, param)
     mail_template = get_template('28')
     email_subject = mail_template.subject.gsub(/#name_of_ra/, param[:name_of_ra].to_s).gsub(/#date_time/, param[:date_time])
-    email_body = mail_template.body.gsub(/#buyer_company_name/, param[:buyer_company_name].to_s).gsub(/#name_of_ra/, param[:name_of_ra].to_s).gsub(/#date_time/, param[:date_time])
+    email_body = mail_template.body.gsub(/#buyer_company_name/, user.company_name).gsub(/#name_of_ra/, param[:name_of_ra].to_s).gsub(/#date_time/, param[:date_time])
     send_email(user.email, email_body, email_subject)
   end
 
