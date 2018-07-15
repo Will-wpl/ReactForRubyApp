@@ -208,6 +208,14 @@ class Api::ConsumptionDetailsController < Api::BaseController
   end
 
   def set_participate_auction_contract_total(auction_contract, intake_values, days)
+    auction_contract.total_lt_peak = 0 if auction_contract.total_lt_peak.blank?
+    auction_contract.total_lt_off_peak = 0 if auction_contract.total_lt_off_peak.blank?
+    auction_contract.total_hts_peak = 0 if auction_contract.total_hts_peak.blank?
+    auction_contract.total_hts_off_peak = 0 if auction_contract.total_hts_off_peak.blank?
+    auction_contract.total_htl_peak = 0 if auction_contract.total_htl_peak.blank?
+    auction_contract.total_htl_off_peak = 0 if auction_contract.total_htl_off_peak.blank?
+    auction_contract.total_eht_peak = 0 if auction_contract.total_eht_peak.blank?
+    auction_contract.total_eht_off_peak = 0 if auction_contract.total_eht_off_peak.blank?
     auction_contract.total_lt_peak += intake_values[0]
     auction_contract.total_lt_off_peak += intake_values[1]
     auction_contract.total_hts_peak += intake_values[2]
