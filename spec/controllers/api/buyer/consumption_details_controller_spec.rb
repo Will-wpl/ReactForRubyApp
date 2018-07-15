@@ -37,9 +37,16 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
 
       context 'Has set participation_status to 1 at consumption' do
         def do_request
+          buyer_entity = CompanyBuyerEntity.new
+          buyer_entity.company_name = 'Test_Company_Name_4'
+          buyer_entity.company_uen = 'Test_Company_UEN_4'
+          buyer_entity.company_address = 'Test_Company_Address_4'
+          buyer_entity.contact_email = 'Buyer_entity_4@email.com'
+          buyer_entity.user = company_buyer
+          buyer_entity.save
           details = []
-          details.push({id: 0, account_number: '000001', intake_level: 'LT' , peak: 100, off_peak: 100})
-          details.push({id: 0, account_number: '000002', intake_level: 'HTS' , peak: 100, off_peak: 100})
+          details.push({id: 0, account_number: '000001', intake_level: 'LT' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '2018-08-01'})
+          details.push({id: 0, account_number: '000002', intake_level: 'HTS' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '01-08-2018'})
           put :save, params: { consumption_id: consumption.id , details: details.to_json}
         end
 
@@ -48,6 +55,9 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
           array = JSON.parse(response.body)
           expect(response).to have_http_status(:ok)
           expect(array.length).to eq(2)
+          detail_entities = ConsumptionDetail.where('company_buyer_entity_id = (?)', array[0]['company_buyer_entity_id'])
+          expect(detail_entities.length).to eq(2)
+          expect(array[0]['company_buyer_entity_id']).to eq(array[1]['company_buyer_entity_id'])
         end
       end
     end

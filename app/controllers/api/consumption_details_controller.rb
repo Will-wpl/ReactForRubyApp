@@ -59,7 +59,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
         consumption_detail.street = detail['street']
         consumption_detail.unit_number = detail['unit_number']
         consumption_detail.postal_code = detail['postal_code']
-        consumption_detail.company_buyer_entity_id = params[:company_buyer_entity_id]
+        consumption_detail.company_buyer_entity_id = detail['company_buyer_entity_id']
         #Update -new fields (20180709) - End
         consumption_detail.consumption_id = params[:consumption_id]
         saved_details.push(consumption_detail) if consumption_detail.save!
