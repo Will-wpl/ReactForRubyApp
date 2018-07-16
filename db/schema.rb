@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180712023347) do
+ActiveRecord::Schema.define(version: 20180716032812) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -161,15 +161,6 @@ ActiveRecord::Schema.define(version: 20180712023347) do
     t.decimal "eht_peak"
     t.decimal "eht_off_peak"
     t.string "justification"
-    t.string "contract_duration"
-    t.decimal "reserve_price_lt_peak"
-    t.decimal "reserve_price_lt_off_peak"
-    t.decimal "reserve_price_hts_peak"
-    t.decimal "reserve_price_hts_off_peak"
-    t.decimal "reserve_price_htl_peak"
-    t.decimal "reserve_price_htl_off_peak"
-    t.decimal "reserve_price_eht_peak"
-    t.decimal "reserve_price_eht_off_peak"
     t.index ["auction_id"], name: "index_auction_results_on_auction_id"
     t.index ["user_id"], name: "index_auction_results_on_user_id"
   end
