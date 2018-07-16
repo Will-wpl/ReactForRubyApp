@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { UploadFile } from '../shared/upload';
 import { Modal } from '../shared/show-modal';
 import { getRetailerUserInfo, saveRetailManageInfo, submitRetailManageInfo, getRetailerUserInfoByUserId, validateIsExist } from '../../javascripts/componentService/retailer/service';
-import { approveUser } from '../../javascripts/componentService/admin/service';
+import { approveRetailerUser } from '../../javascripts/componentService/admin/service';
 import { validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
 export class RetailerRegister extends Component {
     constructor(props) {
@@ -407,13 +407,13 @@ export class RetailerRegister extends Component {
 
         if (obj.action === 'reject') {
             if (this.checkRejectAction()) {
-                approveUser(param).then(res => {
+                approveRetailerUser(param).then(res => {
                     location.href = "/admin/users/retailers";
                 })
             }
         }
         else {
-            approveUser(param).then(res => {
+            approveRetailerUser(param).then(res => {
                 location.href = "/admin/users/retailers";
             })
         }
@@ -423,7 +423,6 @@ export class RetailerRegister extends Component {
         this.refs.Modal_upload.showModal();
     }
     render() {
-
         let btn_html;
         if (this.state.use_type === 'admin_approve') {
             btn_html = <div>

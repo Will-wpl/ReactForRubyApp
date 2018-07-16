@@ -171,17 +171,17 @@ upload(type, index){
             //     },3000)
             //     result = false;
             // }
-            if(requiredObj['retailer_confidentiality_undertaking_upload'][0].files.length <=0){
-                $("#retailer_confidentiality_undertaking_upload0").next().next().fadeIn(300);
+            // if(requiredObj['retailer_confidentiality_undertaking_upload'][0].files.length <=0){
+            //     $("#retailer_confidentiality_undertaking_upload0").next().next().fadeIn(300);
+            //     timeBar = setTimeout(()=>{
+            //         $("#retailer_confidentiality_undertaking_upload0").next().next().fadeOut(300);
+            //     },3000)
+            //     result = false;
+            // }
+            if(requiredObj['birefing_pack_upload'][0].files.length <=0){
+                $("#birefing_pack_upload0").next().next().fadeIn(300);
                 timeBar = setTimeout(()=>{
-                    $("#retailer_confidentiality_undertaking_upload0").next().next().fadeOut(300);
-                },3000)
-                result = false;
-            }
-            if(requiredObj['tender_documents_upload'][0].files.length <=0){
-                $("#tender_documents_upload0").next().next().fadeIn(300);
-                timeBar = setTimeout(()=>{
-                    $("#tender_documents_upload0").next().next().fadeOut(300);
+                    $("#birefing_pack_upload0").next().next().fadeOut(300);
                 },3000)
                 result = false;
             }
@@ -192,7 +192,7 @@ upload(type, index){
             if(this.props.onAddClick){
                 this.props.onAddClick();
             }
-            if(this.state.buyer_company_select === 0 && this.state.buyer_individual_select === 0){
+            if(this.state.buyer_company_select === 0){
                 clearTimeout(required);
                 $("#buyer_select_box").next().fadeIn(300);
                 location.href="#buyer_select_box";
@@ -201,19 +201,19 @@ upload(type, index){
                 },5000)
                 return;
             }
-            if(this.state.peak_eht<=0 && this.state.off_peak_eht<=0 &&
-                this.state.peak_lt<=0 && this.state.off_peak_lt<=0 &&
-                this.state.peak_hts<=0 && this.state.off_peak_hts<=0 &&
-                this.state.peak_htl<=0 && this.state.off_peak_htl<=0
-            ){
-                clearTimeout(required);
-                $(".consumption .required_error").fadeIn(300);
-                location.href="#aggregate_consumption";
-                required = setTimeout(() => {
-                    $(".consumption .required_error").fadeOut(300);
-                }, 5000)
-                return;
-            }
+            // if(this.state.peak_eht<=0 && this.state.off_peak_eht<=0 &&
+            //     this.state.peak_lt<=0 && this.state.off_peak_lt<=0 &&
+            //     this.state.peak_hts<=0 && this.state.off_peak_hts<=0 &&
+            //     this.state.peak_htl<=0 && this.state.off_peak_htl<=0
+            // ){
+            //     clearTimeout(required);
+            //     $(".consumption .required_error").fadeIn(300);
+            //     location.href="#aggregate_consumption";
+            //     required = setTimeout(() => {
+            //         $(".consumption .required_error").fadeOut(300);
+            //     }, 5000)
+            //     return;
+            // }
             if(!this.checkRequired()){
                 return;
             }
@@ -375,7 +375,7 @@ upload(type, index){
                         doSend = true;
                     }
                 }else{
-                    if(this.state.buyer_company_select === 0 && this.state.buyer_individual_select === 0){
+                    if(this.state.buyer_company_select === 0){
                         this.timeBar(type);
                         doSend = false;
                     }
