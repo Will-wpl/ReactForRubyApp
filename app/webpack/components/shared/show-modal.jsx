@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import { constants } from 'os';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
+import 'react-datepicker/dist/react-datepicker.css';
 //共通弹出框组件
 export class Modal extends React.Component {
     constructor(props) {
@@ -7,18 +11,71 @@ export class Modal extends React.Component {
             modalshowhide: "modal_hide",
             type: 'default',
             secondStatus: "live_hide",
+            itemIndex: "",
             props_data: {},
             strtype: '',
             email_subject: '',
             email_body: '',
-            consumption_account_list: [],
-            consumption_account_item: this.props.consumption_account_item,
-            model_width: '',
-            model_height: ''
+            consumptionItem: {},
+            contract_capacity_disabled: true,
+            contract_expiry_disabled: true,
+            disabled: false,
+            account_number: '',
+            existing_plan: [],
+            existing_plan_selected: '',
+            contract_expiry: '',
+            purchasing_entity: [],
+            purchasing_entity_selectd: '',
+            premise_address: '',
+            intake_level: [],
+            intake_level_selected: '',
+            contracted_capacity: '',
+            blk_or_unit: '',
+            street: '',
+            unit_number: '',
+            postal_code: '',
+            totals: '',
+            peak_pct: '',
+            option: ''
         }
-        console.log(this.props.consumption_account_item)
     }
-    showModal(type, data, str) {
+    componentWillReceiveProps(next) {
+
+        if (next.consumption_account_item) {
+            console.log(next.consumption_account_item);
+            this.setState({
+                account_number: next.consumption_account_item.account_number,
+                existing_plan: next.consumption_account_item.existing_plan,
+                existing_plan_selected: next.consumption_account_item.existing_plan_selected,
+                contract_expiry: moment(next.consumption_account_item.contract_expiry),
+                purchasing_entity: next.consumption_account_item.purchasing_entity,
+                purchasing_entity_selectd: next.consumption_account_item.purchasing_entity_selectd ? next.consumption_account_item.purchasing_entity_selectd : next.consumption_account_item.purchasing_entity[0].id,
+                premise_address: next.consumption_account_item.premise_address,
+                intake_level: next.consumption_account_item.intake_level,
+                intake_level_selected: next.consumption_account_item.intake_level_selected,
+                contracted_capacity: next.consumption_account_item.contracted_capacity,
+                blk_or_unit: next.consumption_account_item.blk_or_unit,
+                street: next.consumption_account_item.street,
+                unit_number: next.consumption_account_item.unit_number,
+                postal_code: next.consumption_account_item.postal_code,
+                totals: next.consumption_account_item.totals,
+                peak_pct: next.consumption_account_item.peak_pct,
+                option: next.consumption_account_item.option
+            });
+            if (next.consumption_account_item.existing_plan_selected === "Retailer plan") {
+                this.setState({
+                    contract_capacity_disabled: false
+                })
+            }
+            if (next.consumption_account_item.intake_level_selected !== "LT") {
+                this.setState({
+                    contract_capacity_disabled: false
+                })
+            }
+        }
+    }
+    showModal(type, data, str, index) {
+        console.log(index)
         if (str) {
             this.setState({ strtype: str });
         }
@@ -48,6 +105,11 @@ export class Modal extends React.Component {
                 type: "default"
             })
         }
+        if (index) {
+            this.setState({
+                itemIndex: index
+            })
+        }
     }
     do_text(text) {
         let show_text = text.replace(/<br>/g, "<br/>");
@@ -74,10 +136,119 @@ export class Modal extends React.Component {
         })
     }
     Add() {
+        let siteItem = {
+            account_number: this.state.account_number,
+            existing_plan_selected: this.state.existing_plan_selected,
+            contract_expiry: this.state.contract_expiry,
+            purchasing_entity_selectd: this.state.purchasing_entity_selectd,
+            intake_level_selected: this.state.intake_level_selected,
+            contracted_capacity: this.state.contracted_capacity,
+            blk_or_unit: this.state.blk_or_unit,
+            street: this.state.street,
+            unit_number: this.state.unit_number,
+            postal_code: this.state.postal_code,
+            totals: this.state.totals,
+            peak_pct: this.state.peak_pct,
+            index: this.state.itemIndex
+        }
+        console.log(this.state.itemIndex);
+        if (this.props.acceptFunction) {
+            this.props.acceptFunction(siteItem);
+        }
 
     }
-    changelevel() {
+    changeConsumption(type, e) {
+        let value = e.target.value;//consumptionItem=this.state.consumptionItem;
+        switch (type) {
+            case "account_number":
+                this.setState({
+                    account_number: value
+                })
+                break;
+            case "existing_plan":
 
+                let existing_plan_dis = true;
+                if (value === 'Retailer plan') {
+                    existing_plan_dis = false;
+                }
+                else {
+                    existing_plan_dis = true;
+                }
+                this.setState({
+                    existing_plan_selected: value,
+                    contract_expiry_disabled: existing_plan_dis
+
+                })
+                break;
+            case "contract_expiry":
+                this.setState({
+                    contract_expiry: value
+                })
+                break;
+            case "purchasing_entity":
+                console.log(value)
+                this.setState({
+                    purchasing_entity_selectd: value
+                })
+                break;
+            case "intake_level":
+                if (value === 'LT') {
+                    console.log("1:" + value)
+                    this.setState({
+                        contract_capacity_disabled: true,
+                        intake_level_selected: value,
+                        contracted_capacity: ""
+                    })
+                }
+                else {
+                    console.log(2 + ":" + value)
+                    this.setState({
+                        contract_capacity_disabled: false,
+                        intake_level_selected: value
+                    })
+                }
+                break;
+            case "contract_capacity":
+                this.setState({
+                    contracted_capacity: value
+                })
+                break;
+            case "blk_or_unit":
+                this.setState({
+                    blk_or_unit: value
+                })
+                break;
+            case "street":
+                this.setState({
+                    street: value
+                })
+                break;
+            case "unit_number":
+                this.setState({
+                    unit_number: value
+                })
+                break;
+            case "postal_code":
+                this.setState({
+                    postal_code: value
+                })
+                break;
+            case "totals":
+                this.setState({
+                    totals: value
+                })
+                break;
+            case "peak_pct":
+                this.setState({
+                    peak_pct: value
+                })
+                // if(number(value))
+                // {
+                //     console.log(111)
+                // }
+                // this.accountItem.peak = (100 - parseFloat(value)).toFixed(2)
+                break;
+        }
     }
     removefile(type, index, id) {
         if (confirm("Are you sure you want to delete this file?")) {
@@ -88,12 +259,7 @@ export class Modal extends React.Component {
 
     }
     Change(type, e) {
-        let obj = e.target.value;
-        if (type == "email_subject") {
-            this.setState({ email_subject: obj });
-        } else {
-            this.setState({ email_body: obj })
-        }
+
     }
     closeModal() {
         this.setState({
@@ -105,6 +271,17 @@ export class Modal extends React.Component {
     }
     checkConsumption() {
 
+    }
+
+    dateChange(data) {
+        // let selectDay = new Date(data.format());
+        console.log(data);
+        this.setState({
+            contract_expiry: data
+        })
+    }
+    noPermitInput(event) {
+        event.preventDefault();
     }
     render() {
         let showDetail = '', secondary = '', secondStatus = '';
@@ -276,94 +453,111 @@ export class Modal extends React.Component {
                 </ul>
             }
             if (this.props.listdetailtype === 'consumption_detail') {
-                showDetail = <div>
-                    <h3>My Account Information</h3>
-                    <table className="consumption_table  u-mb3" cellPadding="0" cellSpacing="0" style={{ marginTop: "15px" }}>
-                        <tbody>
-                            <tr>
-                                <td>Account No.</td>
-                                <td>
-                                    <input type="text" disabled={this.props.checked} defaultValue={this.props.consumption_account_item.account_number} id="account_number" required aria-required="true" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Existing Plan</td>
-                                <td>
-                                    <select>
-                                        <option value="SPS tariff">SPS tariff</option>
-                                        <option value="SPS wholesale">SPS wholesale</option>
-                                        <option value="Retailer plan">Retailer plan</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Contract Expiry</td>
-                                <td>
-                                    <input type="text" disabled={this.props.checked} defaultValue={this.props.consumption_account_item.account_number} id="account_number" required aria-required="true" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Purchasing Entity</td>
-                                <td>
-                                    {/* <select >
-                                        {
-                                            this.props.consuption_account_item.map(item => {
-                                                return <option key={item.company_name} value={item.company_name}>{item.company_name}</option>
-                                            })
-                                        }
-                                    </select> */}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Intake Level</td>
-                                <td>
-                                    {/* <select id="intake_level" onChange={this.changelevel.bind(this)} disabled={this.props.checked} name="intake_level" defaultValue={this.props.consuption_account_item.intake_level_selected}>
-                                        {
-                                            this.props.consuption_account_item.intake_level.map((it, i) => <option key={i} value={(it.split("(")[1]).split(")")[0]}>{it}</option>)
-                                        }
-                                    </select> */}
-                                    {
-
-                                    
-                                    //  this.props.consuption_account_item.intake_level.map((it, i) => <option key={i} value={(it.split("(")[1]).split(")")[0]}>{it}</option>)
-                                    }
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Contract Capacity</td>
-                                <td>
-                                    <input type="text" disabled={this.props.checked} defaultValue={this.props.consumption_account_item.account_number} id="account_number" required aria-required="true" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Permise Address</td>
-                                <td>
-                                    <input type="text" disabled={this.props.checked} defaultValue={this.props.consumption_account_item.account_number} id="account_number" required aria-required="true" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Consumption Details</td>
-                                <td>
-                                    <input type="text" disabled={this.props.checked} defaultValue={this.props.consumption_account_item.account_number} id="account_number" required aria-required="true" />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                if (this.props.consumption_account_item !== null) {
+                    showDetail = <div>
+                        <h3 className="text_padding_left">My Account Information</h3>
+                        <table className="consumption_table  u-mb3" cellPadding="0" cellSpacing="0" style={{ marginTop: "15px" }}>
+                            <tbody>
+                                <tr>
+                                    <td><abbr title="required">*</abbr>Account No.</td>
+                                    <td>
+                                        <input type="text" value={this.state.account_number} onChange={this.changeConsumption.bind(this, "account_number")} id="account_number" required aria-required="true" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><abbr title="required">*</abbr>Existing Plan</td>
+                                    <td>
+                                        <select id="existing_plan" onChange={this.changeConsumption.bind(this, 'existing_plan')} name="existing_plan" value={this.state.existing_plan_selected}>
+                                            {
+                                                this.state.existing_plan.map((it, i) => <option key={i} value={it}>{it}</option>)
+                                            }
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><abbr title="required">*</abbr>Contract Expiry</td>
+                                    <td>
+                                        <DatePicker selected={this.state.contract_expiry} disabled={this.state.contract_expiry_disabled} onKeyDown={this.noPermitInput.bind(this)} ref="contract_expiry_date" shouldCloseOnSelect={true} name="contract_expiry_date" minDate={moment()} showTimeSelect required aria-required="true" className="date_ico" dateFormat="DD-MM-YYYY HH:mm" selectsStart onChange={this.dateChange.bind(this)} title="Time must not be in the past." />
+                                        {/* <DatePicker selected={this.state.start_datetime}  disabled={this.state.disabled}                  onKeyDown={this.noPermitInput.bind(this)}  ref="start_datetime"        shouldCloseOnSelect={true} name="start_datetime" showTimeSelect dateFormat="DD-MM-YYYY HH:mm" timeFormat="HH:mm" timeIntervals={1}  className="time_ico"  onChange = {this.timeChange} minDate={moment()} title="Time must not be in the past."  required aria-required="true"/> */}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><abbr title="required">*</abbr>Purchasing Entity</td>
+                                    <td>
+                                        <select id="purchasing_entity" onChange={this.changeConsumption.bind(this, "purchasing_entity")} name="purchasing_entity" value={this.state.purchasing_entity_selectd} >
+                                            {
+                                                this.state.purchasing_entity.map(item => {
+                                                    return <option key={item.id} value={item.id}>{item.company_name}</option>
+                                                })
+                                            }
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><abbr title="required">*</abbr>Intake Level</td>
+                                    <td>
+                                        <select id="intake_level" onChange={this.changeConsumption.bind(this, "intake_level")} name="intake_level" defaultValue={this.state.intake_level_selected}>
+                                            {
+                                                this.state.intake_level.map((it, i) => <option key={i} value={(it.split("(")[1]).split(")")[0]}>{it}</option>)
+                                            }
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><abbr title="required">*</abbr>Contract Capacity</td>
+                                    <td>
+                                        <input type="text" disabled={this.state.contract_capacity_disabled} value={this.state.contracted_capacity} onChange={this.changeConsumption.bind(this, "contract_capacity")} id="contract_capacity" required aria-required="true" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><abbr title="required">*</abbr>Permise Address</td>
+                                    <td>
+                                        <input type="text" value={this.state.blk_or_unit} onChange={this.changeConsumption.bind(this, "blk_or_unit")} id="blk_or_unit" placeholder="Blk or Unit" required aria-required="true" />
+                                        <input type="text" value={this.state.street} onChange={this.changeConsumption.bind(this, "street")} id="street" placeholder="Street" required aria-required="true" />
+                                        <input type="text" value={this.state.unit_number} onChange={this.changeConsumption.bind(this, "unit_number")} id="unit_number" placeholder="Unit No." required aria-required="true" />
+                                        <input type="text" value={this.state.postal_code} id="postal_code" onChange={this.changeConsumption.bind(this, "postal_code")} placeholder="Postal Code" required aria-required="true" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><abbr title="required">*</abbr>Consumption Details</td>
+                                    <td>
+                                        <div className="specil">
+                                            <span>Total Monthly:</span>
+                                            <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" required aria-required="true" /><span>kWh/month,Peak:</span>
+                                            <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} id="peak_pct" required aria-required="true" /> %
+                                        ,Off-Peak:<input type="text" value="" disabled="true" onChange={this.changeConsumption.bind(this, "pack")} id="pack" required aria-required="true" /><span></span>
+                                            %(auot calculate).<span>Upload bill(s) compulsory for Category 3 (New Accounts)</span>.
+                                              Click on "?" to see Admin's reference information on peak/offpeak ratio.
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div>
+                            <div id="account_number_taken_message" className="errormessage">There is already an existing contract for this Account Number.</div>
+                            <div id="permise_address_taken_message" className="errormessage">There is already an existing contract for this premise address.</div>
+                        </div>
+                    </div>
+                }
+                else {
+                    showDetail = <div></div>
+                }
             }
         }
         let btn_html = '';
         if (this.state.type == "default") {
             btn_html = <div className="modal_btn"><a onClick={this.closeModal.bind(this)}>OK</a></div>;
         } else if (this.state.type == "custom") {
+            btn_html = <div className="modal_btn"><a onClick={this.Add.bind(this)}>{this.state.option === "update" ? "Save" : "Add"}</a>
+
+                <a onClick={this.closeModal.bind(this)}>Cancel</a></div>;
+        }
+        else {
             btn_html =
                 <div className="modal_btn"><a onClick={this.Accept.bind(this)}>Yes</a><a onClick={this.closeModal.bind(this)}>No</a></div>;
         }
-        else {
-            btn_html = <div className="modal_btn"><a onClick={this.Add.bind(this)}>Add</a><a onClick={this.closeModal.bind(this)}>Cancel</a></div>;
-        }
         return (
-            <div id="modal_main" className={` ${this.props.changeSize === "1" ? 'consumption_model' : ''}  ${this.state.modalshowhide}`}   >
+            <div id="modal_main" className={this.state.modalshowhide} >
                 <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
                 <div className="modal_detail">
                     <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}

@@ -61,3 +61,5 @@ export const getTendersCurrent= (type,id) => {
 export const getTenderhistory= (type,id) => {
     return get('/api/'+type+'/tenders/history',{chat_id:id});
 }
+
+

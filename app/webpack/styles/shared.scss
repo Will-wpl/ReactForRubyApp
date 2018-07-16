@@ -300,6 +300,12 @@ abbr[title]{color: #fe0000; text-decoration: none;}
   .addSite{ width: 100%; margin: 10px auto;
     a{color:#00888a; cursor: pointer; background: url("../images/add.png") no-repeat left; padding-left:18px;}
   }
+  .editSite{ width: 100%; margin: 10px auto;
+    a{color:#00888a; cursor: pointer; background: url("../images/add.png") no-repeat left; padding-left:-10px;}
+  }
+  .delSite{ width: 100%; margin: 10px auto;
+    a{color:#00888a; cursor: pointer; background: url("../images/add.png") no-repeat left; padding-left:10px;}
+  }
   .buyer_btn{ text-align: right; width: 100%;
     a{
       &.disabled{background: #666; color: #aaa; cursor:default;}
@@ -800,26 +806,10 @@ ul.history_files{
 
  .consumption_model
  {
-   width:400px;
-   height: 500px;
+   width:500px;
+   height: 400px;
  }
 
-//  .
-//  {
-//   width: 100%; font-size: 13px; table-layout: fixed; border-top:1px solid #314657; border-left:1px solid #314657;
-//   tbody{
-//     overflow:auto; height: 30px;
-//     tr{
-//       td{
-//         text-align: left；
-//         input{
-//           width:100%;
-//           display: inline-block; padding:2px; border:1px solid #fff; margin-left: 5px; background: none;
-//         }
-//       }
-//     }
-//   }
-//  }
 
  .consumption_table{
   width: 100%; font-size: 12px; table-layout: fixed; border-top:1px solid #314657; border-left:1px solid #314657;
@@ -834,26 +824,50 @@ ul.history_files{
   tbody{
     overflow:auto; height: 30px;
     tr{ &.isbidder{background:green; transition: 0.5s all;}
-      td{border:1px solid #314657; text-align: center; height: 40px; padding:5px; word-break: break-all;
+      td{border:1px solid #314657; text-align: left; height: 40px; padding:5px; word-break: break-all;
+        line-height: 25px;
         abbr{
           display: inline-block; line-height: 40px; font-style: normal; transition: 0.5s all;
           background: url("../images/notification_sent.png") no-repeat -20px 11px;
           &.fill_yes{ background-position: 0px 11px; background-size:15px; padding-left: 20px;}
         }
        a{ 
+         &.react-datepicker__navigation{ width: auto; height:auto;}
          display: block; width: 100%; height: 100%; cursor: pointer;
          &.report{background: url("../images/Reverse_Auction_Report.png") no-repeat center; background-size:19px;}
          &.edit{background: url("../images/edit.png") no-repeat left; background-size:10px;  width:50px; margin:0 auto; line-height:35px;}
          &.log,&.award{background: url("../images/Activity_Log.png") no-repeat center; background-size:19px;}
        }
        input{
-         width: 100%; display: inline-block; padding:2px; border:1px solid #fff; margin-left: 5px; background: none;
+         width: 95%; display: inline-block; padding:2px; border:1px solid #fff; margin-left: 5px; background: none;
        }
        select
        {
-        width: 100%; display: inline-block; padding:2px; border:1px solid #fff; margin-left: 5px; background: none;height: 30px;
+        width: 95%; display: inline-block; padding:2px; border:1px solid #fff; margin-left: 5px; background: none;height: 30px;
        }
-     }   
+       .specil{
+        input{ width: 50px; display: inline-block; padding:2px;   background: none;color: #fff;
+          border-top:0px dashed rgba(255,255,255,0);border-left:0px dashed rgba(255,255,255,0);border-right:0px dashed rgba(255,255,255,0);border-bottom:1px solid #fff;
+        }
+      }
+      span{
+        font-weight: bold;
+      }
+     }  
+     .left_td{
+     // width: 150px;
     }
+    .right_td{
+     // width: 350px;
+    } 
+    }
+   
   }
+}
+.offpeak{
+  text-decoration :underline;
+  width: 30px;
+}
+.text_padding_left{
+  margin-left:5px;
 }
