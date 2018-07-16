@@ -727,6 +727,7 @@ class Api::AuctionsController < Api::BaseController
       auction_result_contract.justification = params[:justification]
       auction_result_contract.auction_id = params[:id].to_i
       auction_result_contract.auction_result = auction_result
+      auction_result_contract.contract_duration = params[:contract_duration]
       if auction_result_contract.save!
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], auction_result_contract.to_json)
       end
