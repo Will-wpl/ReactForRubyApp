@@ -87,7 +87,8 @@ RSpec.describe Api::Admin::AuctionHistoriesController, type: :controller do
     let!(:r1_his_bid) { create(:auction_history, :set_bid, bid_time: bid_time, user: retailer1, auction: auction, actual_bid_time:bid_time, contract_duration: '6') }
     let!(:r2_his_bid) { create(:auction_history, :not_bid, bid_time: bid_time, user: retailer2, auction: auction, actual_bid_time:current_time, contract_duration: '6') }
     let!(:r3_his_bid) { create(:auction_history, :not_bid, bid_time: bid_time, user: retailer3, auction: auction, actual_bid_time:current_time, contract_duration: '6') }
-
+    let!(:auction_result) { create(:auction_result, user: retailer1, auction: auction) }
+    let!(:auction_result_contract) { create(:auction_result_contract, auction_result: auction_result, user:retailer1, auction: auction , contract_duration: '6')}
     describe '#list' do
       def do_request
         get :list, params: { auction_id: auction.id }
@@ -115,6 +116,7 @@ RSpec.describe Api::Admin::AuctionHistoriesController, type: :controller do
           list_body = JSON.parse(response.body)
           expect(list_body.size).to eq(2)
           expect(list_body['duration_6'].size).to eq(3)
+          # expect(list_body['duration_6'])
         end
       end
     end

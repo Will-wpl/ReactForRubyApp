@@ -55,7 +55,7 @@ class Api::AuctionHistoriesController < Api::BaseController
         duration = contract.contract_duration
         if has_live_contract(contract)
           histories = AuctionHistory.find_by_sql ['select auction_histories.* ,users.company_name from auction_histories LEFT OUTER JOIN users ON users.id = auction_histories.user_id where flag = (select flag from auction_histories where auction_id = ? and is_bidder = true and contract_duration = ? order by bid_time desc LIMIT 1) order by ranking asc , actual_bid_time asc', auction.id, duration]
-          result = AuctionResult.where(auction_id: params[:auction_id], contract_duration: duration)
+          result = auction.auction_result.blank? ? nil : auction.auction_result.auction_result_contracts.where('contract_duration = ?' , contract.contract_duration).take
         end
         hash.merge!({ "duration_#{duration}": { auction: auction, histories: histories, result: result }})
       end

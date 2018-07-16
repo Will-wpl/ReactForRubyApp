@@ -99,6 +99,9 @@ RSpec.describe BidJob, type: :job do
       redis_result = RedisHelper.get_current_sorted_histories_duration(auction.id,'6')
       expect(redis_result.count).to eq(1)
       expect(redis_result[0]['lt_peak']).to eq(10)
+
+      event = AuctionEvent.find_by_auction_do('set bid 6 months')
+      expect(event.auction_do).to eq('set bid 6 months')
     end
   end
 end
