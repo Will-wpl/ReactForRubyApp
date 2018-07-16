@@ -130,7 +130,7 @@ class AuctionHistory < ApplicationRecord
       action = if history.contract_duration.blank?
                 'set bid'
               else
-                "set_bid_#{history.contract_duration}_months"
+                "set bid #{history.contract_duration} months"
               end
       AuctionEvent.set_events(history.user_id, history.auction_id, action, history.to_json) if history.user_id == current_history.user_id
     end
