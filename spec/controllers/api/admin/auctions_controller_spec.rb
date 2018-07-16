@@ -22,7 +22,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
   let! (:arrangement_pua) { create(:arrangement, user: retailers[0], auction: published_upcoming_auction, action_status: '1') }
   let!(:r1_his_init) { create(:auction_history, bid_time: Date.current, user: retailers[0], auction: published_upcoming_auction) }
   let!(:published_living_auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
-  let!(:logs) { create_list(:auction_event, 50, auction: auction, user: retailers[0]) }
+  let!(:logs) { create_list(:auction_event, 50, auction: auction, user: retailers[0] ,auction_do: 'confirm' ) }
 
   base_url = 'api/admin/auctions'
 
@@ -931,7 +931,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       end
     end
 
-    describe 'GET buyer_dashbaord' do
+    describe 'GET log' do
 
       context 'Base Search' do
         def do_request
@@ -978,7 +978,25 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       end
     end
 
+    describe 'GET new log' do
+      let!(:logs) { create_list(:auction_event, 3, auction: auction, user: retailers[0] ,auction_do: 'update' ) }
+      let!(:logs_bid_6) { create_list(:auction_event, 10, auction: auction, user: retailers[0] ,auction_do: 'set bid 6 months' ) }
+      let!(:logs_bid) { create_list(:auction_event, 10, auction: auction, user: retailers[0] ,auction_do: 'set bid' ) }
 
+      context 'Conditions Pager Search' do
+        def do_request
+          get :log, params: {id: auction.id, company_name: [retailers[0].company_name, 'like', 'users'], page_size: '20', page_index: '1', contract_duration: '6' }
+        end
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash = JSON.parse(response.body)
+          expect(hash['headers'].size).to eq(4)
+          expect(hash['bodies']['total']).to eq(13)
+          expect(hash['bodies']['data'].size).to eq(13)
+        end
+      end
+    end
   end
 
   context 'retailer user' do

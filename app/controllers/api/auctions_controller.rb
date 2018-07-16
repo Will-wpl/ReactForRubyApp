@@ -307,10 +307,15 @@ class Api::AuctionsController < Api::BaseController
 
   def log
     if params.key?(:page_size) && params.key?(:page_index)
-      search_params = reject_params(params, %w[controller action sort_by])
+      search_params = reject_params(params, %w[controller action sort_by contract_duration])
       search_where_array = set_search_params(search_params)
       result = AuctionEvent.find_by_auction_id(params[:id]).where(search_where_array)
-                   .page(params[:page_index]).per(params[:page_size])
+      unless params[:contract_duration].blank?
+        set_bid = "set bid #{params[:contract_duration]} months"
+        auction_do = ['update', 'confirm', 'extend_time', 'hold', 'publish', set_bid]
+        result = result.where(auction_do: auction_do)
+      end
+      result = result.page(params[:page_index]).per(params[:page_size])
       total = result.total_count
     else
       result = AuctionEvent.all
