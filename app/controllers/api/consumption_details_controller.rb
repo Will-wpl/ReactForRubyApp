@@ -59,7 +59,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
         consumption_detail.street = detail['street']
         consumption_detail.unit_number = detail['unit_number']
         consumption_detail.postal_code = detail['postal_code']
-        consumption_detail.company_buyer_entity_id = params[:company_buyer_entity_id]
+        consumption_detail.company_buyer_entity_id = detail['company_buyer_entity_id']
         #Update -new fields (20180709) - End
         consumption_detail.consumption_id = params[:consumption_id]
         saved_details.push(consumption_detail) if consumption_detail.save!
@@ -208,6 +208,14 @@ class Api::ConsumptionDetailsController < Api::BaseController
   end
 
   def set_participate_auction_contract_total(auction_contract, intake_values, days)
+    auction_contract.total_lt_peak = 0 if auction_contract.total_lt_peak.blank?
+    auction_contract.total_lt_off_peak = 0 if auction_contract.total_lt_off_peak.blank?
+    auction_contract.total_hts_peak = 0 if auction_contract.total_hts_peak.blank?
+    auction_contract.total_hts_off_peak = 0 if auction_contract.total_hts_off_peak.blank?
+    auction_contract.total_htl_peak = 0 if auction_contract.total_htl_peak.blank?
+    auction_contract.total_htl_off_peak = 0 if auction_contract.total_htl_off_peak.blank?
+    auction_contract.total_eht_peak = 0 if auction_contract.total_eht_peak.blank?
+    auction_contract.total_eht_off_peak = 0 if auction_contract.total_eht_off_peak.blank?
     auction_contract.total_lt_peak += intake_values[0]
     auction_contract.total_lt_off_peak += intake_values[1]
     auction_contract.total_hts_peak += intake_values[2]

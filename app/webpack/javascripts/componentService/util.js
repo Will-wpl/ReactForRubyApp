@@ -76,9 +76,19 @@ export const getStandardNumBref = (num) => {
 
 }
 
+export const validateLess = (value) => {
+    let num = /^100$|^(\d|[1-9]\d)(\.\d+)*$/;
+    if (!(num.text(value))) {
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+
 
 export const validateNum = (value) => {
-    
+
     let num = /^(\d{8})$/g;
     if (!num.test(value)) {
         return false;
@@ -129,7 +139,7 @@ export const validator_Object = (param, paramType) => {
     }
     return errArr;
 }
-export const validator_Array= (param, paramType) => {
+export const validator_Array = (param, paramType) => {
     let errArr = [];
     for (let i = 0; i < param.length; i++) {
         let entityArr = [];
@@ -160,7 +170,7 @@ export const validator_Array= (param, paramType) => {
             else {
                 let require = /^$/g;
                 if (value === null || value.length === 0 || require.test(value)) {
-                    entityArr.push({ column: key, cate: 1,ind:i })
+                    entityArr.push({ column: key, cate: 1, ind: i })
                 }
             }
         }
