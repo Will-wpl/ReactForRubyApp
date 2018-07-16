@@ -199,6 +199,15 @@ export const setValidationPass = (item, type) => {
 
     }
 }
+
+export const removeNanNum=(value)=>{
+    value.target.value = value.target.value.replace(/[^\d.]/g,"");
+    value.target.value = value.target.value.replace(/\.{2,}/g,".");
+    value.target.value = value.target.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+    if(value.target.value.indexOf(".")< 0 && value.target.value !=""){
+        value.target.value= parseFloat(value.target.value);
+    }
+}
 export const changeValidate = (type, value) => {
     if (value) {
         setValidationPass(type, 1);

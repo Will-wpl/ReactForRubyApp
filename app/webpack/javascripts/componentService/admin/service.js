@@ -151,6 +151,10 @@ export  const  getEmailFile = (type) => {
     return get('/api/admin/user_attachments?file_type='+type);
 }
 
-export const approveUser=(params)=>{
-    return put('/api/admin/users/approval_user',params)
+export const approveBuyerUser=(params)=>{
+    return put('/api/admin/users/approval_buyer',params)
+}
+
+export const approveRetailerUser=(params)=>{
+    return put('/api/admin/users/approval_retailer',params)
 }

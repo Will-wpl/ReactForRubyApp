@@ -100,23 +100,6 @@ export class FillConsumption extends Component {
         this.setState({ site_list: list })
     }
 
-    // doCheck() {
-    //     let validateItem = {
-    //         account_number: { cate: "required" },
-    //         existing_plan: { cate: "required" },
-    //         contract_expiry: { cate: "required" },
-    //         purchasing_entity: { cate: "required" },
-    //         intake_level: { cate: "required" },
-    //         contract_capacity: { cate: "num" },
-    //         blk_or_unit: { cate: "required" },
-    //         street: { cate: "required" },
-    //         unit_number: { cate: "required" },
-    //         postal_code: { cate: "required" },
-    //         totals: { cate: "num" },
-    //         peak_pct: { cate: "less100" },
-    //     }
-    // }
-
     add_site() {
         if (this.props.onAddClick) {
             this.props.onAddClick();
@@ -204,6 +187,10 @@ export class FillConsumption extends Component {
         let checkpeak = this.state.site_list.map((item, index) => {
             return parseFloat(item.totals) > 0 && parseFloat(item.peak_pct) > 0;
         })
+        // let siteCount = this.state.site_list.length;
+        // if (siteCount === 0) {
+
+        // }
 
         this.state.site_list.map((item, index) => {
             let siteItem = {
@@ -237,7 +224,14 @@ export class FillConsumption extends Component {
                 return false;
             }
         }
-        console.log(makeData);
+        
+        // if(siteCount===0)
+        // {
+        //     setTimeout(()=>{
+        //         this.setState({ text: "You must add at least one Account." });
+        //     },200);
+        //     return false;
+        // }
 
         setBuyerParticipate(makeData, '/api/buyer/consumption_details/save').then((res) => {
             if (type != "participate") {
@@ -294,6 +288,7 @@ export class FillConsumption extends Component {
     }
 
     doSubmit(type) {
+        console.log('doSubmit')
         if (type === "return") {
             return false;
         }
@@ -308,7 +303,7 @@ export class FillConsumption extends Component {
         let item = {
             account_number: siteInfo.account_number,
             existing_plan: siteInfo.existing_plan_selected,
-            contract_expiry: moment(siteInfo.contract_expiry),
+            contract_expiry: siteInfo.contract_expiry ? moment(siteInfo.contract_expiry) : "",
             company_buyer_entity_id: siteInfo.purchasing_entity_selectd,
             intake_level: siteInfo.intake_level_selected,
             contracted_capacity: siteInfo.contracted_capacity,
@@ -320,14 +315,17 @@ export class FillConsumption extends Component {
             peak_pct: siteInfo.peak_pct
         };
         let entity = this.state.site_list;
+
         if (siteInfo.index >= 0) { entity[siteInfo.index] = item; }
         else { entity.push(item) }
         this.setState({
             site_list: entity
         })
+        console.log(this.state.site_list)
     }
 
     checkSuccess(event) {
+        console.log('check')
         event.preventDefault();
         let count = this.dateCompare(this.state.site_list);
         this.setState({
@@ -391,7 +389,7 @@ export class FillConsumption extends Component {
                             <tbody>
                                 <tr>
                                     <td>Purchase Duration : </td>
-                                    <td> <select id="selDuration" style={{ 'width': '200px',marginLeft:"5px" }} onChange={this.durationChange.bind(this)}>
+                                    <td> <select id="selDuration" style={{ 'width': '200px', marginLeft: "5px" }} onChange={this.durationChange.bind(this)}>
                                         {
                                             this.state.durationList.map(item => {
                                                 return <option key={item.contract_duration} value={item.contract_duration}>{item.contract_duration + " months"}</option>
@@ -443,7 +441,7 @@ export class FillConsumption extends Component {
                                             return <tr key={index}>
                                                 <td>{item.account_number} </td>
                                                 <td>{item.existing_plan}</td>
-                                                <td>{item.contract_expiry!==""?moment(item.contract_expiry).format('YYYY-MM-DD HH:mm'):""}</td>
+                                                <td>{item.contract_expiry !== "" ? moment(item.contract_expiry).format('YYYY-MM-DD HH:mm') : ""}</td>
                                                 <td>{this.getPurchase(item.company_buyer_entity_id)} </td>
                                                 <td>{item.intake_level}</td>
                                                 <td>{item.contracted_capacity}</td>

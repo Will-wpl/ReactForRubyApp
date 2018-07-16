@@ -175,7 +175,7 @@ export class AdminDashboard extends Component {
     }
 
     goToFinish() {
-        //window.location.href=`/admin/auctions/${this.auction.id}/confirm`
+        window.location.href=`/admin/auctions/${this.auction.id}/confirm`
     }
     liveTab(index){
         let arr = this.state.live_auction_contracts.filter(item=>{
@@ -186,11 +186,34 @@ export class AdminDashboard extends Component {
         this.priceUsers.selectAll();
         this.rankingUsers.selectAll();
     }
+    check_has(type){
+        let arr = [];
+        if(this.state.auction.live_auction_contracts){
+            if(this.state.auction.live_auction_contracts.length>0){
+                arr = this.state.auction.live_auction_contracts.filter(item=>{
+                    return this.state.livetype === item.contract_duration
+                })
+            }
+            switch (type){
+                case 'has_lt':return arr[0].has_lt;
+                case 'has_hts':return arr[0].has_hts;
+                case 'has_htl':return arr[0].has_htl;
+                case 'has_eht':return arr[0].has_eht;
+            }
+        }else{
+            switch (type){
+                case 'has_lt':return !this.state.auction ? true: Number(this.state.auction.total_lt_peak) > 0 || Number(this.state.auction.total_lt_off_peak) > 0;
+                case 'has_hts':return !this.state.auction ? true: Number(this.state.auction.total_hts_peak) > 0 || Number(this.state.auction.total_hts_off_peak) > 0;
+                case 'has_htl':return !this.state.auction ? true: Number(this.state.auction.total_htl_peak) > 0 || Number(this.state.auction.total_htl_off_peak) > 0;
+                case 'has_eht':return !this.state.auction ? true: Number(this.state.auction.total_eht_peak) > 0 || Number(this.state.auction.total_eht_off_peak) > 0;
+            }
+        }
+    }
     render () {
-        const visibility_lt = !this.auction ? true: Number(this.auction.total_lt_peak) > 0 || Number(this.auction.total_lt_off_peak) > 0;
-        const visibility_hts = !this.auction ? true: Number(this.auction.total_hts_peak) > 0 || Number(this.auction.total_hts_off_peak) > 0;
-        const visibility_htl = !this.auction ? true: Number(this.auction.total_htl_peak) > 0 || Number(this.auction.total_htl_off_peak) > 0;
-        const visibility_eht = !this.auction ? true: Number(this.auction.total_eht_peak) > 0 || Number(this.auction.total_eht_off_peak) > 0;
+        const visibility_lt = this.check_has('has_lt');
+        const visibility_hts = this.check_has('has_hts');
+        const visibility_htl = this.check_has('has_htl');
+        const visibility_eht = this.check_has('has_eht');
         return (
             <div>
                 <DuringCountDown auction={this.auction} countDownOver={this.goToFinish.bind(this)} onSecondBreaker={() => {this.refs.submitBtn.disabled='disabled';this.refs.Modal.closeModal();}}>
