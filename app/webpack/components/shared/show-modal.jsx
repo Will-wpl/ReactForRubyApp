@@ -177,7 +177,7 @@ export class Modal extends React.Component {
                 break;
             default:
                 console.log('default')
-                this.Add();
+                this.addToMainForm();
                 break;
         }
     }
@@ -574,7 +574,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td><abbr title="required">*</abbr>Contract Capacity</td>
                                     <td>
-                                        <input type="text" disabled={this.state.contract_capacity_disabled} value={this.state.contracted_capacity} onChange={this.changeConsumption.bind(this, "contract_capacity")} id="contract_capacity" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" pattern="^\d+(\.\d{4})$" />
+                                        <input type="text" disabled={this.state.contract_capacity_disabled} value={this.state.contracted_capacity} onChange={this.changeConsumption.bind(this, "contract_capacity")} id="contract_capacity" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" pattern="^(0|[1-9][0-9]*)$"  maxLength="4"/>
                                     </td>
                                 </tr>
                                 <tr>
