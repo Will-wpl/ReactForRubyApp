@@ -3,6 +3,7 @@ import { constants } from 'os';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
+import { removeNanNum } from '../../javascripts/componentService/util';
 //共通弹出框组件
 export class Modal extends React.Component {
     constructor(props) {
@@ -41,13 +42,15 @@ export class Modal extends React.Component {
     }
     componentWillReceiveProps(next) {
         if (next.consumption_account_item) {
+            console.log(next.consumption_account_item.purchasing_entity)
             this.setState({
                 account_number: next.consumption_account_item.account_number,
                 existing_plan: next.consumption_account_item.existing_plan,
                 existing_plan_selected: next.consumption_account_item.existing_plan_selected,
                 contract_expiry: next.consumption_account_item.contract_expiry === "" ? "" : moment(next.consumption_account_item.contract_expiry),
                 purchasing_entity: next.consumption_account_item.purchasing_entity,
-                purchasing_entity_selectd: next.consumption_account_item.purchasing_entity_selectd ? next.consumption_account_item.purchasing_entity_selectd : next.consumption_account_item.purchasing_entity[0].id,
+                purchasing_entity_selectd: next.consumption_account_item.purchasing_entity_selectd ? next.consumption_account_item.purchasing_entity_selectd :
+                    next.consumption_account_item.purchasing_entity.length > 0 ? next.consumption_account_item.purchasing_entity[0].id : "",
                 premise_address: next.consumption_account_item.premise_address,
                 intake_level: next.consumption_account_item.intake_level,
                 intake_level_selected: next.consumption_account_item.intake_level_selected,
@@ -60,6 +63,8 @@ export class Modal extends React.Component {
                 peak_pct: next.consumption_account_item.peak_pct,
                 option: next.consumption_account_item.option
             });
+
+
             if (next.consumption_account_item.existing_plan_selected === "Retailer plan") {
                 this.setState({
                     contract_expiry_disabled: false
@@ -145,10 +150,22 @@ export class Modal extends React.Component {
             type: "default"
         })
     }
-    checkSuccess(event, obj) {
+
+    // removeNanNum(obj){
+    //     obj.target.value = obj.target.value.replace(/[^\d.]/g,"");
+    //     obj.target.value = obj.target.value.replace(/\.{2,}/g,".");
+    //     obj.target.value = obj.target.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+    //     if(obj.target.value.indexOf(".")< 0 && obj.target.value !=""){
+    //         obj.target.value= parseFloat(obj.target.value);
+    //     }
+    // }
+    checkModelSuccess(event) {
+        console.log('dsafasdfasdf')
         event.preventDefault();
         let status = this.account_address_repeat();
 
+        console.log("status");
+        console.log(status)
         switch (status) {
             case 'false|true':
                 console.log('false|true')
@@ -172,7 +189,14 @@ export class Modal extends React.Component {
                 break;
         }
     }
-
+    removeNanNum(value) {
+        value.target.value = value.target.value.replace(/[^\d.]/g, "");
+        value.target.value = value.target.value.replace(/\.{2,}/g, ".");
+        value.target.value = value.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+        if (value.target.value.indexOf(".") < 0 && value.target.value != "") {
+            value.target.value = parseFloat(value.target.value);
+        }
+    }
     account_address_repeat() {
         let address = false, account = false;
         this.state.consumptionItem.map((item, index) => {
@@ -185,8 +209,12 @@ export class Modal extends React.Component {
         })
         return address + "|" + account;
     }
+
     Add() {
-        console.log("ADD")
+       
+    }
+    addToMainForm()
+    {
         let siteItem = {
             account_number: this.state.account_number,
             existing_plan_selected: this.state.existing_plan_selected,
@@ -202,13 +230,9 @@ export class Modal extends React.Component {
             peak_pct: this.state.peak_pct,
             index: this.state.itemIndex
         }
-        console.log(this.state.consumptionItem);
         if (this.props.acceptFunction) {
             this.props.acceptFunction(siteItem);
         }
-        this.setState({
-            modalshowhide: "modal_hide"
-        })
     }
     changeConsumption(type, e) {
         let value = e.target.value;
@@ -239,14 +263,12 @@ export class Modal extends React.Component {
                 })
                 break;
             case "purchasing_entity":
-                console.log(value)
                 this.setState({
                     purchasing_entity_selectd: value
                 })
                 break;
             case "intake_level":
                 if (value === 'LT') {
-                    console.log("1:" + value)
                     this.setState({
                         contract_capacity_disabled: true,
                         intake_level_selected: value,
@@ -254,7 +276,6 @@ export class Modal extends React.Component {
                     })
                 }
                 else {
-                    console.log(2 + ":" + value)
                     this.setState({
                         contract_capacity_disabled: false,
                         intake_level_selected: value
@@ -508,7 +529,7 @@ export class Modal extends React.Component {
             }
             if (this.props.listdetailtype === 'consumption_detail') {
                 if (this.props.consumption_account_item !== null) {
-                    showDetail = <form name="buyer_form" method="post" onSubmit={this.checkSuccess.bind(this)}>
+                    showDetail = <form name="buyer_model_form" method="post" onSubmit={this.checkModelSuccess.bind(this)}>
                         <h3 className="text_padding_left">My Account Information</h3>
                         <table className="consumption_table  u-mb3" cellPadding="0" cellSpacing="0" style={{ marginTop: "15px" }}>
                             <tbody>
@@ -537,7 +558,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td><abbr title="required">*</abbr>Purchasing Entity</td>
                                     <td>
-                                        <select id="purchasing_entity" onChange={this.changeConsumption.bind(this, "purchasing_entity")} name="purchasing_entity" value={this.state.purchasing_entity_selectd} >
+                                        <select id="purchasing_entity" onChange={this.changeConsumption.bind(this, "purchasing_entity")} name="purchasing_entity" value={this.state.purchasing_entity_selectd} required>
                                             {
                                                 this.state.purchasing_entity.map(item => {
                                                     return <option key={item.id} value={item.id}>{item.company_name}</option>
@@ -559,7 +580,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td><abbr title="required">*</abbr>Contract Capacity</td>
                                     <td>
-                                        <input type="text" disabled={this.state.contract_capacity_disabled} value={this.state.contracted_capacity} onChange={this.changeConsumption.bind(this, "contract_capacity")} id="contract_capacity" required aria-required="true" />
+                                        <input type="text" disabled={this.state.contract_capacity_disabled} value={this.state.contracted_capacity} onChange={this.changeConsumption.bind(this, "contract_capacity")} id="contract_capacity" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" pattern="^\d+(\.\d{4})$" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -575,9 +596,9 @@ export class Modal extends React.Component {
                                     <td><abbr title="required">*</abbr>Consumption Details</td>
                                     <td>
                                         <div className="specil">
-                                            <span>Total Monthly:</span>
-                                            <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" required aria-required="true" /><span>kWh/month,Peak:</span>
-                                            <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} id="peak_pct" required aria-required="true" /> %
+                                            <span>Total Monthly1:</span>
+                                            <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" onKeyUp={this.removeNanNum.bind(this)} pattern="/^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/" required aria-required="true" /><span>kWh/month,Peak:</span>
+                                            <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} id="peak_pct" onKeyUp={this.removeNanNum.bind(this)} pattern="^100$|^(\d|[1-9]\d)(\.\d+)*$" required aria-required="true" /> %
                                         ,Off-Peak:<input type="text" value="" disabled="true" onChange={this.changeConsumption.bind(this, "pack")} id="pack" required aria-required="true" /><span></span>
                                             %(auot calculate).<span>Upload bill(s) compulsory for Category 3 (New Accounts)</span>.
                                             <div title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">?</div>
@@ -586,13 +607,13 @@ export class Modal extends React.Component {
                                 </tr>
                             </tbody>
                         </table>
-                        <div>
+                        <div className="modal_btn">
                             <div id="account_number_taken_message" className="isPassValidate">There is already an existing contract for this Account Number.</div>
                             <div id="permise_address_taken_message" className="isPassValidate">There is already an existing contract for this premise address.</div>
                         </div>
-                        <div>
-                            <button className="modal_btn" onClick={this.Add.bind(this)}>{this.state.option === "update" ? "Save" : "Add"}</button>
-                            <button className="modal_btn" onClick={this.closeModal.bind(this)}>Cancel</button>
+                        <div className="modal_btn">
+                            <button className="custombtn" onClick={this.Add.bind(this)}>{this.state.option === "update" ? "Save" : "Add"}</button>
+                            <button className="custombtn" onClick={this.closeModal.bind(this)}>Cancel</button>
                         </div>
                     </form>
                 }
@@ -605,9 +626,9 @@ export class Modal extends React.Component {
         if (this.state.type == "default") {
             btn_html = <div className="modal_btn"><a onClick={this.closeModal.bind(this)}>OK</a></div>;
         } else if (this.state.type == "custom") {
-            // btn_html = <div className="modal_btn"><a onClick={this.Add.bind(this)}>{this.state.option === "update" ? "Save" : "Add"}</a>
-            //     <a onClick={this.closeModal.bind(this)}>Cancel</a></div>;
-            btn_html = <div></div>
+            btn_html = <div  >
+
+            </div>
         }
         else {
             btn_html =

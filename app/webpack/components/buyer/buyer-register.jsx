@@ -4,7 +4,7 @@ import { UploadFile } from '../shared/upload';
 import { UserEntity } from '../shared/user-entity';
 import { Modal } from '../shared/show-modal';
 import { getBuyerUserInfo, saveBuyerUserInfo, submitBuyerUserInfo, getBuyerUserInfoByUserId, validateIsExist } from '../../javascripts/componentService/common/service';
-import { approveUser } from '../../javascripts/componentService/admin/service';
+import { approveBuyerUser } from '../../javascripts/componentService/admin/service';
 import { validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
 
 export class BuyerRegister extends Component {
@@ -559,13 +559,13 @@ export class BuyerRegister extends Component {
 
         if (obj.action === 'reject') {
             if (this.checkRejectAction()) {
-                approveUser(param).then(res => {
+                approveBuyerUser(param).then(res => {
                     location.href = "/admin/users/buyers";
                 })
             }
         }
         else {
-            approveUser(param).then(res => {
+            approveBuyerUser(param).then(res => {
                 location.href = "/admin/users/buyers";
             })
         }
