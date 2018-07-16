@@ -6,22 +6,22 @@ import {getArrangements, getHistories} from '../../javascripts/componentService/
 import {findUpLimit, getRandomColor, getStandardNumBref, isEmptyJsonObj} from '../../javascripts/componentService/util';
 import {Modal} from '../shared/show-modal';
 export default class ChooseAlternativeWinner extends React.Component{
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state={
-            text:"",
-            winnerData:[],
-            currentRetailerData:[],
-            selectedWinner:null,
-            justification:'',
-            winner:null,
-            disabled:false,
-            auction:{},livetype:'6',
-            live_auction_contracts:[],
-            userid:'',fnStatus:'win'
+        this.state = {
+            text: "",
+            winnerData: [],
+            currentRetailerData: [],
+            selectedWinner: null,
+            justification: '',
+            winner: null,
+            disabled: false,
+            auction: {}, livetype: '6',
+            live_auction_contracts: [],
+            userid: '', fnStatus: 'win',
+            resultarray:[]
         }
     }
-
     componentDidMount(){
         let thisId = window.location.href.split("auctions/")[1].split("/choose_winner")[0];
         //console.log(thisId);
@@ -40,8 +40,13 @@ export default class ChooseAlternativeWinner extends React.Component{
     }
     refresh(){
         getHistoriesLast({ auction_id: this.state.auction.id}).then(resp=>{
-            let data;
-            if(resp.duration_6 || resp.duration_12 || resp.duration_24){;
+            let data ,arr=[];
+            if(resp.duration_6 || resp.duration_12 || resp.duration_24){
+                resp.duration_6?arr.push(resp.duration_6):'';
+                resp.duration_12?arr.push(resp.duration_12):'';
+                resp.duration_24?arr.push(resp.duration_24):'';
+                this.setState({resultarray:arr});
+                this.goToresult();
                 switch (this.state.livetype){
                     case '6' : data = resp.duration_6;
                         break;
@@ -53,8 +58,10 @@ export default class ChooseAlternativeWinner extends React.Component{
             }else{
                 data=resp;
             }
-            if(data.result.status){
+            if(data.result){
                 this.setState({disabled:true});
+            }else{
+                this.setState({disabled:false});
             }
             data.histories.map((item,index)=>{
                 if(index==0){
@@ -161,7 +168,6 @@ export default class ChooseAlternativeWinner extends React.Component{
     }
     acceptWinner(){
         //console.log('sure');
-        let thisId = window.location.href.split("auctions/")[1].split("/choose_winner")[0];
         let timeFn;
         let data = this.state.selectedWinner;
         data.data.justification = this.state.justification;
@@ -171,14 +177,24 @@ export default class ChooseAlternativeWinner extends React.Component{
             clearTimeout(timeFn);
             this.refs.Modal.showModal();
             this.setState({
-                text:'Congratulations! Reverse Auction winner has been confirmed.'
+                text:'Congratulations! Reverse Auction winner has been confirmed.',
+                disabled:true
             });
             timeFn = setTimeout(()=> {
-                window.location.href = `/admin/auctions/${thisId}/result`;
+                this.refresh();
             },2000)
         })
     }
-    
+    goToresult(){
+        let thisId = window.location.href.split("auctions/")[1].split("/choose_winner")[0];
+        console.log(this.state.resultarray);
+        let turly = this.state.resultarray.find(item=>{
+            return item.result == null;
+        })
+        if(!turly){
+            window.location.href = `/admin/auctions/${thisId}/result`;
+        }
+    }
     renderWinner(){
         if(this.state.winnerData.length != 0){
             if(this.state.winner == null){

@@ -26,6 +26,8 @@ export class AdminReport extends Component {
     }
 
     componentDidMount() {
+        let contract_duration = window.location.href.indexOf('contract_duration')>0?
+            window.location.href.split('=')[1]:null;
         getAuction('admin',(window.location.href.split("auctions/")[1]).split("/report")[0]).then(auction => {
             this.auction = auction;
             this.userStartInfo = auction ? `${auction.name} on ${moment(auction.start_datetime).format('D MMM YYYY')}` : '';
@@ -35,9 +37,9 @@ export class AdminReport extends Component {
             this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000';
             this.actualPrice = '0.0000';
             const auctionId = auction? auction.id : 1;
-            getHistoriesLast({ auction_id: auctionId}).then(data => {
+            getHistoriesLast({ auction_id: auctionId,contract_duration:contract_duration}).then(data => {
                 this.actualPrice = data.histories.length > 0 ? data.histories[0].average_price : '0.0000';
-                getHistories({ auction_id: auctionId}).then(histories => {
+                getHistories({ auction_id: auctionId,contract_duration:contract_duration}).then(histories => {
                     this.setState({
                         histories: histories,
                         winner:{
