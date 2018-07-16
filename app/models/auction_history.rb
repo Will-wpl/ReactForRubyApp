@@ -127,7 +127,12 @@ class AuctionHistory < ApplicationRecord
     end
     new_histories.each do |history|
       ids.push(history.id) if history.save
-      AuctionEvent.set_events(history.user_id, history.auction_id, 'set bid', history.to_json) if history.user_id == current_history.user_id
+      action = if history.contract_duration.blank?
+                'set bid'
+              else
+                "set bid #{history.contract_duration} months"
+              end
+      AuctionEvent.set_events(history.user_id, history.auction_id, action, history.to_json) if history.user_id == current_history.user_id
     end
     ids
   end

@@ -169,4 +169,34 @@ RSpec.describe UserMailer, type: :mail do
       expect(open_last_email).to have_body_text email_body
     end
   end
+
+  context 'buyer_participate mail' do
+    before :each do
+      @template = create(:email_template, subject: 'Buyer clicks Participate', body: 'Dear Admin,<br/><br/>#buyer_company_name has submitted purchase details for participation in an upcoming auction: #name_of_ra on #date_time.<br/><br/>Please proceed to approve/reject the submission at <a href="http://revv.sg">revv.sg</a>', template_type: '26')
+      UserMailer.buyer_participate(@admin_user, {:buyer_company_name => 'buyer_company_name', :name_of_ra => 'name_of_ra', :date_time => 'date_time'}).deliver_now
+    end
+    it 'be_delivered_to', mail: true do
+      expect(open_last_email).to be_delivered_to @admin_user.email
+    end
+  end
+
+  context 'buyer_participate approved mail' do
+    before :each do
+      @template = create(:email_template, subject: '#name_of_ra on #date_time has been approved', body: 'Dear #buyer_company_name,<br/><br/>Your purchase details for participation in the upcoming auction (#name_of_ra on #date_time) has been approved.<br/><br/>You may view your approved participation details at <a href="http://revv.sg">revv.sg</a>.', template_type: '27')
+      UserMailer.buyer_participate_approved(company_buyer, {:name_of_ra => 'name_of_ra', :date_time => 'date_time'}).deliver_now
+    end
+    it 'be_delivered_to', mail: true do
+      expect(open_last_email).to be_delivered_to company_buyer.email
+    end
+  end
+
+  context 'buyer_participate rejected mail' do
+    before :each do
+      @template = create(:email_template, subject: '#name_of_ra on #date_time has been rejected', body: 'Dear #buyer_company_name,<br/><br/>Your purchase details for participation in the upcoming auction (#name_of_ra on #date_time) has been rejected.<br/><br/>Please log in to your account at <a href="http://revv.sg">revv.sg</a> for further actions.', template_type: '28')
+      UserMailer.buyer_participate_rejected(company_buyer, {:name_of_ra => 'name_of_ra', :date_time => 'date_time'}).deliver_now
+    end
+    it 'be_delivered_to', mail: true do
+      expect(open_last_email).to be_delivered_to company_buyer.email
+    end
+  end
 end

@@ -53,12 +53,11 @@ export class FillConsumption extends Component {
         this.purchaseList = [];
         this.consumptions_id = (window.location.href.split("consumptions/")[1]).split("/edit")[0];
     }
+
     componentDidMount() {
         this.BuyerParticipateList();
     }
-    buyerPurchseList() {
 
-    }
     BuyerParticipateList() {
         console.log(this.consumptions_id);
         getBuyerParticipate('/api/buyer/consumption_details?consumption_id=' + this.consumptions_id).then((res) => {
@@ -122,8 +121,21 @@ export class FillConsumption extends Component {
         if (this.props.onAddClick) {
             this.props.onAddClick();
         }
+        this.accountItem.account_number = "";
+        this.accountItem.existing_plan = ['SPS tariff', 'SPS wholesale', 'Retailer plan'];
+        this.accountItem.existing_plan_selected = "SPS tariff";
+        this.accountItem.contract_expiry = "";
         this.accountItem.purchasing_entity = this.purchaseList;
-
+        this.accountItem.purchasing_entity_selectd = "";
+        this.accountItem.intake_level = ['Low Tension (LT)', 'High Tension Small (HTS)', 'High Tension Large (HTL)', 'Extra High Tension (EHT)'];
+        this.accountItem.intake_level_selected = "LT";
+        this.accountItem.contracted_capacity = "";
+        this.accountItem.blk_or_unit = "";
+        this.accountItem.street = "";
+        this.accountItem.unit_number = "";
+        this.accountItem.postal_code = "";
+        this.accountItem.totals = "";
+        this.accountItem.peak_pct = "";
         this.setState({
             account_detail: this.accountItem
         })
@@ -216,7 +228,6 @@ export class FillConsumption extends Component {
             details: JSON.stringify(buyerlist),
             contract_duration: $("#selDuration").val()
         }
-        console.log(makeData);
         if (type != "delete") {
             if (!checkpeak) {
                 setTimeout(() => {
@@ -226,6 +237,7 @@ export class FillConsumption extends Component {
                 return false;
             }
         }
+        console.log(makeData);
 
         setBuyerParticipate(makeData, '/api/buyer/consumption_details/save').then((res) => {
             if (type != "participate") {
@@ -256,6 +268,7 @@ export class FillConsumption extends Component {
             this.setState({ text: "Interface failed2" });
         })
     }
+
     doAccept() {
         if (this.state.submit_type === "Reject") { //do Reject
             setBuyerParticipate({ consumption_id: this.consumptions_id }, '/api/buyer/consumption_details/reject').then((res) => {
@@ -279,6 +292,7 @@ export class FillConsumption extends Component {
             }, 500);
         }
     }
+
     doSubmit(type) {
         if (type === "return") {
             return false;
@@ -305,24 +319,15 @@ export class FillConsumption extends Component {
             totals: siteInfo.totals,
             peak_pct: siteInfo.peak_pct
         };
-        console.log(siteInfo);
         let entity = this.state.site_list;
-        if (siteInfo.index >= 0) {
-            // console.log('update')
-            // console.log(siteInfo.index)
-            entity[siteInfo.index] = item;
-        }
-        else {
-            entity.push(item)
-        }
-
+        if (siteInfo.index >= 0) { entity[siteInfo.index] = item; }
+        else { entity.push(item) }
         this.setState({
             site_list: entity
         })
     }
 
-
-    checkSuccess(event, obj) {
+    checkSuccess(event) {
         event.preventDefault();
         let count = this.dateCompare(this.state.site_list);
         this.setState({
@@ -341,7 +346,9 @@ export class FillConsumption extends Component {
         else {
             this.passValidateSave();
         }
+        // this.passValidateSave();
     }
+
     passValidateSave() {
         if (this.state.submit_type === "Participate") {
             this.refs.Modal.showModal("comfirm");
@@ -357,6 +364,7 @@ export class FillConsumption extends Component {
             durtioanItem: itemValue
         })
     }
+
     getPurchase(id) {
         let name = "";
         if (this.purchaseList) {
@@ -370,6 +378,7 @@ export class FillConsumption extends Component {
         }
         return name;
     }
+
     render() {
         return (
             <div>
@@ -378,8 +387,22 @@ export class FillConsumption extends Component {
                 <h4 className="col-sm-12 u-mb2">Contract Start Date: {moment(this.state.time).format('D MMM YYYY hh:mm a')}</h4>
                 <h4 >
                     <div className="row col-sm-12 u-mb2">
-                        <div className="col-sm-2 u-mb2">Purchase Duration:</div>
-                        <div className="col-sm-5 u-mb2">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>Purchase Duration : </td>
+                                    <td> <select id="selDuration" style={{ 'width': '200px',marginLeft:"5px" }} onChange={this.durationChange.bind(this)}>
+                                        {
+                                            this.state.durationList.map(item => {
+                                                return <option key={item.contract_duration} value={item.contract_duration}>{item.contract_duration + " months"}</option>
+                                            })
+                                        }
+                                    </select></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        {/* <div className="col-sm-2  col-md-2 u-mb2">Purchase Duration:</div>
+                        <div className="col-sm-5  col-md-5 u-mb2">
                             <select id="selDuration" style={{ 'width': '200px' }} onChange={this.durationChange.bind(this)}>
                                 {
                                     this.state.durationList.map(item => {
@@ -387,11 +410,9 @@ export class FillConsumption extends Component {
                                     })
                                 }
                             </select>
-                        </div>
+                        </div> */}
                     </div>
                 </h4>
-
-                {/* <h1>Participate in upcoming {this.state.name} exercise on {moment(this.state.time).format('D MMM YYYY hh:mm a')}</h1> */}
                 <form name="buyer_form" method="post" onSubmit={this.checkSuccess.bind(this)}>
                     <div className="u-grid buyer mg0">
                         {this.state.link ?
@@ -399,14 +420,9 @@ export class FillConsumption extends Component {
                                 <input name="agree_auction" type="checkbox" disabled={this.state.disabled} required />&nbsp;&nbsp;
                             I agree to the <a className="cursor" target="_blank" download={this.state.link.file_name} href={`${this.state.link.file_path}`}>terms and conditions.</a>
                             </h4> : ""
-
                         }
-
-                        {/*<h4 className="col-sm-12 u-mb2"><input name="agree_auction" type="checkbox" disabled={this.state.disabled} required /> I agree to the {this.state.link?<a className="cursor" download={this.state.link.file_name} href={`${this.state.link.file_path}`}>terms and conditions.</a>:'terms and conditions.'}</h4>*/}
-
                         <h4 className="col-sm-12 u-mb2">Last Status of Participation : {this.status}</h4>
-                        <div className="col-sm-12 col-md-10">
-                            {/* <DoFillConsumption changeSiteList={this.changeSiteList.bind(this)} site_list={this.state.site_list} checked={this.state.checked} remove={this.remove_site.bind(this)} /> */}
+                        <div className="col-sm-12 col-md-12">
                             <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                                 <thead>
                                     <tr>
@@ -427,12 +443,15 @@ export class FillConsumption extends Component {
                                             return <tr key={index}>
                                                 <td>{item.account_number} </td>
                                                 <td>{item.existing_plan}</td>
-                                                <td>{moment(item.contract_expiry).format('YYYY-MM-DD HH:mm')}</td>
+                                                <td>{item.contract_expiry!==""?moment(item.contract_expiry).format('YYYY-MM-DD HH:mm'):""}</td>
                                                 <td>{this.getPurchase(item.company_buyer_entity_id)} </td>
                                                 <td>{item.intake_level}</td>
                                                 <td>{item.contracted_capacity}</td>
                                                 <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
-                                                <td>{item.account_number}</td>
+                                                <td>
+                                                    <span className="textBold">Total Monthly:<div>{item.totals}</div>kWh/month,Peak:<div>{item.peak_pct}</div></span>,Off-Peak:<span className="textNormal"><div>{100 - item.peak_pct}</div></span>(auto calculate).<span className="textBold">Upload bill(s) compulsory for Category 3(new Accounts)</span>.
+                                                    <div title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">?</div>
+                                                </td>
                                                 <td>
                                                     {this.state.checked ? '' : <div className="editSite"><a onClick={this.edit_site.bind(this, item, index)}>Edit </a></div>}
                                                     {this.state.checked ? '' : <div className="delSite"><a onClick={this.remove_site.bind(this, index)}>Delete </a></div>}
@@ -443,7 +462,7 @@ export class FillConsumption extends Component {
                                 </tbody>
                             </table>
                             {this.state.checked ? '' : <div className="addSite"><a onClick={this.add_site.bind(this)}>Add Account</a></div>}
-                            <div id="div_warning">
+                            <div id="div_warning" className="warning">
                                 {
                                     this.state.dateIssuecount > 0 ?
                                         <h4 className="lm--formItem lm--formItem--inline string" >
@@ -451,6 +470,7 @@ export class FillConsumption extends Component {
                                              to confirm that you aware and would like to proceed with including such account(s) in this auction.</h4> : <div></div>
                                 }
                             </div>
+
                             <div>
                                 <h4 className="lm--formItem lm--formItem--inline string">
                                     <input name="agree_declare" type="checkbox" id="chkAgree_declare" required />
@@ -469,7 +489,7 @@ export class FillConsumption extends Component {
                     </div>
                     <Modal text={this.state.text} acceptFunction={this.doAccept.bind(this)} ref="Modal" />
                 </form>
-                <Modal acceptFunction={this.doAddAccountAction.bind(this)} contract_capacity_disabled={this.state.contract_capacity_disabled} contract_expiry_disabled={this.state.contract_expiry_disabled} consumption_account_item={this.state.account_detail} listdetailtype='consumption_detail' ref="consumption" />
+                <Modal acceptFunction={this.doAddAccountAction.bind(this)} contract_capacity_disabled={this.state.contract_capacity_disabled} contract_expiry_disabled={this.state.contract_expiry_disabled} siteList={this.state.site_list} consumption_account_item={this.state.account_detail} listdetailtype='consumption_detail' ref="consumption" />
             </div>
         )
     }

@@ -22,7 +22,7 @@ NotAllowDeviation = '0'.freeze
   has_many :consumptions, dependent: :destroy
   has_many :users, through: :consumptions
   has_many :auction_contracts, dependent: :destroy
-  has_many :auction_results, dependent: :destroy
+  has_one :auction_result, dependent: :destroy
   # accepts_nested_attributes
 
   # Validations
@@ -31,7 +31,7 @@ NotAllowDeviation = '0'.freeze
 
   scope :published, -> { where("publish_status = '1'") }
   scope :current_year, -> { where("to_char(actual_begin_time,'yyyy') = ?", Time.current.year.to_s) }
-  scope :has_auction_result, -> { includes(:auction_results).where(auction_results: { status: nil }) }
+  scope :has_auction_result, -> { includes(:auction_result).where(auction_results: { status: nil }) }
   scope :unpublished, -> { where("publish_status = '0'") }
   # Callbacks
 
