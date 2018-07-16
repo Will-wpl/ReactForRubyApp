@@ -20,6 +20,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
 
     # update buyer entity registration information
     buyer_entities = JSON.parse(params[:buyer_entities])
+    buyer_entities.push(build_default_entity( update_user_params )) unless buyer_entities.any?{ |v| v['is_default'] == 1 }
     update_buyer_entities(buyer_entities)
     render json: { user: @user }, status: 200
 
@@ -34,6 +35,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
 
     # update buyer entity registration information
     buyer_entities = JSON.parse(params[:buyer_entities])
+    buyer_entities.push(build_default_entity( update_user_params )) unless buyer_entities.any?{ |v| v['is_default'] == 1 }
     update_buyer_entities(buyer_entities, true)
 
     render json: { user: @user }, status: 200
@@ -87,6 +89,21 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
 
   private
 
+  def build_default_entity(update_user_params)
+    buyer_entity = Hash[
+        'id'=> nil,
+        'company_name'=> update_user_params['company_name'],
+        'company_uen'=> update_user_params['company_unique_entity_number'],
+        'company_address'=> update_user_params['company_address'],
+        'billing_address'=> update_user_params['billing_address'],
+        'contact_name'=> update_user_params['name'],
+        'contact_email'=> update_user_params['email'],
+        'user_id'=> current_user.id,
+        'is_default'=> 1
+    ]
+    buyer_entity
+  end
+
   def validate_buyer_entities_info(buyer_email, buyer_entities)
     entity_indexes = []
     user_emails = User.select(:email)
@@ -139,10 +156,11 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
         target_buyer_entity.contact_email = buyer_entity['contact_email'] unless buyer_entity['contact_email'].blank?
         target_buyer_entity.contact_mobile_no = buyer_entity['contact_mobile_no'] unless buyer_entity['contact_mobile_no'].blank?
         target_buyer_entity.contact_office_no = buyer_entity['contact_office_no'] unless buyer_entity['contact_office_no'].blank?
+        target_buyer_entity.is_default = buyer_entity['is_default'].blank? ? 0 : buyer_entity['is_default']
         target_buyer_entity.user = current_user
         if target_buyer_entity.save!
           saved_buyer_entities.push(target_buyer_entity)
-          if need_create_user then
+          if need_create_user && !target_buyer_entity.is_default then
             new_entity_user = User.new
             new_entity_user.name = target_buyer_entity.company_name
             new_entity_user.email = target_buyer_entity.contact_email
@@ -152,6 +170,10 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
             new_entity_user.password_confirmation = 'password'
             new_entity_user.entity_id = target_buyer_entity.id
             new_entity_user.add_role(:entity) if new_entity_user.save
+          elsif need_create_user && target_buyer_entity.is_default then
+            user = current_user
+            user.entity_id = target_buyer_entity.id
+            user.save!
           end
         end
       end
