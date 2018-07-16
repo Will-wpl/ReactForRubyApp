@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180716050932) do
+ActiveRecord::Schema.define(version: 20180716055827) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -162,6 +162,14 @@ ActiveRecord::Schema.define(version: 20180716050932) do
     t.string "contract_duration"
     t.bigint "auction_id"
     t.bigint "user_id"
+    t.decimal "reserve_price_lt_peak"
+    t.decimal "reserve_price_lt_off_peak"
+    t.decimal "reserve_price_hts_peak"
+    t.decimal "reserve_price_hts_off_peak"
+    t.decimal "reserve_price_htl_peak"
+    t.decimal "reserve_price_htl_off_peak"
+    t.decimal "reserve_price_eht_peak"
+    t.decimal "reserve_price_eht_off_peak"
     t.index ["auction_id"], name: "index_auction_result_contracts_on_auction_id"
     t.index ["auction_result_id"], name: "index_auction_result_contracts_on_auction_result_id"
     t.index ["user_id"], name: "index_auction_result_contracts_on_user_id"
