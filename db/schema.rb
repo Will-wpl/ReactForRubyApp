@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180716033419) do
+ActiveRecord::Schema.define(version: 20180716050932) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -159,7 +159,12 @@ ActiveRecord::Schema.define(version: 20180716033419) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "auction_result_id"
+    t.string "contract_duration"
+    t.bigint "auction_id"
+    t.bigint "user_id"
+    t.index ["auction_id"], name: "index_auction_result_contracts_on_auction_id"
     t.index ["auction_result_id"], name: "index_auction_result_contracts_on_auction_result_id"
+    t.index ["user_id"], name: "index_auction_result_contracts_on_user_id"
   end
 
   create_table "auction_results", force: :cascade do |t|
@@ -420,6 +425,7 @@ ActiveRecord::Schema.define(version: 20180716033419) do
   add_foreign_key "auction_events", "users"
   add_foreign_key "auction_histories", "auctions"
   add_foreign_key "auction_histories", "users"
+  add_foreign_key "auction_result_contracts", "auctions"
   add_foreign_key "auction_results", "auctions"
   add_foreign_key "company_buyer_entities", "users"
   add_foreign_key "consumption_details", "company_buyer_entities"
