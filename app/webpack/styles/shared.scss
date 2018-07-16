@@ -254,7 +254,10 @@ abbr[title]{color: #fe0000; text-decoration: none;}
     &.fail{ color:red; background: url("../images/not_achieved.png") no-repeat left; padding-left:20px;}
   }
 }
-
+.retailor_justification{ text-align: right;
+  h2{ text-align:left;}
+  button{margin-left: 15px;}
+}
 //winnerPirce
 .winnerPrice_main{ 
   width:86%; margin: 10px auto; font-size: 12px;
