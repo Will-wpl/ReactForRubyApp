@@ -6,7 +6,7 @@ class AuctionResult < ApplicationRecord
   # Associations
 
   belongs_to :auction
-  belongs_to :user
+  belongs_to :user, optional: true
   has_many :auction_result_contracts, dependent: :destroy
   # accepts_nested_attributes
 

@@ -5,7 +5,7 @@ class AuctionResultContract < ApplicationRecord
 
   # Associations
   belongs_to :auction
-  belongs_to :user
+  belongs_to :user, optional: true
   belongs_to :auction_result
   # accepts_nested_attributes
 
