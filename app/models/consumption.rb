@@ -54,8 +54,16 @@ class Consumption < ApplicationRecord
     get_company_user_by_auction(auction_id).count
   end
 
+  def self.get_company_user_duration_count(auction_id, contract_duration)
+    get_company_user_by_auction_duration(auction_id, contract_duration).count
+  end
+
   def self.get_company_user(auction_id)
     get_company_user_by_auction(auction_id)
+  end
+
+  def self.get_company_user_duration(auction_id, contract_duration)
+    get_company_user_by_auction_duration(auction_id, contract_duration)
   end
 
   def self.update_value(auction_id, _consumption, _intake_values)
@@ -127,5 +135,9 @@ class Consumption < ApplicationRecord
 
   def self.get_company_user_by_auction(auction_id)
     Consumption.find_by_auction_id(auction_id).find_by_user_consumer_type(User::ConsumerTypeCompany).is_participation
+  end
+
+  def self.get_company_user_by_auction_duration(auction_id, contract_duration)
+    get_company_user_by_auction(auction_id).where(contract_duration: contract_duration)
   end
 end
