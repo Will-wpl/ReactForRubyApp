@@ -17,10 +17,8 @@ class Api::Admin::AuctionResultsController < Api::AuctionResultsController
     results = get_order_list(result, params, headers)
     results.each do |result|
       if result.auction_result_contracts.blank?
-
         data.push(set_result(result))
       else
-
         data.push(set_contracts_result(result))
       end
 
@@ -53,7 +51,6 @@ class Api::Admin::AuctionResultsController < Api::AuctionResultsController
   end
 
   def set_contracts_result(result)
-
     contracts = []
     result.auction_result_contracts.each do |result_contract|
       company_user_count = Consumption.get_company_user_duration_count(result_contract.auction_id, result_contract.contract_duration)
@@ -74,6 +71,7 @@ class Api::Admin::AuctionResultsController < Api::AuctionResultsController
     data = {id: result.auction.id,
            published_gid: result.auction.published_gid, name: result.auction.name, start_datetime: result.auction.start_datetime,
            contracts: contracts}
+    data
   end
 
   def get_order_list(result, params, headers)
