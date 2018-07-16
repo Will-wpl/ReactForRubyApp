@@ -22,7 +22,8 @@ export default class AdminConfirmWinner extends Component {
         winner:{
             data:{},
             auction:{}
-        }
+        },
+        auctions:{},livetype:'6',live_auction_contracts:[]
     }
     this.winner = {
         data:{},
@@ -43,20 +44,46 @@ compare(prop) {
 }
 componentDidMount() {
     getAuction('admin',sessionStorage.auction_id).then(auction => {
+        this.setState({auctions:auction});
+        if(auction.live_auction_contracts){
+            this.setState({
+                live_auction_contracts:auction.live_auction_contracts,
+                livetype:auction.live_auction_contracts[0].contract_duration
+            });
+        }
         //console.log(auction);
         this.auction = auction;
-        this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000'
-        getHistoriesLast({ auction_id: auction? auction.id : 1}).then(data => {
-            this.setState({
-                winner:{
-                    data:data.histories[0],
-                    auction:data.auction
-                }
-            })
-            this.setState({realtimeRanking:data.histories,currentPrice : data.histories.length > 0 ? data.histories[0].average_price : this.state.currentPrice});
-        })
+        this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000';
+        this.refresh();
     })
 }
+refresh(){
+    getHistoriesLast({ auction_id: this.state.auctions.id? this.state.auctions.id : 1}).then(data => {
+        let histories;
+        if(data.duration_6 || data.duration_12 || data.duration_24){;
+            switch (this.state.livetype){
+                case '6' : histories = data.duration_6;
+                    break;
+                case '12' : histories = data.duration_12;
+                    break;
+                case '24' : histories = data.duration_24;
+                    break;
+            }
+        }else{
+            histories=data;
+        }
+        this.setState({
+            winner:{
+                data:histories.histories[0],
+                auction:histories.auction
+            },
+            realtimeRanking:histories.histories,currentPrice : histories.histories.length > 0 ? histories.histories[0].average_price : this.state.currentPrice});
+    })
+}
+    liveTab(index){
+        this.setState({livetype:index});
+        this.refresh();
+    }
 showDetail(type,obj){
     if(type == "win"){
         this.setState({
@@ -95,16 +122,51 @@ void_auction(){
 confirm_winner(){
     window.location.href=`/admin/auctions/${this.auction.id}/choose_winner`;
 }
+    check_has(type){
+        let arr = [];
+        if(this.state.auctions.live_auction_contracts){
+            if(this.state.auctions.live_auction_contracts.length>0){
+                arr = this.state.auctions.live_auction_contracts.filter(item=>{
+                    return this.state.livetype === item.contract_duration
+                })
+            }
+            switch (type){
+                case 'has_lt':return arr[0].has_lt;
+                case 'has_hts':return arr[0].has_hts;
+                case 'has_htl':return arr[0].has_htl;
+                case 'has_eht':return arr[0].has_eht;
+            }
+        }else{
+            switch (type){
+                case 'has_lt':return !this.auction ? true: Number(this.auction.total_lt_peak) > 0 || Number(this.auction.total_lt_off_peak) > 0;
+                case 'has_hts':return !this.auction ? true: Number(this.auction.total_hts_peak) > 0 || Number(this.auction.total_hts_off_peak) > 0;
+                case 'has_htl':return !this.auction ? true: Number(this.auction.total_htl_peak) > 0 || Number(this.auction.total_htl_off_peak) > 0;
+                case 'has_eht':return !this.auction ? true: Number(this.auction.total_eht_peak) > 0 || Number(this.auction.total_eht_off_peak) > 0;
+            }
+        }
+    }
 render() {
-    const visibility_lt = !this.auction ? true: Number(this.auction.total_lt_peak) > 0 || Number(this.auction.total_lt_off_peak) > 0;
-    const visibility_hts = !this.auction ? true: Number(this.auction.total_hts_peak) > 0 || Number(this.auction.total_hts_off_peak) > 0;
-    const visibility_htl = !this.auction ? true: Number(this.auction.total_htl_peak) > 0 || Number(this.auction.total_htl_off_peak) > 0;
-    const visibility_eht = !this.auction ? true: Number(this.auction.total_eht_peak) > 0 || Number(this.auction.total_eht_off_peak) > 0;
+    const visibility_lt = this.check_has('has_lt');
+    const visibility_hts = this.check_has('has_hts');
+    const visibility_htl = this.check_has('has_htl');
+    const visibility_eht = this.check_has('has_eht');
     return (
         <div>
             <div className="time_cuntdown during">
             <p className="confirm">Reverse Auction has ended. Please proceed to confirm the outcome. </p>
             </div>
+            {this.state.live_auction_contracts.length>0?
+                <div className="u-grid u-mt2 mouth_tab">
+                    {
+                        this.state.live_auction_contracts.map((item,index)=>{
+                            return <div key={index} className={"col-sm-12 col-md-3 u-cell"}>
+                                <a className={this.state.livetype===item.contract_duration?"col-sm-12 lm--button lm--button--primary selected"
+                                    :"col-sm-12 lm--button lm--button--primary"}
+                                   onClick={this.liveTab.bind(this,item.contract_duration)} >{item.contract_duration} Mouths</a>
+                            </div>
+                        })
+                    }
+                </div>:''}
                 <div className="u-grid u-mt2">
                     <div className="col-sm-12 col-md-6 u-cell">
                         <div className="col-sm-12 col-md-10 push-md-1"><RetailerRanking ranking={this.state.realtimeRanking} /></div>
@@ -114,7 +176,7 @@ render() {
                             <ReservePrice auction={this.auction} price={this.startPrice} realtimePrice={this.state.currentPrice} />
                             <WinnerPrice showOrhide="hide" winner={this.state.winner}  isLtVisible={visibility_lt} isHtsVisible={visibility_hts} isHtlVisible={visibility_htl} isEhtVisible={visibility_eht}/>
                             <div className="winnerPrice_main">
-                                <a className="lm--button lm--button--primary u-mt3" onClick={this.showDetail.bind(this,'void')}>Void Reverse Auction</a>
+                                {/*<a className="lm--button lm--button--primary u-mt3" onClick={this.showDetail.bind(this,'void')}>Void Reverse Auction</a>*/}
                                {/* <a className="lm--button lm--button--primary u-mt3" >Alternate Winner</a>*/}
                                 <a className="lm--button lm--button--primary u-mt3" onClick={this.showDetail.bind(this,'win')} >Select Winner</a>
                             </div>
