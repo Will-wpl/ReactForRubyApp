@@ -7,7 +7,11 @@ class Api::ConsumptionDetailsController < Api::BaseController
       auction = consumption.auction
       contract_duration = auction.auction_contracts.select('contract_duration').sort_by {|contract| contract.contract_duration.to_i}
       buyer_entities = CompanyBuyerEntity.find_by_user(consumption.user_id)
-      tc_attachment = AuctionAttachment.find_by(auction_id: consumption.auction_id, file_type: 'buyer_tc_upload')
+      if auction.auction_contracts.blank?
+        tc_attachment = AuctionAttachment.find_by(auction_id: consumption.auction_id, file_type: 'buyer_tc_upload')
+      else
+        tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
+      end
       render json: { consumption_details: consumption_details, consumption: consumption,
                      auction: { id: auction.id, name: auction.name, actual_begin_time: auction.actual_begin_time, publish_status: auction.publish_status },
                      buyer_entities: buyer_entities,

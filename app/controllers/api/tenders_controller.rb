@@ -7,31 +7,38 @@ class Api::TendersController < Api::TendersBaseController
   end
 
   def node1_retailer
-    attachments = AuctionAttachment.belong_auction(@arrangement.auction_id)
-                      .where(file_type: 'retailer_confidentiality_undertaking_upload').order(:created_at)
+    auction = @arrangement.auction
+    if auction.auction_contracts.blank?
+      attachments = AuctionAttachment.belong_auction(@arrangement.auction_id)
+                        .where(file_type: 'retailer_confidentiality_undertaking_upload').order(:created_at)
+    else
+      attachments = [UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_REVV_TC)]
+    end
+
     render json: attachments, status: 200
   end
 
   def node2_retailer
     auction = @arrangement.auction
-    aggregate_consumptions = { total_lt_peak: auction.total_lt_peak,
-                               total_lt_off_peak: auction.total_lt_off_peak,
-                               total_hts_peak: auction.total_hts_peak,
-                               total_hts_off_peak: auction.total_hts_off_peak,
-                               total_htl_peak: auction.total_htl_peak,
-                               total_htl_off_peak: auction.total_htl_off_peak,
-                               total_eht_peak: auction.total_eht_peak,
-                               total_eht_off_peak: auction.total_eht_off_peak }
-    attachments = AuctionAttachment.belong_auction(@arrangement.auction_id)
-                      .where(file_type: 'tender_documents_upload').order(:created_at)
+    if auction.auction_contracts.blank?
+      aggregate_consumptions = [{ total_lt_peak: auction.total_lt_peak,
+                                 total_lt_off_peak: auction.total_lt_off_peak,
+                                 total_hts_peak: auction.total_hts_peak,
+                                 total_hts_off_peak: auction.total_hts_off_peak,
+                                 total_htl_peak: auction.total_htl_peak,
+                                 total_htl_off_peak: auction.total_htl_off_peak,
+                                 total_eht_peak: auction.total_eht_peak,
+                                 total_eht_off_peak: auction.total_eht_off_peak }]
+      attachments = AuctionAttachment.belong_auction(@arrangement.auction_id)
+                        .where(file_type: 'tender_documents_upload').order(:created_at)
+    else
+      aggregate_consumptions = get_lived_auction_contracts(auction, false)
+      attachments = [UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)]
+    end
+
     render json: { aggregate_consumptions: aggregate_consumptions, attachments: attachments }, status: 200
   end
 
-  def simple_node2_retailer
-    auction = @arrangement.auction
-    data = get_lived_auction_contracts(auction, false)
-    render json: { aggregate_consumptions: data }, status: 200
-  end
 
   def node3_retailer
     attachments_count = AuctionAttachment.belong_auction(@arrangement.auction_id)

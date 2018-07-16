@@ -14,7 +14,7 @@ export class Retailerworkflow extends React.Component{
         this.state={
             auction:{},text:'',disabled:false,
             selected:[],current:{},page:0,tender_status:false,tab_page:0,
-            update:true
+            update:true,single:5
         }
         this.submittender = false;
         this.hiddentimeCount = true;
@@ -22,7 +22,7 @@ export class Retailerworkflow extends React.Component{
     }
     componentDidMount() {
         getAuction('retailer',sessionStorage.auction_id).then(res=>{
-            this.setState({auction:res});
+            this.setState({auction:res,single:res.step});
             //console.log(res);
         },error=>{
             console.log(error)
@@ -47,20 +47,47 @@ export class Retailerworkflow extends React.Component{
     }
     showpage(index){
         let pageDom='';
-        switch(index){
-            case 0 : pageDom = <div></div>
-            break
-            case 1 : pageDom = <Signconfidentialityundertaking propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction}/>
-            break
-            case 2 : pageDom = <Tenderdocuments propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} />
-            break
-            case 3 : pageDom = <Proposedeviations update={this.state.update} propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} current={this.state.current} tenderFn={()=>{this.setState({tender_status:true})}} auction={this.state.auction} tender={this.state.tender_status} />
-            break
-            case 4 : pageDom = <Submittender propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} tenderFn={()=>{this.setState({tender_status:true})}} tender={this.state.tender_status} current={this.state.current} auction={this.state.auction} submit={this.submittender}/>
-            break
-            case 5 : pageDom = <RetailerManage propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} hiddentimeCount={this.hiddentimeCount} node={true}/>
-            break
+        if(this.state.single === 3){
+            switch(index){
+                case 0 : pageDom = <div></div>
+                    break
+                case 1 : pageDom = <Signconfidentialityundertaking propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction}/>
+                    break
+                case 2 : pageDom = <Tenderdocuments propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} />
+                    break
+                case 5 : pageDom = <RetailerManage propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} hiddentimeCount={this.hiddentimeCount} node={true}/>
+                    break
+            }
+        }else if(this.state.single === 4){
+            switch(index){
+                case 0 : pageDom = <div></div>
+                    break
+                case 1 : pageDom = <Signconfidentialityundertaking propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction}/>
+                    break
+                case 2 : pageDom = <Tenderdocuments single={this.state.single} propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} />
+                    break
+                case 3 : pageDom = <Proposedeviations update={this.state.update} propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} current={this.state.current} tenderFn={()=>{this.setState({tender_status:true})}} auction={this.state.auction} tender={this.state.tender_status} />
+                    break
+                case 5 : pageDom = <RetailerManage propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} hiddentimeCount={this.hiddentimeCount} node={true}/>
+                    break
+            }
+        }else{
+            switch(index){
+                case 0 : pageDom = <div></div>
+                    break
+                case 1 : pageDom = <Signconfidentialityundertaking propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction}/>
+                    break
+                case 2 : pageDom = <Tenderdocuments propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} />
+                    break
+                case 3 : pageDom = <Proposedeviations update={this.state.update} propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} current={this.state.current} tenderFn={()=>{this.setState({tender_status:true})}} auction={this.state.auction} tender={this.state.tender_status} />
+                    break
+                case 4 : pageDom = <Submittender propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} tenderFn={()=>{this.setState({tender_status:true})}} tender={this.state.tender_status} current={this.state.current} auction={this.state.auction} submit={this.submittender}/>
+                    break
+                case 5 : pageDom = <RetailerManage propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} hiddentimeCount={this.hiddentimeCount} node={true}/>
+                    break
+            }
         }
+
         return pageDom;
     }
     changePage(index){
@@ -80,7 +107,7 @@ export class Retailerworkflow extends React.Component{
     render(){
         return(
             <div>
-                <Workflowtab auction={this.state.auction} page={this.changePage.bind(this)} current={this.state.current} selected={this.state.selected} />
+                <Workflowtab single={this.state.single} auction={this.state.auction} page={this.changePage.bind(this)} current={this.state.current} selected={this.state.selected} />
                 {this.showpage(this.state.page)}
                 <div className="createRaMain u-grid">
                     <a className="lm--button lm--button--primary u-mt3" href="javascript:history.go(-1)" >Back</a>
