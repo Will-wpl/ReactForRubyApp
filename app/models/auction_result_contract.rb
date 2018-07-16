@@ -4,6 +4,8 @@ class AuctionResultContract < ApplicationRecord
   # Includes
 
   # Associations
+  belongs_to :auction
+  belongs_to :user
   belongs_to :auction_result
   # accepts_nested_attributes
 
