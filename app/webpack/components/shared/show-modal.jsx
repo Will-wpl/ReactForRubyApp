@@ -151,14 +151,6 @@ export class Modal extends React.Component {
         })
     }
 
-    // removeNanNum(obj){
-    //     obj.target.value = obj.target.value.replace(/[^\d.]/g,"");
-    //     obj.target.value = obj.target.value.replace(/\.{2,}/g,".");
-    //     obj.target.value = obj.target.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
-    //     if(obj.target.value.indexOf(".")< 0 && obj.target.value !=""){
-    //         obj.target.value= parseFloat(obj.target.value);
-    //     }
-    // }
     checkModelSuccess(event) {
         console.log('dsafasdfasdf')
         event.preventDefault();
@@ -185,13 +177,13 @@ export class Modal extends React.Component {
                 break;
             default:
                 console.log('default')
-                // this.Add();
+                this.Add();
                 break;
         }
     }
     removeNanNum(value) {
-        value.target.value = value.target.value.replace(/[^\d.]/g, "");
         value.target.value = value.target.value.replace(/\.{2,}/g, ".");
+        value.target.value = value.target.value.replace(/[^\d.]/g, "");
         value.target.value = value.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
         if (value.target.value.indexOf(".") < 0 && value.target.value != "") {
             value.target.value = parseFloat(value.target.value);
@@ -211,10 +203,9 @@ export class Modal extends React.Component {
     }
 
     Add() {
-       
+
     }
-    addToMainForm()
-    {
+    addToMainForm() {
         let siteItem = {
             account_number: this.state.account_number,
             existing_plan_selected: this.state.existing_plan_selected,
@@ -232,6 +223,9 @@ export class Modal extends React.Component {
         }
         if (this.props.acceptFunction) {
             this.props.acceptFunction(siteItem);
+            this.setState({
+                modalshowhide: "modal_hide"
+            })
         }
     }
     changeConsumption(type, e) {
@@ -597,7 +591,7 @@ export class Modal extends React.Component {
                                     <td>
                                         <div className="specil">
                                             <span>Total Monthly1:</span>
-                                            <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" onKeyUp={this.removeNanNum.bind(this)} pattern="/^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/" required aria-required="true" /><span>kWh/month,Peak:</span>
+                                            <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" onKeyUp={this.removeNanNum.bind(this)} pattern="^\d+(\.\d+)?$" required aria-required="true" /><span>kWh/month,Peak:</span>
                                             <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} id="peak_pct" onKeyUp={this.removeNanNum.bind(this)} pattern="^100$|^(\d|[1-9]\d)(\.\d+)*$" required aria-required="true" /> %
                                         ,Off-Peak:<input type="text" value="" disabled="true" onChange={this.changeConsumption.bind(this, "pack")} id="pack" required aria-required="true" /><span></span>
                                             %(auot calculate).<span>Upload bill(s) compulsory for Category 3 (New Accounts)</span>.

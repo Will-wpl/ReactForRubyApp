@@ -155,7 +155,6 @@ export const approveBuyerUser=(params)=>{
     return put('/api/admin/users/approval_buyer',params)
 }
 
-
 export const approveRetailerUser=(params)=>{
     return put('/api/admin/users/approval_retailer',params)
 }

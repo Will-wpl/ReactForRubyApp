@@ -187,6 +187,10 @@ export class FillConsumption extends Component {
         let checkpeak = this.state.site_list.map((item, index) => {
             return parseFloat(item.totals) > 0 && parseFloat(item.peak_pct) > 0;
         })
+        // let siteCount = this.state.site_list.length;
+        // if (siteCount === 0) {
+
+        // }
 
         this.state.site_list.map((item, index) => {
             let siteItem = {
@@ -220,7 +224,14 @@ export class FillConsumption extends Component {
                 return false;
             }
         }
-        console.log(makeData);
+        
+        // if(siteCount===0)
+        // {
+        //     setTimeout(()=>{
+        //         this.setState({ text: "You must add at least one Account." });
+        //     },200);
+        //     return false;
+        // }
 
         setBuyerParticipate(makeData, '/api/buyer/consumption_details/save').then((res) => {
             if (type != "participate") {
