@@ -34,9 +34,9 @@ class Retailer::AuctionsController < Retailer::BaseController
       else
         if @auction.actual_begin_time < Time.current && Time.current < @auction.actual_end_time
           @message = progress_message
-        elsif @auction.auction_results.blank? && Time.current > @auction.actual_end_time
+        elsif @auction.auction_result.blank? && Time.current > @auction.actual_end_time
           @message = progress_message
-        elsif !@auction.auction_results.blank?
+        elsif !@auction.auction_result.blank?
           @message = empty_message
         end
       end
@@ -77,7 +77,7 @@ class Retailer::AuctionsController < Retailer::BaseController
           @message = progress_message
         end
       else
-        @message = empty_message unless @auction.auction_results.blank?
+        @message = empty_message unless @auction.auction_result.blank?
       end
     end
   end
@@ -108,11 +108,11 @@ class Retailer::AuctionsController < Retailer::BaseController
       # stand by page
     elsif @auction.actual_begin_time < Time.current && Time.current < @auction.actual_end_time
       redirect_to live_retailer_auction_path(@auction.id)
-    elsif @auction.auction_results.blank? && Time.current > @auction.actual_end_time && @auction.hold_status
+    elsif @auction.auction_result.blank? && Time.current > @auction.actual_end_time && @auction.hold_status
       redirect_to live_retailer_auction_path(@auction.id)
-    elsif @auction.auction_results.blank? && Time.current > @auction.actual_end_time && !@auction.hold_status
+    elsif @auction.auction_result.blank? && Time.current > @auction.actual_end_time && !@auction.hold_status
       redirect_to finish_retailer_auction_path(@auction.id)
-    elsif !@auction.auction_results.blank?
+    elsif !@auction.auction_result.blank?
       redirect_to message_retailer_auction_path(@auction.id)
       # There is no upcoming reverse auction published.
     end
@@ -132,9 +132,9 @@ class Retailer::AuctionsController < Retailer::BaseController
       redirect_to upcoming_retailer_auction_path(@auction.id)
     elsif @auction.actual_begin_time < Time.current && Time.current < @auction.actual_end_time
       redirect_to empty_retailer_auction_path(@auction.id)
-    elsif @auction.auction_results.blank? && Time.current > @auction.actual_end_time
+    elsif @auction.auction_result.blank? && Time.current > @auction.actual_end_time
       redirect_to empty_retailer_auction_path(@auction.id)
-    elsif !@auction.auction_results.blank?
+    elsif !@auction.auction_result.blank?
       redirect_to empty_retailer_auction_path(@auction.id)
     end
   end

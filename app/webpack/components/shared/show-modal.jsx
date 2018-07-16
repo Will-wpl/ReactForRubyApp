@@ -16,7 +16,7 @@ export class Modal extends React.Component {
             strtype: '',
             email_subject: '',
             email_body: '',
-            consumptionItem: this.props.siteList,
+            consumptionItem: [],
             contract_capacity_disabled: true,
             contract_expiry_disabled: true,
             disabled: false,
@@ -40,14 +40,12 @@ export class Modal extends React.Component {
         }
     }
     componentWillReceiveProps(next) {
-
         if (next.consumption_account_item) {
-            console.log(next.consumption_account_item);
             this.setState({
                 account_number: next.consumption_account_item.account_number,
                 existing_plan: next.consumption_account_item.existing_plan,
                 existing_plan_selected: next.consumption_account_item.existing_plan_selected,
-                contract_expiry: next.consumption_account_item.contract_expiry === null ? "" : moment(next.consumption_account_item.contract_expiry),
+                contract_expiry: next.consumption_account_item.contract_expiry === "" ? "" : moment(next.consumption_account_item.contract_expiry),
                 purchasing_entity: next.consumption_account_item.purchasing_entity,
                 purchasing_entity_selectd: next.consumption_account_item.purchasing_entity_selectd ? next.consumption_account_item.purchasing_entity_selectd : next.consumption_account_item.purchasing_entity[0].id,
                 premise_address: next.consumption_account_item.premise_address,
@@ -64,7 +62,12 @@ export class Modal extends React.Component {
             });
             if (next.consumption_account_item.existing_plan_selected === "Retailer plan") {
                 this.setState({
-                    contract_capacity_disabled: false
+                    contract_expiry_disabled: false
+                })
+            }
+            else {
+                this.setState({
+                    contract_expiry_disabled: true
                 })
             }
             if (next.consumption_account_item.intake_level_selected !== "LT") {
@@ -72,10 +75,17 @@ export class Modal extends React.Component {
                     contract_capacity_disabled: false
                 })
             }
+            else {
+                this.setState({
+                    contract_capacity_disabled: true
+                })
+            }
+        }
+        if (next.siteList) {
+            this.setState({ consumptionItem: next.siteList });
         }
     }
     showModal(type, data, str, index) {
-        console.log(index)
         if (str) {
             this.setState({ strtype: str });
         }
@@ -135,7 +145,48 @@ export class Modal extends React.Component {
             type: "default"
         })
     }
+    checkSuccess(event, obj) {
+        event.preventDefault();
+        let status = this.account_address_repeat();
+
+        switch (status) {
+            case 'false|true':
+                console.log('false|true')
+                $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                return false;
+                break;
+            case 'true|false':
+                console.log('true|false')
+                $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                return false;
+                break;
+            case 'true|true':
+                console.log('true|true')
+                $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                return false;
+                break;
+            default:
+                console.log('default')
+                // this.Add();
+                break;
+        }
+    }
+
+    account_address_repeat() {
+        let address = false, account = false;
+        this.state.consumptionItem.map((item, index) => {
+            if ((this.state.street == item.street) && this.state.postal_code == item.postal_code) {
+                address = true;
+            }
+            if (this.state.account_number == item.account_number) {
+                account = true;
+            }
+        })
+        return address + "|" + account;
+    }
     Add() {
+        console.log("ADD")
         let siteItem = {
             account_number: this.state.account_number,
             existing_plan_selected: this.state.existing_plan_selected,
@@ -151,11 +202,13 @@ export class Modal extends React.Component {
             peak_pct: this.state.peak_pct,
             index: this.state.itemIndex
         }
-        console.log(this.state.siteList);
-        // if (this.props.acceptFunction) {
-        //     this.props.acceptFunction(siteItem);
-        // }
-
+        console.log(this.state.consumptionItem);
+        if (this.props.acceptFunction) {
+            this.props.acceptFunction(siteItem);
+        }
+        this.setState({
+            modalshowhide: "modal_hide"
+        })
     }
     changeConsumption(type, e) {
         let value = e.target.value;
@@ -258,6 +311,7 @@ export class Modal extends React.Component {
         }
 
     }
+
     Change(type, e) {
 
     }
@@ -454,7 +508,7 @@ export class Modal extends React.Component {
             }
             if (this.props.listdetailtype === 'consumption_detail') {
                 if (this.props.consumption_account_item !== null) {
-                    showDetail = <div>
+                    showDetail = <form name="buyer_form" method="post" onSubmit={this.checkSuccess.bind(this)}>
                         <h3 className="text_padding_left">My Account Information</h3>
                         <table className="consumption_table  u-mb3" cellPadding="0" cellSpacing="0" style={{ marginTop: "15px" }}>
                             <tbody>
@@ -533,10 +587,14 @@ export class Modal extends React.Component {
                             </tbody>
                         </table>
                         <div>
-                            <div id="account_number_taken_message" className="errormessage">There is already an existing contract for this Account Number.</div>
-                            <div id="permise_address_taken_message" className="errormessage">There is already an existing contract for this premise address.</div>
+                            <div id="account_number_taken_message" className="isPassValidate">There is already an existing contract for this Account Number.</div>
+                            <div id="permise_address_taken_message" className="isPassValidate">There is already an existing contract for this premise address.</div>
                         </div>
-                    </div>
+                        <div>
+                            <button className="modal_btn" onClick={this.Add.bind(this)}>{this.state.option === "update" ? "Save" : "Add"}</button>
+                            <button className="modal_btn" onClick={this.closeModal.bind(this)}>Cancel</button>
+                        </div>
+                    </form>
                 }
                 else {
                     showDetail = <div></div>
@@ -547,8 +605,9 @@ export class Modal extends React.Component {
         if (this.state.type == "default") {
             btn_html = <div className="modal_btn"><a onClick={this.closeModal.bind(this)}>OK</a></div>;
         } else if (this.state.type == "custom") {
-            btn_html = <div className="modal_btn"><a onClick={this.Add.bind(this)}>{this.state.option === "update" ? "Save" : "Add"}</a>
-                <a onClick={this.closeModal.bind(this)}>Cancel</a></div>;
+            // btn_html = <div className="modal_btn"><a onClick={this.Add.bind(this)}>{this.state.option === "update" ? "Save" : "Add"}</a>
+            //     <a onClick={this.closeModal.bind(this)}>Cancel</a></div>;
+            btn_html = <div></div>
         }
         else {
             btn_html =
