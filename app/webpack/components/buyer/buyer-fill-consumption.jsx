@@ -129,7 +129,7 @@ export class FillConsumption extends Component {
         this.accountItem.account_number = item.account_number;
         this.accountItem.existing_plan = ['SPS tariff', 'SPS wholesale', 'Retailer plan'];
         this.accountItem.existing_plan_selected = item.existing_plan;
-        this.accountItem.contract_expiry = moment(item.contract_expiry);
+        this.accountItem.contract_expiry = item.contract_expiry ? moment(item.contract_expiry) : "";
         this.accountItem.purchasing_entity = this.purchaseList;
         this.accountItem.purchasing_entity_selectd = item.company_buyer_entity_id;
         this.accountItem.intake_level = ['Low Tension (LT)', 'High Tension Small (HTS)', 'High Tension Large (HTL)', 'Extra High Tension (EHT)'];
@@ -196,7 +196,7 @@ export class FillConsumption extends Component {
             let siteItem = {
                 account_number: item.account_number,
                 existing_plan: item.existing_plan,
-                contract_expiry: moment(item.contract_expiry).format(),
+                contract_expiry: item.contract_expiry ? moment(item.contract_expiry).format() : "",
                 company_buyer_entity_id: item.company_buyer_entity_id,
                 intake_level: item.intake_level,
                 contracted_capacity: item.contracted_capacity,
@@ -224,7 +224,7 @@ export class FillConsumption extends Component {
                 return false;
             }
         }
-        
+
         // if(siteCount===0)
         // {
         //     setTimeout(()=>{
