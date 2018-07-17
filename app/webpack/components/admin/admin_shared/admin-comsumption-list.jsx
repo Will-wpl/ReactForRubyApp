@@ -90,7 +90,8 @@ export default class AdminComsumptionList extends Component {
                                                     <td>{item.intake_level}</td>
                                                     <td>{item.contracted_capacity}</td>
                                                     <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
-                                                    <td><span className="textBold">Total Monthly:<div>{item.totals}</div>kWh/month,Peak:<div>{item.peak_pct}</div></span>,Off-Peak:<span className="textNormal"><div>{item.peak_pct ? (100 - item.peak_pct) : 100}</div></span>(auto calculate).<span className="textBold">Upload bill(s) compulsory for Category 3(new Accounts)</span>.
+                                                    <td><span className="textBold">Total Monthly:<span className="textDecoration">{item.totals}</span>kWh/month,Peak:<span className="textDecoration">{item.peak_pct}</span></span>,
+                                                    Off-Peak:<span className="textNormal">{item.peak_pct ? (100 - item.peak_pct) : 100}</span>(auto calculate).<span className="textBold">Upload bill(s) compulsory for Category 3(new Accounts)</span>.
                                                     <div title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">?</div></td>
                                                 </tr>
                                             })}

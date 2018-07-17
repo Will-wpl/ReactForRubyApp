@@ -191,7 +191,8 @@ abbr[title]{color: #fe0000; text-decoration: none;}
   .showinfo{ color: red; min-height: auto;}
   .modal_btn{ 
     width:90%; margin: 10px auto; overflow: hidden;
-    a{ width: 60px; float:right; margin-left: 10px; cursor: pointer;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; }
+    a { width: 60px; float:right; margin-left: 10px; cursor: pointer;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; }
+    button { width: 60px; float:right; margin-left: 10px; cursor: pointer;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; }
   }
 }
 .u-contain{overflow:hidden;}
@@ -884,6 +885,10 @@ ul.history_files{
   div{
     text-decoration :underline;
   }
+}
+.textDecoration
+{
+  text-decoration :underline;
 }
 .textNormal
 {

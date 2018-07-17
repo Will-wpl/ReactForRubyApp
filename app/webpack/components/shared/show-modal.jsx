@@ -37,19 +37,22 @@ export class Modal extends React.Component {
             postal_code: '',
             totals: '',
             peak_pct: '',
+            peak: "",
             option: ''
         }
     }
     componentWillReceiveProps(next) {
         if (next.consumption_account_item) {
-            console.log(next.consumption_account_item.purchasing_entity)
+            console.log(next.consumption_account_item.contract_expiry);
             this.setState({
                 account_number: next.consumption_account_item.account_number,
                 existing_plan: next.consumption_account_item.existing_plan,
                 existing_plan_selected: next.consumption_account_item.existing_plan_selected,
                 contract_expiry: next.consumption_account_item.contract_expiry === "" ? "" : moment(next.consumption_account_item.contract_expiry),
                 purchasing_entity: next.consumption_account_item.purchasing_entity,
-                purchasing_entity_selectd: next.consumption_account_item.purchasing_entity_selectd ? next.consumption_account_item.purchasing_entity_selectd :
+                purchasing_entity_selectd: next.
+
+                    consumption_account_item.purchasing_entity_selectd ? next.consumption_account_item.purchasing_entity_selectd :
                     next.consumption_account_item.purchasing_entity.length > 0 ? next.consumption_account_item.purchasing_entity[0].id : "",
                 premise_address: next.consumption_account_item.premise_address,
                 intake_level: next.consumption_account_item.intake_level,
@@ -61,6 +64,7 @@ export class Modal extends React.Component {
                 postal_code: next.consumption_account_item.postal_code,
                 totals: next.consumption_account_item.totals,
                 peak_pct: next.consumption_account_item.peak_pct,
+                peak: next.consumption_account_item.peak_pct ? (100 - parseFloat(next.consumption_account_item.peak_pct)) : "",
                 option: next.consumption_account_item.option
             });
 
@@ -90,6 +94,7 @@ export class Modal extends React.Component {
             this.setState({ consumptionItem: next.siteList });
         }
     }
+
     showModal(type, data, str, index) {
         if (str) {
             this.setState({ strtype: str });
@@ -126,12 +131,14 @@ export class Modal extends React.Component {
             })
         }
     }
+
     do_text(text) {
         let show_text = text.replace(/<br>/g, "<br/>");
         setTimeout(() => {
             $(".modal_detail_nr").html(show_text);
         }, 50)
     }
+
     Accept() {
         if (this.state.strtype === "email_template") {
             let data = this.state.props_data;
@@ -152,35 +159,36 @@ export class Modal extends React.Component {
     }
 
     checkModelSuccess(event) {
-        console.log('dsafasdfasdf')
+        // console.log('dsafasdfasdf')
         event.preventDefault();
         let status = this.account_address_repeat();
 
-        console.log("status");
-        console.log(status)
+        // console.log("status");
+        // console.log(status)
         switch (status) {
             case 'false|true':
-                console.log('false|true')
+                // console.log('false|true')
                 $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
                 return false;
                 break;
             case 'true|false':
-                console.log('true|false')
+                // console.log('true|false')
                 $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
                 return false;
                 break;
             case 'true|true':
-                console.log('true|true')
+                // console.log('true|true')
                 $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
                 $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
                 return false;
                 break;
             default:
-                console.log('default')
+                // console.log('default')
                 this.addToMainForm();
                 break;
         }
     }
+
     removeNanNum(value) {
         value.target.value = value.target.value.replace(/\.{2,}/g, ".");
         value.target.value = value.target.value.replace(/[^\d.]/g, "");
@@ -189,6 +197,7 @@ export class Modal extends React.Component {
             value.target.value = parseFloat(value.target.value);
         }
     }
+
     account_address_repeat() {
         let address = false, account = false;
         this.state.consumptionItem.map((item, index) => {
@@ -205,11 +214,12 @@ export class Modal extends React.Component {
     Add() {
 
     }
+    
     addToMainForm() {
         let siteItem = {
             account_number: this.state.account_number,
             existing_plan_selected: this.state.existing_plan_selected,
-            contract_expiry: this.state.contract_expiry,
+            contract_expiry: this.state.contract_expiry?this.state.contract_expiry:"",
             purchasing_entity_selectd: this.state.purchasing_entity_selectd,
             intake_level_selected: this.state.intake_level_selected,
             contracted_capacity: this.state.contracted_capacity,
@@ -228,6 +238,7 @@ export class Modal extends React.Component {
             })
         }
     }
+
     changeConsumption(type, e) {
         let value = e.target.value;
         switch (type) {
@@ -310,14 +321,25 @@ export class Modal extends React.Component {
                 this.setState({
                     peak_pct: value
                 })
-                // if(number(value))
-                // {
-                //     console.log(111)
-                // }
+                if(Number(value))
+                {
+                    this.setState({
+                        peak: (100 - parseFloat(value))
+                    })
+                }
+                else
+                {
+                    this.setState({
+                        peak: ""
+                    })
+                }
                 // this.accountItem.peak = (100 - parseFloat(value)).toFixed(2)
+                console.log(value);
+                
                 break;
         }
     }
+    
     removefile(type, index, id) {
         if (confirm("Are you sure you want to delete this file?")) {
             if (this.props.otherFunction) {
@@ -330,28 +352,31 @@ export class Modal extends React.Component {
     Change(type, e) {
 
     }
+
     closeModal() {
         this.setState({
             modalshowhide: "modal_hide"
         })
     }
+
     componentDidMount() {
 
     }
+    
     checkConsumption() {
 
     }
 
     dateChange(data) {
-        // let selectDay = new Date(data.format());
-        console.log(data);
         this.setState({
             contract_expiry: data
         })
     }
+
     noPermitInput(event) {
         event.preventDefault();
     }
+
     render() {
         let showDetail = '', secondary = '', secondStatus = '';
         if (this.props.showdetail && !this.props.text) {
@@ -574,7 +599,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td><abbr title="required">*</abbr>Contract Capacity</td>
                                     <td>
-                                        <input type="text" disabled={this.state.contract_capacity_disabled} value={this.state.contracted_capacity} onChange={this.changeConsumption.bind(this, "contract_capacity")} id="contract_capacity" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" pattern="^(0|[1-9][0-9]*)$"  maxLength="4"/>
+                                        <input type="text" disabled={this.state.contract_capacity_disabled} value={this.state.contracted_capacity} onChange={this.changeConsumption.bind(this, "contract_capacity")} id="contract_capacity" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" pattern="^(0|[1-9][0-9]*)$" maxLength="4" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -588,12 +613,12 @@ export class Modal extends React.Component {
                                 </tr>
                                 <tr>
                                     <td><abbr title="required">*</abbr>Consumption Details</td>
-                                    <td>
+                                    <td >
                                         <div className="specil">
                                             <span>Total Monthly1:</span>
                                             <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" onKeyUp={this.removeNanNum.bind(this)} pattern="^\d+(\.\d+)?$" required aria-required="true" /><span>kWh/month,Peak:</span>
                                             <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} id="peak_pct" onKeyUp={this.removeNanNum.bind(this)} pattern="^100$|^(\d|[1-9]\d)(\.\d+)*$" required aria-required="true" /> %
-                                        ,Off-Peak:<input type="text" value="" disabled="true" onChange={this.changeConsumption.bind(this, "pack")} id="pack" required aria-required="true" /><span></span>
+                                        ,Off-Peak:<input type="text" value={this.state.peak} disabled="true" onChange={this.changeConsumption.bind(this, "pack")} id="pack" required aria-required="true" /><span></span>
                                             %(auot calculate).<span>Upload bill(s) compulsory for Category 3 (New Accounts)</span>.
                                             <div title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">?</div>
                                         </div>
@@ -606,9 +631,10 @@ export class Modal extends React.Component {
                             <div id="permise_address_taken_message" className="isPassValidate">There is already an existing contract for this premise address.</div>
                         </div>
                         <div className="modal_btn">
-                            <button className="custombtn" onClick={this.Add.bind(this)}>{this.state.option === "update" ? "Save" : "Add"}</button>
-                            <button className="custombtn" onClick={this.closeModal.bind(this)}>Cancel</button>
+                            <button      onClick={this.Add.bind(this)}>{this.state.option === "update" ? "Save" : "Add"}</button>
+                           
                         </div>
+                        <div className="modal_btn"><a onClick={this.closeModal.bind(this)}>Cancel</a></div>
                     </form>
                 }
                 else {

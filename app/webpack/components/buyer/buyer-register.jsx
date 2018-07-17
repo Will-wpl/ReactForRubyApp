@@ -579,8 +579,8 @@ export class BuyerRegister extends Component {
                 <button id="save_form" className="lm--button lm--button--primary" onClick={this.cancel.bind(this)}>Cancel</button>
                 <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this, 'edit')}>Save</button>
             </div>;
-            $('#chkBuyer').attr('disabled', true);
-            $('#chkRevv').attr('disabled', true);
+            // $('#chkBuyer').attr('disabled', true);
+            // $('#chkRevv').attr('disabled', true);
         }
         else {
             btn_html = <div>
