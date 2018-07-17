@@ -420,7 +420,7 @@ upload(type, index){
         }
     auction_contracts(data,index){
         let html = <div key={index}>
-            <h4 className="u-mt1 u-mb1">{data.contract_duration} Mouths</h4>
+            <h4 className="u-mt1 u-mb1">{data.contract_duration} Months</h4>
             <table className="retailer_fill w_100" cellPadding="0" cellSpacing="0">
             <thead>
             <tr>

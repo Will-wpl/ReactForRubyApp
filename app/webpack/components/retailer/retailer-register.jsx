@@ -4,7 +4,7 @@ import { UploadFile } from '../shared/upload';
 import { Modal } from '../shared/show-modal';
 import { getRetailerUserInfo, saveRetailManageInfo, submitRetailManageInfo, getRetailerUserInfoByUserId, validateIsExist } from '../../javascripts/componentService/retailer/service';
 import { approveRetailerUser } from '../../javascripts/componentService/admin/service';
-import { validateNum, validateEmail, validator_Object,  setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
+import { validateNum, validateEmail, validator_Object, setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
 export class RetailerRegister extends Component {
     constructor(props) {
         super(props);
@@ -41,19 +41,20 @@ export class RetailerRegister extends Component {
             agree_seller_buyer: "0",
             revvTCurl: "",
             revvTCname: "",
-            agree_seller_revv: "0"
+            agree_seller_revv: "0",
+            messageAttachmentUrl: ""
 
         }
         this.validatorItem = {
-            email_address: { cate: 'email' },
-            company_name: { cate: 'required' },
-            unique_entity_number: { cate: 'required' },
-            company_address: { cate: 'required' },
-            license_number: { cate: 'required' },
-            gst_no: { cate: 'required' },
-            contact_name: { cate: 'required' },
+            office_number: { cate: 'num' },
             mobile_number: { cate: 'num' },
-            office_number: { cate: 'num' }
+            contact_name: { cate: 'required' },
+            gst_no: { cate: 'required' },
+            license_number: { cate: 'required' },
+            company_address: { cate: 'required' },
+            unique_entity_number: { cate: 'required' },
+            company_name: { cate: 'required' },
+            email_address: { cate: 'email' }
         }
         this.validatorComment = {
             comment: { cate: 'required' }
@@ -153,6 +154,11 @@ export class RetailerRegister extends Component {
                 revvTCname: revv.file_name
             })
         }
+        if (param.letter_of_authorisation_attachment) {
+            this.setState({
+                messageAttachmentUrl: param.letter_of_authorisation_attachment.file_path
+            })
+        }
     }
 
     checkRejectAction() {
@@ -178,6 +184,13 @@ export class RetailerRegister extends Component {
 
     checkValidation() {
         let flag = true, hasDoc = true;
+        $('.validate_message').find('div').each(function () {
+            let className = $(this).attr('class');
+            if (className === 'errormessage') {
+                let divid = $(this).attr("id");
+                $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
+            }
+        })
         //validate form 
         let arr = validator_Object(this.state, this.validatorItem);
         if (arr) {
@@ -203,8 +216,7 @@ export class RetailerRegister extends Component {
         $('.validate_message').find('div').each(function () {
             let className = $(this).attr('class');
             if (className === 'errormessage') {
-                if(!($(this).attr("id").indexOf('repeat')>-1))
-                {
+                if (!($(this).attr("id").indexOf('repeat') > -1)) {
                     flag = false;
                     return false;
                 }
@@ -302,48 +314,40 @@ export class RetailerRegister extends Component {
                 break;
         }
     }
-    submit() {
+    submit(type) {
+        let param = {
+            'id': this.state.id,
+            'email': this.state.email_address,
+            'company_name': this.state.company_name,
+            'company_unique_entity_number': this.state.unique_entity_number,
+            'company_address': this.state.company_address,
+            'company_license_number': this.state.license_number,
+            'gst_no': this.state.gst_no,
+            'name': this.state.contact_name,
+            'account_mobile_number': this.state.mobile_number,
+            'account_office_number': this.state.office_number,
+            'agree_seller_buyer': this.state.agree_seller_buyer,
+            'agree_seller_revv': this.state.agree_seller_revv
+        }
         if (this.checkValidation()) {
             validateIsExist({
-                user: {
-                    'id': this.state.id,
-                    'email': this.state.email_address,
-                    'company_name': this.state.company_name,
-                    'company_unique_entity_number': this.state.unique_entity_number,
-                    'company_address': this.state.company_address,
-                    'company_license_number': this.state.license_number,
-                    'gst_no': this.state.gst_no,
-                    'name': this.state.contact_name,
-                    'account_mobile_number': this.state.mobile_number,
-                    'account_office_number': this.state.office_number,
-                    'agree_seller_buyer': this.state.agree_seller_buyer,
-                    'agree_seller_revv': this.state.agree_seller_revv
-                }
+                user: param
             }).then(res => {
-                console.log(res.validate_result);
                 if (res.validate_result)//validate pass
                 {
                     submitRetailManageInfo({
-                        user: {
-                            'id': this.state.id,
-                            'email': this.state.email_address,
-                            'company_name': this.state.company_name,
-                            'company_unique_entity_number': this.state.unique_entity_number,
-                            'company_address': this.state.company_address,
-                            'company_license_number': this.state.license_number,
-                            'gst_no': this.state.gst_no,
-                            'name': this.state.contact_name,
-                            'account_mobile_number': this.state.mobile_number,
-                            'account_office_number': this.state.office_number,
-                            'agree_seller_buyer': this.state.agree_seller_buyer,
-                            'agree_seller_revv': this.state.agree_seller_revv
-                        }
+                        user: param
                     }).then(res => {
-                        this.refs.Modal.showModal();
                         $('#license_number_repeat').removeClass('errormessage').addClass('isPassValidate');
-                        this.setState({
-                            text: "Your details have been successfully submitted. "
-                        });
+                        if (type === "sign_up") {
+                            window.location.href = `/retailer/home`;
+                        }
+                        else {
+                            this.refs.Modal.showModal();
+                            this.setState({
+                                text: "Your details have been successfully submitted. "
+                            });
+                        }
                     })
                 }
                 else {
@@ -351,16 +355,13 @@ export class RetailerRegister extends Component {
                         for (let item of res.error_fields) {
                             if (item === 'company_license_number') {
                                 $('#license_number_repeat').removeClass('isPassValidate').addClass('errormessage');
+                                $("input[name='license_number']").focus();
                             }
                         }
                     }
                 }
             })
-
-
-
         }
-
     }
     save() {
         saveRetailManageInfo({
@@ -391,11 +392,13 @@ export class RetailerRegister extends Component {
     }
     judgeAction(type) {
         if (type === 'reject') {
-            this.setState({
-                text: 'Are you sure you want to reject the request?',
-            }, () => {
-                this.refs.Modal_Option.showModal('comfirm', { action: 'reject' }, '');
-            });
+            if (this.checkRejectAction()) {
+                this.setState({
+                    text: 'Are you sure you want to reject the request?',
+                }, () => {
+                    this.refs.Modal_Option.showModal('comfirm', { action: 'reject' }, '');
+                });
+            }
         }
         else {
             this.setState({ text: "Are you sure you want to approve the request?" });
@@ -408,19 +411,9 @@ export class RetailerRegister extends Component {
             comment: this.state.comment,
             approved: obj.action === 'reject' ? "" : 1
         };
-
-        if (obj.action === 'reject') {
-            if (this.checkRejectAction()) {
-                approveRetailerUser(param).then(res => {
-                    location.href = "/admin/users/retailers";
-                })
-            }
-        }
-        else {
-            approveRetailerUser(param).then(res => {
-                location.href = "/admin/users/retailers";
-            })
-        }
+        approveRetailerUser(param).then(res => {
+            location.href = "/admin/users/retailers";
+        })
     }
 
     showView() {
@@ -437,7 +430,7 @@ export class RetailerRegister extends Component {
         else if (this.state.use_type === 'manage_acount') {
             btn_html = <div>
                 <button id="save_form" className="lm--button lm--button--primary" onClick={this.cancel.bind(this)}>Cancel</button>
-                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this)}>Save</button>
+                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this, "save")}>Save</button>
             </div>;
             $('#chkBuyer').attr('disabled', true);
             $('#chkRevv').attr('disabled', true);
@@ -445,7 +438,7 @@ export class RetailerRegister extends Component {
         else {
             btn_html = <div>
                 <button id="save_form" className="lm--button lm--button--primary" onClick={this.save.bind(this)}>Save</button>
-                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this)}>Complete Sign Up</button>
+                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this, "sign_up")}>Complete Sign Up</button>
             </div>;
         }
         return (
@@ -462,7 +455,7 @@ export class RetailerRegister extends Component {
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="email_address" value={this.state.email_address} onChange={this.Change.bind(this, 'email_address')} disabled={this.state.disabled} ref="email_address" placeholder="Email" required aria-required="true" title="Please fill out this field" />
                                         <div className='isPassValidate' id='email_address_message' >This field is required!</div>
-                                        <div className='isPassValidate' id='email_address_format' >Incorrect mail format.</div>
+                                        <div className='isPassValidate' id='email_address_format' >Incorrect mail format!</div>
                                     </div>
                                 </div>
                                 <h4 className="u-mt1 u-mb1">Company Info</h4>
@@ -492,7 +485,7 @@ export class RetailerRegister extends Component {
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="license_number" value={this.state.license_number} onChange={this.Change.bind(this, 'license_number')} disabled={this.state.disabled} ref="license_number" required aria-required="true" title="Please fill out this field" ></input>
                                         <div className='isPassValidate' id='license_number_message' >This field is required!</div>
-                                        <div className='isPassValidate' id='license_number_repeat' >Retailer license number has already been taken.</div>
+                                        <div className='isPassValidate' id='license_number_repeat' >Retailer license number has already been taken!</div>
                                     </div>
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
@@ -532,7 +525,7 @@ export class RetailerRegister extends Component {
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="mobile_number" value={this.state.mobile_number} onChange={this.Change.bind(this, 'mobile_number')} disabled={this.state.disabled} placeholder="Number should contain 8 integers." title="Please fill out this field" ref="mobile_number" maxLength="8" required aria-required="true" ></input>
                                         <div className='isPassValidate' id='mobile_number_message' >This field is required!</div>
-                                        <div className='isPassValidate' id='mobile_number_format' >Number should contain 8 integers.</div>
+                                        <div className='isPassValidate' id='mobile_number_format' >Number should contain 8 integers!</div>
                                     </div>
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
@@ -542,7 +535,7 @@ export class RetailerRegister extends Component {
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="office_number" value={this.state.office_number} onChange={this.Change.bind(this, 'office_number')} disabled={this.state.disabled} placeholder="Number should contain 8 integers." ref="office_number" maxLength="8" title="Please fill out this field" required aria-required="true" ></input>
                                         <div className='isPassValidate' id='office_number_message' >This field is required!</div>
-                                        <div className='isPassValidate' id='office_number_format' >Number should contain 8 integers.</div>
+                                        <div className='isPassValidate' id='office_number_format' >Number should contain 8 integers!</div>
                                     </div>
                                 </div>
 
@@ -552,7 +545,7 @@ export class RetailerRegister extends Component {
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                         <UploadFile type="RETAILER_DOCUMENTS" required="required" validate={this.state.validate} showList="1" col_width="10" showWay="2" fileData={this.state.fileData.RETAILER_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
-                                        <div className="col-sm-12 col-md-2 u-cell">
+                                        <div className="col-sm-1 col-md-1 u-cell">
                                             <button className="lm--button lm--button--primary" onClick={this.showView.bind(this)} disabled={this.state.disabled} >?</button>
                                         </div>
                                     </div>
@@ -573,14 +566,14 @@ export class RetailerRegister extends Component {
                                     </div>
                                 </div>
 
-                                <h4 className="lm--formItem lm--formItem--inline string"><input id="chkBuyer" type="checkbox" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href={this.state.sellerTCurl}>{this.state.sellerTCname}</a></h4>
+                                <h4 className="lm--formItem lm--formItem--inline string"><input id="chkBuyer" type="checkbox" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href={this.state.sellerTCurl} className="urlStyle">{this.state.sellerTCname}</a></h4>
                                 <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
-                                <h4 className="lm--formItem lm--formItem--inline string"><input id="chkRevv" type="checkbox" onChange={this.Change.bind(this, 'chkRevv')} name={"seller_revv_tc"} disabled={this.state.disabled} />  I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href={this.state.revvTCurl}>{this.state.revvTCname}</a></h4>
+                                <h4 className="lm--formItem lm--formItem--inline string"><input id="chkRevv" type="checkbox" onChange={this.Change.bind(this, 'chkRevv')} name={"seller_revv_tc"} disabled={this.state.disabled} />  I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href={this.state.revvTCurl} className="urlStyle">{this.state.revvTCname}</a></h4>
                                 <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                                 <div className="retailer_btn">
                                     {btn_html}
                                 </div>
-                                <Modal listdetailtype="Retailer Documents Message" ref="Modal_upload" />
+                                <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrl} />
                                 <Modal text={this.state.text} ref="Modal" />
                                 <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
                             </div>

@@ -1,5 +1,7 @@
 class PdfUtils
 
+  HEAD_STRING_HASH = {"LT" => 'LT', 'HTS' => 'HT (Small)', 'HTL' => 'HT (Large)', 'EHT' => 'EHT'}.freeze
+
 
   def self.number_helper
     ActiveSupport::NumberHelper

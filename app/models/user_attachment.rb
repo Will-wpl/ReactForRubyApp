@@ -32,14 +32,14 @@ class UserAttachment < ApplicationRecord
 
   # Methods (class methods before instance methods)
   def self.find_last_by_type_user(user_id, file_type)
-    UserAttachment.find_by_type_user(file_type, user_id).order(updated_at: :desc).last
+    UserAttachment.find_by_type_user(file_type, user_id).order(updated_at: :desc).first
   end
 
   def self.find_last_by_user(user_id)
-    UserAttachment.find_by_user(user_id).order(updated_at: :desc).last
+    UserAttachment.find_by_user(user_id).order(updated_at: :desc).first
   end
 
   def self.find_last_by_type(file_type)
-    UserAttachment.find_by_type(file_type).order(updated_at: :desc).last
+    UserAttachment.find_by_type(file_type).order(updated_at: :desc).first
   end
 end

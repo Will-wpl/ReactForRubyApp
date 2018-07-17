@@ -121,7 +121,7 @@ export class FillConsumption extends Component {
         })
         this.refs.consumption.showModal('custom', {}, '', '-1')
     }
-
+    // edit an account information
     edit_site(item, index) {
         this.accountItem.account_number = item.account_number;
         this.accountItem.existing_plan = ['SPS tariff', 'SPS wholesale', 'Retailer plan'];
@@ -184,11 +184,6 @@ export class FillConsumption extends Component {
         let checkpeak = this.state.site_list.map((item, index) => {
             return parseFloat(item.totals) > 0 && parseFloat(item.peak_pct) > 0;
         })
-        // let siteCount = this.state.site_list.length;
-        // if (siteCount === 0) {
-
-        // }
-
         this.state.site_list.map((item, index) => {
             let siteItem = {
                 account_number: item.account_number,
@@ -221,14 +216,6 @@ export class FillConsumption extends Component {
                 return false;
             }
         }
-
-        // if(siteCount===0)
-        // {
-        //     setTimeout(()=>{
-        //         this.setState({ text: "You must add at least one Account." });
-        //     },200);
-        //     return false;
-        // }
 
         setBuyerParticipate(makeData, '/api/buyer/consumption_details/save').then((res) => {
             if (type != "participate") {
@@ -295,6 +282,7 @@ export class FillConsumption extends Component {
         }
     }
 
+    //when user finished adding a new account, list page will add/update the new account information.
     doAddAccountAction(siteInfo) {
         let item = {
             account_number: siteInfo.account_number,
@@ -318,7 +306,7 @@ export class FillConsumption extends Component {
             site_list: entity
         })
     }
-
+    // validate the page required field and  contact expiry date.
     checkSuccess(event) {
         event.preventDefault();
         let count = this.dateCompare(this.state.site_list);
@@ -338,13 +326,30 @@ export class FillConsumption extends Component {
         else {
             this.passValidateSave();
         }
-        // this.passValidateSave();
     }
 
     passValidateSave() {
+
         if (this.state.submit_type === "Participate") {
-            this.refs.Modal.showModal("comfirm");
-            this.setState({ text: "Are you sure you want to participate in this auction?" });
+
+            let siteCount = this.state.site_list.length;
+            console.log(siteCount)
+            if (siteCount === 0) {
+                setTimeout(() => {
+                    this.setState({ text: "Please add account to participate." });
+                }, 200);
+                this.refs.Modal.showModal();
+                return false;
+            }
+            else
+            {
+                this.setState({ text: "Are you sure you want to participate in this auction?" });
+                this.refs.Modal.showModal("comfirm");
+    
+            }
+
+
+         
         } else if (this.state.submit_type === "save") {
             this.doSave();
         }
@@ -375,7 +380,7 @@ export class FillConsumption extends Component {
         return (
             <div>
                 <h1>Buyer Participation</h1>
-                <h4 className="col-sm-12 u-mb2">Invitation: {this.state.name}</h4>
+                <h4 className="col-sm-12 u-mb2">Invitation to RA: {this.state.name}</h4>
                 <h4 className="col-sm-12 u-mb2">Contract Start Date: {moment(this.state.time).format('D MMM YYYY hh:mm a')}</h4>
                 <h4 >
                     <div className="row col-sm-12 u-mb2">

@@ -13,32 +13,42 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
 
   # update buyer registration information
   def update
+    saved_entities = nil
     # update buyer registration information
     update_user_params = model_params
     update_user_params = filter_user_password(update_user_params)
-    @user.update(update_user_params)
+    ActiveRecord::Base.transaction do
+      @user.update(update_user_params)
+      # update buyer entity registration information
+      buyer_entities = JSON.parse(params[:buyer_entities])
+      # buyer_entities.push(build_default_entity( update_user_params )) unless buyer_entities.any?{ |v| v['is_default'] == 1 }
+      saved_entities = update_buyer_entities(buyer_entities)
+    end
 
-    # update buyer entity registration information
-    buyer_entities = JSON.parse(params[:buyer_entities])
-    # buyer_entities.push(build_default_entity( update_user_params )) unless buyer_entities.any?{ |v| v['is_default'] == 1 }
-    update_buyer_entities(buyer_entities)
-    render json: { user: @user }, status: 200
+    render json: { result: 'success', user: @user, entities: saved_entities }, status: 200
 
+  rescue Exception => ex
+    render json: { result: 'failed', message: ex.message }, status: 200
   end
 
   # Complete Sign up buyer registration information
   def sign_up
+    saved_entities = nil
     update_user_params = model_params
     update_user_params = filter_user_password(update_user_params)
     update_user_params['approval_status'] = User::ApprovalStatusPending
-    @user.update(update_user_params)
+    ActiveRecord::Base.transaction do
+      @user.update(update_user_params)
+      # update buyer entity registration information
+      buyer_entities = JSON.parse(params[:buyer_entities])
+      # buyer_entities.push(build_default_entity( update_user_params )) unless buyer_entities.any?{ |v| v['is_default'] == 1 }
+      saved_entities = update_buyer_entities(buyer_entities, true)
+    end
 
-    # update buyer entity registration information
-    buyer_entities = JSON.parse(params[:buyer_entities])
-    # buyer_entities.push(build_default_entity( update_user_params )) unless buyer_entities.any?{ |v| v['is_default'] == 1 }
-    update_buyer_entities(buyer_entities, true)
+    render json: { result: 'success', user: @user, entities: saved_entities }, status: 200
 
-    render json: { user: @user }, status: 200
+  rescue Exception => ex
+    render json: { result: 'failed', message: ex.message }, status: 200
   end
 
   # validate retailer info
@@ -106,19 +116,47 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
 
   def validate_buyer_entities_info(buyer, buyer_entities)
     entity_indexes = []
-    user_emails = User.select(:email,:company_name)
+    user_emails = User.select(:id, :email, :company_name, :entity_id)
     # validate Entity' email must not be same with any user's email
     buyer_entities.each_index do |index|
       buyer_entity = buyer_entities[index]
-      is_duplicated_email = user_emails.any?{ |v| v.email == buyer_entity['contact_email'] }
-      is_duplicated_comp_name = user_emails.any?{ |v| v.company_name == buyer_entity['company_name'] }
-      if is_duplicated_email || buyer['email']==buyer_entity['contact_email']
+      # is_duplicated_email = user_emails.any?{ |v| v.email == buyer_entity['contact_email'] }
+      # is_duplicated_comp_name = user_emails.any?{ |v| v.company_name == buyer_entity['company_name'] }
+      # if is_duplicated_email || buyer['email']==buyer_entity['contact_email']
+      #   entity_indexes.push({'entity_index' => index, 'error_field_name' => 'contact_email'})
+      # end
+      # if is_duplicated_comp_name
+      #   entity_indexes.push({'entity_index' => index, 'error_field_name' => 'company_name'})
+      # elsif !buyer_entity['is_default'].equal?(1) && buyer['company_name']==buyer_entity['company_name']
+      #   entity_indexes.push({'entity_index' => index, 'error_field_name' => 'company_name'})
+      # end
+
+      # Sub entity validation
+      is_duplicated_email = user_emails.any?{ |v| v.email == buyer_entity['contact_email'] &&
+          (v.entity_id == nil || v.entity_id != buyer_entity['id']) }
+      is_duplicated_comp_name = user_emails.any?{ |v| v.company_name == buyer_entity['company_name'] &&
+          (v.entity_id == nil || v.entity_id != buyer_entity['id']) }
+      # Sub entity -> existed same entity with email & company name
+      if !buyer_entity['is_default'].equal?(1) && is_duplicated_email
         entity_indexes.push({'entity_index' => index, 'error_field_name' => 'contact_email'})
       end
-      if is_duplicated_comp_name
+      if !buyer_entity['is_default'].equal?(1) && is_duplicated_comp_name
         entity_indexes.push({'entity_index' => index, 'error_field_name' => 'company_name'})
-      elsif !buyer_entity['is_default'].equal?(1) && buyer['company_name']==buyer_entity['company_name']
+      end
+      # Sub entity -> same entity email / company name with input buyer
+      if !buyer_entity['is_default'].equal?(1) && buyer_entity['contact_email'].equal?(buyer['email'])
+        entity_indexes.push({'entity_index' => index, 'error_field_name' => 'contact_email'})
+      end
+      if !buyer_entity['is_default'].equal?(1) && buyer_entity['company_name'].equal?(buyer['company_name'])
         entity_indexes.push({'entity_index' => index, 'error_field_name' => 'company_name'})
+      end
+
+      # Master entity validation
+      is_duplicated_email = user_emails.any?{ |v| v.email == buyer_entity['contact_email'] &&
+          v.id != buyer_entity['user_id']}
+      # Master entity -> existed same entity with email
+      if buyer_entity['is_default'].equal?(1) && is_duplicated_email
+        entity_indexes.push({'entity_index' => index, 'error_field_name' => 'contact_email'})
       end
     end
 
@@ -142,55 +180,60 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
   end
 
   def update_buyer_entities( buyer_entities, need_create_user=false )
+
     ids = []
     buyer_entities.each do |buyer_entity|
       ids.push(buyer_entity['id']) if buyer_entity['id'].to_i != 0
     end
-    will_del_buyer_entity = current_user.company_buyer_entities.reject do |buyer_entity|
-      ids.include?(buyer_entity.id.to_s)
+    # will_del_buyer_entity = current_user.company_buyer_entities.reject do |buyer_entity|
+    #   ids.include?(buyer_entity.id.to_s)
+    # end
+    will_del_buyer_entity = []
+    current_user.company_buyer_entities.each do |buyer_entity|
+      will_del_buyer_entity.push(buyer_entity) unless ids.include?(buyer_entity.id)
     end
+    saved_buyer_entities = []
+    # ActiveRecord::Base.transaction do
     will_del_buyer_entity.each do |buyer_entity|
       CompanyBuyerEntity.find(buyer_entity.id).destroy
     end
-    saved_buyer_entities = []
-    ActiveRecord::Base.transaction do
-      buyer_entities.each do |buyer_entity|
-        target_buyer_entity = if buyer_entity['id'].to_i == 0
-                              CompanyBuyerEntity.new
-                             else
-                               CompanyBuyerEntity.find(buyer_entity['id'])
-                             end
-        target_buyer_entity.company_name = buyer_entity['company_name'] unless buyer_entity['company_name'].blank?
-        target_buyer_entity.company_uen = buyer_entity['company_uen'] unless buyer_entity['company_uen'].blank?
-        target_buyer_entity.company_address = buyer_entity['company_address'] unless buyer_entity['company_address'].blank?
-        target_buyer_entity.billing_address = buyer_entity['billing_address'] unless buyer_entity['billing_address'].blank?
-        target_buyer_entity.bill_attention_to = buyer_entity['bill_attention_to'] unless buyer_entity['bill_attention_to'].blank?
-        target_buyer_entity.contact_name = buyer_entity['contact_name'] unless buyer_entity['contact_name'].blank?
-        target_buyer_entity.contact_email = buyer_entity['contact_email'] unless buyer_entity['contact_email'].blank?
-        target_buyer_entity.contact_mobile_no = buyer_entity['contact_mobile_no'] unless buyer_entity['contact_mobile_no'].blank?
-        target_buyer_entity.contact_office_no = buyer_entity['contact_office_no'] unless buyer_entity['contact_office_no'].blank?
-        target_buyer_entity.is_default = buyer_entity['is_default'].blank? ? 0 : buyer_entity['is_default']
-        target_buyer_entity.user = current_user
-        if target_buyer_entity.save!
-          saved_buyer_entities.push(target_buyer_entity)
-          if need_create_user && !target_buyer_entity.is_default then
-            new_entity_user = User.new
-            new_entity_user.name = target_buyer_entity.company_name
-            new_entity_user.email = target_buyer_entity.contact_email
-            new_entity_user.consumer_type = User::ConsumerTypeBuyerEntity
-            new_entity_user.approval_status = User::ApprovalStatusDisable
-            new_entity_user.password = 'password'
-            new_entity_user.password_confirmation = 'password'
-            new_entity_user.entity_id = target_buyer_entity.id
-            new_entity_user.add_role(:entity) if new_entity_user.save
-          elsif need_create_user && target_buyer_entity.is_default then
-            user = current_user
-            user.entity_id = target_buyer_entity.id
-            user.save!
-          end
+    buyer_entities.each do |buyer_entity|
+      target_buyer_entity = if buyer_entity['id'].to_i == 0
+                            CompanyBuyerEntity.new
+                           else
+                             CompanyBuyerEntity.find(buyer_entity['id'])
+                           end
+      target_buyer_entity.company_name = buyer_entity['company_name'] unless buyer_entity['company_name'].blank?
+      target_buyer_entity.company_uen = buyer_entity['company_uen'] unless buyer_entity['company_uen'].blank?
+      target_buyer_entity.company_address = buyer_entity['company_address'] unless buyer_entity['company_address'].blank?
+      target_buyer_entity.billing_address = buyer_entity['billing_address'] unless buyer_entity['billing_address'].blank?
+      target_buyer_entity.bill_attention_to = buyer_entity['bill_attention_to'] unless buyer_entity['bill_attention_to'].blank?
+      target_buyer_entity.contact_name = buyer_entity['contact_name'] unless buyer_entity['contact_name'].blank?
+      target_buyer_entity.contact_email = buyer_entity['contact_email'] unless buyer_entity['contact_email'].blank?
+      target_buyer_entity.contact_mobile_no = buyer_entity['contact_mobile_no'] unless buyer_entity['contact_mobile_no'].blank?
+      target_buyer_entity.contact_office_no = buyer_entity['contact_office_no'] unless buyer_entity['contact_office_no'].blank?
+      target_buyer_entity.is_default = buyer_entity['is_default'].blank? ? 0 : buyer_entity['is_default']
+      target_buyer_entity.user = current_user
+      if target_buyer_entity.save!
+        saved_buyer_entities.push(target_buyer_entity)
+        if need_create_user && !target_buyer_entity.is_default then
+          new_entity_user = User.new
+          new_entity_user.name = target_buyer_entity.company_name
+          new_entity_user.email = target_buyer_entity.contact_email
+          new_entity_user.consumer_type = User::ConsumerTypeBuyerEntity
+          new_entity_user.approval_status = User::ApprovalStatusDisable
+          new_entity_user.password = 'password'
+          new_entity_user.password_confirmation = 'password'
+          new_entity_user.entity_id = target_buyer_entity.id
+          new_entity_user.add_role(:entity) if new_entity_user.save
+        elsif need_create_user && target_buyer_entity.is_default then
+          user = current_user
+          user.entity_id = target_buyer_entity.id
+          user.save!
         end
       end
     end
+    # end
     saved_buyer_entities
   end
 

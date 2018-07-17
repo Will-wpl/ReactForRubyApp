@@ -29,7 +29,7 @@ export class UploadFile extends React.Component {
                                 {required === "required" ?
                                     <div>
                                         <input type="file" name="uploadField" required="required" ref={type + index} onChange={this.changefileval.bind(this, type + index)} id={type + index} name="file" disabled={this.props.propsdisabled ? true : (window.location.href.indexOf("past") > 0 ? true : this.state.disabled)} />
-                                        <b>Browse..</b>
+                                        <b>Browser</b>
                                         <div className="required_error">
                                             Please select file.
                                         </div>

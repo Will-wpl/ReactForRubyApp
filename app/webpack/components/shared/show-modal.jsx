@@ -43,7 +43,6 @@ export class Modal extends React.Component {
     }
     componentWillReceiveProps(next) {
         if (next.consumption_account_item) {
-            console.log(next.consumption_account_item.contract_expiry);
             this.setState({
                 account_number: next.consumption_account_item.account_number,
                 existing_plan: next.consumption_account_item.existing_plan,
@@ -546,10 +545,10 @@ export class Modal extends React.Component {
             }
         }
         else {
-            if (this.props.listdetailtype === 'Retailer Documents Message') {
+            if (this.props.listdetailtype === 'Documents Message') {
                 showDetail = <ul className="showdetail">
                     <li>Please upload the following documentations:</li>
-                    <li>1) A print-out of this <a href='#'>Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
+                    <li>1) A print-out of this <a href={this.props.attatchment} className="urlStyle" target="_blank">Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
                     <li>2a) Your company's Accounting & Corporate Regulatory Authority (ACRA) Business Profile.</li>
                     <li>or</li>
                     <li>2b) Your company's Certificate of Incorporation if you are not registered with Accounting & Corporate Regulatory Authority (ACRA).</li>
@@ -559,19 +558,19 @@ export class Modal extends React.Component {
                     <li>All supporting documents submitted should be in English only.</li>
                 </ul>
             }
-            if (this.props.listdetailtype === 'Buyer Documents Message') {
-                showDetail = <ul className="showdetail">
-                    <li>Please upload the following documentations:</li>
-                    <li>1) A print-out of this <a href='#'> Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
-                    <li>2a) Your company's Accounting & Corporate Regulatory Authority (ACRA) Business Profile.</li>
-                    <li>or</li>
-                    <li>2b) Your company's Certificate of Incorporation if you are not registered with Accounting & Corporate Regulatory Authority (ACRA).</li>
-                    <li>3) Directors' Resolution authorising the Authorised Representative to transact for and on behalf of the Company in this platform.</li>
-                    <li>4) A copy of the Applicant's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
-                    <li>5) A copy of the Authorised Representative's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
-                    <li>All supporting documents submitted should be in English only.</li>
-                </ul>
-            }
+            // if (this.props.listdetailtype === 'Buyer Documents Message') {
+            //     showDetail = <ul className="showdetail">
+            //         <li>Please upload the following documentations:</li>
+            //         <li>1) A print-out of this <a  href={this.props.attatchment} className="urlStyle"> Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
+            //         <li>2a) Your company's Accounting & Corporate Regulatory Authority (ACRA) Business Profile.</li>
+            //         <li>or</li>
+            //         <li>2b) Your company's Certificate of Incorporation if you are not registered with Accounting & Corporate Regulatory Authority (ACRA).</li>
+            //         <li>3) Directors' Resolution authorising the Authorised Representative to transact for and on behalf of the Company in this platform.</li>
+            //         <li>4) A copy of the Applicant's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
+            //         <li>5) A copy of the Authorised Representative's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
+            //         <li>All supporting documents submitted should be in English only.</li>
+            //     </ul>
+            // }
             if (this.props.listdetailtype === 'consumption_detail') {
                 if (this.props.consumption_account_item !== null) {
                     showDetail = <form name="buyer_model_form" method="post" onSubmit={this.checkModelSuccess.bind(this)}>
@@ -595,7 +594,7 @@ export class Modal extends React.Component {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><abbr title="required">*</abbr>Contract Expiry</td>
+                                    <td><abbr title="required"><span className={this.state.existing_plan_selected === "Retailer plan" ? "isDisplay" : "isHide"}>*</span></abbr>Contract Expiry</td>
                                     <td>
                                         <DatePicker selected={this.state.contract_expiry} disabled={this.state.contract_expiry_disabled} onKeyDown={this.noPermitInput.bind(this)} ref="contract_expiry_date" shouldCloseOnSelect={true} name="contract_expiry_date" minDate={moment()} showTimeSelect required aria-required="true" className="date_ico" dateFormat="DD-MM-YYYY HH:mm" selectsStart onChange={this.dateChange.bind(this)} title="Time must not be in the past." />
                                     </td>
@@ -642,8 +641,8 @@ export class Modal extends React.Component {
                                     <td >
                                         <div className="specil">
                                             <span>Total Monthly1:</span>
-                                            <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" onKeyUp={this.removeNanNum.bind(this)} pattern="^\d+(\.\d+)?$" required aria-required="true" /><span>kWh/month,Peak:</span>
-                                            <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} id="peak_pct" onKeyUp={this.removeNanNum.bind(this)} pattern="^100$|^(\d|[1-9]\d)(\.\d+)*$" required aria-required="true" /> %
+                                            <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" onKeyUp={this.removeNanNum.bind(this)} pattern="^\d+(\.\d+)?$" required aria-required="true"  maxLength="10"/><span>kWh/month,Peak:</span>
+                                            <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} id="peak_pct" onKeyUp={this.removeNanNum.bind(this)} pattern="^100$|^(\d|[1-9]\d)(\.\d+)*$" required aria-required="true"  maxLength="5"/> %
                                         ,Off-Peak:<input type="text" value={this.state.peak} disabled="true" onChange={this.changeConsumption.bind(this, "pack")} id="pack" required aria-required="true" /><span></span>
                                             %(auot calculate).<span>Upload bill(s) compulsory for Category 3 (New Accounts)</span>.
                                             <div title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">?</div>
