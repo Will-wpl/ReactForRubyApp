@@ -368,7 +368,7 @@ upload(type, index){
                     if(this.state.retailer_select === 0){
                         this.timeBar(type);
                         doSend = false;
-                    }else if(this.state.fileData["retailer_confidentiality_undertaking_upload"][0].files <= 0 || this.state.fileData["tender_documents_upload"][0].files <= 0 ){
+                    }else if(this.state.fileData["birefing_pack_upload"][0].files <= 0 ){
                         this.timeBar(type);
                         doSend = false;
                     }else{
