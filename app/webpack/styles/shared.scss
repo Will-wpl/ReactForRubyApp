@@ -191,7 +191,8 @@ abbr[title]{color: #fe0000; text-decoration: none;}
   .showinfo{ color: red; min-height: auto;}
   .modal_btn{ 
     width:90%; margin: 10px auto; overflow: hidden;
-    a{ width: 60px; float:right; margin-left: 10px; cursor: pointer;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; }
+    a { width: 60px; float:right; margin-left: 10px; cursor: pointer;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; }
+    button { width: 60px; float:right; margin-left: 10px; cursor: pointer;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; }
   }
 }
 .u-contain{overflow:hidden;}
@@ -304,10 +305,10 @@ abbr[title]{color: #fe0000; text-decoration: none;}
     a{color:#00888a; cursor: pointer; background: url("../images/add.png") no-repeat left; padding-left:18px;}
   }
   .editSite{ width: 100%; margin: 10px auto;
-    a{color:#00888a; cursor: pointer; background: url("../images/add.png") no-repeat left; padding-left:-10px;}
+    a{color:#00888a; cursor: pointer; background: url("../images/edit.png") no-repeat left; padding-left:-10px;}
   }
   .delSite{ width: 100%; margin: 10px auto;
-    a{color:#00888a; cursor: pointer; background: url("../images/add.png") no-repeat left; padding-left:10px;}
+    a{color:#00888a; cursor: pointer; background: url("../images/remove.png") no-repeat left; padding-left:10px;}
   }
   .buyer_btn{ text-align: right; width: 100%;
     a{
@@ -888,6 +889,10 @@ ul.history_files{
     text-decoration :underline;
   }
 }
+.textDecoration
+{
+  text-decoration :underline;
+}
 .textNormal
 {
   text-align: left;
@@ -901,4 +906,11 @@ ul.history_files{
 .custombtn{
  
     background-color: #00d900;
+}
+
+.addEntity{ width: 100%; margin: 10px auto;
+  a{color:#00888a; cursor: pointer; background: url("../images/add.png") no-repeat left; padding-left:18px;}
+}  
+.delEntity{ width: 100%; margin: 10px auto;
+  a{color:#00888a; cursor: pointer; background: url("../images/remove.png") no-repeat left; padding-left:10px;}
 }

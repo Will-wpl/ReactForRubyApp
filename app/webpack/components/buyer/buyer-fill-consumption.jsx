@@ -59,9 +59,7 @@ export class FillConsumption extends Component {
     }
 
     BuyerParticipateList() {
-        console.log(this.consumptions_id);
         getBuyerParticipate('/api/buyer/consumption_details?consumption_id=' + this.consumptions_id).then((res) => {
-            console.log(res);
             this.site_list = res.consumption_details;
             this.status = res.consumption.participation_status === '1' ? "Confirmed" :
                 (res.consumption.participation_status === '2' ? "Pending" : "Rejected")
@@ -70,7 +68,6 @@ export class FillConsumption extends Component {
                 time: res.auction.actual_begin_time,
                 link: res.tc_attachment,
             })
-
             if (res.consumption.participation_status === '1' || res.auction.publish_status === "1") {
                 $("input[type='checkbox']").attr("checked", true);
                 this.setState({
@@ -129,7 +126,7 @@ export class FillConsumption extends Component {
         this.accountItem.account_number = item.account_number;
         this.accountItem.existing_plan = ['SPS tariff', 'SPS wholesale', 'Retailer plan'];
         this.accountItem.existing_plan_selected = item.existing_plan;
-        this.accountItem.contract_expiry = moment(item.contract_expiry);
+        this.accountItem.contract_expiry = item.contract_expiry ? moment(item.contract_expiry) : "";
         this.accountItem.purchasing_entity = this.purchaseList;
         this.accountItem.purchasing_entity_selectd = item.company_buyer_entity_id;
         this.accountItem.intake_level = ['Low Tension (LT)', 'High Tension Small (HTS)', 'High Tension Large (HTL)', 'Extra High Tension (EHT)'];
@@ -196,7 +193,7 @@ export class FillConsumption extends Component {
             let siteItem = {
                 account_number: item.account_number,
                 existing_plan: item.existing_plan,
-                contract_expiry: moment(item.contract_expiry).format(),
+                contract_expiry: item.contract_expiry ? moment(item.contract_expiry).format() : "",
                 company_buyer_entity_id: item.company_buyer_entity_id,
                 intake_level: item.intake_level,
                 contracted_capacity: item.contracted_capacity,
@@ -224,7 +221,7 @@ export class FillConsumption extends Component {
                 return false;
             }
         }
-        
+
         // if(siteCount===0)
         // {
         //     setTimeout(()=>{
@@ -288,7 +285,6 @@ export class FillConsumption extends Component {
     }
 
     doSubmit(type) {
-        console.log('doSubmit')
         if (type === "return") {
             return false;
         }
@@ -321,11 +317,9 @@ export class FillConsumption extends Component {
         this.setState({
             site_list: entity
         })
-        console.log(this.state.site_list)
     }
 
     checkSuccess(event) {
-        console.log('check')
         event.preventDefault();
         let count = this.dateCompare(this.state.site_list);
         this.setState({
@@ -429,7 +423,7 @@ export class FillConsumption extends Component {
                                                 <td>{item.contract_expiry !== "" ? moment(item.contract_expiry).format('YYYY-MM-DD HH:mm') : ""}</td>
                                                 <td>{this.getPurchase(item.company_buyer_entity_id)} </td>
                                                 <td>{item.intake_level}</td>
-                                                <td>{item.contracted_capacity}</td>
+                                                <td>{parseInt(item.contracted_capacity)}</td>
                                                 <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
                                                 <td>
                                                     <span className="textBold">Total Monthly:<div>{item.totals}</div>kWh/month,Peak:<div>{item.peak_pct}</div></span>,Off-Peak:<span className="textNormal"><div>{100 - item.peak_pct}</div></span>(auto calculate).<span className="textBold">Upload bill(s) compulsory for Category 3(new Accounts)</span>.

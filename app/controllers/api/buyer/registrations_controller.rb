@@ -20,7 +20,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
 
     # update buyer entity registration information
     buyer_entities = JSON.parse(params[:buyer_entities])
-    buyer_entities.push(build_default_entity( update_user_params )) unless buyer_entities.any?{ |v| v['is_default'] == 1 }
+    # buyer_entities.push(build_default_entity( update_user_params )) unless buyer_entities.any?{ |v| v['is_default'] == 1 }
     update_buyer_entities(buyer_entities)
     render json: { user: @user }, status: 200
 
@@ -35,7 +35,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
 
     # update buyer entity registration information
     buyer_entities = JSON.parse(params[:buyer_entities])
-    buyer_entities.push(build_default_entity( update_user_params )) unless buyer_entities.any?{ |v| v['is_default'] == 1 }
+    # buyer_entities.push(build_default_entity( update_user_params )) unless buyer_entities.any?{ |v| v['is_default'] == 1 }
     update_buyer_entities(buyer_entities, true)
 
     render json: { user: @user }, status: 200
@@ -79,7 +79,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
 
     # validate user entities
     buyer_entities = JSON.parse(params[:buyer_entities])
-    validate_result, entity_indexes = validate_buyer_entities_info(validation_user['email'], buyer_entities)
+    validate_result, entity_indexes = validate_buyer_entities_info(validation_user, buyer_entities)
     validate_final_result = validate_final_result & validate_result
     error_entity_indexes = entity_indexes unless validate_result
     render json: { validate_result: validate_final_result,
@@ -104,23 +104,36 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     buyer_entity
   end
 
-  def validate_buyer_entities_info(buyer_email, buyer_entities)
+  def validate_buyer_entities_info(buyer, buyer_entities)
     entity_indexes = []
-    user_emails = User.select(:email)
+    user_emails = User.select(:email,:company_name)
     # validate Entity' email must not be same with any user's email
     buyer_entities.each_index do |index|
       buyer_entity = buyer_entities[index]
-      if user_emails.any?{ |v| v.email == buyer_entity['contact_email'] } || buyer_email==buyer_entity['contact_email']
-        entity_indexes.push(index)
+      is_duplicated_email = user_emails.any?{ |v| v.email == buyer_entity['contact_email'] }
+      is_duplicated_comp_name = user_emails.any?{ |v| v.company_name == buyer_entity['company_name'] }
+      if is_duplicated_email || buyer['email']==buyer_entity['contact_email']
+        entity_indexes.push({'entity_index' => index, 'error_field_name' => 'contact_email'})
+      end
+      if is_duplicated_comp_name
+        entity_indexes.push({'entity_index' => index, 'error_field_name' => 'company_name'})
+      elsif !buyer_entity['is_default'].equal?(1) && buyer['company_name']==buyer_entity['company_name']
+        entity_indexes.push({'entity_index' => index, 'error_field_name' => 'company_name'})
       end
     end
 
     # validate Entity' email must be unique
     buyer_entities.each_index do |index| #entity_emails.push(x['contact_email'])
       target_entity = buyer_entities[index]
+      if target_entity['is_default'].equal?(1)
+        next
+      end
       buyer_entities.each do |temp_entity|
         if target_entity.object_id != temp_entity.object_id && target_entity['contact_email'] == temp_entity['contact_email']
-          entity_indexes.push(index)
+          entity_indexes.push({'entity_index' => index, 'error_field_name' => 'contact_email'})
+        end
+        if target_entity.object_id != temp_entity.object_id && target_entity['company_name'] == temp_entity['company_name']
+          entity_indexes.push({'entity_index' => index, 'error_field_name' =>'company_name'})
         end
       end
     end
