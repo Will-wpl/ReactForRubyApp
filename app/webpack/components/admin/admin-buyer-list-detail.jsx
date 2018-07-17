@@ -28,7 +28,7 @@ export default class AdminBuyerListDetail extends Component {
 
 componentDidMount() {
     getAdminBuyerListDetails(window.location.href.split("consumptions/")[1]).then(res=>{
-        //console.log(res);
+        console.log(res);
         this.setState({
             comsumption_list:[res],
         })

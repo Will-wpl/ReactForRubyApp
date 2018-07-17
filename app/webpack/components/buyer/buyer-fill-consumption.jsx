@@ -399,27 +399,12 @@ export class FillConsumption extends Component {
                                 </tr>
                             </tbody>
                         </table>
-                        {/* <div className="col-sm-2  col-md-2 u-mb2">Purchase Duration:</div>
-                        <div className="col-sm-5  col-md-5 u-mb2">
-                            <select id="selDuration" style={{ 'width': '200px' }} onChange={this.durationChange.bind(this)}>
-                                {
-                                    this.state.durationList.map(item => {
-                                        return <option key={item.contract_duration} value={item.contract_duration}>{item.contract_duration + " months"}</option>
-                                    })
-                                }
-                            </select>
-                        </div> */}
                     </div>
                 </h4>
                 <form name="buyer_form" method="post" onSubmit={this.checkSuccess.bind(this)}>
                     <div className="u-grid buyer mg0">
-                        {this.state.link ?
-                            <h4 className="col-sm-12 u-mb2">
-                                <input name="agree_auction" type="checkbox" disabled={this.state.disabled} required />&nbsp;&nbsp;
-                            I agree to the <a className="cursor" target="_blank" download={this.state.link.file_name} href={`${this.state.link.file_path}`}>terms and conditions.</a>
-                            </h4> : ""
-                        }
                         <h4 className="col-sm-12 u-mb2">Last Status of Participation : {this.status}</h4>
+                        <h4 className="col-sm-12 u-mb2">New Accounts</h4>
                         <div className="col-sm-12 col-md-12">
                             <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                                 <thead>
