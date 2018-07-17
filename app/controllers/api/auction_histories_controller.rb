@@ -28,6 +28,9 @@ class Api::AuctionHistoriesController < Api::BaseController
     if auction.auction_contracts.blank?
       list = list_logic(params[:auction_id], nil)
       render json: list, status: 200
+    elsif !params[:contract_duration].blank?
+      list = list_logic(params[:auction_id], params[:contract_duration])
+      render json: list, status: 200
     else
       hash = {}
       auction.auction_contracts.each do |contract|
