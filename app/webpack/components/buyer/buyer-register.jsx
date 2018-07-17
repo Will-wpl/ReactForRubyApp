@@ -63,7 +63,7 @@ export class BuyerRegister extends Component {
             user_contact_office_no: { cate: 'num' },
         }
         this.validatorComment = {
-            comment: { cate: 'email' }
+            comment: { cate: 'required' }
         }
     }
     componentWillMount() {
@@ -523,15 +523,9 @@ export class BuyerRegister extends Component {
                     })
                 }
                 else {
-
                 }
             })
-
-
-
-
         }
-
     }
     cancel() {
         window.location.href = `/users/edit`;
