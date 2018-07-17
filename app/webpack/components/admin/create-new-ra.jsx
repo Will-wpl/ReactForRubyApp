@@ -23,7 +23,7 @@ export class CreateNewRA extends Component {
             edit_change:"lm--button lm--button--primary hide",contractArray:[],
             disabled:false,live_modal:"",live_modal_do:"",holdOrend:"",checkArray:[],
             contract_duration_6:false,contract_duration_12:false,contract_duration_24:false,
-            required:false,check_required:true,single_multiple:"0",allow_deviation:"1",
+            required:false,check_required:true,single_multiple:"1",allow_deviation:"1",
             contract_6:'0',contract_12:'0',contract_24:'0'
         }
 
@@ -601,22 +601,27 @@ export class CreateNewRA extends Component {
                     <dd className="lm--formItem lm--formItem--inline string optional">
                         <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Contract Duration:</span>
                         <div className="lm--formItem-right lm--formItem-label lm--formItem-control">
-                            <label className={"checkbox_div"}><input className={"checkbox"} type="checkbox" required={this.state.check_required} ref="contract_duration_6" disabled={this.state.disabled} name="contract_duration" value={"6"} id={"contract_duration_6"} checked={this.state.contract_duration_6} onChange={this.contractChange.bind(this)}  /> 6 Mouths</label>
-                            <label className={"checkbox_div"}><input className={"checkbox"} type="checkbox" required={this.state.check_required} ref="contract_duration_12" disabled={this.state.disabled} name="contract_duration" value={"12"} id={"contract_duration_12"} checked={this.state.contract_duration_12} onChange={this.contractChange.bind(this)}  /> 12 Mouths</label>
-                            <label className={"checkbox_div"}><input className={"checkbox"} type="checkbox" required={this.state.check_required} ref="contract_duration_24" disabled={this.state.disabled} name="contract_duration" value={"24"} id={"contract_duration_24"} checked={this.state.contract_duration_24} onChange={this.contractChange.bind(this)}  /> 24 Mouths</label>
+                            <label className={"checkbox_div"}><input className={"checkbox"} type="checkbox" required={this.state.check_required} ref="contract_duration_6" disabled={this.state.disabled} name="contract_duration" value={"6"} id={"contract_duration_6"} checked={this.state.contract_duration_6} onChange={this.contractChange.bind(this)}  /> 6 Months</label>
+                            <label className={"checkbox_div"}><input className={"checkbox"} type="checkbox" required={this.state.check_required} ref="contract_duration_12" disabled={this.state.disabled} name="contract_duration" value={"12"} id={"contract_duration_12"} checked={this.state.contract_duration_12} onChange={this.contractChange.bind(this)}  /> 12 Months</label>
+                            <label className={"checkbox_div"}><input className={"checkbox"} type="checkbox" required={this.state.check_required} ref="contract_duration_24" disabled={this.state.disabled} name="contract_duration" value={"24"} id={"contract_duration_24"} checked={this.state.contract_duration_24} onChange={this.contractChange.bind(this)}  /> 24 Months</label>
                         </div>
                     </dd>
                     {this.state.contractArray.length>0?
                         (<div>
                             <dd className="lm--formItem lm--formItem--inline string optional">
                                 <span className="lm--formItem-left lm--formItem-label string optional">Contact End Date</span>
+                                <div className="lm--formItem-right lm--formItem-control">
+                                    {this.state.contractArray.map((item,index)=>{
+                                        return <label className={'lm--formItem-label lm--formItem-control'}>Buyer on {item.contract_duration} mouths [{item.contract_period_end_date}]</label>
+                                    })}
+                                </div>
                             </dd>
-                            {this.state.contractArray.map((item,index)=>{
-                                return <dd key={index} className="lm--formItem lm--formItem--inline string optional">
-                                         <span className="lm--formItem-left lm--formItem-label string optional">Buyer on {item.contract_duration} mouths [{item.contract_period_end_date}]:</span>
-                                         <label className="lm--formItem-right lm--formItem-label lm--formItem-control"><abbr>5</abbr><a href="#" className="lm--button lm--button--primary">Details</a></label>
-                                       </dd>
-                                })}
+                            {/*{this.state.contractArray.map((item,index)=>{*/}
+                                {/*return <dd key={index} className="lm--formItem lm--formItem--inline string optional">*/}
+                                         {/*<span className="lm--formItem-left lm--formItem-label string optional">Buyer on {item.contract_duration} mouths [{item.contract_period_end_date}]:</span>*/}
+                                         {/*<label className="lm--formItem-right lm--formItem-label lm--formItem-control"><abbr>5</abbr><a href="#" className="lm--button lm--button--primary">Details</a></label>*/}
+                                       {/*</dd>*/}
+                                {/*})}*/}
                         </div>):''
                     }
                     <dd className="lm--formItem lm--formItem--inline string optional">

@@ -178,13 +178,13 @@ upload(type, index){
             //     },3000)
             //     result = false;
             // }
-            if(requiredObj['birefing_pack_upload'][0].files.length <=0){
-                $("#birefing_pack_upload0").next().next().fadeIn(300);
-                timeBar = setTimeout(()=>{
-                    $("#birefing_pack_upload0").next().next().fadeOut(300);
-                },3000)
-                result = false;
-            }
+            // if(requiredObj['birefing_pack_upload'][0].files.length <=0){
+            //     $("#birefing_pack_upload0").next().next().fadeIn(300);
+            //     timeBar = setTimeout(()=>{
+            //         $("#birefing_pack_upload0").next().next().fadeOut(300);
+            //     },3000)
+            //     result = false;
+            // }
             return result;
         }
         doPublish(){
@@ -201,19 +201,19 @@ upload(type, index){
                 },5000)
                 return;
             }
-            // if(this.state.peak_eht<=0 && this.state.off_peak_eht<=0 &&
-            //     this.state.peak_lt<=0 && this.state.off_peak_lt<=0 &&
-            //     this.state.peak_hts<=0 && this.state.off_peak_hts<=0 &&
-            //     this.state.peak_htl<=0 && this.state.off_peak_htl<=0
-            // ){
-            //     clearTimeout(required);
-            //     $(".consumption .required_error").fadeIn(300);
-            //     location.href="#aggregate_consumption";
-            //     required = setTimeout(() => {
-            //         $(".consumption .required_error").fadeOut(300);
-            //     }, 5000)
-            //     return;
-            // }
+            if(this.state.peak_eht<=0 && this.state.off_peak_eht<=0 &&
+                this.state.peak_lt<=0 && this.state.off_peak_lt<=0 &&
+                this.state.peak_hts<=0 && this.state.off_peak_hts<=0 &&
+                this.state.peak_htl<=0 && this.state.off_peak_htl<=0
+            ){
+                clearTimeout(required);
+                $(".consumption .required_error").fadeIn(300);
+                location.href="#aggregate_consumption";
+                required = setTimeout(() => {
+                    $(".consumption .required_error").fadeOut(300);
+                }, 5000)
+                return;
+            }
             if(!this.checkRequired()){
                 return;
             }
