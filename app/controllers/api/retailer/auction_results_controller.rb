@@ -22,15 +22,11 @@ class Api::Retailer::AuctionResultsController < Api::AuctionResultsController
     data = []
     results = get_order_list(params, headers, result)
     results.each do |result|
-      company_user_count = Consumption.get_company_user_count(result.auction_id)
-      my_result = get_result(result)
-      data.push(published_gid: result.auction.published_gid,
-                name: result.auction.name,
-                start_datetime: result.auction.start_datetime,
-                my_result: my_result,
-                award: get_award(company_user_count, result),
-                id: Arrangement.auction_of_current_user(result.auction.id, current_user.id).first.id,
-                auction_id: result.auction.id)
+      if result.auction_result_contracts.blank?
+        data.push(set_result(result))
+      else
+        data.push(set_contracts_result(result))
+      end
     end
     bodies = { data: data, total: total }
     actions = [{url: '/retailer/arrangements/:id/tender?past', name: 'View History', icon:'view', interface_type: 'auction'}]
@@ -38,6 +34,43 @@ class Api::Retailer::AuctionResultsController < Api::AuctionResultsController
   end
 
   private
+
+  def set_result(result)
+    company_user_count = Consumption.get_company_user_count(result.auction_id)
+    my_result = get_result(result)
+    data = {
+        published_gid: result.auction.published_gid,
+        name: result.auction.name,
+        start_datetime: result.auction.start_datetime,
+        my_result: my_result,
+        award: get_award(company_user_count, result, nil),
+        id: Arrangement.auction_of_current_user(result.auction.id, current_user.id).first.id,
+        auction_id: result.auction.id
+    }
+    data
+  end
+
+  def set_contracts_result(result)
+    contracts = []
+    result.auction_result_contracts.each do |result_contract|
+      company_user_count = Consumption.get_company_user_duration_count(result_contract.auction_id, result_contract.contract_duration)
+      my_result = get_result(result_contract)
+      contracts.push({
+                         published_gid: result_contract.auction.published_gid,
+                         name: result_contract.auction.name,
+                         start_datetime: result_contract.auction.start_datetime,
+                         my_result: my_result,
+                         award: get_award(company_user_count, result_contract, result_contract.contract_duration),
+                         id: Arrangement.auction_of_current_user(result_contract.auction.id, current_user.id).first.id,
+                         auction_id: result.auction.id
+                     })
+    end
+
+    data = {id: result.auction.id,
+            published_gid: result.auction.published_gid, name: result.auction.name, start_datetime: result.auction.start_datetime,
+            contracts: contracts}
+    data
+  end
 
   def show_award?(result, current_user)
     result.user_id == current_user.id && result.status != 'void'
@@ -60,7 +93,12 @@ class Api::Retailer::AuctionResultsController < Api::AuctionResultsController
     end
   end
 
-  def get_award(company_user_count, result)
-    company_user_count != 0 && show_award?(result, current_user) ? "retailer/auctions/#{result.auction_id}/award" : ''
+  def get_award(company_user_count, result, contract_duration)
+    if contract_duration.blank?
+      company_user_count != 0 && show_award?(result, current_user) ? "retailer/auctions/#{result.auction_id}/award" : ''
+    else
+      company_user_count != 0 && show_award?(result, current_user) ? "retailer/auctions/#{result.auction_id}/award?contract_duration=#{contract_duration}" : ''
+    end
+
   end
 end

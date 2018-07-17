@@ -89,11 +89,16 @@ class Api::ConsumptionDetailsController < Api::BaseController
       consumption.htl_off_peak = intake_values[5]
       consumption.eht_peak = intake_values[6]
       consumption.eht_off_peak = intake_values[7]
+
+      auction_name = auction.name
+      auction_start_datetime = auction.start_datetime.strftime('%Y-%m-%d %H:%M:%S').to_s
+
       if consumption.save!
         if consumption.contract_duration.blank?
           days = Auction.get_days(auction.contract_period_start_date, auction.contract_period_end_date)
           auction = set_participate_auction_total(auction, intake_values, days)
           if auction.save!
+            send_participated_mail(auction_name, auction_start_datetime)
             render json: consumption, status: 200
           else
             render json: nil, status: 500
@@ -103,6 +108,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
           days = Auction.get_days(auction.contract_period_start_date, auction_contract.contract_period_end_date)
           auction_contract = set_participate_auction_contract_total(auction_contract, intake_values, days)
           if auction_contract.save!
+            send_participated_mail(auction_name, auction_start_datetime)
             render json: consumption, status: 200
           else
             render json: nil, status: 500
@@ -182,6 +188,15 @@ class Api::ConsumptionDetailsController < Api::BaseController
   end
 
   private
+
+  # Send participated notification to admin when user click participate button in consumption details page
+  def send_participated_mail(auction_name,auction_start_datetime)
+    User.admins.each do |admin_user|
+      UserMailer.buyer_participate(admin_user, {:buyer_company_name => current_user.name,
+                                                :name_of_ra => auction_name,
+                                                :date_time => auction_start_datetime}).deliver_later
+    end
+  end
 
   def set_consumption
     @consumption = if current_user.has_role?('admin')

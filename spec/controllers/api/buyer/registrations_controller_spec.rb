@@ -132,7 +132,6 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
                                        company_name: 'Dalian Buyer',
                                        company_address: 'cbuyer3@example.com',
                                        company_unique_entity_number: 'UEN 01234',
-                                       email: 'cbuyer3@example.com',
                                        agree_seller_buyer: '1',
                                        agree_buyer_revv: '0' },
                                buyer_entities: buyer_entities.to_json}
@@ -161,7 +160,10 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
 
         buyer_entities = [buyer_entity_3, buyer_entity_4 ]
 
-        put :sign_up, params: { id: company_buyer.id, user: {agree_seller_buyer: '1', agree_buyer_revv: '0' }, buyer_entities: buyer_entities.to_json}
+        put :sign_up, params: { id: company_buyer.id,
+                                user: { agree_seller_buyer: '1',
+                                        agree_buyer_revv: '0' },
+                                buyer_entities: buyer_entities.to_json}
       end
       before { do_request }
       it 'success' do

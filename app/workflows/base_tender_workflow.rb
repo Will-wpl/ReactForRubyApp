@@ -21,7 +21,7 @@ class BaseTenderWorkflow < Workflow
     end
     current = TenderStateMachine.find_by_arrangement_id(arrangement_id).last
     actions = get_current_action_status(arrangement_id)
-    { flows: flow_array, current: current, actions: actions }
+    { flows: flow_array.sort_by! { |p| p }, current: current, actions: actions }
   end
 
   def get_action_state_machine(auction_id)

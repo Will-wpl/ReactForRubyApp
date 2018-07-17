@@ -13,6 +13,7 @@ class Api::ConsumptionsController < Api::BaseController
     consumptions.each do |consumption|
       details = ConsumptionDetail.find_by_consumption_id(consumption.id).order(account_number: :asc)
       count = details.count
+      entities = CompanyBuyerEntity.find_by_user(consumption.user_id)
       data.push(id: consumption.id, auction_id: consumption.auction_id, user_id: consumption.user_id,
                 company_name: consumption.user.company_name, name: consumption.user.name, count: count,
                 lt_peak: Consumption.get_lt_peak(consumption.lt_peak),
@@ -23,7 +24,8 @@ class Api::ConsumptionsController < Api::BaseController
                 htl_off_peak: Consumption.get_htl_off_peak(consumption.htl_off_peak),
                 eht_peak: Consumption.get_eht_peak(consumption.eht_peak),
                 eht_off_peak: Consumption.get_eht_off_peak(consumption.eht_off_peak),
-                details: details)
+                details: details,
+                entities: entities)
       total_info[:consumption_count] += 1
       total_info[:account_count] += count
       total_info[:lt_peak] += Consumption.get_lt_peak(consumption.lt_peak)
