@@ -137,12 +137,12 @@ class Pdf
     total_award_sum = param[:total_award_sum]
     visibility = param[:visibility]
     peak = param[:peak]
-
+    off_peak = param[:off_peak]
     if visibility
       push_consumption_data(param)
       value = ((peak * 12.0 / 365.0) * period_days).to_f
       total_volume, total_award_sum = get_total_value(total_volume, value, total_award_sum, value * price_data[0][index])
-      value = (current_user_consumption.lt_off_peak.to_f * 12.0 / 365.0) * period_days
+      value = (off_peak * 12.0 / 365.0) * period_days
       get_total_value(total_volume, value, total_award_sum, value * price_data[1][index])
     else
       return total_volume, total_award_sum
