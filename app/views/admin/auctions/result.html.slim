@@ -1,22 +1,19 @@
 div.u-grid.u-mt2.u-mb2.mouth_tab
-  div.col-sm-12.col-md-3.u-cell
-    a.col-sm-12.lm--button.lm--button--primary.selected href="#" 6 Mouths
-  div.col-sm-12.col-md-3.u-cell
-    a.col-sm-12.lm--button.lm--button--primary href="#" 12 Mouths
-  div.col-sm-12.col-md-3.u-cell
-    a.col-sm-12.lm--button.lm--button--primary href="#" 24 Mouths
-div.col-sm-12.col-md-4.push-md-4.admin_result_list.u-mt3
-  ul
-    li
-      = link_to report_admin_auction_path(), class: 'report' do
-        = 'Reverse Auction Report :'
-    li
-      = link_to log_admin_auction_path(), class: 'log' do
-        = 'Activity Log:'
-    - if @company_count != 0
-        li
-          = link_to award_admin_auction_path(), class: 'ddd' do
-            = 'Letter of Award:'
+  - @live_auction_contracts.each do |contract|
+    div.col-sm-12.col-md-3.u-cell
+      a.col-sm-12.lm--button.lm--button--primary.selected href="#" #{contract[:contract_duration]} Mouths
+        div.col-sm-12.col-md-4.push-md-4.admin_result_list.u-mt3
+          ul
+            li
+              = link_to report_admin_auction_path(contract_duration: contract[:contract_duration]), class: 'report' do
+                = 'Reverse Auction Report :'
+            li
+              = link_to log_admin_auction_path(contract_duration: contract[:contract_duration]), class: 'log' do
+                = 'Activity Log:'
+            - if @company_count != 0
+                li
+                  = link_to award_admin_auction_path(contract_duration: contract[:contract_duration]), class: 'ddd' do
+                    = 'Letter of Award:'
 div.createRaMain.u-grid
   a.lm--button.lm--button--primary.u-mt3 href="/admin/home" Back to Homepage
 
