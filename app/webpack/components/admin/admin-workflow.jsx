@@ -44,8 +44,8 @@ export class Adminworkflow extends Component {
             break
             case 3 : pageDom = <Keppelproposedeviations current={this.state.current} readOnly={this.state.readOnly} page={this.getPageindex.bind(this)} title="keppel Propose Deviations" />
             break
-            case 4 : pageDom = <Keppelformtender current={this.state.current} readOnly={this.state.readOnly} page={this.getPageindex.bind(this)}/>
-            break
+            // case 4 : pageDom = <Keppelformtender current={this.state.current} readOnly={this.state.readOnly} page={this.getPageindex.bind(this)}/>
+            // break
         }
         return pageDom;
     }
