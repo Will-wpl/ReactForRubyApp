@@ -58,6 +58,7 @@ export const getAdminBuyerListDetails = (params) => {
 export const getBuyerDetailsConsumptions = (params) => {
     return get('/api/admin/consumption_details?consumption_id='+params.id);
 }
+
 export const approveConsumptions=(params)=>{
     return put('/api/admin/consumptions/approval_consumption',params)
 }

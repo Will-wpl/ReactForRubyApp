@@ -4,7 +4,7 @@ import moment from 'moment';
 import AdminComsumptionList from './admin_shared/admin-comsumption-list';
 import AdminComsumptionPrice from './admin_shared/admin-comsumption-price';
 import { getSearchType } from '../../javascripts/componentService/util';
-import { getAdminBuyerListDetails,approveConsumptions } from '../../javascripts/componentService/admin/service';
+import { getAdminBuyerListDetails, approveConsumptions } from '../../javascripts/componentService/admin/service';
 import { Modal } from '../shared/show-modal';
 import { validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
 export default class AdminBuyerListDetail extends Component {
@@ -101,7 +101,7 @@ export default class AdminBuyerListDetail extends Component {
     doAction(obj) {
         let param = {
             consumption_id: this.state.consumption_id,
-            approved: obj.action === 'reject' ? "" : 1,
+            approved: obj.action === 'reject' ? null : '1',
             comment: this.state.comment
         };
         if (obj.action === 'reject') {
