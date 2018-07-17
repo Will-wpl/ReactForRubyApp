@@ -80,7 +80,7 @@ export class Modal extends React.Component {
                 peak: next.consumption_account_item.peak_pct ? (100 - parseFloat(next.consumption_account_item.peak_pct)) : "",
                 option: next.consumption_account_item.option
             });
-           
+
             if (next.consumption_account_item.file_name) {
                 let obj = {
                     id: next.consumption_account_item.id,
@@ -289,7 +289,7 @@ export class Modal extends React.Component {
                     account_count++;
                 }
             }
-            else {            
+            else {
                 if ((this.state.street == item.street) && (this.state.postal_code == item.postal_code)) {
                     address_count++;
                 }
@@ -663,12 +663,7 @@ export class Modal extends React.Component {
                                         <span className={this.state.existing_plan_selected === "Retailer plan" ? "isDisplay" : "isHide"}>*</span>
                                     </abbr>Contract Expiry</td>
                                     <td>
-                                        {/* <div className="react-datepicker-wrapper">
-                                            <div className="react-datepicker__input-container"> */}
-                                                <DatePicker selected={this.state.contract_expiry} disabled={this.state.contract_expiry_disabled} onKeyDown={this.noPermitInput.bind(this)} ref="contract_expiry_date" shouldCloseOnSelect={true} name="contract_expiry_date" minDate={moment()} showTimeSelect required aria-required="true" className="date_ico" dateFormat="DD-MM-YYYY HH:mm" selectsStart onChange={this.dateChange.bind(this)} title="Time must not be in the past." />
-                                            {/* </div>
-                                        </div> */}
-
+                                        <DatePicker selected={this.state.contract_expiry} className="date_ico" disabled={this.state.contract_expiry_disabled} onKeyDown={this.noPermitInput.bind(this)} ref="contract_expiry_date" shouldCloseOnSelect={true} name="contract_expiry_date" minDate={moment()} showTimeSelect required aria-required="true" dateFormat="DD-MM-YYYY HH:mm" selectsStart onChange={this.dateChange.bind(this)} title="Time must not be in the past." />
                                         <div id="contract_expiry_message" className="isPassValidate">This filed is required!</div>
                                     </td>
                                 </tr>
@@ -706,7 +701,7 @@ export class Modal extends React.Component {
                                 </tr>
                                 <tr>
                                     <td colSpan="2">
-                                        Premise Address                             <div id="permise_address_taken_message" className="errormessage">There is already an existing contract for this premise address.</div>
+                                        <span> Premise Address</span> <span><div id="permise_address_taken_message" className="errormessage">There is already an existing contract for this premise address.</div></span>
                                     </td>
                                 </tr>
                                 <tr>
