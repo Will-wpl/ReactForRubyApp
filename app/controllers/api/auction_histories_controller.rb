@@ -49,6 +49,12 @@ class Api::AuctionHistoriesController < Api::BaseController
       histories = AuctionHistory.find_by_sql ['select auction_histories.* ,users.company_name from auction_histories LEFT OUTER JOIN users ON users.id = auction_histories.user_id where flag = (select flag from auction_histories where auction_id = ? and is_bidder = true order by bid_time desc LIMIT 1) order by ranking asc , actual_bid_time asc', auction.id]
       result = AuctionResult.find_by_auction_id(params[:auction_id])
       render json: { auction: auction, histories: histories, result: result }, status: 200
+    elsif !params[:contract_duration].blank?
+      contract = auction.auction_contracts.where('contract_duration = ?', params[:contract_duration]).take
+      duration = contract.contract_duration
+      histories = AuctionHistory.find_by_sql ['select auction_histories.* ,users.company_name from auction_histories LEFT OUTER JOIN users ON users.id = auction_histories.user_id where flag = (select flag from auction_histories where auction_id = ? and is_bidder = true and contract_duration = ? order by bid_time desc LIMIT 1) order by ranking asc , actual_bid_time asc', auction.id, duration]
+      result = auction.auction_result.blank? ? nil : auction.auction_result.auction_result_contracts.where('contract_duration = ?' , contract.contract_duration).take
+      render json: { auction: auction, histories: histories, result: result }, status: 200
     else
       hash = {}
       auction.auction_contracts.each do |contract|
