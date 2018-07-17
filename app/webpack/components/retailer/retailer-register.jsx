@@ -56,7 +56,7 @@ export class RetailerRegister extends Component {
             office_number: { cate: 'num' }
         }
         this.validatorComment = {
-            comment: { cate: 'email' }
+            comment: { cate: 'required' }
         }
     }
     componentWillMount() {

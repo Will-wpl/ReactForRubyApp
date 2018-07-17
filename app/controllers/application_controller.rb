@@ -30,7 +30,7 @@ class ApplicationController < ActionController::Base
       has_hts = !is_zero(contract.total_hts_peak, contract.total_hts_off_peak)
       has_htl = !is_zero(contract.total_htl_peak, contract.total_htl_off_peak)
       has_eht = !is_zero(contract.total_eht_peak, contract.total_eht_off_peak)
-      if has_lt && has_hts && has_htl && has_eht
+      if has_lt || has_hts || has_htl || has_eht
         base_contract = {has_lt: has_lt, has_hts: has_hts, has_htl: has_htl, has_eht: has_eht,
                          starting_price_lt_peak: contract.starting_price_lt_peak,
                          starting_price_lt_off_peak: contract.starting_price_lt_off_peak,
