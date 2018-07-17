@@ -44,6 +44,7 @@ class Api::ConsumptionsController < Api::BaseController
     consumption = @consumption
     details = ConsumptionDetail.find_by_consumption_id(params[:id]).order(id: :asc)
     count = details.count
+    entities = CompanyBuyerEntity.find_by_user(consumption.user_id)
     cons = { auction_id: consumption.auction_id,
              user_id: consumption.user_id,
              company_name: consumption.user.company_name,
@@ -57,7 +58,8 @@ class Api::ConsumptionsController < Api::BaseController
              htl_off_peak: Consumption.get_htl_off_peak(consumption.htl_off_peak),
              eht_peak: Consumption.get_eht_peak(consumption.eht_peak),
              eht_off_peak: Consumption.get_eht_off_peak(consumption.eht_off_peak),
-             details: details }
+             details: details,
+             entities: entities }
 
     render json: cons, status: 200
   end
