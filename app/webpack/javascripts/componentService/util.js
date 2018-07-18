@@ -140,6 +140,9 @@ export const validator_Object = (param, paramType) => {
     return errArr;
 }
 export const validator_Array = (param, paramType) => {
+    // console.log("validate")
+    // console.log(param)
+    // console.log(paramType)
     let errArr = [];
     for (let i = 0; i < param.length; i++) {
         let entityArr = [];
@@ -181,6 +184,7 @@ export const validator_Array = (param, paramType) => {
 }
 
 export const setValidationFaild = (item, type) => {
+    // console.log(item+"_message")
     if (type === 1) {
         $('#' + item + "_message").removeClass('isPassValidate').addClass('errormessage');
         $('#' + item + "_format").removeClass('errormessage').addClass('isPassValidate');
@@ -195,6 +199,7 @@ export const setValidationFaild = (item, type) => {
 export const setValidationPass = (item, type) => {
     if (type === 1) {
         $('#' + item + "_message").removeClass('errormessage').addClass('isPassValidate');
+
     }
     else {
         $('#' + item + "_format").removeClass('errormessage').addClass('isPassValidate');
@@ -213,6 +218,7 @@ export const removeNanNum=(value)=>{
 export const changeValidate = (type, value) => {
     if (value) {
         setValidationPass(type, 1);
+        
     }
     else {
         setValidationFaild(type, 1);
