@@ -111,7 +111,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     buyer_entities.each_index do |index|
       buyer_entity = buyer_entities[index]
       if user_emails.any?{ |v| v.email == buyer_entity['contact_email'] } || buyer_email==buyer_entity['contact_email']
-        entity_indexes.push(index)
+        entity_indexes.push([index, 'contact_email'])
       end
     end
 
@@ -120,7 +120,10 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
       target_entity = buyer_entities[index]
       buyer_entities.each do |temp_entity|
         if target_entity.object_id != temp_entity.object_id && target_entity['contact_email'] == temp_entity['contact_email']
-          entity_indexes.push(index)
+          entity_indexes.push([index, 'contact_email'])
+        end
+        if target_entity.object_id != temp_entity.object_id && target_entity['company_name'] == temp_entity['company_name']
+          entity_indexes.push([index, 'company_name'])
         end
       end
     end
