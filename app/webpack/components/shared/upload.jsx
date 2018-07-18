@@ -13,9 +13,7 @@ export class UploadFile extends React.Component {
         }
     }
     componentDidMount() {
-        // this.setState({
-        //     validate:this.props.validate
-        // })
+      
     }
     addinputfile(type, required) {
        
