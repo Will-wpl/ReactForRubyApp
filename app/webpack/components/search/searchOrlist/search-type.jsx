@@ -77,7 +77,12 @@ export class SearchType extends Component {
         if(type==="user_extension"){
             needData = '{"page_size":10,"page_index":1}';
         }else{
-            needData = '{'+needData+',"page_size":10,"page_index":1}';
+            if(window.location.href.indexOf('log?contract_duration=')>0){
+                needData = '{'+needData+',"page_size":10,"page_index":1,"contract_duration":'+window.location.href.split('log?contract_duration=')[1]+'}';
+            }else{
+                needData = '{'+needData+',"page_size":10,"page_index":1}';
+            }
+
         }
         //console.log(JSON.parse(needData))
         if(this.props.doSearch){
