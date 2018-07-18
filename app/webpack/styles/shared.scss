@@ -535,6 +535,9 @@ dfn.manage_label{
           &.invite{background:url("../images/invite.png") no-repeat left;}
           &.cancel_invite{background:url("../images/cancel_invite.png") no-repeat left;}
         }
+        abbr{
+          display: block; padding:10px 0px; font-style: normal;
+        }
         a{
           margin: 0px auto; display: block; width: 100%; cursor: pointer;
           &.report{background: url("../images/Reverse_Auction_Report.png") no-repeat left; background-size:19px; height: 20px;}
