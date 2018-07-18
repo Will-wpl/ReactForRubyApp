@@ -118,6 +118,9 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     # validate Entity' email must be unique
     buyer_entities.each_index do |index| #entity_emails.push(x['contact_email'])
       target_entity = buyer_entities[index]
+      if target_entity['is_default'].equal?(1)
+        next
+      end
       buyer_entities.each do |temp_entity|
         if target_entity.object_id != temp_entity.object_id && target_entity['contact_email'] == temp_entity['contact_email']
           entity_indexes.push([index, 'contact_email'])
