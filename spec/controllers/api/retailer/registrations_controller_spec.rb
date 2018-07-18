@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Api::Retailer::RegistrationsController, type: :controller do
   let!(:admin_user) { create(:user, :with_admin) }
   let!(:retailer_user) { create(:user, :with_retailer) }
-  let!(:retailer_user1) { create(:user, :with_retailer, company_name: 'Retailer1 Company') }
+  let!(:retailer_user1) { create(:user, :with_retailer, company_license_number: 'Retailer UEN') }
 
   context 'save retailer information' do
     before { sign_in retailer_user }
@@ -26,13 +26,13 @@ RSpec.describe Api::Retailer::RegistrationsController, type: :controller do
           expect(response).to have_http_status(:ok)
         end
       end
-      context 'Failed  - company name is exist.' do
+      context 'Failed  - company_license_number is exist.' do
         def do_request
           put :validate, params: { id: retailer_user.id, user: { id: retailer_user.id,
                                                                  company_name: 'Retailer1 Company',
                                                                  company_unique_entity_number: 'UEN',
                                                                  email: 'abc@emaiol.com',
-                                                                 company_license_number: 'abc'} }
+                                                                 company_license_number: 'Retailer UEN'} }
         end
         before { do_request }
         it 'success' do
