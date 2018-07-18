@@ -103,11 +103,11 @@ export class UserEntity extends React.Component {
         }
     }
     removeEntity(index) {
-            this.setState({
-                deleteIndex: index
-            })
-            this.refs.Modal.showModal("comfirm");
-            this.setState({ text: "Are you sure you want to delete ?" });
+        this.setState({
+            deleteIndex: index
+        })
+        this.refs.Modal.showModal("comfirm");
+        this.setState({ text: "Are you sure you want to delete ?" });
     }
     doAccept() {
         let entityObj, entityData;
@@ -136,7 +136,7 @@ export class UserEntity extends React.Component {
                             <div className="lm--formItem lm--formItem--inline string">
                                 &nbsp;
                                 <div className="lm--formItem-right lm--formItem-control errormessage" >
-                                    &nbsp;<span className={it.user_entity_id?"isHide":"isDisplay"}> Waiting for administrator's approval.</span>
+                                    &nbsp;  {/* <span className={it.user_entity_id?"isHide":"isDisplay"}> Waiting for administrator's approval.</span> */}
                                 </div>
                             </div>
                             <div className="lm--formItem lm--formItem--inline string">
@@ -224,8 +224,8 @@ export class UserEntity extends React.Component {
                                     <input type="text" name={"contact_office_no_" + i} value={it.contact_office_no} onChange={this.Change.bind(this, 'contact_office_no', i)} disabled={this.state.disabled} ref="contact_office_no" aria-required="true" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
                                     <div className='isPassValidate' id={"user_contact_office_no_" + (i) + "_message"} >This field is required!</div>
                                     <div className='isPassValidate' id={"user_contact_office_no_" + (i) + "_format"} >Number should contain 8 integers!</div>
-                                    <div className="delEntity" className={this.state.disabled?"isHide":"delEntity"}>
-                                         <a onClick={this.removeEntity.bind(this, i)}> &nbsp; Delete</a> 
+                                    <div className="delEntity" className={this.state.disabled ? "isHide" : "delEntity"}>
+                                        <a onClick={this.removeEntity.bind(this, i)}> &nbsp; Delete</a>
                                     </div>
                                 </div>
                             </div>

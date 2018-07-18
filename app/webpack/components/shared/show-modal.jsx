@@ -44,7 +44,7 @@ export class Modal extends React.Component {
             peak: "",
             option: '',
             uploadUrl: "/api/buyer/user_attachments?file_type=",
-            validate: true,
+            validate: false,
             fileData: {
                 "CONSUMPTION_DOCUMENTS": [
                     { buttonName: "none", files: [] }
@@ -137,8 +137,7 @@ export class Modal extends React.Component {
         }
         $(".react-datepicker-wrapper").click(function () {
             let status = $(".react-datepicker-wrapper").find("input").attr("disabled");
-            if(status!=="disabled")
-            {
+            if (status !== "disabled") {
                 $(".react-datepicker-popper").removeClass("isHide");
             }
         })
@@ -229,20 +228,21 @@ export class Modal extends React.Component {
         }
 
         let validateResult = validator_Object(this.state, validateItem);
-        if (this.state.fileData['CONSUMPTION_DOCUMENTS'][0].files.length > 0) {
-            hasDoc = true;
-            this.setState({
-                validate: true
-            })
-        }
-        else {
-            hasDoc = false;
-            this.setState({
-                validate: false
-            })
-        }
+        // if (this.state.fileData['CONSUMPTION_DOCUMENTS'][0].files.length > 0) {
+        //     hasDoc = true;
+        //     this.setState({
+        //         validate: true
+        //     })
+        // }
+        // else {
+        //     hasDoc = false;
+        //     this.setState({
+        //         validate: false
+        //     })
+        // }
         flag = validateResult.length > 0 ? false : true;
-        if (flag && hasDoc) {
+        // if (flag && hasDoc) {
+        if (flag) {
             let status = this.account_address_repeat();
             switch (status) {
                 case 'false|true':
@@ -342,9 +342,9 @@ export class Modal extends React.Component {
             totals: this.state.totals,
             peak_pct: this.state.peak_pct,
             index: this.state.itemIndex,
-            user_attachment_id: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].id,
-            file_name: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_name,
-            file_path: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_path
+            user_attachment_id: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].id : "",
+            file_name: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_name : "",
+            file_path: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_path : ""
         }
         if (this.props.acceptFunction) {
             this.props.acceptFunction(siteItem);
@@ -492,7 +492,7 @@ export class Modal extends React.Component {
     noPermitInput(event) {
         event.preventDefault();
     }
-    
+
     render() {
         let showDetail = '', secondary = '', secondStatus = '';
         if (this.props.showdetail && !this.props.text) {
@@ -678,7 +678,7 @@ export class Modal extends React.Component {
                                         <span className={this.state.existing_plan_selected === "Retailer plan" ? "isDisplay" : "isHide"}>*</span>
                                     </abbr>Contract Expiry</td>
                                     <td>
-                                        <DatePicker selected={this.state.contract_expiry} className="date_ico" disabled={this.state.contract_expiry_disabled} onKeyDown={this.noPermitInput.bind(this)} ref="contract_expiry" shouldCloseOnSelect={true} name="contract_expiry" minDate={moment()} showTimeSelect required aria-required="true" dateFormat="DD-MM-YYYY HH:mm" selectsStart   onChange={this.dateChange.bind(this)} title="Time must not be in the past." />
+                                        <DatePicker selected={this.state.contract_expiry} className="date_ico" disabled={this.state.contract_expiry_disabled} onKeyDown={this.noPermitInput.bind(this)} ref="contract_expiry" shouldCloseOnSelect={true} name="contract_expiry" minDate={moment()} required aria-required="true" dateFormat="DD-MM-YYYY" selectsStart onChange={this.dateChange.bind(this)} title="Time must not be in the past." />
                                         <div id="contract_expiry_message" className="isPassValidate">This filed is required!</div>
                                     </td>
                                 </tr>
@@ -782,10 +782,10 @@ export class Modal extends React.Component {
                                     <td><input type="text" value={this.state.peak} disabled="true" onChange={this.changeConsumption.bind(this, "pack")} id="pack" required aria-required="true" /><div>%(auot calculate)</div></td>
                                 </tr>
                                 <tr>
-                                    <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr> Upload bill(s)</td>
+                                    <td>&nbsp;&nbsp;&nbsp; Upload bill(s)</td>
                                     <td>
                                         <div className="upload">
-                                            <UploadFile type="CONSUMPTION_DOCUMENTS" required="required" showlist={false} validate={this.state.validate} showList="1" col_width="9" showWay="2" fileData={this.state.fileData.CONSUMPTION_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
+                                            <UploadFile type="CONSUMPTION_DOCUMENTS" showlist={false} validate={this.state.validate} showList="1" col_width="9" showWay="2" fileData={this.state.fileData.CONSUMPTION_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
                                         </div>
                                     </td>
                                 </tr>
