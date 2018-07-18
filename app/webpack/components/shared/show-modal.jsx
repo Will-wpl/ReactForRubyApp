@@ -57,7 +57,7 @@ export class Modal extends React.Component {
                 premise_address: next.consumption_account_item.premise_address,
                 intake_level: next.consumption_account_item.intake_level,
                 intake_level_selected: next.consumption_account_item.intake_level_selected,
-                contracted_capacity: next.consumption_account_item.contracted_capacity,
+                contracted_capacity: next.consumption_account_item.contracted_capacity ? parseInt(next.consumption_account_item.contracted_capacity) : "",
                 blk_or_unit: next.consumption_account_item.blk_or_unit,
                 street: next.consumption_account_item.street,
                 unit_number: next.consumption_account_item.unit_number,
