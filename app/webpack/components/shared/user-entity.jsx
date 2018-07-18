@@ -103,7 +103,7 @@ export class UserEntity extends React.Component {
         }
     }
     removeEntity(index) {
-      
+
         this.setState({
             deleteIndex: index
         })
@@ -128,13 +128,19 @@ export class UserEntity extends React.Component {
                     this.state.itemList[0].entities.map((it, i) =>
                         <div key={i} style={{ marginTop: '20px', marginBottom: '20px', }} id={i}>
                             <div className="lm--formItem lm--formItem--inline string">
+                                &nbsp;
+                                <div className="lm--formItem-right lm--formItem-control">
+                                    &nbsp;
+                                </div>
+                            </div>
+                            <div className="lm--formItem lm--formItem--inline string">
                                 <label className="lm--formItem-left lm--formItem-label string required">
                                     <abbr title="required">*</abbr>  Puchese Entity/Company Name:
                                          </label>
                                 <div className="lm--formItem-right lm--formItem-control">
                                     <input type="text" name={"company_name_" + (i)} value={it.company_name} onChange={this.Change.bind(this, 'company_name', i)} disabled={this.state.disabled} ref="company_name" aria-required="true" title="Please fill out this field"></input>
                                     <div className='isPassValidate' id={"user_company_name_" + (i) + "_message"} >This field is required!</div>
-                                    <div className='isPassValidate' id={"user_company_name_" + (i) + "_repeat"} >Duplicate value already input!</div>
+                                    <div className='isPassValidate' id={"user_company_name_" + (i) + "_repeat"} >Company name has already been taken!</div>
                                 </div>
                             </div>
                             <div className="lm--formItem lm--formItem--inline string">
@@ -144,7 +150,7 @@ export class UserEntity extends React.Component {
                                 <div className="lm--formItem-right lm--formItem-control">
                                     <input type="text" name={"company_uen_" + i} value={it.company_uen} onChange={this.Change.bind(this, 'company_uen', i)} disabled={this.state.disabled} ref="company_uen" aria-required="true" title="Please fill out this field"></input>
                                     <div className='isPassValidate' id={"user_company_uen_" + (i) + "_message"} >This field is required!</div>
-                                    <div className='isPassValidate' id={"user_company_uen__" + (i) + "_repeat"} >Duplicate value already input!</div>
+                                    <div className='isPassValidate' id={"user_company_uen__" + (i) + "_repeat"} >Company UEN has already been taken!</div>
                                 </div>
                             </div>
                             <div className="lm--formItem lm--formItem--inline string">
@@ -191,7 +197,7 @@ export class UserEntity extends React.Component {
                                     <input type="text" name={"contact_email_" + i} value={it.contact_email} onChange={this.Change.bind(this, 'contact_email', i)} disabled={this.state.disabled} ref="contact_email" aria-required="true" title="Please fill out this field"></input>
                                     <div className='isPassValidate' id={"user_contact_email_" + (i) + "_message"} >This field is required!</div>
                                     <div className='isPassValidate' id={"user_contact_email_" + (i) + "_format"} >Incorrect mail format.!</div>
-                                    <div className='isPassValidate' id={"user_contact_email_" + (i) + "_repeat"} >Duplicate value already input!</div>
+                                    <div className='isPassValidate' id={"user_contact_email_" + (i) + "_repeat"} >Contact email has already been taken!</div>
                                 </div>
                             </div>
                             <div className="lm--formItem lm--formItem--inline string">
@@ -201,7 +207,7 @@ export class UserEntity extends React.Component {
                                 <div className="lm--formItem-right lm--formItem-control">
                                     <input type="text" name="contact_mobile_no" value={it.contact_mobile_no} onChange={this.Change.bind(this, 'contact_mobile_no', i)} disabled={this.state.disabled} ref="contact_mobile_no" aria-required="true" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
                                     <div className='isPassValidate' id={"user_contact_mobile_no_" + (i) + "_message"} >This field is required!</div>
-                                    <div className='isPassValidate' id={"user_contact_mobile_no_" + (i) + "_format"} >Number should contain 8 integers.</div>
+                                    <div className='isPassValidate' id={"user_contact_mobile_no_" + (i) + "_format"} >Number should contain 8 integers!</div>
                                 </div>
                             </div>
                             <div className="lm--formItem lm--formItem--inline string">
@@ -211,8 +217,8 @@ export class UserEntity extends React.Component {
                                 <div className="lm--formItem-right lm--formItem-control">
                                     <input type="text" name={"contact_office_no_" + i} value={it.contact_office_no} onChange={this.Change.bind(this, 'contact_office_no', i)} disabled={this.state.disabled} ref="contact_office_no" aria-required="true" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
                                     <div className='isPassValidate' id={"user_contact_office_no_" + (i) + "_message"} >This field is required!</div>
-                                    <div className='isPassValidate' id={"user_contact_office_no_" + (i) + "_format"} >Number should contain 8 integers.</div>
-                                    <div className="delEntity"><a onClick={this.removeEntity.bind(this,i)}> &nbsp; Remove</a></div>
+                                    <div className='isPassValidate' id={"user_contact_office_no_" + (i) + "_format"} >Number should contain 8 integers!</div>
+                                    <div className="delEntity"><a onClick={this.removeEntity.bind(this, i)}> &nbsp; Remove</a></div>
                                 </div>
                             </div>
                         </div>

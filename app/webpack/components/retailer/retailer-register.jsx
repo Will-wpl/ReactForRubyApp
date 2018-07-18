@@ -4,7 +4,7 @@ import { UploadFile } from '../shared/upload';
 import { Modal } from '../shared/show-modal';
 import { getRetailerUserInfo, saveRetailManageInfo, submitRetailManageInfo, getRetailerUserInfoByUserId, validateIsExist } from '../../javascripts/componentService/retailer/service';
 import { approveRetailerUser } from '../../javascripts/componentService/admin/service';
-import { validateNum, validateEmail, validator_Object,  setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
+import { validateNum, validateEmail, validator_Object, setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
 export class RetailerRegister extends Component {
     constructor(props) {
         super(props);
@@ -203,8 +203,7 @@ export class RetailerRegister extends Component {
         $('.validate_message').find('div').each(function () {
             let className = $(this).attr('class');
             if (className === 'errormessage') {
-                if(!($(this).attr("id").indexOf('repeat')>-1))
-                {
+                if (!($(this).attr("id").indexOf('repeat') > -1)) {
                     flag = false;
                     return false;
                 }
@@ -303,41 +302,29 @@ export class RetailerRegister extends Component {
         }
     }
     submit() {
+        let param = {
+            'id': this.state.id,
+            'email': this.state.email_address,
+            'company_name': this.state.company_name,
+            'company_unique_entity_number': this.state.unique_entity_number,
+            'company_address': this.state.company_address,
+            'company_license_number': this.state.license_number,
+            'gst_no': this.state.gst_no,
+            'name': this.state.contact_name,
+            'account_mobile_number': this.state.mobile_number,
+            'account_office_number': this.state.office_number,
+            'agree_seller_buyer': this.state.agree_seller_buyer,
+            'agree_seller_revv': this.state.agree_seller_revv
+        }
         if (this.checkValidation()) {
             validateIsExist({
-                user: {
-                    'id': this.state.id,
-                    'email': this.state.email_address,
-                    'company_name': this.state.company_name,
-                    'company_unique_entity_number': this.state.unique_entity_number,
-                    'company_address': this.state.company_address,
-                    'company_license_number': this.state.license_number,
-                    'gst_no': this.state.gst_no,
-                    'name': this.state.contact_name,
-                    'account_mobile_number': this.state.mobile_number,
-                    'account_office_number': this.state.office_number,
-                    'agree_seller_buyer': this.state.agree_seller_buyer,
-                    'agree_seller_revv': this.state.agree_seller_revv
-                }
+                user: param
             }).then(res => {
                 console.log(res.validate_result);
                 if (res.validate_result)//validate pass
                 {
                     submitRetailManageInfo({
-                        user: {
-                            'id': this.state.id,
-                            'email': this.state.email_address,
-                            'company_name': this.state.company_name,
-                            'company_unique_entity_number': this.state.unique_entity_number,
-                            'company_address': this.state.company_address,
-                            'company_license_number': this.state.license_number,
-                            'gst_no': this.state.gst_no,
-                            'name': this.state.contact_name,
-                            'account_mobile_number': this.state.mobile_number,
-                            'account_office_number': this.state.office_number,
-                            'agree_seller_buyer': this.state.agree_seller_buyer,
-                            'agree_seller_revv': this.state.agree_seller_revv
-                        }
+                        user: param
                     }).then(res => {
                         this.refs.Modal.showModal();
                         $('#license_number_repeat').removeClass('errormessage').addClass('isPassValidate');
@@ -351,16 +338,13 @@ export class RetailerRegister extends Component {
                         for (let item of res.error_fields) {
                             if (item === 'company_license_number') {
                                 $('#license_number_repeat').removeClass('isPassValidate').addClass('errormessage');
+                                $("input[name='license_number']").focus();
                             }
                         }
                     }
                 }
             })
-
-
-
         }
-
     }
     save() {
         saveRetailManageInfo({
@@ -462,7 +446,7 @@ export class RetailerRegister extends Component {
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="email_address" value={this.state.email_address} onChange={this.Change.bind(this, 'email_address')} disabled={this.state.disabled} ref="email_address" placeholder="Email" required aria-required="true" title="Please fill out this field" />
                                         <div className='isPassValidate' id='email_address_message' >This field is required!</div>
-                                        <div className='isPassValidate' id='email_address_format' >Incorrect mail format.</div>
+                                        <div className='isPassValidate' id='email_address_format' >Incorrect mail format!</div>
                                     </div>
                                 </div>
                                 <h4 className="u-mt1 u-mb1">Company Info</h4>
@@ -492,7 +476,7 @@ export class RetailerRegister extends Component {
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="license_number" value={this.state.license_number} onChange={this.Change.bind(this, 'license_number')} disabled={this.state.disabled} ref="license_number" required aria-required="true" title="Please fill out this field" ></input>
                                         <div className='isPassValidate' id='license_number_message' >This field is required!</div>
-                                        <div className='isPassValidate' id='license_number_repeat' >Retailer license number has already been taken.</div>
+                                        <div className='isPassValidate' id='license_number_repeat' >Retailer license number has already been taken!</div>
                                     </div>
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
@@ -532,7 +516,7 @@ export class RetailerRegister extends Component {
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="mobile_number" value={this.state.mobile_number} onChange={this.Change.bind(this, 'mobile_number')} disabled={this.state.disabled} placeholder="Number should contain 8 integers." title="Please fill out this field" ref="mobile_number" maxLength="8" required aria-required="true" ></input>
                                         <div className='isPassValidate' id='mobile_number_message' >This field is required!</div>
-                                        <div className='isPassValidate' id='mobile_number_format' >Number should contain 8 integers.</div>
+                                        <div className='isPassValidate' id='mobile_number_format' >Number should contain 8 integers!</div>
                                     </div>
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
@@ -542,7 +526,7 @@ export class RetailerRegister extends Component {
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="office_number" value={this.state.office_number} onChange={this.Change.bind(this, 'office_number')} disabled={this.state.disabled} placeholder="Number should contain 8 integers." ref="office_number" maxLength="8" title="Please fill out this field" required aria-required="true" ></input>
                                         <div className='isPassValidate' id='office_number_message' >This field is required!</div>
-                                        <div className='isPassValidate' id='office_number_format' >Number should contain 8 integers.</div>
+                                        <div className='isPassValidate' id='office_number_format' >Number should contain 8 integers!</div>
                                     </div>
                                 </div>
 
