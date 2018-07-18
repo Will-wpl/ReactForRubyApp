@@ -118,6 +118,7 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
         buyer_entity_1.company_name = 'Test_Company_Name_1'
         buyer_entity_1.company_uen = 'Test_Company_UEN_1'
         buyer_entity_1.company_address = 'Test_Company_Address_1'
+        buyer_entity_1.is_default = 1
 
         buyer_entity_2 = CompanyBuyerEntity.new
         buyer_entity_2.company_name = 'Test_Company_Name_2'
