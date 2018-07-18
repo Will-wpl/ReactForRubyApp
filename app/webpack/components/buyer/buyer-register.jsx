@@ -241,10 +241,19 @@ export class BuyerRegister extends Component {
 
 
     checkSuccess() { //buyer register or manage account 
+
+        $('.validate_message').find('div').each(function () {
+            let className = $(this).attr('class');
+            if (className === 'errormessage') {
+               let divid= $(this).attr("id");
+               $("#"+divid).removeClass("errormessage").addClass("isPassValidate");
+
+            }
+        })
+
+
         let flag = true, hasDoc = true, checkSelect = true;
         let arr = validator_Object(this.state, this.validatorItem);
-        // console.log("arr")
-        // console.log(arr)
         if (arr) {
             arr.map((item, index) => {
                 let column = item.column;
@@ -253,15 +262,13 @@ export class BuyerRegister extends Component {
             })
         }
         let entity = validator_Array(this.state.user_entity_data['ENTITY_LIST'][0].entities, this.validatorEntity);
-        console.log("entity")
-        console.log(entity)
         if (entity) {
             entity.map((item, index) => {
                 item.map((it, i) => {
                     let column = it.column;
                     let cate = it.cate;
                     let ind = it.ind;
-                    setValidationFaild("user_"+column + "_" + ind, cate)
+                    setValidationFaild("user_" + column + "_" + ind, cate)
                 })
             })
         }
@@ -521,12 +528,10 @@ export class BuyerRegister extends Component {
     }
     submit(type) {
         let isValidator = this.checkSuccess();
-        console.log(isValidator);
         if (isValidator) {
             let buyerParam = this.setParams();
             validateIsExist(buyerParam).then(res => {
-                console.log(res)
-                if (true) {
+                if (res.validate_result) {
                     submitBuyerUserInfo(buyerParam).then(res => {
                         this.setState(
                             {
@@ -540,6 +545,52 @@ export class BuyerRegister extends Component {
                     })
                 }
                 else {
+                    // $('#unique_entity_number_repeat').removeClass('errormessage').addClass('isPassValidate');
+                    // $('#email_address_repeat').removeClass('errormessage').addClass('isPassValidate');
+                    // $('#company_name_repeat').removeClass('errormessage').addClass('isPassValidate');
+
+                    $("")
+                    if (res.error_fields) {
+                        for (let item of res.error_fields) {
+                            if (item === "company_unique_entity_number") {
+                                $('#unique_entity_number_repeat').removeClass('isPassValidate').addClass('errormessage');
+                                $("input[name='unique_entity_number']").focus();
+                            }
+                            else if (item === "email") {
+                                $('#email_address_repeat').removeClass('isPassValidate').addClass('errormessage');
+                                $("input[name='email_address']").focus();
+                            }
+                            else {
+
+                                $('#company_name_repeat').removeClass('isPassValidate').addClass('errormessage');
+                                $("input[name='company_name']").focus();
+                            }
+                        }
+                    }
+                    if (res.error_entity_indexes) {
+                        for (let item of res.error_entity_indexes) {
+                            let index = item.entity_index;
+                            let fieldName = item.error_field_name;
+                            if (index === 0) {
+                                $('#user_contact_email_repeat').removeClass('isPassValidate').addClass('errormessage');
+                                $("input[name='user_contact_email']").focus();
+                            }
+                            else {
+                                if (fieldName === "contact_email") {
+                                    $("#user_contact_email_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
+                                    $("#contact_email_" + (index - 1)).focus();
+                                }
+                                else if (fieldName === "company_name") {
+                                    $("#user_company_name_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
+                                    $("#company_name_" + (index - 1)).focus();
+                                }
+                                else {
+                                    $("#user_company_uen_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
+                                    $("#company_uen_" + (index - 1)).focus();
+                                }
+                            }
+                        }
+                    }
                 }
             })
         }
@@ -618,7 +669,8 @@ export class BuyerRegister extends Component {
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="email_address" value={this.state.email_address} onChange={this.Change.bind(this, 'email_address')} disabled={this.state.disabled} ref="email_address" required aria-required="true" title="Please fill out this field" placeholder="Email" />
                                         <div className='isPassValidate' id='email_address_message' >This field is required!</div>
-                                        <div className='isPassValidate' id='email_address_format' >Incorrect mail format.</div>
+                                        <div className='isPassValidate' id='email_address_format' >Incorrect mail format!</div>
+                                        <div className='isPassValidate' id='email_address_repeat' >Email has already been taken!</div>
                                     </div>
                                 </div>
                                 <h4 className="u-mt1 u-mb1">Company Info</h4>
@@ -629,6 +681,7 @@ export class BuyerRegister extends Component {
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="company_name" value={this.state.company_name} onChange={this.Change.bind(this, 'company_name')} disabled={this.state.disabled} ref="company_name" required aria-required="true" title="Please fill out this field" ></input>
                                         <div className='isPassValidate' id='company_name_message' >This field is required!</div>
+                                        <div className='isPassValidate' id='company_name_repeat' >Company name has already been taken!</div>
                                     </div>
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
@@ -638,6 +691,7 @@ export class BuyerRegister extends Component {
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="unique_entity_number" value={this.state.unique_entity_number} onChange={this.Change.bind(this, 'unique_entity_number')} disabled={this.state.disabled} ref="unique_entity_number" required aria-required="true" title="Please fill out this field"></input>
                                         <div className='isPassValidate' id='unique_entity_number_message' >This field is required!</div>
+                                        <div className='isPassValidate' id='unique_entity_number_repeat' >Unique entity number has already been taken!</div>
                                     </div>
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
@@ -675,7 +729,7 @@ export class BuyerRegister extends Component {
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="mobile_number" value={this.state.mobile_number} onChange={this.Change.bind(this, 'mobile_number')} disabled={this.state.disabled} ref="mobile_number" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field" required aria-required="true" ></input>
                                         <div className='isPassValidate' id='mobile_number_message' >This field is required!</div>
-                                        <div className='isPassValidate' id='mobile_number_format' >Number should contain 8 integers.</div>
+                                        <div className='isPassValidate' id='mobile_number_format' >Number should contain 8 integers!</div>
                                     </div>
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
@@ -685,10 +739,10 @@ export class BuyerRegister extends Component {
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="office_number" value={this.state.office_number} onChange={this.Change.bind(this, 'office_number')} disabled={this.state.disabled} ref="office_number" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field" required aria-required="true" ></input>
                                         <div className='isPassValidate' id='office_number_message' >This field is required!</div>
-                                        <div className='isPassValidate' id='office_number_format' >Number should contain 8 integers.</div>
+                                        <div className='isPassValidate' id='office_number_format' >Number should contain 8 integers!</div>
                                     </div>
                                 </div>
-                                <h3 className="lm--formItem lm--formItem--inline string">Add Individial Info:</h3>
+                                <h4 className="lm--formItem lm--formItem--inline string">Add Individial Info </h4>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
                                         <abbr title="required">*</abbr> Upload Documents:
@@ -700,7 +754,7 @@ export class BuyerRegister extends Component {
                                         </div>
                                     </div>
                                 </div>
-                                <h5 className="lm--formItem lm--formItem--inline string">Electricity Puchese information:</h5>
+                                <h4 className="lm--formItem lm--formItem--inline string">Electricity Puchese information</h4>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
                                         <abbr title="required">*</abbr>  Puchese Entity/Company Name:
@@ -762,7 +816,8 @@ export class BuyerRegister extends Component {
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="user_contact_email" value={this.state.user_contact_email} onChange={this.Change.bind(this, 'user_contact_email')} disabled={this.state.disabled} ref="user_contact_email" aria-required="true" title="Please fill out this field"></input>
                                         <div className='isPassValidate' id='user_contact_email_message' >This field is required!</div>
-                                        <div className='isPassValidate' id='user_contact_email_format' >Incorrect mail format.</div>
+                                        <div className='isPassValidate' id='user_contact_email_format' >Incorrect mail format!</div>
+                                        <div className='isPassValidate' id='user_contact_email_repeat' >Contact email has already been taken!</div>
                                     </div>
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
