@@ -17,8 +17,8 @@ export class BuyerRegister extends Component {
 
             user_company_name: "", user_company_uen: "", user_company_address: "", user_billing_address: "", user_bill_attention_to: "",
             user_contact_name: "", user_contact_email: "", user_contact_mobile_no: "", user_contact_office_no: "", comment: "",
-            buyerTCurl: "",  buyerTCname: "",  agree_seller_buyer: "0",
-            buyerRevvTCurl: "",   buyerRevvTCname: "",  agree_buyer_revv: "0", has_tenants: "1",
+            buyerTCurl: "", buyerTCname: "", agree_seller_buyer: "0",
+            buyerRevvTCurl: "", buyerRevvTCname: "", agree_buyer_revv: "0", has_tenants: "1",
             user_entity_data: {
                 "ENTITY_LIST": [
                     { buttonName: "none", entities: [] }
@@ -52,15 +52,24 @@ export class BuyerRegister extends Component {
             user_contact_office_no: { cate: 'num' }
         }
         this.validatorEntity = {
-            user_company_name: { cate: 'required' },
-            user_company_uen: { cate: 'required' },
-            user_company_address: { cate: 'required' },
-            user_billing_address: { cate: 'required' },
-            user_bill_attention_to: { cate: 'required' },
-            user_contact_name: { cate: 'required' },
-            user_contact_email: { cate: 'email' },
-            user_contact_mobile_no: { cate: 'num' },
-            user_contact_office_no: { cate: 'num' },
+            // user_company_name: { cate: 'required' },
+            // user_company_uen: { cate: 'required' },
+            // user_company_address: { cate: 'required' },
+            // user_billing_address: { cate: 'required' },
+            // user_bill_attention_to: { cate: 'required' },
+            // user_contact_name: { cate: 'required' },
+            // user_contact_email: { cate: 'email' },
+            // user_contact_mobile_no: { cate: 'num' },
+            // user_contact_office_no: { cate: 'num' }
+            company_name: { cate: 'required' },
+            company_uen: { cate: 'required' },
+            company_address: { cate: 'required' },
+            billing_address: { cate: 'required' },
+            bill_attention_to: { cate: 'required' },
+            contact_name: { cate: 'required' },
+            contact_email: { cate: 'email' },
+            contact_mobile_no: { cate: 'num' },
+            contact_office_no: { cate: 'num' }
         }
         this.validatorComment = {
             comment: { cate: 'required' }
@@ -234,6 +243,8 @@ export class BuyerRegister extends Component {
     checkSuccess() { //buyer register or manage account 
         let flag = true, hasDoc = true, checkSelect = true;
         let arr = validator_Object(this.state, this.validatorItem);
+        // console.log("arr")
+        // console.log(arr)
         if (arr) {
             arr.map((item, index) => {
                 let column = item.column;
@@ -242,13 +253,15 @@ export class BuyerRegister extends Component {
             })
         }
         let entity = validator_Array(this.state.user_entity_data['ENTITY_LIST'][0].entities, this.validatorEntity);
+        console.log("entity")
+        console.log(entity)
         if (entity) {
             entity.map((item, index) => {
                 item.map((it, i) => {
                     let column = it.column;
                     let cate = it.cate;
                     let ind = it.ind;
-                    setValidationFaild(column + "_" + ind, cate)
+                    setValidationFaild("user_"+column + "_" + ind, cate)
                 })
             })
         }
@@ -300,7 +313,7 @@ export class BuyerRegister extends Component {
                 contact_email: this.state.user_contact_email,
                 contact_mobile_no: this.state.user_contact_mobile_no,
                 contact_office_no: this.state.user_contact_office_no,
-                is_default:1
+                is_default: 1
             }
         ];
 
@@ -317,7 +330,7 @@ export class BuyerRegister extends Component {
                     contact_email: item.contact_email,
                     contact_mobile_no: item.contact_mobile_no,
                     contact_office_no: item.contact_office_no,
-                    is_default:0
+                    is_default: 0
                 }
                 entity.push(paramObj);
             })
@@ -508,9 +521,11 @@ export class BuyerRegister extends Component {
     }
     submit(type) {
         let isValidator = this.checkSuccess();
+        console.log(isValidator);
         if (isValidator) {
             let buyerParam = this.setParams();
             validateIsExist(buyerParam).then(res => {
+                console.log(res)
                 if (true) {
                     submitBuyerUserInfo(buyerParam).then(res => {
                         this.setState(
@@ -768,9 +783,10 @@ export class BuyerRegister extends Component {
                                         <input type="text" name="user_contact_office_no" value={this.state.user_contact_office_no} onChange={this.Change.bind(this, 'user_contact_office_no')} disabled={this.state.disabled} ref="user_contact_office_no" maxLength="8" aria-required="true" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
                                         <div className='isPassValidate' id='user_contact_office_no_message' >This field is required!</div>
                                         <div className='isPassValidate' id='user_contact_office_no_format' >Number should contain 8 integers.</div>
+                                        <div className="addEntity"><a onClick={this.addUserEntity.bind(this)}>Add</a></div>
                                     </div>
                                     <div>
-                                        <button className="lm--button lm--button--primary" title="this is retailer upload documents" disabled={this.state.disabled} onClick={this.addUserEntity.bind(this)} >+</button>
+
                                     </div>
                                 </div>
                                 <UserEntity disabled={false} entityList={this.state.user_entity_data} ref="userEntity" className={this.state.disabled === 'admin_approve' ? '' : ''} />

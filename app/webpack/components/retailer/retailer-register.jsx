@@ -4,7 +4,7 @@ import { UploadFile } from '../shared/upload';
 import { Modal } from '../shared/show-modal';
 import { getRetailerUserInfo, saveRetailManageInfo, submitRetailManageInfo, getRetailerUserInfoByUserId, validateIsExist } from '../../javascripts/componentService/retailer/service';
 import { approveRetailerUser } from '../../javascripts/componentService/admin/service';
-import { validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
+import { validateNum, validateEmail, validator_Object,  setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
 export class RetailerRegister extends Component {
     constructor(props) {
         super(props);
@@ -203,8 +203,11 @@ export class RetailerRegister extends Component {
         $('.validate_message').find('div').each(function () {
             let className = $(this).attr('class');
             if (className === 'errormessage') {
-                flag = false;
-                return false;
+                if(!($(this).attr("id").indexOf('repeat')>-1))
+                {
+                    flag = false;
+                    return false;
+                }
             }
         })
         //validate upload form 
@@ -317,6 +320,7 @@ export class RetailerRegister extends Component {
                     'agree_seller_revv': this.state.agree_seller_revv
                 }
             }).then(res => {
+                console.log(res.validate_result);
                 if (res.validate_result)//validate pass
                 {
                     submitRetailManageInfo({
