@@ -241,10 +241,19 @@ export class BuyerRegister extends Component {
 
 
     checkSuccess() { //buyer register or manage account 
+
+        $('.validate_message').find('div').each(function () {
+            let className = $(this).attr('class');
+            if (className === 'errormessage') {
+               let divid= $(this).attr("id");
+               $("#"+divid).removeClass("errormessage").addClass("isPassValidate");
+
+            }
+        })
+
+
         let flag = true, hasDoc = true, checkSelect = true;
         let arr = validator_Object(this.state, this.validatorItem);
-        // console.log("arr")
-        // console.log(arr)
         if (arr) {
             arr.map((item, index) => {
                 let column = item.column;
@@ -253,8 +262,6 @@ export class BuyerRegister extends Component {
             })
         }
         let entity = validator_Array(this.state.user_entity_data['ENTITY_LIST'][0].entities, this.validatorEntity);
-        console.log("entity")
-        console.log(entity)
         if (entity) {
             entity.map((item, index) => {
                 item.map((it, i) => {
@@ -524,7 +531,6 @@ export class BuyerRegister extends Component {
         if (isValidator) {
             let buyerParam = this.setParams();
             validateIsExist(buyerParam).then(res => {
-                console.log(res)
                 if (res.validate_result) {
                     submitBuyerUserInfo(buyerParam).then(res => {
                         this.setState(
@@ -539,25 +545,50 @@ export class BuyerRegister extends Component {
                     })
                 }
                 else {
+                    // $('#unique_entity_number_repeat').removeClass('errormessage').addClass('isPassValidate');
+                    // $('#email_address_repeat').removeClass('errormessage').addClass('isPassValidate');
+                    // $('#company_name_repeat').removeClass('errormessage').addClass('isPassValidate');
+
+                    $("")
                     if (res.error_fields) {
                         for (let item of res.error_fields) {
                             if (item === "company_unique_entity_number") {
                                 $('#unique_entity_number_repeat').removeClass('isPassValidate').addClass('errormessage');
                                 $("input[name='unique_entity_number']").focus();
                             }
-                            else if (item === "company_name") {
-                                $('#company_name_repeat').removeClass('isPassValidate').addClass('errormessage');
-                                $("input[name='company_name']").focus();
-                            }
-                            else {
+                            else if (item === "email") {
                                 $('#email_address_repeat').removeClass('isPassValidate').addClass('errormessage');
                                 $("input[name='email_address']").focus();
+                            }
+                            else {
+
+                                $('#company_name_repeat').removeClass('isPassValidate').addClass('errormessage');
+                                $("input[name='company_name']").focus();
                             }
                         }
                     }
                     if (res.error_entity_indexes) {
                         for (let item of res.error_entity_indexes) {
-
+                            let index = item.entity_index;
+                            let fieldName = item.error_field_name;
+                            if (index === 0) {
+                                $('#user_contact_email_repeat').removeClass('isPassValidate').addClass('errormessage');
+                                $("input[name='user_contact_email']").focus();
+                            }
+                            else {
+                                if (fieldName === "contact_email") {
+                                    $("#user_contact_email_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
+                                    $("#contact_email_" + (index - 1)).focus();
+                                }
+                                else if (fieldName === "company_name") {
+                                    $("#user_company_name_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
+                                    $("#company_name_" + (index - 1)).focus();
+                                }
+                                else {
+                                    $("#user_company_uen_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
+                                    $("#company_uen_" + (index - 1)).focus();
+                                }
+                            }
                         }
                     }
                 }
