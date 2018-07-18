@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
   let!(:admin_user) { create(:user, :with_admin, email: 'admin@email.com') }
-  let!(:company_buyer) { create(:user, :with_buyer, :with_company_buyer, company_name: 'test buyer') }
-  let!(:company_buyer1) { create(:user, :with_buyer, :with_company_buyer,email:'test_email1@email.com') }
+  let!(:company_buyer) { create(:user, :with_buyer, :with_company_buyer, company_name: 'test buyer', email: 'test_email4@email.com') }
+  let!(:company_buyer1) { create(:user, :with_buyer, :with_company_buyer, email:'test_email1@email.com') }
 
   context 'save retailer information' do
     before { sign_in company_buyer }
@@ -32,8 +32,9 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
           expect(hash_body['validate_result']).to eq(false)
           error_entities = [{ 'entity_index' => 0, 'error_field_name' => 'contact_email' },
                             { 'entity_index' => 1, 'error_field_name' => 'contact_email' },
-                            { 'entity_index' => 1, 'error_field_name' => 'company_name' },
+                            { 'entity_index' => 4, 'error_field_name' => 'contact_email' },
                             { 'entity_index' => 4, 'error_field_name' => 'company_name' },
+                            { 'entity_index' => 1, 'error_field_name' => 'company_name' },
                             { 'entity_index' => 2, 'error_field_name' => 'company_name' },
                             { 'entity_index' => 3, 'error_field_name' => 'company_name' }]
           expect(hash_body['error_entity_indexes']).to eq(error_entities)
