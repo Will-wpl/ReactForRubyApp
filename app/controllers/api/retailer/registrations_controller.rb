@@ -38,26 +38,26 @@ class Api::Retailer::RegistrationsController < Api::RegistrationsController
     validation_user = params[:user]
     validate_final_result = true
     error_fields = []
-    # validate Company name field
-    validate_result = validate_user_field('company_name',
-                                                   validation_user['company_name'],
-                                                   [validation_user['id']])
-    validate_final_result = validate_final_result & validate_result
-    error_fields.push('company_name') unless validate_result
-
-    # validate Email field
-    validate_result = validate_user_field('email',
-                                                   validation_user['email'],
-                                                   [validation_user['id']])
-    validate_final_result = validate_final_result & validate_result
-    error_fields.push('email') unless validate_result
-
-    # validate Company UEN field
-    validate_result = validate_user_field('company_unique_entity_number',
-                                                   validation_user['company_unique_entity_number'],
-                                                   [validation_user['id']])
-    validate_final_result = validate_final_result & validate_result
-    error_fields.push('company_unique_entity_number') unless validate_result
+    # # validate Company name field
+    # validate_result = validate_user_field('company_name',
+    #                                                validation_user['company_name'],
+    #                                                [validation_user['id']])
+    # validate_final_result = validate_final_result & validate_result
+    # error_fields.push('company_name') unless validate_result
+    #
+    # # validate Email field
+    # validate_result = validate_user_field('email',
+    #                                                validation_user['email'],
+    #                                                [validation_user['id']])
+    # validate_final_result = validate_final_result & validate_result
+    # error_fields.push('email') unless validate_result
+    #
+    # # validate Company UEN field
+    # validate_result = validate_user_field('company_unique_entity_number',
+    #                                                validation_user['company_unique_entity_number'],
+    #                                                [validation_user['id']])
+    # validate_final_result = validate_final_result & validate_result
+    # error_fields.push('company_unique_entity_number') unless validate_result
 
     # validate Company Licesnce Number
     validate_result = validate_user_field('company_license_number',
