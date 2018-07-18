@@ -299,7 +299,8 @@ export class BuyerRegister extends Component {
                 contact_name: this.state.user_contact_name,
                 contact_email: this.state.user_contact_email,
                 contact_mobile_no: this.state.user_contact_mobile_no,
-                contact_office_no: this.state.user_contact_office_no
+                contact_office_no: this.state.user_contact_office_no,
+                is_default:1
             }
         ];
 
@@ -315,7 +316,8 @@ export class BuyerRegister extends Component {
                     contact_name: item.contact_name,
                     contact_email: item.contact_email,
                     contact_mobile_no: item.contact_mobile_no,
-                    contact_office_no: item.contact_office_no
+                    contact_office_no: item.contact_office_no,
+                    is_default:0
                 }
                 entity.push(paramObj);
             })
