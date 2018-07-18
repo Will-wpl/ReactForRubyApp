@@ -184,10 +184,12 @@ export const setValidationFaild = (item, type) => {
     if (type === 1) {
         $('#' + item + "_message").removeClass('isPassValidate').addClass('errormessage');
         $('#' + item + "_format").removeClass('errormessage').addClass('isPassValidate');
+        $("input[name='"+item+"']").focus();
     }
     else {
         $('#' + item + "_message").removeClass('errormessage').addClass('isPassValidate');
         $('#' + item + "_format").removeClass('isPassValidate').addClass('errormessage');
+        $("input[name='"+item+"']").focus();
     }
 }
 export const setValidationPass = (item, type) => {

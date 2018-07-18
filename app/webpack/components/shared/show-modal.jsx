@@ -57,7 +57,7 @@ export class Modal extends React.Component {
                 premise_address: next.consumption_account_item.premise_address,
                 intake_level: next.consumption_account_item.intake_level,
                 intake_level_selected: next.consumption_account_item.intake_level_selected,
-                contracted_capacity: next.consumption_account_item.contracted_capacity,
+                contracted_capacity: next.consumption_account_item.contracted_capacity ? parseInt(next.consumption_account_item.contracted_capacity) : "",
                 blk_or_unit: next.consumption_account_item.blk_or_unit,
                 street: next.consumption_account_item.street,
                 unit_number: next.consumption_account_item.unit_number,
@@ -93,6 +93,8 @@ export class Modal extends React.Component {
         if (next.siteList) {
             this.setState({ consumptionItem: next.siteList });
         }
+        $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
+        $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
     }
 
     showModal(type, data, str, index) {
@@ -165,6 +167,7 @@ export class Modal extends React.Component {
 
         // console.log("status");
         // console.log(status)
+
         switch (status) {
             case 'false|true':
                 // console.log('false|true')
@@ -200,26 +203,51 @@ export class Modal extends React.Component {
 
     account_address_repeat() {
         let address = false, account = false;
+        let address_count = 0, account_count = 0;
         this.state.consumptionItem.map((item, index) => {
             if ((this.state.street == item.street) && this.state.postal_code == item.postal_code) {
-                address = true;
+                address_count++;
             }
             if (this.state.account_number == item.account_number) {
-                account = true;
+                account_count++;
             }
         })
+
+        if (this.state.option === 'update') {
+            // console.log("update")
+            // console.log(address_count)
+            // console.log(account_count)
+            if (address_count > 1) {
+                address = true;
+            }
+            if (account_count > 1) {
+                account = true;
+            }
+        }
+        else {
+            // console.log("add")
+            // console.log(address_count)
+            // console.log(account_count)
+            if (address_count > 0) {
+                address = true;
+            }
+            if (account_count > 0) {
+                account = true;
+            }
+        }
+
         return address + "|" + account;
     }
 
     Add() {
 
     }
-    
+
     addToMainForm() {
         let siteItem = {
             account_number: this.state.account_number,
             existing_plan_selected: this.state.existing_plan_selected,
-            contract_expiry: this.state.contract_expiry?this.state.contract_expiry:"",
+            contract_expiry: this.state.contract_expiry ? this.state.contract_expiry : "",
             purchasing_entity_selectd: this.state.purchasing_entity_selectd,
             intake_level_selected: this.state.intake_level_selected,
             contracted_capacity: this.state.contracted_capacity,
@@ -321,25 +349,23 @@ export class Modal extends React.Component {
                 this.setState({
                     peak_pct: value
                 })
-                if(Number(value))
-                {
+                if (Number(value)) {
                     this.setState({
                         peak: (100 - parseFloat(value))
                     })
                 }
-                else
-                {
+                else {
                     this.setState({
                         peak: ""
                     })
                 }
                 // this.accountItem.peak = (100 - parseFloat(value)).toFixed(2)
                 console.log(value);
-                
+
                 break;
         }
     }
-    
+
     removefile(type, index, id) {
         if (confirm("Are you sure you want to delete this file?")) {
             if (this.props.otherFunction) {
@@ -362,7 +388,7 @@ export class Modal extends React.Component {
     componentDidMount() {
 
     }
-    
+
     checkConsumption() {
 
     }
@@ -631,8 +657,8 @@ export class Modal extends React.Component {
                             <div id="permise_address_taken_message" className="isPassValidate">There is already an existing contract for this premise address.</div>
                         </div>
                         <div className="modal_btn">
-                            <button      onClick={this.Add.bind(this)}>{this.state.option === "update" ? "Save" : "Add"}</button>
-                           
+                            <button onClick={this.Add.bind(this)}>{this.state.option === "update" ? "Save" : "Add"}</button>
+
                         </div>
                         <div className="modal_btn"><a onClick={this.closeModal.bind(this)}>Cancel</a></div>
                     </form>

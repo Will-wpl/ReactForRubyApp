@@ -20,7 +20,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
 
     # update buyer entity registration information
     buyer_entities = JSON.parse(params[:buyer_entities])
-    buyer_entities.push(build_default_entity( update_user_params )) unless buyer_entities.any?{ |v| v['is_default'] == 1 }
+    # buyer_entities.push(build_default_entity( update_user_params )) unless buyer_entities.any?{ |v| v['is_default'] == 1 }
     update_buyer_entities(buyer_entities)
     render json: { user: @user }, status: 200
 
@@ -35,7 +35,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
 
     # update buyer entity registration information
     buyer_entities = JSON.parse(params[:buyer_entities])
-    buyer_entities.push(build_default_entity( update_user_params )) unless buyer_entities.any?{ |v| v['is_default'] == 1 }
+    # buyer_entities.push(build_default_entity( update_user_params )) unless buyer_entities.any?{ |v| v['is_default'] == 1 }
     update_buyer_entities(buyer_entities, true)
 
     render json: { user: @user }, status: 200
