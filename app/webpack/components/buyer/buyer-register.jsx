@@ -32,44 +32,50 @@ export class BuyerRegister extends Component {
             uploadUrl: "/api/buyer/user_attachments?file_type="
         };
         this.validatorItem = {
-            email_address: { cate: 'email' },
-            company_name: { cate: 'required' },
-            unique_entity_number: { cate: 'required' },
-            company_address: { cate: 'required' },
-            billing_address: { cate: 'required' },
-            contact_name: { cate: 'required' },
-            mobile_number: { cate: 'num' },
-            office_number: { cate: 'num' },
-
-            user_company_name: { cate: 'required' },
-            user_company_uen: { cate: 'required' },
-            user_company_address: { cate: 'required' },
-            user_billing_address: { cate: 'required' },
-            user_bill_attention_to: { cate: 'required' },
-            user_contact_name: { cate: 'required' },
-            user_contact_email: { cate: 'email' },
+           
+            
+            
+            
+            
+            
+            
+            
+            
+            
+           
+            
+                    
+            user_contact_office_no: { cate: 'num' },
             user_contact_mobile_no: { cate: 'num' },
-            user_contact_office_no: { cate: 'num' }
+            user_contact_email: { cate: 'email' },
+            user_contact_name: { cate: 'required' },
+            user_bill_attention_to: { cate: 'required' },
+            user_billing_address: { cate: 'required' },
+            user_company_address: { cate: 'required' },
+            user_company_uen: { cate: 'required' },
+            user_company_name: { cate: 'required' },
+
+            office_number: { cate: 'num' },
+            mobile_number: { cate: 'num' },
+            contact_name: { cate: 'required' },
+            billing_address: { cate: 'required' },
+            company_address: { cate: 'required' },
+            unique_entity_number: { cate: 'required' },
+            company_name: { cate: 'required' },
+            email_address: { cate: 'email' },
+
         }
         this.validatorEntity = {
-            // user_company_name: { cate: 'required' },
-            // user_company_uen: { cate: 'required' },
-            // user_company_address: { cate: 'required' },
-            // user_billing_address: { cate: 'required' },
-            // user_bill_attention_to: { cate: 'required' },
-            // user_contact_name: { cate: 'required' },
-            // user_contact_email: { cate: 'email' },
-            // user_contact_mobile_no: { cate: 'num' },
-            // user_contact_office_no: { cate: 'num' }
-            company_name: { cate: 'required' },
-            company_uen: { cate: 'required' },
-            company_address: { cate: 'required' },
-            billing_address: { cate: 'required' },
-            bill_attention_to: { cate: 'required' },
-            contact_name: { cate: 'required' },
-            contact_email: { cate: 'email' },
+            contact_office_no: { cate: 'num' },
             contact_mobile_no: { cate: 'num' },
-            contact_office_no: { cate: 'num' }
+            contact_email: { cate: 'email' },
+            contact_name: { cate: 'required' },
+            bill_attention_to: { cate: 'required' },
+            billing_address: { cate: 'required' },
+            company_address: { cate: 'required' },
+            company_uen: { cate: 'required' },
+            company_name: { cate: 'required' },
+            
         }
         this.validatorComment = {
             comment: { cate: 'required' }
@@ -245,9 +251,8 @@ export class BuyerRegister extends Component {
         $('.validate_message').find('div').each(function () {
             let className = $(this).attr('class');
             if (className === 'errormessage') {
-               let divid= $(this).attr("id");
-               $("#"+divid).removeClass("errormessage").addClass("isPassValidate");
-
+                let divid = $(this).attr("id");
+                $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
             }
         })
 
@@ -377,7 +382,8 @@ export class BuyerRegister extends Component {
             contact_mobile_no: "",
             contact_office_no: "",
         }
-        entityObj['ENTITY_LIST'][0].entities.splice(0, 0, entity);
+        // entityObj['ENTITY_LIST'][0].entities.splice(0, 0, entity);
+        entityObj['ENTITY_LIST'][0].entities.push(entity);
         this.setState({
             user_entity_data: entityObj,
         })
@@ -870,7 +876,7 @@ export class BuyerRegister extends Component {
 
                                 <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href={this.state.buyerTCurl} className="urlStype">{this.state.buyerTCname}</a></h4>
                                 <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
-                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} /> I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href={this.state.buyerRevvTCurl } className="urlStype">{this.state.buyerRevvTCname}</a></h4>
+                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} /> I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStype">{this.state.buyerRevvTCname}</a></h4>
                                 <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                                 <div className="retailer_btn">
                                     {btn_html}

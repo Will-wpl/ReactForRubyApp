@@ -45,15 +45,15 @@ export class RetailerRegister extends Component {
 
         }
         this.validatorItem = {
-            email_address: { cate: 'email' },
-            company_name: { cate: 'required' },
-            unique_entity_number: { cate: 'required' },
-            company_address: { cate: 'required' },
-            license_number: { cate: 'required' },
-            gst_no: { cate: 'required' },
-            contact_name: { cate: 'required' },
+            office_number: { cate: 'num' },
             mobile_number: { cate: 'num' },
-            office_number: { cate: 'num' }
+            contact_name: { cate: 'required' },
+            gst_no: { cate: 'required' },
+            license_number: { cate: 'required' },
+            company_address: { cate: 'required' },
+            unique_entity_number: { cate: 'required' },
+            company_name: { cate: 'required' },
+            email_address: { cate: 'email' }
         }
         this.validatorComment = {
             comment: { cate: 'required' }
