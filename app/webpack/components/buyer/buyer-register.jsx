@@ -15,7 +15,7 @@ export class BuyerRegister extends Component {
             email_address: "", company_name: "", unique_entity_number: "", company_address: "", billing_address: "", contact_name: "",
             mobile_number: "", office_number: "",
 
-            user_company_name: "", user_company_uen: "", user_company_address: "", user_billing_address: "", user_bill_attention_to: "",
+            user_entity_id:"",user_company_name: "", user_company_uen: "", user_company_address: "", user_billing_address: "", user_bill_attention_to: "",
             user_contact_name: "", user_contact_email: "", user_contact_mobile_no: "", user_contact_office_no: "", comment: "",
             buyerTCurl: "", buyerTCname: "", agree_seller_buyer: "0",
             buyerRevvTCurl: "", buyerRevvTCname: "", agree_buyer_revv: "0", has_tenants: "1",
@@ -165,7 +165,7 @@ export class BuyerRegister extends Component {
             let user_entity = [];
             if (entity.length > 0) {
                 this.setState({
-                    id: entity[0].id,
+                    user_entity_id: entity[0].id,
                     user_company_name: entity[0].company_name ? entity[0].company_name : '',
                     user_company_uen: entity[0].company_uen ? entity[0].company_uen : '',
                     user_company_address: entity[0].company_address ? entity[0].company_address : '',
@@ -181,7 +181,7 @@ export class BuyerRegister extends Component {
                     param.buyer_entities.map((item, index) => {
                         if (index > 0) {
                             user_entity.push({
-                                id: entity[index].id,
+                                user_entity_id: entity[index].id,
                                 company_name: entity[index].company_name ? entity[index].company_name : '',
                                 company_uen: entity[index].company_uen ? entity[index].company_uen : '',
                                 company_address: entity[index].company_address ? entity[index].company_address : '',
@@ -563,10 +563,6 @@ export class BuyerRegister extends Component {
                                 window.location.href = `/retailer/home`;
                             }
                             else {
-                                // this.refs.Modal.showModal();
-                                // this.setState({
-                                //     text: "Your details have been successfully submitted. "
-                                // });
                                 this.setState(
                                     {
                                         user_company_name: this.state.company_name,
@@ -577,12 +573,7 @@ export class BuyerRegister extends Component {
                                 );
                                 this.refs.Modal.showModal();
                             }
-
-
-
-                           
                         }
-
                     })
                 }
                 else {
