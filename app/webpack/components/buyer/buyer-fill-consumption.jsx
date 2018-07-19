@@ -375,7 +375,7 @@ export class FillConsumption extends Component {
         return (
             <div>
                 <h1>Buyer Participation</h1>
-                <h4 className="col-sm-12 u-mb2">Invitation: {this.state.name}</h4>
+                <h4 className="col-sm-12 u-mb2">Invitation to RA: {this.state.name}</h4>
                 <h4 className="col-sm-12 u-mb2">Contract Start Date: {moment(this.state.time).format('D MMM YYYY hh:mm a')}</h4>
                 <h4 >
                     <div className="row col-sm-12 u-mb2">
