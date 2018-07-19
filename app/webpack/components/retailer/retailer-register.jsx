@@ -41,7 +41,8 @@ export class RetailerRegister extends Component {
             agree_seller_buyer: "0",
             revvTCurl: "",
             revvTCname: "",
-            agree_seller_revv: "0"
+            agree_seller_revv: "0",
+            messageAttachmentUrl:""
 
         }
         this.validatorItem = {
@@ -151,6 +152,11 @@ export class RetailerRegister extends Component {
             this.setState({
                 revvTCurl: revv.file_path,
                 revvTCname: revv.file_name
+            })
+        }
+        if (param.letter_of_authorisation_attachment) {
+            this.setState({
+                    messageAttachmentUrl: param.letter_of_authorisation_attachment.file_path
             })
         }
     }
@@ -564,14 +570,14 @@ export class RetailerRegister extends Component {
                                     </div>
                                 </div>
 
-                                <h4 className="lm--formItem lm--formItem--inline string"><input id="chkBuyer" type="checkbox" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href={this.state.sellerTCurl}>{this.state.sellerTCname}</a></h4>
+                                <h4 className="lm--formItem lm--formItem--inline string"><input id="chkBuyer" type="checkbox" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href={this.state.sellerTCurl} className="urlStyle">{this.state.sellerTCname}</a></h4>
                                 <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
-                                <h4 className="lm--formItem lm--formItem--inline string"><input id="chkRevv" type="checkbox" onChange={this.Change.bind(this, 'chkRevv')} name={"seller_revv_tc"} disabled={this.state.disabled} />  I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href={this.state.revvTCurl}>{this.state.revvTCname}</a></h4>
+                                <h4 className="lm--formItem lm--formItem--inline string"><input id="chkRevv" type="checkbox" onChange={this.Change.bind(this, 'chkRevv')} name={"seller_revv_tc"} disabled={this.state.disabled} />  I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href={this.state.revvTCurl} className="urlStyle">{this.state.revvTCname}</a></h4>
                                 <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                                 <div className="retailer_btn">
                                     {btn_html}
                                 </div>
-                                <Modal listdetailtype="Retailer Documents Message" ref="Modal_upload" />
+                                <Modal listdetailtype="Documents Message" ref="Modal_upload"  attatchment={this.state.messageAttachmentUrl}/>
                                 <Modal text={this.state.text} ref="Modal" />
                                 <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
                             </div>
