@@ -32,44 +32,50 @@ export class BuyerRegister extends Component {
             uploadUrl: "/api/buyer/user_attachments?file_type="
         };
         this.validatorItem = {
-            email_address: { cate: 'email' },
-            company_name: { cate: 'required' },
-            unique_entity_number: { cate: 'required' },
-            company_address: { cate: 'required' },
-            billing_address: { cate: 'required' },
-            contact_name: { cate: 'required' },
-            mobile_number: { cate: 'num' },
-            office_number: { cate: 'num' },
-
-            user_company_name: { cate: 'required' },
-            user_company_uen: { cate: 'required' },
-            user_company_address: { cate: 'required' },
-            user_billing_address: { cate: 'required' },
-            user_bill_attention_to: { cate: 'required' },
-            user_contact_name: { cate: 'required' },
-            user_contact_email: { cate: 'email' },
+           
+            
+            
+            
+            
+            
+            
+            
+            
+            
+           
+            
+                    
+            user_contact_office_no: { cate: 'num' },
             user_contact_mobile_no: { cate: 'num' },
-            user_contact_office_no: { cate: 'num' }
+            user_contact_email: { cate: 'email' },
+            user_contact_name: { cate: 'required' },
+            user_bill_attention_to: { cate: 'required' },
+            user_billing_address: { cate: 'required' },
+            user_company_address: { cate: 'required' },
+            user_company_uen: { cate: 'required' },
+            user_company_name: { cate: 'required' },
+
+            office_number: { cate: 'num' },
+            mobile_number: { cate: 'num' },
+            contact_name: { cate: 'required' },
+            billing_address: { cate: 'required' },
+            company_address: { cate: 'required' },
+            unique_entity_number: { cate: 'required' },
+            company_name: { cate: 'required' },
+            email_address: { cate: 'email' },
+
         }
         this.validatorEntity = {
-            // user_company_name: { cate: 'required' },
-            // user_company_uen: { cate: 'required' },
-            // user_company_address: { cate: 'required' },
-            // user_billing_address: { cate: 'required' },
-            // user_bill_attention_to: { cate: 'required' },
-            // user_contact_name: { cate: 'required' },
-            // user_contact_email: { cate: 'email' },
-            // user_contact_mobile_no: { cate: 'num' },
-            // user_contact_office_no: { cate: 'num' }
-            company_name: { cate: 'required' },
-            company_uen: { cate: 'required' },
-            company_address: { cate: 'required' },
-            billing_address: { cate: 'required' },
-            bill_attention_to: { cate: 'required' },
-            contact_name: { cate: 'required' },
-            contact_email: { cate: 'email' },
+            contact_office_no: { cate: 'num' },
             contact_mobile_no: { cate: 'num' },
-            contact_office_no: { cate: 'num' }
+            contact_email: { cate: 'email' },
+            contact_name: { cate: 'required' },
+            bill_attention_to: { cate: 'required' },
+            billing_address: { cate: 'required' },
+            company_address: { cate: 'required' },
+            company_uen: { cate: 'required' },
+            company_name: { cate: 'required' },
+            
         }
         this.validatorComment = {
             comment: { cate: 'required' }
