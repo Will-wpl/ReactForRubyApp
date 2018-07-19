@@ -247,7 +247,6 @@ export class BuyerRegister extends Component {
             if (className === 'errormessage') {
                 let divid = $(this).attr("id");
                 $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
-
             }
         })
 
