@@ -24,18 +24,18 @@ export class UploadFile extends React.Component {
                     <div className="col-sm-12 col-md-12 u-grid" key={index}>
                         <div className={`col-sm-12 col-md-${this.props.col_width ? this.props.col_width : "10"} u-cell`}>
                             <a className="upload_file_btn">
-                                <dfn className="dfn">No file selected...</dfn>
+                                <dfn>No file selected...</dfn>
                                 {/* accept="application/pdf,application/msword" */}
                                 {required === "required" ?
                                     <div>
-                                        <input type="file" name="uploadField" required="required" ref={type + index} onChange={this.changefileval.bind(this, type + index)} id={type + index} name="uploadField" disabled={this.props.propsdisabled ? true : (window.location.href.indexOf("past") > 0 ? true : this.state.disabled)} />
+                                        <input type="file" name="uploadField" required="required" ref={type + index} onChange={this.changefileval.bind(this, type + index)} id={type + index} name="file" disabled={this.props.propsdisabled ? true : (window.location.href.indexOf("past") > 0 ? true : this.state.disabled)} />
                                         <b>Browser</b>
                                         <div className="required_error">
                                             Please select file.
                                         </div>
                                     </div>
                                     : <div> 
-                                        <input type="file" ref={type + index} onChange={this.changefileval.bind(this, type + index)} id={type + index} name="uploadField" disabled={this.props.propsdisabled ? true : (window.location.href.indexOf("past") > 0 ? true : this.state.disabled)} />
+                                        <input type="file" ref={type + index} onChange={this.changefileval.bind(this, type + index)} id={type + index} name="file" disabled={this.props.propsdisabled ? true : (window.location.href.indexOf("past") > 0 ? true : this.state.disabled)} />
                                         <b>Browse..</b>
                                     </div>}
                             </a>
@@ -130,14 +130,6 @@ export class UploadFile extends React.Component {
             success: (res) => {
                 let fileObj;
                 barObj.find(".progress-bar").text('Upload Successful!');
-                console.log(2222)
-                $("input[name='uploadField']").each(function () {
-                    $(this).val('');
-                })
-                $(".dfn").each(function () {
-                    $(this).html('No file selected...');
-                })
-                 
                 setTimeout(() => {
                     barObj.fadeOut(500);
                 }, 2000);
