@@ -173,7 +173,7 @@
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
           .lm--formItem-right.lm--formItem-control
-            = f.button :submit, 'Sign Up', class: 'lm--button--primary u-block', data: { disable_with: t('views.disable_with') }
+            = f.button :submit, 'Register', class: 'lm--button--primary u-block', data: { disable_with: t('views.disable_with') }
         .lm--formItem.u-text-center.link_hand
           | Have an Account? #{link_to 'Log In', new_user_session_path}
 - if params['type'] == '3'
