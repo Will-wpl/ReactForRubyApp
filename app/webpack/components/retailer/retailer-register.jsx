@@ -178,6 +178,13 @@ export class RetailerRegister extends Component {
 
     checkValidation() {
         let flag = true, hasDoc = true;
+        $('.validate_message').find('div').each(function () {
+            let className = $(this).attr('class');
+            if (className === 'errormessage') {
+               let divid= $(this).attr("id");
+               $("#"+divid).removeClass("errormessage").addClass("isPassValidate");
+            }
+        })
         //validate form 
         let arr = validator_Object(this.state, this.validatorItem);
         if (arr) {
