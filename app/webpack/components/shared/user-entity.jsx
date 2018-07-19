@@ -119,10 +119,22 @@ export class UserEntity extends React.Component {
         this.setState({
             itemList: entityData['ENTITY_LIST']
         })
+        console.log($("div[name='entitySub']").length)
+        // // $("div[name='entitySub']").find('div .errormessage').each(function () {
+             
+        // // })
+        // console.log($("div[name='entitySub']").find('div .errormessage').length);
+        $('.validate_message').find('div').each(function () {
+            let className = $(this).attr('class');
+            if (className === 'errormessage') {
+                let divid = $(this).attr("id");
+                $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
+            }
+        })
     }
     buildFrom() {
         let entityHtml = '';
-        entityHtml = <div className="">
+        entityHtml = <div name="entitySub" className="">
             {
                 (this.state.itemList[0].entities.length > 0) ?
                     this.state.itemList[0].entities.map((it, i) =>

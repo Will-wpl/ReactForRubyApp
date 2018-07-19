@@ -245,8 +245,8 @@ export class BuyerRegister extends Component {
         $('.validate_message').find('div').each(function () {
             let className = $(this).attr('class');
             if (className === 'errormessage') {
-               let divid= $(this).attr("id");
-               $("#"+divid).removeClass("errormessage").addClass("isPassValidate");
+                let divid = $(this).attr("id");
+                $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
 
             }
         })
@@ -377,7 +377,8 @@ export class BuyerRegister extends Component {
             contact_mobile_no: "",
             contact_office_no: "",
         }
-        entityObj['ENTITY_LIST'][0].entities.splice(0, 0, entity);
+        // entityObj['ENTITY_LIST'][0].entities.splice(0, 0, entity);
+        entityObj['ENTITY_LIST'][0].entities.push(entity);
         this.setState({
             user_entity_data: entityObj,
         })
@@ -870,7 +871,7 @@ export class BuyerRegister extends Component {
 
                                 <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href={this.state.buyerTCurl} className="urlStype">{this.state.buyerTCname}</a></h4>
                                 <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
-                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} /> I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href={this.state.buyerRevvTCurl } className="urlStype">{this.state.buyerRevvTCname}</a></h4>
+                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} /> I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStype">{this.state.buyerRevvTCname}</a></h4>
                                 <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                                 <div className="retailer_btn">
                                     {btn_html}
