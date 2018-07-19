@@ -42,7 +42,7 @@ export class RetailerRegister extends Component {
             revvTCurl: "",
             revvTCname: "",
             agree_seller_revv: "0",
-            messageAttachmentUrl:""
+            messageAttachmentUrl: ""
 
         }
         this.validatorItem = {
@@ -156,7 +156,7 @@ export class RetailerRegister extends Component {
         }
         if (param.letter_of_authorisation_attachment) {
             this.setState({
-                    messageAttachmentUrl: param.letter_of_authorisation_attachment.file_path
+                messageAttachmentUrl: param.letter_of_authorisation_attachment.file_path
             })
         }
     }
@@ -187,8 +187,8 @@ export class RetailerRegister extends Component {
         $('.validate_message').find('div').each(function () {
             let className = $(this).attr('class');
             if (className === 'errormessage') {
-               let divid= $(this).attr("id");
-               $("#"+divid).removeClass("errormessage").addClass("isPassValidate");
+                let divid = $(this).attr("id");
+                $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
             }
         })
         //validate form 
@@ -314,7 +314,7 @@ export class RetailerRegister extends Component {
                 break;
         }
     }
-    submit() {
+    submit(type) {
         let param = {
             'id': this.state.id,
             'email': this.state.email_address,
@@ -333,17 +333,21 @@ export class RetailerRegister extends Component {
             validateIsExist({
                 user: param
             }).then(res => {
-                console.log(res.validate_result);
                 if (res.validate_result)//validate pass
                 {
                     submitRetailManageInfo({
                         user: param
-                    }).then(res => {
-                        this.refs.Modal.showModal();
+                    }).then(res => { 
                         $('#license_number_repeat').removeClass('errormessage').addClass('isPassValidate');
-                        this.setState({
-                            text: "Your details have been successfully submitted. "
-                        });
+                        if (type === "sign_up") {
+                            window.location.href = `/buyer/home`;
+                        }
+                        else {
+                            this.refs.Modal.showModal();
+                            this.setState({
+                                text: "Your details have been successfully submitted. "
+                            });
+                        }
                     })
                 }
                 else {
@@ -434,7 +438,7 @@ export class RetailerRegister extends Component {
         else if (this.state.use_type === 'manage_acount') {
             btn_html = <div>
                 <button id="save_form" className="lm--button lm--button--primary" onClick={this.cancel.bind(this)}>Cancel</button>
-                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this)}>Save</button>
+                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this, "save")}>Save</button>
             </div>;
             $('#chkBuyer').attr('disabled', true);
             $('#chkRevv').attr('disabled', true);
@@ -442,7 +446,7 @@ export class RetailerRegister extends Component {
         else {
             btn_html = <div>
                 <button id="save_form" className="lm--button lm--button--primary" onClick={this.save.bind(this)}>Save</button>
-                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this)}>Complete Sign Up</button>
+                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this, "sign_up")}>Complete Sign Up</button>
             </div>;
         }
         return (
@@ -577,7 +581,7 @@ export class RetailerRegister extends Component {
                                 <div className="retailer_btn">
                                     {btn_html}
                                 </div>
-                                <Modal listdetailtype="Documents Message" ref="Modal_upload"  attatchment={this.state.messageAttachmentUrl}/>
+                                <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrl} />
                                 <Modal text={this.state.text} ref="Modal" />
                                 <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
                             </div>

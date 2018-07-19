@@ -559,25 +559,33 @@ export class BuyerRegister extends Component {
                             this.refs.Modal.showModal();
                         }
                         else {
-                            this.setState(
-                                {
-                                    user_company_name: this.state.company_name,
-                                    user_company_uen: this.state.unique_entity_number,
-                                    user_company_address: this.state.company_address,
-                                    text: "Your details have been successfully submitted. "
-                                }
-                            );
-                            this.refs.Modal.showModal();
+                            if (type === "sign_up") {
+                                window.location.href = `/retailer/home`;
+                            }
+                            else {
+                                // this.refs.Modal.showModal();
+                                // this.setState({
+                                //     text: "Your details have been successfully submitted. "
+                                // });
+                                this.setState(
+                                    {
+                                        user_company_name: this.state.company_name,
+                                        user_company_uen: this.state.unique_entity_number,
+                                        user_company_address: this.state.company_address,
+                                        text: "Your details have been successfully submitted. "
+                                    }
+                                );
+                                this.refs.Modal.showModal();
+                            }
+
+
+
+                           
                         }
 
                     })
                 }
                 else {
-                    // $('#unique_entity_number_repeat').removeClass('errormessage').addClass('isPassValidate');
-                    // $('#email_address_repeat').removeClass('errormessage').addClass('isPassValidate');
-                    // $('#company_name_repeat').removeClass('errormessage').addClass('isPassValidate');
-
-                    $("")
                     if (res.error_fields) {
                         for (let item of res.error_fields) {
                             if (item === "company_unique_entity_number") {
@@ -673,7 +681,7 @@ export class BuyerRegister extends Component {
         else if (this.state.use_type === 'manage_acount') {
             btn_html = <div>
                 <button id="save_form" className="lm--button lm--button--primary" onClick={this.cancel.bind(this)}>Cancel</button>
-                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this, 'edit')}>Save</button>
+                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this, 'save')}>Save</button>
             </div>;
             // $('#chkBuyer').attr('disabled', true);
             // $('#chkRevv').attr('disabled', true);
@@ -681,7 +689,7 @@ export class BuyerRegister extends Component {
         else {
             btn_html = <div>
                 <button id="save_form" className="lm--button lm--button--primary" onClick={this.save.bind(this)}>Save</button>
-                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this, 'insert')}>Complete Sign Up</button>
+                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this, 'sign_up')}>Complete Sign Up</button>
             </div>;
         }
         return (
