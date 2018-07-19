@@ -97,7 +97,6 @@ export class BuyerRegister extends Component {
         }
         else {
             getBuyerUserInfo().then(res => {
-                console.log(res);
                 this.setDefault(res);
             })
         }
@@ -157,7 +156,7 @@ export class BuyerRegister extends Component {
         }
         if (param.letter_of_authorisation_attachment) {
             this.setState({
-                    messageAttachmentUrl: param.letter_of_authorisation_attachment.file_path
+                messageAttachmentUrl: param.letter_of_authorisation_attachment.file_path
             })
         }
 
@@ -166,6 +165,7 @@ export class BuyerRegister extends Component {
             let user_entity = [];
             if (entity.length > 0) {
                 this.setState({
+                    id: entity[0].id,
                     user_company_name: entity[0].company_name ? entity[0].company_name : '',
                     user_company_uen: entity[0].company_uen ? entity[0].company_uen : '',
                     user_company_address: entity[0].company_address ? entity[0].company_address : '',
@@ -181,6 +181,7 @@ export class BuyerRegister extends Component {
                     param.buyer_entities.map((item, index) => {
                         if (index > 0) {
                             user_entity.push({
+                                id: entity[index].id,
                                 company_name: entity[index].company_name ? entity[index].company_name : '',
                                 company_uen: entity[index].company_uen ? entity[index].company_uen : '',
                                 company_address: entity[index].company_address ? entity[index].company_address : '',
@@ -310,6 +311,7 @@ export class BuyerRegister extends Component {
     setParams() {
         let entity = [
             {
+
                 company_name: this.state.company_name,
                 company_uen: this.state.unique_entity_number,
                 company_address: this.state.company_address,
@@ -362,7 +364,7 @@ export class BuyerRegister extends Component {
         return params;
     }
 
-    addUserEntity() {
+    addUserEntity(type) {
         let entityObj;
         entityObj = this.state.user_entity_data;
         let entity = {
@@ -377,10 +379,13 @@ export class BuyerRegister extends Component {
             contact_office_no: "",
         }
         // entityObj['ENTITY_LIST'][0].entities.splice(0, 0, entity);
-        entityObj['ENTITY_LIST'][0].entities.push(entity);
-        this.setState({
-            user_entity_data: entityObj,
-        })
+        if (type) {
+            entityObj['ENTITY_LIST'][0].entities.push(entity);
+            this.setState({
+                user_entity_data: entityObj,
+            })
+        }
+
     }
 
     Change(type, e) {
@@ -515,15 +520,27 @@ export class BuyerRegister extends Component {
     save() {
         let buyerParam = this.setParams();
         saveBuyerUserInfo(buyerParam).then(res => {
-            this.setState(
-                {
-                    user_company_name: this.state.company_name,
-                    user_company_uen: this.state.unique_entity_number,
-                    user_company_address: this.state.company_address,
-                    text: "Your details have been successfully saved. "
-                }
-            );
-            this.refs.Modal.showModal();
+
+            if (res.result === "failed") {
+                this.setState(
+                    {
+                        text: "Failure to save,the entity have available auction can't be deleted . "
+                    }
+                );
+                this.refs.Modal.showModal();
+            }
+            else {
+                this.setState(
+                    {
+                        user_company_name: this.state.company_name,
+                        user_company_uen: this.state.unique_entity_number,
+                        user_company_address: this.state.company_address,
+                        text: "Your details have been successfully saved. "
+                    }
+                );
+                this.refs.Modal.showModal();
+            }
+
         })
     }
     submit(type) {
@@ -533,15 +550,26 @@ export class BuyerRegister extends Component {
             validateIsExist(buyerParam).then(res => {
                 if (res.validate_result) {
                     submitBuyerUserInfo(buyerParam).then(res => {
-                        this.setState(
-                            {
-                                user_company_name: this.state.company_name,
-                                user_company_uen: this.state.unique_entity_number,
-                                user_company_address: this.state.company_address,
-                                text: "Your details have been successfully submitted. "
-                            }
-                        );
-                        this.refs.Modal.showModal();
+                        if (res.result === "failed") {
+                            this.setState(
+                                {
+                                    text: "Failure to submit,the entity have available auction can't be deleted . "
+                                }
+                            );
+                            this.refs.Modal.showModal();
+                        }
+                        else {
+                            this.setState(
+                                {
+                                    user_company_name: this.state.company_name,
+                                    user_company_uen: this.state.unique_entity_number,
+                                    user_company_address: this.state.company_address,
+                                    text: "Your details have been successfully submitted. "
+                                }
+                            );
+                            this.refs.Modal.showModal();
+                        }
+
                     })
                 }
                 else {
@@ -838,13 +866,15 @@ export class BuyerRegister extends Component {
                                         <input type="text" name="user_contact_office_no" value={this.state.user_contact_office_no} onChange={this.Change.bind(this, 'user_contact_office_no')} disabled={this.state.disabled} ref="user_contact_office_no" maxLength="8" aria-required="true" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
                                         <div className='isPassValidate' id='user_contact_office_no_message' >This field is required!</div>
                                         <div className='isPassValidate' id='user_contact_office_no_format' >Number should contain 8 integers.</div>
-                                        <div className="addEntity"><a onClick={this.addUserEntity.bind(this)}>Add</a></div>
+                                        <div className="addEntity"  >
+                                            {this.state.disabled ? <a onClick={this.addUserEntity.bind(this, false)} >Add</a> : <a onClick={this.addUserEntity.bind(this, true)} >Add</a>}
+                                        </div>
                                     </div>
                                     <div>
 
                                     </div>
                                 </div>
-                                <UserEntity disabled={false} entityList={this.state.user_entity_data} ref="userEntity" className={this.state.disabled === 'admin_approve' ? '' : ''} />
+                                <UserEntity disabled={this.state.disabled} entityList={this.state.user_entity_data} ref="userEntity" className={this.state.disabled === 'admin_approve' ? '' : ''} />
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
                                         <abbr title="required">*</abbr> Tenent Management Service Required:
@@ -879,7 +909,7 @@ export class BuyerRegister extends Component {
                         </div>
                     </div>
 
-                    <Modal text={this.state.text} ref="Modal" /> 
+                    <Modal text={this.state.text} ref="Modal" />
                     <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrl} />
                     <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
                 </div>
