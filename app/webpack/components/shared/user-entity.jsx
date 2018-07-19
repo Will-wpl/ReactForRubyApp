@@ -102,13 +102,16 @@ export class UserEntity extends React.Component {
                 break;
         }
     }
-    removeEntity(index) {
+    removeEntity(index, disabled) {
 
-        this.setState({
-            deleteIndex: index
-        })
-        this.refs.Modal.showModal("comfirm");
-        this.setState({ text: "Are you sure you want to delete ?" });
+        if (disabled) {
+            this.setState({
+                deleteIndex: index
+            })
+            this.refs.Modal.showModal("comfirm");
+            this.setState({ text: "Are you sure you want to delete ?" });
+        }
+
     }
     doAccept() {
         let entityObj, entityData;
@@ -121,7 +124,7 @@ export class UserEntity extends React.Component {
         })
         console.log($("div[name='entitySub']").length)
         // // $("div[name='entitySub']").find('div .errormessage').each(function () {
-             
+
         // // })
         // console.log($("div[name='entitySub']").find('div .errormessage').length);
         $('.validate_message').find('div').each(function () {
@@ -230,7 +233,12 @@ export class UserEntity extends React.Component {
                                     <input type="text" name={"contact_office_no_" + i} value={it.contact_office_no} onChange={this.Change.bind(this, 'contact_office_no', i)} disabled={this.state.disabled} ref="contact_office_no" aria-required="true" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
                                     <div className='isPassValidate' id={"user_contact_office_no_" + (i) + "_message"} >This field is required!</div>
                                     <div className='isPassValidate' id={"user_contact_office_no_" + (i) + "_format"} >Number should contain 8 integers!</div>
-                                    <div className="delEntity"><a onClick={this.removeEntity.bind(this, i)}> &nbsp; Remove</a></div>
+                                    <div className="delEntity">
+                                        {
+                                            this.state.disabled ? <a onClick={this.removeEntity.bind(this, i, false)}> &nbsp; Remove</a> : <a onClick={this.removeEntity.bind(this, i, true)}> &nbsp; Remove</a>
+                                        }
+
+                                    </div>
                                 </div>
                             </div>
                         </div>

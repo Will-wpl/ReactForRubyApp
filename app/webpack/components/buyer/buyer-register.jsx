@@ -29,22 +29,10 @@ export class BuyerRegister extends Component {
                     { buttonName: "none", files: [] }
                 ]
             },
-            uploadUrl: "/api/buyer/user_attachments?file_type="
+            uploadUrl: "/api/buyer/user_attachments?file_type=",
+            messageAttachmentUrl: ""
         };
         this.validatorItem = {
-           
-            
-            
-            
-            
-            
-            
-            
-            
-            
-           
-            
-                    
             user_contact_office_no: { cate: 'num' },
             user_contact_mobile_no: { cate: 'num' },
             user_contact_email: { cate: 'email' },
@@ -75,7 +63,7 @@ export class BuyerRegister extends Component {
             company_address: { cate: 'required' },
             company_uen: { cate: 'required' },
             company_name: { cate: 'required' },
-            
+
         }
         this.validatorComment = {
             comment: { cate: 'required' }
@@ -166,12 +154,18 @@ export class BuyerRegister extends Component {
                 fileData: fileObj
             })
         }
+        if (param.letter_of_authorisation_attachment) {
+            this.setState({
+                messageAttachmentUrl: param.letter_of_authorisation_attachment.file_path
+            })
+        }
 
         if (param.buyer_entities) {
             let entity = param.buyer_entities;
             let user_entity = [];
             if (entity.length > 0) {
                 this.setState({
+                    id: entity[0].id,
                     user_company_name: entity[0].company_name ? entity[0].company_name : '',
                     user_company_uen: entity[0].company_uen ? entity[0].company_uen : '',
                     user_company_address: entity[0].company_address ? entity[0].company_address : '',
@@ -187,6 +181,7 @@ export class BuyerRegister extends Component {
                     param.buyer_entities.map((item, index) => {
                         if (index > 0) {
                             user_entity.push({
+                                id: entity[index].id,
                                 company_name: entity[index].company_name ? entity[index].company_name : '',
                                 company_uen: entity[index].company_uen ? entity[index].company_uen : '',
                                 company_address: entity[index].company_address ? entity[index].company_address : '',
@@ -316,6 +311,7 @@ export class BuyerRegister extends Component {
     setParams() {
         let entity = [
             {
+
                 company_name: this.state.company_name,
                 company_uen: this.state.unique_entity_number,
                 company_address: this.state.company_address,
@@ -368,7 +364,7 @@ export class BuyerRegister extends Component {
         return params;
     }
 
-    addUserEntity() {
+    addUserEntity(type) {
         let entityObj;
         entityObj = this.state.user_entity_data;
         let entity = {
@@ -383,10 +379,13 @@ export class BuyerRegister extends Component {
             contact_office_no: "",
         }
         // entityObj['ENTITY_LIST'][0].entities.splice(0, 0, entity);
-        entityObj['ENTITY_LIST'][0].entities.push(entity);
-        this.setState({
-            user_entity_data: entityObj,
-        })
+        if (type) {
+            entityObj['ENTITY_LIST'][0].entities.push(entity);
+            this.setState({
+                user_entity_data: entityObj,
+            })
+        }
+
     }
 
     Change(type, e) {
@@ -521,15 +520,27 @@ export class BuyerRegister extends Component {
     save() {
         let buyerParam = this.setParams();
         saveBuyerUserInfo(buyerParam).then(res => {
-            this.setState(
-                {
-                    user_company_name: this.state.company_name,
-                    user_company_uen: this.state.unique_entity_number,
-                    user_company_address: this.state.company_address,
-                    text: "Your details have been successfully saved. "
-                }
-            );
-            this.refs.Modal.showModal();
+
+            if (res.result === "failed") {
+                this.setState(
+                    {
+                        text: "Failure to save,the entity have available auction can't be deleted . "
+                    }
+                );
+                this.refs.Modal.showModal();
+            }
+            else {
+                this.setState(
+                    {
+                        user_company_name: this.state.company_name,
+                        user_company_uen: this.state.unique_entity_number,
+                        user_company_address: this.state.company_address,
+                        text: "Your details have been successfully saved. "
+                    }
+                );
+                this.refs.Modal.showModal();
+            }
+
         })
     }
     submit(type) {
@@ -539,23 +550,42 @@ export class BuyerRegister extends Component {
             validateIsExist(buyerParam).then(res => {
                 if (res.validate_result) {
                     submitBuyerUserInfo(buyerParam).then(res => {
-                        this.setState(
-                            {
-                                user_company_name: this.state.company_name,
-                                user_company_uen: this.state.unique_entity_number,
-                                user_company_address: this.state.company_address,
-                                text: "Your details have been successfully submitted. "
+                        if (res.result === "failed") {
+                            this.setState(
+                                {
+                                    text: "Failure to submit,the entity have available auction can't be deleted . "
+                                }
+                            );
+                            this.refs.Modal.showModal();
+                        }
+                        else {
+                            if (type === "sign_up") {
+                                window.location.href = `/retailer/home`;
                             }
-                        );
-                        this.refs.Modal.showModal();
+                            else {
+                                // this.refs.Modal.showModal();
+                                // this.setState({
+                                //     text: "Your details have been successfully submitted. "
+                                // });
+                                this.setState(
+                                    {
+                                        user_company_name: this.state.company_name,
+                                        user_company_uen: this.state.unique_entity_number,
+                                        user_company_address: this.state.company_address,
+                                        text: "Your details have been successfully submitted. "
+                                    }
+                                );
+                                this.refs.Modal.showModal();
+                            }
+
+
+
+                           
+                        }
+
                     })
                 }
                 else {
-                    // $('#unique_entity_number_repeat').removeClass('errormessage').addClass('isPassValidate');
-                    // $('#email_address_repeat').removeClass('errormessage').addClass('isPassValidate');
-                    // $('#company_name_repeat').removeClass('errormessage').addClass('isPassValidate');
-
-                    $("")
                     if (res.error_fields) {
                         for (let item of res.error_fields) {
                             if (item === "company_unique_entity_number") {
@@ -651,7 +681,7 @@ export class BuyerRegister extends Component {
         else if (this.state.use_type === 'manage_acount') {
             btn_html = <div>
                 <button id="save_form" className="lm--button lm--button--primary" onClick={this.cancel.bind(this)}>Cancel</button>
-                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this, 'edit')}>Save</button>
+                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this, 'save')}>Save</button>
             </div>;
             // $('#chkBuyer').attr('disabled', true);
             // $('#chkRevv').attr('disabled', true);
@@ -659,7 +689,7 @@ export class BuyerRegister extends Component {
         else {
             btn_html = <div>
                 <button id="save_form" className="lm--button lm--button--primary" onClick={this.save.bind(this)}>Save</button>
-                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this, 'insert')}>Complete Sign Up</button>
+                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this, 'sign_up')}>Complete Sign Up</button>
             </div>;
         }
         return (
@@ -844,13 +874,15 @@ export class BuyerRegister extends Component {
                                         <input type="text" name="user_contact_office_no" value={this.state.user_contact_office_no} onChange={this.Change.bind(this, 'user_contact_office_no')} disabled={this.state.disabled} ref="user_contact_office_no" maxLength="8" aria-required="true" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
                                         <div className='isPassValidate' id='user_contact_office_no_message' >This field is required!</div>
                                         <div className='isPassValidate' id='user_contact_office_no_format' >Number should contain 8 integers.</div>
-                                        <div className="addEntity"><a onClick={this.addUserEntity.bind(this)}>Add</a></div>
+                                        <div className="addEntity"  >
+                                            {this.state.disabled ? <a onClick={this.addUserEntity.bind(this, false)} >Add</a> : <a onClick={this.addUserEntity.bind(this, true)} >Add</a>}
+                                        </div>
                                     </div>
                                     <div>
 
                                     </div>
                                 </div>
-                                <UserEntity disabled={false} entityList={this.state.user_entity_data} ref="userEntity" className={this.state.disabled === 'admin_approve' ? '' : ''} />
+                                <UserEntity disabled={this.state.disabled} entityList={this.state.user_entity_data} ref="userEntity" className={this.state.disabled === 'admin_approve' ? '' : ''} />
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
                                         <abbr title="required">*</abbr> Tenent Management Service Required:
@@ -874,9 +906,9 @@ export class BuyerRegister extends Component {
                                     </div>
                                 </div>
 
-                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href={this.state.buyerTCurl} className="urlStype">{this.state.buyerTCname}</a></h4>
+                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href={this.state.buyerTCurl} className="urlStyle">{this.state.buyerTCname}</a></h4>
                                 <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
-                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} /> I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStype">{this.state.buyerRevvTCname}</a></h4>
+                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} /> I agree to Seller - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyle">{this.state.buyerRevvTCname}</a></h4>
                                 <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                                 <div className="retailer_btn">
                                     {btn_html}
@@ -886,7 +918,7 @@ export class BuyerRegister extends Component {
                     </div>
 
                     <Modal text={this.state.text} ref="Modal" />
-                    <Modal listdetailtype="Buyer Documents Message" ref="Modal_upload" />
+                    <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrl} />
                     <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
                 </div>
             </div>

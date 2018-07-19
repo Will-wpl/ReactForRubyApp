@@ -545,10 +545,10 @@ export class Modal extends React.Component {
             }
         }
         else {
-            if (this.props.listdetailtype === 'Retailer Documents Message') {
+            if (this.props.listdetailtype === 'Documents Message') {
                 showDetail = <ul className="showdetail">
                     <li>Please upload the following documentations:</li>
-                    <li>1) A print-out of this <a href='#'>Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
+                    <li>1) A print-out of this <a href={this.props.attatchment} className="urlStyle" target="_blank">Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
                     <li>2a) Your company's Accounting & Corporate Regulatory Authority (ACRA) Business Profile.</li>
                     <li>or</li>
                     <li>2b) Your company's Certificate of Incorporation if you are not registered with Accounting & Corporate Regulatory Authority (ACRA).</li>
@@ -558,19 +558,19 @@ export class Modal extends React.Component {
                     <li>All supporting documents submitted should be in English only.</li>
                 </ul>
             }
-            if (this.props.listdetailtype === 'Buyer Documents Message') {
-                showDetail = <ul className="showdetail">
-                    <li>Please upload the following documentations:</li>
-                    <li>1) A print-out of this <a href='#'> Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
-                    <li>2a) Your company's Accounting & Corporate Regulatory Authority (ACRA) Business Profile.</li>
-                    <li>or</li>
-                    <li>2b) Your company's Certificate of Incorporation if you are not registered with Accounting & Corporate Regulatory Authority (ACRA).</li>
-                    <li>3) Directors' Resolution authorising the Authorised Representative to transact for and on behalf of the Company in this platform.</li>
-                    <li>4) A copy of the Applicant's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
-                    <li>5) A copy of the Authorised Representative's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
-                    <li>All supporting documents submitted should be in English only.</li>
-                </ul>
-            }
+            // if (this.props.listdetailtype === 'Buyer Documents Message') {
+            //     showDetail = <ul className="showdetail">
+            //         <li>Please upload the following documentations:</li>
+            //         <li>1) A print-out of this <a  href={this.props.attatchment} className="urlStyle"> Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
+            //         <li>2a) Your company's Accounting & Corporate Regulatory Authority (ACRA) Business Profile.</li>
+            //         <li>or</li>
+            //         <li>2b) Your company's Certificate of Incorporation if you are not registered with Accounting & Corporate Regulatory Authority (ACRA).</li>
+            //         <li>3) Directors' Resolution authorising the Authorised Representative to transact for and on behalf of the Company in this platform.</li>
+            //         <li>4) A copy of the Applicant's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
+            //         <li>5) A copy of the Authorised Representative's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
+            //         <li>All supporting documents submitted should be in English only.</li>
+            //     </ul>
+            // }
             if (this.props.listdetailtype === 'consumption_detail') {
                 if (this.props.consumption_account_item !== null) {
                     showDetail = <form name="buyer_model_form" method="post" onSubmit={this.checkModelSuccess.bind(this)}>
