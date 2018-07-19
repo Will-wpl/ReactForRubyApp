@@ -560,7 +560,7 @@ export class BuyerRegister extends Component {
                         }
                         else {
                             if (type === "sign_up") {
-                                window.location.href = `/retailer/home`;
+                                window.location.href = `/buyer/home`;
                             }
                             else {
                                 this.setState(
