@@ -170,22 +170,61 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
         buyer_entity_3.contact_email = 'Buyer_entity_3@email.com'
 
         buyer_entity_4 = CompanyBuyerEntity.new
+        buyer_entity_4.user_id = company_buyer.id
         buyer_entity_4.company_name = 'Test_Company_Name_4'
         buyer_entity_4.company_uen = 'Test_Company_UEN_4'
         buyer_entity_4.company_address = 'Test_Company_Address_4'
         buyer_entity_4.contact_email = 'Buyer_entity_4@email.com'
+        buyer_entity_4.save!
 
-        buyer_entities = [buyer_entity_3, buyer_entity_4 ]
+        buyer_entities = [buyer_entity_3, buyer_entity_4]
 
         put :sign_up, params: { id: company_buyer.id,
                                 user: { agree_seller_buyer: '1',
                                         agree_buyer_revv: '0' },
-                                buyer_entities: buyer_entities.to_json}
+                                buyer_entities: buyer_entities.to_json }
       end
       before { do_request }
       it 'success' do
         hash_body = JSON.parse(response.body)
+        expect(hash_body['result']).to have_content('success')
         expect(hash_body).to have_content('user')
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    describe 'Put sign up with foreign key error' do
+      def do_request
+        buyer_entity_3 = CompanyBuyerEntity.new
+        buyer_entity_3.company_name = 'Test_Company_Name_3'
+        buyer_entity_3.company_uen = 'Test_Company_UEN_3'
+        buyer_entity_3.company_address = 'Test_Company_Address_3'
+        buyer_entity_3.contact_email = 'Buyer_entity_3@email.com'
+
+        buyer_entity_4 = CompanyBuyerEntity.new
+        buyer_entity_4.user_id = company_buyer.id
+        buyer_entity_4.company_name = 'Test_Company_Name_4'
+        buyer_entity_4.company_uen = 'Test_Company_UEN_4'
+        buyer_entity_4.company_address = 'Test_Company_Address_4'
+        buyer_entity_4.contact_email = 'Buyer_entity_4@email.com'
+        buyer_entity_4.save!
+
+        auction = create(:auction, :for_next_month, :upcoming, :published, :started, contract_period_start_date: '2018-07-01')
+        consumption =create(:consumption, user: company_buyer, auction: auction, participation_status: '1')
+        create(:consumption_detail, :for_lt, consumption_id: consumption.id, company_buyer_entity_id: buyer_entity_4.id)
+
+        buyer_entities = [buyer_entity_3]
+
+        put :sign_up, params: { id: company_buyer.id,
+                                user: { agree_seller_buyer: '1',
+                                        agree_buyer_revv: '0' },
+                                buyer_entities: buyer_entities.to_json }
+      end
+      before { do_request }
+      it 'success' do
+        hash_body = JSON.parse(response.body)
+        expect(hash_body['result']).to have_content('failed')
+        expect(hash_body).to have_content('message')
         expect(response).to have_http_status(:ok)
       end
     end

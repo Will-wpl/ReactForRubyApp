@@ -43,7 +43,6 @@ export class Modal extends React.Component {
     }
     componentWillReceiveProps(next) {
         if (next.consumption_account_item) {
-            console.log(next.consumption_account_item.contract_expiry);
             this.setState({
                 account_number: next.consumption_account_item.account_number,
                 existing_plan: next.consumption_account_item.existing_plan,
@@ -595,7 +594,7 @@ export class Modal extends React.Component {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><abbr title="required">*</abbr>Contract Expiry</td>
+                                    <td><abbr title="required"><span className={this.state.existing_plan_selected === "Retailer plan" ? "isDisplay" : "isHide"}>*</span></abbr>Contract Expiry</td>
                                     <td>
                                         <DatePicker selected={this.state.contract_expiry} disabled={this.state.contract_expiry_disabled} onKeyDown={this.noPermitInput.bind(this)} ref="contract_expiry_date" shouldCloseOnSelect={true} name="contract_expiry_date" minDate={moment()} showTimeSelect required aria-required="true" className="date_ico" dateFormat="DD-MM-YYYY HH:mm" selectsStart onChange={this.dateChange.bind(this)} title="Time must not be in the past." />
                                     </td>
@@ -642,8 +641,8 @@ export class Modal extends React.Component {
                                     <td >
                                         <div className="specil">
                                             <span>Total Monthly1:</span>
-                                            <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" onKeyUp={this.removeNanNum.bind(this)} pattern="^\d+(\.\d+)?$" required aria-required="true" /><span>kWh/month,Peak:</span>
-                                            <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} id="peak_pct" onKeyUp={this.removeNanNum.bind(this)} pattern="^100$|^(\d|[1-9]\d)(\.\d+)*$" required aria-required="true" /> %
+                                            <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" onKeyUp={this.removeNanNum.bind(this)} pattern="^\d+(\.\d+)?$" required aria-required="true"  maxLength="10"/><span>kWh/month,Peak:</span>
+                                            <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} id="peak_pct" onKeyUp={this.removeNanNum.bind(this)} pattern="^100$|^(\d|[1-9]\d)(\.\d+)*$" required aria-required="true"  maxLength="5"/> %
                                         ,Off-Peak:<input type="text" value={this.state.peak} disabled="true" onChange={this.changeConsumption.bind(this, "pack")} id="pack" required aria-required="true" /><span></span>
                                             %(auot calculate).<span>Upload bill(s) compulsory for Category 3 (New Accounts)</span>.
                                             <div title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">?</div>
