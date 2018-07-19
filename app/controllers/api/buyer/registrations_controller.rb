@@ -35,14 +35,18 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     update_user_params = filter_user_password(update_user_params)
     update_user_params['approval_status'] = User::ApprovalStatusPending
     @user.update(update_user_params)
+    saved_entities = nil
     ActiveRecord::Base.transaction do
       # update buyer entity registration information
       buyer_entities = JSON.parse(params[:buyer_entities])
       # buyer_entities.push(build_default_entity( update_user_params )) unless buyer_entities.any?{ |v| v['is_default'] == 1 }
-      update_buyer_entities(buyer_entities, true)
+      saved_entities = update_buyer_entities(buyer_entities, true)
     end
 
-    render json: { user: @user }, status: 200
+    render json: { result:'success', user: @user, entities: saved_entities }, status: 200
+
+  rescue Exception => ex
+    render json: { result:'failed', message: ex.message }, status: 200
   end
 
   # validate retailer info
@@ -189,9 +193,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     saved_buyer_entities = []
     # ActiveRecord::Base.transaction do
     will_del_buyer_entity.each do |buyer_entity|
-      if !CompanyBuyerEntity.find(buyer_entity.id).destroy
-        raise ActiveRecord::RecordNotSaved
-      end
+      CompanyBuyerEntity.find(buyer_entity.id).destroy
     end
     buyer_entities.each do |buyer_entity|
       target_buyer_entity = if buyer_entity['id'].to_i == 0
