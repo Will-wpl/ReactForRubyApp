@@ -97,6 +97,7 @@ export class BuyerRegister extends Component {
         }
         else {
             getBuyerUserInfo().then(res => {
+                console.log(res)
                 this.setDefault(res);
             })
         }
@@ -768,7 +769,7 @@ export class BuyerRegister extends Component {
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                         <UploadFile type="BUYER_DOCUMENTS" required="required" showlist={false} validate={this.state.validate} showList="1" col_width="10" showWay="2" fileData={this.state.fileData.BUYER_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
-                                        <div className="col-sm-12 col-md-2 u-cell">
+                                        <div className="col-sm-1 col-md-1 u-cell">
                                             <button className="lm--button lm--button--primary" title="this is retailer upload documents" disabled={this.state.disabled} onClick={this.showView.bind(this)} >?</button>
                                         </div>
                                     </div>

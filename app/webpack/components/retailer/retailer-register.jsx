@@ -340,7 +340,7 @@ export class RetailerRegister extends Component {
                     }).then(res => {
                         $('#license_number_repeat').removeClass('errormessage').addClass('isPassValidate');
                         if (type === "sign_up") {
-                            window.location.href = `/buyer/home`;
+                            window.location.href = `/retailer/home`;
                         }
                         else {
                             this.refs.Modal.showModal();
@@ -545,7 +545,7 @@ export class RetailerRegister extends Component {
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                         <UploadFile type="RETAILER_DOCUMENTS" required="required" validate={this.state.validate} showList="1" col_width="10" showWay="2" fileData={this.state.fileData.RETAILER_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
-                                        <div className="col-sm-12 col-md-2 u-cell">
+                                        <div className="col-sm-1 col-md-1 u-cell">
                                             <button className="lm--button lm--button--primary" onClick={this.showView.bind(this)} disabled={this.state.disabled} >?</button>
                                         </div>
                                     </div>
