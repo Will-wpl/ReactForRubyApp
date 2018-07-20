@@ -18,7 +18,7 @@ class Api::Admin::UsersController < Api::UsersController
     result_json = approval_user
     approval_status = params[:approved].blank? ? User::ApprovalStatusReject : User::ApprovalStatusApproved
     company_buyer_entity_ids = []
-    CompanyBuyerEntity.find_by_user(params[:user_id]).each { |x| company_buyer_entity_ids.push(x.id)}
+    CompanyBuyerEntity.find_by_user(params[:user_id]).each { |x| company_buyer_entity_ids.push(x.id) if x.is_default != 1}
     if approval_status == User::ApprovalStatusApproved
       # Update entity users approval status to approved
       User.where('entity_id in (?)', company_buyer_entity_ids).update(approval_status: User::ApprovalStatusApproved)

@@ -15,7 +15,7 @@ export class BuyerRegister extends Component {
             email_address: "", company_name: "", unique_entity_number: "", company_address: "", billing_address: "", contact_name: "",
             mobile_number: "", office_number: "",
 
-            user_entity_id:"",user_company_name: "", user_company_uen: "", user_company_address: "", user_billing_address: "", user_bill_attention_to: "",
+            user_entity_id: "", user_company_name: "", user_company_uen: "", user_company_address: "", user_billing_address: "", user_bill_attention_to: "",
             user_contact_name: "", user_contact_email: "", user_contact_mobile_no: "", user_contact_office_no: "", comment: "",
             buyerTCurl: "", buyerTCname: "", agree_seller_buyer: "0",
             buyerRevvTCurl: "", buyerRevvTCname: "", agree_buyer_revv: "0", has_tenants: "1",
@@ -364,7 +364,7 @@ export class BuyerRegister extends Component {
         return params;
     }
 
-    addUserEntity(type) {
+    addUserEntity() {
         let entityObj;
         entityObj = this.state.user_entity_data;
         let entity = {
@@ -379,12 +379,12 @@ export class BuyerRegister extends Component {
             contact_office_no: "",
         }
         // entityObj['ENTITY_LIST'][0].entities.splice(0, 0, entity);
-        if (type) {
-            entityObj['ENTITY_LIST'][0].entities.push(entity);
-            this.setState({
-                user_entity_data: entityObj,
-            })
-        }
+
+        entityObj['ENTITY_LIST'][0].entities.push(entity);
+        this.setState({
+            user_entity_data: entityObj,
+        })
+
 
     }
 
@@ -627,11 +627,13 @@ export class BuyerRegister extends Component {
     }
     judgeAction(type) {
         if (type === 'reject') {
-            this.setState({
-                text: 'Are you sure you want to reject the request?',
-            }, () => {
-                this.refs.Modal_Option.showModal('comfirm', { action: 'reject' }, '');
-            });
+            if (this.checkRejectAction()) {
+                this.setState({
+                    text: 'Are you sure you want to reject the request?',
+                }, () => {
+                    this.refs.Modal_Option.showModal('comfirm', { action: 'reject' }, '');
+                });
+            }
         }
         else {
             this.setState({ text: "Are you sure you want to approve the request?" });
@@ -645,19 +647,9 @@ export class BuyerRegister extends Component {
             comment: this.state.comment,
             approved: obj.action === 'reject' ? "" : 1
         };
-
-        if (obj.action === 'reject') {
-            if (this.checkRejectAction()) {
-                approveBuyerUser(param).then(res => {
-                    location.href = "/admin/users/buyers";
-                })
-            }
-        }
-        else {
-            approveBuyerUser(param).then(res => {
-                location.href = "/admin/users/buyers";
-            })
-        }
+        approveBuyerUser(param).then(res => {
+            location.href = "/admin/users/buyers";
+        })
     }
 
     render() {
@@ -772,7 +764,7 @@ export class BuyerRegister extends Component {
                                 <h4 className="lm--formItem lm--formItem--inline string">Add Individial Info </h4>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr> Upload Documents:
+                                        <abbr title="required">*</abbr> Upload Business Document:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                         <UploadFile type="BUYER_DOCUMENTS" required="required" showlist={false} validate={this.state.validate} showList="1" col_width="10" showWay="2" fileData={this.state.fileData.BUYER_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
@@ -865,8 +857,8 @@ export class BuyerRegister extends Component {
                                         <input type="text" name="user_contact_office_no" value={this.state.user_contact_office_no} onChange={this.Change.bind(this, 'user_contact_office_no')} disabled={this.state.disabled} ref="user_contact_office_no" maxLength="8" aria-required="true" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
                                         <div className='isPassValidate' id='user_contact_office_no_message' >This field is required!</div>
                                         <div className='isPassValidate' id='user_contact_office_no_format' >Number should contain 8 integers.</div>
-                                        <div className="addEntity"  >
-                                            {this.state.disabled ? <a onClick={this.addUserEntity.bind(this, false)} >Add</a> : <a onClick={this.addUserEntity.bind(this, true)} >Add</a>}
+                                        <div className={this.state.disabled ? "isHide" : "addEntity"} >
+                                            <a onClick={this.addUserEntity.bind(this)} >Add</a>
                                         </div>
                                     </div>
                                     <div>

@@ -337,7 +337,7 @@ export class RetailerRegister extends Component {
                 {
                     submitRetailManageInfo({
                         user: param
-                    }).then(res => { 
+                    }).then(res => {
                         $('#license_number_repeat').removeClass('errormessage').addClass('isPassValidate');
                         if (type === "sign_up") {
                             window.location.href = `/buyer/home`;
@@ -392,11 +392,13 @@ export class RetailerRegister extends Component {
     }
     judgeAction(type) {
         if (type === 'reject') {
-            this.setState({
-                text: 'Are you sure you want to reject the request?',
-            }, () => {
-                this.refs.Modal_Option.showModal('comfirm', { action: 'reject' }, '');
-            });
+            if (this.checkRejectAction()) {
+                this.setState({
+                    text: 'Are you sure you want to reject the request?',
+                }, () => {
+                    this.refs.Modal_Option.showModal('comfirm', { action: 'reject' }, '');
+                });
+            }
         }
         else {
             this.setState({ text: "Are you sure you want to approve the request?" });
@@ -409,19 +411,9 @@ export class RetailerRegister extends Component {
             comment: this.state.comment,
             approved: obj.action === 'reject' ? "" : 1
         };
-
-        if (obj.action === 'reject') {
-            if (this.checkRejectAction()) {
-                approveRetailerUser(param).then(res => {
-                    location.href = "/admin/users/retailers";
-                })
-            }
-        }
-        else {
-            approveRetailerUser(param).then(res => {
-                location.href = "/admin/users/retailers";
-            })
-        }
+        approveRetailerUser(param).then(res => {
+            location.href = "/admin/users/retailers";
+        })
     }
 
     showView() {

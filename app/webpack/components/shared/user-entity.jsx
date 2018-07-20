@@ -233,11 +233,8 @@ export class UserEntity extends React.Component {
                                     <input type="text" name={"contact_office_no_" + i} value={it.contact_office_no} onChange={this.Change.bind(this, 'contact_office_no', i)} disabled={this.state.disabled} ref="contact_office_no" aria-required="true" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
                                     <div className='isPassValidate' id={"user_contact_office_no_" + (i) + "_message"} >This field is required!</div>
                                     <div className='isPassValidate' id={"user_contact_office_no_" + (i) + "_format"} >Number should contain 8 integers!</div>
-                                    <div className="delEntity">
-                                        {
-                                            this.state.disabled ? <a onClick={this.removeEntity.bind(this, i, false)}> &nbsp; Remove</a> : <a onClick={this.removeEntity.bind(this, i, true)}> &nbsp; Remove</a>
-                                        }
-
+                                    <div className="delEntity" className={this.state.disabled?"isHide":"delEntity"}>
+                                         <a onClick={this.removeEntity.bind(this, i, false)}> &nbsp; Delete</a> 
                                     </div>
                                 </div>
                             </div>
