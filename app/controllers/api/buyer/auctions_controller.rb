@@ -49,14 +49,35 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
   def pdf
     auction_id = params[:id]
     auction = Auction.find_by id: auction_id
-    auction_result = AuctionResult.find_by_auction_id(auction_id)
 
-    param = {
-      :auction => auction,
-      :auction_result => auction_result,
-      :current_user => current_user
-    }
-    pdf_filename, output_filename = BuyerReport.new(param).pdf
+    if auction.nil?
+      pdf_filename, output_filename = PdfUtils.get_no_data_pdf("LETTER", :portrait, 'NO_DATA_BUYER_REPORT.pdf')
+    else
+      current_user_consumption = Consumption.find_by auction_id: auction.id, user_id: current_user.id
+      if current_user_consumption.contract_duration.nil?
+        auction_result = AuctionResult.find_by_auction_id(auction_id)
+
+        pdf_filename, output_filename = BuyerReport.new({
+                                                            :auction => auction,
+                                                            :auction_result => auction_result,
+                                                            :current_user => current_user
+                                                        }).pdf
+      else
+        auction_result = AuctionResultContract.find_by auction_id: auction.id, contract_duration: current_user_consumption.contract_duration
+        auction_contract = AuctionContract.find_by auction_id: auction.id, contract_duration: current_user_consumption.contract_duration
+        entities_detail = get_entities_detail(current_user_consumption.id)
+        pdf_filename, output_filename = BuyerEntityReport.new({
+                                                                  :entities_detail => entities_detail,
+                                                                  :current_user_consumption => current_user_consumption,
+                                                                  :auction_result => auction_result,
+                                                                  :auction => auction,
+                                                                  :current_user => current_user,
+                                                                  :auction_contract => auction_contract
+                                                              }).pdf
+      end
+
+    end
+
     send_data IO.read(Rails.root.join(pdf_filename)), filename: output_filename
     File.delete Rails.root.join(pdf_filename)
   end
@@ -84,5 +105,15 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
     else
       consumption.participation_status != '1' ? 0 : 1
     end
+  end
+
+  def get_entities_detail(consumption_id)
+    ConsumptionDetail.find_by_sql ['SELECT 	cbe."id",	intake_level,	SUM ( peak ) peak,	SUM ( off_peak ) off_peak,	cbe.company_name
+                                         FROM	consumption_details cds
+	                                       LEFT JOIN company_buyer_entities cbe
+                                           ON cds.company_buyer_entity_id = cbe."id"
+                                        WHERE	cds.consumption_id = ?
+                                     GROUP BY cbe."id", intake_level, cbe.company_name
+                                     ORDER BY intake_level desc', consumption_id]
   end
 end
