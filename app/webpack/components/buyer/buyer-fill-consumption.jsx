@@ -60,13 +60,14 @@ export class FillConsumption extends Component {
 
     BuyerParticipateList() {
         getBuyerParticipate('/api/buyer/consumption_details?consumption_id=' + this.consumptions_id).then((res) => {
+
             this.site_list = res.consumption_details;
             this.status = res.consumption.participation_status === '1' ? "Confirmed" :
                 (res.consumption.participation_status === '2' ? "Pending" : "Rejected")
             this.setState({
                 name: res.auction.name,
                 time: res.auction.actual_begin_time,
-                link: res.tc_attachment,
+                link: res.tc_attachment.file_path,
             })
             if (res.consumption.participation_status === '1' || res.auction.publish_status === "1") {
                 $("input[type='checkbox']").attr("checked", true);
@@ -449,7 +450,7 @@ export class FillConsumption extends Component {
                             <div>
                                 <h4 className="lm--formItem lm--formItem--inline string">
                                     <input name="agree_declare" type="checkbox" id="chkAgree_declare" required />
-                                    I declare that all data submited is true and shall be used for the auction,and that i am bounded by the  <span>Buyer T&C.</span>(can click on Buyer T&C link to view/download it).
+                                    I declare that all data submited is true and shall be used for the auction,and that i am bounded by <a target="_blank" href={this.state.link} className="urlStyle"><span>&nbsp;Buyer T&C.</span></a>
                                 </h4>
                             </div>
                             <div className="buyer_btn">

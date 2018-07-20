@@ -63,9 +63,36 @@ class Pdf
     end
   end
 
+  def push_data_v2(param)
+    visibility = param[:visibility]
+    title = param[:title]
+    prefix = param[:prefix]
+    price_hash = param[:price_hash]
+    peak = param[:peak]
+    off_peak = param[:off_peak]
+    table_head = param[:table_head]
+    table_row0 = param[:table_row0]
+    table_row1 = param[:table_row1]
+    if visibility
+      table_head.push(title)
+      table_row0.push(PdfUtils.get_format_number(peak, '$ ', 4))
+      table_row1.push(PdfUtils.get_format_number(off_peak, '$ ', 4))
+      price_hash[prefix+'peak'] = peak
+      price_hash[prefix+'off_peak'] = off_peak
+    else
+      price_hash[prefix+'peak'] = 0
+      price_hash[prefix+'off_peak'] = 0
+    end
+  end
+
   def get_period_days(auction)
     period_days = (auction.contract_period_end_date - auction.contract_period_start_date).to_i
     return period_days == 0 ? 1 : period_days + 1
+  end
+
+  def get_period_days_v2(period_start_date, period_end_date)
+    period_days = (period_end_date - period_start_date).to_i
+    period_days == 0 ? 1 : period_days + 1
   end
 
   def get_total_value(total_volume_base, total_volume, total_award_sum_base, total_award_sum)
@@ -125,6 +152,56 @@ class Pdf
     else
       return [table_head, table_row0, table_row1], total_volume, total_award_sum
     end
+  end
+
+
+  protected
+
+  def get_contract_period_start_date(auction)
+    (auction.contract_period_start_date).strftime("%-d %b %Y")
+  end
+
+  def get_contract_period_end_date(auction_result)
+    (auction_result.contract_period_end_date).strftime("%-d %b %Y")
+  end
+
+  def get_ra_id(auction)
+    "Buyer Report - #{auction.published_gid}"
+  end
+
+  def get_auction_on_datetime(auction)
+    zone_time = get_pdf_datetime_zone
+    auction.name + ' on ' + (auction.start_datetime + zone_time).strftime("%-d %b %Y")
+  end
+
+  def get_lowest_price_bidder(auction_result)
+    "Winning Bidder: " + auction_result.lowest_price_bidder
+  end
+
+  def get_contract_duration_price(auction_contract, auction_result)
+    table_head, table_row0, table_row1, price_hash = [''], ['Peak<br/>(7am-7pm)'], ['Off-Peak<br/>(7pm-7am)'], {}
+    visibility_lt = auction_contract.total_lt_peak > 0 || auction_contract.total_lt_off_peak > 0
+    visibility_hts = auction_contract.total_hts_peak > 0 || auction_contract.total_hts_off_peak > 0
+    visibility_htl = auction_contract.total_htl_peak > 0 || auction_contract.total_htl_off_peak > 0
+    visibility_eht = auction_contract.total_eht_peak > 0 || auction_contract.total_eht_off_peak > 0
+
+    lt_param = {:visibility => visibility_lt, :title => '<b>LT</b>', :peak => auction_result.lt_peak.to_f, :off_peak => auction_result.lt_off_peak.to_f,
+                :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :prefix => 'LT', :price_hash => price_hash}
+    push_data_v2(lt_param)
+    hts_param = {:visibility => visibility_hts, :title => '<b>HT (Small)</b>', :peak => auction_result.hts_peak.to_f, :off_peak => auction_result.hts_off_peak.to_f,
+                 :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :prefix => 'HTS', :price_hash => price_hash}
+    push_data_v2(hts_param)
+    htl_param = {:visibility => visibility_htl, :title => '<b>HT (Large)</b>', :peak => auction_result.htl_peak.to_f, :off_peak => auction_result.htl_off_peak.to_f,
+                 :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :prefix => 'HTL', :price_hash => price_hash}
+    push_data_v2(htl_param)
+    eht_param = {:visibility => visibility_eht, :title => '<b>EHT</b>', :peak => auction_result.eht_peak.to_f, :off_peak => auction_result.eht_off_peak.to_f,
+                 :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :prefix => 'EHT', :price_hash => price_hash}
+    push_data_v2(eht_param)
+
+    return_value = [[table_head, table_row0, table_row1]]
+    return_value.push(visibility_lt: visibility_lt, visibility_hts: visibility_hts, visibility_htl: visibility_htl, visibility_eht: visibility_eht)
+    return_value.push(price_hash)
+    return_value
   end
 
   private
