@@ -14,12 +14,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     # auction
     auction = Auction.find_by id: params[:id]
 
-    if auction.nil?
-      pdf_filename, output_filename =PdfUtils.get_no_data_pdf("B4", :landscape, 'NO_DATA_ADMIN_REPORT.pdf')
-      send_data IO.read(Rails.root.join(pdf_filename)), filename: output_filename
-      File.delete Rails.root.join(pdf_filename)
-      return
-    end
+    (send_no_data_pdf;return) if auction.nil?
 
     uid, uid2 = PdfUtils.to_array(uid), PdfUtils.to_array(uid2)
 
@@ -37,6 +32,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
                   :end_time2 => end_time2,
                   :uid2 => uid2}
     auction_result, histories_achieved, achieved, histories, histories_2 = get_data(data_param)
+    (send_no_data_pdf;return) if auction_result.nil?
     #
     ra_param = {
         :start_time => start_time,
@@ -65,6 +61,12 @@ class Api::Admin::AuctionsController < Api::AuctionsController
 
   private
 
+  def send_no_data_pdf
+    pdf_filename, output_filename =PdfUtils.get_no_data_pdf("B4", :landscape, 'NO_DATA_ADMIN_REPORT.pdf')
+    send_data IO.read(Rails.root.join(pdf_filename)), filename: output_filename
+    File.delete Rails.root.join(pdf_filename)
+  end
+
 
   def get_data(param)
     auction = param[:auction]
@@ -80,6 +82,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     auction_result = AuctionResult.find_by_auction_id(auction_id)
     histories_achieved = AuctionHistory
                              .find_by_sql ['select auction_histories.* ,users.company_name from auction_histories LEFT OUTER JOIN users ON users.id = auction_histories.user_id where flag = (select flag from auction_histories where auction_id = ? and is_bidder = true order by bid_time desc LIMIT 1) order by ranking asc, actual_bid_time asc ', auction_id]
+    return nil, nil, nil, nil ,nil if (auction.reserve_price.nil? || auction_result.nil? || histories_achieved.empty?)
     achieved = histories_achieved[0].average_price <= auction.reserve_price if !histories_achieved.empty?
     histories = AuctionHistory
                     .select('users.id, users.name, users.company_name, auction_histories.*')
