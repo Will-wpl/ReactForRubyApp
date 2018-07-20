@@ -97,7 +97,6 @@ export class BuyerRegister extends Component {
         }
         else {
             getBuyerUserInfo().then(res => {
-                console.log(res)
                 this.setDefault(res);
             })
         }

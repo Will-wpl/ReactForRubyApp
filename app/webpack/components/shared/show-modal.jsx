@@ -4,7 +4,11 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 import { removeNanNum } from '../../javascripts/componentService/util';
+import { validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
+
 //共通弹出框组件
+import { UploadFile } from '../shared/upload';
+
 export class Modal extends React.Component {
     constructor(props) {
         super(props);
@@ -38,7 +42,14 @@ export class Modal extends React.Component {
             totals: '',
             peak_pct: '',
             peak: "",
-            option: ''
+            option: '',
+            uploadUrl: "/api/buyer/user_attachments?file_type=",
+            validate: true,
+            fileData: {
+                "DOCUMENTS": [
+                    { buttonName: "none", files: [] }
+                ]
+            },
         }
     }
     componentWillReceiveProps(next) {
@@ -78,22 +89,22 @@ export class Modal extends React.Component {
                     contract_expiry_disabled: true
                 })
             }
-            if (next.consumption_account_item.intake_level_selected !== "LT") {
+            if (next.consumption_account_item.intake_level_selected === "LT") {
                 this.setState({
-                    contract_capacity_disabled: false
+                    contract_capacity_disabled: true
                 })
             }
             else {
                 this.setState({
-                    contract_capacity_disabled: true
+                    contract_capacity_disabled: false
                 })
             }
         }
         if (next.siteList) {
             this.setState({ consumptionItem: next.siteList });
         }
-        $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
-        $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
+        $("#permise_address_taken_message").removeClass("isPassValidate").addClass('isPassValidate');
+        $("#account_number_taken_message").removeClass("isPassValidate").addClass('isPassValidate');
     }
 
     showModal(type, data, str, index) {
@@ -126,7 +137,7 @@ export class Modal extends React.Component {
                 type: "default"
             })
         }
-        if (index) {
+        if (index !== null && index !== "") {
             this.setState({
                 itemIndex: index
             })
@@ -159,36 +170,68 @@ export class Modal extends React.Component {
         })
     }
 
-    checkModelSuccess(event) {
-        // console.log('dsafasdfasdf')
-        event.preventDefault();
-        let status = this.account_address_repeat();
-
-        // console.log("status");
-        // console.log(status)
-
-        switch (status) {
-            case 'false|true':
-                // console.log('false|true')
-                $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
-                return false;
-                break;
-            case 'true|false':
-                // console.log('true|false')
-                $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
-                return false;
-                break;
-            case 'true|true':
-                // console.log('true|true')
-                $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
-                $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
-                return false;
-                break;
-            default:
-                // console.log('default')
-                this.addToMainForm();
-                break;
+    checkModelSuccess() {
+        let validateItem = {
+            peak_pct: { cate: 'decimal' },
+            totals: { cate: 'num10' },
+            postal_code: { cate: 'required' },
+            unit_number: { cate: 'required' },
+            street: { cate: 'required' },
+            blk_or_unit: { cate: 'required' },
+            contracted_capacity: { cate: 'num4' },
+            contract_expiry: { cate: 'required' },
+            account_number: { cate: 'required' }
         }
+        if (this.state.existing_plan_selected === "Retailer plan") {
+            delete validateItem.contract_expiry;
+        }
+        if (this.state.intake_level_selected === "LT") {
+            delete validateItem.contracted_capacity;
+        }
+
+        let validateResult = validator_Object(this.state, validateItem);
+        console.log(validateResult)
+        if (validateResult.length===0) {
+            console.log(2)
+            let status = this.account_address_repeat();
+            switch (status) {
+                case 'false|true':
+                    $("#permise_address_taken_message").removeClass("isPassValidate").addClass('isPassValidate');
+                    return false;
+                    break;
+                case 'true|false':
+                    $("#account_number_taken_message").removeClass("isPassValidate").addClass('isPassValidate');
+                    return false;
+                    break;
+                case 'true|true':
+                    $("#permise_address_taken_message").removeClass("isPassValidate").addClass('isPassValidate');
+                    $("#account_number_taken_message").removeClass("isPassValidate").addClass('isPassValidate');
+                    return false;
+                    break;
+                default:
+                    this.addToMainForm();
+                    break;
+            }
+        }
+        else {
+            console.log(1)
+            let flag = true, hasDoc = true;
+            $('.validate_message').find('div').each(function () {
+                let className = $(this).attr('class');
+                if (className === 'errormessage') {
+                    let divid = $(this).attr("id");
+                    $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
+                }
+            })
+
+            validateResult.map((item, index) => {
+                let column = item.column;
+                let cate = item.cate;
+                setValidationFaild(column, cate)
+            })
+        }
+
+
     }
 
     removeNanNum(value) {
@@ -213,9 +256,6 @@ export class Modal extends React.Component {
         })
 
         if (this.state.option === 'update') {
-            // console.log("update")
-            // console.log(address_count)
-            // console.log(account_count)
             if (address_count > 1) {
                 address = true;
             }
@@ -224,9 +264,6 @@ export class Modal extends React.Component {
             }
         }
         else {
-            // console.log("add")
-            // console.log(address_count)
-            // console.log(account_count)
             if (address_count > 0) {
                 address = true;
             }
@@ -234,12 +271,11 @@ export class Modal extends React.Component {
                 account = true;
             }
         }
-
         return address + "|" + account;
     }
 
     Add() {
-
+        this.checkModelSuccess();
     }
 
     addToMainForm() {
@@ -275,7 +311,6 @@ export class Modal extends React.Component {
                 })
                 break;
             case "existing_plan":
-
                 let existing_plan_dis = true;
                 if (value === 'Retailer plan') {
                     existing_plan_dis = false;
@@ -286,7 +321,6 @@ export class Modal extends React.Component {
                 this.setState({
                     existing_plan_selected: value,
                     contract_expiry_disabled: existing_plan_dis
-
                 })
                 break;
             case "contract_expiry":
@@ -300,19 +334,17 @@ export class Modal extends React.Component {
                 })
                 break;
             case "intake_level":
+                let contract_capacity_dis = true;
                 if (value === 'LT') {
-                    this.setState({
-                        contract_capacity_disabled: true,
-                        intake_level_selected: value,
-                        contracted_capacity: ""
-                    })
+                    contract_capacity_dis = true;
                 }
                 else {
-                    this.setState({
-                        contract_capacity_disabled: false,
-                        intake_level_selected: value
-                    })
+                    contract_capacity_dis = false;
                 }
+                this.setState({
+                    contract_capacity_disabled: contract_capacity_dis,
+                    intake_level_selected: value
+                })
                 break;
             case "contract_capacity":
                 this.setState({
@@ -358,9 +390,6 @@ export class Modal extends React.Component {
                         peak: ""
                     })
                 }
-                // this.accountItem.peak = (100 - parseFloat(value)).toFixed(2)
-                console.log(value);
-
                 break;
         }
     }
@@ -371,12 +400,9 @@ export class Modal extends React.Component {
                 this.props.otherFunction(type, index, id)
             }
         }
-
     }
 
-    Change(type, e) {
-
-    }
+    Change(type, e) { }
 
     closeModal() {
         this.setState({
@@ -384,13 +410,7 @@ export class Modal extends React.Component {
         })
     }
 
-    componentDidMount() {
-
-    }
-
-    checkConsumption() {
-
-    }
+    componentDidMount() { }
 
     dateChange(data) {
         this.setState({
@@ -558,29 +578,17 @@ export class Modal extends React.Component {
                     <li>All supporting documents submitted should be in English only.</li>
                 </ul>
             }
-            // if (this.props.listdetailtype === 'Buyer Documents Message') {
-            //     showDetail = <ul className="showdetail">
-            //         <li>Please upload the following documentations:</li>
-            //         <li>1) A print-out of this <a  href={this.props.attatchment} className="urlStyle"> Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
-            //         <li>2a) Your company's Accounting & Corporate Regulatory Authority (ACRA) Business Profile.</li>
-            //         <li>or</li>
-            //         <li>2b) Your company's Certificate of Incorporation if you are not registered with Accounting & Corporate Regulatory Authority (ACRA).</li>
-            //         <li>3) Directors' Resolution authorising the Authorised Representative to transact for and on behalf of the Company in this platform.</li>
-            //         <li>4) A copy of the Applicant's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
-            //         <li>5) A copy of the Authorised Representative's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
-            //         <li>All supporting documents submitted should be in English only.</li>
-            //     </ul>
-            // }
             if (this.props.listdetailtype === 'consumption_detail') {
                 if (this.props.consumption_account_item !== null) {
-                    showDetail = <form name="buyer_model_form" method="post" onSubmit={this.checkModelSuccess.bind(this)}>
+                    showDetail = <div className="validate_message">
                         <h3 className="text_padding_left">My Account Information</h3>
                         <table className="consumption_table  u-mb3" cellPadding="0" cellSpacing="0" style={{ marginTop: "15px" }}>
                             <tbody>
                                 <tr>
-                                    <td><abbr title="required">*</abbr>Account No.</td>
-                                    <td>
+                                    <td style={{ width: "30%" }}><abbr title="required">*</abbr>Account No.</td>
+                                    <td style={{ width: "70%" }}>
                                         <input type="text" value={this.state.account_number} onChange={this.changeConsumption.bind(this, "account_number")} id="account_number" required aria-required="true" />
+                                        <div id="account_number_message" className="isPassValidate">This filed is required!</div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -594,9 +602,12 @@ export class Modal extends React.Component {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><abbr title="required"><span className={this.state.existing_plan_selected === "Retailer plan" ? "isDisplay" : "isHide"}>*</span></abbr>Contract Expiry</td>
+                                    <td><abbr title="required">
+                                        <span className={this.state.existing_plan_selected === "Retailer plan" ? "isDisplay" : "isHide"}>*</span>
+                                    </abbr>Contract Expiry</td>
                                     <td>
                                         <DatePicker selected={this.state.contract_expiry} disabled={this.state.contract_expiry_disabled} onKeyDown={this.noPermitInput.bind(this)} ref="contract_expiry_date" shouldCloseOnSelect={true} name="contract_expiry_date" minDate={moment()} showTimeSelect required aria-required="true" className="date_ico" dateFormat="DD-MM-YYYY HH:mm" selectsStart onChange={this.dateChange.bind(this)} title="Time must not be in the past." />
+                                        <div id="contract_expiry_message" className="isPassValidate">This filed is required!</div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -622,45 +633,87 @@ export class Modal extends React.Component {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><abbr title="required">*</abbr>Contract Capacity</td>
+                                    <td><abbr title="required">
+                                        <span className={this.state.intake_level_selected === "LT" ? "isHide" : "isDisplay"}>*</span>
+                                    </abbr>Contract Capacity</td>
                                     <td>
                                         <input type="text" disabled={this.state.contract_capacity_disabled} value={this.state.contracted_capacity} onChange={this.changeConsumption.bind(this, "contract_capacity")} id="contract_capacity" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" pattern="^(0|[1-9][0-9]*)$" maxLength="4" />
+                                        <div id="contract_capacity_message" className="isPassValidate">This filed is required!</div>
+                                        <div id="contract_capacity_format" className="isPassValidate">format!</div>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><abbr title="required">*</abbr>Permise Address</td>
+                                    <td colSpan="2">
+                                        Premise Address
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Blk or Unit:</td>
+                                    <td><input type="text" value={this.state.blk_or_unit} onChange={this.changeConsumption.bind(this, "blk_or_unit")} id="blk_or_unit" placeholder="" required aria-required="true" />
+                                        <div id="blk_or_unit_message" className="isPassValidate">This filed is required!</div>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Street:</td>
+                                    <td><input type="text" value={this.state.street} onChange={this.changeConsumption.bind(this, "street")} id="street" placeholder="" required aria-required="true" />
+                                        <div id="street_message" className="isPassValidate">This filed is required!</div>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Unit No.:</td>
                                     <td>
-                                        <input type="text" value={this.state.blk_or_unit} onChange={this.changeConsumption.bind(this, "blk_or_unit")} id="blk_or_unit" placeholder="Blk or Unit" required aria-required="true" />
-                                        <input type="text" value={this.state.street} onChange={this.changeConsumption.bind(this, "street")} id="street" placeholder="Street" required aria-required="true" />
-                                        <input type="text" value={this.state.unit_number} onChange={this.changeConsumption.bind(this, "unit_number")} id="unit_number" placeholder="Unit No." required aria-required="true" />
-                                        <input type="text" value={this.state.postal_code} id="postal_code" onChange={this.changeConsumption.bind(this, "postal_code")} placeholder="Postal Code" required aria-required="true" />
+                                        <input type="text" value={this.state.unit_number} onChange={this.changeConsumption.bind(this, "unit_number")} id="unit_number" placeholder="" required aria-required="true" />
+                                        <div id="unit_number_message" className="isPassValidate">This filed is required!</div>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><abbr title="required">*</abbr>Consumption Details</td>
-                                    <td >
-                                        <div className="specil">
-                                            <span>Total Monthly1:</span>
-                                            <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" onKeyUp={this.removeNanNum.bind(this)} pattern="^\d+(\.\d+)?$" required aria-required="true"  maxLength="10"/><span>kWh/month,Peak:</span>
-                                            <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} id="peak_pct" onKeyUp={this.removeNanNum.bind(this)} pattern="^100$|^(\d|[1-9]\d)(\.\d+)*$" required aria-required="true"  maxLength="5"/> %
-                                        ,Off-Peak:<input type="text" value={this.state.peak} disabled="true" onChange={this.changeConsumption.bind(this, "pack")} id="pack" required aria-required="true" /><span></span>
-                                            %(auot calculate).<span>Upload bill(s) compulsory for Category 3 (New Accounts)</span>.
-                                            <div title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">?</div>
-                                        </div>
+                                    <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Postal Code:</td>
+                                    <td> <input type="text" value={this.state.postal_code} id="postal_code" onChange={this.changeConsumption.bind(this, "postal_code")} placeholder="" required aria-required="true" />
+                                        <div id="postal_code" className="isPassValidate">This filed is required!</div>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td colSpan="2">
+                                        Consumption Address
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Total Monthly:</td>
+                                    <td>
+                                        <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" onKeyUp={this.removeNanNum.bind(this)} pattern="^\d+(\.\d+)?$" required aria-required="true" maxLength="10" placeholder="Number should contain 10 integers." /><div>kWh/month</div>
+                                        <div id="totals_message" className="isPassValidate">This filed is required!</div>
+                                        <div id="totals_format" className="isPassValidate">format!</div>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Peak:</td>
+                                    <td>
+                                        <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} id="peak_pct" onKeyUp={this.removeNanNum.bind(this)} pattern="^100$|^(\d|[1-9]\d)(\.\d+)*$" required aria-required="true" maxLength="5" placeholder="0-100" /> <div>%</div>
+                                        <div id="peak_pct_message" className="isPassValidate">This filed is required!</div>
+                                        <div id="peak_pct__format" className="isPassValidate">format!</div>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;&nbsp;&nbsp;Off-Peak:</td>
+                                    <td><input type="text" value={this.state.peak} disabled="true" onChange={this.changeConsumption.bind(this, "pack")} id="pack" required aria-required="true" /><div>%(auot calculate)</div></td>
+                                </tr>
+                                {/* <tr>
+                                    <td> Upload bill(s)</td>
+                                    <td>
+                                        <UploadFile type="CONSUMPTION_DOCUMENTS" required="required" showlist={false} validate={this.state.validate} showList="1" col_width="10" showWay="2" fileData={this.state.fileData.DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
+                                    </td>
+                                </tr> */}
                             </tbody>
-                        </table>
+                        </table >
                         <div className="modal_btn">
                             <div id="account_number_taken_message" className="isPassValidate">There is already an existing contract for this Account Number.</div>
                             <div id="permise_address_taken_message" className="isPassValidate">There is already an existing contract for this premise address.</div>
                         </div>
-                        <div className="modal_btn">
-                            <button onClick={this.Add.bind(this)}>{this.state.option === "update" ? "Save" : "Add"}</button>
-
-                        </div>
-                        <div className="modal_btn"><a onClick={this.closeModal.bind(this)}>Cancel</a></div>
-                    </form>
+                    </div>
                 }
                 else {
                     showDetail = <div></div>
@@ -671,8 +724,9 @@ export class Modal extends React.Component {
         if (this.state.type == "default") {
             btn_html = <div className="modal_btn"><a onClick={this.closeModal.bind(this)}>OK</a></div>;
         } else if (this.state.type == "custom") {
-            btn_html = <div  >
-
+            btn_html = <div className="modal_btn">
+                <a onClick={this.Add.bind(this)}>{this.state.option === "update" ? "Save" : "Add"}</a>
+                <a onClick={this.closeModal.bind(this)}>Cancel</a>
             </div>
         }
         else {
@@ -680,13 +734,22 @@ export class Modal extends React.Component {
                 <div className="modal_btn"><a onClick={this.Accept.bind(this)}>Yes</a><a onClick={this.closeModal.bind(this)}>No</a></div>;
         }
         return (
-            <div id="modal_main" className={this.state.modalshowhide} >
-                <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
-                <div className="modal_detail">
-                    <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
+            this.props.formSize === "big" ?
+                <div id="modal_main" className={this.state.modalshowhide} style={{ width: "800px", top: "20%", left: "40%" }} >
+                    <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
+                    <div className="modal_detail model_detail_formHeight">
+                        <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
+                    </div>
+                    {btn_html}
                 </div>
-                {btn_html}
-            </div>
+                :
+                <div id="modal_main" className={this.state.modalshowhide} >
+                    <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
+                    <div className="modal_detail">
+                        <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
+                    </div>
+                    {btn_html}
+                </div>
         )
     }
 }

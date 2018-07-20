@@ -88,15 +88,36 @@ export const validateLess = (value) => {
 
 
 export const validateNum = (value) => {
-
     let num = /^(\d{8})$/g;
     if (!num.test(value)) {
         return false;
     }
     return true;
 }
+export const validateNum4 = (value) => {
+    let num =  /^(0|[1-9][0-9]*)$/;
+    if (!num.test(value)) {
+        return false;
+    }
+    return true;
+}
+export const validateNum10 = (value) => {
+    let num = /^\d+(\.\d+)?$/;
+    if (!num.test(value)) {
+        return false;
+    }
+    return true;
+}
+
 export const validateEmail = (value) => {
     let num = /^([a-zA-Z0-9._-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
+    if (!num.test(value)) {
+        return false;
+    }
+    return true;
+}
+export const validateDecimal = (value) => {
+    let num = /^100$|^(\d|[1-9]\d)(\.\d+)*$/;
     if (!num.test(value)) {
         return false;
     }
@@ -130,6 +151,37 @@ export const validator_Object = (param, paramType) => {
                 }
             }
         }
+        else if (type.cate === 'num4') {
+            if (value === null || value.length === 0) {
+                errArr.push({ column: key, cate: 1 });
+            }
+            else {
+                if (!validateNum4(value)) {
+                    errArr.push({ column: key, cate: 2 })
+                }
+            }
+        }
+        else if (type.cate === 'num10') {
+            if (value === null || value.length === 0) {
+                errArr.push({ column: key, cate: 1 });
+            }
+            else {
+                if (!validateNum10(value)) {
+                    errArr.push({ column: key, cate: 2 })
+                }
+            }
+        }
+
+        else if (type.cate === 'decimal') {
+            if (value === null || value.length === 0) {
+                errArr.push({ column: key, cate: 1 });
+            }
+            else {
+                if (!validateDecimal(value)) {
+                    errArr.push({ column: key, cate: 2 })
+                }
+            }
+        }
         else {
             let require = /^$/g;
             if (value === null || value.length === 0 || require.test(value)) {
@@ -140,9 +192,6 @@ export const validator_Object = (param, paramType) => {
     return errArr;
 }
 export const validator_Array = (param, paramType) => {
-    // console.log("validate")
-    // console.log(param)
-    // console.log(paramType)
     let errArr = [];
     for (let i = 0; i < param.length; i++) {
         let entityArr = [];
@@ -157,7 +206,7 @@ export const validator_Array = (param, paramType) => {
                 else {
                     if (!validateEmail(value)) {
                         entityArr.push({ column: key, cate: 2, ind: i })
-                    }
+                    }10
                 }
             }
             else if (type.cate === 'num') {
@@ -188,15 +237,15 @@ export const setValidationFaild = (item, type) => {
     if (type === 1) {
         $('#' + item + "_message").removeClass('isPassValidate').addClass('errormessage');
         $('#' + item + "_format").removeClass('errormessage').addClass('isPassValidate');
-        $("input[name='"+item+"']").focus();
-        $("input[name='"+item.split('user_')[1]+"']").focus();
-        
+        $("input[name='" + item + "']").focus();
+        $("input[name='" + item.split('user_')[1] + "']").focus();
+
     }
     else {
         $('#' + item + "_message").removeClass('errormessage').addClass('isPassValidate');
         $('#' + item + "_format").removeClass('isPassValidate').addClass('errormessage');
-        $("input[name='"+item+"']").focus();
-        $("input[name='"+item.split('user_')[1]+"']").focus();
+        $("input[name='" + item + "']").focus();
+        $("input[name='" + item.split('user_')[1] + "']").focus();
     }
 }
 export const setValidationPass = (item, type) => {
@@ -210,18 +259,18 @@ export const setValidationPass = (item, type) => {
     }
 }
 
-export const removeNanNum=(value)=>{
-    value.target.value = value.target.value.replace(/[^\d.]/g,"");
-    value.target.value = value.target.value.replace(/\.{2,}/g,".");
-    value.target.value = value.target.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
-    if(value.target.value.indexOf(".")< 0 && value.target.value !=""){
-        value.target.value= parseFloat(value.target.value);
+export const removeNanNum = (value) => {
+    value.target.value = value.target.value.replace(/[^\d.]/g, "");
+    value.target.value = value.target.value.replace(/\.{2,}/g, ".");
+    value.target.value = value.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+    if (value.target.value.indexOf(".") < 0 && value.target.value != "") {
+        value.target.value = parseFloat(value.target.value);
     }
 }
 export const changeValidate = (type, value) => {
     if (value) {
         setValidationPass(type, 1);
-        
+
     }
     else {
         setValidationFaild(type, 1);

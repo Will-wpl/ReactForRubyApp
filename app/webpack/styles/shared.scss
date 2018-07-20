@@ -194,6 +194,8 @@ abbr[title]{color: #fe0000; text-decoration: none;}
     a { width: 60px; float:right; margin-left: 10px; cursor: pointer;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; }
     button { width: 60px; float:right; margin-left: 10px; cursor: pointer;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; }
   }
+  .model_detail_formHeight{max-height: 550px}
+  .model_detail_formWidth{width:800px;}
 }
 .u-contain{overflow:hidden;}
 #modal_history{position: fixed; top:0; left: 0; font-size: 12px;
@@ -916,4 +918,8 @@ ul.history_files{
 }
 .urlStyle{
   cursor: pointer;
+}
+
+.innerTable{
+  border: 0px !important;
 }

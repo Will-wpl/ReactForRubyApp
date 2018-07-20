@@ -117,7 +117,8 @@ export class FillConsumption extends Component {
         this.accountItem.totals = "";
         this.accountItem.peak_pct = "";
         this.setState({
-            account_detail: this.accountItem
+            account_detail: this.accountItem,
+            text: ""
         })
         this.refs.consumption.showModal('custom', {}, '', '-1')
     }
@@ -142,7 +143,8 @@ export class FillConsumption extends Component {
         this.accountItem.option = 'update';
 
         this.setState({
-            account_detail: this.accountItem
+            account_detail: this.accountItem,
+            text: ""
         })
         this.refs.consumption.showModal('custom', {}, '', index)
     }
@@ -299,7 +301,6 @@ export class FillConsumption extends Component {
             peak_pct: siteInfo.peak_pct
         };
         let entity = this.state.site_list;
-
         if (siteInfo.index >= 0) { entity[siteInfo.index] = item; }
         else { entity.push(item) }
         this.setState({
@@ -329,11 +330,8 @@ export class FillConsumption extends Component {
     }
 
     passValidateSave() {
-
         if (this.state.submit_type === "Participate") {
-
             let siteCount = this.state.site_list.length;
-            console.log(siteCount)
             if (siteCount === 0) {
                 setTimeout(() => {
                     this.setState({ text: "Please add account to participate." });
@@ -341,15 +339,10 @@ export class FillConsumption extends Component {
                 this.refs.Modal.showModal();
                 return false;
             }
-            else
-            {
+            else {
                 this.setState({ text: "Are you sure you want to participate in this auction?" });
                 this.refs.Modal.showModal("comfirm");
-    
             }
-
-
-         
         } else if (this.state.submit_type === "save") {
             this.doSave();
         }
@@ -425,10 +418,10 @@ export class FillConsumption extends Component {
                                             return <tr key={index}>
                                                 <td>{item.account_number} </td>
                                                 <td>{item.existing_plan}</td>
-                                                <td>{item.contract_expiry !== "" ? moment(item.contract_expiry).format('YYYY-MM-DD HH:mm') : ""}</td>
+                                                <td>{item.contract_expiry !== "" ? moment(item.contract_expiry).format('YYYY-MM-DD HH:mm') : "-"}</td>
                                                 <td>{this.getPurchase(item.company_buyer_entity_id)} </td>
                                                 <td>{item.intake_level}</td>
-                                                <td>{parseInt(item.contracted_capacity)}</td>
+                                                <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "-"}</td>
                                                 <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
                                                 <td>
                                                     <span className="textBold">Total Monthly:<div>{item.totals}</div>kWh/month,Peak:<div>{item.peak_pct}</div></span>,Off-Peak:<span className="textNormal"><div>{100 - item.peak_pct}</div></span>(auto calculate).<span className="textBold">Upload bill(s) compulsory for Category 3(new Accounts)</span>.
@@ -471,7 +464,7 @@ export class FillConsumption extends Component {
                     </div>
                     <Modal text={this.state.text} acceptFunction={this.doAccept.bind(this)} ref="Modal" />
                 </form>
-                <Modal acceptFunction={this.doAddAccountAction.bind(this)} contract_capacity_disabled={this.state.contract_capacity_disabled} contract_expiry_disabled={this.state.contract_expiry_disabled} siteList={this.state.site_list} consumption_account_item={this.state.account_detail} listdetailtype='consumption_detail' ref="consumption" />
+                <Modal formSize="big" acceptFunction={this.doAddAccountAction.bind(this)} contract_capacity_disabled={this.state.contract_capacity_disabled} contract_expiry_disabled={this.state.contract_expiry_disabled} siteList={this.state.site_list} consumption_account_item={this.state.account_detail} listdetailtype='consumption_detail' ref="consumption" />
             </div>
         )
     }
