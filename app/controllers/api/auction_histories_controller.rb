@@ -58,6 +58,14 @@ class Api::AuctionHistoriesController < Api::BaseController
       histories = AuctionHistory.find_by_sql ['select auction_histories.* ,users.company_name from auction_histories LEFT OUTER JOIN users ON users.id = auction_histories.user_id where flag = (select flag from auction_histories where auction_id = ? and is_bidder = true and contract_duration = ? order by bid_time desc LIMIT 1) order by ranking asc , actual_bid_time asc', auction.id, duration]
       result = auction.auction_result.blank? ? nil : auction.auction_result.auction_result_contracts.where('contract_duration = ?' , contract.contract_duration).take
       auction.contract_period_end_date = contract.contract_period_end_date
+      auction.total_lt_peak = contract.total_lt_peak
+      auction.total_lt_off_peak = contract.total_lt_off_peak
+      auction.total_hts_peak = contract.total_hts_peak
+      auction.total_hts_off_peak = contract.total_hts_off_peak
+      auction.total_htl_peak = contract.total_htl_peak
+      auction.total_htl_off_peak = contract.total_htl_off_peak
+      auction.total_eht_peak = contract.total_eht_peak
+      auction.total_eht_off_peak = contract.total_eht_off_peak
       auction.total_volume = contract.total_volume
       render json: { auction: auction, histories: histories, result: result }, status: 200
     else
