@@ -17,7 +17,7 @@ class Api::RegistrationsController < Api::BaseController
   # get buyer registration information
   def get_buyer_by_id(user)
     # get the last uploaded business file
-    user_attachment = UserAttachment.find_last_by_user(user.id)
+    user_attachment = UserAttachment.find_by_type_user(UserAttachment::FileType_Buyer_Doc, user.id)
     # get buyer entities
     buyer_entities = user.company_buyer_entities.order(updated_at: :asc)
     # get seller-buyer-t&c document
