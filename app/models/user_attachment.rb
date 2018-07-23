@@ -6,6 +6,7 @@ class UserAttachment < ApplicationRecord
   FileType_Buyer_REVV_TC = 'BUYER_REVV_TC'.freeze
   FileType_Retailer_Doc = 'RETAILER_DOCUMENTS'.freeze
   FileType_Buyer_Doc = 'BUYER_DOCUMENTS'.freeze
+  FileType_Consumption_Detail_Doc = 'CONSUMPTION_DOCUMENTS'.freeze
   FileType_Letter_Authorisation = 'LETTER_OF_AUTHORISATION'.freeze
 
   # Extends
