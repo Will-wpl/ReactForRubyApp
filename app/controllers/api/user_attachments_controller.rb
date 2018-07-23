@@ -18,7 +18,7 @@ class Api::UserAttachmentsController < Api::BaseController
     attachment.file_path = uploader.url
     attachment.user_id = current_user.id unless current_user&.has_role?(:admin)
 
-    attachment.save
+    attachment.save!
 
     render json: attachment, status: 200
   end
