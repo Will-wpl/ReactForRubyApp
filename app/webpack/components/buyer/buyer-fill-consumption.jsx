@@ -99,6 +99,13 @@ export class FillConsumption extends Component {
     }
 
     add_site() {
+        $('.validate_message').find('div').each(function () {
+            let className = $(this).attr('class');
+            if (className === 'errormessage') {
+                let divid = $(this).attr("id");
+                $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
+            }
+        })
         if (this.props.onAddClick) {
             this.props.onAddClick();
         }
