@@ -54,7 +54,7 @@ export class UploadFile extends React.Component {
                                                 : item.files.map((it, i) => {
                                                     let length = item.files.length;
                                                     if (i == (length - 1)) {
-                                                        return <li key={i}><a target="_blank" download={it.file_name} href={it.file_path}>{it.file_name}</a></li>
+                                                        return <li key={i}><a target="_blank" id="uploadAttachment" download={it.file_name} href={it.file_path}>{it.file_name}</a></li>
                                                     }
                                                 })
                                         }
@@ -63,7 +63,7 @@ export class UploadFile extends React.Component {
                                 }
                             </div>
                         </div>
-                        <div className="col-sm-12 col-md-2 u-cell">
+                        <div id="btnUpload" className="col-sm-12 col-md-2 u-cell">
                             {
                                 this.props.propsdisabled ? <button className="lm--button lm--button--primary" disabled>Upload</button> : (this.state.disabled ? <button className="lm--button lm--button--primary" disabled>Upload</button>
                                     : (window.location.href.indexOf("past") > 0 ? <button className="lm--button lm--button--primary" disabled>Upload</button> : <a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>))
@@ -143,7 +143,6 @@ export class UploadFile extends React.Component {
                 })
                 this.setState({
                     fileData: fileObj
-
                 })
                 $('#showMessage').removeClass('errormessage').addClass('isPassValidate')
                 //console.log(res);

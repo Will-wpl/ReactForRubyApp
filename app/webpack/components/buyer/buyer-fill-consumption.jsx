@@ -46,6 +46,9 @@ export class FillConsumption extends Component {
             peak_pct: '',
             peak: '',
             off_peak: '',
+            file_path: "",
+            file_name: "",
+            attachId: "",
             id: 0,
             cid: Math.floor((Math.random() * 10000) + 1),
             option: 'insert'
@@ -62,6 +65,7 @@ export class FillConsumption extends Component {
         getBuyerParticipate('/api/buyer/consumption_details?consumption_id=' + this.consumptions_id).then((res) => {
 
             this.site_list = res.consumption_details;
+            console.log(this.site_list);
             this.status = res.consumption.participation_status === '1' ? "Confirmed" :
                 (res.consumption.participation_status === '2' ? "Pending" : "Rejected")
             this.setState({
@@ -89,7 +93,7 @@ export class FillConsumption extends Component {
             }
         }, (error) => {
             this.refs.Modal.showModal();
-            this.setState({ text: "Interface failed4" });
+            this.setState({ text: "Interface failed" });
         })
     }
     changeSiteList(val, index) {
@@ -124,14 +128,20 @@ export class FillConsumption extends Component {
         this.accountItem.postal_code = "";
         this.accountItem.totals = "";
         this.accountItem.peak_pct = "";
+        this.accountItem.attachmentUrl = "";
+        this.accountItem.attachId = "";
+        this.accountItem.file_path = "";
+        this.accountItem.file_name = "";
         this.setState({
             account_detail: this.accountItem,
             text: ""
         })
         this.refs.consumption.showModal('custom', {}, '', '-1')
     }
+
     // edit an account information
     edit_site(item, index) {
+        this.accountItem.id = item.id;
         this.accountItem.account_number = item.account_number;
         this.accountItem.existing_plan = ['SPS tariff', 'SPS wholesale', 'Retailer plan'];
         this.accountItem.existing_plan_selected = item.existing_plan;
@@ -148,13 +158,40 @@ export class FillConsumption extends Component {
         this.accountItem.totals = item.totals;
         this.accountItem.peak_pct = item.peak_pct;
         this.accountItem.peak = 10;
+        this.accountItem.attachId = item.user_attachment.id;
+        this.accountItem.file_path = item.user_attachment.file_path;
+        this.accountItem.file_name = item.user_attachment.file_name;
         this.accountItem.option = 'update';
-
         this.setState({
             account_detail: this.accountItem,
             text: ""
         })
         this.refs.consumption.showModal('custom', {}, '', index)
+    }
+    //when user finished adding a new account, list page will add/update the new account information.
+    doAddAccountAction(siteInfo) {
+        let item = {
+            account_number: siteInfo.account_number,
+            existing_plan: siteInfo.existing_plan_selected,
+            contract_expiry: siteInfo.contract_expiry ? moment(siteInfo.contract_expiry) : "",
+            company_buyer_entity_id: siteInfo.purchasing_entity_selectd,
+            intake_level: siteInfo.intake_level_selected,
+            contracted_capacity: siteInfo.contracted_capacity,
+            blk_or_unit: siteInfo.blk_or_unit,
+            street: siteInfo.street,
+            unit_number: siteInfo.unit_number,
+            postal_code: siteInfo.postal_code,
+            totals: siteInfo.totals,
+            peak_pct: siteInfo.peak_pct,
+            user_attachment_id: siteInfo.user_attachment_id,
+            user_attachment: { id: siteInfo.user_attachment_id, file_name: siteInfo.file_name, file_path: siteInfo.file_path }
+        };
+        let entity = this.state.site_list;
+        if (siteInfo.index >= 0) { entity[siteInfo.index] = item; }
+        else { entity.push(item) }
+        this.setState({
+            site_list: entity
+        })
     }
 
     remove_site(index) {
@@ -179,14 +216,15 @@ export class FillConsumption extends Component {
         let count = 0;
         let startDate = moment(this.state.time).format('YYYY-MM-DD HH:mm:ss');
         for (let i in arr) {
-            let contract_expiry_date = moment(arr[i].contract_expiry).format('YYYY-MM-DD HH:mm:ss');
-            if (contract_expiry_date >= startDate) {
-                count++;
+            if (arr[i].contract_expiry) {
+                let contract_expiry_date = moment(arr[i].contract_expiry).format('YYYY-MM-DD HH:mm:ss');
+                if (contract_expiry_date >= startDate) {
+                    count++;
+                }
             }
         }
         return count;
     }
-
 
     doSave(type) {
         let makeData = {},
@@ -207,11 +245,11 @@ export class FillConsumption extends Component {
                 unit_number: item.unit_number,
                 postal_code: item.postal_code,
                 totals: item.totals,
-                peak_pct: item.peak_pct
+                peak_pct: item.peak_pct,
+                user_attachment_id: item.user_attachment_id
             }
             buyerlist.push(siteItem);
         })
-
         makeData = {
             consumption_id: this.consumptions_id,
             details: JSON.stringify(buyerlist),
@@ -248,12 +286,12 @@ export class FillConsumption extends Component {
                     }, 3000)
                 }, (error) => {
                     this.refs.Modal.showModal();
-                    this.setState({ text: "Interface failed1" });
+                    this.setState({ text: "Interface failed" });
                 })
             }
         }, (error) => {
             this.refs.Modal.showModal();
-            this.setState({ text: "Interface failed2" });
+            this.setState({ text: "Interface failed" });
         })
     }
 
@@ -267,7 +305,7 @@ export class FillConsumption extends Component {
                 }, 3000)
             }, (error) => {
                 this.refs.Modal.showModal();
-                this.setState({ text: "Interface failed3" });
+                this.setState({ text: "Interface failed" });
             })
         } else if (this.state.submit_type === "Participate") { //do Participate
             this.doSave('participate');
@@ -292,29 +330,7 @@ export class FillConsumption extends Component {
         }
     }
 
-    //when user finished adding a new account, list page will add/update the new account information.
-    doAddAccountAction(siteInfo) {
-        let item = {
-            account_number: siteInfo.account_number,
-            existing_plan: siteInfo.existing_plan_selected,
-            contract_expiry: siteInfo.contract_expiry ? moment(siteInfo.contract_expiry) : "",
-            company_buyer_entity_id: siteInfo.purchasing_entity_selectd,
-            intake_level: siteInfo.intake_level_selected,
-            contracted_capacity: siteInfo.contracted_capacity,
-            blk_or_unit: siteInfo.blk_or_unit,
-            street: siteInfo.street,
-            unit_number: siteInfo.unit_number,
-            postal_code: siteInfo.postal_code,
-            totals: siteInfo.totals,
-            peak_pct: siteInfo.peak_pct
-        };
-        let entity = this.state.site_list;
-        if (siteInfo.index >= 0) { entity[siteInfo.index] = item; }
-        else { entity.push(item) }
-        this.setState({
-            site_list: entity
-        })
-    }
+
     // validate the page required field and  contact expiry date.
     checkSuccess(event) {
         event.preventDefault();
@@ -432,8 +448,10 @@ export class FillConsumption extends Component {
                                                 <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "-"}</td>
                                                 <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
                                                 <td>
-                                                    <span className="textBold">Total Monthly:<div>{item.totals}</div>kWh/month,Peak:<div>{item.peak_pct}</div></span>,Off-Peak:<span className="textNormal"><div>{100 - item.peak_pct}</div></span>(auto calculate).<span className="textBold">Upload bill(s) compulsory for Category 3(new Accounts)</span>.
-                                                    <div title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">?</div>
+                                                    <div><span>Total Monthly:</span><span>{item.totals}kWh/month</span></div>
+                                                    <div><span>Peak:</span><span>{item.peak_pct}</span><span title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">&nbsp;&nbsp;?</span></div>
+                                                    <div><span>Off-Peak:</span><span>{100 - item.peak_pct}(auto calculate)</span></div>
+                                                    <div><span>Upload bill(s):</span><span><a href={item.user_attachment.file_path} target="_blank">{item.user_attachment.file_name}</a></span></div>
                                                 </td>
                                                 <td>
                                                     {this.state.checked ? '' : <div className="editSite"><a onClick={this.edit_site.bind(this, item, index)}>Edit </a></div>}
