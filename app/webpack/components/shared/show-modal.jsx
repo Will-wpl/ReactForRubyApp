@@ -5,7 +5,6 @@ import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 import { removeNanNum } from '../../javascripts/componentService/util';
 import { validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
-
 //共通弹出框组件
 import { UploadFile } from '../shared/upload';
 
@@ -25,6 +24,7 @@ export class Modal extends React.Component {
             contracted_capacity_disabled: true,
             contract_expiry_disabled: true,
             disabled: false,
+            id: "",
             account_number: '',
             existing_plan: [],
             existing_plan_selected: '',
@@ -57,7 +57,9 @@ export class Modal extends React.Component {
         let fileObj;
         fileObj = this.state.fileData;
         if (next.consumption_account_item) {
+            console.log(next.consumption_account_item)
             this.setState({
+                id: next.consumption_account_item.id,
                 account_number: next.consumption_account_item.account_number,
                 existing_plan: next.consumption_account_item.existing_plan,
                 existing_plan_selected: next.consumption_account_item.existing_plan_selected,
@@ -74,15 +76,15 @@ export class Modal extends React.Component {
                 street: next.consumption_account_item.street,
                 unit_number: next.consumption_account_item.unit_number,
                 postal_code: next.consumption_account_item.postal_code,
-                totals: next.consumption_account_item.totals,
+                totals: next.consumption_account_item.totals ? parseInt(next.consumption_account_item.totals) : "",
                 peak_pct: next.consumption_account_item.peak_pct,
                 peak: next.consumption_account_item.peak_pct ? (100 - parseFloat(next.consumption_account_item.peak_pct)) : "",
                 option: next.consumption_account_item.option
             });
 
-
-            if (next.consumption_account_item.user_attachment_id) {
+            if (next.consumption_account_item.file_name) {
                 let obj = {
+                    id: next.consumption_account_item.id,
                     file_name: next.consumption_account_item.file_name,
                     file_path: next.consumption_account_item.file_path
                 }
@@ -122,8 +124,8 @@ export class Modal extends React.Component {
         if (next.siteList) {
             this.setState({ consumptionItem: next.siteList });
         }
-        // $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
-        // $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
+        $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
+        $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
     }
 
     showModal(type, data, str, index) {
@@ -193,7 +195,7 @@ export class Modal extends React.Component {
         let flag = true, hasDoc = true;
         let validateItem = {
             peak_pct: { cate: 'decimal' },
-            totals: { cate: 'num4' },
+            totals: { cate: 'num10' },
             postal_code: { cate: 'required' },
             unit_number: { cate: 'required' },
             street: { cate: 'required' },
@@ -210,6 +212,7 @@ export class Modal extends React.Component {
         }
 
         let validateResult = validator_Object(this.state, validateItem);
+        console.log(validateResult);
         if (this.state.fileData['DOCUMENTS'][0].files.length > 0) {
             hasDoc = true;
             this.setState({
@@ -223,22 +226,18 @@ export class Modal extends React.Component {
             })
         }
         flag = validateResult.length > 0 ? false : true;
-
         if (flag && hasDoc) {
             let status = this.account_address_repeat();
             switch (status) {
                 case 'false|true':
                     $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
-                    // return false;
                     break;
                 case 'true|false':
                     $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
-                    // return false;
                     break;
                 case 'true|true':
                     $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
-                    // $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
-                    return false;
+                    $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
                     break;
                 default:
                     this.addToMainForm();
@@ -274,29 +273,29 @@ export class Modal extends React.Component {
         let address = false, account = false;
         let address_count = 0, account_count = 0;
         this.state.consumptionItem.map((item, index) => {
-            if ((this.state.street == item.street) && this.state.postal_code == item.postal_code) {
-                address_count++;
+            if (this.state.option === 'update') {
+                if ((this.state.street == item.street) && (this.state.postal_code == item.postal_code) && (this.state.id !== item.id)) {
+                    address_count++;
+                }
+                if (this.state.account_number == item.account_number && (this.state.id !== item.id)) {
+                    account_count++;
+                }
             }
-            if (this.state.account_number == item.account_number) {
-                account_count++;
+            else {
+                if ((this.state.street == item.street) && (this.state.postal_code == item.postal_code)) {
+                    address_count++;
+                }
+                if (this.state.account_number == item.account_number) {
+                    account_count++;
+                }
             }
         })
 
-        if (this.state.option === 'update') {
-            if (address_count > 1) {
-                address = true;
-            }
-            if (account_count > 1) {
-                account = true;
-            }
+        if (address_count > 0) {
+            address = true;
         }
-        else {
-            if (address_count > 0) {
-                address = true;
-            }
-            if (account_count > 0) {
-                account = true;
-            }
+        if (account_count > 0) {
+            account = true;
         }
         return account + "|" + address;
     }
@@ -320,7 +319,9 @@ export class Modal extends React.Component {
             totals: this.state.totals,
             peak_pct: this.state.peak_pct,
             index: this.state.itemIndex,
-            attachmentUrl: $("#uploadAttachment").attr("href")
+            user_attachment_id: this.state.fileData["DOCUMENTS"][0].files[0].id,
+            file_name: this.state.fileData["DOCUMENTS"][0].files[0].file_name,
+            file_path: this.state.fileData["DOCUMENTS"][0].files[0].file_path
         }
         if (this.props.acceptFunction) {
             this.props.acceptFunction(siteItem);
@@ -743,7 +744,7 @@ export class Modal extends React.Component {
                                     <td>
                                         <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} id="peak_pct" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" maxLength="5" placeholder="0-100" /> <div>%</div>
                                         <div id="peak_pct_message" className="isPassValidate">This filed is required!</div>
-                                        <div id="peak_pct__format" className="isPassValidate">format!</div>
+                                        <div id="peak_pct_format" className="isPassValidate">format!</div>
                                     </td>
 
                                 </tr>

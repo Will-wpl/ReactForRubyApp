@@ -92,18 +92,29 @@ export const validateNum = (value) => {
     if (!num.test(value)) {
         return false;
     }
+
     return true;
 }
 export const validateNum4 = (value) => {
-    let num =  /^(0|[1-9][0-9]*)$/;
-    if (!num.test(value)) {
-        return false;
+    let num = /^(0|[1-9][0-9]*)$/;
+    if (value > 0) {
+        if (!num.test(value)) {
+            return false;
+        }
+        else {
+            return false;
+        }
+        return true;
     }
-    return true;
 }
 export const validateNum10 = (value) => {
-    let num = /^([0-9]{1,})$/;
-    if (!num.test(value)) {
+    let num = /^\+?[1-9]\d*$/;
+    if (value > 0) {
+        if (!num.test(value)) {
+            return false;
+        }
+    }
+    else {
         return false;
     }
     return true;
@@ -117,8 +128,14 @@ export const validateEmail = (value) => {
     return true;
 }
 export const validateDecimal = (value) => {
+
     let num = /^100$|^(\d|[1-9]\d)(\.\d+)*$/;
-    if (!num.test(value)) {
+    if (value > 0) {
+        if (!num.test(value)) {
+            return false;
+        }
+    }
+    else {
         return false;
     }
     return true;
@@ -156,6 +173,7 @@ export const validator_Object = (param, paramType) => {
                 errArr.push({ column: key, cate: 1 });
             }
             else {
+
                 if (!validateNum4(value)) {
                     errArr.push({ column: key, cate: 2 })
                 }
@@ -206,7 +224,7 @@ export const validator_Array = (param, paramType) => {
                 else {
                     if (!validateEmail(value)) {
                         entityArr.push({ column: key, cate: 2, ind: i })
-                    }10
+                    }
                 }
             }
             else if (type.cate === 'num') {
@@ -239,7 +257,6 @@ export const setValidationFaild = (item, type) => {
         $('#' + item + "_format").removeClass('errormessage').addClass('isPassValidate');
         $("input[name='" + item + "']").focus();
         $("input[name='" + item.split('user_')[1] + "']").focus();
-
     }
     else {
         $('#' + item + "_message").removeClass('errormessage').addClass('isPassValidate');
