@@ -11,7 +11,6 @@ class Api::AuctionHistoriesController < Api::BaseController
       auction.auction_contracts.each do |contract|
         if has_live_contract(contract)
           duration = contract.contract_duration
-          @histories.where(contract_duration: duration).order(bid_time: :asc)
           hash.merge!({ "duration_#{duration}": @histories.where(contract_duration: duration).order(bid_time: :asc)})
         end
       end

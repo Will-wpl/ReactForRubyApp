@@ -12,7 +12,39 @@ class Api::ConsumptionDetailsController < Api::BaseController
       else
         tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
       end
-      render json: { consumption_details: consumption_details, consumption: consumption,
+      consumption_details_all = []
+      consumption_details.each do |consumption_detail|
+        if consumption_detail.user_attachment_id.blank?
+          user_attachment = nil
+        else
+          user_attachment = UserAttachment.find_by_id(consumption_detail.user_attachment_id)
+        end
+        final_detail = {
+            "id" => consumption_detail.id,
+            "account_number" => consumption_detail.account_number,
+            "intake_level" => consumption_detail.intake_level,
+            "peak" => consumption_detail.peak,
+            "off_peak" => consumption_detail.off_peak,
+            "consumption_id" => consumption_detail.consumption_id,
+            "created_at" => consumption_detail.created_at,
+            "updated_at" => consumption_detail.updated_at,
+            "premise_address" => consumption_detail.premise_address,
+            "contracted_capacity" => consumption_detail.contracted_capacity,
+            "existing_plan" => consumption_detail.existing_plan,
+            "contract_expiry" => consumption_detail.contract_expiry,
+            "blk_or_unit" => consumption_detail.blk_or_unit,
+            "street" => consumption_detail.street,
+            "unit_number" => consumption_detail.unit_number,
+            "postal_code" => consumption_detail.postal_code,
+            "totals" => consumption_detail.totals,
+            "peak_pct" => consumption_detail.peak_pct,
+            "company_buyer_entity_id" => consumption_detail.company_buyer_entity_id,
+            "user_attachment_id" => consumption_detail.user_attachment_id,
+            "user_attachment" =>user_attachment
+        }
+        consumption_details_all.push(final_detail)
+      end
+      render json: { consumption_details: consumption_details_all, consumption: consumption,
                      auction: { id: auction.id, name: auction.name, actual_begin_time: auction.actual_begin_time, publish_status: auction.publish_status },
                      buyer_entities: buyer_entities,
                      tc_attachment: tc_attachment, contract_duration: contract_duration }, status: 200
@@ -60,6 +92,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
         consumption_detail.unit_number = detail['unit_number']
         consumption_detail.postal_code = detail['postal_code']
         consumption_detail.company_buyer_entity_id = detail['company_buyer_entity_id']
+        consumption_detail.user_attachment_id = detail['user_attachment_id']
         #Update -new fields (20180709) - End
         consumption_detail.consumption_id = params[:consumption_id]
         saved_details.push(consumption_detail) if consumption_detail.save!

@@ -188,7 +188,7 @@ class AuctionHistory < ApplicationRecord
   def self.save_update_sort_init_auction_histories_logic(calculate_dto)
     days = Auction.get_days(calculate_dto.begin_time, calculate_dto.end_time)
     @histories = AuctionHistory.where('auction_id = ? and user_id = ?', calculate_dto.auction_id, calculate_dto.user_id)
-    @histories.where(contract_duration: calculate_dto.contract_duration) unless calculate_dto.contract_duration.blank?
+    @histories = @histories.where(contract_duration: calculate_dto.contract_duration) unless calculate_dto.contract_duration.blank?
     total_volume = Auction.set_total_volume(
         calculate_dto.total_lt_peak, calculate_dto.total_lt_off_peak,
         calculate_dto.total_hts_peak, calculate_dto.total_hts_off_peak,
