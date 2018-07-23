@@ -54,6 +54,8 @@ export class Modal extends React.Component {
     }
 
     componentWillReceiveProps(next) {
+        let fileObj;
+        fileObj = this.state.fileData;
         if (next.consumption_account_item) {
             this.setState({
                 account_number: next.consumption_account_item.account_number,
@@ -62,7 +64,6 @@ export class Modal extends React.Component {
                 contract_expiry: next.consumption_account_item.contract_expiry === "" ? "" : moment(next.consumption_account_item.contract_expiry),
                 purchasing_entity: next.consumption_account_item.purchasing_entity,
                 purchasing_entity_selectd: next.
-
                     consumption_account_item.purchasing_entity_selectd ? next.consumption_account_item.purchasing_entity_selectd :
                     next.consumption_account_item.purchasing_entity.length > 0 ? next.consumption_account_item.purchasing_entity[0].id : "",
                 premise_address: next.consumption_account_item.premise_address,
@@ -79,6 +80,23 @@ export class Modal extends React.Component {
                 option: next.consumption_account_item.option
             });
 
+
+            if (next.consumption_account_item.user_attachment_id) {
+                let obj = {
+                    file_name: next.consumption_account_item.file_name,
+                    file_path: next.consumption_account_item.file_path
+                }
+                fileObj["DOCUMENTS"][0].files.push(obj);
+                this.setState({
+                    fileData: fileObj
+                })
+            }
+            else {
+                fileObj["DOCUMENTS"][0].files = [];
+                this.setState({
+                    fileData: fileObj
+                })
+            }
 
             if (next.consumption_account_item.existing_plan_selected === "Retailer plan") {
                 this.setState({
@@ -104,8 +122,8 @@ export class Modal extends React.Component {
         if (next.siteList) {
             this.setState({ consumptionItem: next.siteList });
         }
-        $("#permise_address_taken_message").removeClass("isPassValidate").addClass('isPassValidate');
-        $("#account_number_taken_message").removeClass("isPassValidate").addClass('isPassValidate');
+        // $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
+        // $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
     }
 
     showModal(type, data, str, index) {
@@ -172,6 +190,7 @@ export class Modal extends React.Component {
     }
 
     checkModelSuccess() {
+        let flag = true, hasDoc = true;
         let validateItem = {
             peak_pct: { cate: 'decimal' },
             totals: { cate: 'num4' },
@@ -191,20 +210,34 @@ export class Modal extends React.Component {
         }
 
         let validateResult = validator_Object(this.state, validateItem);
-        if (validateResult.length === 0) {
+        if (this.state.fileData['DOCUMENTS'][0].files.length > 0) {
+            hasDoc = true;
+            this.setState({
+                validate: true
+            })
+        }
+        else {
+            hasDoc = false;
+            this.setState({
+                validate: false
+            })
+        }
+        flag = validateResult.length > 0 ? false : true;
+
+        if (flag && hasDoc) {
             let status = this.account_address_repeat();
             switch (status) {
                 case 'false|true':
-                    $("#permise_address_taken_message").removeClass("isPassValidate").addClass('isPassValidate');
-                    return false;
+                    $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                    // return false;
                     break;
                 case 'true|false':
-                    $("#account_number_taken_message").removeClass("isPassValidate").addClass('isPassValidate');
-                    return false;
+                    $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                    // return false;
                     break;
                 case 'true|true':
-                    $("#permise_address_taken_message").removeClass("isPassValidate").addClass('isPassValidate');
-                    $("#account_number_taken_message").removeClass("isPassValidate").addClass('isPassValidate');
+                    $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                    // $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
                     return false;
                     break;
                 default:
@@ -213,7 +246,6 @@ export class Modal extends React.Component {
             }
         }
         else {
-            let flag = true, hasDoc = true;
             $('.validate_message').find('div').each(function () {
                 let className = $(this).attr('class');
                 if (className === 'errormessage') {
@@ -221,7 +253,6 @@ export class Modal extends React.Component {
                     $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
                 }
             })
-
             validateResult.map((item, index) => {
                 let column = item.column;
                 let cate = item.cate;
@@ -267,7 +298,7 @@ export class Modal extends React.Component {
                 account = true;
             }
         }
-        return address + "|" + account;
+        return account + "|" + address;
     }
 
     Add() {
@@ -288,7 +319,8 @@ export class Modal extends React.Component {
             postal_code: this.state.postal_code,
             totals: this.state.totals,
             peak_pct: this.state.peak_pct,
-            index: this.state.itemIndex
+            index: this.state.itemIndex,
+            attachmentUrl: $("#uploadAttachment").attr("href")
         }
         if (this.props.acceptFunction) {
             this.props.acceptFunction(siteItem);
@@ -427,7 +459,9 @@ export class Modal extends React.Component {
         })
     }
 
-    componentDidMount() { }
+    componentDidMount() {
+        $("#btnUpload").removeClass("col-md-2 u-cell").addClass("col-md-3");
+    }
 
     dateChange(data) {
         this.setState({
@@ -720,19 +754,16 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr> Upload bill(s)</td>
                                     <td>
-                                        <div className=" lm--formItem-control u-grid mg0">
-                                          
-                                                <UploadFile type="CONSUMPTION_DOCUMENTS" required="required" showlist={false} validate={this.state.validate} showList="1" col_width="10" showWay="2" fileData={this.state.fileData.DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
-                                              
+                                        <div className="upload">
+                                            <UploadFile type="CONSUMPTION_DOCUMENTS" required="required" showlist={false} validate={this.state.validate} showList="1" col_width="9" showWay="2" fileData={this.state.fileData.DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
                                         </div>
                                     </td>
                                 </tr>
-
                             </tbody>
                         </table>
-                        <div className="modal_btn">
-                            <div id="account_number_taken_message" className="isPassValidate">There is already an existing contract for this Account Number.</div>
-                            <div id="permise_address_taken_message" className="isPassValidate">There is already an existing contract for this premise address.</div>
+                        <div>
+                            <div id="account_number_taken_message" className="errormessage">There is already an existing contract for this Account Number.</div>
+                            <div id="permise_address_taken_message" className="errormessage">There is already an existing contract for this premise address.</div>
                         </div>
                     </div>
                 }

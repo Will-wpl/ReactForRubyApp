@@ -46,6 +46,7 @@ export class FillConsumption extends Component {
             peak_pct: '',
             peak: '',
             off_peak: '',
+            attachmentUrl:"",
             id: 0,
             cid: Math.floor((Math.random() * 10000) + 1),
             option: 'insert'
@@ -60,7 +61,7 @@ export class FillConsumption extends Component {
 
     BuyerParticipateList() {
         getBuyerParticipate('/api/buyer/consumption_details?consumption_id=' + this.consumptions_id).then((res) => {
-
+            console.log(res);
             this.site_list = res.consumption_details;
             this.status = res.consumption.participation_status === '1' ? "Confirmed" :
                 (res.consumption.participation_status === '2' ? "Pending" : "Rejected")
@@ -124,6 +125,7 @@ export class FillConsumption extends Component {
         this.accountItem.postal_code = "";
         this.accountItem.totals = "";
         this.accountItem.peak_pct = "";
+        this.accountItem.attachmentUrl="";
         this.setState({
             account_detail: this.accountItem,
             text: ""

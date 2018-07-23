@@ -11,7 +11,7 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
     let!(:consumption_lt) { create(:consumption_detail, :for_lt, consumption_id: consumption.id) }
     let!(:consumption_hts) { create(:consumption_detail, :for_hts, consumption_id: consumption.id) }
     let!(:consumption_htl) { create(:consumption_detail, :for_htl, consumption_id: consumption.id) }
-    let!(:consumption_eht) { create(:consumption_detail, :for_eht, consumption_id: consumption.id) }
+    let!(:consumption_eht) { create(:consumption_detail, :for_eht, consumption_id: consumption.id ) }
 
     describe 'GET buyer consumption detail list' do
       before { sign_in company_buyer }
