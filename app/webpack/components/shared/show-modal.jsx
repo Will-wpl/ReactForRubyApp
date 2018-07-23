@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 import { removeNanNum } from '../../javascripts/componentService/util';
-import { validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
+import { validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
 
 //共通弹出框组件
 import { UploadFile } from '../shared/upload';
@@ -22,7 +22,7 @@ export class Modal extends React.Component {
             email_subject: '',
             email_body: '',
             consumptionItem: [],
-            contract_capacity_disabled: true,
+            contracted_capacity_disabled: true,
             contract_expiry_disabled: true,
             disabled: false,
             account_number: '',
@@ -52,6 +52,7 @@ export class Modal extends React.Component {
             },
         }
     }
+
     componentWillReceiveProps(next) {
         if (next.consumption_account_item) {
             this.setState({
@@ -91,12 +92,12 @@ export class Modal extends React.Component {
             }
             if (next.consumption_account_item.intake_level_selected === "LT") {
                 this.setState({
-                    contract_capacity_disabled: true
+                    contracted_capacity_disabled: true
                 })
             }
             else {
                 this.setState({
-                    contract_capacity_disabled: false
+                    contracted_capacity_disabled: false
                 })
             }
         }
@@ -173,7 +174,7 @@ export class Modal extends React.Component {
     checkModelSuccess() {
         let validateItem = {
             peak_pct: { cate: 'decimal' },
-            totals: { cate: 'num10' },
+            totals: { cate: 'num4' },
             postal_code: { cate: 'required' },
             unit_number: { cate: 'required' },
             street: { cate: 'required' },
@@ -182,7 +183,7 @@ export class Modal extends React.Component {
             contract_expiry: { cate: 'required' },
             account_number: { cate: 'required' }
         }
-        if (this.state.existing_plan_selected === "Retailer plan") {
+        if (this.state.existing_plan_selected !== "Retailer plan") {
             delete validateItem.contract_expiry;
         }
         if (this.state.intake_level_selected === "LT") {
@@ -190,9 +191,7 @@ export class Modal extends React.Component {
         }
 
         let validateResult = validator_Object(this.state, validateItem);
-        console.log(validateResult)
-        if (validateResult.length===0) {
-            console.log(2)
+        if (validateResult.length === 0) {
             let status = this.account_address_repeat();
             switch (status) {
                 case 'false|true':
@@ -214,7 +213,6 @@ export class Modal extends React.Component {
             }
         }
         else {
-            console.log(1)
             let flag = true, hasDoc = true;
             $('.validate_message').find('div').each(function () {
                 let className = $(this).attr('class');
@@ -230,8 +228,6 @@ export class Modal extends React.Component {
                 setValidationFaild(column, cate)
             })
         }
-
-
     }
 
     removeNanNum(value) {
@@ -309,6 +305,7 @@ export class Modal extends React.Component {
                 this.setState({
                     account_number: value
                 })
+                changeValidate('account_number', value);
                 break;
             case "existing_plan":
                 let existing_plan_dis = true;
@@ -327,6 +324,7 @@ export class Modal extends React.Component {
                 this.setState({
                     contract_expiry: value
                 })
+                changeValidate('contract_expiry', value);
                 break;
             case "purchasing_entity":
                 this.setState({
@@ -334,52 +332,71 @@ export class Modal extends React.Component {
                 })
                 break;
             case "intake_level":
-                let contract_capacity_dis = true;
+                let contracted_capacity_dis = true;
                 if (value === 'LT') {
-                    contract_capacity_dis = true;
+                    contracted_capacity_dis = true;
                 }
                 else {
-                    contract_capacity_dis = false;
+                    contracted_capacity_dis = false;
                 }
                 this.setState({
-                    contract_capacity_disabled: contract_capacity_dis,
+                    contracted_capacity_disabled: contracted_capacity_dis,
                     intake_level_selected: value
                 })
                 break;
-            case "contract_capacity":
+            case "contracted_capacity":
                 this.setState({
                     contracted_capacity: value
                 })
+                if (!validateNum4(value)) {
+                    setValidationFaild('contracted_capacity', 2)
+                } else {
+                    setValidationPass('contracted_capacity', 2)
+                }
                 break;
             case "blk_or_unit":
                 this.setState({
                     blk_or_unit: value
                 })
+                changeValidate('blk_or_unit', value);
                 break;
             case "street":
                 this.setState({
                     street: value
                 })
+                changeValidate('street', value);
                 break;
             case "unit_number":
                 this.setState({
                     unit_number: value
                 })
+                changeValidate('unit_number', value);
                 break;
             case "postal_code":
                 this.setState({
                     postal_code: value
                 })
+                changeValidate('postal_code', value);
                 break;
             case "totals":
                 this.setState({
                     totals: value
                 })
+                if (!validateNum4(value)) {
+                    setValidationFaild('totals', 2)
+                } else {
+                    setValidationPass('totals', 2)
+                }
                 break;
             case "peak_pct":
                 this.setState({
                     peak_pct: value
                 })
+                if (!validateDecimal(value)) {
+                    setValidationFaild('peak_pct', 2)
+                } else {
+                    setValidationPass('peak_pct', 2)
+                }
                 if (Number(value)) {
                     this.setState({
                         peak: (100 - parseFloat(value))
@@ -580,7 +597,7 @@ export class Modal extends React.Component {
             }
             if (this.props.listdetailtype === 'consumption_detail') {
                 if (this.props.consumption_account_item !== null) {
-                    showDetail = <div className="validate_message">
+                    showDetail = <div className=" admin_invitation validate_message">
                         <h3 className="text_padding_left">My Account Information</h3>
                         <table className="consumption_table  u-mb3" cellPadding="0" cellSpacing="0" style={{ marginTop: "15px" }}>
                             <tbody>
@@ -637,9 +654,9 @@ export class Modal extends React.Component {
                                         <span className={this.state.intake_level_selected === "LT" ? "isHide" : "isDisplay"}>*</span>
                                     </abbr>Contract Capacity</td>
                                     <td>
-                                        <input type="text" disabled={this.state.contract_capacity_disabled} value={this.state.contracted_capacity} onChange={this.changeConsumption.bind(this, "contract_capacity")} id="contract_capacity" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" pattern="^(0|[1-9][0-9]*)$" maxLength="4" />
-                                        <div id="contract_capacity_message" className="isPassValidate">This filed is required!</div>
-                                        <div id="contract_capacity_format" className="isPassValidate">format!</div>
+                                        <input type="text" disabled={this.state.contracted_capacity_disabled} value={this.state.contracted_capacity} onChange={this.changeConsumption.bind(this, "contracted_capacity")} id="contracted_capacity" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" maxLength="4" />
+                                        <div id="contracted_capacity_message" className="isPassValidate">This filed is required!</div>
+                                        <div id="contracted_capacity_format" className="isPassValidate">format!</div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -671,7 +688,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Postal Code:</td>
                                     <td> <input type="text" value={this.state.postal_code} id="postal_code" onChange={this.changeConsumption.bind(this, "postal_code")} placeholder="" required aria-required="true" />
-                                        <div id="postal_code" className="isPassValidate">This filed is required!</div>
+                                        <div id="postal_code_message" className="isPassValidate">This filed is required!</div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -682,16 +699,15 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Total Monthly:</td>
                                     <td>
-                                        <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" onKeyUp={this.removeNanNum.bind(this)} pattern="^\d+(\.\d+)?$" required aria-required="true" maxLength="10" placeholder="Number should contain 10 integers." /><div>kWh/month</div>
+                                        <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" maxLength="10" /><div>kWh/month</div>
                                         <div id="totals_message" className="isPassValidate">This filed is required!</div>
                                         <div id="totals_format" className="isPassValidate">format!</div>
                                     </td>
-
                                 </tr>
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Peak:</td>
                                     <td>
-                                        <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} id="peak_pct" onKeyUp={this.removeNanNum.bind(this)} pattern="^100$|^(\d|[1-9]\d)(\.\d+)*$" required aria-required="true" maxLength="5" placeholder="0-100" /> <div>%</div>
+                                        <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} id="peak_pct" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" maxLength="5" placeholder="0-100" /> <div>%</div>
                                         <div id="peak_pct_message" className="isPassValidate">This filed is required!</div>
                                         <div id="peak_pct__format" className="isPassValidate">format!</div>
                                     </td>
@@ -701,14 +717,19 @@ export class Modal extends React.Component {
                                     <td>&nbsp;&nbsp;&nbsp;Off-Peak:</td>
                                     <td><input type="text" value={this.state.peak} disabled="true" onChange={this.changeConsumption.bind(this, "pack")} id="pack" required aria-required="true" /><div>%(auot calculate)</div></td>
                                 </tr>
-                                {/* <tr>
-                                    <td> Upload bill(s)</td>
+                                <tr>
+                                    <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr> Upload bill(s)</td>
                                     <td>
-                                        <UploadFile type="CONSUMPTION_DOCUMENTS" required="required" showlist={false} validate={this.state.validate} showList="1" col_width="10" showWay="2" fileData={this.state.fileData.DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
+                                        <div className=" lm--formItem-control u-grid mg0">
+                                          
+                                                <UploadFile type="CONSUMPTION_DOCUMENTS" required="required" showlist={false} validate={this.state.validate} showList="1" col_width="10" showWay="2" fileData={this.state.fileData.DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
+                                              
+                                        </div>
                                     </td>
-                                </tr> */}
+                                </tr>
+
                             </tbody>
-                        </table >
+                        </table>
                         <div className="modal_btn">
                             <div id="account_number_taken_message" className="isPassValidate">There is already an existing contract for this Account Number.</div>
                             <div id="permise_address_taken_message" className="isPassValidate">There is already an existing contract for this premise address.</div>

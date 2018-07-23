@@ -42,6 +42,7 @@ exclude_patterns:
 - "log/"
 - "jest/"
 - "features/"
+- "app/webpack/components"
 - "**/node_modules/"
 - "script/"
 - "**/spec/"
