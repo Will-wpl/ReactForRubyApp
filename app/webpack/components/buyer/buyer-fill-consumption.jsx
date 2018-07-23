@@ -451,7 +451,7 @@ export class FillConsumption extends Component {
                                                     <div><span>Total Monthly:</span><span className="textDecoration" >{item.totals}</span><span>kWh/month</span></div>
                                                     <div><span>Peak:</span><span className="textDecoration">{item.peak_pct}</span><span>%</span><span title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">&nbsp;&nbsp;?</span></div>
                                                     <div><span>Off-Peak:</span><span className="textDecoration">{100 - item.peak_pct}</span><span>%(auto calculate)</span></div>
-                                                    <div><span>Upload bill(s):</span><span><a href={item.user_attachment.file_path} target="_blank">{item.user_attachment.file_name}</a></span></div>
+                                                    <div><span>Upload bill(s):</span><span><a href={item.user_attachment?item.user_attachment.file_path:"#"} target="_blank">{item.user_attachment?item.user_attachment.file_name:""}</a></span></div>
                                                 </td>
                                                 <td>
                                                     {this.state.checked ? '' : <div className="editSite"><a onClick={this.edit_site.bind(this, item, index)}>Edit </a></div>}
