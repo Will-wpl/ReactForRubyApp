@@ -17,7 +17,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
         if consumption_detail.user_attachment_id.blank?
           user_attachment = nil
         else
-          user_attachment = UserAttachment.find_by_type_user(UserAttachment::FileType_Consumption_Detail_Doc, consumption_detail.user_attachment_id)
+          user_attachment = UserAttachment.find_by_id(consumption_detail.user_attachment_id)
         end
         final_detail = {
             "id" => consumption_detail.id,
