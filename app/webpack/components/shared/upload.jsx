@@ -143,7 +143,6 @@ export class UploadFile extends React.Component {
                 })
                 this.setState({
                     fileData: fileObj
-
                 })
                 $('#showMessage').removeClass('errormessage').addClass('isPassValidate')
                 //console.log(res);
