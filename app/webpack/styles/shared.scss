@@ -815,13 +815,14 @@ ul.history_files{
 .isDisplay{
   display: block;
 }
-
- .consumption_model
+.consumption_model
  {
    width:500px;
    height: 400px;
  }
-
+.left{
+  text-align: left;
+}
 
  .consumption_table{
   width: 100%; font-size: 12px; table-layout: fixed; border-top:1px solid #314657; border-left:1px solid #314657;
@@ -915,10 +916,8 @@ ul.history_files{
   color:yellow;
 }
 .custombtn{
- 
     background-color: #00d900;
 }
-
 .addEntity{ width: 100%; margin: 10px auto;
   a{color:#00888a; cursor: pointer; background: url("../images/add.png") no-repeat left; padding-left:18px;}
 }  

@@ -446,11 +446,11 @@ export class FillConsumption extends Component {
                                                 <td>{this.getPurchase(item.company_buyer_entity_id)} </td>
                                                 <td>{item.intake_level}</td>
                                                 <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "-"}</td>
-                                                <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
-                                                <td>
-                                                    <div><span>Total Monthly:</span><span>{item.totals}kWh/month</span></div>
-                                                    <div><span>Peak:</span><span>{item.peak_pct}</span><span title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">&nbsp;&nbsp;?</span></div>
-                                                    <div><span>Off-Peak:</span><span>{100 - item.peak_pct}(auto calculate)</span></div>
+                                                <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_csode} </td>
+                                                <td className="left">
+                                                    <div><span>Total Monthly:</span><span className="textDecoration" >{item.totals}</span><span>kWh/month</span></div>
+                                                    <div><span>Peak:</span><span className="textDecoration">{item.peak_pct}</span><span>%</span><span title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">&nbsp;&nbsp;?</span></div>
+                                                    <div><span>Off-Peak:</span><span className="textDecoration">{100 - item.peak_pct}</span><span>%(auto calculate)</span></div>
                                                     <div><span>Upload bill(s):</span><span><a href={item.user_attachment.file_path} target="_blank">{item.user_attachment.file_name}</a></span></div>
                                                 </td>
                                                 <td>

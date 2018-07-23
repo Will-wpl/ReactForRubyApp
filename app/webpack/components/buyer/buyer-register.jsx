@@ -140,7 +140,7 @@ export class BuyerRegister extends Component {
                 $('#chkRevv').attr("checked", false);
             }
         }
-
+        // console.log(param)
         if (param.self_attachment) {
             let attachment = param.self_attachment
             let obj = {
