@@ -127,6 +127,17 @@ export class Modal extends React.Component {
         $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
     }
 
+    componentDidMount() {
+
+        if (this.props.formSize === "big") {
+            $("#btnUpload").removeClass("col-md-2 u-cell").addClass("col-md-3");
+        }
+        else
+        {
+            $("#btnUpload").removeClass("col-md-3").addClass("col-md-2 u-cell");
+        }
+    }
+
     showModal(type, data, str, index) {
         if (str) {
             this.setState({ strtype: str });
@@ -457,17 +468,7 @@ export class Modal extends React.Component {
         })
     }
 
-    componentDidMount() {
-
-        if (this.props.formSize === "big") {
-            $("#btnUpload").removeClass("col-md-2 u-cell").addClass("col-md-3");
-        }
-        else
-        {
-            $("#btnUpload").removeClass("col-md-3").addClass("col-md-2 u-cell");
-        }
-    }
-
+   
     dateChange(data) {
         this.setState({
             contract_expiry: data
@@ -792,7 +793,7 @@ export class Modal extends React.Component {
         }
         return (
             this.props.formSize === "big" ?
-                <div id="modal_main" className={this.state.modalshowhide} style={{ width: "800px", top: "20%", left: "40%" }} >
+                <div id="modal_main" className={this.state.modalshowhide} style={{ width: "700px", top: "20%", left: "40%" }} >
                     <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
                     <div className="modal_detail model_detail_formHeight">
                         <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
