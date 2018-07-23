@@ -446,7 +446,7 @@ export class FillConsumption extends Component {
                                                 <td>{this.getPurchase(item.company_buyer_entity_id)} </td>
                                                 <td>{item.intake_level}</td>
                                                 <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "-"}</td>
-                                                <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_csode} </td>
+                                                <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
                                                 <td className="left">
                                                     <div><span>Total Monthly:</span><span className="textDecoration" >{item.totals}</span><span>kWh/month</span></div>
                                                     <div><span>Peak:</span><span className="textDecoration">{item.peak_pct}</span><span>%</span><span title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">&nbsp;&nbsp;?</span></div>
