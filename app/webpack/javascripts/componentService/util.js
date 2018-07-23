@@ -102,7 +102,7 @@ export const validateNum4 = (value) => {
     return true;
 }
 export const validateNum10 = (value) => {
-    let num = /^\d+(\.\d+)?$/;
+    let num = /^([0-9]{1,})$/;
     if (!num.test(value)) {
         return false;
     }
@@ -254,8 +254,8 @@ export const setValidationPass = (item, type) => {
 
     }
     else {
+        $('#' + item + "_message").removeClass('errormessage').addClass('isPassValidate');
         $('#' + item + "_format").removeClass('errormessage').addClass('isPassValidate');
-
     }
 }
 
