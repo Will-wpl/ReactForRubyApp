@@ -311,7 +311,7 @@ export class BuyerRegister extends Component {
     setParams() {
         let entity = [
             {
-
+                user_entity_id:this.state.user_entity_id,
                 company_name: this.state.company_name,
                 company_uen: this.state.unique_entity_number,
                 company_address: this.state.company_address,
@@ -329,6 +329,7 @@ export class BuyerRegister extends Component {
             let list = this.state.user_entity_data['ENTITY_LIST'][0].entities;
             list.map((item, index) => {
                 let paramObj = {
+                    user_entity_id: entity.id,
                     company_name: item.company_name,
                     company_uen: item.company_uen,
                     company_address: item.company_address,
