@@ -865,6 +865,14 @@ ul.history_files{
       span{
         font-weight: bold;
       }
+      .upload {
+        a{
+          display: block; width: 100%; height: auto; cursor: pointer;text-align:center;
+             &.report{background: url("../images/Reverse_Auction_Report.png") no-repeat center; background-size:19px;}
+             &.edit{background: url("../images/edit.png") no-repeat left; background-size:10px;  width:50px; margin:0 auto; line-height:35px;}
+             &.log,&.award{background: url("../images/Activity_Log.png") no-repeat center; background-size:19px;}
+        }
+      }
      }  
      .left_td{
      // width: 150px;
@@ -873,9 +881,10 @@ ul.history_files{
      // width: 350px;
     } 
     }
-   
   }
+ 
 }
+
 .offpeak{
   text-decoration :underline;
   width: 30px;
