@@ -646,6 +646,7 @@ export class Modal extends React.Component {
                                     <td style={{ width: "70%" }}>
                                         <input type="text" value={this.state.account_number} onChange={this.changeConsumption.bind(this, "account_number")} id="account_number" required aria-required="true" />
                                         <div id="account_number_message" className="isPassValidate">This filed is required!</div>
+                                        <div id="account_number_taken_message" className="errormessage">There is already an existing contract for this Account Number.</div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -701,7 +702,7 @@ export class Modal extends React.Component {
                                 </tr>
                                 <tr>
                                     <td colSpan="2">
-                                        Premise Address
+                                        Premise Address                             <div id="permise_address_taken_message" className="errormessage">There is already an existing contract for this premise address.</div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -767,10 +768,6 @@ export class Modal extends React.Component {
                                 </tr>
                             </tbody>
                         </table>
-                        <div>
-                            <div id="account_number_taken_message" className="errormessage">There is already an existing contract for this Account Number.</div>
-                            <div id="permise_address_taken_message" className="errormessage">There is already an existing contract for this premise address.</div>
-                        </div>
                     </div>
                 }
                 else {
