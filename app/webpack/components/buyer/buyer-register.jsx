@@ -861,7 +861,7 @@ export class BuyerRegister extends Component {
                                 <UserEntity disabled={this.state.disabled} entityList={this.state.user_entity_data} ref="userEntity" className={this.state.disabled === 'admin_approve' ? '' : ''} />
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr> Tenent Management Service Required:
+                                        <abbr title="required">*</abbr> Tenant Management Service Required:
                                </label>
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <select name="buyer_management" id="buyer_management" onChange={this.Change.bind(this, 'buyer_management')} defaultValue={this.state.buyer_management} disabled={this.state.disabled} ref="buyer_management" aria-required="true">
