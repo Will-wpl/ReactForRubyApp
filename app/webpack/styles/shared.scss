@@ -835,9 +835,11 @@ ul.history_files{
    }
   }
   tbody{
+    .react-datepicker__input-container,.react-datepicker-wrapper{width:100%;}
     overflow:auto; height: 30px;
     tr{ &.isbidder{background:green; transition: 0.5s all;}
-      td{border:1px solid #314657; text-align: left; height: 40px; padding:5px; word-break: break-all;
+      td{
+        border:1px solid #314657; text-align: left; height: 40px; padding:5px; word-break: break-all;
         line-height: 25px;
         abbr{
           display: inline-block; line-height: 40px; font-style: normal; transition: 0.5s all;
@@ -853,6 +855,9 @@ ul.history_files{
        }
        input{
          width: 95%; display: inline-block; padding:2px; border:1px solid #fff; margin-left: 5px; background: none;
+         &.date_ico{background:url("../images/date.png") no-repeat right;}
+         &.time_ico{background:url("../images/time.png") no-repeat right;}
+         &.checkbox{ display: inline-block; width: auto;}
        }
        select
        {
@@ -873,6 +878,9 @@ ul.history_files{
              &.edit{background: url("../images/edit.png") no-repeat left; background-size:10px;  width:50px; margin:0 auto; line-height:35px;}
              &.log,&.award{background: url("../images/Activity_Log.png") no-repeat center; background-size:19px;}
         }
+      }
+      .noneleftBorder{
+        border-left:thick double #ff0000;
       }
      }  
      .left_td{
@@ -930,4 +938,13 @@ ul.history_files{
 
 .innerTable{
   border: 0px !important;
+}
+.address{
+  width:"100%";float:"left";
+}
+.addressLeft{
+  width: "30%"; float: "left";
+};
+.addressRight{
+width: "70%"; float: "left";padding:5px;
 }

@@ -16,7 +16,6 @@ export default class AdminComsumptionList extends Component {
 
     componentWillReceiveProps(next) {
         if (next.comsumption_list) {
-            console.log(next.comsumption_list)
             this.setState({
                 purchaseEntity: next.comsumption_list
             })
@@ -74,17 +73,17 @@ export default class AdminComsumptionList extends Component {
                                             {item.details.map((it, i) => {
                                                 return <tr key={i}>
                                                     <td>{it.account_number}</td>
-                                                    <td>{item.existing_plan}</td>
-                                                    <td>{item.contract_expiry !== "" ? moment(item.contract_expiry).format('YYYY-MM-DD HH:mm') : ""}</td>
-                                                    <td>{item.company_buyer_entity_id ? this.getPurchase(item.company_buyer_entity_id, i) : ""}</td>
-                                                    <td>{item.intake_level}</td>
-                                                    <td>{item.contracted_capacity}</td>
-                                                    <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
+                                                    <td>{it.existing_plan}</td>
+                                                    <td>{it.contract_expiry !== "" ? moment(it.contract_expiry).format('YYYY-MM-DD HH:mm') : ""}</td>
+                                                    <td>{it.company_buyer_entity_id ? this.getPurchase(it.company_buyer_entity_id, i) : ""}</td>
+                                                    <td>{it.intake_level}</td>
+                                                    <td>{it.contracted_capacity?it.contracted_capacity:'—'}</td>
+                                                    <td>{it.blk_or_unit} {it.street} {it.unit_number} {it.postal_code} </td>
                                                     <td>
-                                                        <div><span>Total Monthly:</span><span className="textDecoration" >{item.totals}</span><span>kWh/month</span></div>
-                                                        <div><span>Peak:</span><span className="textDecoration">{item.peak_pct}</span><span>%</span><span  title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">&nbsp;&nbsp;?</span></div>
-                                                        <div><span>Off-Peak:</span><span className="textDecoration">{100 - item.peak_pct}</span><span>%(auto calculate)</span></div>
-                                                        <div><span>Upload bill(s):</span><span><a href={item.user_attachment?item.user_attachment.file_path:"#"} target="_blank">{item.user_attachment?item.user_attachment.file_name:""}</a></span></div>
+                                                        <div><span>Total Monthly:</span><span className="textDecoration" >{it.totals}</span><span>kWh/month</span></div>
+                                                        <div><span>Peak:</span><span className="textDecoration">{it.peak_pct}</span><span>%</span><span  title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">&nbsp;&nbsp;?</span></div>
+                                                        <div><span>Off-Peak:</span><span className="textDecoration">{100 - it.peak_pct}</span><span>%(auto calculate)</span></div>
+                                                        <div><span>Upload bill(s):</span><span><a href={it.user_attachment?it.user_attachment.file_path:"#"} target="_blank">{it.user_attachment?it.user_attachment.file_name:""}</a></span></div>
                                                     </td>
                                                 </tr>
                                             })}

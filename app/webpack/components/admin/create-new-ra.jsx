@@ -563,7 +563,7 @@ export class CreateNewRA extends Component {
                         </label>
                     </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
-                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Reverse Auction Contract Period :</span>
+                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Contact Start Date :</span>
                         <label className="col">
                             {
                                 this.state.start_datetime === '' ? <DatePicker disabled={this.state.disabled} minDate={moment()} shouldCloseOnSelect={true} onKeyDown={this.noPermitInput.bind(this)} required aria-required="true" ref="contract_period_start_date" name="contract_period_start_date" className="date_ico" dateFormat="DD-MM-YYYY" selected={this.state.startDate} selectsStart startDate={this.state.startDate} endDate={this.state.endDate} onChange = {this.starttimeChange}/>
@@ -612,7 +612,7 @@ export class CreateNewRA extends Component {
                                 <span className="lm--formItem-left lm--formItem-label string optional">Contact End Date</span>
                                 <div className="lm--formItem-right lm--formItem-control">
                                     {this.state.contractArray.map((item,index)=>{
-                                        return <label className={'lm--formItem-label lm--formItem-control'}>Buyer on {item.contract_duration} mouths [{item.contract_period_end_date}]</label>
+                                        return <label key={index} className={'lm--formItem-label lm--formItem-control'}>Buyer on {item.contract_duration} months [{item.contract_period_end_date}]</label>
                                     })}
                                 </div>
                             </dd>

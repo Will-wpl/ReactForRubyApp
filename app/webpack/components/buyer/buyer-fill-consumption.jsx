@@ -65,7 +65,6 @@ export class FillConsumption extends Component {
         getBuyerParticipate('/api/buyer/consumption_details?consumption_id=' + this.consumptions_id).then((res) => {
 
             this.site_list = res.consumption_details;
-            console.log(this.site_list);
             this.status = res.consumption.participation_status === '1' ? "Confirmed" :
                 (res.consumption.participation_status === '2' ? "Pending" : "Rejected")
             this.setState({
@@ -103,6 +102,9 @@ export class FillConsumption extends Component {
     }
 
     add_site() {
+        if (this.props.onAddClick) {
+            this.props.onAddClick();
+        }
         $('.validate_message').find('div').each(function () {
             let className = $(this).attr('class');
             if (className === 'errormessage') {
@@ -110,9 +112,6 @@ export class FillConsumption extends Component {
                 $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
             }
         })
-        if (this.props.onAddClick) {
-            this.props.onAddClick();
-        }
         this.accountItem.account_number = "";
         this.accountItem.existing_plan = ['SPS tariff', 'SPS wholesale', 'Retailer plan'];
         this.accountItem.existing_plan_selected = "SPS tariff";
@@ -202,15 +201,15 @@ export class FillConsumption extends Component {
         this.refs.Modal.showModal("comfirm");
         this.setState({ text: "Are you sure you want to delete ?", submit_type: "delete" });
     }
-    nameRepeat(arr) {
-        let hash = {};
-        for (let i in arr) {
-            if (hash[arr[i].account_number])
-                return true;
-            hash[arr[i].account_number] = true;
-        }
-        return false;
-    }
+    // nameRepeat(arr) {
+    //     let hash = {};
+    //     for (let i in arr) {
+    //         if (hash[arr[i].account_number])
+    //             return true;
+    //         hash[arr[i].account_number] = true;
+    //     }
+    //     return false;
+    // }
 
     dateCompare(arr) {
         let count = 0;

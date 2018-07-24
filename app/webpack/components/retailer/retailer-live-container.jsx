@@ -56,7 +56,7 @@ export class RetailerLiveContainer extends Component {
                     <div>
                         <DuringCountDown auction={this.props.auction} countDownOver={this.goToFinish.bind(this)}>
                             <div id="retailer_hold" className={this.state.extendVisible ? '' : 'live_hide'}>
-                                <b>Admin has extended auction duration by {this.state.extendVisible} min.</b>
+                                <b>Admin has extended auction duration by {this.state.extendVisible} mins.</b>
                             </div>
                         </DuringCountDown>
                         {this.props.auction.live_auction_contracts?

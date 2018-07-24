@@ -295,8 +295,8 @@ export class AdminDashboard extends Component {
                     </div>
                     <div className="col-sm-12 col-md-5">
                         <ReservePrice auction={this.auction} price={this.startPrice} realtimePrice={this.state.currentPrice}/>
-                        <RetailerRanking ranking={this.state.realtimeRanking}/>
                         {this.state.live_auction_contracts.length>0?<ReservePriceCompare livetype={this.state.livetype} contracts={this.state.contracts} compare={this.state.compare} />:''}
+                        <RetailerRanking ranking={this.state.realtimeRanking}/>
                     </div>
                 </div>
                 <Modal text="Please confirm your time extension." acceptFunction={this.extendTime.bind(this)} ref="Modal" />

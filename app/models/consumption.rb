@@ -99,6 +99,10 @@ class Consumption < ApplicationRecord
     intake_values
   end
 
+  def self.change_nil_value(value)
+    value.nil? ? 0: value
+  end
+
   def self.get_lt_peak(lt_peak)
     lt_peak.nil? ? 0 : lt_peak
   end

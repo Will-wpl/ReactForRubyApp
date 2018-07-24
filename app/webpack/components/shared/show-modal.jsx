@@ -132,8 +132,7 @@ export class Modal extends React.Component {
         if (this.props.formSize === "big") {
             $("#btnUpload").removeClass("col-md-2 u-cell").addClass("col-md-3");
         }
-        else
-        {
+        else {
             $("#btnUpload").removeClass("col-md-3").addClass("col-md-2 u-cell");
         }
     }
@@ -240,8 +239,10 @@ export class Modal extends React.Component {
             switch (status) {
                 case 'false|true':
                     $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                    $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
                     break;
                 case 'true|false':
+                    $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
                     $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
                     break;
                 case 'true|true':
@@ -283,15 +284,15 @@ export class Modal extends React.Component {
         let address_count = 0, account_count = 0;
         this.state.consumptionItem.map((item, index) => {
             if (this.state.option === 'update') {
-                if ((this.state.street == item.street) && (this.state.postal_code == item.postal_code) && (this.state.id !== item.id)) {
+                if ((this.state.unit_number == item.unit_number) && (this.state.postal_code == item.postal_code) && (this.state.id !== item.id)) {
                     address_count++;
                 }
-                if (this.state.account_number == item.account_number && (this.state.id !== item.id)) {
+                if (this.state.account_number === item.account_number && (this.state.id !== item.id)) {
                     account_count++;
                 }
             }
             else {
-                if ((this.state.street == item.street) && (this.state.postal_code == item.postal_code)) {
+                if ((this.state.unit_number === item.unit_number) && (this.state.postal_code === item.postal_code)) {
                     address_count++;
                 }
                 if (this.state.account_number == item.account_number) {
@@ -306,6 +307,7 @@ export class Modal extends React.Component {
         if (account_count > 0) {
             account = true;
         }
+        console.log(account + "|" + address)
         return account + "|" + address;
     }
 
@@ -468,7 +470,7 @@ export class Modal extends React.Component {
         })
     }
 
-   
+
     dateChange(data) {
         this.setState({
             contract_expiry: data
@@ -664,7 +666,7 @@ export class Modal extends React.Component {
                                         <span className={this.state.existing_plan_selected === "Retailer plan" ? "isDisplay" : "isHide"}>*</span>
                                     </abbr>Contract Expiry</td>
                                     <td>
-                                        <DatePicker selected={this.state.contract_expiry} disabled={this.state.contract_expiry_disabled} onKeyDown={this.noPermitInput.bind(this)} ref="contract_expiry_date" shouldCloseOnSelect={true} name="contract_expiry_date" minDate={moment()} showTimeSelect required aria-required="true" className="date_ico" dateFormat="DD-MM-YYYY HH:mm" selectsStart onChange={this.dateChange.bind(this)} title="Time must not be in the past." />
+                                        <DatePicker selected={this.state.contract_expiry} className="date_ico" disabled={this.state.contract_expiry_disabled} onKeyDown={this.noPermitInput.bind(this)} ref="contract_expiry_date" shouldCloseOnSelect={true} name="contract_expiry_date" minDate={moment()} showTimeSelect required aria-required="true" dateFormat="DD-MM-YYYY HH:mm" selectsStart onChange={this.dateChange.bind(this)} title="Time must not be in the past." />
                                         <div id="contract_expiry_message" className="isPassValidate">This filed is required!</div>
                                     </td>
                                 </tr>
@@ -702,8 +704,17 @@ export class Modal extends React.Component {
                                 </tr>
                                 <tr>
                                     <td colSpan="2">
-                                        Premise Address                             <div id="permise_address_taken_message" className="errormessage">There is already an existing contract for this premise address.</div>
+
+                                        <div style={{ width: "100%", float: "left" }}>
+                                            <div style={{ width: "30%", float: "left" }}>
+                                                Premise Address
+                                            </div>
+                                            <div style={{ width: "70%", float: "left",padding:"5px" }}>
+                                                <div id="permise_address_taken_message" className="errormessage">There is already an existing contract for this Premise Address.</div>
+                                            </div>
+                                        </div>
                                     </td>
+
                                 </tr>
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Blk or Unit:</td>
@@ -734,7 +745,7 @@ export class Modal extends React.Component {
                                 </tr>
                                 <tr>
                                     <td colSpan="2">
-                                        Consumption Address
+                                        Consumption Details
                                     </td>
                                 </tr>
                                 <tr>
