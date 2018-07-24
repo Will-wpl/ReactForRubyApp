@@ -5,7 +5,8 @@ class Pdf
     (zone * 60 * 60)
   end
 
-  def get_price_table_data(auction, auction_result, visibility = false, price_data = false)
+  def get_price_table_data(param, visibility = false, price_data = false)
+    auction, auction_result = param[:auction], param[:auction_result]
     table_head, table_row0, table_row1, price_row0, price_row1= [''], ['Peak<br/>(7am-7pm)'], ['Off-Peak<br/>(7pm-7am)'], [], []
     if auction.nil? || auction_result.nil?
       return [table_head, table_row0, table_row1], {visibility_lt: false, visibility_hts: false,

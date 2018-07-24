@@ -7,6 +7,10 @@ class PdfUtils
     ActiveSupport::NumberHelper
   end
 
+  def self.number_format(number, precision = 0, unit = '')
+    PdfUtils.number_helper.number_to_currency(number, precision: precision, unit: unit)
+  end
+
 
   def self.to_array(str)
     str.to_s.split(',').map! {|item| item = item.to_i} unless str.nil?
