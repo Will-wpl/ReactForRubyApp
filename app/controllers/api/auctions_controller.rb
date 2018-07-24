@@ -687,9 +687,22 @@ class Api::AuctionsController < Api::BaseController
   end
 
   def get_auction_details(auction)
+    live_auction_contracts = get_lived_auction_contracts(auction, true)
+    live_auction_contracts.each do |contract|
+      auction.total_lt_peak += Consumption.change_nil_value(contract['total_lt_peak'])
+      auction.total_lt_off_peak += Consumption.change_nil_value(contract['total_lt_off_peak'])
+      auction.total_hts_peak += Consumption.change_nil_value(contract['total_hts_peak'])
+      auction.total_hts_off_peak += Consumption.change_nil_value(contract['total_hts_off_peak'])
+      auction.total_htl_peak += Consumption.change_nil_value(contract['total_htl_peak'])
+      auction.total_htl_off_peak += Consumption.change_nil_value(contract['total_htl_off_peak'])
+      auction.total_eht_peak += Consumption.change_nil_value(contract['total_eht_peak'])
+      auction.total_eht_off_peak += Consumption.change_nil_value(contract['total_eht_off_peak'])
+    end
     auction_json = auction.attributes.dup
     auction_json[:auction_contracts] = Auction.find(auction.id).auction_contracts.sort_by {|contract| contract.contract_duration.to_i}
-    auction_json[:live_auction_contracts] = get_lived_auction_contracts(auction, true)
+
+    auction_json[:live_auction_contracts] = live_auction_contracts
+
     auction_json
   end
 
