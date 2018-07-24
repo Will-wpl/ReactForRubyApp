@@ -49,8 +49,10 @@ class Api::RegistrationsController < Api::BaseController
     # get letter-of-authorisation document
     letter_of_authorisation_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Letter_Authorisation)
 
+    # get user info
+    user = User.find(user_id)
     # return json
-    user_json = { user_base_info: current_user,
+    user_json = { user_base_info: user,
                   self_attachment: user_attachment,
                   seller_buyer_tc_attachment: seller_buyer_tc_attachment,
                   seller_revv_tc_attachment: seller_revv_tc_attachment,
