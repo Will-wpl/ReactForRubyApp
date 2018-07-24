@@ -654,7 +654,7 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
           it 'Success' do
             hash_body = JSON.parse(response.body)
             expect(response).to have_http_status(:ok)
-            expect(hash_body['attachments_count']).to eq(5)
+            expect(hash_body['attachments_count']).to eq(1)
             expect(hash_body['chats'].size).to eq(0)
           end
         end
@@ -671,7 +671,7 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
           it 'Success' do
             hash_body = JSON.parse(response.body)
             expect(response).to have_http_status(:ok)
-            expect(hash_body['attachments_count']).to eq(5)
+            expect(hash_body['attachments_count']).to eq(1)
             expect(hash_body['chats'].size).to eq(2)
           end
         end
