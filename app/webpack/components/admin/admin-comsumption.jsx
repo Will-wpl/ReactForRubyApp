@@ -48,7 +48,7 @@ render() {
     return (
         <div className="u-grid mg0">
             <div className="col-sm-12 u-mb3">
-                <AdminComsumptionList table={this.state.detail} detail_index={this.state.detail_index} type={this.pageType} comsumption_list={this.state.comsumption_list} detail={this.show_detail.bind(this)} />
+                <AdminComsumptionList visible={true} table={this.state.detail} detail_index={this.state.detail_index} type={this.pageType} comsumption_list={this.state.comsumption_list} detail={this.show_detail.bind(this)} />
             </div>
             <div className="col-sm-5">
                 <AdminComsumptionPrice type={this.pageType} price={this.state.price}  />
