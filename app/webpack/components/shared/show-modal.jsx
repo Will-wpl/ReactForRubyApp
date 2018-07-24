@@ -46,7 +46,7 @@ export class Modal extends React.Component {
             uploadUrl: "/api/buyer/user_attachments?file_type=",
             validate: true,
             fileData: {
-                "DOCUMENTS": [
+                "CONSUMPTION_DOCUMENTS": [
                     { buttonName: "none", files: [] }
                 ]
             },
@@ -57,7 +57,6 @@ export class Modal extends React.Component {
         let fileObj;
         fileObj = this.state.fileData;
         if (next.consumption_account_item) {
-            console.log(next.consumption_account_item)
             this.setState({
                 id: next.consumption_account_item.id,
                 account_number: next.consumption_account_item.account_number,
@@ -81,20 +80,20 @@ export class Modal extends React.Component {
                 peak: next.consumption_account_item.peak_pct ? (100 - parseFloat(next.consumption_account_item.peak_pct)) : "",
                 option: next.consumption_account_item.option
             });
-
+           
             if (next.consumption_account_item.file_name) {
                 let obj = {
                     id: next.consumption_account_item.id,
                     file_name: next.consumption_account_item.file_name,
                     file_path: next.consumption_account_item.file_path
                 }
-                fileObj["DOCUMENTS"][0].files.push(obj);
+                fileObj["CONSUMPTION_DOCUMENTS"][0].files.push(obj);
                 this.setState({
                     fileData: fileObj
                 })
             }
             else {
-                fileObj["DOCUMENTS"][0].files = [];
+                fileObj["CONSUMPTION_DOCUMENTS"][0].files = [];
                 this.setState({
                     fileData: fileObj
                 })
@@ -126,6 +125,16 @@ export class Modal extends React.Component {
         }
         $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
         $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
+    }
+
+    componentDidMount() {
+
+        if (this.props.formSize === "big") {
+            $("#btnUpload").removeClass("col-md-2 u-cell").addClass("col-md-3");
+        }
+        else {
+            $("#btnUpload").removeClass("col-md-3").addClass("col-md-2 u-cell");
+        }
     }
 
     showModal(type, data, str, index) {
@@ -212,8 +221,7 @@ export class Modal extends React.Component {
         }
 
         let validateResult = validator_Object(this.state, validateItem);
-        console.log(validateResult);
-        if (this.state.fileData['DOCUMENTS'][0].files.length > 0) {
+        if (this.state.fileData['CONSUMPTION_DOCUMENTS'][0].files.length > 0) {
             hasDoc = true;
             this.setState({
                 validate: true
@@ -281,7 +289,7 @@ export class Modal extends React.Component {
                     account_count++;
                 }
             }
-            else {
+            else {            
                 if ((this.state.street == item.street) && (this.state.postal_code == item.postal_code)) {
                     address_count++;
                 }
@@ -319,9 +327,9 @@ export class Modal extends React.Component {
             totals: this.state.totals,
             peak_pct: this.state.peak_pct,
             index: this.state.itemIndex,
-            user_attachment_id: this.state.fileData["DOCUMENTS"][0].files[0].id,
-            file_name: this.state.fileData["DOCUMENTS"][0].files[0].file_name,
-            file_path: this.state.fileData["DOCUMENTS"][0].files[0].file_path
+            user_attachment_id: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].id,
+            file_name: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_name,
+            file_path: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_path
         }
         if (this.props.acceptFunction) {
             this.props.acceptFunction(siteItem);
@@ -451,7 +459,6 @@ export class Modal extends React.Component {
             }
         }
     }
-
     Change(type, e) { }
 
     closeModal() {
@@ -460,9 +467,6 @@ export class Modal extends React.Component {
         })
     }
 
-    componentDidMount() {
-        $("#btnUpload").removeClass("col-md-2 u-cell").addClass("col-md-3");
-    }
 
     dateChange(data) {
         this.setState({
@@ -641,6 +645,7 @@ export class Modal extends React.Component {
                                     <td style={{ width: "70%" }}>
                                         <input type="text" value={this.state.account_number} onChange={this.changeConsumption.bind(this, "account_number")} id="account_number" required aria-required="true" />
                                         <div id="account_number_message" className="isPassValidate">This filed is required!</div>
+                                        <div id="account_number_taken_message" className="errormessage">There is already an existing contract for this Account Number.</div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -658,7 +663,12 @@ export class Modal extends React.Component {
                                         <span className={this.state.existing_plan_selected === "Retailer plan" ? "isDisplay" : "isHide"}>*</span>
                                     </abbr>Contract Expiry</td>
                                     <td>
-                                        <DatePicker selected={this.state.contract_expiry} disabled={this.state.contract_expiry_disabled} onKeyDown={this.noPermitInput.bind(this)} ref="contract_expiry_date" shouldCloseOnSelect={true} name="contract_expiry_date" minDate={moment()} showTimeSelect required aria-required="true" className="date_ico" dateFormat="DD-MM-YYYY HH:mm" selectsStart onChange={this.dateChange.bind(this)} title="Time must not be in the past." />
+                                        {/* <div className="react-datepicker-wrapper">
+                                            <div className="react-datepicker__input-container"> */}
+                                                <DatePicker selected={this.state.contract_expiry} disabled={this.state.contract_expiry_disabled} onKeyDown={this.noPermitInput.bind(this)} ref="contract_expiry_date" shouldCloseOnSelect={true} name="contract_expiry_date" minDate={moment()} showTimeSelect required aria-required="true" className="date_ico" dateFormat="DD-MM-YYYY HH:mm" selectsStart onChange={this.dateChange.bind(this)} title="Time must not be in the past." />
+                                            {/* </div>
+                                        </div> */}
+
                                         <div id="contract_expiry_message" className="isPassValidate">This filed is required!</div>
                                     </td>
                                 </tr>
@@ -689,14 +699,14 @@ export class Modal extends React.Component {
                                         <span className={this.state.intake_level_selected === "LT" ? "isHide" : "isDisplay"}>*</span>
                                     </abbr>Contract Capacity</td>
                                     <td>
-                                        <input type="text" disabled={this.state.contracted_capacity_disabled} value={this.state.contracted_capacity} onChange={this.changeConsumption.bind(this, "contracted_capacity")} id="contracted_capacity" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" maxLength="4" />
+                                        <input type="text" disabled={this.state.contracted_capacity_disabled} value={this.state.contracted_capacity} onChange={this.changeConsumption.bind(this, "contracted_capacity")} id="contracted_capacity" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" maxLength="10" />
                                         <div id="contracted_capacity_message" className="isPassValidate">This filed is required!</div>
                                         <div id="contracted_capacity_format" className="isPassValidate">format!</div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td colSpan="2">
-                                        Premise Address
+                                        Premise Address                             <div id="permise_address_taken_message" className="errormessage">There is already an existing contract for this premise address.</div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -736,7 +746,7 @@ export class Modal extends React.Component {
                                     <td>
                                         <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" maxLength="10" /><div>kWh/month</div>
                                         <div id="totals_message" className="isPassValidate">This filed is required!</div>
-                                        <div id="totals_format" className="isPassValidate">format!</div>
+                                        <div id="totals_format" className="isPassValidate">Must be positive integers,and first cannot be 0!</div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -744,7 +754,7 @@ export class Modal extends React.Component {
                                     <td>
                                         <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} id="peak_pct" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" maxLength="5" placeholder="0-100" /> <div>%</div>
                                         <div id="peak_pct_message" className="isPassValidate">This filed is required!</div>
-                                        <div id="peak_pct_format" className="isPassValidate">format!</div>
+                                        <div id="peak_pct_format" className="isPassValidate">Please input bigger than 0 and less than 100!</div>
                                     </td>
 
                                 </tr>
@@ -756,16 +766,12 @@ export class Modal extends React.Component {
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr> Upload bill(s)</td>
                                     <td>
                                         <div className="upload">
-                                            <UploadFile type="CONSUMPTION_DOCUMENTS" required="required" showlist={false} validate={this.state.validate} showList="1" col_width="9" showWay="2" fileData={this.state.fileData.DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
+                                            <UploadFile type="CONSUMPTION_DOCUMENTS" required="required" showlist={false} validate={this.state.validate} showList="1" col_width="9" showWay="2" fileData={this.state.fileData.CONSUMPTION_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
                                         </div>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <div>
-                            <div id="account_number_taken_message" className="errormessage">There is already an existing contract for this Account Number.</div>
-                            <div id="permise_address_taken_message" className="errormessage">There is already an existing contract for this premise address.</div>
-                        </div>
                     </div>
                 }
                 else {
@@ -788,7 +794,7 @@ export class Modal extends React.Component {
         }
         return (
             this.props.formSize === "big" ?
-                <div id="modal_main" className={this.state.modalshowhide} style={{ width: "800px", top: "20%", left: "40%" }} >
+                <div id="modal_main" className={this.state.modalshowhide} style={{ width: "700px", top: "20%", left: "40%" }} >
                     <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
                     <div className="modal_detail model_detail_formHeight">
                         <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}

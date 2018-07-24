@@ -65,7 +65,6 @@ export class FillConsumption extends Component {
         getBuyerParticipate('/api/buyer/consumption_details?consumption_id=' + this.consumptions_id).then((res) => {
 
             this.site_list = res.consumption_details;
-            console.log(this.site_list);
             this.status = res.consumption.participation_status === '1' ? "Confirmed" :
                 (res.consumption.participation_status === '2' ? "Pending" : "Rejected")
             this.setState({
@@ -103,6 +102,9 @@ export class FillConsumption extends Component {
     }
 
     add_site() {
+        if (this.props.onAddClick) {
+            this.props.onAddClick();
+        }
         $('.validate_message').find('div').each(function () {
             let className = $(this).attr('class');
             if (className === 'errormessage') {
@@ -110,9 +112,6 @@ export class FillConsumption extends Component {
                 $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
             }
         })
-        if (this.props.onAddClick) {
-            this.props.onAddClick();
-        }
         this.accountItem.account_number = "";
         this.accountItem.existing_plan = ['SPS tariff', 'SPS wholesale', 'Retailer plan'];
         this.accountItem.existing_plan_selected = "SPS tariff";
@@ -202,15 +201,15 @@ export class FillConsumption extends Component {
         this.refs.Modal.showModal("comfirm");
         this.setState({ text: "Are you sure you want to delete ?", submit_type: "delete" });
     }
-    nameRepeat(arr) {
-        let hash = {};
-        for (let i in arr) {
-            if (hash[arr[i].account_number])
-                return true;
-            hash[arr[i].account_number] = true;
-        }
-        return false;
-    }
+    // nameRepeat(arr) {
+    //     let hash = {};
+    //     for (let i in arr) {
+    //         if (hash[arr[i].account_number])
+    //             return true;
+    //         hash[arr[i].account_number] = true;
+    //     }
+    //     return false;
+    // }
 
     dateCompare(arr) {
         let count = 0;
@@ -447,11 +446,11 @@ export class FillConsumption extends Component {
                                                 <td>{item.intake_level}</td>
                                                 <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "-"}</td>
                                                 <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
-                                                <td>
-                                                    <div><span>Total Monthly:</span><span>{item.totals}kWh/month</span></div>
-                                                    <div><span>Peak:</span><span>{item.peak_pct}</span><span title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">&nbsp;&nbsp;?</span></div>
-                                                    <div><span>Off-Peak:</span><span>{100 - item.peak_pct}(auto calculate)</span></div>
-                                                    <div><span>Upload bill(s):</span><span><a href={item.user_attachment.file_path} target="_blank">{item.user_attachment.file_name}</a></span></div>
+                                                <td className="left">
+                                                    <div><span>Total Monthly:</span><span className="textDecoration" >{item.totals}</span><span>kWh/month</span></div>
+                                                    <div><span>Peak:</span><span className="textDecoration">{item.peak_pct}</span><span>%</span><span title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">&nbsp;&nbsp;?</span></div>
+                                                    <div><span>Off-Peak:</span><span className="textDecoration">{100 - item.peak_pct}</span><span>%(auto calculate)</span></div>
+                                                    <div><span>Upload bill(s):</span><span><a href={item.user_attachment?item.user_attachment.file_path:"#"} target="_blank">{item.user_attachment?item.user_attachment.file_name:""}</a></span></div>
                                                 </td>
                                                 <td>
                                                     {this.state.checked ? '' : <div className="editSite"><a onClick={this.edit_site.bind(this, item, index)}>Edit </a></div>}

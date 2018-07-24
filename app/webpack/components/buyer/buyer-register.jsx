@@ -140,7 +140,7 @@ export class BuyerRegister extends Component {
                 $('#chkRevv').attr("checked", false);
             }
         }
-
+        // console.log(param)
         if (param.self_attachment) {
             let attachment = param.self_attachment
             let obj = {
@@ -250,8 +250,6 @@ export class BuyerRegister extends Component {
                 $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
             }
         })
-
-
         let flag = true, hasDoc = true, checkSelect = true;
         let arr = validator_Object(this.state, this.validatorItem);
         if (arr) {
@@ -311,7 +309,7 @@ export class BuyerRegister extends Component {
     setParams() {
         let entity = [
             {
-
+                user_entity_id:this.state.user_entity_id,
                 company_name: this.state.company_name,
                 company_uen: this.state.unique_entity_number,
                 company_address: this.state.company_address,
@@ -329,6 +327,7 @@ export class BuyerRegister extends Component {
             let list = this.state.user_entity_data['ENTITY_LIST'][0].entities;
             list.map((item, index) => {
                 let paramObj = {
+                    user_entity_id: entity.id,
                     company_name: item.company_name,
                     company_uen: item.company_uen,
                     company_address: item.company_address,
@@ -379,13 +378,10 @@ export class BuyerRegister extends Component {
             contact_office_no: "",
         }
         // entityObj['ENTITY_LIST'][0].entities.splice(0, 0, entity);
-
         entityObj['ENTITY_LIST'][0].entities.push(entity);
         this.setState({
             user_entity_data: entityObj,
         })
-
-
     }
 
     Change(type, e) {
@@ -524,7 +520,7 @@ export class BuyerRegister extends Component {
             if (res.result === "failed") {
                 this.setState(
                     {
-                        text: "Failure to save,the entity have available auction can't be deleted . "
+                        text: "Failure to save,the entity have available auction can't be deleted."
                     }
                 );
                 this.refs.Modal.showModal();
@@ -653,7 +649,6 @@ export class BuyerRegister extends Component {
     }
 
     render() {
-
         let btn_html;
         if (this.state.use_type === 'admin_approve') {
             btn_html = <div>
@@ -665,9 +660,7 @@ export class BuyerRegister extends Component {
             btn_html = <div>
                 <button id="save_form" className="lm--button lm--button--primary" onClick={this.cancel.bind(this)}>Cancel</button>
                 <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this, 'save')}>Save</button>
-            </div>;
-            // $('#chkBuyer').attr('disabled', true);
-            // $('#chkRevv').attr('disabled', true);
+            </div>;  
         }
         else {
             btn_html = <div>
@@ -868,7 +861,7 @@ export class BuyerRegister extends Component {
                                 <UserEntity disabled={this.state.disabled} entityList={this.state.user_entity_data} ref="userEntity" className={this.state.disabled === 'admin_approve' ? '' : ''} />
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr> Tenent Management Service Required:
+                                        <abbr title="required">*</abbr> Tenant Management Service Required:
                                </label>
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <select name="buyer_management" id="buyer_management" onChange={this.Change.bind(this, 'buyer_management')} defaultValue={this.state.buyer_management} disabled={this.state.disabled} ref="buyer_management" aria-required="true">

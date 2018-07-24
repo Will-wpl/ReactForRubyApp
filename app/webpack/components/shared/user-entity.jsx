@@ -102,16 +102,12 @@ export class UserEntity extends React.Component {
                 break;
         }
     }
-    removeEntity(index, disabled) {
-
-        if (disabled) {
+    removeEntity(index) {
             this.setState({
                 deleteIndex: index
             })
             this.refs.Modal.showModal("comfirm");
             this.setState({ text: "Are you sure you want to delete ?" });
-        }
-
     }
     doAccept() {
         let entityObj, entityData;
@@ -122,7 +118,7 @@ export class UserEntity extends React.Component {
         this.setState({
             itemList: entityData['ENTITY_LIST']
         })
-        console.log($("div[name='entitySub']").length)
+        // console.log($("div[name='entitySub']").length)
         // // $("div[name='entitySub']").find('div .errormessage').each(function () {
 
         // // })
@@ -234,7 +230,7 @@ export class UserEntity extends React.Component {
                                     <div className='isPassValidate' id={"user_contact_office_no_" + (i) + "_message"} >This field is required!</div>
                                     <div className='isPassValidate' id={"user_contact_office_no_" + (i) + "_format"} >Number should contain 8 integers!</div>
                                     <div className="delEntity" className={this.state.disabled?"isHide":"delEntity"}>
-                                         <a onClick={this.removeEntity.bind(this, i, false)}> &nbsp; Delete</a> 
+                                         <a onClick={this.removeEntity.bind(this, i)}> &nbsp; Delete</a> 
                                     </div>
                                 </div>
                             </div>

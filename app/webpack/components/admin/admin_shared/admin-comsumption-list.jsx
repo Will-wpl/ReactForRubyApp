@@ -16,7 +16,6 @@ export default class AdminComsumptionList extends Component {
 
     componentWillReceiveProps(next) {
         if (next.comsumption_list) {
-            console.log(next.comsumption_list)
             this.setState({
                 purchaseEntity: next.comsumption_list
             })
@@ -56,16 +55,6 @@ export default class AdminComsumptionList extends Component {
                         return <div key={index}>
                             <div>New Accounts</div>
                             <div className="comsumption_list" >
-                                {/* <div className={this.props.visible ? "comsumption_list_top u-grid open" : "comsumption_list_top u-grid"} onClick={this.show_table.bind(this, index, item.id)}>
-                                    <div className="col">Account No.</div>
-                                    <div className="col">Existing Plan</div>
-                                    <div className="col">Contract Expiry </div>
-                                    <div className="col">Purchasing Entity</div>
-                                    <div className="col">Intake Level</div>
-                                    <div className="col">Contract Capacity</div>
-                                    <div className="col">Permise Address</div>
-                                    <div className="col">Consumption Details</div>
-                                </div> */}
                                 <div className={this.props.visible ? 'comsumption_list_table u-grid visible' : 'comsumption_list_table u-grid'} id={"comsumption_list_table_" + index}>
                                     <table>
                                         <thead>
@@ -91,11 +80,10 @@ export default class AdminComsumptionList extends Component {
                                                     <td>{item.contracted_capacity}</td>
                                                     <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
                                                     <td>
-                                                        <div><span>Total Monthly:</span><span>{item.totals}kWh/month</span></div>
-                                                        <div><span>Peak:</span><span>{item.peak_pct}</span><span  title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">&nbsp;&nbsp;?</span></div>
-                                                        <div><span>Off-Peak:</span><span>{100 - item.peak_pct}(auto calculate)</span></div>
-                                                        <div><span>Upload bill(s):</span><span><a href={item.user_attachment.file_path} target="_blank">{item.user_attachment.file_name}</a></span></div>
-
+                                                        <div><span>Total Monthly:</span><span className="textDecoration" >{item.totals}</span><span>kWh/month</span></div>
+                                                        <div><span>Peak:</span><span className="textDecoration">{item.peak_pct}</span><span>%</span><span  title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">&nbsp;&nbsp;?</span></div>
+                                                        <div><span>Off-Peak:</span><span className="textDecoration">{100 - item.peak_pct}</span><span>%(auto calculate)</span></div>
+                                                        <div><span>Upload bill(s):</span><span><a href={item.user_attachment?item.user_attachment.file_path:"#"} target="_blank">{item.user_attachment?item.user_attachment.file_name:""}</a></span></div>
                                                     </td>
                                                 </tr>
                                             })}

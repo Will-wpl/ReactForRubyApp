@@ -76,17 +76,6 @@ export const getStandardNumBref = (num) => {
 
 }
 
-export const validateLess = (value) => {
-    let num = /^100$|^(\d|[1-9]\d)(\.\d+)*$/;
-    if (!(num.text(value))) {
-        return false;
-    }
-    else {
-        return true;
-    }
-}
-
-
 export const validateNum = (value) => {
     let num = /^(\d{8})$/g;
     if (!num.test(value)) {
@@ -101,11 +90,11 @@ export const validateNum4 = (value) => {
         if (!num.test(value)) {
             return false;
         }
-        else {
-            return false;
-        }
-        return true;
     }
+    else {
+        return false;
+    }
+    return true;
 }
 export const validateNum10 = (value) => {
     let num = /^\+?[1-9]\d*$/;
@@ -173,7 +162,6 @@ export const validator_Object = (param, paramType) => {
                 errArr.push({ column: key, cate: 1 });
             }
             else {
-
                 if (!validateNum4(value)) {
                     errArr.push({ column: key, cate: 2 })
                 }

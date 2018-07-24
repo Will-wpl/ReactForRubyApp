@@ -183,7 +183,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
 
     ids = []
     buyer_entities.each do |buyer_entity|
-      ids.push(buyer_entity['id']) if buyer_entity['id'].to_i != 0
+      ids.push(buyer_entity['user_entity_id']) if buyer_entity['user_entity_id'].to_i != 0
     end
     # will_del_buyer_entity = current_user.company_buyer_entities.reject do |buyer_entity|
     #   ids.include?(buyer_entity.id.to_s)
@@ -198,10 +198,10 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
       CompanyBuyerEntity.find(buyer_entity.id).destroy
     end
     buyer_entities.each do |buyer_entity|
-      target_buyer_entity = if buyer_entity['id'].to_i == 0
+      target_buyer_entity = if buyer_entity['user_entity_id'].to_i == 0
                             CompanyBuyerEntity.new
                            else
-                             CompanyBuyerEntity.find(buyer_entity['id'])
+                             CompanyBuyerEntity.find(buyer_entity['user_entity_id'])
                            end
       target_buyer_entity.company_name = buyer_entity['company_name'] unless buyer_entity['company_name'].blank?
       target_buyer_entity.company_uen = buyer_entity['company_uen'] unless buyer_entity['company_uen'].blank?
