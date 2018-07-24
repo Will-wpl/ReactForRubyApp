@@ -250,8 +250,6 @@ export class BuyerRegister extends Component {
                 $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
             }
         })
-
-
         let flag = true, hasDoc = true, checkSelect = true;
         let arr = validator_Object(this.state, this.validatorItem);
         if (arr) {
@@ -380,13 +378,10 @@ export class BuyerRegister extends Component {
             contact_office_no: "",
         }
         // entityObj['ENTITY_LIST'][0].entities.splice(0, 0, entity);
-
         entityObj['ENTITY_LIST'][0].entities.push(entity);
         this.setState({
             user_entity_data: entityObj,
         })
-
-
     }
 
     Change(type, e) {
@@ -525,7 +520,7 @@ export class BuyerRegister extends Component {
             if (res.result === "failed") {
                 this.setState(
                     {
-                        text: "Failure to save,the entity have available auction can't be deleted . "
+                        text: "Failure to save,the entity have available auction can't be deleted."
                     }
                 );
                 this.refs.Modal.showModal();
@@ -654,7 +649,6 @@ export class BuyerRegister extends Component {
     }
 
     render() {
-
         let btn_html;
         if (this.state.use_type === 'admin_approve') {
             btn_html = <div>
@@ -666,9 +660,7 @@ export class BuyerRegister extends Component {
             btn_html = <div>
                 <button id="save_form" className="lm--button lm--button--primary" onClick={this.cancel.bind(this)}>Cancel</button>
                 <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this, 'save')}>Save</button>
-            </div>;
-            // $('#chkBuyer').attr('disabled', true);
-            // $('#chkRevv').attr('disabled', true);
+            </div>;  
         }
         else {
             btn_html = <div>

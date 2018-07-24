@@ -24,7 +24,7 @@ export class UploadFile extends React.Component {
                     <div className="col-sm-12 col-md-12 u-grid" key={index}>
                         <div className={`col-sm-12 col-md-${this.props.col_width ? this.props.col_width : "10"} u-cell`}>
                             <a className="upload_file_btn">
-                                <dfn>No file selected...</dfn>
+                                <dfn className="dfn">No file selected...</dfn>
                                 {/* accept="application/pdf,application/msword" */}
                                 {required === "required" ?
                                     <div>
@@ -132,6 +132,7 @@ export class UploadFile extends React.Component {
                 barObj.find(".progress-bar").text('Upload Successful!');
                 setTimeout(() => {
                     barObj.fadeOut(500);
+                    $('.dfn').html('Please select file.')
                 }, 2000);
                 fileObj = this.state.fileData;
                 fileObj.map((item, index) => {

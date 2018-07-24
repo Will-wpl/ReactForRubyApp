@@ -16,7 +16,6 @@ export default class AdminComsumptionList extends Component {
 
     componentWillReceiveProps(next) {
         if (next.comsumption_list) {
-            console.log(next.comsumption_list)
             this.setState({
                 purchaseEntity: next.comsumption_list
             })
