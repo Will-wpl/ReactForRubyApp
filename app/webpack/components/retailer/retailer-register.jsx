@@ -83,8 +83,10 @@ export class RetailerRegister extends Component {
 
     componentDidMount() {
         if (this.state.userid) {
+            console.log(this.state.userid)
             getRetailerUserInfoByUserId(this.state.userid).then(res => {
                 this.setDefult(res);
+                console.log(res)
             })
         }
         else {
@@ -203,7 +205,6 @@ export class RetailerRegister extends Component {
 
         if ($('#chkBuyer').is(':checked')) {
             setValidationPass('chkBuyer', 1);
-
         } else {
             setValidationFaild('chkBuyer', 1);
         }
@@ -314,7 +315,8 @@ export class RetailerRegister extends Component {
                 break;
         }
     }
-    submit(type) {
+
+    getParam() {
         let param = {
             'id': this.state.id,
             'email': this.state.email_address,
@@ -329,6 +331,10 @@ export class RetailerRegister extends Component {
             'agree_seller_buyer': this.state.agree_seller_buyer,
             'agree_seller_revv': this.state.agree_seller_revv
         }
+        return param;
+    }
+    submit(type) {
+        let param = this.getParam();
         if (this.checkValidation()) {
             validateIsExist({
                 user: param
@@ -363,33 +369,56 @@ export class RetailerRegister extends Component {
             })
         }
     }
-    save() {
-        saveRetailManageInfo({
-            user: {
-                'id': this.state.id,
-                'email': this.state.email_address,
-                'company_name': this.state.company_name,
-                'company_unique_entity_number': this.state.unique_entity_number,
-                'company_address': this.state.company_address,
-                'company_license_number': this.state.license_number,
-                'gst_no': this.state.gst_no,
-                'name': this.state.contact_name,
-                'account_mobile_number': this.state.mobile_number,
-                'account_office_number': this.state.office_number,
-                'agree_seller_buyer': this.state.agree_seller_buyer,
-                'agree_seller_revv': this.state.agree_seller_revv
 
+    save(type) {
+        let param = this.getParam();
+        if (type === "save") {
+            if (this.checkValidation()) {
+                validateIsExist({
+                    user: param
+                }).then(res => {
+                    if (res.validate_result)//validate pass
+                    {
+                        saveRetailManageInfo({
+                            user: param
+                        }).then(res => {
+                            $('#license_number_repeat').removeClass('errormessage').addClass('isPassValidate');
+                            this.refs.Modal.showModal();
+                            this.setState({
+                                text: "Your details have been successfully saved. "
+                            });
+
+                        })
+                    }
+                    else {
+                        if (res.error_fields) {
+                            for (let item of res.error_fields) {
+                                if (item === 'company_license_number') {
+                                    $('#license_number_repeat').removeClass('isPassValidate').addClass('errormessage');
+                                    $("input[name='license_number']").focus();
+                                }
+                            }
+                        }
+                    }
+                })
             }
-        }).then(res => {
-            this.refs.Modal.showModal();
-            this.setState({
-                text: "Your details have been successfully saved . "
-            });
-        })
+        }
+        else {
+            saveRetailManageInfo({
+                user: param
+            }).then(res => {
+                this.refs.Modal.showModal();
+                this.setState({
+                    text: "Your details have been successfully saved . "
+                });
+            })
+        }
     }
+
     cancel() {
         window.location.href = `/users/edit`;
     }
+
     judgeAction(type) {
         if (type === 'reject') {
             if (this.checkRejectAction()) {
@@ -430,14 +459,14 @@ export class RetailerRegister extends Component {
         else if (this.state.use_type === 'manage_acount') {
             btn_html = <div>
                 <button id="save_form" className="lm--button lm--button--primary" onClick={this.cancel.bind(this)}>Cancel</button>
-                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this, "save")}>Save</button>
+                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.save.bind(this, "save")}>Save</button>
             </div>;
-            $('#chkBuyer').attr('disabled', true);
-            $('#chkRevv').attr('disabled', true);
+            // $('#chkBuyer').attr('disabled', true);
+            // $('#chkRevv').attr('disabled', true);
         }
         else {
             btn_html = <div>
-                <button id="save_form" className="lm--button lm--button--primary" onClick={this.save.bind(this)}>Save</button>
+                <button id="save_form" className="lm--button lm--button--primary" onClick={this.save.bind(this, "register")}>Save</button>
                 <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this, "sign_up")}>Complete Sign Up</button>
             </div>;
         }

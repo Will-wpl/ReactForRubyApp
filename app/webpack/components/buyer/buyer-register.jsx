@@ -89,10 +89,10 @@ export class BuyerRegister extends Component {
         }
     }
 
-    componentDidMount() {                                                                                                                                                                                               
+    componentDidMount() {
         if (this.state.userid) {
             getBuyerUserInfoByUserId(this.state.userid).then(res => {
-                this.setDefault(res);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+                this.setDefault(res);
             })
         }
         else {
@@ -309,7 +309,7 @@ export class BuyerRegister extends Component {
     setParams() {
         let entity = [
             {
-                user_entity_id:this.state.user_entity_id,
+                user_entity_id: this.state.user_entity_id,
                 company_name: this.state.company_name,
                 company_uen: this.state.unique_entity_number,
                 company_address: this.state.company_address,
@@ -513,10 +513,15 @@ export class BuyerRegister extends Component {
         this.refs.Modal_upload.showModal();
     }
 
-    save() {
+    save(type) {
+        if (type === "save") {
+            let isValidator = this.checkSuccess();
+            if (!isValidator) {
+                return false;
+            }
+        }
         let buyerParam = this.setParams();
         saveBuyerUserInfo(buyerParam).then(res => {
-
             if (res.result === "failed") {
                 this.setState(
                     {
@@ -536,9 +541,9 @@ export class BuyerRegister extends Component {
                 );
                 this.refs.Modal.showModal();
             }
-
         })
     }
+    
     submit(type) {
         let isValidator = this.checkSuccess();
         if (isValidator) {
@@ -659,12 +664,12 @@ export class BuyerRegister extends Component {
         else if (this.state.use_type === 'manage_acount') {
             btn_html = <div>
                 <button id="save_form" className="lm--button lm--button--primary" onClick={this.cancel.bind(this)}>Cancel</button>
-                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this, 'save')}>Save</button>
-            </div>;  
+                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.save.bind(this, 'save')}>Save</button>
+            </div>;
         }
         else {
             btn_html = <div>
-                <button id="save_form" className="lm--button lm--button--primary" onClick={this.save.bind(this)}>Save</button>
+                <button id="save_form" className="lm--button lm--button--primary" onClick={this.save.bind(this, "register")}>Save</button>
                 <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this, 'sign_up')}>Complete Sign Up</button>
             </div>;
         }

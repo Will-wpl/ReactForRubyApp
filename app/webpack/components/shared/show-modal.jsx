@@ -239,8 +239,10 @@ export class Modal extends React.Component {
             switch (status) {
                 case 'false|true':
                     $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                    $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
                     break;
                 case 'true|false':
+                    $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
                     $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
                     break;
                 case 'true|true':
@@ -282,15 +284,15 @@ export class Modal extends React.Component {
         let address_count = 0, account_count = 0;
         this.state.consumptionItem.map((item, index) => {
             if (this.state.option === 'update') {
-                if ((this.state.street == item.street) && (this.state.postal_code == item.postal_code) && (this.state.id !== item.id)) {
+                if ((this.state.unit_number == item.unit_number) && (this.state.postal_code == item.postal_code) && (this.state.id !== item.id)) {
                     address_count++;
                 }
-                if (this.state.account_number == item.account_number && (this.state.id !== item.id)) {
+                if (this.state.account_number === item.account_number && (this.state.id !== item.id)) {
                     account_count++;
                 }
             }
             else {
-                if ((this.state.street == item.street) && (this.state.postal_code == item.postal_code)) {
+                if ((this.state.unit_number === item.unit_number) && (this.state.postal_code === item.postal_code)) {
                     address_count++;
                 }
                 if (this.state.account_number == item.account_number) {
@@ -305,6 +307,7 @@ export class Modal extends React.Component {
         if (account_count > 0) {
             account = true;
         }
+        console.log(account + "|" + address)
         return account + "|" + address;
     }
 
@@ -701,8 +704,17 @@ export class Modal extends React.Component {
                                 </tr>
                                 <tr>
                                     <td colSpan="2">
-                                        <span> Premise Address</span> <span><div id="permise_address_taken_message" className="errormessage">There is already an existing contract for this premise address.</div></span>
+
+                                        <div style={{ width: "100%", float: "left" }}>
+                                            <div style={{ width: "30%", float: "left" }}>
+                                                Premise Address
+                                            </div>
+                                            <div style={{ width: "70%", float: "left",padding:"5px" }}>
+                                                <div id="permise_address_taken_message" className="errormessage">There is already an existing contract for this Premise Address.</div>
+                                            </div>
+                                        </div>
                                     </td>
+
                                 </tr>
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Blk or Unit:</td>
@@ -733,7 +745,7 @@ export class Modal extends React.Component {
                                 </tr>
                                 <tr>
                                     <td colSpan="2">
-                                        Consumption Address
+                                        Consumption Details
                                     </td>
                                 </tr>
                                 <tr>

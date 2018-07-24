@@ -118,11 +118,6 @@ export class UserEntity extends React.Component {
         this.setState({
             itemList: entityData['ENTITY_LIST']
         })
-        // console.log($("div[name='entitySub']").length)
-        // // $("div[name='entitySub']").find('div .errormessage').each(function () {
-
-        // // })
-        // console.log($("div[name='entitySub']").find('div .errormessage').length);
         $('.validate_message').find('div').each(function () {
             let className = $(this).attr('class');
             if (className === 'errormessage') {
@@ -140,8 +135,8 @@ export class UserEntity extends React.Component {
                         <div key={i} style={{ marginTop: '20px', marginBottom: '20px', }} id={i}>
                             <div className="lm--formItem lm--formItem--inline string">
                                 &nbsp;
-                                <div className="lm--formItem-right lm--formItem-control">
-                                    &nbsp;
+                                <div className="lm--formItem-right lm--formItem-control errormessage" >
+                                    &nbsp;<span className={it.user_entity_id?"isHide":"isDisplay"}> Waiting for administrator's approval.</span>
                                 </div>
                             </div>
                             <div className="lm--formItem lm--formItem--inline string">
