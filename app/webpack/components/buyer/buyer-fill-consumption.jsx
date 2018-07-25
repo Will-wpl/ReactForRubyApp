@@ -208,16 +208,7 @@ export class FillConsumption extends Component {
         this.refs.Modal.showModal("comfirm");
         this.setState({ text: "Are you sure you want to delete ?", submit_type: "delete" });
     }
-    // nameRepeat(arr) {
-    //     let hash = {};
-    //     for (let i in arr) {
-    //         if (hash[arr[i].account_number])
-    //             return true;
-    //         hash[arr[i].account_number] = true;
-    //     }
-    //     return false;
-    // }
-
+  
     dateCompare(arr) {
         let count = 0;
         let startDate = moment(this.state.time).format('YYYY-MM-DD HH:mm:ss');

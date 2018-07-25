@@ -135,6 +135,13 @@ export class Modal extends React.Component {
         else {
             $("#btnUpload").removeClass("col-md-3").addClass("col-md-2 u-cell");
         }
+        $(".react-datepicker-wrapper").click(function () {
+            let status = $(".react-datepicker-wrapper").find("input").attr("disabled");
+            if(status!=="disabled")
+            {
+                $(".react-datepicker-popper").removeClass("isHide");
+            }
+        })
     }
 
     showModal(type, data, str, index) {
@@ -200,7 +207,8 @@ export class Modal extends React.Component {
         })
     }
 
-    checkModelSuccess() {
+    checkModelSuccess(event) {
+        // event.preventDefault();
         let flag = true, hasDoc = true;
         let validateItem = {
             peak_pct: { cate: 'decimal' },
@@ -265,7 +273,13 @@ export class Modal extends React.Component {
             validateResult.map((item, index) => {
                 let column = item.column;
                 let cate = item.cate;
-                setValidationFaild(column, cate)
+
+                setValidationFaild(column, cate);
+                if (column === "contract_expiry") {
+                    setTimeout(() => {
+                        $(".react-datepicker-popper").addClass("isHide");
+                    });
+                }
             })
         }
     }
@@ -278,7 +292,6 @@ export class Modal extends React.Component {
             value.target.value = parseFloat(value.target.value);
         }
     }
-
     account_address_repeat() {
         let address = false, account = false;
         let address_count = 0, account_count = 0;
@@ -479,7 +492,7 @@ export class Modal extends React.Component {
     noPermitInput(event) {
         event.preventDefault();
     }
-
+    
     render() {
         let showDetail = '', secondary = '', secondStatus = '';
         if (this.props.showdetail && !this.props.text) {
@@ -645,7 +658,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td style={{ width: "30%" }}><abbr title="required">*</abbr>Account No.</td>
                                     <td style={{ width: "70%" }}>
-                                        <input type="text" value={this.state.account_number} onChange={this.changeConsumption.bind(this, "account_number")} id="account_number" required aria-required="true" />
+                                        <input type="text" value={this.state.account_number} onChange={this.changeConsumption.bind(this, "account_number")} id="account_number" name="account_number" required aria-required="true" />
                                         <div id="account_number_message" className="isPassValidate">This filed is required!</div>
                                         <div id="account_number_taken_message" className="errormessage">There is already an existing contract for this Account Number.</div>
                                     </td>
@@ -665,7 +678,7 @@ export class Modal extends React.Component {
                                         <span className={this.state.existing_plan_selected === "Retailer plan" ? "isDisplay" : "isHide"}>*</span>
                                     </abbr>Contract Expiry</td>
                                     <td>
-                                        <DatePicker selected={this.state.contract_expiry} className="date_ico" disabled={this.state.contract_expiry_disabled} onKeyDown={this.noPermitInput.bind(this)} ref="contract_expiry_date" shouldCloseOnSelect={true} name="contract_expiry_date" minDate={moment()} showTimeSelect required aria-required="true" dateFormat="DD-MM-YYYY HH:mm" selectsStart onChange={this.dateChange.bind(this)} title="Time must not be in the past." />
+                                        <DatePicker selected={this.state.contract_expiry} className="date_ico" disabled={this.state.contract_expiry_disabled} onKeyDown={this.noPermitInput.bind(this)} ref="contract_expiry" shouldCloseOnSelect={true} name="contract_expiry" minDate={moment()} showTimeSelect required aria-required="true" dateFormat="DD-MM-YYYY HH:mm" selectsStart   onChange={this.dateChange.bind(this)} title="Time must not be in the past." />
                                         <div id="contract_expiry_message" className="isPassValidate">This filed is required!</div>
                                     </td>
                                 </tr>
@@ -696,7 +709,7 @@ export class Modal extends React.Component {
                                         <span className={this.state.intake_level_selected === "LT" ? "isHide" : "isDisplay"}>*</span>
                                     </abbr>Contract Capacity</td>
                                     <td>
-                                        <input type="text" disabled={this.state.contracted_capacity_disabled} value={this.state.contracted_capacity} onChange={this.changeConsumption.bind(this, "contracted_capacity")} id="contracted_capacity" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" maxLength="10" />
+                                        <input type="text" disabled={this.state.contracted_capacity_disabled} value={this.state.contracted_capacity} onChange={this.changeConsumption.bind(this, "contracted_capacity")} id="contracted_capacity" name="contracted_capacity" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" maxLength="10" />
                                         <div id="contracted_capacity_message" className="isPassValidate">This filed is required!</div>
                                         <div id="contracted_capacity_format" className="isPassValidate">format!</div>
                                     </td>
@@ -708,7 +721,7 @@ export class Modal extends React.Component {
                                             <div style={{ width: "30%", float: "left" }}>
                                                 Premise Address
                                             </div>
-                                            <div style={{ width: "70%", float: "left",padding:"5px" }}>
+                                            <div style={{ width: "70%", float: "left", padding: "5px" }}>
                                                 <div id="permise_address_taken_message" className="errormessage">There is already an existing contract for this Premise Address.</div>
                                             </div>
                                         </div>
@@ -717,28 +730,28 @@ export class Modal extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Blk or Unit:</td>
-                                    <td><input type="text" value={this.state.blk_or_unit} onChange={this.changeConsumption.bind(this, "blk_or_unit")} id="blk_or_unit" placeholder="" required aria-required="true" />
+                                    <td><input type="text" value={this.state.blk_or_unit} onChange={this.changeConsumption.bind(this, "blk_or_unit")} id="blk_or_unit" name="blk_or_unit" placeholder="" required aria-required="true" />
                                         <div id="blk_or_unit_message" className="isPassValidate">This filed is required!</div>
                                     </td>
 
                                 </tr>
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Street:</td>
-                                    <td><input type="text" value={this.state.street} onChange={this.changeConsumption.bind(this, "street")} id="street" placeholder="" required aria-required="true" />
-                                        <div id="street_message" className="isPassValidate">This filed is required!</div>
+                                    <td><input type="text" value={this.state.street} onChange={this.changeConsumption.bind(this, "street")} id="street" name="street" placeholder="" required aria-required="true" />
+                                        <div id="name" className="isPassValidate">This filed is required!</div>
                                     </td>
 
                                 </tr>
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Unit No.:</td>
                                     <td>
-                                        <input type="text" value={this.state.unit_number} onChange={this.changeConsumption.bind(this, "unit_number")} id="unit_number" placeholder="" required aria-required="true" />
+                                        <input type="text" value={this.state.unit_number} onChange={this.changeConsumption.bind(this, "unit_number")} id="unit_number" name="unit_number" placeholder="" required aria-required="true" />
                                         <div id="unit_number_message" className="isPassValidate">This filed is required!</div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Postal Code:</td>
-                                    <td> <input type="text" value={this.state.postal_code} id="postal_code" onChange={this.changeConsumption.bind(this, "postal_code")} placeholder="" required aria-required="true" />
+                                    <td> <input type="text" value={this.state.postal_code} id="postal_code" name="postal_code" onChange={this.changeConsumption.bind(this, "postal_code")} placeholder="" required aria-required="true" />
                                         <div id="postal_code_message" className="isPassValidate">This filed is required!</div>
                                     </td>
                                 </tr>
@@ -750,7 +763,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Total Monthly:</td>
                                     <td>
-                                        <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" maxLength="10" /><div>kWh/month</div>
+                                        <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" name="totals" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" maxLength="10" /><div>kWh/month</div>
                                         <div id="totals_message" className="isPassValidate">This filed is required!</div>
                                         <div id="totals_format" className="isPassValidate">Must be positive integers,and first cannot be 0!</div>
                                     </td>
@@ -758,7 +771,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Peak:</td>
                                     <td>
-                                        <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} id="peak_pct" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" maxLength="5" placeholder="0-100" /> <div>%</div>
+                                        <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} id="peak_pct" name="peak_pct" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" maxLength="5" placeholder="0-100" /> <div>%</div>
                                         <div id="peak_pct_message" className="isPassValidate">This filed is required!</div>
                                         <div id="peak_pct_format" className="isPassValidate">Please input bigger than 0 and less than 100!</div>
                                     </td>
