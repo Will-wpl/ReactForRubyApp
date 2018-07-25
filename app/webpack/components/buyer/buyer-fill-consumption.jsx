@@ -261,7 +261,7 @@ export class FillConsumption extends Component {
                 return false;
             }
         }
-
+        console.log(makeData)
         setBuyerParticipate(makeData, '/api/buyer/consumption_details/save').then((res) => {
             if (type != "participate") {
                 if (type == "delete") {
@@ -372,7 +372,7 @@ export class FillConsumption extends Component {
     durationChange(e) {
         let itemValue = e.target.value
         this.setState({
-            durtioanItem: itemValue
+            contract_duration: itemValue
         })
     }
 
@@ -402,7 +402,7 @@ export class FillConsumption extends Component {
                             <tbody>
                                 <tr>
                                     <td>Purchase Duration : </td>
-                                    <td> <select id="selDuration" style={{ 'width': '200px', marginLeft: "5px" }} onChange={this.durationChange.bind(this)} value={this.state}>
+                                    <td> <select id="selDuration" style={{ 'width': '200px', marginLeft: "5px" }} onChange={this.durationChange.bind(this)} value={this.state.contract_duration}>
                                         {
                                             this.state.durationList.map(item => {
                                                 return <option key={item.contract_duration} value={item.contract_duration}>{item.contract_duration + " months"}</option>
@@ -451,10 +451,6 @@ export class FillConsumption extends Component {
                                                     <div><span>Upload bill(s):</span><span><a href={item.user_attachment ? item.user_attachment.file_path : "#"} target="_blank">{item.user_attachment ? item.user_attachment.file_name : ""}</a></span></div>
                                                 </td>
                                                 <td>
-                                                    {/* {this.state.checked ? '' : <div className="editSite"><a id="btnEdit" onClick={this.edit_site.bind(this, item, index)}>Edit </a></div>}
-                                                    {this.state.checked ? '' : <div className="delSite"><a  id="btnDel" onClick={this.remove_site.bind(this, index)
-                                                    }>Delete </a></div>} */}
-
                                                     <div className="editSite"><a className="btnOption" onClick={this.edit_site.bind(this, item, index)}>Edit </a></div>
                                                     <div className="delSite"><a className="btnOption" onClick={this.remove_site.bind(this, index)}>Delete </a></div>
                                                 </td>
