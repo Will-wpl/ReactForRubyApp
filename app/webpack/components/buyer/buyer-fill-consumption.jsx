@@ -261,7 +261,6 @@ export class FillConsumption extends Component {
                 return false;
             }
         }
-        console.log(makeData)
         setBuyerParticipate(makeData, '/api/buyer/consumption_details/save').then((res) => {
             if (type != "participate") {
                 if (type == "delete") {
