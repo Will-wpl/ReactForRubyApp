@@ -20,9 +20,9 @@ class RAReportV2 < RAReport
     pdf = param[:pdf]
     pdf.move_down 10; PdfLowestDidderInfo.new({:pdf => pdf, :auction_result => param[:auction_result]}).info
     pdf.move_down 15; PdfPriceTable.new({:pdf => pdf, :price_table => param[:price_table]}).table
-    pdf.move_down 15; PdfReversePriceTable.new(param.merge({:pdf => pdf})).table
-    pdf.move_down 15; PdfTotalInfoV2.new({:pdf => pdf, :auction => param[:auction], :auction_result => param[:auction_result]}).info
-    pdf.move_down 15; PdfRankingTable.new({:pdf => pdf, :histories_achieved => param[:histories_achieved]}).table
+    pdf.move_down 35; PdfReversePriceTable.new(param.merge({:pdf => pdf})).table
+    pdf.move_down 35; PdfTotalInfoV2.new({:pdf => pdf, :auction => param[:auction], :auction_result => param[:auction_result]}).info
+    pdf.move_down 28; PdfRankingTable.new({:pdf => pdf, :histories_achieved => param[:histories_achieved]}).table
     pdf.move_down 15; PdfAggregateConsumption.new({:pdf => pdf, :auction_contract => param[:auction_contract]}).aggregate
   end
 

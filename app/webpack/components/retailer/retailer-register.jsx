@@ -49,9 +49,9 @@ export class RetailerRegister extends Component {
             office_number: { cate: 'num' },
             mobile_number: { cate: 'num' },
             contact_name: { cate: 'required' },
+            company_address: { cate: 'required' },
             gst_no: { cate: 'required' },
             license_number: { cate: 'required' },
-            company_address: { cate: 'required' },
             unique_entity_number: { cate: 'required' },
             company_name: { cate: 'required' },
             email_address: { cate: 'email' }
@@ -83,10 +83,8 @@ export class RetailerRegister extends Component {
 
     componentDidMount() {
         if (this.state.userid) {
-            console.log(this.state.userid)
             getRetailerUserInfoByUserId(this.state.userid).then(res => {
                 this.setDefult(res);
-                console.log(res)
             })
         }
         else {

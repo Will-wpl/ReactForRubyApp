@@ -19,6 +19,7 @@ export class FillConsumption extends Component {
             checked: false,
             name: "",
             time: "", link: "",
+            contract_duration: "",
             durationList: [],
             durtioanItem: "",
             account_detail: this.accountItem,
@@ -63,15 +64,16 @@ export class FillConsumption extends Component {
 
     BuyerParticipateList() {
         getBuyerParticipate('/api/buyer/consumption_details?consumption_id=' + this.consumptions_id).then((res) => {
-
             this.site_list = res.consumption_details;
             this.status = res.consumption.participation_status === '1' ? "Confirmed" :
                 (res.consumption.participation_status === '2' ? "Pending" : "Rejected")
             this.setState({
                 name: res.auction.name,
                 time: res.auction.actual_begin_time,
-                link: res.tc_attachment.file_path,
+                contract_duration: res.consumption.contract_duration,
+                link: res.tc_attachment ? res.tc_attachment.file_path : "",
             })
+
             if (res.consumption.participation_status === '1' || res.auction.publish_status === "1") {
                 $("input[type='checkbox']").attr("checked", true);
                 this.setState({
@@ -90,6 +92,11 @@ export class FillConsumption extends Component {
             if (res.consumption_details.length > 0) {
                 this.setState({ site_list: res.consumption_details });
             }
+
+            if (this.state.checked) {
+                $(".btnOption").css("pointer-events", "none").css("color", "#4B4941");
+            }
+
         }, (error) => {
             this.refs.Modal.showModal();
             this.setState({ text: "Interface failed" });
@@ -201,15 +208,6 @@ export class FillConsumption extends Component {
         this.refs.Modal.showModal("comfirm");
         this.setState({ text: "Are you sure you want to delete ?", submit_type: "delete" });
     }
-    // nameRepeat(arr) {
-    //     let hash = {};
-    //     for (let i in arr) {
-    //         if (hash[arr[i].account_number])
-    //             return true;
-    //         hash[arr[i].account_number] = true;
-    //     }
-    //     return false;
-    // }
 
     dateCompare(arr) {
         let count = 0;
@@ -263,7 +261,6 @@ export class FillConsumption extends Component {
                 return false;
             }
         }
-
         setBuyerParticipate(makeData, '/api/buyer/consumption_details/save').then((res) => {
             if (type != "participate") {
                 if (type == "delete") {
@@ -374,7 +371,7 @@ export class FillConsumption extends Component {
     durationChange(e) {
         let itemValue = e.target.value
         this.setState({
-            durtioanItem: itemValue
+            contract_duration: itemValue
         })
     }
 
@@ -397,14 +394,14 @@ export class FillConsumption extends Component {
             <div>
                 <h1>Buyer Participation</h1>
                 <h4 className="col-sm-12 u-mb2">Invitation to RA: {this.state.name}</h4>
-                <h4 className="col-sm-12 u-mb2">Contract Start Date: {moment(this.state.time).format('D MMM YYYY hh:mm a')}</h4>
+                <h4 className="col-sm-12 u-mb2">Contract Start Date: {moment(this.state.time).format('D MMM YYYY')}</h4>
                 <h4 >
                     <div className="row col-sm-12 u-mb2">
                         <table>
                             <tbody>
                                 <tr>
                                     <td>Purchase Duration : </td>
-                                    <td> <select id="selDuration" style={{ 'width': '200px', marginLeft: "5px" }} onChange={this.durationChange.bind(this)}>
+                                    <td> <select id="selDuration" style={{ 'width': '200px', marginLeft: "5px" }} onChange={this.durationChange.bind(this)} value={this.state.contract_duration}>
                                         {
                                             this.state.durationList.map(item => {
                                                 return <option key={item.contract_duration} value={item.contract_duration}>{item.contract_duration + " months"}</option>
@@ -441,7 +438,7 @@ export class FillConsumption extends Component {
                                             return <tr key={index}>
                                                 <td>{item.account_number} </td>
                                                 <td>{item.existing_plan}</td>
-                                                <td>{item.contract_expiry !== "" ? moment(item.contract_expiry).format('YYYY-MM-DD HH:mm') : "-"}</td>
+                                                <td>{item.contract_expiry !== "" ? moment(item.contract_expiry).format('YYYY-MM-DD') : "-"}</td>
                                                 <td>{this.getPurchase(item.company_buyer_entity_id)} </td>
                                                 <td>{item.intake_level}</td>
                                                 <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "-"}</td>
@@ -450,11 +447,11 @@ export class FillConsumption extends Component {
                                                     <div><span>Total Monthly:</span><span className="textDecoration" >{item.totals}</span><span>kWh/month</span></div>
                                                     <div><span>Peak:</span><span className="textDecoration">{item.peak_pct}</span><span>%</span><span title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">&nbsp;&nbsp;?</span></div>
                                                     <div><span>Off-Peak:</span><span className="textDecoration">{100 - item.peak_pct}</span><span>%(auto calculate)</span></div>
-                                                    <div><span>Upload bill(s):</span><span><a href={item.user_attachment?item.user_attachment.file_path:"#"} target="_blank">{item.user_attachment?item.user_attachment.file_name:""}</a></span></div>
+                                                    <div><span>Upload bill(s):</span><span><a href={item.user_attachment ? item.user_attachment.file_path : "#"} target="_blank">{item.user_attachment ? item.user_attachment.file_name : ""}</a></span></div>
                                                 </td>
                                                 <td>
-                                                    {this.state.checked ? '' : <div className="editSite"><a onClick={this.edit_site.bind(this, item, index)}>Edit </a></div>}
-                                                    {this.state.checked ? '' : <div className="delSite"><a onClick={this.remove_site.bind(this, index)}>Delete </a></div>}
+                                                    <div className="editSite"><a className="btnOption" onClick={this.edit_site.bind(this, item, index)}>Edit </a></div>
+                                                    <div className="delSite"><a className="btnOption" onClick={this.remove_site.bind(this, index)}>Delete </a></div>
                                                 </td>
                                             </tr>
                                         })

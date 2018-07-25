@@ -19,7 +19,7 @@ export default class AdminBuyerListDetail extends Component {
         this.state = {
             consumption_id: "",
             comsumption_list: [],
-            purchase_list:[],
+            purchase_list: [],
             price: {},
             detail: [],
             detail_index: 0,
@@ -63,6 +63,7 @@ export default class AdminBuyerListDetail extends Component {
             this.setState({
                 comment: itemValue
             })
+            changeValidate('comment', itemValue);
         }
     }
     checkRejectAction() { //when admin reject the request                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
@@ -87,11 +88,13 @@ export default class AdminBuyerListDetail extends Component {
     }
     judgeAction(type) {
         if (type === 'reject') {
-            this.setState({
-                text: 'Are you sure you want to reject the request?',
-            }, () => {
-                this.refs.Modal_Option.showModal('comfirm', { action: 'reject' }, '');
-            });
+            if (this.checkRejectAction()) {
+                this.setState({
+                    text: 'Are you sure you want to reject the request?',
+                }, () => {
+                    this.refs.Modal_Option.showModal('comfirm', { action: 'reject' }, '');
+                });
+            }
         }
         else {
             this.setState({ text: "Are you sure you want to approve the request?" });
@@ -105,11 +108,9 @@ export default class AdminBuyerListDetail extends Component {
             comment: this.state.comment
         };
         if (obj.action === 'reject') {
-            if (this.checkRejectAction()) {
-                approveConsumptions(param).then(res => {
-                    location.href = "/admin/auctions/published";
-                })
-            }
+            approveConsumptions(param).then(res => {
+                location.href = "/admin/auctions/published";
+            })
         }
         else {
             approveConsumptions(param).then(res => {

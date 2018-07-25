@@ -5,12 +5,14 @@ export default class AdminAward extends Component{
     constructor(props){
         super(props);
         this.state={
-            awardList:[]
+            awardList:[],
+            contract_duration:6
         }
     }
 
     componentDidMount(){
         let thisId = window.location.href.split("auctions/")[1].split("/award")[0];
+        this.setState({contract_duration:window.location.href.indexOf('contract_duration')>0?window.location.href.split('duration=')[1]:6})
         getLetterOfAward(thisId).then(resp=>{
             //console.log(resp)
             this.setState({awardList:resp})
@@ -21,7 +23,7 @@ export default class AdminAward extends Component{
 
     downLoad(data){
         //console.log(data);
-        window.open(`/api/admin/auctions/letter_of_award_pdf?auction_id=${data.auction_id}&user_id=${data.user_id}`)
+        window.open(`/api/admin/auctions/letter_of_award_pdf?auction_id=${data.auction_id}&user_id=${data.user_id}&contract_duration=${this.state.contract_duration}`)
     }
 
     renderAwardList(data){

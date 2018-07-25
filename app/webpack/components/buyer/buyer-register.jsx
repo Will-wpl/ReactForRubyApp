@@ -759,7 +759,7 @@ export class BuyerRegister extends Component {
                                         <div className='isPassValidate' id='office_number_format' >Number should contain 8 integers!</div>
                                     </div>
                                 </div>
-                                <h4 className="lm--formItem lm--formItem--inline string">Add Individial Info </h4>
+                                <h4 className="lm--formItem lm--formItem--inline string">Add Individual Info </h4>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
                                         <abbr title="required">*</abbr> Upload Business Document:
@@ -771,10 +771,10 @@ export class BuyerRegister extends Component {
                                         </div>
                                     </div>
                                 </div>
-                                <h4 className="lm--formItem lm--formItem--inline string">Electricity Puchese information</h4>
+                                <h4 className="lm--formItem lm--formItem--inline string">Electricity Purchase Information</h4>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr>  Puchese Entity/Company Name:
+                                        <abbr title="required">*</abbr>  Purchase Entity/Company Name:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="user_company_name" style={{ background: '#35404c' }} value={this.state.user_company_name} onChange={this.Change.bind(this, 'user_company_name')} disabled={true} ref="user_company_name" aria-required="true" ></input>
