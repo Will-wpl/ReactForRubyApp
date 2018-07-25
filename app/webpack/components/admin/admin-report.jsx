@@ -18,6 +18,7 @@ export class AdminReport extends Component {
         super(props);
         this.state = {
             users:[], histories:[], ranking:[],
+            contract_duration:6,
             winner:{
                 data:{},
                 auction:{}
@@ -28,6 +29,7 @@ export class AdminReport extends Component {
     componentDidMount() {
         let contract_duration = window.location.href.indexOf('contract_duration')>0?
             window.location.href.split('=')[1]:null;
+            this.setState({contract_duration:contract_duration});
         getAuction('admin',(window.location.href.split("auctions/")[1]).split("/report")[0]).then(auction => {
             this.auction = auction;
             this.userStartInfo = auction ? `${auction.name} on ${moment(auction.start_datetime).format('D MMM YYYY')}` : '';
@@ -85,7 +87,7 @@ export class AdminReport extends Component {
             data.color = ((JSON.stringify(color).split("[")[1]).split("]")[0]).replace(/"([^"]*)"/g, "$1");
             data.color2 =((JSON.stringify(color2).split("[")[1]).split("]")[0]).replace(/"([^"]*)"/g, "$1");
         //console.log(data);
-        window.open(`/api/admin/auctions/${data.id}/pdf?start_time=${data.start_time}&end_time=${data.end_time}&start_time2=${data.start_time2}&end_time2=${data.end_time2}&start_price=${data.start_price}&end_price=${data.end_price}&uid=${data.uid}&uid2=${data.uid2}&color=${data.color}&color2=${data.color2}`);
+        window.open(`/api/admin/auctions/${data.id}/pdf?start_time=${data.start_time}&end_time=${data.end_time}&start_time2=${data.start_time2}&end_time2=${data.end_time2}&start_price=${data.start_price}&end_price=${data.end_price}&uid=${data.uid}&uid2=${data.uid2}&color=${data.color}&color2=${data.color2}&contract_duration=${this.state.contract_duration}`);
     }
     render () {
         let achieved = parseFloat(this.actualPrice).toFixed(4) <= parseFloat(this.startPrice);
