@@ -50,7 +50,7 @@ export class BuyerList extends Component {
                                         <li key={index} className="u-grid">
                                             <span className="col-sm-7 white" title={item.name}>{item.name}</span>
                                             <span className="col-sm-3"><abbr className={'color'+item.participation_status}></abbr></span>
-                                            <span id="showDetail" className={item.participation_status==='1' ?"col-sm-2":"col-sm-2 isHide" }    onClick={this.showDetail.bind(this,item)}>Consumption Details{item.participation_status}</span>     
+                                            <span id="showDetail" className={item.participation_status==='1' ?"col-sm-2":"col-sm-2 isHide" }    onClick={this.showDetail.bind(this,item)}>Consumption Details</span>     
                                         </li>)
                                     })
                                 }                          
