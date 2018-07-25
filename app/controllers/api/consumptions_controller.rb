@@ -12,6 +12,7 @@ class Api::ConsumptionsController < Api::BaseController
                    hts_peak: 0, hts_off_peak: 0, htl_peak: 0, htl_off_peak: 0, eht_peak: 0, eht_off_peak: 0 }
     consumptions.each do |consumption|
       details = ConsumptionDetail.find_by_consumption_id(consumption.id).order(account_number: :asc)
+      details_array = consumption_details(details)
       count = details.count
       entities = CompanyBuyerEntity.find_by_user(consumption.user_id)
       data.push(id: consumption.id, auction_id: consumption.auction_id, user_id: consumption.user_id,
@@ -24,7 +25,7 @@ class Api::ConsumptionsController < Api::BaseController
                 htl_off_peak: Consumption.get_htl_off_peak(consumption.htl_off_peak),
                 eht_peak: Consumption.get_eht_peak(consumption.eht_peak),
                 eht_off_peak: Consumption.get_eht_off_peak(consumption.eht_off_peak),
-                details: details,
+                details: details_array,
                 entities: entities)
       total_info[:consumption_count] += 1
       total_info[:account_count] += count
@@ -43,6 +44,7 @@ class Api::ConsumptionsController < Api::BaseController
   def show
     consumption = @consumption
     details = ConsumptionDetail.find_by_consumption_id(params[:id]).order(id: :asc)
+    details_array = consumption_details(details)
     count = details.count
     entities = CompanyBuyerEntity.find_by_user(consumption.user_id)
     cons = { auction_id: consumption.auction_id,
@@ -58,7 +60,7 @@ class Api::ConsumptionsController < Api::BaseController
              htl_off_peak: Consumption.get_htl_off_peak(consumption.htl_off_peak),
              eht_peak: Consumption.get_eht_peak(consumption.eht_peak),
              eht_off_peak: Consumption.get_eht_off_peak(consumption.eht_off_peak),
-             details: details,
+             details: details_array,
              entities: entities }
 
     render json: cons, status: 200
@@ -114,6 +116,42 @@ class Api::ConsumptionsController < Api::BaseController
   end
 
   private
+
+  def consumption_details(consumption_details)
+    consumption_details_all = []
+    consumption_details.each do |consumption_detail|
+      if consumption_detail.user_attachment_id.blank?
+        user_attachment = nil
+      else
+        user_attachment = UserAttachment.find_by_id(consumption_detail.user_attachment_id)
+      end
+      final_detail = {
+          "id" => consumption_detail.id,
+          "account_number" => consumption_detail.account_number,
+          "intake_level" => consumption_detail.intake_level,
+          "peak" => consumption_detail.peak,
+          "off_peak" => consumption_detail.off_peak,
+          "consumption_id" => consumption_detail.consumption_id,
+          "created_at" => consumption_detail.created_at,
+          "updated_at" => consumption_detail.updated_at,
+          "premise_address" => consumption_detail.premise_address,
+          "contracted_capacity" => consumption_detail.contracted_capacity,
+          "existing_plan" => consumption_detail.existing_plan,
+          "contract_expiry" => consumption_detail.contract_expiry,
+          "blk_or_unit" => consumption_detail.blk_or_unit,
+          "street" => consumption_detail.street,
+          "unit_number" => consumption_detail.unit_number,
+          "postal_code" => consumption_detail.postal_code,
+          "totals" => consumption_detail.totals,
+          "peak_pct" => consumption_detail.peak_pct,
+          "company_buyer_entity_id" => consumption_detail.company_buyer_entity_id,
+          "user_attachment_id" => consumption_detail.user_attachment_id,
+          "user_attachment" =>user_attachment
+      }
+      consumption_details_all.push(final_detail)
+    end
+    consumption_details_all
+  end
 
   def set_consumption
     if current_user.has_role?('admin') || current_user.has_role?('retailer')

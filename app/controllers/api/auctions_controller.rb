@@ -396,7 +396,7 @@ class Api::AuctionsController < Api::BaseController
 
   def get_letter_of_award_pdf_data(auction_id, user_id, contract_duration, entity_id)
     if contract_duration.blank? && entity_id.blank?
-      consumption, auction_result, consumption_details, auction_contract = get_data(auction_id, user_id)
+      consumption, auction_result, consumption_details, auction_contract = get_data_v0(auction_id, user_id)
     else
       consumption, auction_result, consumption_details, auction_contract = get_data_entity(auction_id, user_id, contract_duration, entity_id)
     end
@@ -419,7 +419,7 @@ class Api::AuctionsController < Api::BaseController
     return auction_result, consumption, tender_state, consumption_details, auction_contract
   end
 
-  def get_data(auction_id, user_id)
+  def get_data_v0(auction_id, user_id)
     consumption = Consumption.select("users.id, users.name, coalesce(users.company_name, '') company_name,
                                   coalesce(users.company_address, '') company_address,
                                   coalesce(users.company_unique_entity_number,'') company_unique_entity_number,
