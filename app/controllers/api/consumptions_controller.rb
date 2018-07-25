@@ -17,6 +17,7 @@ class Api::ConsumptionsController < Api::BaseController
       entities = CompanyBuyerEntity.find_by_user(consumption.user_id)
       data.push(id: consumption.id, auction_id: consumption.auction_id, user_id: consumption.user_id,
                 company_name: consumption.user.company_name, name: consumption.user.name, count: count,
+                consumption: consumption,
                 lt_peak: Consumption.get_lt_peak(consumption.lt_peak),
                 lt_off_peak: Consumption.get_lt_off_peak(consumption.lt_off_peak),
                 hts_peak: Consumption.get_hts_peak(consumption.hts_peak),
@@ -51,6 +52,7 @@ class Api::ConsumptionsController < Api::BaseController
              user_id: consumption.user_id,
              company_name: consumption.user.company_name,
              name: consumption.user.name,
+             consumption: consumption,
              count: count,
              lt_peak: Consumption.get_lt_peak(consumption.lt_peak),
              lt_off_peak: Consumption.get_lt_off_peak(consumption.lt_off_peak),

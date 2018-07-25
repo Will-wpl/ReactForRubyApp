@@ -24,7 +24,8 @@ export default class AdminBuyerListDetail extends Component {
             detail: [],
             detail_index: 0,
             text: "",
-            comment: ""
+            comment: "",
+            dataVersion: ""
         }
         this.type = sessionStorage.getItem('comsumptiontype');
         if (this.type === 'company') {
@@ -41,7 +42,8 @@ export default class AdminBuyerListDetail extends Component {
             console.log(res)
             this.setState({
                 consumption_id: id,
-                comsumption_list: [res]
+                comsumption_list: [res],
+                dataVersion: res.contract_duration ? "1" : ""
             })
         }, error => {
 
