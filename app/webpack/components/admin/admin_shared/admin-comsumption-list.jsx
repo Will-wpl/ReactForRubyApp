@@ -50,10 +50,10 @@ export default class AdminComsumptionList extends Component {
     }
     render() {
         return (
+            
             <div>
                 {this.props.comsumption_list ?
                     this.props.comsumption_list.map((item, index) => {
-
                         return <div key={index}>
                             <div>New Accounts</div>
                             <div className="comsumption_list" >
