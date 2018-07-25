@@ -40,7 +40,7 @@ export default class AdminComsumptionList extends Component {
         if (this.state.purchaseEntity.length>0) {
             for (let i = 0; i < this.state.purchaseEntity.length; i++) {
                 if (this.state.purchaseEntity[i].id == id) {
-                    name = this.state.comsumption_list[i].company_name;
+                    name = this.state.comsumption_list[i]?this.state.comsumption_list[i].company_name:'';
                     return name;
                     break;
                 }
