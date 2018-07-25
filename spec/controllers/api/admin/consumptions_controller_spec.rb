@@ -87,6 +87,8 @@ RSpec.describe Api::Admin::ConsumptionsController, type: :controller do
 
     it "success" do
       expect(response).to be_success
+      hash = JSON.parse(response.body)
+      expect(hash['count']).to eq(4)
     end
   end
 
