@@ -326,7 +326,7 @@ export class CreateNewRA extends Component {
     }
     mouthsHtml(mouth){
         const html = <div key={mouth}>
-                <h3 className={"u-mt2 u-mb2"}>{mouth} mouths</h3>
+                <h3 className={"u-mt2 u-mb2"}>{mouth} months</h3>
                 <div className="lm--formItem lm--formItem--inline string optional">
                     <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                         <thead>
