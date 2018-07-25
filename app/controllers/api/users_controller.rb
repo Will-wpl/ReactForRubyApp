@@ -69,7 +69,7 @@ class Api::UsersController < Api::BaseController
     target_user = User.find(params[:user_id])
     approval_status = params[:approved].blank? ? User::ApprovalStatusReject : User::ApprovalStatusApproved
     comment = params[:comment]
-    target_user.update(approval_status: approval_status, comment: comment)
+    target_user.update(approval_status: approval_status, comment: comment) unless target_user.approval_status == User::ApprovalStatusApproved
     if approval_status == User::ApprovalStatusApproved
       UserMailer.approval_email(target_user).deliver_later
     elsif approval_status == User::ApprovalStatusReject

@@ -19,7 +19,7 @@ export default class AdminComsumptionList extends Component {
         if (next.comsumption_list) {
             this.setState({
                 comsumption_list: next.comsumption_list,
-                purchaseEntity:next.comsumption_list[0].entities
+                purchaseEntity:next.comsumption_list.length>0?next.comsumption_list[0].entities:[]
             })
         }
     }
@@ -37,7 +37,7 @@ export default class AdminComsumptionList extends Component {
     }
     getPurchase(id, index) {
         let name = "";
-        if (this.state.purchaseEntity) {
+        if (this.state.purchaseEntity.length>0) {
             for (let i = 0; i < this.state.purchaseEntity.length; i++) {
                 if (this.state.purchaseEntity[i].id == id) {
                     name = this.state.comsumption_list[i].company_name;
