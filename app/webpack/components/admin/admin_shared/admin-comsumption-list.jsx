@@ -6,18 +6,20 @@ export default class AdminComsumptionList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            purchaseEntity: []
+            purchaseEntity: [],
+            comsumption_list:[]
         }
     }
 
     componentDidMount() {
 
-    }
+    } 
 
     componentWillReceiveProps(next) {
         if (next.comsumption_list) {
             this.setState({
-                purchaseEntity: next.comsumption_list
+                comsumption_list: next.comsumption_list,
+                purchaseEntity:next.comsumption_list[0].entities
             })
         }
     }
@@ -35,10 +37,10 @@ export default class AdminComsumptionList extends Component {
     }
     getPurchase(id, index) {
         let name = "";
-        if (this.state.purchaseEntity[index].entities) {
-            for (let i = 0; i < this.state.purchaseEntity[index].entities.length; i++) {
-                if (this.state.purchaseEntity[index].entities[i].id == id) {
-                    name = this.props.comsumption_list[index].entities[i].company_name;
+        if (this.state.purchaseEntity) {
+            for (let i = 0; i < this.state.purchaseEntity.length; i++) {
+                if (this.state.purchaseEntity[i].id == id) {
+                    name = this.state.comsumption_list[i].company_name;
                     return name;
                     break;
                 }

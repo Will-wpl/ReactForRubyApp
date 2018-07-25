@@ -340,19 +340,27 @@ class Api::AuctionsController < Api::BaseController
   def letter_of_award_pdf
     auction_id = params[:auction_id]
     user_id = params[:user_id]
+    contract_duration = params[:contract_duration]
+    entity_id = params[:entity_id]
 
     auction = Auction.find_by id: auction_id
 
-    auction_result, consumption, tender_state, consumption_details = get_letter_of_award_pdf_data(auction_id, user_id)
+    auction_result, consumption, tender_state, consumption_details, auction_contract = get_letter_of_award_pdf_data(auction_id, user_id, contract_duration, entity_id)
     pdf_param = {
         :user_id => user_id,
         :auction => auction,
         :auction_result => auction_result,
         :consumption => consumption,
         :tender_state => tender_state,
-        :consumption_details => consumption_details
+        :consumption_details => consumption_details,
+        :auction_contract => auction_contract
     }
-    pdf, output_filename = LetterOfAward.new(pdf_param).pdf
+    if entity_id.blank?
+      pdf, output_filename = LetterOfAward.new(pdf_param).pdf
+    else
+      pdf, output_filename = LetterOfAwardV2.new(pdf_param, 'letter_of_award_template_v2.html').pdf
+    end
+
     send_data(pdf, filename: output_filename)
   end
 
@@ -386,23 +394,13 @@ class Api::AuctionsController < Api::BaseController
     "/admin/auctions/#{auctionId}/#{addr}"
   end
 
-  def get_letter_of_award_pdf_data(auction_id, user_id)
-    auction_result = AuctionResult.select("users.id, users.name, coalesce(users.company_name, '') company_name,
-                                  coalesce(users.company_address, '') company_address,
-                                  coalesce(users.company_unique_entity_number, '') company_unique_entity_number,
-                                  auction_results.*")
-                         .joins(:user)
-                         .where('auction_id = ?', auction_id)
-                         .limit 1
+  def get_letter_of_award_pdf_data(auction_id, user_id, contract_duration, entity_id)
+    if contract_duration.blank? && entity_id.blank?
+      consumption, auction_result, consumption_details, auction_contract = get_data_v0(auction_id, user_id)
+    else
+      consumption, auction_result, consumption_details, auction_contract = get_data_entity(auction_id, user_id, contract_duration, entity_id)
+    end
 
-    consumption = Consumption.select("users.id, users.name, coalesce(users.company_name, '') company_name,
-                                  coalesce(users.company_address, '') company_address,
-                                  coalesce(users.company_unique_entity_number,'') company_unique_entity_number,
-                                  consumptions.*")
-                      .joins(:user)
-                      .where('auction_id = ? AND user_id = ?', auction_id, user_id)
-
-    consumption_id = consumption[0].id unless consumption.empty?
     winner_user_id = auction_result[0].user_id unless auction_result.empty?
     tender_state = TenderStateMachine
                        .find_by_sql ["SELECT *
@@ -417,8 +415,59 @@ class Api::AuctionsController < Api::BaseController
                                                           LIMIT 1)
                                     ORDER BY created_at DESC LIMIT 1", auction_id, winner_user_id]
 
+
+    return auction_result, consumption, tender_state, consumption_details, auction_contract
+  end
+
+  def get_data_v0(auction_id, user_id)
+    consumption = Consumption.select("users.id, users.name, coalesce(users.company_name, '') company_name,
+                                  coalesce(users.company_address, '') company_address,
+                                  coalesce(users.company_unique_entity_number,'') company_unique_entity_number,
+                                  consumptions.*")
+                      .joins(:user)
+                      .where('auction_id = ? AND user_id = ?', auction_id, user_id)
+
+
+    auction_result = AuctionResult.select("users.id, users.name, coalesce(users.company_name, '') company_name,
+                                  coalesce(users.company_address, '') company_address,
+                                  coalesce(users.company_unique_entity_number, '') company_unique_entity_number,
+                                  auction_results.*")
+                         .joins(:user)
+                         .where('auction_id = ?', auction_id)
+                         .limit 1
+
+    consumption_id = consumption[0].id unless consumption.empty?
     consumption_details = ConsumptionDetail.find_by_consumption_id(consumption_id)
-    return auction_result, consumption, tender_state, consumption_details
+    return consumption, auction_result, consumption_details, nil
+  end
+
+  def get_data_entity(auction_id, user_id, contract_duration, entity_id)
+    consumption = Consumption.find_by_sql ["SELECT
+                                    cns.*,
+                                    coalesce(entity.company_name,'') company_name,
+                                    coalesce(entity.company_uen,'') company_unique_entity_number
+                                  FROM
+                                    consumptions cns,
+                                    ( SELECT ent.company_name, ent.company_uen FROM company_buyer_entities ent WHERE ent.user_id = ? AND \"id\" = ? LIMIT 1 ) entity
+                                  WHERE
+                                    cns.user_id = ? AND auction_id = ? AND contract_duration = ?",
+                                           user_id, entity_id, user_id, auction_id, contract_duration]
+    auction_result = AuctionResultContract.select("users.id, users.name, coalesce(users.company_name, '') company_name,
+                                  coalesce(users.company_address, '') company_address,
+                                  coalesce(users.company_unique_entity_number, '') company_unique_entity_number,
+                                  auction_result_contracts.*")
+                         .joins(:user)
+                         .where('auction_id = ? AND contract_duration = ?', auction_id, contract_duration)
+                         .limit 1
+    consumption_details = nil
+    consumption_details = ConsumptionDetail.find_by_sql ['SELECT 	cbe."id",	cbe.company_name, cds.*
+                                         FROM	consumption_details cds
+	                                       LEFT JOIN company_buyer_entities cbe
+                                           ON cds.company_buyer_entity_id = cbe."id"
+                                        WHERE	cds.consumption_id = ? AND cds.company_buyer_entity_id = ?
+                                        ', consumption[0].id, entity_id]   unless consumption.empty?
+    auction_contract = AuctionContract.find_by auction_id: auction_id, contract_duration: contract_duration
+    return consumption, auction_result, consumption_details, auction_contract
   end
 
   def create_auction_at_update

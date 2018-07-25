@@ -16,7 +16,7 @@ class BuyerReport <Pdf
     end
     auction_result = param[:auction_result]
     current_user = param[:current_user]
-    price_table_data, visibilities, price_data = get_price_table_data(auction, auction_result, true, true)
+    price_table_data, visibilities, price_data = get_price_table_data({:auction => auction, :auction_result => auction_result}, true, true)
 
     auction_name_date = auction.name + ' on ' + (auction.start_datetime + zone_time).strftime("%-d %b %Y")
 
