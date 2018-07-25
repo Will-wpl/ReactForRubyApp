@@ -71,7 +71,7 @@ export class FillConsumption extends Component {
                 name: res.auction.name,
                 time: res.auction.actual_begin_time,
                 contract_duration: res.consumption.contract_duration,
-                link: res.tc_attachment.file_path,
+                link: res.tc_attachment ? res.tc_attachment.file_path : "",
             })
 
             if (res.consumption.participation_status === '1' || res.auction.publish_status === "1") {
@@ -94,7 +94,7 @@ export class FillConsumption extends Component {
             }
 
             if (this.state.checked) {
-                $(".btnOption").css("pointer-events", "none").css("color","#4B4941");
+                $(".btnOption").css("pointer-events", "none").css("color", "#4B4941");
             }
 
         }, (error) => {
@@ -208,7 +208,7 @@ export class FillConsumption extends Component {
         this.refs.Modal.showModal("comfirm");
         this.setState({ text: "Are you sure you want to delete ?", submit_type: "delete" });
     }
-  
+
     dateCompare(arr) {
         let count = 0;
         let startDate = moment(this.state.time).format('YYYY-MM-DD HH:mm:ss');
