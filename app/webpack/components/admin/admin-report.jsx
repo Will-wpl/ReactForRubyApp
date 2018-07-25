@@ -28,7 +28,7 @@ export class AdminReport extends Component {
 
     componentDidMount() {
         let contract_duration = window.location.href.indexOf('contract_duration')>0?
-            window.location.href.split('=')[1]:null;
+            window.location.href.split('=')[1]:'';
             this.setState({contract_duration:contract_duration});
         getAuction('admin',(window.location.href.split("auctions/")[1]).split("/report")[0]).then(auction => {
             this.auction = auction;
