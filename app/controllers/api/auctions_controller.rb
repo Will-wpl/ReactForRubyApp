@@ -355,10 +355,11 @@ class Api::AuctionsController < Api::BaseController
         :consumption_details => consumption_details,
         :auction_contract => auction_contract
     }
-    if entity_id.blank?
+    if auction_result.nil?
+      pdf, output_filename =  PdfUtils.get_wicked_pdf_data('no data', 'NO_DATA_LETTER_OF_AWARD.pdf')
+    elsif entity_id.blank?
       pdf, output_filename = LetterOfAward.new(pdf_param).pdf
     else
-      puts " >>>>>>>>>>>>>>>>>parent: #{is_parent}"
       template_filename = if is_parent
                             'letter_of_award_template.html'
                           else
@@ -406,6 +407,7 @@ class Api::AuctionsController < Api::BaseController
     else
       consumption, auction_result, consumption_details, auction_contract, is_parent = get_data_entity(auction_id, user_id, contract_duration, entity_id)
     end
+    return nil, nil,nil, nil, nil, nil if (consumption.blank? || auction_result.blank?)
 
     winner_user_id = auction_result[0].user_id unless auction_result.empty?
     tender_state = TenderStateMachine
@@ -448,6 +450,7 @@ class Api::AuctionsController < Api::BaseController
   end
 
   def get_data_entity(auction_id, user_id, contract_duration, entity_id)
+    return nil, nil,nil, nil, nil if (contract_duration.blank? || entity_id.blank?)
     consumption = Consumption.find_by_sql ["SELECT
                                     cns.*,
                                     coalesce(entity.company_name,'') company_name,
