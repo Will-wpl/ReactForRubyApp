@@ -36,7 +36,12 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     saved_entities = nil
     update_user_params = model_params
     update_user_params = filter_user_password(update_user_params)
-    update_user_params['approval_status'] = User::ApprovalStatusPending
+    user = User.find(params[:user]['id'])
+    # need admin approval if company name / UEN changed.
+    if(user && (user.company_name != update_user_params['company_name'] ||
+        user.company_unique_entity_number != update_user_params['company_unique_entity_number'] ))
+      update_user_params['approval_status'] = User::ApprovalStatusPending
+    end
     ActiveRecord::Base.transaction do
       @user.update(update_user_params)
       # update buyer entity registration information
@@ -213,6 +218,9 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
       target_buyer_entity.contact_mobile_no = buyer_entity['contact_mobile_no'] unless buyer_entity['contact_mobile_no'].blank?
       target_buyer_entity.contact_office_no = buyer_entity['contact_office_no'] unless buyer_entity['contact_office_no'].blank?
       target_buyer_entity.is_default = buyer_entity['is_default'].blank? ? 0 : buyer_entity['is_default']
+      if buyer_entity['user_entity_id'].to_i == 0
+        target_buyer_entity.approval_status = CompanyBuyerEntity::ApprovalStatusPending
+      end
       target_buyer_entity.user = current_user
       if target_buyer_entity.save!
         saved_buyer_entities.push(target_buyer_entity)

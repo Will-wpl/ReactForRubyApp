@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
   let!(:admin_user) { create(:user, :with_admin, email: 'admin@email.com') }
-  let!(:company_buyer) { create(:user, :with_buyer, :with_company_buyer, company_name: 'test buyer', email: 'test_email4@email.com') }
+  let!(:company_buyer) { create(:user, :with_buyer, :with_company_buyer, approval_status: '1', company_unique_entity_number: 'Test UEN', company_name: 'test buyer', email: 'test_email4@email.com') }
   let!(:company_buyer1) { create(:user, :with_buyer, :with_company_buyer, email:'test_email1@email.com') }
 
   context 'save retailer information' do
@@ -215,7 +215,10 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
         buyer_entities = [buyer_entity_3, buyer_entity_4]
 
         put :sign_up, params: { id: company_buyer.id,
-                                user: { agree_seller_buyer: '1',
+                                user: { id: company_buyer.id,
+                                        company_unique_entity_number: 'Test UEN1',
+                                        company_name: 'test buyer',
+                                        agree_seller_buyer: '1',
                                         agree_buyer_revv: '0' },
                                 buyer_entities: buyer_entities.to_json }
       end
