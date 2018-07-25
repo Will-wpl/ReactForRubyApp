@@ -395,7 +395,7 @@ export class FillConsumption extends Component {
             <div>
                 <h1>Buyer Participation</h1>
                 <h4 className="col-sm-12 u-mb2">Invitation to RA: {this.state.name}</h4>
-                <h4 className="col-sm-12 u-mb2">Contract Start Date: {moment(this.state.time).format('D MMM YYYY hh:mm a')}</h4>
+                <h4 className="col-sm-12 u-mb2">Contract Start Date: {moment(this.state.time).format('D MMM YYYY')}</h4>
                 <h4 >
                     <div className="row col-sm-12 u-mb2">
                         <table>
@@ -439,7 +439,7 @@ export class FillConsumption extends Component {
                                             return <tr key={index}>
                                                 <td>{item.account_number} </td>
                                                 <td>{item.existing_plan}</td>
-                                                <td>{item.contract_expiry !== "" ? moment(item.contract_expiry).format('YYYY-MM-DD HH:mm') : "-"}</td>
+                                                <td>{item.contract_expiry !== "" ? moment(item.contract_expiry).format('YYYY-MM-DD') : "-"}</td>
                                                 <td>{this.getPurchase(item.company_buyer_entity_id)} </td>
                                                 <td>{item.intake_level}</td>
                                                 <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "-"}</td>
