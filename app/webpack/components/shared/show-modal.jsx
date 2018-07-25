@@ -307,7 +307,6 @@ export class Modal extends React.Component {
         if (account_count > 0) {
             account = true;
         }
-        console.log(account + "|" + address)
         return account + "|" + address;
     }
 
@@ -685,7 +684,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td><abbr title="required">*</abbr>Intake Level</td>
                                     <td>
-                                        <select id="intake_level" onChange={this.changeConsumption.bind(this, "intake_level")} name="intake_level" defaultValue={this.state.intake_level_selected}>
+                                        <select id="intake_level" onChange={this.changeConsumption.bind(this, "intake_level")} name="intake_level" value={this.state.intake_level_selected}>
                                             {
                                                 this.state.intake_level.map((it, i) => <option key={i} value={(it.split("(")[1]).split(")")[0]}>{it}</option>)
                                             }
