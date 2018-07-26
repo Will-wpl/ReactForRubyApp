@@ -76,7 +76,8 @@ class Api::AuctionHistoriesController < Api::BaseController
           result = auction.auction_result.blank? ? nil : auction.auction_result.auction_result_contracts.where('contract_duration = ?' , contract.contract_duration).take
           auction.contract_period_end_date = contract.contract_period_end_date
           auction.total_volume = contract.total_volume
-          hash.merge!({ "duration_#{duration}": { auction: auction, histories: histories, result: result }})
+          auction_json = auction.attributes.dup
+          hash.merge!({ "duration_#{duration}": { auction: auction_json, histories: histories, result: result }})
         end
 
       end
