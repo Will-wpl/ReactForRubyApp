@@ -45,7 +45,7 @@ class RAReport < Pdf
       PdfRankChart.new(ranking_param).chart
       unless param[:auction_result].nil?
         pdf.fill_color "ffffff"
-        pdf.grid([2, 19], [22, 29]).bounding_box do
+        pdf.grid([0, 19], [22, 29]).bounding_box do
           pdf_draw_right_info(param.merge({:pdf => pdf, :auction_contract => param[:auction_contract], :auction_result => auction_result, :price_table => price_table,
                                :auction => auction,:histories_achieved => param[:histories_achieved]}))
 
@@ -61,7 +61,7 @@ class RAReport < Pdf
 
   def pdf_draw_right_info(param)
     pdf = param[:pdf]
-    pdf.move_down 10; PdfLowestDidderInfo.new({:pdf => pdf, :auction_result => param[:auction_result]}).info
+    pdf.move_down 60; PdfLowestDidderInfo.new({:pdf => pdf, :auction_result => param[:auction_result]}).info
     pdf.move_down 15; PdfPriceTable.new({:pdf => pdf, :price_table => param[:price_table]}).table
     pdf.move_down 15; PdfTotalInfo.new({:pdf => pdf, :auction => param[:auction], :auction_result => param[:auction_result]}).info
     pdf.move_down 15; PdfRankingTable.new({:pdf => pdf, :histories_achieved => param[:histories_achieved]}).table
