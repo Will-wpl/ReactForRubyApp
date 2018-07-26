@@ -37,6 +37,8 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     update_user_params = model_params
     update_user_params = filter_user_password(update_user_params)
     user = User.find(params[:user]['id'])
+    raise ActiveRecord::RecordNotFound if user.nil?
+
     # need admin approval if company name / UEN changed.
     if(user.approval_status == User::ApprovalStatusRegistering ||
         (user.company_name != update_user_params['company_name'] ||

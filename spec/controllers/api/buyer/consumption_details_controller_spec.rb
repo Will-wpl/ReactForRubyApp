@@ -81,8 +81,8 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
           expect(hash['hts_off_peak']).to eq('100.0')
           expect(hash['htl_peak']).to eq('100.0')
           expect(hash['htl_off_peak']).to eq('100.0')
-          auction = Auction.find(hash['auction_id'])
-          expect(auction.total_lt_peak.to_s).to eq('2468475.0')
+          # auction = Auction.find(hash['auction_id'])
+          # expect(auction.total_lt_peak.to_s).to eq('2468475.0')
         end
       end
 

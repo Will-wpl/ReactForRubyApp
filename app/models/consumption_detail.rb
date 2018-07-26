@@ -1,6 +1,9 @@
 class ConsumptionDetail < ApplicationRecord
   # Extends
 
+  ApprovalStatusReject = '0'.freeze
+  ApprovalStatusApproved = '1'.freeze
+  ApprovalStatusPending = '2'.freeze
   # Includes
 
   # Associations
