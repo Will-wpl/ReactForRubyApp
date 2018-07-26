@@ -45,7 +45,7 @@ export default class AdminBuyerListDetail extends Component {
                 consumption_id: id,
                 comsumption_list: [res],
                 dataVersion: res.consumption.contract_duration ? "1" : "",
-                past: false
+                past: res.auction_finished
             })
         }, error => {
 
