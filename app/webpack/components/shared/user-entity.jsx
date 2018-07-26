@@ -136,7 +136,7 @@ export class UserEntity extends React.Component {
                             <div className="lm--formItem lm--formItem--inline string">
                                 &nbsp;
                                 <div className="lm--formItem-right lm--formItem-control errormessage" >
-                                    &nbsp;  {/* <span className={it.user_entity_id?"isHide":"isDisplay"}> Waiting for administrator's approval.</span> */}
+                                    &nbsp;  <span className={this.props.entityStatus==="manage" && it.approval_status==="2"?"isDisplay":"isHide"}> Waiting for administrator's approval.</span>
                                 </div>
                             </div>
                             <div className="lm--formItem lm--formItem--inline string">

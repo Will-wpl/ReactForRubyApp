@@ -13,7 +13,7 @@ export class BuyerRegister extends Component {
         this.state = {
             id: "", userid: "", text: "", btn_status: false, disabled: false, havedata: false, allbtnStatus: true, validate: true, use_type: "",
             email_address: "", company_name: "", unique_entity_number: "", company_address: "", billing_address: "", contact_name: "",
-            mobile_number: "", office_number: "",
+            mobile_number: "", office_number: "", entityStatus: "",
 
             user_entity_id: "", user_company_name: "", user_company_uen: "", user_company_address: "", user_billing_address: "", user_bill_attention_to: "",
             user_contact_name: "", user_contact_email: "", user_contact_mobile_no: "", user_contact_office_no: "", comment: "",
@@ -75,16 +75,20 @@ export class BuyerRegister extends Component {
             userid = window.location.href.split("admin/users/")[1].split("/manage")[0];
         }
         if (userid) {
-            this.setState({ userid: userid });
+            this.setState({
+                userid: userid
+            });
         }
         if (window.location.href.indexOf('buyer/home') > 0) {
-            this.setState({ use_type: 'sign_up' });
+            this.setState({
+                use_type: 'sign_up', entityStatus: "register"
+            });
         }
         else if (window.location.href.indexOf('users/edit') > 0) {
-            this.setState({ use_type: 'manage_acount' });
+            this.setState({ use_type: 'manage_acount', entityStatus: "manage" });
         }
         else {
-            this.setState({ use_type: 'admin_approve' });
+            this.setState({ use_type: 'admin_approve', entityStatus: "approve" });
             this.setState({ disabled: true });
         }
     }
@@ -97,6 +101,7 @@ export class BuyerRegister extends Component {
         }
         else {
             getBuyerUserInfo().then(res => {
+                console.log(res)
                 this.setDefault(res);
             })
         }
@@ -543,7 +548,7 @@ export class BuyerRegister extends Component {
             }
         })
     }
-    
+
     submit(type) {
         let isValidator = this.checkSuccess();
         if (isValidator) {
@@ -863,7 +868,7 @@ export class BuyerRegister extends Component {
 
                                     </div>
                                 </div>
-                                <UserEntity disabled={this.state.disabled} entityList={this.state.user_entity_data} ref="userEntity" className={this.state.disabled === 'admin_approve' ? '' : ''} />
+                                <UserEntity entityStatus={this.state.entityStatus} disabled={this.state.disabled} entityList={this.state.user_entity_data} ref="userEntity" className={this.state.disabled === 'admin_approve' ? '' : ''} />
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
                                         <abbr title="required">*</abbr> Tenant Management Service Required:

@@ -79,18 +79,15 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     auction = param[:auction]
     contract_duration = param[:contract_duration]
     auction_id = auction.id
-    histories_achieved = AuctionHistory
-                             .find_by_sql ['select auction_histories.* ,users.company_name from auction_histories LEFT OUTER JOIN users ON users.id = auction_histories.user_id where flag = (select flag from auction_histories where auction_id = ? and is_bidder = true order by bid_time desc LIMIT 1) order by ranking asc, actual_bid_time asc ', auction_id]
-
     if contract_duration.blank?
-      auction_result, achieved, histories, histories_2, auction_contract = get_ra_report_data_v0(param, histories_achieved)
+      histories_achieved, auction_result, achieved, histories, histories_2, auction_contract = get_ra_report_data_v0(param)
     else
-      auction_result, achieved, histories, histories_2, auction_contract =  get_ra_report_data_v2(param)
+      histories_achieved, auction_result, achieved, histories, histories_2, auction_contract = get_ra_report_data_v2(param)
     end
     return auction_result, histories_achieved, achieved, histories, histories_2, auction_contract
   end
 
-  def get_ra_report_data_v0(param, histories_achieved)
+  def get_ra_report_data_v0(param)
     auction = param[:auction]
     start_time = param[:start_time]
     end_time = param[:end_time]
@@ -102,6 +99,8 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     uid2 = param[:uid2]
     auction_id = auction.id
     auction_result = AuctionResult.find_by_auction_id(auction_id)
+    histories_achieved = AuctionHistory
+                             .find_by_sql ['select auction_histories.* ,users.company_name from auction_histories LEFT OUTER JOIN users ON users.id = auction_histories.user_id where flag = (select flag from auction_histories where auction_id = ? and is_bidder = true order by bid_time desc LIMIT 1) order by ranking asc, actual_bid_time asc ', auction_id]
     achieved = histories_achieved[0].average_price <= auction.reserve_price if !histories_achieved.empty?
     histories = AuctionHistory
                     .select('users.id, users.name, users.company_name, auction_histories.*')
@@ -113,7 +112,8 @@ class Api::Admin::AuctionsController < Api::AuctionsController
                       .joins(:user)
                       .where('auction_id = ? and bid_time BETWEEN ? AND ? AND user_id in (?)', auction_id, start_time2, end_time2, uid2)
                       .order(bid_time: :asc)
-    return auction_result, achieved, histories, histories_2, nil
+
+    return histories_achieved, auction_result, achieved, histories, histories_2, nil
   end
 
   def get_ra_report_data_v2(param)
@@ -140,7 +140,10 @@ class Api::Admin::AuctionsController < Api::AuctionsController
                       .where('auction_id = ? and bid_time BETWEEN ? AND ? AND user_id in (?) AND contract_duration = ?', auction_id, start_time2, end_time2, uid2, contract_duration)
                       .order(bid_time: :asc)
     auction_contract = AuctionContract.find_by auction_id: auction_id, contract_duration: contract_duration
-    return auction_result, false, histories, histories_2, auction_contract
+    histories_achieved = AuctionHistory
+                             .find_by_sql ['select auction_histories.* ,users.company_name from auction_histories LEFT OUTER JOIN users ON users.id = auction_histories.user_id where flag = (select flag from auction_histories where auction_id = ? and contract_duration = ? and is_bidder = true order by bid_time desc LIMIT 1) order by ranking asc, actual_bid_time asc ', auction_id, contract_duration]
+
+    return histories_achieved, auction_result, false, histories, histories_2, auction_contract
   end
 
 end

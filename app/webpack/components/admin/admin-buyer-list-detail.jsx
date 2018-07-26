@@ -25,7 +25,9 @@ export default class AdminBuyerListDetail extends Component {
             detail_index: 0,
             text: "",
             comment: "",
-            dataVersion: ""
+            dataVersion: "",
+            past: false
+
         }
         this.type = sessionStorage.getItem('comsumptiontype');
         if (this.type === 'company') {
@@ -39,11 +41,11 @@ export default class AdminBuyerListDetail extends Component {
     componentDidMount() {
         let id = window.location.href.split("consumptions/")[1];
         getAdminBuyerListDetails(id).then(res => {
-            console.log(res)
             this.setState({
                 consumption_id: id,
                 comsumption_list: [res],
-                dataVersion: res.contract_duration ? "1" : ""
+                dataVersion: res.consumption.contract_duration ? "1" : "",
+                past: false
             })
         }, error => {
 
@@ -111,12 +113,12 @@ export default class AdminBuyerListDetail extends Component {
         };
         if (obj.action === 'reject') {
             approveConsumptions(param).then(res => {
-                location.href = "/admin/auctions/published";
+                location.href = "/admin/auctions/unpublished";
             })
         }
         else {
             approveConsumptions(param).then(res => {
-                location.href = "/admin/auctions/published";
+                location.href = "/admin/auctions/unpublished";
             })
         }
     }
@@ -125,24 +127,24 @@ export default class AdminBuyerListDetail extends Component {
             <div className="u-grid mg0 validate_message">
                 <h2 className="u-mt2 u-mb2">View Consumption Details</h2>
                 <div className="col-sm-12 u-mb3">
-                    <AdminComsumptionList visible="visible" comsumption_list={this.state.comsumption_list} detail={this.show_detail.bind(this)} type={this.type} />
+                    <AdminComsumptionList visible="visible" dataVersion={this.state.dataVersion} comsumption_list={this.state.comsumption_list} detail={this.show_detail.bind(this)} type={this.type} />
                 </div>
-                <div className="col-sm-12 u-mb3">
+                <div className={this.state.dataVersion === "1" ? "col-sm-12 u-mb3" : "isHide"}>
                     <div>
                         <div className="lm--formItem lm--formItem--inline string">
                             <label className="lm--formItem-left lm--formItem-label string required">
                                 Comment:
                                     </label>
                             <div className="lm--formItem-right lm--formItem-control">
-                                <textarea name="comment" value={this.state.comment} onChange={this.Change.bind(this, 'comment')} ref="comment" aria-required="true"></textarea>
+                                <textarea name="comment" value={this.state.comment} onChange={this.Change.bind(this, 'comment')} ref="comment" aria-required="true" disabled={this.state.past}></textarea>
                                 <div className='isPassValidate' id='comment_message' >This field is required!</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="retailer_btn">
-                    <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'reject')}>Reject</button>
-                    <button id="submit_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'approve')}>Approve</button>
+                <div className={this.state.dataVersion === "1" ? "retailer_btn" : "isHide"}>
+                    <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'reject')} disabled={this.state.past} >Reject</button>
+                    <button id="submit_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'approve')} disabled={this.state.past}>Approve</button>
                 </div>
                 <div className="createRaMain u-grid">
                     <a className="lm--button lm--button--primary u-mt3" href="javascript:javascript:self.location=document.referrer;" >Back</a>

@@ -164,9 +164,9 @@ export class FillConsumption extends Component {
         this.accountItem.totals = item.totals;
         this.accountItem.peak_pct = item.peak_pct;
         this.accountItem.peak = 10;
-        this.accountItem.attachId = item.user_attachment.id;
-        this.accountItem.file_path = item.user_attachment.file_path;
-        this.accountItem.file_name = item.user_attachment.file_name;
+        this.accountItem.attachId = item.user_attachment ? item.user_attachment.id : "";
+        this.accountItem.file_path = item.user_attachment ? item.user_attachment.file_path : "";
+        this.accountItem.file_name = item.user_attachment ? item.user_attachment.file_name : "";
         this.accountItem.option = 'update';
         this.setState({
             account_detail: this.accountItem,
@@ -447,7 +447,7 @@ export class FillConsumption extends Component {
                                                     <div><span>Total Monthly:</span><span className="textDecoration" >{item.totals}</span><span>kWh/month</span></div>
                                                     <div><span>Peak:</span><span className="textDecoration">{item.peak_pct}</span><span>%</span><span title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">&nbsp;&nbsp;?</span></div>
                                                     <div><span>Off-Peak:</span><span className="textDecoration">{100 - item.peak_pct}</span><span>%(auto calculate)</span></div>
-                                                    <div><span>Upload bill(s):</span><span><a href={item.user_attachment ? item.user_attachment.file_path : "#"} target="_blank">{item.user_attachment ? item.user_attachment.file_name : ""}</a></span></div>
+                                                    <div className={item.user_attachment?"isDisplay":"isHide"}><span>Upload bill(s):</span><span><a href={item.user_attachment ? item.user_attachment.file_path : "#"} target="_blank">{item.user_attachment ? item.user_attachment.file_name : ""}</a></span></div>
                                                 </td>
                                                 <td>
                                                     <div className="editSite"><a className="btnOption" onClick={this.edit_site.bind(this, item, index)}>Edit </a></div>
