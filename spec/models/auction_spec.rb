@@ -40,5 +40,12 @@ RSpec.describe Auction, type: :model do
       result = Auction.get_days(Date.parse(start_dt), Date.parse(end_dt))
       expect(result).to eq(33)
     end
+
+    # it 'calculates' do
+    #   start_dt = Date.new(2018, 7, 26)
+    #   end_dt = start_dt.advance(months: 6).advance(days: -1)
+    #   result = Auction.get_days(start_dt, end_dt)
+    #   puts result
+    # end
   end
 end
