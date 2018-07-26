@@ -80,7 +80,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
         consumption_detail.off_peak = detail['off_peak']
         consumption_detail.premise_address = detail['premise_address']
         consumption_detail.contracted_capacity = detail['contracted_capacity']
-        #update - new fields (20180709) - Start
+        # update - new fields (20180709) - Start
         consumption_detail.existing_plan = detail['existing_plan']
         consumption_detail.totals = detail['totals']
         consumption_detail.peak_pct = detail['peak_pct']
@@ -93,7 +93,10 @@ class Api::ConsumptionDetailsController < Api::BaseController
         consumption_detail.postal_code = detail['postal_code']
         consumption_detail.company_buyer_entity_id = detail['company_buyer_entity_id']
         consumption_detail.user_attachment_id = detail['user_attachment_id']
-        #Update -new fields (20180709) - End
+        # Update -new fields (20180709) - End
+        # update - new fields (20180726) - Start
+        # consumption_detail.approval_status = ConsumptionDetail::ApprovalStatusPending
+        # update - new fields (20180726) - End
         consumption_detail.consumption_id = params[:consumption_id]
         saved_details.push(consumption_detail) if consumption_detail.save!
       end
@@ -127,29 +130,36 @@ class Api::ConsumptionDetailsController < Api::BaseController
       auction_start_datetime = auction.start_datetime.strftime('%Y-%m-%d %H:%M:%S').to_s
 
       if consumption.save!
-        if consumption.contract_duration.blank?
-          days = Auction.get_days(auction.contract_period_start_date, auction.contract_period_end_date)
-          auction = set_participate_auction_total(auction, intake_values, days)
-          if auction.save!
-            send_participated_mail(auction_name, auction_start_datetime)
-            render json: consumption, status: 200
-          else
-            render json: nil, status: 500
-          end
-        else
-          auction_contract = auction.auction_contracts.where('contract_duration = ?', consumption.contract_duration).take
-          days = Auction.get_days(auction.contract_period_start_date, auction_contract.contract_period_end_date)
-          auction_contract = set_participate_auction_contract_total(auction_contract, intake_values, days)
-          if auction_contract.save!
-            send_participated_mail(auction_name, auction_start_datetime)
-            render json: consumption, status: 200
-          else
-            render json: nil, status: 500
-          end
-        end
+        # Change -- [do not save acution. move this logic to admin approval logic] - Start
+        #  -- Original
+        # if consumption.contract_duration.blank?
+        #   days = Auction.get_days(auction.contract_period_start_date, auction.contract_period_end_date)
+        #   auction = set_participate_auction_total(auction, intake_values, days)
+        #   if auction.save!
+        #     send_participated_mail(auction_name, auction_start_datetime)
+        #     render json: consumption, status: 200
+        #   else
+        #     render json: nil, status: 500
+        #   end
+        # else
+        #   auction_contract = auction.auction_contracts.where('contract_duration = ?', consumption.contract_duration).take
+        #   days = Auction.get_days(auction.contract_period_start_date, auction_contract.contract_period_end_date)
+        #   auction_contract = set_participate_auction_contract_total(auction_contract, intake_values, days)
+        #   if auction_contract.save!
+        #     send_participated_mail(auction_name, auction_start_datetime)
+        #     render json: consumption, status: 200
+        #   else
+        #     render json: nil, status: 500
+        #   end
+        # end
+        # -- Now logic - 20170726
+        send_participated_mail(auction_name, auction_start_datetime)
+        render json: consumption, status: 200
+        # Change -- [do not save acution. move this logic to admin approval logic] - End
       else
         render json: nil, status: 500
       end
+
     end
     
   end
@@ -237,46 +247,6 @@ class Api::ConsumptionDetailsController < Api::BaseController
                    else
                      current_user.consumptions.find(params[:consumption_id])
                    end
-  end
-
-  def set_participate_auction_total(auction, intake_values, days)
-    auction.total_lt_peak += intake_values[0]
-    auction.total_lt_off_peak += intake_values[1]
-    auction.total_hts_peak += intake_values[2]
-    auction.total_hts_off_peak += intake_values[3]
-    auction.total_htl_peak += intake_values[4]
-    auction.total_htl_off_peak += intake_values[5]
-    auction.total_eht_peak += intake_values[6]
-    auction.total_eht_off_peak += intake_values[7]
-    total_volume = Auction.set_total_volume(
-        auction.total_lt_peak, auction.total_lt_off_peak, auction.total_hts_peak, auction.total_hts_off_peak,
-        auction.total_htl_peak, auction.total_htl_off_peak, auction.total_eht_peak, auction.total_eht_off_peak )
-    auction.total_volume = Auction.set_c_value(total_volume, days)
-    auction
-  end
-
-  def set_participate_auction_contract_total(auction_contract, intake_values, days)
-    auction_contract.total_lt_peak = 0 if auction_contract.total_lt_peak.blank?
-    auction_contract.total_lt_off_peak = 0 if auction_contract.total_lt_off_peak.blank?
-    auction_contract.total_hts_peak = 0 if auction_contract.total_hts_peak.blank?
-    auction_contract.total_hts_off_peak = 0 if auction_contract.total_hts_off_peak.blank?
-    auction_contract.total_htl_peak = 0 if auction_contract.total_htl_peak.blank?
-    auction_contract.total_htl_off_peak = 0 if auction_contract.total_htl_off_peak.blank?
-    auction_contract.total_eht_peak = 0 if auction_contract.total_eht_peak.blank?
-    auction_contract.total_eht_off_peak = 0 if auction_contract.total_eht_off_peak.blank?
-    auction_contract.total_lt_peak += intake_values[0]
-    auction_contract.total_lt_off_peak += intake_values[1]
-    auction_contract.total_hts_peak += intake_values[2]
-    auction_contract.total_hts_off_peak += intake_values[3]
-    auction_contract.total_htl_peak += intake_values[4]
-    auction_contract.total_htl_off_peak += intake_values[5]
-    auction_contract.total_eht_peak += intake_values[6]
-    auction_contract.total_eht_off_peak += intake_values[7]
-    total_volume = Auction.set_total_volume(
-        auction_contract.total_lt_peak, auction_contract.total_lt_off_peak, auction_contract.total_hts_peak, auction_contract.total_hts_off_peak,
-        auction_contract.total_htl_peak, auction_contract.total_htl_off_peak, auction_contract.total_eht_peak, auction_contract.total_eht_off_peak )
-    auction_contract.total_volume = Auction.set_c_value(total_volume, days)
-    auction_contract
   end
 
 end
