@@ -785,7 +785,7 @@ export class Modal extends React.Component {
                                     <td>&nbsp;&nbsp;&nbsp; Upload bill(s)</td>
                                     <td>
                                         <div className="upload">
-                                            <UploadFile type="CONSUMPTION_DOCUMENTS" showlist={false} validate={this.state.validate} showList="1" col_width="9" showWay="2" fileData={this.state.fileData.CONSUMPTION_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
+                                            <UploadFile type="CONSUMPTION_DOCUMENTS" showlist={false} validate={true} showList="1" col_width="9" showWay="2" fileData={this.state.fileData.CONSUMPTION_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
                                         </div>
                                     </td>
                                 </tr>
