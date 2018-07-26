@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180724054833) do
+ActiveRecord::Schema.define(version: 20180726022321) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -271,6 +271,7 @@ ActiveRecord::Schema.define(version: 20180724054833) do
     t.decimal "peak_pct"
     t.bigint "company_buyer_entity_id"
     t.bigint "user_attachment_id"
+    t.string "approval_status"
     t.index ["company_buyer_entity_id"], name: "index_consumption_details_on_company_buyer_entity_id"
     t.index ["consumption_id"], name: "index_consumption_details_on_consumption_id"
     t.index ["user_attachment_id"], name: "index_consumption_details_on_user_attachment_id"
