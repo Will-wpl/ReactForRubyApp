@@ -8,7 +8,7 @@ export default class ReservePriceCompare extends Component {
         }
     }
     componentWillReceiveProps(nextProps) {
-        if(nextProps.compare){
+        if(nextProps.compare && nextProps.contracts[0]){
             this.compare(nextProps.contracts[0],nextProps.compare)
         }
     }
@@ -39,17 +39,17 @@ export default class ReservePriceCompare extends Component {
                     <tbody>
                     <tr>
                         <td>Peak</td>
-                        {data.has_lt?<td><abbr className={this.state.lt_peak?'fill_yes':''}>{parseFloat(data.starting_price_lt_peak).toFixed(4)}</abbr></td>:''}
-                        {data.has_hts?<td><abbr className={this.state.hts_peak?'fill_yes':''}>{parseFloat(data.starting_price_hts_peak).toFixed(4)}</abbr></td>:''}
-                        {data.has_htl?<td><abbr className={this.state.htl_peak?'fill_yes':''}>{parseFloat(data.starting_price_hts_peak).toFixed(4)}</abbr></td>:''}
-                        {data.has_eht?<td><abbr className={this.state.eht_peak?'fill_yes':''}>{parseFloat(data.starting_price_hts_peak).toFixed(4)}</abbr></td>:''}
+                        {data.has_lt?<td><abbr className={this.state.lt_peak?'fill_yes':''}>{parseFloat(data.reserve_price_lt_peak).toFixed(4)}</abbr></td>:''}
+                        {data.has_hts?<td><abbr className={this.state.hts_peak?'fill_yes':''}>{parseFloat(data.reserve_price_hts_peak).toFixed(4)}</abbr></td>:''}
+                        {data.has_htl?<td><abbr className={this.state.htl_peak?'fill_yes':''}>{parseFloat(data.reserve_price_hts_peak).toFixed(4)}</abbr></td>:''}
+                        {data.has_eht?<td><abbr className={this.state.eht_peak?'fill_yes':''}>{parseFloat(data.reserve_price_hts_peak).toFixed(4)}</abbr></td>:''}
                     </tr>
                     <tr>
                         <td>Off Peak</td>
-                        {data.has_lt?<td><abbr className={this.state.lt_off_peak?'fill_yes':''}>{parseFloat(data.starting_price_lt_peak).toFixed(4)}</abbr></td>:''}
-                        {data.has_hts?<td><abbr className={this.state.hts_off_peak?'fill_yes':''}>{parseFloat(data.starting_price_lt_peak).toFixed(4)}</abbr></td>:''}
-                        {data.has_htl?<td><abbr className={this.state.htl_off_peak?'fill_yes':''}>{parseFloat(data.starting_price_lt_peak).toFixed(4)}</abbr></td>:''}
-                        {data.has_eht?<td><abbr className={this.state.eht_off_peak?'fill_yes':''}>{parseFloat(data.starting_price_lt_peak).toFixed(4)}</abbr></td>:''}
+                        {data.has_lt?<td><abbr className={this.state.lt_off_peak?'fill_yes':''}>{parseFloat(data.reserve_price_lt_peak).toFixed(4)}</abbr></td>:''}
+                        {data.has_hts?<td><abbr className={this.state.hts_off_peak?'fill_yes':''}>{parseFloat(data.reserve_price_lt_peak).toFixed(4)}</abbr></td>:''}
+                        {data.has_htl?<td><abbr className={this.state.htl_off_peak?'fill_yes':''}>{parseFloat(data.reserve_price_lt_peak).toFixed(4)}</abbr></td>:''}
+                        {data.has_eht?<td><abbr className={this.state.eht_off_peak?'fill_yes':''}>{parseFloat(data.reserve_price_lt_peak).toFixed(4)}</abbr></td>:''}
                     </tr>
                     </tbody>
                 </table>
