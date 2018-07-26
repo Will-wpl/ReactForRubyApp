@@ -168,6 +168,11 @@ export class Modal extends React.Component {
                 type: "custom"
             })
         }
+        else if (type === 'defaultCallBack') {
+            this.setState({
+                type: "defaultCallBack"
+            })
+        }
         else {
             this.setState({
                 type: "default"
@@ -226,22 +231,8 @@ export class Modal extends React.Component {
         if (this.state.intake_level_selected === "LT") {
             delete validateItem.contracted_capacity;
         }
-
         let validateResult = validator_Object(this.state, validateItem);
-        // if (this.state.fileData['CONSUMPTION_DOCUMENTS'][0].files.length > 0) {
-        //     hasDoc = true;
-        //     this.setState({
-        //         validate: true
-        //     })
-        // }
-        // else {
-        //     hasDoc = false;
-        //     this.setState({
-        //         validate: false
-        //     })
-        // }
         flag = validateResult.length > 0 ? false : true;
-        // if (flag && hasDoc) {
         if (flag) {
             let status = this.account_address_repeat();
             switch (status) {
@@ -482,7 +473,13 @@ export class Modal extends React.Component {
         })
     }
 
-
+    closeModalAndRefresh()
+    {
+        if (this.props.acceptFunction) {
+            this.props.acceptFunction('refrsesh');
+            this.closeModal();
+        }
+    }
     dateChange(data) {
         this.setState({
             contract_expiry: data
@@ -801,11 +798,16 @@ export class Modal extends React.Component {
         let btn_html = '';
         if (this.state.type == "default") {
             btn_html = <div className="modal_btn"><a onClick={this.closeModal.bind(this)}>OK</a></div>;
-        } else if (this.state.type == "custom") {
+        }
+        else if
+        (this.state.type == "custom") {
             btn_html = <div className="modal_btn">
                 <a onClick={this.Add.bind(this)}>{this.state.option === "update" ? "Save" : "Add"}</a>
                 <a onClick={this.closeModal.bind(this)}>Cancel</a>
             </div>
+        }
+        else if (this.state.type === "defaultCallBack") {
+            btn_html = <div className="modal_btn"><a onClick={this.closeModalAndRefresh.bind(this)}>OK</a></div>;
         }
         else {
             btn_html =
