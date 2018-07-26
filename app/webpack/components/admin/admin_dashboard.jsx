@@ -116,7 +116,7 @@ export class AdminDashboard extends Component {
                     //console.log(histories);
                     this.setState({realtimeData: [].concat(histories), realtimeRanking: orderRanking
                          , currentPrice : orderRanking.length > 0 ? orderRanking[0].average_price : this.state.currentPrice,
-                         compare:orderRanking[0]});
+                         compare:[].concat(orderRanking[0])});
                 }
                 this.createWebsocket(auctionId);
             }, error => {
@@ -178,11 +178,10 @@ export class AdminDashboard extends Component {
         window.location.href=`/admin/auctions/${this.auction.id}/confirm`
     }
     liveTab(index){
-        let arr = this.state.live_auction_contracts.filter(item=>{
-            return index === item.contract_duration
-        })
-        this.setState({livetype:index,livetab:true,contracts:arr});
-        this.refresh();
+        this.setState({livetype:index,livetab:true});
+        setTimeout(()=>{
+            this.refresh();
+        },200)
         this.priceUsers.selectAll();
         this.rankingUsers.selectAll();
     }

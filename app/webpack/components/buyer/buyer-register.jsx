@@ -195,7 +195,8 @@ export class BuyerRegister extends Component {
                                 contact_name: entity[index].contact_name ? entity[index].contact_name : '',
                                 contact_email: entity[index].contact_email ? entity[index].contact_email : '',
                                 contact_mobile_no: entity[index].contact_mobile_no ? entity[index].contact_mobile_no : '',
-                                contact_office_no: entity[index].contact_office_no ? entity[index].contact_office_no : ''
+                                contact_office_no: entity[index].contact_office_no ? entity[index].contact_office_no : '',
+                                approval_status: entity[index].approval_status
                             });
                         }
                     })
@@ -544,7 +545,10 @@ export class BuyerRegister extends Component {
                         text: "Your details have been successfully saved. "
                     }
                 );
-                this.refs.Modal.showModal();
+                this.refs.Modal.showModal("defaultCallBack");
+                // if (this.state.entityStatus === "manage") {
+                //     window.location.href = `/users/edit`;
+                // }
             }
         })
     }
@@ -644,6 +648,11 @@ export class BuyerRegister extends Component {
         else {
             this.setState({ text: "Are you sure you want to approve the request?" });
             this.refs.Modal_Option.showModal('comfirm', { action: 'approve' }, '');
+        }
+    }
+    refreshForm(obj) {
+        if (obj === "refrsesh") {
+            window.location.href = `/users/edit`;
         }
     }
 
@@ -903,7 +912,7 @@ export class BuyerRegister extends Component {
                         </div>
                     </div>
 
-                    <Modal text={this.state.text} ref="Modal" />
+                    <Modal text={this.state.text} acceptFunction={this.refreshForm.bind(this)} ref="Modal" />
                     <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrl} />
                     <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
                 </div>
