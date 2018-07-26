@@ -23,7 +23,7 @@ export default class AdminAward extends Component{
 
     downLoad(data,entity_id){
         //console.log(data);
-        window.open(`/api/admin/auctions/letter_of_award_pdf?auction_id=${data.auction_id}&user_id=${data.user_id}&contract_duration=${this.state.contract_duration}&company_buyer_entity_id=${entity_id}`)
+        window.open(`/api/admin/auctions/letter_of_award_pdf?auction_id=${data.auction_id}&user_id=${data.user_id}&contract_duration=${this.state.contract_duration}&entity_id=${entity_id}`)
     }
 
     renderAwardList(data){
