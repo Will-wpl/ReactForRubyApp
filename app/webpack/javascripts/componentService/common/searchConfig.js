@@ -103,7 +103,7 @@ export const searchTypeData = {
         ]
     },
     "Auction Log List":{
-        list_url:`/api/admin/auctions${window.location.href.indexOf('/log')?window.location.href.split("/auctions")[1].split("/log")[0]:'1'}/log`,
+        list_url:`/api/admin/auctions${window.location.href.indexOf('/log')>0?(window.location.href.split("/auctions")[1].split("/log")[0]):'1'}/log`,
         list_data:[
             {title:"Company Name:",type:"company_name",species:"input",operator:'like'},
         ]
