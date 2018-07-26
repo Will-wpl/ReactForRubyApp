@@ -73,7 +73,6 @@ export class FillConsumption extends Component {
                 contract_duration: res.consumption.contract_duration,
                 link: res.tc_attachment ? res.tc_attachment.file_path : "",
             })
-
             if (res.consumption.participation_status === '1' || res.auction.publish_status === "1") {
                 $("input[type='checkbox']").attr("checked", true);
                 this.setState({
