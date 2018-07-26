@@ -821,7 +821,8 @@ ul.history_files{
    height: 400px;
  }
 .left{
-  text-align: left;
+  text-align: left !important;
+  word-wrap:break-word;
 }
 
  .consumption_table{
