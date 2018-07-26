@@ -418,9 +418,20 @@ export class FillConsumption extends Component {
                         <h4 className="col-sm-12 u-mb2">New Accounts</h4>
                         <div className="col-sm-12 col-md-12">
                             <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                                <colgroup>
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="20%" />
+                                    <col width="10%" />
+                                </colgroup>
                                 <thead>
                                     <tr>
-                                        <th>Account No.</th>
+                                        <th >Account No.</th>
                                         <th>Existing Plan</th>
                                         <th>Contract Expiry</th>
                                         <th>Purchasing Entity</th>
@@ -444,9 +455,9 @@ export class FillConsumption extends Component {
                                                 <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
                                                 <td className="left">
                                                     <div><span>Total Monthly:</span><span className="textDecoration" >{parseInt(item.totals)}</span><span> kWh/month</span></div>
-                                                    <div><span>Peak:</span><span className="textDecoration">{parseFloat(item.peak_pct).toFixed(2)}</span><span> %</span><span style={{fontWeight:"bold",fontSize:"14px"}} title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">&nbsp;&nbsp;?</span></div>
+                                                    <div><span>Peak:</span><span className="textDecoration">{parseFloat(item.peak_pct).toFixed(2)}</span><span> %</span><span style={{ fontWeight: "bold", fontSize: "14px" }} title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">&nbsp;&nbsp;?</span></div>
                                                     <div><span>Off-Peak:</span><span className="textDecoration">{parseFloat(100 - item.peak_pct).toFixed(2)}</span><span> %</span></div>
-                                                    <div className={item.user_attachment?"isDisplay":"isHide"}><span>Upload bill(s):</span><span><a href={item.user_attachment ? item.user_attachment.file_path : "#"} target="_blank">{item.user_attachment ? item.user_attachment.file_name : ""}</a></span></div>
+                                                    <div className={item.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span><span><a href={item.user_attachment ? item.user_attachment.file_path : "#"} target="_blank">{item.user_attachment ? item.user_attachment.file_name : ""}</a></span></div>
                                                 </td>
                                                 <td>
                                                     <div className="editSite"><a className="btnOption" onClick={this.edit_site.bind(this, item, index)}>Edit </a></div>

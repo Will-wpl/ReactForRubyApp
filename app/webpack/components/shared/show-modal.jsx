@@ -735,7 +735,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Street:</td>
                                     <td><input type="text" value={this.state.street} onChange={this.changeConsumption.bind(this, "street")} id="street" name="street" placeholder="" required aria-required="true" />
-                                        <div id="name" className="isPassValidate">This filed is required!</div>
+                                        <div id="street_message" className="isPassValidate">This filed is required!</div>
                                     </td>
 
                                 </tr>

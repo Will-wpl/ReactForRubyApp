@@ -41,7 +41,6 @@ export default class AdminBuyerListDetail extends Component {
     componentDidMount() {
         let id = window.location.href.split("consumptions/")[1];
         getAdminBuyerListDetails(id).then(res => {
-            console.log(res)
             this.setState({
                 consumption_id: id,
                 comsumption_list: [res],
@@ -131,17 +130,17 @@ export default class AdminBuyerListDetail extends Component {
                     <AdminComsumptionList visible="visible" dataVersion={this.state.dataVersion} comsumption_list={this.state.comsumption_list} detail={this.show_detail.bind(this)} type={this.type} />
                 </div>
                 <div className={this.state.dataVersion === "1" ? "col-sm-12 u-mb3" : "isHide"}>
-                    <div>
-                        <div className="lm--formItem lm--formItem--inline string">
-                            <label className="lm--formItem-left lm--formItem-label string required">
-                                Comment:
+                    <div className="lm--formItem lm--formItem--inline string">
+                        {/* <div className="lm--formItem-left lm--formItem-label string required">Comment:</div> */}
+                        <label className="lm--formItem-left lm--formItem-label-comment string required">
+                            Comment:
                                     </label>
-                            <div className="lm--formItem-right lm--formItem-control">
-                                <textarea name="comment" value={this.state.comment} onChange={this.Change.bind(this, 'comment')} ref="comment" aria-required="true" disabled={this.state.past}></textarea>
-                                <div className='isPassValidate' id='comment_message' >This field is required!</div>
-                            </div>
+                        <div className="lm--formItem-right lm--formItem-control">
+                            <textarea name="comment" value={this.state.comment} onChange={this.Change.bind(this, 'comment')} ref="comment" aria-required="true" disabled={this.state.past}></textarea>
+                            <div className='isPassValidate' id='comment_message' >This field is required!</div>
                         </div>
                     </div>
+
                 </div>
                 <div className={this.state.dataVersion === "1" ? "retailer_btn" : "isHide"}>
                     <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'reject')} disabled={this.state.past} >Reject</button>
