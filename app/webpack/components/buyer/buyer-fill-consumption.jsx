@@ -438,15 +438,15 @@ export class FillConsumption extends Component {
                                             return <tr key={index}>
                                                 <td>{item.account_number} </td>
                                                 <td>{item.existing_plan}</td>
-                                                <td>{item.contract_expiry !== "" ? moment(item.contract_expiry).format('YYYY-MM-DD') : "-"}</td>
+                                                <td>{item.contract_expiry !== "" ? moment(item.contract_expiry).format('YYYY-MM-DD') : "—"}</td>
                                                 <td>{this.getPurchase(item.company_buyer_entity_id)} </td>
                                                 <td>{item.intake_level}</td>
-                                                <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "-"}</td>
+                                                <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
                                                 <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
                                                 <td className="left">
-                                                    <div><span>Total Monthly:</span><span className="textDecoration" >{item.totals}</span><span>kWh/month</span></div>
-                                                    <div><span>Peak:</span><span className="textDecoration">{item.peak_pct}</span><span>%</span><span title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">&nbsp;&nbsp;?</span></div>
-                                                    <div><span>Off-Peak:</span><span className="textDecoration">{100 - item.peak_pct}</span><span>%(auto calculate)</span></div>
+                                                    <div><span>Total Monthly:</span><span className="textDecoration" >{parseInt(item.totals)}</span><span> kWh/month</span></div>
+                                                    <div><span>Peak:</span><span className="textDecoration">{parseFloat(item.peak_pct).toFixed(2)}</span><span> %</span><span style={{fontWeight:"bold",fontSize:"14px"}} title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">&nbsp;&nbsp;?</span></div>
+                                                    <div><span>Off-Peak:</span><span className="textDecoration">{parseFloat(100 - item.peak_pct).toFixed(2)}</span><span> %</span></div>
                                                     <div className={item.user_attachment?"isDisplay":"isHide"}><span>Upload bill(s):</span><span><a href={item.user_attachment ? item.user_attachment.file_path : "#"} target="_blank">{item.user_attachment ? item.user_attachment.file_name : ""}</a></span></div>
                                                 </td>
                                                 <td>
