@@ -10,8 +10,9 @@ class Api::AuctionResultsController < Api::BaseController
     end
     data = []
     consumptions.each do |consumption|
+      entities = consumption.consumption_details
       data.push(id: consumption.id, name: consumption.user.company_name, acknowledge: consumption.acknowledge, download_url: nil,
-                auction_id: consumption.auction_id, user_id: consumption.user_id)
+                auction_id: consumption.auction_id, user_id: consumption.user_id, entities: entities)
     end
     render json: data, status: 200
   end
