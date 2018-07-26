@@ -90,7 +90,7 @@ export default class AdminComsumptionList extends Component {
                                                         <td>{it.contract_expiry !== "" ? moment(it.contract_expiry).format('YYYY-MM-DD') : "—"}</td>
                                                         <td>{this.getPurchase(it.company_buyer_entity_id, i)}</td>
                                                         <td>{it.intake_level}</td>
-                                                        <td>{it.contracted_capacity ? it.contracted_capacity : '—'}</td>
+                                                        <td>{it.contracted_capacity ? parseInt(it.contracted_capacity) : '—'}</td>
                                                         <td>{it.blk_or_unit} {it.street} {it.unit_number} {it.postal_code} </td>
                                                         <td className="left">
                                                             <div><span>Total Monthly:</span><span className="textDecoration" >{parseInt(it.totals)}</span><span> kWh/month</span></div>
