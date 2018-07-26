@@ -12,13 +12,15 @@ import Ranking from '../common/chart/ranking';
 import Price from '../common/chart/price';
 import WinnerPrice from './admin_shared/winner';
 import moment from 'moment';
+import ReservePriceCompare from './admin_shared/reserveprice-compare';
 
 export class AdminReport extends Component {
     constructor(props){
         super(props);
         this.state = {
             users:[], histories:[], ranking:[],
-            contract_duration:6,
+            contract_duration:6,compare:{},
+            live_auction_contracts:[],contracts:[],
             winner:{
                 data:{},
                 auction:{}
@@ -31,6 +33,15 @@ export class AdminReport extends Component {
             window.location.href.split('=')[1]:'';
             this.setState({contract_duration:contract_duration});
         getAuction('admin',(window.location.href.split("auctions/")[1]).split("/report")[0]).then(auction => {
+            if(auction.live_auction_contracts){
+                let live = auction.live_auction_contracts.filter(item=>{
+                    return contract_duration === item.contract_duration
+                })
+                console.log(live);
+                this.setState({
+                    live_auction_contracts:live
+                });
+            }
             this.auction = auction;
             this.userStartInfo = auction ? `${auction.name} on ${moment(auction.start_datetime).format('D MMM YYYY')}` : '';
             this.startTime = auction ? `${moment(auction.actual_begin_time).format('h:mm A')}` : '';
@@ -48,7 +59,8 @@ export class AdminReport extends Component {
                             data:data.result,
                             auction:data.auction
                         },
-                        ranking:data.histories
+                        ranking:data.histories,
+                        compare:data.result
                     });
                 }, error => {
                     this.forceUpdate();
@@ -104,12 +116,12 @@ export class AdminReport extends Component {
                     </div>
                     <div className="col-sm-12 col-md-5">
                         <dl className="reservePrice">
-                            <dd>
-                                <span>Reserve Price = $ {this.startPrice} /kWh</span>
-                                <span className={achieved ? 'success' : 'fail'}>
-                                {achieved ? 'Reserve Price Achieved' : 'Reserve Price Not Achieved'}
-                                </span>
-                            </dd>
+                            {/*<dd>*/}
+                                {/*<span>Reserve Price = $ {this.startPrice} /kWh</span>*/}
+                                {/*<span className={achieved ? 'success' : 'fail'}>*/}
+                                {/*{achieved ? 'Reserve Price Achieved' : 'Reserve Price Not Achieved'}*/}
+                                {/*</span>*/}
+                            {/*</dd>*/}
                         </dl>
                     </div>
                 </div>
@@ -171,6 +183,7 @@ export class AdminReport extends Component {
                         </div>
                     </div>
                     <div className="col-sm-12 col-md-5">
+                        {this.state.live_auction_contracts.length>0?<ReservePriceCompare contracts={this.state.live_auction_contracts} compare={this.state.compare} />:''}
                         <WinnerPrice showOrhide="show" winner={this.state.winner} isLtVisible={visibility_lt} isHtsVisible={visibility_hts} isHtlVisible={visibility_htl} isEhtVisible={visibility_eht}/>
                         <RetailerRanking nobidder={true} ranking={this.state.ranking}/>
                         <div className="retailrank_main"><a className="lm--button lm--button--primary u-mt3" onClick={this.dopdf.bind(this)} >Download Report</a></div>
