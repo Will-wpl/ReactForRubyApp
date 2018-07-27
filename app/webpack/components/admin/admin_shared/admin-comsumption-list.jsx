@@ -35,12 +35,12 @@ export default class AdminComsumptionList extends Component {
             this.props.detail(index, id);
         }
     }
-    getPurchase(id, index) {
+    getPurchase(id,index) {
         let name = "";
-        if (this.state.purchaseEntity.length > 0) {
-            for (let i = 0; i < this.state.purchaseEntity.length; i++) {
-                if (this.state.purchaseEntity[i].id == id) {
-                    name = this.state.comsumption_list[i] ? this.state.comsumption_list[i].company_name : '';
+        if (this.state.comsumption_list[index].entities.length > 0) {
+            for (let i = 0; i < this.state.comsumption_list[index].entities.length; i++) {
+                if (this.state.comsumption_list[index].entities[i].id == id) {
+                    name = this.state.comsumption_list[index].entities[i] ? this.state.comsumption_list[index].entities[i].company_name : '';
                     return name;
                     break;
                 }
@@ -49,46 +49,47 @@ export default class AdminComsumptionList extends Component {
         return name;
     }
     render() {
+        
         return (
             this.props.dataVersion ?
                 <div>
-                    {this.props.comsumption_list ?
-                        this.props.comsumption_list.map((item, index) => {
-                            return <div key={index}>
-                                <div>New Accounts</div>
-                                <div className="comsumption_list_new" >
-                                    <div className="comsumption_list_table_new u-grid visible">
-                                        <table>
-                                            <colgroup>
-                                                <col width="12%" />
-                                                <col width="12%" />
-                                                <col width="12%" />
-                                                <col width="12%" />
-                                                <col width="12%" />
-                                                <col width="12%" />
-                                                <col width="12%" />
-                                                <col width="20%" />
+                    <div >
+                        <div>New Accounts</div>
+                        <div className="comsumption_list_new" >
+                            <div className="comsumption_list_table_new u-grid visible">
+                                <table>
+                                    <colgroup>
+                                        <col width="12%" />
+                                        <col width="12%" />
+                                        <col width="12%" />
+                                        <col width="12%" />
+                                        <col width="12%" />
+                                        <col width="12%" />
+                                        <col width="12%" />
+                                        <col width="20%" />
 
-                                            </colgroup>
-                                            <thead>
-                                                <tr>
-                                                    <td>Account No.</td>
-                                                    <td>Existing Plan</td>
-                                                    <td>Contract Expiry </td>
-                                                    <td>Purchasing Entity</td>
-                                                    <td>Intake Level</td>
-                                                    <td>Contract Capacity</td>
-                                                    <td>Permise Address</td>
-                                                    <td>Consumption Details</td>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {item.details.map((it, i) => {
-                                                    return <tr key={i}>
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <td>Account No.</td>
+                                            <td>Existing Plan</td>
+                                            <td>Contract Expiry </td>
+                                            <td>Purchasing Entity</td>
+                                            <td>Intake Level</td>
+                                            <td>Contract Capacity</td>
+                                            <td>Permise Address</td>
+                                            <td>Consumption Details</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {this.props.comsumption_list ?
+                                            this.props.comsumption_list.map((item, index) => {
+                                                return item.details.map((it, i) => {
+                                                    return (<tr key={i}>
                                                         <td>{it.account_number}</td>
                                                         <td>{it.existing_plan}</td>
                                                         <td>{it.contract_expiry !== "" ? moment(it.contract_expiry).format('YYYY-MM-DD') : "—"}</td>
-                                                        <td>{this.getPurchase(it.company_buyer_entity_id, i)}</td>
+                                                        <td>{this.getPurchase(it.company_buyer_entity_id,index)}</td>
                                                         <td>{it.intake_level}</td>
                                                         <td>{it.contracted_capacity ? parseInt(it.contracted_capacity) : '—'}</td>
                                                         <td>{it.blk_or_unit} {it.street} {it.unit_number} {it.postal_code} </td>
@@ -98,15 +99,15 @@ export default class AdminComsumptionList extends Component {
                                                             <div><span>Off-Peak:</span><span className="textDecoration">{parseFloat(100 - it.peak_pct).toFixed(2)}</span><span> %</span></div>
                                                             <div className={it.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span><span><a href={it.user_attachment ? it.user_attachment.file_path : "#"} target="_blank">{it.user_attachment ? it.user_attachment.file_name : ""}</a></span></div>
                                                         </td>
-                                                    </tr>
-                                                })}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                                                    </tr>)
+                                                })
+                                            }) : "11"
+                                        }
+                                    </tbody>
+                                </table>
                             </div>
-                        }) : ''
-                    }
+                        </div>
+                    </div>
                 </div> :
                 <div>
                     {this.props.comsumption_list ?
