@@ -88,6 +88,13 @@ class UserMailer < ApplicationMailer
     send_email(user.email, email_body, email_subject)
   end
 
+  def winner_confirmation(user, param)
+    mail_template = get_template('10')
+    email_subject = mail_template.subject
+    email_body = mail_template.body.gsub(/#retailer_company_name/, user.company_name).gsub(/#date_of_ra/, param[:date_of_ra].to_s).gsub(/#ra_id/, param[:ra_id]).gsub(/#months/, param[:months].join(' and '))
+    send_email(user.email, email_body, email_subject)
+  end
+
   private
 
   def send_email(email, body, subject)

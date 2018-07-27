@@ -152,10 +152,8 @@ class Api::AuctionsController < Api::BaseController
                else
                  'In Progress'
                end
-      if auction.starting_price_time.blank?
-        actions[2]['name'] = 'Manange !Starting Price Incomplete'
-      end
-      data.push(id: auction.id, published_gid: auction.published_gid, name: auction.name, actual_begin_time: auction.actual_begin_time, status: status)
+      incomplete = Auction.check_start_price_incomplete(auction)
+      data.push(id: auction.id, published_gid: auction.published_gid, name: auction.name, actual_begin_time: auction.actual_begin_time, status: status, incomplete: incomplete)
     end
     bodies = {data: data, total: total}
     render json: {headers: headers, bodies: bodies, actions: actions}, status: 200
@@ -577,14 +575,14 @@ class Api::AuctionsController < Api::BaseController
               calculate_dto.total_htl_off_peak = contract.total_htl_off_peak
               calculate_dto.total_eht_peak = contract.total_eht_peak
               calculate_dto.total_eht_off_peak = contract.total_eht_off_peak
-              calculate_dto.lt_peak = contract.starting_price_lt_peak
-              calculate_dto.lt_off_peak = contract.starting_price_lt_off_peak
-              calculate_dto.hts_peak = contract.starting_price_hts_peak
-              calculate_dto.hts_off_peak = contract.starting_price_hts_off_peak
-              calculate_dto.htl_peak = contract.starting_price_htl_peak
-              calculate_dto.htl_off_peak = contract.starting_price_htl_off_peak
-              calculate_dto.eht_peak = contract.starting_price_eht_peak
-              calculate_dto.eht_off_peak = contract.starting_price_eht_off_peak
+              calculate_dto.lt_peak = Auction.set_zero(contract.starting_price_lt_peak)
+              calculate_dto.lt_off_peak = Auction.set_zero(contract.starting_price_lt_off_peak)
+              calculate_dto.hts_peak = Auction.set_zero(contract.starting_price_hts_peak)
+              calculate_dto.hts_off_peak = Auction.set_zero(contract.starting_price_hts_off_peak)
+              calculate_dto.htl_peak = Auction.set_zero(contract.starting_price_htl_peak)
+              calculate_dto.htl_off_peak = Auction.set_zero(contract.starting_price_htl_off_peak)
+              calculate_dto.eht_peak = Auction.set_zero(contract.starting_price_eht_peak)
+              calculate_dto.eht_off_peak = Auction.set_zero(contract.starting_price_eht_off_peak)
               calculate_dto.end_time = contract.contract_period_end_date
               calculate_dto.contract_duration = contract.contract_duration
               update_auction_at_update(calculate_dto)
@@ -806,6 +804,7 @@ class Api::AuctionsController < Api::BaseController
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], auction_result_contract.to_json)
       end
     end
+    winner_send_mails(params[:user_id], params[:id], params[:contract_duration])
     auction_result_contract_hash = auction_result_contract.attributes.dup
     auction_result_contract_hash['contract_period_start_date'] = auction_result.contract_period_start_date
     auction_result_contract_hash
@@ -841,5 +840,12 @@ class Api::AuctionsController < Api::BaseController
     auction_result
   end
 
-
+  def winner_send_mails(user_id, auction_id, contract_duration)
+    user = User.find_by id: user_id
+    auction = Auction.find_by id: auction_id
+    date_of_ra = (auction.start_datetime + (8 * 60 * 60)).strftime("%-d %b %Y")
+    ra_id = auction.published_gid
+    months = ["#{contract_duration} months"]
+    UserMailer.winner_confirmation(user,{:date_of_ra => date_of_ra, :ra_id => ra_id, :months => months}).deliver_later
+  end
 end

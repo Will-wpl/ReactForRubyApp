@@ -53,4 +53,25 @@ NotAllowDeviation = '0'.freeze
   def self.set_c_value(c, days)
     BigDecimal.new(c.nil? ? 0 : c) * 12 / 365 * days
   end
+
+  def self.set_zero(value)
+    value.nil? ? 0 : value
+  end
+
+  def self.check_start_price_incomplete(auction)
+    if auction.auction_contracts.nil?
+      incomplete = false
+    else
+      incomplete = false
+      auction.auction_contracts.each do |contract|
+        if contract.starting_price_lt_peak.nil? || contract.starting_price_lt_off_peak.nil? || contract.starting_price_hts_peak.nil? || contract.starting_price_hts_off_peak.nil? ||
+            contract.starting_price_htl_peak.nil? || contract.starting_price_htl_off_peak.nil? || contract.starting_price_eht_peak.nil? || contract.starting_price_eht_off_peak.nil?
+          incomplete = true
+          break
+        end
+      end
+    end
+    incomplete
+
+  end
 end
