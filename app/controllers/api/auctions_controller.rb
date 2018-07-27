@@ -152,10 +152,8 @@ class Api::AuctionsController < Api::BaseController
                else
                  'In Progress'
                end
-      if auction.starting_price_time.blank?
-        actions[2]['name'] = 'Manange !Starting Price Incomplete'
-      end
-      data.push(id: auction.id, published_gid: auction.published_gid, name: auction.name, actual_begin_time: auction.actual_begin_time, status: status)
+      incomplete = Auction.check_start_price_incomplete(auction)
+      data.push(id: auction.id, published_gid: auction.published_gid, name: auction.name, actual_begin_time: auction.actual_begin_time, status: status, incomplete: incomplete)
     end
     bodies = {data: data, total: total}
     render json: {headers: headers, bodies: bodies, actions: actions}, status: 200
@@ -850,5 +848,4 @@ class Api::AuctionsController < Api::BaseController
     months = ["#{contract_duration} months"]
     UserMailer.winner_confirmation(user,{:date_of_ra => date_of_ra, :ra_id => ra_id, :months => months}).deliver_later
   end
-
 end
