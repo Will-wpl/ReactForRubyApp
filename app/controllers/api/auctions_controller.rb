@@ -575,14 +575,14 @@ class Api::AuctionsController < Api::BaseController
               calculate_dto.total_htl_off_peak = contract.total_htl_off_peak
               calculate_dto.total_eht_peak = contract.total_eht_peak
               calculate_dto.total_eht_off_peak = contract.total_eht_off_peak
-              calculate_dto.lt_peak = contract.starting_price_lt_peak
-              calculate_dto.lt_off_peak = contract.starting_price_lt_off_peak
-              calculate_dto.hts_peak = contract.starting_price_hts_peak
-              calculate_dto.hts_off_peak = contract.starting_price_hts_off_peak
-              calculate_dto.htl_peak = contract.starting_price_htl_peak
-              calculate_dto.htl_off_peak = contract.starting_price_htl_off_peak
-              calculate_dto.eht_peak = contract.starting_price_eht_peak
-              calculate_dto.eht_off_peak = contract.starting_price_eht_off_peak
+              calculate_dto.lt_peak = Auction.set_zero(contract.starting_price_lt_peak)
+              calculate_dto.lt_off_peak = Auction.set_zero(contract.starting_price_lt_off_peak)
+              calculate_dto.hts_peak = Auction.set_zero(contract.starting_price_hts_peak)
+              calculate_dto.hts_off_peak = Auction.set_zero(contract.starting_price_hts_off_peak)
+              calculate_dto.htl_peak = Auction.set_zero(contract.starting_price_htl_peak)
+              calculate_dto.htl_off_peak = Auction.set_zero(contract.starting_price_htl_off_peak)
+              calculate_dto.eht_peak = Auction.set_zero(contract.starting_price_eht_peak)
+              calculate_dto.eht_off_peak = Auction.set_zero(contract.starting_price_eht_off_peak)
               calculate_dto.end_time = contract.contract_period_end_date
               calculate_dto.contract_duration = contract.contract_duration
               update_auction_at_update(calculate_dto)

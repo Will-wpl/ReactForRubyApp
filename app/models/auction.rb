@@ -54,6 +54,10 @@ NotAllowDeviation = '0'.freeze
     BigDecimal.new(c.nil? ? 0 : c) * 12 / 365 * days
   end
 
+  def self.set_zero(value)
+    value.nil? ? 0 : value
+  end
+
   def self.check_start_price_incomplete(auction)
     if auction.auction_contracts.nil?
       incomplete = false
