@@ -230,7 +230,7 @@ export class AdminDashboard extends Component {
                                 return <div key={index} className={"col-sm-12 col-md-3 u-cell"}>
                                     <a className={this.state.livetype===item.contract_duration?"col-sm-12 lm--button lm--button--primary selected"
                                         :"col-sm-12 lm--button lm--button--primary"}
-                                       onClick={this.liveTab.bind(this,item.contract_duration)} >{item.contract_duration} Mouths</a>
+                                       onClick={this.liveTab.bind(this,item.contract_duration)} >{item.contract_duration} Months</a>
                                 </div>
                             })
                         }
