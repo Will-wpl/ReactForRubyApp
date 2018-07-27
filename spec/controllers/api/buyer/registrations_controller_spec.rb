@@ -203,7 +203,6 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
         buyer_entity_3.company_uen = 'Test_Company_UEN_3'
         buyer_entity_3.company_address = 'Test_Company_Address_3'
         buyer_entity_3.contact_email = 'Buyer_entity_3@email.com'
-
         buyer_entity_4 = CompanyBuyerEntity.new
         buyer_entity_4.user_id = company_buyer.id
         buyer_entity_4.company_name = 'Test_Company_Name_4'
