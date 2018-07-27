@@ -45,7 +45,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
         consumption_details_all.push(final_detail)
       end
       render json: { consumption_details: consumption_details_all, consumption: consumption,
-                     auction: { id: auction.id, name: auction.name, actual_begin_time: auction.actual_begin_time, publish_status: auction.publish_status },
+                     auction: { id: auction.id, name: auction.name, actual_begin_time: auction.actual_begin_time, contract_period_start_date: auction.contract_period_start_date, publish_status: auction.publish_status },
                      buyer_entities: buyer_entities,
                      tc_attachment: tc_attachment, contract_duration: contract_duration }, status: 200
     end
