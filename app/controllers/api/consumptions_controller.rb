@@ -12,6 +12,7 @@ class Api::ConsumptionsController < Api::BaseController
     total_info = { consumption_count: 0, account_count: 0, lt_peak: 0, lt_off_peak: 0,
                    hts_peak: 0, hts_off_peak: 0, htl_peak: 0, htl_off_peak: 0, eht_peak: 0, eht_off_peak: 0 }
     consumptions.each do |consumption|
+      next if current_user&.has_role?(:admin) && consumption.accept_status != Consumption::AcceptStatusApproved
       details = ConsumptionDetail.find_by_consumption_id(consumption.id).order(account_number: :asc)
       details_array = consumption_details(details)
       count = details.count
