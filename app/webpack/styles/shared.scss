@@ -439,7 +439,16 @@ input[type="number"]{
 .lm--formItem-left.lm--formItem-label{
   font{font-size: 20px;}
   b{color:red;}
-  // &:first-letter{color:red;}
+  // 
+   &:first-letter{color:red;}
+}
+.lm--formItem-left.lm--formItem-label-comment{
+  font{font-size: 20px;}
+  b{color:red;}
+  width:65%;
+  // padding-right: 20px;
+  padding: 0.6875rem 2.0625rem 0.5rem 0;
+   
 }
 .save-right{ text-align: right;
   form{ width: 100%;
@@ -678,6 +687,24 @@ ul.history_files{
   .visible{ display: block;}
 }
 
+.comsumption_list_new{
+  font-size: 13px;  padding:10px; text-align:center;
+  .comsumption_list_top{ 
+    padding:15px 0px 15px 32px; border-bottom: 1px solid #314657; background:url("../images/add_l.png") no-repeat left;
+  }
+  .open{background:url("../images/subtract.png") no-repeat left;}
+  .comsumption_list_table_new{
+    display:block;  
+    table{
+      width: 100%; text-align: center;
+      td,th{
+      padding: 10px 0px; border-bottom: 1px solid #314657; word-break: break-word;
+      }
+    }
+  }
+  .visible{ display: block;}
+}
+
 .workflowtab{
   margin:30px 0px;
   table{ width: 100%; table-layout: fixed; margin: 0 auto;
@@ -823,6 +850,9 @@ ul.history_files{
 .left{
   text-align: left !important;
   word-wrap:break-word;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow:auto;
 }
 
  .consumption_table{
