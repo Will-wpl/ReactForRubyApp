@@ -125,8 +125,8 @@ export const createWebsocket = (auction, methods = {}) => {
     return new Ws(window.location.port, auction);
 }
 
-export const getLetterOfAward = (params) => {
-    return get(`/api/admin/auction_results/${params}/award`)
+export const getLetterOfAward = (params,contract_duration) => {
+    return get(`/api/admin/auction_results/${params}/award?contract_duration=${contract_duration}`);
 }
 
 export const doPdf = (params) => {

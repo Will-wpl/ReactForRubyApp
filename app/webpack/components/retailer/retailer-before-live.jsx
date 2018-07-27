@@ -90,8 +90,11 @@ export class RetailerBeforeLive extends Component {
     getAuctionTime(auctionId) {
         getAuctionTimeRule(auctionId).then(res => {
             const isOver = this.isCountDownOver(res[AUCTION_PROPS.ACTUAL_BEGIN_TIME], res[AUCTION_PROPS.ACTUAL_CURRENT_TIME]);
+            console.log("离开始前时间：",parseInt(moment(res[AUCTION_PROPS.ACTUAL_BEGIN_TIME]).add(parseInt(0-this.props.auction.starting_price_time),"hours") - moment(res[AUCTION_PROPS.ACTUAL_CURRENT_TIME])))
             if(parseInt(moment(res[AUCTION_PROPS.ACTUAL_BEGIN_TIME]).add(parseInt(0-this.props.auction.starting_price_time),"hours") - moment(res[AUCTION_PROPS.ACTUAL_CURRENT_TIME]))<=0){
-                this.setState({timeShow:ture});
+                this.setState({timeShow:true});
+            }else{
+                this.setState({timeShow:false});
             }
             if (isOver) {
                 if (this.mHoldStatus !== res[AUCTION_PROPS.HOLD_STATUS]) {
