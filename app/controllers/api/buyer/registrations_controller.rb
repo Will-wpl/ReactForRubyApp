@@ -39,16 +39,18 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     user = User.find(params[:user]['id'])
     raise ActiveRecord::RecordNotFound if user.nil?
 
+    buyer_entities = JSON.parse(params[:buyer_entities])
+
     # need admin approval if company name / UEN changed.
     if(user.approval_status == User::ApprovalStatusRegistering ||
         (user.company_name != update_user_params['company_name'] ||
-          user.company_unique_entity_number != update_user_params['company_unique_entity_number'] ))
+          user.company_unique_entity_number != update_user_params['company_unique_entity_number'] ) ||
+       buyer_entities.any?{ |e| e['user_entity_id'].to_i == 0 })
       update_user_params['approval_status'] = User::ApprovalStatusPending
     end
     ActiveRecord::Base.transaction do
       @user.update(update_user_params)
       # update buyer entity registration information
-      buyer_entities = JSON.parse(params[:buyer_entities])
       # buyer_entities.push(build_default_entity( update_user_params )) unless buyer_entities.any?{ |v| v['is_default'] == 1 }
       saved_entities = update_buyer_entities(buyer_entities, true)
     end
