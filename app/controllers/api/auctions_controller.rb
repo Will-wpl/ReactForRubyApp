@@ -806,6 +806,7 @@ class Api::AuctionsController < Api::BaseController
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], auction_result_contract.to_json)
       end
     end
+    winner_send_mails(params[:user_id], params[:id], params[:contract_duration])
     auction_result_contract_hash = auction_result_contract.attributes.dup
     auction_result_contract_hash['contract_period_start_date'] = auction_result.contract_period_start_date
     auction_result_contract_hash
@@ -841,5 +842,13 @@ class Api::AuctionsController < Api::BaseController
     auction_result
   end
 
+  def winner_send_mails(user_id, auction_id, contract_duration)
+    user = User.find_by id: user_id
+    auction = Auction.find_by id: auction_id
+    date_of_ra = (auction.start_datetime + (8 * 60 * 60)).strftime("%-d %b %Y")
+    ra_id = auction.published_gid
+    months = ["#{contract_duration} months"]
+    UserMailer.winner_confirmation(user,{:date_of_ra => date_of_ra, :ra_id => ra_id, :months => months}).deliver_later
+  end
 
 end
