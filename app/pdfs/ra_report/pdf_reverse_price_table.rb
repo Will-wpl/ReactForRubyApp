@@ -41,10 +41,10 @@ class PdfReversePriceTable
     is_zero = true if (peak == 0 || peak.blank?) && (off_peak == 0 || off_peak.blank?)
     unless is_zero
       head_row.push(title)
-      img_table = pdf.make_table([[{:image => get_achieved_img(average_price,  peak), :vposition => :center, :image_height => 12, :image_width => 12}, number_format(peak)]], :header => true, :cell_style => { :size => 9, :align => :center, :valign => :center, :padding => [0, 2, 0], :inline_format => true, :border_width => 0.0})
+      img_table = pdf.make_table([[{:image => get_achieved_img(average_price,  peak), :vposition => :center, :image_height => 12, :image_width => 12}, number_format(peak)]],:position => :center, :cell_style => { :size => 9, :align => :center, :valign => :center, :padding => [0, 2, 0], :inline_format => true, :border_width => 0.0})
       peak_row.push(img_table)
 
-      img_table = pdf.make_table([[{:image => get_achieved_img(average_price,  off_peak), :vposition => :center, :image_height => 12, :image_width => 12}, number_format(off_peak)]], :header => true, :cell_style => { :size => 9, :align => :center, :valign => :center, :padding => [0, 2, 0], :inline_format => true, :border_width => 0.0})
+      img_table = pdf.make_table([[{:image => get_achieved_img(average_price,  off_peak), :vposition => :center, :image_height => 12, :image_width => 12}, number_format(off_peak)]], :position => :center,  :cell_style => { :size => 9, :align => :center, :valign => :center, :padding => [0, 2, 0], :inline_format => true, :border_width => 0.0})
       off_peak_row.push(img_table)
     end
   end
