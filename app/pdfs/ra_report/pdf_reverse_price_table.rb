@@ -31,31 +31,44 @@ class PdfReversePriceTable
   end
 
   def push_colume_data(param)
-
     average_price = param[:average_price]
     pdf = param[:pdf]
-
     title, peak, off_peak = param[:title], param[:peak], param[:off_peak]
     head_row, peak_row, off_peak_row = param[:head_row], param[:peak_row], param[:off_peak_row]
     is_zero = false
     is_zero = true if (peak == 0 || peak.blank?) && (off_peak == 0 || off_peak.blank?)
     unless is_zero
       head_row.push(title)
-      img_table = pdf.make_table([[{:image => get_achieved_img(average_price,  peak), :vposition => :center, :image_height => 12, :image_width => 12}, number_format(peak)]],:position => :center, :cell_style => { :size => 9, :align => :center, :valign => :center, :padding => [0, 2, 0], :inline_format => true, :border_width => 0.0})
-      peak_row.push(img_table)
+      is_yes, img = get_achieved_img(average_price,  peak)
+      if is_yes
+        img_table = get_img_table(pdf, img, peak)
+        peak_row.push(img_table)
+      else
+        peak_row.push(number_format(peak))
+      end
 
-      img_table = pdf.make_table([[{:image => get_achieved_img(average_price,  off_peak), :vposition => :center, :image_height => 12, :image_width => 12}, number_format(off_peak)]], :position => :center,  :cell_style => { :size => 9, :align => :center, :valign => :center, :padding => [0, 2, 0], :inline_format => true, :border_width => 0.0})
-      off_peak_row.push(img_table)
+      is_yes, img = get_achieved_img(average_price,  off_peak)
+      if is_yes
+        img_table = get_img_table(pdf, img, off_peak)
+        off_peak_row.push(img_table)
+      else
+        off_peak_row.push(number_format(off_peak))
+
+      end
     end
+  end
+
+  def get_img_table(pdf, img, number)
+    pdf.make_table([[{:image => img, :vposition => :center, :image_height => 12, :image_width => 12}, number_format(number)]],:position => :center, :cell_style => { :size => 9, :align => :center, :valign => :center, :padding => [0, 2, 0], :inline_format => true, :border_width => 0.0})
   end
 
   def get_achieved_img(average_price, reserve_price)
     # achieved = histories_achieved[0].average_price <= auction.reserve_price if !histories_achieved.empty?
     achieved = average_price <= reserve_price
     if achieved
-      Rails.root.join("app", "assets", "pdf", "yes.png")
+      return true, Rails.root.join("app", "assets", "pdf", "yes.png")
     else
-      Rails.root.join("app", "assets", "pdf", "no.png")
+      return false, nil
     end
   end
 end
