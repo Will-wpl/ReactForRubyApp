@@ -72,6 +72,15 @@ class Api::UsersController < Api::BaseController
     unless target_user.approval_status == User::ApprovalStatusApproved
       target_user.update(approval_status: approval_status, comment: comment)
     end
+
+    if target_user.approval_status == User::ApprovalStatusApproved
+        if target_user.company_buyer_entities.any?{ |x| x.approval_status == CompanyBuyerEntity::ApprovalStatusPending}
+            target_user.update(comment: comment)
+        else
+            target_user.update(approval_status: approval_status, comment: comment)
+        end
+    end
+
     if approval_status == User::ApprovalStatusApproved
       UserMailer.approval_email(target_user).deliver_later
     elsif approval_status == User::ApprovalStatusReject
