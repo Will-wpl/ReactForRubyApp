@@ -177,24 +177,29 @@ class Api::ConsumptionDetailsController < Api::BaseController
     details = JSON.parse(params[:details])
     auction = Auction.find(consumption.auction_id)
     raise ActiveRecord::RecordNotFound if auction.nil?
+
     # Account must be unique within a RA.
-    account_numbers = []
-    auction.consumptions.each do |consumption|
-      consumption.consumption_details.each do |consumption_detail|
-        account_numbers.push(consumption_detail.account_number)
-      end
-    end
-    had_error_msg_acc = false
-    details.each_index do |index|
-      if account_numbers.any? { |v| v == details[index]['account_number'] }
-        error_detail_indexes.push(index)
-        messages.push('There is already an existing contract for this Account Number.') unless had_error_msg_acc
-        had_error_msg_acc = true
-      end
-    end
+    check_result = account_number_unique(auction, details)
+    error_detail_indexes.concat(check_result[0])
+    messages.concat(check_result[1])
     # Account number cannot be same with any unexpired contracts of this buyer.
-    # contract expiry date > RA's contract start date.
+    # Other check
+    check_result = consumption_other_check(auction, details)
+    error_detail_indexes.concat(check_result[0])
+    messages.concat(check_result[1])
+
+    error_detail_indexes = error_detail_indexes.uniq
+    return_json = {validate_result: error_detail_indexes.blank?,
+                   error_detail_indexes: error_detail_indexes,
+                   error_messages: messages}
+    render json: return_json, status: 200
+  end
+
+  def consumption_other_check(auction, details)
+    messages = []
+    error_detail_indexes = []
     had_error_msg_addr = false
+    had_error_msg_acc = false
     details.each_index do |index|
       details.each do |temp_detail|
         if details[index].object_id != temp_detail.object_id && details[index]['account_number'] == temp_detail['account_number']
@@ -216,11 +221,28 @@ class Api::ConsumptionDetailsController < Api::BaseController
       end
     end
 
-    error_detail_indexes = error_detail_indexes.uniq
-    return_json = {validate_result: error_detail_indexes.blank?,
-                   error_detail_indexes: error_detail_indexes,
-                   error_messages: messages}
-    render json: return_json, status: 200
+    [error_detail_indexes, messages]
+  end
+
+  def account_number_unique(auction, details)
+    messages = []
+    error_detail_indexes = []
+    # Account must be unique within a RA.
+    account_numbers = []
+    auction.consumptions.each do |consumption|
+      consumption.consumption_details.each do |consumption_detail|
+        account_numbers.push(consumption_detail.account_number)
+      end
+    end
+    had_error_msg_acc = false
+    details.each_index do |index|
+      if account_numbers.any? { |v| v == details[index]['account_number'] }
+        error_detail_indexes.push(index)
+        messages.push('There is already an existing contract for this Account Number.') unless had_error_msg_acc
+        had_error_msg_acc = true
+      end
+    end
+    [error_detail_indexes, messages]
   end
 
   def reject
