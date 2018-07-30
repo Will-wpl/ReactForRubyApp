@@ -560,6 +560,10 @@ dfn.manage_label{
             &::before{
               display: none;
             }
+            span.incomplete_span{
+              padding-left: 10px;
+              font{ width: 15px; display: inline-block; font-weight: 600; line-height: 15px; height:15px; background: red; border-radius: 100%; text-align: center;}
+            }
             &.view{background:url("../images/view.png") no-repeat left;}
             &.delete{background:url("../images/delete.png") no-repeat left;}
             &.manage{background:url("../images/manage.png") no-repeat left;}

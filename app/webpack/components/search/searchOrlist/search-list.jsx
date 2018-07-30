@@ -324,8 +324,11 @@ export class SearchList extends Component {
                                                                 }else{
                                                                     if(item['auction_status'] === 'Upcoming' && ik.name === 'Manage'){
                                                                     }else{
+                                                                        let incompleteHtml = <span className={'incomplete_span'}><font>!</font> Starting Price Incomplete</span>;
                                                                         if(item['status'] === 'In Progress' && ik.name === 'Manage'){
-                                                                            return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>View</a>
+                                                                            return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>View{item.incomplete?incompleteHtml:''}</a>
+                                                                        }else if(item['status'] === 'Upcoming' && ik.name === 'Manage'){
+                                                                            return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>Manage{item.incomplete?incompleteHtml:''}</a>
                                                                         }else{
                                                                             return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>{ik.name}</a>
                                                                         }

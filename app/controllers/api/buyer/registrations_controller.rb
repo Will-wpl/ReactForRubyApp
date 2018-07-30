@@ -208,26 +208,9 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
       CompanyBuyerEntity.find(buyer_entity.id).destroy
     end
     buyer_entities.each do |buyer_entity|
-      target_buyer_entity = if buyer_entity['user_entity_id'].to_i == 0
-                            CompanyBuyerEntity.new
-                           else
-                             CompanyBuyerEntity.find(buyer_entity['user_entity_id'])
-                           end
-      target_buyer_entity.company_name = buyer_entity['company_name'] unless buyer_entity['company_name'].blank?
-      target_buyer_entity.company_uen = buyer_entity['company_uen'] unless buyer_entity['company_uen'].blank?
-      target_buyer_entity.company_address = buyer_entity['company_address'] unless buyer_entity['company_address'].blank?
-      target_buyer_entity.billing_address = buyer_entity['billing_address'] unless buyer_entity['billing_address'].blank?
-      target_buyer_entity.bill_attention_to = buyer_entity['bill_attention_to'] unless buyer_entity['bill_attention_to'].blank?
-      target_buyer_entity.contact_name = buyer_entity['contact_name'] unless buyer_entity['contact_name'].blank?
-      target_buyer_entity.contact_email = buyer_entity['contact_email'] unless buyer_entity['contact_email'].blank?
-      target_buyer_entity.contact_mobile_no = buyer_entity['contact_mobile_no'] unless buyer_entity['contact_mobile_no'].blank?
-      target_buyer_entity.contact_office_no = buyer_entity['contact_office_no'] unless buyer_entity['contact_office_no'].blank?
-      target_buyer_entity.is_default = buyer_entity['is_default'].blank? ? 0 : buyer_entity['is_default']
-      if buyer_entity['user_entity_id'].to_i == 0
-        target_buyer_entity.approval_status = CompanyBuyerEntity::ApprovalStatusPending
-      end
-      target_buyer_entity.user = current_user
-      if target_buyer_entity.save!
+      save_result= update_buyer_entity(buyer_entity)
+      if save_result[0]
+        target_buyer_entity = save_result[1]
         saved_buyer_entities.push(target_buyer_entity)
         if need_create_user && !target_buyer_entity.is_default then
           new_entity_user = User.new
@@ -250,4 +233,27 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     saved_buyer_entities
   end
 
+  def update_buyer_entity(buyer_entity)
+    target_buyer_entity = if buyer_entity['user_entity_id'].to_i == 0
+                            CompanyBuyerEntity.new
+                          else
+                            CompanyBuyerEntity.find(buyer_entity['user_entity_id'])
+                          end
+    target_buyer_entity.company_name = buyer_entity['company_name'] unless buyer_entity['company_name'].blank?
+    target_buyer_entity.company_uen = buyer_entity['company_uen'] unless buyer_entity['company_uen'].blank?
+    target_buyer_entity.company_address = buyer_entity['company_address'] unless buyer_entity['company_address'].blank?
+    target_buyer_entity.billing_address = buyer_entity['billing_address'] unless buyer_entity['billing_address'].blank?
+    target_buyer_entity.bill_attention_to = buyer_entity['bill_attention_to'] unless buyer_entity['bill_attention_to'].blank?
+    target_buyer_entity.contact_name = buyer_entity['contact_name'] unless buyer_entity['contact_name'].blank?
+    target_buyer_entity.contact_email = buyer_entity['contact_email'] unless buyer_entity['contact_email'].blank?
+    target_buyer_entity.contact_mobile_no = buyer_entity['contact_mobile_no'] unless buyer_entity['contact_mobile_no'].blank?
+    target_buyer_entity.contact_office_no = buyer_entity['contact_office_no'] unless buyer_entity['contact_office_no'].blank?
+    target_buyer_entity.is_default = buyer_entity['is_default'].blank? ? 0 : buyer_entity['is_default']
+    if buyer_entity['user_entity_id'].to_i == 0
+      target_buyer_entity.approval_status = CompanyBuyerEntity::ApprovalStatusPending
+    end
+    target_buyer_entity.user = current_user
+    success_saved = (target_buyer_entity.save!)
+    [success_saved, target_buyer_entity]
+  end
 end

@@ -461,6 +461,7 @@ class Api::AuctionsController < Api::BaseController
                                   WHERE
                                     cns.user_id = ? AND auction_id = ? AND contract_duration = ?",
                                            user_id, entity_id, user_id, auction_id, contract_duration]
+    return nil, nil,nil, nil, nil if (consumption.empty?)
     auction_result = AuctionResultContract.select("users.id, users.name, coalesce(users.company_name, '') company_name,
                                   coalesce(users.company_address, '') company_address,
                                   coalesce(users.company_unique_entity_number, '') company_unique_entity_number,
@@ -476,6 +477,7 @@ class Api::AuctionsController < Api::BaseController
                                         WHERE	cds.consumption_id = ? AND cds.company_buyer_entity_id = ?
                                         ', consumption[0].id, entity_id]   unless consumption.empty?
     auction_contract = AuctionContract.find_by auction_id: auction_id, contract_duration: contract_duration
+
     return consumption, auction_result, consumption_details, auction_contract, consumption[0].company_name == consumption[0].parent_company_name
   end
 
