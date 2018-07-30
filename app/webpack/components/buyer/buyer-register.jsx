@@ -900,9 +900,9 @@ export class BuyerRegister extends Component {
                                     </div>
                                 </div>
 
-                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /> I agree to Seller - Buyer T&C &nbsp;&nbsp;&nbsp; <a target="_blank" href={this.state.buyerTCurl} className="urlStyle">{this.state.buyerTCname}</a></h4>
+                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /> Check here to indicate that you have read and agree to  &nbsp;&nbsp;&nbsp; <a target="_blank" href={this.state.buyerTCurl} className="urlStyle">the Buyer Platform Terms of Use</a>.</h4>
                                 <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
-                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} /> I agree to Buyer - Revv T&C &nbsp;&nbsp;&nbsp;  <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyle">{this.state.buyerRevvTCname}</a></h4>
+                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} /> Check here to indicate that you have read and agree to   &nbsp;&nbsp;&nbsp;  <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyle">the Energy Procurement Agreement</a>.</h4>
                                 <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                                 <div className="retailer_btn">
                                     {btn_html}
