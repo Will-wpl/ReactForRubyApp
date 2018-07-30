@@ -708,7 +708,7 @@ export class Modal extends React.Component {
                                     <td>
                                         <input type="text" disabled={this.state.contracted_capacity_disabled} value={this.state.contracted_capacity} onChange={this.changeConsumption.bind(this, "contracted_capacity")} id="contracted_capacity" name="contracted_capacity" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" maxLength="10" />
                                         <div id="contracted_capacity_message" className="isPassValidate">This filed is required!</div>
-                                        <div id="contracted_capacity_format" className="isPassValidate">format!</div>
+                                        <div id="contracted_capacity_format" className="isPassValidate">Must be positive integers,and first cannot be 0!</div>
                                     </td>
                                 </tr>
                                 <tr>
