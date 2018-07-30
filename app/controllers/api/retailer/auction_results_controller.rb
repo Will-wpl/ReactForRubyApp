@@ -66,7 +66,7 @@ class Api::Retailer::AuctionResultsController < Api::AuctionResultsController
                      })
     end
 
-    data = {id: Arrangement.auction_of_current_user(result_contract.auction.id, current_user.id).first.id, auction_id: result.auction.id,
+    data = {id: Arrangement.auction_of_current_user(result.auction.id, current_user.id).first.id, auction_id: result.auction.id,
             published_gid: result.auction.published_gid, name: result.auction.name, start_datetime: result.auction.start_datetime,
             contracts: contracts}
     data
