@@ -291,7 +291,7 @@ class Api::AuctionsController < Api::BaseController
     consumptions_company = []
     consumptions = Consumption.find_by_auction_id(params[:id])
     consumptions.find_by_user_consumer_type('2').order(:participation_status).each do |consumption|
-      consumptions_company.push(id: consumption.id, name: consumption.user.company_name, participation_status: consumption.participation_status)
+      consumptions_company.push(id: consumption.id, name: consumption.user.company_name, participation_status: consumption.participation_status, accept_status: consumption.accept_status)
     end
     count_company = consumptions_company.count
 
