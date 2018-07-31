@@ -41,7 +41,6 @@ export default class AdminBuyerListDetail extends Component {
     componentDidMount() {
         let id = window.location.href.split("consumptions/")[1];
         getAdminBuyerListDetails(id).then(res => {
-            console.log(res)
             this.setState({
                 consumption_id: id,
                 comsumption_list: [res],
