@@ -73,7 +73,7 @@ export class FillConsumption extends Component {
             this.setState({
                 name: res.auction.name,
                 time: res.auction.actual_begin_time,
-
+                contact_start_date:res.auction.contract_period_start_date,
                 contract_duration: res.consumption.contract_duration?res.consumption.contract_duration:"",
                 link: res.tc_attachment ? res.tc_attachment.file_path : "",
             })
@@ -214,10 +214,10 @@ export class FillConsumption extends Component {
 
     dateCompare(arr) {
         let count = 0;
-        let startDate = moment(this.state.time).format('YYYY-MM-DD HH:mm:ss');
+        let startDate = moment(this.state.contact_start_date).format('YYYY-MM-DD');
         for (let i in arr) {
             if (arr[i].contract_expiry) {
-                let contract_expiry_date = moment(arr[i].contract_expiry).format('YYYY-MM-DD HH:mm:ss');
+                let contract_expiry_date = moment(arr[i].contract_expiry).format('YYYY-MM-DD');
                 if (contract_expiry_date >= startDate) {
                     count++;
                 }
