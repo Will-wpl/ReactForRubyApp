@@ -10,6 +10,8 @@ Role.find_or_create_by(name: 'retailer')
 Role.find_or_create_by(name: 'buyer')
 Role.find_or_create_by(name: 'entity')
 Role.find_or_create_by(name: 'tenant')
+
+User.all.update_all(approval_status: User::ApprovalStatusRegistering)
 # reverse_auction = Auction.find_or_create_by(name: 'SP Reverse Auction') do |auction|
 #   auction.start_datetime = nil
 #   auction.contract_period_start_date = nil
