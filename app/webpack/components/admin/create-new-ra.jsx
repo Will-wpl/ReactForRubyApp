@@ -76,7 +76,7 @@ export class CreateNewRA extends Component {
                     })
                 }          
             }else{
-                if(moment(this.auction.actual_begin_time) < moment()){
+                if(moment(this.auction.actual_begin_time) < moment() || this.auction.publish_status == 1){
                     this.setState({
                         disabled:true
                     })
@@ -601,9 +601,9 @@ export class CreateNewRA extends Component {
                     <dd className="lm--formItem lm--formItem--inline string optional">
                         <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Contract Duration:</span>
                         <div className="lm--formItem-right lm--formItem-label lm--formItem-control">
-                            <label className={"checkbox_div"}><input className={"checkbox"} type="checkbox" required={this.state.check_required} ref="contract_duration_6" disabled={this.state.disabled} name="contract_duration" value={"6"} id={"contract_duration_6"} checked={this.state.contract_duration_6} onChange={this.contractChange.bind(this)}  /> 6 Months</label>
-                            <label className={"checkbox_div"}><input className={"checkbox"} type="checkbox" required={this.state.check_required} ref="contract_duration_12" disabled={this.state.disabled} name="contract_duration" value={"12"} id={"contract_duration_12"} checked={this.state.contract_duration_12} onChange={this.contractChange.bind(this)}  /> 12 Months</label>
-                            <label className={"checkbox_div"}><input className={"checkbox"} type="checkbox" required={this.state.check_required} ref="contract_duration_24" disabled={this.state.disabled} name="contract_duration" value={"24"} id={"contract_duration_24"} checked={this.state.contract_duration_24} onChange={this.contractChange.bind(this)}  /> 24 Months</label>
+                            <label className={"checkbox_div"}><input className={"checkbox"} type="checkbox" required={this.state.check_required} ref="contract_duration_6" disabled={this.state.disabled?true:(this.auction.buyer_notify?true:false)} name="contract_duration" value={"6"} id={"contract_duration_6"} checked={this.state.contract_duration_6} onChange={this.contractChange.bind(this)}  /> 6 Months</label>
+                            <label className={"checkbox_div"}><input className={"checkbox"} type="checkbox" required={this.state.check_required} ref="contract_duration_12" disabled={this.state.disabled?true:(this.auction.buyer_notify?true:false)} name="contract_duration" value={"12"} id={"contract_duration_12"} checked={this.state.contract_duration_12} onChange={this.contractChange.bind(this)}  /> 12 Months</label>
+                            <label className={"checkbox_div"}><input className={"checkbox"} type="checkbox" required={this.state.check_required} ref="contract_duration_24" disabled={this.state.disabled?true:(this.auction.buyer_notify?true:false)} name="contract_duration" value={"24"} id={"contract_duration_24"} checked={this.state.contract_duration_24} onChange={this.contractChange.bind(this)}  /> 24 Months</label>
                         </div>
                     </dd>
                     {this.state.contractArray.length>0?
