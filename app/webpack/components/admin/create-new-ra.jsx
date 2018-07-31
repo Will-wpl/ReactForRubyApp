@@ -24,7 +24,7 @@ export class CreateNewRA extends Component {
             disabled:false,live_modal:"",live_modal_do:"",holdOrend:"",checkArray:[],
             contract_duration_6:false,contract_duration_12:false,contract_duration_24:false,
             required:false,check_required:true,single_multiple:"1",allow_deviation:"1",
-            contract_6:'0',contract_12:'0',contract_24:'0'
+            contract_6:'0',contract_12:'0',contract_24:'0',single_truely:false
         }
 
         this.auction = {};
@@ -68,7 +68,8 @@ export class CreateNewRA extends Component {
             if(type == "create"){
                 if(this.auction.publish_status == 1){
                     this.setState({
-                        disabled:true
+                        disabled:true,
+                        single_truely:true
                     })
                 }else{
                     this.setState({
@@ -582,7 +583,7 @@ export class CreateNewRA extends Component {
                     <dd className="lm--formItem lm--formItem--inline string optional">
                         <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Single / Multiple :</span>
                         <label className="lm--formItem-right lm--formItem-control">
-                            <select ref="single_multiple" id="single_multiple" onChange={this.single_multiple.bind(this,'single_multiple')} value={this.state.single_multiple} disabled={this.state.disabled}>
+                            <select ref="single_multiple" id="single_multiple" onChange={this.single_multiple.bind(this,'single_multiple')} value={this.state.single_multiple} disabled={this.state.single_truely?true:this.state.disabled}>
                                 <option value="0">Single</option>
                                 <option value="1">Multiple</option>
                             </select>
@@ -592,7 +593,7 @@ export class CreateNewRA extends Component {
                     <dd className="lm--formItem lm--formItem--inline string optional">
                         <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Allow Deviations :</span>
                         <label className="lm--formItem-right lm--formItem-control">
-                            <select ref="allow_deviation" id="allow_deviation" onChange={this.single_multiple.bind(this,'allow_deviation')} value={this.state.allow_deviation} disabled={this.state.disabled}>
+                            <select ref="allow_deviation" id="allow_deviation" onChange={this.single_multiple.bind(this,'allow_deviation')} value={this.state.allow_deviation} disabled={this.state.single_truely?true:this.state.disabled}>
                                 <option value="1">Yes</option>
                                 <option value="0">No</option>
                             </select>
