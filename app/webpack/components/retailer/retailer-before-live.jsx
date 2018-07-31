@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import {CounterDownShowBeforeLive} from '../shared/before-live-counterdown';
 import {AUCTION_PROPS, getAuctionTimeRule} from '../../javascripts/componentService/common/service';
 import {getDHMSbetweenTwoTimes} from '../../javascripts/componentService/util';
-
+import moment from 'moment';
 export class RetailerBeforeLive extends Component {
 
     constructor(props) {
         super(props);
         this.mHoldStatus = false;
-        this.state = {holdStatus:false, day: 0, hour: 0, minute: 0, second: 0}
+        this.state = {holdStatus:false, day: 0, hour: 0, minute: 0, second: 0,timeShow:false}
     }
     componentDidMount() {
         this.interval = setInterval(() => {
@@ -28,26 +28,26 @@ export class RetailerBeforeLive extends Component {
                     <thead>
                     <tr>
                         <th></th>
-                        {data.has_lt?<th>LT</th>:''}
-                        {data.has_hts?<th>HTS</th>:''}
-                        {data.has_htl?<th>HTL</th>:''}
-                        {data.has_eht?<th>EHT</th>:''}
+                        {data.has_lt?<th>LT</th>:<th style={{display:"none"}}></th>}
+                        {data.has_hts?<th>HTS</th>:<th style={{display:"none"}}></th>}
+                        {data.has_htl?<th>HTL</th>:<th style={{display:"none"}}></th>}
+                        {data.has_eht?<th>EHT</th>:<th style={{display:"none"}}></th>}
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
                         <td>Peak</td>
-                        {data.has_lt?<td>{parseFloat(data.starting_price_lt_peak).toFixed(4)}</td>:''}
-                        {data.has_hts?<td>{parseFloat(data.starting_price_hts_peak).toFixed(4)}</td>:''}
-                        {data.has_htl?<td>{parseFloat(data.starting_price_htl_peak).toFixed(4)}</td>:''}
-                        {data.has_eht?<td>{parseFloat(data.starting_price_eht_peak).toFixed(4)}</td>:''}
+                        {data.has_lt?<td>{parseFloat(data.starting_price_lt_peak).toFixed(4)}</td>:<td style={{display:"none"}}></td>}
+                        {data.has_hts?<td>{parseFloat(data.starting_price_hts_peak).toFixed(4)}</td>:<td style={{display:"none"}}></td>}
+                        {data.has_htl?<td>{parseFloat(data.starting_price_htl_peak).toFixed(4)}</td>:<td style={{display:"none"}}></td>}
+                        {data.has_eht?<td>{parseFloat(data.starting_price_eht_peak).toFixed(4)}</td>:<td style={{display:"none"}}></td>}
                     </tr>
                     <tr>
                         <td>Off Peak</td>
-                        {data.has_lt?<td>{parseFloat(data.starting_price_lt_off_peak).toFixed(4)}</td>:''}
-                        {data.has_hts?<td>{parseFloat(data.starting_price_hts_off_peak).toFixed(4)}</td>:''}
-                        {data.has_htl?<td>{parseFloat(data.starting_price_htl_off_peak).toFixed(4)}</td>:''}
-                        {data.has_eht?<td>{parseFloat(data.starting_price_eht_off_peak).toFixed(4)}</td>:''}
+                        {data.has_lt?<td>{parseFloat(data.starting_price_lt_off_peak).toFixed(4)}</td>:<td style={{display:"none"}}></td>}
+                        {data.has_hts?<td>{parseFloat(data.starting_price_hts_off_peak).toFixed(4)}</td>:<td style={{display:"none"}}></td>}
+                        {data.has_htl?<td>{parseFloat(data.starting_price_htl_off_peak).toFixed(4)}</td>:<td style={{display:"none"}}></td>}
+                        {data.has_eht?<td>{parseFloat(data.starting_price_eht_off_peak).toFixed(4)}</td>:<td style={{display:"none"}}></td>}
                     </tr>
                     </tbody>
                 </table>
@@ -69,7 +69,7 @@ export class RetailerBeforeLive extends Component {
                         Page will automatically refresh when<br></br>Reverse Auction commences.
                     </p>
                 </div>
-                {this.props.auction.live_auction_contracts?
+                {this.state.timeShow?(this.props.auction.live_auction_contracts?
                     <div className="createRaMain u-grid">
                         <div className={'col-sm-12 col-md-6 push-md-3'}>
                         <h2>Starting Price</h2>
@@ -78,7 +78,7 @@ export class RetailerBeforeLive extends Component {
                                 return this.mouthsHtml(item,index)
                             }):''
                         }</div>
-                    </div>:''
+                    </div>:''):''
                 }
                 <div className="createRaMain u-grid">
                     <a className="lm--button lm--button--primary u-mt3" href="/retailer/auctions">Back</a>
@@ -90,6 +90,9 @@ export class RetailerBeforeLive extends Component {
     getAuctionTime(auctionId) {
         getAuctionTimeRule(auctionId).then(res => {
             const isOver = this.isCountDownOver(res[AUCTION_PROPS.ACTUAL_BEGIN_TIME], res[AUCTION_PROPS.ACTUAL_CURRENT_TIME]);
+            if(parseInt(moment(res[AUCTION_PROPS.ACTUAL_BEGIN_TIME]).add(parseInt(0-this.props.auction.starting_price_time),"hours") - moment(res[AUCTION_PROPS.ACTUAL_CURRENT_TIME]))<=0){
+                this.setState({timeShow:ture});
+            }
             if (isOver) {
                 if (this.mHoldStatus !== res[AUCTION_PROPS.HOLD_STATUS]) {
                     this.setState({holdStatus: res[AUCTION_PROPS.HOLD_STATUS]});
