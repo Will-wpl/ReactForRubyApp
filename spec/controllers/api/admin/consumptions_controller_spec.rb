@@ -5,7 +5,7 @@ RSpec.describe Api::Admin::ConsumptionsController, type: :controller do
   let!(:buyer_user){ create(:user, :with_buyer, :with_company_buyer) }
   let!(:buyer_user_1){ create(:user, :with_buyer, :with_company_buyer) }
   let!(:auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
-  let!(:consumption) { create(:consumption, :init, user: buyer_user, auction: auction, participation_status: '1' ) }
+  let!(:consumption) { create(:consumption, :init, user: buyer_user, auction: auction, participation_status: '1', accept_status: '1' ) }
   let!(:consumption_lt) { create(:consumption_detail, :for_lt, consumption_id: consumption.id) }
   let!(:consumption_hts) { create(:consumption_detail, :for_hts, consumption_id: consumption.id) }
   let!(:consumption_htl) { create(:consumption_detail, :for_htl, consumption_id: consumption.id) }
@@ -51,7 +51,7 @@ RSpec.describe Api::Admin::ConsumptionsController, type: :controller do
       describe 'got consumption list buy auction_id ,consumer_type is 2 and contract duration is 6' do
         let!(:auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
         let!(:six_month_contract) { create(:auction_contract, :six_month, :total, auction: auction ) }
-        let!(:consumption) { create(:consumption, :init, user: buyer_user, auction: auction, participation_status: '1', contract_duration: '6' ) }
+        let!(:consumption) { create(:consumption, :init, user: buyer_user, auction: auction, participation_status: '1', contract_duration: '6', accept_status: '1' ) }
         let!(:consumption_lt) { create(:consumption_detail, :for_lt, consumption_id: consumption.id) }
         let!(:consumption_hts) { create(:consumption_detail, :for_hts, consumption_id: consumption.id) }
         let!(:consumption_htl) { create(:consumption_detail, :for_htl, consumption_id: consumption.id) }
