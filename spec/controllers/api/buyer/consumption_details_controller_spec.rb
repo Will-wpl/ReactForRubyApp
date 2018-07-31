@@ -225,7 +225,7 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
           expect(hash['htl_peak']).to eq('100.0')
           expect(hash['htl_off_peak']).to eq('100.0')
           contract_duration = Auction.find(hash['auction_id']).auction_contracts.where(contract_duration: '6').take
-          expect(contract_duration.total_lt_peak.to_s).to eq('1100.0')
+          expect(contract_duration.total_lt_peak.to_s).to eq('1000.0')
         end
       end
 
