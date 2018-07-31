@@ -59,7 +59,7 @@ export default class ChooseAlternativeWinner extends React.Component{
                 data=resp;
             }
             if(data.result){
-                this.setState({disabled:true});
+                this.setState({disabled:true,justification:data.result.justification});
             }else{
                 this.setState({disabled:false});
             }
@@ -84,7 +84,7 @@ export default class ChooseAlternativeWinner extends React.Component{
         })
     }
     liveTab(index){
-        this.setState({livetype:index});
+        this.setState({livetype:index,justification:''});
         this.refresh();
     }
     showRetailer(data){
