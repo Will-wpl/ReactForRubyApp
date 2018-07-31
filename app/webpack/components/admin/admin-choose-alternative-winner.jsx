@@ -112,7 +112,7 @@ export default class ChooseAlternativeWinner extends React.Component{
             name:data.company_name,
             ranking:data.ranking
         }
-        this.setState({selectedWinner:e, winner,disabled:true});
+        this.setState({selectedWinner:e, winner});
         this.state.winnerData.map((e,i)=>{
             e.disabled=false;
             if(i==index){
