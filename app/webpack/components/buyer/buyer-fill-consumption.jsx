@@ -18,7 +18,9 @@ export class FillConsumption extends Component {
             disabled: '',
             checked: false,
             name: "",
-            time: "", link: "",
+            time: "",
+            contact_start_date:"",
+            link: "",
             contract_duration: "",
             durationList: [],
             durtioanItem: "",
@@ -64,13 +66,15 @@ export class FillConsumption extends Component {
 
     BuyerParticipateList() {
         getBuyerParticipate('/api/buyer/consumption_details?consumption_id=' + this.consumptions_id).then((res) => {
+            console.log(res)
             this.site_list = res.consumption_details;
             this.status = res.consumption.participation_status === '1' ? "Confirmed" :
                 (res.consumption.participation_status === '2' ? "Pending" : "Rejected")
             this.setState({
                 name: res.auction.name,
                 time: res.auction.actual_begin_time,
-                contract_duration: res.consumption.contract_duration,
+                contact_start_date:res.auction.contract_period_start_date,
+                contract_duration: res.consumption.contract_duration?res.consumption.contract_duration:"",
                 link: res.tc_attachment ? res.tc_attachment.file_path : "",
             })
             if (res.consumption.participation_status === '1' || res.auction.publish_status === "1") {
@@ -210,10 +214,10 @@ export class FillConsumption extends Component {
 
     dateCompare(arr) {
         let count = 0;
-        let startDate = moment(this.state.time).format('YYYY-MM-DD HH:mm:ss');
+        let startDate = moment(this.state.contact_start_date).format('YYYY-MM-DD');
         for (let i in arr) {
             if (arr[i].contract_expiry) {
-                let contract_expiry_date = moment(arr[i].contract_expiry).format('YYYY-MM-DD HH:mm:ss');
+                let contract_expiry_date = moment(arr[i].contract_expiry).format('YYYY-MM-DD');
                 if (contract_expiry_date >= startDate) {
                     count++;
                 }
@@ -392,8 +396,8 @@ export class FillConsumption extends Component {
         return (
             <div>
                 <h1>Buyer Participation</h1>
-                <h4 className="col-sm-12 u-mb2">Invitation to RA: {this.state.name}</h4>
-                <h4 className="col-sm-12 u-mb2">Contract Start Date: {moment(this.state.time).format('D MMM YYYY')}</h4>
+                <h4 className="col-sm-12 u-mb2">Invitation to RA: {this.state.name} on {moment(this.state.time).format('D MMM YYYY hh:mm a')}</h4>
+                <h4 className="col-sm-12 u-mb2">Contract Start Date: {moment(this.state.contact_start_date).format('D MMM YYYY')}</h4>
                 <h4 >
                     <div className="row col-sm-12 u-mb2">
                         <table>
