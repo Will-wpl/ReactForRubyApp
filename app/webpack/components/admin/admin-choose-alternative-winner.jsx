@@ -112,7 +112,7 @@ export default class ChooseAlternativeWinner extends React.Component{
             name:data.company_name,
             ranking:data.ranking
         }
-        this.setState({selectedWinner:e, winner,disabled:true});
+        this.setState({selectedWinner:e, winner});
         this.state.winnerData.map((e,i)=>{
             e.disabled=false;
             if(i==index){
@@ -160,7 +160,8 @@ export default class ChooseAlternativeWinner extends React.Component{
             {data: { user_id: this.state.userid , status:'void',contract_duration:this.state.livetype}, id:this.state.auction.id}).then(res=>{
             this.refs.Modal.showModal();
             this.setState({
-                text:"You have voided this Reverse Auction exercise, and will be redirected to the homepage."
+                text:"You have voided this Reverse Auction exercise, and will be redirected to the homepage.",
+                disabled:true
             })
         },error=>{
 
