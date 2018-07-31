@@ -13,7 +13,7 @@ export default class AdminAward extends Component{
     componentDidMount(){
         let thisId = window.location.href.split("auctions/")[1].split("/award")[0];
         this.setState({contract_duration:window.location.href.indexOf('contract_duration')>0?window.location.href.split('duration=')[1]:6})
-        getLetterOfAward(thisId).then(resp=>{
+        getLetterOfAward(thisId,this.state.contract_duration).then(resp=>{
             //console.log(resp)
             this.setState({awardList:resp})
         },error=>{
