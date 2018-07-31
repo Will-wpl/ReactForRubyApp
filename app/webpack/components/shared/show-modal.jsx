@@ -155,7 +155,7 @@ export class Modal extends React.Component {
             if (data.subject && data.body) {
                 this.setState({
                     email_subject: data.subject,
-                    email_body: decodeURI(data.body)
+                    email_body: data.body
                 })
             }
         }
@@ -196,7 +196,7 @@ export class Modal extends React.Component {
         if (this.state.strtype === "email_template") {
             let data = this.state.props_data;
             data.subject = this.state.email_subject;
-            data.body = encodeURI(this.state.email_body);
+            data.body = this.state.email_body;
             this.setState({ props_data: data });
         }
         if (this.props.acceptFunction) {
