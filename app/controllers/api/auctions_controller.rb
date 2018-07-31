@@ -758,9 +758,10 @@ class Api::AuctionsController < Api::BaseController
       auction.total_eht_peak += Consumption.change_nil_value(contract[:total_eht_peak])
       auction.total_eht_off_peak += Consumption.change_nil_value(contract[:total_eht_off_peak])
     end
+
     auction_json = auction.attributes.dup
     auction_json[:auction_contracts] = Auction.find(auction.id).auction_contracts.sort_by {|contract| contract.contract_duration.to_i}
-
+    auction_json[:buyer_notify] = Consumption.find_by_auction_id(auction.id).find_notify_buyer.blank? ? false : true
     auction_json[:live_auction_contracts] = live_auction_contracts
 
     auction_json
