@@ -369,7 +369,7 @@ export class RetailerRegister extends Component {
                                 $('#company_name_repeat').removeClass('isPassValidate').addClass('errormessage');
                                 $("input[name='company_name']").focus();
                             }
-                            if (item === 'email_address') {
+                            if (item === 'email') {
                                 $('#email_address_repeat').removeClass('isPassValidate').addClass('errormessage');
                                 $("input[name='email_address']").focus();
                             }
@@ -403,10 +403,6 @@ export class RetailerRegister extends Component {
                     else {
                         if (res.error_fields) {
                             for (let item of res.error_fields) {
-                                // if (item === 'company_license_number') {
-                                //     $('#license_number_repeat').removeClass('isPassValidate').addClass('errormessage');
-                                //     $("input[name='license_number']").focus();
-                                // }
                                 if (item === 'company_license_number') {
                                     $('#license_number_repeat').removeClass('isPassValidate').addClass('errormessage');
                                     $("input[name='license_number']").focus();
@@ -419,7 +415,7 @@ export class RetailerRegister extends Component {
                                     $('#company_name_repeat').removeClass('isPassValidate').addClass('errormessage');
                                     $("input[name='company_name']").focus();
                                 }
-                                if (item === 'email_address') {
+                                if (item === 'email') {
                                     $('#email_address_repeat').removeClass('isPassValidate').addClass('errormessage');
                                     $("input[name='email_address']").focus();
                                 }
@@ -522,7 +518,7 @@ export class RetailerRegister extends Component {
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="company_name" value={this.state.company_name} onChange={this.Change.bind(this, 'company_name')} disabled={this.state.disabled} ref="company_name" required aria-required="true" title="Please fill out this field" ></input>
                                         <div className='isPassValidate' id='company_name_message' >This field is required!</div>
-                                        <div className='isPassValidate' id='company_name_repeat' >Unique Entity Number has already been taken!</div>
+                                        <div className='isPassValidate' id='company_name_repeat' >Company Name has already been taken!</div>
                                     </div>
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
