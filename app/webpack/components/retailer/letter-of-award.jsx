@@ -16,8 +16,9 @@ export default class RetailerLetterOfAward extends React.Component{
 
     componentDidMount(){
         let id = window.location.href.split("retailer/")[1].split("auctions/")[1].split('/')[0];
+        let duration=window.location.href.indexOf("duration")>0?window.location.href.split("duration=")[1]:'';
         //console.log(id);
-        getLetterOfAward(id).then(resp=>{
+        getLetterOfAward(id,duration).then(resp=>{
            // console.log(resp);
             resp.map((e,i)=>{
                 e.acknowledge==1 ? e.disabled=true:e.disabled=false
