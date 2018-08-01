@@ -103,10 +103,10 @@ export class AdminReport extends Component {
     }
     render () {
         let achieved = parseFloat(this.actualPrice).toFixed(4) <= parseFloat(this.startPrice);
-        const visibility_lt = !this.auction ? true: Number(this.auction.total_lt_peak) > 0 || Number(this.auction.total_lt_off_peak) > 0;
-        const visibility_hts = !this.auction ? true: Number(this.auction.total_hts_peak) > 0 || Number(this.auction.total_hts_off_peak) > 0;
-        const visibility_htl = !this.auction ? true: Number(this.auction.total_htl_peak) > 0 || Number(this.auction.total_htl_off_peak) > 0;
-        const visibility_eht = !this.auction ? true: Number(this.auction.total_eht_peak) > 0 || Number(this.auction.total_eht_off_peak) > 0;
+        const visibility_lt = !this.state.winner.auction ? true: Number(this.state.winner.auction.total_lt_peak) > 0 || Number(this.state.winner.auction.total_lt_off_peak) > 0;
+        const visibility_hts = !this.state.winner.auction ? true: Number(this.state.winner.auction.total_hts_peak) > 0 || Number(this.state.winner.auction.total_hts_off_peak) > 0;
+        const visibility_htl = !this.state.winner.auction ? true: Number(this.state.winner.auction.total_htl_peak) > 0 || Number(this.state.winner.auction.total_htl_off_peak) > 0;
+        const visibility_eht = !this.state.winner.auction ? true: Number(this.state.winner.auction.total_eht_peak) > 0 || Number(this.state.winner.auction.total_eht_off_peak) > 0;
         return (
             <div>
                 <div className="u-grid u-mt2 report_bg">
