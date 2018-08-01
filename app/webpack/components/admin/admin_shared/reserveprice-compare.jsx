@@ -8,8 +8,7 @@ export default class ReservePriceCompare extends Component {
         }
     }
     componentWillReceiveProps(nextProps) {
-        if(nextProps.compare || nextProps.contracts[0]){
-            console.log("当前type",nextProps.contracts);
+        if(nextProps.compare && nextProps.contracts[0]){
             this.compare(nextProps.contracts[0],nextProps.compare)
         }
     }
