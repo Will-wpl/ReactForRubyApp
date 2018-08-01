@@ -16,6 +16,7 @@ class Api::Retailer::AuctionResultsController < Api::AuctionResultsController
       { name: 'ID', field_name: 'published_gid', table_name: 'auctions' },
       { name: 'Name', field_name: 'name', table_name: 'auctions' },
       { name: 'Date', field_name: 'start_datetime', table_name: 'auctions' },
+      { name: 'Contract Period', field_name: 'contract_period', is_sort: false },
       { name: 'My Result', field_name: 'my_result', is_sort: false },
       { name: 'Letter of Award', field_name: 'award', is_sort: false }
     ]
@@ -39,6 +40,7 @@ class Api::Retailer::AuctionResultsController < Api::AuctionResultsController
     company_user_count = Consumption.get_company_user_count(result.auction_id)
     my_result = get_result(result)
     data = {
+        contract_period: "#{result.contract_period_start_date.strftime('%d %b %Y')} to #{result.contract_period_end_date.strftime('%d %b %Y')}",
         published_gid: result.auction.published_gid,
         name: result.auction.name,
         start_datetime: result.auction.start_datetime,
@@ -56,6 +58,7 @@ class Api::Retailer::AuctionResultsController < Api::AuctionResultsController
       company_user_count = Consumption.get_company_user_duration_count(result_contract.auction_id, result_contract.contract_duration)
       my_result = get_result(result_contract)
       contracts.push({
+                         contract_period: "#{result_contract.contract_duration} months: #{result.contract_period_start_date.strftime('%d %b %Y')} to #{result_contract.contract_period_end_date.strftime('%d %b %Y')}",
                          published_gid: result_contract.auction.published_gid,
                          name: result_contract.auction.name,
                          start_datetime: result_contract.auction.start_datetime,
