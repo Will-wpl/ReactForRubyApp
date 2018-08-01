@@ -35,7 +35,6 @@ export default class ChooseAlternativeWinner extends React.Component{
                 });
             }
             this.refresh();
-            //console.log(resp);
         })
     }
     refresh(){
@@ -80,7 +79,7 @@ export default class ChooseAlternativeWinner extends React.Component{
                 index:0
             };
             //console.log(e);
-            this.setState({winnerData:data.histories,selectedWinner:e})
+            this.setState({winnerData:data.histories,selectedWinner:e,userid:data.histories[0].user_id})
         })
     }
     liveTab(index){
@@ -112,7 +111,7 @@ export default class ChooseAlternativeWinner extends React.Component{
             name:data.company_name,
             ranking:data.ranking
         }
-        this.setState({selectedWinner:e, winner});
+        this.setState({selectedWinner:e, winner,userid:data.user_id});
         this.state.winnerData.map((e,i)=>{
             e.disabled=false;
             if(i==index){
