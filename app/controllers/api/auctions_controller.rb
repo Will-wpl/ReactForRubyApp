@@ -786,19 +786,17 @@ class Api::AuctionsController < Api::BaseController
       auction_result_contract.status = params[:status]
       auction_result_contract.contract_period_end_date = auction_contract.contract_period_end_date
       auction_result_contract.total_volume = auction_contract.total_volume
-      unless params[:status] == 'void'
-        auction_result_contract.lowest_average_price = history.average_price
-        auction_result_contract.lowest_price_bidder = history.company_name
-        auction_result_contract.total_award_sum = history.total_award_sum
-        auction_result_contract.lt_peak = history.lt_peak
-        auction_result_contract.lt_off_peak = history.lt_off_peak
-        auction_result_contract.hts_peak = history.hts_peak
-        auction_result_contract.hts_off_peak = history.hts_off_peak
-        auction_result_contract.htl_peak = history.htl_peak
-        auction_result_contract.htl_off_peak = history.htl_off_peak
-        auction_result_contract.eht_peak = history.eht_peak
-        auction_result_contract.eht_off_peak = history.eht_off_peak
-      end
+      auction_result_contract.lowest_average_price = history.average_price
+      auction_result_contract.lowest_price_bidder = history.company_name
+      auction_result_contract.total_award_sum = history.total_award_sum
+      auction_result_contract.lt_peak = history.lt_peak
+      auction_result_contract.lt_off_peak = history.lt_off_peak
+      auction_result_contract.hts_peak = history.hts_peak
+      auction_result_contract.hts_off_peak = history.hts_off_peak
+      auction_result_contract.htl_peak = history.htl_peak
+      auction_result_contract.htl_off_peak = history.htl_off_peak
+      auction_result_contract.eht_peak = history.eht_peak
+      auction_result_contract.eht_off_peak = history.eht_off_peak
       auction_result_contract.user_id = params[:user_id]
       auction_result_contract.justification = params[:justification]
       auction_result_contract.auction_id = params[:id].to_i
