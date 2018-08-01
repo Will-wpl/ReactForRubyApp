@@ -234,11 +234,14 @@ export default class LiveHomePage extends Component {
         const visibility_htl = this.check_has('has_htl');
         const visibility_eht = this.check_has('has_eht');
         const showTopDescription = this.state.showTop2Rule && this.state.ranking === 2;
+        const constractArr = this.props.auction.live_auction_contracts?this.props.auction.live_auction_contracts.filter(item=>{
+            return this.props.livetype === item.contract_duration
+        }):{}
         return (
             <div>
                 <div className="u-grid u-mt2">
                     <div className="col-sm-12 col-md-5 u-cell">
-                        <div className="col-sm-12 col-md-10 push-md-1 white_bg"><Description ranking={`${showTopDescription ? 'TOP ' : ''}${getNumBref(this.state.ranking, !showTopDescription)}`}/></div>
+                        <div className="col-sm-12 col-md-10 push-md-1 white_bg"><Description constractArr={constractArr} ranking={`${showTopDescription ? 'TOP ' : ''}${getNumBref(this.state.ranking, !showTopDescription)}`}/></div>
                     </div>
                     <div className="col-sm-12 col-md-7 u-cell">
                         <div className="col-sm-12 col-md-10 push-md-1"><Ranking data={this.state.chartDatas} yAxisFormatterRule={(this.state.showTop2Rule) ? {0 : ' ', 1 : ' ', 2 : 'Top 2', 'func': getNumBref} : {0 : ' ', 'func': getStandardNumBref}}/></div>
