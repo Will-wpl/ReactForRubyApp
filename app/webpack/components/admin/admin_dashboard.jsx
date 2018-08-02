@@ -62,13 +62,7 @@ export class AdminDashboard extends Component {
     }
     refresh(){
             let auctionId = this.state.auction? this.state.auction.id : 1;
-            if(this.state.auction.live_auction_contracts){
-                let live = this.state.auction.live_auction_contracts.filter(item=>{
-                    return this.state.livetype === item.contract_duration
-                })
-                this.setState({contracts:live});
-            }
-            getHistories({ auction_id: auctionId}).then(res => {
+            getHistories({ auction_id: sessionStorage.auction_id}).then(res => {
                 let histories;
                 if(res.duration_6 || res.duration_12 || res.duration_24){
                     console.log(this.state.livetype);
@@ -113,10 +107,15 @@ export class AdminDashboard extends Component {
                     } catch (error) {
                         console.log(error);
                     }
-                    //console.log(histories);
+                    if(this.state.auction.live_auction_contracts){
+                        let live = this.state.auction.live_auction_contracts.filter(item=>{
+                            return this.state.livetype === item.contract_duration
+                        })
+                        this.setState({contracts:live});
+                    }
                     this.setState({realtimeData: [].concat(histories), realtimeRanking: orderRanking
                          , currentPrice : orderRanking.length > 0 ? orderRanking[0].average_price : this.state.currentPrice,
-                         compare:[].concat(orderRanking[0])});
+                         compare:orderRanking[0]});
                 }
                 this.createWebsocket(auctionId);
             }, error => {
@@ -194,10 +193,10 @@ export class AdminDashboard extends Component {
                 })
             }
             switch (type){
-                case 'has_lt':return arr[0].has_lt;
-                case 'has_hts':return arr[0].has_hts;
-                case 'has_htl':return arr[0].has_htl;
-                case 'has_eht':return arr[0].has_eht;
+                case 'has_lt':return arr[0]?arr[0].has_lt:true;
+                case 'has_hts':return arr[0]?arr[0].has_hts:true;
+                case 'has_htl':return arr[0]?arr[0].has_htl:true;
+                case 'has_eht':return arr[0]?arr[0].has_eht:true;
             }
         }else{
             switch (type){
