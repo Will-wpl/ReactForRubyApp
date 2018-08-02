@@ -361,6 +361,18 @@ export class RetailerRegister extends Component {
                                 $('#license_number_repeat').removeClass('isPassValidate').addClass('errormessage');
                                 $("input[name='license_number']").focus();
                             }
+                            if (item === 'company_unique_entity_number') {
+                                $('#unique_entity_number_repeat').removeClass('isPassValidate').addClass('errormessage');
+                                $("input[name='unique_entity_number']").focus();
+                            }
+                            if (item === 'company_name') {
+                                $('#company_name_repeat').removeClass('isPassValidate').addClass('errormessage');
+                                $("input[name='company_name']").focus();
+                            }
+                            if (item === 'email') {
+                                $('#email_address_repeat').removeClass('isPassValidate').addClass('errormessage');
+                                $("input[name='email_address']").focus();
+                            }
                         }
                     }
                 }
@@ -394,6 +406,18 @@ export class RetailerRegister extends Component {
                                 if (item === 'company_license_number') {
                                     $('#license_number_repeat').removeClass('isPassValidate').addClass('errormessage');
                                     $("input[name='license_number']").focus();
+                                }
+                                if (item === 'company_unique_entity_number') {
+                                    $('#unique_entity_number_repeat').removeClass('isPassValidate').addClass('errormessage');
+                                    $("input[name='unique_entity_number']").focus();
+                                }
+                                if (item === 'company_name') {
+                                    $('#company_name_repeat').removeClass('isPassValidate').addClass('errormessage');
+                                    $("input[name='company_name']").focus();
+                                }
+                                if (item === 'email') {
+                                    $('#email_address_repeat').removeClass('isPassValidate').addClass('errormessage');
+                                    $("input[name='email_address']").focus();
                                 }
                             }
                         }
@@ -481,8 +505,9 @@ export class RetailerRegister extends Component {
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="email_address" value={this.state.email_address} onChange={this.Change.bind(this, 'email_address')} disabled={this.state.disabled} ref="email_address" placeholder="Email" required aria-required="true" title="Please fill out this field" />
-                                        <div className='isPassValidate' id='email_address_message' >This field is required!</div>
-                                        <div className='isPassValidate' id='email_address_format' >Incorrect mail format!</div>
+                                        <div className='isPassValidate' id='email_address_message'>This field is required!</div>
+                                        <div className='isPassValidate' id='email_address_format'>Incorrect mail format!</div>
+                                        <div className='isPassValidate' id='email_address_repeat'>Email has already been taken!</div>
                                     </div>
                                 </div>
                                 <h4 className="u-mt1 u-mb1">Company Info</h4>
@@ -493,6 +518,7 @@ export class RetailerRegister extends Component {
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="company_name" value={this.state.company_name} onChange={this.Change.bind(this, 'company_name')} disabled={this.state.disabled} ref="company_name" required aria-required="true" title="Please fill out this field" ></input>
                                         <div className='isPassValidate' id='company_name_message' >This field is required!</div>
+                                        <div className='isPassValidate' id='company_name_repeat' >Company Name has already been taken!</div>
                                     </div>
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
@@ -502,6 +528,7 @@ export class RetailerRegister extends Component {
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="unique_entity_number" value={this.state.unique_entity_number} onChange={this.Change.bind(this, 'unique_entity_number')} disabled={this.state.disabled} ref="unique_entity_number" required aria-required="true" title="Please fill out this field" ></input>
                                         <div className='isPassValidate' id='unique_entity_number_message' >This field is required!</div>
+                                        <div className='isPassValidate' id='unique_entity_number_repeat' >Unique Entity Number has already been taken!</div>
                                     </div>
                                 </div>
 
@@ -512,7 +539,7 @@ export class RetailerRegister extends Component {
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="license_number" value={this.state.license_number} onChange={this.Change.bind(this, 'license_number')} disabled={this.state.disabled} ref="license_number" required aria-required="true" title="Please fill out this field" ></input>
                                         <div className='isPassValidate' id='license_number_message' >This field is required!</div>
-                                        <div className='isPassValidate' id='license_number_repeat' >Retailer license number has already been taken!</div>
+                                        <div className='isPassValidate' id='license_number_repeat' >Retailer License Number has already been taken!</div>
                                     </div>
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
