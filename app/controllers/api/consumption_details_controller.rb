@@ -129,6 +129,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
       auction_name = auction.name
       auction_start_datetime = auction.start_datetime.strftime('%Y-%m-%d %H:%M:%S').to_s
       consumption.comments = nil
+      consumption.accept_status = Consumption::AcceptStatusPending
       if consumption.save!
         # Change -- [do not save acution. move this logic to admin approval logic] - Start
         #  -- Original
