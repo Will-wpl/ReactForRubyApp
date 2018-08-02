@@ -242,7 +242,7 @@ export class SearchList extends Component {
                                                                 if(item.report == "" || item.log == "" || item.award == ""){
                                                                     return <td key={i}></td>
                                                                 }else{
-                                                                    return <td key={i}><abbr>{e[`${it.field_name}`]?<a className={it.field_name} href={item[`${it.field_name}`]?"/"+item[`${it.field_name}`]:"javascript:void(0);"} onClick={this.saveId.bind(this,item[`${it.field_name}`])}></a>:''}</abbr></td>
+                                                                    return <td key={i}><abbr>{item[`${it.field_name}`]?<a className={it.field_name} href={item[`${it.field_name}`]?"/"+item[`${it.field_name}`]:"javascript:void(0);"} onClick={this.saveId.bind(this,item[`${it.field_name}`])}></a>:''}</abbr></td>
                                                                 }
                                                             }
                                                         } else if(it.field_name === 'acknowledge'){
