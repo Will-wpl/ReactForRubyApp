@@ -130,7 +130,7 @@ export class BuyerRegister extends Component {
                 agree_seller_buyer: item.agree_seller_buyer ? item.agree_seller_buyer : '0',
                 agree_buyer_revv: item.agree_buyer_revv ? item.agree_buyer_revv : '0',
                 has_tenants: item.has_tenants ? item.has_tenants : '1',
-                approveStatus: item.approval_status === "2" ? false : true
+                approveStatus: item.approval_status === "3" ? true : false
             })
             $('#buyer_management').val(this.state.has_tenants);
             if (this.state.agree_seller_buyer === "1") {
