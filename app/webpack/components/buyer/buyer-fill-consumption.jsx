@@ -121,7 +121,7 @@ export class FillConsumption extends Component {
                 $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
             }
         })
-        this.accountItem.id="";
+        this.accountItem.id = "";
         this.accountItem.account_number = "";
         this.accountItem.existing_plan = ['SPS tariff', 'SPS wholesale', 'Retailer plan'];
         this.accountItem.existing_plan_selected = "SPS tariff";
@@ -143,8 +143,9 @@ export class FillConsumption extends Component {
         this.accountItem.file_name = "";
         this.setState({
             account_detail: this.accountItem,
-            text: ""
+            text: " "
         })
+        $("#account_number").focus();
         this.refs.consumption.showModal('custom', {}, '', '-1')
     }
 
@@ -172,9 +173,10 @@ export class FillConsumption extends Component {
         this.accountItem.file_name = item.user_attachment ? item.user_attachment.file_name : "";
         this.accountItem.option = 'update';
         this.setState({
-            account_detail: this.accountItem,
-            text: ""
+            text: " ", 
+            account_detail: this.accountItem
         })
+        $("#account_number").focus();
         this.refs.consumption.showModal('custom', {}, '', index)
     }
     //when user finished adding a new account, list page will add/update the new account information.
@@ -501,7 +503,7 @@ export class FillConsumption extends Component {
                     </div>
                     <Modal text={this.state.text} acceptFunction={this.doAccept.bind(this)} ref="Modal" />
                 </form>
-                <Modal formSize="big" acceptFunction={this.doAddAccountAction.bind(this)} contract_capacity_disabled={this.state.contract_capacity_disabled} contract_expiry_disabled={this.state.contract_expiry_disabled} siteList={this.state.site_list} consumption_account_item={this.state.account_detail} listdetailtype='consumption_detail' ref="consumption" />
+                <Modal formSize="big" text={this.state.text} acceptFunction={this.doAddAccountAction.bind(this)} contract_capacity_disabled={this.state.contract_capacity_disabled} contract_expiry_disabled={this.state.contract_expiry_disabled} siteList={this.state.site_list} consumption_account_item={this.state.account_detail} listdetailtype='consumption_detail' ref="consumption" />
             </div>
         )
     }

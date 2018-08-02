@@ -3,8 +3,7 @@ import { constants } from 'os';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
-import { removeNanNum } from '../../javascripts/componentService/util';
-import { validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
+import { validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate,removeNanNum } from '../../javascripts/componentService/util';
 //共通弹出框组件
 import { UploadFile } from '../shared/upload';
 
@@ -44,6 +43,7 @@ export class Modal extends React.Component {
             peak_pct: '',
             peak: "",
             option: '',
+            isSaved: false,
             uploadUrl: "/api/buyer/user_attachments?file_type=",
             validate: false,
             fileData: {
@@ -60,6 +60,7 @@ export class Modal extends React.Component {
         if (next.consumption_account_item) {
             this.setState({
                 consumptionid: next.consumption_account_item.id,
+                isSaved: next.consumption_account_item.id ? true : false,
                 account_number: next.consumption_account_item.account_number,
                 existing_plan: next.consumption_account_item.existing_plan,
                 existing_plan_selected: next.consumption_account_item.existing_plan_selected,
@@ -236,19 +237,21 @@ export class Modal extends React.Component {
         flag = validateResult.length > 0 ? false : true;
         if (flag) {
             let status = this.account_address_repeat();
-            console.log(status)
             switch (status) {
                 case 'false|true':
                     $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
                     $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
+                    $("#permise_address").focus();
                     break;
                 case 'true|false':
                     $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
                     $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                    $("#account_number").focus();
                     break;
                 case 'true|true':
                     $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
                     $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                    $("#account_number").focus();
                     break;
                 default:
                     this.addToMainForm();
@@ -277,13 +280,8 @@ export class Modal extends React.Component {
         }
     }
 
-    removeNanNum(value) {
-        value.target.value = value.target.value.replace(/\.{2,}/g, ".");
-        value.target.value = value.target.value.replace(/[^\d.]/g, "");
-        value.target.value = value.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
-        if (value.target.value.indexOf(".") < 0 && value.target.value != "") {
-            value.target.value = parseFloat(value.target.value);
-        }
+    removeInputNanNum(value) {
+        removeNanNum(value)
     }
     getFormsValue() {
         let siteItem = {
@@ -325,76 +323,45 @@ export class Modal extends React.Component {
     account_address_repeat() {
         let address = false, account = false, editNotSave = false;
         let address_count = 0, account_count = 0;
-        console.log(this.state.consumptionItem);
-        // this.state.consumptionItem.map((item, index) => {
-        //     if (this.state.option === 'update') {
-        //         if (item.id) {
-        //             if ((this.state.unit_number == item.unit_number) && (this.state.postal_code == item.postal_code) && (this.state.id !== item.id)) {
-        //                 address_count++;
-        //             }
-        //             if (this.state.account_number === item.account_number && (this.state.id !== item.id)) {
-        //                 account_count++;
-        //             }
-        //         }
-        //         else {
-        //             if ((this.state.unit_number == item.unit_number) && (this.state.postal_code == item.postal_code)) {
-        //                 address_count++;
-        //             }
-        //             if (this.state.account_number === item.account_number) {
-        //                 account_count++;
-        //             }
-        //         }
-
-        //     }
-        //     else {
-        //         if ((this.state.unit_number === item.unit_number) && (this.state.postal_code === item.postal_code)) {
-        //             address_count++;
-        //         }
-        //         if (this.state.account_number == item.account_number) {
-        //             account_count++;
-        //         }
-        //     }
-        // })
-        // if (this.state.option === "update") {
-        //     console.log(this.state.consumptionid)
-        //     if (this.state.id) {
-        //         console.log("bbbb")
-        //         if (address_count > 0) {
-        //             address = true;
-        //         }
-        //         if (account_count > 0) {
-        //             account = true;
-        //         }
-        //     }
-        //     else {
-
-        //         console.log("aaaa")
-        //         if (address_count > 1) {
-        //             address = true;
-        //         }
-        //         if (account_count > 1) {
-        //             account = true;
-        //         }
-        //     }
-        // }
-        // else {
-        //     if (address_count > 0) {
-        //         address = true;
-        //     }
-        //     if (account_count > 0) {
-        //         account = true;
-        //     }
-        // }
-
-        for(let i=0;i<this.state.consumptionItem.length;i++)
-        {
-            let account_number=this.state.consumptionItem[i].account_count;
-            let unit=this.state.consumptionItem[i].unit_number;
-            let postal_code=this.state.consumptionItem[i].postal_code;
+        this.state.consumptionItem.map((item, index) => {
+            if (this.state.option === 'update') {
+                if (item.id) {
+                    if ((this.state.unit_number == item.unit_number) && (this.state.postal_code == item.postal_code) && (this.state.consumptionid !== item.id)) {
+                        address_count++;
+                    }
+                    if (this.state.account_number === item.account_number && (this.state.consumptionid !== item.id)) {
+                        account_count++;
+                    }
+                }
+                else {
+                    if ((this.state.unit_number === item.unit_number) && (this.state.postal_code === item.postal_code)) {
+                        if (index != this.state.itemIndex) {
+                            address_count++;
+                        }
+                    }
+                    if (this.state.account_number === item.account_number) {
+                        if (index != this.state.itemIndex ) {
+                            account_count++;
+                        }
+                    }
+                }
+            }
+            else {
+                if ((this.state.unit_number === item.unit_number) && (this.state.postal_code === item.postal_code)) {
+                    address_count++;
+                }
+                if (this.state.account_number === item.account_number) {
+                    account_count++;
+                }
+            }
+        })
+       
+        if (address_count > 0) {
+            address = true;
         }
-
-
-        console.log(account_count + "_" + address_count)
+        if (account_count > 0) {
+            account = true;
+        }
         return account + "|" + address;
     }
 
@@ -403,7 +370,25 @@ export class Modal extends React.Component {
     }
 
     addToMainForm() {
-        let siteItem = this.getFormsValue();
+        let siteItem = {
+            consumptionid: this.state.consumptionid ? this.state.consumptionid : "",
+            account_number: this.state.account_number,
+            existing_plan_selected: this.state.existing_plan_selected,
+            contract_expiry: this.state.contract_expiry ? this.state.contract_expiry : "",
+            purchasing_entity_selectd: this.state.purchasing_entity_selectd,
+            intake_level_selected: this.state.intake_level_selected,
+            contracted_capacity: this.state.contracted_capacity,
+            blk_or_unit: this.state.blk_or_unit,
+            street: this.state.street,
+            unit_number: this.state.unit_number,
+            postal_code: this.state.postal_code,
+            totals: this.state.totals,
+            peak_pct: this.state.peak_pct,
+            index: this.state.itemIndex,
+            user_attachment_id: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].id : "",
+            file_name: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_name : "",
+            file_path: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_path : ""
+        }
         if (this.props.acceptFunction) {
             this.props.acceptFunction(siteItem);
             this.setState({
@@ -429,11 +414,16 @@ export class Modal extends React.Component {
                 break;
             case "existing_plan":
                 let existing_plan_dis = true;
+
                 if (value === 'Retailer plan') {
                     existing_plan_dis = false;
                 }
                 else {
+                    this.setState({
+                        contract_expiry: ""
+                    })
                     existing_plan_dis = true;
+
                 }
                 this.setState({
                     existing_plan_selected: value,
@@ -454,6 +444,9 @@ export class Modal extends React.Component {
             case "intake_level":
                 let contracted_capacity_dis = true;
                 if (value === 'LT') {
+                    this.setState({
+                        contracted_capacity: ""
+                    })
                     contracted_capacity_dis = true;
                 }
                 else {
@@ -727,7 +720,9 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td style={{ width: "30%" }}><abbr title="required">*</abbr>Account No.</td>
                                     <td style={{ width: "70%" }}>
-                                        <input type="text" value={this.state.consumptionid} onChange={this.changeConsumption.bind(this, "consumptionid")} id="id" name="id" />
+                                        <div className="isHide">
+                                            <input type="text" value={this.state.consumptionid} onChange={this.changeConsumption.bind(this, "consumptionid")} id="id" name="id" />
+                                        </div>
                                         <input type="text" value={this.state.account_number} onChange={this.changeConsumption.bind(this, "account_number")} id="account_number" name="account_number" required aria-required="true" />
                                         <div id="account_number_message" className="isPassValidate">This filed is required!</div>
                                         <div id="account_number_taken_message" className="errormessage">There is already an existing contract for this Account Number.</div>
@@ -779,7 +774,7 @@ export class Modal extends React.Component {
                                         <span className={this.state.intake_level_selected === "LT" ? "isHide" : "isDisplay"}>*</span>
                                     </abbr>Contract Capacity</td>
                                     <td>
-                                        <input type="text" disabled={this.state.contracted_capacity_disabled} value={this.state.contracted_capacity} onChange={this.changeConsumption.bind(this, "contracted_capacity")} id="contracted_capacity" name="contracted_capacity" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" maxLength="10" />
+                                        <input type="text" disabled={this.state.contracted_capacity_disabled} value={this.state.contracted_capacity} onChange={this.changeConsumption.bind(this, "contracted_capacity")} id="contracted_capacity" name="contracted_capacity" onKeyUp={this.removeInputNanNum.bind(this)} required aria-required="true" maxLength="10" />
                                         <div id="contracted_capacity_message" className="isPassValidate">This filed is required!</div>
                                         <div id="contracted_capacity_format" className="isPassValidate">Must be positive integers,and first cannot be 0!</div>
                                     </td>
@@ -833,7 +828,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Total Monthly:</td>
                                     <td>
-                                        <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" name="totals" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" maxLength="10" /><div>kWh/month</div>
+                                        <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" name="totals" onKeyUp={this.removeInputNanNum.bind(this)} required aria-required="true" maxLength="10" /><div>kWh/month</div>
                                         <div id="totals_message" className="isPassValidate">This filed is required!</div>
                                         <div id="totals_format" className="isPassValidate">Must be positive integers,and first cannot be 0!</div>
                                     </td>
@@ -841,7 +836,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Peak:</td>
                                     <td>
-                                        <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} id="peak_pct" name="peak_pct" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" maxLength="5" placeholder="0-100" /> <div>%</div>
+                                        <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} id="peak_pct" name="peak_pct" onKeyUp={this.removeInputNanNum.bind(this)} required aria-required="true" maxLength="5" placeholder="0-100" /> <div>%</div>
                                         <div id="peak_pct_message" className="isPassValidate">This filed is required!</div>
                                         <div id="peak_pct_format" className="isPassValidate">Please input bigger than 0 and less than 100!</div>
                                     </td>

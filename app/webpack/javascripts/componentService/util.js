@@ -271,6 +271,7 @@ export const removeNanNum = (value) => {
     if (value.target.value.indexOf(".") < 0 && value.target.value != "") {
         value.target.value = parseFloat(value.target.value);
     }
+    return value
 }
 export const changeValidate = (type, value) => {
     if (value) {
@@ -327,3 +328,5 @@ export const formatPower = (number, places, symbol, thousand, decimal) => {
         j = (j = i.length) > 3 ? j % 3 : 0;
     return symbol + negative + (j ? i.substr(0, j) + thousand : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousand) + (places ? decimal + Math.abs(number - i).toFixed(places).slice(2) : "");
 }
+
+ 
