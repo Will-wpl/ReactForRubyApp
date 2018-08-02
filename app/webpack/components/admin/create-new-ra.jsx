@@ -113,22 +113,22 @@ export class CreateNewRA extends Component {
                             case "24": this.setState({contract_duration_24:true,contract_24:item.id});
                             break
                         }
-                        $("#starting_price_lt_peak_"+index).val(item.starting_price_lt_peak);
-                        $("#reserve_price_lt_peak_"+index).val(item.reserve_price_lt_peak);
-                        $("#starting_price_hts_peak_"+index).val(item.starting_price_hts_peak);
-                        $("#reserve_price_hts_peak_"+index).val(item.reserve_price_hts_peak);
-                        $("#starting_price_htl_peak_"+index).val(item.starting_price_htl_peak);
-                        $("#reserve_price_htl_peak_"+index).val(item.reserve_price_htl_peak);
-                        $("#starting_price_eht_peak_"+index).val(item.starting_price_eht_peak);
-                        $("#reserve_price_eht_peak_"+index).val(item.reserve_price_eht_peak);
-                        $("#starting_price_lt_off_peak_"+index).val(item.starting_price_lt_off_peak);
-                        $("#reserve_price_lt_off_peak_"+index).val(item.reserve_price_lt_off_peak);
-                        $("#starting_price_hts_off_peak_"+index).val(item.starting_price_hts_off_peak);
-                        $("#reserve_price_hts_off_peak_"+index).val(item.reserve_price_hts_off_peak);
-                        $("#starting_price_htl_off_peak_"+index).val(item.starting_price_htl_off_peak);
-                        $("#reserve_price_htl_off_peak_"+index).val(item.reserve_price_htl_off_peak);
-                        $("#starting_price_eht_off_peak_"+index).val(item.starting_price_eht_off_peak);
-                        $("#reserve_price_eht_off_peak_"+index).val(item.reserve_price_eht_off_peak);
+                        $("#starting_price_lt_peak_"+index).val(findUpLimitZero(item.starting_price_lt_peak));
+                        $("#reserve_price_lt_peak_"+index).val(findUpLimitZero(item.reserve_price_lt_peak));
+                        $("#starting_price_hts_peak_"+index).val(findUpLimitZero(item.starting_price_hts_peak));
+                        $("#reserve_price_hts_peak_"+index).val(findUpLimitZero(item.reserve_price_hts_peak));
+                        $("#starting_price_htl_peak_"+index).val(findUpLimitZero(item.starting_price_htl_peak));
+                        $("#reserve_price_htl_peak_"+index).val(findUpLimitZero(item.reserve_price_htl_peak));
+                        $("#starting_price_eht_peak_"+index).val(findUpLimitZero(item.starting_price_eht_peak));
+                        $("#reserve_price_eht_peak_"+index).val(findUpLimitZero(item.reserve_price_eht_peak));
+                        $("#starting_price_lt_off_peak_"+index).val(findUpLimitZero(item.starting_price_lt_off_peak));
+                        $("#reserve_price_lt_off_peak_"+index).val(findUpLimitZero(item.reserve_price_lt_off_peak));
+                        $("#starting_price_hts_off_peak_"+index).val(findUpLimitZero(item.starting_price_hts_off_peak));
+                        $("#reserve_price_hts_off_peak_"+index).val(findUpLimitZero(item.reserve_price_hts_off_peak));
+                        $("#starting_price_htl_off_peak_"+index).val(findUpLimitZero(item.starting_price_htl_off_peak));
+                        $("#reserve_price_htl_off_peak_"+index).val(findUpLimitZero(item.reserve_price_htl_off_peak));
+                        $("#starting_price_eht_off_peak_"+index).val(findUpLimitZero(item.starting_price_eht_off_peak));
+                        $("#reserve_price_eht_off_peak_"+index).val(findUpLimitZero(item.reserve_price_eht_off_peak));
                     })
                     $("#starting_price_time").val(res.starting_price_time);
                 }
