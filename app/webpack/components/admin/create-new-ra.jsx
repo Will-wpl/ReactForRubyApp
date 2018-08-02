@@ -346,40 +346,48 @@ export class CreateNewRA extends Component {
                         <tbody>
                         <tr>
                             <td>Peak</td>
-                            <td>
+                            <td id={'lt_peak_'+mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"starting_price_lt_peak_"+mouth} disabled={this.state.disabled} /><br/>
                                 Reserve:<input type="text" maxLength="6"  onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"reserve_price_lt_peak_"+mouth} required={this.state.required} disabled={this.state.disabled} />
+                                <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
                             </td>
-                            <td>
+                            <td id={'hts_peak_'+mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"starting_price_hts_peak_"+mouth} disabled={this.state.disabled} /><br/>
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"reserve_price_hts_peak_"+mouth} required={this.state.required} disabled={this.state.disabled} />
+                                <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
                             </td>
-                            <td>
+                            <td id={'htl_peak_'+mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"starting_price_htl_peak_"+mouth} disabled={this.state.disabled} /><br/>
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"reserve_price_htl_peak_"+mouth} disabled={this.state.disabled} />
+                                <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
                             </td>
-                            <td>
+                            <td id={'eht_peak_'+mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"starting_price_eht_peak_"+mouth} disabled={this.state.disabled} /><br/>
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"reserve_price_eht_peak_"+mouth} required={this.state.required} disabled={this.state.disabled} />
+                                <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
                             </td>
                         </tr>
                         <tr>
                             <td>Off Peak</td>
-                            <td>
+                            <td id={'lt_off_peak_'+mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"starting_price_lt_off_peak_"+mouth} disabled={this.state.disabled} /><br/>
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"reserve_price_lt_off_peak_"+mouth} required={this.state.required} disabled={this.state.disabled} />
+                                <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
                             </td>
-                            <td>
+                            <td id={'hts_off_peak_'+mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"starting_price_hts_off_peak_"+mouth} disabled={this.state.disabled} /><br/>
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"reserve_price_hts_off_peak_"+mouth} required={this.state.required} disabled={this.state.disabled} />
+                                <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
                             </td>
-                            <td>
+                            <td id={'htl_off_peak_'+mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"starting_price_htl_off_peak_"+mouth} disabled={this.state.disabled} /><br/>
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"reserve_price_htl_off_peak_"+mouth} required={this.state.required} disabled={this.state.disabled} />
+                                <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
                             </td>
-                            <td>
+                            <td id={'eht_off_peak_'+mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"starting_price_eht_off_peak_"+mouth} disabled={this.state.disabled} /><br/>
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"reserve_price_eht_off_peak_"+mouth} required={this.state.required} disabled={this.state.disabled} />
+                                <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
                             </td>
                         </tr>
                         </tbody>
@@ -440,8 +448,8 @@ export class CreateNewRA extends Component {
     }
     checkSuccess(event,obj){
         event.preventDefault();
-        let timeBar;
         if(!this.state.disabled){
+            let timeBar,k=true,peaktime;
             if(this.state.start_datetime < moment()){
                 $("#start_datetime .required_error").fadeIn(300);
                 window.location.href="#start_datetime";
@@ -451,15 +459,54 @@ export class CreateNewRA extends Component {
                 },5000)
                 return false;
             }
-            if(this.state.reserve_price > this.state.starting_price){
-                $("#reserve_price .required_error").fadeIn(300);
-                window.location.href="#reserve_price";
-                clearTimeout(timeBar);
-                timeBar = setTimeout(()=>{
-                    $("#reserve_price .required_error").fadeOut(300);
-                },5000);
-                return false
-            }
+            this.state.checkArray.map((item)=>{
+                if(parseFloat($('#starting_price_lt_peak_'+item).val())<parseFloat($('#reserve_price_lt_peak_'+item).val())){
+                    k=false;
+                    $("#lt_peak_"+item).find('.peak_error').fadeIn(300);
+                }
+                if(parseFloat($('#starting_price_hts_peak_'+item).val())<parseFloat($('#reserve_price_hts_peak_'+item).val())){
+                    k=false
+                    $("#hts_peak_"+item).find('.peak_error').fadeIn(300);
+                }
+                if(parseFloat($('#starting_price_htl_peak_'+item).val())<parseFloat($('#reserve_price_htl_peak_'+item).val())){
+                    k=false
+                    $("#htl_peak_"+item).find('.peak_error').fadeIn(300);
+                }
+                if(parseFloat($('#starting_price_eht_peak_'+item).val())<parseFloat($('#reserve_price_eht_peak_'+item).val())){
+                    k=false
+                    $("#eht_peak_"+item).find('.peak_error').fadeIn(300);
+                }
+                if(parseFloat($('#starting_price_lt_off_peak_'+item).val())<parseFloat($('#reserve_price_lt_off_peak_'+item).val())){
+                    k=false;
+                    $("#lt_off_peak_"+item).find('.peak_error').fadeIn(300);
+                }
+                if(parseFloat($('#starting_price_hts_off_peak_'+item).val())<parseFloat($('#reserve_price_hts_off_peak_'+item).val())){
+                    k=false
+                    $("#hts_off_peak_"+item).find('.peak_error').fadeIn(300);
+                }
+                if(parseFloat($('#starting_price_htl_off_peak_'+item).val())<parseFloat($('#reserve_price_htl_off_peak_'+item).val())){
+                    k=false
+                    $("#htl_off_peak_"+item).find('.peak_error').fadeIn(300);
+                }
+                if(parseFloat($('#starting_price_eht_off_peak_'+item).val())<parseFloat($('#reserve_price_eht_off_peak_'+item).val())){
+                    k=false
+                    $("#eht_off_peak_"+item).find('.peak_error').fadeIn(300);
+                }
+            })
+            clearTimeout(peaktime);
+            peaktime = setTimeout(()=>{
+                $(".peak_error").fadeOut(300);
+            },5000);
+            if(!k){return};
+            // if(this.state.reserve_price > this.state.starting_price){
+            //     $("#reserve_price .required_error").fadeIn(300);
+            //     window.location.href="#reserve_price";
+            //     clearTimeout(timeBar);
+            //     timeBar = setTimeout(()=>{
+            //         $("#reserve_price .required_error").fadeOut(300);
+            //     },5000);
+            //     return false
+            // }
         }
         
         if(this.state.btn_type == "save"){
