@@ -16,8 +16,9 @@ export default class RetailerLetterOfAward extends React.Component{
 
     componentDidMount(){
         let id = window.location.href.split("retailer/")[1].split("auctions/")[1].split('/')[0];
+        let duration=window.location.href.indexOf("duration")>0?window.location.href.split("duration=")[1]:'';
         //console.log(id);
-        getLetterOfAward(id).then(resp=>{
+        getLetterOfAward(id,duration).then(resp=>{
            // console.log(resp);
             resp.map((e,i)=>{
                 e.acknowledge==1 ? e.disabled=true:e.disabled=false
@@ -88,9 +89,9 @@ export default class RetailerLetterOfAward extends React.Component{
             console.log(error)
         })
     }
-    download(data,index){
+    download(data,id){
         //console.log(data);
-        window.open(`/api/retailer/auctions/letter_of_award_pdf?auction_id=${data.auction_id}&user_id=${data.user_id}`);
+        window.open(`/api/retailer/auctions/letter_of_award_pdf?auction_id=${data.auction_id}&user_id=${data.user_id}&entity_id=${id}`);
     }
 
     renderAwardList(data){
@@ -99,8 +100,10 @@ export default class RetailerLetterOfAward extends React.Component{
                 return(
                     <li key={i} className="u-grid center ">
                         <span className="col-sm-4 white">{e.name}</span>
-                        <span className="col-sm-4">
-                            <div className="downLoadIcon" onClick={this.download.bind(this,e,i)}></div>
+                        <span className="col-sm-4 line15">
+                            {e.entities?e.entities.map((it,k)=>{
+                                return <div key={k} className="downLoadIcon" onClick={this.download.bind(this,e,it.company_buyer_entity_id)}></div>
+                            }):''}
                         </span>
                         <span className="col-sm-4 ">
                             <button
