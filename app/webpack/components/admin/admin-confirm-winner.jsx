@@ -131,10 +131,10 @@ confirm_winner(){
                 })
             }
             switch (type){
-                case 'has_lt':return arr[0].has_lt;
-                case 'has_hts':return arr[0].has_hts;
-                case 'has_htl':return arr[0].has_htl;
-                case 'has_eht':return arr[0].has_eht;
+                case 'has_lt':return arr[0]?arr[0].has_lt:true;
+                case 'has_hts':return arr[0]?arr[0].has_hts:true;
+                case 'has_htl':return arr[0]?arr[0].has_htl:true;
+                case 'has_eht':return arr[0]?arr[0].has_eht:true;
             }
         }else{
             switch (type){
