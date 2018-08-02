@@ -88,10 +88,11 @@
   display: flex;
   flex-direction: row-reverse;
 }
+.line15{line-height: 15px;}
 .downLoadIcon{
   width:24px;
   height:24px;
-  margin: auto;
+  margin: 0px 5px; display: inline-block;
   background: url("../images/letter_of_award.png") no-repeat;
   background-size: 24px;
 }

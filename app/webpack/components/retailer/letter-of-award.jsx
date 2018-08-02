@@ -89,9 +89,9 @@ export default class RetailerLetterOfAward extends React.Component{
             console.log(error)
         })
     }
-    download(data,index){
+    download(data,id){
         //console.log(data);
-        window.open(`/api/retailer/auctions/letter_of_award_pdf?auction_id=${data.auction_id}&user_id=${data.user_id}`);
+        window.open(`/api/retailer/auctions/letter_of_award_pdf?auction_id=${data.auction_id}&user_id=${data.user_id}&entity_id=${id}`);
     }
 
     renderAwardList(data){
@@ -100,10 +100,10 @@ export default class RetailerLetterOfAward extends React.Component{
                 return(
                     <li key={i} className="u-grid center ">
                         <span className="col-sm-4 white">{e.name}</span>
-                        <span className="col-sm-4">
-                            {e.entities.map((it,k)=>{
-                                return <div key={k} className="downLoadIcon" onClick={this.downLoad.bind(this,e,it.company_buyer_entity_id)}></div>
-                            })}
+                        <span className="col-sm-4 line15">
+                            {e.entities?e.entities.map((it,k)=>{
+                                return <div key={k} className="downLoadIcon" onClick={this.download.bind(this,e,it.company_buyer_entity_id)}></div>
+                            }):''}
                         </span>
                         <span className="col-sm-4 ">
                             <button
