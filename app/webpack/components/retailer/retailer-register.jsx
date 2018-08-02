@@ -4,7 +4,7 @@ import { UploadFile } from '../shared/upload';
 import { Modal } from '../shared/show-modal';
 import { getRetailerUserInfo, saveRetailManageInfo, submitRetailManageInfo, getRetailerUserInfoByUserId, validateIsExist } from '../../javascripts/componentService/retailer/service';
 import { approveRetailerUser } from '../../javascripts/componentService/admin/service';
-import { validateNum, validateEmail, validator_Object, setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
+import { validateNum, validateEmail, validator_Object, setValidationFaild, setValidationPass, changeValidate ,removeNanNum} from '../../javascripts/componentService/util';
 export class RetailerRegister extends Component {
     constructor(props) {
         super(props);
@@ -456,6 +456,9 @@ export class RetailerRegister extends Component {
     showView() {
         this.refs.Modal_upload.showModal();
     }
+    removeInputNanNum(value) {
+        removeNanNum(value);
+    }
     render() {
         let btn_html;
         if (this.state.use_type === 'admin_approve') {
@@ -563,7 +566,7 @@ export class RetailerRegister extends Component {
                                         <abbr title="required">*</abbr> Mobile Number:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="mobile_number" value={this.state.mobile_number} onChange={this.Change.bind(this, 'mobile_number')} disabled={this.state.disabled} placeholder="Number should contain 8 integers." title="Please fill out this field" ref="mobile_number" maxLength="8" required aria-required="true" ></input>
+                                        <input type="text" name="mobile_number" value={this.state.mobile_number}  onKeyUp={this.removeInputNanNum.bind(this)} onChange={this.Change.bind(this, 'mobile_number')} disabled={this.state.disabled} placeholder="Number should contain 8 integers." title="Please fill out this field" ref="mobile_number" maxLength="8" required aria-required="true" ></input>
                                         <div className='isPassValidate' id='mobile_number_message' >This field is required!</div>
                                         <div className='isPassValidate' id='mobile_number_format' >Number should contain 8 integers!</div>
                                     </div>
@@ -573,7 +576,7 @@ export class RetailerRegister extends Component {
                                         <abbr title="required">*</abbr> Office Number:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="office_number" value={this.state.office_number} onChange={this.Change.bind(this, 'office_number')} disabled={this.state.disabled} placeholder="Number should contain 8 integers." ref="office_number" maxLength="8" title="Please fill out this field" required aria-required="true" ></input>
+                                        <input type="text" name="office_number" value={this.state.office_number} onKeyUp={this.removeInputNanNum.bind(this)} onChange={this.Change.bind(this, 'office_number')} disabled={this.state.disabled} placeholder="Number should contain 8 integers." ref="office_number" maxLength="8" title="Please fill out this field" required aria-required="true" ></input>
                                         <div className='isPassValidate' id='office_number_message' >This field is required!</div>
                                         <div className='isPassValidate' id='office_number_format' >Number should contain 8 integers!</div>
                                     </div>

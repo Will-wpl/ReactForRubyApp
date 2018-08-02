@@ -5,7 +5,7 @@ import { UserEntity } from '../shared/user-entity';
 import { Modal } from '../shared/show-modal';
 import { getBuyerUserInfo, saveBuyerUserInfo, submitBuyerUserInfo, getBuyerUserInfoByUserId, validateIsExist } from '../../javascripts/componentService/common/service';
 import { approveBuyerUser } from '../../javascripts/componentService/admin/service';
-import { validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
+import { removeNanNum,validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
 
 export class BuyerRegister extends Component {
     constructor(props) {
@@ -107,7 +107,6 @@ export class BuyerRegister extends Component {
     }
 
     setDefault(param) {
-        console.log(param)
         let fileObj, entityObj;
         fileObj = this.state.fileData;
         entityObj = this.state.user_entity_data;
@@ -369,7 +368,9 @@ export class BuyerRegister extends Component {
         };
         return params;
     }
-
+    removeInputNanNum(value) {
+        removeNanNum(value);
+    }
     addUserEntity() {
         let entityObj;
         entityObj = this.state.user_entity_data;
@@ -553,47 +554,6 @@ export class BuyerRegister extends Component {
                 })
             }
             else {
-                // if (res.error_fields) {
-                //     for (let item of res.error_fields) {
-                //         if (item === "company_unique_entity_number") {
-                //             $('#unique_entity_number_repeat').removeClass('isPassValidate').addClass('errormessage');
-                //             $("input[name='unique_entity_number']").focus();
-                //         }
-                //         else if (item === "email") {
-                //             $('#email_address_repeat').removeClass('isPassValidate').addClass('errormessage');
-                //             $("input[name='email_address']").focus();
-                //         }
-                //         else {
-
-                //             $('#company_name_repeat').removeClass('isPassValidate').addClass('errormessage');
-                //             $("input[name='company_name']").focus();
-                //         }
-                //     }
-                // }
-                // if (res.error_entity_indexes) {
-                //     for (let item of res.error_entity_indexes) {
-                //         let index = item.entity_index;
-                //         let fieldName = item.error_field_name;
-                //         if (index === 0) {
-                //             $('#user_contact_email_repeat').removeClass('isPassValidate').addClass('errormessage');
-                //             $("input[name='user_contact_email']").focus();
-                //         }
-                //         else {
-                //             if (fieldName === "contact_email") {
-                //                 $("#user_contact_email_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
-                //                 $("#contact_email_" + (index - 1)).focus();
-                //             }
-                //             else if (fieldName === "company_name") {
-                //                 $("#user_company_name_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
-                //                 $("#company_name_" + (index - 1)).focus();
-                //             }
-                //             else {
-                //                 $("#user_company_uen_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
-                //                 $("#company_uen_" + (index - 1)).focus();
-                //             }
-                //         }
-                //     }
-                // }
                 this.validateRepeatColumn(res);
             }
 
@@ -636,47 +596,6 @@ export class BuyerRegister extends Component {
                 }
                 else {
                     this.validateRepeatColumn(res);
-                    // if (res.error_fields) {
-                    //     for (let item of res.error_fields) {
-                    //         if (item === "company_unique_entity_number") {
-                    //             $('#unique_entity_number_repeat').removeClass('isPassValidate').addClass('errormessage');
-                    //             $("input[name='unique_entity_number']").focus();
-                    //         }
-                    //         else if (item === "email") {
-                    //             $('#email_address_repeat').removeClass('isPassValidate').addClass('errormessage');
-                    //             $("input[name='email_address']").focus();
-                    //         }
-                    //         else {
-
-                    //             $('#company_name_repeat').removeClass('isPassValidate').addClass('errormessage');
-                    //             $("input[name='company_name']").focus();
-                    //         }
-                    //     }
-                    // }
-                    // if (res.error_entity_indexes) {
-                    //     for (let item of res.error_entity_indexes) {
-                    //         let index = item.entity_index;
-                    //         let fieldName = item.error_field_name;
-                    //         if (index === 0) {
-                    //             $('#user_contact_email_repeat').removeClass('isPassValidate').addClass('errormessage');
-                    //             $("input[name='user_contact_email']").focus();
-                    //         }
-                    //         else {
-                    //             if (fieldName === "contact_email") {
-                    //                 $("#user_contact_email_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
-                    //                 $("#contact_email_" + (index - 1)).focus();
-                    //             }
-                    //             else if (fieldName === "company_name") {
-                    //                 $("#user_company_name_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
-                    //                 $("#company_name_" + (index - 1)).focus();
-                    //             }
-                    //             else {
-                    //                 $("#user_company_uen_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
-                    //                 $("#company_uen_" + (index - 1)).focus();
-                    //             }
-                    //         }
-                    //     }
-                    // }
                 }
             })
         }
@@ -852,7 +771,7 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Mobile Number:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="mobile_number" value={this.state.mobile_number} onChange={this.Change.bind(this, 'mobile_number')} disabled={this.state.disabled} ref="mobile_number" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field" required aria-required="true" ></input>
+                                        <input type="text" name="mobile_number" value={this.state.mobile_number} onKeyUp={this.removeInputNanNum.bind(this)}  onChange={this.Change.bind(this, 'mobile_number')} disabled={this.state.disabled} ref="mobile_number" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field" required aria-required="true" ></input>
                                         <div className='isPassValidate' id='mobile_number_message' >This field is required!</div>
                                         <div className='isPassValidate' id='mobile_number_format' >Number should contain 8 integers!</div>
                                     </div>
@@ -862,7 +781,7 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Office Number:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="office_number" value={this.state.office_number} onChange={this.Change.bind(this, 'office_number')} disabled={this.state.disabled} ref="office_number" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field" required aria-required="true" ></input>
+                                        <input type="text" name="office_number" value={this.state.office_number} onKeyUp={this.removeInputNanNum.bind(this)}  onChange={this.Change.bind(this, 'office_number')} disabled={this.state.disabled} ref="office_number" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field" required aria-required="true" ></input>
                                         <div className='isPassValidate' id='office_number_message' >This field is required!</div>
                                         <div className='isPassValidate' id='office_number_format' >Number should contain 8 integers!</div>
                                     </div>

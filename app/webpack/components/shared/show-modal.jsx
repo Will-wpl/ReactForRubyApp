@@ -3,8 +3,7 @@ import { constants } from 'os';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
-import { removeNanNum } from '../../javascripts/componentService/util';
-import { validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
+import { validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate,removeNanNum } from '../../javascripts/componentService/util';
 //共通弹出框组件
 import { UploadFile } from '../shared/upload';
 
@@ -281,13 +280,8 @@ export class Modal extends React.Component {
         }
     }
 
-    removeNanNum(value) {
-        value.target.value = value.target.value.replace(/\.{2,}/g, ".");
-        value.target.value = value.target.value.replace(/[^\d.]/g, "");
-        value.target.value = value.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
-        if (value.target.value.indexOf(".") < 0 && value.target.value != "") {
-            value.target.value = parseFloat(value.target.value);
-        }
+    removeInputNanNum(value) {
+        removeNanNum(value)
     }
     getFormsValue() {
         let siteItem = {
@@ -780,7 +774,7 @@ export class Modal extends React.Component {
                                         <span className={this.state.intake_level_selected === "LT" ? "isHide" : "isDisplay"}>*</span>
                                     </abbr>Contract Capacity</td>
                                     <td>
-                                        <input type="text" disabled={this.state.contracted_capacity_disabled} value={this.state.contracted_capacity} onChange={this.changeConsumption.bind(this, "contracted_capacity")} id="contracted_capacity" name="contracted_capacity" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" maxLength="10" />
+                                        <input type="text" disabled={this.state.contracted_capacity_disabled} value={this.state.contracted_capacity} onChange={this.changeConsumption.bind(this, "contracted_capacity")} id="contracted_capacity" name="contracted_capacity" onKeyUp={this.removeInputNanNum.bind(this)} required aria-required="true" maxLength="10" />
                                         <div id="contracted_capacity_message" className="isPassValidate">This filed is required!</div>
                                         <div id="contracted_capacity_format" className="isPassValidate">Must be positive integers,and first cannot be 0!</div>
                                     </td>
@@ -834,7 +828,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Total Monthly:</td>
                                     <td>
-                                        <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" name="totals" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" maxLength="10" /><div>kWh/month</div>
+                                        <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" name="totals" onKeyUp={this.removeInputNanNum.bind(this)} required aria-required="true" maxLength="10" /><div>kWh/month</div>
                                         <div id="totals_message" className="isPassValidate">This filed is required!</div>
                                         <div id="totals_format" className="isPassValidate">Must be positive integers,and first cannot be 0!</div>
                                     </td>
@@ -842,7 +836,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Peak:</td>
                                     <td>
-                                        <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} id="peak_pct" name="peak_pct" onKeyUp={this.removeNanNum.bind(this)} required aria-required="true" maxLength="5" placeholder="0-100" /> <div>%</div>
+                                        <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} id="peak_pct" name="peak_pct" onKeyUp={this.removeInputNanNum.bind(this)} required aria-required="true" maxLength="5" placeholder="0-100" /> <div>%</div>
                                         <div id="peak_pct_message" className="isPassValidate">This filed is required!</div>
                                         <div id="peak_pct_format" className="isPassValidate">Please input bigger than 0 and less than 100!</div>
                                     </td>
