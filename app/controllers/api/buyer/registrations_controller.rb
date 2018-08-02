@@ -126,7 +126,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
 
   def validate_buyer_entities_info(buyer, buyer_entities)
     entity_indexes = []
-    user = User.select(:id, :email, :company_name, :entity_id)
+    user = User.select(:id, :email, :company_unique_entity_number, :company_name, :entity_id)
     # validate Entity' email must not be same with any user's email
     entity_indexes.concat(check_entities_email_with_user(buyer, buyer_entities, user))
 
@@ -219,6 +219,9 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
         if target_entity.object_id != temp_entity.object_id && target_entity['company_name'] == temp_entity['company_name']
           entity_indexes.push({'entity_index' => index, 'error_field_name' =>'company_name'})
         end
+        if target_entity.object_id != temp_entity.object_id && target_entity['company_uen'] == temp_entity['company_uen']
+          entity_indexes.push({'entity_index' => index, 'error_field_name' =>'company_uen'})
+        end
       end
     end
     entity_indexes
@@ -234,6 +237,8 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
           (v.entity_id == nil || v.entity_id != buyer_entity['id']) }
       is_duplicated_comp_name = user.any?{ |v| v.company_name == buyer_entity['company_name'] &&
           (v.entity_id == nil || v.entity_id != buyer_entity['id']) }
+      is_duplicated_uen = user.any?{ |v| v.company_unique_entity_number == buyer_entity['company_uen'] &&
+          (v.entity_id == nil || v.entity_id != buyer_entity['id']) }
       # Sub entity -> existed same entity with email & company name
       if !buyer_entity['is_default'].equal?(1) && is_duplicated_email
         entity_indexes.push({'entity_index' => index, 'error_field_name' => 'contact_email'})
@@ -241,12 +246,18 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
       if !buyer_entity['is_default'].equal?(1) && is_duplicated_comp_name
         entity_indexes.push({'entity_index' => index, 'error_field_name' => 'company_name'})
       end
+      if !buyer_entity['is_default'].equal?(1) && is_duplicated_uen
+        entity_indexes.push({'entity_index' => index, 'error_field_name' => 'company_uen'})
+      end
       # Sub entity -> same entity email / company name with input buyer
       if !buyer_entity['is_default'].equal?(1) && buyer_entity['contact_email'].equal?(buyer['email'])
         entity_indexes.push({'entity_index' => index, 'error_field_name' => 'contact_email'})
       end
       if !buyer_entity['is_default'].equal?(1) && buyer_entity['company_name'].equal?(buyer['company_name'])
         entity_indexes.push({'entity_index' => index, 'error_field_name' => 'company_name'})
+      end
+      if !buyer_entity['is_default'].equal?(1) && buyer_entity['company_uen'].equal?(buyer['company_unique_entity_number'])
+        entity_indexes.push({'entity_index' => index, 'error_field_name' => 'company_uen'})
       end
 
       # Master entity validation
