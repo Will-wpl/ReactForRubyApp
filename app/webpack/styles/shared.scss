@@ -550,7 +550,7 @@ dfn.manage_label{
           display: block; padding:10px 0px; font-style: normal;
         }
         a{
-          margin: 0px auto; display: block; width: 100%; cursor: pointer;
+          margin: 0px auto; display: inline-block; width: 24px; cursor: pointer;
           &.report{background: url("../images/Reverse_Auction_Report.png") no-repeat left; background-size:19px; height: 20px;}
           &.log,&.award{background: url("../images/Activity_Log.png") no-repeat left; background-size:19px; height: 20px;}
         }
