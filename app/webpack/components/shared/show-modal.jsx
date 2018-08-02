@@ -25,6 +25,7 @@ export class Modal extends React.Component {
             contract_expiry_disabled: true,
             disabled: false,
             id: "",
+            consumptionid: "",
             account_number: '',
             existing_plan: [],
             existing_plan_selected: '',
@@ -58,7 +59,7 @@ export class Modal extends React.Component {
         fileObj = this.state.fileData;
         if (next.consumption_account_item) {
             this.setState({
-                id: next.consumption_account_item.id,
+                consumptionid: next.consumption_account_item.id,
                 account_number: next.consumption_account_item.account_number,
                 existing_plan: next.consumption_account_item.existing_plan,
                 existing_plan_selected: next.consumption_account_item.existing_plan_selected,
@@ -235,6 +236,7 @@ export class Modal extends React.Component {
         flag = validateResult.length > 0 ? false : true;
         if (flag) {
             let status = this.account_address_repeat();
+            console.log(status)
             switch (status) {
                 case 'false|true':
                     $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
@@ -283,43 +285,9 @@ export class Modal extends React.Component {
             value.target.value = parseFloat(value.target.value);
         }
     }
-    account_address_repeat() {
-        let address = false, account = false;
-        let address_count = 0, account_count = 0;
-        this.state.consumptionItem.map((item, index) => {
-            if (this.state.option === 'update') {
-                if ((this.state.unit_number == item.unit_number) && (this.state.postal_code == item.postal_code) && (this.state.id !== item.id)) {
-                    address_count++;
-                }
-                if (this.state.account_number === item.account_number && (this.state.id !== item.id)) {
-                    account_count++;
-                }
-            }
-            else {
-                if ((this.state.unit_number === item.unit_number) && (this.state.postal_code === item.postal_code)) {
-                    address_count++;
-                }
-                if (this.state.account_number == item.account_number) {
-                    account_count++;
-                }
-            }
-        })
-
-        if (address_count > 0) {
-            address = true;
-        }
-        if (account_count > 0) {
-            account = true;
-        }
-        return account + "|" + address;
-    }
-
-    Add() {
-        this.checkModelSuccess();
-    }
-
-    addToMainForm() {
+    getFormsValue() {
         let siteItem = {
+            consumptionid: this.state.consumptionid ? this.state.consumptionid : "",
             account_number: this.state.account_number,
             existing_plan_selected: this.state.existing_plan_selected,
             contract_expiry: this.state.contract_expiry ? this.state.contract_expiry : "",
@@ -337,6 +305,105 @@ export class Modal extends React.Component {
             file_name: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_name : "",
             file_path: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_path : ""
         }
+        return siteItem;
+    }
+
+    modifySiteListInLocal() {
+        let siteItem = this.getFormsValue();
+        let entity = this.state.consumptionItem;
+        if (this.state.itemIndex >= 0) {
+            entity[this.state.itemIndex] = siteItem;
+        } else {
+
+            entity.push(siteItem);
+        }
+        this.setState({
+            consumptionItem: entity
+        })
+    }
+
+    account_address_repeat() {
+        let address = false, account = false, editNotSave = false;
+        let address_count = 0, account_count = 0;
+        console.log(this.state.consumptionItem);
+        // this.state.consumptionItem.map((item, index) => {
+        //     if (this.state.option === 'update') {
+        //         if (item.id) {
+        //             if ((this.state.unit_number == item.unit_number) && (this.state.postal_code == item.postal_code) && (this.state.id !== item.id)) {
+        //                 address_count++;
+        //             }
+        //             if (this.state.account_number === item.account_number && (this.state.id !== item.id)) {
+        //                 account_count++;
+        //             }
+        //         }
+        //         else {
+        //             if ((this.state.unit_number == item.unit_number) && (this.state.postal_code == item.postal_code)) {
+        //                 address_count++;
+        //             }
+        //             if (this.state.account_number === item.account_number) {
+        //                 account_count++;
+        //             }
+        //         }
+
+        //     }
+        //     else {
+        //         if ((this.state.unit_number === item.unit_number) && (this.state.postal_code === item.postal_code)) {
+        //             address_count++;
+        //         }
+        //         if (this.state.account_number == item.account_number) {
+        //             account_count++;
+        //         }
+        //     }
+        // })
+        // if (this.state.option === "update") {
+        //     console.log(this.state.consumptionid)
+        //     if (this.state.id) {
+        //         console.log("bbbb")
+        //         if (address_count > 0) {
+        //             address = true;
+        //         }
+        //         if (account_count > 0) {
+        //             account = true;
+        //         }
+        //     }
+        //     else {
+
+        //         console.log("aaaa")
+        //         if (address_count > 1) {
+        //             address = true;
+        //         }
+        //         if (account_count > 1) {
+        //             account = true;
+        //         }
+        //     }
+        // }
+        // else {
+        //     if (address_count > 0) {
+        //         address = true;
+        //     }
+        //     if (account_count > 0) {
+        //         account = true;
+        //     }
+        // }
+
+        for(let i=0;i<this.state.consumptionItem.length;i++)
+        {
+            let account_number=this.state.consumptionItem[i].account_count;
+            let unit=this.state.consumptionItem[i].unit_number;
+            let postal_code=this.state.consumptionItem[i].postal_code;
+        }
+
+
+        console.log(account_count + "_" + address_count)
+        return account + "|" + address;
+    }
+
+    Add() {
+        this.checkModelSuccess();
+    }
+
+    addToMainForm() {
+        let siteItem = this.getFormsValue();
         if (this.props.acceptFunction) {
             this.props.acceptFunction(siteItem);
             this.setState({
@@ -345,9 +412,15 @@ export class Modal extends React.Component {
         }
     }
 
+
     changeConsumption(type, e) {
         let value = e.target.value;
         switch (type) {
+            case "consumptionid":
+                this.setState({
+                    consumptionid: value
+                })
+                break;
             case "account_number":
                 this.setState({
                     account_number: value
@@ -473,8 +546,7 @@ export class Modal extends React.Component {
         })
     }
 
-    closeModalAndRefresh()
-    {
+    closeModalAndRefresh() {
         if (this.props.acceptFunction) {
             this.props.acceptFunction('refrsesh');
             this.closeModal();
@@ -655,6 +727,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td style={{ width: "30%" }}><abbr title="required">*</abbr>Account No.</td>
                                     <td style={{ width: "70%" }}>
+                                        <input type="text" value={this.state.consumptionid} onChange={this.changeConsumption.bind(this, "consumptionid")} id="id" name="id" />
                                         <input type="text" value={this.state.account_number} onChange={this.changeConsumption.bind(this, "account_number")} id="account_number" name="account_number" required aria-required="true" />
                                         <div id="account_number_message" className="isPassValidate">This filed is required!</div>
                                         <div id="account_number_taken_message" className="errormessage">There is already an existing contract for this Account Number.</div>

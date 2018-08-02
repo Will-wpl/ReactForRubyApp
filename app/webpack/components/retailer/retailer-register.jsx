@@ -356,24 +356,7 @@ export class RetailerRegister extends Component {
                 }
                 else {
                     if (res.error_fields) {
-                        for (let item of res.error_fields) {
-                            if (item === 'company_license_number') {
-                                $('#license_number_repeat').removeClass('isPassValidate').addClass('errormessage');
-                                $("input[name='license_number']").focus();
-                            }
-                            if (item === 'company_unique_entity_number') {
-                                $('#unique_entity_number_repeat').removeClass('isPassValidate').addClass('errormessage');
-                                $("input[name='unique_entity_number']").focus();
-                            }
-                            if (item === 'company_name') {
-                                $('#company_name_repeat').removeClass('isPassValidate').addClass('errormessage');
-                                $("input[name='company_name']").focus();
-                            }
-                            if (item === 'email') {
-                                $('#email_address_repeat').removeClass('isPassValidate').addClass('errormessage');
-                                $("input[name='email_address']").focus();
-                            }
-                        }
+                        this.validateRepeatColumn(res.error_fields);
                     }
                 }
             })
@@ -402,24 +385,7 @@ export class RetailerRegister extends Component {
                     }
                     else {
                         if (res.error_fields) {
-                            for (let item of res.error_fields) {
-                                if (item === 'company_license_number') {
-                                    $('#license_number_repeat').removeClass('isPassValidate').addClass('errormessage');
-                                    $("input[name='license_number']").focus();
-                                }
-                                if (item === 'company_unique_entity_number') {
-                                    $('#unique_entity_number_repeat').removeClass('isPassValidate').addClass('errormessage');
-                                    $("input[name='unique_entity_number']").focus();
-                                }
-                                if (item === 'company_name') {
-                                    $('#company_name_repeat').removeClass('isPassValidate').addClass('errormessage');
-                                    $("input[name='company_name']").focus();
-                                }
-                                if (item === 'email') {
-                                    $('#email_address_repeat').removeClass('isPassValidate').addClass('errormessage');
-                                    $("input[name='email_address']").focus();
-                                }
-                            }
+                            this.validateRepeatColumn(res.error_fields);
                         }
                     }
                 })
@@ -436,7 +402,27 @@ export class RetailerRegister extends Component {
             })
         }
     }
-
+    
+    validateRepeatColumn(err) {
+        for (let item of err) {
+            if (item === 'company_license_number') {
+                $('#license_number_repeat').removeClass('isPassValidate').addClass('errormessage');
+                $("input[name='license_number']").focus();
+            }
+            if (item === 'company_unique_entity_number') {
+                $('#unique_entity_number_repeat').removeClass('isPassValidate').addClass('errormessage');
+                $("input[name='unique_entity_number']").focus();
+            }
+            if (item === 'company_name') {
+                $('#company_name_repeat').removeClass('isPassValidate').addClass('errormessage');
+                $("input[name='company_name']").focus();
+            }
+            if (item === 'email') {
+                $('#email_address_repeat').removeClass('isPassValidate').addClass('errormessage');
+                $("input[name='email_address']").focus();
+            }
+        }
+    }
     cancel() {
         window.location.href = `/users/edit`;
     }

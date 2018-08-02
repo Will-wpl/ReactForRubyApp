@@ -19,7 +19,7 @@ export class FillConsumption extends Component {
             checked: false,
             name: "",
             time: "",
-            contact_start_date:"",
+            contact_start_date: "",
             link: "",
             contract_duration: "",
             durationList: [],
@@ -66,15 +66,14 @@ export class FillConsumption extends Component {
 
     BuyerParticipateList() {
         getBuyerParticipate('/api/buyer/consumption_details?consumption_id=' + this.consumptions_id).then((res) => {
-            console.log(res)
             this.site_list = res.consumption_details;
             this.status = res.consumption.participation_status === '1' ? "Confirmed" :
                 (res.consumption.participation_status === '2' ? "Pending" : "Rejected")
             this.setState({
                 name: res.auction.name,
                 time: res.auction.actual_begin_time,
-                contact_start_date:res.auction.contract_period_start_date,
-                contract_duration: res.consumption.contract_duration?res.consumption.contract_duration:"",
+                contact_start_date: res.auction.contract_period_start_date,
+                contract_duration: res.consumption.contract_duration ? res.consumption.contract_duration : "",
                 link: res.tc_attachment ? res.tc_attachment.file_path : "",
             })
             if (res.consumption.participation_status === '1' || res.auction.publish_status === "1") {
@@ -122,6 +121,7 @@ export class FillConsumption extends Component {
                 $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
             }
         })
+        this.accountItem.id="";
         this.accountItem.account_number = "";
         this.accountItem.existing_plan = ['SPS tariff', 'SPS wholesale', 'Retailer plan'];
         this.accountItem.existing_plan_selected = "SPS tariff";
@@ -180,6 +180,7 @@ export class FillConsumption extends Component {
     //when user finished adding a new account, list page will add/update the new account information.
     doAddAccountAction(siteInfo) {
         let item = {
+            id: siteInfo.consumptionid ? siteInfo.consumptionid : "",
             account_number: siteInfo.account_number,
             existing_plan: siteInfo.existing_plan_selected,
             contract_expiry: siteInfo.contract_expiry ? moment(siteInfo.contract_expiry) : "",

@@ -334,7 +334,7 @@ export class BuyerRegister extends Component {
             let list = this.state.user_entity_data['ENTITY_LIST'][0].entities;
             list.map((item, index) => {
                 let paramObj = {
-                    user_entity_id: entity.id,
+                    user_entity_id: item.user_entity_id,
                     company_name: item.company_name,
                     company_uen: item.company_uen,
                     company_address: item.company_address,
@@ -528,7 +528,6 @@ export class BuyerRegister extends Component {
             }
         }
         let buyerParam = this.setParams();
-
         validateIsExist(buyerParam).then(res => {
             if (res.validate_result) {
                 saveBuyerUserInfo(buyerParam).then(res => {
@@ -554,47 +553,48 @@ export class BuyerRegister extends Component {
                 })
             }
             else {
-                if (res.error_fields) {
-                    for (let item of res.error_fields) {
-                        if (item === "company_unique_entity_number") {
-                            $('#unique_entity_number_repeat').removeClass('isPassValidate').addClass('errormessage');
-                            $("input[name='unique_entity_number']").focus();
-                        }
-                        else if (item === "email") {
-                            $('#email_address_repeat').removeClass('isPassValidate').addClass('errormessage');
-                            $("input[name='email_address']").focus();
-                        }
-                        else {
+                // if (res.error_fields) {
+                //     for (let item of res.error_fields) {
+                //         if (item === "company_unique_entity_number") {
+                //             $('#unique_entity_number_repeat').removeClass('isPassValidate').addClass('errormessage');
+                //             $("input[name='unique_entity_number']").focus();
+                //         }
+                //         else if (item === "email") {
+                //             $('#email_address_repeat').removeClass('isPassValidate').addClass('errormessage');
+                //             $("input[name='email_address']").focus();
+                //         }
+                //         else {
 
-                            $('#company_name_repeat').removeClass('isPassValidate').addClass('errormessage');
-                            $("input[name='company_name']").focus();
-                        }
-                    }
-                }
-                if (res.error_entity_indexes) {
-                    for (let item of res.error_entity_indexes) {
-                        let index = item.entity_index;
-                        let fieldName = item.error_field_name;
-                        if (index === 0) {
-                            $('#user_contact_email_repeat').removeClass('isPassValidate').addClass('errormessage');
-                            $("input[name='user_contact_email']").focus();
-                        }
-                        else {
-                            if (fieldName === "contact_email") {
-                                $("#user_contact_email_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
-                                $("#contact_email_" + (index - 1)).focus();
-                            }
-                            else if (fieldName === "company_name") {
-                                $("#user_company_name_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
-                                $("#company_name_" + (index - 1)).focus();
-                            }
-                            else {
-                                $("#user_company_uen_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
-                                $("#company_uen_" + (index - 1)).focus();
-                            }
-                        }
-                    }
-                }
+                //             $('#company_name_repeat').removeClass('isPassValidate').addClass('errormessage');
+                //             $("input[name='company_name']").focus();
+                //         }
+                //     }
+                // }
+                // if (res.error_entity_indexes) {
+                //     for (let item of res.error_entity_indexes) {
+                //         let index = item.entity_index;
+                //         let fieldName = item.error_field_name;
+                //         if (index === 0) {
+                //             $('#user_contact_email_repeat').removeClass('isPassValidate').addClass('errormessage');
+                //             $("input[name='user_contact_email']").focus();
+                //         }
+                //         else {
+                //             if (fieldName === "contact_email") {
+                //                 $("#user_contact_email_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
+                //                 $("#contact_email_" + (index - 1)).focus();
+                //             }
+                //             else if (fieldName === "company_name") {
+                //                 $("#user_company_name_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
+                //                 $("#company_name_" + (index - 1)).focus();
+                //             }
+                //             else {
+                //                 $("#user_company_uen_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
+                //                 $("#company_uen_" + (index - 1)).focus();
+                //             }
+                //         }
+                //     }
+                // }
+                this.validateRepeatColumn(res);
             }
 
         })
@@ -635,51 +635,97 @@ export class BuyerRegister extends Component {
                     })
                 }
                 else {
-                    if (res.error_fields) {
-                        for (let item of res.error_fields) {
-                            if (item === "company_unique_entity_number") {
-                                $('#unique_entity_number_repeat').removeClass('isPassValidate').addClass('errormessage');
-                                $("input[name='unique_entity_number']").focus();
-                            }
-                            else if (item === "email") {
-                                $('#email_address_repeat').removeClass('isPassValidate').addClass('errormessage');
-                                $("input[name='email_address']").focus();
-                            }
-                            else {
+                    this.validateRepeatColumn(res);
+                    // if (res.error_fields) {
+                    //     for (let item of res.error_fields) {
+                    //         if (item === "company_unique_entity_number") {
+                    //             $('#unique_entity_number_repeat').removeClass('isPassValidate').addClass('errormessage');
+                    //             $("input[name='unique_entity_number']").focus();
+                    //         }
+                    //         else if (item === "email") {
+                    //             $('#email_address_repeat').removeClass('isPassValidate').addClass('errormessage');
+                    //             $("input[name='email_address']").focus();
+                    //         }
+                    //         else {
 
-                                $('#company_name_repeat').removeClass('isPassValidate').addClass('errormessage');
-                                $("input[name='company_name']").focus();
-                            }
-                        }
-                    }
-                    if (res.error_entity_indexes) {
-                        for (let item of res.error_entity_indexes) {
-                            let index = item.entity_index;
-                            let fieldName = item.error_field_name;
-                            if (index === 0) {
-                                $('#user_contact_email_repeat').removeClass('isPassValidate').addClass('errormessage');
-                                $("input[name='user_contact_email']").focus();
-                            }
-                            else {
-                                if (fieldName === "contact_email") {
-                                    $("#user_contact_email_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
-                                    $("#contact_email_" + (index - 1)).focus();
-                                }
-                                else if (fieldName === "company_name") {
-                                    $("#user_company_name_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
-                                    $("#company_name_" + (index - 1)).focus();
-                                }
-                                else {
-                                    $("#user_company_uen_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
-                                    $("#company_uen_" + (index - 1)).focus();
-                                }
-                            }
-                        }
-                    }
+                    //             $('#company_name_repeat').removeClass('isPassValidate').addClass('errormessage');
+                    //             $("input[name='company_name']").focus();
+                    //         }
+                    //     }
+                    // }
+                    // if (res.error_entity_indexes) {
+                    //     for (let item of res.error_entity_indexes) {
+                    //         let index = item.entity_index;
+                    //         let fieldName = item.error_field_name;
+                    //         if (index === 0) {
+                    //             $('#user_contact_email_repeat').removeClass('isPassValidate').addClass('errormessage');
+                    //             $("input[name='user_contact_email']").focus();
+                    //         }
+                    //         else {
+                    //             if (fieldName === "contact_email") {
+                    //                 $("#user_contact_email_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
+                    //                 $("#contact_email_" + (index - 1)).focus();
+                    //             }
+                    //             else if (fieldName === "company_name") {
+                    //                 $("#user_company_name_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
+                    //                 $("#company_name_" + (index - 1)).focus();
+                    //             }
+                    //             else {
+                    //                 $("#user_company_uen_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
+                    //                 $("#company_uen_" + (index - 1)).focus();
+                    //             }
+                    //         }
+                    //     }
+                    // }
                 }
             })
         }
     }
+    validateRepeatColumn(res) {
+        if (res.error_fields) {
+            for (let item of res.error_fields) {
+                if (item === "company_unique_entity_number") {
+                    $('#unique_entity_number_repeat').removeClass('isPassValidate').addClass('errormessage');
+                    $("input[name='unique_entity_number']").focus();
+                }
+                else if (item === "email") {
+                    $('#email_address_repeat').removeClass('isPassValidate').addClass('errormessage');
+                    $("input[name='email_address']").focus();
+                }
+                else {
+
+                    $('#company_name_repeat').removeClass('isPassValidate').addClass('errormessage');
+                    $("input[name='company_name']").focus();
+                }
+            }
+        }
+        if (res.error_entity_indexes) {
+            for (let item of res.error_entity_indexes) {
+                let index = item.entity_index;
+                let fieldName = item.error_field_name;
+                if (index === 0) {
+                    $('#user_contact_email_repeat').removeClass('isPassValidate').addClass('errormessage');
+                    $("input[name='user_contact_email']").focus();
+                }
+                else {
+                    if (fieldName === "contact_email") {
+                        $("#user_contact_email_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
+                        $("#contact_email_" + (index - 1)).focus();
+                    }
+                    else if (fieldName === "company_name") {
+                        $("#user_company_name_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
+                        $("#company_name_" + (index - 1)).focus();
+                    }
+                    else {
+                        $("#user_company_uen_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
+                        $("#company_uen_" + (index - 1)).focus();
+                    }
+                }
+            }
+        }
+    }
+
+
     cancel() {
         window.location.href = `/users/edit`;
     }
