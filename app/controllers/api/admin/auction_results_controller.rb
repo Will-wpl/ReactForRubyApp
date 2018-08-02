@@ -46,7 +46,7 @@ class Api::Admin::AuctionResultsController < Api::AuctionResultsController
             total_volume: "#{tv}kWh",
             report: "admin/auctions/#{result.auction_id}/report",
             log: "admin/auctions/#{result.auction_id}/log",
-            award: get_award_url(company_user_count, result, nil)}
+            award: get_award_new_url(company_user_count, result, nil)}
     data
   end
 
@@ -88,6 +88,15 @@ class Api::Admin::AuctionResultsController < Api::AuctionResultsController
       company_user_count != 0 && result.status != 'void' ? "admin/auctions/#{result.auction_id}/award" : ''
     else
       company_user_count != 0 && result.status != 'void' ? "admin/auctions/#{result.auction_id}/award?contract_duration=#{contract_duration}" : ''
+    end
+
+  end
+
+  def get_award_new_url(company_user_count, result, contract_duration)
+    if contract_duration.blank?
+      company_user_count != 0 && result.status != 'void' ? ["admin/auctions/#{result.auction_id}/award"] : []
+    else
+      company_user_count != 0 && result.status != 'void' ? ["admin/auctions/#{result.auction_id}/award?contract_duration=#{contract_duration}"] : []
     end
 
   end

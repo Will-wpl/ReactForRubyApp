@@ -98,9 +98,9 @@ class Api::Retailer::AuctionResultsController < Api::AuctionResultsController
 
   def get_award(company_user_count, result, contract_duration)
     if contract_duration.blank?
-      company_user_count != 0 && show_award?(result, current_user) ? "retailer/auctions/#{result.auction_id}/award" : ''
+      company_user_count != 0 && show_award?(result, current_user) ? ["retailer/auctions/#{result.auction_id}/award"] : []
     else
-      company_user_count != 0 && show_award?(result, current_user) ? "retailer/auctions/#{result.auction_id}/award?contract_duration=#{contract_duration}" : ''
+      company_user_count != 0 && show_award?(result, current_user) ? ["retailer/auctions/#{result.auction_id}/award?contract_duration=#{contract_duration}"] : []
     end
 
   end

@@ -16,12 +16,22 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
     data = []
     results = get_order_list(params, headers, result)
     results.each do |result|
-      data.push(published_gid: result.auction.published_gid,
-                name: result.auction.name,
-                start_datetime: result.auction.start_datetime,
-                acknowledge: get_acknowledge(result) ,
-                report: get_report(result) ,
-                award: get_award(result))
+      if result.auction_result_contracts.blank?
+        data.push(published_gid: result.auction.published_gid,
+                  name: result.auction.name,
+                  start_datetime: result.auction.start_datetime,
+                  acknowledge: get_acknowledge(result) ,
+                  report: get_report(result) ,
+                  award: get_award(result))
+      else
+        data.push(published_gid: result.auction.published_gid,
+                  name: result.auction.name,
+                  start_datetime: result.auction.start_datetime,
+                  acknowledge: get_acknowledge(result) ,
+                  report: get_report(result) ,
+                  award: get_new_awrd(result))
+      end
+
     end
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: nil }, status: 200
@@ -69,6 +79,19 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
   end
 
   def get_award(result)
-    show_award?(result, current_user) ? result.participation_status=='1' ? "api/buyer/auctions/#{result.auction_id}/letter_of_award_pdf" : '' : ''
+    show_award?(result, current_user) ? result.participation_status=='1' ? ["api/buyer/auctions/#{result.auction_id}/letter_of_award_pdf"] : [] : []
+  end
+
+  def get_new_awrd(result)
+    awards = []
+    if show_award?(result, current_user) then
+      if result.participation_status == '1'
+        consumption = Consumption.find_by_auction_and_user(result.auction_id, current_user.id).first
+        consumption.consumption_details.each do |detail|
+          awards.push("api/buyer/auctions/#{result.auction_id}/letter_of_award_pdf?entity_id=#{detail.company_buyer_entity_id}&contract_duration=#{consumption.contract_duration}")
+        end
+      end
+    end
+    awards
   end
 end

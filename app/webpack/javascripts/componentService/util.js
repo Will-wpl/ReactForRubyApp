@@ -243,12 +243,14 @@ export const setValidationFaild = (item, type) => {
     if (type === 1) {
         $('#' + item + "_message").removeClass('isPassValidate').addClass('errormessage');
         $('#' + item + "_format").removeClass('errormessage').addClass('isPassValidate');
+        $('#' + item + "_repeat").removeClass('errormessage').addClass('isPassValidate');
         $("input[name='" + item + "']").focus();
         $("input[name='" + item.split('user_')[1] + "']").focus();
     }
     else {
         $('#' + item + "_message").removeClass('errormessage').addClass('isPassValidate');
         $('#' + item + "_format").removeClass('isPassValidate').addClass('errormessage');
+        $('#' + item + "_repeat").removeClass('errormessage').addClass('isPassValidate');
         $("input[name='" + item + "']").focus();
         $("input[name='" + item.split('user_')[1] + "']").focus();
     }
@@ -261,6 +263,7 @@ export const setValidationPass = (item, type) => {
     else {
         $('#' + item + "_message").removeClass('errormessage').addClass('isPassValidate');
         $('#' + item + "_format").removeClass('errormessage').addClass('isPassValidate');
+        $('#' + item + "_repeat").removeClass('errormessage').addClass('isPassValidate');
     }
 }
 
