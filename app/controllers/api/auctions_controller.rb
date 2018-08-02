@@ -803,6 +803,12 @@ class Api::AuctionsController < Api::BaseController
       auction_result_contract.auction_result = auction_result
       auction_result_contract.contract_duration = params[:contract_duration]
       if auction_result_contract.save!
+        live_auction_contracts_count = get_lived_auction_contracts(@auction, true).count
+        result_auction_contracts_count = AuctionResultContract.where(auction_result_id: auction_result.id).count
+        if live_auction_contracts_count == result_auction_contracts_count
+          auction_result.status = '1'
+          auction_result.save!
+        end
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], auction_result_contract.to_json)
       end
     end
