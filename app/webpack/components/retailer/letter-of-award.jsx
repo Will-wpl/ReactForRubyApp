@@ -91,7 +91,8 @@ export default class RetailerLetterOfAward extends React.Component{
     }
     download(data,id){
         //console.log(data);
-        window.open(`/api/retailer/auctions/letter_of_award_pdf?auction_id=${data.auction_id}&user_id=${data.user_id}&entity_id=${id}`);
+        let duration=window.location.href.indexOf("duration")>0?window.location.href.split("duration=")[1]:'';
+        window.open(`/api/retailer/auctions/letter_of_award_pdf?auction_id=${data.auction_id}&user_id=${data.user_id}&entity_id=${id}&contract_duration=${duration}`);
     }
 
     renderAwardList(data){

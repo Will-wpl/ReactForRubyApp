@@ -63,7 +63,7 @@ class Api::Retailer::AuctionResultsController < Api::AuctionResultsController
                          name: result_contract.auction.name,
                          start_datetime: result_contract.auction.start_datetime,
                          my_result: my_result,
-                         award: get_award(company_user_count, result_contract, result_contract.contract_duration),
+                         award: get_new_award(company_user_count, result_contract, result_contract.contract_duration),
                          id: Arrangement.auction_of_current_user(result_contract.auction.id, current_user.id).first.id,
                          auction_id: result.auction.id
                      })
@@ -101,6 +101,15 @@ class Api::Retailer::AuctionResultsController < Api::AuctionResultsController
       company_user_count != 0 && show_award?(result, current_user) ? ["retailer/auctions/#{result.auction_id}/award"] : []
     else
       company_user_count != 0 && show_award?(result, current_user) ? ["retailer/auctions/#{result.auction_id}/award?contract_duration=#{contract_duration}"] : []
+    end
+
+  end
+
+  def get_new_award(company_user_count, result, contract_duration)
+    if contract_duration.blank?
+      company_user_count != 0 && show_award?(result, current_user) ? "retailer/auctions/#{result.auction_id}/award" : ''
+    else
+      company_user_count != 0 && show_award?(result, current_user) ? "retailer/auctions/#{result.auction_id}/award?contract_duration=#{contract_duration}" : ''
     end
 
   end
