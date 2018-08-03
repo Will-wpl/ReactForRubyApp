@@ -607,7 +607,7 @@ export class Modal extends React.Component {
             } else if (this.props.listdetailtype === "Link History") {
                 showDetail = <ul className="showdetail history_files">
                     {this.props.listdetail.map((item, index) => {
-                        return <li key={index}><a className="overflow_text" target="_blank" download={item.file_name} href={item.file_path}>{item.file_name}</a><abbr><font>|</font>{item.file_time}</abbr><span className="remove_file" onClick={this.removefile.bind(this, this.state.strtype, index, item.fileid)}></span></li>
+                        return <li key={index}><a className="overflow_text" target="_blank" download={item.file_name} href={item.file_path}>{item.file_name}</a><abbr><font>|</font>{item.file_time}</abbr><span style={{display:'none'}} className="remove_file" onClick={this.removefile.bind(this, this.state.strtype, index, item.fileid)}></span></li>
                     })}
                 </ul>
             } else if (this.props.listdetailtype === "Email Template") {
@@ -830,7 +830,7 @@ export class Modal extends React.Component {
                                     <td>
                                         <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" name="totals" onKeyUp={this.removeInputNanNum.bind(this)} required aria-required="true" maxLength="10" /><div>kWh/month</div>
                                         <div id="totals_message" className="isPassValidate">This filed is required!</div>
-                                        <div id="totals_format" className="isPassValidate">Must be positive integers,and first cannot be 0!</div>
+                                        <div id="totals_format" className="isPassValidate">Please input a number greater than 0.</div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -838,7 +838,7 @@ export class Modal extends React.Component {
                                     <td>
                                         <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} id="peak_pct" name="peak_pct" onKeyUp={this.removeInputNanNum.bind(this)} required aria-required="true" maxLength="5" placeholder="0-100" /> <div>%</div>
                                         <div id="peak_pct_message" className="isPassValidate">This filed is required!</div>
-                                        <div id="peak_pct_format" className="isPassValidate">Please input bigger than 0 and less than 100!</div>
+                                        <div id="peak_pct_format" className="isPassValidate">Please input a number between 0 and 100.</div>
                                     </td>
 
                                 </tr>
@@ -850,7 +850,7 @@ export class Modal extends React.Component {
                                     <td>&nbsp;&nbsp;&nbsp; Upload bill(s)</td>
                                     <td>
                                         <div className="upload">
-                                            <UploadFile type="CONSUMPTION_DOCUMENTS" showlist={false} validate={true} showList="1" col_width="9" showWay="2" fileData={this.state.fileData.CONSUMPTION_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
+                                            <UploadFile type="CONSUMPTION_DOCUMENTS" validate={true} showList="1" col_width="9" showWay="1" fileData={this.state.fileData.CONSUMPTION_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
                                         </div>
                                     </td>
                                 </tr>

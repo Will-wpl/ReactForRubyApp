@@ -4,7 +4,7 @@ body a{outline:none; cursor: default;}
 button{ cursor: pointer; transition: 0.5s all;}
 .green{color:green;}
 .red{color:red;}
-button[disabled='']{background: #666 !important; color:#999 !important; cursor: default !important;}
+button[disabled=''],input[disabled=''],select[disabled='']{background: #666 !important; color:#999 !important; cursor: default !important;}
 textarea{resize: none;}
 ul, menu, dir {
   display: block;
@@ -194,7 +194,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
     a { width: 60px; float:right; margin-left: 10px; cursor: pointer;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; }
     button { width: 60px; float:right; margin-left: 10px; cursor: pointer;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; }
   }
-  .model_detail_formHeight{max-height: 550px}
+  .model_detail_formHeight{max-height: 450px}
   .model_detail_formWidth{width:800px;}
 }
 .u-contain{overflow:hidden;}
@@ -982,4 +982,10 @@ ul.history_files{
 };
 .addressRight{
 width: "70%"; float: "left";padding:5px;
+}
+.chkBuyer{
+  margin:10px auto !important;
+  display: inline-block;
+  vertical-align: middle;
+  span{margin:0px 10px;}
 }

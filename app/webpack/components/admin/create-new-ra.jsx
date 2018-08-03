@@ -615,7 +615,7 @@ export class CreateNewRA extends Component {
                         </label>
                     </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
-                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Contact Start Date :</span>
+                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Contract Start Date :</span>
                         <label className="col">
                             {
                                 this.state.start_datetime === '' ? <DatePicker disabled={this.state.disabled} minDate={moment()} shouldCloseOnSelect={true} onKeyDown={this.noPermitInput.bind(this)} required aria-required="true" ref="contract_period_start_date" name="contract_period_start_date" className="date_ico" dateFormat="DD-MM-YYYY" selected={this.state.startDate} selectsStart startDate={this.state.startDate} endDate={this.state.endDate} onChange = {this.starttimeChange}/>
@@ -632,7 +632,7 @@ export class CreateNewRA extends Component {
                         {/*</label>*/}
                     </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
-                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Single / Multiple :</span>
+                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Single / Multiple Buyer(s) :</span>
                         <label className="lm--formItem-right lm--formItem-control">
                             <select ref="single_multiple" id="single_multiple" onChange={this.single_multiple.bind(this,'single_multiple')} value={this.state.single_multiple} disabled={this.state.single_truely?true:this.state.disabled}>
                                 <option value="0">Single</option>
@@ -651,7 +651,7 @@ export class CreateNewRA extends Component {
                         </label>
                     </dd>:''}
                     <dd className="lm--formItem lm--formItem--inline string optional">
-                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Contract Duration:</span>
+                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Contract Duration :</span>
                         <div className="lm--formItem-right lm--formItem-label lm--formItem-control">
                             <label className={"checkbox_div"}><input className={"checkbox"} type="checkbox" required={this.state.check_required} ref="contract_duration_6" disabled={this.state.disabled?true:(this.auction.buyer_notify?true:false)} name="contract_duration" value={"6"} id={"contract_duration_6"} checked={this.state.contract_duration_6} onChange={this.contractChange.bind(this)}  /> 6 Months</label>
                             <label className={"checkbox_div"}><input className={"checkbox"} type="checkbox" required={this.state.check_required} ref="contract_duration_12" disabled={this.state.disabled?true:(this.auction.buyer_notify?true:false)} name="contract_duration" value={"12"} id={"contract_duration_12"} checked={this.state.contract_duration_12} onChange={this.contractChange.bind(this)}  /> 12 Months</label>
@@ -661,7 +661,7 @@ export class CreateNewRA extends Component {
                     {this.state.contractArray.length>0?
                         (<div>
                             <dd className="lm--formItem lm--formItem--inline string optional">
-                                <span className="lm--formItem-left lm--formItem-label string optional">Contact End Date</span>
+                                <span className="lm--formItem-left lm--formItem-label string optional">Contract End Date :</span>
                                 <div className="lm--formItem-right lm--formItem-control">
                                     {this.state.contractArray.map((item,index)=>{
                                         return <label key={index} className={'lm--formItem-label lm--formItem-control'}>Buyers on {item.contract_duration} months [{item.contract_period_end_date}]</label>
@@ -677,10 +677,10 @@ export class CreateNewRA extends Component {
                         </div>):''
                     }
                     <dd className="lm--formItem lm--formItem--inline string optional">
-                        <span className="lm--formItem-left lm--formItem-label string optional">Reverse Auction Parameters</span>
+                        <span className="lm--formItem-left lm--formItem-label string optional">Reverse Auction Parameters :</span>
                     </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
-                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Duration (minutes):</span>
+                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Duration (minutes) :</span>
                         <label className="lm--formItem-right lm--formItem-control">
                             <input type="test" ref="duration" onChange={this.doDuration.bind(this)} value={this.state.duration} disabled={this.state.disabled} name="duration" maxLength="50" required aria-required="true" pattern="^[0-9]*[1-9][0-9]*$" title="Duration must be an integer."></input>
                             <abbr ref="ra_duration_error" className="col"></abbr>
