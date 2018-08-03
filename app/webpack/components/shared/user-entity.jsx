@@ -141,7 +141,7 @@ export class UserEntity extends React.Component {
                             </div>
                             <div className="lm--formItem lm--formItem--inline string">
                                 <label className="lm--formItem-left lm--formItem-label string required">
-                                    <abbr title="required">*</abbr>  Puchese Entity/Company Name:
+                                    <abbr title="required">*</abbr>  Purchase Entity/Company Name:
                                          </label>
                                 <div className="lm--formItem-right lm--formItem-control">
                                     <input type="text" name={"company_name_" + (i)} id={"company_name_" + (i)} value={it.company_name} onChange={this.Change.bind(this, 'company_name', i)} disabled={this.state.disabled} ref="company_name" aria-required="true" title="Please fill out this field"></input>
