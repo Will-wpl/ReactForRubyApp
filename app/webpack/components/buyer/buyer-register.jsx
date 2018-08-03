@@ -524,8 +524,7 @@ export class BuyerRegister extends Component {
 
     save(type) {
         if (type === "save") {
-            let isValidator = this.checkSuccess();
-            if (!isValidator) {
+            if (!this.checkSuccess()) {
                 return false;
             }
         }
