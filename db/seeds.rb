@@ -12,6 +12,8 @@ Role.find_or_create_by(name: 'entity')
 Role.find_or_create_by(name: 'tenant')
 
 User.all.update_all(approval_status: User::ApprovalStatusRegistering)
+
+CompanyBuyerEntity.where('approval_status is null').update(approval_status: CompanyBuyerEntity::ApprovalStatusApproved)
 # reverse_auction = Auction.find_or_create_by(name: 'SP Reverse Auction') do |auction|
 #   auction.start_datetime = nil
 #   auction.contract_period_start_date = nil
