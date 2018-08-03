@@ -701,12 +701,12 @@ export class BuyerRegister extends Component {
                 <div><button id="save_edit" className="lm--button lm--button--primary" onClick={this.edit.bind(this)}>Edit</button></div>
                 :<div>
                     <button id="save_form" className="lm--button lm--button--primary" onClick={this.cancel.bind(this)}>Cancel</button>
-                    <button id="submit_form" className="lm--button lm--button--primary" onClick={this.save.bind(this, 'save')}>Save</button>1
+                    <button id="submit_form" className="lm--button lm--button--primary" onClick={this.save.bind(this, 'save')}>Save</button>
                 </div>;
         }
         else {
             btn_html = <div>
-                <button id="save_form" className="lm--button lm--button--primary" onClick={this.save.bind(this, "register")}>Save</button>0
+                <button id="save_form" className="lm--button lm--button--primary" onClick={this.save.bind(this, "register")}>Save</button>
                 <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this, 'sign_up')}>Complete Sign Up</button>
             </div>;
         }
