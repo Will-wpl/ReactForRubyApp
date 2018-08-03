@@ -6,7 +6,15 @@ button{ cursor: pointer; transition: 0.5s all;}
 .red{color:red;}
 button[disabled='']{background: #666 !important; color:#999 !important; cursor: default !important;}
 textarea{resize: none;}
-
+ul, menu, dir {
+  display: block;
+  list-style-type: disc;
+  -webkit-margin-before: 0em;
+  -webkit-margin-after: 0em;
+  -webkit-margin-start: 0px;
+  -webkit-margin-end: 0px;
+  -webkit-padding-start: 0px;
+}
 //createRaMain or retailer btn
 .createRaMain{
   margin: 0px auto;
@@ -22,6 +30,15 @@ textarea{resize: none;}
           .lm--formItem-right{ 
             position: relative;
             .required_error{position:absolute; display: none; top:45px; left:0; width: 100%; padding:5px 10px; border:2px solid #fbb136; background: #fff; color:#333; font-size: 15px;z-index: 10}
+          }
+          label{
+            abbr{display: inline-block;}
+            a{
+              font-size: 12px;
+              padding: 4px 15px;
+              margin-left: 10px;
+              }
+            &.checkbox_div{margin:12px 10px;}
           }
           b{ 
               font-weight: normal; font-size: 18px; line-height: 44px; text-align:center; display: block;
@@ -41,6 +58,7 @@ textarea{resize: none;}
               border-radius: 0.3125rem;
               &.date_ico{background:url("../images/date.png") no-repeat right;}
               &.time_ico{background:url("../images/time.png") no-repeat right;}
+              &.checkbox{ display: inline-block; width: auto;}
             }
       }
   }
@@ -89,9 +107,15 @@ abbr[title]{color: #fe0000; text-decoration: none;}
      overflow:auto; height: 30px;
      tr{ &.isbidder{background:green; transition: 0.5s all;}
        td{border:1px solid #314657; text-align: center; height: 40px; padding:5px; word-break: break-all;
+         abbr{
+           display: inline-block; line-height: 40px; font-style: normal; transition: 0.5s all;
+           background: url("../images/notification_sent.png") no-repeat -20px 11px;
+           &.fill_yes{ background-position: 0px 11px; background-size:15px; padding-left: 20px;}
+         }
         a{ 
           display: block; width: 100%; height: 100%; cursor: pointer;
           &.report{background: url("../images/Reverse_Auction_Report.png") no-repeat center; background-size:19px;}
+          &.edit{background: url("../images/edit.png") no-repeat left; background-size:10px;  width:50px; margin:0 auto; line-height:35px;}
           &.log,&.award{background: url("../images/Activity_Log.png") no-repeat center; background-size:19px;}
         }
         input{
@@ -147,7 +171,9 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 
 
 
-
+.mouth_tab{
+  .selected{background:forestgreen;}
+}
 //var modal css by will
 .modal_hide{ opacity: 0; z-index: -1;}
 .modal_show{  opacity: 1; z-index: 10; transition: 0.8s all;}
@@ -164,9 +190,12 @@ abbr[title]{color: #fe0000; text-decoration: none;}
   }
   .showinfo{ color: red; min-height: auto;}
   .modal_btn{ 
-    width:100%; margin: 10px auto; overflow: hidden;
-    a{ width: 60px; float:right; margin-right: 10px; cursor: pointer;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; margin: 0px 10px;}
+    width:90%; margin: 10px auto; overflow: hidden;
+    a { width: 60px; float:right; margin-left: 10px; cursor: pointer;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; }
+    button { width: 60px; float:right; margin-left: 10px; cursor: pointer;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; }
   }
+  .model_detail_formHeight{max-height: 550px}
+  .model_detail_formWidth{width:800px;}
 }
 .u-contain{overflow:hidden;}
 #modal_history{position: fixed; top:0; left: 0; font-size: 12px;
@@ -228,7 +257,10 @@ abbr[title]{color: #fe0000; text-decoration: none;}
     &.fail{ color:red; background: url("../images/not_achieved.png") no-repeat left; padding-left:20px;}
   }
 }
-
+.retailor_justification{ text-align: right;
+  h2{ text-align:left;}
+  button{margin-left: 15px;}
+}
 //winnerPirce
 .winnerPrice_main{ 
   width:86%; margin: 10px auto; font-size: 12px;
@@ -273,6 +305,12 @@ abbr[title]{color: #fe0000; text-decoration: none;}
   }
   .addSite{ width: 100%; margin: 10px auto;
     a{color:#00888a; cursor: pointer; background: url("../images/add.png") no-repeat left; padding-left:18px;}
+  }
+  .editSite{ width: 50%; margin: 10px auto;
+    a{color:#00888a; cursor: pointer; background: url("../images/edit.png") no-repeat left;}
+  }
+  .delSite{ width: 50%; margin: 10px auto;
+    a{color:#00888a; cursor: pointer; background: url("../images/remove.png") no-repeat left; }
   }
   .buyer_btn{ text-align: right; width: 100%;
     a{
@@ -401,7 +439,16 @@ input[type="number"]{
 .lm--formItem-left.lm--formItem-label{
   font{font-size: 20px;}
   b{color:red;}
+  // 
   // &:first-letter{color:red;}
+}
+.lm--formItem-left.lm--formItem-label-comment{
+  font{font-size: 20px;}
+  b{color:red;}
+  width:65%;
+  // padding-right: 20px;
+  padding: 0.6875rem 2.0625rem 0.5rem 0;
+   
 }
 .save-right{ text-align: right;
   form{ width: 100%;
@@ -499,8 +546,11 @@ dfn.manage_label{
           &.invite{background:url("../images/invite.png") no-repeat left;}
           &.cancel_invite{background:url("../images/cancel_invite.png") no-repeat left;}
         }
+        abbr{
+          display: block; padding:10px 0px; font-style: normal;
+        }
         a{
-          margin: 0px auto; display: block; width: 100%; cursor: pointer;
+          margin: 0px auto; display: inline-block; min-width: 24px; cursor: pointer;
           &.report{background: url("../images/Reverse_Auction_Report.png") no-repeat left; background-size:19px; height: 20px;}
           &.log,&.award{background: url("../images/Activity_Log.png") no-repeat left; background-size:19px; height: 20px;}
         }
@@ -509,6 +559,10 @@ dfn.manage_label{
             padding-left: 20px; display: block;
             &::before{
               display: none;
+            }
+            span.incomplete_span{
+              padding-left: 10px;
+              font{ width: 15px; display: inline-block; font-weight: 600; line-height: 15px; height:15px; background: red; border-radius: 100%; text-align: center;}
             }
             &.view{background:url("../images/view.png") no-repeat left;}
             &.delete{background:url("../images/delete.png") no-repeat left;}
@@ -551,6 +605,12 @@ body.choose{
   .consumption{ position: relative;
     .retailer_fill{ margin-bottom: 1.5rem;}
     .required_error{top:125px; left:0;}
+    .account_info{
+      font-size:13px;
+    }
+    .account_info inpunt{
+      width: 90%;
+    }
   }
   .role_select{
     position: relative;
@@ -598,6 +658,20 @@ body.choose{
     }
   } 
 }
+ul.history_files{
+    li{list-style: none; line-height: 26px; overflow: hidden;
+      &.lineHeight42{line-height: 42px;}
+      a{ cursor: pointer; color: #00b0b2; float: left; margin: 0;
+        &.overflow_text{
+          overflow: hidden; white-space: nowrap; text-overflow: ellipsis; width:220px;
+        }
+      }
+      abbr{font-style: normal; float: left; color: #00b0b2; font-size: 12px;
+        font{margin:0px 10px;}
+      }
+      span.remove_file{background:url("../images/remove.png") no-repeat center; cursor: pointer; width: 26px; height: 26px; float: right;}
+    }
+}
 
 .comsumption_list{
   font-size: 13px;  padding:10px; text-align:center;
@@ -610,7 +684,25 @@ body.choose{
     table{
       width: 100%; text-align: center;
       td,th{
-      padding: 10px 0px; border-bottom: 1px solid #314657; word-break: break-word; width:16.6%;
+      padding: 10px 0px; border-bottom: 1px solid #314657; word-break: break-word; width:12.5%;
+      }
+    }
+  }
+  .visible{ display: block;}
+}
+
+.comsumption_list_new{
+  font-size: 13px;  padding:10px; text-align:center;
+  .comsumption_list_top{ 
+    padding:15px 0px 15px 32px; border-bottom: 1px solid #314657; background:url("../images/add_l.png") no-repeat left;
+  }
+  .open{background:url("../images/subtract.png") no-repeat left;}
+  .comsumption_list_table_new{
+    display:block;  
+    table{
+      width: 100%; text-align: center;
+      td,th{
+      padding: 10px 0px; border-bottom: 1px solid #314657; word-break: break-word;
       }
     }
   }
@@ -619,7 +711,10 @@ body.choose{
 
 .workflowtab{
   margin:30px 0px;
-  table{ width: 100%; table-layout: fixed;
+  table{ width: 100%; table-layout: fixed; margin: 0 auto;
+    &.w_100{width: 100%;}
+    &.w_80{width: 80%;}
+    &.w_60{width: 60%;}
     td{height:110px;
       div{ cursor: pointer;
         width: 100%; height: 100%; background: #00afb1; position: relative;
@@ -737,4 +832,154 @@ body.choose{
 .lm--header-home-logo > a{
   &:hover{cursor: pointer}
   margin-right: 10px;
+}
+.errormessage{
+  color:red;
+  display: block;
+}
+.isPassValidate{
+  display: none;
+}
+.isHide{
+  display: none;
+}
+.isDisplay{
+  display: block;
+}
+.consumption_model
+ {
+   width:500px;
+   height: 400px;
+ }
+.left{
+  text-align: left !important;
+  word-wrap:break-word;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow:auto;
+}
+
+ .consumption_table{
+  width: 100%; font-size: 12px; table-layout: fixed; border-top:1px solid #314657; border-left:1px solid #314657;
+  thead{
+    tr{ background: #00394A;
+     th{ 
+       height: 40px; border-right:1px solid #314657; font-size: 14px;
+       &.table_title{border-bottom:1px solid #314657;}
+     }
+   }
+  }
+  tbody{
+    .react-datepicker__input-container,.react-datepicker-wrapper{width:100%;}
+    overflow:auto; height: 30px;
+    tr{ &.isbidder{background:green; transition: 0.5s all;}
+      td{
+        border:1px solid #314657; text-align: left; height: 40px; padding:5px; word-break: break-all;
+        line-height: 25px;
+        abbr{
+          display: inline-block; line-height: 40px; font-style: normal; transition: 0.5s all;
+          background: url("../images/notification_sent.png") no-repeat -20px 11px;
+          &.fill_yes{ background-position: 0px 11px; background-size:15px; padding-left: 20px;}
+        }
+       a{ 
+         &.react-datepicker__navigation{ width: auto; height:auto;}
+         display: block; width: 100%; height: 100%; cursor: pointer;
+         &.report{background: url("../images/Reverse_Auction_Report.png") no-repeat center; background-size:19px;}
+         &.edit{background: url("../images/edit.png") no-repeat left; background-size:10px;  width:50px; margin:0 auto; line-height:35px;}
+         &.log,&.award{background: url("../images/Activity_Log.png") no-repeat center; background-size:19px;}
+       }
+       input{
+         width: 95%; display: inline-block; padding:2px; border:1px solid #fff; margin-left: 5px; background: none;
+         &.date_ico{background:url("../images/date.png") no-repeat right;}
+         &.time_ico{background:url("../images/time.png") no-repeat right;}
+         &.checkbox{ display: inline-block; width: auto;}
+       }
+       select
+       {
+        width: 95%; display: inline-block; padding:2px; border:1px solid #fff; margin-left: 5px; background: none;height: 30px;
+       }
+       .specil{
+        input{ width: 50px; display: inline-block; padding:2px;   background: none;color: #fff;
+          border-top:0px dashed rgba(255,255,255,0);border-left:0px dashed rgba(255,255,255,0);border-right:0px dashed rgba(255,255,255,0);border-bottom:1px solid #fff;
+        }
+      }
+      span{
+        font-weight: bold;
+      }
+      .upload {
+        a{
+          display: block; width: 100%; height: auto; cursor: pointer;text-align:center;
+             &.report{background: url("../images/Reverse_Auction_Report.png") no-repeat center; background-size:19px;}
+             &.edit{background: url("../images/edit.png") no-repeat left; background-size:10px;  width:50px; margin:0 auto; line-height:35px;}
+             &.log,&.award{background: url("../images/Activity_Log.png") no-repeat center; background-size:19px;}
+        }
+      }
+      .noneleftBorder{
+        border-left:thick double #ff0000;
+      }
+     }  
+     .left_td{
+     // width: 150px;
+    }
+    .right_td{
+     // width: 350px;
+    } 
+    }
+  }
+ 
+}
+
+.offpeak{
+  text-decoration :underline;
+  width: 30px;
+}
+.text_padding_left{
+  margin-left:5px;
+}
+.textBold
+{
+  text-align: left;
+  font-weight: bold;
+  div{
+    text-decoration :underline;
+  }
+}
+.textDecoration
+{
+  text-decoration :underline;
+}
+.textNormal
+{
+  text-align: left;
+  div{
+    text-decoration :underline;
+  }
+}
+.warning{
+  color:yellow;
+}
+.custombtn{
+    background-color: #00d900;
+}
+.addEntity{ width: 100%; margin: 10px auto;
+  a{color:#00888a; cursor: pointer; background: url("../images/add.png") no-repeat left; padding-left:18px;}
+}  
+.delEntity{ width: 100%; margin: 10px auto;
+  a{color:#00888a; cursor: pointer; background: url("../images/remove.png") no-repeat left; padding-left:10px;}
+}
+.urlStyle{
+  cursor: pointer;
+}
+
+.innerTable{
+  border: 0px !important;
+}
+.address{
+  width:"100%";float:"left";
+}
+.addressLeft{
+  width: "30%"; float: "left";
+};
+.addressRight{
+width: "70%"; float: "left";padding:5px;
 }

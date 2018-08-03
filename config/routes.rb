@@ -30,10 +30,12 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :admin do
-      resources :users, only: %i[show retailers buyers] do
+      resources :users, only: %i[show retailers buyers approval_retailer approval_buyer] do
         collection do
           get 'retailers'
           get 'buyers'
+          put 'approval_retailer'
+          put 'approval_buyer'
         end
       end
       resources :auctions, only: %i[obtain link create update delete publish hold confirm destroy unpublished published retailers buyers selects send_mails] do
@@ -73,9 +75,12 @@ Rails.application.routes.draw do
           get 'obtain'
         end
       end
-      resources :consumptions, only: %i[index show destroy update_status] do
+      resources :consumptions, only: %i[index show destroy update_status approval_consumption] do
         member do
           put 'update_status'
+        end
+        collection do
+          put 'approval_consumption'
         end
       end
       resources :consumption_details, only: %i[index] do
@@ -97,8 +102,21 @@ Rails.application.routes.draw do
         member do
           get 'award'
         end
+        end
+      resources :user_attachments, only: %i[index create destroy find_last_by_type] do
+        member do
+          put 'find_last_by_type'
+        end
       end
       resources :user_extensions, only: %i[index]
+      resources :email_templates, only: %i[index show update]
+      resources :la_templates, only: %i[show update]
+      resources :registrations, only: %i[index retailer_info buyer_info] do
+        member do
+          get 'retailer_info'
+          get 'buyer_info'
+        end
+      end
     end
   end
 
@@ -151,7 +169,7 @@ Rails.application.routes.draw do
           get 'award'
         end
       end
-      resources :consumptions, only: %i[] do
+      resources :consumptions, only: %i[index] do
         member do
           post 'acknowledge'
         end
@@ -159,16 +177,25 @@ Rails.application.routes.draw do
           post 'acknowledge_all'
         end
       end
+      resources :registrations, only: %i[index update sign_up validate] do
+        member do
+          put 'sign_up'
+          put 'validate'
+        end
+      end
+      resources :user_attachments, only: %i[create] do
+      end
     end
   end
 
   namespace :api do
     namespace :buyer do
-      resources :consumption_details, only: %i[index update participate reject] do
+      resources :consumption_details, only: %i[index update participate reject validate] do
         collection do
           post 'participate'
           post 'reject'
           post 'save'
+          post 'validate'
         end
       end
       resources :auctions, only: %i[obtain published] do
@@ -181,7 +208,17 @@ Rails.application.routes.draw do
           get 'published'
         end
       end
-      resources :auction_results, only: %i[index]
+      resources :auction_results, only: %i[index] do
+
+      end
+      resources :registrations, only: %i[index update sign_up validate] do
+        member do
+          put 'sign_up'
+          put 'validate'
+        end
+      end
+      resources :user_attachments, only: %i[create] do
+      end
     end
   end
 
@@ -243,6 +280,8 @@ Rails.application.routes.draw do
         get 'published'
       end
     end
+    resources :contract, only: %i[index]
+    resources :templates, only: %i[index]
   end
 
   namespace :retailer do
@@ -258,7 +297,7 @@ Rails.application.routes.draw do
       end
     end
     resources :auction_results, only: [:index]
-    resources :auctions, only: %i[upcoming live finish result empty goto message gotobid] do
+    resources :auctions, only: %i[upcoming live finish result empty goto message gotobid consumption] do
       member do
         get 'upcoming' # upcoming auction page
         get 'live' # standby and live page
@@ -268,10 +307,12 @@ Rails.application.routes.draw do
         get 'goto'
         get 'message' # no published auction page
         get 'gotobid'
+        get 'consumption' # select users page
       end
       collection do
       end
     end
+    resources :register, only: [:index]
   end
 
   namespace :buyer do
@@ -284,6 +325,7 @@ Rails.application.routes.draw do
       end
     end
     resources :consumptions,only: %i[edit]
+    resources :register, only: [:index]
   end
 
   require 'sidekiq/web'

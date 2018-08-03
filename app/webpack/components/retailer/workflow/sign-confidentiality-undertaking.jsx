@@ -54,9 +54,8 @@ export class Signconfidentialityundertaking extends React.Component{
                 {this.props.current.current.current_status ?
                 <h4>You have {this.props.current.current.current_status === 'reject' ? 'rejected' : 'accepted'} the Confidentiality Undertaking.</h4>
                 :''}
-                <p>Please read attached Confidentiality Undertaking and click on 'Accept' to indicate acceptance.
-                    Tender documents will only be released to you upon your acceptance of Confidentiality Undertaking.</p>
-                <p>By clicking Accept, you confirm that you have read the terms and conditions, that you understand them and that you agree to be bound by them.</p>
+                <p>You are bounded by the confidentiality clauses in the Retailer Platform Terms of Use. Please click 'Proceed' to continue.</p>
+                <p>*Note: can click on 'Retailer Platform Terms of Use' to download the PDF document.</p>
                     <div className="u-mt3 u-mb3 download">
                         <span>Click to Download : </span>
                         <a className="download_ico" target="_blank" download={this.state.file_name} href={this.state.file_path}></a>

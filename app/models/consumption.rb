@@ -15,6 +15,10 @@ class Consumption < ApplicationRecord
 
   Acknowledged = '1'.freeze
 
+  AcceptStatusReject = '0'.freeze
+  AcceptStatusApproved = '1'.freeze
+  AcceptStatusPending = '2'.freeze
+
   # Extends
 
   # Includes
@@ -29,7 +33,7 @@ class Consumption < ApplicationRecord
 
   # Scopes
   scope :mine, ->(user_id) { where( user_id: user_id) }
-  scope :find_notify_buyer, ->{ where(action_status: ActionStatusSent) } # "action_status = '1'"
+  scope :find_notify_buyer, -> { where(action_status: ActionStatusSent) } # "action_status = '1'"
   scope :find_by_auction_id, ->(auction_id) { where('auction_id = ?', auction_id) }
   scope :join_buyer_auction, -> { includes(:auction).where.not(auctions: { publish_status: nil }) }
   scope :find_buyer_result_auction, -> { includes(auction: :auction_result).where(auction_results: { status: nil }).where.not(auctions: { publish_status: nil })}
@@ -50,8 +54,16 @@ class Consumption < ApplicationRecord
     get_company_user_by_auction(auction_id).count
   end
 
+  def self.get_company_user_duration_count(auction_id, contract_duration)
+    get_company_user_by_auction_duration(auction_id, contract_duration).count
+  end
+
   def self.get_company_user(auction_id)
     get_company_user_by_auction(auction_id)
+  end
+
+  def self.get_company_user_duration(auction_id, contract_duration)
+    get_company_user_by_auction_duration(auction_id, contract_duration)
   end
 
   def self.update_value(auction_id, _consumption, _intake_values)
@@ -85,6 +97,10 @@ class Consumption < ApplicationRecord
       intake_values[7] += BigDecimal.new(intake_value[7])
     end
     intake_values
+  end
+
+  def self.change_nil_value(value)
+    value.nil? ? 0: value
   end
 
   def self.get_lt_peak(lt_peak)
@@ -123,5 +139,9 @@ class Consumption < ApplicationRecord
 
   def self.get_company_user_by_auction(auction_id)
     Consumption.find_by_auction_id(auction_id).find_by_user_consumer_type(User::ConsumerTypeCompany).is_participation
+  end
+
+  def self.get_company_user_by_auction_duration(auction_id, contract_duration)
+    get_company_user_by_auction(auction_id).where(contract_duration: contract_duration)
   end
 end

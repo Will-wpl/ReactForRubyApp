@@ -27,6 +27,7 @@ class Admin::AuctionsController < Admin::BaseController
   # GET result page
   def result
     @company_count = Consumption.get_company_user_count(params[:id])
+    @live_auction_contracts = get_lived_auction_contracts(Auction.find(params[:id]), true)
   end
 
   # GET report page

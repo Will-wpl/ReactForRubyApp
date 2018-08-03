@@ -1,9 +1,9 @@
 class LetterOfAward < Pdf
   attr_reader :param, :pdf_template, :pdf_filename
 
-  def initialize(param)
+  def initialize(param, template_filename = 'letter_of_award_template.html')
     @param = param
-    @pdf_template = Rails.root.join('app', 'assets', 'pdf', 'letter_of_award_template.html')
+    @pdf_template = Rails.root.join('app', 'assets', 'pdf', template_filename)
     @pdf_filename = Time.new.strftime("%Y%m%d%H%M%S%L")
   end
 
@@ -16,8 +16,8 @@ class LetterOfAward < Pdf
     table1_tr = html_parse(page, '#appendix_table1_tr')
     tr_string = table1_tr.to_s
     tr_text = get_consumption_details_text(consumption_details, tr_string)
-    price_table_data, visibilities, price_data = get_price_table_data(param[:auction], auction_result[0], true, true)
-    consumption_table_data, table_data = get_consumption_table_data({:auction => param[:auction], :visibilities => visibilities, :price_data => price_data, :user_id => param[:user_id], :table_data => true})
+    price_table_data, visibilities, price_data = get_price_table_data(param.merge({:auction => param[:auction], :auction_result => param[:auction_result][0]}), true, true)
+    consumption_table_data, table_data = get_consumption_table_data(param.merge({:auction => param[:auction], :visibilities => visibilities, :price_data => price_data, :user_id => param[:user_id], :table_data => true}))
     table2_head = html_parse(page, '#appendix_table2_head')
     head = html_parse(table2_head, '#lt_head_id', '#hts_head_id', '#htl_head_id', '#eht_head_id')
     table2_tr = html_parse(page, '#appendix_table2_peak')

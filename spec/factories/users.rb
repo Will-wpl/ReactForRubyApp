@@ -61,6 +61,19 @@ FactoryBot.define do
         user.add_role(:admin)
       end
     end
+
+
+    trait :with_buyer_entity do
+      after(:create) do |user|
+        user.add_role(:entity)
+      end
+    end
+
+    trait :with_tenant do
+      after(:create) do |user|
+        user.add_role(:tenant)
+      end
+    end
   end
 
 

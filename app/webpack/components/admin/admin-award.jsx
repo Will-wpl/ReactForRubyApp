@@ -5,13 +5,15 @@ export default class AdminAward extends Component{
     constructor(props){
         super(props);
         this.state={
-            awardList:[]
+            awardList:[],
+            contract_duration:6
         }
     }
 
     componentDidMount(){
         let thisId = window.location.href.split("auctions/")[1].split("/award")[0];
-        getLetterOfAward(thisId).then(resp=>{
+        this.setState({contract_duration:window.location.href.indexOf('contract_duration')>0?window.location.href.split('contract_duration=')[1]:6})
+        getLetterOfAward(thisId,window.location.href.indexOf('contract_duration')>0?window.location.href.split('contract_duration=')[1]:6).then(resp=>{
             //console.log(resp)
             this.setState({awardList:resp})
         },error=>{
@@ -19,9 +21,9 @@ export default class AdminAward extends Component{
         })
     }
 
-    downLoad(data){
+    downLoad(data,entity_id){
         //console.log(data);
-        window.open(`/api/admin/auctions/letter_of_award_pdf?auction_id=${data.auction_id}&user_id=${data.user_id}`)
+        window.open(`/api/admin/auctions/letter_of_award_pdf?auction_id=${data.auction_id}&user_id=${data.user_id}&contract_duration=${this.state.contract_duration}&entity_id=${entity_id}`)
     }
 
     renderAwardList(data){
@@ -32,9 +34,11 @@ export default class AdminAward extends Component{
                     <li key={i} className="u-grid center ">
                         <span className="col-sm-4 white">{e.name}</span>
                         <span className="col-sm-4"><abbr className={'color'+status}></abbr></span>
-                        <span className="col-sm-4 ">
-                            <div className="downLoadIcon" onClick={this.downLoad.bind(this,e)}>
-                            </div>
+                        <span className="col-sm-4 line15">
+                            {e.entities.map((it,k)=>{
+                                return <div key={k} className="downLoadIcon" onClick={this.downLoad.bind(this,e,it.company_buyer_entity_id)}></div>
+                            })}
+
                         </span>
                     </li>
                 )

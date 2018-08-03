@@ -19,6 +19,10 @@ import "components/search/home-list";
 import "components/retailer/letter-of-award";
 import "components/buyer/buyer-fill-consumption";
 import "components/retailer/retailer-workflow";
+import "components/retailer/retailer-register";
+import "components/buyer/buyer-register";
+import "components/admin/admin-comsumption";
+
 // ActionCable = require('actioncable')
 
 // const cable = ActionCable.createConsumer()

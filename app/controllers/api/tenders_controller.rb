@@ -1,38 +1,60 @@
 class Api::TendersController < Api::TendersBaseController
 
   def current
-    workflow = TenderWorkflow.new.get_arrangement_state_machine(params[:id])
+    workflow = TenderHelper.current(params[:id])
+    # workflow = TenderWorkflow.get_arrangement_state_machine(params[:id])
     render json: workflow, status: 200
   end
 
   def node1_retailer
-    attachments = AuctionAttachment.belong_auction(@arrangement.auction_id)
-                                   .where(file_type: 'retailer_confidentiality_undertaking_upload').order(:created_at)
+    auction = @arrangement.auction
+    if auction.auction_contracts.blank?
+      attachments = AuctionAttachment.belong_auction(@arrangement.auction_id)
+                        .where(file_type: 'retailer_confidentiality_undertaking_upload').order(:created_at)
+    else
+      attachments = [UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_REVV_TC)]
+    end
+
     render json: attachments, status: 200
   end
 
   def node2_retailer
     auction = @arrangement.auction
-    aggregate_consumptions = { total_lt_peak: auction.total_lt_peak,
-                               total_lt_off_peak: auction.total_lt_off_peak,
-                               total_hts_peak: auction.total_hts_peak,
-                               total_hts_off_peak: auction.total_hts_off_peak,
-                               total_htl_peak: auction.total_htl_peak,
-                               total_htl_off_peak: auction.total_htl_off_peak,
-                               total_eht_peak: auction.total_eht_peak,
-                               total_eht_off_peak: auction.total_eht_off_peak }
-    attachments = AuctionAttachment.belong_auction(@arrangement.auction_id)
-                                   .where(file_type: 'tender_documents_upload').order(:created_at)
+    if auction.auction_contracts.blank?
+      aggregate_consumptions = [{ total_lt_peak: auction.total_lt_peak,
+                                 total_lt_off_peak: auction.total_lt_off_peak,
+                                 total_hts_peak: auction.total_hts_peak,
+                                 total_hts_off_peak: auction.total_hts_off_peak,
+                                 total_htl_peak: auction.total_htl_peak,
+                                 total_htl_off_peak: auction.total_htl_off_peak,
+                                 total_eht_peak: auction.total_eht_peak,
+                                 total_eht_off_peak: auction.total_eht_off_peak }]
+      attachments = AuctionAttachment.belong_auction(@arrangement.auction_id)
+                        .where(file_type: 'tender_documents_upload').order(:created_at)
+    else
+      aggregate_consumptions = get_lived_auction_contracts(auction, false)
+      attachments = [UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)]
+    end
+
     render json: { aggregate_consumptions: aggregate_consumptions, attachments: attachments }, status: 200
   end
 
+
   def node3_retailer
-    attachments_count = AuctionAttachment.belong_auction(@arrangement.auction_id)
-                      .where(file_type: 'tender_documents_upload').count
-    chats = set_node3_chats(params[:id])
-    attachments = AuctionAttachment.user_auction(@arrangement.auction_id, @arrangement.user_id)
-                      .where(file_type: 'attachment_deviation').order(:created_at)
-    render json: { chats: chats, attachments_count: attachments_count, attachments: attachments }, status: 200
+    auction = @arrangement.auction
+    if auction.auction_contracts.blank?
+      attachments_count = AuctionAttachment.belong_auction(@arrangement.auction_id)
+                              .where(file_type: 'tender_documents_upload').count
+      chats = set_node3_chats(params[:id])
+      attachments = AuctionAttachment.user_auction(@arrangement.auction_id, @arrangement.user_id)
+                        .where(file_type: 'attachment_deviation').order(:created_at)
+      render json: { chats: chats, attachments_count: attachments_count, attachments: attachments }, status: 200
+    else
+      chats = set_node3_chats(params[:id])
+      attachments = [UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)]
+      attachments_count = attachments.count()
+      render json: { chats: chats, attachments_count: attachments_count, attachments: attachments }, status: 200
+    end
   end
 
   def node3_admin
@@ -69,23 +91,23 @@ class Api::TendersController < Api::TendersBaseController
 
   # work flow function
   def node1_retailer_accept
-    workflow = TenderWorkflow.new.execute(:node1, :accept, params[:id])
+    workflow = TenderHelper.execute(:node1, :accept, params[:id])
 
     render json: workflow, status: 200
   end
 
   def node1_retailer_reject
-    workflow = TenderWorkflow.new.execute(:node1, :reject, params[:id])
+    workflow = TenderHelper.execute(:node1, :reject, params[:id])
     render json: workflow, status: 200
   end
 
   def node2_retailer_accept_all
-    workflow = TenderWorkflow.new.execute(:node2, :accept_all, params[:id])
+    workflow = TenderHelper.execute(:node2, :accept_all, params[:id])
     render json: workflow, status: 200
   end
 
   def node2_retailer_propose_deviations
-    workflow = TenderWorkflow.new.execute(:node2, :propose_deviations, params[:id])
+    workflow = TenderHelper.execute(:node2, :propose_deviations, params[:id])
     render json: workflow, status: 200
   end
 
@@ -94,7 +116,7 @@ class Api::TendersController < Api::TendersBaseController
     chats = JSON.parse(params[:chats])
     ActiveRecord::Base.transaction do
       node3_retailer_withdraw_all_deviations_biz(chats, params)
-      workflow = TenderWorkflow.new.execute(:node3, :withdraw_all_deviations, params[:id])
+      workflow = TenderHelper.execute(:node3, :withdraw_all_deviations, params[:id])
     end
 
     render json: workflow, status: 200
@@ -105,13 +127,13 @@ class Api::TendersController < Api::TendersBaseController
     chats = JSON.parse(params[:chats])
     ActiveRecord::Base.transaction do
       node3_retailer_submit_deviations_biz(chats, params)
-      workflow = TenderWorkflow.new.execute(:node3, :submit_deviations, params[:id])
+      workflow = TenderHelper.execute(:node3, :submit_deviations, params[:id])
     end
     render json: workflow, status: 200
   end
 
   def node3_retailer_next
-    workflow = TenderWorkflow.new.execute(:node3, :next, params[:id])
+    workflow = TenderHelper.execute(:node3, :next, params[:id])
     render json: workflow, status: 200
   end
 
@@ -128,39 +150,39 @@ class Api::TendersController < Api::TendersBaseController
           TenderChatDetail.chat_save(tender_chat, chat_info)
         end
       end
-      workflow = TenderWorkflow.new.execute(:node3, :send_response, params[:id])
+      workflow = TenderHelper.execute(:node3, :send_response, params[:id])
     end
     admin_response_mail(params[:id])
     render json: workflow, status: 200
   end
 
   def node4_retailer_submit
-    workflow = TenderWorkflow.new.execute(:node4, :submit, params[:id])
+    workflow = TenderHelper.execute(:node4, :submit, params[:id])
     retailer_submit_mail params[:id]
     render json: workflow, status: 200
   end
 
   def node4_retailer_next
-    workflow = TenderWorkflow.new.execute(:node4, :next, params[:id])
+    workflow = TenderHelper.execute(:node4, :next, params[:id])
     render json: workflow, status: 200
   end
 
   def node4_admin_accept
-    workflow = TenderWorkflow.new.execute(:node4, :accept, params[:id])
+    workflow = TenderHelper.execute(:node4, :accept, params[:id])
     @arrangement.update(comments: params[:comments])
     admin_accept_mail params[:id]
     render json: workflow, status: 200
   end
 
   def node4_admin_reject
-    workflow = TenderWorkflow.new.execute(:node4, :reject, params[:id])
+    workflow = TenderHelper.execute(:node4, :reject, params[:id])
     @arrangement.update(comments: params[:comments])
     admin_reject_mail params[:id], params[:comments]
     render json: workflow, status: 200
   end
 
   def node5_retailer_submit
-    workflow = TenderWorkflow.new.execute(:node5, :submit, params[:id])
+    workflow = TenderHelper.execute(:node5, :submit, params[:id])
     render json: workflow, status: 200
   end
 

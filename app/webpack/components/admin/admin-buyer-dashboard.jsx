@@ -24,7 +24,7 @@ export default class AdminBuyerDashboard extends Component {
 
 componentDidMount() {
     getAdminBuyerDashboard(sessionStorage.auction_id).then(res=>{
-        //console.log(res);
+        console.log(res)
         this.setState({
             buyer_company:{
                 count:res.count_company,
@@ -69,7 +69,7 @@ render() {
                 </div>
             </div>
             <div className="createRaMain u-grid">
-            <a className="lm--button lm--button--primary u-mt3" href={window.location.href.indexOf("past")>0?"/admin/auction_results":"/admin/auctions/published"} >Back</a>
+            <a className="lm--button lm--button--primary u-mt3" href={window.location.href.indexOf("past")>0?"/admin/auction_results":(window.location.href.indexOf("unpublished")>0?"/admin/auctions/unpublished":"/admin/auctions/published")} >Back</a>
             </div>
         </div>
     )

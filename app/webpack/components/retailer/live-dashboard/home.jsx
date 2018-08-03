@@ -18,17 +18,29 @@ export default class LiveHomePage extends Component {
             showTop2Rule: false
         };
     }
-
     componentDidMount() {
+        this.getHistory();
+    }
+    getHistory(){
         let auctionId = this.props.auction ? this.props.auction.id : 1;
         getAuctionHistorys(auctionId, getLoginUserId()).then(res => {
-            this.makeup(res);
+            if(res.duration_6 || res.duration_12 || res.duration_24){
+                switch (this.props.livetype){
+                    case '6' : this.makeup(res.duration_6);
+                        break;
+                    case '12' : this.makeup(res.duration_12);
+                        break;
+                    case '24' : this.makeup(res.duration_24);
+                        break;
+                }
+            }else{
+                this.makeup(res);
+            }
             this.createSocket(auctionId);
         }, error => {
             this.createSocket(auctionId);
         });
     }
-
     componentWillUnmount() {
         if (this.ws) {
             this.ws.stopConnect();
@@ -93,6 +105,7 @@ export default class LiveHomePage extends Component {
                         }
                     } else if (data.action === 'extend') {
                         this.setState({extendVisible : data.data.minutes, priceConfig: []});
+                        this.props.extend(data.data.minutes);
                         if (this.extendTimeout) {
                             clearTimeout(this.extendTimeout);
                         }
@@ -171,7 +184,7 @@ export default class LiveHomePage extends Component {
             let newest = histories[histories.length - 1];
             this.setState({
                 ranking: topRule && Number(newest.ranking) === 1 ? 2 : Number(newest.ranking),
-                    priceConfig: biddenArr.length > 1 ? []
+                    priceConfig: biddenArr.length > 0 ? []
                     .concat(lastBidden.lt_off_peak).concat(lastBidden.lt_peak)
                     .concat(lastBidden.hts_off_peak).concat(lastBidden.hts_peak)
                     .concat(lastBidden.htl_off_peak).concat(lastBidden.htl_peak)
@@ -191,30 +204,44 @@ export default class LiveHomePage extends Component {
             lt_peak:`0.${configs[1]}`, lt_off_peak: `0.${configs[0]}`
             , hts_peak:`0.${configs[3]}`,hts_off_peak:`0.${configs[2]}`
             ,htl_peak:`0.${configs[5]}`,htl_off_peak:`0.${configs[4]}`
-            ,eht_peak:`0.${configs[7]}`,eht_off_peak:`0.${configs[6]}`
+            ,eht_peak:`0.${configs[7]}`,eht_off_peak:`0.${configs[6]}`,
+            contract_duration:this.props.livetype
         })
     }
 
     goToFinish() {
         window.location.href=`/retailer/auctions/${this.props.auction.id}/finish`;
     }
-
+    check_has(type){
+        let arr = [];
+        if(this.props.auction.live_auction_contracts){
+            if(this.props.auction.live_auction_contracts.length>0){
+                arr = this.props.auction.live_auction_contracts.filter(item=>{
+                    return this.props.livetype === item.contract_duration
+                })
+            }
+        }
+        switch (type){
+            case 'has_lt':return this.props.auction.has_lt?this.props.auction.has_lt:arr[0].has_lt;
+            case 'has_hts':return this.props.auction.has_hts?this.props.auction.has_hts:arr[0].has_hts;
+            case 'has_htl':return this.props.auction.has_htl?this.props.auction.has_htl:arr[0].has_htl;
+            case 'has_eht':return this.props.auction.has_eht?this.props.auction.has_eht:arr[0].has_eht;
+        }
+    }
     render() {
-        const visibility_lt = !this.props.auction ? true: this.props.auction.has_lt;
-        const visibility_hts = !this.props.auction ? true: this.props.auction.has_hts;
-        const visibility_htl = !this.props.auction ? true: this.props.auction.has_htl;
-        const visibility_eht = !this.props.auction ? true: this.props.auction.has_eht;
+        const visibility_lt = this.check_has('has_lt');
+        const visibility_hts = this.check_has('has_hts');
+        const visibility_htl = this.check_has('has_htl');
+        const visibility_eht = this.check_has('has_eht');
         const showTopDescription = this.state.showTop2Rule && this.state.ranking === 2;
+        const constractArr = this.props.auction.live_auction_contracts?this.props.auction.live_auction_contracts.filter(item=>{
+            return this.props.livetype === item.contract_duration
+        }):{}
         return (
             <div>
-                <DuringCountDown auction={this.props.auction} countDownOver={this.goToFinish.bind(this)}>
-                    <div id="retailer_hold" className={this.state.extendVisible ? '' : 'live_hide'}>
-                        <b>Admin has extended auction duration by {this.state.extendVisible} min.</b>
-                    </div>
-                </DuringCountDown>
                 <div className="u-grid u-mt2">
                     <div className="col-sm-12 col-md-5 u-cell">
-                        <div className="col-sm-12 col-md-10 push-md-1 white_bg"><Description ranking={`${showTopDescription ? 'TOP ' : ''}${getNumBref(this.state.ranking, !showTopDescription)}`}/></div>
+                        <div className="col-sm-12 col-md-10 push-md-1 white_bg"><Description constractArr={constractArr} ranking={`${showTopDescription ? 'TOP ' : ''}${getNumBref(this.state.ranking, !showTopDescription)}`}/></div>
                     </div>
                     <div className="col-sm-12 col-md-7 u-cell">
                         <div className="col-sm-12 col-md-10 push-md-1"><Ranking data={this.state.chartDatas} yAxisFormatterRule={(this.state.showTop2Rule) ? {0 : ' ', 1 : ' ', 2 : 'Top 2', 'func': getNumBref} : {0 : ' ', 'func': getStandardNumBref}}/></div>

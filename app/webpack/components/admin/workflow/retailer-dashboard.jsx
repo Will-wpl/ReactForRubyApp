@@ -8,7 +8,7 @@ export class Adminretailerdashboard extends Component {
         super(props);
         this.state={
             showDetail:{},
-            step:[1,2,3,4,5]
+            step:[1,2,3,5]
         }
         this.auction = {};
         this.holdStatus = false;
@@ -51,7 +51,7 @@ export class Adminretailerdashboard extends Component {
                                 <th>Confidentiality Undertaking</th>
                                 <th>Tender Documents</th>
                                 <th>Deviations (if any)</th>
-                                <th>Submit Form of Tender</th>
+                                {/*<th>Submit Form of Tender</th>*/}
                                 <th>Contact Details</th>
                                 <th></th>
                                 </tr>
@@ -63,10 +63,16 @@ export class Adminretailerdashboard extends Component {
                                                     <td>{item.company_name}</td>
                                                         {
                                                             this.state.step.map((it,i)=>{
-                                                                let flows = [null,null,null,null,null];
+                                                                let flows = [null,null,null,null];
                                                                 item.detail.flows.map((s,k)=>{
-                                                                    flows[s-1]=s;
+                                                                    if(s==5){
+                                                                        flows[s-2]=s;
+                                                                    }else{
+                                                                        flows[s-1]=s;
+                                                                    }
+
                                                                 })
+                                                                console.log(flows);
                                                                 return <td key={i}>{
                                                                                 flows[i] ? 
                                                                                 (item.detail.current.current_node === it ? 

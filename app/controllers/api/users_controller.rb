@@ -11,9 +11,9 @@ class Api::UsersController < Api::BaseController
       total = users.count
     end
     headers = [
-      { name: 'Company Name', field_name: 'company_name' },
-      { name: 'License Number', field_name: 'company_license_number' },
-      { name: 'Status', field_name: 'approval_status' }
+        { name: 'Company Name', field_name: 'company_name' },
+        { name: 'License Number', field_name: 'company_license_number' },
+        { name: 'Status', field_name: 'approval_status' }
     ]
     actions = [{ url: '/admin/users/:id/manage', name: 'Manage', icon: 'manage' }]
     users = get_retailer_order_list(params, headers, users)
@@ -42,10 +42,11 @@ class Api::UsersController < Api::BaseController
       total = users.count
     end
     headers = get_buyer_headers(params)
-    actions = [{ url: '/admin/users/:id/manage', name: 'View', icon: 'view' }]
+    actions = [{ url: '/admin/users/:id/manage', name: 'Manage', icon: 'manage' }]
     data = get_data(params, headers, users)
     data = data.each do |user|
       user.consumer_type = user.consumer_type == '2' ? 'Company' : 'Individual'
+      user.approval_status = get_approval_status_string(user)
     end
     bodies = { data: data, total: total }
 
@@ -57,6 +58,38 @@ class Api::UsersController < Api::BaseController
     render json: user, status: 200
   end
 
+  protected
+
+  # Approval User
+  # Params:
+  #   user_id  -> Indicate a user's id which will be approved or rejected
+  #   approved -> Indicate this is approval operation if this param is not nil. Otherwise, it is reject operation.
+  #   comment -> Indicate a comment to this operation.
+  def approval_user
+    target_user = User.find(params[:user_id])
+    approval_status = params[:approved].blank? ? User::ApprovalStatusReject : User::ApprovalStatusApproved
+    comment = params[:comment]
+    unless target_user.approval_status == User::ApprovalStatusApproved
+      target_user.update(approval_status: approval_status, comment: comment)
+    end
+
+    if target_user.approval_status == User::ApprovalStatusApproved
+        if target_user.company_buyer_entities.any?{ |x| x.approval_status == CompanyBuyerEntity::ApprovalStatusPending}
+            target_user.update(comment: comment)
+        else
+            target_user.update(approval_status: approval_status, comment: comment)
+        end
+    end
+
+    if approval_status == User::ApprovalStatusApproved
+      UserMailer.approval_email(target_user).deliver_later
+    elsif approval_status == User::ApprovalStatusReject
+      UserMailer.reject_email(target_user).deliver_later
+    end
+    result_json = {user_base_info: target_user}
+    result_json
+  end
+
   private
 
   def get_buyer_headers(params)
@@ -64,7 +97,8 @@ class Api::UsersController < Api::BaseController
         { name: 'Company Name', field_name: 'company_name' },
         { name: 'Name', field_name: 'name', table_name: 'users' },
         { name: 'Email', field_name: 'email' },
-        { name: 'Consumer Type', field_name: 'consumer_type', is_sort: false }
+        { name: 'Consumer Type', field_name: 'consumer_type', is_sort: false },
+        { name: 'Status', field_name: 'approval_status' }
     ]
     unless params[:consumer_type].nil?
       headers.delete_if { |header| header[:field_name] == 'name' } if params[:consumer_type][0] == '2'
@@ -89,6 +123,8 @@ class Api::UsersController < Api::BaseController
       'Approved'
     elsif user.approval_status == '2'
       'Pending'
+    elsif user.approval_status == '3'
+      'Registering'
     else
       ''
     end
@@ -131,6 +167,6 @@ class Api::UsersController < Api::BaseController
     else
       get_default_order(params, headers, users)
     end
-      
+
   end
 end

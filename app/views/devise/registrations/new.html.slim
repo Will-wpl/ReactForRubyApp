@@ -8,7 +8,7 @@
         wrapper: :vertical_form,id:'registration_form', defaults: { label: false }) do |f|
         input name='type' type="hidden" value=params['type']
         input name='user[consumer_type]' type="hidden" value=params['type']
-        input name='user[approval_status]' type="hidden" value='2'
+        input name='user[approval_status]' type="hidden" value='3'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
             b *  
@@ -102,7 +102,7 @@
         wrapper: :vertical_form, defaults: { label: false }) do |f|
         input name='type' type="hidden" value=params['type']
         input name='user[consumer_type]' type="hidden" value=params['type']
-        input name='user[approval_status]' type="hidden" value='1'
+        input name='user[approval_status]' type="hidden" value='3'
         /= f.input :consumer_type, as: :hidden
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label 
@@ -173,7 +173,7 @@
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
           .lm--formItem-right.lm--formItem-control
-            = f.button :submit, 'Sign Up', class: 'lm--button--primary u-block', data: { disable_with: t('views.disable_with') }
+            = f.button :submit, 'Register', class: 'lm--button--primary u-block', data: { disable_with: t('views.disable_with') }
         .lm--formItem.u-text-center.link_hand
           | Have an Account? #{link_to 'Log In', new_user_session_path}
 - if params['type'] == '3'
@@ -191,7 +191,7 @@
       wrapper: :vertical_form, defaults: { label: false }) do |f|
         input name='type' type="hidden" value=params['type']
         input name='user[consumer_type]' type="hidden" value=params['type']
-        input name='user[approval_status]' type="hidden" value='1'
+        input name='user[approval_status]' type="hidden" value='3'
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label 
             b * 

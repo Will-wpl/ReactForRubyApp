@@ -83,12 +83,29 @@ export const getRetailerDeviationsList = (params) => {
 export const getRetailerFiles = (params) => {
     return get('/api/retailer/tenders/'+params+'/node5_retailer');
 }
-export const getLetterOfAward = (params)=> {
-    return get(`/api/retailer/auction_results/${params}/award`)
+export const getLetterOfAward = (params,duration)=> {
+    return get(`/api/retailer/auction_results/${params}/award?contract_duration=${duration}`)
 }
 export const retailerAcknowledge = (id) => {
     return create(`/api/retailer/consumptions/${id}/acknowledge`)
 }
 export const retailerAllAcknowledge = (data) => {
     return create(`/api/retailer/consumptions/acknowledge_all`,data)
+}
+
+export const getRetailerUserInfo =()=>{
+    return get('/api/retailer/registrations/');
+}
+
+export const saveRetailManageInfo = (params) => {  //save
+    return put('/api/retailer/registrations/'+params.user.id, params);
+}
+export const submitRetailManageInfo = (params) => {  //submit
+    return put('/api/retailer/registrations/'+params.user.id+'/sign_up', params);
+}
+export const validateIsExist=(params)=>{
+    return put('/api/retailer/registrations/'+params.user.id+'/validate', params);
+}
+export const getRetailerUserInfoByUserId=(id)=>{
+    return get(`/api/admin/registrations/${id}/retailer_info?user_id=${id}`);
 }

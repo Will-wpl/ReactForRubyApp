@@ -20,15 +20,24 @@ export class CreateNewRA extends Component {
             left_name:this.props.left_name,
             btn_type:"",text:"",id:"0",
             edit_btn:"lm--button lm--button--primary show",
-            edit_change:"lm--button lm--button--primary hide",
-            disabled:false,live_modal:"",live_modal_do:"",holdOrend:"",
+            edit_change:"lm--button lm--button--primary hide",contractArray:[],
+            disabled:false,live_modal:"",live_modal_do:"",holdOrend:"",checkArray:[],
+            contract_duration_6:false,contract_duration_12:false,contract_duration_24:false,
+            required:false,check_required:true,single_multiple:"1",allow_deviation:"1",
+            contract_6:'0',contract_12:'0',contract_24:'0',single_truely:false
         }
+
         this.auction = {};
+        this.newarray=[];
         this.auction_data = null;
+        this.hours = [];
         this.starttimeChange = this.starttimeChange.bind(this);
         this.endtimeChange = this.endtimeChange.bind(this);
         this.dateChange = this.dateChange.bind(this);
         this.timeChange = this.timeChange.bind(this);
+        for(let i=1; i<49; i++){
+            this.hours.push(i);
+        }
     }
     componentDidMount() {
         if(this.props.left_name){//eidt
@@ -59,7 +68,8 @@ export class CreateNewRA extends Component {
             if(type == "create"){
                 if(this.auction.publish_status == 1){
                     this.setState({
-                        disabled:true
+                        disabled:true,
+                        single_truely:true
                     })
                 }else{
                     this.setState({
@@ -67,7 +77,7 @@ export class CreateNewRA extends Component {
                     })
                 }          
             }else{
-                if(moment(this.auction.actual_begin_time) < moment()){
+                if(moment(this.auction.actual_begin_time) < moment() || this.auction.publish_status == 1){
                     this.setState({
                         disabled:true
                     })
@@ -84,8 +94,42 @@ export class CreateNewRA extends Component {
                         endDate:res.contract_period_end_date == null ? '' : moment(res.contract_period_end_date),
                         duration:res.duration== null ? '' : res.duration,
                         reserve_price:res.reserve_price== null ? '' : this.padZero(res.reserve_price,'4'),
-                        starting_price:res.starting_price== null ? '' : this.padZero(res.starting_price,'4')
+                        starting_price:res.starting_price== null ? '' : this.padZero(res.starting_price,'4'),
+                        allow_deviation:res.allow_deviation,
+                        single_multiple:res.buyer_type
                     });
+                    let arr = res.auction_contracts.map((item)=>{
+                        return item.contract_duration;
+                    })
+                    this.setState({checkArray:arr.sort(this.sortNumber),contractArray:res.auction_contracts});
+                    res.auction_contracts.map((item)=>{
+                        let index = item.contract_duration;
+                        switch (index){
+                            case "6": this.setState({contract_duration_6:true,contract_6:item.id});
+                            break
+                            case "12": this.setState({contract_duration_12:true,contract_12:item.id});
+                            break
+                            case "24": this.setState({contract_duration_24:true,contract_24:item.id});
+                            break
+                        }
+                        $("#starting_price_lt_peak_"+index).val(item.starting_price_lt_peak);
+                        $("#reserve_price_lt_peak_"+index).val(item.reserve_price_lt_peak);
+                        $("#starting_price_hts_peak_"+index).val(item.starting_price_hts_peak);
+                        $("#reserve_price_hts_peak_"+index).val(item.reserve_price_hts_peak);
+                        $("#starting_price_htl_peak_"+index).val(item.starting_price_htl_peak);
+                        $("#reserve_price_htl_peak_"+index).val(item.reserve_price_htl_peak);
+                        $("#starting_price_eht_peak_"+index).val(item.starting_price_eht_peak);
+                        $("#reserve_price_eht_peak_"+index).val(item.reserve_price_eht_peak);
+                        $("#starting_price_lt_off_peak_"+index).val(item.starting_price_lt_off_peak);
+                        $("#reserve_price_lt_off_peak_"+index).val(item.reserve_price_lt_off_peak);
+                        $("#starting_price_hts_off_peak_"+index).val(item.starting_price_hts_off_peak);
+                        $("#reserve_price_hts_off_peak_"+index).val(item.reserve_price_hts_off_peak);
+                        $("#starting_price_htl_off_peak_"+index).val(item.starting_price_htl_off_peak);
+                        $("#reserve_price_htl_off_peak_"+index).val(item.reserve_price_htl_off_peak);
+                        $("#starting_price_eht_off_peak_"+index).val(item.starting_price_eht_off_peak);
+                        $("#reserve_price_eht_off_peak_"+index).val(item.reserve_price_eht_off_peak);
+                    })
+                    $("#starting_price_time").val(res.starting_price_time);
                 }
                 $("#time_extension option[value='"+res.time_extension+"']").attr("selected",true);
                 $("#average_price option[value='"+res.average_price+"']").attr("selected",true);
@@ -194,6 +238,16 @@ export class CreateNewRA extends Component {
         }        
     }
     auctionCreate(type,e){
+        if(type === "next"){
+            this.setState({required:true});
+        }else{
+            this.setState({required:false});
+        }
+        if(this.state.checkArray.length>0){
+            this.setState({check_required:false});
+        }else{
+            this.setState({check_required:true});
+        }
         this.setState({
             btn_type:type
         })
@@ -215,23 +269,153 @@ export class CreateNewRA extends Component {
     }
     setAuction(){
         this.auction.id=this.state.id;
-        this.auction.contract_period_end_date= this.state.endDate.format().split("T")[0];
+        //this.auction.contract_period_end_date= this.state.endDate.format().split("T")[0];
         this.auction.contract_period_start_date= this.state.startDate.format().split("T")[0];
         this.auction.duration= this.refs.duration.value;
         this.auction.name= this.refs.name.value;
-        this.auction.reserve_price= this.refs.reserve_price.value;
+        //this.auction.reserve_price= this.refs.reserve_price.value;
         this.auction.start_datetime= this.state.start_datetime.format();
         this.auction.actual_begin_time= moment(this.state.start_datetime.toDate()).format();
         this.auction.actual_end_time = moment(this.state.start_datetime.toDate()).add(this.refs.duration.value,'minutes').format();
         this.auction.time_extension= this.refs.time_extension.value;
         this.auction.average_price= this.refs.average_price.value;
-        this.auction.starting_price= this.refs.starting_price.value;
+        //this.auction.starting_price= this.refs.starting_price.value;
         this.auction.retailer_mode= this.refs.retailer_mode.value;
+        this.auction.auction_contracts = this.somefield();
+        this.auction.buyer_type=this.state.single_multiple;
+        this.auction.allow_deviation=this.state.allow_deviation;
+        this.auction.starting_price_time=this.refs.starting_price_time.value;
         return this.auction;
     }
-
+    somefield(){
+        let somefield = [];
+        this.state.checkArray.map((item)=>{
+            let obj = {
+                starting_price_lt_peak:$("#starting_price_lt_peak_"+item).val(),
+                reserve_price_lt_peak:$("#reserve_price_lt_peak_"+item).val(),
+                starting_price_hts_peak:$("#starting_price_hts_peak_"+item).val(),
+                reserve_price_hts_peak:$("#reserve_price_hts_peak_"+item).val(),
+                starting_price_htl_peak:$("#starting_price_htl_peak_"+item).val(),
+                reserve_price_htl_peak:$("#reserve_price_htl_peak_"+item).val(),
+                starting_price_eht_peak:$("#starting_price_eht_peak_"+item).val(),
+                reserve_price_eht_peak:$("#reserve_price_eht_peak_"+item).val(),
+                starting_price_lt_off_peak:$("#starting_price_lt_off_peak_"+item).val(),
+                reserve_price_lt_off_peak:$("#reserve_price_lt_off_peak_"+item).val(),
+                starting_price_hts_off_peak:$("#starting_price_hts_off_peak_"+item).val(),
+                reserve_price_hts_off_peak:$("#reserve_price_hts_off_peak_"+item).val(),
+                starting_price_htl_off_peak:$("#starting_price_htl_off_peak_"+item).val(),
+                reserve_price_htl_off_peak:$("#reserve_price_htl_off_peak_"+item).val(),
+                starting_price_eht_off_peak:$("#starting_price_eht_off_peak_"+item).val(),
+                reserve_price_eht_off_peak:$("#reserve_price_eht_off_peak_"+item).val(),
+                contract_duration:item,
+                id:item==='6'?this.state.contract_6:(item==='12'?this.state.contract_12:this.state.contract_24)
+            }
+            somefield.push(obj);
+        })
+        return JSON.stringify(somefield);
+    }
     noPermitInput(event){
         event.preventDefault();
+    }
+    clearNoNum(obj){
+        obj.target.value = obj.target.value.replace(/[^\d.]/g,"");
+        obj.target.value = obj.target.value.replace(/\.{2,}/g,".");
+        obj.target.value = obj.target.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+        if(obj.target.value.indexOf(".")< 0 && obj.target.value !=""){
+            obj.target.value= parseFloat(obj.target.value);
+        }
+    }
+    mouthsHtml(mouth){
+        const html = <div key={mouth}>
+                <h3 className={"u-mt2 u-mb2"}>{mouth} months</h3>
+                <div className="lm--formItem lm--formItem--inline string optional">
+                    <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>LT</th>
+                            <th>HT (Small)</th>
+                            <th>HT (Large)</th>
+                            <th>EHT</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Peak</td>
+                            <td>
+                                Starting:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"starting_price_lt_peak_"+mouth} disabled={this.state.disabled} /><br/>
+                                Reserve:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"reserve_price_lt_peak_"+mouth} required={this.state.required} disabled={this.state.disabled} />
+                            </td>
+                            <td>
+                                Starting:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"starting_price_hts_peak_"+mouth} disabled={this.state.disabled} /><br/>
+                                Reserve:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"reserve_price_hts_peak_"+mouth} required={this.state.required} disabled={this.state.disabled} />
+                            </td>
+                            <td>
+                                Starting:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"starting_price_htl_peak_"+mouth} disabled={this.state.disabled} /><br/>
+                                Reserve:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"reserve_price_htl_peak_"+mouth} disabled={this.state.disabled} />
+                            </td>
+                            <td>
+                                Starting:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"starting_price_eht_peak_"+mouth} disabled={this.state.disabled} /><br/>
+                                Reserve:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"reserve_price_eht_peak_"+mouth} required={this.state.required} disabled={this.state.disabled} />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Off Peak</td>
+                            <td>
+                                Starting:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"starting_price_lt_off_peak_"+mouth} disabled={this.state.disabled} /><br/>
+                                Reserve:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"reserve_price_lt_off_peak_"+mouth} required={this.state.required} disabled={this.state.disabled} />
+                            </td>
+                            <td>
+                                Starting:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"starting_price_hts_off_peak_"+mouth} disabled={this.state.disabled} /><br/>
+                                Reserve:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"reserve_price_hts_off_peak_"+mouth} required={this.state.required} disabled={this.state.disabled} />
+                            </td>
+                            <td>
+                                Starting:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"starting_price_htl_off_peak_"+mouth} disabled={this.state.disabled} /><br/>
+                                Reserve:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"reserve_price_htl_off_peak_"+mouth} required={this.state.required} disabled={this.state.disabled} />
+                            </td>
+                            <td>
+                                Starting:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"starting_price_eht_off_peak_"+mouth} disabled={this.state.disabled} /><br/>
+                                Reserve:<input type="text" maxLength="6" onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891."  id={"reserve_price_eht_off_peak_"+mouth} required={this.state.required} disabled={this.state.disabled} />
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+        return html;
+    }
+    sortNumber(a,b){
+        return a - b;
+    }
+    contractChange(type){
+        let arr = this.state.checkArray;
+        switch (type.target.value){
+            case "6": this.setState({contract_duration_6:type.target.checked});
+                break
+            case "12": this.setState({contract_duration_12:type.target.checked});
+                break
+            case "24": this.setState({contract_duration_24:type.target.checked});
+                break
+        }
+        if(type.target.checked){
+            let turly = arr.find(item=>{
+                return item === type.target.value;
+            })
+            if(!turly){
+                arr.push(type.target.value);
+            }
+            arr.sort(this.sortNumber);
+            console.log(arr);
+            this.setState({checkArray:arr});
+            //this.doGetData("create");
+        }else{
+            let arr = this.state.checkArray.filter(item=>{
+                return item != type.target.value
+            })
+            arr.sort(this.sortNumber);
+            console.log(arr);
+            this.setState({checkArray:arr});
+        }
     }
     checkSubmitTruly(){
         let data = {};
@@ -245,7 +429,11 @@ export class CreateNewRA extends Component {
             }
         }
         return data;
-    }  
+    }
+    single_multiple(type,e){
+        let val = e.target.value;
+        type=="single_multiple"?this.setState({single_multiple:val}):this.setState({allow_deviation:val})
+    }
     checkSuccess(event,obj){
         event.preventDefault();
         let timeBar;
@@ -376,23 +564,67 @@ export class CreateNewRA extends Component {
                         </label>
                     </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
-                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Reverse Auction Contract Period :</span>
+                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Contact Start Date :</span>
                         <label className="col">
                             {
-                                this.state.start_datetime === '' ? <DatePicker disabled={this.state.disabled} minDate={moment()} shouldCloseOnSelect={true} onKeyDown={this.noPermitInput.bind(this)} required aria-required="true" ref="contract_period_start_date" name="contract_period_start_date" className="date_ico" dateFormat="DD-MM-YYYY" selected={this.state.startDate} selectsStart startDate={this.state.startDate} endDate={this.state.endDate} onChange = {this.starttimeChange}/> 
+                                this.state.start_datetime === '' ? <DatePicker disabled={this.state.disabled} minDate={moment()} shouldCloseOnSelect={true} onKeyDown={this.noPermitInput.bind(this)} required aria-required="true" ref="contract_period_start_date" name="contract_period_start_date" className="date_ico" dateFormat="DD-MM-YYYY" selected={this.state.startDate} selectsStart startDate={this.state.startDate} endDate={this.state.endDate} onChange = {this.starttimeChange}/>
                                 :<DatePicker disabled={this.state.disabled} minDate={this.state.start_datetime} shouldCloseOnSelect={true} onKeyDown={this.noPermitInput.bind(this)} required aria-required="true" ref="contract_period_start_date" name="contract_period_start_date" className="date_ico" dateFormat="DD-MM-YYYY" selected={this.state.startDate} selectsStart startDate={this.state.startDate} endDate={this.state.endDate} onChange = {this.starttimeChange}/>
                             }
                         </label>
-                        <label className="col"><b>to</b></label>
-                        <label className="col">
-                            {
-                                this.state.start_datetime === '' ? <DatePicker disabled={this.state.disabled} minDate={moment()} shouldCloseOnSelect={true} onKeyDown={this.noPermitInput.bind(this)} required aria-required="true" ref="contract_period_end_date" name="contract_period_end_date" className="date_ico" dateFormat="DD-MM-YYYY" selected={this.state.endDate} selectsEnd startDate={this.state.startDate} endDate={this.state.endDate}  onChange = {this.endtimeChange}/>
-                                :<DatePicker disabled={this.state.disabled} minDate={this.state.start_datetime} shouldCloseOnSelect={true} onKeyDown={this.noPermitInput.bind(this)} required aria-required="true" ref="contract_period_end_date" name="contract_period_end_date" className="date_ico" dateFormat="DD-MM-YYYY" selected={this.state.endDate} selectsEnd startDate={this.state.startDate} endDate={this.state.endDate}  onChange = {this.endtimeChange}/>
-                            }
-                            
+                        {/*<label className="col"><b>to</b></label>*/}
+                        {/*<label className="col">*/}
+                            {/*{*/}
+                                {/*this.state.start_datetime === '' ? <DatePicker disabled={this.state.disabled} minDate={moment()} shouldCloseOnSelect={true} onKeyDown={this.noPermitInput.bind(this)} required aria-required="true" ref="contract_period_end_date" name="contract_period_end_date" className="date_ico" dateFormat="DD-MM-YYYY" selected={this.state.endDate} selectsEnd startDate={this.state.startDate} endDate={this.state.endDate}  onChange = {this.endtimeChange}/>*/}
+                                {/*:<DatePicker disabled={this.state.disabled} minDate={this.state.start_datetime} shouldCloseOnSelect={true} onKeyDown={this.noPermitInput.bind(this)} required aria-required="true" ref="contract_period_end_date" name="contract_period_end_date" className="date_ico" dateFormat="DD-MM-YYYY" selected={this.state.endDate} selectsEnd startDate={this.state.startDate} endDate={this.state.endDate}  onChange = {this.endtimeChange}/>*/}
+                            {/*}*/}
+                            {/**/}
+                        {/*</label>*/}
+                    </dd>
+                    <dd className="lm--formItem lm--formItem--inline string optional">
+                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Single / Multiple :</span>
+                        <label className="lm--formItem-right lm--formItem-control">
+                            <select ref="single_multiple" id="single_multiple" onChange={this.single_multiple.bind(this,'single_multiple')} value={this.state.single_multiple} disabled={this.state.single_truely?true:this.state.disabled}>
+                                <option value="0">Single</option>
+                                <option value="1">Multiple</option>
+                            </select>
                         </label>
                     </dd>
-                    <dd></dd>
+                    {this.state.single_multiple=="0"?
+                    <dd className="lm--formItem lm--formItem--inline string optional">
+                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Allow Deviations :</span>
+                        <label className="lm--formItem-right lm--formItem-control">
+                            <select ref="allow_deviation" id="allow_deviation" onChange={this.single_multiple.bind(this,'allow_deviation')} value={this.state.allow_deviation} disabled={this.state.single_truely?true:this.state.disabled}>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </label>
+                    </dd>:''}
+                    <dd className="lm--formItem lm--formItem--inline string optional">
+                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Contract Duration:</span>
+                        <div className="lm--formItem-right lm--formItem-label lm--formItem-control">
+                            <label className={"checkbox_div"}><input className={"checkbox"} type="checkbox" required={this.state.check_required} ref="contract_duration_6" disabled={this.state.disabled?true:(this.auction.buyer_notify?true:false)} name="contract_duration" value={"6"} id={"contract_duration_6"} checked={this.state.contract_duration_6} onChange={this.contractChange.bind(this)}  /> 6 Months</label>
+                            <label className={"checkbox_div"}><input className={"checkbox"} type="checkbox" required={this.state.check_required} ref="contract_duration_12" disabled={this.state.disabled?true:(this.auction.buyer_notify?true:false)} name="contract_duration" value={"12"} id={"contract_duration_12"} checked={this.state.contract_duration_12} onChange={this.contractChange.bind(this)}  /> 12 Months</label>
+                            <label className={"checkbox_div"}><input className={"checkbox"} type="checkbox" required={this.state.check_required} ref="contract_duration_24" disabled={this.state.disabled?true:(this.auction.buyer_notify?true:false)} name="contract_duration" value={"24"} id={"contract_duration_24"} checked={this.state.contract_duration_24} onChange={this.contractChange.bind(this)}  /> 24 Months</label>
+                        </div>
+                    </dd>
+                    {this.state.contractArray.length>0?
+                        (<div>
+                            <dd className="lm--formItem lm--formItem--inline string optional">
+                                <span className="lm--formItem-left lm--formItem-label string optional">Contact End Date</span>
+                                <div className="lm--formItem-right lm--formItem-control">
+                                    {this.state.contractArray.map((item,index)=>{
+                                        return <label key={index} className={'lm--formItem-label lm--formItem-control'}>Buyer on {item.contract_duration} months [{item.contract_period_end_date}]</label>
+                                    })}
+                                </div>
+                            </dd>
+                            {/*{this.state.contractArray.map((item,index)=>{*/}
+                                {/*return <dd key={index} className="lm--formItem lm--formItem--inline string optional">*/}
+                                         {/*<span className="lm--formItem-left lm--formItem-label string optional">Buyer on {item.contract_duration} mouths [{item.contract_period_end_date}]:</span>*/}
+                                         {/*<label className="lm--formItem-right lm--formItem-label lm--formItem-control"><abbr>5</abbr><a href="#" className="lm--button lm--button--primary">Details</a></label>*/}
+                                       {/*</dd>*/}
+                                {/*})}*/}
+                        </div>):''
+                    }
                     <dd className="lm--formItem lm--formItem--inline string optional">
                         <span className="lm--formItem-left lm--formItem-label string optional">Reverse Auction Parameters</span>
                     </dd>
@@ -403,23 +635,23 @@ export class CreateNewRA extends Component {
                             <abbr ref="ra_duration_error" className="col"></abbr>
                         </label>
                     </dd>
-                    <dd className="lm--formItem lm--formItem--inline string optional">
-                        <span className="lm--formItem-left lm--formItem-label string optional">
-                            <abbr title="required">*</abbr>Starting Price ($/kWh):</span>
-                            <label className="lm--formItem-right lm--formItem-control">
-                                <input type="test" ref="starting_price" onChange={this.startPrice.bind(this)} value={this.state.starting_price} disabled={this.state.disabled} name="starting_price" maxLength="50" required aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891/kWh." ></input>
-                                <abbr ref="ra_duration_error" className="col"></abbr>
-                            </label>
-                    </dd>
-                    <dd className="lm--formItem lm--formItem--inline string optional">
-                        <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Reserve Price ($/kWh):</span>
-                        <label className="lm--formItem-right lm--formItem-control" id="reserve_price">
-                            <input type="test" ref="reserve_price" onChange={this.doPrice.bind(this)} value={this.state.reserve_price} disabled={this.state.disabled} name="reserve_price" maxLength="50" required aria-required="true" pattern="^\d+(\.\d{4})$" title="Reserve Price must be a number with 4 decimal places, e.g. $0.0891/kWh." ></input>
-                            <abbr ref="ra_duration_error" className="col"></abbr>
-                            <div className="required_error">Reserve price must be smaller than or equal to starting price.</div>
-                        </label>
+                    {/*<dd className="lm--formItem lm--formItem--inline string optional">*/}
+                        {/*<span className="lm--formItem-left lm--formItem-label string optional">*/}
+                            {/*<abbr title="required">*</abbr>Starting Price ($/kWh):</span>*/}
+                            {/*<label className="lm--formItem-right lm--formItem-control">*/}
+                                {/*<input type="test" ref="starting_price" onChange={this.startPrice.bind(this)} value={this.state.starting_price} disabled={this.state.disabled} name="starting_price" maxLength="50" required aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891/kWh." ></input>*/}
+                                {/*<abbr ref="ra_duration_error" className="col"></abbr>*/}
+                            {/*</label>*/}
+                    {/*</dd>*/}
+                    {/*<dd className="lm--formItem lm--formItem--inline string optional">*/}
+                        {/*<span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Reserve Price ($/kWh):</span>*/}
+                        {/*<label className="lm--formItem-right lm--formItem-control" id="reserve_price">*/}
+                            {/*<input type="test" ref="reserve_price" onChange={this.doPrice.bind(this)} value={this.state.reserve_price} disabled={this.state.disabled} name="reserve_price" maxLength="50" required aria-required="true" pattern="^\d+(\.\d{4})$" title="Reserve Price must be a number with 4 decimal places, e.g. $0.0891/kWh." ></input>*/}
+                            {/*<abbr ref="ra_duration_error" className="col"></abbr>*/}
+                            {/*<div className="required_error">Reserve price must be smaller than or equal to starting price.</div>*/}
+                        {/*</label>*/}
 
-                    </dd>
+                    {/*</dd>*/}
                     <dd className="lm--formItem lm--formItem--inline string optional">
                         <span className="lm--formItem-left lm--formItem-label string optional">
                             <abbr title="required">*</abbr>Time Extension :</span>
@@ -449,6 +681,21 @@ export class CreateNewRA extends Component {
                                 </select>
                             </label>
                     </dd>
+                    <dd className="lm--formItem lm--formItem--inline string optional">
+                        <span className="lm--formItem-left lm--formItem-label string optional">
+                            <abbr title="required">*</abbr>Time to Display Starting Price:</span>
+                        <label className="lm--formItem-right lm--formItem-control">
+                            <select ref="starting_price_time" id="starting_price_time" disabled={this.state.disabled}>
+                                {this.hours.map((item)=>{
+                                    return <option key={item} value={item}>{item}</option>
+                                })}
+                            </select>
+                            <div>hours before auction start time</div>
+                        </label>
+                    </dd>
+                    {this.state.checkArray.map((item)=>{
+                        return this.mouthsHtml(item);
+                    })}
                 </dl>
                 {btn_html}
                 </form>

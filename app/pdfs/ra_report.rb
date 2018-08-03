@@ -8,6 +8,7 @@ require 'ra_report/pdf_title'
 require 'ra_report/pdf_total_info'
 
 
+
 class RAReport < Pdf
   attr_reader :param, :background_img, :step_number, :base_x, :pdf_filename
 
@@ -32,10 +33,10 @@ class RAReport < Pdf
     color, color2 = param[:color], param[:color2]
     chart_color = PdfUtils.get_chart_color({:hash => hash, :hash2 => hash2, :uid => uid, :color => color}).merge PdfUtils.get_chart_color({:hash => hash, :hash2 => hash2, :uid => uid2, :color => color2})
     auction, auction_result = param[:auction], param[:auction_result]
-    price_table = get_price_table_data(auction, auction_result)
+    price_table = get_price_table_data(param)
     Prawn::Document.generate(Rails.root.join(pdf_filename), :background => background_img, :page_size => "B4", :page_layout => :landscape) do |pdf|
       pdf.define_grid(:columns => 30, :rows => 23, :gutter => 2)
-      PdfTitle.new({:pdf => pdf, :achieved => param[:achieved], :auction => param[:auction], :zone_time => get_pdf_datetime_zone}).title
+      pdf_draw_title({:pdf => pdf, :achieved => param[:achieved], :auction => param[:auction], :zone_time => get_pdf_datetime_zone})
       chart_param = get_price_chart_data({:pdf => pdf, :start_datetime => start_datetime, :end_datetime => end_datetime, :start_time_i => start_time_i, :end_time_i => end_time_i, :min_price => min_price, :max_price => max_price,
                                           :hash => hash, :user_company_name_hash => user_company_name_hash, :chart_color => chart_color, :uid => uid})
       PdfPriceChart.new(chart_param).chart
@@ -44,15 +45,26 @@ class RAReport < Pdf
       PdfRankChart.new(ranking_param).chart
       unless param[:auction_result].nil?
         pdf.fill_color "ffffff"
-        pdf.grid([2, 19], [22, 29]).bounding_box do
-          pdf.move_down 10; PdfLowestDidderInfo.new({:pdf => pdf, :auction_result => auction_result}).info
-          pdf.move_down 15; PdfPriceTable.new({:pdf => pdf, :price_table => price_table}).table
-          pdf.move_down 15; PdfTotalInfo.new({:pdf => pdf, :auction => auction, :auction_result => auction_result}).info
-          pdf.move_down 15; PdfRankingTable.new({:pdf => pdf, :histories_achieved => param[:histories_achieved]}).table
+        pdf.grid([0, 19], [22, 29]).bounding_box do
+          pdf_draw_right_info(param.merge({:pdf => pdf, :auction_contract => param[:auction_contract], :auction_result => auction_result, :price_table => price_table,
+                               :auction => auction,:histories_achieved => param[:histories_achieved]}))
+
         end
       end
     end
     return pdf_filename, auction.published_gid.to_s + '_ADMIN_REPORT.pdf'
+  end
+
+  def pdf_draw_title(param)
+    PdfTitle.new(param).title
+  end
+
+  def pdf_draw_right_info(param)
+    pdf = param[:pdf]
+    pdf.move_down 60; PdfLowestDidderInfo.new({:pdf => pdf, :auction_result => param[:auction_result]}).info
+    pdf.move_down 15; PdfPriceTable.new({:pdf => pdf, :price_table => param[:price_table]}).table
+    pdf.move_down 15; PdfTotalInfo.new({:pdf => pdf, :auction => param[:auction], :auction_result => param[:auction_result]}).info
+    pdf.move_down 15; PdfRankingTable.new({:pdf => pdf, :histories_achieved => param[:histories_achieved]}).table
   end
 
   private

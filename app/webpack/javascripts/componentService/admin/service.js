@@ -48,7 +48,7 @@ export const sendMail = (params) => {
 }
 
 export const getBuyerDetails = (params) => {
-    return get('/api/admin/consumptions?id='+params.id+'&consumer_type='+params.type);
+    return get('/api/'+params.role+'/consumptions?id='+params.id+'&consumer_type='+params.type+'&contract_duration='+params.contract_duration);
 }
 
 export const getAdminBuyerListDetails = (params) => {
@@ -58,6 +58,11 @@ export const getAdminBuyerListDetails = (params) => {
 export const getBuyerDetailsConsumptions = (params) => {
     return get('/api/admin/consumption_details?consumption_id='+params.id);
 }
+
+export const approveConsumptions=(params)=>{
+    return put('/api/admin/consumptions/approval_consumption',params)
+}
+
 
 export const adminShowSelects = () => {
     return get('/api/admin/auctions/'+sessionStorage.auction_id+'/selects');
@@ -120,10 +125,41 @@ export const createWebsocket = (auction, methods = {}) => {
     return new Ws(window.location.port, auction);
 }
 
-export const getLetterOfAward = (params) => {
-    return get(`/api/admin/auction_results/${params}/award`)
+export const getLetterOfAward = (params,contract_duration) => {
+    return get(`/api/admin/auction_results/${params}/award?contract_duration=${contract_duration}`);
 }
 
 export const doPdf = (params) => {
     return get(`/api/admin/auctions/${params.id}/pdf?start_time=${params.start_time}&end_time=${params.end_time}&start_time2=${params.start_time2}&end_time2=${params.end_time2}&start_price=${params.start_price}&end_price=${params.end_price}`)
+}
+
+export const  getContractAttachmentsByType = (params) => {
+    // return get(`/api/admin/auction_attachments/`, params)
+    return get(`/api/admin/user_attachments/?file_type=${params}`)
+
+
+}
+
+export  const  deleteContractAttachmentById = (param) => {
+    return Ddelete('/api/admin/user_attachments/' + param);
+}
+export  const  getEmailList = () => {
+    return get('/api/admin/email_templates/');
+}
+export  const  getEmailListItem = (id) => {
+    return get('/api/admin/email_templates/'+id);
+}
+export  const  getEmailItemUpdate = (param) => {
+    return put('/api/admin/email_templates/'+param.id,{subject:param.subject, body:param.body});
+}
+export  const  getEmailFile = (type) => {
+    return get('/api/admin/user_attachments?file_type='+type);
+}
+
+export const approveBuyerUser=(params)=>{
+    return put('/api/admin/users/approval_buyer',params)
+}
+
+export const approveRetailerUser=(params)=>{
+    return put('/api/admin/users/approval_retailer',params)
 }

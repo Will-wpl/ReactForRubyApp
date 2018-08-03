@@ -22,7 +22,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
   let! (:arrangement_pua) { create(:arrangement, user: retailers[0], auction: published_upcoming_auction, action_status: '1') }
   let!(:r1_his_init) { create(:auction_history, bid_time: Date.current, user: retailers[0], auction: published_upcoming_auction) }
   let!(:published_living_auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
-  let!(:logs) { create_list(:auction_event, 50, auction: auction, user: retailers[0]) }
+  let!(:logs) { create_list(:auction_event, 50, auction: auction, user: retailers[0] ,auction_do: 'confirm' ) }
 
   base_url = 'api/admin/auctions'
 
@@ -185,6 +185,49 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       end
     end
 
+    describe 'POST new confirm' do
+      current_time = Time.current
+      bid_time = Time.current + 10
+      let! (:auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
+      let!(:six_month_contract) { create(:auction_contract, :six_month, :total, auction: auction ) }
+      let!(:retailer1) { create(:user, :with_retailer) }
+      let!(:retailer2) { create(:user, :with_retailer) }
+      let!(:retailer3) { create(:user, :with_retailer) }
+      let!(:r1_his_init) { create(:auction_history, bid_time: current_time, user: retailer1, auction: auction, actual_bid_time: current_time, contract_duration: '6') }
+      let!(:r2_his_init) { create(:auction_history, bid_time: current_time, user: retailer2, auction: auction, actual_bid_time: current_time, contract_duration: '6') }
+      let!(:r3_his_init) { create(:auction_history, bid_time: current_time, user: retailer3, auction: auction, actual_bid_time: current_time, contract_duration: '6') }
+      let!(:r1_his_bid) { create(:auction_history, :set_bid, bid_time: bid_time, user: retailer1, auction: auction, actual_bid_time: bid_time, contract_duration: '6') }
+      let!(:r2_his_bid) { create(:auction_history, :not_bid, bid_time: bid_time, user: retailer2, auction: auction, actual_bid_time: current_time, contract_duration: '6') }
+      let!(:r3_his_bid) { create(:auction_history, :not_bid, bid_time: bid_time, user: retailer3, auction: auction, actual_bid_time: current_time, contract_duration: '6') }
+
+      def do_request_void
+        post :confirm, params: { id: auction.id, user_id: retailer1, status: 'void', contract_duration: '6'  }
+      end
+
+      def do_request_winner
+        post :confirm, params: { id: auction.id, user_id: retailer1, status: 'win', contract_duration: '6' }
+      end
+
+      context 'confirm void' do
+        before { do_request_void }
+        it 'success' do
+          hash_body = JSON.parse(response.body)
+          expect(hash_body['status']).to eq('void')
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
+      context 'confirm winner' do
+        before { do_request_winner }
+        it 'success' do
+          hash_body = JSON.parse(response.body)
+          expect(hash_body['status']).to eq('win')
+          expect(hash_body['lowest_average_price'].to_s).to eq(r1_his_bid.average_price.to_s)
+          expect(response).to have_http_status(:ok)
+        end
+      end
+    end
+
     describe 'PUT update' do
       def do_request(id, auction)
         auction_object = {
@@ -239,6 +282,164 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
           expect(hash_body['name']).to eq('Hello world')
           expect(hash_body['average_price']).to eq('2')
           expect(response).to have_http_status(:ok)
+          histories = RedisHelper.get_current_sorted_histories(published_upcoming_auction.id)
+          expect(histories[0][:id]).to eq(r1_his_init.id)
+
+        end
+      end
+    end
+
+    describe 'PUT new update' do
+      def do_request(id, auction)
+        put :update, params: { id: id, auction: auction }
+      end
+
+      context 'Has create an auction' do
+        before do
+          common_contract = {
+              starting_price_lt_peak: 0.1888,
+              starting_price_lt_off_peak: 0.1888,
+              starting_price_hts_peak: 0.1888,
+              starting_price_hts_off_peak: 0.1888,
+              starting_price_htl_peak: 0.1888,
+              starting_price_htl_off_peak: 0.1888,
+              starting_price_eht_peak: 0.1888,
+              starting_price_eht_off_peak: 0.1888,
+              reserve_price_lt_peak: 0.0988,
+              reserve_price_lt_off_peak: 0.0988,
+              reserve_price_hts_peak: 0.0988,
+              reserve_price_hts_off_peak: 0.0988,
+              reserve_price_htl_peak: 0.0988,
+              reserve_price_htl_off_peak: 0.0988,
+              reserve_price_eht_peak: 0.0988,
+              reserve_price_eht_off_peak: 0.0988}
+          contract_6 = common_contract
+          contract_6[:contract_duration] = '6'
+          contract_12 = common_contract
+          contract_12[:contract_duration] = '12'
+          contract_24 = common_contract
+          contract_24[:contract_duration] = '24'
+          contracts = [contract_6 , contract_12, contract_24]
+          auction_object = {
+              name: 'Hello world',
+              start_datetime: auction.start_datetime,
+              contract_period_start_date: auction.contract_period_start_date,
+              duration: auction.duration,
+              actual_begin_time: auction.actual_begin_time,
+              actual_end_time: auction.actual_end_time,
+              publish_status: auction.publish_status,
+              hold_status: auction.hold_status,
+              time_extension: '0',
+              average_price: '2',
+              retailer_mode: '3',
+              starting_price_time: 2,
+              buyer_type: '0',
+              allow_deviation: '1',
+              auction_contracts: contracts.to_json
+          }
+
+
+          do_request(0, auction_object)
+        end
+        it 'success' do
+          hash_body = JSON.parse(response.body)
+          expect(hash_body['id']).not_to eq(auction.id)
+          expect(hash_body['name']).to eq('Hello world')
+          expect(hash_body['average_price']).to eq('2')
+          expect(hash_body['auction_contracts'].count).to eq(3)
+          expect(response).to have_http_status(201)
+        end
+      end
+
+      context 'has updated an auction' do
+        let! (:auction_new) { create(:auction, :for_next_month, :upcoming) }
+        let!(:six_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '6') }
+        let!(:twelve_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '12') }
+        let!(:twenty_four_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '24') }
+        before do
+          contract_6 = six_month_contract
+          contracts = [contract_6]
+          auction_object = {
+              id: auction_new.id,
+              name: 'Hello world',
+              start_datetime: auction_new.start_datetime,
+              contract_period_start_date: auction_new.contract_period_start_date,
+              duration: auction_new.duration,
+              actual_begin_time: auction_new.actual_begin_time,
+              actual_end_time: auction_new.actual_end_time,
+              publish_status: auction_new.publish_status,
+              hold_status: auction_new.hold_status,
+              time_extension: '0',
+              average_price: '2',
+              retailer_mode: '3',
+              starting_price_time: 2,
+              buyer_type: '0',
+              allow_deviation: '1',
+              auction_contracts: contracts.to_json
+          }
+          do_request(auction_new.id, auction_object)
+        end
+
+        it 'success' do
+          hash_body = JSON.parse(response.body)
+          expect(hash_body['id']).to eq(auction_new.id)
+          expect(hash_body['name']).to eq('Hello world')
+          expect(hash_body['average_price']).to eq('2')
+          expect(hash_body['auction_contracts'].count).to eq(1)
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
+      context 'has updated same data an auction' do
+        let! (:auction_new) { create(:auction, :for_next_month, :upcoming) }
+        let!(:six_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '6') }
+        let!(:twelve_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '12') }
+        let!(:twenty_four_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '24') }
+        before do
+
+          contracts = [six_month_contract, twelve_month_contract, twenty_four_month_contract]
+          auction_object = auction_new.attributes.dup
+          auction_object[:auction_contracts] = contracts.to_json
+          do_request(auction_new.id, auction_object)
+        end
+
+        it 'success' do
+          hash_body = JSON.parse(response.body)
+          expect(hash_body['id']).to eq(auction_new.id)
+          expect(hash_body['name']).to eq(auction_new.name)
+          expect(hash_body['auction_contracts'].count).to eq(3)
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
+      context 'has updated an auction, has retailers' do
+        let!(:published_upcoming_auction_new) { create(:auction, :for_next_month, :upcoming, :published) }
+        let! (:arrangement_pua_new) { create(:arrangement, user: retailers[0], auction: published_upcoming_auction_new, action_status: '1') }
+        let!(:r1_his_init_1) { create(:auction_history, bid_time: Date.current, user: retailers[0], auction: published_upcoming_auction_new, contract_duration: '6') }
+        let!(:r1_his_init_2) { create(:auction_history, bid_time: Date.current, user: retailers[0], auction: published_upcoming_auction_new, contract_duration: '12') }
+        let!(:r1_his_init_3) { create(:auction_history, bid_time: Date.current, user: retailers[0], auction: published_upcoming_auction_new, contract_duration: '24') }
+        let!(:six_month_contract) { create(:auction_contract, :six_month, :total, auction: published_upcoming_auction_new ) }
+        let!(:twelve_month_contract) { create(:auction_contract, :twelve_month, :total, auction: published_upcoming_auction_new ) }
+        let!(:twenty_four_month_contract) { create(:auction_contract, :twenty_four_month, :total, auction: published_upcoming_auction_new) }
+        before do
+          contracts = [six_month_contract, twelve_month_contract, twenty_four_month_contract]
+          published_upcoming_auction = published_upcoming_auction_new.attributes.dup
+          published_upcoming_auction[:auction_contracts] = contracts.to_json
+          do_request(published_upcoming_auction_new.id, published_upcoming_auction)
+        end
+        it 'success' do
+          hash_body = JSON.parse(response.body)
+          expect(hash_body['id']).to eq(published_upcoming_auction_new.id)
+          expect(hash_body['name']).to eq(published_upcoming_auction_new.name)
+          expect(response).to have_http_status(:ok)
+
+          histories_j6 = RedisHelper.get_current_sorted_histories_duration(published_upcoming_auction_new.id, 6)
+          expect(histories_j6[0][:id]).to eq(r1_his_init_1.id)
+          histories_j12 = RedisHelper.get_current_sorted_histories_duration(published_upcoming_auction_new.id, 12)
+          expect(histories_j12[0][:id]).to eq(r1_his_init_2.id)
+          histories_j24 = RedisHelper.get_current_sorted_histories_duration(published_upcoming_auction_new.id, 24)
+          expect(histories_j24[0][:id]).to eq(r1_his_init_3.id)
+
         end
       end
     end
@@ -318,10 +519,6 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
           expect(hash['headers'].size).to eq(4)
           expect(hash['bodies']['total']).to eq(2)
           expect(hash['bodies']['data'].size).to eq(2)
-          # hash['bodies']['data'].each do |auction|
-          #   if auction.publish_status == '0'
-          # end
-          # expect(hash['bodies']['data']).to eq(auction.name)
         end
       end
 
@@ -729,7 +926,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       end
     end
 
-    describe 'GET buyer_dashbaord' do
+    describe 'GET log' do
 
       context 'Base Search' do
         def do_request
@@ -776,7 +973,25 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       end
     end
 
+    describe 'GET new log' do
+      let!(:logs) { create_list(:auction_event, 3, auction: auction, user: retailers[0] ,auction_do: 'update' ) }
+      let!(:logs_bid_6) { create_list(:auction_event, 10, auction: auction, user: retailers[0] ,auction_do: 'set bid 6 months' ) }
+      let!(:logs_bid) { create_list(:auction_event, 10, auction: auction, user: retailers[0] ,auction_do: 'set bid' ) }
 
+      context 'Conditions Pager Search' do
+        def do_request
+          get :log, params: {id: auction.id, company_name: [retailers[0].company_name, 'like', 'users'], page_size: '20', page_index: '1', contract_duration: '6' }
+        end
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash = JSON.parse(response.body)
+          expect(hash['headers'].size).to eq(4)
+          expect(hash['bodies']['total']).to eq(13)
+          expect(hash['bodies']['data'].size).to eq(13)
+        end
+      end
+    end
   end
 
   context 'retailer user' do

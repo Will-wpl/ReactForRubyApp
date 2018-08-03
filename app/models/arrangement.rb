@@ -1,5 +1,9 @@
 class Arrangement < ApplicationRecord
 
+  # Important
+  # Discarded fields: lt_peak lt_off_peak hts_peak hts_off_peak htl_peak htl_off_peak eht_peak eht_off_peak
+
+
   # Field description:
   # accept_status
   # "0":"Reject", "1":"Accept", "2":"Pending"

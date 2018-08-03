@@ -1,6 +1,14 @@
 class Auction < ApplicationRecord
 
-  PublishStatusPublished = '1'.freeze
+  # Important
+  # Discarded fields: lt_peak lt_off_peak hts_peak hts_off_peak htl_peak htl_off_peak eht_peak eht_off_peak
+
+
+PublishStatusPublished = '1'.freeze
+SingleBuyerType = '0'.freeze
+MultipleBuyerType = '1'.freeze
+AllowDeviation = '1'.freeze
+NotAllowDeviation = '0'.freeze
   # Extends
 
   # Includes
@@ -13,6 +21,7 @@ class Auction < ApplicationRecord
   has_many :auction_attachments, dependent: :destroy
   has_many :consumptions, dependent: :destroy
   has_many :users, through: :consumptions
+  has_many :auction_contracts, dependent: :destroy
   has_one :auction_result, dependent: :destroy
   # accepts_nested_attributes
 
@@ -33,7 +42,7 @@ class Auction < ApplicationRecord
   # Methods (class methods before instance methods)
 
   def self.set_total_volume(*values)
-    values.inject(BigDecimal.new('0')) { |sum, n| sum + BigDecimal.new(n) }
+    values.inject(BigDecimal.new('0')) { |sum, n| sum + BigDecimal.new(n.nil? ? 0 : n) }
   end
 
   def self.get_days(start_date, end_date)
@@ -42,6 +51,27 @@ class Auction < ApplicationRecord
   end
 
   def self.set_c_value(c, days)
-    BigDecimal.new(c) * 12 / 365 * days
+    BigDecimal.new(c.nil? ? 0 : c) * 12 / 365 * days
+  end
+
+  def self.set_zero(value)
+    value.nil? ? 0 : value
+  end
+
+  def self.check_start_price_incomplete(auction)
+    if auction.auction_contracts.nil?
+      incomplete = false
+    else
+      incomplete = false
+      auction.auction_contracts.each do |contract|
+        if contract.starting_price_lt_peak.nil? || contract.starting_price_lt_off_peak.nil? || contract.starting_price_hts_peak.nil? || contract.starting_price_hts_off_peak.nil? ||
+            contract.starting_price_htl_peak.nil? || contract.starting_price_htl_off_peak.nil? || contract.starting_price_eht_peak.nil? || contract.starting_price_eht_off_peak.nil?
+          incomplete = true
+          break
+        end
+      end
+    end
+    incomplete
+
   end
 end

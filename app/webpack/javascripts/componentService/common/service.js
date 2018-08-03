@@ -1,4 +1,4 @@
-import {Ws, create, get} from '../../../javascripts/http';
+import {Ws, create, get, put} from '../../../javascripts/http';
 
 export const getAuctionTimeRule = (auction) => get(`/api/auctions/${auction}/timer`)
 
@@ -15,6 +15,29 @@ export const getRoleList = (data, url) => get(url, data)
 export const setBuyerParticipate = (data, url) => create(url, data)
 
 export const getBuyerParticipate = (url) => get(url)
+
+export const getBuyerUserInfo=()=>{
+    return get('/api/buyer/registrations');
+}
+
+export const getBuyerUserInfoByUserId=(id)=>{
+    return get(`/api/admin/registrations/${id}/buyer_info?user_id=${id}`);
+}
+
+export const validateIsExist=(params)=>{
+    return put('/api/buyer/registrations/'+params.user.id+'/validate', params);
+}
+ 
+export const saveBuyerUserInfo=(params)=>{
+    return put('/api/buyer/registrations/'+params.user.id,params);
+}
+
+export const submitBuyerUserInfo=(params)=>{
+    return put('/api/buyer/registrations/'+params.user.id+'/sign_up',params);
+}
+
+
+
 
 export const ACTION_COMMANDS = {
     SET_BID: 'set_bid',
@@ -37,3 +60,5 @@ export const getTendersCurrent= (type,id) => {
 export const getTenderhistory= (type,id) => {
     return get('/api/'+type+'/tenders/history',{chat_id:id});
 }
+
+

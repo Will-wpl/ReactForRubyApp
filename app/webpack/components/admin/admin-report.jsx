@@ -12,12 +12,15 @@ import Ranking from '../common/chart/ranking';
 import Price from '../common/chart/price';
 import WinnerPrice from './admin_shared/winner';
 import moment from 'moment';
+import ReservePriceCompare from './admin_shared/reserveprice-compare';
 
 export class AdminReport extends Component {
     constructor(props){
         super(props);
         this.state = {
             users:[], histories:[], ranking:[],
+            contract_duration:6,compare:{},
+            live_auction_contracts:[],contracts:[],
             winner:{
                 data:{},
                 auction:{}
@@ -26,7 +29,19 @@ export class AdminReport extends Component {
     }
 
     componentDidMount() {
+        let contract_duration = window.location.href.indexOf('contract_duration')>0?
+            window.location.href.split('=')[1]:'';
+            this.setState({contract_duration:contract_duration});
         getAuction('admin',(window.location.href.split("auctions/")[1]).split("/report")[0]).then(auction => {
+            if(auction.live_auction_contracts){
+                let live = auction.live_auction_contracts.filter(item=>{
+                    return contract_duration === item.contract_duration
+                })
+                console.log(live);
+                this.setState({
+                    live_auction_contracts:live
+                });
+            }
             this.auction = auction;
             this.userStartInfo = auction ? `${auction.name} on ${moment(auction.start_datetime).format('D MMM YYYY')}` : '';
             this.startTime = auction ? `${moment(auction.actual_begin_time).format('h:mm A')}` : '';
@@ -35,16 +50,17 @@ export class AdminReport extends Component {
             this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000';
             this.actualPrice = '0.0000';
             const auctionId = auction? auction.id : 1;
-            getHistoriesLast({ auction_id: auctionId}).then(data => {
+            getHistoriesLast({ auction_id: auctionId,contract_duration:contract_duration}).then(data => {
                 this.actualPrice = data.histories.length > 0 ? data.histories[0].average_price : '0.0000';
-                getHistories({ auction_id: auctionId}).then(histories => {
+                getHistories({ auction_id: auctionId,contract_duration:contract_duration}).then(histories => {
                     this.setState({
                         histories: histories,
                         winner:{
                             data:data.result,
                             auction:data.auction
                         },
-                        ranking:data.histories
+                        ranking:data.histories,
+                        compare:data.result
                     });
                 }, error => {
                     this.forceUpdate();
@@ -83,14 +99,14 @@ export class AdminReport extends Component {
             data.color = ((JSON.stringify(color).split("[")[1]).split("]")[0]).replace(/"([^"]*)"/g, "$1");
             data.color2 =((JSON.stringify(color2).split("[")[1]).split("]")[0]).replace(/"([^"]*)"/g, "$1");
         //console.log(data);
-        window.open(`/api/admin/auctions/${data.id}/pdf?start_time=${data.start_time}&end_time=${data.end_time}&start_time2=${data.start_time2}&end_time2=${data.end_time2}&start_price=${data.start_price}&end_price=${data.end_price}&uid=${data.uid}&uid2=${data.uid2}&color=${data.color}&color2=${data.color2}`);
+        window.open(`/api/admin/auctions/${data.id}/pdf?start_time=${data.start_time}&end_time=${data.end_time}&start_time2=${data.start_time2}&end_time2=${data.end_time2}&start_price=${data.start_price}&end_price=${data.end_price}&uid=${data.uid}&uid2=${data.uid2}&color=${data.color}&color2=${data.color2}&contract_duration=${this.state.contract_duration}`);
     }
     render () {
         let achieved = parseFloat(this.actualPrice).toFixed(4) <= parseFloat(this.startPrice);
-        const visibility_lt = !this.auction ? true: Number(this.auction.total_lt_peak) > 0 || Number(this.auction.total_lt_off_peak) > 0;
-        const visibility_hts = !this.auction ? true: Number(this.auction.total_hts_peak) > 0 || Number(this.auction.total_hts_off_peak) > 0;
-        const visibility_htl = !this.auction ? true: Number(this.auction.total_htl_peak) > 0 || Number(this.auction.total_htl_off_peak) > 0;
-        const visibility_eht = !this.auction ? true: Number(this.auction.total_eht_peak) > 0 || Number(this.auction.total_eht_off_peak) > 0;
+        const visibility_lt = !this.state.winner.auction ? true: Number(this.state.winner.auction.total_lt_peak) > 0 || Number(this.state.winner.auction.total_lt_off_peak) > 0;
+        const visibility_hts = !this.state.winner.auction ? true: Number(this.state.winner.auction.total_hts_peak) > 0 || Number(this.state.winner.auction.total_hts_off_peak) > 0;
+        const visibility_htl = !this.state.winner.auction ? true: Number(this.state.winner.auction.total_htl_peak) > 0 || Number(this.state.winner.auction.total_htl_off_peak) > 0;
+        const visibility_eht = !this.state.winner.auction ? true: Number(this.state.winner.auction.total_eht_peak) > 0 || Number(this.state.winner.auction.total_eht_off_peak) > 0;
         return (
             <div>
                 <div className="u-grid u-mt2 report_bg">
@@ -100,12 +116,12 @@ export class AdminReport extends Component {
                     </div>
                     <div className="col-sm-12 col-md-5">
                         <dl className="reservePrice">
-                            <dd>
-                                <span>Reserve Price = $ {this.startPrice} /kWh</span>
-                                <span className={achieved ? 'success' : 'fail'}>
-                                {achieved ? 'Reserve Price Achieved' : 'Reserve Price Not Achieved'}
-                                </span>
-                            </dd>
+                            {/*<dd>*/}
+                                {/*<span>Reserve Price = $ {this.startPrice} /kWh</span>*/}
+                                {/*<span className={achieved ? 'success' : 'fail'}>*/}
+                                {/*{achieved ? 'Reserve Price Achieved' : 'Reserve Price Not Achieved'}*/}
+                                {/*</span>*/}
+                            {/*</dd>*/}
                         </dl>
                     </div>
                 </div>
@@ -167,6 +183,7 @@ export class AdminReport extends Component {
                         </div>
                     </div>
                     <div className="col-sm-12 col-md-5">
+                        {this.state.live_auction_contracts.length>0?<ReservePriceCompare contracts={this.state.live_auction_contracts} compare={this.state.compare} />:''}
                         <WinnerPrice showOrhide="show" winner={this.state.winner} isLtVisible={visibility_lt} isHtsVisible={visibility_hts} isHtlVisible={visibility_htl} isEhtVisible={visibility_eht}/>
                         <RetailerRanking nobidder={true} ranking={this.state.ranking}/>
                         <div className="retailrank_main"><a className="lm--button lm--button--primary u-mt3" onClick={this.dopdf.bind(this)} >Download Report</a></div>

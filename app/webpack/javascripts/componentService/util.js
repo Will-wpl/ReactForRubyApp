@@ -76,6 +76,216 @@ export const getStandardNumBref = (num) => {
 
 }
 
+export const validateNum = (value) => {
+    let num = /^(\d{8})$/g;
+    if (!num.test(value)) {
+        return false;
+    }
+
+    return true;
+}
+export const validateNum4 = (value) => {
+    let num = /^(0|[1-9][0-9]*)$/;
+    if (value > 0) {
+        if (!num.test(value)) {
+            return false;
+        }
+    }
+    else {
+        return false;
+    }
+    return true;
+}
+export const validateNum10 = (value) => {
+    let num = /^\+?[1-9]\d*$/;
+    if (value > 0) {
+        if (!num.test(value)) {
+            return false;
+        }
+    }
+    else {
+        return false;
+    }
+    return true;
+}
+
+export const validateEmail = (value) => {
+    let num = /^([a-zA-Z0-9._-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
+    if (!num.test(value)) {
+        return false;
+    }
+    return true;
+}
+export const validateDecimal = (value) => {
+
+    let num = /^100$|^(\d|[1-9]\d)(\.\d+)*$/;
+    if (value > 0) {
+        if (!num.test(value)) {
+            return false;
+        }
+    }
+    else {
+        return false;
+    }
+    return true;
+}
+
+export const validator_Object = (param, paramType) => {
+    let errArr = [];
+    for (let key in paramType) {
+        var value = param[key];
+        var type = paramType[key];
+
+        if (value == null) continue;
+        if (type.cate === 'email') {
+            if (value === null || value.length === 0) {
+                errArr.push({ column: key, cate: 1 });
+            }
+            else {
+                if (!validateEmail(value)) {
+                    errArr.push({ column: key, cate: 2 })
+                }
+            }
+        }
+        else if (type.cate === 'num') {
+            if (value === null || value.length === 0) {
+                errArr.push({ column: key, cate: 1 });
+            }
+            else {
+                if (!validateNum(value)) {
+                    errArr.push({ column: key, cate: 2 })
+                }
+            }
+        }
+        else if (type.cate === 'num4') {
+            if (value === null || value.length === 0) {
+                errArr.push({ column: key, cate: 1 });
+            }
+            else {
+                if (!validateNum4(value)) {
+                    errArr.push({ column: key, cate: 2 })
+                }
+            }
+        }
+        else if (type.cate === 'num10') {
+            if (value === null || value.length === 0) {
+                errArr.push({ column: key, cate: 1 });
+            }
+            else {
+                if (!validateNum10(value)) {
+                    errArr.push({ column: key, cate: 2 })
+                }
+            }
+        }
+
+        else if (type.cate === 'decimal') {
+            if (value === null || value.length === 0) {
+                errArr.push({ column: key, cate: 1 });
+            }
+            else {
+                if (!validateDecimal(value)) {
+                    errArr.push({ column: key, cate: 2 })
+                }
+            }
+        }
+        else {
+            let require = /^$/g;
+            if (value === null || value.length === 0 || require.test(value)) {
+                errArr.push({ column: key, cate: 1 })
+            }
+        }
+    }
+    return errArr;
+}
+export const validator_Array = (param, paramType) => {
+    let errArr = [];
+    for (let i = 0; i < param.length; i++) {
+        let entityArr = [];
+        for (let key in paramType) {
+            var value = param[i][key];
+            var type = paramType[key];
+            if (value == null) continue;
+            if (type.cate === 'email') {
+                if (value === null || value.length === 0) {
+                    entityArr.push({ column: key, cate: 1, ind: i });
+                }
+                else {
+                    if (!validateEmail(value)) {
+                        entityArr.push({ column: key, cate: 2, ind: i })
+                    }
+                }
+            }
+            else if (type.cate === 'num') {
+                if (value === null || value.length === 0) {
+                    entityArr.push({ column: key, cate: 1, ind: i });
+                }
+                else {
+                    if (!validateNum(value)) {
+                        entityArr.push({ column: key, cate: 2, ind: i })
+                    }
+                }
+            }
+            else {
+                let require = /^$/g;
+                if (value === null || value.length === 0 || require.test(value)) {
+                    entityArr.push({ column: key, cate: 1, ind: i })
+                }
+            }
+        }
+        errArr.push(entityArr);
+    }
+    return errArr;
+
+}
+
+export const setValidationFaild = (item, type) => {
+    // console.log(item+"_message")
+    if (type === 1) {
+        $('#' + item + "_message").removeClass('isPassValidate').addClass('errormessage');
+        $('#' + item + "_format").removeClass('errormessage').addClass('isPassValidate');
+        $('#' + item + "_repeat").removeClass('errormessage').addClass('isPassValidate');
+        $("input[name='" + item + "']").focus();
+        $("input[name='" + item.split('user_')[1] + "']").focus();
+    }
+    else {
+        $('#' + item + "_message").removeClass('errormessage').addClass('isPassValidate');
+        $('#' + item + "_format").removeClass('isPassValidate').addClass('errormessage');
+        $('#' + item + "_repeat").removeClass('errormessage').addClass('isPassValidate');
+        $("input[name='" + item + "']").focus();
+        $("input[name='" + item.split('user_')[1] + "']").focus();
+    }
+}
+export const setValidationPass = (item, type) => {
+    if (type === 1) {
+        $('#' + item + "_message").removeClass('errormessage').addClass('isPassValidate');
+
+    }
+    else {
+        $('#' + item + "_message").removeClass('errormessage').addClass('isPassValidate');
+        $('#' + item + "_format").removeClass('errormessage').addClass('isPassValidate');
+        $('#' + item + "_repeat").removeClass('errormessage').addClass('isPassValidate');
+    }
+}
+
+export const removeNanNum = (value) => {
+    value.target.value = value.target.value.replace(/[^\d.]/g, "");
+    value.target.value = value.target.value.replace(/\.{2,}/g, ".");
+    value.target.value = value.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+    if (value.target.value.indexOf(".") < 0 && value.target.value != "") {
+        value.target.value = parseFloat(value.target.value);
+    }
+    return value
+}
+export const changeValidate = (type, value) => {
+    if (value) {
+        setValidationPass(type, 1);
+
+    }
+    else {
+        setValidationFaild(type, 1);
+    }
+}
+
 export const isEmptyJsonObj = (obj) => {
     if (!obj) {
         return true;
@@ -93,7 +303,7 @@ export const getDHMSbetweenTwoTimes = (startSeq, nowSeq) => {
         const hour = Math.floor((divider - day * 24 * 60 * 60) / 3600);
         const minute = Math.floor((divider - day * 24 * 60 * 60 - hour * 3600) / 60);
         const second = Math.floor(divider - day * 24 * 60 * 60 - hour * 3600 - minute * 60);
-        return {day, hour, minute, second, divider}
+        return { day, hour, minute, second, divider }
     }
     return {
         day: 0,
@@ -121,3 +331,5 @@ export const formatPower = (number, places, symbol, thousand, decimal) => {
         j = (j = i.length) > 3 ? j % 3 : 0;
     return symbol + negative + (j ? i.substr(0, j) + thousand : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousand) + (places ? decimal + Math.abs(number - i).toFixed(places).slice(2) : "");
 }
+
+ 

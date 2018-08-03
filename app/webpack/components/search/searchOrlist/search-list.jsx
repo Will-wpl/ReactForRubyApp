@@ -229,25 +229,29 @@ export class SearchList extends Component {
                                                             return <td key={i}>
                                                                     {item[`${it.field_name}`] === null ? 'Pending' : (item[`${it.field_name}`] === '0' ? 'Rejected' : (item[`${it.field_name}`] === '1'?'Accepted':"In Progress"))}
                                                                    </td>
-                                                        }else if( it.field_name === 'log' ){
-                                                            return <td key={i}>
-                                                                    <a className={it.field_name} href={item[`${it.field_name}`]?"/"+item[`${it.field_name}`]:"javascript:void(0);"} onClick={this.saveId.bind(this,item[`${it.field_name}`])}></a>
-                                                                   </td>
-                                                        }else if(it.field_name === 'report'){
-                                                            if(item.report == ""){
-                                                                return <td key={i}></td>
-                                                            }else{
+                                                        }else if( it.field_name === 'log' || it.field_name === 'report' || it.field_name === 'award'){
+                                                            if(item.contracts){
                                                                 return <td key={i}>
-                                                                    <a className={it.field_name} href={item[`${it.field_name}`]?"/"+item[`${it.field_name}`]:"javascript:void(0);"} onClick={this.saveId.bind(this,item[`${it.field_name}`])}></a>
-                                                                </td>
-                                                            }
-                                                        } else if(it.field_name === 'award'){
-                                                            if(item.award != ""){
-                                                                return <td key={i}>
-                                                                    <a className={it.field_name} href={item[`${it.field_name}`]?"/"+item[`${it.field_name}`]:"javascript:void(0);"} onClick={this.saveId.bind(this,item[`${it.field_name}`])}></a>
+                                                                        {item.contracts.map((e,l)=>{
+                                                                            if(e.report != "" || e.log != "" || e.award != ""){
+                                                                                return <abbr key={l}>{e[`${it.field_name}`]?<a className={it.field_name} href={e[`${it.field_name}`]?"/"+e[`${it.field_name}`]:"javascript:void(0);"} onClick={this.saveId.bind(this,e[`${it.field_name}`])}></a>:<a>&nbsp;</a>}</abbr>
+                                                                            }
+                                                                        })}
                                                                 </td>
                                                             }else{
-                                                                return <td key={i}></td>
+                                                                if(item.report == "" || item.log == "" || item.award == ""){
+                                                                    return <td key={i}></td>
+                                                                }else{
+                                                                    if(it.field_name === 'award'){
+                                                                        return <td key={i}><abbr>{item[`${it.field_name}`]?
+                                                                            item[`${it.field_name}`].map((o,m)=>{
+                                                                                return <a key={m} className={it.field_name} href={item[`${it.field_name}`]?"/"+o:"javascript:void(0);"} onClick={this.saveId.bind(this,item[`${it.field_name}`])}></a>
+                                                                            }):<a>&nbsp;</a>}</abbr></td>
+                                                                    }else{
+                                                                        return <td key={i}><abbr>{item[`${it.field_name}`]?<a className={it.field_name} href={item[`${it.field_name}`]?"/"+item[`${it.field_name}`]:"javascript:void(0);"} onClick={this.saveId.bind(this,item[`${it.field_name}`])}></a>:<a>&nbsp;</a>}</abbr></td>
+                                                                    }
+
+                                                                }
                                                             }
                                                         } else if(it.field_name === 'acknowledge'){
                                                             if(item.award == ""){
@@ -288,10 +292,24 @@ export class SearchList extends Component {
                                                         }
                                                         else{
                                                             return <td key={i}>
-                                                                {it.field_name === "actual_begin_time" || it.field_name === "start_datetime" || it.field_name ==="logged_in_last_time" ||it.field_name ==="ws_connected_last_time" ||
-                                                                it.field_name === "ws_send_message_last_time"|| it.field_name === "auction_when"
-                                                                ? moment(item[`${it.field_name}`]).format('D MMM YYYY hh:mm A') 
-                                                                : item[`${it.field_name}`]}
+                                                                {
+                                                                    item.contracts?item.contracts.map((k,s)=>{
+                                                                        if(it.field_name === "published_gid" || it.field_name === "start_datetime" || it.field_name === "name"){
+                                                                            if(s==0){
+                                                                                return <abbr key={s}>{it.field_name === "start_datetime"?moment(item[`${it.field_name}`]).format('D MMM YYYY hh:mm A'):item[`${it.field_name}`]}</abbr>
+                                                                            }
+                                                                        }else{
+                                                                            return <abbr key={s}>
+                                                                                {it.field_name === "actual_begin_time" || it.field_name ==="logged_in_last_time" ||it.field_name ==="ws_connected_last_time" ||
+                                                                                it.field_name === "ws_send_message_last_time"|| it.field_name === "auction_when"
+                                                                                    ? moment(k[`${it.field_name}`]).format('D MMM YYYY hh:mm A')
+                                                                                    : k[`${it.field_name}`]}
+                                                                            </abbr>
+                                                                        }
+                                                                    })
+                                                                    :<abbr>{(it.field_name === "actual_begin_time" || it.field_name === "start_datetime" || it.field_name ==="logged_in_last_time" ||it.field_name ==="ws_connected_last_time" || it.field_name === "ws_send_message_last_time"|| it.field_name === "auction_when")
+                                                                    ? moment(item[`${it.field_name}`]).format('D MMM YYYY hh:mm A'):item[`${it.field_name}`]}</abbr>
+                                                                }
                                                                 </td>
                                                         }
                                                         
@@ -314,8 +332,11 @@ export class SearchList extends Component {
                                                                 }else{
                                                                     if(item['auction_status'] === 'Upcoming' && ik.name === 'Manage'){
                                                                     }else{
+                                                                        let incompleteHtml = <span className={'incomplete_span'}><font>!</font> Starting Price Incomplete</span>;
                                                                         if(item['status'] === 'In Progress' && ik.name === 'Manage'){
-                                                                            return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>View</a>
+                                                                            return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>View{item.incomplete?incompleteHtml:''}</a>
+                                                                        }else if(item['status'] === 'Upcoming' && ik.name === 'Manage'){
+                                                                            return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>Manage{item.incomplete?incompleteHtml:''}</a>
                                                                         }else{
                                                                             return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>{ik.name}</a>
                                                                         }

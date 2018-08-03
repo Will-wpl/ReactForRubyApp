@@ -1,8 +1,14 @@
 class PdfUtils
 
+  HEAD_STRING_HASH = {"LT" => 'LT', 'HTS' => 'HT (Small)', 'HTL' => 'HT (Large)', 'EHT' => 'EHT'}.freeze
+
 
   def self.number_helper
     ActiveSupport::NumberHelper
+  end
+
+  def self.number_format(number, precision = 0, unit = '')
+    PdfUtils.number_helper.number_to_currency(number, precision: precision, unit: unit)
   end
 
 

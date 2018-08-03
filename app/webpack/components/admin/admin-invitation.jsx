@@ -171,20 +171,20 @@ upload(type, index){
             //     },3000)
             //     result = false;
             // }
-            if(requiredObj['retailer_confidentiality_undertaking_upload'][0].files.length <=0){
-                $("#retailer_confidentiality_undertaking_upload0").next().next().fadeIn(300);
-                timeBar = setTimeout(()=>{
-                    $("#retailer_confidentiality_undertaking_upload0").next().next().fadeOut(300);
-                },3000)
-                result = false;
-            }
-            if(requiredObj['tender_documents_upload'][0].files.length <=0){
-                $("#tender_documents_upload0").next().next().fadeIn(300);
-                timeBar = setTimeout(()=>{
-                    $("#tender_documents_upload0").next().next().fadeOut(300);
-                },3000)
-                result = false;
-            }
+            // if(requiredObj['retailer_confidentiality_undertaking_upload'][0].files.length <=0){
+            //     $("#retailer_confidentiality_undertaking_upload0").next().next().fadeIn(300);
+            //     timeBar = setTimeout(()=>{
+            //         $("#retailer_confidentiality_undertaking_upload0").next().next().fadeOut(300);
+            //     },3000)
+            //     result = false;
+            // }
+            // if(requiredObj['birefing_pack_upload'][0].files.length <=0){
+            //     $("#birefing_pack_upload0").next().next().fadeIn(300);
+            //     timeBar = setTimeout(()=>{
+            //         $("#birefing_pack_upload0").next().next().fadeOut(300);
+            //     },3000)
+            //     result = false;
+            // }
             return result;
         }
         doPublish(){
@@ -192,7 +192,7 @@ upload(type, index){
             if(this.props.onAddClick){
                 this.props.onAddClick();
             }
-            if(this.state.buyer_company_select === 0 && this.state.buyer_individual_select === 0){
+            if(this.state.buyer_company_select === 0){
                 clearTimeout(required);
                 $("#buyer_select_box").next().fadeIn(300);
                 location.href="#buyer_select_box";
@@ -368,14 +368,14 @@ upload(type, index){
                     if(this.state.retailer_select === 0){
                         this.timeBar(type);
                         doSend = false;
-                    }else if(this.state.fileData["retailer_confidentiality_undertaking_upload"][0].files <= 0 || this.state.fileData["tender_documents_upload"][0].files <= 0 ){
-                        this.timeBar(type);
-                        doSend = false;
+                    // }else if(this.state.fileData["birefing_pack_upload"][0].files <= 0 ){
+                    //     this.timeBar(type);
+                    //     doSend = false;
                     }else{
                         doSend = true;
                     }
                 }else{
-                    if(this.state.buyer_company_select === 0 && this.state.buyer_individual_select === 0){
+                    if(this.state.buyer_company_select === 0){
                         this.timeBar(type);
                         doSend = false;
                     }
@@ -418,6 +418,40 @@ upload(type, index){
 
             })
         }
+    auction_contracts(data,index){
+        let html = <div key={index}>
+            <h4 className="u-mt1 u-mb1">{data.contract_duration} Months</h4>
+            <table className="retailer_fill w_100" cellPadding="0" cellSpacing="0">
+            <thead>
+            <tr>
+                <th></th>
+                <th>LT</th>
+                <th>HT (Small)</th>
+                <th>HT (Large)</th>
+                <th>EHT</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Peak<br/>(7am-7pm)</td>
+                <td >{data.total_lt_peak ? formatPower(parseInt(Number(data.total_lt_peak)), 0, '') : 0}</td>
+                <td >{data.total_hts_peak ? formatPower(parseInt(Number(data.total_hts_peak)), 0, '') : 0}</td>
+                <td >{data.total_htl_peak ? formatPower(parseInt(Number(data.total_htl_peak)), 0, '') : 0}</td>
+                <td >{data.total_eht_peak ? formatPower(parseInt(Number(data.total_eht_peak)), 0, '') : 0}</td>
+            </tr>
+            <tr>
+                <td>Off-Peak<br/>(7pm-7am)</td>
+                <td >{data.total_lt_off_peak ? formatPower(parseInt(Number(data.total_lt_off_peak)), 0, '') : 0}</td>
+                <td >{data.total_hts_off_peak ? formatPower(parseInt(Number(data.total_hts_off_peak)), 0, '') : 0}</td>
+                <td >{data.total_htl_off_peak ? formatPower(parseInt(Number(data.total_htl_off_peak)), 0, '') : 0}</td>
+                <td >{data.total_eht_off_peak ? formatPower(parseInt(Number(data.total_eht_off_peak)), 0, '') : 0}</td>
+            </tr>
+            </tbody>
+        </table>
+            <div className="col-sm-12 col-md-6"><a href={`/admin/auctions/${sessionStorage.auction_id}/consumption?type=2&contract_duration=${data.contract_duration}`} className="lm--button lm--button--primary col-sm-12"><span>Company Consumption Details</span></a></div>
+        </div>
+        return html
+    }
 render() {
     let url;
     if(this.state.publish_status==0){
@@ -453,7 +487,7 @@ render() {
                                 </label>
                                 <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                 <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=2`} className="lm--button lm--button--primary col-sm-12"><span>Select Company Buyers</span></a></div>
-                                <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=3`} className="lm--button lm--button--primary col-sm-12"><span>Select Individual Buyers</span></a></div>
+                                {/*<div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/select?type=3`} className="lm--button lm--button--primary col-sm-12"><span>Select Individual Buyers</span></a></div>*/}
                                 <div className="col-sm-12 col-md-12 u-cell"><button className="lm--button lm--button--primary col-sm-12 orange" disabled={this.state.buyer_company_pend==0&&this.state.buyer_individual_pend==0?true:false} onClick={this.show_send_mail.bind(this,'buyer')}><span>Send Invitation Email</span></button></div>
                                 </div>
                             </div>}
@@ -503,7 +537,12 @@ render() {
                         </label>
                         <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                             <div className="col-sm-12 u-cell consumption" id="aggregate_consumption">
-                                <table className="retailer_fill w_100" cellPadding="0" cellSpacing="0">
+                                {this.state.auction.auction_contracts?(this.state.auction.auction_contracts.length>0?
+                                        this.state.auction.auction_contracts.map((item,index)=>{
+                                            return this.auction_contracts(item,index);
+                                        }):''
+                                )
+                                :<table className="retailer_fill w_100" cellPadding="0" cellSpacing="0">
                                         <thead>
                                         <tr>
                                             <th></th>
@@ -529,47 +568,46 @@ render() {
                                                 <td >{this.state.off_peak_eht}</td>
                                             </tr>
                                         </tbody>
-                                    </table>
+                                    </table>}
                                     <div className="required_error">
                                         At least one field in intake level must have value greater than 0 kWh.
                                     </div>
                                 </div>
-                                <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/consumption?type=2`} className="lm--button lm--button--primary col-sm-12"><span>Company Consumption Details</span></a></div>
-                                <div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/consumption?type=3`} className="lm--button lm--button--primary col-sm-12"><span>Individual Consumption Details</span></a></div>
+                                {/*<div className="col-sm-12 col-md-6 u-cell"><a href={`/admin/auctions/${sessionStorage.auction_id}/consumption?type=3`} className="lm--button lm--button--primary col-sm-12"><span>Individual Consumption Details</span></a></div>*/}
                         </div>
                     </div>
-                    <div className="lm--formItem lm--formItem--inline string u-mt3">
-                        <label className="lm--formItem-left lm--formItem-label string required">
-                        Upload files:
-                        </label>
-                        <div className="lm--formItem-right lm--formItem-control">
-                        </div>
-                    </div>
-                    <div className="lm--formItem lm--formItem--inline string">
-                        <label className="lm--formItem-left lm--formItem-label string required">
-                           {/* <abbr title="required">*</abbr>*/}
-                            Buyer T&C Upload :
-                        </label>
-                        <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                        {this.addinputfile("buyer_tc_upload", "required")}
-                        </div>
-                    </div>
-                    <div className="lm--formItem lm--formItem--inline string">
-                        <label className="lm--formItem-left lm--formItem-label string required">
-                        <abbr title="required">*</abbr> Retailer Confidentiality Undertaking Upload :
-                        </label>
-                        <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                        {this.addinputfile("retailer_confidentiality_undertaking_upload", "required")}
-                        </div>
-                    </div>
-                    <div className="lm--formItem lm--formItem--inline string">
-                        <label className="lm--formItem-left lm--formItem-label string required">
-                        <abbr title="required">*</abbr> Tender Documents Upload :
-                        </label>
-                        <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                        {this.addinputfile("tender_documents_upload", "required")}
-                        </div>
-                    </div>
+                    {/*<div className="lm--formItem lm--formItem--inline string u-mt3">*/}
+                        {/*<label className="lm--formItem-left lm--formItem-label string required">*/}
+                        {/*Upload files:*/}
+                        {/*</label>*/}
+                        {/*<div className="lm--formItem-right lm--formItem-control">*/}
+                        {/*</div>*/}
+                    {/*</div>*/}
+                    {/*<div className="lm--formItem lm--formItem--inline string">*/}
+                        {/*<label className="lm--formItem-left lm--formItem-label string required">*/}
+                           {/*/!* <abbr title="required">*</abbr>*!/*/}
+                            {/*Buyer T&C Upload :*/}
+                        {/*</label>*/}
+                        {/*<div className="lm--formItem-right lm--formItem-control u-grid mg0">*/}
+                        {/*{this.addinputfile("buyer_tc_upload", "required")}*/}
+                        {/*</div>*/}
+                    {/*</div>*/}
+                    {/*<div className="lm--formItem lm--formItem--inline string">*/}
+                        {/*<label className="lm--formItem-left lm--formItem-label string required">*/}
+                        {/*<abbr title="required">*</abbr> Retailer Confidentiality Undertaking Upload :*/}
+                        {/*</label>*/}
+                        {/*<div className="lm--formItem-right lm--formItem-control u-grid mg0">*/}
+                        {/*{this.addinputfile("retailer_confidentiality_undertaking_upload", "required")}*/}
+                        {/*</div>*/}
+                    {/*</div>*/}
+                    {/*<div className="lm--formItem lm--formItem--inline string">*/}
+                        {/*<label className="lm--formItem-left lm--formItem-label string required">*/}
+                        {/*<abbr title="required">*</abbr> Tender Documents Upload :*/}
+                        {/*</label>*/}
+                        {/*<div className="lm--formItem-right lm--formItem-control u-grid mg0">*/}
+                        {/*{this.addinputfile("tender_documents_upload", "required")}*/}
+                        {/*</div>*/}
+                    {/*</div>*/}
                     <div className="lm--formItem lm--formItem--inline string">
                         <label className="lm--formItem-left lm--formItem-label string required">
                         Birefing Pack Upload :
