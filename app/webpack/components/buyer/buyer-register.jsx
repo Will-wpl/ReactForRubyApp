@@ -313,7 +313,7 @@ export class BuyerRegister extends Component {
         return flag && hasDoc && checkSelect;
     }
 
-    setParams() {
+    setParams(type) {
         let entity = [
             {
                 user_entity_id: this.state.user_entity_id,
@@ -363,10 +363,13 @@ export class BuyerRegister extends Component {
                 'account_office_number': this.state.office_number,
                 'agree_seller_buyer': this.state.agree_seller_buyer,
                 'agree_buyer_revv': this.state.agree_buyer_revv,
-                'has_tenants': this.state.has_tenants
+                'has_tenants': this.state.has_tenants,
             },
             buyer_entities: JSON.stringify(entity)
         };
+        if(type == 1){
+            params.update_status_flag = 1;
+        }
         return params;
     }
     removeInputNanNum(value) {
@@ -528,10 +531,9 @@ export class BuyerRegister extends Component {
                 return false;
             }
         }
-        let buyerParam = this.setParams();
-        validateIsExist(buyerParam).then(res => {
+        validateIsExist(this.setParams()).then(res => {
             if (res.validate_result) {
-                saveBuyerUserInfo(buyerParam).then(res => {
+                saveBuyerUserInfo(this.setParams(type=="save"?1:null)).then(res => {
                     if (res.result === "failed") {
                         this.setState(
                             {
@@ -699,12 +701,12 @@ export class BuyerRegister extends Component {
                 <div><button id="save_edit" className="lm--button lm--button--primary" onClick={this.edit.bind(this)}>Edit</button></div>
                 :<div>
                     <button id="save_form" className="lm--button lm--button--primary" onClick={this.cancel.bind(this)}>Cancel</button>
-                    <button id="submit_form" className="lm--button lm--button--primary" onClick={this.save.bind(this, 'save')}>Save</button>
+                    <button id="submit_form" className="lm--button lm--button--primary" onClick={this.save.bind(this, 'save')}>Save</button>1
                 </div>;
         }
         else {
             btn_html = <div>
-                <button id="save_form" className="lm--button lm--button--primary" onClick={this.save.bind(this, "register")}>Save</button>
+                <button id="save_form" className="lm--button lm--button--primary" onClick={this.save.bind(this, "register")}>Save</button>0
                 <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this, 'sign_up')}>Complete Sign Up</button>
             </div>;
         }
