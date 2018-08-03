@@ -42,7 +42,8 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     buyer_entities = JSON.parse(params[:buyer_entities])
 
     # need admin approval if company name / UEN changed.
-    if(user.approval_status == User::ApprovalStatusRegistering ||
+    if(user.approval_status == User::ApprovalStatusReject ||
+      user.approval_status == User::ApprovalStatusRegistering ||
         (user.company_name != update_user_params['company_name'] ||
           user.company_unique_entity_number != update_user_params['company_unique_entity_number'] ) ||
        buyer_entities.any?{ |e| e['user_entity_id'].to_i == 0 })
@@ -78,7 +79,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     # validate Company name field
     validate_result = validate_user_field('company_name',
                                                    validation_user['company_name'],
-                                                   [validation_user['id']])
+                                                   [validation_user['id']],'Buyer')
     validate_final_result = validate_final_result & validate_result
     error_fields.push('company_name') unless validate_result
 
@@ -92,7 +93,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     # validate Company UEN field
     validate_result = validate_user_field('company_unique_entity_number',
                                                    validation_user['company_unique_entity_number'],
-                                                   [validation_user['id']])
+                                                   [validation_user['id']],'Buyer')
 
     validate_final_result = validate_final_result & validate_result
     error_fields.push('company_unique_entity_number') unless validate_result

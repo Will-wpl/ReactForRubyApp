@@ -60,8 +60,20 @@ class Api::RegistrationsController < Api::BaseController
     user_json
   end
 
-  def validate_user_field(field_name, field_value, except_ids)
-    check_result = User.where(field_name + ' = \'' + field_value + '\'').where(' id not in (?)', except_ids).blank?
+  def validate_user_field(field_name, field_value, except_ids, role = nil)
+    if role.blank?
+      check_result = User.where(field_name + ' = \'' + field_value + '\'').where(' id not in (?)', except_ids).blank?
+    elsif role == 'Buyer'
+      check_result = User.includes(:roles).where(roles: { name: 'buyer' })
+                         .where(field_name + ' = \'' + field_value + '\'')
+                         .where(' users.id not in (?)', except_ids).blank?
+    elsif role == 'Retailer'
+      check_result = User.includes(:roles).where(roles: { name: 'retailer' })
+                         .where(field_name + ' = \'' + field_value + '\'')
+                         .where(' users.id not in (?)', except_ids).blank?
+    else
+      check_result = User.where(field_name + ' = \'' + field_value + '\'').where(' id not in (?)', except_ids).blank?
+    end
 
     check_result
   end

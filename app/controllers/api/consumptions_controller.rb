@@ -7,7 +7,9 @@ class Api::ConsumptionsController < Api::BaseController
       consumptions = consumptions.where('contract_duration = ?', params[:contract_duration])
     end
     consumptions = (params[:consumer_type] == '2') ? consumptions.order('users.company_name asc') : consumptions.order('users.name asc')
-    auction_finished = !Auction.find(params[:id]).auction_result.blank?
+    auction = Auction.find(params[:id])
+    auction_finished = !auction.auction_result.blank?
+    auction_published = auction.publish_status == '1' ? true : false
     data = []
     total_info = { consumption_count: 0, account_count: 0, lt_peak: 0, lt_off_peak: 0,
                    hts_peak: 0, hts_off_peak: 0, htl_peak: 0, htl_off_peak: 0, eht_peak: 0, eht_off_peak: 0 }
@@ -42,14 +44,17 @@ class Api::ConsumptionsController < Api::BaseController
       total_info[:eht_off_peak] += Consumption.get_eht_off_peak(consumption.eht_off_peak)
 
     end
-    render json: { list: data, total_info: total_info, auction_finished: auction_finished }, status: 200
+    render json: { list: data, total_info: total_info, auction_finished: auction_finished, auction_published: auction_published }, status: 200
   end
 
   def show
     consumption = @consumption
     details = ConsumptionDetail.find_by_consumption_id(params[:id]).order(id: :asc)
     details_array = consumption_details(details)
-    auction_finished = !consumption.auction.auction_result.blank?
+    auction = consumption.auction
+    auction_contract = auction.auction_contracts.where(contract_duration: consumption.contract_duration).take
+    auction_finished = !auction.auction_result.blank?
+    auction_published = auction.publish_status
     count = details.count
     entities = CompanyBuyerEntity.find_by_user(consumption.user_id)
     cons = { auction_id: consumption.auction_id,
@@ -58,6 +63,8 @@ class Api::ConsumptionsController < Api::BaseController
              name: consumption.user.name,
              consumption: consumption,
              auction_finished: auction_finished,
+             auction_published: auction_published,
+             contract_period: "#{consumption.contract_duration} months: #{auction.contract_period_start_date.strftime('%d %b %Y')} to #{auction_contract.contract_period_end_date.strftime('%d %b %Y')}",
              count: count,
              lt_peak: Consumption.get_lt_peak(consumption.lt_peak),
              lt_off_peak: Consumption.get_lt_off_peak(consumption.lt_off_peak),
