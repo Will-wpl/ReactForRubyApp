@@ -603,7 +603,7 @@ export class BuyerRegister extends Component {
     validateRepeatColumn(res) {
         if (res.error_fields) {
             for (let item of res.error_fields) {
-                if (item === "company_uen") {
+                if (item === "company_unique_entity_number") {
                     $('#unique_entity_number_repeat').removeClass('isPassValidate').addClass('errormessage');
                     $("input[name='unique_entity_number']").focus();
                 }
@@ -635,7 +635,6 @@ export class BuyerRegister extends Component {
                         $("#company_name_" + (index - 1)).focus();
                     }
                     else {
-                        console.log("#company_uen_" + (index - 1));
                         $("#user_company_uen_" + (index - 1) + "_repeat").removeClass('isPassValidate').addClass('errormessage');
                         $("#company_uen_" + (index - 1)).focus();
                     }
