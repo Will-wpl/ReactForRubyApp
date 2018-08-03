@@ -24,7 +24,7 @@ export default class ReservePriceCompare extends Component {
     }
     mouthsHtml(data,index){
         const html = <div className={"retailrank_main"} key={index}>
-            <h3 className={"u-mt2 u-mb2"}>Reseve Price</h3>
+            <h3 className={"u-mt2 u-mb2"}>Reserve Price</h3>
             <div className="lm--formItem lm--formItem--inline string optional">
                 <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                     <thead>
