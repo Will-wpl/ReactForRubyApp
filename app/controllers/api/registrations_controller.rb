@@ -32,7 +32,7 @@ class Api::RegistrationsController < Api::BaseController
     user_json = { user_base_info: user,
                   buyer_entities: buyer_entities,
                   self_attachment: user_attachment,
-                  self_attachment: user_attachments,
+                  self_attachments: user_attachments,
                   seller_buyer_tc_attachment: seller_buyer_tc_attachment,
                   buyer_revv_tc_attachment: buyer_revv_tc_attachment,
                   letter_of_authorisation_attachment: letter_of_authorisation_attachment}

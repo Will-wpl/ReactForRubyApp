@@ -10,9 +10,12 @@ class Api::Retailer::RegistrationsController < Api::RegistrationsController
 
   # update retailer registration information
   def update
+    update_status_flag = params['update_status_flag']
     update_user_params = model_params
     update_user_params = filter_user_password(update_user_params)
-    update_user_params['approval_status'] = User::ApprovalStatusPending
+    if update_status_flag.eql?("1")
+      update_user_params['approval_status'] = User::ApprovalStatusPending
+    end
     @user.update(update_user_params)
     render json: { user: @user }, status: 200
   end
