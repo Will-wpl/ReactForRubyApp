@@ -5,7 +5,7 @@ import { UserEntity } from '../shared/user-entity';
 import { Modal } from '../shared/show-modal';
 import { getBuyerUserInfo, saveBuyerUserInfo, submitBuyerUserInfo, getBuyerUserInfoByUserId, validateIsExist } from '../../javascripts/componentService/common/service';
 import { approveBuyerUser } from '../../javascripts/componentService/admin/service';
-import { removeNanNum,validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, setApprovalStatus } from '../../javascripts/componentService/util';
+import { removeNanNum, validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, setApprovalStatus } from '../../javascripts/componentService/util';
 
 export class BuyerRegister extends Component {
     constructor(props) {
@@ -136,7 +136,7 @@ export class BuyerRegister extends Component {
                 agree_buyer_revv: item.agree_buyer_revv ? item.agree_buyer_revv : '0',
                 has_tenants: item.has_tenants ? item.has_tenants : '1',
                 approveStatus: item.approval_status === "3" ? true : false,
-                status: setApprovalStatus(item.approval_status, item.approval_date_time)
+                status: setApprovalStatus(item.approval_status, item.approval_date_time === null ? item.created_at : item.approval_date_time)
             })
             $('#buyer_management').val(this.state.has_tenants);
             if (this.state.agree_seller_buyer === "1") {
@@ -268,6 +268,8 @@ export class BuyerRegister extends Component {
         })
         let flag = true, hasDoc = true, checkSelect = true;
         let arr = validator_Object(this.state, this.validatorItem);
+        console.log("form")
+        console.log(arr)
         if (arr) {
             arr.map((item, index) => {
                 let column = item.column;
@@ -276,6 +278,8 @@ export class BuyerRegister extends Component {
             })
         }
         let entity = validator_Array(this.state.user_entity_data['ENTITY_LIST'][0].entities, this.validatorEntity);
+        console.log("entity")
+        console.log(entity)
         if (entity) {
             entity.map((item, index) => {
                 item.map((it, i) => {
@@ -290,16 +294,10 @@ export class BuyerRegister extends Component {
         if (this.state.fileData['BUYER_DOCUMENTS'][0].files.length > 0) {
             hasDoc = true;
             $("#showMessage").removeClass("errormessage").addClass("isPassValidate");
-            // this.setState({
-            //     validate: true
-            // })
         }
         else {
             hasDoc = false;
             $("#showMessage").removeClass("isPassValidate").addClass("errormessage");
-            // this.setState({
-            //     validate: false
-            // })
         }
 
         $('.validate_message').find('div').each(function () {
@@ -537,41 +535,37 @@ export class BuyerRegister extends Component {
     }
 
     save(type) {
-        if (type === "save") {
-            if (!this.checkSuccess()) {
-                return false;
-            }
+        let isValidator = this.checkSuccess();
+        if (isValidator) {
+            validateIsExist(this.setParams()).then(res => {
+                if (res.validate_result) {
+                    saveBuyerUserInfo(this.setParams(type == "save" ? 1 : null)).then(res => {
+                        if (res.result === "failed") {
+                            this.setState(
+                                {
+                                    text: "Failure to save,the entity have available auction can't be deleted."
+                                }
+                            );
+                            this.refs.Modal.showModal();
+                        }
+                        else {
+                            this.setState(
+                                {
+                                    user_company_name: this.state.company_name,
+                                    user_company_uen: this.state.unique_entity_number,
+                                    user_company_address: this.state.company_address,
+                                    text: "Your details have been successfully saved. "
+                                }
+                            );
+                            this.refs.Modal.showModal("defaultCallBack");
+                        }
+                    })
+                }
+                else {
+                    this.validateRepeatColumn(res);
+                }
+            })
         }
-        validateIsExist(this.setParams()).then(res => {
-            if (res.validate_result) {
-                saveBuyerUserInfo(this.setParams(type == "save" ? 1 : null)).then(res => {
-                    if (res.result === "failed") {
-                        this.setState(
-                            {
-                                text: "Failure to save,the entity have available auction can't be deleted."
-                            }
-                        );
-                        this.refs.Modal.showModal();
-                    }
-                    else {
-                        this.setState(
-                            {
-                                user_company_name: this.state.company_name,
-                                user_company_uen: this.state.unique_entity_number,
-                                user_company_address: this.state.company_address,
-                                text: "Your details have been successfully saved. "
-                            }
-                        );
-                        this.refs.Modal.showModal("defaultCallBack");
-                    }
-                })
-            }
-            else {
-                this.validateRepeatColumn(res);
-            }
-
-        })
-
     }
 
     submit(type) {
@@ -821,9 +815,9 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Upload Supporting Documents :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                                        <UploadFile type="BUYER_DOCUMENTS" required="required"   showList="1" col_width="10" showWay="1" fileData={this.state.fileData.BUYER_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
+                                        <UploadFile type="BUYER_DOCUMENTS" required="required" validate="true" deleteType="buyer" showList="1" col_width="10" showWay="1" fileData={this.state.fileData.BUYER_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
                                         <div className="col-sm-1 col-md-1 u-cell">
-                                            <button className={this.state.disabled?"lm--button lm--button--primary buttonDisabled":"lm--button lm--button--primary"} title="this is retailer upload documents" disabled={this.state.disabled} onClick={this.showView.bind(this)} >?</button>
+                                            <button className={this.state.disabled ? "lm--button lm--button--primary buttonDisabled" : "lm--button lm--button--primary"} title="this is retailer upload documents" disabled={this.state.disabled} onClick={this.showView.bind(this)} >?</button>
                                         </div>
                                         <div id="showMessage" className="isPassValidate">This field is required!</div>
                                     </div>

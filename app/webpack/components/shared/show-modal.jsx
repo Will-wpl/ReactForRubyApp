@@ -3,7 +3,7 @@ import { constants } from 'os';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
-import { validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate,removeNanNum } from '../../javascripts/componentService/util';
+import { validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum } from '../../javascripts/componentService/util';
 //共通弹出框组件
 import { UploadFile } from '../shared/upload';
 
@@ -42,6 +42,7 @@ export class Modal extends React.Component {
             totals: '',
             peak_pct: '',
             peak: "",
+            attachment_ids:'',
             option: '',
             isSaved: false,
             uploadUrl: "/api/buyer/user_attachments?file_type=",
@@ -89,7 +90,7 @@ export class Modal extends React.Component {
                     file_name: next.consumption_account_item.file_name,
                     file_path: next.consumption_account_item.file_path
                 }
-                fileObj["CONSUMPTION_DOCUMENTS"][0].files=[];
+                fileObj["CONSUMPTION_DOCUMENTS"][0].files = [];
                 fileObj["CONSUMPTION_DOCUMENTS"][0].files.push(obj);
                 this.setState({
                     fileData: fileObj
@@ -341,7 +342,7 @@ export class Modal extends React.Component {
                         }
                     }
                     if (this.state.account_number === item.account_number) {
-                        if (index != this.state.itemIndex ) {
+                        if (index != this.state.itemIndex) {
                             account_count++;
                         }
                     }
@@ -356,7 +357,7 @@ export class Modal extends React.Component {
                 }
             }
         })
-       
+
         if (address_count > 0) {
             address = true;
         }
@@ -386,10 +387,20 @@ export class Modal extends React.Component {
             totals: this.state.totals,
             peak_pct: this.state.peak_pct,
             index: this.state.itemIndex,
-            user_attachment_id: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].id : "",
-            file_name: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_name : "",
-            file_path: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_path : ""
+            attachment_ids: ""
+            // user_attachment_id: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].id : "",
+            // file_name: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_name : "",
+            // file_path: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_path : ""
         }
+        if (this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0) {
+            let idsArr = [];
+            this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.map((item) => {
+                idsArr.push(item.id);
+            })
+            siteItem.attachment_ids = JSON.stringify(idsArr)
+        }
+        console.log("siteItem");
+        console.log(siteItem);
         if (this.props.acceptFunction) {
             this.props.acceptFunction(siteItem);
             this.setState({
@@ -517,7 +528,7 @@ export class Modal extends React.Component {
                     })
                 }
                 else {
-                    
+
                     this.setState({
                         peak: 100
                     })
@@ -609,7 +620,7 @@ export class Modal extends React.Component {
             } else if (this.props.listdetailtype === "Link History") {
                 showDetail = <ul className="showdetail history_files">
                     {this.props.listdetail.map((item, index) => {
-                        return <li key={index}><a className="overflow_text" target="_blank" download={item.file_name} href={item.file_path}>{item.file_name}</a><abbr><font>|</font>{item.file_time}</abbr><span style={{display:'none'}} className="remove_file" onClick={this.removefile.bind(this, this.state.strtype, index, item.fileid)}></span></li>
+                        return <li key={index}><a className="overflow_text" target="_blank" download={item.file_name} href={item.file_path}>{item.file_name}</a><abbr><font>|</font>{item.file_time}</abbr><span style={{ display: 'none' }} className="remove_file" onClick={this.removefile.bind(this, this.state.strtype, index, item.fileid)}></span></li>
                     })}
                 </ul>
             } else if (this.props.listdetailtype === "Email Template") {

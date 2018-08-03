@@ -115,7 +115,7 @@ export class RetailerRegister extends Component {
                 office_number: item.account_office_number ? item.account_office_number : '',
                 agree_seller_buyer: item.agree_seller_buyer ? item.agree_seller_buyer : '0',
                 agree_seller_revv: item.agree_seller_revv ? item.agree_seller_revv : '0',
-                status: setApprovalStatus(item.approval_status, item.approval_date_time)
+                status: setApprovalStatus(item.approval_status,  item.approval_date_time === null ? item.created_at : item.approval_date_time)
             })
             if (this.state.agree_seller_buyer === '1') {
                 $('#chkBuyer').attr("checked", true);
@@ -357,7 +357,7 @@ export class RetailerRegister extends Component {
                     }).then(res => {
                         $('#license_number_repeat').removeClass('errormessage').addClass('isPassValidate');
                         if (type === "sign_up") {
-                            window.location.href = `/retailer/home`;
+                             window.location.href = `/retailer/home`;
                         }
                         else {
                             this.refs.Modal.showModal();
@@ -374,14 +374,10 @@ export class RetailerRegister extends Component {
                 }
             })
         }
-        else {
-            console.log('submit validate error');
-        }
     }
 
     save(type) {
         let param = this.getParam();
-        // console.log(param)
         if (this.checkValidation()) {
             validateIsExist({
                 user: param
@@ -406,10 +402,6 @@ export class RetailerRegister extends Component {
                 }
             })
         }
-        else {
-            console.log('save validate error');
-        }
-
     }
 
     validateRepeatColumn(err) {
