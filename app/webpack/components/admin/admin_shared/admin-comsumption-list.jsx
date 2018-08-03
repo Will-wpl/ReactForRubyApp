@@ -79,8 +79,8 @@ export default class AdminComsumptionList extends Component {
                                                 <td>Contract Expiry </td>
                                                 <td>Purchasing Entity</td>
                                                 <td>Intake Level</td>
-                                                <td>Contract Capacity</td>
-                                                <td>Permise Address</td>
+                                                <td>Contracted Capacity</td>
+                                                <td>Premise Address</td>
                                                 <td>Consumption Details</td>
                                             </tr>
                                         </thead>

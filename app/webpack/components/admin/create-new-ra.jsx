@@ -600,6 +600,7 @@ export class CreateNewRA extends Component {
             <div className={"createRaMain u-grid "+this.state.live_modal_do}>
             <div className={styleType}>
                 <h2>{left_name}</h2>
+                <br/>
                 {this.auction.publish_status == '1' ?<h4>Published on : {moment(this.state.published_date_time).format('DD-MMM-YYYY hh:mm a')}</h4>:''}
                 <form action="" ref="CreatRaForm" method="post" id="CreatRaForm" onSubmit={this.checkSuccess.bind(this)}>
                 <dl className="vw-block vw-block-cols creatRa">
@@ -737,7 +738,7 @@ export class CreateNewRA extends Component {
                     </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
                         <span className="lm--formItem-left lm--formItem-label string optional">
-                            <abbr title="required">*</abbr>Time to Display Starting Price:</span>
+                            <abbr title="required">*</abbr>Time to Display Starting Price :</span>
                         <label className="lm--formItem-right lm--formItem-control">
                             <select ref="starting_price_time" id="starting_price_time" disabled={this.state.disabled}>
                                 {this.hours.map((item)=>{
