@@ -748,7 +748,11 @@ ul.history_files{
     }
   }
 }
-
+.winner_btn{
+  border-top:1px solid #00afb1;
+  padding-top:15px;
+  text-align:center;
+}
 .workflow_btn{
   text-align: right;
   button{ margin-left: 15px; outline: none;
