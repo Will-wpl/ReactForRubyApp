@@ -156,10 +156,10 @@ class BuyerEntityReport < BuyerReport
     total_volume = PdfUtils.number_helper.number_to_currency(total_volume, precision: 0, unit: '')
     total_award_sum = PdfUtils.number_helper.number_to_currency(total_award_sum, precision: 2, unit: '$')
     pdf.font_size(18) {
-      pdf_text pdf, "Sub-Report for Purchasing Entity: #{entity_company_name}"
+      pdf_text pdf, "<b>Sub-Report for Purchasing Entity: #{entity_company_name}</b>"
     }
     pdf.move_down 10
-    pdf.font_size 16
+    pdf.font_size 14
     pdf_reverse_auction_id(pdf,auction)
     pdf.move_down 10
     pdf_name_of_reverse_auction(pdf, auction)
@@ -188,7 +188,7 @@ class BuyerEntityReport < BuyerReport
     pdf.font_size(20) {
       pdf_buyer_company_name(pdf, current_user)
     }
-    pdf.font_size 16
+    pdf.font_size 14
     pdf.move_down 8
     pdf_reverse_auction_id(pdf,auction)
     pdf.move_down 8
