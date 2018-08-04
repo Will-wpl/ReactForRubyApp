@@ -44,7 +44,7 @@ export class Tenderdocuments extends React.Component {
         } else {
             this.refs.Modal.showModal("comfirm");
             this.setState({
-                text: "Are you sure you want to accept all?"
+                text: "Are you sure you want to participate in the auction?"
             });
         }
     }

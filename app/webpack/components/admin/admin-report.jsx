@@ -21,6 +21,7 @@ export class AdminReport extends Component {
             users:[], histories:[], ranking:[],
             contract_duration:6,compare:{},
             live_auction_contracts:[],contracts:[],
+            consumption:{},
             winner:{
                 data:{},
                 auction:{}
@@ -55,6 +56,7 @@ export class AdminReport extends Component {
                 getHistories({ auction_id: auctionId,contract_duration:contract_duration}).then(histories => {
                     this.setState({
                         histories: histories,
+                        consumption:data.consumption?data.consumption:{},
                         winner:{
                             data:data.result,
                             auction:data.auction
@@ -181,9 +183,39 @@ export class AdminReport extends Component {
                                 }}/>
                             </div>
                         </div>
+                        {this.state.live_auction_contracts.length>0?<ReservePriceCompare contracts={this.state.live_auction_contracts} compare={this.state.compare} />:''}
                     </div>
                     <div className="col-sm-12 col-md-5">
-                        {this.state.live_auction_contracts.length>0?<ReservePriceCompare contracts={this.state.live_auction_contracts} compare={this.state.compare} />:''}
+                        <div className={'winnerPrice_main'}>
+                        <h2>Aggregate Consumption</h2>
+                        <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th >LT</th>
+                                <th >HT (Small)</th>
+                                <th >HT (Large)</th>
+                                <th >EHT</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Peak<br/>(7am-7pm)</td>
+                                <td >{this.state.consumption.lt_peak}</td>
+                                <td >{this.state.consumption.hts_peak}</td>
+                                <td >{this.state.consumption.htl_peak}</td>
+                                <td >{this.state.consumption.eht_peak}</td>
+                            </tr>
+                            <tr>
+                                <td>Off-Peak<br/>(7pm-7am)</td>
+                                <td >{this.state.consumption.lt_off_peak}</td>
+                                <td >{this.state.consumption.hts_off_peak}</td>
+                                <td >{this.state.consumption.htl_off_peak}</td>
+                                <td >{this.state.consumption.eht_off_peak}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        </div>
                         <WinnerPrice showOrhide="show" winner={this.state.winner} isLtVisible={visibility_lt} isHtsVisible={visibility_hts} isHtlVisible={visibility_htl} isEhtVisible={visibility_eht}/>
                         <RetailerRanking nobidder={true} ranking={this.state.ranking}/>
                         <div className="retailrank_main"><a className="lm--button lm--button--primary u-mt3" onClick={this.dopdf.bind(this)} >Download Report</a></div>

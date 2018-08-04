@@ -2,12 +2,25 @@ import React, { Component, PropTypes } from 'react'
 import moment from 'moment';
 import {Modal} from '../../shared/show-modal';
 import {deleteAuction,updateStatus,deleteStatus,getUsersDetail} from '../../../javascripts/componentService/admin/service';
+import {getAuction} from '../../../javascripts/componentService/common/service';
 export class SearchList extends Component {
     constructor(props, context){
         super(props);
         this.state={
             text:"",showDetail:{},
-            name:"",params_type:true
+            name:"",params_type:true,
+            buyer_type:null
+        }
+    }
+    componentDidMount() {
+        if(window.location.href.indexOf("admin")>0){
+            getAuction('admin',sessionStorage.auction_id).then(res => {
+                this.auction = res;
+                this.setState({
+                    buyer_type:res.buyer_type
+                })
+                console.log(this.auction);
+            })
         }
     }
     dosearch(index,obj){
@@ -99,6 +112,21 @@ export class SearchList extends Component {
     }
     doinvite(type,user_id,select_action){
         let invite_type = this.props.type === 'Select Retailers' ? 'arrangements' : 'consumptions';
+        if(this.state.buyer_type == '1' && window.location.href.indexOf("type=2")>0){
+            this.props.table_data.bodies.data.map((item)=>{
+                if(item.select_action){
+                    deleteStatus({
+                        id:item.select_action,
+                        type:invite_type,
+                        data:{
+                            action_status:0
+                        }
+                    }).then(res=>{
+                        this.dosearch(this.props.list_data.page_index);
+                    })
+                }
+            })
+        }
         if(type === "invite"){
             updateStatus({
                 id:0,

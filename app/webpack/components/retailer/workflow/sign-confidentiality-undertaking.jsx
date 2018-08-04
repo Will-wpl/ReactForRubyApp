@@ -63,16 +63,16 @@ export class Signconfidentialityundertaking extends React.Component{
                 {this.props.current.current.current_status ?
                 <h4>You have {this.props.current.current.current_status === 'reject' ? 'rejected' : 'accepted'} the Confidentiality Undertaking.</h4>
                 :''}
-                <p>You are bounded by the confidentiality clauses in the Retailer Platform Terms of Use. Please click 'Proceed' to continue.</p>
-                <p>*Note: can click on 'Retailer Platform Terms of Use' to download the PDF document.</p>
-                    <div className="u-mt3 u-mb3 download">
-                        <span>Click to Download : </span>
-                        <a className="download_ico" target="_blank" download={this.state.file_name} href={this.state.file_path}></a>
-                    </div>
+                <p>You are bounded by the confidentiality clauses in the <a className="download_ico" target="_blank" download={this.state.file_name} href={this.state.file_path}>Retailer Platform Terms of Use.</a> Please click 'Proceed' to continue.</p>
+                {/*<p>*Note: can click on '<a className="download_ico" target="_blank" download={this.state.file_name} href={this.state.file_path}>Retailer Platform Terms of Use</a>' to download the PDF document.</p>*/}
+                    {/*<div className="u-mt3 u-mb3 download">*/}
+                        {/*<span>Click to Download : </span>*/}
+                        {/*<a className="download_ico" target="_blank" download={this.state.file_name} href={this.state.file_path}></a>*/}
+                    {/*</div>*/}
                 {this.props.current.actions ?
                 <div className="workflow_btn u-mt3">
                     <button disabled={this.props.propsdisabled?true:(this.props.current.actions.node1_retailer_reject?!this.props.current.actions.node1_retailer_reject:false)} className="lm--button lm--button--primary" onClick={this.showConfirm.bind(this,'Reject')} >Reject</button>
-                    <button disabled={this.props.propsdisabled?true:(this.props.current.actions.node1_retailer_accept?!this.props.current.actions.node1_retailer_accept:false)} className="lm--button lm--button--primary" onClick={this.showConfirm.bind(this,'Accept')} >Accept</button>
+                    <button disabled={this.props.propsdisabled?true:(this.props.current.actions.node1_retailer_accept?!this.props.current.actions.node1_retailer_accept:false)} className="lm--button lm--button--primary" onClick={this.showConfirm.bind(this,'Accept')} >Proceed</button>
                 </div>
                 : <div></div>}
                 <Modal text={this.state.text} acceptFunction={this.state.buttonType === 'Reject'?this.do_reject.bind(this):this.do_accept.bind(this)} ref="Modal" />
