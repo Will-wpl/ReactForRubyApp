@@ -537,8 +537,8 @@ render() {
                         </label>
                         <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                             <div className="col-sm-12 u-cell consumption" id="aggregate_consumption">
-                                {this.state.auction.auction_contracts?(this.state.auction.auction_contracts.length>0?
-                                        this.state.auction.auction_contracts.map((item,index)=>{
+                                {this.state.auction.aggregate_auction_contracts?(this.state.auction.aggregate_auction_contracts.length>0?
+                                        this.state.auction.aggregate_auction_contracts.map((item,index)=>{
                                             return this.auction_contracts(item,index);
                                         }):''
                                 )
