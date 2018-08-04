@@ -273,7 +273,9 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 .winnerPrice_main{ 
   width:86%; margin: 10px auto; font-size: 12px;
   h4{ color:#fff;}
-  ul li{ line-height: 32px; list-style: none;}
+  ul li{ padding:5px 0px; list-style: none;
+    table{text-align: center; margin:5px auto;}
+  }
   table{ margin: 15px auto;}
   .show{display: block;}
   .hide{ display: none}
