@@ -601,7 +601,7 @@ export class CreateNewRA extends Component {
             <div className={styleType}>
                 <h2>{left_name}</h2>
                 <br/>
-                {this.auction.publish_status == '1' ?<h4>Published on : {moment(this.state.published_date_time).format('DD MMM YYYY hh:mm a')}</h4>:''}
+                {this.auction.publish_status == '1' ?<h4>Published on {moment(this.state.published_date_time).format('DD MMM YYYY hh:mm a')}</h4>:''}
                 <form action="" ref="CreatRaForm" method="post" id="CreatRaForm" onSubmit={this.checkSuccess.bind(this)}>
                 <dl className="vw-block vw-block-cols creatRa">
                     <dd className="lm--formItem lm--formItem--inline string optional">
@@ -673,7 +673,7 @@ export class CreateNewRA extends Component {
                         </div>):''
                     }
                     <dd className="lm--formItem lm--formItem--inline string optional">
-                        <span className="lm--formItem-left lm--formItem-label string optional">Reverse Auction Parameters :</span>
+                        <span className="lm--formItem-left lm--formItem-label string optional">Reverse Auction Parameters</span>
                     </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
                         <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Date/Time of Reverse Auction :</span>
