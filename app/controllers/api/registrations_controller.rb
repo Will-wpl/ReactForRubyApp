@@ -22,6 +22,11 @@ class Api::RegistrationsController < Api::BaseController
     user_attachments = UserAttachment.find_by_type_user(UserAttachment::FileType_Buyer_Doc, user.id).order(updated_at: :desc)
     # get buyer entities
     buyer_entities = user.company_buyer_entities.order(is_default: :desc)
+    buyer_entity_ids = []
+    buyer_entities.each { |x| buyer_entity_ids.push(x.id) }
+    # get used buyer entities
+    used_buyer_entity_ids = []
+    ConsumptionDetail.all().each { |x| used_buyer_entity_ids.push(x.company_buyer_entity_id) if buyer_entity_ids.include?(x.company_buyer_entity_id) }
     # get seller-buyer-t&c document
     seller_buyer_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)
     # get buyer-revv-t&c document
@@ -31,6 +36,7 @@ class Api::RegistrationsController < Api::BaseController
     # return json
     user_json = { user_base_info: user,
                   buyer_entities: buyer_entities,
+                  used_buyer_entity_ids: used_buyer_entity_ids,
                   self_attachment: user_attachment,
                   self_attachments: user_attachments,
                   seller_buyer_tc_attachment: seller_buyer_tc_attachment,

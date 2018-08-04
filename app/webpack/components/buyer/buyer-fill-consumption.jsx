@@ -461,7 +461,7 @@ export class FillConsumption extends Component {
                                                     <div><span>Off-Peak:</span><span className="textDecoration">{parseFloat(100 - item.peak_pct).toFixed(2)}</span><span> %</span></div>
                                                     <div className={item.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span>
                                                         <span>
-                                                            <ul>
+                                                            <ul className="attachementList">
                                                                 {
                                                                     item.user_attachment ? item.user_attachment.map((item, i) => {
                                                                         return <li key={i}>
@@ -496,7 +496,7 @@ export class FillConsumption extends Component {
                             <div>
                                 <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
                                     <input name="agree_declare" type="checkbox" id="chkAgree_declare" required />
-                                    <span>I declare that all data submited is true and shall be used for the auction,and that i am bounded by <a target="_blank" href={this.state.link} className="urlStyle">Buyer T&C.</a></span>
+                                    <span>I declare that all data submited is true and shall be used for the auction, and that i am bounded by <a target="_blank" href={this.state.link} className="urlStyle">Buyer T&C.</a></span>
                                 </h4>
                             </div>
                             <div className="buyer_btn">

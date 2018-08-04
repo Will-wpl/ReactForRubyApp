@@ -42,19 +42,19 @@ class Api::TendersController < Api::TendersBaseController
 
   def node3_retailer
     auction = @arrangement.auction
-    if auction.auction_contracts.blank?
-      attachments_count = AuctionAttachment.belong_auction(@arrangement.auction_id)
-                              .where(file_type: 'attachment_deviation').count
-      chats = set_node3_chats(params[:id])
-      attachments = AuctionAttachment.user_auction(@arrangement.auction_id, @arrangement.user_id)
-                        .where(file_type: 'attachment_deviation').order(:created_at)
-      render json: { chats: chats, attachments_count: attachments_count, attachments: attachments }, status: 200
-    else
-      chats = set_node3_chats(params[:id])
-      attachments = [UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)]
-      attachments_count = attachments.count()
-      render json: { chats: chats, attachments_count: attachments_count, attachments: attachments }, status: 200
-    end
+    # if auction.auction_contracts.blank?
+    attachments_count = AuctionAttachment.belong_auction(@arrangement.auction_id)
+                            .where(file_type: 'attachment_deviation').count
+    chats = set_node3_chats(params[:id])
+    attachments = AuctionAttachment.user_auction(@arrangement.auction_id, @arrangement.user_id)
+                      .where(file_type: 'attachment_deviation').order(:created_at)
+    render json: { chats: chats, attachments_count: attachments_count, attachments: attachments }, status: 200
+    # else
+    #   chats = set_node3_chats(params[:id])
+    #   attachments = [UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)]
+    #   attachments_count = attachments.count()
+    #   render json: { chats: chats, attachments_count: attachments_count, attachments: attachments }, status: 200
+    # end
   end
 
   def node3_admin

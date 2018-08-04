@@ -13,7 +13,7 @@ export class BuyerRegister extends Component {
         this.state = {
             id: "", userid: "", text: "", btn_status: false, disabled: false, havedata: false, allbtnStatus: true, validate: true, use_type: "",
             email_address: "", company_name: "", unique_entity_number: "", company_address: "", billing_address: "", contact_name: "",
-            mobile_number: "", office_number: "", entityStatus: "", approveStatus: false, status: '',
+            mobile_number: "", office_number: "", entityStatus: "", approveStatus: false, status: '',main_id:'',
             user_entity_id: "", user_company_name: "", user_company_uen: "", user_company_address: "", user_billing_address: "", user_bill_attention_to: "",
             user_contact_name: "", user_contact_email: "", user_contact_mobile_no: "", user_contact_office_no: "", comment: "",
             buyerTCurl: "", buyerTCname: "", agree_seller_buyer: "0",
@@ -29,7 +29,8 @@ export class BuyerRegister extends Component {
                 ]
             },
             uploadUrl: "/api/buyer/user_attachments?file_type=",
-            messageAttachmentUrl: ""
+            messageAttachmentUrl: "",
+            usedEntityIdArr:[]
         };
         this.validatorItem = {
             user_contact_office_no: { cate: 'num' },
@@ -113,6 +114,7 @@ export class BuyerRegister extends Component {
     }
 
     setDefault(param) {
+        console.log(param)
         let fileObj, entityObj;
         fileObj = this.state.fileData;
         entityObj = this.state.user_entity_data;
@@ -198,7 +200,7 @@ export class BuyerRegister extends Component {
                         if (index > 0) {
                             user_entity.push({
                                 user_entity_id: entity[index].user_entity_id,
-                                main_id: entity[0].id,
+                                main_id: entity[index].id,
                                 company_name: entity[index].company_name ? entity[index].company_name : '',
                                 company_uen: entity[index].company_uen ? entity[index].company_uen : '',
                                 company_address: entity[index].company_address ? entity[index].company_address : '',
@@ -233,6 +235,12 @@ export class BuyerRegister extends Component {
             this.setState({
                 buyerRevvTCurl: revv.file_path,
                 buyerRevvTCname: revv.file_name
+            })
+        }
+        if(param.used_buyer_entity_ids)
+        {
+            this.setState({
+                usedEntityIdArr:param.used_buyer_entity_ids
             })
         }
     }
@@ -270,8 +278,6 @@ export class BuyerRegister extends Component {
         })
         let flag = true, hasDoc = true, checkSelect = true;
         let arr = validator_Object(this.state, this.validatorItem);
-        console.log("form")
-        console.log(arr)
         if (arr) {
             arr.map((item, index) => {
                 let column = item.column;
@@ -280,8 +286,6 @@ export class BuyerRegister extends Component {
             })
         }
         let entity = validator_Array(this.state.user_entity_data['ENTITY_LIST'][0].entities, this.validatorEntity);
-        console.log("entity")
-        console.log(entity)
         if (entity) {
             entity.map((item, index) => {
                 item.map((it, i) => {
@@ -327,7 +331,8 @@ export class BuyerRegister extends Component {
     setParams(type) {
         let entity = [
             {
-                main_id: this.state.user_entity_id,
+                main_id: this.state.main_id,
+                user_entity_id:this.state.user_entity_id,
                 company_name: this.state.company_name,
                 company_uen: this.state.unique_entity_number,
                 company_address: this.state.company_address,
@@ -345,7 +350,8 @@ export class BuyerRegister extends Component {
             let list = this.state.user_entity_data['ENTITY_LIST'][0].entities;
             list.map((item, index) => {
                 let paramObj = {
-                    main_id: item.user_entity_id,
+                    main_id: item.main_id,
+                    user_entity_id:item.user_entity_id,
                     company_name: item.company_name,
                     company_uen: item.company_uen,
                     company_address: item.company_address,
@@ -537,7 +543,6 @@ export class BuyerRegister extends Component {
     }
 
     save(type) {
-
         let isValidator = this.checkSuccess();
         if (isValidator) {
             validateIsExist(this.setParams()).then(res => {
@@ -743,7 +748,7 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Email :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="email_address" value={this.state.email_address} onChange={this.Change.bind(this, 'email_address')} disabled={this.state.disabled} ref="email_address" required aria-required="true" title="Please fill out this field" placeholder="Email" />
+                                        <input type="text" name="email_address" value={this.state.email_address} onChange={this.Change.bind(this, 'email_address')} readOnly={this.state.disabled} ref="email_address" required aria-required="true" title="Please fill out this field" placeholder="Email" />
                                         <div className='isPassValidate' id='email_address_message' >This field is required!</div>
                                         <div className='isPassValidate' id='email_address_format' >Incorrect mail format!</div>
                                         <div className='isPassValidate' id='email_address_repeat' >Email has already been taken!</div>
@@ -755,7 +760,7 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Company Name :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="company_name" value={this.state.company_name} onChange={this.Change.bind(this, 'company_name')} disabled={this.state.disabled} ref="company_name" required aria-required="true" title="Please fill out this field" ></input>
+                                        <input type="text" name="company_name" value={this.state.company_name} onChange={this.Change.bind(this, 'company_name')} readOnly={this.state.disabled} ref="company_name" required aria-required="true" title="Please fill out this field" ></input>
                                         <div className='isPassValidate' id='company_name_message' >This field is required!</div>
                                         <div className='isPassValidate' id='company_name_repeat' >Company name has already been taken!</div>
                                     </div>
@@ -765,7 +770,7 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Unique Entity Number :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="unique_entity_number" value={this.state.unique_entity_number} onChange={this.Change.bind(this, 'unique_entity_number')} disabled={this.state.disabled} ref="unique_entity_number" required aria-required="true" title="Please fill out this field"></input>
+                                        <input type="text" name="unique_entity_number" value={this.state.unique_entity_number} onChange={this.Change.bind(this, 'unique_entity_number')} readOnly={this.state.disabled} ref="unique_entity_number" required aria-required="true" title="Please fill out this field"></input>
                                         <div className='isPassValidate' id='unique_entity_number_message' >This field is required!</div>
                                         <div className='isPassValidate' id='unique_entity_number_repeat' >Unique entity number has already been taken!</div>
                                     </div>
@@ -775,7 +780,7 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Company Address :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="company_address" value={this.state.company_address} onChange={this.Change.bind(this, 'company_address')} disabled={this.state.disabled} ref="company_address" required aria-required="true" title="Please fill out this field"></input>
+                                        <input type="text" name="company_address" value={this.state.company_address} onChange={this.Change.bind(this, 'company_address')} readOnly={this.state.disabled} ref="company_address" required aria-required="true" title="Please fill out this field"></input>
                                         <div className='isPassValidate' id='company_address_message' >This field is required!</div>
                                     </div>
                                 </div>
@@ -784,7 +789,7 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Billing Address :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="billing_address" value={this.state.billing_address} onChange={this.Change.bind(this, 'billing_address')} disabled={this.state.disabled} ref="billing_address" required aria-required="true" title="Please fill out this field"></input>
+                                        <input type="text" name="billing_address" value={this.state.billing_address} onChange={this.Change.bind(this, 'billing_address')} readOnly={this.state.disabled} ref="billing_address" required aria-required="true" title="Please fill out this field"></input>
                                         <div className='isPassValidate' id='billing_address_message' >This field is required!</div>
                                     </div>
                                 </div>
@@ -794,7 +799,7 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Contact Name :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="contact_name" value={this.state.contact_name} onChange={this.Change.bind(this, 'contact_name')} disabled={this.state.disabled} ref="contact_name" required aria-required="true" title="Please fill out this field"></input>
+                                        <input type="text" name="contact_name" value={this.state.contact_name} onChange={this.Change.bind(this, 'contact_name')} readOnly={this.state.disabled} ref="contact_name" required aria-required="true" title="Please fill out this field"></input>
                                         <div className='isPassValidate' id='contact_name_message' >This field is required!</div>
                                     </div>
                                 </div>
@@ -803,7 +808,7 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Mobile Number :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="mobile_number" value={this.state.mobile_number} onKeyUp={this.removeInputNanNum.bind(this)} onChange={this.Change.bind(this, 'mobile_number')} disabled={this.state.disabled} ref="mobile_number" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field" required aria-required="true" ></input>
+                                        <input type="text" name="mobile_number" value={this.state.mobile_number} onKeyUp={this.removeInputNanNum.bind(this)} onChange={this.Change.bind(this, 'mobile_number')} readOnly={this.state.disabled} ref="mobile_number" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field" required aria-required="true" ></input>
                                         <div className='isPassValidate' id='mobile_number_message' >This field is required!</div>
                                         <div className='isPassValidate' id='mobile_number_format' >Number should contain 8 integers!</div>
                                     </div>
@@ -813,7 +818,7 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Office Number :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="office_number" value={this.state.office_number} onKeyUp={this.removeInputNanNum.bind(this)} onChange={this.Change.bind(this, 'office_number')} disabled={this.state.disabled} ref="office_number" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field" required aria-required="true" ></input>
+                                        <input type="text" name="office_number" value={this.state.office_number} onKeyUp={this.removeInputNanNum.bind(this)} onChange={this.Change.bind(this, 'office_number')} readOnly={this.state.disabled} ref="office_number" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field" required aria-required="true" ></input>
                                         <div className='isPassValidate' id='office_number_message' >This field is required!</div>
                                         <div className='isPassValidate' id='office_number_format' >Number should contain 8 integers!</div>
                                     </div>
@@ -864,7 +869,7 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Billing Address :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="user_billing_address" value={this.state.user_billing_address} onChange={this.Change.bind(this, 'user_billing_address')} disabled={this.state.disabled} ref="user_billing_address" aria-required="true" title="Please fill out this field"></input>
+                                        <input type="text" name="user_billing_address" value={this.state.user_billing_address} onChange={this.Change.bind(this, 'user_billing_address')} readOnly={this.state.disabled} ref="user_billing_address" aria-required="true" title="Please fill out this field"></input>
                                         <div className='isPassValidate' id='user_billing_address_message' >This field is required!</div>
                                     </div>
                                 </div>
@@ -873,7 +878,7 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Bill Attention To :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="user_bill_attention_to" value={this.state.user_bill_attention_to} onChange={this.Change.bind(this, 'user_bill_attention_to')} disabled={this.state.disabled} ref="user_bill_attention_to" aria-required="true" title="Please fill out this field"></input>
+                                        <input type="text" name="user_bill_attention_to" value={this.state.user_bill_attention_to} onChange={this.Change.bind(this, 'user_bill_attention_to')} readOnly={this.state.disabled} ref="user_bill_attention_to" aria-required="true" title="Please fill out this field"></input>
                                         <div className='isPassValidate' id='user_bill_attention_to_message' >This field is required!</div>
                                     </div>
                                 </div>
@@ -882,7 +887,7 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Contact Name :
                                </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="user_contact_name" value={this.state.user_contact_name} onChange={this.Change.bind(this, 'user_contact_name')} disabled={this.state.disabled} ref="user_contact_name" aria-required="true" title="Please fill out this field"></input>
+                                        <input type="text" name="user_contact_name" value={this.state.user_contact_name} onChange={this.Change.bind(this, 'user_contact_name')} readOnly={this.state.disabled} ref="user_contact_name" aria-required="true" title="Please fill out this field"></input>
                                         <div className='isPassValidate' id='user_contact_name_message' >This field is required!</div>
                                     </div>
                                 </div>
@@ -891,7 +896,7 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr>  Contact Email :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="user_contact_email" value={this.state.user_contact_email} onChange={this.Change.bind(this, 'user_contact_email')} disabled={this.state.disabled} ref="user_contact_email" aria-required="true" title="Please fill out this field"></input>
+                                        <input type="text" name="user_contact_email" value={this.state.user_contact_email} onChange={this.Change.bind(this, 'user_contact_email')} readOnly={this.state.disabled} ref="user_contact_email" aria-required="true" title="Please fill out this field"></input>
                                         <div className='isPassValidate' id='user_contact_email_message' >This field is required!</div>
                                         <div className='isPassValidate' id='user_contact_email_format' >Incorrect mail format!</div>
                                         <div className='isPassValidate' id='user_contact_email_repeat' >Contact email has already been taken!</div>
@@ -902,7 +907,7 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Contact Mobile No. :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="user_contact_mobile_no" value={this.state.user_contact_mobile_no} onChange={this.Change.bind(this, 'user_contact_mobile_no')} disabled={this.state.disabled} ref="user_contact_mobile_no" maxLength="8" aria-required="true" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
+                                        <input type="text" name="user_contact_mobile_no" value={this.state.user_contact_mobile_no} onChange={this.Change.bind(this, 'user_contact_mobile_no')} readOnly={this.state.disabled} ref="user_contact_mobile_no" maxLength="8" aria-required="true" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
                                         <div className='isPassValidate' id='user_contact_mobile_no_message' >This field is required!</div>
                                         <div className='isPassValidate' id='user_contact_mobile_no_format' >Number should contain 8 integers.</div>
                                     </div>
@@ -912,7 +917,7 @@ export class BuyerRegister extends Component {
                                         <abbr title="required">*</abbr> Contact Office No. :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="user_contact_office_no" value={this.state.user_contact_office_no} onChange={this.Change.bind(this, 'user_contact_office_no')} disabled={this.state.disabled} ref="user_contact_office_no" maxLength="8" aria-required="true" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
+                                        <input type="text" name="user_contact_office_no" value={this.state.user_contact_office_no} onChange={this.Change.bind(this, 'user_contact_office_no')} readOnly={this.state.disabled} ref="user_contact_office_no" maxLength="8" aria-required="true" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
                                         <div className='isPassValidate' id='user_contact_office_no_message' >This field is required!</div>
                                         <div className='isPassValidate' id='user_contact_office_no_format' >Number should contain 8 integers.</div>
                                         <div className={this.state.disabled ? "isHide" : "addEntity"} >
@@ -923,7 +928,7 @@ export class BuyerRegister extends Component {
 
                                     </div>
                                 </div>
-                                <UserEntity entityStatus={this.state.entityStatus} disabled={this.state.disabled} entityList={this.state.user_entity_data} ref="userEntity" className={this.state.disabled === 'admin_approve' ? '' : ''} />
+                                <UserEntity entityStatus={this.state.entityStatus} usedEntity={this.state.usedEntityIdArr} disabled={this.state.disabled} entityList={this.state.user_entity_data} ref="userEntity" className={this.state.disabled === 'admin_approve' ? '' : ''} />
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
                                         <abbr title="required">*</abbr> Tenant Management Service Required :
