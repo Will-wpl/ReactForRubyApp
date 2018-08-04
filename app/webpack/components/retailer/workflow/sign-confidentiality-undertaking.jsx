@@ -51,7 +51,7 @@ export class Signconfidentialityundertaking extends React.Component{
     }
     do_accept(){
         retailerAccept(this.props.current.current.arrangement_id).then(res=>{
-            this.popUp("You have accepted the Confidentiality Undertaking.");
+            //this.popUp("You have accepted the Confidentiality Undertaking.");
             setTimeout(()=>{
                 this.props.page();
             },3000)
@@ -60,10 +60,11 @@ export class Signconfidentialityundertaking extends React.Component{
     render(){
         return(
             <div className="sign_box">
-                {this.props.current.current.current_status ?
-                <h4>You have {this.props.current.current.current_status === 'reject' ? 'rejected' : 'accepted'} the Confidentiality Undertaking.</h4>
-                :''}
-                <p>You are bounded by the confidentiality clauses in the <a className="download_ico" target="_blank" download={this.state.file_name} href={this.state.file_path}>Retailer Platform Terms of Use.</a> Please click 'Proceed' to continue.</p>
+                {/*{this.props.current.current.current_status ?*/}
+                {/*<h4>You have {this.props.current.current.current_status === 'reject' ? 'rejected' : 'accepted'} the Confidentiality Undertaking.</h4>*/}
+                {/*:''}*/}
+                <p>You are bounded by the confidentiality clauses in the <a className="download_ico" target="_blank" download={this.state.file_name} href={this.state.file_path}>Retailer Platform Terms of Use.</a></p>
+                <p>Please click 'Proceed' to continue.</p>
                 {/*<p>*Note: can click on '<a className="download_ico" target="_blank" download={this.state.file_name} href={this.state.file_path}>Retailer Platform Terms of Use</a>' to download the PDF document.</p>*/}
                     {/*<div className="u-mt3 u-mb3 download">*/}
                         {/*<span>Click to Download : </span>*/}
