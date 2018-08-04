@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { removeFile,removeRetailerFile,removeBuyerFile } from '../../javascripts/componentService/admin/service';
+import { removeFile,removeRetailerFile,removeBuyerFile,removeUserAttachFile } from '../../javascripts/componentService/admin/service';
 export class UploadFile extends React.Component {
     constructor(props) {
         super(props);
@@ -42,7 +42,7 @@ export class UploadFile extends React.Component {
                                 <div className="progress-bar" style={{ width: "0%" }}>0%</div>
                             </div>
                             <div className="progress_files">
-                                <div id="showMessage" className={this.props.validate ? 'isPassValidate' : 'errormessage'}>This field is required!</div>
+                                {/* <div id="showMessage" className={this.props.validate ? 'isPassValidate' : 'errormessage'}>This field is required!</div> */}
                                 {this.state.showList == 1 ?
                                     <ul>
                                         {
@@ -111,6 +111,19 @@ export class UploadFile extends React.Component {
 
             })
 
+        }
+        else if(this.props.deleteType === "userAttach")
+        {
+            
+            removeUserAttachFile(fileid).then(res => {
+                fileObj = this.state.fileData;
+                fileObj[typeindex].files.splice(fileindex, 1);
+                this.setState({
+                    fileData: fileObj
+                })
+            }, error => {
+
+            })
         }
         else if (this.props.deleteType === "consumption")
         {
