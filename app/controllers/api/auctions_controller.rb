@@ -763,7 +763,7 @@ class Api::AuctionsController < Api::BaseController
     end
 
     auction_json = auction.attributes.dup
-    if auction.publish_status = Auction::PublishStatusPublished
+    if auction.publish_status == Auction::PublishStatusPublished
       auction_json[:auction_contracts] = live_auction_contracts
     else
       auction_json[:auction_contracts] = Auction.find(auction.id).auction_contracts.sort_by {|contract| contract.contract_duration.to_i}
