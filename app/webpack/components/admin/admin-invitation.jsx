@@ -425,26 +425,26 @@ upload(type, index){
             <thead>
             <tr>
                 <th></th>
-                {this.state.publish_status === "1" && !data.total_lt_peak && !data.total_lt_off_peak?<th style={{display:'none'}}></th>:<th>LT</th>}
-                {this.state.publish_status === "1" && !data.total_hts_peak && !data.total_hts_off_peak?<th style={{display:'none'}}></th>:<th>HT (Small)</th>}
-                {this.state.publish_status === "1" && !data.total_htl_peak && !data.total_htl_off_peak?<th style={{display:'none'}}></th>:<th>HT (Large)</th>}
-                {this.state.publish_status === "1" && !data.total_eht_peak && !data.total_eht_off_peak?<th style={{display:'none'}}></th>:<th>EHT</th>}
+                {!data.has_lt?<th style={{display:'none'}}></th>:<th>LT</th>}
+                {!data.has_hts?<th style={{display:'none'}}></th>:<th>HT (Small)</th>}
+                {!data.has_htl?<th style={{display:'none'}}></th>:<th>HT (Large)</th>}
+                {!data.has_eht?<th style={{display:'none'}}></th>:<th>EHT</th>}
             </tr>
             </thead>
             <tbody>
             <tr>
                 <td>Peak<br/>(7am-7pm)</td>
-                {this.state.publish_status === "1" && !data.total_lt_peak && !data.total_lt_off_peak?<td style={{display:'none'}}></td>:<td >{data.total_lt_peak ? formatPower(parseInt(Number(data.total_lt_peak)), 0, '') : 0}</td>}
-                {this.state.publish_status === "1" && !data.total_hts_peak && !data.total_hts_off_peak?<td style={{display:'none'}}></td>:<td >{data.total_hts_peak ? formatPower(parseInt(Number(data.total_hts_peak)), 0, '') : 0}</td>}
-                {this.state.publish_status === "1" && !data.total_htl_peak && !data.total_htl_off_peak?<td style={{display:'none'}}></td>:<td >{data.total_htl_peak ? formatPower(parseInt(Number(data.total_htl_peak)), 0, '') : 0}</td>}
-                {this.state.publish_status === "1" && !data.total_eht_peak && !data.total_eht_off_peak?<td style={{display:'none'}}></td>:<td >{data.total_eht_peak ? formatPower(parseInt(Number(data.total_eht_peak)), 0, '') : 0}</td>}
+                {!data.has_lt?<td style={{display:'none'}}></td>:<td >{data.total_lt_peak ? formatPower(parseInt(Number(data.total_lt_peak)), 0, '') : 0}</td>}
+                {!data.has_hts?<td style={{display:'none'}}></td>:<td >{data.total_hts_peak ? formatPower(parseInt(Number(data.total_hts_peak)), 0, '') : 0}</td>}
+                {!data.has_htl?<td style={{display:'none'}}></td>:<td >{data.total_htl_peak ? formatPower(parseInt(Number(data.total_htl_peak)), 0, '') : 0}</td>}
+                {!data.has_eht?<td style={{display:'none'}}></td>:<td >{data.total_eht_peak ? formatPower(parseInt(Number(data.total_eht_peak)), 0, '') : 0}</td>}
             </tr>
             <tr>
                 <td>Off-Peak<br/>(7pm-7am)</td>
-                {this.state.publish_status === "1" && !data.total_lt_peak && !data.total_lt_off_peak?<td style={{display:'none'}}></td>:<td >{data.total_lt_off_peak ? formatPower(parseInt(Number(data.total_lt_off_peak)), 0, '') : 0}</td>}
-                {this.state.publish_status === "1" && !data.total_hts_peak && !data.total_hts_off_peak?<td style={{display:'none'}}></td>:<td >{data.total_hts_off_peak ? formatPower(parseInt(Number(data.total_hts_off_peak)), 0, '') : 0}</td>}
-                {this.state.publish_status === "1" && !data.total_htl_peak && !data.total_htl_off_peak?<td style={{display:'none'}}></td>:<td >{data.total_htl_off_peak ? formatPower(parseInt(Number(data.total_htl_off_peak)), 0, '') : 0}</td>}
-                {this.state.publish_status === "1" && !data.total_eht_peak && !data.total_eht_off_peak?<td style={{display:'none'}}></td>:<td >{data.total_eht_off_peak ? formatPower(parseInt(Number(data.total_eht_off_peak)), 0, '') : 0}</td>}
+                {!data.has_lt?<td style={{display:'none'}}></td>:<td >{data.total_lt_off_peak ? formatPower(parseInt(Number(data.total_lt_off_peak)), 0, '') : 0}</td>}
+                {!data.has_hts?<td style={{display:'none'}}></td>:<td >{data.total_hts_off_peak ? formatPower(parseInt(Number(data.total_hts_off_peak)), 0, '') : 0}</td>}
+                {!data.has_htl?<td style={{display:'none'}}></td>:<td >{data.total_htl_off_peak ? formatPower(parseInt(Number(data.total_htl_off_peak)), 0, '') : 0}</td>}
+                {!data.has_eht?<td style={{display:'none'}}></td>:<td >{data.total_eht_off_peak ? formatPower(parseInt(Number(data.total_eht_off_peak)), 0, '') : 0}</td>}
             </tr>
             </tbody>
         </table>
