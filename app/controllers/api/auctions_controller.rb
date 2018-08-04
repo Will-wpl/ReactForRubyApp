@@ -462,7 +462,7 @@ class Api::AuctionsController < Api::BaseController
                                   LEFT JOIN users ON cns.user_id = users.\"id\",
                                     ( SELECT ent.company_name, ent.company_uen FROM company_buyer_entities ent WHERE ent.user_id = ? AND \"id\" = ? LIMIT 1 ) entity
                                   WHERE
-                                    cns.user_id = ? AND auction_id = ? AND contract_duration = ?",
+                                    cns.user_id = ? AND auction_id = ? AND contract_duration = ? AND accept_status = '1'",
                                            user_id, entity_id, user_id, auction_id, contract_duration]
     return nil, nil,nil, nil, nil if (consumption.empty?)
     auction_result = AuctionResultContract.select("users.id, users.name, coalesce(users.company_name, '') company_name,
