@@ -39,17 +39,17 @@ export default class ReservePriceCompare extends Component {
                     <tbody>
                     <tr>
                         <td>Peak</td>
-                        {data.has_lt?<td><abbr className={this.state.lt_peak?'fill_yes':''}>${parseFloat(data.reserve_price_lt_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
-                        {data.has_hts?<td><abbr className={this.state.hts_peak?'fill_yes':''}>${parseFloat(data.reserve_price_hts_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
-                        {data.has_htl?<td><abbr className={this.state.htl_peak?'fill_yes':''}>${parseFloat(data.reserve_price_htl_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
-                        {data.has_eht?<td><abbr className={this.state.eht_peak?'fill_yes':''}>${parseFloat(data.reserve_price_eht_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
+                        {data.has_lt?<td><abbr className={this.state.lt_peak?'fill_yes':''}>$ {parseFloat(data.reserve_price_lt_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
+                        {data.has_hts?<td><abbr className={this.state.hts_peak?'fill_yes':''}>$ {parseFloat(data.reserve_price_hts_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
+                        {data.has_htl?<td><abbr className={this.state.htl_peak?'fill_yes':''}>$ {parseFloat(data.reserve_price_htl_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
+                        {data.has_eht?<td><abbr className={this.state.eht_peak?'fill_yes':''}>$ {parseFloat(data.reserve_price_eht_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
                     </tr>
                     <tr>
                         <td>Off Peak</td>
-                        {data.has_lt?<td><abbr className={this.state.lt_off_peak?'fill_yes':''}>${parseFloat(data.reserve_price_lt_off_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
-                        {data.has_hts?<td><abbr className={this.state.hts_off_peak?'fill_yes':''}>${parseFloat(data.reserve_price_hts_off_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
-                        {data.has_htl?<td><abbr className={this.state.htl_off_peak?'fill_yes':''}>${parseFloat(data.reserve_price_htl_off_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
-                        {data.has_eht?<td><abbr className={this.state.eht_off_peak?'fill_yes':''}>${parseFloat(data.reserve_price_eht_off_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
+                        {data.has_lt?<td><abbr className={this.state.lt_off_peak?'fill_yes':''}>$ {parseFloat(data.reserve_price_lt_off_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
+                        {data.has_hts?<td><abbr className={this.state.hts_off_peak?'fill_yes':''}>$ {parseFloat(data.reserve_price_hts_off_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
+                        {data.has_htl?<td><abbr className={this.state.htl_off_peak?'fill_yes':''}>$ {parseFloat(data.reserve_price_htl_off_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
+                        {data.has_eht?<td><abbr className={this.state.eht_off_peak?'fill_yes':''}>$ {parseFloat(data.reserve_price_eht_off_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
                     </tr>
                     </tbody>
                 </table>
