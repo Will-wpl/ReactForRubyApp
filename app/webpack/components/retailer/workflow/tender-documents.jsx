@@ -106,23 +106,23 @@ export class Tenderdocuments extends React.Component {
 
                     </div>
                 </div>
-                <div className="lm--formItem lm--formItem--inline string u-mt3 role_select">
-                    <label className="lm--formItem-left lm--formItem-label string required">
-                        Electricity Procurement Agreement:
-                    </label>
-                    <div className="lm--formItem-right lm--formItem-control">
-                        <ul className="tender_list">
-                            {this.state.attachments ? this.state.attachments.map((item, index) => {
-                                return <li key={index}><a target="_blank" disabled={this.props.propsdisabled} download={item.file_name} href={item.file_path}>{item.file_name}</a></li>
-                            }) : ''}
-                        </ul>
-                    </div>
-                </div>
                 <div className="lm--formItem lm--formItem--inline string u-mt1">
                     <label className=" lm--formItem-label ">
                         Click on 'Accept & Proceed' if you do not wish to propose deviations to the Electricity Procurement Agreement.
                     </label>
                 </div>
+                {/*<div className="lm--formItem lm--formItem--inline string u-mt3 role_select">*/}
+                    {/*<label className="lm--formItem-left lm--formItem-label string required">*/}
+                        {/*Electricity Procurement Agreement:*/}
+                    {/*</label>*/}
+                    {/*<div className="lm--formItem-right lm--formItem-control">*/}
+                        {/*<ul className="tender_list">*/}
+                            {/*{this.state.attachments ? this.state.attachments.map((item, index) => {*/}
+                                {/*return <li key={index}><a target="_blank" disabled={this.props.propsdisabled} download={item.file_name} href={item.file_path}>{item.file_name}</a></li>*/}
+                            {/*}) : ''}*/}
+                        {/*</ul>*/}
+                    {/*</div>*/}
+                {/*</div>*/}
                 {/*<div className="lm--formItem lm--formItem--inline string u-mt3 role_select">*/}
                     {/*<label className=" lm--formItem-label ">*/}
                         {/*{(this.props.single != 5 && this.props.single != 4) ? "You are bounded by the Electricity Procurement Agreement. Please click 'Proceed' to continue." : ""}*/}
