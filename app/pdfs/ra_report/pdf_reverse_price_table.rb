@@ -60,7 +60,7 @@ class PdfReversePriceTable
 
   def get_achieved_img(result_price, reserve_price)
     # achieved = histories_achieved[0].average_price <= auction.reserve_price if !histories_achieved.empty?
-    achieved = result_price < reserve_price
+    achieved = result_price <= reserve_price
     if achieved
       return true, Rails.root.join("app", "assets", "pdf", "yes.png")
     else
