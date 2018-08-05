@@ -474,7 +474,7 @@ class Api::AuctionsController < Api::BaseController
                                   coalesce(users.company_unique_entity_number, '') company_unique_entity_number,
                                   auction_result_contracts.*")
                          .joins(:user)
-                         .where('auction_id = ? AND contract_duration = ?', auction_id, contract_duration)
+                         .where("auction_id = ? AND contract_duration = ? AND status= 'win'", auction_id, contract_duration)
                          .limit 1
     consumption_details = nil
     consumption_details = ConsumptionDetail.find_by_sql ['SELECT 	cbe."id",	cbe.company_name, cds.*
