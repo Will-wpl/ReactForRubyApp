@@ -239,6 +239,7 @@ export const Ws = class {
                 }
             } else {
                 if (!this.connected) {
+                    window.location.reload();
                     cable.connection.reopen();
                 }
             }
