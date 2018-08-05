@@ -10,7 +10,7 @@ div.u-grid.u-mt2.u-mb2.mouth_tab
           li
             = link_to log_admin_auction_path(contract_duration: contract[:contract_duration]), class: 'log' do
               = 'Activity Log:'
-          - if @company_count != 0
+          - if @company_count != 0 && contract[:status] != 'void'
               li
                 = link_to award_admin_auction_path(contract_duration: contract[:contract_duration]), class: 'ddd' do
                   = 'Letter of Award:'
