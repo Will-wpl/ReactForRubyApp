@@ -169,7 +169,10 @@ export default class ChooseAlternativeWinner extends React.Component{
                 text:"You have voided this Reverse Auction exercise, and will be redirected to the homepage.",
                 disabled:true,
                 voidStatus:true
-            })
+            });
+            setTimeout(()=>{
+                this.refresh();
+            },3000)
         },error=>{
 
         })

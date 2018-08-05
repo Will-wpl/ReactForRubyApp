@@ -12,6 +12,7 @@ export class Signconfidentialityundertaking extends React.Component {
     }
     componentDidMount() {
         getUndertaking(sessionStorage.arrangement_id).then(res => {
+            console.log(res);
             this.setState({
                 file: res
             })
@@ -62,8 +63,8 @@ export class Signconfidentialityundertaking extends React.Component {
                 {/*:''}*/}
                 {/* You are bounded by the confidentiality clauses in the <a className="download_ico" target="_blank" download={this.state.file.length>0?this.state.file[0].file_name:''} href={this.state.file.length>0?this.state.file[0].file_path:'#'}>Retailer Platform Terms of Use</a> and <a className="download_ico" target="_blank" download={this.state.file.length>0?this.state.file[1].file_name:''} href={this.state.file.length>0?this.state.file[1].file_path:'#'}>Electricity Procurement Agreement.</a> */}
                 {this.props.auction.step === 3 ?
-                    <p>You are bounded by the  <a className="download_ico" target="_blank" download={this.state.file.length > 0 ? this.state.file[0].file_name : ""} href={this.state.file.length > 0 ? this.state.file[0].file_path : "#"}>Retailer Platform Terms of Use</a> and <a className="download_ico" target="_blank" download={this.state.file.length > 0 ? this.state.file[1].file_name : ""} href={this.state.file.length > 0 ? this.state.file[1].file_path : "#"}>Electricity Procurement Agreement.</a></p>
-                    :<p>You are bounded by the confidentiality clauses in the <a className="download_ico" target="_blank" download={this.state.file.length > 0 ? this.state.file[0].file_name : ''} href={this.state.file.length > 0 ? this.state.file[0].file_path : '#'}>Retailer Platform Terms of Use</a>.</p>}
+                    <p>You are bounded by the  <a className="download_ico" target="_blank" download={this.state.file.length > 0 && this.state.file[0]? this.state.file[0].file_name : ""} href={this.state.file.length > 0  && this.state.file[0] ? this.state.file[0].file_path : "#"}>Retailer Platform Terms of Use</a> and <a className="download_ico" target="_blank" download={this.state.file.length > 0  && this.state.file[1] ? this.state.file[1].file_name : ""} href={this.state.file.length > 0  && this.state.file[1] ? this.state.file[1].file_path : "#"}>Electricity Procurement Agreement.</a></p>
+                    :<p>You are bounded by the confidentiality clauses in the <a className="download_ico" target="_blank" download={this.state.file.length > 0 && this.state.file[0] ? this.state.file[0].file_name : ''} href={this.state.file.length > 0  && this.state.file[0] ? this.state.file[0].file_path : '#'}>Retailer Platform Terms of Use</a>.</p>}
                 <p>Please click 'Proceed' to continue.</p>
                 {/*<p>*Note: can click on '<a className="download_ico" target="_blank" download={this.state.file_name} href={this.state.file_path}>Retailer Platform Terms of Use</a>' to download the PDF document.</p>*/}
                 {/*<div className="u-mt3 u-mb3 download">*/}
