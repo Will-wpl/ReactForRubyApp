@@ -24,12 +24,14 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
                   report: get_report(result) ,
                   award: get_award(result))
       else
+        consumption = Consumption.find_by_auction_and_user(result.auction_id, current_user.id).take
+        contract_result = result.auction_result_contracts.where(contract_duration: consumption.contract_duration).take
         data.push(published_gid: result.auction.published_gid,
                   name: result.auction.name,
                   start_datetime: result.auction.start_datetime,
-                  acknowledge: get_acknowledge(result) ,
-                  report: get_report(result) ,
-                  award: get_new_awrd(result))
+                  acknowledge: get_acknowledge(contract_result) ,
+                  report: get_report(contract_result) ,
+                  award: get_new_awrd(contract_result))
       end
 
     end
