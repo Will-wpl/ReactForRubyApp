@@ -206,6 +206,9 @@ export class Keppelproposedeviations extends Component {
             contentType: false,
             xhr:() => {
                 var xhr = new window.XMLHttpRequest();
+                this.setState({
+                    disabled: true
+                })
                 xhr.upload.addEventListener("progress", function (evt) {
                     if (evt.lengthComputable) {
                         const percentComplete = parseInt(evt.loaded / evt.total * 100, 10);
@@ -224,7 +227,12 @@ export class Keppelproposedeviations extends Component {
                 barObj.find(".progress-bar").text('Upload Successful!');
                 setTimeout(()=>{
                     barObj.fadeOut(500);
+                    $('.dfn').html('Please select file.')
+                    this.setState({
+                        disabled: false
+                    })
                 },2000);
+               
                 fileObj = this.state.fileData;
                 fileObj[type].map((item,index)=>{
                     item.files.push({
@@ -236,10 +244,14 @@ export class Keppelproposedeviations extends Component {
                 this.setState({
                     fileData:fileObj
                 })
+                $("#" + type + index).val('');
                 //console.log(res);
             },error:() => {
                         barObj.find(".progress-bar").text('upload failed!');
                         barObj.find(".progress-bar").css('background', 'red');
+                        this.setState({
+                            disabled: false
+                        })
                     }
                 })
             }
