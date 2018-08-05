@@ -150,8 +150,6 @@ export class Modal extends React.Component {
     }
 
     showModal(type, data, str, index) {
-        $(".email_body").css({ "height": "140px" });
-        $("div[name='middleModal']").css({ "width": "50%", "height": "300px", "top": "40%", "left": "40%" })
         if (str) {
             this.setState({ strtype: str });
         }
