@@ -623,19 +623,19 @@ export class CreateNewRA extends Component {
             btn_html = <div className="createRa_btn">
                 {this.state.disabled ? <div className="mask"></div> : ''}
                 <button className="lm--button lm--button--primary" disabled={this.state.disabled?true:(this.state.submit_btn?false:true)} onClick={this.auctionCreate.bind(this, 'save')}>Save</button>
-                <button className="lm--button lm--button--primary" disabled={this.state.disabled?true:(this.state.submit_btn?false:true)} onClick={this.auctionCreate.bind(this, 'next')}>Next</button>
+                <button className="lm--button lm--button--primary"  onClick={this.auctionCreate.bind(this, 'next')}>Next</button>
             </div>
         } else {//edit
             styleType = "col-sm-12 col-md-8 push-md-2";
             left_name = this.props.left_name;
             btn_html = <div className="createRa_btn">
                 {this.props.disabled ?
-                    <button className="lm--button lm--button--primary" disabled={this.state.disabled?true:(this.state.submit_btn?false:true)} onClick={this.auctionCreate.bind(this, 'next')}>Next</button> :
+                    <button className="lm--button lm--button--primary"  onClick={this.auctionCreate.bind(this, 'next')}>Next</button> :
                     <div>
                         <a className={this.state.edit_btn} onClick={this.edit.bind(this)}>Edit</a>
                         <a className={this.state.edit_change} onClick={this.Cancel.bind(this)}>Cancel</a>
                         <button className={this.state.edit_change} disabled={this.state.disabled?true:(this.state.submit_btn?false:true)} onClick={this.auctionCreate.bind(this, 'save')}>Save</button>
-                        <button className="lm--button lm--button--primary" disabled={this.state.disabled?true:(this.state.submit_btn?false:true)} onClick={this.auctionCreate.bind(this, 'next')}>Next</button>
+                        <button className="lm--button lm--button--primary"  onClick={this.auctionCreate.bind(this, 'next')}>Next</button>
                     </div>}
             </div>
         }
