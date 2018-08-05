@@ -282,6 +282,9 @@ upload(type, index){
                 || this.state.readOnly){
                     uploadStatus = false;
                 }
+                if(this.state.publish_status === "1"){
+                    uploadStatus = false;
+                }
                 let fileHtml = '';
                 fileHtml = <div className="file_box">
                             <form id={type+"_form"} encType="multipart/form-data">
