@@ -23,7 +23,12 @@ export default class AdminAward extends Component{
 
     downLoad(data,entity_id){
         //console.log(data);
-        window.open(`/api/admin/auctions/letter_of_award_pdf?auction_id=${data.auction_id}&user_id=${data.user_id}&contract_duration=${this.state.contract_duration}&entity_id=${entity_id}`)
+        if(entity_id){
+            window.open(`/api/admin/auctions/letter_of_award_pdf?auction_id=${data.auction_id}&user_id=${data.user_id}&contract_duration=${this.state.contract_duration}&entity_id=${entity_id}`);
+        }else{
+            window.open(`/api/admin/auctions/letter_of_award_pdf?auction_id=${data.auction_id}&user_id=${data.user_id}`);
+        }
+
     }
 
     renderAwardList(data){
@@ -35,9 +40,9 @@ export default class AdminAward extends Component{
                         <span className="col-sm-4 white">{e.name}</span>
                         <span className="col-sm-4"><abbr className={'color'+status}></abbr></span>
                         <span className="col-sm-4 line15">
-                            {e.entities.map((it,k)=>{
+                            {e.entities?e.entities.map((it,k)=>{
                                 return <div key={k} className="downLoadIcon" onClick={this.downLoad.bind(this,e,it.company_buyer_entity_id)}></div>
-                            })}
+                            }):<div className="downLoadIcon" onClick={this.downLoad.bind(this,e,null)}></div>}
 
                         </span>
                     </li>
