@@ -90,9 +90,13 @@ export default class RetailerLetterOfAward extends React.Component{
         })
     }
     download(data,id){
-        //console.log(data);
-        let duration=window.location.href.indexOf("duration")>0?window.location.href.split("duration=")[1]:'';
-        window.open(`/api/retailer/auctions/letter_of_award_pdf?auction_id=${data.auction_id}&user_id=${data.user_id}&entity_id=${id}&contract_duration=${duration}`);
+        if(id){
+            let duration=window.location.href.indexOf("duration")>0?window.location.href.split("duration=")[1]:'';
+            window.open(`/api/retailer/auctions/letter_of_award_pdf?auction_id=${data.auction_id}&user_id=${data.user_id}&entity_id=${id}&contract_duration=${duration}`);
+        }else{
+            window.open(`/api/retailer/auctions/letter_of_award_pdf?auction_id=${data.auction_id}&user_id=${data.user_id}`);
+        }
+
     }
 
     renderAwardList(data){
@@ -104,7 +108,7 @@ export default class RetailerLetterOfAward extends React.Component{
                         <span className="col-sm-4 line15">
                             {e.entities?e.entities.map((it,k)=>{
                                 return <div key={k} className="downLoadIcon" onClick={this.download.bind(this,e,it.company_buyer_entity_id)}></div>
-                            }):''}
+                            }):<div className="downLoadIcon" onClick={this.download.bind(this,e,null)}></div>}
                         </span>
                         <span className="col-sm-4 ">
                             <button
