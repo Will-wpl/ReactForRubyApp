@@ -69,17 +69,17 @@ export class CreateNewRA extends Component {
                 if(this.auction.publish_status == 1){
                     this.setState({
                         disabled:true,
-                        single_truely:true
                     })
                 }else{
                     this.setState({
-                        disabled:false
+                        disabled:false,
                     })
                 }          
             }else{
                 if(moment(this.auction.actual_begin_time) < moment() || this.auction.publish_status == 1){
                     this.setState({
-                        disabled:true
+                        disabled:true,
+                        single_truely:true
                     })
                 }
             }     
