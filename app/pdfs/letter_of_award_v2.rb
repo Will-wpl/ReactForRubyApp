@@ -41,4 +41,12 @@ class LetterOfAwardV2 < LetterOfAward
     return 0.0, 0.0
   end
 
+  def get_premise_address(consumption_detail)
+    blk_or_unit = consumption_detail.blk_or_unit
+    street = consumption_detail.street
+    unit_number = consumption_detail.unit_number
+    postal_code = consumption_detail.postal_code
+    "#{blk_or_unit} #{street} #{unit_number} #{postal_code}"
+  end
+
 end

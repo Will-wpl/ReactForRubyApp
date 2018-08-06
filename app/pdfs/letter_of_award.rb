@@ -119,9 +119,13 @@ class LetterOfAward < Pdf
                      else
                        PdfUtils.number_helper.number_to_currency(detail.contracted_capacity.to_f, precision: 0, unit: '')
                      end))
-                     .gsub(/#premise_address/, detail.premise_address.to_s)
+                     .gsub(/#premise_address/, get_premise_address(detail))
     end
     tr_text
+  end
+
+  def get_premise_address(consumption_detail)
+    consumption_detail.premise_address.to_s
   end
 
   def html_parse(page, *id_name)
