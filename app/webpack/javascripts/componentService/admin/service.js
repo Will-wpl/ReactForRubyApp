@@ -126,7 +126,12 @@ export const createWebsocket = (auction, methods = {}) => {
 }
 
 export const getLetterOfAward = (params,contract_duration) => {
-    return get(`/api/admin/auction_results/${params}/award?contract_duration=${contract_duration}`);
+    if(contract_duration){
+        return get(`/api/admin/auction_results/${params}/award?contract_duration=${contract_duration}`);
+    }else{
+        return get(`/api/admin/auction_results/${params}/award`);
+    }
+
 }
 
 export const doPdf = (params) => {

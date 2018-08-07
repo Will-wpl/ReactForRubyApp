@@ -69,17 +69,17 @@ export class CreateNewRA extends Component {
                 if(this.auction.publish_status == 1){
                     this.setState({
                         disabled:true,
-                        single_truely:true
                     })
                 }else{
                     this.setState({
-                        disabled:false
+                        disabled:false,
                     })
                 }          
             }else{
                 if(moment(this.auction.actual_begin_time) < moment() || this.auction.publish_status == 1){
                     this.setState({
-                        disabled:true
+                        disabled:true,
+                        single_truely:true
                     })
                 }
             }     
@@ -613,7 +613,7 @@ export class CreateNewRA extends Component {
                                 <span className="lm--formItem-left lm--formItem-label string optional">Contact End Date</span>
                                 <div className="lm--formItem-right lm--formItem-control">
                                     {this.state.contractArray.map((item,index)=>{
-                                        return <label key={index} className={'lm--formItem-label lm--formItem-control'}>Buyer on {item.contract_duration} months [{item.contract_period_end_date}]</label>
+                                        return <label key={index} className={'lm--formItem-label lm--formItem-control'}>Buyers on {item.contract_duration} months [{item.contract_period_end_date}]</label>
                                     })}
                                 </div>
                             </dd>

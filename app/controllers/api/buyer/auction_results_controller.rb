@@ -87,7 +87,7 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
     if show_award?(result, current_user) then
       if result.participation_status == '1'
         consumption = Consumption.find_by_auction_and_user(result.auction_id, current_user.id).first
-        consumption.consumption_details.each do |detail|
+        consumption.consumption_details.select(:company_buyer_entity_id).distinct.each do |detail|
           awards.push("api/buyer/auctions/#{result.auction_id}/letter_of_award_pdf?entity_id=#{detail.company_buyer_entity_id}&contract_duration=#{consumption.contract_duration}")
         end
       end

@@ -19,7 +19,7 @@ class Api::RegistrationsController < Api::BaseController
     # get the last uploaded business file
     user_attachment = UserAttachment.find_by_type_user(UserAttachment::FileType_Buyer_Doc, user.id).order(updated_at: :desc).first
     # get buyer entities
-    buyer_entities = user.company_buyer_entities.order(updated_at: :asc)
+    buyer_entities = user.company_buyer_entities.order(is_default: :desc)
     # get seller-buyer-t&c document
     seller_buyer_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)
     # get buyer-revv-t&c document
