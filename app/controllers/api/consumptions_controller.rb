@@ -52,6 +52,7 @@ class Api::ConsumptionsController < Api::BaseController
     details = ConsumptionDetail.find_by_consumption_id(params[:id]).order(id: :asc)
     details_array = consumption_details(details)
     auction_finished = !consumption.auction.auction_result.blank?
+    auction_published = consumption.auction.publish_status
     count = details.count
     entities = CompanyBuyerEntity.find_by_user(consumption.user_id)
     cons = { auction_id: consumption.auction_id,
@@ -60,6 +61,7 @@ class Api::ConsumptionsController < Api::BaseController
              name: consumption.user.name,
              consumption: consumption,
              auction_finished: auction_finished,
+             auction_published: auction_published,
              count: count,
              lt_peak: Consumption.get_lt_peak(consumption.lt_peak),
              lt_off_peak: Consumption.get_lt_off_peak(consumption.lt_off_peak),
