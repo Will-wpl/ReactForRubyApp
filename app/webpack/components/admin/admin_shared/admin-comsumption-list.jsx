@@ -84,27 +84,23 @@ export default class AdminComsumptionList extends Component {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {this.props.comsumption_list ?
-                                            this.props.comsumption_list.map((item, index) => {
-                                                return item.details.map((it, i) => {
-                                                    return (<tr key={i}>
-                                                        <td>{it.account_number}</td>
-                                                        <td>{it.existing_plan}</td>
-                                                        <td>{it.contract_expiry !== "" ? moment(it.contract_expiry).format('YYYY-MM-DD') : "—"}</td>
-                                                        <td>{this.getPurchase(it.company_buyer_entity_id,index)}</td>
-                                                        <td>{it.intake_level}</td>
-                                                        <td>{it.contracted_capacity ? parseInt(it.contracted_capacity) : '—'}</td>
-                                                        <td>{it.blk_or_unit} {it.street} {it.unit_number} {it.postal_code} </td>
-                                                        <td className="left">
-                                                            <div><span>Total Monthly:</span><span className="textDecoration" >{parseInt(it.totals)}</span><span> kWh/month</span></div>
-                                                            <div><span>Peak:</span><span className="textDecoration">{parseFloat(it.peak_pct).toFixed(2)}</span><span> %</span><span style={{ fontWeight: "bold", fontSize: "14px" }} title="Click on '?' to see Admin's reference information on peak/offpeak ratio." >&nbsp;&nbsp;?</span></div>
-                                                            <div><span>Off-Peak:</span><span className="textDecoration">{parseFloat(100 - it.peak_pct).toFixed(2)}</span><span> %</span></div>
-                                                            <div className={it.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span><span><a href={it.user_attachment ? it.user_attachment.file_path : "#"} target="_blank">{it.user_attachment ? it.user_attachment.file_name : ""}</a></span></div>
-                                                        </td>
-                                                    </tr>)
-                                                })
-                                            }) : "11"
-                                        }
+                                        {item.details.map((it, i) => {
+                                            return (<tr key={i}>
+                                                <td>{it.account_number}</td>
+                                                <td>{it.existing_plan}</td>
+                                                <td>{it.contract_expiry !== "" ? moment(it.contract_expiry).format('YYYY-MM-DD') : "—"}</td>
+                                                <td>{this.getPurchase(it.company_buyer_entity_id,index)}</td>
+                                                <td>{it.intake_level}</td>
+                                                <td>{it.contracted_capacity ? parseInt(it.contracted_capacity) : '—'}</td>
+                                                <td>{it.blk_or_unit} {it.street} {it.unit_number} {it.postal_code} </td>
+                                                <td className="left">
+                                                    <div><span>Total Monthly:</span><span className="textDecoration" >{parseInt(it.totals)}</span><span> kWh/month</span></div>
+                                                    <div><span>Peak:</span><span className="textDecoration">{parseFloat(it.peak_pct).toFixed(2)}</span><span> %</span><span style={{ fontWeight: "bold", fontSize: "14px" }} title="Click on '?' to see Admin's reference information on peak/offpeak ratio." >&nbsp;&nbsp;?</span></div>
+                                                    <div><span>Off-Peak:</span><span className="textDecoration">{parseFloat(100 - it.peak_pct).toFixed(2)}</span><span> %</span></div>
+                                                    <div className={it.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span><span><a href={it.user_attachment ? it.user_attachment.file_path : "#"} target="_blank">{it.user_attachment ? it.user_attachment.file_name : ""}</a></span></div>
+                                                </td>
+                                            </tr>)
+                                        })}
                                     </tbody>
                                     </table>
                                 </div>
