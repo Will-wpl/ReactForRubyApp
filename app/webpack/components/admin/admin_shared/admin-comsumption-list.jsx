@@ -53,22 +53,24 @@ export default class AdminComsumptionList extends Component {
         return (
             this.props.dataVersion ?
                 <div>
-                    <div >
-                        <div>New Accounts</div>
-                        <div className="comsumption_list_new" >
-                            <div className="comsumption_list_table_new u-grid visible">
-                                <table>
-                                    <colgroup>
-                                        <col width="12%" />
-                                        <col width="12%" />
-                                        <col width="12%" />
-                                        <col width="12%" />
-                                        <col width="12%" />
-                                        <col width="12%" />
-                                        <col width="12%" />
-                                        <col width="20%" />
-
-                                    </colgroup>
+                    {this.props.comsumption_list ?
+                        this.props.comsumption_list.map((item, index) => {
+                            return <div className="comsumption_list" key={index}>
+                                <div className={this.props.visible ? "comsumption_list_top u-grid open" : "comsumption_list_top u-grid"} onClick={this.show_table.bind(this, index, item.id)}>
+                                    <div className="col">{this.props.type === 'View Company Consumption Details' ? item.company_name : item.name}</div>
+                                    <div className="col">Accounts: <p>{item.count}</p></div>
+                                    <div className="col">LT(Peak): <p>{formatPower(parseInt(Number(item.lt_peak)), 0, '')}</p></div>
+                                    <div className="col">LT(Off-Peak): <p>{formatPower(parseInt(Number(item.lt_off_peak)), 0, '')}</p></div>
+                                    <div className="col">HTS(Peak): <p>{formatPower(parseInt(Number(item.hts_peak)), 0, '')}</p></div>
+                                    <div className="col">HTS(Off-Peak): <p>{formatPower(parseInt(Number(item.hts_off_peak)), 0, '')}</p></div>
+                                    <div className="col">HTL(Peak): <p>{formatPower(parseInt(Number(item.htl_peak)), 0, '')}</p></div>
+                                    <div className="col">HTL(Off-Peak): <p>{formatPower(parseInt(Number(item.htl_off_peak)), 0, '')}</p></div>
+                                    <div className="col">EHT(Peak): <p>{formatPower(parseInt(Number(item.eht_peak)), 0, '')}</p></div>
+                                    <div className="col">EHT(Off-Peak): <p>{formatPower(parseInt(Number(item.eht_off_peak)), 0, '')}</p></div>
+                                    <div className="col">Unit: kWh</div>
+                                </div>
+                                <div className={this.props.visible ? 'comsumption_list_table u-grid visible' : 'comsumption_list_table u-grid'} id={"comsumption_list_table_" + index}>
+                                    <table>
                                     <thead>
                                         <tr>
                                             <td>Account No.</td>
@@ -104,10 +106,11 @@ export default class AdminComsumptionList extends Component {
                                             }) : "11"
                                         }
                                     </tbody>
-                                </table>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
-                    </div>
+                        }) : ''
+                    }
                 </div> :
                 <div>
                     {this.props.comsumption_list ?
