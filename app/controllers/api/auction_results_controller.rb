@@ -10,7 +10,12 @@ class Api::AuctionResultsController < Api::BaseController
     end
     data = []
     consumptions.each do |consumption|
-      entities = consumption.consumption_details
+
+      entities = if params[:contract_duration].blank?
+                   nil
+                 else
+                   consumption.consumption_details.select(:company_buyer_entity_id).distinct
+                 end
       data.push(id: consumption.id, name: consumption.user.company_name, acknowledge: consumption.acknowledge, download_url: nil,
                 auction_id: consumption.auction_id, user_id: consumption.user_id, entities: entities)
     end

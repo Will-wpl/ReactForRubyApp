@@ -74,7 +74,7 @@ ul, menu, dir {
   }
 }
 
-
+.peak_error{position:absolute; display: none; top:60px; left:0; width: 100%; padding:5px 10px; border:2px solid #fbb136; background: #fff; color:#333; font-size: 15px;z-index: 10}
 
 //retailer manage coming
 .link_file{line-height: 40px; text-decoration: underline;}
@@ -106,7 +106,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
    tbody{
      overflow:auto; height: 30px;
      tr{ &.isbidder{background:green; transition: 0.5s all;}
-       td{border:1px solid #314657; text-align: center; height: 40px; padding:5px; word-break: break-all;
+       td{border:1px solid #314657; position: relative; text-align: center; height: 40px; padding:5px; word-break: break-all;
          abbr{
            display: inline-block; line-height: 40px; font-style: normal; transition: 0.5s all;
            background: url("../images/notification_sent.png") no-repeat -20px 11px;

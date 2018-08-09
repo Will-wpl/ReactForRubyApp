@@ -11,6 +11,18 @@ export const findUpLimit = (curValue) => {
     return 1;
 }
 
+export const findUpLimitZero = (curValue) => {
+    if (curValue.indexOf('.') > 0) {
+        let arr = curValue.split('');
+        for(let i=0; i<6; i++) {
+            arr[i] = arr[i]=='0'?arr[i]:(arr[i]?arr[i]:'0');
+        }
+        return arr.join('');
+    }else{
+        return curValue
+    }
+}
+
 const defaultColors = ['#22ad38', '#ffff00', '#f53d0b', '#8ff830', '#f13de8', '#37b8ff', '#ffffff', '#ffc000'
     , '#3366ff', '#9933ff', '#868686', '#0ba55c', '#fa9106', '#ffafff', '#c00000', '#46f0f0', '#49702e', '#ffff99'
     , '#993300', '#8e8cf4']
