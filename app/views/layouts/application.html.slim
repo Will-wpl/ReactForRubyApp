@@ -58,11 +58,6 @@ html(lang="en")
                     = current_user.company_name
                   i class="lm--icon-profile" aria-hidden="true"
                 ul.lm--dropdown-menu
-                  - if current_user.approval_status == '1' || current_user.approval_status == '0'
-                    li
-                      = link_to 'Manage Account', edit_user_registration_path, class: 'lm--dropdown-link'
-                    li
-                      = link_to 'Manage Password', users_pwds_edit_path, class: 'lm--dropdown-link'
                   - if current_user.has_role?('admin')
                     li
                       = link_to 'Manage Account', edit_user_registration_path, class: 'lm--dropdown-link'
@@ -72,6 +67,15 @@ html(lang="en")
                       = link_to 'Manage Contract', admin_contract_index_path, class: 'lm--dropdown-link'
                     li
                       = link_to 'Manage Templates', admin_templates_path, class: 'lm--dropdown-link'
+                  - else
+                    -if current_user.approval_status == '1' || current_user.approval_status == '0'
+                      li
+                        = link_to 'Manage Account', edit_user_registration_path, class: 'lm--dropdown-link'
+                      li
+                        = link_to 'Manage Password', users_pwds_edit_path, class: 'lm--dropdown-link'
+                    -if current_user.approval_status == '2' || current_user.approval_status == '3'
+                      li
+                        = link_to 'Manage Password', users_pwds_edit_path, class: 'lm--dropdown-link'
                   li
                     = link_to 'Log Out', destroy_user_session_path, method: :delete, class: 'lm--dropdown-link',onClick:'clearStorage()'
           - else
