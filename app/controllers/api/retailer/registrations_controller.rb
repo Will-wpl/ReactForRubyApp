@@ -12,6 +12,7 @@ class Api::Retailer::RegistrationsController < Api::RegistrationsController
   def update
     update_user_params = model_params
     update_user_params = filter_user_password(update_user_params)
+    update_user_params['approval_status'] = User::ApprovalStatusPending
     @user.update(update_user_params)
     render json: { user: @user }, status: 200
   end
@@ -20,7 +21,7 @@ class Api::Retailer::RegistrationsController < Api::RegistrationsController
   def sign_up
     update_user_params = model_params
     update_user_params = filter_user_password(update_user_params)
-    update_user_params['approval_status'] = User::ApprovalStatusPending
+    update_user_params['approval_status'] = User::ApprovalStatusRegistering
     @user.update(update_user_params)
     render json: { user: @user }, status: 200
   end
