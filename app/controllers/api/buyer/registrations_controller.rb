@@ -42,7 +42,8 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     buyer_entities = JSON.parse(params[:buyer_entities])
 
     # need admin approval if company name / UEN changed.
-    if(user.approval_status == User::ApprovalStatusRegistering ||
+    if(user.approval_status == User::ApprovalStatusReject ||
+      user.approval_status == User::ApprovalStatusRegistering ||
         (user.company_name != update_user_params['company_name'] ||
           user.company_unique_entity_number != update_user_params['company_unique_entity_number'] ) ||
        buyer_entities.any?{ |e| e['user_entity_id'].to_i == 0 })
