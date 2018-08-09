@@ -65,6 +65,10 @@ html(lang="en")
                       = link_to 'Manage Password', users_pwds_edit_path, class: 'lm--dropdown-link'
                   - if current_user.has_role?('admin')
                     li
+                      = link_to 'Manage Account', edit_user_registration_path, class: 'lm--dropdown-link'
+                    li
+                      = link_to 'Manage Password', users_pwds_edit_path, class: 'lm--dropdown-link'
+                    li
                       = link_to 'Manage Contract', admin_contract_index_path, class: 'lm--dropdown-link'
                     li
                       = link_to 'Manage Templates', admin_templates_path, class: 'lm--dropdown-link'
