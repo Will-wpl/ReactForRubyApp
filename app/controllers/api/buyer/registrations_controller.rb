@@ -78,7 +78,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     # validate Company name field
     validate_result = validate_user_field('company_name',
                                                    validation_user['company_name'],
-                                                   [validation_user['id']])
+                                                   [validation_user['id']],'Buyer')
     validate_final_result = validate_final_result & validate_result
     error_fields.push('company_name') unless validate_result
 
@@ -92,7 +92,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     # validate Company UEN field
     validate_result = validate_user_field('company_unique_entity_number',
                                                    validation_user['company_unique_entity_number'],
-                                                   [validation_user['id']])
+                                                   [validation_user['id']],'Buyer')
 
     validate_final_result = validate_final_result & validate_result
     error_fields.push('company_unique_entity_number') unless validate_result
