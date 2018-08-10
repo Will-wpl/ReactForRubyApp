@@ -25,7 +25,8 @@ export class CreateNewRA extends Component {
             disabled:false,live_modal:"",live_modal_do:"",holdOrend:"",checkArray:[],
             contract_duration_6:false,contract_duration_12:false,contract_duration_24:false,
             required:false,check_required:true,single_multiple:"1",allow_deviation:"1",
-            contract_6:'0',contract_12:'0',contract_24:'0',single_truely:false
+            contract_6:'0',contract_12:'0',contract_24:'0',single_truely:false,published_date_time:''
+
         }
 
         this.auction = {};
@@ -97,7 +98,9 @@ export class CreateNewRA extends Component {
                         reserve_price:res.reserve_price== null ? '' : this.padZero(res.reserve_price,'4'),
                         starting_price:res.starting_price== null ? '' : this.padZero(res.starting_price,'4'),
                         allow_deviation:res.allow_deviation,
-                        single_multiple:res.buyer_type
+                        single_multiple:res.buyer_type,
+                        published_date_time: res.published_date_time
+
                     });
                     let arr = res.auction_contracts.map((item)=>{
                         return item.contract_duration;
@@ -598,6 +601,7 @@ export class CreateNewRA extends Component {
             <div className={"createRaMain u-grid "+this.state.live_modal_do}>
             <div className={styleType}>
                 <h2>{left_name}</h2>
+                {this.auction.publish_status == '1' ?<h4>Published on : {moment(this.state.published_date_time).format('DD-MM-YYYY hh:mm')}</h4>:''}
                 <form action="" ref="CreatRaForm" method="post" id="CreatRaForm" onSubmit={this.checkSuccess.bind(this)}>
                 <dl className="vw-block vw-block-cols creatRa">
                     <dd className="lm--formItem lm--formItem--inline string optional">

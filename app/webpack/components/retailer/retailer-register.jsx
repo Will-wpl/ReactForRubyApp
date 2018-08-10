@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
+import moment from 'moment'; 
 import { UploadFile } from '../shared/upload';
 import { Modal } from '../shared/show-modal';
 import { getRetailerUserInfo, saveRetailManageInfo, submitRetailManageInfo, getRetailerUserInfoByUserId, validateIsExist } from '../../javascripts/componentService/retailer/service';
 import { approveRetailerUser } from '../../javascripts/componentService/admin/service';
-import { validateNum, validateEmail, validator_Object, setValidationFaild, setValidationPass, changeValidate ,removeNanNum} from '../../javascripts/componentService/util';
+import { validateNum, validateEmail, validator_Object, setValidationFaild, setValidationPass, changeValidate ,removeNanNum, setApprovalStatus} from '../../javascripts/componentService/util';
 export class RetailerRegister extends Component {
     constructor(props) {
         super(props);
@@ -112,7 +113,8 @@ export class RetailerRegister extends Component {
                 mobile_number: item.account_mobile_number ? item.account_mobile_number : '',
                 office_number: item.account_office_number ? item.account_office_number : '',
                 agree_seller_buyer: item.agree_seller_buyer ? item.agree_seller_buyer : '0',
-                agree_seller_revv: item.agree_seller_revv ? item.agree_seller_revv : '0'
+                agree_seller_revv: item.agree_seller_revv ? item.agree_seller_revv : '0',
+                status: setApprovalStatus(item.approval_status, item.approval_date_time)
             })
             if (this.state.agree_seller_buyer === '1') {
                 $('#chkBuyer').attr("checked", true);
@@ -498,6 +500,14 @@ export class RetailerRegister extends Component {
                         <div className="u-grid admin_invitation">
                             <div className="col-sm-12 col-md-6 push-md-3 validate_message ">
                                 {/* <h3 className="u-mt3 u-mb1">Retailer Register Page</h3> */}
+                                <div className="lm--formItem lm--formItem--inline string">
+                                    <label className="lm--formItem-left lm--formItem-label string required">
+                                        Status:
+                                    </label>
+                                    <div className="lm--formItem-right lm--formItem-control lm--formItem-label">
+                                        {this.state.status}
+                                    </div>
+                                </div>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
                                         <abbr title="required">*</abbr> Email:

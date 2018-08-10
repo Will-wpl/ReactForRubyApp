@@ -344,4 +344,28 @@ export const formatPower = (number, places, symbol, thousand, decimal) => {
     return symbol + negative + (j ? i.substr(0, j) + thousand : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousand) + (places ? decimal + Math.abs(number - i).toFixed(places).slice(2) : "");
 }
 
+export const setApprovalStatus = (status, dt) => {
+    let approvalStatus = null;
+    let approvalDateTime = '(' + moment(dt).format('DD-MM-YYYY hh:mm') + ')';
+    switch(status)
+        {
+            case '0':
+                approvalStatus = 'Rejected ' + approvalDateTime;
+                break;
+            case '1':
+                approvalStatus = 'Approved ' + approvalDateTime;
+                break;
+            case '2':
+                approvalStatus = 'Pending';
+                break;
+            case '3':
+                approvalStatus = 'Registration';
+                break;
+            default:
+                approvalStatus = 'Registration';
+                break;
+        }
+    return approvalStatus;
+}
+
  
