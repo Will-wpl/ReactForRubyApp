@@ -233,7 +233,7 @@ export class FillConsumption extends Component {
         let makeData = {},
             buyerlist = [];
         let checkpeak = this.state.site_list.map((item, index) => {
-            return parseFloat(item.totals) > 0 && parseFloat(item.peak_pct) > 0;
+            return parseFloat(item.totals) >= 0 && parseFloat(item.peak_pct) >= 0;
         })
         this.state.site_list.map((item, index) => {
             let siteItem = {

@@ -131,7 +131,7 @@ export const validateEmail = (value) => {
 export const validateDecimal = (value) => {
 
     let num = /^100$|^(\d|[1-9]\d)(\.\d+)*$/;
-    if (value > 0) {
+    if (value >= 0) {
         if (!num.test(value)) {
             return false;
         }

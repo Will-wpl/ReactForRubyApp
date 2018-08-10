@@ -130,7 +130,7 @@ export class BuyerRegister extends Component {
                 has_tenants: item.has_tenants ? item.has_tenants : '1',
                 approveStatus: item.approval_status === "3" ? true : false,
                 status:item.approval_status === "2" ? 'Pending'
-                    :(item.approval_status === "0"?'Reject': (item.approval_status === "1"?'Approved':'Registration'))
+                    :(item.approval_status === "0"?'Rejected': (item.approval_status === "1"?'Approved':'Registration'))
             })
             $('#buyer_management').val(this.state.has_tenants);
             if (this.state.agree_seller_buyer === "1") {
@@ -524,8 +524,7 @@ export class BuyerRegister extends Component {
 
     save(type) {
         if (type === "save") {
-            let isValidator = this.checkSuccess();
-            if (!isValidator) {
+            if (!this.checkSuccess()) {
                 return false;
             }
         }
@@ -928,7 +927,7 @@ export class BuyerRegister extends Component {
                                 <div className={this.state.use_type === 'admin_approve' ? 'isDisplay' : 'isHide'}>
                                     <div className="lm--formItem lm--formItem--inline string">
                                         <label className="lm--formItem-left lm--formItem-label string required">
-                                            Admin Comment:
+                                            Admin Comments:
                                         </label>
                                         <div className="lm--formItem-right lm--formItem-control">
                                             <textarea name="comment" value={this.state.comment} onChange={this.Change.bind(this, 'comment')} ref="comment" aria-required="true"></textarea>

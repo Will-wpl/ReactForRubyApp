@@ -36,7 +36,7 @@ export class CreateNewRA extends Component {
         this.endtimeChange = this.endtimeChange.bind(this);
         this.dateChange = this.dateChange.bind(this);
         this.timeChange = this.timeChange.bind(this);
-        for(let i=1; i<49; i++){
+        for(let i=1; i<121; i++){
             this.hours.push(i);
         }
     }
