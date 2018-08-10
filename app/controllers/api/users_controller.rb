@@ -75,9 +75,9 @@ class Api::UsersController < Api::BaseController
 
     if target_user.approval_status == User::ApprovalStatusApproved
         if target_user.company_buyer_entities.any?{ |x| x.approval_status == CompanyBuyerEntity::ApprovalStatusPending}
-            target_user.update(comment: comment)
+            target_user.update(comment: comment, approval_date_time: DateTime.current)
         else
-            target_user.update(approval_status: approval_status, comment: comment)
+            target_user.update(approval_status: approval_status, comment: comment, approval_date_time: DateTime.current)
         end
     end
 

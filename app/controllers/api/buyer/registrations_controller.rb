@@ -14,14 +14,14 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
   # update buyer registration information
   def update
     saved_entities = nil
+    update_status_flag = params['update_status_flag']
     # update buyer registration information
     update_user_params = model_params
     update_user_params = filter_user_password(update_user_params)
     user = User.find(params[:user]['id'])
-    update_status_flag = params['update_status_flag']
     buyer_entities = JSON.parse(params[:buyer_entities])
     # need admin approval if company name / UEN changed.
-    unless user.blank? || update_status_flag != 1
+    if !user.blank? && update_status_flag.eql?("1")
       if(user.approval_status == User::ApprovalStatusReject ||
           user.approval_status == User::ApprovalStatusRegistering ||
           (user.company_name != update_user_params['company_name'] ||
