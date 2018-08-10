@@ -64,7 +64,7 @@ class Api::ConsumptionsController < Api::BaseController
              consumption: consumption,
              auction_finished: auction_finished,
              auction_published: auction_published,
-             contract_period: "#{consumption.contract_duration} months: #{auction.contract_period_start_date.strftime('%d %b %Y')} to #{auction_contract.contract_period_end_date.strftime('%d %b %Y')}",
+             contract_period: get_contract_period(auction,auction_contract,consumption),
              count: count,
              lt_peak: Consumption.get_lt_peak(consumption.lt_peak),
              lt_off_peak: Consumption.get_lt_off_peak(consumption.lt_off_peak),
@@ -181,6 +181,14 @@ class Api::ConsumptionsController < Api::BaseController
                     consumptions.find(params[:id]) unless params[:id] == '0'
                   end
     consumption
+  end
+
+  def get_contract_period(auction, auction_contract, consumption)
+    if auction_contract.nil?
+      "#{auction.contract_period_start_date.strftime('%d %b %Y')} to #{auction.contract_period_end_date.strftime('%d %b %Y')}"
+    else
+      "#{consumption.contract_duration} months: #{auction.contract_period_start_date.strftime('%d %b %Y')} to #{auction_contract.contract_period_end_date.strftime('%d %b %Y')}"
+    end
   end
 
 end
