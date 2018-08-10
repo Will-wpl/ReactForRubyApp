@@ -141,7 +141,7 @@ export class UserEntity extends React.Component {
                             </div>
                             <div className="lm--formItem lm--formItem--inline string">
                                 <label className="lm--formItem-left lm--formItem-label string required">
-                                    <abbr title="required">*</abbr>  Purchase Entity/Company Name:
+                                    <abbr title="required">*</abbr>  Purchase Entity/Company Name :
                                          </label>
                                 <div className="lm--formItem-right lm--formItem-control">
                                     <input type="text" name={"company_name_" + (i)} id={"company_name_" + (i)} value={it.company_name} onChange={this.Change.bind(this, 'company_name', i)} disabled={this.props.disabled} ref="company_name" aria-required="true" title="Please fill out this field"></input>
@@ -151,7 +151,7 @@ export class UserEntity extends React.Component {
                             </div>
                             <div className="lm--formItem lm--formItem--inline string">
                                 <label className="lm--formItem-left lm--formItem-label string required">
-                                    <abbr title="required">*</abbr>  Company UEN:
+                                    <abbr title="required">*</abbr>  Company UEN :
                                             </label>
                                 <div className="lm--formItem-right lm--formItem-control">
                                     <input type="text" name={"company_uen_" + i} id={"company_uen_" + i} value={it.company_uen} onChange={this.Change.bind(this, 'company_uen', i)} disabled={this.props.disabled} ref="company_uen" aria-required="true" title="Please fill out this field"></input>
@@ -161,7 +161,7 @@ export class UserEntity extends React.Component {
                             </div>
                             <div className="lm--formItem lm--formItem--inline string">
                                 <label className="lm--formItem-left lm--formItem-label string required">
-                                    <abbr title="required">*</abbr> Company Address:
+                                    <abbr title="required">*</abbr> Company Address :
                                             </label>
                                 <div className="lm--formItem-right lm--formItem-control">
                                     <input type="text" name={"company_address_" + i} id={"company_address_" + i} value={it.company_address} onChange={this.Change.bind(this, 'company_address', i)} disabled={this.props.disabled} ref="company_address" aria-required="true" title="Please fill out this field"></input>
@@ -170,7 +170,7 @@ export class UserEntity extends React.Component {
                             </div>
                             <div className="lm--formItem lm--formItem--inline string">
                                 <label className="lm--formItem-left lm--formItem-label string required">
-                                    <abbr title="required">*</abbr>    Billing Address:
+                                    <abbr title="required">*</abbr>    Billing Address :
                                             </label>
                                 <div className="lm--formItem-right lm--formItem-control">
                                     <input type="text" name={"billing_address_" + i}  id={"billing_address_" + i}  value={it.billing_address} onChange={this.Change.bind(this, 'billing_address', i)} disabled={this.props.disabled} ref="billing_address" aria-required="true" title="Please fill out this field"></input>
@@ -179,7 +179,7 @@ export class UserEntity extends React.Component {
                             </div>
                             <div className="lm--formItem lm--formItem--inline string">
                                 <label className="lm--formItem-left lm--formItem-label string required">
-                                    <abbr title="required">*</abbr>    Bill Attention To:
+                                    <abbr title="required">*</abbr>    Bill Attention To :
                                             </label>
                                 <div className="lm--formItem-right lm--formItem-control">
                                     <input type="text" name={"bill_attention_to_" + i} id={"bill_attention_to_" + i} value={it.bill_attention_to} onChange={this.Change.bind(this, 'bill_attention_to', i)} disabled={this.props.disabled} ref="bill_attention_to" aria-required="true" title="Please fill out this field"></input>
@@ -188,7 +188,7 @@ export class UserEntity extends React.Component {
                             </div>
                             <div className="lm--formItem lm--formItem--inline string">
                                 <label className="lm--formItem-left lm--formItem-label string required">
-                                    <abbr title="required">*</abbr>     Contact Name:
+                                    <abbr title="required">*</abbr>     Contact Name :
                                              </label>
                                 <div className="lm--formItem-right lm--formItem-control">
                                     <input type="text" name={"contact_name_" + i}  id={"contact_name_" + i} value={it.contact_name} onChange={this.Change.bind(this, 'contact_name', i)} disabled={this.props.disabled} ref="contact_name" aria-required="true" title="Please fill out this field"></input>
@@ -197,7 +197,7 @@ export class UserEntity extends React.Component {
                             </div>
                             <div className="lm--formItem lm--formItem--inline string">
                                 <label className="lm--formItem-left lm--formItem-label string required">
-                                    <abbr title="required">*</abbr>    Contact Email:
+                                    <abbr title="required">*</abbr>    Contact Email :
                                              </label>
                                 <div className="lm--formItem-right lm--formItem-control">
                                     <input type="text" name={"contact_email_" + i} value={it.contact_email} onChange={this.Change.bind(this, 'contact_email', i)} disabled={this.props.disabled} ref="contact_email" aria-required="true" title="Please fill out this field"></input>
@@ -208,7 +208,7 @@ export class UserEntity extends React.Component {
                             </div>
                             <div className="lm--formItem lm--formItem--inline string">
                                 <label className="lm--formItem-left lm--formItem-label string required">
-                                    <abbr title="required">*</abbr>    Contact Mobile No.:
+                                    <abbr title="required">*</abbr>    Contact Mobile No. :
                                             </label>
                                 <div className="lm--formItem-right lm--formItem-control">
                                     <input type="text" name={"contact_mobile_no_"+i} id={"contact_mobile_no_"+i} value={it.contact_mobile_no} onChange={this.Change.bind(this, 'contact_mobile_no', i)} disabled={this.props.disabled} ref="contact_mobile_no" aria-required="true" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
@@ -218,7 +218,7 @@ export class UserEntity extends React.Component {
                             </div>
                             <div className="lm--formItem lm--formItem--inline string">
                                 <label className="lm--formItem-left lm--formItem-label string required">
-                                    <abbr title="required">*</abbr>    Contact Office No.:
+                                    <abbr title="required">*</abbr>    Contact Office No. :
                                             </label>
                                 <div className="lm--formItem-right lm--formItem-control">
                                     <input type="text" name={"contact_office_no_" + i} id={"contact_office_no_" + i} value={it.contact_office_no} onChange={this.Change.bind(this, 'contact_office_no', i)} disabled={this.props.disabled} ref="contact_office_no" aria-required="true" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
