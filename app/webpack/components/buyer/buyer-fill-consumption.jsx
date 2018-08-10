@@ -445,8 +445,8 @@ export class FillConsumption extends Component {
                                         <th>Contract Expiry</th>
                                         <th>Purchasing Entity</th>
                                         <th>Intake Level</th>
-                                        <th>Contract Capacity</th>
-                                        <th>Permise Address</th>
+                                        <th>Contracted Capacity</th>
+                                        <th>Premise Address</th>
                                         <th>Consumption Details</th>
                                         <th></th>
                                     </tr>

@@ -316,7 +316,7 @@ export class RetailerRegister extends Component {
         }
     }
 
-    getParam() {
+    getParam(type) {
         let param = {
             'id': this.state.id,
             'email': this.state.email_address,
@@ -330,6 +330,9 @@ export class RetailerRegister extends Component {
             'account_office_number': this.state.office_number,
             'agree_seller_buyer': this.state.agree_seller_buyer,
             'agree_seller_revv': this.state.agree_seller_revv
+        }
+        if(type == 1){
+            params.update_status_flag = 1;
         }
         return param;
     }
@@ -367,7 +370,6 @@ export class RetailerRegister extends Component {
 
     save(type) {
         let param = this.getParam();
-        if (type === "save") {
             if (this.checkValidation()) {
                 validateIsExist({
                     user: param
@@ -375,7 +377,7 @@ export class RetailerRegister extends Component {
                     if (res.validate_result)//validate pass
                     {
                         saveRetailManageInfo({
-                            user: param
+                            user: this.getParam(type=="save"?1:null)
                         }).then(res => {
                             $('#license_number_repeat').removeClass('errormessage').addClass('isPassValidate');
                             this.refs.Modal.showModal();
@@ -392,17 +394,7 @@ export class RetailerRegister extends Component {
                     }
                 })
             }
-        }
-        else {
-            saveRetailManageInfo({
-                user: param
-            }).then(res => {
-                this.refs.Modal.showModal();
-                this.setState({
-                    text: "Your details have been successfully saved . "
-                });
-            })
-        }
+
     }
     
     validateRepeatColumn(err) {
