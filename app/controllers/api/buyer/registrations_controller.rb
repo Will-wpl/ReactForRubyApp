@@ -17,10 +17,23 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     # update buyer registration information
     update_user_params = model_params
     update_user_params = filter_user_password(update_user_params)
+    user = User.find(params[:user]['id'])
+    buyer_entities = JSON.parse(params[:buyer_entities])
+    # need admin approval if company name / UEN changed.
+    unless user.blank?
+      if(user.approval_status == User::ApprovalStatusReject ||
+          user.approval_status == User::ApprovalStatusRegistering ||
+          (user.company_name != update_user_params['company_name'] ||
+              user.company_unique_entity_number != update_user_params['company_unique_entity_number'] ) ||
+          buyer_entities.any?{ |e| e['user_entity_id'].to_i == 0 })
+        update_user_params['approval_status'] = User::ApprovalStatusPending
+      end
+    else
+      update_user_params['approval_status'] = User::ApprovalStatusRegistering
+    end
     ActiveRecord::Base.transaction do
       @user.update(update_user_params)
       # update buyer entity registration information
-      buyer_entities = JSON.parse(params[:buyer_entities])
       # buyer_entities.push(build_default_entity( update_user_params )) unless buyer_entities.any?{ |v| v['is_default'] == 1 }
       saved_entities = update_buyer_entities(buyer_entities)
     end
@@ -36,23 +49,14 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     saved_entities = nil
     update_user_params = model_params
     update_user_params = filter_user_password(update_user_params)
-    user = User.find(params[:user]['id'])
-    raise ActiveRecord::RecordNotFound if user.nil?
+
+    update_user_params['approval_status'] = User::ApprovalStatusRegistering
 
     buyer_entities = JSON.parse(params[:buyer_entities])
 
-    # need admin approval if company name / UEN changed.
-    if(user.approval_status == User::ApprovalStatusReject ||
-      user.approval_status == User::ApprovalStatusRegistering ||
-        (user.company_name != update_user_params['company_name'] ||
-          user.company_unique_entity_number != update_user_params['company_unique_entity_number'] ) ||
-       buyer_entities.any?{ |e| e['user_entity_id'].to_i == 0 })
-      update_user_params['approval_status'] = User::ApprovalStatusPending
-    end
     ActiveRecord::Base.transaction do
       @user.update(update_user_params)
-      # update buyer entity registration information
-      # buyer_entities.push(build_default_entity( update_user_params )) unless buyer_entities.any?{ |v| v['is_default'] == 1 }
+      # update buyer entity registration information}
       saved_entities = update_buyer_entities(buyer_entities, true)
     end
 

@@ -13,8 +13,7 @@ export class BuyerRegister extends Component {
         this.state = {
             id: "", userid: "", text: "", btn_status: false, disabled: false, havedata: false, allbtnStatus: true, validate: true, use_type: "",
             email_address: "", company_name: "", unique_entity_number: "", company_address: "", billing_address: "", contact_name: "",
-            mobile_number: "", office_number: "", entityStatus: "", approveStatus: false,
-
+            mobile_number: "", office_number: "", entityStatus: "", approveStatus: false,status:'',
             user_entity_id: "", user_company_name: "", user_company_uen: "", user_company_address: "", user_billing_address: "", user_bill_attention_to: "",
             user_contact_name: "", user_contact_email: "", user_contact_mobile_no: "", user_contact_office_no: "", comment: "",
             buyerTCurl: "", buyerTCname: "", agree_seller_buyer: "0",
@@ -85,7 +84,7 @@ export class BuyerRegister extends Component {
             });
         }
         else if (window.location.href.indexOf('users/edit') > 0) {
-            this.setState({ use_type: 'manage_acount', entityStatus: "manage" });
+            this.setState({ use_type: 'manage_acount', entityStatus: "manage",disabled: true });
         }
         else {
             this.setState({ use_type: 'admin_approve', entityStatus: "approve" });
@@ -129,7 +128,9 @@ export class BuyerRegister extends Component {
                 agree_seller_buyer: item.agree_seller_buyer ? item.agree_seller_buyer : '0',
                 agree_buyer_revv: item.agree_buyer_revv ? item.agree_buyer_revv : '0',
                 has_tenants: item.has_tenants ? item.has_tenants : '1',
-                approveStatus: item.approval_status === "3" ? true : false
+                approveStatus: item.approval_status === "3" ? true : false,
+                status:item.approval_status === "2" ? 'Pending'
+                    :(item.approval_status === "0"?'Rejected': (item.approval_status === "1"?'Approved':'Registration'))
             })
             $('#buyer_management').val(this.state.has_tenants);
             if (this.state.agree_seller_buyer === "1") {
@@ -523,8 +524,7 @@ export class BuyerRegister extends Component {
 
     save(type) {
         if (type === "save") {
-            let isValidator = this.checkSuccess();
-            if (!isValidator) {
+            if (!this.checkSuccess()) {
                 return false;
             }
         }
@@ -643,9 +643,16 @@ export class BuyerRegister extends Component {
         }
     }
 
-
+    edit(){
+        this.setState({
+            disabled:false
+        })
+    }
     cancel() {
-        window.location.href = `/users/edit`;
+        this.setState({
+            disabled:true
+        })
+        //window.location.href = `/users/edit`;
     }
     judgeAction(type) {
         if (type === 'reject') {
@@ -688,10 +695,12 @@ export class BuyerRegister extends Component {
             </div>;
         }
         else if (this.state.use_type === 'manage_acount') {
-            btn_html = <div>
-                <button id="save_form" className="lm--button lm--button--primary" onClick={this.cancel.bind(this)}>Cancel</button>
-                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.save.bind(this, 'save')}>Save</button>
-            </div>;
+            btn_html = this.state.disabled?
+                <div><button id="save_edit" className="lm--button lm--button--primary" onClick={this.edit.bind(this)}>Edit</button></div>
+                :<div>
+                    <button id="save_form" className="lm--button lm--button--primary" onClick={this.cancel.bind(this)}>Cancel</button>
+                    <button id="submit_form" className="lm--button lm--button--primary" onClick={this.save.bind(this, 'save')}>Save</button>
+                </div>;
         }
         else {
             btn_html = <div>
@@ -705,6 +714,14 @@ export class BuyerRegister extends Component {
                     <div>
                         <div className="u-grid admin_invitation">
                             <div className="col-sm-12 col-md-6 push-md-3 validate_message">
+                                <div className="lm--formItem lm--formItem--inline string">
+                                    <label className="lm--formItem-left lm--formItem-label string required">
+                                        <abbr title="required">*</abbr> Status:
+                                    </label>
+                                    <div className="lm--formItem-right lm--formItem-control lm--formItem-label">
+                                        {this.state.status}
+                                    </div>
+                                </div>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
                                         <abbr title="required">*</abbr> Email:
@@ -785,13 +802,13 @@ export class BuyerRegister extends Component {
                                         <div className='isPassValidate' id='office_number_format' >Number should contain 8 integers!</div>
                                     </div>
                                 </div>
-                                <h4 className="lm--formItem lm--formItem--inline string">Add Individual Info </h4>
+                                <h4 className="lm--formItem lm--formItem--inline string">Business Documentations</h4>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr> Upload Business Document:
+                                        <abbr title="required">*</abbr> Upload Supporting Documents:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                                        <UploadFile type="BUYER_DOCUMENTS" required="required" showlist={false} validate={this.state.validate} showList="1" col_width="10" showWay="2" fileData={this.state.fileData.BUYER_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
+                                        <UploadFile type="BUYER_DOCUMENTS" required="required" validate={this.state.validate} showList="1" col_width="10" showWay="1" fileData={this.state.fileData.BUYER_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
                                         <div className="col-sm-1 col-md-1 u-cell">
                                             <button className="lm--button lm--button--primary" title="this is retailer upload documents" disabled={this.state.disabled} onClick={this.showView.bind(this)} >?</button>
                                         </div>
@@ -800,7 +817,7 @@ export class BuyerRegister extends Component {
                                 <h4 className="lm--formItem lm--formItem--inline string">Electricity Purchase Information</h4>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr>  Purchase Entity/Company Name:
+                                        <abbr title="required">*</abbr> Purchase Entity/<br/>Company Name:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="user_company_name" style={{ background: '#35404c' }} value={this.state.user_company_name} onChange={this.Change.bind(this, 'user_company_name')} disabled={true} ref="user_company_name" aria-required="true" ></input>
@@ -901,22 +918,23 @@ export class BuyerRegister extends Component {
                                         </select>
                                     </div>
                                 </div>
+
+
+                                <h4 className="lm--formItem lm--formItem--inline string chkBuyer"><input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /><span>Check here to indicate that you have read and agree to the</span><a target="_blank" href={this.state.buyerTCurl} className="urlStyle">Buyer Platform Terms of Use</a></h4>
+                                <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
+                                <h4 className="lm--formItem lm--formItem--inline string chkBuyer"><input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} /><span>Check here to indicate that you have read and agree to the</span><a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyle">Energy Procurement Agreement</a></h4>
+                                <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                                 <div className={this.state.use_type === 'admin_approve' ? 'isDisplay' : 'isHide'}>
                                     <div className="lm--formItem lm--formItem--inline string">
                                         <label className="lm--formItem-left lm--formItem-label string required">
-                                            Comment:
-                                    </label>
+                                            Admin Comments:
+                                        </label>
                                         <div className="lm--formItem-right lm--formItem-control">
                                             <textarea name="comment" value={this.state.comment} onChange={this.Change.bind(this, 'comment')} ref="comment" aria-required="true"></textarea>
                                             <div className='isPassValidate' id='comment_message' >This field is required!</div>
                                         </div>
                                     </div>
                                 </div>
-
-                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /> Check here to indicate that you have read and agree to  &nbsp;&nbsp;&nbsp; <a target="_blank" href={this.state.buyerTCurl} className="urlStyle">the Buyer Platform Terms of Use</a>.</h4>
-                                <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
-                                <h4 className="lm--formItem lm--formItem--inline string"><input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} /> Check here to indicate that you have read and agree to   &nbsp;&nbsp;&nbsp;  <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyle">the Energy Procurement Agreement</a>.</h4>
-                                <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                                 <div className="retailer_btn">
                                     {btn_html}
                                 </div>
