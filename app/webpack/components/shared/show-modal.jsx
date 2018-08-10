@@ -89,6 +89,7 @@ export class Modal extends React.Component {
                     file_name: next.consumption_account_item.file_name,
                     file_path: next.consumption_account_item.file_path
                 }
+                fileObj["CONSUMPTION_DOCUMENTS"][0].files=[];
                 fileObj["CONSUMPTION_DOCUMENTS"][0].files.push(obj);
                 this.setState({
                     fileData: fileObj
