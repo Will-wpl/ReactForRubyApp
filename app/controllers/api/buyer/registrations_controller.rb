@@ -18,9 +18,10 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     update_user_params = model_params
     update_user_params = filter_user_password(update_user_params)
     user = User.find(params[:user]['id'])
+    update_status_flag = params['update_status_flag']
     buyer_entities = JSON.parse(params[:buyer_entities])
     # need admin approval if company name / UEN changed.
-    unless user.blank?
+    unless user.blank? || update_status_flag != 1
       if(user.approval_status == User::ApprovalStatusReject ||
           user.approval_status == User::ApprovalStatusRegistering ||
           (user.company_name != update_user_params['company_name'] ||
@@ -49,11 +50,21 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     saved_entities = nil
     update_user_params = model_params
     update_user_params = filter_user_password(update_user_params)
+    user = User.find(params[:user]['id'])
 
     update_user_params['approval_status'] = User::ApprovalStatusRegistering
 
     buyer_entities = JSON.parse(params[:buyer_entities])
 
+    unless user.blank?
+      if(user.approval_status == User::ApprovalStatusReject ||
+          user.approval_status == User::ApprovalStatusRegistering ||
+          (user.company_name != update_user_params['company_name'] ||
+              user.company_unique_entity_number != update_user_params['company_unique_entity_number'] ) ||
+          buyer_entities.any?{ |e| e['user_entity_id'].to_i == 0 })
+        update_user_params['approval_status'] = User::ApprovalStatusPending
+      end
+    end
     ActiveRecord::Base.transaction do
       @user.update(update_user_params)
       # update buyer entity registration information}

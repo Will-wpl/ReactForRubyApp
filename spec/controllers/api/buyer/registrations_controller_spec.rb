@@ -160,8 +160,9 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
         buyer_entities = [buyer_entity_1, buyer_entity_2]
 
         put :update, params: { id: company_buyer.id,
+                               update_status_flag: 1,
                                user: {
-                                   id:company_buyer.id,
+                                       id:company_buyer.id,
                                        name: 'buyer3',
                                        email: 'cbuyer3@example.com',
                                        company_name: 'Dalian Buyer',
