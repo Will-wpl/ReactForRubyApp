@@ -718,7 +718,7 @@ export class BuyerRegister extends Component {
                             <div className="col-sm-12 col-md-6 push-md-3 validate_message">
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr> Status:
+                                        <abbr title="required">*</abbr> Status :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control lm--formItem-label">
                                         {this.state.status}
@@ -726,7 +726,7 @@ export class BuyerRegister extends Component {
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr> Email:
+                                        <abbr title="required">*</abbr> Email :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="email_address" value={this.state.email_address} onChange={this.Change.bind(this, 'email_address')} disabled={this.state.disabled} ref="email_address" required aria-required="true" title="Please fill out this field" placeholder="Email" />
@@ -738,7 +738,7 @@ export class BuyerRegister extends Component {
                                 <h4 className="u-mt1 u-mb1">Company Info</h4>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr> Company Name:
+                                        <abbr title="required">*</abbr> Company Name :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="company_name" value={this.state.company_name} onChange={this.Change.bind(this, 'company_name')} disabled={this.state.disabled} ref="company_name" required aria-required="true" title="Please fill out this field" ></input>
@@ -748,7 +748,7 @@ export class BuyerRegister extends Component {
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr> Unique Entity Number:
+                                        <abbr title="required">*</abbr> Unique Entity Number :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="unique_entity_number" value={this.state.unique_entity_number} onChange={this.Change.bind(this, 'unique_entity_number')} disabled={this.state.disabled} ref="unique_entity_number" required aria-required="true" title="Please fill out this field"></input>
@@ -758,7 +758,7 @@ export class BuyerRegister extends Component {
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr> Company Address
+                                        <abbr title="required">*</abbr> Company Address :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="company_address" value={this.state.company_address} onChange={this.Change.bind(this, 'company_address')} disabled={this.state.disabled} ref="company_address" required aria-required="true" title="Please fill out this field"></input>
@@ -767,7 +767,7 @@ export class BuyerRegister extends Component {
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr> Billing Address:
+                                        <abbr title="required">*</abbr> Billing Address :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="billing_address" value={this.state.billing_address} onChange={this.Change.bind(this, 'billing_address')} disabled={this.state.disabled} ref="billing_address" required aria-required="true" title="Please fill out this field"></input>
@@ -777,7 +777,7 @@ export class BuyerRegister extends Component {
                                 <h4 className="u-mt1 u-mb1">Contact Information</h4>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr> Contact Name:
+                                        <abbr title="required">*</abbr> Contact Name :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="contact_name" value={this.state.contact_name} onChange={this.Change.bind(this, 'contact_name')} disabled={this.state.disabled} ref="contact_name" required aria-required="true" title="Please fill out this field"></input>
@@ -786,7 +786,7 @@ export class BuyerRegister extends Component {
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr> Mobile Number:
+                                        <abbr title="required">*</abbr> Mobile Number :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="mobile_number" value={this.state.mobile_number} onKeyUp={this.removeInputNanNum.bind(this)}  onChange={this.Change.bind(this, 'mobile_number')} disabled={this.state.disabled} ref="mobile_number" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field" required aria-required="true" ></input>
@@ -796,7 +796,7 @@ export class BuyerRegister extends Component {
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr> Office Number:
+                                        <abbr title="required">*</abbr> Office Number :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="office_number" value={this.state.office_number} onKeyUp={this.removeInputNanNum.bind(this)}  onChange={this.Change.bind(this, 'office_number')} disabled={this.state.disabled} ref="office_number" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field" required aria-required="true" ></input>
@@ -807,7 +807,7 @@ export class BuyerRegister extends Component {
                                 <h4 className="lm--formItem lm--formItem--inline string">Business Documentations</h4>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr> Upload Supporting Documents:
+                                        <abbr title="required">*</abbr> Upload Supporting Documents :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                         <UploadFile type="BUYER_DOCUMENTS" required="required" validate={this.state.validate} showList="1" col_width="10" showWay="1" fileData={this.state.fileData.BUYER_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
@@ -819,7 +819,7 @@ export class BuyerRegister extends Component {
                                 <h4 className="lm--formItem lm--formItem--inline string">Electricity Purchase Information</h4>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr> Purchase Entity/<br/>Company Name:
+                                        <abbr title="required">*</abbr> Purchase Entity/<br/>Company Name :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="user_company_name" style={{ background: '#35404c' }} value={this.state.user_company_name} onChange={this.Change.bind(this, 'user_company_name')} disabled={true} ref="user_company_name" aria-required="true" ></input>
@@ -828,7 +828,7 @@ export class BuyerRegister extends Component {
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr>  Company UEN:
+                                        <abbr title="required">*</abbr>  Company UEN :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="user_company_uen" style={{ background: '#35404c' }} disabled={true} value={this.state.user_company_uen} onChange={this.Change.bind(this, 'user_company_uen')} ref="user_company_uen" aria-required="true"></input>
@@ -837,7 +837,7 @@ export class BuyerRegister extends Component {
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr> Company Address:
+                                        <abbr title="required">*</abbr> Company Address :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="user_company_address" style={{ background: '#35404c' }} value={this.state.user_company_address} onChange={this.Change.bind(this, 'user_company_address')} disabled={true} ref="user_company_address" aria-required="true"></input>
@@ -846,7 +846,7 @@ export class BuyerRegister extends Component {
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr> Billing Address:
+                                        <abbr title="required">*</abbr> Billing Address :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="user_billing_address" value={this.state.user_billing_address} onChange={this.Change.bind(this, 'user_billing_address')} disabled={this.state.disabled} ref="user_billing_address" aria-required="true" title="Please fill out this field"></input>
@@ -855,7 +855,7 @@ export class BuyerRegister extends Component {
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr> Bill Attention To:
+                                        <abbr title="required">*</abbr> Bill Attention To :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="user_bill_attention_to" value={this.state.user_bill_attention_to} onChange={this.Change.bind(this, 'user_bill_attention_to')} disabled={this.state.disabled} ref="user_bill_attention_to" aria-required="true" title="Please fill out this field"></input>
@@ -864,7 +864,7 @@ export class BuyerRegister extends Component {
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr> Contact Name:
+                                        <abbr title="required">*</abbr> Contact Name :
                                </label>
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="user_contact_name" value={this.state.user_contact_name} onChange={this.Change.bind(this, 'user_contact_name')} disabled={this.state.disabled} ref="user_contact_name" aria-required="true" title="Please fill out this field"></input>
@@ -873,7 +873,7 @@ export class BuyerRegister extends Component {
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr>  Contact Email:
+                                        <abbr title="required">*</abbr>  Contact Email :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="user_contact_email" value={this.state.user_contact_email} onChange={this.Change.bind(this, 'user_contact_email')} disabled={this.state.disabled} ref="user_contact_email" aria-required="true" title="Please fill out this field"></input>
@@ -884,7 +884,7 @@ export class BuyerRegister extends Component {
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr> Contact Mobile No.:
+                                        <abbr title="required">*</abbr> Contact Mobile No. :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="user_contact_mobile_no" value={this.state.user_contact_mobile_no} onChange={this.Change.bind(this, 'user_contact_mobile_no')} disabled={this.state.disabled} ref="user_contact_mobile_no" maxLength="8" aria-required="true" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
@@ -894,7 +894,7 @@ export class BuyerRegister extends Component {
                                 </div>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr> Contact Office No.:
+                                        <abbr title="required">*</abbr> Contact Office No. :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <input type="text" name="user_contact_office_no" value={this.state.user_contact_office_no} onChange={this.Change.bind(this, 'user_contact_office_no')} disabled={this.state.disabled} ref="user_contact_office_no" maxLength="8" aria-required="true" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
@@ -911,7 +911,7 @@ export class BuyerRegister extends Component {
                                 <UserEntity entityStatus={this.state.entityStatus} disabled={this.state.disabled} entityList={this.state.user_entity_data} ref="userEntity" className={this.state.disabled === 'admin_approve' ? '' : ''} />
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr> Tenant Management Service Required:
+                                        <abbr title="required">*</abbr> Tenant Management Service Required :
                                </label>
                                     <div className="lm--formItem-right lm--formItem-control">
                                         <select name="buyer_management" id="buyer_management" onChange={this.Change.bind(this, 'buyer_management')} defaultValue={this.state.buyer_management} disabled={this.state.disabled} ref="buyer_management" aria-required="true">
@@ -929,7 +929,7 @@ export class BuyerRegister extends Component {
                                 <div className={this.state.use_type === 'admin_approve' ? 'isDisplay' : 'isHide'}>
                                     <div className="lm--formItem lm--formItem--inline string">
                                         <label className="lm--formItem-left lm--formItem-label string required">
-                                            Admin Comments:
+                                            Admin Comments :
                                         </label>
                                         <div className="lm--formItem-right lm--formItem-control">
                                             <textarea name="comment" value={this.state.comment} onChange={this.Change.bind(this, 'comment')} ref="comment" aria-required="true"></textarea>
