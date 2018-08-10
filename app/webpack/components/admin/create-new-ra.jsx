@@ -80,8 +80,7 @@ export class CreateNewRA extends Component {
             }else{
                 if(moment(this.auction.actual_begin_time) < moment() || this.auction.publish_status == 1){
                     this.setState({
-                        disabled:true,
-                        single_truely:true
+                        disabled:true
                     })
                 }
             }     
@@ -638,7 +637,7 @@ export class CreateNewRA extends Component {
                     <dd className="lm--formItem lm--formItem--inline string optional">
                         <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Single / Multiple Buyer(s) :</span>
                         <label className="lm--formItem-right lm--formItem-control">
-                            <select ref="single_multiple" id="single_multiple" onChange={this.single_multiple.bind(this,'single_multiple')} value={this.state.single_multiple} disabled={this.state.single_truely?true:this.state.disabled}>
+                            <select ref="single_multiple" id="single_multiple" onChange={this.single_multiple.bind(this,'single_multiple')} value={this.state.single_multiple} disabled={this.state.disabled?true:(this.auction.buyer_notify?true:false)}>
                                 <option value="0">Single</option>
                                 <option value="1">Multiple</option>
                             </select>
@@ -648,7 +647,7 @@ export class CreateNewRA extends Component {
                     <dd className="lm--formItem lm--formItem--inline string optional">
                         <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Allow Deviations :</span>
                         <label className="lm--formItem-right lm--formItem-control">
-                            <select ref="allow_deviation" id="allow_deviation" onChange={this.single_multiple.bind(this,'allow_deviation')} value={this.state.allow_deviation} disabled={this.state.single_truely?true:this.state.disabled}>
+                            <select ref="allow_deviation" id="allow_deviation" onChange={this.single_multiple.bind(this,'allow_deviation')} value={this.state.allow_deviation} disabled={this.state.disabled?true:(this.auction.buyer_notify?true:false)}>
                                 <option value="1">Yes</option>
                                 <option value="0">No</option>
                             </select>
