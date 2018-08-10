@@ -151,6 +151,8 @@ export class FillConsumption extends Component {
 
     // edit an account information
     edit_site(item, index) {
+        this.setState({account_detail:{}});
+        this.accountItem={};
         this.accountItem.id = item.id;
         this.accountItem.account_number = item.account_number;
         this.accountItem.existing_plan = ['SPS tariff', 'SPS wholesale', 'Retailer plan'];
@@ -443,8 +445,8 @@ export class FillConsumption extends Component {
                                         <th>Contract Expiry</th>
                                         <th>Purchasing Entity</th>
                                         <th>Intake Level</th>
-                                        <th>Contract Capacity</th>
-                                        <th>Permise Address</th>
+                                        <th>Contracted Capacity</th>
+                                        <th>Premise Address</th>
                                         <th>Consumption Details</th>
                                         <th></th>
                                     </tr>

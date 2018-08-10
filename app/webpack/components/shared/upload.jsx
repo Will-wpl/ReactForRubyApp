@@ -150,6 +150,9 @@ export class UploadFile extends React.Component {
                 this.setState({
                     fileData: fileObj
                 })
+                if(this.props.calbackFn){
+                    this.props.calbackFn();
+                }
                 $('#showMessage').removeClass('errormessage').addClass('isPassValidate')
                 //console.log(res);
             }, error: () => {

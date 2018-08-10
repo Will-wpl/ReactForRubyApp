@@ -89,6 +89,7 @@ export class Modal extends React.Component {
                     file_name: next.consumption_account_item.file_name,
                     file_path: next.consumption_account_item.file_path
                 }
+                fileObj["CONSUMPTION_DOCUMENTS"][0].files=[];
                 fileObj["CONSUMPTION_DOCUMENTS"][0].files.push(obj);
                 this.setState({
                     fileData: fileObj
@@ -844,7 +845,7 @@ export class Modal extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;Off-Peak:</td>
-                                    <td><input type="text" value={this.state.peak} disabled="true" onChange={this.changeConsumption.bind(this, "pack")} id="pack" required aria-required="true" /><div>%(auot calculate)</div></td>
+                                    <td><input type="text" value={this.state.peak} disabled="true" onChange={this.changeConsumption.bind(this, "pack")} id="pack" required aria-required="true" /><div>%</div></td>
                                 </tr>
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp; Upload bill(s)</td>
