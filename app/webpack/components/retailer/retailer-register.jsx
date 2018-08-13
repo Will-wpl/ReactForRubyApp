@@ -613,7 +613,7 @@ export class RetailerRegister extends Component {
                                         <abbr title="required">*</abbr>Upload Supporting Documents:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                                        <UploadFile type="RETAILER_DOCUMENTS" required="required"   showList="1" col_width="10" showWay="1" deleteType="retailer" fileData={this.state.fileData.RETAILER_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
+                                        <UploadFile type="RETAILER_DOCUMENTS" required="required"  validate="true"  showList="1" col_width="10" showWay="1" deleteType="retailer" fileData={this.state.fileData.RETAILER_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
 
                                         <div className="col-sm-1 col-md-1 u-cell">
                                             <button className={this.state.disabled ? "lm--button lm--button--primary buttonDisabled" : "lm--button lm--button--primary"} onClick={this.showView.bind(this)} disabled={this.state.disabled} >?</button>
