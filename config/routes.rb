@@ -183,7 +183,7 @@ Rails.application.routes.draw do
           put 'validate'
         end
       end
-      resources :user_attachments, only: %i[create] do
+      resources :user_attachments, only: %i[create delete] do
       end
     end
   end
@@ -217,7 +217,10 @@ Rails.application.routes.draw do
           put 'validate'
         end
       end
-      resources :user_attachments, only: %i[create] do
+      resources :user_attachments, only: %i[create delete patch_update_consumption_detail_id] do
+        collection do
+          put 'patch_update_consumption_detail_id'
+        end
       end
     end
   end

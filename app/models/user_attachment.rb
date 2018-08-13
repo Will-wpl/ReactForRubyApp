@@ -23,8 +23,19 @@ class UserAttachment < ApplicationRecord
   # scope :belong_auction, ->(auction_id) { where('auction_id = ? and user_id is null', auction_id) }
   scope :find_by_user, ->(user_id) { where('user_id = ?', user_id) }
   scope :find_by_id, ->(id) { where(id: id).take }
-  scope :find_by_type, ->(file_type) {where('file_type = ?', file_type)}
-  scope :find_by_type_user, ->(file_type, user_id) {where('file_type = ? and user_id = ?', file_type, user_id)}
+  scope :find_by_ids, ->(ids) { where(' id in (?)',ids) }
+  scope :find_by_type, ->(file_type) { where('file_type = ?', file_type) }
+  scope :find_by_type_user, ->(file_type, user_id) { where('file_type = ? and user_id = ?', file_type, user_id) }
+  scope :find_consumption_attachment, ->(consumption_detail_id) { where('consumption_detail_id = ? ', consumption_detail_id) }
+  scope :find_consumption_attachment_by_user, ->(consumption_detail_id,user_id) {
+    where('consumption_detail_id = ? and user_id = ? ', consumption_detail_id, user_id).order(updated_at: :desc)
+  }
+  scope :find_consumption_attachment_by_type, ->(consumption_detail_id,file_type) {
+    where('consumption_detail_id = ? and file_type = ? ', consumption_detail_id, file_type).order(updated_at: :desc)
+  }
+  scope :find_consumption_attachment_by_user_type, ->(consumption_detail_id, user_id, file_type) {
+    where('consumption_detail_id = ? and file_type = ? and user_id = ? ', consumption_detail_id, file_type, user_id).order(updated_at: :desc)
+  }
   # Callbacks
 
   # Delegates
