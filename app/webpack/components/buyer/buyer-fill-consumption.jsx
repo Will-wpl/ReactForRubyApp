@@ -152,7 +152,6 @@ export class FillConsumption extends Component {
 
     // edit an account information
     edit_site(item, index) {
-
         this.setState({account_detail:{}});
         this.accountItem={};
         this.accountItem.id = item.id;
@@ -199,9 +198,12 @@ export class FillConsumption extends Component {
             postal_code: siteInfo.postal_code,
             totals: siteInfo.totals,
             peak_pct: siteInfo.peak_pct,
-            user_attachment_id: siteInfo.user_attachment_id,
-            user_attachment: { id: siteInfo.user_attachment_id, file_name: siteInfo.file_name, file_path: siteInfo.file_path }
+            // user_attachment_id: siteInfo.user_attachment_id,
+            // user_attachment: { id: siteInfo.user_attachment_id, file_name: siteInfo.file_name, file_path: siteInfo.file_path }
+            attachment_ids:siteInfo.attachment_ids
         };
+        console.log("item");
+        console.log(item);
         let entity = this.state.site_list;
         if (siteInfo.index >= 0) { entity[siteInfo.index] = item; }
         else { entity.push(item) }
@@ -236,9 +238,9 @@ export class FillConsumption extends Component {
     doSave(type) {
         let makeData = {},
             buyerlist = [];
-        let checkpeak = this.state.site_list.map((item, index) => {
-            return parseFloat(item.totals) >= 0 && parseFloat(item.peak_pct) >= 0;
-        })
+        // let checkpeak = this.state.site_list.map((item, index) => {
+        //     return parseFloat(item.totals) >= 0 && parseFloat(item.peak_pct) >= 0;
+        // })
         this.state.site_list.map((item, index) => {
             let siteItem = {
                 account_number: item.account_number,
@@ -253,7 +255,8 @@ export class FillConsumption extends Component {
                 postal_code: item.postal_code,
                 totals: item.totals,
                 peak_pct: item.peak_pct,
-                user_attachment_id: item.user_attachment_id
+                user_attachment_id: item.user_attachment_id,
+                attachment_ids:item.attachment_ids
             }
             buyerlist.push(siteItem);
         })
@@ -262,15 +265,15 @@ export class FillConsumption extends Component {
             details: JSON.stringify(buyerlist),
             contract_duration: $("#selDuration").val()
         }
-        if (type != "delete") {
-            if (!checkpeak) {
-                setTimeout(() => {
-                    this.refs.Modal.showModal();
-                    this.setState({ text: "You cannot enter 0 kWh for both peak and off-peak volume" });
-                }, 200)
-                return false;
-            }
-        }
+        // if (type != "delete") {
+        //     if (!checkpeak) {
+        //         setTimeout(() => {
+        //             this.refs.Modal.showModal();
+        //             this.setState({ text: "You cannot enter 0 kWh for both peak and off-peak volume" });
+        //         }, 200)
+        //         return false;
+        //     }
+        // }
         setBuyerParticipate(makeData, '/api/buyer/consumption_details/save').then((res) => {
             if (type != "participate") {
                 if (type == "delete") {

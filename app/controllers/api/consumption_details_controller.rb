@@ -15,12 +15,12 @@ class Api::ConsumptionDetailsController < Api::BaseController
       end
       consumption_details_all = []
       consumption_details.each do |consumption_detail|
-        if consumption_detail.user_attachment_id.blank?
-          user_attachments = nil
-        else
-          # user_attachment = UserAttachment.find_by_id(consumption_detail.user_attachment_id)
-          user_attachments = UserAttachment.find_consumption_attachment_by_user_type(consumption_detail.id, consumption.user_id, UserAttachment::FileType_Consumption_Detail_Doc)
-        end
+        # if consumption_detail.user_attachment_id.blank?
+        #   user_attachments = nil
+        # else
+        # user_attachment = UserAttachment.find_by_id(consumption_detail.user_attachment_id)
+        user_attachments = UserAttachment.find_consumption_attachment_by_user_type(consumption_detail.id, consumption.user_id, UserAttachment::FileType_Consumption_Detail_Doc)
+        # end
         final_detail = {
             "id" => consumption_detail.id,
             "account_number" => consumption_detail.account_number,

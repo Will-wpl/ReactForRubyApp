@@ -357,7 +357,7 @@ export class RetailerRegister extends Component {
                     }).then(res => {
                         $('#license_number_repeat').removeClass('errormessage').addClass('isPassValidate');
                         if (type === "sign_up") {
-                            window.location.href = `/retailer/home`;
+                             window.location.href = `/retailer/home`;
                         }
                         else {
                             this.refs.Modal.showModal();
@@ -374,14 +374,10 @@ export class RetailerRegister extends Component {
                 }
             })
         }
-        else {
-            console.log('submit validate error');
-        }
     }
 
     save(type) {
         let param = this.getParam();
-        // console.log(param)
         if (this.checkValidation()) {
             validateIsExist({
                 user: param
@@ -406,10 +402,6 @@ export class RetailerRegister extends Component {
                 }
             })
         }
-        else {
-            console.log('save validate error');
-        }
-
     }
 
     validateRepeatColumn(err) {
