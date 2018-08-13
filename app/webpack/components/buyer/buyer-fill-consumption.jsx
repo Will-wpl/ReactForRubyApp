@@ -66,9 +66,8 @@ export class FillConsumption extends Component {
     }
 
     BuyerParticipateList() {
-        getBuyerParticipate('/api/buyer/consumption_details?consumption_id=' + this.consumptions_id).then((res) => {
+        getBuyerParticipate('/api/buyer/consumption_details? =' + this.consumptions_id).then((res) => {
             this.site_list = res.consumption_details;
-            console.log(this.site_list)
             this.status = res.consumption.participation_status === '1' ? "Confirmed" :
                 (res.consumption.participation_status === '2' ? "Pending" : "Rejected")
             this.setState({
@@ -257,6 +256,7 @@ export class FillConsumption extends Component {
             }
             buyerlist.push(siteItem);
         })
+        console.log(buyerlist);
         makeData = {
             consumption_id: this.consumptions_id,
             details: JSON.stringify(buyerlist),
