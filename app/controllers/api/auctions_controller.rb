@@ -7,6 +7,9 @@ class Api::AuctionsController < Api::BaseController
       render json: nil
     else
       auction = Auction.find(params[:id])
+      if auction.published_date_time.nil? && auction.publish_status == Auction::PublishStatusPublished
+        auction.published_date_time = AuctionEvent.find_by_auction_id(auction.id).where(auction_do: 'publish').take.updated_at
+      end
       if auction.auction_contracts.blank?
         render json: auction, status: 200
       else
