@@ -269,7 +269,7 @@ export class FillConsumption extends Component {
                 }
                 this.refs.Modal.showModal();
             } else {
-                setBuyerParticipate({ consumption_id: this.consumptions_id }, '/api/buyer/consumption_details/participate').then((res) => {
+                setBuyerParticipate(makeData, '/api/buyer/consumption_details/participate').then((res) => {
                     this.setState({
                         disabled: 'disabled',
                         checked: true,
