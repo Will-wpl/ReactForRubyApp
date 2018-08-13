@@ -25,6 +25,8 @@ class User < ApplicationRecord
   RequireTenants='1'.freeze
   NotRequireTenants='0'.freeze
 
+  DefaultPassword='Password'.freeze
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -67,6 +69,8 @@ class User < ApplicationRecord
   scope :selected_buyers_action_status, ->(auction_id, action_status) { includes(:consumptions).where(consumptions: { auction_id: auction_id, action_status: action_status }) }
   scope :exclude, ->(ids) { where('users.id not in (?)', ids) }
   scope :admins, -> { includes(:roles).where(roles: { name: 'admin' }) }
+  scope :buyer_entities_by_entity_id, ->(entity_id) { includes(:roles).where('users.user_entity_id = ? ', entity_id) }
+  scope :buyer_entities_by_email, ->(email) { includes(:roles).where('users.email = ? ', email) }
   # Callbacks
 
   # Delegates

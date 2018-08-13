@@ -170,31 +170,44 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     # ActiveRecord::Base.transaction do
     will_del_buyer_entity.each do |buyer_entity|
       CompanyBuyerEntity.find(buyer_entity.id).destroy
+      User.buyer_entities_by_entity_id(buyer_entity.id).destroy
     end
     buyer_entities.each do |buyer_entity|
       save_result= update_buyer_entity(buyer_entity)
       if save_result[0]
         target_buyer_entity = save_result[1]
         saved_buyer_entities.push(target_buyer_entity)
-        if need_create_user && !target_buyer_entity.is_default then
-          new_entity_user = User.new
-          new_entity_user.name = target_buyer_entity.company_name
-          new_entity_user.email = target_buyer_entity.contact_email
-          new_entity_user.consumer_type = User::ConsumerTypeBuyerEntity
-          new_entity_user.approval_status = User::ApprovalStatusDisable
-          new_entity_user.password = 'password'
-          new_entity_user.password_confirmation = 'password'
-          new_entity_user.entity_id = target_buyer_entity.id
-          new_entity_user.add_role(:entity) if new_entity_user.save
-        elsif need_create_user && target_buyer_entity.is_default then
-          user = current_user
-          user.entity_id = target_buyer_entity.id
-          user.save!
-        end
+        build_entity_user(target_buyer_entity, need_create_user)
       end
     end
     # end
     saved_buyer_entities
+  end
+
+  def build_entity_user(target_buyer_entity, need_create_user)
+    entity_user = nil
+    if need_create_user && !target_buyer_entity.is_default then
+      entity_user = User.buyer_entities_by_entity_id(target_buyer_entity.contact_email)
+      if entity_user.blank?
+        entity_user = User.new
+        entity_user.name = target_buyer_entity.company_name
+        entity_user.email = target_buyer_entity.contact_email
+        entity_user.consumer_type = User::ConsumerTypeBuyerEntity
+        entity_user.approval_status = User::ApprovalStatusDisable
+        entity_user.password = User::DefaultPassword
+        entity_user.password_confirmation = User::DefaultPassword
+        # entity_user.entity_id = target_buyer_entity.id
+        if entity_user.save!
+          entity_user.add_role(:entity)
+        end
+      end
+      CompanyBuyerEntity.find(target_buyer_entity.id).update(user_entity_id: entity_user.id)
+    elsif need_create_user && target_buyer_entity.is_default then
+      user = current_user
+      user.entity_id = target_buyer_entity.id
+      user.save!
+    end
+    entity_user
   end
 
   def update_buyer_entity(buyer_entity)
