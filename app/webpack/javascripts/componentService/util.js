@@ -346,7 +346,8 @@ export const formatPower = (number, places, symbol, thousand, decimal) => {
 
 export const setApprovalStatus = (status, dt) => {
     let approvalStatus = null;
-    let approvalDateTime = '(' + moment(dt).format('DD-MM-YYYY hh:mm') + ')';
+    let approvalDateTime = '(' + moment(dt).format('DD MMM YYYY hh:mm a') + ')';
+    console.log(approvalDateTime);
     switch(status)
         {
             case '0':
@@ -359,10 +360,10 @@ export const setApprovalStatus = (status, dt) => {
                 approvalStatus = 'Pending';
                 break;
             case '3':
-                approvalStatus = 'Registration';
+                approvalStatus = 'Registering';
                 break;
             default:
-                approvalStatus = 'Registration';
+                approvalStatus = 'Registering';
                 break;
         }
     return approvalStatus;

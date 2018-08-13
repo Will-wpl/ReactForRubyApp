@@ -5,7 +5,11 @@ import { UserEntity } from '../shared/user-entity';
 import { Modal } from '../shared/show-modal';
 import { getBuyerUserInfo, saveBuyerUserInfo, submitBuyerUserInfo, getBuyerUserInfoByUserId, validateIsExist } from '../../javascripts/componentService/common/service';
 import { approveBuyerUser } from '../../javascripts/componentService/admin/service';
+<<<<<<< HEAD
 import { removeNanNum, validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
+=======
+import { removeNanNum,validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, setApprovalStatus } from '../../javascripts/componentService/util';
+>>>>>>> d978c16632a15a4c9b56cbd78bb4021e4438153e
 
 export class BuyerRegister extends Component {
     constructor(props) {
@@ -136,8 +140,12 @@ export class BuyerRegister extends Component {
                 agree_buyer_revv: item.agree_buyer_revv ? item.agree_buyer_revv : '0',
                 has_tenants: item.has_tenants ? item.has_tenants : '1',
                 approveStatus: item.approval_status === "3" ? true : false,
+<<<<<<< HEAD
                 status: item.approval_status === "2" ? 'Pending'
                     : (item.approval_status === "0" ? 'Rejected' : (item.approval_status === "1" ? 'Approved' : 'Registration'))
+=======
+                status: setApprovalStatus(item.approval_status, item.approval_date_time)
+>>>>>>> d978c16632a15a4c9b56cbd78bb4021e4438153e
             })
             $('#buyer_management').val(this.state.has_tenants);
             if (this.state.agree_seller_buyer === "1") {
@@ -730,7 +738,7 @@ export class BuyerRegister extends Component {
                             <div className="col-sm-12 col-md-6 push-md-3 validate_message">
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr> Status :
+                                        Status :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control lm--formItem-label">
                                         {this.state.status}

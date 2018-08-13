@@ -10,14 +10,16 @@ class Api::ConsumptionDetailsController < Api::BaseController
       if auction.auction_contracts.blank?
         tc_attachment = AuctionAttachment.find_by(auction_id: consumption.auction_id, file_type: 'buyer_tc_upload')
       else
-        tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
+        # tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
+        tc_attachment = UserAttachment.find_by_type_user(UserAttachment::FileType_Buyer_REVV_TC, consumption.user_id)
       end
       consumption_details_all = []
       consumption_details.each do |consumption_detail|
         if consumption_detail.user_attachment_id.blank?
-          user_attachment = nil
+          user_attachments = nil
         else
-          user_attachment = UserAttachment.find_by_id(consumption_detail.user_attachment_id)
+          # user_attachment = UserAttachment.find_by_id(consumption_detail.user_attachment_id)
+          user_attachments = UserAttachment.find_consumption_attachment_by_user_type(consumption_detail.id, consumption.user_id, UserAttachment::FileType_Consumption_Detail_Doc)
         end
         final_detail = {
             "id" => consumption_detail.id,
@@ -40,7 +42,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
             "peak_pct" => consumption_detail.peak_pct,
             "company_buyer_entity_id" => consumption_detail.company_buyer_entity_id,
             "user_attachment_id" => consumption_detail.user_attachment_id,
-            "user_attachment" =>user_attachment
+            "user_attachment" =>user_attachments
         }
         consumption_details_all.push(final_detail)
       end
@@ -92,13 +94,17 @@ class Api::ConsumptionDetailsController < Api::BaseController
         consumption_detail.unit_number = detail['unit_number']
         consumption_detail.postal_code = detail['postal_code']
         consumption_detail.company_buyer_entity_id = detail['company_buyer_entity_id']
-        consumption_detail.user_attachment_id = detail['user_attachment_id']
+        # consumption_detail.user_attachment_id = detail['user_attachment_id']
         # Update -new fields (20180709) - End
         # update - new fields (20180726) - Start
         # consumption_detail.approval_status = ConsumptionDetail::ApprovalStatusPending
         # update - new fields (20180726) - End
         consumption_detail.consumption_id = params[:consumption_id]
-        saved_details.push(consumption_detail) if consumption_detail.save!
+        if consumption_detail.save!
+          saved_details.push(consumption_detail)
+          attachment_id_array = JSON.parse(detail['attachment_ids'])
+          UserAttachment.find_by_ids(attachment_id_array).update(consumption_detail_id: consumption_detail.id)
+        end
       end
     end
 
