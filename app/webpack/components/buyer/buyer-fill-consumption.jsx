@@ -66,7 +66,7 @@ export class FillConsumption extends Component {
     }
 
     BuyerParticipateList() {
-        getBuyerParticipate('/api/buyer/consumption_details? =' + this.consumptions_id).then((res) => {
+        getBuyerParticipate('/api/buyer/consumption_details?consumption_id=' + this.consumptions_id).then((res) => {
             this.site_list = res.consumption_details;
             this.status = res.consumption.participation_status === '1' ? "Confirmed" :
                 (res.consumption.participation_status === '2' ? "Pending" : "Rejected")
@@ -496,7 +496,7 @@ export class FillConsumption extends Component {
                             <div>
                                 <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
                                     <input name="agree_declare" type="checkbox" id="chkAgree_declare" required />
-                                    <span>I declare that all data submited is true and shall be used for the auction,and that i am bounded by<a target="_blank" href={this.state.link} className="urlStyle"> Buyer T&C.</a></span>
+                                    <span>I declare that all data submited is true and shall be used for the auction,and that i am bounded by <a target="_blank" href={this.state.link} className="urlStyle">Buyer T&C.</a></span>
                                 </h4>
                             </div>
                             <div className="buyer_btn">
