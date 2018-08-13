@@ -40,6 +40,16 @@ RSpec.describe Api::Buyer::UserAttachmentsController, type: :controller do
           expect(hash_body['result']).to eq('success')
         end
       end
+
+      context 'Delete file' do
+        def do_request
+          delete :destroy, params: {id: tc1.id }
+        end
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+        end
+      end
     end
   end
 end

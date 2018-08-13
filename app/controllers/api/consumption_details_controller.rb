@@ -10,7 +10,8 @@ class Api::ConsumptionDetailsController < Api::BaseController
       if auction.auction_contracts.blank?
         tc_attachment = AuctionAttachment.find_by(auction_id: consumption.auction_id, file_type: 'buyer_tc_upload')
       else
-        tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
+        # tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
+        tc_attachment = UserAttachment.find_by_type_user(UserAttachment::FileType_Buyer_REVV_TC, consumption.user_id)
       end
       consumption_details_all = []
       consumption_details.each do |consumption_detail|
