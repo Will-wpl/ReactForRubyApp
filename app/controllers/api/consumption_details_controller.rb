@@ -21,6 +21,8 @@ class Api::ConsumptionDetailsController < Api::BaseController
         # user_attachment = UserAttachment.find_by_id(consumption_detail.user_attachment_id)
         user_attachments = UserAttachment.find_consumption_attachment_by_user_type(consumption_detail.id, consumption.user_id, UserAttachment::FileType_Consumption_Detail_Doc)
         # end
+        attachment_ids = []
+        user_attachments.each{ |x| attachment_ids.push(x.id) }
         final_detail = {
             "id" => consumption_detail.id,
             "account_number" => consumption_detail.account_number,
@@ -42,7 +44,8 @@ class Api::ConsumptionDetailsController < Api::BaseController
             "peak_pct" => consumption_detail.peak_pct,
             "company_buyer_entity_id" => consumption_detail.company_buyer_entity_id,
             "user_attachment_id" => consumption_detail.user_attachment_id,
-            "user_attachment" =>user_attachments
+            "user_attachment" =>user_attachments,
+            "attachment_ids" => attachment_ids.to_json
         }
         consumption_details_all.push(final_detail)
       end
@@ -258,8 +261,10 @@ class Api::ConsumptionDetailsController < Api::BaseController
         consumption_detail.consumption_id = params[:consumption_id]
         if consumption_detail.save!
           saved_details.push(consumption_detail)
-          attachment_id_array = JSON.parse(detail['attachment_ids'])
-          UserAttachment.find_by_ids(attachment_id_array).update(consumption_detail_id: consumption_detail.id)
+          unless detail['attachment_ids'].blank?
+            attachment_id_array = JSON.parse(detail['attachment_ids'])
+            UserAttachment.find_by_ids(attachment_id_array).update(consumption_detail_id: consumption_detail.id)
+          end
         end
       end
     end
