@@ -387,7 +387,8 @@ export class Modal extends React.Component {
             totals: this.state.totals,
             peak_pct: this.state.peak_pct,
             index: this.state.itemIndex,
-            attachment_ids: ""
+            attachment_ids: "",
+            user_attachment:[]
             // user_attachment_id: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].id : "",
             // file_name: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_name : "",
             // file_path: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_path : ""
@@ -397,7 +398,8 @@ export class Modal extends React.Component {
             this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.map((item) => {
                 idsArr.push(item.id);
             })
-            siteItem.attachment_ids = JSON.stringify(idsArr)
+            siteItem.attachment_ids = JSON.stringify(idsArr);
+            siteItem.user_attachment=this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files;
         }
 
         if (this.props.acceptFunction) {

@@ -198,7 +198,8 @@ export class FillConsumption extends Component {
             postal_code: siteInfo.postal_code,
             totals: siteInfo.totals,
             peak_pct: siteInfo.peak_pct,
-            attachment_ids: siteInfo.attachment_ids
+            attachment_ids: siteInfo.attachment_ids,
+            user_attachment:siteInfo.user_attachment
         };
 
         let entity = this.state.site_list;
@@ -251,7 +252,8 @@ export class FillConsumption extends Component {
                 totals: item.totals,
                 peak_pct: item.peak_pct,
                 user_attachment_id: item.user_attachment_id,
-                attachment_ids: item.attachment_ids
+                attachment_ids: item.attachment_ids,
+                user_attachment:item.user_attachment
             }
             buyerlist.push(siteItem);
         })
