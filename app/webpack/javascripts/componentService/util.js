@@ -359,10 +359,10 @@ export const setApprovalStatus = (status, dt) => {
                 approvalStatus = 'Pending';
                 break;
             case '3':
-                approvalStatus = 'Registration';
+                approvalStatus = 'Registering';
                 break;
             default:
-                approvalStatus = 'Registration';
+                approvalStatus = 'Registering';
                 break;
         }
     return approvalStatus;
