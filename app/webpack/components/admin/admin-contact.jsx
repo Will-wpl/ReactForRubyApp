@@ -45,7 +45,7 @@ export default class AdminContact extends Component {
                  file_name:item.file_name,
                  file_path:item.file_path,
                  fileid:item.id,
-                 file_time:moment(item.created_at).format('YYYY-DD-MM HH:mm:ss'),
+                 file_time:moment(item.created_at).format('YYYY-MM-DD HH:mm:ss'),
                  file_type:item.file_type
              }
              fileObj[item.file_type][0].files.push(obj);

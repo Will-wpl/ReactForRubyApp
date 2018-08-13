@@ -23,6 +23,9 @@ export const getUsersDetail = (params) => {
 export const removeFile = (params) => {
     return Ddelete('/api/admin/auction_attachments/'+params);
 }
+// export const removeRetailerFile=(params)=>{
+
+// }
 
 export const getFileList = (params) => {
     return get('/api/admin/auction_attachments?auction_id='+params);

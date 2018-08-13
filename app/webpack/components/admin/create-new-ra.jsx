@@ -737,7 +737,7 @@ export class CreateNewRA extends Component {
                     </dd>
                     <dd className="lm--formItem lm--formItem--inline string optional">
                         <span className="lm--formItem-left lm--formItem-label string optional">
-                            <abbr title="required">*</abbr>Time to Display Starting Price:</span>
+                            <abbr title="required">*</abbr>Time to Display Starting Price :</span>
                         <label className="lm--formItem-right lm--formItem-control">
                             <select ref="starting_price_time" id="starting_price_time" disabled={this.state.disabled}>
                                 {this.hours.map((item)=>{

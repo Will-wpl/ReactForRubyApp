@@ -517,8 +517,9 @@ export class Modal extends React.Component {
                     })
                 }
                 else {
+                    
                     this.setState({
-                        peak: ""
+                        peak: 100
                     })
                 }
                 break;
