@@ -25,7 +25,13 @@ class Api::Retailer::RegistrationsController < Api::RegistrationsController
   def sign_up
     update_user_params = model_params
     update_user_params = filter_user_password(update_user_params)
-    update_user_params['approval_status'] = User::ApprovalStatusRegistering
+    user = User.find(params[:user]['id'])
+
+    unless user.blank?
+      update_user_params['approval_status'] = User::ApprovalStatusPending
+    else
+      update_user_params['approval_status'] = User::ApprovalStatusRegistering
+    end
     update_user_params['approval_date_time'] = DateTime.current
     @user.update(update_user_params)
     render json: { user: @user }, status: 200
