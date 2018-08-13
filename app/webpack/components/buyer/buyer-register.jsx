@@ -5,11 +5,7 @@ import { UserEntity } from '../shared/user-entity';
 import { Modal } from '../shared/show-modal';
 import { getBuyerUserInfo, saveBuyerUserInfo, submitBuyerUserInfo, getBuyerUserInfoByUserId, validateIsExist } from '../../javascripts/componentService/common/service';
 import { approveBuyerUser } from '../../javascripts/componentService/admin/service';
-<<<<<<< HEAD
-import { removeNanNum, validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
-=======
 import { removeNanNum,validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, setApprovalStatus } from '../../javascripts/componentService/util';
->>>>>>> d978c16632a15a4c9b56cbd78bb4021e4438153e
 
 export class BuyerRegister extends Component {
     constructor(props) {
