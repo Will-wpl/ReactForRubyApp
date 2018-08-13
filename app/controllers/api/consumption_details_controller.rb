@@ -54,65 +54,13 @@ class Api::ConsumptionDetailsController < Api::BaseController
   end
 
   def save
-    @consumption.contract_duration = params[:contract_duration]
-    @consumption.update(contract_duration: params[:contract_duration])
-    consumption = @consumption
-    details = JSON.parse(params[:details])
-    ids = []
-    details.each do |detail|
-      ids.push(detail['id']) if detail['id'].to_i != 0
-    end
-    will_del_details = consumption.consumption_details.reject do |detail|
-      ids.include?(detail.id.to_s)
-    end
-    will_del_details.each do |detail|
-      ConsumptionDetail.find(detail.id).destroy
-    end
-    saved_details = []
-    ActiveRecord::Base.transaction do
-      details.each do |detail|
-        consumption_detail = if detail['id'].to_i == 0
-                               ConsumptionDetail.new
-                             else
-                               ConsumptionDetail.find(detail['id'])
-                             end
-        consumption_detail.account_number = detail['account_number']
-        consumption_detail.intake_level = detail['intake_level']
-        consumption_detail.peak = detail['peak']
-        consumption_detail.off_peak = detail['off_peak']
-        consumption_detail.premise_address = detail['premise_address']
-        consumption_detail.contracted_capacity = detail['contracted_capacity']
-        # update - new fields (20180709) - Start
-        consumption_detail.existing_plan = detail['existing_plan']
-        consumption_detail.totals = detail['totals']
-        consumption_detail.peak_pct = detail['peak_pct']
-        consumption_detail.peak = detail['totals'].to_f * detail['peak_pct'].to_f / 100 unless detail['peak_pct'].blank?
-        consumption_detail.off_peak = detail['totals'].to_f - consumption_detail.peak unless detail['peak_pct'].blank?
-        consumption_detail.contract_expiry = detail['contract_expiry']
-        consumption_detail.blk_or_unit = detail['blk_or_unit']
-        consumption_detail.street = detail['street']
-        consumption_detail.unit_number = detail['unit_number']
-        consumption_detail.postal_code = detail['postal_code']
-        consumption_detail.company_buyer_entity_id = detail['company_buyer_entity_id']
-        # consumption_detail.user_attachment_id = detail['user_attachment_id']
-        # Update -new fields (20180709) - End
-        # update - new fields (20180726) - Start
-        # consumption_detail.approval_status = ConsumptionDetail::ApprovalStatusPending
-        # update - new fields (20180726) - End
-        consumption_detail.consumption_id = params[:consumption_id]
-        if consumption_detail.save!
-          saved_details.push(consumption_detail)
-          attachment_id_array = JSON.parse(detail['attachment_ids'])
-          UserAttachment.find_by_ids(attachment_id_array).update(consumption_detail_id: consumption_detail.id)
-        end
-      end
-    end
-
+    saved_details = save_comsumption_details()
     render json: saved_details, status: 200
   end
 
   def participate
     ActiveRecord::Base.transaction do
+      save_comsumption_details()
       consumption = @consumption
       auction = Auction.find(consumption.auction_id)
       raise ActiveRecord::RecordNotFound if auction.nil?
@@ -260,6 +208,63 @@ class Api::ConsumptionDetailsController < Api::BaseController
   end
 
   private
+
+  def save_comsumption_details()
+    @consumption.contract_duration = params[:contract_duration]
+    @consumption.update(contract_duration: params[:contract_duration])
+    consumption = @consumption
+    details = JSON.parse(params[:details])
+    ids = []
+    details.each do |detail|
+      ids.push(detail['id']) if detail['id'].to_i != 0
+    end
+    will_del_details = consumption.consumption_details.reject do |detail|
+      ids.include?(detail.id.to_s)
+    end
+    will_del_details.each do |detail|
+      ConsumptionDetail.find(detail.id).destroy
+    end
+    saved_details = []
+    ActiveRecord::Base.transaction do
+      details.each do |detail|
+        consumption_detail = if detail['id'].to_i == 0
+                               ConsumptionDetail.new
+                             else
+                               ConsumptionDetail.find(detail['id'])
+                             end
+        consumption_detail.account_number = detail['account_number']
+        consumption_detail.intake_level = detail['intake_level']
+        consumption_detail.peak = detail['peak']
+        consumption_detail.off_peak = detail['off_peak']
+        consumption_detail.premise_address = detail['premise_address']
+        consumption_detail.contracted_capacity = detail['contracted_capacity']
+        # update - new fields (20180709) - Start
+        consumption_detail.existing_plan = detail['existing_plan']
+        consumption_detail.totals = detail['totals']
+        consumption_detail.peak_pct = detail['peak_pct']
+        consumption_detail.peak = detail['totals'].to_f * detail['peak_pct'].to_f / 100 unless detail['peak_pct'].blank?
+        consumption_detail.off_peak = detail['totals'].to_f - consumption_detail.peak unless detail['peak_pct'].blank?
+        consumption_detail.contract_expiry = detail['contract_expiry']
+        consumption_detail.blk_or_unit = detail['blk_or_unit']
+        consumption_detail.street = detail['street']
+        consumption_detail.unit_number = detail['unit_number']
+        consumption_detail.postal_code = detail['postal_code']
+        consumption_detail.company_buyer_entity_id = detail['company_buyer_entity_id']
+        # consumption_detail.user_attachment_id = detail['user_attachment_id']
+        # Update -new fields (20180709) - End
+        # update - new fields (20180726) - Start
+        # consumption_detail.approval_status = ConsumptionDetail::ApprovalStatusPending
+        # update - new fields (20180726) - End
+        consumption_detail.consumption_id = params[:consumption_id]
+        if consumption_detail.save!
+          saved_details.push(consumption_detail)
+          attachment_id_array = JSON.parse(detail['attachment_ids'])
+          UserAttachment.find_by_ids(attachment_id_array).update(consumption_detail_id: consumption_detail.id)
+        end
+      end
+    end
+    saved_details
+  end
 
   # Send participated notification to admin when user click participate button in consumption details page
   def send_participated_mail(auction_name,auction_start_datetime)
