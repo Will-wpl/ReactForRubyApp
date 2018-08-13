@@ -114,7 +114,7 @@ export class UploadFile extends React.Component {
         }
         else if (this.props.deleteType === "consumption")
         {
-            removeRetailerFile(fileid).then(res => {
+            removeBuyerFile(fileid).then(res => {
                 fileObj = this.state.fileData;
                 fileObj[typeindex].files.splice(fileindex, 1);
                 this.setState({

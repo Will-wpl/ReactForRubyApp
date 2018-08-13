@@ -98,7 +98,21 @@ export default class AdminComsumptionList extends Component {
                                                         <div><span>Total Monthly:</span><span className="textDecoration" >{parseInt(it.totals)}</span><span> kWh/month</span></div>
                                                         <div><span>Peak:</span><span className="textDecoration">{parseFloat(it.peak_pct).toFixed(2)}</span><span> %</span><span style={{ fontWeight: "bold", fontSize: "14px" }} title="Click on '?' to see Admin's reference information on peak/offpeak ratio." >&nbsp;&nbsp;?</span></div>
                                                         <div><span>Off-Peak:</span><span className="textDecoration">{parseFloat(100 - it.peak_pct).toFixed(2)}</span><span> %</span></div>
-                                                        <div className={it.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span><span><a href={it.user_attachment ? it.user_attachment.file_path : "#"} target="_blank">{it.user_attachment ? it.user_attachment.file_name : ""}</a></span></div>
+                                                        {/* <div className={it.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span><span><a href={it.user_attachment ? it.user_attachment.file_path : "#"} target="_blank">{it.user_attachment ? it.user_attachment.file_name : ""}</a></span></div> */}
+                                                        <div className={item.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span>
+                                                        <span>
+                                                            <ul>
+                                                                {
+                                                                    item.user_attachment ? item.user_attachment.map((item, i) => {
+                                                                        return <li key={i}>
+                                                                            <a href={item.file_path ? item.file_path : "#"} target="_blank">{item.file_name ? item.file_name : ""}</a>
+                                                                        </li>
+                                                                    }) :
+                                                                        <li> </li>
+                                                                }
+                                                            </ul>
+                                                        </span>
+                                                    </div>
                                                     </td>
                                                 </tr>)
                                             })}

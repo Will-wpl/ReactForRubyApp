@@ -84,14 +84,14 @@ export class Modal extends React.Component {
                 option: next.consumption_account_item.option
             });
 
-            if (next.consumption_account_item.file_name) {
-                let obj = {
-                    id: next.consumption_account_item.id,
-                    file_name: next.consumption_account_item.file_name,
-                    file_path: next.consumption_account_item.file_path
-                }
+            if (next.consumption_account_item.attachment_ids) {
+                // let obj = {
+                //     id: next.consumption_account_item.id,
+                //     file_name: next.consumption_account_item.file_name,
+                //     file_path: next.consumption_account_item.file_path
+                // }
                 fileObj["CONSUMPTION_DOCUMENTS"][0].files = [];
-                fileObj["CONSUMPTION_DOCUMENTS"][0].files.push(obj);
+                fileObj["CONSUMPTION_DOCUMENTS"][0].files=next.consumption_account_item.attachment_ids;
                 this.setState({
                     fileData: fileObj
                 })
@@ -399,8 +399,7 @@ export class Modal extends React.Component {
             })
             siteItem.attachment_ids = JSON.stringify(idsArr)
         }
-        console.log("siteItem");
-        console.log(siteItem);
+
         if (this.props.acceptFunction) {
             this.props.acceptFunction(siteItem);
             this.setState({
@@ -863,7 +862,7 @@ export class Modal extends React.Component {
                                     <td>&nbsp;&nbsp;&nbsp; Upload bill(s)</td>
                                     <td>
                                         <div className="upload">
-                                            <UploadFile type="CONSUMPTION_DOCUMENTS" validate={true} showList="1" col_main="12" col_width="9" showWay="1" fileData={this.state.fileData.CONSUMPTION_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
+                                            <UploadFile type="CONSUMPTION_DOCUMENTS" deleteType="consumption" validate={true} showList="1" col_main="12" col_width="9" showWay="1" fileData={this.state.fileData.CONSUMPTION_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
                                         </div>
                                     </td>
                                 </tr>
