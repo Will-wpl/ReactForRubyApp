@@ -347,6 +347,7 @@ export const formatPower = (number, places, symbol, thousand, decimal) => {
 export const setApprovalStatus = (status, dt) => {
     let approvalStatus = null;
     let approvalDateTime = '(' + moment(dt).format('DD MMM YYYY hh:mm a') + ')';
+    console.log(approvalDateTime);
     switch(status)
         {
             case '0':
