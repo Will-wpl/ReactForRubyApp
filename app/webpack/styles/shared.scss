@@ -4,7 +4,7 @@ body a{outline:none; cursor: default;}
 button{ cursor: pointer; transition: 0.5s all;}
 .green{color:green;}
 .red{color:red;}
-// button[disabled=''],input[disabled=''],select[disabled='']{background: #666 !important; color:#999 !important; cursor: default !important;}
+button[disabled=''],input[disabled=''],select[disabled='']{background: #666 !important; color:#999 !important; cursor: default !important;}
 textarea{resize: none;}
 ul, menu, dir {
   display: block;
