@@ -11,6 +11,18 @@ export const findUpLimit = (curValue) => {
     return 1;
 }
 
+export const findUpLimitZero = (curValue) => {
+    if (curValue.indexOf('.') > 0) {
+        let arr = curValue.split('');
+        for(let i=0; i<6; i++) {
+            arr[i] = arr[i]=='0'?arr[i]:(arr[i]?arr[i]:'0');
+        }
+        return arr.join('');
+    }else{
+        return curValue
+    }
+}
+
 const defaultColors = ['#22ad38', '#ffff00', '#f53d0b', '#8ff830', '#f13de8', '#37b8ff', '#ffffff', '#ffc000'
     , '#3366ff', '#9933ff', '#868686', '#0ba55c', '#fa9106', '#ffafff', '#c00000', '#46f0f0', '#49702e', '#ffff99'
     , '#993300', '#8e8cf4']
@@ -119,7 +131,7 @@ export const validateEmail = (value) => {
 export const validateDecimal = (value) => {
 
     let num = /^100$|^(\d|[1-9]\d)(\.\d+)*$/;
-    if (value > 0) {
+    if (value >= 0) {
         if (!num.test(value)) {
             return false;
         }
@@ -330,6 +342,30 @@ export const formatPower = (number, places, symbol, thousand, decimal) => {
         i = parseInt(number = Math.abs(+number || 0).toFixed(places), 10) + "",
         j = (j = i.length) > 3 ? j % 3 : 0;
     return symbol + negative + (j ? i.substr(0, j) + thousand : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousand) + (places ? decimal + Math.abs(number - i).toFixed(places).slice(2) : "");
+}
+
+export const setApprovalStatus = (status, dt) => {
+    let approvalStatus = null;
+    let approvalDateTime = '(' + moment(dt).format('DD-MM-YYYY hh:mm') + ')';
+    switch(status)
+        {
+            case '0':
+                approvalStatus = 'Rejected ' + approvalDateTime;
+                break;
+            case '1':
+                approvalStatus = 'Approved ' + approvalDateTime;
+                break;
+            case '2':
+                approvalStatus = 'Pending';
+                break;
+            case '3':
+                approvalStatus = 'Registration';
+                break;
+            default:
+                approvalStatus = 'Registration';
+                break;
+        }
+    return approvalStatus;
 }
 
  

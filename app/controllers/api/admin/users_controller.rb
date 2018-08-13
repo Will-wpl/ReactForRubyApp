@@ -21,9 +21,10 @@ class Api::Admin::UsersController < Api::UsersController
     CompanyBuyerEntity.find_by_user(params[:user_id]).each { |x| company_buyer_entity_ids.push(x.id) if x.is_default != 1 && x.approval_status = CompanyBuyerEntity::ApprovalStatusPending}
     if approval_status == User::ApprovalStatusApproved
       # Update entity approval status to approved
-      CompanyBuyerEntity.find_by_status_user(CompanyBuyerEntity::ApprovalStatusPending, params[:user_id]).update(approval_status: CompanyBuyerEntity::ApprovalStatusApproved)
+      # CompanyBuyerEntity.find_by_status_user(CompanyBuyerEntity::ApprovalStatusPending, params[:user_id]).update(approval_status: CompanyBuyerEntity::ApprovalStatusApproved)
+      CompanyBuyerEntity.find_by_user(params[:user_id]).update(approval_status: CompanyBuyerEntity::ApprovalStatusApproved)
       # Update entity users approval status to approved
-      User.where('entity_id in (?)', company_buyer_entity_ids).update(approval_status: User::ApprovalStatusApproved)
+      User.where('entity_id in (?)', company_buyer_entity_ids).update(approval_status: User::ApprovalStatusApproved, approval_date_time: DateTime.current)
     elsif approval_status == User::ApprovalStatusReject
       # Update entity approval status to approved
       CompanyBuyerEntity.find_by_status_user(CompanyBuyerEntity::ApprovalStatusPending, params[:user_id]).update(approval_status: CompanyBuyerEntity::ApprovalStatusReject)

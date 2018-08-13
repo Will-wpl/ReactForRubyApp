@@ -151,6 +151,8 @@ export class FillConsumption extends Component {
 
     // edit an account information
     edit_site(item, index) {
+        this.setState({account_detail:{}});
+        this.accountItem={};
         this.accountItem.id = item.id;
         this.accountItem.account_number = item.account_number;
         this.accountItem.existing_plan = ['SPS tariff', 'SPS wholesale', 'Retailer plan'];
@@ -233,7 +235,7 @@ export class FillConsumption extends Component {
         let makeData = {},
             buyerlist = [];
         let checkpeak = this.state.site_list.map((item, index) => {
-            return parseFloat(item.totals) > 0 && parseFloat(item.peak_pct) > 0;
+            return parseFloat(item.totals) >= 0 && parseFloat(item.peak_pct) >= 0;
         })
         this.state.site_list.map((item, index) => {
             let siteItem = {
@@ -443,8 +445,8 @@ export class FillConsumption extends Component {
                                         <th>Contract Expiry</th>
                                         <th>Purchasing Entity</th>
                                         <th>Intake Level</th>
-                                        <th>Contract Capacity</th>
-                                        <th>Permise Address</th>
+                                        <th>Contracted Capacity</th>
+                                        <th>Premise Address</th>
                                         <th>Consumption Details</th>
                                         <th></th>
                                     </tr>
@@ -486,9 +488,9 @@ export class FillConsumption extends Component {
                             </div>
 
                             <div>
-                                <h4 className="lm--formItem lm--formItem--inline string">
+                                <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
                                     <input name="agree_declare" type="checkbox" id="chkAgree_declare" required />
-                                    I declare that all data submited is true and shall be used for the auction,and that i am bounded by <a target="_blank" href={this.state.link} className="urlStyle"><span>&nbsp;Buyer T&C.</span></a>
+                                    <span>I declare that all data submited is true and shall be used for the auction,and that i am bounded by </span><a target="_blank" href={this.state.link} className="urlStyle"><span>Buyer T&C.</span></a>
                                 </h4>
                             </div>
                             <div className="buyer_btn">

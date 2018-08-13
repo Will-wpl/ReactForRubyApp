@@ -44,7 +44,7 @@ class Api::AuctionsController < Api::BaseController
                       exist_published_gid
                     end
 
-    if @auction.update(publish_status: params[:publish_status], published_gid: published_gid)
+    if @auction.update(publish_status: params[:publish_status], published_gid: published_gid, published_date_time: Time.current)
       AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
     end
     render json: @auction, status: 200

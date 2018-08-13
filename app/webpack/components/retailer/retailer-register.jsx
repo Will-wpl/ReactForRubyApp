@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
+import moment from 'moment'; 
 import { UploadFile } from '../shared/upload';
 import { Modal } from '../shared/show-modal';
 import { getRetailerUserInfo, saveRetailManageInfo, submitRetailManageInfo, getRetailerUserInfoByUserId, validateIsExist } from '../../javascripts/componentService/retailer/service';
 import { approveRetailerUser } from '../../javascripts/componentService/admin/service';
-import { validateNum, validateEmail, validator_Object, setValidationFaild, setValidationPass, changeValidate ,removeNanNum} from '../../javascripts/componentService/util';
+import { validateNum, validateEmail, validator_Object, setValidationFaild, setValidationPass, changeValidate ,removeNanNum, setApprovalStatus} from '../../javascripts/componentService/util';
 export class RetailerRegister extends Component {
     constructor(props) {
         super(props);
@@ -73,7 +74,7 @@ export class RetailerRegister extends Component {
             this.setState({ use_type: 'sign_up' });
         }
         else if (window.location.href.indexOf('users/edit') > 0) {
-            this.setState({ use_type: 'manage_acount' });
+            this.setState({ use_type: 'manage_acount',disabled: true });
         }
         else {
             this.setState({ use_type: 'admin_approve' });
@@ -112,7 +113,8 @@ export class RetailerRegister extends Component {
                 mobile_number: item.account_mobile_number ? item.account_mobile_number : '',
                 office_number: item.account_office_number ? item.account_office_number : '',
                 agree_seller_buyer: item.agree_seller_buyer ? item.agree_seller_buyer : '0',
-                agree_seller_revv: item.agree_seller_revv ? item.agree_seller_revv : '0'
+                agree_seller_revv: item.agree_seller_revv ? item.agree_seller_revv : '0',
+                status: setApprovalStatus(item.approval_status, item.approval_date_time)
             })
             if (this.state.agree_seller_buyer === '1') {
                 $('#chkBuyer').attr("checked", true);
@@ -314,7 +316,7 @@ export class RetailerRegister extends Component {
         }
     }
 
-    getParam() {
+    getParam(type) {
         let param = {
             'id': this.state.id,
             'email': this.state.email_address,
@@ -328,6 +330,9 @@ export class RetailerRegister extends Component {
             'account_office_number': this.state.office_number,
             'agree_seller_buyer': this.state.agree_seller_buyer,
             'agree_seller_revv': this.state.agree_seller_revv
+        }
+        if(type == 1){
+            params.update_status_flag = 1;
         }
         return param;
     }
@@ -365,7 +370,6 @@ export class RetailerRegister extends Component {
 
     save(type) {
         let param = this.getParam();
-        if (type === "save") {
             if (this.checkValidation()) {
                 validateIsExist({
                     user: param
@@ -373,7 +377,7 @@ export class RetailerRegister extends Component {
                     if (res.validate_result)//validate pass
                     {
                         saveRetailManageInfo({
-                            user: param
+                            user: this.getParam(type=="save"?1:null)
                         }).then(res => {
                             $('#license_number_repeat').removeClass('errormessage').addClass('isPassValidate');
                             this.refs.Modal.showModal();
@@ -390,17 +394,7 @@ export class RetailerRegister extends Component {
                     }
                 })
             }
-        }
-        else {
-            saveRetailManageInfo({
-                user: param
-            }).then(res => {
-                this.refs.Modal.showModal();
-                this.setState({
-                    text: "Your details have been successfully saved . "
-                });
-            })
-        }
+
     }
     
     validateRepeatColumn(err) {
@@ -423,8 +417,16 @@ export class RetailerRegister extends Component {
             }
         }
     }
+    edit(){
+        this.setState({
+            disabled:false
+        })
+    }
     cancel() {
-        window.location.href = `/users/edit`;
+        this.setState({
+            disabled:true
+        })
+        //window.location.href = `/users/edit`;
     }
 
     judgeAction(type) {
@@ -468,10 +470,12 @@ export class RetailerRegister extends Component {
             </div>;
         }
         else if (this.state.use_type === 'manage_acount') {
-            btn_html = <div>
-                <button id="save_form" className="lm--button lm--button--primary" onClick={this.cancel.bind(this)}>Cancel</button>
-                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.save.bind(this, "save")}>Save</button>
-            </div>;
+            btn_html = this.state.disabled?
+                <div><button id="save_edit" className="lm--button lm--button--primary" onClick={this.edit.bind(this)}>Edit</button></div>
+                :<div>
+                    <button id="save_form" className="lm--button lm--button--primary" onClick={this.cancel.bind(this)}>Cancel</button>
+                    <button id="submit_form" className="lm--button lm--button--primary" onClick={this.save.bind(this, 'save')}>Save</button>
+                </div>;
             // $('#chkBuyer').attr('disabled', true);
             // $('#chkRevv').attr('disabled', true);
         }
@@ -488,6 +492,14 @@ export class RetailerRegister extends Component {
                         <div className="u-grid admin_invitation">
                             <div className="col-sm-12 col-md-6 push-md-3 validate_message ">
                                 {/* <h3 className="u-mt3 u-mb1">Retailer Register Page</h3> */}
+                                <div className="lm--formItem lm--formItem--inline string">
+                                    <label className="lm--formItem-left lm--formItem-label string required">
+                                        Status:
+                                    </label>
+                                    <div className="lm--formItem-right lm--formItem-control lm--formItem-label">
+                                        {this.state.status}
+                                    </div>
+                                </div>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
                                         <abbr title="required">*</abbr> Email:
@@ -581,10 +593,10 @@ export class RetailerRegister extends Component {
                                         <div className='isPassValidate' id='office_number_format' >Number should contain 8 integers!</div>
                                     </div>
                                 </div>
-
+                                <h4 className="u-mt1 u-mb1">Business Documentations</h4>
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                        <abbr title="required">*</abbr> Upload Documents:
+                                        <abbr title="required">*</abbr>Upload Supporting Documents:
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                         <UploadFile type="RETAILER_DOCUMENTS" required="required" validate={this.state.validate} showList="1" col_width="10" showWay="2" fileData={this.state.fileData.RETAILER_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
@@ -609,9 +621,9 @@ export class RetailerRegister extends Component {
                                     </div>
                                 </div>
 
-                                <h4 className="lm--formItem lm--formItem--inline string"><input id="chkBuyer" type="checkbox" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /> Check here to indicate that you have read and agree to  &nbsp;&nbsp;&nbsp; <a target="_blank" href={this.state.sellerTCurl} className="urlStyle">the Seller Platform Terms of Use</a>.</h4>
+                                <h4 className="lm--formItem lm--formItem--inline string chkBuyer"><input id="chkBuyer" type="checkbox" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /><span>Check here to indicate that you have read and agree to the</span><a target="_blank" href={this.state.sellerTCurl} className="urlStyle">Seller Platform Terms of Use</a></h4>
                                 <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
-                                <h4 className="lm--formItem lm--formItem--inline string"><input id="chkRevv" type="checkbox" onChange={this.Change.bind(this, 'chkRevv')} name={"seller_revv_tc"} disabled={this.state.disabled} />  Check here to indicate that you have read and agree to  &nbsp;&nbsp;&nbsp;  <a target="_blank" href={this.state.revvTCurl} className="urlStyle">the Energy Procurement Agreement</a>.</h4>
+                                <h4 className="lm--formItem lm--formItem--inline string chkBuyer"><input id="chkRevv" type="checkbox" onChange={this.Change.bind(this, 'chkRevv')} name={"seller_revv_tc"} disabled={this.state.disabled} /><span>Check here to indicate that you have read and agree to the</span><a target="_blank" href={this.state.revvTCurl} className="urlStyle">Energy Procurement Agreement</a></h4>
                                 <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                                 <div className="retailer_btn">
                                     {btn_html}

@@ -84,7 +84,12 @@ export const getRetailerFiles = (params) => {
     return get('/api/retailer/tenders/'+params+'/node5_retailer');
 }
 export const getLetterOfAward = (params,duration)=> {
-    return get(`/api/retailer/auction_results/${params}/award?contract_duration=${duration}`)
+    if(duration){
+        return get(`/api/retailer/auction_results/${params}/award?contract_duration=${duration}`);
+    }else{
+        return get(`/api/retailer/auction_results/${params}/award`);
+    }
+
 }
 export const retailerAcknowledge = (id) => {
     return create(`/api/retailer/consumptions/${id}/acknowledge`)
