@@ -28,9 +28,11 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
               user.company_unique_entity_number != update_user_params['company_unique_entity_number'] ) ||
           buyer_entities.any?{ |e| e['user_entity_id'].to_i == 0 })
         update_user_params['approval_status'] = User::ApprovalStatusPending
+        update_user_params['approval_date_time'] = DateTime.current
       end
     else
       update_user_params['approval_status'] = User::ApprovalStatusRegistering
+      update_user_params['approval_date_time'] = DateTime.current
     end
     ActiveRecord::Base.transaction do
       @user.update(update_user_params)
@@ -65,6 +67,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
         update_user_params['approval_status'] = User::ApprovalStatusPending
       end
     end
+    update_user_params['approval_date_time'] = DateTime.current
     ActiveRecord::Base.transaction do
       @user.update(update_user_params)
       # update buyer entity registration information}
@@ -157,7 +160,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
 
     ids = []
     buyer_entities.each do |buyer_entity|
-      ids.push(buyer_entity['user_entity_id']) if buyer_entity['user_entity_id'].to_i != 0
+      ids.push(buyer_entity['main_id']) if buyer_entity['main_id'].to_i != 0
     end
     # will_del_buyer_entity = current_user.company_buyer_entities.reject do |buyer_entity|
     #   ids.include?(buyer_entity.id.to_s)
@@ -169,8 +172,15 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     saved_buyer_entities = []
     # ActiveRecord::Base.transaction do
     will_del_buyer_entity.each do |buyer_entity|
+      # User.buyer_entities_by_email(buyer_entity.contact_email).destroy
+      unless buyer_entity.user_entity_id.blank?
+        unless buyer_entities.any? { |x| x['user_entity_id'] == buyer_entity.user_entity_id}
+          entity_user = User.find(buyer_entity.user_entity_id)
+          entity_user.destroy unless entity_user.blank?
+        end
+      end
+      # entity_user.destroy unless entity_user.blank?
       CompanyBuyerEntity.find(buyer_entity.id).destroy
-      User.buyer_entities_by_entity_id(buyer_entity.id).destroy
     end
     buyer_entities.each do |buyer_entity|
       save_result= update_buyer_entity(buyer_entity)
@@ -194,6 +204,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
         entity_user.email = target_buyer_entity.contact_email
         entity_user.consumer_type = User::ConsumerTypeBuyerEntity
         entity_user.approval_status = User::ApprovalStatusDisable
+        entity_user.approval_date_time = DateTime.current
         entity_user.password = User::DefaultPassword
         entity_user.password_confirmation = User::DefaultPassword
         # entity_user.entity_id = target_buyer_entity.id
