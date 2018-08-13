@@ -564,11 +564,11 @@ dfn.manage_label{
               padding-left: 10px;
               font{ width: 15px; display: inline-block; font-weight: 600; line-height: 15px; height:15px; background: red; border-radius: 100%; text-align: center;}
             }
-            &.view{background:url("../images/view.png") no-repeat left;}
-            &.delete{background:url("../images/delete.png") no-repeat left;}
-            &.manage{background:url("../images/manage.png") no-repeat left;}
-            &.edit{background:url("../images/edit.png") no-repeat left;}
-            &.bidding{color:#df5c28; background:url("../images/bidding.png") no-repeat left;}
+            &.view{background:url("../images/view.png") no-repeat left 3px;}
+            &.delete{background:url("../images/delete.png") no-repeat left 3px;}
+            &.manage{background:url("../images/manage.png") no-repeat left 3px;}
+            &.edit{background:url("../images/edit.png") no-repeat left 3px;}
+            &.bidding{color:#df5c28; background:url("../images/bidding.png") no-repeat left 3px;}
           }
         }
       }
