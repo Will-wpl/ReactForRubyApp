@@ -20,7 +20,8 @@ export class FillConsumption extends Component {
             name: "",
             time: "",
             contact_start_date: "",
-            link: "",
+            buyer_link: "",
+            seller_link:"",
             contract_duration: "",
             durationList: [],
             durtioanItem: "",
@@ -75,7 +76,8 @@ export class FillConsumption extends Component {
                 time: res.auction.actual_begin_time,
                 contact_start_date: res.auction.contract_period_start_date,
                 contract_duration: res.consumption.contract_duration ? res.consumption.contract_duration : "",
-                link: res.tc_attachment ? res.tc_attachment.file_path : "",
+                buyer_link: res.buyer_revv_tc_attachment ? res.buyer_revv_tc_attachment.file_path : "",
+                seller_link:res.seller_buyer_tc_attachment? res.seller_buyer_tc_attachment.file_path : ""
             })
             if (res.consumption.participation_status === '1' || res.auction.publish_status === "1") {
                 $("input[type='checkbox']").attr("checked", true);
@@ -502,7 +504,7 @@ export class FillConsumption extends Component {
                                 <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
                                     <input name="agree_declare" type="checkbox" id="chkAgree_declare" required />
                                     {/* <span>I declare that all data submited is true and shall be used for the auction, and that i am bounded by <a target="_blank" href={this.state.link} className="urlStyle">Buyer T&C.</a></span> */}
-                                    <span>I declare that all data submitted is true and shall be used for the auction, and that I am bounded by the <a target="_blank" href="#" className="urlStyle">Buyer Platform Terms of Use</a> and <a target="_blank" href="#" className="urlStyle">Electricity Procurement Agreement</a>. </span>
+                                    <span>I declare that all data submitted is true and shall be used for the auction, and that I am bounded by the <a target="_blank" href={this.state.buyer_link} className="urlStyle">Buyer Platform Terms of Use</a> and <a target="_blank" href={this.state.seller_link}  className="urlStyle">Electricity Procurement Agreement</a>. </span>
                                 </h4>
                             </div>
                             <div className="buyer_btn">
