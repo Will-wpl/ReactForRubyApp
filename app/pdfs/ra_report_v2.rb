@@ -10,6 +10,7 @@ require 'ra_report/pdf_title_v2'
 require 'ra_report/pdf_total_info_v2'
 require 'ra_report/pdf_aggregate_consumption'
 require 'ra_report/pdf_reverse_price_table'
+require 'ra_report/pdf_total_award_sum_v2'
 
 class RAReportV2 < RAReport
   def pdf_draw_title(param)
@@ -32,8 +33,10 @@ class RAReportV2 < RAReport
     pdf.move_down 15; PdfPriceTable.new({:pdf => pdf, :price_table => param[:price_table]}).table
 
     pdf.move_down 35; PdfTotalInfoV2.new({:pdf => pdf, :auction => param[:auction], :auction_result => param[:auction_result]}).info
-    pdf.move_down 35; PdfRankingTable.new({:pdf => pdf, :histories_achieved => param[:histories_achieved]}).table
-    pdf.move_down 55; PdfAggregateConsumption.new({:pdf => pdf, :auction_contract => param[:auction_contract]}).aggregate
+    pdf.move_down 5; PdfAggregateConsumption.new({:pdf => pdf, :auction_contract => param[:auction_contract]}).aggregate
+    pdf.move_down 5; PdfTotalAwardSumV2.new({:pdf => pdf, :auction => param[:auction], :auction_result => param[:auction_result]}).info
+    pdf.move_down 55; PdfRankingTable.new({:pdf => pdf, :histories_achieved => param[:histories_achieved]}).table
+
   end
 
   def get_price_table_data(param, visibility = false, price_data = false)
