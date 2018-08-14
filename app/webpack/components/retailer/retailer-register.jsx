@@ -511,7 +511,7 @@ export class RetailerRegister extends Component {
                                         <abbr title="required">*</abbr> Email :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="email_address" value={this.state.email_address} onChange={this.Change.bind(this, 'email_address')} disabled={this.state.disabled} ref="email_address" placeholder="Email" required aria-required="true" title="Please fill out this field" />
+                                        <input type="text" name="email_address" value={this.state.email_address} onChange={this.Change.bind(this, 'email_address')} readOnly={this.state.disabled} ref="email_address" placeholder="Email" required aria-required="true" title="Please fill out this field" />
                                         <div className='isPassValidate' id='email_address_message'>This field is required!</div>
                                         <div className='isPassValidate' id='email_address_format'>Incorrect mail format!</div>
                                         <div className='isPassValidate' id='email_address_repeat'>Email has already been taken!</div>
@@ -523,7 +523,7 @@ export class RetailerRegister extends Component {
                                         <abbr title="required">*</abbr> Company Name :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="company_name" value={this.state.company_name} onChange={this.Change.bind(this, 'company_name')} disabled={this.state.disabled} ref="company_name" required aria-required="true" title="Please fill out this field" ></input>
+                                        <input type="text" name="company_name" value={this.state.company_name} onChange={this.Change.bind(this, 'company_name')} readOnly={this.state.disabled} ref="company_name" required aria-required="true" title="Please fill out this field" ></input>
                                         <div className='isPassValidate' id='company_name_message' >This field is required!</div>
                                         <div className='isPassValidate' id='company_name_repeat' >Company Name has already been taken!</div>
                                     </div>
@@ -533,7 +533,7 @@ export class RetailerRegister extends Component {
                                         <abbr title="required">*</abbr> Unique Entity Number(UEN) :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="unique_entity_number" value={this.state.unique_entity_number} onChange={this.Change.bind(this, 'unique_entity_number')} disabled={this.state.disabled} ref="unique_entity_number" required aria-required="true" title="Please fill out this field" ></input>
+                                        <input type="text" name="unique_entity_number" value={this.state.unique_entity_number} onChange={this.Change.bind(this, 'unique_entity_number')} readOnly={this.state.disabled} ref="unique_entity_number" required aria-required="true" title="Please fill out this field" ></input>
                                         <div className='isPassValidate' id='unique_entity_number_message' >This field is required!</div>
                                         <div className='isPassValidate' id='unique_entity_number_repeat' >Unique Entity Number has already been taken!</div>
                                     </div>
@@ -544,7 +544,7 @@ export class RetailerRegister extends Component {
                                         <abbr title="required">*</abbr> Retailer License Number :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="license_number" value={this.state.license_number} onChange={this.Change.bind(this, 'license_number')} disabled={this.state.disabled} ref="license_number" required aria-required="true" title="Please fill out this field" ></input>
+                                        <input type="text" name="license_number" value={this.state.license_number} onChange={this.Change.bind(this, 'license_number')} readOnly={this.state.disabled} ref="license_number" required aria-required="true" title="Please fill out this field" ></input>
                                         <div className='isPassValidate' id='license_number_message' >This field is required!</div>
                                         <div className='isPassValidate' id='license_number_repeat' >Retailer License Number has already been taken!</div>
                                     </div>
@@ -554,7 +554,7 @@ export class RetailerRegister extends Component {
                                         <abbr title="required">*</abbr> GST No. :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="gst_no" value={this.state.gst_no} onChange={this.Change.bind(this, 'gst_no')} disabled={this.state.disabled} ref="gst_no" required aria-required="true" title="Please fill out this field"></input>
+                                        <input type="text" name="gst_no" value={this.state.gst_no} onChange={this.Change.bind(this, 'gst_no')} readOnly={this.state.disabled} ref="gst_no" required aria-required="true" title="Please fill out this field"></input>
                                         <div className='isPassValidate' id='gst_no_message' >This field is required!</div>
                                     </div>
                                 </div>
@@ -564,7 +564,7 @@ export class RetailerRegister extends Component {
                                         <abbr title="required">*</abbr> Company Address :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="company_address" value={this.state.company_address} onChange={this.Change.bind(this, 'company_address')} disabled={this.state.disabled} ref="company_address" required aria-required="true" title="Please fill out this field"></input>
+                                        <input type="text" name="company_address" value={this.state.company_address} onChange={this.Change.bind(this, 'company_address')} readOnly={this.state.disabled} ref="company_address" required aria-required="true" title="Please fill out this field"></input>
                                         <div className='isPassValidate' id='company_address_message' >This field is required!</div>
                                     </div>
                                 </div>
@@ -575,7 +575,7 @@ export class RetailerRegister extends Component {
                                         <abbr title="required">*</abbr> Contact Name :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="contact_name" value={this.state.contact_name} onChange={this.Change.bind(this, 'contact_name')} disabled={this.state.disabled} ref="contact_name" required aria-required="true" title="Please fill out this field"></input>
+                                        <input type="text" name="contact_name" value={this.state.contact_name} onChange={this.Change.bind(this, 'contact_name')} readOnly={this.state.disabled} ref="contact_name" required aria-required="true" title="Please fill out this field"></input>
                                         <div className='isPassValidate' id='contact_name_message' >This field is required!</div>
                                     </div>
                                 </div>
@@ -584,7 +584,7 @@ export class RetailerRegister extends Component {
                                         <abbr title="required">*</abbr> Mobile Number :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="mobile_number" value={this.state.mobile_number} onKeyUp={this.removeInputNanNum.bind(this)} onChange={this.Change.bind(this, 'mobile_number')} disabled={this.state.disabled} placeholder="Number should contain 8 integers." title="Please fill out this field" ref="mobile_number" maxLength="8" required aria-required="true" ></input>
+                                        <input type="text" name="mobile_number" value={this.state.mobile_number} onKeyUp={this.removeInputNanNum.bind(this)} onChange={this.Change.bind(this, 'mobile_number')} readOnly={this.state.disabled} placeholder="Number should contain 8 integers." title="Please fill out this field" ref="mobile_number" maxLength="8" required aria-required="true" ></input>
                                         <div className='isPassValidate' id='mobile_number_message' >This field is required!</div>
                                         <div className='isPassValidate' id='mobile_number_format' >Number should contain 8 integers!</div>
                                     </div>
@@ -594,7 +594,7 @@ export class RetailerRegister extends Component {
                                         <abbr title="required">*</abbr> Office Number :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <input type="text" name="office_number" value={this.state.office_number} onKeyUp={this.removeInputNanNum.bind(this)} onChange={this.Change.bind(this, 'office_number')} disabled={this.state.disabled} placeholder="Number should contain 8 integers." ref="office_number" maxLength="8" title="Please fill out this field" required aria-required="true" ></input>
+                                        <input type="text" name="office_number" value={this.state.office_number} onKeyUp={this.removeInputNanNum.bind(this)} onChange={this.Change.bind(this, 'office_number')} readOnly={this.state.disabled} placeholder="Number should contain 8 integers." ref="office_number" maxLength="8" title="Please fill out this field" required aria-required="true" ></input>
                                         <div className='isPassValidate' id='office_number_message' >This field is required!</div>
                                         <div className='isPassValidate' id='office_number_format' >Number should contain 8 integers!</div>
                                     </div>
