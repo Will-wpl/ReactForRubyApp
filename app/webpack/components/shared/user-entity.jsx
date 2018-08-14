@@ -103,8 +103,7 @@ export class UserEntity extends React.Component {
         }
     }
     removeEntity(index, main_id) {
-        console.log(main_id);
-        console.log(this.props.usedEntity);
+
         if (this.props.usedEntity.indexOf(main_id) > -1) {
             this.setState({ text: "The entity have available auction can't be deleted!" });
             this.refs.Modal.showModal();
