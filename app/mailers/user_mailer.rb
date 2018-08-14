@@ -95,6 +95,13 @@ class UserMailer < ApplicationMailer
     send_email(user.email, email_body, email_subject)
   end
 
+  def buyer_registered_email(admin_user, user)
+    mail_template = get_template('11')
+    email_subject = mail_template.subject
+    email_body = mail_template.body.gsub(/#buyer_company_name/, user.company_name)
+    send_email(admin_user.email, email_body, email_subject)
+  end
+
   private
 
   def send_email(email, body, subject)
