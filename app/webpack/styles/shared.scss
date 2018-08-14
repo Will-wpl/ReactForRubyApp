@@ -4,7 +4,7 @@ body a{outline:none; cursor: default;}
 button{ cursor: pointer; transition: 0.5s all;}
 .green{color:green;}
 .red{color:red;}
-button[disabled=''],input[disabled=''],select[disabled='']{background: #666 !important; color:#999 !important; cursor: default !important;}
+// button[disabled=''],input[disabled=''],select[disabled='']{background: #666 !important; color:#999 !important; cursor: default !important;}
 textarea{resize: none;}
 ul, menu, dir {
   display: block;
@@ -60,7 +60,9 @@ ul, menu, dir {
               &.time_ico{background:url("../images/time.png") no-repeat right;}
               &.checkbox{ display: inline-block; width: auto;}
             }
+          
       }
+     
   }
   .createRa_btn{text-align: right; right:0px; bottom:0px; position: relative;
       .show{display:inline-block;}
@@ -1004,4 +1006,11 @@ width: "70%"; float: "left";padding:5px;
 .buttonDisabled{
   background: #1d3845 !important;
   color: 9ba6aa !important;
+}
+.entitySub{
+
+}
+.selectController{
+  margin-top: 20px !important;
+  padding-top: 20px  !important;
 }
