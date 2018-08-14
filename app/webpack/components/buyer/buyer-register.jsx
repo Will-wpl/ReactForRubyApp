@@ -114,6 +114,7 @@ export class BuyerRegister extends Component {
     }
 
     setDefault(param) {
+        console.log(param)
         let fileObj, entityObj;
         fileObj = this.state.fileData;
         entityObj = this.state.user_entity_data;

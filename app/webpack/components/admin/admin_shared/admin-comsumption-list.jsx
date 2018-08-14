@@ -101,7 +101,7 @@ export default class AdminComsumptionList extends Component {
                                                         {/* <div className={it.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span><span><a href={it.user_attachment ? it.user_attachment.file_path : "#"} target="_blank">{it.user_attachment ? it.user_attachment.file_name : ""}</a></span></div> */}
                                                         <div className={it.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span>
                                                         <span>
-                                                            <ul>
+                                                            <ul className="attachementList">
                                                                 {
                                                                     it.user_attachment ? it.user_attachment.map((item, i) => {
                                                                         return <li key={i}>

@@ -19,9 +19,11 @@ class Api::ConsumptionsController < Api::BaseController
       details_array = consumption_details(details)
       count = details.count
       entities = CompanyBuyerEntity.find_by_user(consumption.user_id)
+      auction_contract = auction.auction_contracts.where(contract_duration: consumption.contract_duration).take
       data.push(id: consumption.id, auction_id: consumption.auction_id, user_id: consumption.user_id,
                 company_name: consumption.user.company_name, name: consumption.user.name, count: count,
                 consumption: consumption,
+                contract_period: get_contract_period(auction,auction_contract,consumption),
                 lt_peak: Consumption.get_lt_peak(consumption.lt_peak),
                 lt_off_peak: Consumption.get_lt_off_peak(consumption.lt_off_peak),
                 hts_peak: Consumption.get_hts_peak(consumption.hts_peak),

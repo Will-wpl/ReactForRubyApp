@@ -973,6 +973,7 @@ ul.history_files{
 }
 .urlStyle{
   cursor: pointer; font-size: 14px !important;
+  text-decoration: none;
 }
 
 .innerTable{
@@ -1014,4 +1015,7 @@ width: "70%"; float: "left";padding:5px;
 .selectController{
   // margin-top: 20px !important;
   // padding-top: 20px  !important;
+}
+.attachementList{
+  list-style:none;  
 }
