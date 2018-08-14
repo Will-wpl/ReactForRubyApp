@@ -198,7 +198,7 @@ export class FillConsumption extends Component {
             totals: siteInfo.totals,
             peak_pct: siteInfo.peak_pct,
             attachment_ids: siteInfo.attachment_ids,
-            user_attachment:siteInfo.user_attachment
+            user_attachment: siteInfo.user_attachment
         };
 
         let entity = this.state.site_list;
@@ -252,7 +252,7 @@ export class FillConsumption extends Component {
                 peak_pct: item.peak_pct,
                 user_attachment_id: item.user_attachment_id,
                 attachment_ids: item.attachment_ids,
-                user_attachment:item.user_attachment
+                user_attachment: item.user_attachment
             }
             buyerlist.push(siteItem);
         })
@@ -456,9 +456,14 @@ export class FillConsumption extends Component {
                                                 <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
                                                 <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
                                                 <td className="left">
-                                                    <div><span>Total Monthly:</span><span className="textDecoration" >{parseInt(item.totals)}</span><span> kWh/month</span></div>
-                                                    <div><span>Peak:</span><span className="textDecoration">{parseFloat(item.peak_pct).toFixed(2)}</span><span> %</span><span style={{ fontWeight: "bold", fontSize: "14px" }} title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">&nbsp;&nbsp;?</span></div>
-                                                    <div><span>Off-Peak:</span><span className="textDecoration">{parseFloat(100 - item.peak_pct).toFixed(2)}</span><span> %</span></div>
+                                                    <div><span>Total Monthly: </span><span className="textDecoration" >{parseInt(item.totals)}</span><span> kWh/month</span></div>
+                                                    {/* <div><span>Peak:</span><span className="textDecoration">{parseFloat(item.peak_pct).toFixed(2)}</span><span> %</span><span style={{ fontWeight: "bold", fontSize: "14px" }} title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">&nbsp;&nbsp;?</span></div>
+                                                    <div><span>Off-Peak:</span><span className="textDecoration">{parseFloat(100 - item.peak_pct).toFixed(2)}</span><span> %</span></div> */}
+
+                                                    <div><span>Peak: </span><span><span>{parseInt(Math.round(item.totals * (item.peak_pct) / 100))} kWh/month </span>({parseFloat(item.peak_pct).toFixed(2)}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Click on '?' to see Admin's reference information on peak/offpeak ratio." >&nbsp;&nbsp;?</span></div>
+                                                    <div><span>Off-Peak: </span><span>{item.totals - parseInt(Math.round(item.totals * (item.peak_pct) / 100))} kWh/month </span><span>({parseFloat(100 - item.peak_pct).toFixed(2)}%)</span></div>
+
+
                                                     <div className={item.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span>
                                                         <span>
                                                             <ul className="attachementList">
@@ -496,7 +501,8 @@ export class FillConsumption extends Component {
                             <div>
                                 <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
                                     <input name="agree_declare" type="checkbox" id="chkAgree_declare" required />
-                                    <span>I declare that all data submited is true and shall be used for the auction, and that i am bounded by <a target="_blank" href={this.state.link} className="urlStyle">Buyer T&C.</a></span>
+                                    {/* <span>I declare that all data submited is true and shall be used for the auction, and that i am bounded by <a target="_blank" href={this.state.link} className="urlStyle">Buyer T&C.</a></span> */}
+                                    <span>I declare that all data submitted is true and shall be used for the auction, and that I am bounded by the <a target="_blank" href="#" className="urlStyle">Buyer Platform Terms of Use</a> and <a target="_blank" href="#" className="urlStyle">Electricity Procurement Agreement</a>. </span>
                                 </h4>
                             </div>
                             <div className="buyer_btn">

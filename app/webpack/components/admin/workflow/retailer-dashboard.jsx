@@ -72,7 +72,6 @@ export class Adminretailerdashboard extends Component {
                                                                     }
 
                                                                 })
-                                                                console.log(flows);
                                                                 return <td key={i}>{
                                                                                 flows[i] ? 
                                                                                 (item.detail.current.current_node === it ? 

@@ -20,8 +20,17 @@ export class Signconfidentialityundertaking extends React.Component{
     }
     doconfirm(type){
         this.refs.Modal.showModal("comfirm");
+        let message="";
+        if(type==="Accept")
+        {
+            message="Please be reminded of the confidentiality clauses in the Retailer Platform Terms of Use. Click 'Yes' to proceed."
+        }
+        else
+        {
+            message="Are you sure you want to reject participation in the auction?"
+        }
         this.setState({
-            text:`Are you sure you want to ${type} the Confidentiality Undertaking ?`
+            text:message
         });
     }
     showConfirm(type){
