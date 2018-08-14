@@ -739,7 +739,7 @@ export class Modal extends React.Component {
                                         </div>
                                         <input type="text" value={this.state.account_number} onChange={this.changeConsumption.bind(this, "account_number")} id="account_number" name="account_number" required aria-required="true" />
                                         <div id="account_number_message" className="isPassValidate">This filed is required!</div>
-                                        <div id="account_number_taken_message" className="errormessage">There is already an existing contract for this Account Number.</div>
+                                        <div id="account_number_taken_message" className="errormessage">Account number cannot be duplicated.</div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -801,7 +801,7 @@ export class Modal extends React.Component {
                                                 Premise Address
                                             </div>
                                             <div style={{ width: "70%", float: "left", padding: "5px" }}>
-                                                <div id="permise_address_taken_message" className="errormessage">There is already an existing contract for this Premise Address.</div>
+                                                <div id="permise_address_taken_message" className="errormessage">Premise address cannot be duplicated.</div>
                                             </div>
                                         </div>
                                     </td>

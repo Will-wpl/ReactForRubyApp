@@ -28,9 +28,12 @@ export class BuyerList extends Component {
         //     });
         //     this.refs.Modal.showModal();
         // }
-
+        let url = window.location.href.split('/buyer_dashboard')[0];
+        let position = window.location.href.split('/buyer_dashboard')[0].lastIndexOf('/');
+        let auctionId = url.substr(position + 1);
+        console.log(auctionId)
         sessionStorage.setItem('comsumptiontype', this.props.dashboard.type)
-        window.location.href = "/admin/consumptions/" + item.id;
+        window.location.href = "/admin/consumptions/" + item.id + "&auctions=" + auctionId;
     }
     render() {
         return (
@@ -52,7 +55,7 @@ export class BuyerList extends Component {
                                             return (
                                                 <li key={index} className="u-grid">
                                                     <span className="col-sm-5 white" title={item.name}>{item.name}</span>
-                                                    <span className="col-sm-3"><abbr className={'color' + item.participation_status }></abbr></span>
+                                                    <span className="col-sm-3"><abbr className={'color' + item.participation_status}></abbr></span>
                                                     <span id="showDetail" className={item.participation_status === '1' ? "col-sm-4" : item.accept_status === '0' ? "col-sm-4" : "col-sm-4 isHide"} onClick={this.showDetail.bind(this, item)}>Consumption Details {item.accept_status === "1" ? "(Admin Approved)" : item.accept_status === "0" ? "(Admin Rejected)" : ""}</span>
                                                 </li>)
                                         })
