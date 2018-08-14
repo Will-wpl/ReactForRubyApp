@@ -18,9 +18,8 @@ class BuyerEntityReport < BuyerReport
       pdf.fill_color "ffffff"
       pdf.define_grid(:columns => 22, :rows => 35, :gutter => 1)
       #main page 1
-      pdf_draw_title(pdf, current_user)
-      pdf.grid([2, 1], [35, 19]).bounding_box do
-        pdf_draw_info(pdf, entities)
+      pdf.grid([1, 1], [35, 19]).bounding_box do
+        pdf_draw_info(pdf, current_user, entities)
         pdf_draw_price(pdf, price_table_data)
         pdf_draw_consumption_forecast(pdf, total_consumption)
       end
@@ -38,29 +37,12 @@ class BuyerEntityReport < BuyerReport
 
   private
 
-  def pdf_draw_title(pdf, current_user)
-    # pdf.fill_color "ffffff"
-    pdf.grid([1, 1], [1, 21]).bounding_box do
-      pdf.font_size(22) {
-        pdf.draw_text "#{current_user.company_name}", :at => [pdf.bounds.left, pdf.bounds.top-18]
-      }
-    end
-  end
 
   def pdf_draw_page2_title(pdf)
     # pdf.fill_color "ffffff"
     pdf.grid([1, 1], [1, 21]).bounding_box do
       pdf.font_size(16) {
         pdf.draw_text "Breakdown of Consumption Forecast based on Purchasing Entities:", :at => [pdf.bounds.left, pdf.bounds.top-18]
-      }
-    end
-  end
-
-  def pdf_draw_entity_title(pdf, company_name)
-    # pdf.fill_color "ffffff"
-    pdf.grid([1, 1], [1, 21]).bounding_box do
-      pdf.font_size(20) {
-        pdf.draw_text "#{company_name}", :at => [pdf.bounds.left, pdf.bounds.top-18]
       }
     end
   end
@@ -129,8 +111,8 @@ class BuyerEntityReport < BuyerReport
   def do_entities_page(pdf, hash, price_table_data, entities_data)
     hash.keys.each do |key|
       pdf.start_new_page
-      pdf_draw_entity_title(pdf, key)
-      pdf.grid([2, 1], [35, 19]).bounding_box do
+
+      pdf.grid([1, 1], [35, 19]).bounding_box do
         pdf_entity_info(pdf, key, entities_data)
         pdf_draw_price(pdf, price_table_data)
         pdf_draw_entity_consumption(pdf, key, hash[key])
@@ -173,22 +155,27 @@ class BuyerEntityReport < BuyerReport
     total_award_sum = entities_data[entity_company_name][:award_sum]
     total_volume = PdfUtils.number_helper.number_to_currency(total_volume, precision: 0, unit: '')
     total_award_sum = PdfUtils.number_helper.number_to_currency(total_award_sum, precision: 2, unit: '$')
-    pdf.move_down 20
+    pdf.font_size(18) {
+      pdf_text pdf, "Sub-Report for Purchasing Entity: #{entity_company_name}"
+    }
+    pdf.move_down 10
     pdf.font_size 16
-    pdf.text get_ra_id(auction)
+    pdf_reverse_auction_id(pdf,auction)
     pdf.move_down 10
-    pdf.text get_auction_on_datetime(auction)
+    pdf_name_of_reverse_auction(pdf, auction)
     pdf.move_down 10
-    pdf.text get_lowest_price_bidder(auction_result)
+    pdf_datetime_of_auction(pdf, auction)
     pdf.move_down 10
-    pdf.text "Contract Period: " + "#{contract_period_start_date} to #{contract_period_end_date} (#{auction_result.contract_duration} months)"
+    pdf_winner_bidder(pdf,auction_result)
     pdf.move_down 10
-    pdf.text "#{entity_company_name} Volume: "+ total_volume + " kWh (forecasted)"
+    pdf_text pdf,"<b>Contract Period: </b>" + "#{contract_period_start_date} to #{contract_period_end_date} (#{auction_result.contract_duration} months)"
     pdf.move_down 10
-    pdf.text "#{entity_company_name} Award Sum: "+total_award_sum + " (forecasted)"
+    pdf_text pdf, "<b>#{entity_company_name} Volume: </b>"+ total_volume + " kWh (forecasted)"
+    pdf.move_down 10
+    pdf_text pdf,"<b>#{entity_company_name} Award Sum: </b>"+total_award_sum + " (forecasted)"
   end
 
-  def pdf_draw_info(pdf, entities)
+  def pdf_draw_info(pdf, current_user, entities)
     # pdf.fill_color "ffffff"
     auction = param[:auction]
     auction_result = param[:auction_result]
@@ -198,22 +185,53 @@ class BuyerEntityReport < BuyerReport
     total_award_sum = param[:total_award_sum]
     total_volume = PdfUtils.number_helper.number_to_currency(total_volume, precision: 0, unit: '')
     total_award_sum = PdfUtils.number_helper.number_to_currency(total_award_sum, precision: 2, unit: '$')
-    pdf.move_down 20
+    pdf.font_size(20) {
+      pdf_buyer_company_name(pdf, current_user)
+    }
     pdf.font_size 16
-    pdf.text get_ra_id(auction)
     pdf.move_down 8
-    pdf.text get_auction_on_datetime(auction)
+    pdf_reverse_auction_id(pdf,auction)
     pdf.move_down 8
-    pdf.text get_lowest_price_bidder(auction_result)
+    pdf_name_of_reverse_auction(pdf, auction)
     pdf.move_down 8
-    pdf.text "Contract Period: " + "#{contract_period_start_date} to #{contract_period_end_date} (#{auction_result.contract_duration} months)"
+    pdf_datetime_of_auction(pdf, auction)
+    pdf.move_down 8
+    pdf_winner_bidder(pdf, auction_result)
+    pdf.move_down 8
+    pdf_text pdf, "<b>Contract Period: </b>" + "#{contract_period_start_date} to #{contract_period_end_date} (#{auction_result.contract_duration} months)"
     pdf.move_down 1
-    pdf.table([["Purchasing Entities:", '']] + get_entities_list(entities),
+    pdf.table([["<b>Purchasing Entities:</b>", '']] + get_entities_list(entities),
               :cell_style => {:padding => [1, 1], :inline_format => true, :border_width => 0})
     pdf.move_down 8
-    pdf.text "Total Volume: "+ total_volume + " kWh (forecasted)"
+    pdf_text pdf, "<b>Total Volume: </b>"+ total_volume + " kWh (forecasted)"
     pdf.move_down 8
-    pdf.text "Total Award Sum: "+total_award_sum + " (forecasted)"
+    pdf_text pdf, "<b>Total Award Sum: </b>"+total_award_sum + " (forecasted)"
+  end
+
+  def pdf_buyer_company_name(pdf, current_user)
+    pdf_text pdf, "<b>Buyer Report for #{current_user.company_name}</b>"
+  end
+
+  def pdf_reverse_auction_id(pdf, auction)
+    pdf_text pdf, "<b>Reverse Auction ID: </b>#{auction.published_gid}"
+  end
+
+  def pdf_name_of_reverse_auction(pdf, auction)
+    pdf_text pdf, "<b>Name of Reverse Auction: </b>#{auction.name}"
+  end
+
+  def pdf_datetime_of_auction(pdf, auction)
+    zone_time = get_pdf_datetime_zone
+    auction_datetime = (auction.start_datetime + zone_time).strftime("%-d %b %Y")
+    pdf_text pdf, "<b>Date/Time of Reverse Auction: </b>#{auction_datetime}"
+  end
+
+  def pdf_winner_bidder(pdf, auction_result)
+    pdf_text pdf, "<b>Winner Bidder:  </b>#{auction_result.lowest_price_bidder}"
+  end
+
+  def pdf_text(pdf, text)
+    pdf.text text,  :inline_format => true
   end
 
   def get_entities_list(entities)

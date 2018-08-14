@@ -537,6 +537,7 @@ export class BuyerRegister extends Component {
     }
 
     save(type) {
+
         let isValidator = this.checkSuccess();
         if (isValidator) {
             validateIsExist(this.setParams()).then(res => {
@@ -559,7 +560,13 @@ export class BuyerRegister extends Component {
                                     text: "Your details have been successfully saved. "
                                 }
                             );
-                            this.refs.Modal.showModal("defaultCallBack");
+                            //  this.refs.Modal.showModal("defaultCallBack");
+                            if (type !== "save") {
+                                this.refs.Modal.showModal();
+                            }
+                            else {
+                                this.refs.Modal.showModal("defaultCallBack");
+                            }
                         }
                     })
                 }
@@ -911,7 +918,7 @@ export class BuyerRegister extends Component {
                                         <div className={this.state.disabled ? "isHide" : "addEntity"} >
                                             <a onClick={this.addUserEntity.bind(this)} >Add</a>
                                         </div>
-                                    </div> 
+                                    </div>
                                     <div>
 
                                     </div>

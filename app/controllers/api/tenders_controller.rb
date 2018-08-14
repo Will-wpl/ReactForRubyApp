@@ -44,7 +44,7 @@ class Api::TendersController < Api::TendersBaseController
     auction = @arrangement.auction
     if auction.auction_contracts.blank?
       attachments_count = AuctionAttachment.belong_auction(@arrangement.auction_id)
-                              .where(file_type: 'tender_documents_upload').count
+                              .where(file_type: 'attachment_deviation').count
       chats = set_node3_chats(params[:id])
       attachments = AuctionAttachment.user_auction(@arrangement.auction_id, @arrangement.user_id)
                         .where(file_type: 'attachment_deviation').order(:created_at)
