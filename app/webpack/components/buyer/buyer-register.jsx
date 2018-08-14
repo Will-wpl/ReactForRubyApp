@@ -542,7 +542,6 @@ export class BuyerRegister extends Component {
     }
 
     save(type) {
-        console.log(this.setParams())
         let isValidator = this.checkSuccess();
         if (isValidator) {
             validateIsExist(this.setParams()).then(res => {
