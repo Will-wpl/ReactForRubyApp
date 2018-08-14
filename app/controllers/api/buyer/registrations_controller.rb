@@ -222,10 +222,10 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
   end
 
   def update_buyer_entity(buyer_entity)
-    target_buyer_entity = if buyer_entity['user_entity_id'].to_i == 0
+    target_buyer_entity = if buyer_entity['main_id'].to_i == 0
                             CompanyBuyerEntity.new
                           else
-                            CompanyBuyerEntity.find(buyer_entity['user_entity_id'])
+                            CompanyBuyerEntity.find(buyer_entity['main_id'])
                           end
     target_buyer_entity.company_name = buyer_entity['company_name'] unless buyer_entity['company_name'].blank?
     target_buyer_entity.company_uen = buyer_entity['company_uen'] unless buyer_entity['company_uen'].blank?
@@ -237,7 +237,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     target_buyer_entity.contact_mobile_no = buyer_entity['contact_mobile_no'] unless buyer_entity['contact_mobile_no'].blank?
     target_buyer_entity.contact_office_no = buyer_entity['contact_office_no'] unless buyer_entity['contact_office_no'].blank?
     target_buyer_entity.is_default = buyer_entity['is_default'].blank? ? 0 : buyer_entity['is_default']
-    if buyer_entity['user_entity_id'].to_i == 0
+    if buyer_entity['main_id'].to_i == 0
       target_buyer_entity.approval_status = CompanyBuyerEntity::ApprovalStatusPending
     end
     target_buyer_entity.user = current_user
