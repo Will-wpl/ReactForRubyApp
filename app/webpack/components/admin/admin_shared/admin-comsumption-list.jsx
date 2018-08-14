@@ -49,7 +49,7 @@ export default class AdminComsumptionList extends Component {
         return name;
     }
     render() {
-        
+        console.log(this.props.comsumption_list)
         return (
             this.props.dataVersion ?
                 <div>

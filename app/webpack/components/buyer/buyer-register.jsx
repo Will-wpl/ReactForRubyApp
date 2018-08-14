@@ -911,7 +911,7 @@ export class BuyerRegister extends Component {
                                         <div className={this.state.disabled ? "isHide" : "addEntity"} >
                                             <a onClick={this.addUserEntity.bind(this)} >Add</a>
                                         </div>
-                                    </div>
+                                    </div> 
                                     <div>
 
                                     </div>
@@ -920,9 +920,9 @@ export class BuyerRegister extends Component {
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
                                         <abbr title="required">*</abbr> Tenant Management Service Required :
-                               </label>
+                                    </label>
                                     <div className="lm--formItem-right lm--formItem-control">
-                                        <select name="buyer_management" id="buyer_management" onChange={this.Change.bind(this, 'buyer_management')} defaultValue={this.state.buyer_management} disabled={this.state.disabled} ref="buyer_management" aria-required="true">
+                                        <select className="selectController" name="buyer_management" id="buyer_management" onChange={this.Change.bind(this, 'buyer_management')} defaultValue={this.state.buyer_management} disabled={this.state.disabled} ref="buyer_management" aria-required="true">
                                             <option value="1">Yes</option>
                                             <option value="0">No</option>
                                         </select>
