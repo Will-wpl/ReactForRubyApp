@@ -13,7 +13,7 @@ export class BuyerRegister extends Component {
         this.state = {
             id: "", userid: "", text: "", btn_status: false, disabled: false, havedata: false, allbtnStatus: true, validate: true, use_type: "",
             email_address: "", company_name: "", unique_entity_number: "", company_address: "", billing_address: "", contact_name: "",
-            mobile_number: "", office_number: "", entityStatus: "", approveStatus: false, status: '',
+            mobile_number: "", office_number: "", entityStatus: "", approveStatus: false, status: '',main_id:'',
             user_entity_id: "", user_company_name: "", user_company_uen: "", user_company_address: "", user_billing_address: "", user_bill_attention_to: "",
             user_contact_name: "", user_contact_email: "", user_contact_mobile_no: "", user_contact_office_no: "", comment: "",
             buyerTCurl: "", buyerTCname: "", agree_seller_buyer: "0",
@@ -198,7 +198,7 @@ export class BuyerRegister extends Component {
                         if (index > 0) {
                             user_entity.push({
                                 user_entity_id: entity[index].user_entity_id,
-                                main_id: entity[0].id,
+                                main_id: entity[index].id,
                                 company_name: entity[index].company_name ? entity[index].company_name : '',
                                 company_uen: entity[index].company_uen ? entity[index].company_uen : '',
                                 company_address: entity[index].company_address ? entity[index].company_address : '',
@@ -270,8 +270,6 @@ export class BuyerRegister extends Component {
         })
         let flag = true, hasDoc = true, checkSelect = true;
         let arr = validator_Object(this.state, this.validatorItem);
-        console.log("form")
-        console.log(arr)
         if (arr) {
             arr.map((item, index) => {
                 let column = item.column;
@@ -280,8 +278,6 @@ export class BuyerRegister extends Component {
             })
         }
         let entity = validator_Array(this.state.user_entity_data['ENTITY_LIST'][0].entities, this.validatorEntity);
-        console.log("entity")
-        console.log(entity)
         if (entity) {
             entity.map((item, index) => {
                 item.map((it, i) => {
@@ -327,7 +323,7 @@ export class BuyerRegister extends Component {
     setParams(type) {
         let entity = [
             {
-                main_id: this.state.user_entity_id,
+                main_id: this.state.main_id,
                 company_name: this.state.company_name,
                 company_uen: this.state.unique_entity_number,
                 company_address: this.state.company_address,
@@ -345,7 +341,7 @@ export class BuyerRegister extends Component {
             let list = this.state.user_entity_data['ENTITY_LIST'][0].entities;
             list.map((item, index) => {
                 let paramObj = {
-                    main_id: item.user_entity_id,
+                    main_id: item.main_id,
                     company_name: item.company_name,
                     company_uen: item.company_uen,
                     company_address: item.company_address,
