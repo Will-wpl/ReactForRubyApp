@@ -16,14 +16,24 @@ class RAReportV2 < RAReport
     PdfTitleV2.new(param).title
   end
 
-  def pdf_draw_right_info(param)
+
+  def pdf_draw_left_info(param)
     pdf = param[:pdf]
+    pdf.grid([0, 0], [22, 17]).bounding_box do
+      pdf.move_down 650
+      PdfReversePriceTable.new(param.merge({:pdf => pdf, :visibilities => @visibilities})).table
+    end
+
+  end
+
+  def pdf_draw_right_info(param)
+    pdf = param[:pdf];pdf.go_to_page(1)
     pdf.move_down 60; PdfLowestDidderInfo.new({:pdf => pdf, :auction_result => param[:auction_result]}).info
     pdf.move_down 15; PdfPriceTable.new({:pdf => pdf, :price_table => param[:price_table]}).table
-    pdf.move_down 35; PdfReversePriceTable.new(param.merge({:pdf => pdf, :visibilities => @visibilities})).table
+
     pdf.move_down 35; PdfTotalInfoV2.new({:pdf => pdf, :auction => param[:auction], :auction_result => param[:auction_result]}).info
-    pdf.start_new_page; PdfRankingTable.new({:pdf => pdf, :histories_achieved => param[:histories_achieved]}).table
-    pdf.move_down 15; PdfAggregateConsumption.new({:pdf => pdf, :auction_contract => param[:auction_contract]}).aggregate
+    pdf.move_down 35; PdfRankingTable.new({:pdf => pdf, :histories_achieved => param[:histories_achieved]}).table
+    pdf.move_down 55; PdfAggregateConsumption.new({:pdf => pdf, :auction_contract => param[:auction_contract]}).aggregate
   end
 
   def get_price_table_data(param, visibility = false, price_data = false)
