@@ -134,11 +134,14 @@ class Api::ConsumptionsController < Api::BaseController
   def consumption_details(consumption_details)
     consumption_details_all = []
     consumption_details.each do |consumption_detail|
-      if consumption_detail.user_attachment_id.blank?
-        user_attachment = nil
-      else
-        user_attachment = UserAttachment.find_by_id(consumption_detail.user_attachment_id)
-      end
+      # if consumption_detail.user_attachment_id.blank?
+      #   user_attachment = nil
+      # else
+      #   user_attachment = UserAttachment.find_by_id(consumption_detail.user_attachment_id)
+      # end
+      user_attachments = UserAttachment.find_consumption_attachment_by_user_type(consumption_detail.id, consumption_detail.consumption.user_id, UserAttachment::FileType_Consumption_Detail_Doc)
+      attachment_ids = []
+      user_attachments.each{ |x| attachment_ids.push(x.id) }
       final_detail = {
           "id" => consumption_detail.id,
           "account_number" => consumption_detail.account_number,
@@ -159,8 +162,8 @@ class Api::ConsumptionsController < Api::BaseController
           "totals" => consumption_detail.totals,
           "peak_pct" => consumption_detail.peak_pct,
           "company_buyer_entity_id" => consumption_detail.company_buyer_entity_id,
-          "user_attachment_id" => consumption_detail.user_attachment_id,
-          "user_attachment" =>user_attachment
+          "user_attachment" => user_attachments,
+          "attachment_ids" => attachment_ids.to_json
       }
       consumption_details_all.push(final_detail)
     end
