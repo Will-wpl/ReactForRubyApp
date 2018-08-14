@@ -166,18 +166,6 @@ class Pdf
     (auction_result.contract_period_end_date).strftime("%-d %b %Y")
   end
 
-  def get_ra_id(auction)
-    "Buyer Report - #{auction.published_gid}"
-  end
-
-  def get_auction_on_datetime(auction)
-    zone_time = get_pdf_datetime_zone
-    auction.name + ' on ' + (auction.start_datetime + zone_time).strftime("%-d %b %Y")
-  end
-
-  def get_lowest_price_bidder(auction_result)
-    "Winning Bidder: " + auction_result.lowest_price_bidder
-  end
 
   def get_contract_duration_price(auction_contract, auction_result)
     table_head, table_row0, table_row1, price_hash = [''], ['Peak<br/>(7am-7pm)'], ['Off-Peak<br/>(7pm-7am)'], {}

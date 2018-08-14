@@ -88,6 +88,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
     &:last-child{ margin-right: 0px;}
     &:hover{background:#00888a;}
   }
+  button[disabled=''],input[disabled=''],select[disabled='']{background: #666 !important; color:#999 !important; cursor: default !important;}
   a{transition: 0.8s all;
     &:hover{background:#00888a;}
   }
