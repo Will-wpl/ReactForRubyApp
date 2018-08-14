@@ -26,7 +26,8 @@ export default class AdminBuyerListDetail extends Component {
             text: "",
             comment: "",
             dataVersion: "",
-            past: false
+            past: false,
+            auctionId: ""
 
         }
         this.type = sessionStorage.getItem('comsumptiontype');
@@ -39,7 +40,11 @@ export default class AdminBuyerListDetail extends Component {
     }
 
     componentDidMount() {
-        let id = window.location.href.split("consumptions/")[1];
+        let id = window.location.href.split("consumptions/")[1].split('&auctions=')[0];
+        let auctionId = window.location.href.split("consumptions/")[1].split('&auctions=')[1];
+        this.setState({
+            auctionId: auctionId
+        });
         getAdminBuyerListDetails(id).then(res => {
             this.setState({
                 consumption_id: id,
@@ -114,12 +119,12 @@ export default class AdminBuyerListDetail extends Component {
         };
         if (obj.action === 'reject') {
             approveConsumptions(param).then(res => {
-                location.href = "/admin/auctions/unpublished";
+                location.href = "/admin/auctions/"+this.state.auctionId+"/buyer_dashboard?unpublished";
             })
         }
         else {
             approveConsumptions(param).then(res => {
-                location.href = "/admin/auctions/unpublished";
+                location.href = "/admin/auctions/"+this.state.auctionId+"/buyer_dashboard?unpublished";
             })
         }
     }

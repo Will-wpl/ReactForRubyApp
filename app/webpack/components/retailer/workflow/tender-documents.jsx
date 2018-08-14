@@ -100,13 +100,13 @@ export class Tenderdocuments extends React.Component {
                                         </tr>
                                     </tbody>
                                 </table>
-                                {this.props.single != 5 ? <a href={`/retailer/auctions/${this.props.auction.id}/consumption?type=2&contract_duration=${item.contract_duration}`} className="col-sm-12 lm--button lm--button--primary u-mt1">View Details</a> : ''}
+                                {this.props.single != 5 ? <a href={`/retailer/auctions/${this.props.auction.id}/consumption?type=2&contract_duration=${item.contract_duration}`} className="col-sm-4 lm--button lm--button--primary u-mt1">View Details</a> : ''}
                             </div>
                         })}
 
                     </div>
                 </div>
-                <div className="lm--formItem lm--formItem--inline string u-mt3 role_select">
+                {/* <div className="lm--formItem lm--formItem--inline string u-mt3 role_select">
                     <label className="lm--formItem-left lm--formItem-label string required">
                         Electricity Procurement Agreement:
                     </label>
@@ -117,12 +117,12 @@ export class Tenderdocuments extends React.Component {
                             }) : ''}
                         </ul>
                     </div>
-                </div>
-                <div className="lm--formItem lm--formItem--inline string u-mt3 role_select">
+                </div> */}
+                {/* <div className="lm--formItem lm--formItem--inline string u-mt3 role_select">
                     <label className=" lm--formItem-label ">
                         {(this.props.single != 5 && this.props.single != 4) ? "You are bounded by the Electricity Procurement Agreement. Please click 'Proceed' to continue." : ""}
                     </label>
-                </div>
+                </div> */}
                 {this.props.single === 5 ? (this.props.current.actions ?
                         <div className="workflow_btn u-mt3">
                             <button disabled={this.props.propsdisabled ? true : (!this.props.current.actions.node2_retailer_propose_deviations)} onClick={this.showConfirm.bind(this, 'Propose_Deviations')} className="lm--button lm--button--primary">Propose Deviations</button>

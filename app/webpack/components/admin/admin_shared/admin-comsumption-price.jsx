@@ -43,6 +43,13 @@ render() {
                        <td >{formatPower(parseInt(Number(this.props.price.htl_off_peak)), 0, '')}</td>
                        <td >{formatPower(parseInt(Number(this.props.price.eht_off_peak)), 0, '')}</td>
                    </tr>
+                   <tr>
+                       <td>Total</td>
+                       <td>{formatPower(parseInt(Number(this.props.price.lt_peak))+parseInt(Number(this.props.price.lt_off_peak)),0,'')}</td>
+                       <td>{formatPower(parseInt(Number(this.props.price.hts_peak))+parseInt(Number(this.props.price.hts_off_peak)),0,'')}</td>
+                       <td>{formatPower(parseInt(Number(this.props.price.htl_peak))+parseInt(Number(this.props.price.htl_off_peak)),0,'')}</td>
+                       <td>{formatPower(parseInt(Number(this.props.price.eht_peak))+parseInt(Number(this.props.price.eht_off_peak)),0,'')}</td>
+                   </tr>
                </tbody>
            </table>
             </div>
