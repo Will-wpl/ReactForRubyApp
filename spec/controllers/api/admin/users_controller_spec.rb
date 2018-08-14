@@ -262,7 +262,7 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
           # expect(hash['user_base_info']['approval_status']).to eq('0')
-          expect(entity_users.size).to eq(0)
+          expect(entity_users.size).to eq(2)
         end
       end
     end

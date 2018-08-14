@@ -175,16 +175,13 @@ render() {
                         <div className="col-sm-12 col-md-10 push-md-1">
                             <ReservePrice auction={this.auction} price={this.startPrice} realtimePrice={this.state.currentPrice} />
                             <WinnerPrice showOrhide="hide" winner={this.state.winner}  isLtVisible={visibility_lt} isHtsVisible={visibility_hts} isHtlVisible={visibility_htl} isEhtVisible={visibility_eht}/>
-                            <div className="winnerPrice_main">
-                                {/*<a className="lm--button lm--button--primary u-mt3" onClick={this.showDetail.bind(this,'void')}>Void Reverse Auction</a>*/}
-                               {/* <a className="lm--button lm--button--primary u-mt3" >Alternate Winner</a>*/}
-                                <a className="lm--button lm--button--primary u-mt3" onClick={this.showDetail.bind(this,'win')} >Select Winner</a>
-                            </div>
-                            
                         </div>
                     </div>
                 </div>
                 <Modal ref="Modal" text={this.state.text} acceptFunction={!this.state.fnStatus ? this.void_auction.bind(this) : this.confirm_winner.bind(this)} />
+                <div className="createRaMain u-grid">
+                    <a className="lm--button lm--button--primary u-mt3" onClick={this.showDetail.bind(this,'win')} >Select Winner</a>
+                </div>
             </div>
     )
   }
