@@ -25,7 +25,7 @@ class PdfReversePriceTable
   end
 
   def number_format(num)
-    PdfUtils.number_helper.number_to_currency(num, precision: 4, unit: '')
+    PdfUtils.number_helper.number_to_currency(num, precision: 4, format: '$ %n/kWh')
   end
 
   def push_colume_data(param)
