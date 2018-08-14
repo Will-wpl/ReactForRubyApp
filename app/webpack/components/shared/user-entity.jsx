@@ -128,7 +128,7 @@ export class UserEntity extends React.Component {
     }
     buildFrom() {
         let entityHtml = '';
-        entityHtml = <div name="entitySub" className="">
+        entityHtml = <div name="entitySub" className="entitySub">
             {
                 (this.props.entityList['ENTITY_LIST'][0].entities.length > 0) ?
                     this.props.entityList['ENTITY_LIST'][0].entities.map((it, i) =>
