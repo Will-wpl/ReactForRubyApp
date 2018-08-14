@@ -52,6 +52,7 @@ export class FillConsumption extends Component {
             file_path: "",
             file_name: "",
             attachId: "",
+            attachment_ids: '',
             id: 0,
             cid: Math.floor((Math.random() * 10000) + 1),
             option: 'insert'
@@ -141,6 +142,7 @@ export class FillConsumption extends Component {
         this.accountItem.attachId = "";
         this.accountItem.file_path = "";
         this.accountItem.file_name = "";
+        this.accountItem.attachment_ids = "";
         this.setState({
             account_detail: this.accountItem,
             text: " "
@@ -151,6 +153,8 @@ export class FillConsumption extends Component {
 
     // edit an account information
     edit_site(item, index) {
+        this.setState({ account_detail: {} });
+        this.accountItem = {};
         this.accountItem.id = item.id;
         this.accountItem.account_number = item.account_number;
         this.accountItem.existing_plan = ['SPS tariff', 'SPS wholesale', 'Retailer plan'];
@@ -168,12 +172,10 @@ export class FillConsumption extends Component {
         this.accountItem.totals = item.totals;
         this.accountItem.peak_pct = item.peak_pct;
         this.accountItem.peak = 10;
-        this.accountItem.attachId = item.user_attachment ? item.user_attachment.id : "";
-        this.accountItem.file_path = item.user_attachment ? item.user_attachment.file_path : "";
-        this.accountItem.file_name = item.user_attachment ? item.user_attachment.file_name : "";
+        this.accountItem.attachment_ids = item.user_attachment;
         this.accountItem.option = 'update';
         this.setState({
-            text: " ", 
+            text: " ",
             account_detail: this.accountItem
         })
         $("#account_number").focus();
@@ -195,9 +197,10 @@ export class FillConsumption extends Component {
             postal_code: siteInfo.postal_code,
             totals: siteInfo.totals,
             peak_pct: siteInfo.peak_pct,
-            user_attachment_id: siteInfo.user_attachment_id,
-            user_attachment: { id: siteInfo.user_attachment_id, file_name: siteInfo.file_name, file_path: siteInfo.file_path }
+            attachment_ids: siteInfo.attachment_ids,
+            user_attachment:siteInfo.user_attachment
         };
+
         let entity = this.state.site_list;
         if (siteInfo.index >= 0) { entity[siteInfo.index] = item; }
         else { entity.push(item) }
@@ -232,9 +235,7 @@ export class FillConsumption extends Component {
     doSave(type) {
         let makeData = {},
             buyerlist = [];
-        let checkpeak = this.state.site_list.map((item, index) => {
-            return parseFloat(item.totals) > 0 && parseFloat(item.peak_pct) > 0;
-        })
+
         this.state.site_list.map((item, index) => {
             let siteItem = {
                 account_number: item.account_number,
@@ -249,23 +250,17 @@ export class FillConsumption extends Component {
                 postal_code: item.postal_code,
                 totals: item.totals,
                 peak_pct: item.peak_pct,
-                user_attachment_id: item.user_attachment_id
+                user_attachment_id: item.user_attachment_id,
+                attachment_ids: item.attachment_ids,
+                user_attachment:item.user_attachment
             }
             buyerlist.push(siteItem);
         })
+        console.log(buyerlist);
         makeData = {
             consumption_id: this.consumptions_id,
             details: JSON.stringify(buyerlist),
             contract_duration: $("#selDuration").val()
-        }
-        if (type != "delete") {
-            if (!checkpeak) {
-                setTimeout(() => {
-                    this.refs.Modal.showModal();
-                    this.setState({ text: "You cannot enter 0 kWh for both peak and off-peak volume" });
-                }, 200)
-                return false;
-            }
         }
         setBuyerParticipate(makeData, '/api/buyer/consumption_details/save').then((res) => {
             if (type != "participate") {
@@ -276,7 +271,7 @@ export class FillConsumption extends Component {
                 }
                 this.refs.Modal.showModal();
             } else {
-                setBuyerParticipate({ consumption_id: this.consumptions_id }, '/api/buyer/consumption_details/participate').then((res) => {
+                setBuyerParticipate(makeData, '/api/buyer/consumption_details/participate').then((res) => {
                     this.setState({
                         disabled: 'disabled',
                         checked: true,
@@ -438,13 +433,13 @@ export class FillConsumption extends Component {
                                 </colgroup>
                                 <thead>
                                     <tr>
-                                        <th >Account No.</th>
+                                        <th>Account No.</th>
                                         <th>Existing Plan</th>
                                         <th>Contract Expiry</th>
                                         <th>Purchasing Entity</th>
                                         <th>Intake Level</th>
-                                        <th>Contract Capacity</th>
-                                        <th>Permise Address</th>
+                                        <th>Contracted Capacity</th>
+                                        <th>Premise Address</th>
                                         <th>Consumption Details</th>
                                         <th></th>
                                     </tr>
@@ -464,7 +459,20 @@ export class FillConsumption extends Component {
                                                     <div><span>Total Monthly:</span><span className="textDecoration" >{parseInt(item.totals)}</span><span> kWh/month</span></div>
                                                     <div><span>Peak:</span><span className="textDecoration">{parseFloat(item.peak_pct).toFixed(2)}</span><span> %</span><span style={{ fontWeight: "bold", fontSize: "14px" }} title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">&nbsp;&nbsp;?</span></div>
                                                     <div><span>Off-Peak:</span><span className="textDecoration">{parseFloat(100 - item.peak_pct).toFixed(2)}</span><span> %</span></div>
-                                                    <div className={item.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span><span><a href={item.user_attachment ? item.user_attachment.file_path : "#"} target="_blank">{item.user_attachment ? item.user_attachment.file_name : ""}</a></span></div>
+                                                    <div className={item.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span>
+                                                        <span>
+                                                            <ul className="attachementList">
+                                                                {
+                                                                    item.user_attachment ? item.user_attachment.map((item, i) => {
+                                                                        return <li key={i}>
+                                                                            <a href={item.file_path ? item.file_path : "#"} target="_blank">{item.file_name ? item.file_name : ""}</a>
+                                                                        </li>
+                                                                    }) :
+                                                                        <li> </li>
+                                                                }
+                                                            </ul>
+                                                        </span>
+                                                    </div>
                                                 </td>
                                                 <td>
                                                     <div className="editSite"><a className="btnOption" onClick={this.edit_site.bind(this, item, index)}>Edit </a></div>
@@ -486,9 +494,9 @@ export class FillConsumption extends Component {
                             </div>
 
                             <div>
-                                <h4 className="lm--formItem lm--formItem--inline string">
+                                <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
                                     <input name="agree_declare" type="checkbox" id="chkAgree_declare" required />
-                                    I declare that all data submited is true and shall be used for the auction,and that i am bounded by <a target="_blank" href={this.state.link} className="urlStyle"><span>&nbsp;Buyer T&C.</span></a>
+                                    <span>I declare that all data submited is true and shall be used for the auction, and that i am bounded by <a target="_blank" href={this.state.link} className="urlStyle">Buyer T&C.</a></span>
                                 </h4>
                             </div>
                             <div className="buyer_btn">

@@ -3,7 +3,7 @@ import { constants } from 'os';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
-import { validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate,removeNanNum } from '../../javascripts/componentService/util';
+import { validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum } from '../../javascripts/componentService/util';
 //共通弹出框组件
 import { UploadFile } from '../shared/upload';
 
@@ -42,6 +42,7 @@ export class Modal extends React.Component {
             totals: '',
             peak_pct: '',
             peak: "",
+            attachment_ids:'',
             option: '',
             isSaved: false,
             uploadUrl: "/api/buyer/user_attachments?file_type=",
@@ -83,13 +84,14 @@ export class Modal extends React.Component {
                 option: next.consumption_account_item.option
             });
 
-            if (next.consumption_account_item.file_name) {
-                let obj = {
-                    id: next.consumption_account_item.id,
-                    file_name: next.consumption_account_item.file_name,
-                    file_path: next.consumption_account_item.file_path
-                }
-                fileObj["CONSUMPTION_DOCUMENTS"][0].files.push(obj);
+            if (next.consumption_account_item.attachment_ids) {
+                // let obj = {
+                //     id: next.consumption_account_item.id,
+                //     file_name: next.consumption_account_item.file_name,
+                //     file_path: next.consumption_account_item.file_path
+                // }
+                fileObj["CONSUMPTION_DOCUMENTS"][0].files = [];
+                fileObj["CONSUMPTION_DOCUMENTS"][0].files=next.consumption_account_item.attachment_ids;
                 this.setState({
                     fileData: fileObj
                 })
@@ -340,7 +342,7 @@ export class Modal extends React.Component {
                         }
                     }
                     if (this.state.account_number === item.account_number) {
-                        if (index != this.state.itemIndex ) {
+                        if (index != this.state.itemIndex) {
                             account_count++;
                         }
                     }
@@ -355,7 +357,7 @@ export class Modal extends React.Component {
                 }
             }
         })
-       
+
         if (address_count > 0) {
             address = true;
         }
@@ -385,10 +387,21 @@ export class Modal extends React.Component {
             totals: this.state.totals,
             peak_pct: this.state.peak_pct,
             index: this.state.itemIndex,
-            user_attachment_id: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].id : "",
-            file_name: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_name : "",
-            file_path: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_path : ""
+            attachment_ids: "",
+            user_attachment:[]
+            // user_attachment_id: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].id : "",
+            // file_name: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_name : "",
+            // file_path: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_path : ""
         }
+        if (this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0) {
+            let idsArr = [];
+            this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.map((item) => {
+                idsArr.push(item.id);
+            })
+            siteItem.attachment_ids = JSON.stringify(idsArr);
+            siteItem.user_attachment=this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files;
+        }
+
         if (this.props.acceptFunction) {
             this.props.acceptFunction(siteItem);
             this.setState({
@@ -516,8 +529,9 @@ export class Modal extends React.Component {
                     })
                 }
                 else {
+
                     this.setState({
-                        peak: ""
+                        peak: 100
                     })
                 }
                 break;
@@ -607,7 +621,7 @@ export class Modal extends React.Component {
             } else if (this.props.listdetailtype === "Link History") {
                 showDetail = <ul className="showdetail history_files">
                     {this.props.listdetail.map((item, index) => {
-                        return <li key={index}><a className="overflow_text" target="_blank" download={item.file_name} href={item.file_path}>{item.file_name}</a><abbr><font>|</font>{item.file_time}</abbr><span className="remove_file" onClick={this.removefile.bind(this, this.state.strtype, index, item.fileid)}></span></li>
+                        return <li key={index}><a className="overflow_text" target="_blank" download={item.file_name} href={item.file_path}>{item.file_name}</a><abbr><font>|</font>{item.file_time}</abbr><span style={{ display: 'none' }} className="remove_file" onClick={this.removefile.bind(this, this.state.strtype, index, item.fileid)}></span></li>
                     })}
                 </ul>
             } else if (this.props.listdetailtype === "Email Template") {
@@ -816,7 +830,7 @@ export class Modal extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Postal Code:</td>
-                                    <td> <input type="text" value={this.state.postal_code} id="postal_code" name="postal_code" onChange={this.changeConsumption.bind(this, "postal_code")} placeholder="" required aria-required="true" />
+                                    <td> <input type="text" value={this.state.postal_code} id="postal_code" maxLength="6" name="postal_code" onChange={this.changeConsumption.bind(this, "postal_code")} placeholder="" required aria-required="true" />
                                         <div id="postal_code_message" className="isPassValidate">This filed is required!</div>
                                     </td>
                                 </tr>
@@ -830,7 +844,7 @@ export class Modal extends React.Component {
                                     <td>
                                         <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" name="totals" onKeyUp={this.removeInputNanNum.bind(this)} required aria-required="true" maxLength="10" /><div>kWh/month</div>
                                         <div id="totals_message" className="isPassValidate">This filed is required!</div>
-                                        <div id="totals_format" className="isPassValidate">Must be positive integers,and first cannot be 0!</div>
+                                        <div id="totals_format" className="isPassValidate">Please input a number greater than 0.</div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -838,19 +852,19 @@ export class Modal extends React.Component {
                                     <td>
                                         <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} id="peak_pct" name="peak_pct" onKeyUp={this.removeInputNanNum.bind(this)} required aria-required="true" maxLength="5" placeholder="0-100" /> <div>%</div>
                                         <div id="peak_pct_message" className="isPassValidate">This filed is required!</div>
-                                        <div id="peak_pct_format" className="isPassValidate">Please input bigger than 0 and less than 100!</div>
+                                        <div id="peak_pct_format" className="isPassValidate">Please input a number between 0 and 100.</div>
                                     </td>
 
                                 </tr>
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;Off-Peak:</td>
-                                    <td><input type="text" value={this.state.peak} disabled="true" onChange={this.changeConsumption.bind(this, "pack")} id="pack" required aria-required="true" /><div>%(auot calculate)</div></td>
+                                    <td><input type="text" value={this.state.peak} disabled="true" onChange={this.changeConsumption.bind(this, "pack")} id="pack" required aria-required="true" /><div>%</div></td>
                                 </tr>
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp; Upload bill(s)</td>
                                     <td>
                                         <div className="upload">
-                                            <UploadFile type="CONSUMPTION_DOCUMENTS" showlist={false} validate={true} showList="1" col_width="9" showWay="2" fileData={this.state.fileData.CONSUMPTION_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
+                                            <UploadFile type="CONSUMPTION_DOCUMENTS" deleteType="consumption" validate={true} showList="1" col_main="12" col_width="9" showWay="1" fileData={this.state.fileData.CONSUMPTION_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
                                         </div>
                                     </td>
                                 </tr>

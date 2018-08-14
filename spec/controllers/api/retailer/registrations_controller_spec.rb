@@ -80,7 +80,7 @@ RSpec.describe Api::Retailer::RegistrationsController, type: :controller do
 
     describe 'Put sign up' do
       def do_request
-        put :sign_up, params: { id: retailer_user.id, user:{agree_seller_buyer: '1', agree_seller_revv: '0'} }
+        put :sign_up, params: { id: retailer_user.id, user:{id: retailer_user.id, agree_seller_buyer: '1', agree_seller_revv: '0'} }
       end
       before { do_request }
       it 'success' do

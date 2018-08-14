@@ -7,6 +7,9 @@ class Api::AuctionsController < Api::BaseController
       render json: nil
     else
       auction = Auction.find(params[:id])
+      if auction.published_date_time.nil? && auction.publish_status == Auction::PublishStatusPublished
+        auction.published_date_time = AuctionEvent.find_by_auction_id(auction.id).where(auction_do: 'publish').take.updated_at
+      end
       if auction.auction_contracts.blank?
         render json: auction, status: 200
       else
@@ -44,7 +47,7 @@ class Api::AuctionsController < Api::BaseController
                       exist_published_gid
                     end
 
-    if @auction.update(publish_status: params[:publish_status], published_gid: published_gid)
+    if @auction.update(publish_status: params[:publish_status], published_gid: published_gid, published_date_time: Time.current)
       AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
     end
     render json: @auction, status: 200

@@ -22,6 +22,10 @@ class PdfAggregateConsumption
     end
   end
 
+  def number_format(num)
+    PdfUtils.number_helper.number_to_currency(num, precision: 0, format: '%n kWh/month')
+  end
+
   def push_colume_data(param)
     title, peak, off_peak = param[:title], param[:peak], param[:off_peak]
     head_row, peak_row, off_peak_row = param[:head_row], param[:peak_row], param[:off_peak_row]
@@ -29,8 +33,8 @@ class PdfAggregateConsumption
     is_zero = true if (peak == 0 || peak.blank?) && (off_peak == 0 || off_peak.blank?)
     unless is_zero
       head_row.push(title)
-      peak_row.push(PdfUtils.number_format(peak))
-      off_peak_row.push(PdfUtils.number_format(off_peak))
+      peak_row.push(number_format(peak))
+      off_peak_row.push(number_format(off_peak))
     end
   end
 end

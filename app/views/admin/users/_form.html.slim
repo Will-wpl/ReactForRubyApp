@@ -10,7 +10,7 @@
     = f.input :company_name
     = f.input :password
     = f.input :password_confirmation
-    = f.association :roles, disabled: f.object == current_user
+    / = f.association :roles, disabled: f.object == current_user
 
     .form-action.u-mt3
       .lm--formItem-right.lm--formItem-right-push

@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
 
-
   context 'OLD' do
     let!(:admin_user){ create(:user, :with_admin) }
     let!(:auction) { create(:auction, :for_next_month, :upcoming, :published, :started, contract_period_start_date: '2018-07-01') }
@@ -12,6 +11,9 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
     let!(:consumption_hts) { create(:consumption_detail, :for_hts, consumption_id: consumption.id) }
     let!(:consumption_htl) { create(:consumption_detail, :for_htl, consumption_id: consumption.id) }
     let!(:consumption_eht) { create(:consumption_detail, :for_eht, consumption_id: consumption.id ) }
+    let!(:tc1) { create(:user_attachment, file_name: 'test', file_path: 'test')}
+    let!(:tc2) { create(:user_attachment, file_name: 'test', file_path: 'test')}
+    let!(:tc3) { create(:user_attachment, file_name: 'test', file_path: 'test')}
 
     describe 'GET buyer consumption detail list' do
       before { sign_in company_buyer }
@@ -37,6 +39,11 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
 
       context 'Has set participation_status to 1 at consumption' do
         def do_request
+          entity_1_attachment_ids = []
+          entity_2_attachment_ids = []
+          entity_1_attachment_ids.push(tc1.id)
+          entity_1_attachment_ids.push(tc2.id)
+          entity_2_attachment_ids.push(tc3.id)
           buyer_entity = CompanyBuyerEntity.new
           buyer_entity.company_name = 'Test_Company_Name_4'
           buyer_entity.company_uen = 'Test_Company_UEN_4'
@@ -45,8 +52,8 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
           buyer_entity.user = company_buyer
           buyer_entity.save
           details = []
-          details.push({id: 0, account_number: '000001', intake_level: 'LT' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '2018-08-01'})
-          details.push({id: 0, account_number: '000002', intake_level: 'HTS' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '01-08-2018'})
+          details.push({id: 0, account_number: '000001', intake_level: 'LT' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '2018-08-01',attachment_ids:entity_1_attachment_ids.to_json})
+          details.push({id: 0, account_number: '000002', intake_level: 'HTS' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '01-08-2018',attachment_ids:entity_2_attachment_ids.to_json})
           put :save, params: { consumption_id: consumption.id , details: details.to_json}
         end
 
@@ -67,7 +74,22 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
 
       context 'Has set participation_status to 1 at consumption' do
         def do_request
-          put :participate, params: { consumption_id: consumption.id}
+          entity_1_attachment_ids = []
+          entity_2_attachment_ids = []
+          entity_1_attachment_ids.push(tc1.id)
+          entity_1_attachment_ids.push(tc2.id)
+          entity_2_attachment_ids.push(tc3.id)
+          buyer_entity = CompanyBuyerEntity.new
+          buyer_entity.company_name = 'Test_Company_Name_4'
+          buyer_entity.company_uen = 'Test_Company_UEN_4'
+          buyer_entity.company_address = 'Test_Company_Address_4'
+          buyer_entity.contact_email = 'Buyer_entity_4@email.com'
+          buyer_entity.user = company_buyer
+          buyer_entity.save
+          details = []
+          details.push({id: 0, account_number: '000001', intake_level: 'LT' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '2018-08-01',attachment_ids:entity_1_attachment_ids.to_json})
+          details.push({id: 0, account_number: '000002', intake_level: 'HTS' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '01-08-2018',attachment_ids:entity_2_attachment_ids.to_json})
+          put :participate, params: { consumption_id: consumption.id, details: details.to_json}
         end
 
         before { do_request }
@@ -210,7 +232,22 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
 
       context 'Has set participation_status to 1 at consumption' do
         def do_request
-          put :participate, params: { consumption_id: consumption.id}
+          entity_1_attachment_ids = []
+          entity_2_attachment_ids = []
+          entity_1_attachment_ids.push(consumption_lt.id)
+          entity_1_attachment_ids.push(consumption_hts.id)
+          entity_2_attachment_ids.push(consumption_htl.id)
+          buyer_entity = CompanyBuyerEntity.new
+          buyer_entity.company_name = 'Test_Company_Name_4'
+          buyer_entity.company_uen = 'Test_Company_UEN_4'
+          buyer_entity.company_address = 'Test_Company_Address_4'
+          buyer_entity.contact_email = 'Buyer_entity_4@email.com'
+          buyer_entity.user = company_buyer
+          buyer_entity.save
+          details = []
+          details.push({id: 0, account_number: '000001', intake_level: 'LT' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '2018-08-01',attachment_ids:entity_1_attachment_ids.to_json})
+          details.push({id: 0, account_number: '000002', intake_level: 'HTS' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '01-08-2018',attachment_ids:entity_2_attachment_ids.to_json})
+          put :participate, params: { consumption_id: consumption.id, details: details.to_json}
         end
 
         before { do_request }

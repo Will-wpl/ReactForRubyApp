@@ -14,13 +14,29 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
   # update buyer registration information
   def update
     saved_entities = nil
+    update_status_flag = params['update_status_flag']
     # update buyer registration information
     update_user_params = model_params
     update_user_params = filter_user_password(update_user_params)
+    user = User.find(params[:user]['id'])
+    buyer_entities = JSON.parse(params[:buyer_entities])
+    # need admin approval if company name / UEN changed.
+    if !user.blank? && update_status_flag.eql?("1")
+      if(user.approval_status == User::ApprovalStatusReject ||
+          user.approval_status == User::ApprovalStatusRegistering ||
+          (user.company_name != update_user_params['company_name'] ||
+              user.company_unique_entity_number != update_user_params['company_unique_entity_number'] ) ||
+          buyer_entities.any?{ |e| e['main_id'].to_i == 0 })
+        update_user_params['approval_status'] = User::ApprovalStatusPending
+        update_user_params['approval_date_time'] = DateTime.current
+      end
+    else
+      update_user_params['approval_status'] = User::ApprovalStatusRegistering
+      update_user_params['approval_date_time'] = DateTime.current
+    end
     ActiveRecord::Base.transaction do
       @user.update(update_user_params)
       # update buyer entity registration information
-      buyer_entities = JSON.parse(params[:buyer_entities])
       # buyer_entities.push(build_default_entity( update_user_params )) unless buyer_entities.any?{ |v| v['is_default'] == 1 }
       saved_entities = update_buyer_entities(buyer_entities)
     end
@@ -37,21 +53,24 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     update_user_params = model_params
     update_user_params = filter_user_password(update_user_params)
     user = User.find(params[:user]['id'])
-    raise ActiveRecord::RecordNotFound if user.nil?
+
+    update_user_params['approval_status'] = User::ApprovalStatusRegistering
 
     buyer_entities = JSON.parse(params[:buyer_entities])
 
-    # need admin approval if company name / UEN changed.
-    if(user.approval_status == User::ApprovalStatusRegistering ||
-        (user.company_name != update_user_params['company_name'] ||
-          user.company_unique_entity_number != update_user_params['company_unique_entity_number'] ) ||
-       buyer_entities.any?{ |e| e['user_entity_id'].to_i == 0 })
-      update_user_params['approval_status'] = User::ApprovalStatusPending
+    unless user.blank?
+      if(user.approval_status == User::ApprovalStatusReject ||
+          user.approval_status == User::ApprovalStatusRegistering ||
+          (user.company_name != update_user_params['company_name'] ||
+              user.company_unique_entity_number != update_user_params['company_unique_entity_number'] ) ||
+          buyer_entities.any?{ |e| e['user_entity_id'].to_i == 0 })
+        update_user_params['approval_status'] = User::ApprovalStatusPending
+      end
     end
+    update_user_params['approval_date_time'] = DateTime.current
     ActiveRecord::Base.transaction do
       @user.update(update_user_params)
-      # update buyer entity registration information
-      # buyer_entities.push(build_default_entity( update_user_params )) unless buyer_entities.any?{ |v| v['is_default'] == 1 }
+      # update buyer entity registration information}
       saved_entities = update_buyer_entities(buyer_entities, true)
     end
 
@@ -78,7 +97,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     # validate Company name field
     validate_result = validate_user_field('company_name',
                                                    validation_user['company_name'],
-                                                   [validation_user['id']])
+                                                   [validation_user['id']],'Buyer')
     validate_final_result = validate_final_result & validate_result
     error_fields.push('company_name') unless validate_result
 
@@ -92,7 +111,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     # validate Company UEN field
     validate_result = validate_user_field('company_unique_entity_number',
                                                    validation_user['company_unique_entity_number'],
-                                                   [validation_user['id']])
+                                                   [validation_user['id']],'Buyer')
 
     validate_final_result = validate_final_result & validate_result
     error_fields.push('company_unique_entity_number') unless validate_result
@@ -141,7 +160,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
 
     ids = []
     buyer_entities.each do |buyer_entity|
-      ids.push(buyer_entity['user_entity_id']) if buyer_entity['user_entity_id'].to_i != 0
+      ids.push(buyer_entity['main_id']) if buyer_entity['main_id'].to_i != 0
     end
     # will_del_buyer_entity = current_user.company_buyer_entities.reject do |buyer_entity|
     #   ids.include?(buyer_entity.id.to_s)
@@ -153,6 +172,14 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     saved_buyer_entities = []
     # ActiveRecord::Base.transaction do
     will_del_buyer_entity.each do |buyer_entity|
+      # User.buyer_entities_by_email(buyer_entity.contact_email).destroy
+      unless buyer_entity.user_entity_id.blank?
+        unless buyer_entities.any? { |x| x['user_entity_id'] == buyer_entity.user_entity_id}
+          entity_user = User.find(buyer_entity.user_entity_id)
+          entity_user.destroy unless entity_user.blank?
+        end
+      end
+      # entity_user.destroy unless entity_user.blank?
       CompanyBuyerEntity.find(buyer_entity.id).destroy
     end
     buyer_entities.each do |buyer_entity|
@@ -160,32 +187,45 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
       if save_result[0]
         target_buyer_entity = save_result[1]
         saved_buyer_entities.push(target_buyer_entity)
-        if need_create_user && !target_buyer_entity.is_default then
-          new_entity_user = User.new
-          new_entity_user.name = target_buyer_entity.company_name
-          new_entity_user.email = target_buyer_entity.contact_email
-          new_entity_user.consumer_type = User::ConsumerTypeBuyerEntity
-          new_entity_user.approval_status = User::ApprovalStatusDisable
-          new_entity_user.password = 'password'
-          new_entity_user.password_confirmation = 'password'
-          new_entity_user.entity_id = target_buyer_entity.id
-          new_entity_user.add_role(:entity) if new_entity_user.save
-        elsif need_create_user && target_buyer_entity.is_default then
-          user = current_user
-          user.entity_id = target_buyer_entity.id
-          user.save!
-        end
+        build_entity_user(target_buyer_entity, need_create_user)
       end
     end
     # end
     saved_buyer_entities
   end
 
+  def build_entity_user(target_buyer_entity, need_create_user)
+    entity_user = nil
+    if need_create_user && !target_buyer_entity.is_default then
+      entity_user = User.buyer_entities_by_entity_id(target_buyer_entity.contact_email)
+      if entity_user.blank?
+        entity_user = User.new
+        entity_user.name = target_buyer_entity.company_name
+        entity_user.email = target_buyer_entity.contact_email
+        entity_user.consumer_type = User::ConsumerTypeBuyerEntity
+        entity_user.approval_status = User::ApprovalStatusDisable
+        entity_user.approval_date_time = DateTime.current
+        entity_user.password = User::DefaultPassword
+        entity_user.password_confirmation = User::DefaultPassword
+        # entity_user.entity_id = target_buyer_entity.id
+        if entity_user.save!
+          entity_user.add_role(:entity)
+        end
+      end
+      CompanyBuyerEntity.find(target_buyer_entity.id).update(user_entity_id: entity_user.id)
+    elsif need_create_user && target_buyer_entity.is_default then
+      user = current_user
+      user.entity_id = target_buyer_entity.id
+      user.save!
+    end
+    entity_user
+  end
+
   def update_buyer_entity(buyer_entity)
-    target_buyer_entity = if buyer_entity['user_entity_id'].to_i == 0
+    target_buyer_entity = if buyer_entity['main_id'].to_i == 0
                             CompanyBuyerEntity.new
                           else
-                            CompanyBuyerEntity.find(buyer_entity['user_entity_id'])
+                            CompanyBuyerEntity.find(buyer_entity['main_id'])
                           end
     target_buyer_entity.company_name = buyer_entity['company_name'] unless buyer_entity['company_name'].blank?
     target_buyer_entity.company_uen = buyer_entity['company_uen'] unless buyer_entity['company_uen'].blank?
@@ -197,7 +237,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     target_buyer_entity.contact_mobile_no = buyer_entity['contact_mobile_no'] unless buyer_entity['contact_mobile_no'].blank?
     target_buyer_entity.contact_office_no = buyer_entity['contact_office_no'] unless buyer_entity['contact_office_no'].blank?
     target_buyer_entity.is_default = buyer_entity['is_default'].blank? ? 0 : buyer_entity['is_default']
-    if buyer_entity['user_entity_id'].to_i == 0
+    if buyer_entity['main_id'].to_i == 0
       target_buyer_entity.approval_status = CompanyBuyerEntity::ApprovalStatusPending
     end
     target_buyer_entity.user = current_user

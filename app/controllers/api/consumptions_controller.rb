@@ -7,7 +7,9 @@ class Api::ConsumptionsController < Api::BaseController
       consumptions = consumptions.where('contract_duration = ?', params[:contract_duration])
     end
     consumptions = (params[:consumer_type] == '2') ? consumptions.order('users.company_name asc') : consumptions.order('users.name asc')
-    auction_finished = !Auction.find(params[:id]).auction_result.blank?
+    auction = Auction.find(params[:id])
+    auction_finished = !auction.auction_result.blank?
+    auction_published = auction.publish_status == '1' ? true : false
     data = []
     total_info = { consumption_count: 0, account_count: 0, lt_peak: 0, lt_off_peak: 0,
                    hts_peak: 0, hts_off_peak: 0, htl_peak: 0, htl_off_peak: 0, eht_peak: 0, eht_off_peak: 0 }
@@ -17,9 +19,11 @@ class Api::ConsumptionsController < Api::BaseController
       details_array = consumption_details(details)
       count = details.count
       entities = CompanyBuyerEntity.find_by_user(consumption.user_id)
+      auction_contract = auction.auction_contracts.where(contract_duration: consumption.contract_duration).take
       data.push(id: consumption.id, auction_id: consumption.auction_id, user_id: consumption.user_id,
                 company_name: consumption.user.company_name, name: consumption.user.name, count: count,
                 consumption: consumption,
+                contract_period: get_contract_period(auction,auction_contract,consumption),
                 lt_peak: Consumption.get_lt_peak(consumption.lt_peak),
                 lt_off_peak: Consumption.get_lt_off_peak(consumption.lt_off_peak),
                 hts_peak: Consumption.get_hts_peak(consumption.hts_peak),
@@ -42,14 +46,17 @@ class Api::ConsumptionsController < Api::BaseController
       total_info[:eht_off_peak] += Consumption.get_eht_off_peak(consumption.eht_off_peak)
 
     end
-    render json: { list: data, total_info: total_info, auction_finished: auction_finished }, status: 200
+    render json: { list: data, total_info: total_info, auction_finished: auction_finished, auction_published: auction_published }, status: 200
   end
 
   def show
     consumption = @consumption
     details = ConsumptionDetail.find_by_consumption_id(params[:id]).order(id: :asc)
     details_array = consumption_details(details)
-    auction_finished = !consumption.auction.auction_result.blank?
+    auction = consumption.auction
+    auction_contract = auction.auction_contracts.where(contract_duration: consumption.contract_duration).take
+    auction_finished = !auction.auction_result.blank?
+    auction_published = auction.publish_status
     count = details.count
     entities = CompanyBuyerEntity.find_by_user(consumption.user_id)
     cons = { auction_id: consumption.auction_id,
@@ -58,6 +65,8 @@ class Api::ConsumptionsController < Api::BaseController
              name: consumption.user.name,
              consumption: consumption,
              auction_finished: auction_finished,
+             auction_published: auction_published,
+             contract_period: get_contract_period(auction,auction_contract,consumption),
              count: count,
              lt_peak: Consumption.get_lt_peak(consumption.lt_peak),
              lt_off_peak: Consumption.get_lt_off_peak(consumption.lt_off_peak),
@@ -127,11 +136,14 @@ class Api::ConsumptionsController < Api::BaseController
   def consumption_details(consumption_details)
     consumption_details_all = []
     consumption_details.each do |consumption_detail|
-      if consumption_detail.user_attachment_id.blank?
-        user_attachment = nil
-      else
-        user_attachment = UserAttachment.find_by_id(consumption_detail.user_attachment_id)
-      end
+      # if consumption_detail.user_attachment_id.blank?
+      #   user_attachment = nil
+      # else
+      #   user_attachment = UserAttachment.find_by_id(consumption_detail.user_attachment_id)
+      # end
+      user_attachments = UserAttachment.find_consumption_attachment_by_user_type(consumption_detail.id, consumption_detail.consumption.user_id, UserAttachment::FileType_Consumption_Detail_Doc)
+      attachment_ids = []
+      user_attachments.each{ |x| attachment_ids.push(x.id) }
       final_detail = {
           "id" => consumption_detail.id,
           "account_number" => consumption_detail.account_number,
@@ -152,8 +164,8 @@ class Api::ConsumptionsController < Api::BaseController
           "totals" => consumption_detail.totals,
           "peak_pct" => consumption_detail.peak_pct,
           "company_buyer_entity_id" => consumption_detail.company_buyer_entity_id,
-          "user_attachment_id" => consumption_detail.user_attachment_id,
-          "user_attachment" =>user_attachment
+          "user_attachment" => user_attachments,
+          "attachment_ids" => attachment_ids.to_json
       }
       consumption_details_all.push(final_detail)
     end
@@ -174,6 +186,14 @@ class Api::ConsumptionsController < Api::BaseController
                     consumptions.find(params[:id]) unless params[:id] == '0'
                   end
     consumption
+  end
+
+  def get_contract_period(auction, auction_contract, consumption)
+    if auction_contract.nil?
+      "#{auction.contract_period_start_date.strftime('%d %b %Y')} to #{auction.contract_period_end_date.strftime('%d %b %Y')}"
+    else
+      "#{consumption.contract_duration} months: #{auction.contract_period_start_date.strftime('%d %b %Y')} to #{auction_contract.contract_period_end_date.strftime('%d %b %Y')}"
+    end
   end
 
 end

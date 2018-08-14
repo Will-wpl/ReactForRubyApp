@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180726022321) do
+ActiveRecord::Schema.define(version: 20180810094011) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -231,6 +231,7 @@ ActiveRecord::Schema.define(version: 20180726022321) do
     t.integer "starting_price_time"
     t.string "buyer_type"
     t.string "allow_deviation"
+    t.datetime "published_date_time"
   end
 
   create_table "company_buyer_entities", force: :cascade do |t|
@@ -248,6 +249,7 @@ ActiveRecord::Schema.define(version: 20180726022321) do
     t.bigint "user_id"
     t.integer "is_default"
     t.string "approval_status"
+    t.bigint "user_entity_id"
     t.index ["user_id"], name: "index_company_buyer_entities_on_user_id"
   end
 
@@ -360,6 +362,7 @@ ActiveRecord::Schema.define(version: 20180726022321) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
+    t.bigint "consumption_detail_id"
     t.index ["user_id"], name: "index_user_attachments_on_user_id"
   end
 
@@ -416,6 +419,7 @@ ActiveRecord::Schema.define(version: 20180726022321) do
     t.string "changed_contract"
     t.bigint "entity_id"
     t.bigint "tenant_id"
+    t.datetime "approval_date_time"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

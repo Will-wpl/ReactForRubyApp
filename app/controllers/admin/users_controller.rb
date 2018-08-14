@@ -78,6 +78,7 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def model_params
+    params[:user][:role_ids] = [Role.find_by_name(:admin).id]
     params.require(:user).permit(:name, :email, :password, :password_confirmation, :company_name, role_ids: [])
   end
 
