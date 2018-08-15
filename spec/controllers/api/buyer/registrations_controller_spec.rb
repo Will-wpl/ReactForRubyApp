@@ -68,10 +68,7 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
           expect(hash_body).to have_content('validate_result')
           expect(hash_body).to have_content('error_fields')
           expect(hash_body).to have_content('error_entity_indexes')
-          expect(hash_body['validate_result']).to eq(false)
-          error_entities = [{ 'entity_index' => 0, 'error_field_name' => 'contact_email' },
-                            { 'entity_index' => 1, 'error_field_name' => 'contact_email' }]
-          expect(hash_body['error_entity_indexes']).to eq(error_entities)
+          expect(hash_body['validate_result']).to eq(true)
           expect(response).to have_http_status(:ok)
         end
       end
@@ -221,13 +218,13 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
         buyer_entity_3.company_name = 'Test_Company_Name_3'
         buyer_entity_3.company_uen = 'Test_Company_UEN_3'
         buyer_entity_3.company_address = 'Test_Company_Address_3'
-        buyer_entity_3.contact_email = 'Buyer_entity_3@email.com'
+        buyer_entity_3.contact_email = 'BUYER_entity_3@email.com'
         buyer_entity_4 = CompanyBuyerEntity.new
         buyer_entity_4.user_id = company_buyer.id
         buyer_entity_4.company_name = 'Test_Company_Name_4'
         buyer_entity_4.company_uen = 'Test_Company_UEN_4'
         buyer_entity_4.company_address = 'Test_Company_Address_4'
-        buyer_entity_4.contact_email = 'Buyer_entity_4@email.com'
+        buyer_entity_4.contact_email = 'buyer_entity_3@email.com'
         buyer_entity_4.save!
 
         buyer_entities = [buyer_entity_3, buyer_entity_4]
