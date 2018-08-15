@@ -5,8 +5,9 @@
   div id='checkNetwork'
 
 - if current_user.approval_status == '0'
-  div.live_modal
-    p Account Status: Rejected by administrator.
+  div.live_modal_reject
+    p.p1 Account Status: Rejected by administrator.
+    p.p2 Please update your details under 'Manage Account'.
 
 
 - if current_user.approval_status == '3' 
