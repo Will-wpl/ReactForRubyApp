@@ -13,14 +13,14 @@ export default class ReservePriceCompare extends Component {
         }
     }
     compare(oldData,newData){
-        parseFloat(oldData.reserve_price_lt_peak)>parseFloat(newData.lt_peak)?this.setState({lt_peak:true}):this.setState({lt_peak:false});
-        parseFloat(oldData.reserve_price_hts_peak)>parseFloat(newData.hts_peak)?this.setState({hts_peak:true}):this.setState({hts_peak:false});
-        parseFloat(oldData.reserve_price_htl_peak)>parseFloat(newData.htl_peak)?this.setState({htl_peak:true}):this.setState({htl_peak:false});
-        parseFloat(oldData.reserve_price_eht_peak)>parseFloat(newData.eht_peak)?this.setState({eht_peak:true}):this.setState({eht_peak:false});
-        parseFloat(oldData.reserve_price_lt_off_peak)>parseFloat(newData.lt_off_peak)?this.setState({lt_off_peak:true}):this.setState({lt_off_peak:false});
-        parseFloat(oldData.reserve_price_hts_off_peak)>parseFloat(newData.hts_off_peak)?this.setState({hts_off_peak:true}):this.setState({hts_off_peak:false});
-        parseFloat(oldData.reserve_price_htl_off_peak)>parseFloat(newData.htl_off_peak)?this.setState({htl_off_peak:true}):this.setState({htl_off_peak:false});
-        parseFloat(oldData.reserve_price_eht_off_peak)>parseFloat(newData.eht_off_peak)?this.setState({eht_off_peak:true}):this.setState({eht_off_peak:false});
+        parseFloat(oldData.reserve_price_lt_peak)>=parseFloat(newData.lt_peak)?this.setState({lt_peak:true}):this.setState({lt_peak:false});
+        parseFloat(oldData.reserve_price_hts_peak)>=parseFloat(newData.hts_peak)?this.setState({hts_peak:true}):this.setState({hts_peak:false});
+        parseFloat(oldData.reserve_price_htl_peak)>=parseFloat(newData.htl_peak)?this.setState({htl_peak:true}):this.setState({htl_peak:false});
+        parseFloat(oldData.reserve_price_eht_peak)>=parseFloat(newData.eht_peak)?this.setState({eht_peak:true}):this.setState({eht_peak:false});
+        parseFloat(oldData.reserve_price_lt_off_peak)>=parseFloat(newData.lt_off_peak)?this.setState({lt_off_peak:true}):this.setState({lt_off_peak:false});
+        parseFloat(oldData.reserve_price_hts_off_peak)>=parseFloat(newData.hts_off_peak)?this.setState({hts_off_peak:true}):this.setState({hts_off_peak:false});
+        parseFloat(oldData.reserve_price_htl_off_peak)>=parseFloat(newData.htl_off_peak)?this.setState({htl_off_peak:true}):this.setState({htl_off_peak:false});
+        parseFloat(oldData.reserve_price_eht_off_peak)>=parseFloat(newData.eht_off_peak)?this.setState({eht_off_peak:true}):this.setState({eht_off_peak:false});
     }
     mouthsHtml(data,index){
         const html = <div className={"retailrank_main"} key={index}>
@@ -39,17 +39,17 @@ export default class ReservePriceCompare extends Component {
                     <tbody>
                     <tr>
                         <td>Peak</td>
-                        {data.has_lt?<td><abbr className={this.state.lt_peak?'fill_yes':''}>=${parseFloat(data.reserve_price_lt_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
-                        {data.has_hts?<td><abbr className={this.state.hts_peak?'fill_yes':''}>=${parseFloat(data.reserve_price_hts_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
-                        {data.has_htl?<td><abbr className={this.state.htl_peak?'fill_yes':''}>=${parseFloat(data.reserve_price_htl_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
-                        {data.has_eht?<td><abbr className={this.state.eht_peak?'fill_yes':''}>=${parseFloat(data.reserve_price_eht_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
+                        {data.has_lt?<td><abbr className={this.state.lt_peak?'fill_yes':''}>$ {parseFloat(data.reserve_price_lt_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
+                        {data.has_hts?<td><abbr className={this.state.hts_peak?'fill_yes':''}>$ {parseFloat(data.reserve_price_hts_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
+                        {data.has_htl?<td><abbr className={this.state.htl_peak?'fill_yes':''}>$ {parseFloat(data.reserve_price_htl_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
+                        {data.has_eht?<td><abbr className={this.state.eht_peak?'fill_yes':''}>$ {parseFloat(data.reserve_price_eht_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
                     </tr>
                     <tr>
                         <td>Off Peak</td>
-                        {data.has_lt?<td><abbr className={this.state.lt_off_peak?'fill_yes':''}>=${parseFloat(data.reserve_price_lt_off_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
-                        {data.has_hts?<td><abbr className={this.state.hts_off_peak?'fill_yes':''}>=${parseFloat(data.reserve_price_hts_off_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
-                        {data.has_htl?<td><abbr className={this.state.htl_off_peak?'fill_yes':''}>=${parseFloat(data.reserve_price_htl_off_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
-                        {data.has_eht?<td><abbr className={this.state.eht_off_peak?'fill_yes':''}>=${parseFloat(data.reserve_price_eht_off_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
+                        {data.has_lt?<td><abbr className={this.state.lt_off_peak?'fill_yes':''}>$ {parseFloat(data.reserve_price_lt_off_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
+                        {data.has_hts?<td><abbr className={this.state.hts_off_peak?'fill_yes':''}>$ {parseFloat(data.reserve_price_hts_off_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
+                        {data.has_htl?<td><abbr className={this.state.htl_off_peak?'fill_yes':''}>$ {parseFloat(data.reserve_price_htl_off_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
+                        {data.has_eht?<td><abbr className={this.state.eht_off_peak?'fill_yes':''}>$ {parseFloat(data.reserve_price_eht_off_peak).toFixed(4)}/kWh</abbr></td>:<td style={{display:"none"}}></td>}
                     </tr>
                     </tbody>
                 </table>
