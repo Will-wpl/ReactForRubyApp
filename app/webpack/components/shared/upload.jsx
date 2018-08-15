@@ -42,7 +42,7 @@ export class UploadFile extends React.Component {
                                 <div className="progress-bar" style={{ width: "0%" }}>0%</div>
                             </div>
                             <div className="progress_files">
-                                <div id="showMessage" className={this.props.validate ? 'isPassValidate' : 'errormessage'}>This field is required!</div>
+                                {/* <div id="showMessage" className={this.props.validate ? 'isPassValidate' : 'errormessage'}>This field is required!</div> */}
                                 {this.state.showList == 1 ?
                                     <ul>
                                         {
