@@ -8,10 +8,10 @@ export default class Description extends Component {
                     <thead>
                     <tr>
                         <th></th>
-                        {data.has_lt?<th>LT</th>:<th style={{display:"none"}}></th>}
-                        {data.has_hts?<th>HTS</th>:<th style={{display:"none"}}></th>}
-                        {data.has_htl?<th>HTL</th>:<th style={{display:"none"}}></th>}
-                        {data.has_eht?<th>EHT</th>:<th style={{display:"none"}}></th>}
+                        {data.has_lt?<th>LT<br/>($/kWh)</th>:<th style={{display:"none"}}></th>}
+                        {data.has_hts?<th>HTS<br/>($/kWh)</th>:<th style={{display:"none"}}></th>}
+                        {data.has_htl?<th>HTL<br/>($/kWh)</th>:<th style={{display:"none"}}></th>}
+                        {data.has_eht?<th>EHT<br/>($/kWh)</th>:<th style={{display:"none"}}></th>}
                     </tr>
                     </thead>
                     <tbody>

@@ -159,20 +159,26 @@ class BuyerEntityReport < BuyerReport
       pdf_text pdf, "<b>Sub-Report for Purchasing Entity: #{entity_company_name}</b>"
     }
     pdf.move_down 10
-    pdf.font_size 14
-    pdf_reverse_auction_id(pdf,auction)
-    pdf.move_down 10
-    pdf_name_of_reverse_auction(pdf, auction)
-    pdf.move_down 10
-    pdf_datetime_of_auction(pdf, auction)
-    pdf.move_down 10
-    pdf_winner_bidder(pdf,auction_result)
-    pdf.move_down 10
-    pdf_text pdf,"<b>Contract Period: </b>" + "#{contract_period_start_date} to #{contract_period_end_date} (#{auction_result.contract_duration} months)"
-    pdf.move_down 10
-    pdf_text pdf, "<b>#{entity_company_name} Volume: </b>"+ total_volume + " kWh (forecasted)"
-    pdf.move_down 10
-    pdf_text pdf,"<b>#{entity_company_name} Award Sum: </b>"+total_award_sum + " (forecasted)"
+
+
+    info_data = []
+    info_data.push(get_reverse_auction_id(auction))
+    info_data.push(get_name_of_reverse_auction(auction))
+    info_data.push(get_datetime_of_auction(auction))
+    info_data.push(get_winner_bidder(auction_result))
+
+    info_data.push(["<b>Contract Period: </b>", "#{contract_period_start_date} to #{contract_period_end_date} (#{auction_result.contract_duration} months)"])
+    info_data.push(["<b>#{entity_company_name} Volume: </b>", total_volume + " kWh (forecasted)"])
+    info_data.push(["<b>#{entity_company_name} Award Sum: </b>", total_award_sum + " (forecasted)"])
+
+    col0_len = pdf.bounds.right/2-20
+    col1_len = pdf.bounds.right - col0_len
+    pdf.table(info_data, :column_widths => [col0_len, col1_len],
+              :cell_style => {:size => 14,
+                              :align => :left,
+                              :valign => :top,
+                              :inline_format => true,
+                              :border_width => 0.0})
   end
 
   def pdf_draw_info(pdf, current_user, entities)
@@ -190,44 +196,49 @@ class BuyerEntityReport < BuyerReport
     }
     pdf.font_size 14
     pdf.move_down 8
-    pdf_reverse_auction_id(pdf,auction)
-    pdf.move_down 8
-    pdf_name_of_reverse_auction(pdf, auction)
-    pdf.move_down 8
-    pdf_datetime_of_auction(pdf, auction)
-    pdf.move_down 8
-    pdf_winner_bidder(pdf, auction_result)
-    pdf.move_down 8
-    pdf_text pdf, "<b>Contract Period: </b>" + "#{contract_period_start_date} to #{contract_period_end_date} (#{auction_result.contract_duration} months)"
-    pdf.move_down 1
-    pdf.table([["<b>Purchasing Entities:</b>", '']] + get_entities_list(entities),
-              :cell_style => {:padding => [1, 1], :inline_format => true, :border_width => 0})
-    pdf.move_down 8
-    pdf_text pdf, "<b>Total Volume: </b>"+ total_volume + " kWh (forecasted)"
-    pdf.move_down 8
-    pdf_text pdf, "<b>Total Award Sum: </b>"+total_award_sum + " (forecasted)"
+    info_data = []
+    info_data.push(get_reverse_auction_id(auction))
+    info_data.push(get_name_of_reverse_auction(auction))
+    info_data.push(get_datetime_of_auction(auction))
+    info_data.push(get_winner_bidder(auction_result))
+
+    info_data.push(["<b>Contract Period: </b>", "#{contract_period_start_date} to #{contract_period_end_date} (#{auction_result.contract_duration} months)"])
+    entity_list_table = pdf.make_table(get_entities_list(entities), :cell_style => { :size => 14, :align => :left, :valign => :center, :padding => [0, 2, 0], :inline_format => true, :border_width => 0.0})
+    info_data.push(["<b>Purchasing Entities:</b>", entity_list_table])
+    info_data.push(["<b>Total Volume: </b>", total_volume + " kWh (forecasted)"])
+    info_data.push(["<b>Total Award Sum: </b>", total_award_sum + " (forecasted)"])
+
+
+    col0_len = pdf.bounds.right/2-20
+    col1_len = pdf.bounds.right - col0_len
+    pdf.table(info_data, :column_widths => [col0_len, col1_len],
+              :cell_style => {:size => 14,
+                              :align => :left,
+                              :valign => :top,
+                              :inline_format => true,
+                              :border_width => 0.0})
   end
 
   def pdf_buyer_company_name(pdf, current_user)
     pdf_text pdf, "<b>Buyer Report for #{current_user.company_name}</b>"
   end
 
-  def pdf_reverse_auction_id(pdf, auction)
-    pdf_text pdf, "<b>Reverse Auction ID: </b>#{auction.published_gid}"
+  def get_reverse_auction_id(auction)
+    ["<b>Reverse Auction ID: </b>", "#{auction.published_gid}"]
   end
 
-  def pdf_name_of_reverse_auction(pdf, auction)
-    pdf_text pdf, "<b>Name of Reverse Auction: </b>#{auction.name}"
+  def get_name_of_reverse_auction(auction)
+    ["<b>Name of Reverse Auction: </b>", "#{auction.name}"]
   end
 
-  def pdf_datetime_of_auction(pdf, auction)
+  def get_datetime_of_auction(auction)
     zone_time = get_pdf_datetime_zone
     auction_datetime = (auction.start_datetime + zone_time).strftime("%-d %b %Y")
-    pdf_text pdf, "<b>Date/Time of Reverse Auction: </b>#{auction_datetime}"
+    ["<b>Date/Time of Reverse Auction:</b>", "#{auction_datetime}"]
   end
 
-  def pdf_winner_bidder(pdf, auction_result)
-    pdf_text pdf, "<b>Winner Bidder:  </b>#{auction_result.lowest_price_bidder}"
+  def get_winner_bidder(auction_result)
+    ["<b>Winner Bidder:  </b>", "#{auction_result.lowest_price_bidder}"]
   end
 
   def pdf_text(pdf, text)
@@ -237,7 +248,7 @@ class BuyerEntityReport < BuyerReport
   def get_entities_list(entities)
     list = []
     entities.each do |entity|
-      list.push(['', entity.company_name]) unless list.include?(['', entity.company_name])
+      list.push([entity.company_name]) unless list.include?([entity.company_name])
     end
     list
   end
