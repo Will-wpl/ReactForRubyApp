@@ -610,7 +610,7 @@ render() {
                     {/*</div>*/}
                     <div className="lm--formItem lm--formItem--inline string">
                         <label className="lm--formItem-left lm--formItem-label string required">
-                        Birefing Pack Upload :
+                        Briefing Pack Upload :
                         </label>
                         <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                         {this.addinputfile("birefing_pack_upload", "required")}
