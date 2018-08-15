@@ -86,7 +86,7 @@ export default class EmailTemplates extends Component {
                                 <abbr title="required">*</abbr> Letter Of Authorisation :
                             </label>
                             <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                                <UploadFile type="LETTER_OF_AUTHORISATION" required="required" deleteType="admin" showList="1" col_width="10" showWay="1" fileData={this.state.fileData.LETTER_OF_AUTHORISATION} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
+                                <UploadFile type="LETTER_OF_AUTHORISATION" required="required" deleteType="userAttach" showList="1" col_width="10" showWay="1" fileData={this.state.fileData.LETTER_OF_AUTHORISATION} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
                             </div>
                         </div>
                     </div>
