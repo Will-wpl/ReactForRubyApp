@@ -69,7 +69,7 @@ class User < ApplicationRecord
   scope :selected_buyers_action_status, ->(auction_id, action_status) { includes(:consumptions).where(consumptions: { auction_id: auction_id, action_status: action_status }) }
   scope :exclude, ->(ids) { where('users.id not in (?)', ids) }
   scope :admins, -> { includes(:roles).where(roles: { name: 'admin' }) }
-  scope :buyer_entities_by_email, ->(email) { includes(:roles).where('users.email = ? ', email) }
+  scope :buyer_entities_by_email, ->(email) { includes(:roles).where(roles: { name: 'entity' }).where('users.email = ? ', email) }
   # Callbacks
 
   # Delegates
@@ -77,5 +77,7 @@ class User < ApplicationRecord
   # Custom
 
   # Methods (class methods before instance methods)
-
+  def self.find_buyer_entity_by_email(email)
+    User.buyer_entities_by_email(email.downcase).first
+  end
 end
