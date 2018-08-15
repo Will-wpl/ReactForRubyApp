@@ -108,7 +108,7 @@ export class Tenderdocuments extends React.Component {
                 </div>
                 <div className="lm--formItem lm--formItem--inline string u-mt1">
                     <label className=" lm--formItem-label ">
-                        Click on 'Accept & Proceed' if you do not wish to propose deviations to <a target="_blank" disabled={this.props.propsdisabled} download={this.state.attachments[0].file_name} href={this.state.attachments[0].file_path}>the Electricity Procurement Agreement.</a>
+                        Click on 'Accept & Proceed' if you do not wish to propose deviations to <a target="_blank" disabled={this.props.propsdisabled} download={this.state.attachments.length>0?this.state.attachments[0].file_name:''} href={this.state.attachments.length>0?this.state.attachments[0].file_path:'#'}>the Electricity Procurement Agreement.</a>
                     </label>
                 </div>
                 {/*<div className="lm--formItem lm--formItem--inline string u-mt3 role_select">*/}
