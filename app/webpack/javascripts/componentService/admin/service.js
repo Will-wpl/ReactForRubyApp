@@ -30,6 +30,10 @@ export const removeBuyerFile = (params) => {
 
     return Ddelete('/api/buyer/user_attachments/' + params);
 }
+export const removeUserAttachFile = (params) => {
+
+    return Ddelete('/api/admin/user_attachments/' + params);
+}
 
 export const getFileList = (params) => {
     return get('/api/admin/auction_attachments?auction_id=' + params);

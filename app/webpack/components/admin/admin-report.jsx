@@ -201,17 +201,17 @@ export class AdminReport extends Component {
                             <tbody>
                             <tr>
                                 <td>Peak<br/>(7am-7pm)</td>
-                                <td >{this.state.consumption.total_lt_peak}</td>
-                                <td >{this.state.consumption.total_hts_peak}</td>
-                                <td >{this.state.consumption.total_htl_peak}</td>
-                                <td >{this.state.consumption.total_eht_peak}</td>
+                                <td >$ {this.state.consumption.total_lt_peak}</td>
+                                <td >$ {this.state.consumption.total_hts_peak}</td>
+                                <td >$ {this.state.consumption.total_htl_peak}</td>
+                                <td >$ {this.state.consumption.total_eht_peak}</td>
                             </tr>
                             <tr>
                                 <td>Off-Peak<br/>(7pm-7am)</td>
-                                <td >{this.state.consumption.total_lt_off_peak}</td>
-                                <td >{this.state.consumption.total_hts_off_peak}</td>
-                                <td >{this.state.consumption.total_htl_off_peak}</td>
-                                <td >{this.state.consumption.total_eht_off_peak}</td>
+                                <td >$ {this.state.consumption.total_lt_off_peak}</td>
+                                <td >$ {this.state.consumption.total_hts_off_peak}</td>
+                                <td >$ {this.state.consumption.total_htl_off_peak}</td>
+                                <td >$ {this.state.consumption.total_eht_off_peak}</td>
                             </tr>
                             </tbody>
                         </table>
