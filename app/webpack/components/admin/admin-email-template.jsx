@@ -52,7 +52,7 @@ export default class EmailTemplates extends Component {
         //console.log('ranking', this.props.ranking)
         return (
             <div>
-                <div className="retailrank_main">
+                <div className="retailrank_main-new  col-md-8 col-sm-10 ">
                     <h3>List of Templates</h3>
                     <div className="admin_invitation u-mt2">
                         <div className="table-head">
@@ -72,7 +72,7 @@ export default class EmailTemplates extends Component {
                                         this.state.email_list.map((item, index) => {
                                             return (
                                                 <tr key={index}>
-                                                    <td width={"70%"}>{item.subject}</td>
+                                                    <td width={"70%"} style={{"textAlign":"left","paddingLeft":"15px"}}>{item.subject}</td>
                                                     <td><a onClick={this.showEmail.bind(this, item.id)} className={"edit"}>edit</a></td>
                                                 </tr>
                                             )
@@ -82,7 +82,7 @@ export default class EmailTemplates extends Component {
                             </table>
                         </div>
                         <div className="lm--formItem lm--formItem--inline string u-mt3">
-                            <label className="lm--formItem-left lm--formItem-label string required">
+                            <label className="lm--formItem-left lm--formItem-label string required" >
                                 <abbr title="required">*</abbr> Letter Of Authorisation :
                             </label>
                             <div className="lm--formItem-right lm--formItem-control u-grid mg0">

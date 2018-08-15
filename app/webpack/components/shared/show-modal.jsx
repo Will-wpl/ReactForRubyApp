@@ -640,7 +640,7 @@ export class Modal extends React.Component {
                                 Body:
                             </label>
                             <div className="lm--formItem-right lm--formItem-control">
-                                <textarea name="email_body" style={{height:"100px"}} value={this.state.email_body} onChange={this.Change.bind(this, 'email_body')} disabled={this.state.disabled} ref="email_body" required aria-required="true" />
+                                <textarea name="email_body" style={{height:"140px"}} value={this.state.email_body} onChange={this.Change.bind(this, 'email_body')} disabled={this.state.disabled} ref="email_body" required aria-required="true" />
                             </div>
                         </div>
                     </div>
@@ -908,7 +908,7 @@ export class Modal extends React.Component {
                 this.props.formSize==="middle"?
                 <div id="modal_main" className={this.state.modalshowhide} style={{ width: "50%", height:"300px", top: "40%", left: "40%" }} >
                     <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
-                    <div className="modal_detail model_detail_formHeight" style={{"margin-bottom":"30px"}}>
+                    <div className="modal_detail model_detail_formHeight" style={{"marginBottom":"30px"}}>
                         <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
                     </div>
                     {btn_html}
