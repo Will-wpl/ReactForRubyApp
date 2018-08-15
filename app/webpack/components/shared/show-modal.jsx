@@ -627,7 +627,7 @@ export class Modal extends React.Component {
             } else if (this.props.listdetailtype === "Email Template") {
                 if (this.props.text === '') {
                     showDetail = <div>
-                        <div className="lm--formItem lm--formItem--inline string">
+                        <div className="lm--formItem lm--formItem--inline string" style={{marginLeft:"-15%"}}>
                             <label className="lm--formItem-left lm--formItem-label string required">
                                 Subject:
                             </label>
@@ -635,12 +635,12 @@ export class Modal extends React.Component {
                                 <input type="text" name="email_subject" value={this.state.email_subject} onChange={this.Change.bind(this, 'email_subject')} disabled={this.state.disabled} ref="email_subject" maxLength="50" required aria-required="true" />
                             </div>
                         </div>
-                        <div className="lm--formItem lm--formItem--inline string">
+                        <div className="lm--formItem lm--formItem--inline string" style={{marginLeft:"-15%"}}>
                             <label className="lm--formItem-left lm--formItem-label string required">
                                 Body:
                             </label>
                             <div className="lm--formItem-right lm--formItem-control">
-                                <textarea name="email_body" value={this.state.email_body} onChange={this.Change.bind(this, 'email_body')} disabled={this.state.disabled} ref="email_body" required aria-required="true" />
+                                <textarea name="email_body" style={{height:"100px"}} value={this.state.email_body} onChange={this.Change.bind(this, 'email_body')} disabled={this.state.disabled} ref="email_body" required aria-required="true" />
                             </div>
                         </div>
                     </div>
@@ -906,9 +906,9 @@ export class Modal extends React.Component {
                 </div>
                 :
                 this.props.formSize==="middle"?
-                <div id="modal_main" className={this.state.modalshowhide} style={{ width: "60%", top: "30%", left: "30%" }} >
+                <div id="modal_main" className={this.state.modalshowhide} style={{ width: "50%", height:"300px", top: "40%", left: "40%" }} >
                     <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
-                    <div className="modal_detail model_detail_formHeight">
+                    <div className="modal_detail model_detail_formHeight" style={{"margin-bottom":"30px"}}>
                         <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
                     </div>
                     {btn_html}
