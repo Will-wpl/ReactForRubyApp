@@ -905,6 +905,15 @@ export class Modal extends React.Component {
                     {btn_html}
                 </div>
                 :
+                this.props.formSize==="middle"?
+                <div id="modal_main" className={this.state.modalshowhide} style={{ width: "60%", top: "30%", left: "30%" }} >
+                    <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
+                    <div className="modal_detail model_detail_formHeight">
+                        <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
+                    </div>
+                    {btn_html}
+                </div>
+                :
                 <div id="modal_main" className={this.state.modalshowhide} >
                     <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
                     <div className="modal_detail">
