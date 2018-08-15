@@ -300,13 +300,13 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
         entity_indexes.push({'entity_index' => index, 'error_field_name' => 'company_uen'})
       end
 
-      # Master entity validation
-      is_duplicated_email = user.any?{ |v| v.email == buyer_entity['contact_email'] &&
-          v.id != buyer_entity['user_id']}
-      # Master entity -> existed same entity with email
-      if buyer_entity['is_default'].equal?(1) && is_duplicated_email
-        entity_indexes.push({'entity_index' => index, 'error_field_name' => 'contact_email'})
-      end
+      # # Master entity validation
+      # is_duplicated_email = user.any?{ |v| v.email == buyer_entity['contact_email'] &&
+      #     v.id != buyer_entity['user_id']}
+      # # Master entity -> existed same entity with email
+      # if buyer_entity['is_default'].equal?(1) && is_duplicated_email
+      #   entity_indexes.push({'entity_index' => index, 'error_field_name' => 'contact_email'})
+      # end
     end
     entity_indexes
   end
