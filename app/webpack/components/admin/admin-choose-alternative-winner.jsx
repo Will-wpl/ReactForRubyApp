@@ -132,7 +132,7 @@ export default class ChooseAlternativeWinner extends React.Component{
             if(this.state.justification == ''){
                 this.setState({
                     currentRetailerData:[],
-                    text:'Please fill out this field.'},()=>{
+                    text:'Please provide justification for selection of alternate winner.'},()=>{
                     this.refs.Modal.showModal();
                 })
             }else{

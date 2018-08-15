@@ -66,7 +66,7 @@ class Api::AuctionHistoriesController < Api::BaseController
       auction.total_eht_peak = contract.total_eht_peak
       auction.total_eht_off_peak = contract.total_eht_off_peak
       auction.total_volume = contract.total_volume
-      render json: { auction: auction, histories: histories, result: result }, status: 200
+      render json: { auction: auction, histories: histories, result: result, aggregate_consumptions: get_aggregate_consumptions(contract) }, status: 200
     else
       hash = {}
       auction.auction_contracts.each do |contract|

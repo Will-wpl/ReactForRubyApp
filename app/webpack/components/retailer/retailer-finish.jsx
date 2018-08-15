@@ -16,8 +16,8 @@ export class RetailerFinish extends Component {
                         <p>
                         The Reverse Auction has ended.<br/>
                         Thank you for your participation!<br/>
-                        You will be contacted separately<br/>
-                        on the Reverse Auction results.
+                        Your bidding results will be updated under<br/>
+                        'View Past Reverse Auction'.
                         </p>
                     </div>
                 </div>
