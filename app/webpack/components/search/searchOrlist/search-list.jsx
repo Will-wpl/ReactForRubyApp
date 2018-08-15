@@ -112,7 +112,7 @@ export class SearchList extends Component {
     }
     doinvite(type,user_id,select_action){
         let invite_type = this.props.type === 'Select Retailers' ? 'arrangements' : 'consumptions';
-        if(this.state.buyer_type == '1' && window.location.href.indexOf("type=2")>0){
+        if(this.state.buyer_type == '0' && window.location.href.indexOf("type=2")>0){
             this.props.table_data.bodies.data.map((item)=>{
                 if(item.select_action){
                     deleteStatus({
