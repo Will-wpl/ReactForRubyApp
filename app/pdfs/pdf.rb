@@ -54,8 +54,9 @@ class Pdf
     price_row1 = param[:price_row1]
     if visibility
       table_head.push(title)
-      table_row0.push(PdfUtils.get_format_number(peak, '$ ', 4))
-      table_row1.push(PdfUtils.get_format_number(off_peak, '$ ', 4))
+
+      table_row0.push(PdfUtils.number_helper.number_to_currency(peak, precision: 4, format: '$ %n/kWh'))
+      table_row1.push(PdfUtils.number_helper.number_to_currency(off_peak, precision: 4, format: '$ %n/kWh'))
       price_row0.push(peak)
       price_row1.push(off_peak)
     else
