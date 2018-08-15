@@ -503,7 +503,7 @@ export class FillConsumption extends Component {
                                 <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
                                     <input name="agree_declare" type="checkbox" id="chkAgree_declare" required />
                                     {/* <span>I declare that all data submited is true and shall be used for the auction, and that i am bounded by <a target="_blank" href={this.state.link} className="urlStyle">Buyer T&C.</a></span> */}
-                                    <span>I declare that all data submitted is true and shall be used for the auction, and that I am bounded by the <a target="_blank" href={this.state.buyer_link} className="urlStyle">Buyer Platform Terms of Use</a> and <a target="_blank" href={this.state.seller_link} className="urlStyle">Electricity Procurement Agreement</a>. </span>
+                                    <span>I declare that all data submitted is true and shall be used for the auction, and that I am bounded by the <a target="_blank" href={this.state.buyer_link} className="urlStyleUnderline">Buyer Platform Terms of Use</a> and <a target="_blank" href={this.state.seller_link} className="urlStyleUnderline">Electricity Procurement Agreement</a>. </span>
                                 </h4>
                             </div>
                             <div className="buyer_btn">
