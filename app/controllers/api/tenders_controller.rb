@@ -43,8 +43,7 @@ class Api::TendersController < Api::TendersBaseController
   def node3_retailer
     auction = @arrangement.auction
     # if auction.auction_contracts.blank?
-    attachments_count = AuctionAttachment.belong_auction(@arrangement.auction_id)
-                            .find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC).count
+    attachments_count = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC).count
     chats = set_node3_chats(params[:id])
     attachments = AuctionAttachment.user_auction(@arrangement.auction_id, @arrangement.user_id)
                       .where(file_type: 'attachment_deviation').order(:created_at)
