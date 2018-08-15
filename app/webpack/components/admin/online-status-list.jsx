@@ -94,13 +94,13 @@ export class OnlineStatusMain extends Component {
                     <div className="col-sm-12 col-md-10 push-md-1">
                     <h3 className="col-sm-12 col-md-12 u-mb3">Online Status of Retailers</h3>
                     <div className="u-grid u-mt2">
-                        <div className="col-sm-12 col-md-4">
+                        <div className="col-sm-12 col-md-4 u-cell">
                             <RetailsOnlineStatus list_data={this.state.data_online} onlineStatus="on" />
                         </div>
-                        <div className="col-sm-12 col-md-4">
+                        <div className="col-sm-12 col-md-4 u-cell">
                             <RetailsOnlineStatus list_data={this.state.data_pedding} onlineStatus="other" />
                         </div>
-                        <div className="col-sm-12 col-md-4">
+                        <div className="col-sm-12 col-md-4 u-cell">
                             <RetailsOnlineStatus list_data={this.state.data_outline} onlineStatus="off" />
                         </div>
                     </div>
