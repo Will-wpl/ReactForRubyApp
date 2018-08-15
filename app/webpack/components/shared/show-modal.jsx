@@ -715,7 +715,7 @@ export class Modal extends React.Component {
             if (this.props.listdetailtype === 'Documents Message') {
                 showDetail = <ul className="showdetail">
                     <li>Please upload the following documentations:</li>
-                    <li>1) A print-out of this <a href={this.props.attatchment} className="urlStyle" target="_blank">Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
+                    <li>1) A print-out of this <a href={this.props.attatchment} className="urlStyleUnderline" target="_blank">Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
                     <li>2a) Your company's Accounting & Corporate Regulatory Authority (ACRA) Business Profile.</li>
                     <li>or</li>
                     <li>2b) Your company's Certificate of Incorporation if you are not registered with Accounting & Corporate Regulatory Authority (ACRA).</li>
