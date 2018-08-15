@@ -7,14 +7,13 @@ export class Signconfidentialityundertaking extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            buttonType:'',file_path:'',file_name:''
+            buttonType:'',file:[]
         }
     }
     componentDidMount() {
         getUndertaking(sessionStorage.arrangement_id).then(res=>{
             this.setState({
-                file_path:res[0].file_path,
-                file_name:res[0].file_name
+                file:res
             })
         })
     }
@@ -63,7 +62,7 @@ export class Signconfidentialityundertaking extends React.Component{
                 {/*{this.props.current.current.current_status ?*/}
                 {/*<h4>You have {this.props.current.current.current_status === 'reject' ? 'rejected' : 'accepted'} the Confidentiality Undertaking.</h4>*/}
                 {/*:''}*/}
-                <p>You are bounded by the confidentiality clauses in the <a className="download_ico" target="_blank" download={this.state.file_name} href={this.state.file_path}>Retailer Platform Terms of Use.</a></p>
+                <p>You are bounded by the confidentiality clauses in the <a className="download_ico" target="_blank" download={this.state.file.length>0?this.state.file[0].file_name:''} href={this.state.file.length>0?this.state.file[0].file_path:'#'}>Retailer Platform Terms of Use</a> and <a className="download_ico" target="_blank" download={this.state.file.length>0?this.state.file[1].file_name:''} href={this.state.file.length>0?this.state.file[1].file_path:'#'}>Electricity Procurement Agreement.</a></p>
                 <p>Please click 'Proceed' to continue.</p>
                 {/*<p>*Note: can click on '<a className="download_ico" target="_blank" download={this.state.file_name} href={this.state.file_path}>Retailer Platform Terms of Use</a>' to download the PDF document.</p>*/}
                     {/*<div className="u-mt3 u-mb3 download">*/}

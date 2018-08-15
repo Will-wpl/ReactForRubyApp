@@ -179,8 +179,8 @@ render() {
                     </div>
                 </div>
                 <Modal ref="Modal" text={this.state.text} acceptFunction={!this.state.fnStatus ? this.void_auction.bind(this) : this.confirm_winner.bind(this)} />
-                <div className="createRaMain u-grid">
-                    <a className="lm--button lm--button--primary u-mt3" onClick={this.showDetail.bind(this,'win')} >Select Winner</a>
+                <div className="createRaMain u-grid winner_btn">
+                    <a className="lm--button lm--button--primary u-mt3" onClick={this.showDetail.bind(this,'win')} >Click to Select Winner</a>
                 </div>
             </div>
     )
