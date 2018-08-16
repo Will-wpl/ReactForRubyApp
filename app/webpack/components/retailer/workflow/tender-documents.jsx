@@ -86,17 +86,17 @@ export class Tenderdocuments extends React.Component {
                                     <tbody>
                                         <tr>
                                             <td>Peak (7am-7pm)</td>
-                                            <td className="lt">{item.total_lt_peak ? formatPower(parseInt(Math.round(Number(item.total_lt_peak))), 0, '') : 0}</td>
-                                            <td className="hts">{item.total_hts_peak ? formatPower(parseInt(Math.round(Number(item.total_hts_peak))), 0, '') : 0}</td>
-                                            <td className="htl">{item.total_htl_peak ? formatPower(parseInt(Math.round(Number(item.total_htl_peak))), 0, '') : 0}</td>
-                                            <td className="eht">{item.total_eht_peak ? formatPower(parseInt(Math.round(Number(item.total_eht_peak))), 0, '') : 0}</td>
+                                            <td className="lt">{item.total_lt_peak ? formatPower(parseInt(Number(item.total_lt_peak)), 0, '') : 0}</td>
+                                            <td className="hts">{item.total_hts_peak ? formatPower(parseInt(Number(item.total_hts_peak)), 0, '') : 0}</td>
+                                            <td className="htl">{item.total_htl_peak ? formatPower(parseInt(Number(item.total_htl_peak)), 0, '') : 0}</td>
+                                            <td className="eht">{item.total_eht_peak ? formatPower(parseInt(Number(item.total_eht_peak)), 0, '') : 0}</td>
                                         </tr>
                                         <tr>
                                             <td>Off-Peak (7pm-7am)</td>
-                                            <td className="lt">{item.total_lt_off_peak ? formatPower(parseInt(Math.round(Number(item.total_lt_off_peak))), 0, '') : 0}</td>
-                                            <td className="hts">{item.total_hts_off_peak ? formatPower(parseInt(Math.round(Number(item.total_hts_off_peak))), 0, '') : 0}</td>
-                                            <td className="htl">{item.total_htl_off_peak ? formatPower(parseInt(Math.round(Number(item.total_htl_off_peak))), 0, '') : 0}</td>
-                                            <td className="eht">{item.total_eht_off_peak ? formatPower(parseInt(Math.round(Number(item.total_eht_off_peak))), 0, '') : 0}</td>
+                                            <td className="lt">{item.total_lt_off_peak ? formatPower(parseInt(Number(item.total_lt_off_peak)), 0, '') : 0}</td>
+                                            <td className="hts">{item.total_hts_off_peak ? formatPower(parseInt(Number(item.total_hts_off_peak)), 0, '') : 0}</td>
+                                            <td className="htl">{item.total_htl_off_peak ? formatPower(parseInt(Number(item.total_htl_off_peak)), 0, '') : 0}</td>
+                                            <td className="eht">{item.total_eht_off_peak ? formatPower(parseInt(Number(item.total_eht_off_peak)), 0, '') : 0}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -106,11 +106,11 @@ export class Tenderdocuments extends React.Component {
 
                     </div>
                 </div>
-                <div className="lm--formItem lm--formItem--inline string u-mt1">
-                    <label className=" lm--formItem-label ">
-                        Click on 'Accept & Proceed' if you do not wish to propose deviations to the <a target="_blank" disabled={this.props.propsdisabled} download={this.state.attachments.length>0?this.state.attachments[0].file_name:''} href={this.state.attachments.length>0?this.state.attachments[0].file_path:'#'}>Electricity Procurement Agreement.</a>
-                    </label>
-                </div>
+                {/*<div className="lm--formItem lm--formItem--inline string u-mt1">*/}
+                    {/*<label className=" lm--formItem-label ">*/}
+                        {/*Click on 'Accept & Proceed' if you do not wish to propose deviations to the <a target="_blank" disabled={this.props.propsdisabled} download={this.state.attachments.length>0?this.state.attachments[0].file_name:''} href={this.state.attachments.length>0?this.state.attachments[0].file_path:'#'}>Electricity Procurement Agreement.</a>*/}
+                    {/*</label>*/}
+                {/*</div>*/}
                 {/*<div className="lm--formItem lm--formItem--inline string u-mt3 role_select">*/}
                     {/*<label className="lm--formItem-left lm--formItem-label string required">*/}
                         {/*Electricity Procurement Agreement:*/}
