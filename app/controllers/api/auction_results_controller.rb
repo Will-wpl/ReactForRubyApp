@@ -4,9 +4,9 @@ class Api::AuctionResultsController < Api::BaseController
 
   def award
     if params[:contract_duration].blank?
-      consumptions = Consumption.get_company_user(params[:id])
+      consumptions = Consumption.get_company_user(params[:id]).where(accept_status: Consumption::AcceptStatusApproved)
     else
-      consumptions = Consumption.get_company_user_by_auction_duration(params[:id],params[:contract_duration])
+      consumptions = Consumption.get_company_user_by_auction_duration(params[:id],params[:contract_duration]).where(accept_status: Consumption::AcceptStatusApproved)
     end
     data = []
     consumptions.each do |consumption|

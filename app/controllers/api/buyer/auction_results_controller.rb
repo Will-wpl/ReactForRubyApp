@@ -42,7 +42,7 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
   def show_award?(result, current_user)
     consumption = Consumption.find_by_auction_and_user(result.auction_id, current_user.id).first
     user = User.find(current_user.id)
-    result.status != 'void' && consumption.participation_status == Consumption::ParticipationStatusParticipate && user.consumer_type == User::ConsumerTypeCompany
+    result.status != 'void' && consumption.participation_status == Consumption::ParticipationStatusParticipate && user.consumer_type == User::ConsumerTypeCompany && consumption.accept_status == Consumption::AcceptStatusApproved
   end
 
   def get_headers
