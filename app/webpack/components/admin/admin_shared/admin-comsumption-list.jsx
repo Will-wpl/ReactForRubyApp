@@ -49,7 +49,6 @@ export default class AdminComsumptionList extends Component {
         return name;
     }
     render() {
-        console.log(this.props.comsumption_list)
         return (
             this.props.dataVersion ?
                 <div>
@@ -95,10 +94,9 @@ export default class AdminComsumptionList extends Component {
                                                     <td>{it.contracted_capacity ? parseInt(it.contracted_capacity) : '—'}</td>
                                                     <td>{it.blk_or_unit} {it.street} {it.unit_number} {it.postal_code} </td>
                                                     <td className="left">
-                                                        <div><span>Total Monthly:</span><span className="textDecoration" >{parseInt(it.totals)}</span><span> kWh/month</span></div>
-                                                        <div><span>Peak:</span><span className="textDecoration">{parseFloat(it.peak_pct).toFixed(2)}</span><span> %</span><span style={{ fontWeight: "bold", fontSize: "14px" }} title="Click on '?' to see Admin's reference information on peak/offpeak ratio." >&nbsp;&nbsp;?</span></div>
-                                                        <div><span>Off-Peak:</span><span className="textDecoration">{parseFloat(100 - it.peak_pct).toFixed(2)}</span><span> %</span></div>
-                                                        {/* <div className={it.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span><span><a href={it.user_attachment ? it.user_attachment.file_path : "#"} target="_blank">{it.user_attachment ? it.user_attachment.file_name : ""}</a></span></div> */}
+                                                        <div><span>Total Monthly: </span><span className="textDecoration" >{parseInt(it.totals)}</span><span> kWh/month</span></div>
+                                                        <div><span>Peak: </span><span><span>{parseInt(it.peak)} kWh/month </span>({parseFloat(it.peak_pct).toFixed(2)}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
+                                                        <div><span>Off-Peak: </span><span>{parseInt(it.off_peak)} kWh/month </span><span>({parseFloat(100 - it.peak_pct).toFixed(2)}%)</span></div>
                                                         <div className={it.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span>
                                                         <span>
                                                             <ul className="attachementList">

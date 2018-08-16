@@ -23,7 +23,7 @@ class PdfAggregateConsumption
   end
 
   def number_format(num)
-    PdfUtils.number_helper.number_to_currency(num, precision: 0, format: '%n kWh/month')
+    PdfUtils.number_helper.number_to_currency(num, precision: 0, format: '%n kWh')
   end
 
   def push_colume_data(param)

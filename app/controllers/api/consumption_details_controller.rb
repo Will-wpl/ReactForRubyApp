@@ -8,10 +8,15 @@ class Api::ConsumptionDetailsController < Api::BaseController
       contract_duration = auction.auction_contracts.select('contract_duration').sort_by {|contract| contract.contract_duration.to_i}
       buyer_entities = CompanyBuyerEntity.find_by_status_user(CompanyBuyerEntity::ApprovalStatusApproved, consumption.user_id).order(is_default: :desc)
       if auction.auction_contracts.blank?
-        tc_attachment = AuctionAttachment.find_by(auction_id: consumption.auction_id, file_type: 'buyer_tc_upload')
+        buyer_revv_tc_attachment = AuctionAttachment.find_by(auction_id: consumption.auction_id, file_type: 'buyer_tc_upload')
+        seller_buyer_tc_attachment = nil
       else
         # tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
-        tc_attachment = UserAttachment.find_by_type_user(UserAttachment::FileType_Buyer_REVV_TC, consumption.user_id)
+        # tc_attachment = UserAttachment.find_by_type_user(UserAttachment::FileType_Buyer_REVV_TC, consumption.user_id)
+        # get seller-buyer-t&c document
+        seller_buyer_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)
+        # get buyer-revv-t&c document
+        buyer_revv_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
       end
       consumption_details_all = []
       consumption_details.each do |consumption_detail|
@@ -50,9 +55,11 @@ class Api::ConsumptionDetailsController < Api::BaseController
         consumption_details_all.push(final_detail)
       end
       render json: { consumption_details: consumption_details_all, consumption: consumption,
-                     auction: { id: auction.id, name: auction.name, actual_begin_time: auction.actual_begin_time, contract_period_start_date: auction.contract_period_start_date, publish_status: auction.publish_status },
-                     buyer_entities: buyer_entities,
-                     tc_attachment: tc_attachment, contract_duration: contract_duration }, status: 200
+                     auction: { id: auction.id, name: auction.name, actual_begin_time: auction.actual_begin_time,
+                                contract_period_start_date: auction.contract_period_start_date,
+                                publish_status: auction.publish_status },
+                     buyer_entities: buyer_entities, seller_buyer_tc_attachment:seller_buyer_tc_attachment,
+                     buyer_revv_tc_attachment: buyer_revv_tc_attachment, contract_duration: contract_duration }, status: 200
     end
   end
 
@@ -245,8 +252,8 @@ class Api::ConsumptionDetailsController < Api::BaseController
         consumption_detail.existing_plan = detail['existing_plan']
         consumption_detail.totals = detail['totals']
         consumption_detail.peak_pct = detail['peak_pct']
-        consumption_detail.peak = detail['totals'].to_f * detail['peak_pct'].to_f / 100 unless detail['peak_pct'].blank?
-        consumption_detail.off_peak = detail['totals'].to_f - consumption_detail.peak unless detail['peak_pct'].blank?
+        consumption_detail.peak = (detail['totals'].to_f * detail['peak_pct'].to_f / 100).round() unless detail['peak_pct'].blank?
+        consumption_detail.off_peak = detail['totals'].to_i - consumption_detail.peak unless detail['peak_pct'].blank?
         consumption_detail.contract_expiry = detail['contract_expiry']
         consumption_detail.blk_or_unit = detail['blk_or_unit']
         consumption_detail.street = detail['street']

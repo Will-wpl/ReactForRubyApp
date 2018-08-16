@@ -2,7 +2,7 @@ class Api::ConsumptionsController < Api::BaseController
   before_action :set_consumption, only: %i[show update_status destroy acknowledge]
 
   def index
-    consumptions = Consumption.find_by_user_consumer_type(params[:consumer_type]).find_by_auction_id(params[:id]).is_participation
+    consumptions = Consumption.find_by_user_consumer_type(params[:consumer_type]).find_by_auction_id(params[:id]).is_participation.is_accpet
     unless params[:contract_duration].blank?
       consumptions = consumptions.where('contract_duration = ?', params[:contract_duration])
     end

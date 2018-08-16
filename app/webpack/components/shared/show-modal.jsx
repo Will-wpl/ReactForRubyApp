@@ -627,7 +627,7 @@ export class Modal extends React.Component {
             } else if (this.props.listdetailtype === "Email Template") {
                 if (this.props.text === '') {
                     showDetail = <div>
-                        <div className="lm--formItem lm--formItem--inline string">
+                        <div className="lm--formItem lm--formItem--inline string" style={{marginLeft:"-15%"}}>
                             <label className="lm--formItem-left lm--formItem-label string required">
                                 Subject:
                             </label>
@@ -635,12 +635,12 @@ export class Modal extends React.Component {
                                 <input type="text" name="email_subject" value={this.state.email_subject} onChange={this.Change.bind(this, 'email_subject')} disabled={this.state.disabled} ref="email_subject" maxLength="50" required aria-required="true" />
                             </div>
                         </div>
-                        <div className="lm--formItem lm--formItem--inline string">
+                        <div className="lm--formItem lm--formItem--inline string" style={{marginLeft:"-15%"}}>
                             <label className="lm--formItem-left lm--formItem-label string required">
                                 Body:
                             </label>
                             <div className="lm--formItem-right lm--formItem-control">
-                                <textarea name="email_body" value={this.state.email_body} onChange={this.Change.bind(this, 'email_body')} disabled={this.state.disabled} ref="email_body" required aria-required="true" />
+                                <textarea name="email_body" style={{height:"140px"}} value={this.state.email_body} onChange={this.Change.bind(this, 'email_body')} disabled={this.state.disabled} ref="email_body" required aria-required="true" />
                             </div>
                         </div>
                     </div>
@@ -715,7 +715,7 @@ export class Modal extends React.Component {
             if (this.props.listdetailtype === 'Documents Message') {
                 showDetail = <ul className="showdetail">
                     <li>Please upload the following documentations:</li>
-                    <li>1) A print-out of this <a href={this.props.attatchment} className="urlStyle" target="_blank">Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
+                    <li>1) A print-out of this <a href={this.props.attatchment} className="urlStyleUnderline" target="_blank">Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
                     <li>2a) Your company's Accounting & Corporate Regulatory Authority (ACRA) Business Profile.</li>
                     <li>or</li>
                     <li>2b) Your company's Certificate of Incorporation if you are not registered with Accounting & Corporate Regulatory Authority (ACRA).</li>
@@ -739,7 +739,7 @@ export class Modal extends React.Component {
                                         </div>
                                         <input type="text" value={this.state.account_number} onChange={this.changeConsumption.bind(this, "account_number")} id="account_number" name="account_number" required aria-required="true" />
                                         <div id="account_number_message" className="isPassValidate">This filed is required!</div>
-                                        <div id="account_number_taken_message" className="errormessage">There is already an existing contract for this Account Number.</div>
+                                        <div id="account_number_taken_message" className="errormessage">Account number cannot be duplicated.</div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -801,7 +801,7 @@ export class Modal extends React.Component {
                                                 Premise Address
                                             </div>
                                             <div style={{ width: "70%", float: "left", padding: "5px" }}>
-                                                <div id="permise_address_taken_message" className="errormessage">There is already an existing contract for this Premise Address.</div>
+                                                <div id="permise_address_taken_message" className="errormessage">Premise address cannot be duplicated.</div>
                                             </div>
                                         </div>
                                     </td>
@@ -900,6 +900,15 @@ export class Modal extends React.Component {
                 <div id="modal_main" className={this.state.modalshowhide} style={{ width: "700px", top: "20%", left: "40%" }} >
                     <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
                     <div className="modal_detail model_detail_formHeight">
+                        <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
+                    </div>
+                    {btn_html}
+                </div>
+                :
+                this.props.formSize==="middle"?
+                <div id="modal_main" className={this.state.modalshowhide} style={{ width: "50%", height:"300px", top: "40%", left: "40%" }} >
+                    <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
+                    <div className="modal_detail model_detail_formHeight" style={{"marginBottom":"30px"}}>
                         <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
                     </div>
                     {btn_html}

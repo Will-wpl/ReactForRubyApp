@@ -462,7 +462,7 @@ class Api::AuctionsController < Api::BaseController
                                   LEFT JOIN users ON cns.user_id = users.\"id\",
                                     ( SELECT ent.company_name, ent.company_uen FROM company_buyer_entities ent WHERE ent.user_id = ? AND \"id\" = ? LIMIT 1 ) entity
                                   WHERE
-                                    cns.user_id = ? AND auction_id = ? AND contract_duration = ?",
+                                    cns.user_id = ? AND auction_id = ? AND contract_duration = ? AND accept_status = '1'",
                                            user_id, entity_id, user_id, auction_id, contract_duration]
     return nil, nil,nil, nil, nil if (consumption.empty?)
     auction_result = AuctionResultContract.select("users.id, users.name, coalesce(users.company_name, '') company_name,
@@ -763,6 +763,12 @@ class Api::AuctionsController < Api::BaseController
     end
 
     auction_json = auction.attributes.dup
+    if auction.publish_status == Auction::PublishStatusPublished
+      auction_json[:aggregate_auction_contracts] = live_auction_contracts
+    else
+      auction_json[:aggregate_auction_contracts] = get_unpublished_auction_contracts(auction)
+    end
+
     auction_json[:auction_contracts] = Auction.find(auction.id).auction_contracts.sort_by {|contract| contract.contract_duration.to_i}
     auction_json[:buyer_notify] = Consumption.find_by_auction_id(auction.id).find_notify_buyer.blank? ? false : true
     auction_json[:live_auction_contracts] = live_auction_contracts

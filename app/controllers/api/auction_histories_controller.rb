@@ -66,7 +66,7 @@ class Api::AuctionHistoriesController < Api::BaseController
       auction.total_eht_peak = contract.total_eht_peak
       auction.total_eht_off_peak = contract.total_eht_off_peak
       auction.total_volume = contract.total_volume
-      render json: { auction: auction, histories: histories, result: result }, status: 200
+      render json: { auction: auction, histories: histories, result: result, aggregate_consumptions: get_aggregate_consumptions(contract) }, status: 200
     else
       hash = {}
       auction.auction_contracts.each do |contract|
@@ -77,7 +77,7 @@ class Api::AuctionHistoriesController < Api::BaseController
           auction.contract_period_end_date = contract.contract_period_end_date
           auction.total_volume = contract.total_volume
           auction_json = auction.attributes.dup
-          hash.merge!({ "duration_#{duration}": { auction: auction_json, histories: histories, result: result }})
+          hash.merge!({ "duration_#{duration}": { auction: auction_json, histories: histories, result: result, aggregate_consumptions: get_aggregate_consumptions(contract) }})
         end
 
       end
@@ -87,6 +87,36 @@ class Api::AuctionHistoriesController < Api::BaseController
   end
 
   private
+
+  def get_aggregate_consumptions(contract)
+    has_lt = !is_zero(contract.total_lt_peak, contract.total_lt_off_peak)
+    has_hts = !is_zero(contract.total_hts_peak, contract.total_hts_off_peak)
+    has_htl = !is_zero(contract.total_htl_peak, contract.total_htl_off_peak)
+    has_eht = !is_zero(contract.total_eht_peak, contract.total_eht_off_peak)
+    if has_lt || has_hts || has_htl || has_eht
+      base_contract = {has_lt: has_lt, has_hts: has_hts, has_htl: has_htl, has_eht: has_eht,
+                       starting_price_lt_peak: contract.starting_price_lt_peak,
+                       starting_price_lt_off_peak: contract.starting_price_lt_off_peak,
+                       starting_price_hts_peak: contract.starting_price_hts_peak,
+                       starting_price_hts_off_peak: contract.starting_price_hts_off_peak,
+                       starting_price_htl_peak: contract.starting_price_htl_peak,
+                       starting_price_htl_off_peak: contract.starting_price_htl_off_peak,
+                       starting_price_eht_peak: contract.starting_price_eht_peak,
+                       starting_price_eht_off_peak: contract.starting_price_eht_off_peak,
+                       contract_period_end_date: contract.contract_period_end_date,
+                       contract_duration: contract.contract_duration,
+                       total_lt_peak: contract.total_lt_peak,
+                       total_lt_off_peak: contract.total_lt_off_peak,
+                       total_hts_peak: contract.total_hts_peak,
+                       total_hts_off_peak: contract.total_hts_off_peak,
+                       total_htl_peak: contract.total_htl_peak,
+                       total_htl_off_peak: contract.total_htl_off_peak,
+                       total_eht_peak: contract.total_eht_peak,
+                       total_eht_off_peak: contract.total_eht_off_peak}
+      base_contract
+    end
+  end
+
 
   def list_logic(auction_id, contract_duration)
     if contract_duration.blank?

@@ -13,7 +13,7 @@ export class BuyerRegister extends Component {
         this.state = {
             id: "", userid: "", text: "", btn_status: false, disabled: false, havedata: false, allbtnStatus: true, validate: true, use_type: "",
             email_address: "", company_name: "", unique_entity_number: "", company_address: "", billing_address: "", contact_name: "",
-            mobile_number: "", office_number: "", entityStatus: "", approveStatus: false, status: '',main_id:'',
+            mobile_number: "", office_number: "", entityStatus: "", approveStatus: false, status: '', main_id: '',
             user_entity_id: "", user_company_name: "", user_company_uen: "", user_company_address: "", user_billing_address: "", user_bill_attention_to: "",
             user_contact_name: "", user_contact_email: "", user_contact_mobile_no: "", user_contact_office_no: "", comment: "",
             buyerTCurl: "", buyerTCname: "", agree_seller_buyer: "0",
@@ -30,7 +30,7 @@ export class BuyerRegister extends Component {
             },
             uploadUrl: "/api/buyer/user_attachments?file_type=",
             messageAttachmentUrl: "",
-            usedEntityIdArr:[]
+            usedEntityIdArr: []
         };
         this.validatorItem = {
             user_contact_office_no: { cate: 'num' },
@@ -118,7 +118,6 @@ export class BuyerRegister extends Component {
         let fileObj, entityObj;
         fileObj = this.state.fileData;
         entityObj = this.state.user_entity_data;
-
         if (param.user_base_info) {
             let item = param.user_base_info;
             this.setState({
@@ -220,7 +219,16 @@ export class BuyerRegister extends Component {
                     })
                 }
             }
+            else {
+                 setTimeout((item) => {
+                    this.setState({
+                        user_contact_email: this.state.email_address
+                    }) 
+                 }, 300);
+                
+            }
         }
+
 
         if (param.seller_buyer_tc_attachment) {
             let buyer = param.seller_buyer_tc_attachment;
@@ -237,10 +245,9 @@ export class BuyerRegister extends Component {
                 buyerRevvTCname: revv.file_name
             })
         }
-        if(param.used_buyer_entity_ids)
-        {
+        if (param.used_buyer_entity_ids) {
             this.setState({
-                usedEntityIdArr:param.used_buyer_entity_ids
+                usedEntityIdArr: param.used_buyer_entity_ids
             })
         }
     }
@@ -332,7 +339,7 @@ export class BuyerRegister extends Component {
         let entity = [
             {
                 main_id: this.state.main_id,
-                user_entity_id:this.state.user_entity_id,
+                user_entity_id: this.state.user_entity_id,
                 company_name: this.state.company_name,
                 company_uen: this.state.unique_entity_number,
                 company_address: this.state.company_address,
@@ -342,7 +349,8 @@ export class BuyerRegister extends Component {
                 contact_email: this.state.user_contact_email,
                 contact_mobile_no: this.state.user_contact_mobile_no,
                 contact_office_no: this.state.user_contact_office_no,
-                is_default: 1
+                is_default: 1,
+                user_id:this.state.id
             }
         ];
 
@@ -351,7 +359,7 @@ export class BuyerRegister extends Component {
             list.map((item, index) => {
                 let paramObj = {
                     main_id: item.main_id,
-                    user_entity_id:item.user_entity_id,
+                    user_entity_id: item.user_entity_id,
                     company_name: item.company_name,
                     company_uen: item.company_uen,
                     company_address: item.company_address,
@@ -361,7 +369,8 @@ export class BuyerRegister extends Component {
                     contact_email: item.contact_email,
                     contact_mobile_no: item.contact_mobile_no,
                     contact_office_no: item.contact_office_no,
-                    is_default: 0
+                    is_default: 0, 
+                   user_id:this.state.id
                 }
                 entity.push(paramObj);
             })
@@ -942,9 +951,9 @@ export class BuyerRegister extends Component {
                                 </div>
 
 
-                                <h4 className="lm--formItem lm--formItem--inline string chkBuyer"><input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /><span>Check here to indicate that you have read and agree to the</span><a target="_blank" href={this.state.buyerTCurl} className="urlStyle">Buyer Platform Terms of Use</a></h4>
+                                <h4 className="lm--formItem lm--formItem--inline string chkBuyer"><input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /><span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerTCurl} className="urlStyleUnderline">Buyer Platform Terms of Use</a></span></h4>
                                 <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
-                                <h4 className="lm--formItem lm--formItem--inline string chkBuyer"><input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} /><span>Check here to indicate that you have read and agree to the</span><a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyle">Energy Procurement Agreement</a></h4>
+                                <h4 className="lm--formItem lm--formItem--inline string chkBuyer"><input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} /><span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyleUnderline">Energy Procurement Agreement</a></span></h4>
                                 <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                                 <div className={this.state.use_type === 'admin_approve' ? 'isDisplay' : 'isHide'}>
                                     <div className="dividerline"></div>

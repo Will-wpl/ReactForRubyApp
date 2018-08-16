@@ -20,7 +20,8 @@ export class FillConsumption extends Component {
             name: "",
             time: "",
             contact_start_date: "",
-            link: "",
+            buyer_link: "",
+            seller_link: "",
             contract_duration: "",
             durationList: [],
             durtioanItem: "",
@@ -75,7 +76,8 @@ export class FillConsumption extends Component {
                 time: res.auction.actual_begin_time,
                 contact_start_date: res.auction.contract_period_start_date,
                 contract_duration: res.consumption.contract_duration ? res.consumption.contract_duration : "",
-                link: res.tc_attachment ? res.tc_attachment.file_path : "",
+                buyer_link: res.buyer_revv_tc_attachment ? res.buyer_revv_tc_attachment.file_path : "",
+                seller_link: res.seller_buyer_tc_attachment ? res.seller_buyer_tc_attachment.file_path : ""
             })
             if (res.consumption.participation_status === '1' || res.auction.publish_status === "1") {
                 $("input[type='checkbox']").attr("checked", true);
@@ -198,7 +200,7 @@ export class FillConsumption extends Component {
             totals: siteInfo.totals,
             peak_pct: siteInfo.peak_pct,
             attachment_ids: siteInfo.attachment_ids,
-            user_attachment:siteInfo.user_attachment
+            user_attachment: siteInfo.user_attachment
         };
 
         let entity = this.state.site_list;
@@ -252,7 +254,7 @@ export class FillConsumption extends Component {
                 peak_pct: item.peak_pct,
                 user_attachment_id: item.user_attachment_id,
                 attachment_ids: item.attachment_ids,
-                user_attachment:item.user_attachment
+                user_attachment: item.user_attachment
             }
             buyerlist.push(siteItem);
         })
@@ -456,9 +458,11 @@ export class FillConsumption extends Component {
                                                 <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
                                                 <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
                                                 <td className="left">
-                                                    <div><span>Total Monthly:</span><span className="textDecoration" >{parseInt(item.totals)}</span><span> kWh/month</span></div>
-                                                    <div><span>Peak:</span><span className="textDecoration">{parseFloat(item.peak_pct).toFixed(2)}</span><span> %</span><span style={{ fontWeight: "bold", fontSize: "14px" }} title="Click on '?' to see Admin's reference information on peak/offpeak ratio.">&nbsp;&nbsp;?</span></div>
-                                                    <div><span>Off-Peak:</span><span className="textDecoration">{parseFloat(100 - item.peak_pct).toFixed(2)}</span><span> %</span></div>
+                                                    <div><span>Total Monthly: </span><span className="textDecoration" >{parseInt(item.totals)}</span><span> kWh/month</span></div>
+                                                    <div><span>Peak: </span><span><span>{parseInt(Math.round(item.totals * (item.peak_pct) / 100))} kWh/month </span>({parseFloat(item.peak_pct).toFixed(2)}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
+                                                    <div><span>Off-Peak: </span><span>{item.totals - parseInt(Math.round(item.totals * (item.peak_pct) / 100))} kWh/month </span><span>({parseFloat(100 - item.peak_pct).toFixed(2)}%)</span></div>
+
+
                                                     <div className={item.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span>
                                                         <span>
                                                             <ul className="attachementList">
@@ -487,16 +491,16 @@ export class FillConsumption extends Component {
                             <div id="div_warning" className="warning">
                                 {
                                     this.state.dateIssuecount > 0 ?
-                                        <h4 className="lm--formItem lm--formItem--inline string" >
-                                            <input type="checkbox" id="chkBuyer" id="chk_Warning" required /> Warning:[{this.state.dateIssuecount}] account(s) detected to have expiry date on  or after new contract start date. Please tick the checkbox
-                                             to confirm that you aware and would like to proceed with including such account(s) in this auction.</h4> : <div></div>
+                                    <h4 className="lm--formItem lm--formItem--inline string chkBuyer" >
+                                    <input type="checkbox" id="chkBuyer" id="chk_Warning" required /><span>Warning:[{this.state.dateIssuecount}] account(s) detected to have expiry date on  or after new contract start date. Please tick the checkbox
+                                             to confirm that you aware and would like to proceed with including such account(s) in this auction.</span> </h4> : <div></div>
                                 }
                             </div>
-
                             <div>
                                 <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
                                     <input name="agree_declare" type="checkbox" id="chkAgree_declare" required />
-                                    <span>I declare that all data submited is true and shall be used for the auction, and that i am bounded by <a target="_blank" href={this.state.link} className="urlStyle">Buyer T&C.</a></span>
+                                    {/* <span>I declare that all data submited is true and shall be used for the auction, and that i am bounded by <a target="_blank" href={this.state.link} className="urlStyle">Buyer T&C.</a></span> */}
+                                    <span>I declare that all data submitted is true and shall be used for the auction, and that I am bounded by the <a target="_blank" href={this.state.buyer_link} className="urlStyleUnderline">Buyer Platform Terms of Use</a> and <a target="_blank" href={this.state.seller_link} className="urlStyleUnderline">Electricity Procurement Agreement</a>. </span>
                                 </h4>
                             </div>
                             <div className="buyer_btn">
