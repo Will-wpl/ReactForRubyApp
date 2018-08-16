@@ -24,8 +24,8 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     if !user.blank? && update_status_flag.eql?("1")
       if(user.approval_status == User::ApprovalStatusReject ||
           user.approval_status == User::ApprovalStatusRegistering ||
-          (user.company_name.downcase != update_user_params['company_name'].downcase ||
-              user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase ))
+          ( !user.company_name.blank? && user.company_name.downcase != update_user_params['company_name'].downcase) ||
+          ( !user.company_unique_entity_number && user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase ))
         update_user_params['approval_status'] = User::ApprovalStatusPending
         update_user_params['approval_date_time'] = DateTime.current
       end
@@ -199,7 +199,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
       if entity_user.blank?
         entity_user = User.new
         entity_user.name = target_buyer_entity.company_name
-        entity_user.email = target_buyer_entity.contact_email.downcase
+        entity_user.email = target_buyer_entity.contact_email
         entity_user.consumer_type = User::ConsumerTypeBuyerEntity
         entity_user.approval_status = User::ApprovalStatusDisable
         entity_user.approval_date_time = DateTime.current
