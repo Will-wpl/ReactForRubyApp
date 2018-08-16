@@ -434,17 +434,17 @@ upload(type, index){
             <tbody>
             <tr>
                 <td>Peak<br/>(7am-7pm)</td>
-                <td >{data.total_lt_peak ? formatPower(parseInt(Number(data.total_lt_peak)), 0, '') : 0}</td>
-                <td >{data.total_hts_peak ? formatPower(parseInt(Number(data.total_hts_peak)), 0, '') : 0}</td>
-                <td >{data.total_htl_peak ? formatPower(parseInt(Number(data.total_htl_peak)), 0, '') : 0}</td>
-                <td >{data.total_eht_peak ? formatPower(parseInt(Number(data.total_eht_peak)), 0, '') : 0}</td>
+                <td >{data.total_lt_peak ? formatPower(parseInt(Math.round(Number(data.total_lt_peak))), 0, '') : 0}</td>
+                <td >{data.total_hts_peak ? formatPower(parseInt(Math.round(Number(data.total_hts_peak))), 0, '') : 0}</td>
+                <td >{data.total_htl_peak ? formatPower(parseInt(Math.round(Number(data.total_htl_peak))), 0, '') : 0}</td>
+                <td >{data.total_eht_peak ? formatPower(parseInt(Math.round(Number(data.total_eht_peak))), 0, '') : 0}</td>
             </tr>
             <tr>
                 <td>Off-Peak<br/>(7pm-7am)</td>
-                <td >{data.total_lt_off_peak ? formatPower(parseInt(Number(data.total_lt_off_peak)), 0, '') : 0}</td>
-                <td >{data.total_hts_off_peak ? formatPower(parseInt(Number(data.total_hts_off_peak)), 0, '') : 0}</td>
-                <td >{data.total_htl_off_peak ? formatPower(parseInt(Number(data.total_htl_off_peak)), 0, '') : 0}</td>
-                <td >{data.total_eht_off_peak ? formatPower(parseInt(Number(data.total_eht_off_peak)), 0, '') : 0}</td>
+                <td >{data.total_lt_off_peak ? formatPower(parseInt(Math.round(Number(data.total_lt_off_peak))), 0, '') : 0}</td>
+                <td >{data.total_hts_off_peak ? formatPower(parseInt(Math.round(Number(data.total_hts_off_peak))), 0, '') : 0}</td>
+                <td >{data.total_htl_off_peak ? formatPower(parseInt(Math.round(Number(data.total_htl_off_peak))), 0, '') : 0}</td>
+                <td >{data.total_eht_off_peak ? formatPower(parseInt(Math.round(Number(data.total_eht_off_peak))), 0, '') : 0}</td>
             </tr>
             </tbody>
         </table>
@@ -459,7 +459,9 @@ render() {
     }else{
         url = "/admin/auctions/published"
     }
+    console.log( this.state.auction.auction_contracts)
     return (
+      
         <div className="u-grid admin_invitation">
             {this.state.publish_status === "1"?<TimeCuntDown auction={this.state.auction} countDownOver={()=>{this.setState({disabled:true})}} timehidden="countdown_seconds"/>:''}
             {sessionStorage.isAuctionId === "yes"
