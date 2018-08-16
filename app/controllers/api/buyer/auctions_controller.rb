@@ -62,7 +62,7 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
                                                             :auction_result => auction_result,
                                                             :current_user => current_user
                                                         }).pdf
-      elsif current_user_consumption.accept_status != '1'
+      elsif current_user_consumption.accept_status != Consumption::AcceptStatusApproved
         pdf_filename, output_filename = PdfUtils.get_no_data_pdf("LETTER", :portrait, 'NO_DATA_BUYER_REPORT.pdf')
       else
         auction_result = AuctionResultContract.find_by auction_id: auction.id, contract_duration: current_user_consumption.contract_duration
