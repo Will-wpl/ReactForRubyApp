@@ -35,7 +35,7 @@ export default class AdminComsumptionList extends Component {
             this.props.detail(index, id);
         }
     }
-    getPurchase(id,index) {
+    getPurchase(id, index) {
         let name = "";
         if (this.state.comsumption_list[index].entities.length > 0) {
             for (let i = 0; i < this.state.comsumption_list[index].entities.length; i++) {
@@ -89,28 +89,28 @@ export default class AdminComsumptionList extends Component {
                                                     <td>{it.account_number}</td>
                                                     <td>{it.existing_plan}</td>
                                                     <td>{it.contract_expiry !== "" ? moment(it.contract_expiry).format('YYYY-MM-DD') : "—"}</td>
-                                                    <td>{this.getPurchase(it.company_buyer_entity_id,index)}</td>
+                                                    <td>{this.getPurchase(it.company_buyer_entity_id, index)}</td>
                                                     <td>{it.intake_level}</td>
                                                     <td>{it.contracted_capacity ? parseInt(it.contracted_capacity) : '—'}</td>
                                                     <td>{it.blk_or_unit} {it.street} {it.unit_number} {it.postal_code} </td>
                                                     <td className="left">
                                                         <div><span>Total Monthly: </span><span className="textDecoration" >{parseInt(it.totals)}</span><span> kWh/month</span></div>
-                                                        <div><span>Peak: </span><span><span>{parseInt(Math.round(it.totals*(it.peak_pct)/100))} kWh/month </span>({parseFloat(it.peak_pct).toFixed(2)}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
-                                                        <div><span>Off-Peak: </span><span>{(it.totals-parseInt(Math.round(it.totals*(it.peak_pct)/100)))} kWh/month </span><span>({parseFloat(100 - it.peak_pct).toFixed(2)}%)</span></div>
+                                                        <div><span>Peak: </span><span><span>{it.peak} kWh/month </span>({parseFloat(it.peak_pct).toFixed(2)}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
+                                                        <div><span>Off-Peak: </span><span>{it.off_peak} kWh/month </span><span>({parseFloat(100 - it.peak_pct).toFixed(2)}%)</span></div>
                                                         <div className={it.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span>
-                                                        <span>
-                                                            <ul className="attachementList">
-                                                                {
-                                                                    it.user_attachment ? it.user_attachment.map((item, i) => {
-                                                                        return <li key={i}>
-                                                                            <a href={item.file_path ? item.file_path : "#"} target="_blank">{item.file_name ? item.file_name : ""}</a>
-                                                                        </li>
-                                                                    }) :
-                                                                        <li> </li>
-                                                                }
-                                                            </ul>
-                                                        </span>
-                                                    </div>
+                                                            <span>
+                                                                <ul className="attachementList">
+                                                                    {
+                                                                        it.user_attachment ? it.user_attachment.map((item, i) => {
+                                                                            return <li key={i}>
+                                                                                <a href={item.file_path ? item.file_path : "#"} target="_blank">{item.file_name ? item.file_name : ""}</a>
+                                                                            </li>
+                                                                        }) :
+                                                                            <li> </li>
+                                                                    }
+                                                                </ul>
+                                                            </span>
+                                                        </div>
                                                     </td>
                                                 </tr>)
                                             })}
