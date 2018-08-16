@@ -31,24 +31,24 @@ render() {
                <tbody>
                    <tr>
                        <td>Peak<br/>(7am-7pm)</td>
-                       <td >{formatPower(parseInt(Number(this.props.price.lt_peak)), 0, '')}</td>
-                       <td >{formatPower(parseInt(Number(this.props.price.hts_peak)), 0, '')}</td>
-                       <td >{formatPower(parseInt(Number(this.props.price.htl_peak)), 0, '')}</td>
-                       <td >{formatPower(parseInt(Number(this.props.price.eht_peak)), 0, '')}</td>
+                       <td >{formatPower(parseInt(Math.round(Number(this.props.price.lt_peak))), 0, '')}</td>
+                       <td >{formatPower(parseInt(Math.round(Number(this.props.price.hts_peak))), 0, '')}</td>
+                       <td >{formatPower(parseInt(Math.round(Number(this.props.price.htl_peak))), 0, '')}</td>
+                       <td >{formatPower(parseInt(Math.round(Number(this.props.price.eht_peak))), 0, '')}</td>
                    </tr>
                    <tr>
                        <td>Off-Peak<br/>(7pm-7am)</td>
-                       <td >{formatPower(parseInt(Number(this.props.price.lt_off_peak)), 0, '')}</td>
-                       <td >{formatPower(parseInt(Number(this.props.price.hts_off_peak)), 0, '')}</td>
-                       <td >{formatPower(parseInt(Number(this.props.price.htl_off_peak)), 0, '')}</td>
-                       <td >{formatPower(parseInt(Number(this.props.price.eht_off_peak)), 0, '')}</td>
+                       <td >{formatPower(parseInt(Math.round(Number(this.props.price.lt_off_peak))), 0, '')}</td>
+                       <td >{formatPower(parseInt(Math.round(Number(this.props.price.hts_off_peak))), 0, '')}</td>
+                       <td >{formatPower(parseInt(Math.round(Number(this.props.price.htl_off_peak))), 0, '')}</td>
+                       <td >{formatPower(parseInt(Math.round(Number(this.props.price.eht_off_peak))), 0, '')}</td>
                    </tr>
                    <tr>
                        <td>Total</td>
-                       <td>{formatPower(parseInt(Number(this.props.price.lt_peak))+parseInt(Number(this.props.price.lt_off_peak)),0,'')}</td>
-                       <td>{formatPower(parseInt(Number(this.props.price.hts_peak))+parseInt(Number(this.props.price.hts_off_peak)),0,'')}</td>
-                       <td>{formatPower(parseInt(Number(this.props.price.htl_peak))+parseInt(Number(this.props.price.htl_off_peak)),0,'')}</td>
-                       <td>{formatPower(parseInt(Number(this.props.price.eht_peak))+parseInt(Number(this.props.price.eht_off_peak)),0,'')}</td>
+                       <td>{formatPower(parseInt(Math.round(Number(this.props.price.lt_peak)))+parseInt(Math.round(Number(this.props.price.lt_off_peak))),0,'')}</td>
+                       <td>{formatPower(parseInt(Math.round(Number(this.props.price.hts_peak)))+parseInt(Math.round(Number(this.props.price.hts_off_peak))),0,'')}</td>
+                       <td>{formatPower(parseInt(Math.round(Number(this.props.price.htl_peak)))+parseInt(Math.round(Number(this.props.price.htl_off_peak))),0,'')}</td>
+                       <td>{formatPower(parseInt(Math.round(Number(this.props.price.eht_peak)))+parseInt(Math.round(Number(this.props.price.eht_off_peak))),0,'')}</td>
                    </tr>
                </tbody>
            </table>
