@@ -393,7 +393,6 @@ export class FillConsumption extends Component {
     }
 
     render() {
-        console.log(this.state.site_list)
         return (
             <div>
                 <h1>Buyer Participation</h1>
@@ -460,8 +459,8 @@ export class FillConsumption extends Component {
                                                 <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
                                                 <td className="left">
                                                     <div><span>Total Monthly: </span><span className="textDecoration" >{parseInt(item.totals)}</span><span> kWh/month</span></div>
-                                                    <div><span>Peak: </span><span><span>{item.peak} kWh/month </span>({parseFloat(item.peak_pct).toFixed(2)}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
-                                                    <div><span>Off-Peak: </span><span>{item.off_peak} kWh/month </span><span>({parseFloat(100 - item.peak_pct).toFixed(2)}%)</span></div>
+                                                    <div><span>Peak: </span><span><span>{parseInt(item.totals * (item.peak_pct) / 100)} kWh/month </span>({parseFloat(item.peak_pct).toFixed(2)}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
+                                                    <div><span>Off-Peak: </span><span>{item.totals - parseInt(item.totals * (item.peak_pct) / 100)} kWh/month </span><span>({parseFloat(100 - item.peak_pct).toFixed(2)}%)</span></div>
 
 
                                                     <div className={item.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span>
