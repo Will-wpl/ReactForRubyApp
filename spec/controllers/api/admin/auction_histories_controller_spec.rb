@@ -115,7 +115,7 @@ RSpec.describe Api::Admin::AuctionHistoriesController, type: :controller do
           expect(response).to be_success
           list_body = JSON.parse(response.body)
           expect(list_body.size).to eq(2)
-          expect(list_body['duration_6'].size).to eq(3)
+          expect(list_body['duration_6'].size).to eq(4)
           # expect(list_body['duration_6'])
         end
       end
@@ -131,7 +131,7 @@ RSpec.describe Api::Admin::AuctionHistoriesController, type: :controller do
         it "got auction history last list" do
           expect(response).to be_success
           list_body = JSON.parse(response.body)
-          expect(list_body.size).to eq(3)
+          expect(list_body.size).to eq(4)
         end
       end
     end
