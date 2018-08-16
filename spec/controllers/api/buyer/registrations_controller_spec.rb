@@ -143,18 +143,21 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
 
     describe 'Put update' do
       def do_request
-        buyer_entity_1 = CompanyBuyerEntity.new
-        buyer_entity_1.company_name = 'Test_Company_Name_1'
-        buyer_entity_1.company_uen = 'Test_Company_UEN_1'
-        buyer_entity_1.company_address = 'Test_Company_Address_1'
-        buyer_entity_1.is_default = 1
 
-        buyer_entity_2 = CompanyBuyerEntity.new
-        buyer_entity_2.company_name = 'Test_Company_Name_2'
-        buyer_entity_2.company_uen = 'Test_Company_UEN_2'
-        buyer_entity_2.company_address = 'Test_Company_Address_2'
-
-        buyer_entities = [buyer_entity_1, buyer_entity_2]
+        buyer_entities = [{ company_name: 'AA',
+                            company_uen: 'Test UEN AA',
+                            contact_email: 'test_email3@email.com',
+                            main_id: nil,
+                            user_id: company_buyer.id,
+                            user_entity_id: nil,
+                            is_default: 1},
+                          { company_name: 'BB',
+                            company_uen: 'Test UEN BB',
+                            contact_email: 'test_email2@email.com',
+                            main_id: nil,
+                            user_id: company_buyer.id,
+                            user_entity_id: nil,
+                            is_default: 0} ]
 
         put :update, params: { id: company_buyer.id,
                                update_status_flag: 1,
@@ -177,40 +180,7 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
       end
     end
 
-    describe 'Put update with foreign key error' do
-      def do_request
-        buyer_entity_1 = CompanyBuyerEntity.new
-        buyer_entity_1.company_name = 'Test_Company_Name_1'
-        buyer_entity_1.company_uen = 'Test_Company_UEN_1'
-        buyer_entity_1.company_address = 'Test_Company_Address_1'
-        buyer_entity_1.is_default = 1
 
-        buyer_entity_2 = CompanyBuyerEntity.new
-        buyer_entity_2.user_id = company_buyer.id
-        buyer_entity_2.company_name = 'Test_Company_Name_2'
-        buyer_entity_2.company_uen = 'Test_Company_UEN_2'
-        buyer_entity_2.company_address = 'Test_Company_Address_2'
-        buyer_entity_2.save!
-
-        auction = create(:auction, :for_next_month, :upcoming, :published, :started, contract_period_start_date: '2018-07-01')
-        consumption =create(:consumption, user: company_buyer, auction: auction, participation_status: '1')
-        create(:consumption_detail, :for_lt, consumption_id: consumption.id, company_buyer_entity_id: buyer_entity_2.id)
-
-        buyer_entities = [buyer_entity_1]
-
-        put :sign_up, params: { id: company_buyer.id,
-                                user: { agree_seller_buyer: '1',
-                                        agree_buyer_revv: '0' },
-                                buyer_entities: buyer_entities.to_json }
-      end
-      before { do_request }
-      it 'success' do
-        hash_body = JSON.parse(response.body)
-        expect(hash_body['result']).to have_content('failed')
-        expect(hash_body).to have_content('message')
-        expect(response).to have_http_status(:ok)
-      end
-    end
 
     describe 'Put sign up' do
       def do_request
