@@ -22,6 +22,20 @@ class ApplicationController < ActionController::Base
     has_lt || has_hts || has_htl || has_eht
   end
 
+  def get_unpublished_auction_contracts(auction)
+    contracts = auction.auction_contracts.sort_by {|contract| contract.contract_duration.to_i}
+    auction_contracts = []
+    contracts.each do |contract|
+      new_contract = contract.attributes.dup
+      new_contract[:has_lt] = true
+      new_contract[:has_hts] = true
+      new_contract[:has_htl] = true
+      new_contract[:has_eht] = true
+      auction_contracts.push(new_contract)
+    end
+    auction_contracts
+  end
+
   def get_lived_auction_contracts(auction, is_admin)
     contracts = auction.auction_contracts.sort_by {|contract| contract.contract_duration.to_i}
     auction_contracts = []
