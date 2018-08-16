@@ -28,26 +28,26 @@ export class RetailerBeforeLive extends Component {
                     <thead>
                     <tr>
                         <th></th>
-                        {data.has_lt?<th>LT</th>:<th style={{display:"none"}}></th>}
-                        {data.has_hts?<th>HTS</th>:<th style={{display:"none"}}></th>}
-                        {data.has_htl?<th>HTL</th>:<th style={{display:"none"}}></th>}
-                        {data.has_eht?<th>EHT</th>:<th style={{display:"none"}}></th>}
+                        {data.has_lt?(data.starting_price_lt_peak==0 && data.starting_price_lt_off_peak==0?<th style={{display:"none"}}></th>:<th>LT</th>):<th style={{display:"none"}}></th>}
+                        {data.has_hts?(data.starting_price_hts_peak==0 && data.starting_price_hts_off_peak==0?<th style={{display:"none"}}></th>:<th>HTS</th>):<th style={{display:"none"}}></th>}
+                        {data.has_htl?(data.starting_price_htl_peak==0 && data.starting_price_htl_off_peak==0?<th style={{display:"none"}}></th>:<th>HTL</th>):<th style={{display:"none"}}></th>}
+                        {data.has_eht?(data.starting_price_eht_peak==0 && data.starting_price_eht_off_peak==0?<th style={{display:"none"}}></th>:<th>EHT</th>):<th style={{display:"none"}}></th>}
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
                         <td>Peak</td>
-                        {data.has_lt?<td>{parseFloat(data.starting_price_lt_peak).toFixed(4)}$/kWh</td>:<td style={{display:"none"}}></td>}
-                        {data.has_hts?<td>{parseFloat(data.starting_price_hts_peak).toFixed(4)}$/kWh</td>:<td style={{display:"none"}}></td>}
-                        {data.has_htl?<td>{parseFloat(data.starting_price_htl_peak).toFixed(4)}$/kWh</td>:<td style={{display:"none"}}></td>}
-                        {data.has_eht?<td>{parseFloat(data.starting_price_eht_peak).toFixed(4)}$/kWh</td>:<td style={{display:"none"}}></td>}
+                        {data.has_lt?(data.starting_price_lt_peak==0 && data.starting_price_lt_off_peak==0?<td style={{display:"none"}}></td>:<td>{parseFloat(data.starting_price_lt_peak).toFixed(4)}$/kWh</td>):<td style={{display:"none"}}></td>}
+                        {data.has_lt?(data.starting_price_hts_peak==0 && data.starting_price_hts_off_peak==0?<td style={{display:"none"}}></td>:<td>{parseFloat(data.starting_price_hts_peak).toFixed(4)}$/kWh</td>):<td style={{display:"none"}}></td>}
+                        {data.has_lt?(data.starting_price_htl_peak==0 && data.starting_price_htl_off_peak==0?<td style={{display:"none"}}></td>:<td>{parseFloat(data.starting_price_htl_peak).toFixed(4)}$/kWh</td>):<td style={{display:"none"}}></td>}
+                        {data.has_lt?(data.starting_price_eht_peak==0 && data.starting_price_eht_off_peak==0?<td style={{display:"none"}}></td>:<td>{parseFloat(data.starting_price_eht_peak).toFixed(4)}$/kWh</td>):<td style={{display:"none"}}></td>}
                     </tr>
                     <tr>
                         <td>Off Peak</td>
-                        {data.has_lt?<td>{parseFloat(data.starting_price_lt_off_peak).toFixed(4)}$/kWh</td>:<td style={{display:"none"}}></td>}
-                        {data.has_hts?<td>{parseFloat(data.starting_price_hts_off_peak).toFixed(4)}$/kWh</td>:<td style={{display:"none"}}></td>}
-                        {data.has_htl?<td>{parseFloat(data.starting_price_htl_off_peak).toFixed(4)}$/kWh</td>:<td style={{display:"none"}}></td>}
-                        {data.has_eht?<td>{parseFloat(data.starting_price_eht_off_peak).toFixed(4)}$/kWh</td>:<td style={{display:"none"}}></td>}
+                        {data.has_lt?(data.starting_price_lt_peak==0 && data.starting_price_lt_off_peak==0?<td style={{display:"none"}}></td>:<td>{parseFloat(data.starting_price_lt_off_peak).toFixed(4)}$/kWh</td>):<td style={{display:"none"}}></td>}
+                        {data.has_lt?(data.starting_price_hts_peak==0 && data.starting_price_hts_off_peak==0?<td style={{display:"none"}}></td>:<td>{parseFloat(data.starting_price_hts_off_peak).toFixed(4)}$/kWh</td>):<td style={{display:"none"}}></td>}
+                        {data.has_lt?(data.starting_price_htl_peak==0 && data.starting_price_htl_off_peak==0?<td style={{display:"none"}}></td>:<td>{parseFloat(data.starting_price_htl_off_peak).toFixed(4)}$/kWh</td>):<td style={{display:"none"}}></td>}
+                        {data.has_lt?(data.starting_price_eht_peak==0 && data.starting_price_eht_off_peak==0?<td style={{display:"none"}}></td>:<td>{parseFloat(data.starting_price_eht_off_peak).toFixed(4)}$/kWh</td>):<td style={{display:"none"}}></td>}
                     </tr>
                     </tbody>
                 </table>

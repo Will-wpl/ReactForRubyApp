@@ -117,7 +117,6 @@ export class BuyerRegister extends Component {
         let fileObj, entityObj;
         fileObj = this.state.fileData;
         entityObj = this.state.user_entity_data;
-
         if (param.user_base_info) {
             let item = param.user_base_info;
             this.setState({
@@ -349,7 +348,8 @@ export class BuyerRegister extends Component {
                 contact_email: this.state.user_contact_email,
                 contact_mobile_no: this.state.user_contact_mobile_no,
                 contact_office_no: this.state.user_contact_office_no,
-                is_default: 1
+                is_default: 1,
+                user_id:this.state.id
             }
         ];
 
@@ -368,7 +368,8 @@ export class BuyerRegister extends Component {
                     contact_email: item.contact_email,
                     contact_mobile_no: item.contact_mobile_no,
                     contact_office_no: item.contact_office_no,
-                    is_default: 0
+                    is_default: 0, 
+                   user_id:this.state.id
                 }
                 entity.push(paramObj);
             })
