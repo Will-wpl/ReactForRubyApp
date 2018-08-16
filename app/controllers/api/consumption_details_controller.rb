@@ -252,7 +252,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
         consumption_detail.existing_plan = detail['existing_plan']
         consumption_detail.totals = detail['totals']
         consumption_detail.peak_pct = detail['peak_pct']
-        consumption_detail.peak = detail['totals'].to_f * detail['peak_pct'].to_f / 100.round() unless detail['peak_pct'].blank?
+        consumption_detail.peak = (detail['totals'].to_f * detail['peak_pct'].to_f / 100).round() unless detail['peak_pct'].blank?
         consumption_detail.off_peak = detail['totals'].to_i - consumption_detail.peak unless detail['peak_pct'].blank?
         consumption_detail.contract_expiry = detail['contract_expiry']
         consumption_detail.blk_or_unit = detail['blk_or_unit']
