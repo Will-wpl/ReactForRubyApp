@@ -230,16 +230,17 @@ export class CreateNewRA extends Component {
         })
     }
     timeChange(data) {
+        console.log(data)
         this.setState({
             start_datetime: data
         })
-        if (this.state.startDate != '') {
-            if ((data - this.state.startDate) >= 0) {
-                this.setState({
-                    startDate: ''
-                })
-            }
-        }
+        // if (this.state.startDate != '') {
+        //     if ((data - this.state.startDate) >= 0) {
+        //         this.setState({
+        //             startDate: ''
+        //         })
+        //     }
+        // }
         if (this.state.endDate != '') {
             if ((data - this.state.endDate) >= 0) {
                 this.setState({
