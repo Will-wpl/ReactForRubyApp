@@ -25,8 +25,8 @@ export class CreateNewRA extends Component {
             disabled:false,live_modal:"",live_modal_do:"",holdOrend:"",checkArray:[],
             contract_duration_6:false,contract_duration_12:false,contract_duration_24:false,
             required:false,check_required:true,single_multiple:"1",allow_deviation:"1",
-            contract_6:'0',contract_12:'0',contract_24:'0',single_truely:false,published_date_time:''
-
+            contract_6:'0',contract_12:'0',contract_24:'0',single_truely:false,published_date_time:'',
+            reverse_auction_end:''
         }
 
         this.auction = {};
@@ -40,6 +40,7 @@ export class CreateNewRA extends Component {
         for(let i=1; i<121; i++){
             this.hours.push(i);
         }
+        
     }
     componentDidMount() {
         if(this.props.left_name){//eidt
@@ -175,6 +176,7 @@ export class CreateNewRA extends Component {
         })
     }
     starttimeChange(data) {
+        console.log(data);
         if(this.state.endDate != ''){
         let selectDay = new Date(data.format());
         let endDay = new Date(this.state.endDate.format());
@@ -188,11 +190,15 @@ export class CreateNewRA extends Component {
                         endDate: data
                     });
                 }
+            
         }else{
             this.setState({
                 startDate: data
             })
         }
+        this.setState({
+            reverse_auction_end:moment(data)
+        })
         
     }
     endtimeChange(data) {
@@ -678,7 +684,7 @@ export class CreateNewRA extends Component {
                     <dd className="lm--formItem lm--formItem--inline string optional">
                         <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Date/Time of Reverse Auction :</span>
                         <label className="lm--formItem-right lm--formItem-control" id="start_datetime">
-                            <DatePicker selected={this.state.start_datetime} disabled={this.state.disabled} onKeyDown={this.noPermitInput.bind(this)} ref="start_datetime" shouldCloseOnSelect={true} name="start_datetime" showTimeSelect dateFormat="DD-MM-YYYY HH:mm" timeFormat="HH:mm" timeIntervals={1}  className="time_ico"  onChange = {this.timeChange} minDate={moment()} title="Time must not be in the past."  required aria-required="true"/>
+                            <DatePicker selected={this.state.start_datetime} disabled={this.state.disabled} onKeyDown={this.noPermitInput.bind(this)} ref="start_datetime" shouldCloseOnSelect={true} name="start_datetime" showTimeSelect dateFormat="DD-MM-YYYY HH:mm" timeFormat="HH:mm" timeIntervals={1}  className="time_ico"  onChange = {this.timeChange} minDate={moment()}  maxDate={this.state.reverse_auction_end} title="Time must not be in the past."  required aria-required="true"/>
                             <abbr ref="ra_duration_error" className="col">(SGT)</abbr>
                             <div className="required_error">Auction Date/time must bigger than current time</div>
                         </label>
