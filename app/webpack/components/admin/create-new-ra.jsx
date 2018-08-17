@@ -105,7 +105,7 @@ export class CreateNewRA extends Component {
                 // this.setState({
                 //     reverse_auction_end:moment(data)
                 // })
-                let arr = res.live_auction_contracts.length>0?
+                let arr = res.live_auction_contracts.length>0 && res.publish_status == '1'?
                     res.live_auction_contracts.map((item) => {return item.contract_duration;})
                     :res.auction_contracts.map((item) => {return item.contract_duration;})
                 this.setState({ checkArray: arr.sort(this.sortNumber), contractArray: res.auction_contracts });
