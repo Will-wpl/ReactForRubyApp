@@ -26,7 +26,8 @@ export class CreateNewRA extends Component {
             contract_duration_6: false, contract_duration_12: false, contract_duration_24: false,
             required: false, check_required: true, single_multiple: "1", allow_deviation: "1",
             contract_6: '0', contract_12: '0', contract_24: '0', single_truely: false, published_date_time: '',
-            reverse_auction_end: ''
+            reverse_auction_end: '',
+            live_auction_contracts: null
         }
 
         this.auction = {};
@@ -108,8 +109,14 @@ export class CreateNewRA extends Component {
                 // let arr = res.live_auction_contracts.length>0 && res.publish_status == '1'?
                 //     res.live_auction_contracts.map((item) => {return item.contract_duration;})
                 //     :res.auction_contracts.map((item) => {return item.contract_duration;})
-                let arr = res.auction_contracts.map((item) => {return item.contract_duration;})
+                let arr = res.auction_contracts.map((item) => { return item.contract_duration; })
                 this.setState({ checkArray: arr.sort(this.sortNumber), contractArray: res.auction_contracts });
+
+                this.setState({ live_auction_contracts: res.live_auction_contracts });
+                console.log("this.state.live_auction_contracts");
+                console.log(this.state.live_auction_contracts);
+                console.log("res");
+                console.log(res)
                 res.auction_contracts.map((item) => {
                     let index = item.contract_duration;
                     switch (index) {
@@ -342,7 +349,20 @@ export class CreateNewRA extends Component {
         obj.target.value = findUpLimitZero(obj.target.value);
     }
     mouthsHtml(mouth) {
-        const html = <div key={mouth}>
+        let months = []
+        let flag = false;
+        if (this.state.live_auction_contracts) {
+            this.state.live_auction_contracts.map((item) => {
+                months.push(item.contract_duration)
+            })
+            if (this.state.live_auction_contracts.length > 0 && this.auction.publish_status == '1' && months.indexOf(mouth) == -1) {
+                flag = true
+            } else {
+                flag = false
+            }
+        }
+
+        const html = <div key={mouth} className={flag ? 'isHide' : 'isDisplay'}>
             <h3 className={"u-mt2 u-mb2"}>{mouth} months</h3>
             <div className="lm--formItem lm--formItem--inline string optional">
                 <table className="retailer_fill" cellPadding="0" cellSpacing="0">
