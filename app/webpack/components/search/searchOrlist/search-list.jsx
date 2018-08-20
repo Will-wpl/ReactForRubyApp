@@ -228,14 +228,16 @@ export class SearchList extends Component {
                                                 {
                                                     this.props.table_data.headers.map((it,i)=>{
                                                         if(it.field_name === 'select_action'){
+                                                            console.log(item[`lock`])
                                                             return <td key={i}>
-                                                                    {item[`${it.field_name}`] === null 
+                                                                    {item[`lock`] === false ?
+                                                                        item[`${it.field_name}`] === null 
                                                                         ? <span className={'invite'} onClick={this.doinvite.bind(this,'invite',item.user_id)}>Invite</span> 
                                                                         :(
                                                                             item[`select_status`] === '2' 
                                                                             ? <span className={'cancel_invite'} onClick={this.doinvite.bind(this,'not_invite',item.user_id,item.select_action)}>Cancel Invite</span>
                                                                             : (item[`select_status`] === null ? <span className={'invite'} onClick={this.doinvite.bind(this,'invite',item.user_id)}>Invite</span>  : '')
-                                                                        )
+                                                                        ):''
                                                                     }
                                                                    </td>
                                                         }else if(it.field_name === 'select_status'){
