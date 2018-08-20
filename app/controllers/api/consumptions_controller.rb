@@ -95,7 +95,7 @@ class Api::ConsumptionsController < Api::BaseController
         @consumption.action_status = Consumption::ActionStatusPending
         @consumption.participation_status = Consumption::ParticipationStatusPending
         #update - new field (20180711) - Start
-        @consumption.accept_status = Consumption::AcceptStatusPending
+        # @consumption.accept_status = Consumption::AcceptStatusPending
         #update - new field (20180711) - End
         @consumption.save
         render json: @consumption, status: 201
