@@ -258,7 +258,6 @@ export class FillConsumption extends Component {
             }
             buyerlist.push(siteItem);
         })
-        console.log(buyerlist);
         makeData = {
             consumption_id: this.consumptions_id,
             details: JSON.stringify(buyerlist),
