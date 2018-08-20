@@ -60,6 +60,7 @@ class User < ApplicationRecord
   # Scopes
   scope :retailers, -> { includes(:roles).where(roles: { name: 'retailer' }) }
   scope :retailer_approved, -> { where(approval_status: ApprovalStatusApproved) } # "approval_status = '1'"
+  scope :buyer_approved, -> { where(approval_status: ApprovalStatusApproved) }
   scope :buyers, -> { includes(:roles).where(roles: { name: 'buyer' }) }
   scope :buyer_entities, -> { includes(:roles).where(roles: { name: 'entity' }) }
   scope :tenants, -> { includes(:roles).where(roles: { name: 'tenant' }) }

@@ -89,14 +89,17 @@ class Api::ConsumptionsController < Api::BaseController
       if Consumption.find_by_auction_and_user(params[:auction_id], params[:user_id]).exists?
         render json: { message: 'consumption exist' }, status: 200
       else
+        auction = Auction.find(params[:auction_id])
+        if auction.buyer_type == Auction::SingleBuyerType
+          auction.consumptions.destroy_all
+        end
         @consumption = Consumption.new
         @consumption.auction_id = params[:auction_id]
         @consumption.user_id = params[:user_id]
         @consumption.action_status = Consumption::ActionStatusPending
         @consumption.participation_status = Consumption::ParticipationStatusPending
         #update - new field (20180711) - Start
-        @consumption.accept_status = Consumption::AcceptStatusPending
-        @consumption.approval_date_time = Time.current
+        # @consumption.accept_status = Consumption::AcceptStatusPending
         #update - new field (20180711) - End
         @consumption.save
         render json: @consumption, status: 201
