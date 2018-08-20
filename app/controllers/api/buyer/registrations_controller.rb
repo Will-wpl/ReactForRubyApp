@@ -24,8 +24,8 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     if !user.blank? && update_status_flag.eql?("1")
       if(user.approval_status == User::ApprovalStatusReject ||
           user.approval_status == User::ApprovalStatusRegistering ||
-          (user.company_name.downcase != update_user_params['company_name'].downcase ||
-              user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase ))
+          ( !user.company_name.blank? && user.company_name.downcase != update_user_params['company_name'].downcase) ||
+          ( !user.company_unique_entity_number && user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase ))
         update_user_params['approval_status'] = User::ApprovalStatusPending
         update_user_params['approval_date_time'] = DateTime.current
       end
@@ -37,7 +37,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
       @user.update(update_user_params)
       # update buyer entity registration information
       # buyer_entities.push(build_default_entity( update_user_params )) unless buyer_entities.any?{ |v| v['is_default'] == 1 }
-      saved_entities = update_buyer_entities(buyer_entities)
+      saved_entities = update_buyer_entities(buyer_entities,true)
     end
 
     render json: { result: 'success', user: @user, entities: saved_entities }, status: 200
@@ -199,7 +199,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
       if entity_user.blank?
         entity_user = User.new
         entity_user.name = target_buyer_entity.company_name
-        entity_user.email = target_buyer_entity.contact_email.downcase
+        entity_user.email = target_buyer_entity.contact_email
         entity_user.consumer_type = User::ConsumerTypeBuyerEntity
         entity_user.approval_status = User::ApprovalStatusDisable
         entity_user.approval_date_time = DateTime.current
@@ -270,13 +270,60 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     buyer_entities.each_index do |index|
       buyer_entity = buyer_entities[index]
 
-      if buyer_entity['is_default'].equal?(1) && user.any?{ |v| v.email == buyer_entity['contact_email'] && v.id != buyer_entity['user_id'] }
+      if buyer_entity['is_default'].equal?(1) &&
+          !buyer_entity['contact_email'].blank? &&
+          user.any?{ |v| !v.email.blank? && v.email.downcase == buyer_entity['contact_email'].downcase &&
+          !buyer_entity['user_id'].blank? &&
+          v.id != buyer_entity['user_id'] }
         entity_indexes.push({'entity_index' => index, 'error_field_name' => 'contact_email'})
-      elsif !buyer_entity['is_default'].equal?(1) && user.any?{ |v| v.email == buyer_entity['contact_email'] && v.id != buyer_entity['user_entity_id'] }
+      end
+      if buyer_entity['is_default'].equal?(1) &&
+          !buyer_entity['contact_email'].blank? &&
+          user.any?{ |v| !v.email.blank? && v.email.downcase == buyer_entity['contact_email'].downcase &&
+          buyer_entity['user_id'].blank? &&
+          v.id != buyer['id'] }
         entity_indexes.push({'entity_index' => index, 'error_field_name' => 'contact_email'})
-      elsif !buyer_entity['is_default'].equal?(1) && user.any?{ |v| v.company_name == buyer_entity['company_name'] && v.id != buyer_entity['user_entity_id'] }
+      end
+      if !buyer_entity['is_default'].equal?(1) &&
+          !buyer_entity['contact_email'].blank? &&
+          user.any?{ |v| !v.email.blank? && v.email.downcase == buyer_entity['contact_email'].downcase &&
+          !buyer_entity['user_entity_id'].blank? &&
+          v.id != buyer_entity['user_entity_id'] }
+        entity_indexes.push({'entity_index' => index, 'error_field_name' => 'contact_email'})
+      end
+      if !buyer_entity['is_default'].equal?(1) &&
+          !buyer_entity['contact_email'].blank? &&
+          user.any?{ |v| !v.email.blank? && v.email.downcase == buyer_entity['contact_email'].downcase &&
+          buyer_entity['user_id'].blank? &&
+          v.id != buyer['id'] }
+        entity_indexes.push({'entity_index' => index, 'error_field_name' => 'contact_email'})
+      end
+      if !buyer_entity['is_default'].equal?(1) &&
+          !buyer_entity['company_name'].blank? &&
+          user.any?{ |v| !v.company_name.blank? && v.company_name.downcase == buyer_entity['company_name'].downcase &&
+          !buyer_entity['user_entity_id'].blank? &&
+          v.id != buyer_entity['user_entity_id'] }
         entity_indexes.push({'entity_index' => index, 'error_field_name' => 'company_name'})
-      elsif !buyer_entity['is_default'].equal?(1) && user.any?{ |v| v.company_unique_entity_number == buyer_entity['company_uen'] && v.id != buyer_entity['user_entity_id'] }
+      end
+      if !buyer_entity['is_default'].equal?(1) &&
+          !buyer_entity['company_name'].blank? &&
+          user.any?{ |v| !v.company_name.blank? && v.company_name.downcase == buyer_entity['company_name'].downcase &&
+          buyer_entity['user_entity_id'].blank? &&
+          v.id != buyer['id'] }
+        entity_indexes.push({'entity_index' => index, 'error_field_name' => 'company_name'})
+      end
+      if !buyer_entity['is_default'].equal?(1) &&
+          !buyer_entity['company_uen'].blank? &&
+          user.any?{ |v| !v.company_unique_entity_number.blank? && v.company_unique_entity_number.downcase == buyer_entity['company_uen'].downcase &&
+          !buyer_entity['user_entity_id'].blank? &&
+          v.id != buyer_entity['user_entity_id'] }
+        entity_indexes.push({'entity_index' => index, 'error_field_name' => 'company_uen'})
+      end
+      if !buyer_entity['is_default'].equal?(1) &&
+          !buyer_entity['company_uen'].blank? &&
+          user.any?{ |v| !v.company_unique_entity_number.blank? && v.company_unique_entity_number.downcase == buyer_entity['company_uen'].downcase &&
+          buyer_entity['user_entity_id'].blank? &&
+          v.id != buyer['id'] }
         entity_indexes.push({'entity_index' => index, 'error_field_name' => 'company_uen'})
       end
 

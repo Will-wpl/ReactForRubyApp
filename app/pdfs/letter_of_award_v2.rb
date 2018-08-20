@@ -45,12 +45,14 @@ class LetterOfAwardV2 < LetterOfAward
 
   def get_intake_level_data(intake_level, param)
     consumption_details = param[:consumption_details]
+    peak, off_peak = 0.0, 0.0
     consumption_details.each {|item|
       if item.intake_level === intake_level
-        return item.peak, item.off_peak
+        peak += item.peak
+        off_peak += item.off_peak
       end
     }
-    return 0.0, 0.0
+    return peak, off_peak
   end
 
   def get_premise_address(consumption_detail)

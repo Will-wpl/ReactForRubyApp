@@ -763,6 +763,12 @@ class Api::AuctionsController < Api::BaseController
     end
 
     auction_json = auction.attributes.dup
+    if auction.publish_status == Auction::PublishStatusPublished
+      auction_json[:aggregate_auction_contracts] = live_auction_contracts
+    else
+      auction_json[:aggregate_auction_contracts] = get_unpublished_auction_contracts(auction)
+    end
+
     auction_json[:auction_contracts] = Auction.find(auction.id).auction_contracts.sort_by {|contract| contract.contract_duration.to_i}
     auction_json[:buyer_notify] = Consumption.find_by_auction_id(auction.id).find_notify_buyer.blank? ? false : true
     auction_json[:live_auction_contracts] = live_auction_contracts
