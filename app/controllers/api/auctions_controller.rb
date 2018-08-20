@@ -210,7 +210,7 @@ class Api::AuctionsController < Api::BaseController
                               []
                             end
       search_where_array = set_search_params(users_search_params)
-      users = User.buyers.where(search_where_array)
+      users = User.buyers.buyer_approved.where(search_where_array)
       consumptions = Consumption.find_by_auction_id(params[:id])
       ids = get_user_ids(consumptions)
       users = get_buyer_users(params, users, ids)
