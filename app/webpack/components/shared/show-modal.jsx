@@ -3,7 +3,7 @@ import { constants } from 'os';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
-import { validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum } from '../../javascripts/componentService/util';
+import { validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum ,removePostCode} from '../../javascripts/componentService/util';
 //共通弹出框组件
 import { UploadFile } from '../shared/upload';
 
@@ -221,7 +221,7 @@ export class Modal extends React.Component {
         let validateItem = {
             peak_pct: { cate: 'decimal' },
             totals: { cate: 'num10' },
-            postal_code: { cate: 'required' },
+            postal_code: { cate: 'postcode' },
             unit_number: { cate: 'required' },
             street: { cate: 'required' },
             blk_or_unit: { cate: 'required' },
@@ -284,6 +284,10 @@ export class Modal extends React.Component {
 
     removeInputNanNum(value) {
         removeNanNum(value)
+    }
+    removeInputPostCode(value)
+    {
+        removePostCode(value);
     }
     getFormsValue() {
         let siteItem = {
@@ -830,8 +834,9 @@ export class Modal extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Postal Code:</td>
-                                    <td> <input type="text" value={this.state.postal_code} id="postal_code" maxLength="6" name="postal_code" onChange={this.changeConsumption.bind(this, "postal_code")} placeholder="" required aria-required="true" />
+                                    <td> <input type="text" value={this.state.postal_code} id="postal_code" maxLength="6" onKeyUp={this.removeInputPostCode.bind(this)} name="postal_code" onChange={this.changeConsumption.bind(this, "postal_code")} placeholder="" required aria-required="true" />
                                         <div id="postal_code_message" className="isPassValidate">This filed is required!</div>
+                                        <div id="postal_code_format" className="isPassValidate">Postal code must be 6 digit interger.</div>
                                     </td>
                                 </tr>
                                 <tr>
