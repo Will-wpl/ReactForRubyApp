@@ -30,6 +30,7 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
       { name: 'Date/Time', field_name: 'actual_begin_time', table_name: 'auctions' },
       { name: 'Auction Status', field_name: 'publish_status', table_name: 'auctions' },
       { name: 'Status of Participation', field_name: 'participation_status', table_name: 'consumptions' },
+      { name: 'Status of Approval', field_name: 'accept_status', table_name: 'consumptions' },
       { name: nil, field_name: 'actions', is_sort: false }
     ]
     actions = [{ url: '/buyer/consumptions/:id/edit', name: 'Manage', icon: 'manage', check: 'docheck' },
@@ -40,6 +41,7 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
       action = get_action(consumption)
       data.push(id: consumption.id, name: consumption.auction.name, actual_begin_time: consumption.auction.actual_begin_time,
                 publish_status: consumption.auction.publish_status, participation_status: consumption.participation_status,
+                accept_status: get_accept_status(consumption.accept_status),
                 actions: action)
     end
     bodies = { data: data, total: total }
@@ -91,6 +93,20 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
   end
 
   private
+
+  def get_accept_status(accept_status)
+    case accept_status
+      when "0"
+        accept_status_str = 'Admin Rejected'
+      when "1"
+        accept_status_str = 'Admin Approved'
+      when "2"
+        accept_status_str = 'Pending Approval'
+      else
+        accept_status_str = ''
+    end
+    accept_status_str
+  end
 
   def get_order_list(params, headers, consumption)
     if params.key?(:sort_by)
