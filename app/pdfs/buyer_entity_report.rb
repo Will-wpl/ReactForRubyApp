@@ -233,7 +233,7 @@ class BuyerEntityReport < BuyerReport
 
   def get_datetime_of_auction(auction)
     zone_time = get_pdf_datetime_zone
-    auction_datetime = (auction.start_datetime + zone_time).strftime("%-d %b %Y")
+    auction_datetime = (auction.start_datetime + zone_time).strftime("%-d %b %Y %I:%M %p")
     ["<b>Date/Time of Reverse Auction:</b>", "#{auction_datetime}"]
   end
 
