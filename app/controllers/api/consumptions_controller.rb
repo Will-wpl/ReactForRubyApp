@@ -96,7 +96,6 @@ class Api::ConsumptionsController < Api::BaseController
         @consumption.participation_status = Consumption::ParticipationStatusPending
         #update - new field (20180711) - Start
         @consumption.accept_status = Consumption::AcceptStatusPending
-        @consumption.approval_date_time = Time.current
         #update - new field (20180711) - End
         @consumption.save
         render json: @consumption, status: 201
