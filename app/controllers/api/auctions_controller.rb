@@ -247,8 +247,8 @@ class Api::AuctionsController < Api::BaseController
     end
 
     auction = Auction.find(params[:id])
-    consumptions_sent_count = auction.consumptions.where(action_status: Consumption::ActionStatusSent).count
-    lock = consumptions_sent_count > 0 && auction.buyer_type == Auction::SingleBuyerType ? true : false
+    company_consumptions_sent_count = auction.consumptions.find_by_user_consumer_type(User::ConsumerTypeCompany).where(action_status: Consumption::ActionStatusSent).count
+    lock = company_consumptions_sent_count > 0 && auction.buyer_type == Auction::SingleBuyerType ? true : false
     data = []
     users.each do |user|
       # status = ids.include?(user.id) ? '1' : '0'
