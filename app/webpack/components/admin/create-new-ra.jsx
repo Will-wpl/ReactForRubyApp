@@ -348,12 +348,24 @@ export class CreateNewRA extends Component {
     blurNoNum(obj) {
         obj.target.value = findUpLimitZero(obj.target.value);
     }
+    
     mouthsHtml(mouth) {
         let months = []
         let flag = false;
+        let has_eht = true;
+        let has_htl = true;
+        let has_hts = true;
+        let has_lt = true;
+
         if (this.state.live_auction_contracts) {
             this.state.live_auction_contracts.map((item) => {
                 months.push(item.contract_duration)
+                if (mouth == item.contract_duration && this.auction.publish_status == '1') {
+                    has_eht = item.has_eht
+                    has_htl = item.has_htl
+                    has_hts = item.has_hts
+                    has_lt = item.has_lt
+                }
             })
             if (this.state.live_auction_contracts.length > 0 && this.auction.publish_status == '1' && months.indexOf(mouth) == -1) {
                 flag = true
@@ -369,31 +381,31 @@ export class CreateNewRA extends Component {
                     <thead>
                         <tr>
                             <th></th>
-                            <th>LT</th>
-                            <th>HT (Small)</th>
-                            <th>HT (Large)</th>
-                            <th>EHT</th>
+                            <th className={ has_lt ? 'isDisplay' : 'isHide'}>LT</th>
+                            <th className={ has_hts ? 'isDisplay' : 'isHide'}>HT (Small)</th>
+                            <th className={ has_htl ? 'isDisplay' : 'isHide'}>HT (Large)</th>
+                            <th className={ has_eht ? 'isDisplay' : 'isHide'}>EHT</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>Peak</td>
-                            <td id={'lt_peak_' + mouth}>
+                            <td className={ has_lt ? 'isDisplay' : 'isHide'} id={'lt_peak_' + mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"starting_price_lt_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} /><br />
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"reserve_price_lt_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} />
                                 <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
                             </td>
-                            <td id={'hts_peak_' + mouth}>
+                            <td className={ has_hts ? 'isDisplay' : 'isHide'} id={'hts_peak_' + mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"starting_price_hts_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} /><br />
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"reserve_price_hts_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} />
                                 <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
                             </td>
-                            <td id={'htl_peak_' + mouth}>
+                            <td className={ has_htl ? 'isDisplay' : 'isHide'} id={'htl_peak_' + mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"starting_price_htl_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} /><br />
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"reserve_price_htl_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} />
                                 <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
                             </td>
-                            <td id={'eht_peak_' + mouth}>
+                            <td className={ has_eht ? 'isDisplay' : 'isHide'} id={'eht_peak_' + mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"starting_price_eht_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} /><br />
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"reserve_price_eht_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} />
                                 <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
@@ -401,22 +413,22 @@ export class CreateNewRA extends Component {
                         </tr>
                         <tr>
                             <td>Off Peak</td>
-                            <td id={'lt_off_peak_' + mouth}>
+                            <td className={ has_lt ? 'isDisplay' : 'isHide'} id={'lt_off_peak_' + mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"starting_price_lt_off_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} /><br />
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"reserve_price_lt_off_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} />
                                 <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
                             </td>
-                            <td id={'hts_off_peak_' + mouth}>
+                            <td className={ has_hts ? 'isDisplay' : 'isHide'} id={'hts_off_peak_' + mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"starting_price_hts_off_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} /><br />
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"reserve_price_hts_off_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} />
                                 <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
                             </td>
-                            <td id={'htl_off_peak_' + mouth}>
+                            <td className={ has_htl ? 'isDisplay' : 'isHide'} id={'htl_off_peak_' + mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"starting_price_htl_off_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} /><br />
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"reserve_price_htl_off_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} />
                                 <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
                             </td>
-                            <td id={'eht_off_peak_' + mouth}>
+                            <td className={ has_eht ? 'isDisplay' : 'isHide'} id={'eht_off_peak_' + mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"starting_price_eht_off_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} /><br />
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"reserve_price_eht_off_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} />
                                 <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
