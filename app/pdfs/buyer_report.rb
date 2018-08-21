@@ -10,11 +10,10 @@ class BuyerReport <Pdf
 
   def pdf
     zone_time = get_pdf_datetime_zone
-    auction = param[:auction]
-    if auction.nil?
+    auction, auction_result = param[:auction], param[:auction_result]
+    if auction.nil? || auction_result.nil?
       return PdfUtils.get_no_data_pdf("LETTER", :portrait, 'NO_DATA_BUYER_REPORT.pdf')
     end
-    auction_result = param[:auction_result]
     current_user = param[:current_user]
     price_table_data, visibilities, price_data = get_price_table_data({:auction => auction, :auction_result => auction_result}, true, true)
 
