@@ -180,6 +180,7 @@ export const Ws = class {
     disconnectedCall;
     receiveDataCall;
     connectedFailureCall;
+    onErr;
     connected = false;
     cache = [];
 
@@ -236,11 +237,16 @@ export const Ws = class {
                     if (this.connectedFailureCall) {
                         this.connectedFailureCall();
                     }
+                    // if (this.onErr) {
+                    //     this.onErr()
+                    // }
                 }
             } else {
                 if (!this.connected) {
-                    window.location.reload();
                     cable.connection.reopen();
+                    if (this.onErr) {
+                        this.onErr()
+                    }
                 }
             }
             cnt++;
@@ -265,6 +271,11 @@ export const Ws = class {
     onConnectedFailure(callback) {
         this.connectedFailureCall = callback;
         return this;
+    }
+
+    onError(callback) {
+        this.onErr = callback;
+        return this
     }
 
     sendMessage(action, data) {

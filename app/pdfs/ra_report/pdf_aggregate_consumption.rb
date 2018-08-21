@@ -7,7 +7,7 @@ class PdfAggregateConsumption
 
   def aggregate
     pdf, auction_contract = param[:pdf], param[:auction_contract]
-    pdf.table [["Aggregate Consumption: #{auction_contract.contract_duration} Months"]], :cell_style => {:size => 18, :inline_format => true, :width => pdf.bounds.right, :border_width => 0}
+    pdf.table [["Aggregate Consumption: #{auction_contract.contract_duration} Months"]], :cell_style => {:size => 16, :inline_format => true, :width => pdf.bounds.right, :border_width => 0}
     head_row, peak_row, off_peak_row = [''], ['Peak<br/>(7am-7pm)'], ['Off-Peak<br/>(7pm-7am)']
     push_colume_data({:head_row => head_row, :peak_row => peak_row, :off_peak_row => off_peak_row, :title => 'LT', :peak => auction_contract.total_lt_peak, :off_peak => auction_contract.total_lt_off_peak})
     push_colume_data({:head_row => head_row, :peak_row => peak_row, :off_peak_row => off_peak_row, :title => 'HT(Small)', :peak => auction_contract.total_hts_peak, :off_peak => auction_contract.total_hts_off_peak})
