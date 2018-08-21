@@ -76,7 +76,7 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
     show_award?(result, current_user) ? result.acknowledge : nil
   end
 
-  def get_report(result, contract_result)
+  def get_report(result)
     result.participation_status=='1' ? "api/buyer/auctions/#{result.auction_id}/pdf" : ''
   end
 
@@ -89,11 +89,11 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
   end
 
   def get_new_report(result, contract_result)
-    show_award?(contract_result, current_user) && result.accept_status=='1' ? "api/buyer/auctions/#{result.auction_id}/pdf" : ''
+    show_award?(contract_result, current_user) && result.participation_status=='1' ? "api/buyer/auctions/#{result.auction_id}/pdf" : ''
   end
 
   def get_new_award(result, contract_result)
-    show_award?(contract_result, current_user) ? result.accept_status=='1' ? ["api/buyer/auctions/#{result.auction_id}/letter_of_award_pdf"] : [] : []
+    show_award?(contract_result, current_user) ? result.participation_status=='1' ? ["api/buyer/auctions/#{result.auction_id}/letter_of_award_pdf"] : [] : []
   end
 
   def get_new_awrd(result, contract_result)
