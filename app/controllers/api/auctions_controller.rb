@@ -193,7 +193,7 @@ class Api::AuctionsController < Api::BaseController
       arrangement = get_retailer_arrangement_value(index, arrangements)
       status = get_retailer_status_value(arrangement)
       action = get_retailer_action_value(arrangement)
-      data.push(user_id: user.id, company_name: user.company_name, select_status: status, select_action: action)
+      data.push(user_id: user.id, company_name: user.company_name, select_status: status, select_action: action, lock: false)
     end
     bodies = {data: data, total: total}
     render json: {headers: headers, bodies: bodies, actions: actions}, status: 200
@@ -259,7 +259,7 @@ class Api::AuctionsController < Api::BaseController
       if consumer_type == '2'
         data.push(user_id: user.id, company_name: user.company_name, select_status: status, select_action: action, lock: lock)
       elsif consumer_type == '3'
-        data.push(user_id: user.id, name: user.name, account_housing_type: user.account_housing_type, select_status: status, select_action: action)
+        data.push(user_id: user.id, name: user.name, account_housing_type: user.account_housing_type, select_status: status, select_action: action, lock: false)
       end
     end
     bodies = {data: data, total: total}
@@ -474,7 +474,7 @@ class Api::AuctionsController < Api::BaseController
                                   coalesce(users.company_unique_entity_number, '') company_unique_entity_number,
                                   auction_result_contracts.*")
                          .joins(:user)
-                         .where('auction_id = ? AND contract_duration = ?', auction_id, contract_duration)
+                         .where("auction_id = ? AND contract_duration = ? AND status= 'win'", auction_id, contract_duration)
                          .limit 1
     consumption_details = nil
     consumption_details = ConsumptionDetail.find_by_sql ['SELECT 	cbe."id",	cbe.company_name, cds.*
@@ -825,7 +825,7 @@ class Api::AuctionsController < Api::BaseController
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], auction_result_contract.to_json)
       end
     end
-    winner_send_mails(params[:user_id], params[:id], params[:contract_duration])
+    winner_send_mails(params[:user_id], params[:id], params[:contract_duration]) if params[:status] == AuctionResultContract::STATUS_WIN
     auction_result_contract_hash = auction_result_contract.attributes.dup
     auction_result_contract_hash['contract_period_start_date'] = auction_result.contract_period_start_date
     auction_result_contract_hash
