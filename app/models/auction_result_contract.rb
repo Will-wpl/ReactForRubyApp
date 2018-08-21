@@ -1,4 +1,6 @@
 class AuctionResultContract < ApplicationRecord
+
+  STATUS_WIN = 'win'.freeze
   # Extends
 
   # Includes
