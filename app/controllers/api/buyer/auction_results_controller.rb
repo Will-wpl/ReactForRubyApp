@@ -99,7 +99,7 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
   def get_new_awrd(result, contract_result)
     awards = []
     if show_award?(contract_result, current_user) then
-      if result.participation_status == '1' && result.accept_status == '1'
+      if result.participation_status == '1'
         consumption = Consumption.find_by_auction_and_user(result.auction_id, current_user.id).first
         consumption.consumption_details.select(:company_buyer_entity_id).distinct.each do |detail|
           awards.push("api/buyer/auctions/#{result.auction_id}/letter_of_award_pdf?entity_id=#{detail.company_buyer_entity_id}&contract_duration=#{consumption.contract_duration}")
