@@ -825,7 +825,7 @@ class Api::AuctionsController < Api::BaseController
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], auction_result_contract.to_json)
       end
     end
-    winner_send_mails(params[:user_id], params[:id], params[:contract_duration])
+    winner_send_mails(params[:user_id], params[:id], params[:contract_duration]) if params[:status] == AuctionResultContract::STATUS_WIN
     auction_result_contract_hash = auction_result_contract.attributes.dup
     auction_result_contract_hash['contract_period_start_date'] = auction_result.contract_period_start_date
     auction_result_contract_hash
