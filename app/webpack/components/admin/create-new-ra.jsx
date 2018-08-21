@@ -27,7 +27,7 @@ export class CreateNewRA extends Component {
             required: false, check_required: true, single_multiple: "1", allow_deviation: "1",
             contract_6: '0', contract_12: '0', contract_24: '0', single_truely: false, published_date_time: '',
             reverse_auction_end: '',
-            live_auction_contracts: null
+            live_auction_contracts: null,submit_btn:true
         }
 
         this.auction = {};
@@ -552,9 +552,10 @@ export class CreateNewRA extends Component {
             //     return false
             // }
         }
-
+        this.setState({submit_btn:false});
         if (this.state.btn_type == "save") {
             createRa({ auction: this.checkSubmitTruly() }).then(res => {
+                this.setState({submit_btn:true});
                 this.auction_data = res;
                 this.auction = res;
                 this.refs.Modal.showModal();
@@ -589,6 +590,7 @@ export class CreateNewRA extends Component {
                 window.location.href = `/admin/auctions/${this.auction.id}/invitation`;
             } else {
                 createRa({ auction: this.checkSubmitTruly() }).then(res => {
+                    this.setState({submit_btn:true});
                     this.auction = res;
                     sessionStorage.auction_id = res.id;
                     window.location.href = `/admin/auctions/${res.id}/invitation`;
@@ -620,20 +622,20 @@ export class CreateNewRA extends Component {
             left_name = "Create New Reverse Auction";
             btn_html = <div className="createRa_btn">
                 {this.state.disabled ? <div className="mask"></div> : ''}
-                <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this, 'save')}>Save</button>
-                <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this, 'next')}>Next</button>
+                <button className="lm--button lm--button--primary" disabled={this.state.disabled?true:(this.state.submit_btn?false:true)} onClick={this.auctionCreate.bind(this, 'save')}>Save</button>
+                <button className="lm--button lm--button--primary"  onClick={this.auctionCreate.bind(this, 'next')}>Next</button>
             </div>
         } else {//edit
             styleType = "col-sm-12 col-md-8 push-md-2";
             left_name = this.props.left_name;
             btn_html = <div className="createRa_btn">
                 {this.props.disabled ?
-                    <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this, 'next')}>Next</button> :
+                    <button className="lm--button lm--button--primary"  onClick={this.auctionCreate.bind(this, 'next')}>Next</button> :
                     <div>
                         <a className={this.state.edit_btn} onClick={this.edit.bind(this)}>Edit</a>
                         <a className={this.state.edit_change} onClick={this.Cancel.bind(this)}>Cancel</a>
-                        <button className={this.state.edit_change} onClick={this.auctionCreate.bind(this, 'save')}>Save</button>
-                        <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this, 'next')}>Next</button>
+                        <button className={this.state.edit_change} disabled={this.state.disabled?true:(this.state.submit_btn?false:true)} onClick={this.auctionCreate.bind(this, 'save')}>Save</button>
+                        <button className="lm--button lm--button--primary"  onClick={this.auctionCreate.bind(this, 'next')}>Next</button>
                     </div>}
             </div>
         }

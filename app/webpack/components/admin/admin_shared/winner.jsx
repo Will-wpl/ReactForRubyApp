@@ -75,7 +75,7 @@ export default class WinnerPrice extends Component {
                                 <li><span>Contract Period: </span><span>{moment(this.props.winner.auction.contract_period_start_date).format('D MMM YYYY')} to {moment(this.props.winner.auction.contract_period_end_date).format('D MMM YYYY')}</span></li>
                                 <li><span>Total Volume: </span><span>{this.toThousands(Math.round(Number(this.props.winner.auction.total_volume)))} kWh (forecasted)</span></li>
                                   <li>
-                                      <h2>Aggregate Consumption</h2>
+                                      <h4>Aggregate Consumption</h4>
                                       <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                                           <thead>
                                           <tr>
@@ -89,17 +89,17 @@ export default class WinnerPrice extends Component {
                                           <tbody>
                                           <tr>
                                               <td>Peak<br/>(7am-7pm)</td>
-                                              {this.props.consumption.has_lt?<td >$ {this.props.consumption.total_lt_peak}</td>:<td className={'live_hide'}></td>}
-                                              {this.props.consumption.has_hts?<td >$ {this.props.consumption.total_hts_peak}</td>:<td className={'live_hide'}></td>}
-                                              {this.props.consumption.has_htl?<td >$ {this.props.consumption.total_htl_peak}</td>:<td className={'live_hide'}></td>}
-                                              {this.props.consumption.has_eht?<td >$ {this.props.consumption.total_eht_peak}</td>:<td className={'live_hide'}></td>}
+                                              {this.props.consumption.has_lt?<td >{this.props.consumption.total_lt_peak} kWh</td>:<td className={'live_hide'}></td>}
+                                              {this.props.consumption.has_hts?<td >{this.props.consumption.total_hts_peak} kWh</td>:<td className={'live_hide'}></td>}
+                                              {this.props.consumption.has_htl?<td >{this.props.consumption.total_htl_peak} kWh</td>:<td className={'live_hide'}></td>}
+                                              {this.props.consumption.has_eht?<td >{this.props.consumption.total_eht_peak} kWh</td>:<td className={'live_hide'}></td>}
                                           </tr>
                                           <tr>
                                               <td>Off-Peak<br/>(7pm-7am)</td>
-                                              {this.props.consumption.has_lt?<td >$ {this.props.consumption.total_lt_off_peak}</td>:<td className={'live_hide'}></td>}
-                                              {this.props.consumption.has_hts?<td >$ {this.props.consumption.total_hts_off_peak}</td>:<td className={'live_hide'}></td>}
-                                              {this.props.consumption.has_htl?<td >$ {this.props.consumption.total_htl_off_peak}</td>:<td className={'live_hide'}></td>}
-                                              {this.props.consumption.has_eht?<td >$ {this.props.consumption.total_eht_off_peak}</td>:<td className={'live_hide'}></td>}
+                                              {this.props.consumption.has_lt?<td >{this.props.consumption.total_lt_off_peak} kWh</td>:<td className={'live_hide'}></td>}
+                                              {this.props.consumption.has_hts?<td >{this.props.consumption.total_hts_off_peak} kWh</td>:<td className={'live_hide'}></td>}
+                                              {this.props.consumption.has_htl?<td >{this.props.consumption.total_htl_off_peak} kWh</td>:<td className={'live_hide'}></td>}
+                                              {this.props.consumption.has_eht?<td >{this.props.consumption.total_eht_off_peak} kWh</td>:<td className={'live_hide'}></td>}
                                           </tr>
                                           </tbody>
                                       </table>

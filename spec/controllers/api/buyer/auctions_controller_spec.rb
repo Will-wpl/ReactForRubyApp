@@ -46,7 +46,7 @@ RSpec.describe Api::Buyer::AuctionsController, type: :controller do
       before { do_request }
       it 'Success' do
         hash = JSON.parse(response.body)
-        expect(hash['headers'].size).to eq(5)
+        expect(hash['headers'].size).to eq(6)
         expect(hash['bodies']['total']).to eq(6)
         expect(hash['bodies']['data'].size).to eq(6)
         expect(response).to have_http_status(:ok)
@@ -65,7 +65,7 @@ RSpec.describe Api::Buyer::AuctionsController, type: :controller do
       before { do_request }
       it 'Success' do
         hash = JSON.parse(response.body)
-        expect(hash['headers'].size).to eq(5)
+        expect(hash['headers'].size).to eq(6)
         # expect(hash['bodies']['total']).to eq(3)
         expect(hash['bodies']['data'].size).to eq(3)
         expect(hash['bodies']['data'][0]['name']).to eq(auction.name)
@@ -85,7 +85,7 @@ RSpec.describe Api::Buyer::AuctionsController, type: :controller do
       before { do_request }
       it 'Success' do
         hash = JSON.parse(response.body)
-        expect(hash['headers'].size).to eq(5)
+        expect(hash['headers'].size).to eq(6)
         # expect(hash['bodies']['total']).to eq(3)
         expect(hash['bodies']['data'].size).to eq(3)
         expect(hash['bodies']['data'][0]['name']).to eq(auction.name)

@@ -19,7 +19,7 @@ export default class ChooseAlternativeWinner extends React.Component{
             auction: {}, livetype: '6',
             live_auction_contracts: [],
             userid: '', fnStatus: 'win',
-            resultarray:[]
+            resultarray:[],voidStatus:false
         }
     }
     componentDidMount(){
@@ -160,7 +160,8 @@ export default class ChooseAlternativeWinner extends React.Component{
             this.refs.Modal.showModal();
             this.setState({
                 text:"You have voided this Reverse Auction exercise, and will be redirected to the homepage.",
-                disabled:true
+                disabled:true,
+                voidStatus:true
             })
         },error=>{
 
@@ -269,7 +270,7 @@ export default class ChooseAlternativeWinner extends React.Component{
 
                     <div className="retailor_justification">
                         <h2><abbr id='badge'>*</abbr>Justification</h2>
-                        <textarea disabled={this.state.disabled}
+                        <textarea disabled={this.state.disabled?true:(this.state.voidStatus?true:false)}
                             value={this.state.justification }
                             onChange={this.getJustification.bind(this)}
                         />

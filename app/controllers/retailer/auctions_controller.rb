@@ -2,7 +2,7 @@ class Retailer::AuctionsController < Retailer::BaseController
   before_action :retailer_approved_required
   before_action :retailer_could_access, only: %i[upcoming live finish]
   before_action :set_auction, only: %i[empty goto gotobid message]
-  after_action :set_login_status, only: %i[upcoming live finish empty]
+  after_action :set_login_status, only: %i[index upcoming live finish empty]
 
   # GET upcoming page
   def upcoming; end
