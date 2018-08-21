@@ -74,7 +74,7 @@ class ApplicationController < ActionController::Base
             reserve_price_eht_peak:contract.reserve_price_eht_peak,
             reserve_price_eht_off_peak:contract.reserve_price_eht_off_peak
         }
-        auction_contract_result = AuctionResultContract.where(auction_id: auction.id, contract_duration: contract.contract_duration)
+        auction_contract_result = AuctionResultContract.where(auction_id: auction.id, contract_duration: contract.contract_duration).take
         unless auction_contract_result.blank?
           contract_result = {
               status: auction_contract_result.status
@@ -85,7 +85,7 @@ class ApplicationController < ActionController::Base
         }
         end
         result = is_admin ? base_contract.merge(admin_contract) : base_contract
-        result = result.merge(contract_result)
+        result = result.merge!(contract_result)
         auction_contracts.push(result)
       end
     end
