@@ -77,6 +77,8 @@ class Api::ConsumptionsController < Api::BaseController
              eht_peak: Consumption.get_eht_peak(consumption.eht_peak),
              eht_off_peak: Consumption.get_eht_off_peak(consumption.eht_off_peak),
              details: consumption.contract_duration.blank? ? details : details_array,
+             accept_status: consumption.accept_status,
+             approval_date_time: consumption.approval_date_time,
              entities: entities }
 
     render json: cons, status: 200
@@ -87,13 +89,17 @@ class Api::ConsumptionsController < Api::BaseController
       if Consumption.find_by_auction_and_user(params[:auction_id], params[:user_id]).exists?
         render json: { message: 'consumption exist' }, status: 200
       else
+        auction = Auction.find(params[:auction_id])
+        if auction.buyer_type == Auction::SingleBuyerType
+          auction.consumptions.find_by_user_consumer_type(User::ConsumerTypeCompany).destroy_all
+        end
         @consumption = Consumption.new
         @consumption.auction_id = params[:auction_id]
         @consumption.user_id = params[:user_id]
         @consumption.action_status = Consumption::ActionStatusPending
         @consumption.participation_status = Consumption::ParticipationStatusPending
         #update - new field (20180711) - Start
-        @consumption.accept_status = Consumption::AcceptStatusPending
+        # @consumption.accept_status = Consumption::AcceptStatusPending
         #update - new field (20180711) - End
         @consumption.save
         render json: @consumption, status: 201

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180810094011) do
+ActiveRecord::Schema.define(version: 20180820031411) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -298,6 +298,7 @@ ActiveRecord::Schema.define(version: 20180810094011) do
     t.string "contract_duration"
     t.string "accept_status"
     t.string "comments"
+    t.datetime "approval_date_time"
     t.index ["auction_id"], name: "index_consumptions_on_auction_id"
     t.index ["user_id"], name: "index_consumptions_on_user_id"
   end

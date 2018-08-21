@@ -19,6 +19,7 @@ class Api::Admin::ConsumptionsController < Api::ConsumptionsController
       # Change -- [Update Action once approved consumption] - Start
       target_consumption.update(accept_status: approval_status,
           participation_status: participate_status,
+          approval_date_time: Time.current,
           comments: comment)
       render json: nil , status:500 unless update_auction_approval(target_consumption)
       # Change -- [Update Action once approved consumption] - End
@@ -30,6 +31,7 @@ class Api::Admin::ConsumptionsController < Api::ConsumptionsController
       # Change -- [Update Action once approved consumption] - Start
       target_consumption.update(accept_status: approval_status,
                                 participation_status: participate_status,
+                                approval_date_time: Time.current,
                                 comments: comment,
                                 participation_status: '2',
                                 lt_peak: 0,

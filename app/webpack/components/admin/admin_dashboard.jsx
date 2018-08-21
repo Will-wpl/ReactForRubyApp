@@ -126,6 +126,12 @@ export class AdminDashboard extends Component {
         this.ws = createWebsocket(auction);
         this.ws.onConnected(() => {
         }).onDisconnected(() => {
+        }).onError(()=>{
+            this.setState({text:'WebSocket exception,page will reload ３ seconds.'});
+            this.refs.Modal.showModal();
+            setTimeout(()=>{
+                window.location.reload();
+            },3500);
         }).onReceivedData(data => {
             if (data.action === 'set_bid') {
                 if (data.data.length > 0) {

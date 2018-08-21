@@ -111,6 +111,7 @@ export class SearchList extends Component {
             })
     }
     doinvite(type,user_id,select_action){
+        console.log(this.props.table_data)
         let invite_type = this.props.type === 'Select Retailers' ? 'arrangements' : 'consumptions';
         if(this.state.buyer_type == '0' && window.location.href.indexOf("type=2")>0){
             this.props.table_data.bodies.data.map((item)=>{
@@ -227,14 +228,16 @@ export class SearchList extends Component {
                                                 {
                                                     this.props.table_data.headers.map((it,i)=>{
                                                         if(it.field_name === 'select_action'){
+                                                            console.log(item[`lock`])
                                                             return <td key={i}>
-                                                                    {item[`${it.field_name}`] === null 
+                                                                    {item[`lock`] === false ?
+                                                                        item[`${it.field_name}`] === null 
                                                                         ? <span className={'invite'} onClick={this.doinvite.bind(this,'invite',item.user_id)}>Invite</span> 
                                                                         :(
                                                                             item[`select_status`] === '2' 
                                                                             ? <span className={'cancel_invite'} onClick={this.doinvite.bind(this,'not_invite',item.user_id,item.select_action)}>Cancel Invite</span>
                                                                             : (item[`select_status`] === null ? <span className={'invite'} onClick={this.doinvite.bind(this,'invite',item.user_id)}>Invite</span>  : '')
-                                                                        )
+                                                                        ):''
                                                                     }
                                                                    </td>
                                                         }else if(it.field_name === 'select_status'){
@@ -253,7 +256,7 @@ export class SearchList extends Component {
                                                             return <td key={i}>
                                                                     {item[`${it.field_name}`] === '0' ? 'HDB' : (item[`${it.field_name}`] === '1' ? 'Private High-rise' : 'Landed')}
                                                                    </td>
-                                                        }else if(it.field_name === 'accept_status'){
+                                                        }else if(it.field_name === 'accept_status' && it.table_name !== 'consumptions'){
                                                             return <td key={i}>
                                                                     {item[`${it.field_name}`] === null ? 'Pending' : (item[`${it.field_name}`] === '0' ? 'Rejected' : (item[`${it.field_name}`] === '1'?'Accepted':"In Progress"))}
                                                                    </td>

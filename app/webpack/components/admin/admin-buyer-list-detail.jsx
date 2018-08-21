@@ -6,7 +6,7 @@ import AdminComsumptionPrice from './admin_shared/admin-comsumption-price';
 import { getSearchType } from '../../javascripts/componentService/util';
 import { getAdminBuyerListDetails, approveConsumptions } from '../../javascripts/componentService/admin/service';
 import { Modal } from '../shared/show-modal';
-import { validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate } from '../../javascripts/componentService/util';
+import { validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, setApprovalStatus } from '../../javascripts/componentService/util';
 export default class AdminBuyerListDetail extends Component {
     constructor(props) {
         super(props);
@@ -27,7 +27,8 @@ export default class AdminBuyerListDetail extends Component {
             comment: "",
             dataVersion: "",
             past: false,
-            auctionId: ""
+            auctionId: "",
+            approvedStatus: ""
 
         }
         this.type = sessionStorage.getItem('comsumptiontype');
@@ -51,7 +52,8 @@ export default class AdminBuyerListDetail extends Component {
                 comsumption_list: [res],
                 dataVersion: res.consumption.contract_duration ? "1" : "",
                 past: (res.consumption.accept_status === "0" || res.consumption.accept_status === "1" || res.auction_published == true) ? true : false,
-                comment: res.consumption.comments ? res.consumption.comments : ""
+                comment: res.consumption.comments ? res.consumption.comments : "",
+                approvedStatus: setApprovalStatus(res.accept_status, res.approval_date_time)
             })
         }, error => {
 
@@ -119,12 +121,12 @@ export default class AdminBuyerListDetail extends Component {
         };
         if (obj.action === 'reject') {
             approveConsumptions(param).then(res => {
-                location.href = "/admin/auctions/"+this.state.auctionId+"/buyer_dashboard?unpublished";
+                location.href = "/admin/auctions/" + this.state.auctionId + "/buyer_dashboard?unpublished";
             })
         }
         else {
             approveConsumptions(param).then(res => {
-                location.href = "/admin/auctions/"+this.state.auctionId+"/buyer_dashboard?unpublished";
+                location.href = "/admin/auctions/" + this.state.auctionId + "/buyer_dashboard?unpublished";
             })
         }
     }
@@ -133,6 +135,7 @@ export default class AdminBuyerListDetail extends Component {
             <div className="u-grid mg0 validate_message">
                 <h2 className="u-mt2 u-mb2">View Consumption Details</h2>
                 <div className="col-sm-12 u-mb3">
+                    Status: {this.state.approvedStatus}
                     <AdminComsumptionList visible="visible" dataVersion={this.state.dataVersion} comsumption_list={this.state.comsumption_list} detail={this.show_detail.bind(this)} type={this.type} />
                 </div>
                 <div className={this.state.dataVersion === "1" ? "col-sm-12 u-mb3" : "isHide"}>
