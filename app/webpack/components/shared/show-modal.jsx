@@ -3,7 +3,7 @@ import { constants } from 'os';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
-import { validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum ,removePostCode} from '../../javascripts/componentService/util';
+import { validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum, removePostCode } from '../../javascripts/componentService/util';
 //共通弹出框组件
 import { UploadFile } from '../shared/upload';
 
@@ -42,7 +42,7 @@ export class Modal extends React.Component {
             totals: '',
             peak_pct: '',
             peak: "",
-            attachment_ids:'',
+            attachment_ids: '',
             option: '',
             isSaved: false,
             uploadUrl: "/api/buyer/user_attachments?file_type=",
@@ -52,6 +52,7 @@ export class Modal extends React.Component {
                     { buttonName: "none", files: [] }
                 ]
             },
+            modalSize: this.props.modalSize
         }
     }
 
@@ -91,7 +92,7 @@ export class Modal extends React.Component {
                 //     file_path: next.consumption_account_item.file_path
                 // }
                 fileObj["CONSUMPTION_DOCUMENTS"][0].files = [];
-                fileObj["CONSUMPTION_DOCUMENTS"][0].files=next.consumption_account_item.attachment_ids;
+                fileObj["CONSUMPTION_DOCUMENTS"][0].files = next.consumption_account_item.attachment_ids;
                 this.setState({
                     fileData: fileObj
                 })
@@ -145,13 +146,17 @@ export class Modal extends React.Component {
                 $(".react-datepicker-popper").removeClass("isHide");
             }
         })
+
     }
 
     showModal(type, data, str, index) {
+        $(".email_body").css({ "height": "140px" });
+        $("div[name='middleModal']").css({ "width": "50%", "height": "300px", "top": "40%", "left": "40%" })
         if (str) {
             this.setState({ strtype: str });
         }
         this.setState({
+            modalSize: "big",
             modalshowhide: "modal_show",
             props_data: data ? data : {}
         })
@@ -187,6 +192,8 @@ export class Modal extends React.Component {
                 itemIndex: index
             })
         }
+
+
     }
 
     do_text(text) {
@@ -213,6 +220,12 @@ export class Modal extends React.Component {
         this.setState({
             type: "default"
         })
+
+        if (this.props.formSize === "middle") { 
+            $("#modal_main").css({ "width": "50%", "height": "300px", "top": "40%", "left": "40%" });
+            $(".email_body").css({ "height": "140px" });
+        }
+
     }
 
     checkModelSuccess(event) {
@@ -285,8 +298,7 @@ export class Modal extends React.Component {
     removeInputNanNum(value) {
         removeNanNum(value)
     }
-    removeInputPostCode(value)
-    {
+    removeInputPostCode(value) {
         removePostCode(value);
     }
     getFormsValue() {
@@ -392,7 +404,7 @@ export class Modal extends React.Component {
             peak_pct: this.state.peak_pct,
             index: this.state.itemIndex,
             attachment_ids: "",
-            user_attachment:[]
+            user_attachment: []
             // user_attachment_id: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].id : "",
             // file_name: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_name : "",
             // file_path: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_path : ""
@@ -403,7 +415,7 @@ export class Modal extends React.Component {
                 idsArr.push(item.id);
             })
             siteItem.attachment_ids = JSON.stringify(idsArr);
-            siteItem.user_attachment=this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files;
+            siteItem.user_attachment = this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files;
         }
 
         if (this.props.acceptFunction) {
@@ -553,10 +565,31 @@ export class Modal extends React.Component {
 
     closeModal() {
         this.setState({
+            modalSize: "small",
             modalshowhide: "modal_hide"
         })
-    }
+        if (this.props.formSize === "middle") {
+            $("#modal_main").css({ "width": "50%", "height": "300px", "top": "40%", "left": "40%" });
+            $(".email_body").css({ "height": "140px" });
+        }
 
+    }
+    bigModal(type) {
+        if (this.state.modalSize === "big") {//height:"300px", top: "40%", left: "40%"
+            $("#modal_main").css({ "width": "85%", "height": "500px", "top": "30%", "left": "20%" });
+            $(".email_body").css({ "height": "330px" });
+            this.setState({
+                modalSize: "small"
+            })
+        }
+        else {
+            $("#modal_main").css({ "width": "50%", "height": "300px", "top": "40%", "left": "40%" });
+            $(".email_body").css({ "height": "140px" });
+            this.setState({
+                modalSize: "big"
+            })
+        }
+    }
     closeModalAndRefresh() {
         if (this.props.acceptFunction) {
             this.props.acceptFunction('refrsesh');
@@ -574,6 +607,7 @@ export class Modal extends React.Component {
     }
 
     render() {
+        // console.log(this.state.modalSize)
         let showDetail = '', secondary = '', secondStatus = '';
         if (this.props.showdetail && !this.props.text) {
             this.secondaryData = [
@@ -631,7 +665,7 @@ export class Modal extends React.Component {
             } else if (this.props.listdetailtype === "Email Template") {
                 if (this.props.text === '') {
                     showDetail = <div>
-                        <div className="lm--formItem lm--formItem--inline string" style={{marginLeft:"-15%"}}>
+                        <div className="lm--formItem lm--formItem--inline string" style={{ marginLeft: "-15%" }}>
                             <label className="lm--formItem-left lm--formItem-label string required">
                                 Subject:
                             </label>
@@ -639,12 +673,12 @@ export class Modal extends React.Component {
                                 <input type="text" name="email_subject" value={this.state.email_subject} onChange={this.Change.bind(this, 'email_subject')} disabled={this.state.disabled} ref="email_subject" maxLength="50" required aria-required="true" />
                             </div>
                         </div>
-                        <div className="lm--formItem lm--formItem--inline string" style={{marginLeft:"-15%"}}>
+                        <div className="lm--formItem lm--formItem--inline string" style={{ marginLeft: "-15%" }}>
                             <label className="lm--formItem-left lm--formItem-label string required">
                                 Body:
                             </label>
                             <div className="lm--formItem-right lm--formItem-control">
-                                <textarea name="email_body" style={{height:"140px"}} value={this.state.email_body} onChange={this.Change.bind(this, 'email_body')} disabled={this.state.disabled} ref="email_body" required aria-required="true" />
+                                <textarea name="email_body" className="email_body" style={{ height: "140px" }} value={this.state.email_body} onChange={this.Change.bind(this, 'email_body')} disabled={this.state.disabled} ref="email_body" required aria-required="true" />
                             </div>
                         </div>
                     </div>
@@ -834,7 +868,7 @@ export class Modal extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Postal Code:</td>
-                                    <td> <input type="text" value={this.state.postal_code} id="postal_code" maxLength="6"   name="postal_code" onChange={this.changeConsumption.bind(this, "postal_code")} placeholder="" required aria-required="true" />
+                                    <td> <input type="text" value={this.state.postal_code} id="postal_code" maxLength="6" name="postal_code" onChange={this.changeConsumption.bind(this, "postal_code")} placeholder="" required aria-required="true" />
                                         <div id="postal_code_message" className="isPassValidate">This filed is required!</div>
                                         <div id="postal_code_format" className="isPassValidate">Postal code must be 6 digit interger.</div>
                                     </td>
@@ -910,22 +944,22 @@ export class Modal extends React.Component {
                     {btn_html}
                 </div>
                 :
-                this.props.formSize==="middle"?
-                <div id="modal_main" className={this.state.modalshowhide} style={{ width: "50%", height:"300px", top: "40%", left: "40%" }} >
-                    <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
-                    <div className="modal_detail model_detail_formHeight" style={{"marginBottom":"30px"}}>
-                        <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
+                this.props.formSize === "middle" ?
+                    <div id="modal_main" name="middleModal" className={this.state.modalshowhide} style={{ width: "50%", height: "300px", top: "40%", left: "40%" }} >
+                        <h4><a onClick={this.closeModal.bind(this)}>X</a><a onClick={this.bigModal.bind(this, this.state.modalSize)}>口</a></h4>
+                        <div className="modal_detail model_detail_formHeight" style={{ "marginBottom": "30px" }}>
+                            <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
+                        </div>
+                        {btn_html}
                     </div>
-                    {btn_html}
-                </div>
-                :
-                <div id="modal_main" className={this.state.modalshowhide} >
-                    <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
-                    <div className="modal_detail">
-                        <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
+                    :
+                    <div id="modal_main" className={this.state.modalshowhide} >
+                        <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
+                        <div className="modal_detail">
+                            <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
+                        </div>
+                        {btn_html}
                     </div>
-                    {btn_html}
-                </div>
         )
     }
 }
