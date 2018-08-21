@@ -834,7 +834,7 @@ export class Modal extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Postal Code:</td>
-                                    <td> <input type="text" value={this.state.postal_code} id="postal_code" maxLength="6" onKeyUp={this.removeInputPostCode.bind(this)} name="postal_code" onChange={this.changeConsumption.bind(this, "postal_code")} placeholder="" required aria-required="true" />
+                                    <td> <input type="text" value={this.state.postal_code} id="postal_code" maxLength="6"   name="postal_code" onChange={this.changeConsumption.bind(this, "postal_code")} placeholder="" required aria-required="true" />
                                         <div id="postal_code_message" className="isPassValidate">This filed is required!</div>
                                         <div id="postal_code_format" className="isPassValidate">Postal code must be 6 digit interger.</div>
                                     </td>
