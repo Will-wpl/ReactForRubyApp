@@ -91,7 +91,7 @@ class Api::ConsumptionsController < Api::BaseController
       else
         auction = Auction.find(params[:auction_id])
         if auction.buyer_type == Auction::SingleBuyerType
-          auction.consumptions.destroy_all
+          auction.consumptions.find_by_user_consumer_type(User::ConsumerTypeCompany).destroy_all
         end
         @consumption = Consumption.new
         @consumption.auction_id = params[:auction_id]
