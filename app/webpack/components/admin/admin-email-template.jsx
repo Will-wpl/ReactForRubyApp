@@ -91,7 +91,7 @@ export default class EmailTemplates extends Component {
                         </div>
                     </div>
                 </div>
-                <Modal formSize="middle" text={this.state.text} acceptFunction={this.changeEmail.bind(this)} listdetail={this.state.listdetail} listdetailtype="Email Template" ref="Modal" />
+                <Modal formSize="middle" modalSize="big" text={this.state.text} acceptFunction={this.changeEmail.bind(this)} listdetail={this.state.listdetail}  listdetailtype="Email Template" ref="Modal" />
             </div>
 
         )

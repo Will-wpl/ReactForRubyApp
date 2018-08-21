@@ -19,7 +19,7 @@ class PdfRankingTable
       ranking_table.push(ranking_table_row)
       is_bidder_index = index + 1 if item.is_bidder
     }
-    pdf.table [["Retailer Ranking"]], :cell_style => {:size => 18, :inline_format => true, :width => pdf.bounds.right, :border_width => 0}
+    pdf.table [["Retailer Ranking"]], :cell_style => {:size => 16, :inline_format => true, :width => pdf.bounds.right, :border_width => 0}
 
     col0_width = pdf.bounds.right / 3.0 - 50.0
     #col1_width = (pdf.bounds.right - col0_width)/2.0 + 20.0

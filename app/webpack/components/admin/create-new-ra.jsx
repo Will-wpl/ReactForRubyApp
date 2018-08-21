@@ -27,7 +27,7 @@ export class CreateNewRA extends Component {
             required: false, check_required: true, single_multiple: "1", allow_deviation: "1",
             contract_6: '0', contract_12: '0', contract_24: '0', single_truely: false, published_date_time: '',
             reverse_auction_end: '',
-            live_auction_contracts: null
+            live_auction_contracts: null,submit_btn:true
         }
 
         this.auction = {};
@@ -348,12 +348,24 @@ export class CreateNewRA extends Component {
     blurNoNum(obj) {
         obj.target.value = findUpLimitZero(obj.target.value);
     }
+    
     mouthsHtml(mouth) {
         let months = []
         let flag = false;
+        let has_eht = true;
+        let has_htl = true;
+        let has_hts = true;
+        let has_lt = true;
+
         if (this.state.live_auction_contracts) {
             this.state.live_auction_contracts.map((item) => {
                 months.push(item.contract_duration)
+                if (mouth == item.contract_duration && this.auction.publish_status == '1') {
+                    has_eht = item.has_eht
+                    has_htl = item.has_htl
+                    has_hts = item.has_hts
+                    has_lt = item.has_lt
+                }
             })
             if (this.state.live_auction_contracts.length > 0 && this.auction.publish_status == '1' && months.indexOf(mouth) == -1) {
                 flag = true
@@ -369,31 +381,31 @@ export class CreateNewRA extends Component {
                     <thead>
                         <tr>
                             <th></th>
-                            <th>LT</th>
-                            <th>HT (Small)</th>
-                            <th>HT (Large)</th>
-                            <th>EHT</th>
+                            <th className={ has_lt ? '' : 'isHide'}>LT</th>
+                            <th className={ has_hts ? '' : 'isHide'}>HT (Small)</th>
+                            <th className={ has_htl ? '' : 'isHide'}>HT (Large)</th>
+                            <th className={ has_eht ? '' : 'isHide'}>EHT</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>Peak</td>
-                            <td id={'lt_peak_' + mouth}>
+                            <td className={ has_lt ? '' : 'isHide'} id={'lt_peak_' + mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"starting_price_lt_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} /><br />
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"reserve_price_lt_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} />
                                 <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
                             </td>
-                            <td id={'hts_peak_' + mouth}>
+                            <td className={ has_hts ? '' : 'isHide'} id={'hts_peak_' + mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"starting_price_hts_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} /><br />
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"reserve_price_hts_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} />
                                 <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
                             </td>
-                            <td id={'htl_peak_' + mouth}>
+                            <td className={ has_htl ? '' : 'isHide'} id={'htl_peak_' + mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"starting_price_htl_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} /><br />
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"reserve_price_htl_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} />
                                 <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
                             </td>
-                            <td id={'eht_peak_' + mouth}>
+                            <td className={ has_eht ? '' : 'isHide'} id={'eht_peak_' + mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"starting_price_eht_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} /><br />
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"reserve_price_eht_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} />
                                 <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
@@ -401,22 +413,22 @@ export class CreateNewRA extends Component {
                         </tr>
                         <tr>
                             <td>Off Peak</td>
-                            <td id={'lt_off_peak_' + mouth}>
+                            <td className={ has_lt ? '' : 'isHide'} id={'lt_off_peak_' + mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"starting_price_lt_off_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} /><br />
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"reserve_price_lt_off_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} />
                                 <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
                             </td>
-                            <td id={'hts_off_peak_' + mouth}>
+                            <td className={ has_hts ? '' : 'isHide'} id={'hts_off_peak_' + mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"starting_price_hts_off_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} /><br />
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"reserve_price_hts_off_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} />
                                 <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
                             </td>
-                            <td id={'htl_off_peak_' + mouth}>
+                            <td className={ has_htl ? '' : 'isHide'} id={'htl_off_peak_' + mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"starting_price_htl_off_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} /><br />
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"reserve_price_htl_off_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} />
                                 <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
                             </td>
-                            <td id={'eht_off_peak_' + mouth}>
+                            <td className={ has_eht ? '' : 'isHide'} id={'eht_off_peak_' + mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"starting_price_eht_off_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} /><br />
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"reserve_price_eht_off_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} />
                                 <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
@@ -540,9 +552,10 @@ export class CreateNewRA extends Component {
             //     return false
             // }
         }
-
+        this.setState({submit_btn:false});
         if (this.state.btn_type == "save") {
             createRa({ auction: this.checkSubmitTruly() }).then(res => {
+                this.setState({submit_btn:true});
                 this.auction_data = res;
                 this.auction = res;
                 this.refs.Modal.showModal();
@@ -577,6 +590,7 @@ export class CreateNewRA extends Component {
                 window.location.href = `/admin/auctions/${this.auction.id}/invitation`;
             } else {
                 createRa({ auction: this.checkSubmitTruly() }).then(res => {
+                    this.setState({submit_btn:true});
                     this.auction = res;
                     sessionStorage.auction_id = res.id;
                     window.location.href = `/admin/auctions/${res.id}/invitation`;
@@ -608,20 +622,20 @@ export class CreateNewRA extends Component {
             left_name = "Create New Reverse Auction";
             btn_html = <div className="createRa_btn">
                 {this.state.disabled ? <div className="mask"></div> : ''}
-                <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this, 'save')}>Save</button>
-                <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this, 'next')}>Next</button>
+                <button className="lm--button lm--button--primary" disabled={this.state.disabled?true:(this.state.submit_btn?false:true)} onClick={this.auctionCreate.bind(this, 'save')}>Save</button>
+                <button className="lm--button lm--button--primary"  onClick={this.auctionCreate.bind(this, 'next')}>Next</button>
             </div>
         } else {//edit
             styleType = "col-sm-12 col-md-8 push-md-2";
             left_name = this.props.left_name;
             btn_html = <div className="createRa_btn">
                 {this.props.disabled ?
-                    <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this, 'next')}>Next</button> :
+                    <button className="lm--button lm--button--primary"  onClick={this.auctionCreate.bind(this, 'next')}>Next</button> :
                     <div>
                         <a className={this.state.edit_btn} onClick={this.edit.bind(this)}>Edit</a>
                         <a className={this.state.edit_change} onClick={this.Cancel.bind(this)}>Cancel</a>
-                        <button className={this.state.edit_change} onClick={this.auctionCreate.bind(this, 'save')}>Save</button>
-                        <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this, 'next')}>Next</button>
+                        <button className={this.state.edit_change} disabled={this.state.disabled?true:(this.state.submit_btn?false:true)} onClick={this.auctionCreate.bind(this, 'save')}>Save</button>
+                        <button className="lm--button lm--button--primary"  onClick={this.auctionCreate.bind(this, 'next')}>Next</button>
                     </div>}
             </div>
         }

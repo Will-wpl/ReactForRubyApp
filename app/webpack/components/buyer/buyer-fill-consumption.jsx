@@ -258,7 +258,6 @@ export class FillConsumption extends Component {
             }
             buyerlist.push(siteItem);
         })
-        console.log(buyerlist);
         makeData = {
             consumption_id: this.consumptions_id,
             details: JSON.stringify(buyerlist),
@@ -492,7 +491,7 @@ export class FillConsumption extends Component {
                                 {
                                     this.state.dateIssuecount > 0 ?
                                     <h4 className="lm--formItem lm--formItem--inline string chkBuyer" >
-                                    <input type="checkbox" id="chkBuyer" id="chk_Warning" required /><span>Warning:[{this.state.dateIssuecount}] account(s) detected to have expiry date on  or after new contract start date. Please tick the checkbox
+                                    <input type="checkbox" id="chkBuyer" id="chk_Warning" required /><span>Warning: [{this.state.dateIssuecount}] account(s) detected to have expiry date on  or after new contract start date. Please tick the checkbox
                                              to confirm that you aware and would like to proceed with including such account(s) in this auction.</span> </h4> : <div></div>
                                 }
                             </div>

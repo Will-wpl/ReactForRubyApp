@@ -4,6 +4,9 @@ class BuyerEntityReport < BuyerReport
     current_user = param[:current_user]
     auction_result = param[:auction_result]
     auction_contract = param[:auction_contract]
+    if auction_result.nil?
+      return PdfUtils.get_no_data_pdf("LETTER", :portrait, 'NO_DATA_BUYER_REPORT.pdf')
+    end
     price_table_data, visibilities, price_hash = get_contract_duration_price(auction_contract, auction_result)
     entities = param[:entities_detail]
     total_consumption = get_consumption_forecast(entities)
@@ -233,7 +236,7 @@ class BuyerEntityReport < BuyerReport
 
   def get_datetime_of_auction(auction)
     zone_time = get_pdf_datetime_zone
-    auction_datetime = (auction.start_datetime + zone_time).strftime("%-d %b %Y")
+    auction_datetime = (auction.start_datetime + zone_time).strftime("%-d %b %Y %I:%M %p")
     ["<b>Date/Time of Reverse Auction:</b>", "#{auction_datetime}"]
   end
 

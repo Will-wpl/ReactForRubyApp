@@ -193,7 +193,7 @@ class Api::AuctionsController < Api::BaseController
       arrangement = get_retailer_arrangement_value(index, arrangements)
       status = get_retailer_status_value(arrangement)
       action = get_retailer_action_value(arrangement)
-      data.push(user_id: user.id, company_name: user.company_name, select_status: status, select_action: action)
+      data.push(user_id: user.id, company_name: user.company_name, select_status: status, select_action: action, lock: false)
     end
     bodies = {data: data, total: total}
     render json: {headers: headers, bodies: bodies, actions: actions}, status: 200
@@ -210,7 +210,7 @@ class Api::AuctionsController < Api::BaseController
                               []
                             end
       search_where_array = set_search_params(users_search_params)
-      users = User.buyers.where(search_where_array)
+      users = User.buyers.buyer_approved.where(search_where_array)
       consumptions = Consumption.find_by_auction_id(params[:id])
       ids = get_user_ids(consumptions)
       users = get_buyer_users(params, users, ids)
@@ -245,6 +245,10 @@ class Api::AuctionsController < Api::BaseController
       headers = []
       actions = []
     end
+
+    auction = Auction.find(params[:id])
+    company_consumptions_sent_count = auction.consumptions.find_by_user_consumer_type(User::ConsumerTypeCompany).where(action_status: Consumption::ActionStatusSent).count
+    lock = company_consumptions_sent_count > 0 && auction.buyer_type == Auction::SingleBuyerType ? true : false
     data = []
     users.each do |user|
       # status = ids.include?(user.id) ? '1' : '0'
@@ -253,13 +257,13 @@ class Api::AuctionsController < Api::BaseController
       status = get_buyer_status_value(consumption)
       action = get_buyer_action_value(consumption)
       if consumer_type == '2'
-        data.push(user_id: user.id, company_name: user.company_name, select_status: status, select_action: action)
+        data.push(user_id: user.id, company_name: user.company_name, select_status: status, select_action: action, lock: lock)
       elsif consumer_type == '3'
-        data.push(user_id: user.id, name: user.name, account_housing_type: user.account_housing_type, select_status: status, select_action: action)
+        data.push(user_id: user.id, name: user.name, account_housing_type: user.account_housing_type, select_status: status, select_action: action, lock: false)
       end
     end
     bodies = {data: data, total: total}
-    render json: {headers: headers, bodies: bodies, actions: actions}, status: 200
+    render json: {headers: headers, bodies: bodies, actions: actions }, status: 200
   end
 
   def selects
@@ -470,7 +474,7 @@ class Api::AuctionsController < Api::BaseController
                                   coalesce(users.company_unique_entity_number, '') company_unique_entity_number,
                                   auction_result_contracts.*")
                          .joins(:user)
-                         .where('auction_id = ? AND contract_duration = ?', auction_id, contract_duration)
+                         .where("auction_id = ? AND contract_duration = ? AND status= 'win'", auction_id, contract_duration)
                          .limit 1
     consumption_details = nil
     consumption_details = ConsumptionDetail.find_by_sql ['SELECT 	cbe."id",	cbe.company_name, cds.*
@@ -821,7 +825,7 @@ class Api::AuctionsController < Api::BaseController
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], auction_result_contract.to_json)
       end
     end
-    winner_send_mails(params[:user_id], params[:id], params[:contract_duration])
+    winner_send_mails(params[:user_id], params[:id], params[:contract_duration]) if params[:status] == AuctionResultContract::STATUS_WIN
     auction_result_contract_hash = auction_result_contract.attributes.dup
     auction_result_contract_hash['contract_period_start_date'] = auction_result.contract_period_start_date
     auction_result_contract_hash

@@ -14,11 +14,11 @@ export const findUpLimit = (curValue) => {
 export const findUpLimitZero = (curValue) => {
     if (curValue.indexOf('.') > 0) {
         let arr = curValue.split('');
-        for(let i=0; i<6; i++) {
-            arr[i] = arr[i]=='0'?arr[i]:(arr[i]?arr[i]:'0');
+        for (let i = 0; i < 6; i++) {
+            arr[i] = arr[i] == '0' ? arr[i] : (arr[i] ? arr[i] : '0');
         }
         return arr.join('');
-    }else{
+    } else {
         return curValue
     }
 }
@@ -142,6 +142,15 @@ export const validateDecimal = (value) => {
     return true;
 }
 
+export const validatePostCode = (value) => {
+    let express = /^[0-9]{6}$/;
+    if (!express.test(value)) {
+        return false;
+    }
+    else {
+        return true;
+    }
+}
 export const validator_Object = (param, paramType) => {
     let errArr = [];
     for (let key in paramType) {
@@ -189,7 +198,17 @@ export const validator_Object = (param, paramType) => {
                 }
             }
         }
-
+        else if (type.cate === 'postcode') {
+            //^\\d{6}$
+            if (value === null || value.length === 0) {
+                errArr.push({ column: key, cate: 1 });
+            }
+            else {
+                if (!validatePostCode(value)) {
+                    errArr.push({ column: key, cate: 2 })
+                }
+            }
+        }
         else if (type.cate === 'decimal') {
             if (value === null || value.length === 0) {
                 errArr.push({ column: key, cate: 1 });
@@ -280,13 +299,20 @@ export const setValidationPass = (item, type) => {
 }
 
 export const removeNanNum = (value) => {
+
     value.target.value = value.target.value.replace(/[^\d.]/g, "");
     value.target.value = value.target.value.replace(/\.{2,}/g, ".");
     value.target.value = value.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
     if (value.target.value.indexOf(".") < 0 && value.target.value != "") {
         value.target.value = parseFloat(value.target.value);
     }
-    return value
+    return value;
+}
+export const removePostCode = (value) => {
+    value.target.value = value.target.value.replace(/[^\d.]/g, "");
+    value.target.value = value.target.value.replace(/\.{2,}/g, ".");
+    value.target.value = value.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+    return value;
 }
 export const changeValidate = (type, value) => {
     if (value) {
@@ -347,26 +373,23 @@ export const formatPower = (number, places, symbol, thousand, decimal) => {
 export const setApprovalStatus = (status, dt) => {
     let approvalStatus = null;
     let approvalDateTime = '(' + moment(dt).format('DD MMM YYYY hh:mm a') + ')';
-    console.log(approvalDateTime);
-    switch(status)
-        {
-            case '0':
-                approvalStatus = 'Rejected ' + approvalDateTime;
-                break;
-            case '1':
-                approvalStatus = 'Approved ' + approvalDateTime;
-                break;
-            case '2':
-                approvalStatus = 'Pending';
-                break;
-            case '3':
-                approvalStatus = 'Registering';
-                break;
-            default:
-                approvalStatus = 'Registering';
-                break;
-        }
+    switch (status) {
+        case '0':
+            approvalStatus = 'Rejected ' + approvalDateTime;
+            break;
+        case '1':
+            approvalStatus = 'Approved ' + approvalDateTime;
+            break;
+        case '2':
+            approvalStatus = 'Pending';
+            break;
+        case '3':
+            approvalStatus = 'Registering';
+            break;
+        default:
+            approvalStatus = 'Registering';
+            break;
+    }
     return approvalStatus;
 }
 
- 

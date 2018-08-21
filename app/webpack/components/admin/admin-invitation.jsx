@@ -279,7 +279,7 @@ upload(type, index){
                   this.state.retailer_send != 0
                 //   || this.state.buyer_individual_send != 0 && type === "buyer_tc_upload"
                 // || this.state.buyer_company_send != 0 && type === "buyer_tc_upload"
-                || this.state.readOnly){
+                || this.state.readOnly || this.state.publish_status === "1"){
                     uploadStatus = false;
                 }
                 let fileHtml = '';
