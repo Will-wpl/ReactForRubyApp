@@ -29,9 +29,9 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
         data.push(published_gid: result.auction.published_gid,
                   name: result.auction.name,
                   start_datetime: result.auction.start_datetime,
-                  acknowledge: get_acknowledge(contract_result) ,
-                  report: get_report(contract_result) ,
-                  award: get_new_awrd(contract_result))
+                  acknowledge: get_new_acknowledge(result, contract_result) ,
+                  report: get_new_report(result, contract_result) ,
+                  award: get_new_awrd(result, contract_result))
       end
 
     end
@@ -76,7 +76,7 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
     show_award?(result, current_user) ? result.acknowledge : nil
   end
 
-  def get_report(result)
+  def get_report(result, contract_result)
     result.participation_status=='1' ? "api/buyer/auctions/#{result.auction_id}/pdf" : ''
   end
 
@@ -84,10 +84,22 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
     show_award?(result, current_user) ? result.participation_status=='1' ? ["api/buyer/auctions/#{result.auction_id}/letter_of_award_pdf"] : [] : []
   end
 
-  def get_new_awrd(result)
+  def get_new_acknowledge(result, contract_result)
+    show_award?(contract_result, current_user) ? result.acknowledge : nil
+  end
+
+  def get_new_report(result, contract_result)
+    show_award?(contract_result, current_user) && result.accept_status=='1' ? "api/buyer/auctions/#{result.auction_id}/pdf" : ''
+  end
+
+  def get_new_award(result, contract_result)
+    show_award?(contract_result, current_user) ? result.accept_status=='1' ? ["api/buyer/auctions/#{result.auction_id}/letter_of_award_pdf"] : [] : []
+  end
+
+  def get_new_awrd(result, contract_result)
     awards = []
-    if show_award?(result, current_user) then
-      if result.participation_status == '1'
+    if show_award?(contract_result, current_user) then
+      if result.participation_status == '1' && result.accept_status == '1'
         consumption = Consumption.find_by_auction_and_user(result.auction_id, current_user.id).first
         consumption.consumption_details.select(:company_buyer_entity_id).distinct.each do |detail|
           awards.push("api/buyer/auctions/#{result.auction_id}/letter_of_award_pdf?entity_id=#{detail.company_buyer_entity_id}&contract_duration=#{consumption.contract_duration}")
