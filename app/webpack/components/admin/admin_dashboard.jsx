@@ -127,7 +127,7 @@ export class AdminDashboard extends Component {
         this.ws.onConnected(() => {
         }).onDisconnected(() => {
         }).onError(()=>{
-            this.setState({text:'３ seconds will reload!'});
+            this.setState({text:'WebSocket exception,page will reload ３ seconds.'});
             this.refs.Modal.showModal();
             setTimeout(()=>{
                 window.location.reload();
