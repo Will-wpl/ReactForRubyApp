@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { removeFile,removeRetailerFile,removeBuyerFile,removeUserAttachFile } from '../../javascripts/componentService/admin/service';
+import { removeFile, removeRetailerFile, removeBuyerFile, removeUserAttachFile } from '../../javascripts/componentService/admin/service';
 export class UploadFile extends React.Component {
     constructor(props) {
         super(props);
@@ -67,10 +67,12 @@ export class UploadFile extends React.Component {
                                 }
                             </div>
                         </div>
-                        <div id="btnUpload" className="col-sm-12 col-md-2 u-cell">
+                        <div className="col-sm-12 col-md-2 u-cell">
                             {
-                                this.props.propsdisabled ? <button id="btnUpload" className={this.props.propsdisabled ? "lm--button lm--button--primary buttonDisabled" : "lm--button lm--button--primary"} disabled>Upload</button> : (this.state.disabled ? <button className="lm--button lm--button--primary" disabled>Upload</button>
-                                    : (window.location.href.indexOf("past") > 0 ? <button className="lm--button lm--button--primary" disabled>Upload</button> : <a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>))
+                                this.props.propsdisabled ?
+                                    <button className={this.props.propsdisabled ? "lm--button lm--button--primary buttonDisabled" : "lm--button lm--button--primary"} disabled>Upload</button>
+                                    : (this.state.disabled ? <button className="lm--button lm--button--primary" disabled>Upload</button>
+                                        : (window.location.href.indexOf("past") > 0 ? <button className="lm--button lm--button--primary" disabled>Upload</button> : <a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>))
                             }
                         </div>
                         {/* <div className="col-sm-12 col-md-2 u-cell">
@@ -86,7 +88,7 @@ export class UploadFile extends React.Component {
         fileObj.parent().prev("dfn").text(fileObj.val());
     }
     remove_file(filetype, typeindex, fileindex, fileid) {
-      
+
         let fileObj;
         if (this.props.deleteType === "buyer") {
             removeBuyerFile(fileid).then(res => {
@@ -99,8 +101,7 @@ export class UploadFile extends React.Component {
 
             })
         }
-        else if (this.props.deleteType === "retailer")
-        {
+        else if (this.props.deleteType === "retailer") {
             removeRetailerFile(fileid).then(res => {
                 fileObj = this.state.fileData;
                 fileObj[typeindex].files.splice(fileindex, 1);
@@ -112,9 +113,8 @@ export class UploadFile extends React.Component {
             })
 
         }
-        else if(this.props.deleteType === "userAttach")
-        {
-            
+        else if (this.props.deleteType === "userAttach") {
+
             removeUserAttachFile(fileid).then(res => {
                 fileObj = this.state.fileData;
                 fileObj[typeindex].files.splice(fileindex, 1);
@@ -125,8 +125,7 @@ export class UploadFile extends React.Component {
 
             })
         }
-        else if (this.props.deleteType === "consumption")
-        {
+        else if (this.props.deleteType === "consumption") {
             removeBuyerFile(fileid).then(res => {
                 fileObj = this.state.fileData;
                 fileObj[typeindex].files.splice(fileindex, 1);
@@ -151,6 +150,7 @@ export class UploadFile extends React.Component {
 
     }
     upload(type, index) {
+
         let time = null;
         if ($("#" + type + index).val() === "") {
             $("#" + type + index).next().next().fadeIn(300);
@@ -170,6 +170,10 @@ export class UploadFile extends React.Component {
             contentType: false,
             xhr: () => {
                 var xhr = new window.XMLHttpRequest();
+
+                this.setState({
+                    disabled: true
+                })
                 xhr.upload.addEventListener("progress", function (evt) {
                     if (evt.lengthComputable) {
                         const percentComplete = parseInt(evt.loaded / evt.total * 100, 10);
@@ -189,6 +193,9 @@ export class UploadFile extends React.Component {
                 setTimeout(() => {
                     barObj.fadeOut(500);
                     $('.dfn').html('Please select file.')
+                    this.setState({
+                        disabled: false
+                    })
                 }, 2000);
                 fileObj = this.state.fileData;
                 fileObj.map((item, index) => {
@@ -204,7 +211,8 @@ export class UploadFile extends React.Component {
                 if (this.props.calbackFn) {
                     this.props.calbackFn();
                 }
-                $('#showMessage').removeClass('errormessage').addClass('isPassValidate')
+                // $('#showMessage').removeClass('errormessage').addClass('isPassValidate')
+                $("#" + type + index).val('')
                 //console.log(res);
             }, error: () => {
                 barObj.find(".progress-bar").text('upload failed!');
