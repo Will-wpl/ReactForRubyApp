@@ -25,7 +25,6 @@ export default class ChooseAlternativeWinner extends React.Component{
     componentDidMount(){
         let thisId = window.location.href.split("auctions/")[1].split("/choose_winner")[0];
         //console.log(thisId);
-        document.getElementById('badge').style.display = 'none'
         getAuction('admin',thisId).then(resp=>{
             this.setState({auction:resp,userid:thisId});
             if(resp.live_auction_contracts){
@@ -38,6 +37,7 @@ export default class ChooseAlternativeWinner extends React.Component{
         })
     }
     refresh(){
+        document.getElementById('badge').style.display = 'none'
         getHistoriesLast({ auction_id: this.state.auction.id}).then(resp=>{
             let data ,arr=[];
             if(resp.duration_6 || resp.duration_12 || resp.duration_24){
