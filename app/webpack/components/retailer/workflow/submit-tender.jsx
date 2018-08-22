@@ -231,6 +231,7 @@ export class Submittender extends React.Component{
                         disabled: false
                     })
                 },2000);
+              
                 fileObj = this.state.fileData;
                 fileObj[type].map((item,index)=>{
                     item.files.push({
@@ -247,6 +248,9 @@ export class Submittender extends React.Component{
             },error:() => {
                         barObj.find(".progress-bar").text('upload failed!');
                         barObj.find(".progress-bar").css('background', 'red');
+                        this.setState({
+                            disabled: false
+                        })
                     }
                 })
             }

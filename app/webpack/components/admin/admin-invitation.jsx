@@ -140,10 +140,12 @@ export default class AdminInvitation extends Component {
                 barObj.find(".progress-bar").text('Upload Successful!');
                 setTimeout(() => {
                     barObj.fadeOut(500);
+                    $('.dfn').html('Please select file.');
                     this.setState({
                         disabled: false
                     })
                 }, 2000)
+               
                 fileObj = this.state.fileData;
                 fileObj[type].map((item, index) => {
                     item.files.push({
@@ -160,6 +162,9 @@ export default class AdminInvitation extends Component {
             }, error: () => {
                 barObj.find(".progress-bar").text('Upload failed!');
                 barObj.find(".progress-bar").css('background', 'red');
+                this.setState({
+                    disabled: false
+                })
             }
         })
     }
