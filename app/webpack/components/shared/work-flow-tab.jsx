@@ -88,7 +88,7 @@ export class Workflowtab extends React.Component{
                             </td>
                         </tr>:(this.props.single===4?<tr>
                             <td width="16.8%">
-                                <div className={"old_step1"} current={this.state.current} onClick={this.tab.bind(this,1)}><span className={this.stepSelect(1)}></span></div>
+                                <div className={"step1"} id="old_step1" current={this.state.current} onClick={this.tab.bind(this,1)}><span className={this.stepSelect(1)}></span></div>
                             </td>
                             <td width="4%">
                                 <div className="step_icon"></div>

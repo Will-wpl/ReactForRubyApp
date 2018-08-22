@@ -48,6 +48,7 @@ export class AdminDashboard extends Component {
                     element['color'] = getRandomColor(index + 1, limit);
                     return element;
                 });
+                this.refresh();
                 this.userLen = users.length;
                 this.priceUsers.setList(JSON.parse(JSON.stringify(users)));
                 this.rankingUsers.setList(JSON.parse(JSON.stringify(users)));
@@ -55,13 +56,17 @@ export class AdminDashboard extends Component {
                 this.rankingUsers.selectAll();
             }, error => {
             });
+            
         })
-        setTimeout(()=>{
-            this.refresh();
-        },200)
+        // setTimeout(()=>{
+        //     this.refresh();
+        // },200)
     }
     refresh(){
             let auctionId = this.state.auction? this.state.auction.id : 1;
+            if (this.ws) {
+                this.ws.stopConnect();
+            }
             getHistories({ auction_id: sessionStorage.auction_id}).then(res => {
                 let histories;
                 if(res.duration_6 || res.duration_12 || res.duration_24){
@@ -126,16 +131,12 @@ export class AdminDashboard extends Component {
         this.ws = createWebsocket(auction);
         this.ws.onConnected(() => {
         }).onDisconnected(() => {
-        }).onError(()=>{
-            this.setState({text:'WebSocket exception,page will reload ３ seconds.'});
-            this.refs.Modal.showModal();
-            setTimeout(()=>{
-                window.location.reload();
-            },3500);
         }).onReceivedData(data => {
             if (data.action === 'set_bid') {
                 if (data.data.length > 0) {
                     let histories = [];
+                    console.log('websocket set_bid-----------------');
+                    console.log(data);
                     data.data.forEach((element, index) => {
                         histories.push({id: element.user_id, data:[].concat(element)})
                     })
@@ -186,7 +187,7 @@ export class AdminDashboard extends Component {
         this.setState({livetype:index,livetab:true});
         setTimeout(()=>{
             this.refresh();
-        },200)
+        },500)
         this.priceUsers.selectAll();
         this.rankingUsers.selectAll();
     }

@@ -56,7 +56,7 @@ export class BuyerList extends Component {
                                                 <li key={index} className="u-grid">
                                                     <span className="col-sm-5 white" title={item.name}>{item.name}</span>
                                                     <span className="col-sm-3"><abbr className={'color' + item.participation_status}></abbr></span>
-                                                    <span id="showDetail" className={item.participation_status === '1' ? "col-sm-4" : item.accept_status === '0' ? "col-sm-4" : "col-sm-4 isHide"} onClick={this.showDetail.bind(this, item)}>Consumption Details {item.accept_status === "1" ? "(Admin Approved)" : item.accept_status === "0" ? "(Admin Rejected)" : ""}</span>
+                                                    <span id="showDetail" className={item.participation_status === '1' ? "col-sm-4" : item.accept_status === '0' ? "col-sm-4" : "col-sm-4 isHide"} onClick={this.showDetail.bind(this, item)}><font>Consumption Details</font> {item.accept_status === "1" ? <b className={"b_approved"}>(Admin Approved)</b> : item.accept_status === "0" ? <b className={"b_rejected"}>(Admin Rejected)</b> : ""}</span>
                                                 </li>)
                                         })
                                     }

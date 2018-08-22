@@ -128,7 +128,7 @@ export default class ChooseAlternativeWinner extends React.Component{
     submit(type){
         if(this.state.justification == "" && type != "win"){
             this.setState({
-                text:'Please provide justification for voiding selection of alternate.'},()=>{
+                text:'Please provide justification for voiding of auction.'},()=>{
                 this.refs.Modal.showModal();
             })
             return;
@@ -169,7 +169,10 @@ export default class ChooseAlternativeWinner extends React.Component{
                 text:"You have voided this Reverse Auction exercise, and will be redirected to the homepage.",
                 disabled:true,
                 voidStatus:true
-            })
+            });
+            setTimeout(()=>{
+                this.refresh();
+            },3000)
         },error=>{
 
         })
