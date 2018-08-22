@@ -60,7 +60,7 @@ export default class ChooseAlternativeWinner extends React.Component{
             if(data.result){
                 this.setState({disabled:true,justification:data.result.justification});
             }else{
-                this.setState({disabled:false});
+                this.setState({disabled:false,voidStatus:false});
             }
             data.histories.map((item,index)=>{
                 if(index==0){
@@ -83,7 +83,7 @@ export default class ChooseAlternativeWinner extends React.Component{
         })
     }
     liveTab(index){
-        this.setState({livetype:index,justification:''});
+        this.setState({livetype:index,justification:'',voidStatus:false});
         this.refresh();
     }
     showRetailer(data){
@@ -163,7 +163,7 @@ export default class ChooseAlternativeWinner extends React.Component{
     }
     void_auction(){
         auctionConfirm(
-            {data: { user_id: this.state.userid , status:'void',contract_duration:this.state.livetype}, id:this.state.auction.id}).then(res=>{
+            {data: { user_id: this.state.userid , status:'void',contract_duration:this.state.livetype,justification:this.state.justification}, id:this.state.auction.id}).then(res=>{
             this.refs.Modal.showModal();
             this.setState({
                 text:"You have voided this Reverse Auction exercise.",
