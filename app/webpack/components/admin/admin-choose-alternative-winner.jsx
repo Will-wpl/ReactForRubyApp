@@ -128,7 +128,7 @@ export default class ChooseAlternativeWinner extends React.Component{
     submit(type){
         if(this.state.justification == "" && type != "win"){
             this.setState({
-                text:'Please provide justification for voiding selection of alternate.'},()=>{
+                text:'Please provide justification for voiding of auction.'},()=>{
                 this.refs.Modal.showModal();
             })
             return;
