@@ -48,6 +48,7 @@ export class AdminDashboard extends Component {
                     element['color'] = getRandomColor(index + 1, limit);
                     return element;
                 });
+                this.refresh();
                 this.userLen = users.length;
                 this.priceUsers.setList(JSON.parse(JSON.stringify(users)));
                 this.rankingUsers.setList(JSON.parse(JSON.stringify(users)));
@@ -55,7 +56,7 @@ export class AdminDashboard extends Component {
                 this.rankingUsers.selectAll();
             }, error => {
             });
-            this.refresh();
+            
         })
         // setTimeout(()=>{
         //     this.refresh();
@@ -63,6 +64,9 @@ export class AdminDashboard extends Component {
     }
     refresh(){
             let auctionId = this.state.auction? this.state.auction.id : 1;
+            if (this.ws) {
+                this.ws.stopConnect();
+            }
             getHistories({ auction_id: sessionStorage.auction_id}).then(res => {
                 let histories;
                 if(res.duration_6 || res.duration_12 || res.duration_24){
@@ -183,7 +187,7 @@ export class AdminDashboard extends Component {
         this.setState({livetype:index,livetab:true});
         setTimeout(()=>{
             this.refresh();
-        },200)
+        },500)
         this.priceUsers.selectAll();
         this.rankingUsers.selectAll();
     }
