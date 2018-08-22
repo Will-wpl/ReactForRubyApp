@@ -848,7 +848,16 @@ ul.history_files{
   #buyer_individual{ display: none;}
   .bidderStatus{
       .bidders_list{ width:96%; margin:0px; margin-top: 5px;
-      li{ background: #304556;}
+      li{ background: #304556;
+        span{
+          &:last-child{text-decoration: none; cursor: default;}
+          font{color:#00afb2; cursor: pointer; text-decoration: underline;}
+          b{font-weight: normal; margin-left:10px;
+            &.b_approved{background: url('../images/notification_sent.png') no-repeat left; padding-left:18px;}
+            &.b_rejected{background: url('../images/not_invited.png') no-repeat left; padding-left: 18px;}
+          }
+        }
+      }
       }
     }
 }
