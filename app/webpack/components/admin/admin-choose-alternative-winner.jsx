@@ -126,6 +126,13 @@ export default class ChooseAlternativeWinner extends React.Component{
     }
 
     submit(type){
+        if(this.state.justification == "" && type != "win"){
+            this.setState({
+                text:'Please provide justification for voiding selection of alternate.'},()=>{
+                this.refs.Modal.showModal();
+            })
+            return;
+        }
         let text = type==="win"?"Are you sure you want to confirm the winner?":"Are you sure you want to void this Reverse Auction exercise?";
         let data = this.state.selectedWinner;
         if(data.index != 0){
@@ -155,13 +162,6 @@ export default class ChooseAlternativeWinner extends React.Component{
         }
     }
     void_auction(){
-        if(this.state.justification == ""){
-            this.setState({
-                text:'Please provide justification for selection of alternate void.'},()=>{
-                this.refs.Modal.showModal();
-            })
-            return;
-        }
         auctionConfirm(
             {data: { user_id: this.state.userid , status:'void',contract_duration:this.state.livetype}, id:this.state.auction.id}).then(res=>{
             this.refs.Modal.showModal();
