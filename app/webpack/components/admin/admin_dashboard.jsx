@@ -42,6 +42,7 @@ export class AdminDashboard extends Component {
                     livetype:res.live_auction_contracts[0].contract_duration
                 });
             }
+            this.refresh();
             getArrangements(res.id, ACCEPT_STATUS.ACCEPT).then(res => {
                 let limit = findUpLimit(res.length);
                 let users = res.map((element, index) => {
@@ -56,12 +57,13 @@ export class AdminDashboard extends Component {
             }, error => {
             });
         })
-        setTimeout(()=>{
-            this.refresh();
-        },200)
+        // setTimeout(()=>{
+        //     this.refresh();
+        // },200)
     }
     refresh(){
             let auctionId = this.state.auction? this.state.auction.id : 1;
+            this.ws.stopConnect();
             getHistories({ auction_id: sessionStorage.auction_id}).then(res => {
                 let histories;
                 if(res.duration_6 || res.duration_12 || res.duration_24){
@@ -130,6 +132,8 @@ export class AdminDashboard extends Component {
             if (data.action === 'set_bid') {
                 if (data.data.length > 0) {
                     let histories = [];
+                    console.log('websocket set_bid-----------------');
+                    console.log(data);
                     data.data.forEach((element, index) => {
                         histories.push({id: element.user_id, data:[].concat(element)})
                     })
