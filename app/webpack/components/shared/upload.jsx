@@ -15,7 +15,8 @@ export class UploadFile extends React.Component {
     componentDidMount() {
     }
     addinputfile(type, required) {
-
+        let buttonWidth=12-parseInt(this.props.col_width);
+        console.log(buttonWidth)
         let fileHtml = '';
         fileHtml = <form id={type + "_form"} encType="multipart/form-data">
             {
@@ -66,8 +67,8 @@ export class UploadFile extends React.Component {
                                     <div></div>
                                 }
                             </div>
-                        </div>
-                        <div className="col-sm-12 col-md-2 u-cell">
+                        </div>   
+                        <div className={`col-sm-12 col-md-${buttonWidth } u-cell` }>
                             {
                                 this.props.propsdisabled ?
                                     <button className={this.props.propsdisabled ? "lm--button lm--button--primary buttonDisabled" : "lm--button lm--button--primary"} disabled>Upload</button>

@@ -15,7 +15,7 @@ export default class AdminInvitation extends Component {
             buyer_company_pend: 0, buyer_individual_select: 0, buyer_individual_send: 0,
             buyer_individual_pend: 0, peak_lt: 0, peak_hts: 0,
             peak_htl: 0, peak_eht: 0, off_peak_lt: 0, off_peak_hts: 0,
-            off_peak_htl: 0, off_peak_eht: 0, disabled: false, publish_status: 0, readOnly: false,
+            off_peak_htl: 0, off_peak_eht: 0, disabled: false, publish_status: 0, readOnly: false, buttonDisabled:false,
             params_type: "", auction: {},
             fileData: {
                 "buyer_tc_upload": [
@@ -119,7 +119,7 @@ export default class AdminInvitation extends Component {
             xhr: () => {
                 var xhr = new window.XMLHttpRequest();
                 this.setState({
-                    disabled: true
+                    buttonDisabled: true
                 })
                 xhr.upload.addEventListener("progress", function (evt) {
                     if (evt.lengthComputable) {
@@ -142,7 +142,7 @@ export default class AdminInvitation extends Component {
                     barObj.fadeOut(500);
                     $('.dfn').html('Please select file.');
                     this.setState({
-                        disabled: false
+                        buttonDisabled: false
                     })
                 }, 2000)
                
@@ -163,7 +163,7 @@ export default class AdminInvitation extends Component {
                 barObj.find(".progress-bar").text('Upload failed!');
                 barObj.find(".progress-bar").css('background', 'red');
                 this.setState({
-                    disabled: false
+                    buttonDisabled: false
                 })
             }
         })
@@ -332,7 +332,12 @@ export default class AdminInvitation extends Component {
                             </div>
                         </div>
                         {uploadStatus ? <div className="col-sm-12 col-md-2 u-cell">
-                            <a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>
+                           {/* {this.state.buttonDisabled?<a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)} >Upload2</a>:<a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload1</a>}  */}
+
+                             {
+                                 this.state.buttonDisabled?<button className="lm--button lm--button--primary"  disabled>Upload</button>:<button className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)} >Upload</button>
+                             }       
+
                         </div> : ''}
                         {/* <div className="col-sm-12 col-md-2 u-cell">
                                                 {item.buttonName === "none" ? "" : <a onClick={this.fileclick.bind(this, index, type, item.buttonName)} className={"lm--button lm--button--primary "+item.buttonName}>{item.buttonText}</a>}
