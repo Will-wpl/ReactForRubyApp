@@ -205,6 +205,9 @@ export class Submittender extends React.Component{
             contentType: false,
             xhr:() => {
                 var xhr = new window.XMLHttpRequest();
+                this.setState({
+                    disabled: true
+                })
                 xhr.upload.addEventListener("progress", function (evt) {
                     if (evt.lengthComputable) {
                         const percentComplete = parseInt(evt.loaded / evt.total * 100, 10);
@@ -223,6 +226,10 @@ export class Submittender extends React.Component{
                 barObj.find(".progress-bar").text('Upload Successful!');
                 setTimeout(()=>{
                     barObj.fadeOut(500);
+                    $('.dfn').html('Please select file.')
+                    this.setState({
+                        disabled: false
+                    })
                 },2000);
                 fileObj = this.state.fileData;
                 fileObj[type].map((item,index)=>{
@@ -235,6 +242,7 @@ export class Submittender extends React.Component{
                 this.setState({
                     fileData:fileObj
                 })
+                $("#" + type + index).val('');
                 //console.log(res);
             },error:() => {
                         barObj.find(".progress-bar").text('upload failed!');

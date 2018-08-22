@@ -212,7 +212,7 @@ export class UploadFile extends React.Component {
                     this.props.calbackFn();
                 }
                 // $('#showMessage').removeClass('errormessage').addClass('isPassValidate')
-                $("#" + type + index).val('')
+                $("#" + type + index).val('');
                 //console.log(res);
             }, error: () => {
                 barObj.find(".progress-bar").text('upload failed!');
