@@ -188,7 +188,9 @@ abbr[title]{color: #fe0000; text-decoration: none;}
   h4{
     height: 32px; line-height: 32px; width: 100%; margin: 0 auto; font-size: 13px;
     span{ float: left; padding-left:15px;}
-    a{ float: right; padding-right:15px; cursor: pointer;}
+    a{ float: right; padding-right:15px; cursor: pointer;
+      &:hover{background: none;}
+    }
   }
   .modal_detail{ width:90%; min-height: 112px; max-height:290px; overflow-y: auto; margin:0px auto; line-height: 22px; font-size: 16px;word-wrap: break-word;
     .modal_text{ width: 100%; height: auto; border:0px; background: none; font-size: 16px; color:#fff;rows:2;resize:none;}
