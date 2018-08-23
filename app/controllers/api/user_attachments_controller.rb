@@ -21,6 +21,14 @@ class Api::UserAttachmentsController < Api::BaseController
     render json: attachments, status: 200
   end
 
+  # reset user updated attachment flag
+  def reset_updated_attachment
+    user = current_user
+    user.tc_attachment_update_flag = 0
+    user.save!
+    render json: user, status: 200
+  end
+
   # get user attachments by user id
   def index
     file_type = params[:file_type]
