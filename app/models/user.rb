@@ -81,4 +81,16 @@ class User < ApplicationRecord
   def self.find_buyer_entity_by_email(email)
     User.buyer_entities_by_email(email.downcase).first
   end
+
+  def self.update_attachment_update_flag(users, file_flag_val)
+    # users.update('tc_attachment_update_flag = tc_attachment_update_flag | ? ', tc_attachment_update_flag)
+    users.each{ |u|
+      if u.tc_attachment_update_flag.blank?
+        u.tc_attachment_update_flag = file_flag_val
+      else
+        u.tc_attachment_update_flag |= file_flag_val
+      end
+      u.save
+    }
+  end
 end

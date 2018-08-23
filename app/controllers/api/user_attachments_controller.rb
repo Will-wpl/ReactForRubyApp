@@ -1,5 +1,26 @@
 class Api::UserAttachmentsController < Api::BaseController
 
+  # get updated attachments
+  def updated_attachment
+    user = current_user
+    attachments = []
+    if user.tc_attachment_update_flag & UserAttachment::FileFlag_Seller_Buyer_TC
+      seller_buyer_tc = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)
+      attachments.push({type: UserAttachment::FileType_Seller_Buyer_TC, file: seller_buyer_tc})
+    end
+
+    if user.tc_attachment_update_flag & UserAttachment::FileFlag_Buyer_REVV_TC
+      buyer_revv_tc = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
+      attachments.push({type: UserAttachment::FileType_Buyer_REVV_TC, file: buyer_revv_tc})
+    end
+
+    if user.tc_attachment_update_flag & UserAttachment::FileFlag_Seller_REVV_TC
+      seller_revv_tc = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_REVV_TC)
+      attachments.push({type: UserAttachment::FileType_Seller_REVV_TC, file: seller_revv_tc})
+    end
+    render json: attachments, status: 200
+  end
+
   # get user attachments by user id
   def index
     file_type = params[:file_type]
@@ -20,6 +41,20 @@ class Api::UserAttachmentsController < Api::BaseController
     attachment.consumption_detail_id = params[:consumption_detail_id] unless params[:consumption_detail_id].blank?
 
     attachment.save!
+
+    if attachment.file_type.eql?(UserAttachment::FileType_Seller_Buyer_TC)
+      User.update_attachment_update_flag(User.buyers,UserAttachment::FileFlag_Seller_Buyer_TC)
+      User.update_attachment_update_flag(User.buyer_entities,UserAttachment::FileFlag_Seller_Buyer_TC)
+      User.update_attachment_update_flag(User.retailers,UserAttachment::FileFlag_Seller_Buyer_TC)
+    end
+
+    if attachment.file_type.eql?(UserAttachment::FileType_Buyer_REVV_TC)
+      User.update_attachment_update_flag(User.buyers,UserAttachment::FileFlag_Buyer_REVV_TC)
+      User.update_attachment_update_flag(User.buyer_entities,UserAttachment::FileFlag_Buyer_REVV_TC)
+    end
+    if attachment.file_type.eql?(UserAttachment::FileType_Seller_REVV_TC)
+      User.update_attachment_update_flag(User.retailers,UserAttachment::FileFlag_Seller_REVV_TC)
+    end
 
     render json: attachment, status: 200
   end
