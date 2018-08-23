@@ -15,22 +15,22 @@ export class RetailerTCUploadApprove extends Component {
 
     componentDidMount() {
         getNeedRetailerApproveAttachments().then(res=>{
-            res.map((item)=>{
-                 if(item.type==="SELLER_BUYER_TC")
-                 {
-                     this.setState({
-                        epaIsExist:true,
-                        epaUrl:item.file.file_path
-                     })
-                 }
-                 if(item.type==="BUYER_REVV_TC")
-                 {
-                     this.setState({
-                        bptIsExist:true,
-                        bptUrl:item.file.file_path
-                     })
-                 }
-            })
+        //     res.map((item)=>{
+        //          if(item.type==="SELLER_BUYER_TC")
+        //          {
+        //              this.setState({
+        //                 epaIsExist:true,
+        //                 epaUrl:item.file.file_path
+        //              })
+        //          }
+        //          if(item.type==="BUYER_REVV_TC")
+        //          {
+        //              this.setState({
+        //                 bptIsExist:true,
+        //                 bptUrl:item.file.file_path
+        //              })
+        //          }
+        //     })
         }) 
     }
 

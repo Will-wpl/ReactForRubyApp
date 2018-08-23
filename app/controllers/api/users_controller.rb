@@ -58,6 +58,28 @@ class Api::UsersController < Api::BaseController
     render json: user, status: 200
   end
 
+  def show_current_user
+    user = current_user
+    seller_buyer_tc = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)
+    buyer_revv_tc = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
+    seller_revv_tc = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_REVV_TC)
+    attachments = []
+    attachments.push(seller_buyer_tc)
+    attachments.push(buyer_revv_tc)
+    attachments.push(seller_revv_tc)
+    render json: { user: user, attachments: attachments} , status: 200
+  end
+
+  def update_attachment_status
+    if current_user.has_role?(:retailer)
+      current_user.update(agree_seller_buyer: User::AgreeSellerBuyerYes, agree_seller_revv: User::AgreeSellerRevvYes)
+    end
+    if current_user.has_role?(:buyer)
+      current_user.update(agree_seller_buyer: User::AgreeSellerBuyerYes, agree_buyer_revv: User::AgreeBuyerRevvYes)
+    end
+    render json: current_user, status: 200
+  end
+
   protected
 
   # Approval User

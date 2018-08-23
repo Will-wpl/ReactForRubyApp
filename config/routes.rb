@@ -124,6 +124,13 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :retailer do
+      resources :users, only: %i[show_current_user update_attachment_status] do
+        collection do
+          get 'show_current_user'
+          post 'update_attachment_status'
+        end
+      end
+
       resources :auctions, only: %i[obtain published] do
         collection do
           get 'obtain'
@@ -185,17 +192,19 @@ Rails.application.routes.draw do
           put 'validate'
         end
       end
-      resources :user_attachments, only: %i[create destroy updated_attachment reset_updated_attachment] do
-        collection do
-          put 'updated_attachment'
-          put 'reset_updated_attachment'
-        end
+      resources :user_attachments, only: %i[create destroy] do
       end
     end
   end
 
   namespace :api do
     namespace :buyer do
+      resources :users, only: %i[show_current_user update_attachment_status] do
+        collection do
+          get 'show_current_user'
+          post 'update_attachment_status'
+        end
+      end
       resources :consumption_details, only: %i[index update participate reject validate] do
         collection do
           post 'participate'
@@ -223,11 +232,9 @@ Rails.application.routes.draw do
           put 'validate'
         end
       end
-      resources :user_attachments, only: %i[create destroy patch_update_consumption_detail_id updated_attachment reset_updated_attachment] do
+      resources :user_attachments, only: %i[create destroy patch_update_consumption_detail_id] do
         collection do
           put 'patch_update_consumption_detail_id'
-          put 'updated_attachment'
-          put 'reset_updated_attachment'
         end
       end
     end
