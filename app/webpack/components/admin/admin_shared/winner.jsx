@@ -39,7 +39,7 @@ export default class WinnerPrice extends Component {
             this.props.winner.data.status ?
                 <div className="winnerPrice_main">
                     <h2 className={this.props.showOrhide}>{this.props.winner.data.status === 'win' ? <span className="green">Status : Awarded</span> : <span className="red">Status : Void</span>}</h2>
-                    {this.props.winner.data.justification?(this.props.winner.data.justification.length > 0 ? <div><h4 className="u-mt1">Justification:{this.props.winner.data.justification}</h4></div> : ""):""}
+                    {this.props.winner.data.justification?(this.props.winner.data.justification.length > 0 ? <div><h4 className="u-mt1">Justification: {this.props.winner.data.justification}</h4></div> : ""):""}
                     <div>{this.props.winner.data.status === 'win' ? <h4 className="u-mt1">Summary of Winner</h4> : <h4 className="u-mt1">Summary of Lowest Bidder</h4>} </div>
                     <ul>
                         <li>{this.props.winner.data.status === 'win' ? <span>Winning Bidder: </span> : <span>Lowest Price Bidder: </span>}<span className="bidder_name">{this.props.winner.data.lowest_price_bidder}</span></li>
