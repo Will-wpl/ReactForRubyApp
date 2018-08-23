@@ -25,7 +25,6 @@ export default class ChooseAlternativeWinner extends React.Component{
     componentDidMount(){
         let thisId = window.location.href.split("auctions/")[1].split("/choose_winner")[0];
         //console.log(thisId);
-        document.getElementById('badge').style.display = 'none'
         getAuction('admin',thisId).then(resp=>{
             this.setState({auction:resp,userid:thisId});
             if(resp.live_auction_contracts){
@@ -38,6 +37,7 @@ export default class ChooseAlternativeWinner extends React.Component{
         })
     }
     refresh(){
+        document.getElementById('badge').style.display = 'none'
         getHistoriesLast({ auction_id: this.state.auction.id}).then(resp=>{
             let data ,arr=[];
             if(resp.duration_6 || resp.duration_12 || resp.duration_24){
@@ -60,7 +60,7 @@ export default class ChooseAlternativeWinner extends React.Component{
             if(data.result){
                 this.setState({disabled:true,justification:data.result.justification});
             }else{
-                this.setState({disabled:false});
+                this.setState({disabled:false,voidStatus:false});
             }
             data.histories.map((item,index)=>{
                 if(index==0){
@@ -83,7 +83,7 @@ export default class ChooseAlternativeWinner extends React.Component{
         })
     }
     liveTab(index){
-        this.setState({livetype:index,justification:''});
+        this.setState({livetype:index,justification:'',voidStatus:false});
         this.refresh();
     }
     showRetailer(data){
@@ -163,7 +163,7 @@ export default class ChooseAlternativeWinner extends React.Component{
     }
     void_auction(){
         auctionConfirm(
-            {data: { user_id: this.state.userid , status:'void',contract_duration:this.state.livetype}, id:this.state.auction.id}).then(res=>{
+            {data: { user_id: this.state.userid , status:'void',contract_duration:this.state.livetype,justification:this.state.justification}, id:this.state.auction.id}).then(res=>{
             this.refs.Modal.showModal();
             this.setState({
                 text:"You have voided this Reverse Auction exercise.",
