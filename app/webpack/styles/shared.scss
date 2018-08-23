@@ -566,7 +566,7 @@ dfn.manage_label{
           &.participation_status_2{ background: yellow; width:60%; margin-top: 3px;}
         }
         span{
-          &.font_arial{font-family: normal; padding-left: 10px; font-size: 12px;}
+          &.font_arial{font-family: normal; color:red; padding-left: 10px; font-weight: bold;}
           cursor: pointer; padding-left: 20px;
           &.invite{background:url("../images/invite.png") no-repeat left;}
           &.cancel_invite{background:url("../images/cancel_invite.png") no-repeat left;}
