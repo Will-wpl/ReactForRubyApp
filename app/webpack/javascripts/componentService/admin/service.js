@@ -43,6 +43,14 @@ export const createRa = (params) => {
     return put('/api/admin/auctions/' + params.auction.id, params);
 }
 
+export const checkBuyerType=(params)=>{
+    return put('/api/admin/auctions/' + params.id + '/check_buyer_type',params)
+}
+
+export const deleteSelectedBuyer=(params)=>{
+    return put('/api/admin/auctions/' + params.id + '/delete_selected_buyer',params)
+}
+
 export const deleteAuction = (params) => {
     return Ddelete('/api/admin/auctions/' + params.auction.id);
 }

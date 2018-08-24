@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
-import { createRa, raPublish } from '../../javascripts/componentService/admin/service';
+import { createRa, raPublish, checkBuyerType, deleteSelectedBuyer } from '../../javascripts/componentService/admin/service';
 import { getAuction } from '../../javascripts/componentService/common/service';
 import { Modal } from '../shared/show-modal';
 import { findUpLimitZero } from '../../javascripts/componentService/util';
@@ -27,7 +27,7 @@ export class CreateNewRA extends Component {
             required: false, check_required: true, single_multiple: "1", allow_deviation: "1",
             contract_6: '0', contract_12: '0', contract_24: '0', single_truely: false, published_date_time: '',
             reverse_auction_end: '',
-            live_auction_contracts: null,submit_btn:true
+            live_auction_contracts: null, submit_btn: true
         }
 
         this.auction = {};
@@ -348,7 +348,7 @@ export class CreateNewRA extends Component {
     blurNoNum(obj) {
         obj.target.value = findUpLimitZero(obj.target.value);
     }
-    
+
     mouthsHtml(mouth) {
         let months = []
         let flag = false;
@@ -381,31 +381,31 @@ export class CreateNewRA extends Component {
                     <thead>
                         <tr>
                             <th></th>
-                            <th className={ has_lt ? '' : 'isHide'}>LT</th>
-                            <th className={ has_hts ? '' : 'isHide'}>HT (Small)</th>
-                            <th className={ has_htl ? '' : 'isHide'}>HT (Large)</th>
-                            <th className={ has_eht ? '' : 'isHide'}>EHT</th>
+                            <th className={has_lt ? '' : 'isHide'}>LT</th>
+                            <th className={has_hts ? '' : 'isHide'}>HT (Small)</th>
+                            <th className={has_htl ? '' : 'isHide'}>HT (Large)</th>
+                            <th className={has_eht ? '' : 'isHide'}>EHT</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>Peak</td>
-                            <td className={ has_lt ? '' : 'isHide'} id={'lt_peak_' + mouth}>
+                            <td className={has_lt ? '' : 'isHide'} id={'lt_peak_' + mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"starting_price_lt_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} /><br />
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"reserve_price_lt_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} />
                                 <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
                             </td>
-                            <td className={ has_hts ? '' : 'isHide'} id={'hts_peak_' + mouth}>
+                            <td className={has_hts ? '' : 'isHide'} id={'hts_peak_' + mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"starting_price_hts_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} /><br />
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"reserve_price_hts_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} />
                                 <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
                             </td>
-                            <td className={ has_htl ? '' : 'isHide'} id={'htl_peak_' + mouth}>
+                            <td className={has_htl ? '' : 'isHide'} id={'htl_peak_' + mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"starting_price_htl_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} /><br />
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"reserve_price_htl_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} />
                                 <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
                             </td>
-                            <td className={ has_eht ? '' : 'isHide'} id={'eht_peak_' + mouth}>
+                            <td className={has_eht ? '' : 'isHide'} id={'eht_peak_' + mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"starting_price_eht_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} /><br />
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"reserve_price_eht_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} />
                                 <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
@@ -413,22 +413,22 @@ export class CreateNewRA extends Component {
                         </tr>
                         <tr>
                             <td>Off Peak</td>
-                            <td className={ has_lt ? '' : 'isHide'} id={'lt_off_peak_' + mouth}>
+                            <td className={has_lt ? '' : 'isHide'} id={'lt_off_peak_' + mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"starting_price_lt_off_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} /><br />
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"reserve_price_lt_off_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} />
                                 <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
                             </td>
-                            <td className={ has_hts ? '' : 'isHide'} id={'hts_off_peak_' + mouth}>
+                            <td className={has_hts ? '' : 'isHide'} id={'hts_off_peak_' + mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"starting_price_hts_off_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} /><br />
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"reserve_price_hts_off_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} />
                                 <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
                             </td>
-                            <td className={ has_htl ? '' : 'isHide'} id={'htl_off_peak_' + mouth}>
+                            <td className={has_htl ? '' : 'isHide'} id={'htl_off_peak_' + mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"starting_price_htl_off_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} /><br />
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"reserve_price_htl_off_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} />
                                 <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
                             </td>
-                            <td className={ has_eht ? '' : 'isHide'} id={'eht_off_peak_' + mouth}>
+                            <td className={has_eht ? '' : 'isHide'} id={'eht_off_peak_' + mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"starting_price_eht_off_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} /><br />
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"reserve_price_eht_off_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} />
                                 <div className="peak_error">Reserve price must be smaller than or equal to starting price.</div>
@@ -491,6 +491,7 @@ export class CreateNewRA extends Component {
         type == "single_multiple" ? this.setState({ single_multiple: val }) : this.setState({ allow_deviation: val })
     }
     checkSuccess(event, obj) {
+
         event.preventDefault();
         if (!this.state.disabled) {
             let timeBar, k = true, peaktime;
@@ -552,56 +553,126 @@ export class CreateNewRA extends Component {
             //     return false
             // }
         }
-        this.setState({submit_btn:false});
+        this.setState({ submit_btn: false });
         if (this.state.btn_type == "save") {
-            createRa({ auction: this.checkSubmitTruly() }).then(res => {
-                this.setState({submit_btn:true});
-                this.auction_data = res;
-                this.auction = res;
-                this.refs.Modal.showModal();
-                this.setState({ id: res.id })
-                sessionStorage.auction_id = res.id;
-                if (this.props.left_name) {
-                    this.setState({
-                        text: this.auction.name + " has been successfully updated. "
-                    });
-                } else {
-                    this.setState({
-                        text: this.auction.name + " has been successfully saved. "
-                    });
+            if (this.state.id) {
+                let param = {
+                    id: this.state.id,
+                    buyer_type: this.state.single_multiple
                 }
+                checkBuyerType(param).then(res => {
+                    if (res.count > 0) {
+                        this.setState({
+                            text: "Please note that by changing the selection for ‘Single/Multiple Buyer(s)’ , buyer(s) previously selected for invitation will be refreshed."
+                        })
+                        this.refs.checkSelectedBuyerModal.showModal('chkSelectedBuyers', { action: 'proceed', method: "save" }, '');
+                    }
+                    else {
+                        this.doSave();
+                    }
+                })
+            }
+            else {
+                this.doSave();
+            }
+        }
+        if (this.state.btn_type == "next") {
+            sessionStorage.isAuctionId = "yes";
+            if (this.state.id) {
+                let param = {
+                    id: this.state.id,
+                    buyer_type: this.state.single_multiple
+                }
+                checkBuyerType(param).then(res => {
+                    if (res.count > 0) {
+                        this.setState({
+                            text: "Please note that by changing the selection for ‘Single/Multiple Buyer(s)’ , buyer(s) previously selected for invitation will be refreshed."
+                        })
+                        this.refs.checkSelectedBuyerModal.showModal('chkSelectedBuyers', { action: 'proceed', method: "next" }, '');
+                    }
+                    else {
+                        this.doNext();
+                    }
+                })
+            }
+            else {
+                this.doNext();
+            }
+
+
+        }
+    }
+    doSave() {
+        createRa({ auction: this.checkSubmitTruly() }).then(res => {
+            this.setState({ submit_btn: true });
+            this.auction_data = res;
+            this.auction = res;
+            this.refs.Modal.showModal();
+            this.setState({ id: res.id })
+            sessionStorage.auction_id = res.id;
+            if (this.props.left_name) {
+                this.setState({
+                    text: this.auction.name + " has been successfully updated. "
+                });
+            } else {
+                this.setState({
+                    text: this.auction.name + " has been successfully saved. "
+                });
+            }
+        }, error => {
+            this.setState({
+                text: 'Request exception,Save failed!'
+            });
+            this.refs.Modal.showModal();
+        })
+        if (this.props.left_name) {
+            this.setState({
+                edit_btn: "lm--button lm--button--primary show",
+                edit_change: "lm--button lm--button--primary hide",
+                disabled: true
+            })
+        }
+    }
+    doNext() {
+        if (this.state.disabled) {
+            window.location.href = `/admin/auctions/${this.auction.id}/invitation`;
+        } else {
+            createRa({ auction: this.checkSubmitTruly() }).then(res => {
+                this.setState({ submit_btn: true });
+                this.auction = res;
+                sessionStorage.auction_id = res.id;
+                window.location.href = `/admin/auctions/${res.id}/invitation`;
             }, error => {
                 this.setState({
                     text: 'Request exception,Save failed!'
                 });
                 this.refs.Modal.showModal();
             })
-            if (this.props.left_name) {
-                this.setState({
-                    edit_btn: "lm--button lm--button--primary show",
-                    edit_change: "lm--button lm--button--primary hide",
-                    disabled: true
+        }
+    }
+    doRemoveBuyer(obj) {
+        let param = {
+            id: this.state.id,
+            buyer_type: this.state.single_multiple
+        }
+        if (obj.method === "save") {
+            if (obj.action === "proceed") {
+
+                deleteSelectedBuyer(param).then(res => {
+                    if (res.status === "1") {
+                        this.doSave();
+                    }
                 })
             }
         }
-        if (this.state.btn_type == "next") {
-            sessionStorage.isAuctionId = "yes";
-            if (this.state.disabled) {
-                window.location.href = `/admin/auctions/${this.auction.id}/invitation`;
-            } else {
-                createRa({ auction: this.checkSubmitTruly() }).then(res => {
-                    this.setState({submit_btn:true});
-                    this.auction = res;
-                    sessionStorage.auction_id = res.id;
-                    window.location.href = `/admin/auctions/${res.id}/invitation`;
-                }, error => {
-                    this.setState({
-                        text: 'Request exception,Save failed!'
-                    });
-                    this.refs.Modal.showModal();
+        if (obj.method === "next") {
+            if (obj.action === "proceed") {
+                deleteSelectedBuyer(param).then(res => {
+                    if (res.status === "1") {
+                        this.doNext();
+                    }
                 })
             }
-
         }
     }
     render() {
@@ -622,20 +693,20 @@ export class CreateNewRA extends Component {
             left_name = "Create New Reverse Auction";
             btn_html = <div className="createRa_btn">
                 {this.state.disabled ? <div className="mask"></div> : ''}
-                <button className="lm--button lm--button--primary" disabled={this.state.disabled?true:(this.state.submit_btn?false:true)} onClick={this.auctionCreate.bind(this, 'save')}>Save</button>
-                <button className="lm--button lm--button--primary"  onClick={this.auctionCreate.bind(this, 'next')}>Next</button>
+                <button className="lm--button lm--button--primary" disabled={this.state.disabled ? true : (this.state.submit_btn ? false : true)} onClick={this.auctionCreate.bind(this, 'save')}>Save</button>
+                <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this, 'next')}>Next</button>
             </div>
         } else {//edit
             styleType = "col-sm-12 col-md-8 push-md-2";
             left_name = this.props.left_name;
             btn_html = <div className="createRa_btn">
                 {this.props.disabled ?
-                    <button className="lm--button lm--button--primary"  onClick={this.auctionCreate.bind(this, 'next')}>Next</button> :
+                    <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this, 'next')}>Next</button> :
                     <div>
                         <a className={this.state.edit_btn} onClick={this.edit.bind(this)}>Edit</a>
                         <a className={this.state.edit_change} onClick={this.Cancel.bind(this)}>Cancel</a>
-                        <button className={this.state.edit_change} disabled={this.state.disabled?true:(this.state.submit_btn?false:true)} onClick={this.auctionCreate.bind(this, 'save')}>Save</button>
-                        <button className="lm--button lm--button--primary"  onClick={this.auctionCreate.bind(this, 'next')}>Next</button>
+                        <button className={this.state.edit_change} disabled={this.state.disabled ? true : (this.state.submit_btn ? false : true)} onClick={this.auctionCreate.bind(this, 'save')}>Save</button>
+                        <button className="lm--button lm--button--primary" onClick={this.auctionCreate.bind(this, 'next')}>Next</button>
                     </div>}
             </div>
         }
@@ -799,6 +870,7 @@ export class CreateNewRA extends Component {
                             {btn_html}
                         </form>
                         <Modal text={this.state.text} ref="Modal" />
+                        <Modal text={this.state.text} ref="checkSelectedBuyerModal" acceptFunction={this.doRemoveBuyer.bind(this)} />
                     </div>
                 </div>
                 <div className="createRaMain u-grid">
