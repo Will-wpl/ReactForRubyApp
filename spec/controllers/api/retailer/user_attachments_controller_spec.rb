@@ -31,6 +31,26 @@ RSpec.describe Api::Retailer::UserAttachmentsController, type: :controller do
           expect(response).to have_http_status(:ok)
         end
       end
+
+      context 'get updated attachments' do
+        def do_request
+          put :updated_attachment, params: {}
+        end
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
+      context 'reset updated attachments' do
+        def do_request
+          put :reset_updated_attachment, params: {}
+        end
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+        end
+      end
     end
   end
 end

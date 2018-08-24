@@ -376,6 +376,26 @@ class Api::AuctionsController < Api::BaseController
     send_data(pdf, filename: output_filename)
   end
 
+  def check_buyer_type
+    auction = Auction.find(params[:id])
+    count = auction.consumptions.find_by_user_consumer_type(User::ConsumerTypeCompany).count
+    if count > 0 && params[:buyer_type] != auction.buyer_type
+      render json: { count: count }, status: 200
+    else
+      render json: { count: 0 }, status: 200
+    end
+  end
+
+  def delete_selected_buyer
+    auction = Auction.find(params[:id])
+    if params[:buyer_type] != auction.buyer_type
+      auction.consumptions.find_by_user_consumer_type(User::ConsumerTypeCompany).destroy_all
+      render json: { status: '1' }, status: 200
+    else
+      render json: { status: nil }, status: 200
+    end
+  end
+
   private
 
   def retailer_send_mails(user_ids)
