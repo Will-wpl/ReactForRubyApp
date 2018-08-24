@@ -180,6 +180,12 @@ export class Modal extends React.Component {
                 type: "defaultCallBack"
             })
         }
+        else if(type==='chkSelectedBuyers')
+        {
+            this.setState({
+                type: "chkSelectedBuyers"
+            })
+        }
         else {
             this.setState({
                 type: "default"
@@ -208,6 +214,7 @@ export class Modal extends React.Component {
             data.body = this.state.email_body;
             this.setState({ props_data: data });
         }
+        
         if (this.props.acceptFunction) {
             this.props.acceptFunction(this.state.props_data);
             this.closeModal();
@@ -927,6 +934,11 @@ export class Modal extends React.Component {
         }
         else if (this.state.type === "defaultCallBack") {
             btn_html = <div className="modal_btn"><a onClick={this.closeModalAndRefresh.bind(this)}>OK</a></div>;
+        }
+        else if(this.state.type === "chkSelectedBuyers")
+        {
+            btn_html =
+                <div className="modal_btn"><a onClick={this.Accept.bind(this)}>Proceed</a><a onClick={this.closeModal.bind(this)}>Cancel</a></div>;
         }
         else {
             btn_html =
