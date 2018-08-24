@@ -563,7 +563,7 @@ export class CreateNewRA extends Component {
                 checkBuyerType(param).then(res => {
                     if (res.count > 0) {
                         this.setState({
-                            text: "Please note that by changing the selection for ‘Single/Multiple Buyer(s)’ , buyer(s) previously selected for invitation will be refreshed."
+                            text: "Please note that by changing the selection for ‘Single/Multiple Buyer(s)’, buyer(s) previously selected for invitation will be refreshed."
                         })
                         this.refs.checkSelectedBuyerModal.showModal('chkSelectedBuyers', { action: 'proceed', method: "save" }, '');
                     }
