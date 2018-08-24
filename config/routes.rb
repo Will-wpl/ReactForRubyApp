@@ -185,7 +185,11 @@ Rails.application.routes.draw do
           put 'validate'
         end
       end
-      resources :user_attachments, only: %i[create destroy] do
+      resources :user_attachments, only: %i[create destroy updated_attachment reset_updated_attachment] do
+        collection do
+          put 'updated_attachment'
+          put 'reset_updated_attachment'
+        end
       end
     end
   end
@@ -219,9 +223,11 @@ Rails.application.routes.draw do
           put 'validate'
         end
       end
-      resources :user_attachments, only: %i[create destroy patch_update_consumption_detail_id] do
+      resources :user_attachments, only: %i[create destroy patch_update_consumption_detail_id updated_attachment reset_updated_attachment] do
         collection do
           put 'patch_update_consumption_detail_id'
+          put 'updated_attachment'
+          put 'reset_updated_attachment'
         end
       end
     end
