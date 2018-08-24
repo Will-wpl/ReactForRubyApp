@@ -11,6 +11,7 @@ FactoryBot.define do
     total_eht_peak 1_983_720
     total_eht_off_peak 791_712
     duration 30
+    buyer_type '1'
     reserve_price { BigDecimal.new('0.0841') }
 
     trait :for_next_month do

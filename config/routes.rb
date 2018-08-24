@@ -38,7 +38,7 @@ Rails.application.routes.draw do
           put 'approval_buyer'
         end
       end
-      resources :auctions, only: %i[obtain link create update delete publish hold confirm destroy unpublished published retailers buyers selects send_mails] do
+      resources :auctions, only: %i[obtain link create update delete publish hold confirm destroy unpublished published retailers buyers selects send_mails check_buyer_type delete_selected_buyer] do
         member do
           put 'publish'
           put 'hold'
@@ -47,6 +47,8 @@ Rails.application.routes.draw do
           get 'buyers'
           get 'selects'
           put 'send_mails'
+          put 'check_buyer_type'
+          put 'delete_selected_buyer'
           get 'retailer_dashboard'
           get 'buyer_dashboard'
           get 'pdf'
