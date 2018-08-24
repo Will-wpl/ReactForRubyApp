@@ -555,7 +555,7 @@ export class CreateNewRA extends Component {
         }
         this.setState({ submit_btn: false });
         if (this.state.btn_type == "save") {
-            if (this.state.id) {
+            if (this.state.id>0) {
                 let param = {
                     id: this.state.id,
                     buyer_type: this.state.single_multiple
@@ -578,7 +578,7 @@ export class CreateNewRA extends Component {
         }
         if (this.state.btn_type == "next") {
             sessionStorage.isAuctionId = "yes";
-            if (this.state.id) {
+            if (this.state.id>0) {
                 let param = {
                     id: this.state.id,
                     buyer_type: this.state.single_multiple
