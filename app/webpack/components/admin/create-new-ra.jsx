@@ -555,43 +555,57 @@ export class CreateNewRA extends Component {
         }
         this.setState({ submit_btn: false });
         if (this.state.btn_type == "save") {
-            if (this.state.id > 0) {
-                let param = {
-                    id: this.state.id,
-                    buyer_type: this.state.single_multiple
+            if (!this.auction.buyer_notify) {
+                if (this.state.id > 0) {
+                    let param = {
+                        id: this.state.id,
+                        buyer_type: this.state.single_multiple
+                    }
+                    checkBuyerType(param).then(res => {
+                        if (res.count > 0) {
+                            this.setState({
+                                text: "Please note that by changing the selection for ‘Single/Multiple Buyer(s)’, buyer(s) previously selected for invitation will be refreshed."
+                            })
+                            // this.setBuyerChange();
+                            this.refs.checkSelectedBuyerModal.showModal('chkSelectedBuyers', { action: 'proceed', method: "save" }, '');
+                        }
+                        else {
+                            this.doSave();
+                        }
+                    })
                 }
-                checkBuyerType(param).then(res => {
-                    if (res.count > 0) {
-                        this.setState({
-                            text: "Please note that by changing the selection for ‘Single/Multiple Buyer(s)’, buyer(s) previously selected for invitation will be refreshed."
-                        })
-                        // this.setBuyerChange();
-                        this.refs.checkSelectedBuyerModal.showModal('chkSelectedBuyers', { action: 'proceed', method: "save" }, '');
-                    }
-                    else {
-                        this.doSave();
-                    }
-                })
+                else {
+                    this.doSave();
+                }
             }
             else {
                 this.doSave();
             }
+
         }
         if (this.state.btn_type == "next") {
             sessionStorage.isAuctionId = "yes";
-            if (this.state.id > 0) {
-                let param = {
-                    id: this.state.id,
-                    buyer_type: this.state.single_multiple
+            if (!this.auction.buyer_notify) {
+                if (this.state.id > 0) {
+                    let param = {
+                        id: this.state.id,
+                        buyer_type: this.state.single_multiple
+                    }
+                    checkBuyerType(param).then(res => {
+                        if (res.count > 0) {
+                            this.setState({
+                                text: "Please note that by changing the selection for ‘Single/Multiple Buyer(s)’, buyer(s) previously selected for invitation will be refreshed."
+                            })
+                            this.refs.checkSelectedBuyerModal.showModal('chkSelectedBuyers', { action: 'proceed', method: "next" }, '');
+                        }
+                        else {
+                            this.doNext();
+                        }
+                    })
                 }
-                checkBuyerType(param).then(res => {
-                    if (res.count > 0) {
-                        this.refs.checkSelectedBuyerModal.showModal('chkSelectedBuyers', { action: 'proceed', method: "next" }, '');
-                    }
-                    else {
-                        this.doNext();
-                    }
-                })
+                else {
+                    this.doNext();
+                }
             }
             else {
                 this.doNext();
@@ -669,7 +683,7 @@ export class CreateNewRA extends Component {
 
                 this.setState({
                     disabled: false,
-                    submit_btn:true
+                    submit_btn: true
                 })
 
             }
@@ -685,7 +699,7 @@ export class CreateNewRA extends Component {
             else {
                 this.setState({
                     disabled: false,
-                    submit_btn:true
+                    submit_btn: true
                 })
             }
         }
