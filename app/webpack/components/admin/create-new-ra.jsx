@@ -555,7 +555,7 @@ export class CreateNewRA extends Component {
         }
         this.setState({ submit_btn: false });
         if (this.state.btn_type == "save") {
-            if (this.state.id>0) {
+            if (this.state.id > 0) {
                 let param = {
                     id: this.state.id,
                     buyer_type: this.state.single_multiple
@@ -565,6 +565,7 @@ export class CreateNewRA extends Component {
                         this.setState({
                             text: "Please note that by changing the selection for ‘Single/Multiple Buyer(s)’, buyer(s) previously selected for invitation will be refreshed."
                         })
+                        // this.setBuyerChange();
                         this.refs.checkSelectedBuyerModal.showModal('chkSelectedBuyers', { action: 'proceed', method: "save" }, '');
                     }
                     else {
@@ -578,16 +579,13 @@ export class CreateNewRA extends Component {
         }
         if (this.state.btn_type == "next") {
             sessionStorage.isAuctionId = "yes";
-            if (this.state.id>0) {
+            if (this.state.id > 0) {
                 let param = {
                     id: this.state.id,
                     buyer_type: this.state.single_multiple
                 }
                 checkBuyerType(param).then(res => {
                     if (res.count > 0) {
-                        this.setState({
-                            text: "Please note that by changing the selection for ‘Single/Multiple Buyer(s)’ , buyer(s) previously selected for invitation will be refreshed."
-                        })
                         this.refs.checkSelectedBuyerModal.showModal('chkSelectedBuyers', { action: 'proceed', method: "next" }, '');
                     }
                     else {
@@ -598,10 +596,14 @@ export class CreateNewRA extends Component {
             else {
                 this.doNext();
             }
-
-
         }
     }
+    // setBuyerChange()
+    // {
+    //     this.setState({
+    //         text: "Please note that by changing the selection for ‘Single/Multiple Buyer(s)’, buyer(s) previously selected for invitation will be refreshed."
+    //     })
+    // }
     doSave() {
         createRa({ auction: this.checkSubmitTruly() }).then(res => {
             this.setState({ submit_btn: true });
@@ -657,12 +659,19 @@ export class CreateNewRA extends Component {
         }
         if (obj.method === "save") {
             if (obj.action === "proceed") {
-
                 deleteSelectedBuyer(param).then(res => {
                     if (res.status === "1") {
                         this.doSave();
                     }
                 })
+            }
+            else {
+
+                this.setState({
+                    disabled: false,
+                    submit_btn:true
+                })
+
             }
         }
         if (obj.method === "next") {
@@ -671,6 +680,12 @@ export class CreateNewRA extends Component {
                     if (res.status === "1") {
                         this.doNext();
                     }
+                })
+            }
+            else {
+                this.setState({
+                    disabled: false,
+                    submit_btn:true
                 })
             }
         }
