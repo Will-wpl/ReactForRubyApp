@@ -881,7 +881,7 @@ export class Modal extends React.Component {
                                     <td>
                                         <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" name="totals" onKeyUp={this.removeInputNanNum.bind(this)} required aria-required="true" maxLength="10" /><div>kWh/month</div>
                                         <div id="totals_message" className="isPassValidate">This filed is required!</div>
-                                        <div id="totals_format" className="isPassValidate">Please input a number greater than 0.</div>
+                                        <div id="totals_format" className="isPassValidate">Please input an integer greater than 0.</div>
                                     </td>
                                 </tr>
                                 <tr>

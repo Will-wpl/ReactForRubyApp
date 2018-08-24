@@ -65,6 +65,7 @@ ul, menu, dir {
       }
      
   }
+
   .createRa_btn{text-align: right; right:0px; bottom:0px; position: relative;
       .show{display:inline-block;}
       .hide{ display: none;}
@@ -1054,4 +1055,42 @@ width: "70%"; float: "left";padding:5px;
 }
 .attachementList{
   list-style:none;  
+  a{
+    cursor: pointer
+  }
+}
+.displayline
+{
+  display: inline;
+}
+
+.live_modal_approve_attachment{
+  text-align:left;
+  min-width:800px;margin: 60px auto;
+  height:250px;;
+  border-radius:5px;overflow: hidden;    font-size:16px; 
+  background: #314657;
+  .title{  width: 100%;  padding:20px 10px 20px 10px; text-align: left;
+    a{
+      cursor: pointer
+    }
+     
+  }
+  .btnProceed{
+    // margin: 50 10px 20px 10 ;
+    margin-top: 50px;
+  }
+  h4{ padding:0px 10px 0px 10px;color:#fff !important; font-size:16px; }
+}
+.checkBuyer{
+  margin:5px auto !important;
+  display: inline-block;
+  vertical-align: middle;
+  span{margin:0px 10px;}
+}
+
+.approve_btn{ 
+  button{ 
+    background:#00afb1; margin: 0 10px;margin-right: 10px;
+  }
 }

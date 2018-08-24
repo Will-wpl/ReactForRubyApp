@@ -15,7 +15,7 @@ export default class AdminInvitation extends Component {
             buyer_company_pend: 0, buyer_individual_select: 0, buyer_individual_send: 0,
             buyer_individual_pend: 0, peak_lt: 0, peak_hts: 0,
             peak_htl: 0, peak_eht: 0, off_peak_lt: 0, off_peak_hts: 0,
-            off_peak_htl: 0, off_peak_eht: 0, disabled: false, publish_status: 0, readOnly: false, buttonDisabled:false,
+            off_peak_htl: 0, off_peak_eht: 0, disabled: false, publish_status: 0, readOnly: false, buttonDisabled: false,
             params_type: "", auction: {},
             fileData: {
                 "buyer_tc_upload": [
@@ -145,7 +145,7 @@ export default class AdminInvitation extends Component {
                         buttonDisabled: false
                     })
                 }, 2000)
-               
+
                 fileObj = this.state.fileData;
                 fileObj[type].map((item, index) => {
                     item.files.push({
@@ -332,11 +332,11 @@ export default class AdminInvitation extends Component {
                             </div>
                         </div>
                         {uploadStatus ? <div className="col-sm-12 col-md-2 u-cell">
-                           {/* {this.state.buttonDisabled?<a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)} >Upload2</a>:<a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload1</a>}  */}
+                            {/* {this.state.buttonDisabled?<a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)} >Upload2</a>:<a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload1</a>}  */}
 
-                             {
-                                 this.state.buttonDisabled?<button className="lm--button lm--button--primary"  disabled>Upload</button>:<button className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)} >Upload</button>
-                             }       
+                            {
+                                this.state.buttonDisabled ? <button className="lm--button lm--button--primary" disabled>Upload</button> : <button className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)} >Upload</button>
+                            }
 
                         </div> : ''}
                         {/* <div className="col-sm-12 col-md-2 u-cell">
@@ -412,7 +412,7 @@ export default class AdminInvitation extends Component {
         })
         this.refs.Modal.showModal("comfirm");
         this.setState({
-            text: "Are you sure you want to send the invitation email(s)? Once you click yes, you can no longer make any changes to the uploaded documents.",
+            text: "Are you sure you want to send the invitation email(s)? Please note that the invitation email(s) will be immediately routed."
         });
     }
     send_mail() {
