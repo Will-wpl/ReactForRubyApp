@@ -16,7 +16,6 @@ export class UploadFile extends React.Component {
     }
     addinputfile(type, required) {
         let buttonWidth=12-parseInt(this.props.col_width);
-        console.log(buttonWidth)
         let fileHtml = '';
         fileHtml = <form id={type + "_form"} encType="multipart/form-data">
             {

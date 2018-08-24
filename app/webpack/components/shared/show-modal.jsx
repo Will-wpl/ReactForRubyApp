@@ -180,6 +180,11 @@ export class Modal extends React.Component {
                 type: "defaultCallBack"
             })
         }
+        else if (type === 'chkSelectedBuyers') {
+            this.setState({
+                type: "chkSelectedBuyers"
+            })
+        }
         else {
             this.setState({
                 type: "default"
@@ -208,6 +213,7 @@ export class Modal extends React.Component {
             data.body = this.state.email_body;
             this.setState({ props_data: data });
         }
+
         if (this.props.acceptFunction) {
             this.props.acceptFunction(this.state.props_data);
             this.closeModal();
@@ -219,7 +225,7 @@ export class Modal extends React.Component {
             type: "default"
         })
 
-        if (this.props.formSize === "middle") { 
+        if (this.props.formSize === "middle") {
             $("#modal_main").css({ "width": "50%", "height": "300px", "top": "40%", "left": "40%" });
             $(".email_body").css({ "height": "140px" });
         }
@@ -594,6 +600,15 @@ export class Modal extends React.Component {
             this.closeModal();
         }
     }
+    closeModelAndCancelSave() {
+    
+        let data = this.state.props_data;
+        data.action = "cancel";
+        if (this.props.acceptFunction) {
+            this.props.acceptFunction(data);
+            this.closeModal();
+        }
+    }
     dateChange(data) {
         this.setState({
             contract_expiry: data
@@ -881,7 +896,7 @@ export class Modal extends React.Component {
                                     <td>
                                         <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" name="totals" onKeyUp={this.removeInputNanNum.bind(this)} required aria-required="true" maxLength="10" /><div>kWh/month</div>
                                         <div id="totals_message" className="isPassValidate">This filed is required!</div>
-                                        <div id="totals_format" className="isPassValidate">Please input a number greater than 0.</div>
+                                        <div id="totals_format" className="isPassValidate">Please input an integer greater than 0.</div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -927,6 +942,10 @@ export class Modal extends React.Component {
         }
         else if (this.state.type === "defaultCallBack") {
             btn_html = <div className="modal_btn"><a onClick={this.closeModalAndRefresh.bind(this)}>OK</a></div>;
+        }
+        else if (this.state.type === "chkSelectedBuyers") {
+            btn_html =
+                <div className="modal_btn"><a onClick={this.Accept.bind(this)}>Proceed</a><a onClick={this.closeModelAndCancelSave.bind(this)}>Cancel</a></div>;
         }
         else {
             btn_html =

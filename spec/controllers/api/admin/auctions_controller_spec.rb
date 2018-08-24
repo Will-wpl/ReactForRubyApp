@@ -992,6 +992,57 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
         end
       end
     end
+
+    describe 'PUT check buyer_type' do
+      def do_request(buyer_type)
+        put :check_buyer_type, params: { id: auction.id, buyer_type: buyer_type }
+      end
+
+      context 'has buyer' do
+        before { do_request('0') }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash_body = JSON.parse(response.body)
+          expect(hash_body['count']).to eq(4)
+
+        end
+      end
+
+      context 'not has buyer' do
+        before { do_request('1') }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash_body = JSON.parse(response.body)
+          expect(hash_body['count']).to eq(0)
+
+        end
+      end
+    end
+
+    describe 'PUT delete selected buyer' do
+      def do_request(buyer_type)
+        put :delete_selected_buyer, params: { id: auction.id, buyer_type: buyer_type }
+      end
+
+      context 'has buyer will delete' do
+        before { do_request('0') }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash_body = JSON.parse(response.body)
+          expect(hash_body['status']).to eq('1')
+        end
+      end
+
+      context 'not has buyer be deleted' do
+        before { do_request('1') }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash_body = JSON.parse(response.body)
+          expect(hash_body['status']).to eq(nil)
+
+        end
+      end
+    end
   end
 
   context 'retailer user' do

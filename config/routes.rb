@@ -38,7 +38,7 @@ Rails.application.routes.draw do
           put 'approval_buyer'
         end
       end
-      resources :auctions, only: %i[obtain link create update delete publish hold confirm destroy unpublished published retailers buyers selects send_mails] do
+      resources :auctions, only: %i[obtain link create update delete publish hold confirm destroy unpublished published retailers buyers selects send_mails check_buyer_type delete_selected_buyer] do
         member do
           put 'publish'
           put 'hold'
@@ -47,6 +47,8 @@ Rails.application.routes.draw do
           get 'buyers'
           get 'selects'
           put 'send_mails'
+          put 'check_buyer_type'
+          put 'delete_selected_buyer'
           get 'retailer_dashboard'
           get 'buyer_dashboard'
           get 'pdf'
@@ -183,7 +185,11 @@ Rails.application.routes.draw do
           put 'validate'
         end
       end
-      resources :user_attachments, only: %i[create destroy] do
+      resources :user_attachments, only: %i[create destroy updated_attachment reset_updated_attachment] do
+        collection do
+          put 'updated_attachment'
+          put 'reset_updated_attachment'
+        end
       end
     end
   end
@@ -217,9 +223,11 @@ Rails.application.routes.draw do
           put 'validate'
         end
       end
-      resources :user_attachments, only: %i[create destroy patch_update_consumption_detail_id] do
+      resources :user_attachments, only: %i[create destroy patch_update_consumption_detail_id updated_attachment reset_updated_attachment] do
         collection do
           put 'patch_update_consumption_detail_id'
+          put 'updated_attachment'
+          put 'reset_updated_attachment'
         end
       end
     end
