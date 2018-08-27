@@ -568,15 +568,27 @@ export class Modal extends React.Component {
     Change(type, e) { }
 
     closeModal() {
-        this.setState({
-            modalSize: "small",
-            modalshowhide: "modal_hide"
-        })
-        if (this.props.formSize === "middle") {
-            $("#modal_main").css({ "width": "50%", "height": "300px", "top": "40%", "left": "40%" });
-            $(".email_body").css({ "height": "140px" });
+        if (this.state.type === "chkSelectedBuyers") {
+            let data = this.state.props_data;
+            data.action = "cancel";
+            if (this.props.acceptFunction) {
+                this.props.acceptFunction(data);
+                this.setState({
+                    modalSize: "small",
+                    modalshowhide: "modal_hide"
+                })
+            }
         }
-
+        else {
+            this.setState({
+                modalSize: "small",
+                modalshowhide: "modal_hide"
+            })
+            if (this.props.formSize === "middle") {
+                $("#modal_main").css({ "width": "50%", "height": "300px", "top": "40%", "left": "40%" });
+                $(".email_body").css({ "height": "140px" });
+            }
+        }
     }
     bigModal(type) {
         if (this.state.modalSize === "big") {//height:"300px", top: "40%", left: "40%"
@@ -601,7 +613,7 @@ export class Modal extends React.Component {
         }
     }
     closeModelAndCancelSave() {
-    
+
         let data = this.state.props_data;
         data.action = "cancel";
         if (this.props.acceptFunction) {
