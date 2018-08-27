@@ -60,7 +60,14 @@ class Api::UsersController < Api::BaseController
 
   def show_current_user
     user = current_user
-    render json: user, status: 200
+    seller_buyer_tc = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)
+    buyer_revv_tc = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
+    seller_revv_tc = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_REVV_TC)
+    attachments = []
+    attachments.push(seller_buyer_tc)
+    attachments.push(buyer_revv_tc)
+    attachments.push(seller_revv_tc)
+    render json: { user: user, attachments: attachments} , status: 200
   end
 
   def update_attachment_status
