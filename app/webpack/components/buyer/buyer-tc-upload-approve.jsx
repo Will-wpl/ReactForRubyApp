@@ -14,7 +14,8 @@ export class BuyerTCUploadApprove extends Component {
 
 
     componentDidMount() {
-        getNeedBuyerApproveAttachments().then(res => {
+        getNeedBuyerApproveAttachments().then(res => { 
+            // console.log(res)
             res.map((item) => {
                 if (item.type === "SELLER_BUYER_TC") {
                     this.setState({
@@ -61,6 +62,7 @@ export class BuyerTCUploadApprove extends Component {
                             </div>
                         </div>
                     </div>
+
                 </form >
                 {/* </div> */}
             </div>
