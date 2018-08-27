@@ -130,7 +130,6 @@ Rails.application.routes.draw do
           put 'update_attachment_status'
         end
       end
-
       resources :auctions, only: %i[obtain published] do
         collection do
           get 'obtain'
