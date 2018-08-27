@@ -115,8 +115,8 @@ export const getRetailerUserInfoByUserId=(id)=>{
     return get(`/api/admin/registrations/${id}/retailer_info?user_id=${id}`);
 }
 export const getNeedRetailerApproveAttachments=()=>{
-    return put(' /api/retailer/user_attachments/updated_attachment');
+    return get('/api/buyer/users/show_current_user');
 }
 export const saveRetailerAttachmentModification=()=>{
-    return put('/api/retailer/user_attachments/reset_updated_attachment');
+    return put('/api/buyer/users/update_attachment_status');
 }

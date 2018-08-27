@@ -37,11 +37,11 @@ export const submitBuyerUserInfo=(params)=>{
 }
 
 export const getNeedBuyerApproveAttachments=()=>{
-    return put(' /api/buyer/user_attachments/updated_attachment');
+    return get('/api/buyer/users/show_current_user');
 }
 
 export const saveBuyerAttachmentModification=()=>{
-    return put('/api/buyer/user_attachments/reset_updated_attachment');
+    return put('/api/buyer/users/update_attachment_status');
 }
 
 

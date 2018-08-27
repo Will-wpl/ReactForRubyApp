@@ -15,21 +15,21 @@ export class BuyerTCUploadApprove extends Component {
 
     componentDidMount() {
         getNeedBuyerApproveAttachments().then(res => { 
-            // console.log(res)
-            res.map((item) => {
-                if (item.type === "SELLER_BUYER_TC") {
-                    this.setState({
-                        epaIsExist: true,
-                        epaUrl: item.file.file_path
-                    })
-                }
-                if (item.type === "BUYER_REVV_TC") {
-                    this.setState({
-                        bptIsExist: true,
-                        bptUrl: item.file.file_path
-                    })
-                }
-            })
+            console.log(res)
+            // res.map((item) => {
+            //     if (item.type === "SELLER_BUYER_TC") {
+            //         this.setState({
+            //             epaIsExist: true,
+            //             epaUrl: item.file.file_path
+            //         })
+            //     }
+            //     if (item.type === "BUYER_REVV_TC") {
+            //         this.setState({
+            //             bptIsExist: true,
+            //             bptUrl: item.file.file_path
+            //         })
+            //     }
+            // }) 
         })
     }
 
