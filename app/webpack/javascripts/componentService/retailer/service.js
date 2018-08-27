@@ -114,3 +114,9 @@ export const validateIsExist=(params)=>{
 export const getRetailerUserInfoByUserId=(id)=>{
     return get(`/api/admin/registrations/${id}/retailer_info?user_id=${id}`);
 }
+export const getNeedRetailerApproveAttachments=()=>{
+    return put(' /api/retailer/user_attachments/updated_attachment');
+}
+export const saveRetailerAttachmentModification=()=>{
+    return put('/api/retailer/user_attachments/reset_updated_attachment');
+}

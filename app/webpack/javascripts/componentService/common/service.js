@@ -36,6 +36,15 @@ export const submitBuyerUserInfo=(params)=>{
     return put('/api/buyer/registrations/'+params.user.id+'/sign_up',params);
 }
 
+export const getNeedBuyerApproveAttachments=()=>{
+    return put(' /api/buyer/user_attachments/updated_attachment');
+}
+
+export const saveBuyerAttachmentModification=()=>{
+    return put('/api/buyer/user_attachments/reset_updated_attachment');
+}
+
+
 
 
 

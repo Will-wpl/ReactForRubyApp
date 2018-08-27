@@ -22,6 +22,9 @@ import "components/retailer/retailer-workflow";
 import "components/retailer/retailer-register";
 import "components/buyer/buyer-register";
 import "components/admin/admin-comsumption";
+import "components/buyer/buyer-tc-upload-approve";
+import "components/retailer/retailer-tc-upload-approve";
+
 
 // ActionCable = require('actioncable')
 
