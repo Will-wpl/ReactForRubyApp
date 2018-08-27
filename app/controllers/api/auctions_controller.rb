@@ -119,7 +119,15 @@ class Api::AuctionsController < Api::BaseController
            else
              auction.order(actual_begin_time: :asc)
            end
-    bodies = {data: data, total: total}
+    auctions = []
+    data.each do |auction|
+      consumptions = Consumption.find_by_auction_id(auction.id)
+      consumptions_all_count = consumptions.count
+      consumptions_accept_count = consumptions.where(accept_status: Consumption::AcceptStatusApproved).count
+      all_accept = consumptions_all_count == consumptions_accept_count ? true : false
+      auctions.push(id: auction.id, name: auction.name, actual_begin_time: auction.actual_begin_time, all_accept: all_accept)
+    end
+    bodies = {data: auctions, total: total}
     render json: {headers: headers, bodies: bodies, actions: actions}, status: 200
   end
 
@@ -149,10 +157,6 @@ class Api::AuctionsController < Api::BaseController
     data = []
     auctions = get_published_order_list(params, headers, auction)
     auctions.each do |auction|
-      consumptions = Consumption.find_by_auction_id(auction.id)
-      consumptions_all_count = consumptions.count
-      consumptions_accept_count = consumptions.where(accept_status: Consumption::AcceptStatusApproved).count
-      all_accept = consumptions_all_count == consumptions_accept_count ? true : false
       status = if Time.current < auction.actual_begin_time
                  'Upcoming'
                  # elsif Time.current >= auction.actual_begin_time && Time.current <= auction.actual_end_time
@@ -160,7 +164,7 @@ class Api::AuctionsController < Api::BaseController
                  'In Progress'
                end
       incomplete = Auction.check_start_price_incomplete(auction)
-      data.push(id: auction.id, published_gid: auction.published_gid, name: auction.name, actual_begin_time: auction.actual_begin_time, status: status, incomplete: incomplete, all_accept: all_accept)
+      data.push(id: auction.id, published_gid: auction.published_gid, name: auction.name, actual_begin_time: auction.actual_begin_time, status: status, incomplete: incomplete)
     end
     bodies = {data: data, total: total}
     render json: {headers: headers, bodies: bodies, actions: actions}, status: 200
