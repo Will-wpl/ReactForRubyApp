@@ -14,13 +14,15 @@ export class SearchList extends Component {
     }
     componentDidMount() {
         if(window.location.href.indexOf("admin")>0){
-            getAuction('admin',sessionStorage.auction_id).then(res => {
-                this.auction = res;
-                this.setState({
-                    buyer_type:res.buyer_type
+            if(sessionStorage.auction_id){
+                getAuction('admin',sessionStorage.auction_id).then(res => {
+                    this.auction = res;
+                    this.setState({
+                        buyer_type:res.buyer_type
+                    })
+                    console.log(this.auction);
                 })
-                console.log(this.auction);
-            })
+            }
         }
     }
     dosearch(index,obj){
@@ -369,7 +371,7 @@ export class SearchList extends Component {
                                                                         }else if(item['status'] === 'Upcoming' && ik.name === 'Manage'){
                                                                             return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>Manage{item.incomplete?incompleteHtml:''}</a>
                                                                         }else{
-                                                                            return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>{ik.name}</a>
+                                                                            return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>{ik.name}{ik.name=="Buyer Dashboard" && item.all_accept==false?<span className={"font_arial"}>( ! )</span>:''}</a>
                                                                         }
                                                                         
                                                                     }
