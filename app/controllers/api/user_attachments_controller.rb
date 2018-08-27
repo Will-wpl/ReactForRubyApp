@@ -1,33 +1,33 @@
 class Api::UserAttachmentsController < Api::BaseController
 
-  # get updated attachments
-  def updated_attachment
-    user = current_user
-    attachments = []
-    if user.tc_attachment_update_flag & UserAttachment::FileFlag_Seller_Buyer_TC
-      seller_buyer_tc = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)
-      attachments.push({type: UserAttachment::FileType_Seller_Buyer_TC, file: seller_buyer_tc})
-    end
-
-    if user.tc_attachment_update_flag & UserAttachment::FileFlag_Buyer_REVV_TC
-      buyer_revv_tc = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
-      attachments.push({type: UserAttachment::FileType_Buyer_REVV_TC, file: buyer_revv_tc})
-    end
-
-    if user.tc_attachment_update_flag & UserAttachment::FileFlag_Seller_REVV_TC
-      seller_revv_tc = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_REVV_TC)
-      attachments.push({type: UserAttachment::FileType_Seller_REVV_TC, file: seller_revv_tc})
-    end
-    render json: attachments, status: 200
-  end
-
-  # reset user updated attachment flag
-  def reset_updated_attachment
-    user = current_user
-    user.tc_attachment_update_flag = 0
-    user.save!
-    render json: user, status: 200
-  end
+  # # get updated attachments
+  # def updated_attachment
+  #   user = current_user
+  #   attachments = []
+  #   if user.tc_attachment_update_flag & UserAttachment::FileFlag_Seller_Buyer_TC
+  #     seller_buyer_tc = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)
+  #     attachments.push({type: UserAttachment::FileType_Seller_Buyer_TC, file: seller_buyer_tc})
+  #   end
+  #
+  #   if user.tc_attachment_update_flag & UserAttachment::FileFlag_Buyer_REVV_TC
+  #     buyer_revv_tc = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
+  #     attachments.push({type: UserAttachment::FileType_Buyer_REVV_TC, file: buyer_revv_tc})
+  #   end
+  #
+  #   if user.tc_attachment_update_flag & UserAttachment::FileFlag_Seller_REVV_TC
+  #     seller_revv_tc = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_REVV_TC)
+  #     attachments.push({type: UserAttachment::FileType_Seller_REVV_TC, file: seller_revv_tc})
+  #   end
+  #   render json: attachments, status: 200
+  # end
+  #
+  # # reset user updated attachment flag
+  # def reset_updated_attachment
+  #   user = current_user
+  #   user.tc_attachment_update_flag = 0
+  #   user.save!
+  #   render json: user, status: 200
+  # end
 
   # get user attachments by user id
   def index
@@ -51,17 +51,20 @@ class Api::UserAttachmentsController < Api::BaseController
     attachment.save!
 
     if attachment.file_type.eql?(UserAttachment::FileType_Seller_Buyer_TC)
-      User.update_attachment_update_flag(User.buyers,UserAttachment::FileFlag_Seller_Buyer_TC)
-      User.update_attachment_update_flag(User.buyer_entities,UserAttachment::FileFlag_Seller_Buyer_TC)
-      User.update_attachment_update_flag(User.retailers,UserAttachment::FileFlag_Seller_Buyer_TC)
+      # User.update_attachment_update_flag(User.buyers,UserAttachment::FileFlag_Seller_Buyer_TC)
+      # User.update_attachment_update_flag(User.buyer_entities,UserAttachment::FileFlag_Seller_Buyer_TC)
+      # User.update_attachment_update_flag(User.retailers,UserAttachment::FileFlag_Seller_Buyer_TC)
+      User.update_all(agree_seller_buyer: User::AgreeSellerBuyerNo)
     end
 
     if attachment.file_type.eql?(UserAttachment::FileType_Buyer_REVV_TC)
-      User.update_attachment_update_flag(User.buyers,UserAttachment::FileFlag_Buyer_REVV_TC)
-      User.update_attachment_update_flag(User.buyer_entities,UserAttachment::FileFlag_Buyer_REVV_TC)
+      # User.update_attachment_update_flag(User.buyers,UserAttachment::FileFlag_Buyer_REVV_TC)
+      # User.update_attachment_update_flag(User.buyer_entities,UserAttachment::FileFlag_Buyer_REVV_TC)
+      User.update_all(agree_buyer_revv: User::AgreeBuyerRevvNo)
     end
     if attachment.file_type.eql?(UserAttachment::FileType_Seller_REVV_TC)
-      User.update_attachment_update_flag(User.retailers,UserAttachment::FileFlag_Seller_REVV_TC)
+      # User.update_attachment_update_flag(User.retailers,UserAttachment::FileFlag_Seller_REVV_TC)
+      User.update_all(agree_seller_revv: User::AgreeSellerRevvNo)
     end
 
     render json: attachment, status: 200
