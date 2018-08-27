@@ -5,31 +5,43 @@ export class BuyerTCUploadApprove extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            epaIsExist: true,
+            epaIsExist: false,
             epaUrl: "",
-            bptIsExist: true,
+            bptIsExist: false,
             bptUrl: ""
         }
     }
 
 
     componentDidMount() {
-        getNeedBuyerApproveAttachments().then(res => { 
+        getNeedBuyerApproveAttachments().then(res => {
             console.log(res)
-            // res.map((item) => {
-            //     if (item.type === "SELLER_BUYER_TC") {
-            //         this.setState({
-            //             epaIsExist: true,
-            //             epaUrl: item.file.file_path
-            //         })
-            //     }
-            //     if (item.type === "BUYER_REVV_TC") {
-            //         this.setState({
-            //             bptIsExist: true,
-            //             bptUrl: item.file.file_path
-            //         })
-            //     }
-            // }) 
+            if (res.user) {
+                if (res.user.agree_buyer_revv === null || res.user.agree_buyer_revv === '0') {
+                    this.setState({
+                        epaIsExist: true 
+                    })
+                }
+                if (res.user.agree_seller_buyer === null || res.user.agree_seller_buyer === '0') {
+                    this.setState({
+                        bptIsExist: true
+                    })
+                }
+            }
+            if (res.attachments) {
+                res.attachments.map((item) => {
+                    if (item.file_type === "SELLER_BUYER_TC" && this.state.epaIsExist) {
+                        this.setState({
+                            epaUrl: item.file_path
+                        })
+                    }
+                    if (item.file_type === "BUYER_REVV_TC" && this.state.bptIsExist) {
+                        this.setState({
+                            bptUrl: item.file_path
+                        })
+                    }
+                }) 
+            }
         })
     }
 
@@ -39,11 +51,15 @@ export class BuyerTCUploadApprove extends Component {
     checkSuccess() {
         event.preventDefault();
         saveBuyerAttachmentModification().then(res => {
+            console.log(res)
             window.location.href = `/buyer/home`;
         })
     }
     doSubmit() {
-
+        // saveBuyerAttachmentModification().then(res => {
+        //     console.log(res)
+        //     window.location.href = `/buyer/home`;
+        // })
     }
     render() {
         return (
@@ -62,7 +78,6 @@ export class BuyerTCUploadApprove extends Component {
                             </div>
                         </div>
                     </div>
-
                 </form >
                 {/* </div> */}
             </div>
