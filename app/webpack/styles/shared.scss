@@ -1077,12 +1077,17 @@ width: "70%"; float: "left";padding:5px;
     a{
       cursor: pointer
     }
-     
+  }
+  .attachment{
+    height: 180px;
   }
   .btnProceed{
-     margin: 50 10px 20px 10 ;
+       margin: 150 10px 20px 10 ;
     // padding-bottom: 130px;
-    // position: relative;
+      // position:relative;
+      // margin-bottom: "50px"
+    //  bottom:30px;
+    // button { width: 80px; float:right; margin-left: 10px; cursor: pointer;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; }
   }
   h4{ padding:0px 10px 0px 10px;color:#fff !important; font-size:16px; }
 }
