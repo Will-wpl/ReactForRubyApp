@@ -1,4 +1,4 @@
-import {get, update, create, Ddelete, put} from '../../../javascripts/http';
+import {get, update, create, Ddelete, put,post} from '../../../javascripts/http';
 
 export const retailManageComing = (params) => {
     return put('/api/retailer/arrangements/'+params.arrangement.id, params);
@@ -115,8 +115,8 @@ export const getRetailerUserInfoByUserId=(id)=>{
     return get(`/api/admin/registrations/${id}/retailer_info?user_id=${id}`);
 }
 export const getNeedRetailerApproveAttachments=()=>{
-    return get('/api/buyer/users/show_current_user');
+    return get('/api/retailer/users/show_current_user');
 }
 export const saveRetailerAttachmentModification=()=>{
-    return put('/api/buyer/users/update_attachment_status');
+    return put('/api/retailer/users/update_attachment_status');
 }
