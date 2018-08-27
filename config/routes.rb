@@ -127,7 +127,7 @@ Rails.application.routes.draw do
       resources :users, only: %i[show_current_user update_attachment_status] do
         collection do
           get 'show_current_user'
-          post 'update_attachment_status'
+          put 'update_attachment_status'
         end
       end
 
@@ -202,7 +202,7 @@ Rails.application.routes.draw do
       resources :users, only: %i[show_current_user update_attachment_status] do
         collection do
           get 'show_current_user'
-          post 'update_attachment_status'
+          put 'update_attachment_status'
         end
       end
       resources :consumption_details, only: %i[index update participate reject validate] do
