@@ -121,7 +121,7 @@ class Api::AuctionsController < Api::BaseController
            end
     auctions = []
     data.each do |auction|
-      consumptions = Consumption.find_by_auction_id(auction.id)
+      consumptions = Consumption.find_by_auction_id(auction.id).is_participation
       consumptions_all_count = consumptions.count
       consumptions_accept_count = consumptions.where(accept_status: Consumption::AcceptStatusApproved).count
       all_accept = consumptions_all_count == consumptions_accept_count ? true : false
