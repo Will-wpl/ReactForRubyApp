@@ -299,7 +299,13 @@ class Api::AuctionsController < Api::BaseController
 
   def retailer_dashboard
     tenders = TenderWorkflow.new.get_action_state_machine(params[:id])
-    render json: tenders, status: 200
+    step_counts = [0, 0, 0, 0, 0]
+    tenders.each do |tender|
+      current_node = tender[:detail][:current][:current_node]
+      step_counts[current_node - 1] += 1
+    end
+
+    render json: {tenders: tenders, step_counts: step_counts}, status: 200
   end
 
   def buyer_dashboard

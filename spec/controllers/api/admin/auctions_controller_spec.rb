@@ -901,10 +901,11 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
 
         before { do_request }
         it 'Success' do
-          hash = JSON.parse(response.body)
           expect(response).to have_http_status(:ok)
-          expect(hash[0]['detail']['flows'].to_s).to eq('[1]')
-          expect(hash[1]['detail']['flows'].to_s).to eq('[1]')
+          hash = JSON.parse(response.body)
+          expect(hash['tenders'][0]['detail']['flows'].to_s).to eq('[1]')
+          expect(hash['tenders'][1]['detail']['flows'].to_s).to eq('[1]')
+          expect(hash['step_counts'].to_s).to eq('[2, 0, 0, 0, 0]')
         end
       end
     end
