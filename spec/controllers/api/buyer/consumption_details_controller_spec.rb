@@ -28,7 +28,6 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
           hash = JSON.parse(response.body)
           expect(hash.size).to eq(7)
           expect(hash['consumption_details'].size).to eq(4)
-          expect(hash['consumption_details'][0]['intake_level']).to eq('EHT')
           expect(response).to have_http_status(:ok)
         end
       end

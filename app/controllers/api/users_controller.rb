@@ -58,6 +58,21 @@ class Api::UsersController < Api::BaseController
     render json: user, status: 200
   end
 
+  def show_current_user
+    user = current_user
+    render json: user, status: 200
+  end
+
+  def update_attachment_status
+    if current_user.has_role?(:retailer)
+      current_user.update(agree_seller_buyer: User::AgreeSellerBuyerYes, agree_seller_revv: User::AgreeSellerRevvYes)
+    end
+    if current_user.has_role?(:buyer)
+      current_user.update(agree_seller_buyer: User::AgreeSellerBuyerYes, agree_buyer_revv: User::AgreeBuyerRevvYes)
+    end
+    render json: current_user, status: 200
+  end
+
   protected
 
   # Approval User
