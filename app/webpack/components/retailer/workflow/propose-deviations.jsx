@@ -384,18 +384,15 @@ export class Proposedeviations extends React.Component{
                     {!this.props.tender ? <div className="workflow_btn u-mt3 u-mb3"><button className="add_deviation" disabled={this.props.propsdisabled?true:(this.state.alldisabled)} onClick={this.addDeviations.bind(this)}>Add</button></div> :''}
                     <div className="workflow_btn u-mt3">
                         {!this.props.tender ?
-                        <div><button className="lm--button lm--button--primary" disabled={this.props.propsdisabled?true:(this.state.alldisabled?true:(!this.props.current.actions.node3_retailer_withdraw_all_deviations))} onClick={this.showConfirm.bind(this,'Withdraw_Deviations')}>Withdraw All Deviations</button>
-                        <button className="lm--button lm--button--primary" onClick={this.save.bind(this)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Save</button>
-                        <button className="lm--button lm--button--primary" disabled={this.props.propsdisabled?true:(this.state.alldisabled?true:(!this.props.current.actions.node3_retailer_submit_deviations))} onClick={this.showConfirm.bind(this,'Submit_Deviations')}>Submit Deviations</button></div> :
-                        <button className="lm--button lm--button--primary" disabled={this.props.propsdisabled} onClick={this.next.bind(this)}>Next</button>
+                        <div>
+                            {this.props.current.actions.node3_retailer_back?<button className="lm--button lm--button--primary" disabled={this.props.propsdisabled} onClick={this.goBack.bind(bind)}>Back</button>:''}
+                            <button className="lm--button lm--button--primary" disabled={this.props.propsdisabled?true:(this.state.alldisabled?true:(!this.props.current.actions.node3_retailer_withdraw_all_deviations))} onClick={this.showConfirm.bind(this,'Withdraw_Deviations')}>Withdraw All Deviations</button>
+                            <button className="lm--button lm--button--primary" onClick={this.save.bind(this)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Save</button>
+                            <button className="lm--button lm--button--primary" disabled={this.props.propsdisabled?true:(this.state.alldisabled?true:(!this.props.current.actions.node3_retailer_submit_deviations))} onClick={this.showConfirm.bind(this,'Submit_Deviations')}>Submit Deviations</button></div> :
+                            <button className="lm--button lm--button--primary" disabled={this.props.propsdisabled} onClick={this.next.bind(this)}>Next</button>
                         }
                     </div>
                 </div>
-                {this.props.current.actions.node3_retailer_back?
-                    <div className="createRaMain u-grid">
-                        <a className="lm--button lm--button--primary u-mt3" onClick={this.goBack.bind(bind)} >Back</a>
-                    </div>:''
-                }
                 <Showhistory ref="history" status={this.state.status} textdisabled={this.state.textdisabled} type={this.state.detailType} title={this.state.title} detail={this.state.detail} detail_id={this.state.detail_id} editDetail={this.editDetail.bind(this)} />
                 <Modal text={this.state.text} acceptFunction={
                     this.state.buttonType === 'Withdraw_Deviations'?this.withdrawAllDeviations.bind(this):
