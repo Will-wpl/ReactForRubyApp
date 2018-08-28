@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {Modal} from '../../shared/show-modal';
 import {Showhistory} from '../../shared/show-history';
-import {retailerWithdrawAllDeviations,retailerSubmitDeviations,retailerNext,getRetailerDeviationsList,retailerDeviationsSave,retailerWithdraw} from '../../../javascripts/componentService/retailer/service';
+import {retailerWithdrawAllDeviations,retailerSubmitDeviations,retailerNext,getRetailerDeviationsList,retailerDeviationsSave,retailerWithdraw,retailer_back} from '../../../javascripts/componentService/retailer/service';
 import {getTenderhistory} from '../../../javascripts/componentService/common/service';
 export class Proposedeviations extends React.Component{
     constructor(props){
@@ -126,7 +126,7 @@ export class Proposedeviations extends React.Component{
                         if(next.update){
                             next.tenderFn();
                         }
-                    }                    
+                    }
                 }
             }
         }
@@ -205,11 +205,11 @@ export class Proposedeviations extends React.Component{
                         }
                     }else{
                         deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+deviation+'","retailer_response":"'+response+'","sp_response_status":"'+item.sp_response_status+'"},';
-                    } 
+                    }
                 }
             }else{
                 deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+deviation+'","retailer_response":"'+response+'","sp_response_status":"'+sum+'"},';
-            }       
+            }
         })
         deviationslist = deviationslist.substr(0, deviationslist.length-1);
         deviationslist = '['+deviationslist+']';
@@ -267,7 +267,20 @@ export class Proposedeviations extends React.Component{
                 list[id.split("_")[1]].retailer_response = detail;
             }
             this.setState({deviations_list:list});
-        }   
+        }
+    }
+    goBack(){
+        if(this.state.deviations_list.length>1){
+            this.refs.Modal.showModal();
+            this.setState({text:"Please confirm that you want to return to the previous step. <br>All deviations will be deleted.(Yes,No). <br>The saved data will be removed if click Yes, <br>and page forward back to Step page2.",buttonType:"goback"});
+        }else{
+            this.doBack();
+        }
+    }
+    doBack(){
+        retailer_back('retailer',this.props.current.current.arrangement_id).then(res=>{
+            window.location.reload();
+        })
     }
     render(){
         return(
@@ -289,7 +302,7 @@ export class Proposedeviations extends React.Component{
                                 </tr>
                         </thead>
                         <tbody>
-                                {!this.props.tender ? 
+                                {!this.props.tender ?
                                     this.state.deviations_list.map((item,index)=>{
                                         if(item.sp_response_status === "1" || item.sp_response_status === "4"){
                                             return (<tr key={item.id}>
@@ -337,7 +350,7 @@ export class Proposedeviations extends React.Component{
                                                         </div>
                                                         )}</td>
                                                 </tr>)
-                                            }                                   
+                                            }
                                         })
                                 :this.state.deviations_list.map((item,index)=>{
                                     return <tr key={item.id}>
@@ -378,8 +391,16 @@ export class Proposedeviations extends React.Component{
                         }
                     </div>
                 </div>
+                {this.props.current.actions.node3_retailer_back?
+                    <div className="createRaMain u-grid">
+                        <a className="lm--button lm--button--primary u-mt3" onClick={this.goBack.bind(bind)} >Back</a>
+                    </div>:''
+                }
                 <Showhistory ref="history" status={this.state.status} textdisabled={this.state.textdisabled} type={this.state.detailType} title={this.state.title} detail={this.state.detail} detail_id={this.state.detail_id} editDetail={this.editDetail.bind(this)} />
-                <Modal text={this.state.text} acceptFunction={this.state.buttonType === 'Withdraw_Deviations'?this.withdrawAllDeviations.bind(this):(this.state.buttonType === 'Withdraw'? this.Withdraw.bind(this):this.submitDeviations.bind(this))} ref="Modal" />
+                <Modal text={this.state.text} acceptFunction={
+                    this.state.buttonType === 'Withdraw_Deviations'?this.withdrawAllDeviations.bind(this):
+                    (this.state.buttonType === 'Withdraw'? this.Withdraw.bind(this):
+                        (this.state.buttonType === 'goback'?this.doBack.bind(this):this.submitDeviations.bind(this)))} ref="Modal" />
             </div>
         )
     }
