@@ -6,6 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum, removePostCode } from '../../javascripts/componentService/util';
 //共通弹出框组件
 import { UploadFile } from '../shared/upload';
+import E from 'wangeditor'
 
 export class Modal extends React.Component {
     constructor(props) {
@@ -146,10 +147,10 @@ export class Modal extends React.Component {
                 $(".react-datepicker-popper").removeClass("isHide");
             }
         })
-
     }
 
     showModal(type, data, str, index) {
+
         if (str) {
             this.setState({ strtype: str });
         }
@@ -160,10 +161,15 @@ export class Modal extends React.Component {
         })
         if (data) {
             if (data.subject && data.body) {
+                if($("#email_body").html() == ""){
+                    var editor = new E('#email_body');
+                    setTimeout(()=>{editor.create();})
+                }
                 this.setState({
                     email_subject: data.subject,
                     email_body: data.body
                 })
+                setTimeout(()=>{$(".w-e-text p").html(this.state.email_body)},300);
             }
         }
         if (type == "comfirm") {
@@ -210,7 +216,7 @@ export class Modal extends React.Component {
         if (this.state.strtype === "email_template") {
             let data = this.state.props_data;
             data.subject = this.state.email_subject;
-            data.body = this.state.email_body;
+            data.body = $(".w-e-text p").html();
             this.setState({ props_data: data });
         }
 
@@ -226,8 +232,8 @@ export class Modal extends React.Component {
         })
 
         if (this.props.formSize === "middle") {
-            $("#modal_main").css({ "width": "50%", "height": "300px", "top": "40%", "left": "40%" });
-            $(".email_body").css({ "height": "140px" });
+            $("#modal_main").css({ "width": "50%", "height": "310px", "top": "40%", "left": "40%" });
+            $(".email_body").css({ "height": "170px" });
         }
 
     }
@@ -585,8 +591,8 @@ export class Modal extends React.Component {
                 modalshowhide: "modal_hide"
             })
             if (this.props.formSize === "middle") {
-                $("#modal_main").css({ "width": "50%", "height": "300px", "top": "40%", "left": "40%" });
-                $(".email_body").css({ "height": "140px" });
+                $("#modal_main").css({ "width": "50%", "height": "310px", "top": "40%", "left": "40%" });
+                $(".email_body").css({ "height": "170px" });
             }
         }
     }
@@ -599,8 +605,8 @@ export class Modal extends React.Component {
             })
         }
         else {
-            $("#modal_main").css({ "width": "50%", "height": "300px", "top": "40%", "left": "40%" });
-            $(".email_body").css({ "height": "140px" });
+            $("#modal_main").css({ "width": "50%", "height": "310px", "top": "40%", "left": "40%" });
+            $(".email_body").css({ "height": "170px" });
             this.setState({
                 modalSize: "big"
             })
@@ -703,7 +709,7 @@ export class Modal extends React.Component {
                                 Body:
                             </label>
                             <div className="lm--formItem-right lm--formItem-control">
-                                <textarea name="email_body" className="email_body" style={{ height: "140px" }} value={this.state.email_body} onChange={this.Change.bind(this, 'email_body')} disabled={this.state.disabled} ref="email_body" required aria-required="true" />
+                                <div name="email_body" className="email_body" id={"email_body"} style={{ height: "170px" }} onChange={this.Change.bind(this, 'email_body')} disabled={this.state.disabled} ref="email_body" required aria-required="true" />
                             </div>
                         </div>
                     </div>
@@ -974,9 +980,9 @@ export class Modal extends React.Component {
                 </div>
                 :
                 this.props.formSize === "middle" ?
-                    <div id="modal_main" name="middleModal" className={this.state.modalshowhide} style={{ width: "50%", height: "300px", top: "40%", left: "40%" }} >
+                    <div id="modal_main" name="middleModal" className={this.state.modalshowhide} style={{ width: "50%", height: "310px", top: "40%", left: "40%" }} >
                         <h4><a onClick={this.closeModal.bind(this)}>X</a><a onClick={this.bigModal.bind(this, this.state.modalSize)}>口</a></h4>
-                        <div className="modal_detail model_detail_formHeight" style={{ "marginBottom": "30px" }}>
+                        <div className="modal_detail model_detail_formHeight">
                             <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
                         </div>
                         {btn_html}
