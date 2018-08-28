@@ -14,11 +14,12 @@ export class Adminworkflow extends Component {
         this.state={
             auction:{},
             disabled:false,current:{},page:1,
-            allbtnStatus:true,retailer_list:[],readOnly:false
+            allbtnStatus:true,retailer_list:[],readOnly:false,
+            step_counts:[]
         }
         getRetailerList(sessionStorage.auction_id).then(res=>{
             //console.log(res);
-            this.setState({retailer_list:res});
+            this.setState({retailer_list:res.tenders,step_counts:res.step_counts});
         })
     }
     getPageindex(arrangement_id,name,type,index){
@@ -40,7 +41,7 @@ export class Adminworkflow extends Component {
         switch(index){
             case 0 : pageDom = <div></div>
             break
-            case 1 : pageDom = <Adminretailerdashboard retailer_list={this.state.retailer_list} page={this.getPageindex.bind(this)} title="Retailer Dashboard" />
+            case 1 : pageDom = <Adminretailerdashboard step_counts={this.state.step_counts} retailer_list={this.state.retailer_list} page={this.getPageindex.bind(this)} title="Retailer Dashboard" />
             break
             case 3 : pageDom = <Keppelproposedeviations current={this.state.current} readOnly={this.state.readOnly} page={this.getPageindex.bind(this)} title="keppel Propose Deviations" />
             break
