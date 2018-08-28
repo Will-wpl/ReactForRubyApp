@@ -13,47 +13,23 @@ export class Modal extends React.Component {
         super(props);
         this.state = {
             modalshowhide: "modal_hide",
-            type: 'default',
-            secondStatus: "live_hide",
-            itemIndex: "",
-            props_data: {},
-            strtype: '',
-            email_subject: '',
-            email_body: '',
-            consumptionItem: [],
-            contracted_capacity_disabled: true,
-            contract_expiry_disabled: true,
-            disabled: false,
-            id: "",
-            consumptionid: "",
-            account_number: '',
-            existing_plan: [],
-            existing_plan_selected: '',
-            contract_expiry: '',
-            purchasing_entity: [],
-            purchasing_entity_selectd: '',
-            premise_address: '',
-            intake_level: [],
-            intake_level_selected: '',
-            contracted_capacity: '',
-            blk_or_unit: '',
-            street: '',
-            unit_number: '',
-            postal_code: '',
-            totals: '',
-            peak_pct: '',
-            peak: "",
-            attachment_ids: '',
-            option: '',
-            isSaved: false,
-            uploadUrl: "/api/buyer/user_attachments?file_type=",
-            validate: false,
+            type: 'default', secondStatus: "live_hide", itemIndex: "", props_data: {},
+            strtype: '', email_subject: '', email_body: '', consumptionItem: [],
+            contracted_capacity_disabled: true, contract_expiry_disabled: true, disabled: false, id: "", consumptionid: "", account_number: '',
+            existing_plan: [], existing_plan_selected: '', contract_expiry: '', purchasing_entity: [], purchasing_entity_selectd: '', premise_address: '',
+            intake_level: [], intake_level_selected: '',
+            contracted_capacity: '', blk_or_unit: '', street: '', unit_number: '', postal_code: '',
+            totals: '', peak_pct: '', peak: "", attachment_ids: '', option: '',
+            isSaved: false, uploadUrl: "/api/buyer/user_attachments?file_type=", validate: false,
             fileData: {
                 "CONSUMPTION_DOCUMENTS": [
                     { buttonName: "none", files: [] }
                 ]
             },
-            modalSize: this.props.modalSize
+            modalSize: this.props.modalSize,
+            entityid: '', is_defalut: '',
+            entity_company_name: '', entity_company_uen: '', entity_company_address: '', entity_billing_address: '', entity_bill_attention_to: '', entity_contact_name: '',
+            entity_contact_email: '', entity_contact_mobile_no: '', entity_contact_office_no: '', entitList: []
         }
     }
 
@@ -87,11 +63,7 @@ export class Modal extends React.Component {
             });
 
             if (next.consumption_account_item.attachment_ids) {
-                // let obj = {
-                //     id: next.consumption_account_item.id,
-                //     file_name: next.consumption_account_item.file_name,
-                //     file_path: next.consumption_account_item.file_path
-                // }
+
                 fileObj["CONSUMPTION_DOCUMENTS"][0].files = [];
                 fileObj["CONSUMPTION_DOCUMENTS"][0].files = next.consumption_account_item.attachment_ids;
                 this.setState({
@@ -129,12 +101,31 @@ export class Modal extends React.Component {
         if (next.siteList) {
             this.setState({ consumptionItem: next.siteList });
         }
+        if (next.entityDetailItem) {
+            console.log(next.entityDetailItem)
+            this.setState({
+                entityid: next.entityDetailItem.id,
+                entity_company_name: next.entityDetailItem.company_name,
+                entity_company_uen: next.entityDetailItem.company_uen,
+                entity_company_address: next.entityDetailItem.company_address,
+                entity_billing_address: next.entityDetailItem.billing_address,
+                entity_bill_attention_to: next.entityDetailItem.bill_attention_to,
+                entity_contact_name: next.entityDetailItem.contact_name,
+                entity_contact_email: next.entityDetailItem.contact_email,
+                entity_contact_mobile_no: next.entityDetailItem.contact_mobile_no,
+                entity_contact_office_no: next.entityDetailItem.contact_office_no,
+                is_defalut: next.entityDetailItem.is_defalut,
+                option:next.entityDetailItem.option
+            })
+        }
+        if (next.entitList) {
+            this.setState({ entitList: next.entitList })
+        }
         $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
         $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
     }
 
     componentDidMount() {
-
         if (this.props.formSize === "big") {
             $("#btnUpload").removeClass("col-md-2 u-cell").addClass("col-md-3");
         }
@@ -201,8 +192,6 @@ export class Modal extends React.Component {
                 itemIndex: index
             })
         }
-
-
     }
 
     do_text(text) {
@@ -239,7 +228,6 @@ export class Modal extends React.Component {
     }
 
     checkModelSuccess(event) {
-        // event.preventDefault();
         let flag = true, hasDoc = true;
         let validateItem = {
             peak_pct: { cate: 'decimal' },
@@ -294,7 +282,6 @@ export class Modal extends React.Component {
             validateResult.map((item, index) => {
                 let column = item.column;
                 let cate = item.cate;
-
                 setValidationFaild(column, cate);
                 if (column === "contract_expiry") {
                     setTimeout(() => {
@@ -305,47 +292,50 @@ export class Modal extends React.Component {
         }
     }
 
+    checkEntitySuccess() {
+        let flag = true;
+        let validateItem = {
+            // company_name:"required",
+            entity_contact_office_no: { cate: 'num' },
+            entity_contact_mobile_no: { cate: 'num' },
+            entity_contact_email: { cate: 'email' },
+            entity_contact_name: { cate: 'required' },
+            entity_bill_attention_to: { cate: 'required' },
+            entity_billing_address: { cate: 'required' },
+            entity_company_address: { cate: 'required' },
+            entity_company_uen: { cate: 'required' },
+            entity_company_name: { cate: 'required' }
+        }
+        let validateResult = validator_Object(this.state, validateItem);
+        flag = validateResult.length > 0 ? false : true;
+        if (flag) {
+            //need  validate 
+            if (true) {
+
+                this.addEntity();
+            }
+
+        }
+        else {
+            $('.validate_message').find('div').each(function () {
+                let className = $(this).attr('class');
+                if (className === 'errormessage') {
+                    let divid = $(this).attr("id");
+                    $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
+                }
+            })
+            validateResult.map((item, index) => {
+                let column = item.column;
+                let cate = item.cate;
+                setValidationFaild(column, cate);
+            })
+        }
+    }
     removeInputNanNum(value) {
         removeNanNum(value)
     }
     removeInputPostCode(value) {
         removePostCode(value);
-    }
-    getFormsValue() {
-        let siteItem = {
-            consumptionid: this.state.consumptionid ? this.state.consumptionid : "",
-            account_number: this.state.account_number,
-            existing_plan_selected: this.state.existing_plan_selected,
-            contract_expiry: this.state.contract_expiry ? this.state.contract_expiry : "",
-            purchasing_entity_selectd: this.state.purchasing_entity_selectd,
-            intake_level_selected: this.state.intake_level_selected,
-            contracted_capacity: this.state.contracted_capacity,
-            blk_or_unit: this.state.blk_or_unit,
-            street: this.state.street,
-            unit_number: this.state.unit_number,
-            postal_code: this.state.postal_code,
-            totals: this.state.totals,
-            peak_pct: this.state.peak_pct,
-            index: this.state.itemIndex,
-            user_attachment_id: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].id : "",
-            file_name: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_name : "",
-            file_path: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_path : ""
-        }
-        return siteItem;
-    }
-
-    modifySiteListInLocal() {
-        let siteItem = this.getFormsValue();
-        let entity = this.state.consumptionItem;
-        if (this.state.itemIndex >= 0) {
-            entity[this.state.itemIndex] = siteItem;
-        } else {
-
-            entity.push(siteItem);
-        }
-        this.setState({
-            consumptionItem: entity
-        })
     }
 
     account_address_repeat() {
@@ -394,9 +384,35 @@ export class Modal extends React.Component {
     }
 
     Add() {
-        this.checkModelSuccess();
-    }
+        if (this.props.listdetailtype === 'entity_detail') {
+            this.checkEntitySuccess();
+        }
+        else {
+            this.checkModelSuccess();
+        }
 
+    }
+    addEntity() {
+        let entityItem = {
+            id: this.state.entityid,
+            company_name: this.state.entity_company_name,
+            company_uen: this.state.entity_company_address,
+            company_address: this.state.entity_company_address,
+            billing_address: this.state.entity_billing_address,
+            bill_attention_to: this.state.entity_bill_attention_to,
+            contact_name: this.state.entity_contact_name,
+            contact_email: this.state.entity_contact_email,
+            contact_mobile_no: this.state.entity_contact_mobile_no,
+            contact_office_no: this.state.entity_contact_office_no,
+            index: this.state.itemIndex
+        }
+        if (this.props.acceptFunction) {
+            this.props.acceptFunction(entityItem);
+            this.setState({
+                modalshowhide: "modal_hide"
+            })
+        }
+    }
     addToMainForm() {
         let siteItem = {
             consumptionid: this.state.consumptionid ? this.state.consumptionid : "",
@@ -415,9 +431,6 @@ export class Modal extends React.Component {
             index: this.state.itemIndex,
             attachment_ids: "",
             user_attachment: []
-            // user_attachment_id: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].id : "",
-            // file_name: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_name : "",
-            // file_path: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_path : ""
         }
         if (this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0) {
             let idsArr = [];
@@ -436,6 +449,67 @@ export class Modal extends React.Component {
         }
     }
 
+    changeEntity(type, e) {
+        let itemValue = e.target.value;
+        switch (type) {
+            case "entityid":
+                this.setState({
+                    entityid: value
+                })
+                break;
+            case "entity_company_name":
+                this.setState(
+                    { entity_company_name: itemValue }
+                );
+                changeValidate('entity_company_name', itemValue);
+                break;
+
+            case 'entity_company_uen':
+                this.setState({ entity_company_uen: itemValue });
+                changeValidate('entity_company_uen', itemValue);
+                break;
+            case 'entity_company_address':
+                this.setState({ entity_company_address: itemValue });
+                changeValidate('entity_company_address', itemValue);
+                break;
+            case 'entity_billing_address':
+                this.setState({ entity_billing_address: itemValue });
+                changeValidate('entity_billing_address', itemValue);
+                break;
+            case 'entity_bill_attention_to':
+                this.setState({ entity_bill_attention_to: itemValue });
+                changeValidate('entity_bill_attention_to', itemValue);
+                break;
+            case 'entity_contact_name':
+                this.setState({ entity_contact_name: itemValue });
+                changeValidate('entity_contact_name', itemValue);
+                break;
+            case 'entity_contact_email':
+                this.setState({ entity_contact_email: itemValue });
+                if (!validateEmail(itemValue)) {
+                    setValidationFaild('entity_contact_email', 2)
+                } else {
+                    setValidationPass('entity_contact_email', 2)
+                }
+                break;
+            case 'entity_contact_mobile_no':
+                this.setState({ entity_contact_mobile_no: itemValue });
+                if (!validateNum(itemValue)) {
+                    setValidationFaild('entity_contact_mobile_no', 2)
+                } else {
+                    setValidationPass('entity_contact_mobile_no', 2)
+                }
+                break;
+            case 'entity_contact_office_no':
+                this.setState({ entity_contact_office_no: itemValue });
+                if (!validateNum(itemValue)) {
+                    setValidationFaild('entity_contact_office_no', 2)
+                } else {
+                    setValidationPass('entity_contact_office_no', 2)
+                }
+                break;
+        }
+    }
 
     changeConsumption(type, e) {
         let value = e.target.value;
@@ -638,7 +712,6 @@ export class Modal extends React.Component {
     }
 
     render() {
-        // console.log(this.state.modalSize)
         let showDetail = '', secondary = '', secondStatus = '';
         if (this.props.showdetail && !this.props.text) {
             this.secondaryData = [
@@ -793,6 +866,95 @@ export class Modal extends React.Component {
                     <li>5) A copy of the Authorised Representative's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
                     <li>All supporting documents submitted should be in English only.</li>
                 </ul>
+            }
+
+            if (this.props.listdetailtype === 'entity_detail') {
+                if (this.props.entity_detail_item !== null) {
+                    showDetail = <div className=" admin_invitation validate_message">
+                        <h3 className="text_padding_left">Entity Information</h3>
+                        <table className="consumption_table  u-mb3" cellPadding="0" cellSpacing="0" style={{ marginTop: "15px" }}>
+                            <tbody>
+                                <tr>
+                                    <td style={{ width: "30%" }}><abbr title="required">*</abbr>Purchase Entity/Company Name</td>
+                                    <td style={{ width: "70%" }}>
+                                        <div className="isHide">
+                                            <input type="text" value={this.state.entityid} onChange={this.changeEntity.bind(this, "entityid")} id="id" name="id" />
+                                        </div>
+                                        <input type="text" name="entity_company_name" id="entity_company_name" value={this.state.entity_company_name} onChange={this.changeEntity.bind(this, 'entity_company_name')} className={this.props.disabled ? "mainEntity" : ""} readOnly={this.props.disabled} ref="entity_company_name" aria-required="true" title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id="entity_company_name_message" >This field is required!</div>
+                                        <div className='isPassValidate' id="entity_company_name_repeat" >Company name has already been taken!</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><abbr title="required">*</abbr>Company UEN</td>
+                                    <td>
+                                        <input type="text" name="entity_company_uen" id="entity_company_uen" value={this.state.entity_company_uen} onChange={this.changeEntity.bind(this, 'entity_company_uen')} className={this.props.disabled ? "mainEntity" : ""} readOnly={this.props.disabled} ref="entity_company_uen" aria-required="true" title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id="entity_company_uen_message" >This field is required!</div>
+                                        <div className='isPassValidate' id="entity_company_uen_repeat" >Company UEN has already been taken!</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><abbr title="required">*</abbr>Company Address</td>
+                                    <td>
+                                        <input type="text" name="entity_company_address" id="entity_company_address" value={this.state.entity_company_address} onChange={this.changeEntity.bind(this, 'entity_company_address')} className={this.props.disabled ? "mainEntity" : ""} readOnly={this.props.disabled} ref="entity_company_address" aria-required="true" title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id="entity_company_address_message" >This field is required!</div>
+                                        <div className='isPassValidate' id="entity_company_address_repeat" >Company UEN has already been taken!</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><abbr title="required">*</abbr>Billing Address</td>
+                                    <td>
+                                        <input type="text" name="entity_billing_address" id="entity_billing_address" value={this.state.entity_billing_address} onChange={this.changeEntity.bind(this, 'entity_billing_address')}   ref="entity_billing_address" aria-required="true" title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id="entity_billing_address_message" >This field is required!</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <abbr title="required">*</abbr>Bill Attention To</td>
+                                    <td>
+                                        <input type="text" name="entity_bill_attention_to" id="entity_bill_attention_to" value={this.state.entity_bill_attention_to} onChange={this.changeEntity.bind(this, 'entity_bill_attention_to')}   ref="entity_bill_attention_to" aria-required="true" title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id="entity_bill_attention_to_message" >This field is required!</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <abbr title="required">*</abbr>Contact Name</td>
+                                    <td>
+                                        <input type="text" name="entity_contact_name" id="entity_contact_name" value={this.state.entity_contact_name} onChange={this.changeEntity.bind(this, 'entity_contact_name')}   ref="entity_contact_name" aria-required="true" title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id="entity_contact_name_message" >This field is required!</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <abbr title="required">*</abbr>Contact Email</td>
+                                    <td>
+                                        <input type="text" name="entity_contact_email" id="entity_contact_email" value={this.state.entity_contact_email} onChange={this.changeEntity.bind(this, 'entity_contact_email')}   ref="entity_contact_email" aria-required="true" title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id="entity_contact_email_message" >This field is required!</div>
+                                        <div className='isPassValidate' id='entity_contact_email_format' >Incorrect mail format!</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <abbr title="required">*</abbr>Contact Mobile No.</td>
+                                    <td>
+                                        <input type="text" name="entity_contact_mobile_no" id="entity_contact_mobile_no" value={this.state.entity_contact_mobile_no} onChange={this.changeEntity.bind(this, 'entity_contact_mobile_no')}   maxLength="8" onKeyUp={this.removeInputNanNum.bind(this)} ref="entity_contact_mobile_no" aria-required="true" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id="entity_contact_mobile_no_message" >This field is required!</div>
+                                        <div className='isPassValidate' id='entity_contact_mobile_no_format' >Number should contain 8 integers.</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <abbr title="required">*</abbr>Contact Office No.</td>
+                                    <td>
+                                        <input type="text" name="entity_contact_office_no" id="entity_contact_office_no" value={this.state.entity_contact_office_no} onChange={this.changeEntity.bind(this, 'entity_contact_office_no')}   maxLength="8" onKeyUp={this.removeInputNanNum.bind(this)} ref="entity_contact_office_no" aria-required="true" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id="entity_contact_office_no_message" >This field is required!</div>
+                                        <div className='isPassValidate' id='entity_contact_office_no_format' >Number should contain 8 integers.</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                }
             }
             if (this.props.listdetailtype === 'consumption_detail') {
                 if (this.props.consumption_account_item !== null) {

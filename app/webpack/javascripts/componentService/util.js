@@ -270,7 +270,7 @@ export const validator_Array = (param, paramType) => {
 }
 
 export const setValidationFaild = (item, type) => {
-    console.log($("input[name='" + item + "']"))
+
     if (type === 1) {
         $('#' + item + "_message").removeClass('isPassValidate').addClass('errormessage');
         $('#' + item + "_format").removeClass('errormessage').addClass('isPassValidate');

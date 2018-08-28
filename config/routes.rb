@@ -30,12 +30,12 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :admin do
-      resources :users, only: %i[show retailers buyers approval_retailer approval_buyer] do
+      resources :users, only: %i[show retailers buyers approval_account approval_buyer_entity] do
         collection do
           get 'retailers'
           get 'buyers'
-          put 'approval_retailer'
-          put 'approval_buyer'
+          put 'approval_account'
+          put 'approval_buyer_entity'
         end
       end
       resources :auctions, only: %i[obtain link create update delete publish hold confirm destroy unpublished published retailers buyers selects send_mails check_buyer_type delete_selected_buyer] do
@@ -226,10 +226,13 @@ Rails.application.routes.draw do
       resources :auction_results, only: %i[index] do
 
       end
-      resources :registrations, only: %i[index update sign_up validate] do
+      resources :registrations, only: %i[index update sign_up validate_buyer_entity validate] do
         member do
           put 'sign_up'
           put 'validate'
+        end
+        collection do
+          put 'validate_buyer_entity'
         end
       end
       resources :user_attachments, only: %i[create destroy patch_update_consumption_detail_id] do

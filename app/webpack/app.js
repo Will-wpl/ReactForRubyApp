@@ -20,7 +20,7 @@ import "components/retailer/letter-of-award";
 import "components/buyer/buyer-fill-consumption";
 import "components/retailer/retailer-workflow";
 import "components/retailer/retailer-register";
-import "components/buyer/buyer-register";
+import "components/buyer/buyer-register-entity";
 import "components/admin/admin-comsumption";
 import "components/buyer/buyer-tc-upload-approve";
 import "components/retailer/retailer-tc-upload-approve";
