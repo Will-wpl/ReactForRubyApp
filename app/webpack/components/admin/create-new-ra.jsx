@@ -21,7 +21,7 @@ export class CreateNewRA extends Component {
             left_name: this.props.left_name,
             btn_type: "", text: "", id: "0",
             edit_btn: "lm--button lm--button--primary show",
-            edit_change: "lm--button lm--button--primary hide", contractArray: [],
+            edit_change: "lm--button lm--button--primary hide", contractArray: [],contract_end_list: [],
             disabled: false, live_modal: "", live_modal_do: "", holdOrend: "", checkArray: [],
             contract_duration_6: false, contract_duration_12: false, contract_duration_24: false,
             required: false, check_required: true, single_multiple: "1", allow_deviation: "1",
@@ -110,7 +110,7 @@ export class CreateNewRA extends Component {
                 //     res.live_auction_contracts.map((item) => {return item.contract_duration;})
                 //     :res.auction_contracts.map((item) => {return item.contract_duration;})
                 let arr = res.auction_contracts.map((item) => { return item.contract_duration; })
-                this.setState({ checkArray: arr.sort(this.sortNumber), contractArray: res.auction_contracts });
+                this.setState({ checkArray: arr.sort(this.sortNumber), contractArray: res.auction_contracts, contract_end_list:res.contract_end_list });
 
                 this.setState({ live_auction_contracts: res.live_auction_contracts });
                 console.log("this.state.live_auction_contracts");
@@ -798,13 +798,13 @@ export class CreateNewRA extends Component {
                                         <label className={"checkbox_div"}><input className={"checkbox"} type="checkbox" required={this.state.check_required} ref="contract_duration_24" disabled={this.state.disabled ? true : (this.auction.buyer_notify ? true : false)} name="contract_duration" value={"24"} id={"contract_duration_24"} checked={this.state.contract_duration_24} onChange={this.contractChange.bind(this)} /> 24 Months</label>
                                     </div>
                                 </dd>
-                                {this.state.contractArray.length > 0 ?
+                                {this.state.contract_end_list.length > 0 ?
                                     (<div>
                                         <dd className="lm--formItem lm--formItem--inline string optional">
                                             <span className="lm--formItem-left lm--formItem-label string optional">Contract End Date :</span>
                                             <div className="lm--formItem-right lm--formItem-control">
-                                                {this.state.contractArray.map((item, index) => {
-                                                    return <label key={index} className={'lm--formItem-label lm--formItem-control'}>Buyers on {item.contract_duration} months [{item.contract_period_end_date}]</label>
+                                                {this.state.contract_end_list.map((item, index) => {
+                                                    return <label key={index} className={'lm--formItem-label lm--formItem-control'}>Buyers on {item.contract_duration} months [{item.contract_period_end_date}] count[{item.count}]</label>
                                                 })}
                                             </div>
                                         </dd>
