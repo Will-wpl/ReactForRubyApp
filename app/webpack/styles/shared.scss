@@ -1190,8 +1190,29 @@ width: "70%"; float: "left";padding:5px;
      }   
     }
   }
+  .addSite{ width: 100%; margin: 10px auto;
+    a{color:#00888a; cursor: pointer; background: url("../images/add.png") no-repeat left; padding-left:18px;}
+  }
+  .editSite{ width: 100%; margin: 10px 5px 10px 5px auto;
+    a{ padding-left:20px;color:#00888a; cursor: pointer; background: url("../images/edit.png") no-repeat left;}
+  }
+  .delSite{ width: 100%; margin: 10px 5px 15px 5px  auto;
+    a{ padding-left:20px;color:#00888a; cursor: pointer; background: url("../images/remove.png") no-repeat left; }
+  }
+  .approveEntity{ width: 100%; margin: 10px 5px 10px 5px  auto;
+    a{padding-left:20px; color:#00888a; cursor: pointer; background: url("../images/edit.png") no-repeat left;}
+  }
+  .rejectEntity{ width: 100%; margin: 10px 5px 10px 5px  auto;
+    a{ padding-left:20px;color:#00888a; cursor: pointer; background: url("../images/remove.png") no-repeat left; }
+  }
+  .viewEntity{ width: 100%; margin: 10px 5px 10px 5px auto;
+    a{padding-left:20px;color:#00888a; cursor: pointer; background: url("../images/view.png") no-repeat left; }
+  }
+  
 }
-
+.addSite{ width: 100%; margin: 10px auto;
+  a{color:#00888a; cursor: pointer; background: url("../images/add.png") no-repeat left; padding-left:18px;}
+}
 .spaceDiv{
   height: 25px;
 }

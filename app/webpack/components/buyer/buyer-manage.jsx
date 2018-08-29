@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { UploadFile } from '../shared/upload';
 import { Modal } from '../shared/show-modal';
 import { getBuyerUserInfo, saveBuyerUserInfo, submitBuyerUserInfo, getBuyerUserInfoByUserId, validateIsExist } from '../../javascripts/componentService/common/service';
-import { approveBuyerUser } from '../../javascripts/componentService/admin/service';
+import { approveBuyerUser ,approveBuyerEntity} from '../../javascripts/componentService/admin/service';
 import { removeNanNum, validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, setApprovalStatus } from '../../javascripts/componentService/util';
 import { textChangeRangeIsUnchanged } from 'typescript';
 
@@ -209,6 +209,27 @@ export class BuyerUserManage extends Component {
         approveBuyerUser(param).then(res => {
             location.href = "/admin/users/buyers";
         })
+    }
+    approve_entity(item)
+    {
+
+        let params={
+            entity_id:item.id,
+            approved:1
+        }
+        approveBuyerEntity(params).then(res=>{
+            console.log(res)
+        })
+
+        console.log(item)
+    }
+    reject_entity(item)
+    {
+        console.log(item)
+    }
+    view_log(item)
+    {
+        console.log(item)
     }
     tab(type) {
         $(".buyer_tab a").removeClass("selected");
@@ -574,6 +595,7 @@ export class BuyerUserManage extends Component {
                                 <col width="10%" />
                                 <col width="10%" />
                                 <col width="10%" />
+                                <col width="10%" />
                             </colgroup>
                             <thead>
                                 <tr>
@@ -586,6 +608,7 @@ export class BuyerUserManage extends Component {
                                     <th>Contact Email</th>
                                     <th>Contact Mobile No.</th>
                                     <th>Contact Office No.</th>
+                                    <th>Status</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -602,11 +625,11 @@ export class BuyerUserManage extends Component {
                                             <td>{item.contact_email}</td>
                                             <td>{item.contact_mobile_no}</td>
                                             <td>{item.contact_office_no}</td>
+                                            <td>{item.approval_status}</td>
                                             <td>
-                                                {/* <div className="editSite"><a className="btnOption" onClick={this.edit_entity.bind(this, item, index)}>Edit </a></div>
-                                                <div className={index === 0 ? "isHide" : "isDisplay"}>
-                                                    <div className="delSite"><a className="btnOption" onClick={this.delete_entity.bind(this, index)}>Delete </a></div>
-                                                </div> */}
+                                                <div className="approveEntity"><a className="btnOption" onClick={this.approve_entity.bind(this, item)}>Approve </a></div>
+                                                <div className="rejectEntity"><a className="btnOption" onClick={this.reject_entity.bind(this, item)}>Reject </a></div>
+                                                <div className="viewEntity"><a className="btnOption" onClick={this.view_log.bind(this, item)}>View</a></div>
                                             </td>
                                         </tr>
                                     })

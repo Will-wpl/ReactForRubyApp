@@ -33,7 +33,7 @@ export class BuyerUserEntityRegister extends Component {
             messageAttachmentUrl: "",
             usedEntityIdArr: [],
             mainEntityFinished: false,
-            ismain:false
+            ismain: false
         }
         this.entityItem = {
             id: 0,
@@ -131,6 +131,11 @@ export class BuyerUserEntityRegister extends Component {
             this.setState({
                 mainEntityFinished: true
             })
+
+
+            if (this.state.disabled) {
+                $(".btnOption").css("pointer-events", "none").css("color", "#4B4941");
+            }
         }
         else {
             this.setState({
@@ -139,6 +144,7 @@ export class BuyerUserEntityRegister extends Component {
             })
         }
     }
+
     setBuyerInfo(param) {
         let fileObj, entityObj;
         fileObj = this.state.fileData;
@@ -228,6 +234,7 @@ export class BuyerUserEntityRegister extends Component {
             }
         }
     }
+
     setEntityInfo(param) {
         if (param.buyer_entities) {
             let user_entity = param.buyer_entities;
@@ -237,7 +244,6 @@ export class BuyerUserEntityRegister extends Component {
         }
     }
 
-
     tab(type) {
         if (this.state.mainEntityFinished) {
             $(".buyer_tab a").removeClass("selected");
@@ -246,6 +252,7 @@ export class BuyerUserEntityRegister extends Component {
             $("#buyer_" + type).fadeIn(500);
         }
     }
+
     tab_next(type) {
         if (this.state.mainEntityFinished) {
             $(".buyer_tab a").removeClass("selected");
@@ -379,16 +386,18 @@ export class BuyerUserEntityRegister extends Component {
                 break;
         }
     }
+
     removeInputNanNum(value) {
         removeNanNum(value);
     }
+
     showView() {
         this.refs.Modal_upload.showModal();
     }
     next() {
         if (this.checkRequired(this.validatorItem)) {
             let mainEntityObj = {
-                id:"",
+                id: "",
                 company_name: this.state.company_name,
                 company_uen: this.state.unique_entity_number,
                 company_address: this.state.company_address,
@@ -473,6 +482,7 @@ export class BuyerUserEntityRegister extends Component {
         this.setState({
             disabled: false
         })
+        $(".btnOption").css("pointer-events", "auto").css("color", "#00888a");
     }
     cancel() {
         this.setState({
@@ -539,10 +549,10 @@ export class BuyerUserEntityRegister extends Component {
         this.entityItem.contact_email = '';
         this.entityItem.contact_mobile_no = '';
         this.entityItem.contact_office_no = '';
-        this.entityItem.is_default=0;
+        this.entityItem.is_default = 0;
         this.setState({
             entityItemInfo: this.entityItem,
-            ismain:false,
+            ismain: false,
             text: " "
         })
         this.refs.Modal_Entity.showModal('custom', {}, '', '-1')
@@ -562,13 +572,13 @@ export class BuyerUserEntityRegister extends Component {
         if (index === 0) {
             this.entityItem.is_default = 1;
             this.setState({
-                ismain:true
+                ismain: true
             });
         }
         else {
             this.entityItem.is_default = 0;
             this.setState({
-                ismain:false
+                ismain: false
             });
         }
 
@@ -865,9 +875,9 @@ export class BuyerUserEntityRegister extends Component {
                                             <td>{item.contact_mobile_no}</td>
                                             <td>{item.contact_office_no}</td>
                                             <td>
-                                                <div className="editSite"><a className="btnOption" onClick={this.edit_entity.bind(this, item, index)}>Edit </a></div>
+                                                <div className="editSite"><a className="btnOption" onClick={this.edit_entity.bind(this, item, index)}>Edit</a></div>
                                                 <div className={index === 0 ? "isHide" : "isDisplay"}>
-                                                    <div className="delSite"><a className="btnOption" onClick={this.delete_entity.bind(this, index)}>Delete </a></div>
+                                                    <div className="delSite"><a className="btnOption" onClick={this.delete_entity.bind(this, index)}>Delete</a></div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -875,9 +885,7 @@ export class BuyerUserEntityRegister extends Component {
                                 }
                             </tbody>
                         </table>
-                        <div className="" style={{ paddingLeft: "20px" }}>
-                            {/* <a href="" >Add Entity</a> */}
-                            {/* {this.state.checked ? '' : <div className="addSite"><a onClick={this.add_site.bind(this)}>Add Entity</a></div>} */}
+                        <div className={this.state.disabled ? "isHide" : "isDisplay addSite"} style={{ paddingLeft: "20px" }}>
                             <a onClick={this.add_entity.bind(this)}>Add Entity</a>
                         </div>
                     </div>
@@ -905,7 +913,7 @@ export class BuyerUserEntityRegister extends Component {
                             <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyleUnderline">Energy Procurement Agreement</a></span>
                         </h4>
                         <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
-                        <div className={this.state.use_type === 'admin_approve' ? 'isDisplay' : 'isHide'}>
+                        {/* <div className={this.state.use_type === 'admin_approve' ? 'isDisplay' : 'isHide'}>
                             <div className="dividerline"></div>
                             <div >
                                 <div className="lm--formItem lm--formItem--inline string">
@@ -918,7 +926,7 @@ export class BuyerUserEntityRegister extends Component {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                         {/* <Modal text={this.state.text} acceptFunction={this.refreshForm.bind(this)} ref="Modal" />
                         <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrl} /> */}
                         <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
