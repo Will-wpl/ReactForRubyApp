@@ -1,12 +1,32 @@
 class Api::Admin::UsersController < Api::UsersController
-  # Approval retailer
+  # Approval Account
   # Params:
   #   user_id  -> Indicate a user's id which will be approved or rejected
   #   approved -> Indicate this is approval operation if this param is not nil. Otherwise, it is reject operation.
   #   comment -> Indicate a comment to this operation.
-  def approval_retailer
+  def approval_account
     result_json = approval_user
     render json: result_json, status: 200
+  end
+
+  def approval_buyer_entity
+    approval_status = params[:approved].blank? ? CompanyBuyerEntity::ApprovalStatusReject : CompanyBuyerEntity::ApprovalStatusApproved
+    company_buyer_entity_id = params[:entity_id].to_i
+    company_buyer_entity = CompanyBuyerEntity.find(company_buyer_entity_id)
+    if approval_status == CompanyBuyerEntity::ApprovalStatusApproved
+      # Update entity approval status to approved
+      company_buyer_entity.update(approval_status: CompanyBuyerEntity::ApprovalStatusApproved)
+      # Update entity users approval status to approved
+      User.find(company_buyer_entity.user_entity_id).update(approval_status: User::ApprovalStatusApproved, approval_date_time: DateTime.current)
+    elsif approval_status == CompanyBuyerEntity::ApprovalStatusReject
+      # Update entity approval status to approved
+      company_buyer_entity.update(approval_status: CompanyBuyerEntity::ApprovalStatusReject)
+      # Remove entity users
+      if CompanyBuyerEntity.find_by_user_entity_id(company_buyer_entity.user_entity_id).count <= 1
+        User.find(company_buyer_entity.user_entity_id).delete
+      end
+    end
+    render json: { company_buyer_entity: company_buyer_entity }, status: 200
   end
 
   # Approval retailer
@@ -14,26 +34,25 @@ class Api::Admin::UsersController < Api::UsersController
   #   user_id  -> Indicate a user's id which will be approved or rejected
   #   approved -> Indicate this is approval operation if this param is not nil. Otherwise, it is reject operation.
   #   comment -> Indicate a comment to this operation.
-  def approval_buyer
-    result_json = approval_user
-    approval_status = params[:approved].blank? ? User::ApprovalStatusReject : User::ApprovalStatusApproved
-    company_buyer_entity_ids = []
-    CompanyBuyerEntity.find_by_user(params[:user_id]).each { |x| company_buyer_entity_ids.push(x.id) if x.is_default != 1 && x.approval_status = CompanyBuyerEntity::ApprovalStatusPending}
-    if approval_status == User::ApprovalStatusApproved
-      # Update entity approval status to approved
-      # CompanyBuyerEntity.find_by_status_user(CompanyBuyerEntity::ApprovalStatusPending, params[:user_id]).update(approval_status: CompanyBuyerEntity::ApprovalStatusApproved)
-      CompanyBuyerEntity.find_by_user(params[:user_id]).update(approval_status: CompanyBuyerEntity::ApprovalStatusApproved)
-      # Update entity users approval status to approved
-      User.where('entity_id in (?)', company_buyer_entity_ids).update(approval_status: User::ApprovalStatusApproved, approval_date_time: DateTime.current)
-    elsif approval_status == User::ApprovalStatusReject
-      # Update entity approval status to approved
-      entites = CompanyBuyerEntity.find_by_status_user(CompanyBuyerEntity::ApprovalStatusPending, params[:user_id])
-      entites.update(approval_status: CompanyBuyerEntity::ApprovalStatusReject)
-      # Remove entity users
-      entity_user_ids = []
-      entites.each { |x| entity_user_ids.push(x.user_entity_id) unless x.user_entity_id.blank? }
-      User.where('id in (?)', entity_user_ids).delete_all
-    end
-    render json: result_json, status: 200
-  end
+  # def approval_buyer
+  #   result_json = approval_user
+    # approval_status = params[:approved].blank? ? User::ApprovalStatusReject : User::ApprovalStatusApproved
+    # company_buyer_entity_ids = []
+    # CompanyBuyerEntity.find_by_user(params[:user_id]).each { |x| company_buyer_entity_ids.push(x.id) if x.is_default != 1 && x.approval_status = CompanyBuyerEntity::ApprovalStatusPending}
+    # if approval_status == User::ApprovalStatusApproved
+    #   # Update entity approval status to approved
+    #   CompanyBuyerEntity.find_by_user(params[:user_id]).update(approval_status: CompanyBuyerEntity::ApprovalStatusApproved)
+    #   # Update entity users approval status to approved
+    #   User.where('entity_id in (?)', company_buyer_entity_ids).update(approval_status: User::ApprovalStatusApproved, approval_date_time: DateTime.current)
+    # elsif approval_status == User::ApprovalStatusReject
+    #   # Update entity approval status to approved
+    #   entites = CompanyBuyerEntity.find_by_status_user(CompanyBuyerEntity::ApprovalStatusPending, params[:user_id])
+    #   entites.update(approval_status: CompanyBuyerEntity::ApprovalStatusReject)
+    #   # Remove entity users
+    #   entity_user_ids = []
+    #   entites.each { |x| entity_user_ids.push(x.user_entity_id) unless x.user_entity_id.blank? }
+    #   User.where('id in (?)', entity_user_ids).delete_all
+    # end
+  #   render json: result_json, status: 200
+  # end
 end
