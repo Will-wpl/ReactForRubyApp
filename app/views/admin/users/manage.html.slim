@@ -40,7 +40,7 @@
 - if @user.has_role?(:buyer) and  @user.consumer_type == '2'
   h1.title_top.u-mt2
    = 'Manage Buyer Account'
-  div id="buyer_register"
+  div id="buyer_manage"
 - if @user.has_role?(:buyer) and @user.consumer_type == '3'
   h1.title_top.u-mt2
    = 'Manage Buyer Individual Account'

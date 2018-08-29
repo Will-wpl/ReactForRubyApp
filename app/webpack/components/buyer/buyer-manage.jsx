@@ -7,12 +7,15 @@ import { approveBuyerUser } from '../../javascripts/componentService/admin/servi
 import { removeNanNum, validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, setApprovalStatus } from '../../javascripts/componentService/util';
 import { textChangeRangeIsUnchanged } from 'typescript';
 
-export class BuyerUserEntityRegister extends Component {
+
+
+
+export class BuyerUserManage extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            id: "", userid: "", text: "", btn_status: false, disabled: false, havedata: false, allbtnStatus: true, validate: true, use_type: "",
+            id: "", userid: "", text: "", btn_status: false, disabled: true, havedata: false, allbtnStatus: true, validate: true, use_type: "",
             email_address: "", company_name: "", unique_entity_number: "", company_address: "", billing_address: "", contact_name: "",
             mobile_number: "", office_number: "", entityStatus: "", approveStatus: false, status: '', main_id: '',
             user_entity_id: "", user_company_name: "", user_company_uen: "", user_company_address: "", user_billing_address: "", user_bill_attention_to: "",
@@ -33,111 +36,36 @@ export class BuyerUserEntityRegister extends Component {
             messageAttachmentUrl: "",
             usedEntityIdArr: [],
             mainEntityFinished: false,
-            ismain:false
+            ismain: false
         }
-        this.entityItem = {
-            id: 0,
-            company_name: "",
-            company_uen: "",
-            company_address: "",
-            billing_address: "",
-            bill_attention_to: "",
-            contact_name: "",
-            contact_email: "",
-            contact_mobile_no: "",
-            contact_office_no: "",
-            option: "",
-            is_default: 0
-        }
-        this.validatorItem = {
-            user_contact_office_no: { cate: 'num' },
-            user_contact_mobile_no: { cate: 'num' },
-            user_contact_email: { cate: 'email' },
-            user_contact_name: { cate: 'required' },
-            user_bill_attention_to: { cate: 'required' },
-            user_billing_address: { cate: 'required' },
-            user_company_address: { cate: 'required' },
-            user_company_uen: { cate: 'required' },
-            user_company_name: { cate: 'required' },
-
-            office_number: { cate: 'num' },
-            mobile_number: { cate: 'num' },
-            contact_name: { cate: 'required' },
-            billing_address: { cate: 'required' },
-            company_address: { cate: 'required' },
-            unique_entity_number: { cate: 'required' },
-            company_name: { cate: 'required' },
-            email_address: { cate: 'email' },
-        }
-        this.validatorBuyerInfo = {
-            office_number: { cate: 'num' },
-            mobile_number: { cate: 'num' },
-            contact_name: { cate: 'required' },
-            billing_address: { cate: 'required' },
-            company_address: { cate: 'required' },
-            unique_entity_number: { cate: 'required' },
-            company_name: { cate: 'required' },
-            email_address: { cate: 'email' }
+        this.validatorComment = {
+            comment: { cate: 'required' }
         }
     }
     componentWillMount() {
+        let userid;
+        if (window.location.href.indexOf("admin/users/") > -1) {
+            userid = window.location.href.split("admin/users/")[1].split("/manage")[0];
+        }
+        if (userid) {
+            this.setState({
+                userid: userid
+            });
+        }
     }
+
     componentDidMount() {
         if (this.state.userid) {
             getBuyerUserInfoByUserId(this.state.userid).then(res => {
                 this.setDefaultValue(res);
             })
         }
-        else {
-            getBuyerUserInfo().then(res => {
-                this.setDefaultValue(res);
-            })
-        }
-        if (this.isApprove) {
-            $("#buyer_management").addClass("tenant_management");
-        }
+        $("#buyer_management").addClass("tenant_management");
     }
+
     setDefaultValue(param) {
         this.setBuyerInfo(param);
         this.setEntityInfo(param);
-        this.setButton(param);
-    }
-    setButton(param) {
-        let userid;
-        if (param.buyer_entities.length > 0) {
-            if (window.location.href.indexOf("admin/users/") > -1) {
-                userid = window.location.href.split("admin/users/")[1].split("/manage")[0];
-            }
-            if (userid) {
-                this.setState({
-                    userid: userid
-                });
-            }
-            if (window.location.href.indexOf('buyer/home') > 0) {
-                this.setState({
-                    use_type: 'sign_up', entityStatus: "register"
-                });
-                this.isApprove = false;
-            }
-            else if (window.location.href.indexOf('users/edit') > 0) {
-                this.setState({ use_type: 'manage_acount', entityStatus: "manage", disabled: true });
-                this.isApprove = false;
-            }
-            else {
-                this.setState({ use_type: 'admin_approve', entityStatus: "approve" });
-                this.setState({ disabled: true });
-                this.isApprove = true;
-            }
-            this.setState({
-                mainEntityFinished: true
-            })
-        }
-        else {
-            this.setState({
-                use_type: 'first_register', entityStatus: "register",
-                mainEntityFinished: false
-            })
-        }
     }
     setBuyerInfo(param) {
         let fileObj, entityObj;
@@ -237,24 +165,57 @@ export class BuyerUserEntityRegister extends Component {
         }
     }
 
-
+    checkRejectAction() { //when admin reject the request 
+        let flag = true;
+        let arr = validator_Object(this.state, this.validatorComment);
+        if (arr) {
+            arr.map((item, index) => {
+                let column = item.column;
+                let cate = item.cate;
+                setValidationFaild(column, cate)
+            })
+        }
+        $('.validate_message').find('div').each(function () {
+            let className = $(this).attr('class');
+            if (className === 'errormessage') {
+                flag = false;
+                return false;
+            }
+        })
+        this.refs.Modal_Option.closeModal();
+        return flag;
+    }
+    judgeAction(type) {
+        if (type === 'reject') {
+            if (this.checkRejectAction()) {
+                this.setState({
+                    text: 'Are you sure you want to reject the request?',
+                }, () => {
+                    this.refs.Modal_Option.showModal('comfirm', { action: 'reject' }, '');
+                });
+            }
+        }
+        else {
+            this.setState({ text: "Are you sure you want to approve the request?" });
+            this.refs.Modal_Option.showModal('comfirm', { action: 'approve' }, '');
+        }
+    }
+    doAction(obj) {
+        let param = {
+            user_id: this.state.userid,
+            comment: this.state.comment,
+            approved: obj.action === 'reject' ? "" : 1
+        };
+        approveBuyerUser(param).then(res => {
+            location.href = "/admin/users/buyers";
+        })
+    }
     tab(type) {
-        if (this.state.mainEntityFinished) {
-            $(".buyer_tab a").removeClass("selected");
-            $("#tab_" + type).addClass("selected");
-            $(".buyer_list").hide();
-            $("#buyer_" + type).fadeIn(500);
-        }
+        $(".buyer_tab a").removeClass("selected");
+        $("#tab_" + type).addClass("selected");
+        $(".buyer_list").hide();
+        $("#buyer_" + type).fadeIn(500);
     }
-    tab_next(type) {
-        if (this.state.mainEntityFinished) {
-            $(".buyer_tab a").removeClass("selected");
-            $("#tab_" + type).addClass("selected");
-            $(".buyer_list").hide();
-            $("#buyer_" + type).fadeIn(0);
-        }
-    }
-
     Change(type, e) {
         let itemValue = e.target.value;
         switch (type) {
@@ -379,235 +340,12 @@ export class BuyerUserEntityRegister extends Component {
                 break;
         }
     }
-    removeInputNanNum(value) {
-        removeNanNum(value);
-    }
-    showView() {
-        this.refs.Modal_upload.showModal();
-    }
-    next() {
-        if (this.checkRequired(this.validatorItem)) {
-            let mainEntityObj = {
-                id:"",
-                company_name: this.state.company_name,
-                company_uen: this.state.unique_entity_number,
-                company_address: this.state.company_address,
-                billing_address: this.state.user_billing_address,
-                bill_attention_to: this.state.user_bill_attention_to,
-                contact_name: this.state.user_contact_name,
-                contact_email: this.state.user_contact_email,
-                contact_mobile_no: this.state.user_contact_mobile_no,
-                contact_office_no: this.state.user_contact_office_no,
-                is_default: 1
-            }
-            let mainEntityArr = [];
-            mainEntityArr.push(mainEntityObj)
-            this.setState({
-                entity_list: mainEntityArr
-            });
-            setTimeout(() => {
-                this.tab_next('entity');
-            })
-            this.setState({
-                mainEntityFinished: true,
-                use_type: 'sign_up', entityStatus: "register",
-            })
-        }
-    }
-    checkRequired(item) {
-        $('.validate_message').find('div').each(function () {
-            let className = $(this).attr('class');
-            if (className === 'errormessage') {
-                let divid = $(this).attr("id");
-                $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
-            }
-        })
-        let flag = true, hasDoc = true, checkSelect = true;
-        let arr = validator_Object(this.state, item);
-
-        if (arr) {
-            arr.map((item, index) => {
-                let column = item.column;
-                let cate = item.cate;
-                setValidationFaild(column, cate)
-            })
-        }
-        if (this.state.fileData['BUYER_DOCUMENTS'][0].files.length > 0) {
-            hasDoc = true;
-            $("#showMessage").removeClass("errormessage").addClass("isPassValidate");
-        }
-        else {
-            hasDoc = false;
-            $("#showMessage").removeClass("isPassValidate").addClass("errormessage");
-        }
-        $('.validate_message').find('div').each(function () {
-            let className = $(this).attr('class');
-            if (className === 'errormessage') {
-                flag = false;
-                return false;
-            }
-        })
-        if ($('#chkBuyer').is(':checked') && $('#chkRevv').is(':checked')) {
-            checkSelect = true;
-        }
-        else {
-            checkSelect = false;
-            if (!$('#chkBuyer').is(':checked')) {
-                $("#chkBuyer_message").removeClass('isPassValidate').addClass('errormessage');
-            }
-            if (!$('#chkRevv').is(':checked')) {
-                $("#chkRevv_message").removeClass('isPassValidate').addClass('errormessage');
-            }
-        }
-        return flag && hasDoc && checkSelect;
-    }
-
-    save(type) {
-
-    }
-    submit(type) {
-
-    }
-
-    edit() {
-        this.setState({
-            disabled: false
-        })
-    }
-    cancel() {
-        this.setState({
-            disabled: true
-        })
-        //window.location.href = `/users/edit`;
-    }
-    judgeAction(type) {
-    }
-    refreshForm(obj) {
-        if (obj === "refrsesh") {
-            window.location.href = `/users/edit`;
-        }
-    }
-    doAction(obj) {
-        // let param = {
-        //     user_id: this.state.userid,
-        //     comment: this.state.comment,
-        //     approved: obj.action === 'reject' ? "" : 1
-        // };
-        // approveBuyerUser(param).then(res => {
-        //     location.href = "/admin/users/buyers";
-        // })
-    }
-    acceptAddEntity(entityInfo) {
-        let item = {
-            id: entityInfo.id ? entityInfo.id : "",
-            company_name: entityInfo.company_name,
-            company_uen: entityInfo.company_uen,
-            company_address: entityInfo.company_address,
-            billing_address: entityInfo.billing_address,
-            bill_attention_to: entityInfo.bill_attention_to,
-            contact_name: entityInfo.contact_name,
-            contact_email: entityInfo.contact_email,
-            contact_mobile_no: entityInfo.contact_mobile_no,
-            contact_office_no: entityInfo.contact_office_no
-        };
-
-        let entity = this.state.entity_list;
-        if (entityInfo.index >= 0) { entity[entityInfo.index] = item; }
-        else { entity.push(item) }
-        this.setState({
-            entity_list: entity
-        })
-    }
-    add_entity() {
-        if (this.props.onAddClick) {
-            this.props.onAddClick();
-        }
-        $('.validate_message').find('div').each(function () {
-            let className = $(this).attr('class');
-            if (className === 'errormessage') {
-                let divid = $(this).attr("id");
-                $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
-            }
-        })
-        this.entityItem.id = '';
-        this.entityItem.company_name = '';
-        this.entityItem.company_uen = '';
-        this.entityItem.company_address = '';
-        this.entityItem.billing_address = '';
-        this.entityItem.bill_attention_to = '';
-        this.entityItem.contact_name = '';
-        this.entityItem.contact_email = '';
-        this.entityItem.contact_mobile_no = '';
-        this.entityItem.contact_office_no = '';
-        this.entityItem.is_default=0;
-        this.setState({
-            entityItemInfo: this.entityItem,
-            ismain:false,
-            text: " "
-        })
-        this.refs.Modal_Entity.showModal('custom', {}, '', '-1')
-    }
-    edit_entity(item, index) {
-        this.setState({ entityItemInfo: {} });
-        this.entityItem.id = item.id;
-        this.entityItem.company_name = item.company_name;
-        this.entityItem.company_uen = item.company_uen;
-        this.entityItem.company_address = item.company_address;
-        this.entityItem.billing_address = item.billing_address;
-        this.entityItem.bill_attention_to = item.bill_attention_to;
-        this.entityItem.contact_name = item.contact_name;
-        this.entityItem.contact_email = item.contact_email;
-        this.entityItem.contact_mobile_no = item.contact_mobile_no;
-        this.entityItem.contact_office_no = item.contact_office_no;
-        if (index === 0) {
-            this.entityItem.is_default = 1;
-            this.setState({
-                ismain:true
-            });
-        }
-        else {
-            this.entityItem.is_default = 0;
-            this.setState({
-                ismain:false
-            });
-        }
-
-        this.entityItem.option = 'update';
-        this.setState({
-            text: " ",
-            entityItemInfo: this.entityItem
-        })
-        this.refs.Modal_Entity.showModal('custom', {}, '', index)
-    }
-    delete_entity(item) {
-
-    }
     render() {
         let btn_html;
-        if (this.state.use_type === "first_register") {
-            btn_html =
-                <div><button id="save_new" className="lm--button lm--button--primary" onClick={this.next.bind(this)}>Next</button></div>
-        }
-        // else if (this.state.use_type === 'admin_approve') {
-        //     btn_html = <div>
-        //         <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'reject')} disabled={this.state.approveStatus}>Reject</button>
-        //         <button id="submit_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'approve')} disabled={this.state.approveStatus}>Approve</button>
-        //     </div>;
-        // }
-        else if (this.state.use_type === 'manage_acount') {
-            btn_html = this.state.disabled ?
-                <div><button id="save_edit" className="lm--button lm--button--primary" onClick={this.edit.bind(this)}>Edit</button></div>
-                : <div>
-                    <button id="save_form" className="lm--button lm--button--primary" onClick={this.cancel.bind(this)}>Cancel</button>
-                    <button id="submit_form" className="lm--button lm--button--primary" onClick={this.save.bind(this, 'save')}>Save</button>
-                </div>;
-        }
-        else {
-            btn_html = <div>
-                <button id="save_form" className="lm--button lm--button--primary" onClick={this.save.bind(this, "register")}>Save</button>
-                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this, 'sign_up')}>Complete Sign Up</button>
-            </div>;
-        }
+        btn_html = <div>
+            <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'reject')} disabled={this.state.approveStatus}>Reject</button>
+            <button id="submit_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'approve')} disabled={this.state.approveStatus}>Approve</button>
+        </div>;
         return (
             <div className="u-grid mg0 div-center" >
                 <h2 className="u-mt3 u-mb3"></h2>
@@ -695,7 +433,7 @@ export class BuyerUserEntityRegister extends Component {
                                                     <abbr title="required">*</abbr> Mobile Number :
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control">
-                                                    <input type="text" name="mobile_number" value={this.state.mobile_number} onKeyUp={this.removeInputNanNum.bind(this)} onChange={this.Change.bind(this, 'mobile_number')} readOnly={this.state.disabled} ref="mobile_number" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field" required aria-required="true" ></input>
+                                                    <input type="text" name="mobile_number" value={this.state.mobile_number} onChange={this.Change.bind(this, 'mobile_number')} readOnly={this.state.disabled} ref="mobile_number" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field" required aria-required="true" ></input>
                                                     <div className='isPassValidate' id='mobile_number_message' >This field is required!</div>
                                                     <div className='isPassValidate' id='mobile_number_format' >Number should contain 8 integers!</div>
                                                 </div>
@@ -705,7 +443,7 @@ export class BuyerUserEntityRegister extends Component {
                                                     <abbr title="required">*</abbr> Office Number :
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control">
-                                                    <input type="text" name="office_number" value={this.state.office_number} onKeyUp={this.removeInputNanNum.bind(this)} onChange={this.Change.bind(this, 'office_number')} readOnly={this.state.disabled} ref="office_number" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field" required aria-required="true" ></input>
+                                                    <input type="text" name="office_number" value={this.state.office_number} onChange={this.Change.bind(this, 'office_number')} readOnly={this.state.disabled} ref="office_number" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field" required aria-required="true" ></input>
                                                     <div className='isPassValidate' id='office_number_message' >This field is required!</div>
                                                     <div className='isPassValidate' id='office_number_format' >Number should contain 8 integers!</div>
                                                 </div>
@@ -718,7 +456,7 @@ export class BuyerUserEntityRegister extends Component {
                                                 <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                                     <UploadFile type="BUYER_DOCUMENTS" required="required" validate="true" deleteType="buyer" showList="1" col_width="10" showWay="1" fileData={this.state.fileData.BUYER_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
                                                     <div className="col-sm-1 col-md-1 u-cell">
-                                                        <button className={this.state.disabled ? "lm--button lm--button--primary buttonDisabled" : "lm--button lm--button--primary"} disabled={this.state.disabled} onClick={this.showView.bind(this)} >?</button>
+                                                        <button className={this.state.disabled ? "lm--button lm--button--primary buttonDisabled" : "lm--button lm--button--primary"} disabled={this.state.disabled} >?</button>
                                                     </div>
                                                     <div id="showMessage" className="isPassValidate">This field is required!</div>
                                                 </div>
@@ -726,7 +464,7 @@ export class BuyerUserEntityRegister extends Component {
                                             <div className="spaceDiv">
 
                                             </div>
-                                            <div className={this.state.mainEntityFinished ? "isHide" : "isDisplay"}>
+                                            {/* <div className={this.state.mainEntityFinished ? "isHide" : "isDisplay"}>
                                                 <h4 className="lm--formItem lm--formItem--inline string">Electricity Purchase Information</h4>
                                                 <div className="lm--formItem lm--formItem--inline string">
                                                     <label className="lm--formItem-left lm--formItem-label string required">
@@ -816,7 +554,7 @@ export class BuyerUserEntityRegister extends Component {
                                                 <div className="spaceDiv">
 
                                                 </div>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                 </div>
@@ -865,21 +603,16 @@ export class BuyerUserEntityRegister extends Component {
                                             <td>{item.contact_mobile_no}</td>
                                             <td>{item.contact_office_no}</td>
                                             <td>
-                                                <div className="editSite"><a className="btnOption" onClick={this.edit_entity.bind(this, item, index)}>Edit </a></div>
+                                                {/* <div className="editSite"><a className="btnOption" onClick={this.edit_entity.bind(this, item, index)}>Edit </a></div>
                                                 <div className={index === 0 ? "isHide" : "isDisplay"}>
                                                     <div className="delSite"><a className="btnOption" onClick={this.delete_entity.bind(this, index)}>Delete </a></div>
-                                                </div>
+                                                </div> */}
                                             </td>
                                         </tr>
                                     })
                                 }
                             </tbody>
                         </table>
-                        <div className="" style={{ paddingLeft: "20px" }}>
-                            {/* <a href="" >Add Entity</a> */}
-                            {/* {this.state.checked ? '' : <div className="addSite"><a onClick={this.add_site.bind(this)}>Add Entity</a></div>} */}
-                            <a onClick={this.add_entity.bind(this)}>Add Entity</a>
-                        </div>
                     </div>
                     <div className="col-sm-12 col-md-8 push-md-3 validate_message margin-t buyer_list_select">
                         <div className="lm--formItem lm--formItem--inline string">
@@ -905,25 +638,20 @@ export class BuyerUserEntityRegister extends Component {
                             <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyleUnderline">Energy Procurement Agreement</a></span>
                         </h4>
                         <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
-                        <div className={this.state.use_type === 'admin_approve' ? 'isDisplay' : 'isHide'}>
-                            <div className="dividerline"></div>
-                            <div >
-                                <div className="lm--formItem lm--formItem--inline string">
-                                    <label className="lm--formItem-left lm--formItem-label string required">
-                                        Admin Comments :
+                        {/* <div className={this.state.use_type === 'admin_approve' ? 'isDisplay' : 'isHide'}> */}
+                        <div className="dividerline"></div>
+                        <div >
+                            <div className="lm--formItem lm--formItem--inline string">
+                                <label className="lm--formItem-left lm--formItem-label string required">
+                                    Admin Comments :
                                         </label>
-                                    <div className="lm--formItem-right lm--formItem-control">
-                                        <textarea name="comment" value={this.state.comment} onChange={this.Change.bind(this, 'comment')} ref="comment" aria-required="true"></textarea>
-                                        <div className='isPassValidate' id='comment_message' >This field is required!</div>
-                                    </div>
+                                <div className="lm--formItem-right lm--formItem-control">
+                                    <textarea name="comment" value={this.state.comment} onChange={this.Change.bind(this, 'comment')} ref="comment" aria-required="true"></textarea>
+                                    <div className='isPassValidate' id='comment_message' >This field is required!</div>
                                 </div>
                             </div>
                         </div>
-                        {/* <Modal text={this.state.text} acceptFunction={this.refreshForm.bind(this)} ref="Modal" />
-                        <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrl} /> */}
                         <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
-                        <Modal formSize="big" listdetailtype="entity_detail" text={this.state.text} acceptFunction={this.acceptAddEntity.bind(this)} entitList={this.state.entity_list} disabled={this.state.ismain} entityDetailItem={this.state.entityItemInfo} ref="Modal_Entity" />
-                        {/* */}
                     </div>
                     <div className="retailer_btn">
                         {btn_html}
@@ -934,15 +662,15 @@ export class BuyerUserEntityRegister extends Component {
     }
 }
 
-BuyerUserEntityRegister.propTypes = {
+BuyerUserManage.propTypes = {
     onSubmitjest: () => { }
 };
 
 function runs() {
-    const domNode = document.getElementById('buyer_register');
+    const domNode = document.getElementById('buyer_manage');
     if (domNode !== null) {
         ReactDOM.render(
-            React.createElement(BuyerUserEntityRegister),
+            React.createElement(BuyerUserManage),
             domNode
         );
     }
