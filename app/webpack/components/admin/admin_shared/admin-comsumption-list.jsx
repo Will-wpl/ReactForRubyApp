@@ -103,7 +103,7 @@ export default class AdminComsumptionList extends Component {
                                                                 {
                                                                     it.user_attachment ? it.user_attachment.map((item, i) => {
                                                                         return <li key={i}>
-                                                                            <a href={item.file_path ? item.file_path : "#"} target="_blank">{item.file_name ? item.file_name : ""}</a>
+                                                                            <a className={"cursor_link"} href={item.file_path ? item.file_path : "#"} target="_blank">{item.file_name ? item.file_name : ""}</a>
                                                                         </li>
                                                                     }) :
                                                                         <li> </li>
