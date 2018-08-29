@@ -48,11 +48,11 @@ export class Adminretailerdashboard extends Component {
                             <thead>
                             <tr>
                                 <th></th>
-                                <th>Confidentiality Undertaking</th>
-                                <th>Tender Documents</th>
-                                <th>Deviations (if any)</th>
+                                <th>Confidentiality Undertaking ({this.props.step_counts[0]})</th>
+                                <th>Tender Documents ({this.props.step_counts[1]})</th>
+                                <th>Deviations (if any) ({this.props.step_counts[2]})</th>
                                 {/*<th>Submit Form of Tender</th>*/}
-                                <th>Contact Details</th>
+                                <th>Contact Details ({this.props.step_counts[4]})</th>
                                 <th></th>
                                 </tr>
                             </thead>

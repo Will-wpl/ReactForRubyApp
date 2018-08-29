@@ -14,7 +14,7 @@ class TenderChat < ApplicationRecord
   # Associations
 
   belongs_to :arrangement
-  has_many :tender_chat_details
+  has_many :tender_chat_details, dependent: :destroy
 
   # accepts_nested_attributes
 

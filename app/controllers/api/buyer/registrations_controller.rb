@@ -78,15 +78,38 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     render json: { result: 'failed', message: ex.message }, status: 200
   end
 
+  # validate buyer entity info
+  # params:
+  #   user: {id: 'Buyer Id', company_name:'Company_name', email:'Email',company_unique_entity_number:'UEN'}
+  #   buyer_entities: JSON array -> [{contact_email:'Entity email'}]
+  #   buyer_entity_index: entity index number
+  # Logic:
+  #   Unique check: User-> Company Name, Company UEN, Email
+  def validate_buyer_entity
+    entity_indexes = []
+    buyer_entities = JSON.parse(params[:buyer_entities])
+    buyer = params[:buyer]
+    buyer_entity_index = params[:buyer_entity_index].to_i
+    buyer_entity = buyer_entities[buyer_entity_index]
+    user = User.select(:id, :email, :company_unique_entity_number, :company_name, :entity_id)
+    # validate Entity' email must not be same with any user's email
+    entity_indexes.concat(check_entity_email_with_user(buyer, buyer_entity, user))
+
+    # validate Entity' email must be unique
+    entity_indexes.concat(check_entities_email_duplicated(buyer_entities, true))
+
+    error_fields = entity_indexes.uniq
+
+    render json: { validate_result: error_fields.blank?,
+                   error_fields: error_fields }, status: 200
+  end
+
   # validate retailer info
   # params:
   #   user: {id: 'Buyer Id', company_name:'Company_name', email:'Email',company_unique_entity_number:'UEN'}
   #   buyer_entities: JSON array -> [{contact_email:'Entity email'}]
   # Logic:
   #   Unique check: User-> Company Name, Company UEN, Email
-  #   Email Check:
-  #     a. Buyer email must be difference with it's entity contact email.
-  #     b. Buyer entities's emails must be unique.
   def validate
     validation_user = params[:user]
     validate_final_result = true
@@ -114,14 +137,17 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     validate_final_result = validate_final_result & validate_result
     error_fields.push('company_unique_entity_number') unless validate_result
 
-    # validate user entities
-    buyer_entities = JSON.parse(params[:buyer_entities])
-    validate_result, entity_indexes = validate_buyer_entities_info(validation_user, buyer_entities)
-    validate_final_result = validate_final_result & validate_result
-    error_entity_indexes = entity_indexes unless validate_result
+    # # validate user entities
+    # buyer_entities = JSON.parse(params[:buyer_entities])
+    # validate_result, entity_indexes = validate_buyer_entities_info(validation_user, buyer_entities)
+    # validate_final_result = validate_final_result & validate_result
+    # error_entity_indexes = entity_indexes unless validate_result
+    # render json: { validate_result: validate_final_result,
+    #                error_fields: error_fields,
+    #                error_entity_indexes: error_entity_indexes }, status: 200
+    #
     render json: { validate_result: validate_final_result,
-                   error_fields: error_fields,
-                   error_entity_indexes: error_entity_indexes }, status: 200
+                   error_fields: error_fields }, status: 200
   end
 
   private
@@ -237,14 +263,16 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     target_buyer_entity.is_default = buyer_entity['is_default'].blank? ? 0 : buyer_entity['is_default']
     if buyer_entity['main_id'].to_i == 0
       target_buyer_entity.approval_status = CompanyBuyerEntity::ApprovalStatusPending
+    else
+      target_buyer_entity.approval_status = buyer_entity['approval_status'] unless buyer_entity['approval_status'].blank?
     end
     target_buyer_entity.user = current_user
     success_saved = (target_buyer_entity.save!)
     [success_saved, target_buyer_entity]
   end
 
-  def check_entities_email_duplicated(buyer_entities)
-    entity_indexes = []
+  def check_entities_email_duplicated(buyer_entities, only_field_name = false)
+    entity_error_info = []
     buyer_entities.each_index do |index| #entity_emails.push(x['contact_email'])
       target_entity = buyer_entities[index]
       if target_entity['is_default'].equal?(1)
@@ -255,115 +283,123 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
         #   entity_indexes.push({'entity_index' => index, 'error_field_name' => 'contact_email'})
         # end
         if target_entity.object_id != temp_entity.object_id && target_entity['company_name'] == temp_entity['company_name']
-          entity_indexes.push({'entity_index' => index, 'error_field_name' =>'company_name'})
+          if only_field_name
+            entity_error_info.push('company_name')
+          else
+            entity_error_info.push({'entity_index' => index, 'error_field_name' =>'company_name'})
+          end
         end
         if target_entity.object_id != temp_entity.object_id && target_entity['company_uen'] == temp_entity['company_uen']
-          entity_indexes.push({'entity_index' => index, 'error_field_name' =>'company_uen'})
+          if only_field_name
+            entity_error_info.push('company_uen')
+          else
+            entity_error_info.push({'entity_index' => index, 'error_field_name' =>'company_uen'})
+          end
         end
       end
     end
-    entity_indexes
+    entity_error_info
   end
 
   def check_entities_email_with_user(buyer, buyer_entities, user)
     entity_indexes = []
     buyer_entities.each_index do |index|
       buyer_entity = buyer_entities[index]
-
-      if buyer_entity['is_default'].equal?(1) &&
-          !buyer_entity['contact_email'].blank? &&
-          user.any?{ |v| !v.email.blank? && v.email.downcase == buyer_entity['contact_email'].downcase &&
-          !buyer_entity['user_id'].blank? &&
-          v.id != buyer_entity['user_id'] }
-        entity_indexes.push({'entity_index' => index, 'error_field_name' => 'contact_email'})
-      end
-      if buyer_entity['is_default'].equal?(1) &&
-          !buyer_entity['contact_email'].blank? &&
-          user.any?{ |v| !v.email.blank? && v.email.downcase == buyer_entity['contact_email'].downcase &&
-          buyer_entity['user_id'].blank? &&
-          v.id != buyer['id'] }
-        entity_indexes.push({'entity_index' => index, 'error_field_name' => 'contact_email'})
-      end
-      if !buyer_entity['is_default'].equal?(1) &&
-          !buyer_entity['contact_email'].blank? &&
-          user.any?{ |v| !v.email.blank? && v.email.downcase == buyer_entity['contact_email'].downcase &&
-          !buyer_entity['user_entity_id'].blank? &&
-          v.id != buyer_entity['user_entity_id'] }
-        entity_indexes.push({'entity_index' => index, 'error_field_name' => 'contact_email'})
-      end
-      if !buyer_entity['is_default'].equal?(1) &&
-          !buyer_entity['contact_email'].blank? &&
-          user.any?{ |v| !v.email.blank? && v.email.downcase == buyer_entity['contact_email'].downcase &&
-          buyer_entity['user_id'].blank? &&
-          v.id != buyer['id'] }
-        entity_indexes.push({'entity_index' => index, 'error_field_name' => 'contact_email'})
-      end
-      if !buyer_entity['is_default'].equal?(1) &&
-          !buyer_entity['company_name'].blank? &&
-          user.any?{ |v| !v.company_name.blank? && v.company_name.downcase == buyer_entity['company_name'].downcase &&
-          !buyer_entity['user_entity_id'].blank? &&
-          v.id != buyer_entity['user_entity_id'] }
-        entity_indexes.push({'entity_index' => index, 'error_field_name' => 'company_name'})
-      end
-      if !buyer_entity['is_default'].equal?(1) &&
-          !buyer_entity['company_name'].blank? &&
-          user.any?{ |v| !v.company_name.blank? && v.company_name.downcase == buyer_entity['company_name'].downcase &&
-          buyer_entity['user_entity_id'].blank? &&
-          v.id != buyer['id'] }
-        entity_indexes.push({'entity_index' => index, 'error_field_name' => 'company_name'})
-      end
-      if !buyer_entity['is_default'].equal?(1) &&
-          !buyer_entity['company_uen'].blank? &&
-          user.any?{ |v| !v.company_unique_entity_number.blank? && v.company_unique_entity_number.downcase == buyer_entity['company_uen'].downcase &&
-          !buyer_entity['user_entity_id'].blank? &&
-          v.id != buyer_entity['user_entity_id'] }
-        entity_indexes.push({'entity_index' => index, 'error_field_name' => 'company_uen'})
-      end
-      if !buyer_entity['is_default'].equal?(1) &&
-          !buyer_entity['company_uen'].blank? &&
-          user.any?{ |v| !v.company_unique_entity_number.blank? && v.company_unique_entity_number.downcase == buyer_entity['company_uen'].downcase &&
-          buyer_entity['user_entity_id'].blank? &&
-          v.id != buyer['id'] }
-        entity_indexes.push({'entity_index' => index, 'error_field_name' => 'company_uen'})
-      end
-
-      # # Sub entity validation
-      # is_duplicated_email = user.any?{ |v| v.email == buyer_entity['contact_email'] &&
-      #     (v.entity_id == nil || v.entity_id != buyer_entity['id']) }
-      # is_duplicated_comp_name = user.any?{ |v| v.company_name == buyer_entity['company_name'] &&
-      #     (v.entity_id == nil || v.entity_id != buyer_entity['id']) }
-      # is_duplicated_uen = user.any?{ |v| v.company_unique_entity_number == buyer_entity['company_uen'] &&
-      #     (v.entity_id == nil || v.entity_id != buyer_entity['id']) }
-      # # Sub entity -> existed same entity with email & company name
-      # if !buyer_entity['is_default'].equal?(1) && is_duplicated_email
-      #   entity_indexes.push({'entity_index' => index, 'error_field_name' => 'contact_email'})
-      # end
-      # if !buyer_entity['is_default'].equal?(1) && is_duplicated_comp_name
-      #   entity_indexes.push({'entity_index' => index, 'error_field_name' => 'company_name'})
-      # end
-      # if !buyer_entity['is_default'].equal?(1) && is_duplicated_uen
-      #   entity_indexes.push({'entity_index' => index, 'error_field_name' => 'company_uen'})
-      # end
-      # # Sub entity -> same entity email / company name with input buyer
-      # if !buyer_entity['is_default'].equal?(1) && buyer_entity['contact_email'].equal?(buyer['email'])
-      #   entity_indexes.push({'entity_index' => index, 'error_field_name' => 'contact_email'})
-      # end
-      # if !buyer_entity['is_default'].equal?(1) && buyer_entity['company_name'].equal?(buyer['company_name'])
-      #   entity_indexes.push({'entity_index' => index, 'error_field_name' => 'company_name'})
-      # end
-      # if !buyer_entity['is_default'].equal?(1) && buyer_entity['company_uen'].equal?(buyer['company_unique_entity_number'])
-      #   entity_indexes.push({'entity_index' => index, 'error_field_name' => 'company_uen'})
-      # end
-
-      # # Master entity validation
-      # is_duplicated_email = user.any?{ |v| v.email == buyer_entity['contact_email'] &&
-      #     v.id != buyer_entity['user_id']}
-      # # Master entity -> existed same entity with email
-      # if buyer_entity['is_default'].equal?(1) && is_duplicated_email
-      #   entity_indexes.push({'entity_index' => index, 'error_field_name' => 'contact_email'})
-      # end
+      entity_indexes.concat(check_entity_email_with_user(buyer, buyer_entity, user, index))
     end
     entity_indexes
   end
 
+  def check_entity_email_with_user(buyer,buyer_entity,user, index = -1)
+    entity_error_info = []
+    if buyer_entity['is_default'].equal?(1) &&
+        !buyer_entity['contact_email'].blank? &&
+        user.any?{ |v| !v.email.blank? && v.email.downcase == buyer_entity['contact_email'].downcase &&
+            !buyer_entity['user_id'].blank? &&
+            v.id != buyer_entity['user_id'] }
+      if index > -1
+        entity_error_info.push({'entity_index' => index, 'error_field_name' => 'contact_email'})
+      else
+        entity_error_info.push('contact_email')
+      end
+    end
+    if buyer_entity['is_default'].equal?(1) &&
+        !buyer_entity['contact_email'].blank? &&
+        user.any?{ |v| !v.email.blank? && v.email.downcase == buyer_entity['contact_email'].downcase &&
+            buyer_entity['user_id'].blank? &&
+            v.id != buyer['id'] }
+      if index > -1
+        entity_error_info.push({'entity_index' => index, 'error_field_name' => 'contact_email'})
+      else
+        entity_error_info.push('contact_email')
+      end
+    end
+    if !buyer_entity['is_default'].equal?(1) &&
+        !buyer_entity['contact_email'].blank? &&
+        user.any?{ |v| !v.email.blank? && v.email.downcase == buyer_entity['contact_email'].downcase &&
+            !buyer_entity['user_entity_id'].blank? &&
+            v.id != buyer_entity['user_entity_id'] }
+      if index > -1
+        entity_error_info.push({'entity_index' => index, 'error_field_name' => 'contact_email'})
+      else
+        entity_error_info.push('contact_email')
+      end
+    end
+    if !buyer_entity['is_default'].equal?(1) &&
+        !buyer_entity['contact_email'].blank? &&
+        user.any?{ |v| !v.email.blank? && v.email.downcase == buyer_entity['contact_email'].downcase &&
+            buyer_entity['user_id'].blank? &&
+            v.id != buyer['id'] }
+      if index > -1
+        entity_error_info.push({'entity_index' => index, 'error_field_name' => 'contact_email'})
+      else
+        entity_error_info.push('contact_email')
+      end
+    end
+    if !buyer_entity['is_default'].equal?(1) &&
+        !buyer_entity['company_name'].blank? &&
+        user.any?{ |v| !v.company_name.blank? && v.company_name.downcase == buyer_entity['company_name'].downcase &&
+            !buyer_entity['user_entity_id'].blank? &&
+            v.id != buyer_entity['user_entity_id'] }
+      if index > -1
+        entity_error_info.push({'entity_index' => index, 'error_field_name' => 'company_name'})
+      else
+        entity_error_info.push('company_name')
+      end
+    end
+    if !buyer_entity['is_default'].equal?(1) &&
+        !buyer_entity['company_name'].blank? &&
+        user.any?{ |v| !v.company_name.blank? && v.company_name.downcase == buyer_entity['company_name'].downcase &&
+            buyer_entity['user_entity_id'].blank? &&
+            v.id != buyer['id'] }
+      if index > -1
+        entity_error_info.push({'entity_index' => index, 'error_field_name' => 'company_name'})
+      else
+        entity_error_info.push('company_name')
+      end
+    end
+    if !buyer_entity['is_default'].equal?(1) &&
+        !buyer_entity['company_uen'].blank? &&
+        user.any?{ |v| !v.company_unique_entity_number.blank? && v.company_unique_entity_number.downcase == buyer_entity['company_uen'].downcase &&
+            !buyer_entity['user_entity_id'].blank? &&
+            v.id != buyer_entity['user_entity_id'] }
+      if index > -1
+        entity_error_info.push({'entity_index' => index, 'error_field_name' => 'company_uen'})
+      else
+        entity_error_info.push('company_uen')
+      end
+    end
+    if !buyer_entity['is_default'].equal?(1) &&
+        !buyer_entity['company_uen'].blank? &&
+        user.any?{ |v| !v.company_unique_entity_number.blank? && v.company_unique_entity_number.downcase == buyer_entity['company_uen'].downcase &&
+            buyer_entity['user_entity_id'].blank? &&
+            v.id != buyer['id'] }
+      if index > -1
+        entity_error_info.push({'entity_index' => index, 'error_field_name' => 'company_uen'})
+      else
+        entity_error_info.push('company_uen')
+      end
+    end
+    entity_error_info
+  end
 end

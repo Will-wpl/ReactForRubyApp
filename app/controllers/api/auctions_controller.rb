@@ -34,7 +34,7 @@ class Api::AuctionsController < Api::BaseController
       @auction.destroy
       render json: nil, status: 200
     else
-      render json: {message: 'The auction already published, you can not delete it!'}, status: 200
+      render json: { message: 'The auction already published, you can not delete it!' }, status: 200
     end
   end
 
@@ -60,25 +60,25 @@ class Api::AuctionsController < Api::BaseController
     if hold_status
       if @auction.update(hold_status: hold_status)
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
-        render json: {hold_status: true, forward: false}, status: 200
+        render json: { hold_status: true, forward: false }, status: 200
       end
     elsif !hold_status && Time.current < @auction.actual_begin_time
       if @auction.update(hold_status: hold_status)
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
-        render json: {hold_status: false, forward: false}, status: 200
+        render json: { hold_status: false, forward: false }, status: 200
       end
     elsif !hold_status && Time.current > @auction.actual_begin_time
       if @auction.update(hold_status: hold_status, actual_begin_time: Time.current, actual_end_time: Time.current + 60 * @auction.duration)
         # link = set_link(@auction.id, 'dashboard')
         AuctionEvent.set_events(current_user.id, @auction.id, request[:action], @auction.to_json)
-        render json: {hold_status: false, forward: true}, status: 200
+        render json: { hold_status: false, forward: true }, status: 200
       end
     end
   end
 
   # GET current time by ajax
   def timer
-    render json: {current_time: Time.current, hold_status: @auction.hold_status, actual_begin_time: @auction.actual_begin_time, actual_end_time: @auction.actual_end_time}, status: 200
+    render json: { current_time: Time.current, hold_status: @auction.hold_status, actual_begin_time: @auction.actual_begin_time, actual_end_time: @auction.actual_end_time }, status: 200
   end
 
   # POST confirm
@@ -105,13 +105,13 @@ class Api::AuctionsController < Api::BaseController
       total = auction.count
     end
     headers = [
-        {name: 'Name', field_name: 'name'},
-        {name: 'Date/Time', field_name: 'actual_begin_time'}
+        { name: 'Name', field_name: 'name' },
+        { name: 'Date/Time', field_name: 'actual_begin_time' }
     ]
     actions = [
-        {url: '/admin/auctions/:id/buyer_dashboard?unpublished', name: 'Buyer Dashboard', icon: 'view', interface_type: 'auction'},
-        {url: '/admin/auctions/new', name: 'Manage', icon: 'manage', interface_type: 'auction'},
-        {url: '/admin/auctions/:id', name: 'Delete', icon: 'delete', interface_type: 'auction'}
+        { url: '/admin/auctions/:id/buyer_dashboard?unpublished', name: 'Buyer Dashboard', icon: 'view', interface_type: 'auction' },
+        { url: '/admin/auctions/new', name: 'Manage', icon: 'manage', interface_type: 'auction' },
+        { url: '/admin/auctions/:id', name: 'Delete', icon: 'delete', interface_type: 'auction' }
     ]
     data = if params.key?(:sort_by)
              order_by_string = get_order_by_obj_str(params[:sort_by], headers)
@@ -127,8 +127,8 @@ class Api::AuctionsController < Api::BaseController
       all_accept = consumptions_all_count == consumptions_accept_count ? true : false
       auctions.push(id: auction.id, name: auction.name, actual_begin_time: auction.actual_begin_time, all_accept: all_accept)
     end
-    bodies = {data: auctions, total: total}
-    render json: {headers: headers, bodies: bodies, actions: actions}, status: 200
+    bodies = { data: auctions, total: total }
+    render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
   end
 
   def published
@@ -143,16 +143,16 @@ class Api::AuctionsController < Api::BaseController
       total = auction.count
     end
     headers = [
-        {name: 'ID', field_name: 'published_gid'},
-        {name: 'Name', field_name: 'name'},
-        {name: 'Date/Time', field_name: 'actual_begin_time'},
-        {name: 'Status', field_name: 'status', is_sort: false}
+        { name: 'ID', field_name: 'published_gid' },
+        { name: 'Name', field_name: 'name' },
+        { name: 'Date/Time', field_name: 'actual_begin_time' },
+        { name: 'Status', field_name: 'status', is_sort: false }
     ]
     actions = [
-        {url: '/admin/auctions/:id/retailer_dashboard', name: 'Retailer Dashboard', icon: 'edit', interface_type: 'auction'},
-        {url: '/admin/auctions/:id/buyer_dashboard?published', name: 'Buyer Dashboard', icon: 'view', interface_type: 'auction'},
-        {url: '/admin/auctions/:id/upcoming', name: 'Manage', icon: 'manage', interface_type: 'auction'},
-        {url: '/admin/auctions/:id/online', name: 'Commence', icon: 'bidding', interface_type: 'auction'}
+        { url: '/admin/auctions/:id/retailer_dashboard', name: 'Retailer Dashboard', icon: 'edit', interface_type: 'auction' },
+        { url: '/admin/auctions/:id/buyer_dashboard?published', name: 'Buyer Dashboard', icon: 'view', interface_type: 'auction' },
+        { url: '/admin/auctions/:id/upcoming', name: 'Manage', icon: 'manage', interface_type: 'auction' },
+        { url: '/admin/auctions/:id/online', name: 'Commence', icon: 'bidding', interface_type: 'auction' }
     ]
     data = []
     auctions = get_published_order_list(params, headers, auction)
@@ -166,8 +166,8 @@ class Api::AuctionsController < Api::BaseController
       incomplete = Auction.check_start_price_incomplete(auction)
       data.push(id: auction.id, published_gid: auction.published_gid, name: auction.name, actual_begin_time: auction.actual_begin_time, status: status, incomplete: incomplete)
     end
-    bodies = {data: data, total: total}
-    render json: {headers: headers, bodies: bodies, actions: actions}, status: 200
+    bodies = { data: data, total: total }
+    render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
   end
 
   # Admin create auction select retailer. If retailer's account is not approved, can't find
@@ -187,12 +187,12 @@ class Api::AuctionsController < Api::BaseController
       total = users.count
     end
     headers = [
-        {name: 'Company Name', field_name: 'company_name'},
-        {name: 'Status', field_name: 'select_status', is_sort: false},
-        {name: 'Action', field_name: 'select_action', is_sort: false}
+        { name: 'Company Name', field_name: 'company_name' },
+        { name: 'Status', field_name: 'select_status', is_sort: false },
+        { name: 'Action', field_name: 'select_action', is_sort: false }
     ]
     actions = [
-        {url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail'}
+        { url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail' }
     ]
     data = []
     users = get_retailer_order_list(params, headers, users)
@@ -203,8 +203,8 @@ class Api::AuctionsController < Api::BaseController
       action = get_retailer_action_value(arrangement)
       data.push(user_id: user.id, company_name: user.company_name, select_status: status, select_action: action, lock: false)
     end
-    bodies = {data: data, total: total}
-    render json: {headers: headers, bodies: bodies, actions: actions}, status: 200
+    bodies = { data: data, total: total }
+    render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
   end
 
   def buyers
@@ -230,23 +230,23 @@ class Api::AuctionsController < Api::BaseController
     end
     if consumer_type == '2'
       headers = [
-          {name: 'Company Name', field_name: 'company_name'},
-          {name: 'Status', field_name: 'select_status', is_sort: false},
-          {name: 'Action', field_name: 'select_action', is_sort: false}
+          { name: 'Company Name', field_name: 'company_name' },
+          { name: 'Status', field_name: 'select_status', is_sort: false },
+          { name: 'Action', field_name: 'select_action', is_sort: false }
       ]
       actions = [
-          {url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail'}
+          { url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail' }
       ]
       users = get_company_buyer_order_list(params, headers, users)
     elsif consumer_type == '3'
       headers = [
-          {name: 'Name', field_name: 'name', table_name: 'users'},
-          {name: 'Housing Type', field_name: 'account_housing_type'},
-          {name: 'Status', field_name: 'select_status', is_sort: false},
-          {name: 'Action', field_name: 'select_action', is_sort: false}
+          { name: 'Name', field_name: 'name', table_name: 'users' },
+          { name: 'Housing Type', field_name: 'account_housing_type' },
+          { name: 'Status', field_name: 'select_status', is_sort: false },
+          { name: 'Action', field_name: 'select_action', is_sort: false }
       ]
       actions = [
-          {url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail'}
+          { url: '/admin/users/:id/manage', name: 'View', icon: 'view', interface_type: 'show_detail' }
       ]
       users = get_individual_buyer_order_list(params, headers, users)
     else
@@ -270,8 +270,8 @@ class Api::AuctionsController < Api::BaseController
         data.push(user_id: user.id, name: user.name, account_housing_type: user.account_housing_type, select_status: status, select_action: action, lock: false)
       end
     end
-    bodies = {data: data, total: total}
-    render json: {headers: headers, bodies: bodies, actions: actions }, status: 200
+    bodies = { data: data, total: total }
+    render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
   end
 
   def selects
@@ -279,7 +279,7 @@ class Api::AuctionsController < Api::BaseController
     company_buyers = Consumption.find_by_auction_id(params[:id]).find_by_user_consumer_type('2').group(:action_status).count
     individual_buyers = Consumption.find_by_auction_id(params[:id]).find_by_user_consumer_type('3').group(:action_status).count
 
-    render json: {retailers: retailers, company_buyers: company_buyers, individual_buyers: individual_buyers}, status: 200
+    render json: { retailers: retailers, company_buyers: company_buyers, individual_buyers: individual_buyers }, status: 200
   end
 
   def send_mails
@@ -299,7 +299,13 @@ class Api::AuctionsController < Api::BaseController
 
   def retailer_dashboard
     tenders = TenderWorkflow.new.get_action_state_machine(params[:id])
-    render json: tenders, status: 200
+    step_counts = [0, 0, 0, 0, 0]
+    tenders.each do |tender|
+      current_node = tender[:detail][:current][:current_node]
+      step_counts[current_node - 1] += 1
+    end
+
+    render json: { tenders: tenders, step_counts: step_counts }, status: 200
   end
 
   def buyer_dashboard
@@ -315,7 +321,7 @@ class Api::AuctionsController < Api::BaseController
       consumptions_individual.push(id: consumption.id, name: consumption.user.name, participation_status: consumption.participation_status, accept_status: consumption.accept_status)
     end
     count_individual = consumptions_individual.count
-    render json: {consumptions_company: consumptions_company, count_company: count_company, consumptions_individual: consumptions_individual, count_individual: count_individual}, status: 200
+    render json: { consumptions_company: consumptions_company, count_company: count_company, consumptions_individual: consumptions_individual, count_individual: count_individual }, status: 200
   end
 
   def log
@@ -336,18 +342,18 @@ class Api::AuctionsController < Api::BaseController
       total = result.count
     end
     headers = [
-        {name: 'Name', field_name: 'name', is_sort: false},
-        {name: 'Date', field_name: 'auction_when', is_sort: false},
-        {name: 'Action', field_name: 'auction_do', is_sort: false},
-        {name: 'Details', field_name: 'auction_what', is_sort: false}
+        { name: 'Name', field_name: 'name', is_sort: false },
+        { name: 'Date', field_name: 'auction_when', is_sort: false },
+        { name: 'Action', field_name: 'auction_do', is_sort: false },
+        { name: 'Details', field_name: 'auction_what', is_sort: false }
     ]
     data = []
     result.order(created_at: :desc).each do |event|
       data.push(name: event.user.company_name, auction_when: event.auction_when,
                 auction_do: event.auction_do, auction_what: event.auction_what)
     end
-    bodies = {data: data, total: total}
-    render json: {headers: headers, bodies: bodies, actions: nil}, status: 200
+    bodies = { data: data, total: total }
+    render json: { headers: headers, bodies: bodies, actions: nil }, status: 200
   end
 
   def letter_of_award_pdf
@@ -800,11 +806,30 @@ class Api::AuctionsController < Api::BaseController
     else
       auction_json[:aggregate_auction_contracts] = get_unpublished_auction_contracts(auction)
     end
-
+    auction_json[:contract_end_list] = get_contract_end_list(auction)
     auction_json[:auction_contracts] = Auction.find(auction.id).auction_contracts.sort_by {|contract| contract.contract_duration.to_i}
     auction_json[:buyer_notify] = Consumption.find_by_auction_id(auction.id).find_notify_buyer.blank? ? false : true
     auction_json[:live_auction_contracts] = live_auction_contracts
+    auction_json[:contract_end_list] = get_contract_end_list(auction)
     auction_json
+  end
+
+  def get_contract_end_list(auction)
+    contract_end_list = []
+    contracts = auction.auction_contracts.sort_by {|contract| contract.contract_duration.to_i}
+    contracts.each do |c|
+      if auction.publish_status == Auction::PublishStatusPublished
+        contract_end_list.push(push_data_to_contract_end_list(c)) if has_live_contract(c)
+      else
+        contract_end_list.push(push_data_to_contract_end_list(c))
+      end
+    end
+    contract_end_list
+  end
+
+  def push_data_to_contract_end_list(contract)
+    count = Consumption.where(contract_duration: contract.contract_duration, auction_id: contract.auction_id).is_participation.is_accpet.count
+    { id: contract.auction_id, contract_duration: contract.contract_duration, contract_period_end_date: contract.contract_period_end_date, count: count }
   end
 
   def set_contract_duration_confirm(params, auction_result)
@@ -895,6 +920,6 @@ class Api::AuctionsController < Api::BaseController
     date_of_ra = (auction.start_datetime + (8 * 60 * 60)).strftime("%-d %b %Y")
     ra_id = auction.published_gid
     months = ["#{contract_duration} months"]
-    UserMailer.winner_confirmation(user,{:date_of_ra => date_of_ra, :ra_id => ra_id, :months => months}).deliver_later
+    UserMailer.winner_confirmation(user,{ :date_of_ra => date_of_ra, :ra_id => ra_id, :months => months }).deliver_later
   end
 end

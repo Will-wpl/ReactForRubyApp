@@ -4,6 +4,7 @@ body a{outline:none; cursor: default;}
 button{ cursor: pointer; transition: 0.5s all;}
 .green{color:green;}
 .red{color:red;}
+.cursor_link{cursor: pointer !important;}
 .a_center{text-align: center; display: inline-block;}
  button[disabled=''],input[disabled=''],select[disabled='']{background: #666 !important; color:#999 !important; cursor: default !important;}
 textarea{resize: none;}
@@ -28,7 +29,7 @@ ul, menu, dir {
       .react-datepicker__input-container,.react-datepicker-wrapper{width:100%;}
       dd{
           margin-bottom: 20px;
-          .lm--formItem-right{ 
+          .lm--formItem-right{
             position: relative;
             .required_error{position:absolute; display: none; top:45px; left:0; width: 100%; padding:5px 10px; border:2px solid #fbb136; background: #fff; color:#333; font-size: 15px;z-index: 10}
           }
@@ -41,7 +42,7 @@ ul, menu, dir {
               }
             &.checkbox_div{margin:12px 10px;}
           }
-          b{ 
+          b{
               font-weight: normal; font-size: 18px; line-height: 44px; text-align:center; display: block;
               &.textLeft{text-align: left;}
           }
@@ -61,15 +62,15 @@ ul, menu, dir {
               &.time_ico{background:url("../images/time.png") no-repeat right;}
               &.checkbox{ display: inline-block; width: auto;}
             }
-          
+
       }
-     
+
   }
 
   .createRa_btn{text-align: right; right:0px; bottom:0px; position: relative;
       .show{display:inline-block;}
       .hide{ display: none;}
-      button{ 
+      button{
           margin: 0 10px;
           &:last-child{margin-right: 0px;}
           &:hover{background:#00888a;}
@@ -83,9 +84,9 @@ ul, menu, dir {
 //retailer manage coming
 .link_file{line-height: 40px; text-decoration: underline;}
 abbr[title]{color: #fe0000; text-decoration: none;}
-.retailer_btn{ 
+.retailer_btn{
   text-align: right; width: 100%; margin: 25px auto; position: relative;
-  button{ 
+  button{
     display: inline-block; margin: 0px 10px;
     &:last-child{ margin-right: 0px;}
     &:hover{background:#00888a;}
@@ -102,7 +103,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
    width: 100%; font-size: 12px; table-layout: fixed; border-top:1px solid #314657; border-left:1px solid #314657;
    thead{
      tr{ background: #00394A;
-      th{ 
+      th{
         height: 40px; border-right:1px solid #314657; font-size: 14px;
         &.table_title{border-bottom:1px solid #314657;}
       }
@@ -117,7 +118,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
            background: url("../images/notification_sent.png") no-repeat -20px 11px;
            &.fill_yes{ background-position: 0px 11px; background-size:15px; padding-left: 20px;}
          }
-        a{ 
+        a{
           display: block; width: 100%; height: 100%; cursor: pointer;
           &.report{background: url("../images/Reverse_Auction_Report.png") no-repeat center; background-size:19px;}
           &.edit{background: url("../images/edit.png") no-repeat left; background-size:10px;  width:50px; margin:0 auto; line-height:35px;}
@@ -126,13 +127,13 @@ abbr[title]{color: #fe0000; text-decoration: none;}
         input{
           width: 60px; display: inline-block; padding:2px; border:1px solid #fff; margin-left: 5px; background: none;
         }
-      }   
+      }
      }
    }
 }
 
 //time_cuntdown
-.time_cuntdown{ 
+.time_cuntdown{
     width: 100%; padding:12px; background: #90bf33; overflow: hidden; min-height: 132px; color:#fff;
     p{
       font-size:20px; line-height: 30px;
@@ -183,7 +184,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 .modal_hide{ opacity: 0; z-index: -1;}
 .modal_show{  opacity: 1; z-index: 10; transition: 0.8s all;}
 #modal_main{ position: fixed; font-size: 12px;
-  width:420px; min-height:200px; background-color: rgba(0, 0, 0, 1); border-radius: 10px; box-shadow: 0px 0px 10px #ccc; 
+  width:420px; min-height:200px; background-color: rgba(0, 0, 0, 1); border-radius: 10px; box-shadow: 0px 0px 10px #ccc;
   top:35%; left:50%; margin: -100px 0px 0px -210px;
   h4{
     height: 32px; line-height: 32px; width: 100%; margin: 0 auto; font-size: 13px;
@@ -196,9 +197,9 @@ abbr[title]{color: #fe0000; text-decoration: none;}
     .modal_text{ width: 100%; height: auto; border:0px; background: none; font-size: 16px; color:#fff;rows:2;resize:none;}
   }
   .showinfo{ color: red; min-height: auto;}
-  .modal_btn{ 
-    width:90%; margin: 10px auto; overflow: hidden;
-    a { width: 60px; float:right; margin-left: 10px; cursor: pointer;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; }
+  .modal_btn{
+    width:90%; margin:10px auto; overflow: hidden;
+    a { width: 60px; float:right; cursor: pointer; margin-left: 10px;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; }
     button { width: 60px; float:right; margin-left: 10px; cursor: pointer;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; }
   }
   .model_detail_formHeight{max-height: 450px}
@@ -206,7 +207,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 }
 .u-contain{overflow:hidden;}
 #modal_history{position: fixed; top:0; left: 0; font-size: 12px;
-  width:100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); 
+  width:100%; height: 100%; background-color: rgba(0, 0, 0, 0.8);
     .history_box{ width:40%; min-width: 300px;  overflow: hidden; background: #fff; margin:8% auto 0;
       h4{font-weight: 500;
         height: 42px; line-height: 42px; background: #00afb1; width: 100%; margin: 0 auto; font-size: 13px;
@@ -218,7 +219,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
       }
       a.detail_show_btn{ float: right; width:80px; border-radius: 5px; display: block; height:24px; background:#00b0b2; line-height: 24px; text-align: center; margin: 0px 2% 10px 0px; color: #fff;}
       .history_nr{overflow-y: auto; height:362px;
-        dl{ width: 100%; 
+        dl{ width: 100%;
             textarea{border:1px dashed #ddd; background: #fff; margin-top: 5px; padding: 5px; font-size: 12px; color:#666;}
             dd{ width:92%; display: block; overflow: hidden; margin: 15px auto; font-weight: normal;
               dfn{
@@ -241,7 +242,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
               }
             }
         }
-      } 
+      }
   }
   .showbig{ width: 96%; margin: 2% auto;
     textarea.detail_show,.history_nr{ height: 420px;}
@@ -253,16 +254,19 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 .retailrank_main{ width: 86%; margin: 10px auto; font-size: 12px;
   h4{ color:#fff;}
   .retailrank_box{width: 100%; max-height: 441px; margin: 10px auto; overflow-y: auto;}
-} 
+}
 
 .retailrank_main-new{ width: 76%; margin: 10px auto; font-size: 12px;
+  .admin_buyer_list .buyer_list{
+    padding: 0; display: none;
+  }
   h4{ color:#fff;}
   .retailrank_box{width: 100%; max-height: 441px; margin: 10px auto; overflow-y: auto;}
-} 
+}
 //reservePrice
-.reservePrice{ 
+.reservePrice{
   width: 86%; margin: 10px auto; line-height:22px;
-  span{ 
+  span{
     margin-right: 10px;
     &.success{ color:green; background: url("../images/achieved.png") no-repeat left; padding-left:20px;}
     &.fail{ color:red; background: url("../images/not_achieved.png") no-repeat left; padding-left:20px;}
@@ -273,7 +277,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
   button{margin-left: 15px;}
 }
 //winnerPirce
-.winnerPrice_main{ 
+.winnerPrice_main{
   width:86%; margin: 10px auto; font-size: 12px;
   h4{ color:#fff;}
   ul li{ padding:5px 0px; list-style: none;
@@ -297,7 +301,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 //retailer liveing
 #live_modal{
   width: 480px; margin: 60px auto;
-  border-radius: 0px 0px 5px 5px; overflow: hidden; 
+  border-radius: 0px 0px 5px 5px; overflow: hidden;
   .live_hold{ background: url("../images/count_down.png") no-repeat; width: 100%; height:126px; }
   .live_end{ background: url("../images/thank you_end.png") no-repeat; width: 100%; height:126px; }
   p{ background: #00afb1; width: 100%; line-height: 32px; font-size: 18px; padding:10px 10px 20px 10px; text-align: center}
@@ -330,7 +334,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
     a{
       &.disabled{background: #666; color: #aaa; cursor:default;}
     }
-    button{ 
+    button{
         margin: 0 10px;
         &:last-child{margin-right: 0px;}
         &:hover{background:#00888a;}
@@ -353,53 +357,53 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 
 
 .admin_hold{ position: absolute; color:red; top:25%;}
-::-webkit-scrollbar  
-{  
+::-webkit-scrollbar
+{
     position: absolute;
-    width: 5px;  
-    height: 5px;  
-    background-color: #314657;  
-    border-radius: 10px;  
-}  
- 
-::-webkit-scrollbar-track  
-{  
-    -webkit-box-shadow: inset 0 0 6px #314657;  
-    border-radius: 10px;  
-    background-color: #00394A;  
-}  
-   
-::-webkit-scrollbar-thumb  
-{  
-    border-radius: 10px;  
-    -webkit-box-shadow: inset 0 0 1px #00b0b2;  
-    background-color: #00b0b2;  
+    width: 5px;
+    height: 5px;
+    background-color: #314657;
+    border-radius: 10px;
 }
 
-::-moz-scrollbar  
-{  
-    position: absolute;
-    width: 5px;  
-    height: 5px;  
-    background-color: #314657;  
-    border-radius: 10px;  
-}  
- 
-::-moz-scrollbar-track  
-{  
-    -moz-box-shadow: inset 0 0 6px #314657;  
-    border-radius: 10px;  
-    background-color: #00394A;  
-}  
-   
-::-moz-scrollbar-thumb  
-{  
-    border-radius: 10px;  
-    -moz-box-shadow: inset 0 0 1px #00b0b2;  
-    background-color: #00b0b2;  
+::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px #314657;
+    border-radius: 10px;
+    background-color: #00394A;
 }
 
-//retailer 
+::-webkit-scrollbar-thumb
+{
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 1px #00b0b2;
+    background-color: #00b0b2;
+}
+
+::-moz-scrollbar
+{
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background-color: #314657;
+    border-radius: 10px;
+}
+
+::-moz-scrollbar-track
+{
+    -moz-box-shadow: inset 0 0 6px #314657;
+    border-radius: 10px;
+    background-color: #00394A;
+}
+
+::-moz-scrollbar-thumb
+{
+    border-radius: 10px;
+    -moz-box-shadow: inset 0 0 1px #00b0b2;
+    background-color: #00b0b2;
+}
+
+//retailer
 .number_form{ position: relative; width: 100%; }
 .number_error{ position: absolute; width: 100%; background: #fff; top:242px; border-radius: 5px; color: #333; font-size: 12px; padding:5px 10px; border:2px solid #fbb136;}
 
@@ -414,7 +418,7 @@ input[type="number"]{
 
 //resposive
 @media screen and (max-width:1008px){
-  .col-md-5,.col-md-7{ width: 100%;} 
+  .col-md-5,.col-md-7{ width: 100%;}
   .push-md-1{margin-left: 4.33333%;}
   .propose_deviations{
     .push-md-1{margin-left: 0;}
@@ -448,11 +452,11 @@ input[type="number"]{
 .registration{ margin: 30px auto; min-height: 400px;
   h4{text-align: center; margin: 20px auto;}
   a{width:190px; margin: 40px auto; border-radius:6px; display: block; transition: 0.3s all; cursor: pointer; height:248px; text-indent: -9999px;
-    &.buyer{  
+    &.buyer{
       background:#3b98de url("../images/buyer_ico.png") no-repeat bottom;
       &:hover{width:200px; height:258px; box-shadow: 0px 0px 25px #fff;}
     }
-    &.retailer{  
+    &.retailer{
       background:#D69841 url("../images/retailer_ico.png") no-repeat bottom;
       &:hover{width:200px; height:258px; box-shadow: 0px 0px 25px #fff;}
     }
@@ -463,7 +467,7 @@ input[type="number"]{
 .lm--formItem-left.lm--formItem-label{
   font{font-size: 20px;}
   b{color:red;}
-  // 
+  //
   // &:first-letter{color:red;}
 }
 .lm--formItem-left.lm--formItem-label-comment{
@@ -472,7 +476,7 @@ input[type="number"]{
   width:65%;
   // padding-right: 20px;
   padding: 0.6875rem 2.0625rem 0.5rem 0;
-   
+
 }
 .save-right{ text-align: right;
   form{ width: 100%;
@@ -501,13 +505,13 @@ dfn.manage_label{
   border-radius: 0.3125rem;
 }
 
-#users_search_list{ 
+#users_search_list{
   .mg0{ margin: 0 auto;}
   width: 100%;
   div.list_loading{ font-size:22px; margin:40px auto; text-align: center;}
   div.search_type{
     dd{ float: left; margin: 0px 5px; margin-bottom: 10px;
-      &.fright{ 
+      &.fright{
         float:right; margin: 0;
         a.create_btn{padding: 0px 20px 0px 30px; background:#00b0b2 url("../images/create_ico.png") no-repeat 5px center; background-size: 18px;}
       }
@@ -534,11 +538,11 @@ dfn.manage_label{
       a.lm--button{padding: 0px 20px 0px 20px;}
     }
     .search_btn{
-      background:#00b0b2 url("../images/search.png") no-repeat 5px center; background-size: 18px; 
+      background:#00b0b2 url("../images/search.png") no-repeat 5px center; background-size: 18px;
     }
     .reset_btn{
-      background:#00b0b2 url("../images/reset.png") no-repeat 5px center; background-size: 18px; 
-    }       
+      background:#00b0b2 url("../images/reset.png") no-repeat 5px center; background-size: 18px;
+    }
   }
   div.lm--table-container{ overflow:hidden; padding: 0 20px;
     a{ text-decoration: none; cursor: pointer;}
@@ -566,7 +570,7 @@ dfn.manage_label{
           &.participation_status_2{ background: yellow; width:60%; margin-top: 3px;}
         }
         span{
-          &.font_arial{font-family: normal; padding-left: 10px; font-size: 12px;}
+          &.font_arial{font-family: normal; color:red; padding-left: 10px; font-weight: bold;}
           cursor: pointer; padding-left: 20px;
           &.invite{background:url("../images/invite.png") no-repeat left;}
           &.cancel_invite{background:url("../images/cancel_invite.png") no-repeat left;}
@@ -580,7 +584,7 @@ dfn.manage_label{
           &.log,&.award{background: url("../images/Activity_Log.png") no-repeat left; background-size:19px; height: 20px;}
         }
         &.search_list_btn{word-wrap: break-word;
-          a{ 
+          a{
             padding-left: 20px; display: block;
             &::before{
               display: none;
@@ -598,7 +602,7 @@ dfn.manage_label{
         }
       }
     }
-    .table_page{ 
+    .table_page{
       width: 100%; text-align: left; margin: 30px auto 0px auto;
       span{ display: inline-block; line-height: 32px; color:#fff; cursor: pointer; padding: 0px 15px; transition: 0.5s all;
         &.table_page_selected,&:hover{ background:#314657; }
@@ -614,6 +618,17 @@ dfn.manage_label{
     &.participation_status_1{background:url("../images/green_ico.png") no-repeat left;}
     &.participation_status_2{background:url("../images/yellow_ico.png") no-repeat left;}
     &.participation_status_0{background:url("../images/red_ico.png") no-repeat left;}
+  }
+}
+#email_body{
+  div.w-e-toolbar{
+    flex-wrap: wrap;
+    div.w-e-menu{
+      &:hover{z-index:10002 !important;}
+    }
+  }
+  div.w-e-text-container{
+    height:296px !important;
   }
 }
 .mg0{ margin: 0 auto;}
@@ -655,9 +670,9 @@ body.choose{
     a{ margin-right: 0.75rem;}
   }
   .required_error{position:absolute; display: none; width: 100%; padding:5px 10px; border:2px solid #fbb136; background: #fff; color:#333; font-size: 15px;}
-  .file_box{ 
+  .file_box{
     width: 100%;
-    .upload_file_btn{ 
+    .upload_file_btn{
       position: relative; width: 100%; display:inline-block; min-height:40px; margin-bottom: 0px;
       border:1px solid #fff;
       input{ position: absolute; width: 100%; opacity: 0; top:0px; left:0px; margin: 0; height: 100%; z-index: 10;}
@@ -681,7 +696,7 @@ body.choose{
         span.remove_file{background:url("../images/remove.png") no-repeat center; cursor: pointer; width: 26px; height: 26px; float: right;}
       }
     }
-  } 
+  }
 }
 ul.history_files{
     li{list-style: none; line-height: 26px; overflow: hidden;
@@ -700,12 +715,12 @@ ul.history_files{
 
 .comsumption_list{
   font-size: 13px;  padding:10px; text-align:center;
-  .comsumption_list_top{ 
+  .comsumption_list_top{
     padding:15px 0px 15px 32px; border-bottom: 1px solid #314657; background:url("../images/add_l.png") no-repeat left;
   }
   .open{background:url("../images/subtract.png") no-repeat left;}
   .comsumption_list_table{
-    display: none;  
+    display: none;
     table{
       width: 100%; text-align: center;
       td,th{
@@ -718,12 +733,12 @@ ul.history_files{
 
 .comsumption_list_new{
   font-size: 13px;  padding:10px; text-align:center;
-  .comsumption_list_top{ 
+  .comsumption_list_top{
     padding:15px 0px 15px 32px; border-bottom: 1px solid #314657; background:url("../images/add_l.png") no-repeat left;
   }
   .open{background:url("../images/subtract.png") no-repeat left;}
   .comsumption_list_table_new{
-    display:block;  
+    display:block;
     table{
       width: 100%; text-align: center;
       td,th{
@@ -750,7 +765,7 @@ ul.history_files{
         &.step3{background:#00afb1 url("../images/deviations.png") no-repeat center; background-size: 100%;}
         &.step4{background:#00afb1 url("../images/submit_form_of_tender.png") no-repeat center; background-size: 100%;}
         &.step5{background:#00afb1 url("../images/contact_details.png") no-repeat center; background-size:100%;}
-        span{ 
+        span{
           position: absolute; width: 40px; height:40px; right: 0px; top:0px;
           &.selected{background: url("../images/selected_ico_n.png") no-repeat right top;}
           &.pending{background: url("../images/selected_ico_p.png") no-repeat right top;}
@@ -824,7 +839,7 @@ ul.history_files{
   }
 }
 
-.brif_list{ 
+.brif_list{
   li{
     list-style:none;
     line-height: 42px;
@@ -839,8 +854,8 @@ ul.history_files{
 
 .admin_buyer_list{
   .buyer_tab{
-    a{ 
-      background: #24425a; color: #fff; display:inline-block; 
+    a{
+      background: #24425a; color: #fff; display:inline-block;
       text-align: center; height:42px; line-height: 42px;
       border-radius: 5px 5px 0px 0px; margin-right: 5px; transition: 0.5s all; cursor: pointer;
       &.selected,&:hover{background: #1b3146;}
@@ -903,7 +918,7 @@ ul.history_files{
   width: 100%; font-size: 12px; table-layout: fixed; border-top:1px solid #314657; border-left:1px solid #314657;
   thead{
     tr{ background: #00394A;
-     th{ 
+     th{
        height: 40px; border-right:1px solid #314657; font-size: 14px;
        &.table_title{border-bottom:1px solid #314657;}
      }
@@ -922,7 +937,7 @@ ul.history_files{
           &.fill_yes{ background-position: 0px 11px; background-size:15px; padding-left: 20px;}
         }
         .progress_files{ a{  display: inherit !important; width: auto !important;  } }
-       a{ 
+       a{
          &.react-datepicker__navigation{ width: auto; height:auto;}
          display: block; width: 100%; height: 100%; cursor: pointer;
          &.report{background: url("../images/Reverse_Auction_Report.png") no-repeat center; background-size:19px;}
@@ -958,16 +973,16 @@ ul.history_files{
       .noneleftBorder{
         border-left:thick double #ff0000;
       }
-     }  
+     }
      .left_td{
      // width: 150px;
     }
     .right_td{
      // width: 350px;
-    } 
+    }
     }
   }
- 
+
 }
 
 .offpeak{
@@ -1004,7 +1019,7 @@ ul.history_files{
 }
 .addEntity{ width: 100%; margin: 10px auto;
   a{color:#00888a; cursor: pointer; background: url("../images/add.png") no-repeat left; padding-left:18px;}
-}  
+}
 .delEntity{ width: 100%; margin: 10px auto;
   a{color:#00888a; cursor: pointer; background: url("../images/remove.png") no-repeat left; padding-left:10px;}
 }
@@ -1040,7 +1055,7 @@ width: "70%"; float: "left";padding:5px;
   margin-top: 15px;
   margin-bottom: 30px;
 }
-.tenant_management 
+.tenant_management
 {
   background: #1d3845 !important;
    color:#999 !important;
@@ -1057,7 +1072,7 @@ width: "70%"; float: "left";padding:5px;
   // padding-top: 20px  !important;
 }
 .attachementList{
-  list-style:none;  
+  list-style:none;
   a{
     cursor: pointer
   }
@@ -1071,7 +1086,7 @@ width: "70%"; float: "left";padding:5px;
   text-align:left;
   min-width:800px;margin: 60px auto;
   height:250px;;
-  border-radius:5px;overflow: hidden;    font-size:16px; 
+  border-radius:5px;overflow: hidden;    font-size:16px;
   background: #314657;
   .title{  width: 100%;  padding:20px 10px 20px 10px; text-align: left;
     a{
@@ -1098,8 +1113,8 @@ width: "70%"; float: "left";padding:5px;
   span{margin:0px 10px;}
 }
 
-.approve_btn{ 
-  button{ 
+.approve_btn{
+  button{
     background:#00afb1; margin: 0 10px;margin-right: 10px;
   }
 }

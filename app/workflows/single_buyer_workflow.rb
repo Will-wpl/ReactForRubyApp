@@ -14,6 +14,7 @@ class SingleBuyerWorkflow < BaseTenderWorkflow
                       accept_all: Event.new(:accept_all, :node5, 2, 2, '0'),
                       propose_deviations: Event.new(:propose_deviations, :node3, 2, 2, '0'))
     @node3 = Node.new(:node3, 3, 'in processing',
+                      back: Event.new(:back, :node2, 2, 2, '0'),
                       withdraw_all_deviations: Event.new(:withdraw_all_deviations, :node5, 2, 2, '0'),
                       submit_deviations: Event.new(:submit_deviations, :node3, 1, 2, '2'),
                       next: Event.new(:next, :node5, 2, 2, '0'),
@@ -33,10 +34,11 @@ class SingleBuyerWorkflow < BaseTenderWorkflow
       if node3_retailer_next?(sm)
         { node3_retailer_next: true}
       else
+        back = node3_retailer_has_submit?(sm) ? {node3_retailer_back: false} : {node3_retailer_back: true}
         if node3_retailer_has_chats?(sm)
-          { node3_retailer_withdraw_all_deviations: true, node3_retailer_submit_deviations: true, node3_retailer_save: true }
+          back.merge!({ node3_retailer_withdraw_all_deviations: true, node3_retailer_submit_deviations: true, node3_retailer_save: true })
         else
-          { node3_retailer_submit_deviations: true, node3_retailer_save: true }
+          back.merge!({ node3_retailer_submit_deviations: true, node3_retailer_save: true })
         end
       end
     elsif node3_admin?(sm)

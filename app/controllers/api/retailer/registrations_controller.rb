@@ -13,9 +13,20 @@ class Api::Retailer::RegistrationsController < Api::RegistrationsController
     update_status_flag = params['update_status_flag']
     update_user_params = model_params
     update_user_params = filter_user_password(update_user_params)
-    if update_status_flag.eql?("1")
-      update_user_params['approval_status'] = User::ApprovalStatusPending
-      update_user_params['approval_date_time'] = DateTime.current
+    # if update_status_flag.eql?("1")
+    #   update_user_params['approval_status'] = User::ApprovalStatusPending
+    #   update_user_params['approval_date_time'] = DateTime.current
+    # end
+    if !@user.blank? && update_status_flag.eql?("1")
+      if( @user.approval_status == User::ApprovalStatusReject ||
+          @user.approval_status == User::ApprovalStatusRegistering ||
+          ( !@user.company_name.blank? && user.company_name.downcase != update_user_params['company_name'].downcase) ||
+          ( !@user.company_unique_entity_number && user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase ) ||
+          ( !@user.company_license_number && user.company_license_number.downcase != update_user_params['company_license_number'].downcase )
+      )
+        update_user_params['approval_status'] = User::ApprovalStatusPending
+        update_user_params['approval_date_time'] = DateTime.current
+      end
     end
     @user.update(update_user_params)
     render json: { user: @user }, status: 200
