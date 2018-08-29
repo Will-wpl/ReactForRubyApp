@@ -840,7 +840,7 @@ export class BuyerRegister extends Component {
                                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                         <UploadFile type="BUYER_DOCUMENTS" required="required" validate="true" deleteType="buyer" showList="1" col_width="10" showWay="1" fileData={this.state.fileData.BUYER_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
                                         <div className="col-sm-1 col-md-1 u-cell">
-                                            <button className={this.state.disabled ? "lm--button lm--button--primary buttonDisabled" : "lm--button lm--button--primary"} title="this is retailer upload documents" disabled={this.state.disabled} onClick={this.showView.bind(this)} >?</button>
+                                            <button className={this.state.disabled ? "lm--button lm--button--primary buttonDisabled" : "lm--button lm--button--primary"}  disabled={this.state.disabled} onClick={this.showView.bind(this)} >?</button>
                                         </div>
                                         <div id="showMessage" className="isPassValidate">This field is required!</div>
                                     </div>
@@ -949,8 +949,6 @@ export class BuyerRegister extends Component {
                                         </select>
                                     </div>
                                 </div>
-
-
                                 <h4 className="lm--formItem lm--formItem--inline string chkBuyer"><input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /><span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerTCurl} className="urlStyleUnderline">Buyer Platform Terms of Use</a></span></h4>
                                 <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                                 <h4 className="lm--formItem lm--formItem--inline string chkBuyer"><input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} /><span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyleUnderline">Energy Procurement Agreement</a></span></h4>
