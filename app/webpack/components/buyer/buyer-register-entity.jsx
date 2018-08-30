@@ -30,10 +30,11 @@ export class BuyerUserEntityRegister extends Component {
             },
             uploadUrl: "/api/buyer/user_attachments?file_type=",
             messageAttachmentUrl: "",
-            usedEntityIdArr: [],
+            usedEntityIdArr: [], usedEntityIdArr: [],
             mainEntityFinished: false,
             ismain: false,
-            btnAddDisabled: false
+            btnAddDisabled: false,
+            deleteIndex: -1
         }
         this.entityItem = {
             id: 0,
@@ -209,6 +210,11 @@ export class BuyerUserEntityRegister extends Component {
     }
 
     setEntityInfo(param) {
+        if (param.used_buyer_entity_ids) {
+            this.setState({
+                usedEntityIdArr: param.used_buyer_entity_ids
+            })
+        }
         if (param.buyer_entities.length > 0) {
             let user_entity = [];
             let entity = param.buyer_entities;
@@ -495,13 +501,12 @@ export class BuyerUserEntityRegister extends Component {
             disabled: false
         })
         if (this.state.entity_list) {
-            if (this.state.entity_list[0].billing_address!=="") {
+            if (this.state.entity_list[0].billing_address !== "") {
                 this.setState({
                     btnAddDisabled: false
                 })
             }
-            else
-            {
+            else {
                 this.setState({
                     btnAddDisabled: true
                 })
@@ -521,9 +526,15 @@ export class BuyerUserEntityRegister extends Component {
     }
 
     refreshForm(obj) {
-        if (obj === "refrsesh") {
-            window.location.href = `/users/edit`;
-        }
+
+        let list = this.state.entity_list;
+        list.splice(this.state.deleteIndex, 1);
+        this.setState({
+            entity_list: list
+        })
+        // if (obj === "refrsesh") {
+        //     window.location.href = `/users/edit`;
+        // }
     }
 
     doAction(obj) {
@@ -562,21 +573,19 @@ export class BuyerUserEntityRegister extends Component {
         else {
             entity.push(item)
         }
-        if(entityInfo.index===0)
-        {
+        if (entityInfo.index === 0) {
             this.setState({
                 entity_list: entity,
-                 btnAddDisabled:false
+                btnAddDisabled: false
             })
         }
-        else
-        {
+        else {
             this.setState({
                 entity_list: entity
             })
         }
 
-      
+
     }
 
     add_entity() {
@@ -652,12 +661,24 @@ export class BuyerUserEntityRegister extends Component {
             text: " ",
             entityItemInfo: this.entityItem
         })
-       
+
         this.refs.Modal_Entity.showModal('custom', {}, '', index)
     }
 
-    delete_entity(item) {
-
+    delete_entity(index, mainId) {
+        if (this.state.usedEntityIdArr.length > 0) {
+            if (this.state.usedEntityIdArr.indexOf(mainId) > -1) {
+                this.setState({ text: "The entity have available auction can't be deleted!" });
+                this.refs.Modal.showModal();
+            }
+        }
+        else {
+            this.setState({
+                text: "Are you sure you want to delete?",
+                deleteIndex: index
+            });
+            this.refs.Modal.showModal("comfirm");
+        }
     }
 
     render() {
@@ -846,7 +867,7 @@ export class BuyerUserEntityRegister extends Component {
                                                     <button className="entityApprove" disabled={this.state.disabled} onClick={this.edit_entity.bind(this, item, index)}>Edit</button>
                                                 </div>
                                                 <div className={index === 0 ? "isHide" : "isDisplay"}>
-                                                    <button className="entityApprove" disabled={this.state.disabled} onClick={this.delete_entity.bind(this, index)}>Delete</button>
+                                                    <button className="entityApprove" disabled={this.state.disabled} onClick={this.delete_entity.bind(this, index, item.main_id)}>Delete</button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -884,6 +905,7 @@ export class BuyerUserEntityRegister extends Component {
                             <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyleUnderline">Energy Procurement Agreement</a></span>
                         </h4>
                         <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
+                        <Modal text={this.state.text} acceptFunction={this.refreshForm.bind(this)} ref="Modal" />
                         <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
                         <Modal formSize="big" listdetailtype="entity_detail" text={this.state.text} acceptFunction={this.acceptAddEntity.bind(this)} entitList={this.state.entity_list} disabled={this.state.ismain} entityDetailItem={this.state.entityItemInfo} ref="Modal_Entity" />
                     </div>
