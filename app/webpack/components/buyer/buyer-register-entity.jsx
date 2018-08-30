@@ -103,7 +103,6 @@ export class BuyerUserEntityRegister extends Component {
         }
     }
     setDefaultValue(param) {
-        console.log(param)
         this.setBuyerInfo(param);
         this.setEntityInfo(param);
         this.setButton(param);
@@ -357,6 +356,15 @@ export class BuyerUserEntityRegister extends Component {
     }
 
     setParams(type) {
+        if (this.state.entity_list.length > 0) {
+            let list = this.state.entity_list;
+            list[0].company_name = this.state.company_name;
+            list[0].company_uen = this.state.unique_entity_number;
+            list[0].company_address = this.state.company_address;
+            this.setState({
+                entity_list:list
+            })
+        }
         let params = {
             user: {
                 'id': this.state.id,
@@ -413,7 +421,6 @@ export class BuyerUserEntityRegister extends Component {
         else {
             hasDoc = false;
             $("#showMessage").removeClass("isPassValidate").addClass("errormessage");
-            console.log("empty file ")
         }
         $('.validate_message').find('div').each(function () {
             let className = $(this).attr('class');
@@ -497,7 +504,7 @@ export class BuyerUserEntityRegister extends Component {
                     });
                 }
                 else {
-
+                     this.validateRepeatColumn(res);
                 }
             })
         }
@@ -588,22 +595,7 @@ export class BuyerUserEntityRegister extends Component {
         this.setState({
             entity_list: list
         })
-        // if (obj === "refrsesh") {
-        //     window.location.href = `/users/edit`;
-        // }
     }
-
-    doAction(obj) {
-        // let param = {
-        //     user_id: this.state.userid,
-        //     comment: this.state.comment,
-        //     approved: obj.action === 'reject' ? "" : 1
-        // };
-        // approveBuyerUser(param).then(res => {
-        //     location.href = "/admin/users/buyers";
-        // })
-    }
-
     acceptAddEntity(entityInfo) {
         let item = {
             id: entityInfo.id ? entityInfo.id : "",
@@ -766,7 +758,7 @@ export class BuyerUserEntityRegister extends Component {
                             <div id="buyer_form" >
                                 <div>
                                     <div className="u-grid admin_invitation">
-                                        <div className="col-sm-12 col-md-8 push-md-3 validate_message">
+                                        <div className="col-sm-12 col-md-8 push-md-2 validate_message">
                                             <div className="lm--formItem lm--formItem--inline string">
                                                 <label className="lm--formItem-left lm--formItem-label string required">
                                                     Status :
@@ -875,7 +867,8 @@ export class BuyerUserEntityRegister extends Component {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> 
+
 
                     <div className="col-sm-12 buyer_list" id="buyer_entity">
                         <table className="buyer_entity" cellPadding="0" cellSpacing="0">
@@ -932,11 +925,10 @@ export class BuyerUserEntityRegister extends Component {
                             </tbody>
                         </table>
                         <div style={{ paddingLeft: "20px", paddingBottom: "20px" }}>
-                            {/* className={this.state.disabled ? "isHide" : "isDisplay addSite"}  */}
-                            {/* <a className="btnAddOption" onClick={this.add_entity.bind(this)}>Add Entity</a> */}
                             <button className="entityApprove" disabled={this.state.btnAddDisabled} onClick={this.add_entity.bind(this)}>Add</button>
                         </div>
                     </div>
+                    
                     <div className="col-sm-12 col-md-8 push-md-3 validate_message margin-t buyer_list_select">
                         <div className="lm--formItem lm--formItem--inline string">
                             <label className="lm--formItem-left lm--formItem-label string required">

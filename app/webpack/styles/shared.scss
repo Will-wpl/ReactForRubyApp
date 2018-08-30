@@ -354,7 +354,14 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list{
   padding-right: 0px !important;
 }
-
+.showdetailerr{
+  width: 100%; overflow:hidden;
+  li{ list-style: none; line-height:28px; font-size:14px;background:url("../images/not_invited.png") no-repeat left;
+    span{  margin-left: 15px}
+  }
+  ol{ margin: 20px auto 0px auto;}
+}
+ 
 
 .admin_hold{ position: absolute; color:red; top:25%;}
 ::-webkit-scrollbar
@@ -977,12 +984,6 @@ ul.history_files{
         border-left:thick double #ff0000;
       }
      }
-     .left_td{
-     // width: 150px;
-    }
-    .right_td{
-     // width: 350px;
-    }
     }
   }
 
@@ -1052,6 +1053,16 @@ width: "70%"; float: "left";padding:5px;
   vertical-align: middle;
   span{margin:0px 10px;}
 }
+.chk{
+  margin:10px auto !important;
+  display: inline-block;
+  vertical-align: middle;
+  span{margin:10px 10px;}
+  input{
+    width: 20px;
+  }
+}
+
 
 .dividerline{
   border-bottom: 1px solid white;
