@@ -153,14 +153,16 @@ export class Modal extends React.Component {
             props_data: data ? data : {}
         })
         if (data) {
-            if(str.indexOf("email_template_la")>0){
+            if(str=="email_template_la"){
+                $(".w-e-text p").html("");
                 if($("#email_body").html() == ""){
                     var editor = new E('#email_body');
                     setTimeout(()=>{editor.create();});
-                    setTimeout(()=>{$(".w-e-text p").html(data.body)},300);
                 }
+                setTimeout(()=>{$(".w-e-text p").html(data)},300);
             }
             if (data.subject && data.body) {
+                $(".w-e-text p").html("");
                 if ($("#email_body").html() == "") {
                     var editor = new E('#email_body');
                     setTimeout(() => { editor.create(); })
@@ -211,15 +213,22 @@ export class Modal extends React.Component {
     }
 
     Accept() {
-        if (this.state.strtype.indexOf("email_template") > 0 ) {
-            let data = this.state.props_data;
-            data.subject = this.state.email_subject;
-            data.body = $(".w-e-text p").html();
-            this.setState({ props_data: data });
+        if (this.state.strtype =="email_template" ||
+            this.state.strtype =="email_template_la") {
+            if(this.state.strtype =="email_template_la"){
+                this.setState({ props_data: $(".w-e-text p").html()});
+            }else{
+                let data = this.state.props_data;
+                data.subject = this.state.email_subject;
+                data.body = $(".w-e-text p").html();
+                this.setState({ props_data: data });
+            }
         }
 
         if (this.props.acceptFunction) {
-            this.props.acceptFunction(this.state.props_data);
+            setTimeout(()=>{
+                this.props.acceptFunction(this.state.props_data);
+            })
             this.closeModal();
         }
         if (this.props.dodelete) {
