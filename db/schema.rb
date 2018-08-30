@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180830061320) do
+ActiveRecord::Schema.define(version: 20180830073631) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -264,7 +264,6 @@ ActiveRecord::Schema.define(version: 20180830061320) do
     t.string "premise_address"
     t.decimal "contracted_capacity"
     t.string "existing_plan"
-    t.string "contract_expiry"
     t.string "blk_or_unit"
     t.string "street"
     t.string "unit_number"
@@ -274,6 +273,7 @@ ActiveRecord::Schema.define(version: 20180830061320) do
     t.bigint "company_buyer_entity_id"
     t.bigint "user_attachment_id"
     t.string "approval_status"
+    t.datetime "contract_expiry"
     t.index ["company_buyer_entity_id"], name: "index_consumption_details_on_company_buyer_entity_id"
     t.index ["consumption_id"], name: "index_consumption_details_on_consumption_id"
     t.index ["user_attachment_id"], name: "index_consumption_details_on_user_attachment_id"

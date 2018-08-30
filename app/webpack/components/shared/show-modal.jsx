@@ -102,6 +102,7 @@ export class Modal extends React.Component {
             this.setState({ consumptionItem: next.siteList });
         }
         if (next.entityDetailItem) {
+            console.log(next.entityDetailItem)
             this.setState({
                 entityid: next.entityDetailItem.id,
                 entity_company_name: next.entityDetailItem.company_name,

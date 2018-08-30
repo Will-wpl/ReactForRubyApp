@@ -35,7 +35,7 @@ export class BuyerUserManage extends Component {
             uploadUrl: "/api/buyer/user_attachments?file_type=",
             messageAttachmentUrl: "",
             usedEntityIdArr: [],
-            mainEntityFinished: false,
+            submitStatus: false,
             ismain: false, entityIndex: 0, entityId: 0
 
         }
@@ -91,8 +91,10 @@ export class BuyerUserManage extends Component {
                 user_company_name: item.company_name ? item.company_name : '',
                 user_company_uen: item.company_unique_entity_number ? item.company_unique_entity_number : '',
                 user_company_address: item.company_address ? item.company_address : '',
-                status: setApprovalStatus(item.approval_status, item.approval_date_time === null ? item.created_at : item.approval_date_time)
+                status: setApprovalStatus(item.approval_status, item.approval_date_time === null ? item.created_at : item.approval_date_time),
+                submitStatus: item.approval_status !== "1" ? true : false
             })
+
             $('#buyer_management').val(this.state.has_tenants);
             if (this.state.agree_seller_buyer === "1") {
                 $('#chkBuyer').attr("checked", true);
@@ -214,14 +216,40 @@ export class BuyerUserManage extends Component {
                 approved: obj.action === 'reject' ? "" : 1
             };
             approveBuyerUser(param).then(res => {
-                location.href = "/admin/users/buyers";
+                if (obj.action !== 'reject') {
+                    this.setState({
+                        submitStatus: false
+                    })
+                }
+                else {
+                    this.setState({
+                        submitStatus: true
+                    })
+                }
             })
         }
-
+        else {
+            let paramArr = [];
+            this.state.entity_list.map((item) => {
+                let entityId = item.id;
+                let approveStatus = item.approval_status;
+                let entity = {
+                    entity_id: entityId,
+                    approved_status: approveStatus
+                }
+                paramArr.push(entity)
+            })
+            let param = {
+                entity_statuses: JSON.stringify(paramArr)
+            };
+            console.log(param);
+            approveBuyerEntity(param).then(res => {
+                console.log(res)
+            })
+        }
     }
 
     entity_approve(item, index) {
-
         let list = this.state.entity_list;
         list[index].approval_status = "1";
         list[index].approval_status_name = "Approved";
@@ -231,14 +259,21 @@ export class BuyerUserManage extends Component {
         })
     }
     entity_reject(item, index) {
-
         let list = this.state.entity_list;
-        list[index].approval_status = "2";
+        list[index].approval_status = "0";
         list[index].approval_status_name = "Reject";
         list[index].isApproved = false;
         this.setState({
             entity_list: list
         })
+
+    }
+    submitEntity() {
+        this.setState({
+            text: 'Are you sure you want to submit the entity status?',
+        }, () => {
+            this.refs.Modal_Option.showModal('comfirm', { action: 'submit', type: 'entity' }, '');
+        });
 
     }
     view_log(item) {
@@ -250,6 +285,7 @@ export class BuyerUserManage extends Component {
         $(".buyer_list").hide();
         $("#buyer_" + type).fadeIn(500);
     }
+
     Change(type, e) {
         let itemValue = e.target.value;
         switch (type) {
@@ -617,7 +653,7 @@ export class BuyerUserManage extends Component {
                             </tbody>
                         </table>
                         <div className="retailer_btn">
-                            <button id="save_form" className="lm--button lm--button--primary" style={{ marginRight: "10px" }} onClick={this.judgeUserAction.bind(this, 'reject')} disabled={this.state.approveStatus}>Submit</button>
+                            <button id="save_form" className="lm--button lm--button--primary" style={{ marginRight: "10px" }} onClick={this.submitEntity.bind(this)} disabled={this.state.submitStatus}>Submit</button>
                         </div>
                     </div>
                     {/* <div className="col-sm-12 col-md-8 push-md-3 validate_message margin-t buyer_list_select">
@@ -629,15 +665,15 @@ export class BuyerUserManage extends Component {
                                 <select className="selectController" name="buyer_management" id="buyer_management" onChange={this.Change.bind(this, 'buyer_management')} defaultValue={this.state.buyer_management} disabled={this.state.disabled} ref="buyer_management" aria-required="true">
                                     <option value="1">Yes</option>
                                     <option value="0">No</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div> */}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div> */}
                     <div className="col-sm-12 col-md-8 push-md-3 validate_message margin-t" >
                         {/* <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
-                            <input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} />
-                            <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerTCurl} className="urlStyleUnderline">Buyer Platform Terms of Use</a></span>
-                        </h4>
+                                    <input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} />
+                                    <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerTCurl} className="urlStyleUnderline">Buyer Platform Terms of Use</a></span>
+                                </h4>
                         <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                         <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
                             <input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} />
