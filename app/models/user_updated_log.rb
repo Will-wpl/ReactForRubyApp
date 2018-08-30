@@ -1,0 +1,2 @@
+class UserUpdatedLog < ApplicationRecord
+end
