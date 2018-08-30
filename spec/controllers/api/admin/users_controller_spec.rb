@@ -226,14 +226,16 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
           buyer_entity_1.user_entity_id = temp_entity_user.id
           buyer_entity_1.approval_status = '2'
           buyer_entity_1.save!
-          put :approval_buyer_entity, params: {entity_id: buyer_entity_1.id, approved: '1'}
+          param = []
+          param.push({entity_id: buyer_entity_1.id, approved_status: '1'})
+          put :approval_buyer_entities, params: { entity_statuses: param.to_json }
         end
 
         before { do_request }
         it 'success' do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
-          expect(hash['company_buyer_entity']['approval_status']).to eq('1')
+          expect(hash['company_buyer_entities'][0]['approval_status']).to eq('1')
         end
       end
 
@@ -248,15 +250,17 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
           buyer_entity_1.user_id = temp_buyer.id
           buyer_entity_1.user_entity_id = temp_entity_user.id
           buyer_entity_1.approval_status = '2'
-          buyer_entity_1.save
-          put :approval_buyer_entity, params: {entity_id: buyer_entity_1.id, approved: nil}
+          buyer_entity_1.save!
+          param = []
+          param.push({ entity_id: buyer_entity_1.id, approved_status: nil })
+          put :approval_buyer_entities, params: { entity_statuses: param.to_json }
         end
 
         before { do_request }
         it 'success' do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
-          expect(hash['company_buyer_entity']['approval_status']).to eq('0')
+          expect(hash['company_buyer_entities'][0]['approval_status']).to eq('0')
         end
       end
     end

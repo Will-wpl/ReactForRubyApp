@@ -91,7 +91,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
   def validate_buyer_entity
     entity_indexes = []
     buyer_entities = JSON.parse(params[:buyer_entities])
-    buyer = params[:buyer]
+    buyer = params[:user]
     buyer_entity_index = params[:buyer_entity_index].to_i
     buyer_entity = buyer_entities[buyer_entity_index]
     user = User.select(:id, :email, :company_unique_entity_number, :company_name, :entity_id)
