@@ -14,7 +14,6 @@ class Api::Admin::UsersController < Api::UsersController
   #   entity_statuses ->  this is json string to indicate some entity status.
   #       include:  'enitiy_id' ~ buyer entity id
   #                 'approved_status' ~ approval status
-
   def approval_buyer_entities
     company_buyer_entities = []
     buyer_entities = JSON.parse(params[:entity_statuses])
