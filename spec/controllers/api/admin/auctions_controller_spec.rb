@@ -28,6 +28,30 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
 
   context 'admin user' do
     before { sign_in create(:user, :with_admin) }
+    let! (:buyer_a) { create(:user, :with_buyer, :with_company_buyer ) }
+    let! (:entity) {create(:company_buyer_entity, user: buyer_a)}
+    let! (:consumption_a) { create(:consumption, user: buyer_a, auction: auction, action_status: '1') }
+    let!(:consumption_lt) { create(:consumption_detail, :for_lt ,account_number: 'ddd' , consumption_id: consumption_a.id, company_buyer_entity_id: entity.id,contract_expiry: Date.current.advance(days: -1)) }
+    let!(:consumption_lt2) { create(:consumption_detail, :for_lt ,account_number: 'ddd' , consumption_id: consumption_a.id, company_buyer_entity_id: entity.id,contract_expiry: Date.current.advance(days: -10)) }
+    let!(:consumption_hts) { create(:consumption_detail, :for_hts ,account_number: 'aaa' , consumption_id: consumption_a.id, company_buyer_entity_id: entity.id,contract_expiry: Date.current.advance(days: -1)) }
+    let!(:consumption_htl) { create(:consumption_detail, :for_htl ,account_number: 'bbb' , consumption_id: consumption_a.id, company_buyer_entity_id: entity.id,contract_expiry: Date.current.advance(days: -1)) }
+    let!(:consumption_eht) { create(:consumption_detail, :for_eht ,account_number: 'ccc' , consumption_id: consumption_a.id, company_buyer_entity_id: entity.id,contract_expiry: Date.current.advance(days: -1)) }
+    describe 'GET filter_date' do
+
+      context 'got accounts' do
+        def do_request
+          get :filter_date, params: { date: '2019-01-01' }
+        end
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash_body = JSON.parse(response.body)
+          expect(hash_body['accounts'].size).to eq(4)
+          expect(hash_body['account_ids'].include?(consumption_lt.id)).to eq(true)
+          expect(hash_body['account_ids'].include?(consumption_lt2.id)).to eq(false)
+        end
+      end
+    end
 
     describe 'GET obtain' do
       context 'Has an empty auction' do
