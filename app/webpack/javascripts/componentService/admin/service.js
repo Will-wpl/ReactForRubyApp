@@ -211,3 +211,7 @@ export const removeRetailer=(params)=>{
     console.log(params);
     return put('/api/admin/users/remove_retailer', params)
 }
+
+export const getExpiryList=(params)=>{
+    return get('/api/admin/auctions/filter_date?date='+params);
+}

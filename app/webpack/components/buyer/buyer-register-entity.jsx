@@ -101,6 +101,14 @@ export class BuyerUserEntityRegister extends Component {
         if (this.isApprove) {
             $("#buyer_management").addClass("tenant_management");
         }
+
+
+        $(window).on("load resize ", function () {
+            var scrollWidth = $('.tbl-content').width() - $('.tbl-content table').width();
+            $('.tbl-header').css({ 'padding-right': scrollWidth });
+        }).resize();
+
+
     }
     setDefaultValue(param) {
         this.setBuyerInfo(param);
@@ -354,7 +362,9 @@ export class BuyerUserEntityRegister extends Component {
     }
 
     showView() {
-
+        this.setState({
+            text: " "
+        })
         this.refs.Modal_upload.showModal();
     }
 
@@ -550,7 +560,7 @@ export class BuyerUserEntityRegister extends Component {
             return;
         }
         if (res.error_entity_indexes.length > 0) { //validate entity
-            let name = [], uen = [],email=[];
+            let name = [], uen = [], email = [];
             res.error_entity_indexes.map((item) => {
                 if (item.error_field_name === "company_name") {
                     name.push(item.error_value)
@@ -565,13 +575,13 @@ export class BuyerUserEntityRegister extends Component {
             let errList = {
                 nameError: name,
                 uenError: uen,
-                emailError:email
+                emailError: email
             }
             this.setState({
                 validateErrList: errList
             })
 
-            this.setState({ text: "" });
+            this.setState({ text: " " });
             this.refs.Modal_EntityErr.showModal();
             this.tab("entity");
             return;
@@ -648,7 +658,7 @@ export class BuyerUserEntityRegister extends Component {
             })
         }
         this.setState({
-            mainEntityComplete:false
+            mainEntityComplete: false
         })
 
     }
@@ -761,7 +771,7 @@ export class BuyerUserEntityRegister extends Component {
         this.refs.Modal.showModal("comfirm");
     }
 
-   
+
     render() {
         let btn_html;
         if (this.state.use_type === 'manage_acount') {
@@ -904,59 +914,77 @@ export class BuyerUserEntityRegister extends Component {
 
 
                     <div className="col-sm-12 buyer_list1" id="buyer_entity">
-                        <table className="buyer_entity" cellPadding="0" cellSpacing="0">
-                            <colgroup>
-                                <col width="10%" />
-                                <col width="10%" />
-                                <col width="10%" />
-                                <col width="10%" />
-                                <col width="10%" />
-                                <col width="10%" />
-                                <col width="10%" />
-                                <col width="10%" />
-                                <col width="10%" />
-                                <col width="10%" />
-                            </colgroup>
-                            <thead>
-                                <tr>
-                                    <th>Purchase Entity/Company Name</th>
-                                    <th>Company UEN</th>
-                                    <th>Company Address</th>
-                                    <th>Billing Address</th>
-                                    <th>Bill Attention To</th>
-                                    <th>Contact Name</th>
-                                    <th>Contact Email</th>
-                                    <th>Contact Mobile No.</th>
-                                    <th>Contact Office No.</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    this.state.entity_list.map((item, index) => {
-                                        return <tr key={index}>
-                                            <td>{item.company_name}</td>
-                                            <td>{item.company_uen}</td>
-                                            <td>{item.company_address}</td>
-                                            <td>{item.billing_address}</td>
-                                            <td>{item.bill_attention_to}</td>
-                                            <td>{item.contact_name}</td>
-                                            <td>{item.contact_email}</td>
-                                            <td>{item.contact_mobile_no}</td>
-                                            <td>{item.contact_office_no}</td>
-                                            <td>
-                                                <div className="editSite">
-                                                    <button className="entityApprove" disabled={this.state.disabled} onClick={this.edit_entity.bind(this, item, index)}>Edit</button>
-                                                </div>
-                                                <div className={index === 0 ? "isHide" : "isDisplay"}>
-                                                    <button className="entityApprove" disabled={this.state.disabled} onClick={this.delete_entity.bind(this, index, item.main_id)}>Delete</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    })
-                                }
-                            </tbody>
-                        </table>
+                        <div className="table-head">
+                            <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                                <colgroup>
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>Purchase Entity/Company Name</th>
+                                        <th>Company UEN</th>
+                                        <th>Company Address</th>
+                                        <th>Billing Address</th>
+                                        <th>Bill Attention To</th>
+                                        <th>Contact Name</th>
+                                        <th>Contact Email</th>
+                                        <th>Contact Mobile No.</th>
+                                        <th>Contact Office No.</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div className="table-body">
+                            <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                                <colgroup>
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                </colgroup>
+                                <tbody>
+                                    {
+                                        this.state.entity_list.map((item, index) => {
+                                            return <tr key={index}>
+                                                <td>{item.company_name}</td>
+                                                <td>{item.company_uen}</td>
+                                                <td>{item.company_address}</td>
+                                                <td>{item.billing_address}</td>
+                                                <td>{item.bill_attention_to}</td>
+                                                <td>{item.contact_name}</td>
+                                                <td>{item.contact_email}</td>
+                                                <td>{item.contact_mobile_no}</td>
+                                                <td>{item.contact_office_no}</td>
+                                                <td>
+                                                    <div className="editSite">
+                                                        <button className="entityApprove" disabled={this.state.disabled} onClick={this.edit_entity.bind(this, item, index)}>Edit</button>
+                                                    </div>
+                                                    <div className={index === 0 ? "isHide" : "isDisplay"}>
+                                                        <button className="entityApprove" disabled={this.state.disabled} onClick={this.delete_entity.bind(this, index, item.main_id)}>Delete</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        })
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                         <div style={{ paddingLeft: "20px", paddingBottom: "20px" }}>
                             <button className="entityApprove" disabled={this.state.btnAddDisabled} onClick={this.add_entity.bind(this)}>Add</button>
                             <span className={this.state.mainEntityComplete ? "errormessageline" : "isPassValidate"} > Please complete details for default purchasing entity prior to adding new purchasing entities. </span>
