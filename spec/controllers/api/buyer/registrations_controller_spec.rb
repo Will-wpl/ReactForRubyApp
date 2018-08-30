@@ -42,11 +42,22 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
 
       context 'test buyer email is same with existing user email' do
         def do_request
+          buyer_entities_json = [{ company_name: 'AA',
+                                   company_uen: 'Test UEN AA',
+                                   contact_email: 'test_email3@email.com' },
+                                 { company_name: 'BB',
+                                   company_uen: 'Test UEN BB',
+                                   contact_email: 'test_email3@email.com' },
+                                 { company_name: 'abc',
+                                   company_uen: 'Test UEN BB',
+                                   contact_email: 'test_email2@email.com' }].to_json
+
           put :validate, params: { id: company_buyer.id,
                                    user: {id: company_buyer.id,
                                           company_name: 'abc',
                                           company_unique_entity_number: 'UEN',
-                                          email: 'test_email1@email.com'}
+                                          email: 'test_email1@email.com'},
+                                   buyer_entities: buyer_entities_json
                                   }
         end
         before { do_request }

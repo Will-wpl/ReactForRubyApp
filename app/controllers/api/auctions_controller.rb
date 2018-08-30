@@ -299,10 +299,14 @@ class Api::AuctionsController < Api::BaseController
 
   def retailer_dashboard
     tenders = TenderWorkflow.new.get_action_state_machine(params[:id])
-    step_counts = [0, 0, 0, 0, 0]
+    step_counts = [0, 0, 0, 0, 0, 0, 0]
     tenders.each do |tender|
-      current_node = tender[:detail][:current][:current_node]
-      step_counts[current_node - 1] += 1
+      step_counts[0] += 1
+      step_counts[6] += 1 if tender[:detail][:current][:current_status] == 'closed'
+      flows = tender[:detail][:current][:flows]
+      flows.each do |flow|
+          step_counts[flow] += 1
+      end
     end
 
     render json: { tenders: tenders, step_counts: step_counts }, status: 200
@@ -829,7 +833,7 @@ class Api::AuctionsController < Api::BaseController
 
   def push_data_to_contract_end_list(contract)
     count = Consumption.where(contract_duration: contract.contract_duration, auction_id: contract.auction_id).is_participation.is_accpet.count
-    { id: contract.auction_id, contract_duration: contract.contract_duration, contract_period_end_date: contract.contract_period_end_date, count: count }
+    { id: contract.auction_id, contract_duration: contract.contract_duration, contract_period_end_date: contract.contract_period_end_date, count: count, link: "/admin/auctions/#{contract.auction_id}/consumption?type=2&contract_duration=#{contract.contract_duration}&from=1" }
   end
 
   def set_contract_duration_confirm(params, auction_result)
