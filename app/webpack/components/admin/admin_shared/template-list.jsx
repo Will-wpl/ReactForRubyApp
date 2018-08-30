@@ -33,7 +33,7 @@ export default class TemplatesList extends Component {
                                             return (
                                                 <tr key={index}>
                                                     <td width={"70%"} style={{"textAlign":"left","paddingLeft":"15px"}}>{item.subject}</td>
-                                                    <td><a onClick={this.props.showEmail.bind(this, item.id)} className={"edit"}>edit</a></td>
+                                                    <td><a onClick={this.props.showEmail.bind(this, item.id,this.props.type)} className={"edit"}>edit</a></td>
                                                 </tr>
                                             )
                                         }):<tr style={{display:"none"}}><td></td><td></td></tr>

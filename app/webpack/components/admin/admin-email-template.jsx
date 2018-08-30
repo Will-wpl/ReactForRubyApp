@@ -9,8 +9,8 @@ export default class EmailTemplates extends Component {
         super(props);
         this.state = {
             text: "",
-            email_list: [],
-            listdetail: {},
+            email_list: [],template_type:'',template_id:'',
+            listdetail: {},la_list:[{subject:"LA entity1",id:1},{subject:"LA entity2",id:2}],advisory_list:[],
             uploadUrl: '/api/admin/user_attachments?file_type=',
             fileData: {
                 "LETTER_OF_AUTHORISATION": [
@@ -34,14 +34,15 @@ export default class EmailTemplates extends Component {
         })
         $("#template_email").show();
     }
-    showEmail(id) {
-        getEmailListItem(id).then(res => {
-            this.setState({ listdetail: res, text: '' });
-            this.refs.Modal.showModal('comfirm', res, 'email_template');
+    showEmail(id,type) {
+        getEmailListItem(id,type).then(res => {
+            console.log(res);
+            this.setState({ listdetail: res, text: '',template_type:type,template_id:id });
+            this.refs.Modal.showModal('comfirm', res, type=='la'?'email_template_la':'email_template');
         })
     }
     changeEmail(obj) {
-        getEmailItemUpdate(obj).then(res => {
+        getEmailItemUpdate(obj,this.state.template_type,this.state.template_id).then(res => {
             this.setState({ text: "Email Update Successful!" })
             setTimeout(() => {
                 this.refs.Modal.showModal();
@@ -69,13 +70,13 @@ export default class EmailTemplates extends Component {
                             <a className="col-sm-4 col-md-2" onClick={this.tab.bind(this,'registration')} id="tab_registration">Registration Templates</a>
                         </div>
                         <div className="col-sm-12 buyer_list" id="template_email">
-                            <TemplatesList email_list={this.state.email_list} showEmail={this.showEmail.bind(this)}  />
+                            <TemplatesList type={"email"} email_list={this.state.email_list} showEmail={this.showEmail.bind(this)}  />
                         </div>
                         <div className="col-sm-12 buyer_list" id="template_la">
-                            <TemplatesList email_list={this.state.email_list} showEmail={this.showEmail.bind(this)}  />
+                            <TemplatesList type={"la"} email_list={this.state.la_list} showEmail={this.showEmail.bind(this)}  />
                         </div>
                         <div className="col-sm-12 buyer_list" id="template_advisory">
-                            <TemplatesList email_list={this.state.email_list} showEmail={this.showEmail.bind(this)}  />
+                            <TemplatesList type={"advisory"} email_list={this.state.advisory_list} showEmail={this.showEmail.bind(this)}  />
                         </div>
                         <div className="col-sm-12 buyer_list" id="template_registration">
                             <div className="admin_invitation lm--formItem lm--formItem--inline string u-mt2 u-mb2">

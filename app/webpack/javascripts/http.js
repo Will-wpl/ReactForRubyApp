@@ -8,7 +8,7 @@ if (typeof($) === 'function') {
     test = true;
 }
 handler = !test ? $ : mock;
-export const get = (path, params = {}) => {
+export const get = (path, params = {},dataType) => {
     return new Promise((resolve, reject) => {
         handler.ajax({
             type: "GET",
@@ -22,7 +22,7 @@ export const get = (path, params = {}) => {
                 // console.log('fail to get');
                 reject(data);
             },
-            dataType: 'json'
+            dataType: dataType?dataType:'json'
         });
     })
 }
