@@ -25,7 +25,8 @@ export const getBuyerUserInfoByUserId=(id)=>{
 }
 
 export const validateIsExist=(params)=>{
-    return put('/api/buyer/registrations/'+params.user.id+'/validate', params);
+    // return put('/api/buyer/registrations/'+params.user.id+'/validate', params);
+    return put('/api/buyer/registrations/validate_buyer_entity', params);
 }
  
 export const saveBuyerUserInfo=(params)=>{

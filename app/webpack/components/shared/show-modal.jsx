@@ -27,7 +27,7 @@ export class Modal extends React.Component {
                 ]
             },
             modalSize: this.props.modalSize,
-            entityid: '', is_defalut: '',
+            entityid: '', is_default: '', user_id: "", main_id: "", user_entity_id: "",
             entity_company_name: '', entity_company_uen: '', entity_company_address: '', entity_billing_address: '', entity_bill_attention_to: '', entity_contact_name: '',
             entity_contact_email: '', entity_contact_mobile_no: '', entity_contact_office_no: '', entitList: []
         }
@@ -102,7 +102,6 @@ export class Modal extends React.Component {
             this.setState({ consumptionItem: next.siteList });
         }
         if (next.entityDetailItem) {
-            console.log(next.entityDetailItem)
             this.setState({
                 entityid: next.entityDetailItem.id,
                 entity_company_name: next.entityDetailItem.company_name,
@@ -114,8 +113,11 @@ export class Modal extends React.Component {
                 entity_contact_email: next.entityDetailItem.contact_email,
                 entity_contact_mobile_no: next.entityDetailItem.contact_mobile_no,
                 entity_contact_office_no: next.entityDetailItem.contact_office_no,
-                is_defalut: next.entityDetailItem.is_defalut,
-                option:next.entityDetailItem.option
+                is_default: next.entityDetailItem.is_default,
+                user_id: next.entityDetailItem.user_id,
+                main_id: next.entityDetailItem.main_id,
+                user_entity_id: next.entityDetailItem.user_entity_id,
+                option: next.entityDetailItem.option
             })
         }
         if (next.entitList) {
@@ -159,15 +161,15 @@ export class Modal extends React.Component {
                 }
             }
             if (data.subject && data.body) {
-                if($("#email_body").html() == ""){
+                if ($("#email_body").html() == "") {
                     var editor = new E('#email_body');
-                    setTimeout(()=>{editor.create();})
+                    setTimeout(() => { editor.create(); })
                 }
                 this.setState({
                     email_subject: data.subject,
                     email_body: data.body
                 })
-                setTimeout(()=>{$(".w-e-text p").html(this.state.email_body)},300);
+                setTimeout(() => { $(".w-e-text p").html(this.state.email_body) }, 300);
             }
         }
         if (type == "comfirm") {
@@ -411,6 +413,10 @@ export class Modal extends React.Component {
             contact_email: this.state.entity_contact_email,
             contact_mobile_no: this.state.entity_contact_mobile_no,
             contact_office_no: this.state.entity_contact_office_no,
+            is_default: this.state.is_default,
+            user_id: this.state.user_id,
+            main_id: this.state.main_id,
+            user_entity_id: this.state.user_entity_id,
             index: this.state.itemIndex
         }
         if (this.props.acceptFunction) {
@@ -911,7 +917,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td><abbr title="required">*</abbr>Billing Address</td>
                                     <td>
-                                        <input type="text" name="entity_billing_address" id="entity_billing_address" value={this.state.entity_billing_address} onChange={this.changeEntity.bind(this, 'entity_billing_address')}   ref="entity_billing_address" aria-required="true" title="Please fill out this field"></input>
+                                        <input type="text" name="entity_billing_address" id="entity_billing_address" value={this.state.entity_billing_address} onChange={this.changeEntity.bind(this, 'entity_billing_address')} ref="entity_billing_address" aria-required="true" title="Please fill out this field"></input>
                                         <div className='isPassValidate' id="entity_billing_address_message" >This field is required!</div>
                                     </td>
                                 </tr>
@@ -919,7 +925,7 @@ export class Modal extends React.Component {
                                     <td>
                                         <abbr title="required">*</abbr>Bill Attention To</td>
                                     <td>
-                                        <input type="text" name="entity_bill_attention_to" id="entity_bill_attention_to" value={this.state.entity_bill_attention_to} onChange={this.changeEntity.bind(this, 'entity_bill_attention_to')}   ref="entity_bill_attention_to" aria-required="true" title="Please fill out this field"></input>
+                                        <input type="text" name="entity_bill_attention_to" id="entity_bill_attention_to" value={this.state.entity_bill_attention_to} onChange={this.changeEntity.bind(this, 'entity_bill_attention_to')} ref="entity_bill_attention_to" aria-required="true" title="Please fill out this field"></input>
                                         <div className='isPassValidate' id="entity_bill_attention_to_message" >This field is required!</div>
                                     </td>
                                 </tr>
@@ -927,7 +933,7 @@ export class Modal extends React.Component {
                                     <td>
                                         <abbr title="required">*</abbr>Contact Name</td>
                                     <td>
-                                        <input type="text" name="entity_contact_name" id="entity_contact_name" value={this.state.entity_contact_name} onChange={this.changeEntity.bind(this, 'entity_contact_name')}   ref="entity_contact_name" aria-required="true" title="Please fill out this field"></input>
+                                        <input type="text" name="entity_contact_name" id="entity_contact_name" value={this.state.entity_contact_name} onChange={this.changeEntity.bind(this, 'entity_contact_name')} ref="entity_contact_name" aria-required="true" title="Please fill out this field"></input>
                                         <div className='isPassValidate' id="entity_contact_name_message" >This field is required!</div>
                                     </td>
                                 </tr>
@@ -935,7 +941,7 @@ export class Modal extends React.Component {
                                     <td>
                                         <abbr title="required">*</abbr>Contact Email</td>
                                     <td>
-                                        <input type="text" name="entity_contact_email" id="entity_contact_email" value={this.state.entity_contact_email} onChange={this.changeEntity.bind(this, 'entity_contact_email')}   ref="entity_contact_email" aria-required="true" title="Please fill out this field"></input>
+                                        <input type="text" name="entity_contact_email" id="entity_contact_email" value={this.state.entity_contact_email} onChange={this.changeEntity.bind(this, 'entity_contact_email')} ref="entity_contact_email" aria-required="true" title="Please fill out this field"></input>
                                         <div className='isPassValidate' id="entity_contact_email_message" >This field is required!</div>
                                         <div className='isPassValidate' id='entity_contact_email_format' >Incorrect mail format!</div>
                                     </td>
@@ -944,7 +950,7 @@ export class Modal extends React.Component {
                                     <td>
                                         <abbr title="required">*</abbr>Contact Mobile No.</td>
                                     <td>
-                                        <input type="text" name="entity_contact_mobile_no" id="entity_contact_mobile_no" value={this.state.entity_contact_mobile_no} onChange={this.changeEntity.bind(this, 'entity_contact_mobile_no')}   maxLength="8" onKeyUp={this.removeInputNanNum.bind(this)} ref="entity_contact_mobile_no" aria-required="true" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
+                                        <input type="text" name="entity_contact_mobile_no" id="entity_contact_mobile_no" value={this.state.entity_contact_mobile_no} onChange={this.changeEntity.bind(this, 'entity_contact_mobile_no')} maxLength="8" onKeyUp={this.removeInputNanNum.bind(this)} ref="entity_contact_mobile_no" aria-required="true" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
                                         <div className='isPassValidate' id="entity_contact_mobile_no_message" >This field is required!</div>
                                         <div className='isPassValidate' id='entity_contact_mobile_no_format' >Number should contain 8 integers.</div>
                                     </td>
@@ -953,7 +959,7 @@ export class Modal extends React.Component {
                                     <td>
                                         <abbr title="required">*</abbr>Contact Office No.</td>
                                     <td>
-                                        <input type="text" name="entity_contact_office_no" id="entity_contact_office_no" value={this.state.entity_contact_office_no} onChange={this.changeEntity.bind(this, 'entity_contact_office_no')}   maxLength="8" onKeyUp={this.removeInputNanNum.bind(this)} ref="entity_contact_office_no" aria-required="true" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
+                                        <input type="text" name="entity_contact_office_no" id="entity_contact_office_no" value={this.state.entity_contact_office_no} onChange={this.changeEntity.bind(this, 'entity_contact_office_no')} maxLength="8" onKeyUp={this.removeInputNanNum.bind(this)} ref="entity_contact_office_no" aria-required="true" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
                                         <div className='isPassValidate' id="entity_contact_office_no_message" >This field is required!</div>
                                         <div className='isPassValidate' id='entity_contact_office_no_format' >Number should contain 8 integers.</div>
                                     </td>
