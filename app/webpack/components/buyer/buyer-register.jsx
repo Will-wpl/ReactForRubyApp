@@ -220,12 +220,12 @@ export class BuyerRegister extends Component {
                 }
             }
             else {
-                 setTimeout((item) => {
+                setTimeout((item) => {
                     this.setState({
                         user_contact_email: this.state.email_address
-                    }) 
-                 }, 300);
-                
+                    })
+                }, 300);
+
             }
         }
 
@@ -350,7 +350,7 @@ export class BuyerRegister extends Component {
                 contact_mobile_no: this.state.user_contact_mobile_no,
                 contact_office_no: this.state.user_contact_office_no,
                 is_default: 1,
-                user_id:this.state.id
+                user_id: this.state.id
             }
         ];
 
@@ -369,8 +369,8 @@ export class BuyerRegister extends Component {
                     contact_email: item.contact_email,
                     contact_mobile_no: item.contact_mobile_no,
                     contact_office_no: item.contact_office_no,
-                    is_default: 0, 
-                   user_id:this.state.id
+                    is_default: 0,
+                    user_id: this.state.id
                 }
                 entity.push(paramObj);
             })
@@ -840,7 +840,7 @@ export class BuyerRegister extends Component {
                                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                         <UploadFile type="BUYER_DOCUMENTS" required="required" validate="true" deleteType="buyer" showList="1" col_width="10" showWay="1" fileData={this.state.fileData.BUYER_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
                                         <div className="col-sm-1 col-md-1 u-cell">
-                                            <button className={this.state.disabled ? "lm--button lm--button--primary buttonDisabled" : "lm--button lm--button--primary"}  disabled={this.state.disabled} onClick={this.showView.bind(this)} >?</button>
+                                            <button className={this.state.disabled ? "lm--button lm--button--primary buttonDisabled" : "lm--button lm--button--primary"} disabled={this.state.disabled} onClick={this.showView.bind(this)} >?</button>
                                         </div>
                                         <div id="showMessage" className="isPassValidate">This field is required!</div>
                                     </div>
