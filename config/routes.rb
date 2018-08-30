@@ -60,6 +60,7 @@ Rails.application.routes.draw do
           get 'unpublished'
           get 'published'
           get 'letter_of_award_pdf'
+          get 'filter_date'
         end
       end
       resource :auction_histories, only: %i[list last] do
