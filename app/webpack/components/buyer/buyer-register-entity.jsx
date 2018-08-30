@@ -32,7 +32,8 @@ export class BuyerUserEntityRegister extends Component {
             messageAttachmentUrl: "",
             usedEntityIdArr: [],
             mainEntityFinished: false,
-            ismain: false
+            ismain: false,
+            btnAddDisabled: false
         }
         this.entityItem = {
             id: 0,
@@ -122,7 +123,7 @@ export class BuyerUserEntityRegister extends Component {
                 this.isApprove = false;
             }
             else if (window.location.href.indexOf('users/edit') > 0) {
-                this.setState({ use_type: 'manage_acount', entityStatus: "manage", disabled: true });
+                this.setState({ use_type: 'manage_acount', entityStatus: "manage", disabled: true, btnAddDisabled: true });
                 this.isApprove = false;
             }
             if (this.state.disabled) {
@@ -232,13 +233,15 @@ export class BuyerUserEntityRegister extends Component {
                 }
             })
             this.setState({
-                entity_list: user_entity
+                entity_list: user_entity,
+                btnAddDisabled: false
             })
         }
         else {
+            console.log(param)
             let item = [{
                 id: "",
-                user_id: this.satae.id,
+                user_id: this.state.id,
                 main_id: "",
                 user_entity_id: "",
                 company_name: this.state.company_name,
@@ -252,8 +255,10 @@ export class BuyerUserEntityRegister extends Component {
                 contact_office_no: "",
                 is_default: 1
             }]
+
             this.setState({
-                entity_list: item
+                entity_list: item,
+                btnAddDisabled: true
             });
         }
     }
@@ -341,10 +346,10 @@ export class BuyerUserEntityRegister extends Component {
         removeNanNum(value);
     }
 
-
     showView() {
         this.refs.Modal_upload.showModal();
     }
+
     setParams(type) {
         let params = {
             buyer: {
@@ -366,7 +371,6 @@ export class BuyerUserEntityRegister extends Component {
         if (type == 1) {
             params.update_status_flag = 1;
         }
-        console.log(params)
         return params;
     }
 
@@ -420,7 +424,6 @@ export class BuyerUserEntityRegister extends Component {
 
     save(type) {
         let isValidator = this.checkRequired();
-        this.setParams()
         if (isValidator) {
             validateIsExist(this.setParams()).then(res => {
                 console.log(res)
@@ -447,14 +450,40 @@ export class BuyerUserEntityRegister extends Component {
                 else {
                     this.validateRepeatColumn(res)
                 }
-
-
             });
-
         }
     }
-    submit(type) {
 
+    submit(type) {
+        let isValidator = this.checkSuccess();
+        if (isValidator) {
+            let buyerParam = this.setParams();
+            validateIsExist(buyerParam).then(res => {
+                if (res.validate_result) {
+                    submitBuyerUserInfo(buyerParam).then(res => {
+                        if (res.result === "failed") {
+                            this.setState(
+                                {
+                                    text: "Failure to submit,the entity have available auction can't be deleted . "
+                                }
+                            );
+                            this.refs.Modal.showModal();
+                        } else {
+                            if (type === "sign_up") {
+                                window.location.href = `/buyer/home`;
+                            }
+                            else {
+
+                            }
+                        }
+
+                    });
+                }
+                else {
+
+                }
+            })
+        }
     }
 
     validateRepeatColumn(res) {
@@ -465,20 +494,38 @@ export class BuyerUserEntityRegister extends Component {
         this.setState({
             disabled: false
         })
+        if (this.state.entity_list) {
+            if (this.state.entity_list[0].billing_address!=="") {
+                this.setState({
+                    btnAddDisabled: false
+                })
+            }
+            else
+            {
+                this.setState({
+                    btnAddDisabled: true
+                })
+            }
+        }
         $(".btnOption").css("pointer-events", "auto").css("color", "#00888a");
     }
+
     cancel() {
         this.setState({
             disabled: true
         })
     }
+
     judgeAction(type) {
+
     }
+
     refreshForm(obj) {
         if (obj === "refrsesh") {
             window.location.href = `/users/edit`;
         }
     }
+
     doAction(obj) {
         // let param = {
         //     user_id: this.state.userid,
@@ -489,6 +536,7 @@ export class BuyerUserEntityRegister extends Component {
         //     location.href = "/admin/users/buyers";
         // })
     }
+
     acceptAddEntity(entityInfo) {
         let item = {
             id: entityInfo.id ? entityInfo.id : "",
@@ -514,10 +562,23 @@ export class BuyerUserEntityRegister extends Component {
         else {
             entity.push(item)
         }
-        this.setState({
-            entity_list: entity
-        })
+        if(entityInfo.index===0)
+        {
+            this.setState({
+                entity_list: entity,
+                 btnAddDisabled:false
+            })
+        }
+        else
+        {
+            this.setState({
+                entity_list: entity
+            })
+        }
+
+      
     }
+
     add_entity() {
         if (this.props.onAddClick) {
             this.props.onAddClick();
@@ -546,10 +607,7 @@ export class BuyerUserEntityRegister extends Component {
         })
         this.refs.Modal_Entity.showModal('custom', {}, '', '-1')
     }
-    edit_entity_main() {
-        this.removeError();
-        this.setState({ entityItemInfo: {} });
-    }
+
     removeError() {
         $('.validate_message').find('div').each(function () {
             let className = $(this).attr('class');
@@ -559,6 +617,7 @@ export class BuyerUserEntityRegister extends Component {
             }
         })
     }
+
     edit_entity(item, index) {
         this.removeError();
         this.setState({ entityItemInfo: {} });
@@ -593,11 +652,14 @@ export class BuyerUserEntityRegister extends Component {
             text: " ",
             entityItemInfo: this.entityItem
         })
+       
         this.refs.Modal_Entity.showModal('custom', {}, '', index)
     }
+
     delete_entity(item) {
 
     }
+
     render() {
         let btn_html;
         if (this.state.use_type === 'manage_acount') {
@@ -737,6 +799,7 @@ export class BuyerUserEntityRegister extends Component {
                             </div>
                         </div>
                     </div>
+
                     <div className="col-sm-12 buyer_list" id="buyer_entity">
                         <table className="buyer_entity" cellPadding="0" cellSpacing="0">
                             <colgroup>
@@ -780,11 +843,9 @@ export class BuyerUserEntityRegister extends Component {
                                             <td>{item.contact_office_no}</td>
                                             <td>
                                                 <div className="editSite">
-                                                    {/* <a className="btnOption" onClick={this.edit_entity.bind(this, item, index)}>Edit</a> */}
                                                     <button className="entityApprove" disabled={this.state.disabled} onClick={this.edit_entity.bind(this, item, index)}>Edit</button>
                                                 </div>
                                                 <div className={index === 0 ? "isHide" : "isDisplay"}>
-                                                    {/* <div className="delSite"><a className="btnOption" onClick={this.delete_entity.bind(this, index)}>Delete</a></div> */}
                                                     <button className="entityApprove" disabled={this.state.disabled} onClick={this.delete_entity.bind(this, index)}>Delete</button>
                                                 </div>
                                             </td>
@@ -793,8 +854,10 @@ export class BuyerUserEntityRegister extends Component {
                                 }
                             </tbody>
                         </table>
-                        <div className={this.state.disabled ? "isHide" : "isDisplay addSite"} style={{ paddingLeft: "20px" }}>
-                            <a className="btnAddOption" onClick={this.add_entity.bind(this)}>Add Entity</a>
+                        <div style={{ paddingLeft: "20px", paddingBottom: "20px" }}>
+                            {/* className={this.state.disabled ? "isHide" : "isDisplay addSite"}  */}
+                            {/* <a className="btnAddOption" onClick={this.add_entity.bind(this)}>Add Entity</a> */}
+                            <button className="entityApprove" disabled={this.state.btnAddDisabled} onClick={this.add_entity.bind(this)}>Add</button>
                         </div>
                     </div>
                     <div className="col-sm-12 col-md-8 push-md-3 validate_message margin-t buyer_list_select">

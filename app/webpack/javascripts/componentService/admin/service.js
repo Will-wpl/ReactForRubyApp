@@ -189,5 +189,5 @@ export const approveBuyerEntity = (params) => {
 }
 
 export const approveRetailerUser = (params) => {
-    return put('/api/admin/users/approval_account', params)
+    return put('/api/admin/users/approval_retailer', params)
 }
