@@ -44,7 +44,7 @@ export class RetailerRegister extends Component {
             revvTCurl: "",
             revvTCname: "",
             agree_seller_revv: "0",
-            messageAttachmentUrl: ""
+            messageAttachmentUrl: "",loglist:[]
 
         }
         this.validatorItem = {
@@ -149,15 +149,15 @@ export class RetailerRegister extends Component {
                 fileData: fileObj
             })
         }
-        if (param.seller_buyer_tc_attachment) {
-            let seller = param.seller_buyer_tc_attachment;
+        if (param.seller_revv_tc_attachment) {
+            let seller = param.seller_revv_tc_attachment;
             this.setState({
                 sellerTCurl: seller.file_path,
                 sellerTCname: seller.file_name
             })
         }
-        if (param.seller_revv_tc_attachment) {
-            let revv = param.seller_revv_tc_attachment;
+        if (param.seller_buyer_tc_attachment) {
+            let revv = param.seller_buyer_tc_attachment;
             this.setState({
                 revvTCurl: revv.file_path,
                 revvTCname: revv.file_name
@@ -469,10 +469,15 @@ export class RetailerRegister extends Component {
     removeInputNanNum(value) {
         removeNanNum(value);
     }
+    view_log()
+    {
+
+    }
     render() {
         let btn_html;
         if (this.state.use_type === 'admin_approve') {
             btn_html = <div>
+                 <button id="view_log" className="lm--button lm--button--primary" onClick={this.view_log.bind(this)} >View Log</button>
                 <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'reject')}>Reject</button>
                 <button id="submit_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'approve')}>Approve</button>
             </div>;
@@ -643,6 +648,7 @@ export class RetailerRegister extends Component {
                                 <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrl} />
                                 <Modal text={this.state.text} ref="Modal" />
                                 <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
+                                <Modal listdetailtype="viewLog" loglist={this.state.loglist}  ref="Modal_Log" />
                             </div>
                         </div>
                     </div>

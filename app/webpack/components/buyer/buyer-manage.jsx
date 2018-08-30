@@ -36,7 +36,7 @@ export class BuyerUserManage extends Component {
             messageAttachmentUrl: "",
             usedEntityIdArr: [],
             submitStatus: false,
-            ismain: false, entityIndex: 0, entityId: 0
+            ismain: false, entityIndex: 0, entityId: 0, loglist: []
 
         }
         this.validatorComment = {
@@ -132,32 +132,38 @@ export class BuyerUserManage extends Component {
                 messageAttachmentUrl: param.letter_of_authorisation_attachment.file_path
             })
         }
-        if (param.seller_buyer_tc_attachment) {
-            let buyer = param.seller_buyer_tc_attachment;
+        if (param.buyer_revv_tc_attachment) {
+            let buyer = param.buyer_revv_tc_attachment;
             this.setState({
                 buyerTCurl: buyer.file_path,
                 buyerTCname: buyer.file_name
             })
         }
 
-        if (param.buyer_revv_tc_attachment) {
-            let revv = param.buyer_revv_tc_attachment;
+        if (param.seller_buyer_tc_attachment) {
+            let revv = param.seller_buyer_tc_attachment;
             this.setState({
                 buyerRevvTCurl: revv.file_path,
                 buyerRevvTCname: revv.file_name
             })
         }
 
-        if (param.buyer_entities) {
-            let entity = param.buyer_entities;
-            if (entity.length === 0) {
-                setTimeout((item) => {
-                    this.setState({
-                        user_contact_email: this.state.email_address
-                    })
-                }, 300);
-            }
+        if (param.user_logs) {
+            this.setState({
+                loglist:param.user_logs
+            })
         }
+
+        // if (param.buyer_entities) {
+        //     let entity = param.buyer_entities;
+        //     if (entity.length === 0) {
+        //         setTimeout((item) => {
+        //             this.setState({
+        //                 user_contact_email: this.state.email_address
+        //             })
+        //         }, 300);
+        //     }
+        // }
     }
     setEntityInfo(param) {
         if (param.buyer_entities) {
@@ -276,11 +282,12 @@ export class BuyerUserManage extends Component {
     }
     view_log(item) {
         console.log(item)
+        this.refs.Modal_Log.showModal();
     }
     tab(type) {
         $(".buyer_tab a").removeClass("selected");
         $("#tab_" + type).addClass("selected");
-        $(".buyer_list").hide();
+        $(".buyer_list1").hide();
         $("#buyer_" + type).fadeIn(500);
     }
 
@@ -428,6 +435,7 @@ export class BuyerUserManage extends Component {
     render() {
         let btn_html;
         btn_html = <div>
+            <button id="save_form" className="lm--button lm--button--primary" onClick={this.view_log.bind(this)} disabled={this.state.approveStatus}>View Log</button>
             <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeUserAction.bind(this, 'reject')} disabled={this.state.approveStatus}>Reject</button>
             <button id="submit_form" className="lm--button lm--button--primary" onClick={this.judgeUserAction.bind(this, 'approve')} disabled={this.state.approveStatus}>Approve</button>
         </div>;
@@ -439,7 +447,7 @@ export class BuyerUserManage extends Component {
                         <a className="col-sm-4 col-md-2 selected" onClick={this.tab.bind(this, 'base')} id="tab_base">Buyer Information</a>
                         <a className="col-sm-4 col-md-2" onClick={this.tab.bind(this, 'entity')} id="tab_entity"  >Entity</a>
                     </div>
-                    <div className="col-sm-12 buyer_list " id="buyer_base" >
+                    <div className="col-sm-12 buyer_list1" id="buyer_base" >
                         <div className="retailer_manage_coming">
                             <div id="buyer_form" >
                                 <div>
@@ -560,12 +568,12 @@ export class BuyerUserManage extends Component {
 
                                             <div className="col-sm-12 col-md-8 push-md-3 validate_message margin-t" >
                                                 <h4 className="lm--formItem lm--formItem--inline string chk">
-                                                    <input type="checkbox" id="chkBuyer" style={{ width: "20px" }} onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} />
+                                                    <input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} />
                                                     <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerTCurl} className="urlStyleUnderline">Buyer Platform Terms of Use</a></span>
                                                 </h4>
                                                 <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                                                 <h4 className="lm--formItem lm--formItem--inline string chk">
-                                                    <input type="checkbox" style={{ width: "20px" }} id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} />
+                                                    <input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} />
                                                     <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyleUnderline">Energy Procurement Agreement</a></span>
                                                 </h4>
                                                 <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
@@ -593,7 +601,7 @@ export class BuyerUserManage extends Component {
                             </div>
                         </div>
                     </div>
-                    <div className="col-sm-12 buyer_list " id="buyer_entity">
+                    <div className="col-sm-12 buyer_list1 " id="buyer_entity">
                         <table className="buyer_entity" cellPadding="0" cellSpacing="0">
                             <colgroup>
                                 <col width="10%" />
@@ -654,6 +662,7 @@ export class BuyerUserManage extends Component {
                         </div>
                     </div>
                     <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
+                    <Modal listdetailtype="viewLog" loglist={this.state.loglist} ref="Modal_Log" />
                 </div>
             </div>
         )
