@@ -1,18 +1,19 @@
 class LetterOfAward < Pdf
-  attr_reader :param, :pdf_template, :pdf_filename
+  attr_reader :param, :pdf_template_type, :pdf_filename
 
-  def initialize(param, template_filename = 'letter_of_award_template.html')
+  def initialize(param, template_type = 1)
     @param = param
-    @pdf_template = Rails.root.join('app', 'assets', 'pdf', template_filename)
+    @pdf_template_type = template_type
     @pdf_filename = Time.new.strftime("%Y%m%d%H%M%S%L")
   end
 
   def pdf
     auction_result = param[:auction_result]
     consumption_details = param[:consumption_details]
-    return PdfUtils.get_wicked_pdf_data('no data', 'NO_DATA_LETTER_OF_AWARD.pdf') if param[:auction].nil?
-    return PdfUtils.get_wicked_pdf_data('no data', 'NO_DATA_LETTER_OF_AWARD.pdf') if auction_result.empty?
-    page = Nokogiri::HTML.parse(open(pdf_template), nil, 'UTF-8')
+    return PdfUtils.get_wicked_pdf_data('no data', 'NO_DATA_LETTER_OF_AWARD.pdf') if param[:auction].nil? || auction_result.empty?
+    pdf_template = RichTemplate.find_by type: pdf_template_type
+    return PdfUtils.get_wicked_pdf_data('no data', 'NO_DATA_LETTER_OF_AWARD.pdf') if pdf_template.nil?
+    page = Nokogiri::HTML(pdf_template.content, nil, 'UTF-8')
     table1_tr = html_parse(page, '#appendix_table1_tr')
     tr_string = table1_tr.to_s
     tr_text = get_consumption_details_text(consumption_details, tr_string)
