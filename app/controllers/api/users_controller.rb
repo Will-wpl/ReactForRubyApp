@@ -80,7 +80,46 @@ class Api::UsersController < Api::BaseController
     render json: current_user, status: 200
   end
 
+  # Remove Retailer
+  # Params:
+  #   user_id  -> Indicate a user's id
+  def remove_retailer
+    user_id = params[:user_id]
+    remove_user(user_id)
+    render json: { result: 'success' }, status: 200
+  end
+
+  # Remove Buyer
+  # Params:
+  #   user_id  -> Indicate a user's id
+  def remove_buyer
+    user_id = params[:user_id]
+    buyer_entities = CompanyBuyerEntity.find_by_user(user_id)
+    ActiveRecord::Base.transaction do
+      buyer_entities.each do |temp_entity|
+        remove_user(temp_entity.user_entity_id) unless temp_entity.user_entity_id.blank?
+      end
+      remove_user(user_id)
+    end
+    render json: { result: 'success' }, status: 200
+  end
   protected
+
+  # Remove User
+  # Params:
+  #   user_id  -> Indicate a user's id
+  def remove_user(user_id)
+    user = User.find(user_id)
+    unless user.blank?
+      user.email = string_for_user_value(user.email)
+      user.company_unique_entity_number =string_for_user_value(user.company_unique_entity_number)
+      user.is_deleted = 1
+      user.deleted_at = DateTime.current
+      user.save!
+    end
+    user
+  end
+
 
   # Approval User
   # Params:
@@ -113,6 +152,11 @@ class Api::UsersController < Api::BaseController
   end
 
   private
+
+
+  def string_for_user_value(val)
+    'deleted_' + DateTime.current.strftime('%Y%m%d%H%M%S').to_s + '_' + val
+  end
 
   def get_buyer_headers(params)
     headers = [
