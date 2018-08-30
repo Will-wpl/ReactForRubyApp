@@ -13,7 +13,7 @@ class Api::Admin::LaTemplatesController < Api::BaseController
       template = get_template_content 'letter_of_award_template_nominated_entity.html'
     end
 
-    render json: template, status: 200
+    render json: { body: template }, status: 200
   end
 
   def update
