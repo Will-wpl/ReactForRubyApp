@@ -190,6 +190,7 @@ export class UploadFile extends React.Component {
             success: (res) => {
                 let fileObj;
                 barObj.find(".progress-bar").text('Upload Successful!');
+                $("#showMessage").removeClass("errormessage").addClass("isPassValidate");
                 setTimeout(() => {
                     barObj.fadeOut(500);
                     $('.dfn').html('Please select file.');

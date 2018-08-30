@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { UploadFile } from '../shared/upload';
 import { Modal } from '../shared/show-modal';
 import { getBuyerUserInfo, saveBuyerUserInfo, submitBuyerUserInfo, getBuyerUserInfoByUserId, validateIsExist } from '../../javascripts/componentService/common/service';
-import { approveBuyerUser } from '../../javascripts/componentService/admin/service';
+
 import { removeNanNum, validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, setApprovalStatus } from '../../javascripts/componentService/util';
 import { textChangeRangeIsUnchanged } from 'typescript';
 
@@ -380,7 +380,7 @@ export class BuyerUserEntityRegister extends Component {
         return params;
     }
 
-    checkRequired(item) {
+    checkRequired() {
         $('.validate_message').find('div').each(function () {
             let className = $(this).attr('class');
             if (className === 'errormessage') {
@@ -389,7 +389,7 @@ export class BuyerUserEntityRegister extends Component {
             }
         })
         let flag = true, hasDoc = true, checkSelect = true;
-        let arr = validator_Object(this.state, item);
+        let arr = validator_Object(this.state, this.validatorBuyerInfo);
 
         if (arr) {
             arr.map((item, index) => {
@@ -401,10 +401,12 @@ export class BuyerUserEntityRegister extends Component {
         if (this.state.fileData['BUYER_DOCUMENTS'][0].files.length > 0) {
             hasDoc = true;
             $("#showMessage").removeClass("errormessage").addClass("isPassValidate");
+            console.log("upload file ")
         }
         else {
             hasDoc = false;
             $("#showMessage").removeClass("isPassValidate").addClass("errormessage");
+            console.log("empty file ")
         }
         $('.validate_message').find('div').each(function () {
             let className = $(this).attr('class');
@@ -461,7 +463,7 @@ export class BuyerUserEntityRegister extends Component {
     }
 
     submit(type) {
-        let isValidator = this.checkSuccess();
+        let isValidator = this.checkRequired();
         if (isValidator) {
             let buyerParam = this.setParams();
             validateIsExist(buyerParam).then(res => {
@@ -493,8 +495,16 @@ export class BuyerUserEntityRegister extends Component {
     }
 
     validateRepeatColumn(res) {
+        if (res.error_fields.length > 0) {
+
+            this.setState({text:"sdfsdfasdf"})
+            this.refs.Modal.showModal();
+            this.tab("entity");
+            return;
+        }
 
     }
+
 
     edit() {
         this.setState({
@@ -908,6 +918,7 @@ export class BuyerUserEntityRegister extends Component {
                         <Modal text={this.state.text} acceptFunction={this.refreshForm.bind(this)} ref="Modal" />
                         <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
                         <Modal formSize="big" listdetailtype="entity_detail" text={this.state.text} acceptFunction={this.acceptAddEntity.bind(this)} entitList={this.state.entity_list} disabled={this.state.ismain} entityDetailItem={this.state.entityItemInfo} ref="Modal_Entity" />
+                        <Modal listdetailtype="entity_error" text={this.state.text}  entityErrorList={this.state.entityErrList} ref="Modal_EntityErr"/>
                     </div>
                     <div className="retailer_btn">
                         {btn_html}
