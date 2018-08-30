@@ -30,11 +30,11 @@ export const validateIsExist=(params)=>{
 }
  
 export const saveBuyerUserInfo=(params)=>{
-    return put('/api/buyer/registrations/'+params.buyer.id,params);
+    return put('/api/buyer/registrations/'+params.user.id,params);
 }
 
 export const submitBuyerUserInfo=(params)=>{
-    return put('/api/buyer/registrations/'+params.buyer.id+'/sign_up',params);
+    return put('/api/buyer/registrations/'+params.user.id+'/sign_up',params);
 }
 
 export const getNeedBuyerApproveAttachments=()=>{

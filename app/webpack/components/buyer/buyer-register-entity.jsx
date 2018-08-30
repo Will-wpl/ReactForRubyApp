@@ -244,7 +244,6 @@ export class BuyerUserEntityRegister extends Component {
             })
         }
         else {
-            console.log(param)
             let item = [{
                 id: "",
                 user_id: this.state.id,
@@ -358,7 +357,7 @@ export class BuyerUserEntityRegister extends Component {
 
     setParams(type) {
         let params = {
-            buyer: {
+            user: {
                 'id': this.state.id,
                 'email': this.state.email_address,
                 'company_name': this.state.company_name,
@@ -401,7 +400,6 @@ export class BuyerUserEntityRegister extends Component {
         if (this.state.fileData['BUYER_DOCUMENTS'][0].files.length > 0) {
             hasDoc = true;
             $("#showMessage").removeClass("errormessage").addClass("isPassValidate");
-            console.log("upload file ")
         }
         else {
             hasDoc = false;
@@ -570,7 +568,7 @@ export class BuyerUserEntityRegister extends Component {
             contact_email: entityInfo.contact_email,
             contact_mobile_no: entityInfo.contact_mobile_no,
             contact_office_no: entityInfo.contact_office_no,
-            is_defalut: entityInfo.is_defalut,
+            is_default: entityInfo.is_default,
             user_id: this.state.id,
             main_id: entityInfo.main_id,
             user_entity_id: entityInfo.user_entity_id
