@@ -74,14 +74,16 @@ class Api::Admin::UsersController < Api::UsersController
       # Update entity approval status to approved
       company_buyer_entity.update(approval_status: CompanyBuyerEntity::ApprovalStatusApproved)
       # Update entity users approval status to approved
-      User.find(company_buyer_entity.user_entity_id).update(approval_status: User::ApprovalStatusApproved, approval_date_time: DateTime.current)
+      unless company_buyer_entity.user_entity_id.blank?
+        User.find(company_buyer_entity.user_entity_id).update(approval_status: User::ApprovalStatusApproved, approval_date_time: DateTime.current)
+      end
     elsif approval_status == CompanyBuyerEntity::ApprovalStatusReject
-      # Update entity approval status to approved
-      company_buyer_entity.update(approval_status: CompanyBuyerEntity::ApprovalStatusReject)
       # Remove entity users
       if CompanyBuyerEntity.find_by_user_entity_id(company_buyer_entity.user_entity_id).count <= 1
-        User.find(company_buyer_entity.user_entity_id).delete
+        User.find(company_buyer_entity.user_entity_id).delete unless company_buyer_entity.user_entity_id.blank?
       end
+      # Update entity approval status to approved
+      company_buyer_entity.update(approval_status: CompanyBuyerEntity::ApprovalStatusReject, user_entity_id: nil)
     end
     company_buyer_entity
   end

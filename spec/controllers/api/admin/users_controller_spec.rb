@@ -241,7 +241,6 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
 
       context 'Reject buyer entity' do
         def do_request
-
           buyer_entity_1 = CompanyBuyerEntity.new
           buyer_entity_1.company_name = 'Test_Company_Name_1'
           buyer_entity_1.company_uen = 'Test_Company_UEN_1'
