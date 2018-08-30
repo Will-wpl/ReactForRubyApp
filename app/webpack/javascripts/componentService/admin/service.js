@@ -170,24 +170,24 @@ export const deleteContractAttachmentById = (param) => {
 export const getEmailList = () => {
     return get('/api/admin/email_templates/');
 }
-export const getEmailListItem = (id) => {
-    return get('/api/admin/email_templates/' + id);
+export const getEmailListItem = (id,type) => {
+    return get(`/api/admin/${type}_templates/` + id,{},type=="la"?'html':'json');
 }
-export const getEmailItemUpdate = (param) => {
-    return put('/api/admin/email_templates/' + param.id, { subject: param.subject, body: param.body });
+export const getEmailItemUpdate = (param,type,id) => {
+    return put(`/api/admin/${type}_templates/` + id, type=="la"?{body: param}:{ subject: param.subject, body: param.body });
 }
 export const getEmailFile = (type) => {
     return get('/api/admin/user_attachments?file_type=' + type);
 }
 
 export const approveBuyerUser = (params) => {
-    return put('/api/admin/users/approval_account', params)
-}
-export const approveBuyerEntity = (params) => {
-    return put('/api/admin/users/approval_buyer_entity', params)
+    return put('/api/admin/users/approval_buyer', params)
 }
 
+export const approveBuyerEntity = (params) => {
+    return put('/api/admin/users/approval_buyer_entities', params)
+}
 
 export const approveRetailerUser = (params) => {
-    return put('/api/admin/users/approval_account', params)
+    return put('/api/admin/users/approval_retailer', params)
 }

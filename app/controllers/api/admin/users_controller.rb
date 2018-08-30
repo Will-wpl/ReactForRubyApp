@@ -19,7 +19,9 @@ class Api::Admin::UsersController < Api::UsersController
     company_buyer_entities = []
     buyer_entities = JSON.parse(params[:entity_statuses])
     buyer_entities.each do |temp_entity_status|
-      company_buyer_entity = approval_buyer_entity(temp_entity_status['entity_id'], temp_entity_status['approved_status'])
+      entity_id = temp_entity_status['entity_id']
+      approved_status = temp_entity_status['approved_status'].blank? ? CompanyBuyerEntity::ApprovalStatusReject : CompanyBuyerEntity::ApprovalStatusApproved
+      company_buyer_entity = approval_buyer_entity(entity_id, approved_status)
       company_buyer_entities.push(company_buyer_entity)
     end
     render json: { company_buyer_entities: company_buyer_entities }, status: 200
