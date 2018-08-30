@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Modal } from '../shared/show-modal';
 import { getEmailList, getEmailListItem, getEmailItemUpdate, getEmailFile } from '../../javascripts/componentService/admin/service';
 import { UploadFile } from '../shared/upload';
+import TemplatesList from './admin_shared/template-list';
 export default class EmailTemplates extends Component {
     constructor(props) {
         super(props);
@@ -31,6 +32,7 @@ export default class EmailTemplates extends Component {
                 fileData: file
             })
         })
+        $("#template_email").show();
     }
     showEmail(id) {
         getEmailListItem(id).then(res => {
@@ -48,45 +50,41 @@ export default class EmailTemplates extends Component {
 
         })
     }
+    tab(type){
+        $(".buyer_tab a").removeClass("selected");
+        $("#tab_"+type).addClass("selected");
+        $(".buyer_list").hide();
+        $("#template_"+type).fadeIn(500);
+    }
     render() {
         //console.log('ranking', this.props.ranking)
         return (
             <div>
                 <div className="retailrank_main-new  col-md-8 col-sm-10 ">
-                    <h3>List of Templates</h3>
-                    <div className="admin_invitation u-mt2">
-                        <div className="table-head">
-                            <table className="retailer_fill">
-                                <thead>
-                                    <tr>
-                                        <th width={"69.7%"}>Name</th>
-                                        <th>Email</th>
-                                    </tr>
-                                </thead>
-                            </table>
+                    <div className="admin_buyer_list col-sm-12 col-md-12">
+                        <div className="col-sm-12 buyer_tab">
+                            <a className="col-sm-4 col-md-2 selected" onClick={this.tab.bind(this,'email')} id="tab_email">Email</a>
+                            <a className="col-sm-4 col-md-2" onClick={this.tab.bind(this,'la')} id="tab_la">LA</a>
+                            <a className="col-sm-4 col-md-2" onClick={this.tab.bind(this,'advisory')} id="tab_advisory">Advisory Templates</a>
+                            <a className="col-sm-4 col-md-2" onClick={this.tab.bind(this,'registration')} id="tab_registration">Registration Templates</a>
                         </div>
-                        <div className="table-body">
-                            <table className="retailer_fill">
-                                <tbody>
-                                    {
-                                        this.state.email_list.map((item, index) => {
-                                            return (
-                                                <tr key={index}>
-                                                    <td width={"70%"} style={{"textAlign":"left","paddingLeft":"15px"}}>{item.subject}</td>
-                                                    <td><a onClick={this.showEmail.bind(this, item.id)} className={"edit"}>edit</a></td>
-                                                </tr>
-                                            )
-                                        })
-                                    }
-                                </tbody>
-                            </table>
+                        <div className="col-sm-12 buyer_list" id="template_email">
+                            <TemplatesList email_list={this.state.email_list} showEmail={this.showEmail.bind(this)}  />
                         </div>
-                        <div className="lm--formItem lm--formItem--inline string u-mt3">
-                            <label className="lm--formItem-left lm--formItem-label string required" >
-                                <abbr title="required">*</abbr> Letter Of Authorisation :
-                            </label>
-                            <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                                <UploadFile type="LETTER_OF_AUTHORISATION" required="required" deleteType="userAttach" showList="1" col_width="8" showWay="1" fileData={this.state.fileData.LETTER_OF_AUTHORISATION} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
+                        <div className="col-sm-12 buyer_list" id="template_la">
+                            <TemplatesList email_list={this.state.email_list} showEmail={this.showEmail.bind(this)}  />
+                        </div>
+                        <div className="col-sm-12 buyer_list" id="template_advisory">
+                            <TemplatesList email_list={this.state.email_list} showEmail={this.showEmail.bind(this)}  />
+                        </div>
+                        <div className="col-sm-12 buyer_list" id="template_registration">
+                            <div className="admin_invitation lm--formItem lm--formItem--inline string u-mt2 u-mb2">
+                                <label className="lm--formItem-left lm--formItem-label string required" >
+                                    <abbr title="required">*</abbr> Letter Of Authorisation :
+                                </label>
+                                <div className="lm--formItem-right lm--formItem-control u-grid mg0">
+                                    <UploadFile type="LETTER_OF_AUTHORISATION" required="required" deleteType="userAttach" showList="1" col_width="8" showWay="1" fileData={this.state.fileData.LETTER_OF_AUTHORISATION} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
+                                </div>
                             </div>
                         </div>
                     </div>
