@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { UploadFile } from '../shared/upload';
 import { Modal } from '../shared/show-modal';
 import { getBuyerUserInfo, saveBuyerUserInfo, submitBuyerUserInfo, getBuyerUserInfoByUserId, validateIsExist } from '../../javascripts/componentService/common/service';
-import { approveBuyerUser } from '../../javascripts/componentService/admin/service';
+
 import { removeNanNum, validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, setApprovalStatus } from '../../javascripts/componentService/util';
 import { textChangeRangeIsUnchanged } from 'typescript';
 
@@ -30,9 +30,11 @@ export class BuyerUserEntityRegister extends Component {
             },
             uploadUrl: "/api/buyer/user_attachments?file_type=",
             messageAttachmentUrl: "",
-            usedEntityIdArr: [],
+            usedEntityIdArr: [], usedEntityIdArr: [],
             mainEntityFinished: false,
-            ismain: false
+            ismain: false,
+            btnAddDisabled: false,
+            deleteIndex: -1
         }
         this.entityItem = {
             id: 0,
@@ -122,7 +124,7 @@ export class BuyerUserEntityRegister extends Component {
                 this.isApprove = false;
             }
             else if (window.location.href.indexOf('users/edit') > 0) {
-                this.setState({ use_type: 'manage_acount', entityStatus: "manage", disabled: true });
+                this.setState({ use_type: 'manage_acount', entityStatus: "manage", disabled: true, btnAddDisabled: true });
                 this.isApprove = false;
             }
             if (this.state.disabled) {
@@ -208,6 +210,11 @@ export class BuyerUserEntityRegister extends Component {
     }
 
     setEntityInfo(param) {
+        if (param.used_buyer_entity_ids) {
+            this.setState({
+                usedEntityIdArr: param.used_buyer_entity_ids
+            })
+        }
         if (param.buyer_entities.length > 0) {
             let user_entity = [];
             let entity = param.buyer_entities;
@@ -232,13 +239,15 @@ export class BuyerUserEntityRegister extends Component {
                 }
             })
             this.setState({
-                entity_list: user_entity
+                entity_list: user_entity,
+                btnAddDisabled: false
             })
         }
         else {
+            console.log(param)
             let item = [{
                 id: "",
-                user_id: this.satae.id,
+                user_id: this.state.id,
                 main_id: "",
                 user_entity_id: "",
                 company_name: this.state.company_name,
@@ -252,8 +261,10 @@ export class BuyerUserEntityRegister extends Component {
                 contact_office_no: "",
                 is_default: 1
             }]
+
             this.setState({
-                entity_list: item
+                entity_list: item,
+                btnAddDisabled: true
             });
         }
     }
@@ -341,10 +352,10 @@ export class BuyerUserEntityRegister extends Component {
         removeNanNum(value);
     }
 
-
     showView() {
         this.refs.Modal_upload.showModal();
     }
+
     setParams(type) {
         let params = {
             buyer: {
@@ -366,11 +377,10 @@ export class BuyerUserEntityRegister extends Component {
         if (type == 1) {
             params.update_status_flag = 1;
         }
-        console.log(params)
         return params;
     }
 
-    checkRequired(item) {
+    checkRequired() {
         $('.validate_message').find('div').each(function () {
             let className = $(this).attr('class');
             if (className === 'errormessage') {
@@ -379,7 +389,7 @@ export class BuyerUserEntityRegister extends Component {
             }
         })
         let flag = true, hasDoc = true, checkSelect = true;
-        let arr = validator_Object(this.state, item);
+        let arr = validator_Object(this.state, this.validatorBuyerInfo);
 
         if (arr) {
             arr.map((item, index) => {
@@ -391,10 +401,12 @@ export class BuyerUserEntityRegister extends Component {
         if (this.state.fileData['BUYER_DOCUMENTS'][0].files.length > 0) {
             hasDoc = true;
             $("#showMessage").removeClass("errormessage").addClass("isPassValidate");
+            console.log("upload file ")
         }
         else {
             hasDoc = false;
             $("#showMessage").removeClass("isPassValidate").addClass("errormessage");
+            console.log("empty file ")
         }
         $('.validate_message').find('div').each(function () {
             let className = $(this).attr('class');
@@ -420,7 +432,6 @@ export class BuyerUserEntityRegister extends Component {
 
     save(type) {
         let isValidator = this.checkRequired();
-        this.setParams()
         if (isValidator) {
             validateIsExist(this.setParams()).then(res => {
                 console.log(res)
@@ -447,38 +458,95 @@ export class BuyerUserEntityRegister extends Component {
                 else {
                     this.validateRepeatColumn(res)
                 }
-
-
             });
-
         }
     }
-    submit(type) {
 
+    submit(type) {
+        let isValidator = this.checkRequired();
+        if (isValidator) {
+            let buyerParam = this.setParams();
+            validateIsExist(buyerParam).then(res => {
+                if (res.validate_result) {
+                    submitBuyerUserInfo(buyerParam).then(res => {
+                        if (res.result === "failed") {
+                            this.setState(
+                                {
+                                    text: "Failure to submit,the entity have available auction can't be deleted . "
+                                }
+                            );
+                            this.refs.Modal.showModal();
+                        } else {
+                            if (type === "sign_up") {
+                                window.location.href = `/buyer/home`;
+                            }
+                            else {
+
+                            }
+                        }
+
+                    });
+                }
+                else {
+
+                }
+            })
+        }
     }
 
     validateRepeatColumn(res) {
+        if (res.error_fields.length > 0) {
+
+            this.setState({text:"sdfsdfasdf"})
+            this.refs.Modal.showModal();
+            this.tab("entity");
+            return;
+        }
 
     }
+
 
     edit() {
         this.setState({
             disabled: false
         })
+        if (this.state.entity_list) {
+            if (this.state.entity_list[0].billing_address !== "") {
+                this.setState({
+                    btnAddDisabled: false
+                })
+            }
+            else {
+                this.setState({
+                    btnAddDisabled: true
+                })
+            }
+        }
         $(".btnOption").css("pointer-events", "auto").css("color", "#00888a");
     }
+
     cancel() {
         this.setState({
             disabled: true
         })
     }
+
     judgeAction(type) {
+
     }
+
     refreshForm(obj) {
-        if (obj === "refrsesh") {
-            window.location.href = `/users/edit`;
-        }
+
+        let list = this.state.entity_list;
+        list.splice(this.state.deleteIndex, 1);
+        this.setState({
+            entity_list: list
+        })
+        // if (obj === "refrsesh") {
+        //     window.location.href = `/users/edit`;
+        // }
     }
+
     doAction(obj) {
         // let param = {
         //     user_id: this.state.userid,
@@ -489,6 +557,7 @@ export class BuyerUserEntityRegister extends Component {
         //     location.href = "/admin/users/buyers";
         // })
     }
+
     acceptAddEntity(entityInfo) {
         let item = {
             id: entityInfo.id ? entityInfo.id : "",
@@ -514,10 +583,21 @@ export class BuyerUserEntityRegister extends Component {
         else {
             entity.push(item)
         }
-        this.setState({
-            entity_list: entity
-        })
+        if (entityInfo.index === 0) {
+            this.setState({
+                entity_list: entity,
+                btnAddDisabled: false
+            })
+        }
+        else {
+            this.setState({
+                entity_list: entity
+            })
+        }
+
+
     }
+
     add_entity() {
         if (this.props.onAddClick) {
             this.props.onAddClick();
@@ -546,10 +626,7 @@ export class BuyerUserEntityRegister extends Component {
         })
         this.refs.Modal_Entity.showModal('custom', {}, '', '-1')
     }
-    edit_entity_main() {
-        this.removeError();
-        this.setState({ entityItemInfo: {} });
-    }
+
     removeError() {
         $('.validate_message').find('div').each(function () {
             let className = $(this).attr('class');
@@ -559,6 +636,7 @@ export class BuyerUserEntityRegister extends Component {
             }
         })
     }
+
     edit_entity(item, index) {
         this.removeError();
         this.setState({ entityItemInfo: {} });
@@ -593,11 +671,26 @@ export class BuyerUserEntityRegister extends Component {
             text: " ",
             entityItemInfo: this.entityItem
         })
+
         this.refs.Modal_Entity.showModal('custom', {}, '', index)
     }
-    delete_entity(item) {
 
+    delete_entity(index, mainId) {
+        if (this.state.usedEntityIdArr.length > 0) {
+            if (this.state.usedEntityIdArr.indexOf(mainId) > -1) {
+                this.setState({ text: "The entity have available auction can't be deleted!" });
+                this.refs.Modal.showModal();
+            }
+        }
+        else {
+            this.setState({
+                text: "Are you sure you want to delete?",
+                deleteIndex: index
+            });
+            this.refs.Modal.showModal("comfirm");
+        }
     }
+
     render() {
         let btn_html;
         if (this.state.use_type === 'manage_acount') {
@@ -737,6 +830,7 @@ export class BuyerUserEntityRegister extends Component {
                             </div>
                         </div>
                     </div>
+
                     <div className="col-sm-12 buyer_list" id="buyer_entity">
                         <table className="buyer_entity" cellPadding="0" cellSpacing="0">
                             <colgroup>
@@ -780,12 +874,10 @@ export class BuyerUserEntityRegister extends Component {
                                             <td>{item.contact_office_no}</td>
                                             <td>
                                                 <div className="editSite">
-                                                    {/* <a className="btnOption" onClick={this.edit_entity.bind(this, item, index)}>Edit</a> */}
                                                     <button className="entityApprove" disabled={this.state.disabled} onClick={this.edit_entity.bind(this, item, index)}>Edit</button>
                                                 </div>
                                                 <div className={index === 0 ? "isHide" : "isDisplay"}>
-                                                    {/* <div className="delSite"><a className="btnOption" onClick={this.delete_entity.bind(this, index)}>Delete</a></div> */}
-                                                    <button className="entityApprove" disabled={this.state.disabled} onClick={this.delete_entity.bind(this, index)}>Delete</button>
+                                                    <button className="entityApprove" disabled={this.state.disabled} onClick={this.delete_entity.bind(this, index, item.main_id)}>Delete</button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -793,8 +885,10 @@ export class BuyerUserEntityRegister extends Component {
                                 }
                             </tbody>
                         </table>
-                        <div className={this.state.disabled ? "isHide" : "isDisplay addSite"} style={{ paddingLeft: "20px" }}>
-                            <a className="btnAddOption" onClick={this.add_entity.bind(this)}>Add Entity</a>
+                        <div style={{ paddingLeft: "20px", paddingBottom: "20px" }}>
+                            {/* className={this.state.disabled ? "isHide" : "isDisplay addSite"}  */}
+                            {/* <a className="btnAddOption" onClick={this.add_entity.bind(this)}>Add Entity</a> */}
+                            <button className="entityApprove" disabled={this.state.btnAddDisabled} onClick={this.add_entity.bind(this)}>Add</button>
                         </div>
                     </div>
                     <div className="col-sm-12 col-md-8 push-md-3 validate_message margin-t buyer_list_select">
@@ -821,8 +915,10 @@ export class BuyerUserEntityRegister extends Component {
                             <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyleUnderline">Energy Procurement Agreement</a></span>
                         </h4>
                         <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
+                        <Modal text={this.state.text} acceptFunction={this.refreshForm.bind(this)} ref="Modal" />
                         <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
                         <Modal formSize="big" listdetailtype="entity_detail" text={this.state.text} acceptFunction={this.acceptAddEntity.bind(this)} entitList={this.state.entity_list} disabled={this.state.ismain} entityDetailItem={this.state.entityItemInfo} ref="Modal_Entity" />
+                        <Modal listdetailtype="entity_error" text={this.state.text}  entityErrorList={this.state.entityErrList} ref="Modal_EntityErr"/>
                     </div>
                     <div className="retailer_btn">
                         {btn_html}

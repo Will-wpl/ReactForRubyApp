@@ -607,20 +607,7 @@ export class BuyerRegister extends Component {
                             this.refs.Modal.showModal();
                         }
                         else {
-                            if (type === "sign_up") {
-                                window.location.href = `/buyer/home`;
-                            }
-                            else {
-                                this.setState(
-                                    {
-                                        user_company_name: this.state.company_name,
-                                        user_company_uen: this.state.unique_entity_number,
-                                        user_company_address: this.state.company_address,
-                                        text: "Your details have been successfully submitted. "
-                                    }
-                                );
-                                this.refs.Modal.showModal();
-                            }
+                            window.location.href = `/buyer/home`;
                         }
                     })
                 }
