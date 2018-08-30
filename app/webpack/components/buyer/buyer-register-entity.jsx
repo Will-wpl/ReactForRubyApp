@@ -214,7 +214,7 @@ export class BuyerUserEntityRegister extends Component {
             param.buyer_entities.map((item, index) => {
                 if (index > 0) {
                     user_entity.push({
-                        id:entity[index].id,
+                        id: entity[index].id,
                         user_entity_id: entity[index].user_entity_id,
                         main_id: entity[index].id,
                         user_id: this.state.id,
@@ -347,7 +347,7 @@ export class BuyerUserEntityRegister extends Component {
     }
     setParams(type) {
         let params = {
-            user: {
+            buyer: {
                 'id': this.state.id,
                 'email': this.state.email_address,
                 'company_name': this.state.company_name,
@@ -423,13 +423,29 @@ export class BuyerUserEntityRegister extends Component {
         this.setParams()
         if (isValidator) {
             validateIsExist(this.setParams()).then(res => {
+                console.log(res)
                 if (res.validate_result) {
                     saveBuyerUserInfo(this.setParams(type == "save" ? 1 : null)).then(res => {
-
+                        if (res.result === "failed") {
+                            this.setState(
+                                {
+                                    text: "Failure to save,the entity have available auction can't be deleted . "
+                                }
+                            );
+                            this.refs.Modal.showModal();
+                        }
+                        else {
+                            this.setState(
+                                {
+                                    text: "Your details have been successfully saved. "
+                                }
+                            );
+                            this.refs.Modal.showModal();
+                        }
                     });
                 }
                 else {
-
+                    this.validateRepeatColumn(res)
                 }
 
 
@@ -438,6 +454,10 @@ export class BuyerUserEntityRegister extends Component {
         }
     }
     submit(type) {
+
+    }
+
+    validateRepeatColumn(res) {
 
     }
 
@@ -483,8 +503,8 @@ export class BuyerUserEntityRegister extends Component {
             contact_office_no: entityInfo.contact_office_no,
             is_defalut: entityInfo.is_defalut,
             user_id: this.state.id,
-            main_id:entityInfo.main_id,
-            user_entity_id:entityInfo.user_entity_id
+            main_id: entityInfo.main_id,
+            user_entity_id: entityInfo.user_entity_id
         };
 
         let entity = this.state.entity_list;
