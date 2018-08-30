@@ -151,6 +151,13 @@ export class Modal extends React.Component {
             props_data: data ? data : {}
         })
         if (data) {
+            if(str.indexOf("email_template_la")>0){
+                if($("#email_body").html() == ""){
+                    var editor = new E('#email_body');
+                    setTimeout(()=>{editor.create();});
+                    setTimeout(()=>{$(".w-e-text p").html(data.body)},300);
+                }
+            }
             if (data.subject && data.body) {
                 if($("#email_body").html() == ""){
                     var editor = new E('#email_body');
@@ -202,7 +209,7 @@ export class Modal extends React.Component {
     }
 
     Accept() {
-        if (this.state.strtype === "email_template") {
+        if (this.state.strtype.indexOf("email_template") > 0 ) {
             let data = this.state.props_data;
             data.subject = this.state.email_subject;
             data.body = $(".w-e-text p").html();
@@ -309,7 +316,7 @@ export class Modal extends React.Component {
         let validateResult = validator_Object(this.state, validateItem);
         flag = validateResult.length > 0 ? false : true;
         if (flag) {
-            //need  validate 
+            //need  validate
             if (true) {
 
                 this.addEntity();
@@ -769,14 +776,14 @@ export class Modal extends React.Component {
             } else if (this.props.listdetailtype === "Email Template") {
                 if (this.props.text === '') {
                     showDetail = <div>
-                        <div className="lm--formItem lm--formItem--inline string" style={{ marginLeft: "-15%" }}>
+                        {this.state.strtype == "email_template_la"?'':<div className="lm--formItem lm--formItem--inline string" style={{ marginLeft: "-15%" }}>
                             <label className="lm--formItem-left lm--formItem-label string required">
                                 Subject:
                             </label>
                             <div className="lm--formItem-right lm--formItem-control">
                                 <input type="text" name="email_subject" value={this.state.email_subject} onChange={this.Change.bind(this, 'email_subject')} disabled={this.state.disabled} ref="email_subject" maxLength="50" required aria-required="true" />
                             </div>
-                        </div>
+                        </div>}
                         <div className="lm--formItem lm--formItem--inline string" style={{ marginLeft: "-15%" }}>
                             <label className="lm--formItem-left lm--formItem-label string required">
                                 Body:
