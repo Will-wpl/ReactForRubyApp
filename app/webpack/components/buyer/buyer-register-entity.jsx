@@ -36,6 +36,9 @@ export class BuyerUserEntityRegister extends Component {
         }
         this.entityItem = {
             id: 0,
+            user_id: "",
+            main_id: "",
+            user_entity_id: "",
             company_name: "",
             company_uen: "",
             company_address: "",
@@ -206,13 +209,37 @@ export class BuyerUserEntityRegister extends Component {
 
     setEntityInfo(param) {
         if (param.buyer_entities.length > 0) {
-            let user_entity = param.buyer_entities;
+            let user_entity = [];
+            let entity = param.buyer_entities;
+            param.buyer_entities.map((item, index) => {
+                if (index > 0) {
+                    user_entity.push({
+                        user_entity_id: entity[index].user_entity_id,
+                        main_id: entity[index].id,
+                        user_id: this.state.id,
+                        company_name: entity[index].company_name ? entity[index].company_name : '',
+                        company_uen: entity[index].company_uen ? entity[index].company_uen : '',
+                        company_address: entity[index].company_address ? entity[index].company_address : '',
+                        billing_address: entity[index].billing_address ? entity[index].billing_address : '',
+                        bill_attention_to: entity[index].bill_attention_to ? entity[index].bill_attention_to : '',
+                        contact_name: entity[index].contact_name ? entity[index].contact_name : '',
+                        contact_email: entity[index].contact_email ? entity[index].contact_email : '',
+                        contact_mobile_no: entity[index].contact_mobile_no ? entity[index].contact_mobile_no : '',
+                        contact_office_no: entity[index].contact_office_no ? entity[index].contact_office_no : '',
+                        approval_status: entity[index].approval_status
+                    });
+                }
+            })
             this.setState({
                 entity_list: user_entity
             })
         }
         else {
             let item = [{
+                id: "",
+                user_id: this.satae.id,
+                main_id: "",
+                user_entity_id: "",
                 company_name: this.state.company_name,
                 company_uen: this.state.unique_entity_number,
                 company_address: this.state.company_address,
@@ -221,7 +248,8 @@ export class BuyerUserEntityRegister extends Component {
                 contact_name: "",
                 contact_email: this.state.email_address,
                 contact_mobile_no: "",
-                contact_office_no: ""
+                contact_office_no: "",
+                is_default: 1
             }]
             this.setState({
                 entity_list: item
@@ -312,11 +340,33 @@ export class BuyerUserEntityRegister extends Component {
         removeNanNum(value);
     }
 
+
     showView() {
         this.refs.Modal_upload.showModal();
     }
-    next() {
-
+    setParams(type) {
+        let params = {
+            user: {
+                'id': this.state.id,
+                'email': this.state.email_address,
+                'company_name': this.state.company_name,
+                'company_unique_entity_number': this.state.unique_entity_number,
+                'company_address': this.state.company_address,
+                'billing_address': this.state.billing_address,
+                'name': this.state.contact_name,
+                'account_mobile_number': this.state.mobile_number,
+                'account_office_number': this.state.office_number,
+                'agree_seller_buyer': this.state.agree_seller_buyer,
+                'agree_buyer_revv': this.state.agree_buyer_revv,
+                'has_tenants': this.state.has_tenants,
+            },
+            buyer_entities: JSON.stringify(this.state.entity_list)
+        };
+        if (type == 1) {
+            params.update_status_flag = 1;
+        }
+        console.log(params)
+        return params;
     }
 
     checkRequired(item) {
@@ -368,7 +418,23 @@ export class BuyerUserEntityRegister extends Component {
     }
 
     save(type) {
+        let isValidator = this.checkRequired();
+        this.setParams()
+        if (isValidator) {
+            validateIsExist(this.setParams()).then(res => {
+                if (res.validate_result) {
+                    saveBuyerUserInfo(this.setParams(type == "save" ? 1 : null)).then(res => {
 
+                    });
+                }
+                else {
+
+                }
+
+
+            });
+
+        }
     }
     submit(type) {
 
@@ -413,7 +479,11 @@ export class BuyerUserEntityRegister extends Component {
             contact_name: entityInfo.contact_name,
             contact_email: entityInfo.contact_email,
             contact_mobile_no: entityInfo.contact_mobile_no,
-            contact_office_no: entityInfo.contact_office_no
+            contact_office_no: entityInfo.contact_office_no,
+            is_defalut: entityInfo.is_defalut,
+            user_id: this.state.id,
+            main_id:entityInfo.main_id,
+            user_entity_id:entityInfo.user_entity_id
         };
 
         let entity = this.state.entity_list;
@@ -433,6 +503,9 @@ export class BuyerUserEntityRegister extends Component {
         }
         this.removeError();
         this.entityItem.id = '';
+        this.entityItem.main_id = "";
+        this.entityItem.user_entity_id = "";
+        this.entityItem.user_id = this.state.id;
         this.entityItem.company_name = '';
         this.entityItem.company_uen = '';
         this.entityItem.company_address = '';
@@ -444,6 +517,7 @@ export class BuyerUserEntityRegister extends Component {
         this.entityItem.contact_office_no = '';
         this.entityItem.is_default = 0;
         this.entityItem.option = 'Insert';
+
         this.setState({
             entityItemInfo: this.entityItem,
             ismain: false,
@@ -468,6 +542,9 @@ export class BuyerUserEntityRegister extends Component {
         this.removeError();
         this.setState({ entityItemInfo: {} });
         this.entityItem.id = item.id;
+        this.entityItem.user_id = this.state.id;
+        this.entityItem.main_id = item.main_id ? item.main_id : null;
+        this.entityItem.user_entity_id = item.user_entity_id ? item.user_entity_id : null;
         this.entityItem.company_name = item.company_name;
         this.entityItem.company_uen = item.company_uen;
         this.entityItem.company_address = item.company_address;
@@ -683,7 +760,7 @@ export class BuyerUserEntityRegister extends Component {
                                             <td>
                                                 <div className="editSite">
                                                     {/* <a className="btnOption" onClick={this.edit_entity.bind(this, item, index)}>Edit</a> */}
-                                                    <button className="entityApprove" disabled={this.state.disabled}  onClick={this.edit_entity.bind(this, item, index)}>Edit</button>
+                                                    <button className="entityApprove" disabled={this.state.disabled} onClick={this.edit_entity.bind(this, item, index)}>Edit</button>
                                                 </div>
                                                 <div className={index === 0 ? "isHide" : "isDisplay"}>
                                                     {/* <div className="delSite"><a className="btnOption" onClick={this.delete_entity.bind(this, index)}>Delete</a></div> */}
@@ -723,11 +800,8 @@ export class BuyerUserEntityRegister extends Component {
                             <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyleUnderline">Energy Procurement Agreement</a></span>
                         </h4>
                         <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
-                        {/* <Modal text={this.state.text} acceptFunction={this.refreshForm.bind(this)} ref="Modal" />
-                        <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrl} /> */}
                         <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
                         <Modal formSize="big" listdetailtype="entity_detail" text={this.state.text} acceptFunction={this.acceptAddEntity.bind(this)} entitList={this.state.entity_list} disabled={this.state.ismain} entityDetailItem={this.state.entityItemInfo} ref="Modal_Entity" />
-                        {/* */}
                     </div>
                     <div className="retailer_btn">
                         {btn_html}
