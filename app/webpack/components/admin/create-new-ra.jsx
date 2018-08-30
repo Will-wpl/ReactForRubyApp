@@ -110,7 +110,7 @@ export class CreateNewRA extends Component {
                 //     res.live_auction_contracts.map((item) => {return item.contract_duration;})
                 //     :res.auction_contracts.map((item) => {return item.contract_duration;})
                 let arr = res.auction_contracts.map((item) => { return item.contract_duration; })
-                this.setState({ checkArray: arr.sort(this.sortNumber), contractArray: res.auction_contracts, contract_end_list:res.contract_end_list });
+                this.setState({ checkArray: arr.sort(this.sortNumber), contractArray: res.contract, contract_end_list:res.contract_end_list });
 
                 this.setState({ live_auction_contracts: res.live_auction_contracts });
                 console.log("this.state.live_auction_contracts");
@@ -804,15 +804,15 @@ export class CreateNewRA extends Component {
                                             <span className="lm--formItem-left lm--formItem-label string optional">Contract End Date :</span>
                                             <div className="lm--formItem-right lm--formItem-control">
                                                 {this.state.contract_end_list.map((item, index) => {
-                                                    return <label key={index} className={'lm--formItem-label lm--formItem-control'}>Buyers on {item.contract_duration} months [{item.contract_period_end_date}] count[{item.count}]</label>
+                                                    return <label key={index} className={'lm--formItem-label lm--formItem-control'}>Buyers on {item.contract_duration} months [ {item.contract_period_end_date} ] count [ {item.count} ] <a href={item.link} className="lm--button lm--button--primary">Details</a></label>
                                                 })}
                                             </div>
                                         </dd>
                                         {/*{this.state.contractArray.map((item,index)=>{*/}
                                         {/*return <dd key={index} className="lm--formItem lm--formItem--inline string optional">*/}
-                                        {/*<span className="lm--formItem-left lm--formItem-label string optional">Buyer on {item.contract_duration} mouths [{item.contract_period_end_date}]:</span>*/}
-                                        {/*<label className="lm--formItem-right lm--formItem-label lm--formItem-control"><abbr>5</abbr><a href="#" className="lm--button lm--button--primary">Details</a></label>*/}
-                                        {/*</dd>*/}
+                                                {/*<span className="lm--formItem-left lm--formItem-label string optional">Buyer on {item.contract_duration} mouths [{item.contract_period_end_date}]:</span>*/}
+                                                {/*<label className="lm--formItem-right lm--formItem-label lm--formItem-control"><abbr>5</abbr><a href="#" className="lm--button lm--button--primary">Details</a></label>*/}
+                                               {/*</dd>*/}
                                         {/*})}*/}
                                     </div>) : ''
                                 }
