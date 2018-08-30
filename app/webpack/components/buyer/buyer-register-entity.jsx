@@ -214,6 +214,7 @@ export class BuyerUserEntityRegister extends Component {
             param.buyer_entities.map((item, index) => {
                 if (index > 0) {
                     user_entity.push({
+                        id:entity[index].id,
                         user_entity_id: entity[index].user_entity_id,
                         main_id: entity[index].id,
                         user_id: this.state.id,
