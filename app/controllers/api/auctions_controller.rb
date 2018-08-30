@@ -1,6 +1,15 @@
 class Api::AuctionsController < Api::BaseController
   before_action :set_auction, only: %i[timer]
 
+
+  def filter_date
+
+  end
+
+  def create
+
+  end
+
   # GET auction info by ajax
   def obtain
     if params[:id].nil?

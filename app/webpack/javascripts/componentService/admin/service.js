@@ -181,13 +181,13 @@ export const getEmailFile = (type) => {
 }
 
 export const approveBuyerUser = (params) => {
-    return put('/api/admin/users/approval_account', params)
-}
-export const approveBuyerEntity = (params) => {
-    return put('/api/admin/users/approval_buyer_entity', params)
+    return put('/api/admin/users/approval_buyer', params)
 }
 
+export const approveBuyerEntity = (params) => {
+    return put('/api/admin/users/approval_buyer_entities', params)
+}
 
 export const approveRetailerUser = (params) => {
-    return put('/api/admin/users/approval_account', params)
+    return put('/api/admin/users/approval_retailer', params)
 }
