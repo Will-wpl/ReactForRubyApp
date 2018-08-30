@@ -23,7 +23,7 @@ class Api::AuctionsController < Api::BaseController
     details = ConsumptionDetail.find_account_less_than_contract_start_date_last(search_start_date)
     details.each do |detail|
       account_ids.push(detail.id)
-      buyer_ids.push(detail.buyer_id)
+      buyer_ids.push(detail.buyer_id) unless buyer_ids.include?(detail.buyer_id)
       accounts.push({id: detail.id, account_number: detail.account_number, intake_level: detail.intake_level,
                        peak: detail.peak, off_peak: detail.off_peak, contract_expiry: detail.contract_period_end_date,
                        contracted_capacity: detail.contracted_capacity, totals: detail.totals,
