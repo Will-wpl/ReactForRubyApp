@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { UploadFile } from '../shared/upload';
 import { Modal } from '../shared/show-modal';
 import { getBuyerUserInfo, saveBuyerUserInfo, submitBuyerUserInfo, getBuyerUserInfoByUserId, validateIsExist } from '../../javascripts/componentService/common/service';
-import { approveBuyerUser ,approveBuyerEntity} from '../../javascripts/componentService/admin/service';
+import { approveBuyerUser, approveBuyerEntity } from '../../javascripts/componentService/admin/service';
 import { removeNanNum, validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, setApprovalStatus } from '../../javascripts/componentService/util';
 import { textChangeRangeIsUnchanged } from 'typescript';
 
@@ -36,7 +36,8 @@ export class BuyerUserManage extends Component {
             messageAttachmentUrl: "",
             usedEntityIdArr: [],
             mainEntityFinished: false,
-            ismain: false
+            ismain: false, entityIndex: 0, entityId: 0
+
         }
         this.validatorComment = {
             comment: { cate: 'required' }
@@ -159,6 +160,10 @@ export class BuyerUserManage extends Component {
     setEntityInfo(param) {
         if (param.buyer_entities) {
             let user_entity = param.buyer_entities;
+            user_entity.map((item) => {
+                item.approval_status_name = this.convertEntityStatus(item.approval_status);
+                item.isApproved = item.approval_status === "1" ? true : false;
+            })
             this.setState({
                 entity_list: user_entity
             })
@@ -185,50 +190,58 @@ export class BuyerUserManage extends Component {
         this.refs.Modal_Option.closeModal();
         return flag;
     }
-    judgeAction(type) {
+    judgeUserAction(type) {
         if (type === 'reject') {
             if (this.checkRejectAction()) {
                 this.setState({
                     text: 'Are you sure you want to reject the request?',
                 }, () => {
-                    this.refs.Modal_Option.showModal('comfirm', { action: 'reject' }, '');
+                    this.refs.Modal_Option.showModal('comfirm', { action: 'reject', type: 'user' }, '');
                 });
             }
         }
         else {
             this.setState({ text: "Are you sure you want to approve the request?" });
-            this.refs.Modal_Option.showModal('comfirm', { action: 'approve' }, '');
+            this.refs.Modal_Option.showModal('comfirm', { action: 'approve', type: 'user' }, '');
         }
     }
+
     doAction(obj) {
-        let param = {
-            user_id: this.state.userid,
-            comment: this.state.comment,
-            approved: obj.action === 'reject' ? "" : 1
-        };
-        approveBuyerUser(param).then(res => {
-            location.href = "/admin/users/buyers";
-        })
-    }
-    approve_entity(item)
-    {
-
-        let params={
-            entity_id:item.id,
-            approved:1
+        if (obj.type === 'user') {
+            let param = {
+                user_id: this.state.userid,
+                comment: this.state.comment,
+                approved: obj.action === 'reject' ? "" : 1
+            };
+            approveBuyerUser(param).then(res => {
+                location.href = "/admin/users/buyers";
+            })
         }
-        approveBuyerEntity(params).then(res=>{
-            console.log(res)
+
+    }
+
+    entity_approve(item, index) {
+
+        let list = this.state.entity_list;
+        list[index].approval_status = "1";
+        list[index].approval_status_name = "Approved";
+        list[index].isApproved = true;
+        this.setState({
+            entity_list: list
+        })
+    }
+    entity_reject(item, index) {
+
+        let list = this.state.entity_list;
+        list[index].approval_status = "2";
+        list[index].approval_status_name = "Reject";
+        list[index].isApproved = false;
+        this.setState({
+            entity_list: list
         })
 
-        console.log(item)
     }
-    reject_entity(item)
-    {
-        console.log(item)
-    }
-    view_log(item)
-    {
+    view_log(item) {
         console.log(item)
     }
     tab(type) {
@@ -361,11 +374,28 @@ export class BuyerUserManage extends Component {
                 break;
         }
     }
+
+    convertEntityStatus(value) {
+        if (value) {
+            if (value === "0") {
+                return "Reject"
+            }
+            else if (value === "1") {
+                return "Approve"
+            }
+            else {
+                return "Pending"
+            }
+        }
+        else {
+            return "Pending"
+        }
+    }
     render() {
         let btn_html;
         btn_html = <div>
-            <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'reject')} disabled={this.state.approveStatus}>Reject</button>
-            <button id="submit_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'approve')} disabled={this.state.approveStatus}>Approve</button>
+            <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeUserAction.bind(this, 'reject')} disabled={this.state.approveStatus}>Reject</button>
+            <button id="submit_form" className="lm--button lm--button--primary" onClick={this.judgeUserAction.bind(this, 'approve')} disabled={this.state.approveStatus}>Approve</button>
         </div>;
         return (
             <div className="u-grid mg0 div-center" >
@@ -482,100 +512,50 @@ export class BuyerUserManage extends Component {
                                                     <div id="showMessage" className="isPassValidate">This field is required!</div>
                                                 </div>
                                             </div>
+                                            <div className="lm--formItem lm--formItem--inline string">
+                                                <label className="lm--formItem-left lm--formItem-label string required">
+                                                    <abbr title="required">*</abbr> Tenant Management Service Required :
+                                                 </label>
+                                                <div className="lm--formItem-right lm--formItem-control">
+                                                    <select name="buyer_management" id="buyer_management" onChange={this.Change.bind(this, 'buyer_management')} defaultValue={this.state.buyer_management} disabled={this.state.disabled} ref="buyer_management" aria-required="true">
+                                                        <option value="1">Yes</option>
+                                                        <option value="0">No</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div className="lm--formItem lm--formItem--inline string">
+                                                <div className="chkBuyerDiv">
+                                                    <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
+                                                        <input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} />
+                                                        <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerTCurl} className="urlStyleUnderline">Buyer Platform Terms of Use</a></span>
+                                                    </h4>
+                                                </div>
+                                                <div className="chkBuyerDiv">
+                                                    <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
+                                                    <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
+                                                        <input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} />
+                                                        <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyleUnderline">Energy Procurement Agreement</a></span>
+                                                    </h4>
+                                                </div>
+                                            </div>
+                                            <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
+                                            <div className="dividerline"></div>
+                                            <div className="lm--formItem lm--formItem--inline string">
+                                                <label className="lm--formItem-left lm--formItem-label string required">
+                                                    Admin Comments :
+                                                    </label>
+                                                <div className="lm--formItem-right lm--formItem-control">
+                                                    <textarea name="comment" value={this.state.comment} onChange={this.Change.bind(this, 'comment')} ref="comment" aria-required="true"></textarea>
+                                                    <div className='isPassValidate' id='comment_message' >This field is required!</div>
+                                                </div>
+                                            </div>
+
+                                            <div className="retailer_btn btnFont" >
+                                                {btn_html}
+                                            </div>
                                             <div className="spaceDiv">
 
                                             </div>
-                                            {/* <div className={this.state.mainEntityFinished ? "isHide" : "isDisplay"}>
-                                                <h4 className="lm--formItem lm--formItem--inline string">Electricity Purchase Information</h4>
-                                                <div className="lm--formItem lm--formItem--inline string">
-                                                    <label className="lm--formItem-left lm--formItem-label string required">
-                                                        <abbr title="required">*</abbr> Purchase Entity/<br />Company Name :
-                                                    </label>
-                                                    <div className="lm--formItem-right lm--formItem-control">
-                                                        <input type="text" name="user_company_name" style={{ background: '#35404c' }} value={this.state.user_company_name} onChange={this.Change.bind(this, 'user_company_name')} disabled={true} ref="user_company_name" aria-required="true" ></input>
-
-                                                    </div>
-                                                </div>
-                                                <div className="lm--formItem lm--formItem--inline string">
-                                                    <label className="lm--formItem-left lm--formItem-label string required">
-                                                        <abbr title="required">*</abbr>  Company UEN :
-                                                    </label>
-                                                    <div className="lm--formItem-right lm--formItem-control">
-                                                        <input type="text" name="user_company_uen" style={{ background: '#35404c' }} disabled={true} value={this.state.user_company_uen} onChange={this.Change.bind(this, 'user_company_uen')} ref="user_company_uen" aria-required="true"></input>
-                                                        <div className='isPassValidate' id='user_company_uen_message' >This field is required!</div>
-                                                    </div>
-                                                </div>
-                                                <div className="lm--formItem lm--formItem--inline string">
-                                                    <label className="lm--formItem-left lm--formItem-label string required">
-                                                        <abbr title="required">*</abbr> Company Address :
-                                                    </label>
-                                                    <div className="lm--formItem-right lm--formItem-control">
-                                                        <input type="text" name="user_company_address" style={{ background: '#35404c' }} value={this.state.user_company_address} onChange={this.Change.bind(this, 'user_company_address')} disabled={true} ref="user_company_address" aria-required="true"></input>
-                                                        <div className='isPassValidate' id='user_company_address_message' >This field is required!</div>
-                                                    </div>
-                                                </div>
-                                                <div className="lm--formItem lm--formItem--inline string">
-                                                    <label className="lm--formItem-left lm--formItem-label string required">
-                                                        <abbr title="required">*</abbr> Billing Address :
-                                                    </label>
-                                                    <div className="lm--formItem-right lm--formItem-control">
-                                                        <input type="text" name="user_billing_address" value={this.state.user_billing_address} onChange={this.Change.bind(this, 'user_billing_address')} readOnly={this.state.disabled} ref="user_billing_address" aria-required="true" title="Please fill out this field"></input>
-                                                        <div className='isPassValidate' id='user_billing_address_message' >This field is required!</div>
-                                                    </div>
-                                                </div>
-                                                <div className="lm--formItem lm--formItem--inline string">
-                                                    <label className="lm--formItem-left lm--formItem-label string required">
-                                                        <abbr title="required">*</abbr> Bill Attention To :
-                                                    </label>
-                                                    <div className="lm--formItem-right lm--formItem-control">
-                                                        <input type="text" name="user_bill_attention_to" value={this.state.user_bill_attention_to} onChange={this.Change.bind(this, 'user_bill_attention_to')} readOnly={this.state.disabled} ref="user_bill_attention_to" aria-required="true" title="Please fill out this field"></input>
-                                                        <div className='isPassValidate' id='user_bill_attention_to_message' >This field is required!</div>
-                                                    </div>
-                                                </div>
-                                                <div className="lm--formItem lm--formItem--inline string">
-                                                    <label className="lm--formItem-left lm--formItem-label string required">
-                                                        <abbr title="required">*</abbr> Contact Name :
-                                                    </label>
-                                                    <div className="lm--formItem-right lm--formItem-control">
-                                                        <input type="text" name="user_contact_name" value={this.state.user_contact_name} onChange={this.Change.bind(this, 'user_contact_name')} readOnly={this.state.disabled} ref="user_contact_name" aria-required="true" title="Please fill out this field"></input>
-                                                        <div className='isPassValidate' id='user_contact_name_message' >This field is required!</div>
-                                                    </div>
-                                                </div>
-                                                <div className="lm--formItem lm--formItem--inline string">
-                                                    <label className="lm--formItem-left lm--formItem-label string required">
-                                                        <abbr title="required">*</abbr>  Contact Email :
-                                                    </label>
-                                                    <div className="lm--formItem-right lm--formItem-control">
-                                                        <input type="text" name="user_contact_email" value={this.state.user_contact_email} onChange={this.Change.bind(this, 'user_contact_email')} readOnly={this.state.disabled} ref="user_contact_email" aria-required="true" title="Please fill out this field"></input>
-                                                        <div className='isPassValidate' id='user_contact_email_message' >This field is required!</div>
-                                                        <div className='isPassValidate' id='user_contact_email_format' >Incorrect mail format!</div>
-                                                        <div className='isPassValidate' id='user_contact_email_repeat' >Contact email has already been taken!</div>
-                                                    </div>
-                                                </div>
-                                                <div className="lm--formItem lm--formItem--inline string">
-                                                    <label className="lm--formItem-left lm--formItem-label string required">
-                                                        <abbr title="required">*</abbr> Contact Mobile No. :
-                                                    </label>
-                                                    <div className="lm--formItem-right lm--formItem-control">
-                                                        <input type="text" name="user_contact_mobile_no" value={this.state.user_contact_mobile_no} onChange={this.Change.bind(this, 'user_contact_mobile_no')} onKeyUp={this.removeInputNanNum.bind(this)} readOnly={this.state.disabled} ref="user_contact_mobile_no" maxLength="8" aria-required="true" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
-                                                        <div className='isPassValidate' id='user_contact_mobile_no_message' >This field is required!</div>
-                                                        <div className='isPassValidate' id='user_contact_mobile_no_format' >Number should contain 8 integers.</div>
-                                                    </div>
-                                                </div>
-                                                <div className="lm--formItem lm--formItem--inline string">
-                                                    <label className="lm--formItem-left lm--formItem-label string required">
-                                                        <abbr title="required">*</abbr> Contact Office No. :
-                                                    </label>
-                                                    <div className="lm--formItem-right lm--formItem-control">
-                                                        <input type="text" name="user_contact_office_no" value={this.state.user_contact_office_no} onChange={this.Change.bind(this, 'user_contact_office_no')} onKeyUp={this.removeInputNanNum.bind(this)} readOnly={this.state.disabled} ref="user_contact_office_no" maxLength="8" aria-required="true" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
-                                                        <div className='isPassValidate' id='user_contact_office_no_message' >This field is required!</div>
-                                                        <div className='isPassValidate' id='user_contact_office_no_format' >Number should contain 8 integers.</div>
-                                                    </div>
-                                                </div>
-                                                <div className="spaceDiv">
-
-                                                </div>
-                                            </div> */}
                                         </div>
                                     </div>
                                 </div>
@@ -625,19 +605,22 @@ export class BuyerUserManage extends Component {
                                             <td>{item.contact_email}</td>
                                             <td>{item.contact_mobile_no}</td>
                                             <td>{item.contact_office_no}</td>
-                                            <td>{item.approval_status}</td>
+                                            <td>{item.isApproved}{item.approval_status_name}</td>
                                             <td>
-                                                <div className="approveEntity"><a className="btnOption" onClick={this.approve_entity.bind(this, item)}>Approve </a></div>
-                                                <div className="rejectEntity"><a className="btnOption" onClick={this.reject_entity.bind(this, item)}>Reject </a></div>
-                                                <div className="viewEntity"><a className="btnOption" onClick={this.view_log.bind(this, item)}>View</a></div>
+                                                <button className="entityApprove" disabled={item.isApproved} onClick={this.entity_approve.bind(this, item, index)}>Approve</button>
+                                                <button className="entityApprove" disabled={!item.isApproved} onClick={this.entity_reject.bind(this, item, index)}>Reject</button>
+                                                <button className="entityApprove" onClick={this.view_log.bind(this, item)}>View Log</button>
                                             </td>
                                         </tr>
                                     })
                                 }
                             </tbody>
                         </table>
+                        <div className="retailer_btn">
+                            <button id="save_form" className="lm--button lm--button--primary" style={{ marginRight: "10px" }} onClick={this.judgeUserAction.bind(this, 'reject')} disabled={this.state.approveStatus}>Submit</button>
+                        </div>
                     </div>
-                    <div className="col-sm-12 col-md-8 push-md-3 validate_message margin-t buyer_list_select">
+                    {/* <div className="col-sm-12 col-md-8 push-md-3 validate_message margin-t buyer_list_select">
                         <div className="lm--formItem lm--formItem--inline string">
                             <label className="lm--formItem-left lm--formItem-label string required">
                                 <abbr title="required">*</abbr> Tenant Management Service Required :
@@ -649,9 +632,9 @@ export class BuyerUserManage extends Component {
                                 </select>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                     <div className="col-sm-12 col-md-8 push-md-3 validate_message margin-t" >
-                        <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
+                        {/* <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
                             <input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} />
                             <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerTCurl} className="urlStyleUnderline">Buyer Platform Terms of Use</a></span>
                         </h4>
@@ -660,9 +643,9 @@ export class BuyerUserManage extends Component {
                             <input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} />
                             <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyleUnderline">Energy Procurement Agreement</a></span>
                         </h4>
-                        <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
+                        <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div> */}
                         {/* <div className={this.state.use_type === 'admin_approve' ? 'isDisplay' : 'isHide'}> */}
-                        <div className="dividerline"></div>
+                        {/* <div className="dividerline"></div>
                         <div >
                             <div className="lm--formItem lm--formItem--inline string">
                                 <label className="lm--formItem-left lm--formItem-label string required">
@@ -673,12 +656,12 @@ export class BuyerUserManage extends Component {
                                     <div className='isPassValidate' id='comment_message' >This field is required!</div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                         <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
                     </div>
-                    <div className="retailer_btn">
+                    {/* <div className="retailer_btn">
                         {btn_html}
-                    </div>
+                    </div> */}
                 </div>
             </div>
         )

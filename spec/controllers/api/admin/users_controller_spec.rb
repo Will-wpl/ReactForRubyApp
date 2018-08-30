@@ -165,9 +165,9 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
     end
 
     describe 'Post Approval User' do
-      context 'Approval account' do
+      context 'Approval retailer' do
         def do_request
-          put :approval_account, params: {user_id: temp_retailer.id, approved: '1', comment: 'user test - approval'}
+          put :approval_retailer, params: {user_id: temp_retailer.id, approved: '1', comment: 'user test - approval'}
         end
 
         before { do_request }
@@ -178,9 +178,9 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
         end
       end
 
-      context 'Reject account' do
+      context 'Reject retailer' do
         def do_request
-          put :approval_account, params: {user_id: temp_retailer.id, approved: nil, comment: 'user test - reject'}
+          put :approval_retailer, params: {user_id: temp_retailer.id, approved: nil, comment: 'user test - reject'}
         end
 
         before { do_request }
@@ -188,6 +188,30 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
           # expect(hash['user_base_info']['approval_status']).to eq('0')
+        end
+      end
+
+      context 'Approval buyer' do
+        def do_request
+          put :approval_buyer, params: {user_id: temp_buyer.id, approved: '1', comment: 'user test - approval'}
+        end
+
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash = JSON.parse(response.body)
+          expect(hash['user_base_info']['approval_status']).to eq('1')
+        end
+      end
+
+      context 'Reject buyer' do
+        def do_request
+          put :approval_buyer, params: {user_id: temp_buyer.id, approved: nil, comment: 'user test - reject'}
+        end
+
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
         end
       end
 

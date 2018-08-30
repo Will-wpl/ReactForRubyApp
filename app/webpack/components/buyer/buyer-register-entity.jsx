@@ -15,8 +15,7 @@ export class BuyerUserEntityRegister extends Component {
             id: "", userid: "", text: "", btn_status: false, disabled: false, havedata: false, allbtnStatus: true, validate: true, use_type: "",
             email_address: "", company_name: "", unique_entity_number: "", company_address: "", billing_address: "", contact_name: "",
             mobile_number: "", office_number: "", entityStatus: "", approveStatus: false, status: '', main_id: '',
-            user_entity_id: "", user_company_name: "", user_company_uen: "", user_company_address: "", user_billing_address: "", user_bill_attention_to: "",
-            user_contact_name: "", user_contact_email: "", user_contact_mobile_no: "", user_contact_office_no: "", comment: "",
+
             buyerTCurl: "", buyerTCname: "", agree_seller_buyer: "0",
             buyerRevvTCurl: "", buyerRevvTCname: "", agree_buyer_revv: "0", has_tenants: "1", entity_list: [], entityItemInfo: this.entityItem,
             user_entity_data: {
@@ -123,25 +122,9 @@ export class BuyerUserEntityRegister extends Component {
                 this.setState({ use_type: 'manage_acount', entityStatus: "manage", disabled: true });
                 this.isApprove = false;
             }
-            else {
-                this.setState({ use_type: 'admin_approve', entityStatus: "approve" });
-                this.setState({ disabled: true });
-                this.isApprove = true;
-            }
-            this.setState({
-                mainEntityFinished: true
-            })
-
-
             if (this.state.disabled) {
                 $(".btnOption").css("pointer-events", "none").css("color", "#4B4941");
             }
-        }
-        else {
-            this.setState({
-                use_type: 'first_register', entityStatus: "register",
-                mainEntityFinished: false
-            })
         }
     }
 
@@ -165,9 +148,6 @@ export class BuyerUserEntityRegister extends Component {
                 agree_buyer_revv: item.agree_buyer_revv ? item.agree_buyer_revv : '0',
                 has_tenants: item.has_tenants ? item.has_tenants : '1',
                 approveStatus: item.approval_status === "3" ? true : false,
-                user_company_name: item.company_name ? item.company_name : '',
-                user_company_uen: item.company_unique_entity_number ? item.company_unique_entity_number : '',
-                user_company_address: item.company_address ? item.company_address : '',
                 status: setApprovalStatus(item.approval_status, item.approval_date_time === null ? item.created_at : item.approval_date_time)
             })
             $('#buyer_management').val(this.state.has_tenants);
@@ -222,44 +202,38 @@ export class BuyerUserEntityRegister extends Component {
                 buyerRevvTCname: revv.file_name
             })
         }
-
-        if (param.buyer_entities) {
-            let entity = param.buyer_entities;
-            if (entity.length === 0) {
-                setTimeout((item) => {
-                    this.setState({
-                        user_contact_email: this.state.email_address
-                    })
-                }, 300);
-            }
-        }
     }
 
     setEntityInfo(param) {
-        if (param.buyer_entities) {
+        if (param.buyer_entities.length > 0) {
             let user_entity = param.buyer_entities;
             this.setState({
                 entity_list: user_entity
             })
         }
+        else {
+            let item = [{
+                company_name: this.state.company_name,
+                company_uen: this.state.unique_entity_number,
+                company_address: this.state.company_address,
+                billing_address: "",
+                bill_attention_to: "",
+                contact_name: "",
+                contact_email: this.state.email_address,
+                contact_mobile_no: "",
+                contact_office_no: ""
+            }]
+            this.setState({
+                entity_list: item
+            });
+        }
     }
 
     tab(type) {
-        if (this.state.mainEntityFinished) {
-            $(".buyer_tab a").removeClass("selected");
-            $("#tab_" + type).addClass("selected");
-            $(".buyer_list").hide();
-            $("#buyer_" + type).fadeIn(500);
-        }
-    }
-
-    tab_next(type) {
-        if (this.state.mainEntityFinished) {
-            $(".buyer_tab a").removeClass("selected");
-            $("#tab_" + type).addClass("selected");
-            $(".buyer_list").hide();
-            $("#buyer_" + type).fadeIn(0);
-        }
+        $(".buyer_tab a").removeClass("selected");
+        $("#tab_" + type).addClass("selected");
+        $(".buyer_list").hide();
+        $("#buyer_" + type).fadeIn(500);
     }
 
     Change(type, e) {
@@ -309,55 +283,6 @@ export class BuyerUserEntityRegister extends Component {
                     setValidationPass('office_number', 2)
                 }
                 break;
-            case 'user_company_name':
-                this.setState({ user_company_name: itemValue });
-                changeValidate('user_company_name', itemValue);
-                break;
-            case 'user_company_uen':
-                this.setState({ user_company_uen: itemValue });
-                changeValidate('user_company_uen', itemValue);
-                break;
-            case 'user_company_address':
-                this.setState({ user_company_address: itemValue });
-                changeValidate('user_company_address', itemValue);
-                break;
-            case 'user_billing_address':
-                this.setState({ user_billing_address: itemValue });
-                changeValidate('user_billing_address', itemValue);
-                break;
-            case 'user_bill_attention_to':
-                this.setState({ user_bill_attention_to: itemValue });
-                changeValidate('user_bill_attention_to', itemValue);
-                break;
-            case 'user_contact_name':
-                this.setState({ user_contact_name: itemValue });
-                changeValidate('user_contact_name', itemValue);
-                break;
-            case 'user_contact_email':
-                this.setState({ user_contact_email: itemValue });
-                if (!validateEmail(itemValue)) {
-                    setValidationFaild('user_contact_email', 2)
-                } else {
-                    setValidationPass('user_contact_email', 2)
-                }
-                break;
-            case 'user_contact_mobile_no':
-                this.setState({ user_contact_mobile_no: itemValue });
-                if (!validateNum(itemValue)) {
-                    setValidationFaild('user_contact_mobile_no', 2)
-                } else {
-                    setValidationPass('user_contact_mobile_no', 2)
-                }
-                break;
-            case 'user_contact_office_no':
-                this.setState({ user_contact_office_no: itemValue });
-                if (!validateNum(itemValue)) {
-                    setValidationFaild('user_contact_office_no', 2)
-                } else {
-                    setValidationPass('user_contact_office_no', 2)
-                }
-                break;
-
             case 'buyer_management':
                 let val = $('#buyer_management').val();
                 this.setState({ has_tenants: val });
@@ -380,10 +305,6 @@ export class BuyerUserEntityRegister extends Component {
                     setValidationFaild('chkRevv', 1);
                 }
                 break;
-            case 'comment':
-                this.setState({ comment: itemValue });
-                changeValidate('comment', itemValue);
-                break;
         }
     }
 
@@ -395,34 +316,9 @@ export class BuyerUserEntityRegister extends Component {
         this.refs.Modal_upload.showModal();
     }
     next() {
-        if (this.checkRequired(this.validatorItem)) {
-            let mainEntityObj = {
-                id: "",
-                company_name: this.state.company_name,
-                company_uen: this.state.unique_entity_number,
-                company_address: this.state.company_address,
-                billing_address: this.state.user_billing_address,
-                bill_attention_to: this.state.user_bill_attention_to,
-                contact_name: this.state.user_contact_name,
-                contact_email: this.state.user_contact_email,
-                contact_mobile_no: this.state.user_contact_mobile_no,
-                contact_office_no: this.state.user_contact_office_no,
-                is_default: 1
-            }
-            let mainEntityArr = [];
-            mainEntityArr.push(mainEntityObj)
-            this.setState({
-                entity_list: mainEntityArr
-            });
-            setTimeout(() => {
-                this.tab_next('entity');
-            })
-            this.setState({
-                mainEntityFinished: true,
-                use_type: 'sign_up', entityStatus: "register",
-            })
-        }
+
     }
+
     checkRequired(item) {
         $('.validate_message').find('div').each(function () {
             let className = $(this).attr('class');
@@ -488,7 +384,6 @@ export class BuyerUserEntityRegister extends Component {
         this.setState({
             disabled: true
         })
-        //window.location.href = `/users/edit`;
     }
     judgeAction(type) {
     }
@@ -522,8 +417,12 @@ export class BuyerUserEntityRegister extends Component {
         };
 
         let entity = this.state.entity_list;
-        if (entityInfo.index >= 0) { entity[entityInfo.index] = item; }
-        else { entity.push(item) }
+        if (entityInfo.index >= 0) {
+            entity[entityInfo.index] = item;
+        }
+        else {
+            entity.push(item)
+        }
         this.setState({
             entity_list: entity
         })
@@ -532,13 +431,7 @@ export class BuyerUserEntityRegister extends Component {
         if (this.props.onAddClick) {
             this.props.onAddClick();
         }
-        $('.validate_message').find('div').each(function () {
-            let className = $(this).attr('class');
-            if (className === 'errormessage') {
-                let divid = $(this).attr("id");
-                $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
-            }
-        })
+        this.removeError();
         this.entityItem.id = '';
         this.entityItem.company_name = '';
         this.entityItem.company_uen = '';
@@ -550,6 +443,7 @@ export class BuyerUserEntityRegister extends Component {
         this.entityItem.contact_mobile_no = '';
         this.entityItem.contact_office_no = '';
         this.entityItem.is_default = 0;
+        this.entityItem.option = 'Insert';
         this.setState({
             entityItemInfo: this.entityItem,
             ismain: false,
@@ -557,7 +451,21 @@ export class BuyerUserEntityRegister extends Component {
         })
         this.refs.Modal_Entity.showModal('custom', {}, '', '-1')
     }
+    edit_entity_main() {
+        this.removeError();
+        this.setState({ entityItemInfo: {} });
+    }
+    removeError() {
+        $('.validate_message').find('div').each(function () {
+            let className = $(this).attr('class');
+            if (className === 'errormessage') {
+                let divid = $(this).attr("id");
+                $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
+            }
+        })
+    }
     edit_entity(item, index) {
+        this.removeError();
         this.setState({ entityItemInfo: {} });
         this.entityItem.id = item.id;
         this.entityItem.company_name = item.company_name;
@@ -569,6 +477,7 @@ export class BuyerUserEntityRegister extends Component {
         this.entityItem.contact_email = item.contact_email;
         this.entityItem.contact_mobile_no = item.contact_mobile_no;
         this.entityItem.contact_office_no = item.contact_office_no;
+        this.entityItem.option = 'update';
         if (index === 0) {
             this.entityItem.is_default = 1;
             this.setState({
@@ -582,7 +491,6 @@ export class BuyerUserEntityRegister extends Component {
             });
         }
 
-        this.entityItem.option = 'update';
         this.setState({
             text: " ",
             entityItemInfo: this.entityItem
@@ -594,17 +502,7 @@ export class BuyerUserEntityRegister extends Component {
     }
     render() {
         let btn_html;
-        if (this.state.use_type === "first_register") {
-            btn_html =
-                <div><button id="save_new" className="lm--button lm--button--primary" onClick={this.next.bind(this)}>Next</button></div>
-        }
-        // else if (this.state.use_type === 'admin_approve') {
-        //     btn_html = <div>
-        //         <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'reject')} disabled={this.state.approveStatus}>Reject</button>
-        //         <button id="submit_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'approve')} disabled={this.state.approveStatus}>Approve</button>
-        //     </div>;
-        // }
-        else if (this.state.use_type === 'manage_acount') {
+        if (this.state.use_type === 'manage_acount') {
             btn_html = this.state.disabled ?
                 <div><button id="save_edit" className="lm--button lm--button--primary" onClick={this.edit.bind(this)}>Edit</button></div>
                 : <div>
@@ -734,98 +632,6 @@ export class BuyerUserEntityRegister extends Component {
                                                 </div>
                                             </div>
                                             <div className="spaceDiv">
-
-                                            </div>
-                                            <div className={this.state.mainEntityFinished ? "isHide" : "isDisplay"}>
-                                                <h4 className="lm--formItem lm--formItem--inline string">Electricity Purchase Information</h4>
-                                                <div className="lm--formItem lm--formItem--inline string">
-                                                    <label className="lm--formItem-left lm--formItem-label string required">
-                                                        <abbr title="required">*</abbr> Purchase Entity/<br />Company Name :
-                                                    </label>
-                                                    <div className="lm--formItem-right lm--formItem-control">
-                                                        <input type="text" name="user_company_name" style={{ background: '#35404c' }} value={this.state.user_company_name} onChange={this.Change.bind(this, 'user_company_name')} disabled={true} ref="user_company_name" aria-required="true" ></input>
-
-                                                    </div>
-                                                </div>
-                                                <div className="lm--formItem lm--formItem--inline string">
-                                                    <label className="lm--formItem-left lm--formItem-label string required">
-                                                        <abbr title="required">*</abbr>  Company UEN :
-                                                    </label>
-                                                    <div className="lm--formItem-right lm--formItem-control">
-                                                        <input type="text" name="user_company_uen" style={{ background: '#35404c' }} disabled={true} value={this.state.user_company_uen} onChange={this.Change.bind(this, 'user_company_uen')} ref="user_company_uen" aria-required="true"></input>
-                                                        <div className='isPassValidate' id='user_company_uen_message' >This field is required!</div>
-                                                    </div>
-                                                </div>
-                                                <div className="lm--formItem lm--formItem--inline string">
-                                                    <label className="lm--formItem-left lm--formItem-label string required">
-                                                        <abbr title="required">*</abbr> Company Address :
-                                                    </label>
-                                                    <div className="lm--formItem-right lm--formItem-control">
-                                                        <input type="text" name="user_company_address" style={{ background: '#35404c' }} value={this.state.user_company_address} onChange={this.Change.bind(this, 'user_company_address')} disabled={true} ref="user_company_address" aria-required="true"></input>
-                                                        <div className='isPassValidate' id='user_company_address_message' >This field is required!</div>
-                                                    </div>
-                                                </div>
-                                                <div className="lm--formItem lm--formItem--inline string">
-                                                    <label className="lm--formItem-left lm--formItem-label string required">
-                                                        <abbr title="required">*</abbr> Billing Address :
-                                                    </label>
-                                                    <div className="lm--formItem-right lm--formItem-control">
-                                                        <input type="text" name="user_billing_address" value={this.state.user_billing_address} onChange={this.Change.bind(this, 'user_billing_address')} readOnly={this.state.disabled} ref="user_billing_address" aria-required="true" title="Please fill out this field"></input>
-                                                        <div className='isPassValidate' id='user_billing_address_message' >This field is required!</div>
-                                                    </div>
-                                                </div>
-                                                <div className="lm--formItem lm--formItem--inline string">
-                                                    <label className="lm--formItem-left lm--formItem-label string required">
-                                                        <abbr title="required">*</abbr> Bill Attention To :
-                                                    </label>
-                                                    <div className="lm--formItem-right lm--formItem-control">
-                                                        <input type="text" name="user_bill_attention_to" value={this.state.user_bill_attention_to} onChange={this.Change.bind(this, 'user_bill_attention_to')} readOnly={this.state.disabled} ref="user_bill_attention_to" aria-required="true" title="Please fill out this field"></input>
-                                                        <div className='isPassValidate' id='user_bill_attention_to_message' >This field is required!</div>
-                                                    </div>
-                                                </div>
-                                                <div className="lm--formItem lm--formItem--inline string">
-                                                    <label className="lm--formItem-left lm--formItem-label string required">
-                                                        <abbr title="required">*</abbr> Contact Name :
-                                                    </label>
-                                                    <div className="lm--formItem-right lm--formItem-control">
-                                                        <input type="text" name="user_contact_name" value={this.state.user_contact_name} onChange={this.Change.bind(this, 'user_contact_name')} readOnly={this.state.disabled} ref="user_contact_name" aria-required="true" title="Please fill out this field"></input>
-                                                        <div className='isPassValidate' id='user_contact_name_message' >This field is required!</div>
-                                                    </div>
-                                                </div>
-                                                <div className="lm--formItem lm--formItem--inline string">
-                                                    <label className="lm--formItem-left lm--formItem-label string required">
-                                                        <abbr title="required">*</abbr>  Contact Email :
-                                                    </label>
-                                                    <div className="lm--formItem-right lm--formItem-control">
-                                                        <input type="text" name="user_contact_email" value={this.state.user_contact_email} onChange={this.Change.bind(this, 'user_contact_email')} readOnly={this.state.disabled} ref="user_contact_email" aria-required="true" title="Please fill out this field"></input>
-                                                        <div className='isPassValidate' id='user_contact_email_message' >This field is required!</div>
-                                                        <div className='isPassValidate' id='user_contact_email_format' >Incorrect mail format!</div>
-                                                        <div className='isPassValidate' id='user_contact_email_repeat' >Contact email has already been taken!</div>
-                                                    </div>
-                                                </div>
-                                                <div className="lm--formItem lm--formItem--inline string">
-                                                    <label className="lm--formItem-left lm--formItem-label string required">
-                                                        <abbr title="required">*</abbr> Contact Mobile No. :
-                                                    </label>
-                                                    <div className="lm--formItem-right lm--formItem-control">
-                                                        <input type="text" name="user_contact_mobile_no" value={this.state.user_contact_mobile_no} onChange={this.Change.bind(this, 'user_contact_mobile_no')} onKeyUp={this.removeInputNanNum.bind(this)} readOnly={this.state.disabled} ref="user_contact_mobile_no" maxLength="8" aria-required="true" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
-                                                        <div className='isPassValidate' id='user_contact_mobile_no_message' >This field is required!</div>
-                                                        <div className='isPassValidate' id='user_contact_mobile_no_format' >Number should contain 8 integers.</div>
-                                                    </div>
-                                                </div>
-                                                <div className="lm--formItem lm--formItem--inline string">
-                                                    <label className="lm--formItem-left lm--formItem-label string required">
-                                                        <abbr title="required">*</abbr> Contact Office No. :
-                                                    </label>
-                                                    <div className="lm--formItem-right lm--formItem-control">
-                                                        <input type="text" name="user_contact_office_no" value={this.state.user_contact_office_no} onChange={this.Change.bind(this, 'user_contact_office_no')} onKeyUp={this.removeInputNanNum.bind(this)} readOnly={this.state.disabled} ref="user_contact_office_no" maxLength="8" aria-required="true" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
-                                                        <div className='isPassValidate' id='user_contact_office_no_message' >This field is required!</div>
-                                                        <div className='isPassValidate' id='user_contact_office_no_format' >Number should contain 8 integers.</div>
-                                                    </div>
-                                                </div>
-                                                <div className="spaceDiv">
-
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -875,9 +681,13 @@ export class BuyerUserEntityRegister extends Component {
                                             <td>{item.contact_mobile_no}</td>
                                             <td>{item.contact_office_no}</td>
                                             <td>
-                                                <div className="editSite"><a className="btnOption" onClick={this.edit_entity.bind(this, item, index)}>Edit</a></div>
+                                                <div className="editSite">
+                                                    {/* <a className="btnOption" onClick={this.edit_entity.bind(this, item, index)}>Edit</a> */}
+                                                    <button className="entityApprove" disabled={this.state.disabled}  onClick={this.edit_entity.bind(this, item, index)}>Edit</button>
+                                                </div>
                                                 <div className={index === 0 ? "isHide" : "isDisplay"}>
-                                                    <div className="delSite"><a className="btnOption" onClick={this.delete_entity.bind(this, index)}>Delete</a></div>
+                                                    {/* <div className="delSite"><a className="btnOption" onClick={this.delete_entity.bind(this, index)}>Delete</a></div> */}
+                                                    <button className="entityApprove" disabled={this.state.disabled} onClick={this.delete_entity.bind(this, index)}>Delete</button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -886,7 +696,7 @@ export class BuyerUserEntityRegister extends Component {
                             </tbody>
                         </table>
                         <div className={this.state.disabled ? "isHide" : "isDisplay addSite"} style={{ paddingLeft: "20px" }}>
-                            <a onClick={this.add_entity.bind(this)}>Add Entity</a>
+                            <a className="btnAddOption" onClick={this.add_entity.bind(this)}>Add Entity</a>
                         </div>
                     </div>
                     <div className="col-sm-12 col-md-8 push-md-3 validate_message margin-t buyer_list_select">
@@ -913,20 +723,6 @@ export class BuyerUserEntityRegister extends Component {
                             <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyleUnderline">Energy Procurement Agreement</a></span>
                         </h4>
                         <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
-                        {/* <div className={this.state.use_type === 'admin_approve' ? 'isDisplay' : 'isHide'}>
-                            <div className="dividerline"></div>
-                            <div >
-                                <div className="lm--formItem lm--formItem--inline string">
-                                    <label className="lm--formItem-left lm--formItem-label string required">
-                                        Admin Comments :
-                                        </label>
-                                    <div className="lm--formItem-right lm--formItem-control">
-                                        <textarea name="comment" value={this.state.comment} onChange={this.Change.bind(this, 'comment')} ref="comment" aria-required="true"></textarea>
-                                        <div className='isPassValidate' id='comment_message' >This field is required!</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> */}
                         {/* <Modal text={this.state.text} acceptFunction={this.refreshForm.bind(this)} ref="Modal" />
                         <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrl} /> */}
                         <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />

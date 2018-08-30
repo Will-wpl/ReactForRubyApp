@@ -697,6 +697,9 @@ body.choose{
       }
     }
   }
+  .btnFont{
+    font-size: 18px  !important;
+  }
 }
 ul.history_files{
     li{list-style: none; line-height: 26px; overflow: hidden;
@@ -1133,7 +1136,24 @@ width: "70%"; float: "left";padding:5px;
     border: 1px solid #5d7789;
     border-radius: 0.3125rem;
   }
- 
+  textarea{
+    display: block;
+    width: 80%;
+    padding: 0.6875rem 1rem;
+    margin-top: 0px;
+    font-size: 1rem;
+    font-weight: 300;
+    color: #fff;
+    line-height: 1.25;
+    background: transparent;
+    border: 1px solid #5d7789;
+    border-radius: 0.3125rem;
+  }
+  select
+  {
+    display: block;
+    width: 80%;
+  }
 }
 
 .buyer_list_select
@@ -1219,4 +1239,13 @@ width: "70%"; float: "left";padding:5px;
 
 .mainEntity{
   background: '#35404c' !important;
+}
+.entityApprove{
+  width: 60px; float:center; margin-left: 10px; margin-top: 10px; cursor: pointer;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block;
+}
+.btnFont{
+  font-size: 1.0625rem !important;
+}
+.chkBuyerDiv{
+  width: 100%;
 }
