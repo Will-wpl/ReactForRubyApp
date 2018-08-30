@@ -60,6 +60,7 @@ Rails.application.routes.draw do
           get 'unpublished'
           get 'published'
           get 'letter_of_award_pdf'
+          get 'filter_date'
         end
       end
       resource :auction_histories, only: %i[list last] do
@@ -277,7 +278,7 @@ Rails.application.routes.draw do
     resources :arrangements, only: []
     resources :user_extensions, only: %i[index]
     resources :auction_extend_times, only: []
-    resources :auctions, only: %i[new empty goto upcoming online dashboard confirm result report log invitation select comsumption unpublished published buyer_dashboard retailer_dashboard tender] do
+    resources :auctions, only: %i[new empty goto upcoming online dashboard confirm result report log invitation select comsumption unpublished published buyer_dashboard retailer_dashboard tender contract_expiry] do
       member do
         get 'upcoming' # published and pre-auction page
         get 'online' # published and pre-auction page to retailer online status page
@@ -300,6 +301,7 @@ Rails.application.routes.draw do
         get 'goto'
         get 'unpublished'
         get 'published'
+        get 'contract_expiry'
       end
     end
     resources :contract, only: %i[index]

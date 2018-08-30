@@ -67,7 +67,9 @@ class Admin::AuctionsController < Admin::BaseController
   def retailer_dashboard; end
 
   def buyer_dashboard; end
-  
+
+  def contract_expiry; end
+
   private
 
   def set_auction
