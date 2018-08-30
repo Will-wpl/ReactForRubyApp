@@ -123,14 +123,22 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
                                                    validation_user['company_name'],
                                                    [validation_user['id']],'Buyer')
     validate_final_result = validate_final_result & validate_result
-    error_fields.push('company_name') unless validate_result
+    unless validate_result
+      error_fields.push({ error_field_name:'company_name',
+                              error_message: 'Buyer Company Name"'+ validation_user['company_name'] +'" is duplicated.'}
+                        )
+    end
 
     # validate Email field
     validate_result = validate_user_field('email',
                                                    validation_user['email'],
                                                    [validation_user['id']])
     validate_final_result = validate_final_result & validate_result
-    error_fields.push('email') unless validate_result
+    unless validate_result
+      error_fields.push({ error_field_name:'email',
+                          error_message: 'Buyer Email"'+ validation_user['email'] +'" is duplicated.'}
+      )
+    end
 
     # validate Company UEN field
     validate_result = validate_user_field('company_unique_entity_number',
@@ -138,7 +146,11 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
                                                    [validation_user['id']],'Buyer')
 
     validate_final_result = validate_final_result & validate_result
-    error_fields.push('company_unique_entity_number') unless validate_result
+    unless validate_result
+      error_fields.push({ error_field_name:'company_unique_entity_number',
+                          error_message: 'Buyer Company UEN"'+ validation_user['company_unique_entity_number'] +'" is duplicated.'}
+      )
+    end
 
     # validate user entities
     buyer_entities = JSON.parse(params[:buyer_entities])
@@ -411,10 +423,10 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
       if index > -1
         entity_error_info.push({ 'entity_index' => index,
                                  'error_field_name' => 'company_name',
-                                 'error_message' => 'Sub Entity Company Name "'+ buyer_entity['company_name'] +'" is same with Buyer Company Name.'})
+                                 'error_message' => 'Entity Company Name "'+ buyer_entity['company_name'] +'" is same with Buyer Company Name.'})
       else
         entity_error_info.push({ 'error_field_name' => 'company_name',
-                                 'error_message' => 'Sub Entity Company Name "'+ buyer_entity['company_name'] +'" is same with Buyer Company Name.'})
+                                 'error_message' => 'Entity Company Name "'+ buyer_entity['company_name'] +'" is same with Buyer Company Name.'})
       end
     end
     if !buyer_entity['is_default'].equal?(1) &&
@@ -451,10 +463,10 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
       if index > -1
         entity_error_info.push({ 'entity_index' => index,
                                  'error_field_name' => 'company_uen',
-                                 'error_message' => 'Sub Entity Company UEN "'+ buyer_entity['company_uen'] +'" is same with Buyer Company UEN.'})
+                                 'error_message' => 'Entity Company UEN "'+ buyer_entity['company_uen'] +'" is same with Buyer Company UEN.'})
       else
         entity_error_info.push({ 'error_field_name' => 'company_uen',
-                                 'error_message' => 'Sub Entity Company UEN "'+ buyer_entity['company_uen'] +'" is same with Buyer Company UEN.'})
+                                 'error_message' => 'Entity Company UEN "'+ buyer_entity['company_uen'] +'" is same with Buyer Company UEN.'})
       end
     end
     entity_error_info
