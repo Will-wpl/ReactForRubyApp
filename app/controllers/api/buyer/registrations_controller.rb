@@ -26,6 +26,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
           user.approval_status == User::ApprovalStatusRegistering ||
           ( !user.company_name.blank? && user.company_name.downcase != update_user_params['company_name'].downcase) ||
           ( !user.company_unique_entity_number && user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase ))
+        add_user_log(user)
         update_user_params['approval_status'] = User::ApprovalStatusPending
         update_user_params['approval_date_time'] = DateTime.current
       end
@@ -62,7 +63,9 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
           user.approval_status == User::ApprovalStatusRegistering ||
           (user.company_name.downcase != update_user_params['company_name'].downcase ||
               user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase ))
+        add_user_log(user)
         update_user_params['approval_status'] = User::ApprovalStatusPending
+        update_user_params['approval_date_time'] = DateTime.current
       end
     end
     update_user_params['approval_date_time'] = DateTime.current
@@ -88,7 +91,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
   def validate_buyer_entity
     entity_indexes = []
     buyer_entities = JSON.parse(params[:buyer_entities])
-    buyer = params[:buyer]
+    buyer = params[:user]
     buyer_entity_index = params[:buyer_entity_index].to_i
     buyer_entity = buyer_entities[buyer_entity_index]
     user = User.select(:id, :email, :company_unique_entity_number, :company_name, :entity_id)

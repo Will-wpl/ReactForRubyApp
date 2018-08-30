@@ -26,7 +26,7 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
                                  { company_name: 'test buyer',
                                    company_uen: 'Test UEN',
                                    contact_email: 'test_email@email.com' }].to_json
-          put :validate_buyer_entity, params: { buyer: { id: company_buyer.id, company_name: 'AA', company_unique_entity_number: 'UEN',
+          put :validate_buyer_entity, params: { user: { id: company_buyer.id, company_name: 'AA', company_unique_entity_number: 'UEN',
                                       email: 'test_email@email.com' },
                               buyer_entities: buyer_entities_json, buyer_entity_index: 4 }
         end
