@@ -24,10 +24,7 @@ class Api::AuctionsController < Api::BaseController
     details.each do |detail|
       account_ids.push(detail.id)
       buyer_ids.push(detail.buyer_id) unless buyer_ids.include?(detail.buyer_id)
-      accounts.push({id: detail.id, account_number: detail.account_number, intake_level: detail.intake_level,
-                       peak: detail.peak, off_peak: detail.off_peak, contract_expiry: detail.contract_period_end_date,
-                       contracted_capacity: detail.contracted_capacity, totals: detail.totals,
-                       entity_name: detail.entity_name, ra_id: detail.ra_id})
+      accounts.push(detail)
     end
     render json: {accounts: accounts, account_ids: account_ids, buyer_ids: buyer_ids}, status: 200
   end
