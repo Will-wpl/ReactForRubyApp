@@ -73,7 +73,7 @@ render() {
                             <td>{item.account_number}</td>
                             <td>{item.entity_name}</td>
                             <td>{item.ra_id}</td>
-                            <td>{item.contract_expiry}</td>
+                            <td>{item.contract_period_end_date}</td>
                             <td>{item.intake_level}</td>
                             <td>{item.contracted_capacity}</td>
                             <td>{item.peak}</td>
