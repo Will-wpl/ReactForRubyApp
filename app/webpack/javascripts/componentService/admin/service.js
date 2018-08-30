@@ -215,3 +215,7 @@ export const removeRetailer=(params)=>{
 export const getExpiryList=(params)=>{
     return get('/api/admin/auctions/filter_date?date='+params);
 }
+
+export const goCreateNewRa=(params)=>{
+    return create('/api/admin/auctions',params);
+}

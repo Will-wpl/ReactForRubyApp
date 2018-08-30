@@ -3,19 +3,19 @@ import ReactDOM from 'react-dom';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
-import {getExpiryList} from '../../javascripts/componentService/admin/service';
+import {getExpiryList,goCreateNewRa} from '../../javascripts/componentService/admin/service';
 export default class AdminExpiry extends Component {
   constructor(props){
     super(props);
     this.state={
         start_datetime:moment(),expiry_list:[],
-        buyer_ids:'',
+        buyer_ids:[],
         disabled:false
     }
  }
 
  componentDidMount() {
-
+    this.goSearch();
  }
     timeChange(data) {
         this.setState({
@@ -23,11 +23,17 @@ export default class AdminExpiry extends Component {
         })
     }
     goSearch(){
-        getExpiryList(moment(this.state.start_datetime.toDate()).format()).then(res=>{
+        getExpiryList(moment(this.state.start_datetime).format()).then(res=>{
             this.setState({
                 expiry_list:res.accounts?res.accounts:[],
-                buyer_ids:res.buyer_ids
+                buyer_ids:res.buyer_ids?res.buyer_ids:[]
             })
+        })
+    }
+    goCreate(){
+        goCreateNewRa({date:moment(this.state.start_datetime).format(),buyer_ids:JSON.stringify(this.state.buyer_ids)}).then(res=>{
+            sessionStorage.auction_id = res.auction.id;
+            setTimeout(()=>{window.location.href="/admin/auctions/new"},100);
         })
     }
 render() {
@@ -44,6 +50,7 @@ render() {
                         </dd>
                         <dd>
                             <button onClick={this.goSearch.bind(this)} className="lm--button lm--button--primary search_btn">Search</button>
+                            <button onClick={this.goCreate.bind(this)} className="lm--button lm--button--primary create_btn">Create</button>
                         </dd>
                     </dl>
                 </div>
@@ -61,16 +68,16 @@ render() {
                     </tr>
                     </thead>
                     <tbody>
-                    {this.state.expiry_list.map(()=>{
-                        return <tr>
-                            <td>Account<br/>No.</td>
-                            <td>During<br/>Entity</td>
-                            <td>RA ID</td>
-                            <td>Contract<br/>Expiry</td>
-                            <td>Intake<br/>Level</td>
-                            <td>Contract<br/>Capacity</td>
-                            <td>Peak<br/>(kWh/mth)</td>
-                            <td>Off-Peak<br/>(kWh/mth)</td>
+                    {this.state.expiry_list.map((item,index)=>{
+                        return <tr key={index}>
+                            <td>{item.account_number}</td>
+                            <td>{item.entity_name}</td>
+                            <td>{item.auction_id}</td>
+                            <td>{item.contract_expiry}</td>
+                            <td>{item.intake_level}</td>
+                            <td>{item.contracted_capacity}</td>
+                            <td>{item.peak}</td>
+                            <td>{item.off_peak}</td>
                         </tr>
                     })}
                     </tbody>
