@@ -304,9 +304,12 @@ class Api::AuctionsController < Api::BaseController
       step_counts[0] += 1
       step_counts[6] += 1 if tender[:detail][:current][:current_status] == 'closed'
       flows = tender[:detail][:current][:flows]
-      flows.each do |flow|
-          step_counts[flow] += 1
+      unless flows.nil?
+        flows.each do |flow|
+            step_counts[flow] += 1
+        end
       end
+
     end
 
     render json: { tenders: tenders, step_counts: step_counts }, status: 200
