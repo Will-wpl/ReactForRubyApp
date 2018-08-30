@@ -102,6 +102,7 @@ export class BuyerUserEntityRegister extends Component {
         }
     }
     setDefaultValue(param) {
+        console.log(param)
         this.setBuyerInfo(param);
         this.setEntityInfo(param);
         this.setButton(param);
@@ -210,33 +211,27 @@ export class BuyerUserEntityRegister extends Component {
     }
 
     setEntityInfo(param) {
-        if (param.used_buyer_entity_ids) {
-            this.setState({
-                usedEntityIdArr: param.used_buyer_entity_ids
-            })
-        }
         if (param.buyer_entities.length > 0) {
             let user_entity = [];
             let entity = param.buyer_entities;
             param.buyer_entities.map((item, index) => {
-                if (index > 0) {
-                    user_entity.push({
-                        id: entity[index].id,
-                        user_entity_id: entity[index].user_entity_id,
-                        main_id: entity[index].id,
-                        user_id: this.state.id,
-                        company_name: entity[index].company_name ? entity[index].company_name : '',
-                        company_uen: entity[index].company_uen ? entity[index].company_uen : '',
-                        company_address: entity[index].company_address ? entity[index].company_address : '',
-                        billing_address: entity[index].billing_address ? entity[index].billing_address : '',
-                        bill_attention_to: entity[index].bill_attention_to ? entity[index].bill_attention_to : '',
-                        contact_name: entity[index].contact_name ? entity[index].contact_name : '',
-                        contact_email: entity[index].contact_email ? entity[index].contact_email : '',
-                        contact_mobile_no: entity[index].contact_mobile_no ? entity[index].contact_mobile_no : '',
-                        contact_office_no: entity[index].contact_office_no ? entity[index].contact_office_no : '',
-                        approval_status: entity[index].approval_status
-                    });
-                }
+                user_entity.push({
+                    id: entity[index].id,
+                    user_entity_id: entity[index].user_entity_id,
+                    main_id: entity[index].id,
+                    user_id: this.state.id,
+                    company_name: entity[index].company_name ? entity[index].company_name : '',
+                    company_uen: entity[index].company_uen ? entity[index].company_uen : '',
+                    company_address: entity[index].company_address ? entity[index].company_address : '',
+                    billing_address: entity[index].billing_address ? entity[index].billing_address : '',
+                    bill_attention_to: entity[index].bill_attention_to ? entity[index].bill_attention_to : '',
+                    contact_name: entity[index].contact_name ? entity[index].contact_name : '',
+                    contact_email: entity[index].contact_email ? entity[index].contact_email : '',
+                    contact_mobile_no: entity[index].contact_mobile_no ? entity[index].contact_mobile_no : '',
+                    contact_office_no: entity[index].contact_office_no ? entity[index].contact_office_no : '',
+                    approval_status: entity[index].approval_status,
+                    is_default: entity[index].is_default,
+                });
             })
             this.setState({
                 entity_list: user_entity,
@@ -265,6 +260,11 @@ export class BuyerUserEntityRegister extends Component {
                 entity_list: item,
                 btnAddDisabled: true
             });
+        }
+        if (param.used_buyer_entity_ids) {
+            this.setState({
+                usedEntityIdArr: param.used_buyer_entity_ids
+            })
         }
     }
 
@@ -432,13 +432,12 @@ export class BuyerUserEntityRegister extends Component {
         let isValidator = this.checkRequired();
         if (isValidator) {
             validateIsExist(this.setParams()).then(res => {
-                console.log(res)
                 if (res.validate_result) {
                     saveBuyerUserInfo(this.setParams(type == "save" ? 1 : null)).then(res => {
                         if (res.result === "failed") {
                             this.setState(
                                 {
-                                    text: "Failure to save,the entity have available auction can't be deleted . "
+                                    text: "Failure to save. "
                                 }
                             );
                             this.refs.Modal.showModal();
@@ -470,7 +469,7 @@ export class BuyerUserEntityRegister extends Component {
                         if (res.result === "failed") {
                             this.setState(
                                 {
-                                    text: "Failure to submit,the entity have available auction can't be deleted . "
+                                    text: "Failure to submit. "
                                 }
                             );
                             this.refs.Modal.showModal();
@@ -495,7 +494,7 @@ export class BuyerUserEntityRegister extends Component {
     validateRepeatColumn(res) {
         if (res.error_fields.length > 0) {
 
-            this.setState({text:"sdfsdfasdf"})
+            this.setState({ text: "sdfsdfasdf" })
             this.refs.Modal.showModal();
             this.tab("entity");
             return;
@@ -916,7 +915,7 @@ export class BuyerUserEntityRegister extends Component {
                         <Modal text={this.state.text} acceptFunction={this.refreshForm.bind(this)} ref="Modal" />
                         <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
                         <Modal formSize="big" listdetailtype="entity_detail" text={this.state.text} acceptFunction={this.acceptAddEntity.bind(this)} entitList={this.state.entity_list} disabled={this.state.ismain} entityDetailItem={this.state.entityItemInfo} ref="Modal_Entity" />
-                        <Modal listdetailtype="entity_error" text={this.state.text}  entityErrorList={this.state.entityErrList} ref="Modal_EntityErr"/>
+                        <Modal listdetailtype="entity_error" text={this.state.text} entityErrorList={this.state.entityErrList} ref="Modal_EntityErr" />
                     </div>
                     <div className="retailer_btn">
                         {btn_html}
