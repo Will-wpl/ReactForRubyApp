@@ -47,7 +47,11 @@ class Api::RegistrationsController < Api::BaseController
     # get buyer entities
     buyer_entities = user.company_buyer_entities.order(is_default: :desc)
     buyer_entity_ids = []
-    buyer_entities.each { |x| buyer_entity_ids.push(x.id) }
+    buyer_entitiy_objs = []
+    buyer_entities.each { |x|
+      buyer_entity_ids.push(x.id);
+      buyer_entitiy_objs.push({entity: x, entity_logs:CompanyBuyerEntitiesUpdatedLog.find_by_entity_id(x.id)})
+    }
     # get used buyer entities
     used_buyer_entity_ids = []
     ConsumptionDetail.all().each { |x| used_buyer_entity_ids.push(x.company_buyer_entity_id) if buyer_entity_ids.include?(x.company_buyer_entity_id) }
@@ -61,7 +65,7 @@ class Api::RegistrationsController < Api::BaseController
     user_logs = UserUpdatedLog.find_by_user_id(user.id)
     # return json
     user_json = { user_base_info: user,
-                  buyer_entities: buyer_entities,
+                  buyer_entities: buyer_entitiy_objs,
                   used_buyer_entity_ids: used_buyer_entity_ids,
                   self_attachment: user_attachment,
                   self_attachments: user_attachments,
