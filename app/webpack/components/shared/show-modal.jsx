@@ -935,7 +935,37 @@ export class Modal extends React.Component {
                 }
             }
             if (this.props.listdetailtype === 'viewLog') {
-                
+                showDetail = <table className="buyer_entity" cellPadding="0" cellSpacing="0">
+                    <colgroup>
+                        <col width="33.33%" />
+                        <col width="33.33%" />
+                        <col width="33.33%" />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>Company Name</th>
+                            <th>Company UEN</th>
+                            <th>Update Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            this.state.loglist.map((item, index) => {
+                                <tr>
+                                    <th>{item.company_name}</th>
+                                    <th>{item.company_uen}</th>
+                                    <th>{item.updated_at}</th>
+                                </tr>
+                            })
+                        }
+                    </tbody>
+                </table>
+
+
+                {/* {
+                        this.state.loglist?<div><div></div>
+                    } */}
+
             }
 
             if (this.props.listdetailtype === 'entity_detail') {
@@ -1220,13 +1250,22 @@ export class Modal extends React.Component {
                         {btn_html}
                     </div>
                     :
-                    <div id="modal_main" className={this.state.modalshowhide} >
-                        <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
-                        <div className="modal_detail">
-                            <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
+                    this.props.formSize === 'viewlog' ?
+                        <div id="modal_main" className={this.state.modalshowhide}  style={{ width: "500px", top: "20%", left: "40%" }}>
+                            <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
+                            <div className="modal_detail">
+                                <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
+                            </div>
+                            {btn_html}
                         </div>
-                        {btn_html}
-                    </div>
+                        :
+                        <div id="modal_main" className={this.state.modalshowhide} >
+                            <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
+                            <div className="modal_detail">
+                                <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
+                            </div>
+                            {btn_html}
+                        </div>
         )
     }
 }

@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Api::Retailer::RegistrationsController, type: :controller do
   let!(:admin_user) { create(:user, :with_admin) }
   let!(:retailer_user) { create(:user, :with_retailer) }
-  let!(:retailer_user1) { create(:user, :with_retailer, company_license_number: 'Retailer UEN') }
+  let!(:retailer_user1) { create(:user, :with_retailer,company_name: 'Retailer Company', company_license_number: 'Retailer UEN') }
 
   context 'save retailer information' do
     before { sign_in retailer_user }
