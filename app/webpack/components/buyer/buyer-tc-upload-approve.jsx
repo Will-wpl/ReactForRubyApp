@@ -16,12 +16,12 @@ export class BuyerTCUploadApprove extends Component {
     componentDidMount() {
         getNeedBuyerApproveAttachments().then(res => {
             if (res.user) {
-                if (res.user.agree_buyer_revv === null || res.user.agree_buyer_revv === '0') {
+                if (res.user.agree_seller_buyer === null || res.user.agree_seller_buyer === '0') {
                     this.setState({
                         epaIsExist: true
                     })
                 }
-                if (res.user.agree_seller_buyer === null || res.user.agree_seller_buyer === '0') {
+                if (res.user.agree_buyer_revv === null || res.user.agree_buyer_revv === '0') {
                     this.setState({
                         bptIsExist: true
                     })
@@ -48,7 +48,6 @@ export class BuyerTCUploadApprove extends Component {
 
     }
     checkSuccess() {
-        event.preventDefault();
         saveBuyerAttachmentModification().then(res => {
             window.location.href = `/buyer/home`;
         })

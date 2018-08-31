@@ -29,7 +29,7 @@ export class Modal extends React.Component {
             modalSize: this.props.modalSize,
             entityid: '', is_default: '', user_id: "", main_id: "", user_entity_id: "",
             entity_company_name: '', entity_company_uen: '', entity_company_address: '', entity_billing_address: '', entity_bill_attention_to: '', entity_contact_name: '',
-            entity_contact_email: '', entity_contact_mobile_no: '', entity_contact_office_no: '', entitList: [], entityErrorList: []
+            entity_contact_email: '', entity_contact_mobile_no: '', entity_contact_office_no: '', entitList: [], entityErrorList: [], loglist: []
         }
     }
 
@@ -127,6 +127,11 @@ export class Modal extends React.Component {
         if (next.entityErrorList) {
             this.setState({
                 entityErrorList: next.entityErrorList
+            })
+        }
+        if (next.loglist) {
+            this.setState({
+                loglist: next.loglist
             })
         }
 
@@ -928,6 +933,9 @@ export class Modal extends React.Component {
                         }
                     </div>
                 }
+            }
+            if (this.props.listdetailtype === 'viewLog') {
+                
             }
 
             if (this.props.listdetailtype === 'entity_detail') {

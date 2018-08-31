@@ -193,16 +193,16 @@ export class BuyerUserEntityRegister extends Component {
                 messageAttachmentUrl: param.letter_of_authorisation_attachment.file_path
             })
         }
-        if (param.seller_buyer_tc_attachment) {
-            let buyer = param.seller_buyer_tc_attachment;
+        if (param.buyer_revv_tc_attachment) {
+            let buyer = param.buyer_revv_tc_attachment;
             this.setState({
                 buyerTCurl: buyer.file_path,
                 buyerTCname: buyer.file_name
             })
         }
-
-        if (param.buyer_revv_tc_attachment) {
-            let revv = param.buyer_revv_tc_attachment;
+        
+        if (param.seller_buyer_tc_attachment) {
+            let revv = param.seller_buyer_tc_attachment;
             this.setState({
                 buyerRevvTCurl: revv.file_path,
                 buyerRevvTCname: revv.file_name
@@ -271,7 +271,7 @@ export class BuyerUserEntityRegister extends Component {
     tab(type) {
         $(".buyer_tab a").removeClass("selected");
         $("#tab_" + type).addClass("selected");
-        $(".buyer_list").hide();
+        $(".buyer_list1").hide();
         $("#buyer_" + type).fadeIn(500);
     }
 
@@ -753,7 +753,7 @@ export class BuyerUserEntityRegister extends Component {
                         <a className="col-sm-4 col-md-2 selected" onClick={this.tab.bind(this, 'base')} id="tab_base">Buyer Information</a>
                         <a className="col-sm-4 col-md-2" onClick={this.tab.bind(this, 'entity')} id="tab_entity"  >Entity</a>
                     </div>
-                    <div className="col-sm-12 buyer_list" id="buyer_base" >
+                    <div className="col-sm-12 buyer_list1" id="buyer_base" >
                         <div className="retailer_manage_coming">
                             <div id="buyer_form" >
                                 <div>
@@ -870,7 +870,7 @@ export class BuyerUserEntityRegister extends Component {
                     </div> 
 
 
-                    <div className="col-sm-12 buyer_list" id="buyer_entity">
+                    <div className="col-sm-12 buyer_list1" id="buyer_entity">
                         <table className="buyer_entity" cellPadding="0" cellSpacing="0">
                             <colgroup>
                                 <col width="10%" />
