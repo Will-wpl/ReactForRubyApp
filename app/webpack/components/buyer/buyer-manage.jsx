@@ -6,7 +6,7 @@ import { getBuyerUserInfo, saveBuyerUserInfo, submitBuyerUserInfo, getBuyerUserI
 import { approveBuyerUser, approveBuyerEntity } from '../../javascripts/componentService/admin/service';
 import { removeNanNum, validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, setApprovalStatus } from '../../javascripts/componentService/util';
 import { textChangeRangeIsUnchanged } from 'typescript';
-
+import moment from 'moment';
 
 
 
@@ -149,8 +149,14 @@ export class BuyerUserManage extends Component {
         }
 
         if (param.user_logs) {
+            let list = param.user_logs;
+            list.map((item) => {
+                item.company_uen = item.company_unique_entity_number;
+                item.updated_at = moment(item.updated_at).format('YYYY-MM-DD');
+            })
+            console.log(list)
             this.setState({
-                loglist:param.user_logs
+                loglist: param.user_logs
             })
         }
 
@@ -662,7 +668,7 @@ export class BuyerUserManage extends Component {
                         </div>
                     </div>
                     <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
-                    <Modal listdetailtype="viewLog" loglist={this.state.loglist} ref="Modal_Log" />
+                    <Modal formSize="viewlog" listdetailtype="viewLog" loglist={this.state.loglist} ref="Modal_Log" />
                 </div>
             </div>
         )

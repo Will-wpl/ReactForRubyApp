@@ -352,6 +352,7 @@ export class BuyerUserEntityRegister extends Component {
     }
 
     showView() {
+        
         this.refs.Modal_upload.showModal();
     }
 
