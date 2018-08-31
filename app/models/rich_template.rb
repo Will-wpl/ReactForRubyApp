@@ -1,0 +1,2 @@
+class RichTemplate < ApplicationRecord
+end
