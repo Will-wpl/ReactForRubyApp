@@ -2,22 +2,33 @@ class Api::AuctionsController < Api::BaseController
   before_action :set_auction, only: %i[timer]
 
 
+
+  # account_nums = ConsumptionDetail.select(:account_number).distinct
+  # account_nums.each do |account|
+  #   detail = ConsumptionDetail.find_account_less_than_contract_start_date_last(search_start_date, account.account_number)
+  #   account_ids.push(detail.id)
+  #   buyer_ids.push(detail.consumption.user.id)
+  #   accounts.push({id: detail.id, account_number: detail.account_number, intake_level: detail.intake_level,
+  #                  peak: detail.peak, off_peak: detail.off_peak, contract_expiry: detail.contract_expiry,
+  #                  contracted_capacity: detail.contracted_capacity, totals: detail.totals,
+  #                  entity_name: detail.company_buyer_entity.company_name, ra_id: detail.consumption.auction.published_gid})
+  # end
+
   def filter_date
     search_start_date = Date.parse(params[:date]).advance(days: -1)
     accounts = []
     account_ids = []
     buyer_ids =[]
-    account_nums = ConsumptionDetail.select(:account_number).distinct
-    account_nums.each do |account|
-      detail = ConsumptionDetail.find_account_less_than_contract_start_date_last(search_start_date, account.account_number)
-      account_ids.push(detail.id)
-      buyer_ids.push(detail.consumption.user.id)
-      accounts.push({id: detail.id, account_number: detail.account_number, intake_level: detail.intake_level,
-                     peak: detail.peak, off_peak: detail.off_peak, contract_expiry: detail.contract_expiry,
-                     contracted_capacity: detail.contracted_capacity, totals: detail.totals,
-                     entity_name: detail.company_buyer_entity.company_name, ra_id: detail.consumption.auction.published_gid})
-    end
 
+    details = ConsumptionDetail.find_account_less_than_contract_start_date_last(search_start_date)
+    details.each do |detail|
+      account_ids.push(detail.id)
+      buyer_ids.push(detail.buyer_id) unless buyer_ids.include?(detail.buyer_id)
+      accounts.push({id: detail.id, account_number: detail.account_number, intake_level: detail.intake_level,
+                       peak: detail.peak, off_peak: detail.off_peak, contract_expiry: detail.contract_period_end_date,
+                       contracted_capacity: detail.contracted_capacity, totals: detail.totals,
+                       entity_name: detail.entity_name, ra_id: detail.ra_id})
+    end
     render json: {accounts: accounts, account_ids: account_ids, buyer_ids: buyer_ids}, status: 200
   end
 
