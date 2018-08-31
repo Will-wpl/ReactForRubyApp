@@ -935,7 +935,7 @@ export class Modal extends React.Component {
                 }
             }
             if (this.props.listdetailtype === 'viewLog') {
-                showDetail = <table className="buyer_entity" cellPadding="0" cellSpacing="0">
+                showDetail = <table className="logTable" cellPadding="0" cellSpacing="0">
                     <colgroup>
                         <col width="33.33%" />
                         <col width="33.33%" />
@@ -954,18 +954,42 @@ export class Modal extends React.Component {
                                 <tr>
                                     <th>{item.company_name}</th>
                                     <th>{item.company_uen}</th>
-                                    <th>{item.updated_at}</th>
+                                    <th>{moment(item.updated_at).format('YYYY-MM-DD')}</th>
                                 </tr>
                             })
                         }
                     </tbody>
                 </table>
-
-
-                {/* {
-                        this.state.loglist?<div><div></div>
-                    } */}
-
+            }
+            if (this.props.listdetailtype === 'viewRetailerLog') {
+                showDetail = <table className="logTable" cellPadding="0" cellSpacing="0">
+                    <colgroup>
+                        <col width="25%" />
+                        <col width="25%" />
+                        <col width="25%" />
+                        <col width="25%" />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>Company Name</th>
+                            <th>Company UEN</th>
+                            <th>Retailer License Number</th>
+                            <th>Update Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            this.state.loglist.map((item, index) => {
+                                <tr>
+                                    <th>{item.company_name}</th>
+                                    <th>{item.company_uen}</th>
+                                    <th>{item.license_number}</th>
+                                    <th>{moment(item.updated_at).format('YYYY-MM-DD')}</th>
+                                </tr>
+                            })
+                        }
+                    </tbody>
+                </table>
             }
 
             if (this.props.listdetailtype === 'entity_detail') {
@@ -1242,7 +1266,7 @@ export class Modal extends React.Component {
                 </div>
                 :
                 this.props.formSize === "middle" ?
-                    <div id="modal_main" name="middleModal" className={this.state.modalshowhide} style={{ width: "50%", height: "310px", top: "40%", left: "40%" }} >
+                    <div id="modal_main" name="middleModal" className={this.state.modalshowhide} style={{ width: "50%", height: "310px", top: "40%"}} >
                         <h4><a onClick={this.closeModal.bind(this)}>X</a><a onClick={this.bigModal.bind(this, this.state.modalSize)}>口</a></h4>
                         <div className="modal_detail model_detail_formHeight">
                             <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
@@ -1251,7 +1275,7 @@ export class Modal extends React.Component {
                     </div>
                     :
                     this.props.formSize === 'viewlog' ?
-                        <div id="modal_main" className={this.state.modalshowhide}  style={{ width: "500px", top: "20%", left: "40%" }}>
+                        <div id="modal_main" className={this.state.modalshowhide}  style={{ width: "600px", top: "20%"}}>
                             <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
                             <div className="modal_detail">
                                 <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}

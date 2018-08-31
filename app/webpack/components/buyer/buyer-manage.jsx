@@ -152,9 +152,8 @@ export class BuyerUserManage extends Component {
             let list = param.user_logs;
             list.map((item) => {
                 item.company_uen = item.company_unique_entity_number;
-                item.updated_at = moment(item.updated_at).format('YYYY-MM-DD');
+                // item.updated_at = moment(item.updated_at).format('YYYY-MM-DD');
             })
-            console.log(list)
             this.setState({
                 loglist: param.user_logs
             })
@@ -286,8 +285,20 @@ export class BuyerUserManage extends Component {
         });
 
     }
-    view_log(item) {
-        console.log(item)
+    view_log() {
+        this.setState({
+            text: ""
+        })
+        this.refs.Modal_Log.showModal();
+    }
+    view_entity_log(item) {
+        let log = item.entity_logs;
+        this.setState({
+            loglist: log
+        })
+        this.setState({
+            text: ""
+        })
         this.refs.Modal_Log.showModal();
     }
     tab(type) {
@@ -652,11 +663,9 @@ export class BuyerUserManage extends Component {
                                             <td>{item.contact_office_no}</td>
                                             <td>{item.isApproved}{item.approval_status_name}</td>
                                             <td>{this.state.submitStatus ? true : (item.isApproved ? true : false)}
-                                                {/* <button className="entityApprove" disabled={item.isApproved} onClick={this.entity_approve.bind(this, item, index)}>Approve</button>
-                                                <button className="entityApprove" disabled={!item.isApproved} onClick={this.entity_reject.bind(this, item, index)}>Reject</button> */}
                                                 <button className="entityApprove" disabled={this.state.submitStatus ? true : (item.isApproved ? true : false)} onClick={this.entity_approve.bind(this, item, index)}>Approve</button>
                                                 <button className="entityApprove" disabled={this.state.submitStatus ? true : (!item.isApproved ? true : false)} onClick={this.entity_reject.bind(this, item, index)}>Reject</button>
-                                                <button className="entityApprove" onClick={this.view_log.bind(this, item)}>View Log</button>
+                                                <button className="entityApprove" onClick={this.view_entity_log.bind(this, item)}>View Log</button>
                                             </td>
                                         </tr>
                                     })
