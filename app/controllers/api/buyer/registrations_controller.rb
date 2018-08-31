@@ -26,7 +26,10 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
           user.approval_status == User::ApprovalStatusRegistering ||
           ( !user.company_name.blank? && user.company_name.downcase != update_user_params['company_name'].downcase) ||
           ( !user.company_unique_entity_number && user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase ))
-        add_user_log(user)
+        if (user.company_name.downcase != update_user_params['company_name'].downcase ||
+            user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase )
+          add_user_log(user)
+        end
         update_user_params['approval_status'] = User::ApprovalStatusPending
         update_user_params['approval_date_time'] = DateTime.current
       end
@@ -63,7 +66,10 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
           user.approval_status == User::ApprovalStatusRegistering ||
           (user.company_name.downcase != update_user_params['company_name'].downcase ||
               user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase ))
-        add_user_log(user)
+        if (user.company_name.downcase != update_user_params['company_name'].downcase ||
+            user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase )
+          add_user_log(user)
+        end
         update_user_params['approval_status'] = User::ApprovalStatusPending
         update_user_params['approval_date_time'] = DateTime.current
       end
@@ -266,6 +272,8 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
                           else
                             CompanyBuyerEntity.find(buyer_entity['main_id'])
                           end
+    original_company_name = target_buyer_entity.company_name
+    original_company_uen = target_buyer_entity.company_uen
     target_buyer_entity.company_name = buyer_entity['company_name'] unless buyer_entity['company_name'].blank?
     target_buyer_entity.company_uen = buyer_entity['company_uen'] unless buyer_entity['company_uen'].blank?
     target_buyer_entity.company_address = buyer_entity['company_address'] unless buyer_entity['company_address'].blank?
@@ -280,6 +288,9 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
       target_buyer_entity.approval_status = CompanyBuyerEntity::ApprovalStatusPending
     else
       target_buyer_entity.approval_status = buyer_entity['approval_status'] unless buyer_entity['approval_status'].blank?
+      if (original_company_name != target_buyer_entity.company_name || original_company_uen != target_buyer_entity.company_uen )
+        add_entity_log(target_buyer_entity)
+      end
     end
     target_buyer_entity.user = current_user
     success_saved = (target_buyer_entity.save!)
@@ -470,5 +481,25 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
       end
     end
     entity_error_info
+  end
+
+  def add_entity_log(buyer_entity)
+    entity_updated_log = CompanyBuyerEntitiesUpdatedLog.new
+    entity_updated_log.company_name =  buyer_entity.company_name
+    entity_updated_log.company_uen =  buyer_entity.company_uen
+    entity_updated_log.company_address =  buyer_entity.company_address
+    entity_updated_log.billing_address =  buyer_entity.billing_address
+    entity_updated_log.bill_attention_to =  buyer_entity.bill_attention_to
+    entity_updated_log.contact_name =  buyer_entity.contact_name
+    entity_updated_log.contact_email =  buyer_entity.contact_email
+    entity_updated_log.contact_mobile_no =  buyer_entity.contact_mobile_no
+    entity_updated_log.contact_office_no =  buyer_entity.contact_office_no
+    entity_updated_log.user_id =  buyer_entity.user_id
+    entity_updated_log.is_default =  buyer_entity.is_default
+    entity_updated_log.approval_status =  buyer_entity.approval_status
+    entity_updated_log.user_entity_id =  buyer_entity.user_entity_id
+    entity_updated_log.created_at = DateTime.current
+    entity_updated_log.entity_id =  buyer_entity.id
+    entity_updated_log.save!
   end
 end

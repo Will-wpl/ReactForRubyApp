@@ -29,7 +29,7 @@ export class Modal extends React.Component {
             modalSize: this.props.modalSize,
             entityid: '', is_default: '', user_id: "", main_id: "", user_entity_id: "",
             entity_company_name: '', entity_company_uen: '', entity_company_address: '', entity_billing_address: '', entity_bill_attention_to: '', entity_contact_name: '',
-            entity_contact_email: '', entity_contact_mobile_no: '', entity_contact_office_no: '', entitList: []
+            entity_contact_email: '', entity_contact_mobile_no: '', entity_contact_office_no: '', entitList: [], entityErrorList: [], loglist: []
         }
     }
 
@@ -123,6 +123,18 @@ export class Modal extends React.Component {
         if (next.entitList) {
             this.setState({ entitList: next.entitList })
         }
+
+        if (next.entityErrorList) {
+            this.setState({
+                entityErrorList: next.entityErrorList
+            })
+        }
+        if (next.loglist) {
+            this.setState({
+                loglist: next.loglist
+            })
+        }
+
         $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
         $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
     }
@@ -153,13 +165,13 @@ export class Modal extends React.Component {
             props_data: data ? data : {}
         })
         if (data) {
-            if(str=="email_template_la"){
+            if (str == "email_template_la") {
                 $(".w-e-text p").html("");
-                if($("#email_body").html() == ""){
+                if ($("#email_body").html() == "") {
                     var editor = new E('#email_body');
-                    setTimeout(()=>{editor.create();});
+                    setTimeout(() => { editor.create(); });
                 }
-                setTimeout(()=>{$(".w-e-text p").html(data)},300);
+                setTimeout(() => { $(".w-e-text p").html(data) }, 300);
             }
             if (data.subject && data.body) {
                 $(".w-e-text p").html("");
@@ -213,11 +225,11 @@ export class Modal extends React.Component {
     }
 
     Accept() {
-        if (this.state.strtype =="email_template" ||
-            this.state.strtype =="email_template_la") {
-            if(this.state.strtype =="email_template_la"){
-                this.setState({ props_data: $(".w-e-text p").html()});
-            }else{
+        if (this.state.strtype == "email_template" ||
+            this.state.strtype == "email_template_la") {
+            if (this.state.strtype == "email_template_la") {
+                this.setState({ props_data: $(".w-e-text p").html() });
+            } else {
                 let data = this.state.props_data;
                 data.subject = this.state.email_subject;
                 data.body = $(".w-e-text p").html();
@@ -226,7 +238,7 @@ export class Modal extends React.Component {
         }
 
         if (this.props.acceptFunction) {
-            setTimeout(()=>{
+            setTimeout(() => {
                 this.props.acceptFunction(this.state.props_data);
             })
             this.closeModal();
@@ -791,7 +803,7 @@ export class Modal extends React.Component {
             } else if (this.props.listdetailtype === "Email Template") {
                 if (this.props.text === '') {
                     showDetail = <div>
-                        {this.state.strtype == "email_template_la"?'':<div className="lm--formItem lm--formItem--inline string" style={{ marginLeft: "-15%" }}>
+                        {this.state.strtype == "email_template_la" ? '' : <div className="lm--formItem lm--formItem--inline string" style={{ marginLeft: "-15%" }}>
                             <label className="lm--formItem-left lm--formItem-label string required">
                                 Subject:
                             </label>
@@ -889,6 +901,42 @@ export class Modal extends React.Component {
                     <li>All supporting documents submitted should be in English only.</li>
                 </ul>
             }
+            if (this.props.listdetailtype === 'entity_error') {
+
+                if (this.state.entityErrorList.nameError) {
+                    showDetail = <div>
+                        {
+                            this.state.entityErrorList.nameError ?
+                                <div>
+                                    <span>Company Name can not be duplicated:</span>
+                                    <ul className="showdetailerr">{
+                                        this.state.entityErrorList.nameError.map((item, index) => {
+                                            return <li key={index}><span>{item}</span></li>
+                                        })
+                                    }
+                                    </ul>
+                                </div>
+                                : <div></div>
+                        }
+                        {
+                            this.state.entityErrorList.uenError ?
+                                <div>
+                                    <span>Company UEN can not be duplicated:</span>
+                                    <ul className="showdetailerr">{
+                                        this.state.entityErrorList.uenError.map((item, index) => {
+                                            return <li key={index}><span>{item}</span></li>
+                                        })
+                                    }
+                                    </ul>
+                                </div>
+                                : <div></div>
+                        }
+                    </div>
+                }
+            }
+            if (this.props.listdetailtype === 'viewLog') {
+                
+            }
 
             if (this.props.listdetailtype === 'entity_detail') {
                 if (this.props.entity_detail_item !== null) {
@@ -902,7 +950,7 @@ export class Modal extends React.Component {
                                         <div className="isHide">
                                             <input type="text" value={this.state.entityid} onChange={this.changeEntity.bind(this, "entityid")} id="id" name="id" />
                                         </div>
-                                        <input type="text" name="entity_company_name" id="entity_company_name" value={this.state.entity_company_name} onChange={this.changeEntity.bind(this, 'entity_company_name')} className={this.props.disabled ? "mainEntity" : ""} readOnly={this.props.disabled} ref="entity_company_name" aria-required="true" title="Please fill out this field"></input>
+                                        <input type="text" name="entity_company_name" id="entity_company_name" value={this.state.entity_company_name} onChange={this.changeEntity.bind(this, 'entity_company_name')} className={this.props.disabled ? "mainEntity" : ""} disabled={this.props.disabled} ref="entity_company_name" aria-required="true" title="Please fill out this field"></input>
                                         <div className='isPassValidate' id="entity_company_name_message" >This field is required!</div>
                                         <div className='isPassValidate' id="entity_company_name_repeat" >Company name has already been taken!</div>
                                     </td>
@@ -910,7 +958,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td><abbr title="required">*</abbr>Company UEN</td>
                                     <td>
-                                        <input type="text" name="entity_company_uen" id="entity_company_uen" value={this.state.entity_company_uen} onChange={this.changeEntity.bind(this, 'entity_company_uen')} className={this.props.disabled ? "mainEntity" : ""} readOnly={this.props.disabled} ref="entity_company_uen" aria-required="true" title="Please fill out this field"></input>
+                                        <input type="text" name="entity_company_uen" id="entity_company_uen" value={this.state.entity_company_uen} onChange={this.changeEntity.bind(this, 'entity_company_uen')} className={this.props.disabled ? "mainEntity" : ""} disabled={this.props.disabled} ref="entity_company_uen" aria-required="true" title="Please fill out this field"></input>
                                         <div className='isPassValidate' id="entity_company_uen_message" >This field is required!</div>
                                         <div className='isPassValidate' id="entity_company_uen_repeat" >Company UEN has already been taken!</div>
                                     </td>
@@ -918,7 +966,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td><abbr title="required">*</abbr>Company Address</td>
                                     <td>
-                                        <input type="text" name="entity_company_address" id="entity_company_address" value={this.state.entity_company_address} onChange={this.changeEntity.bind(this, 'entity_company_address')} className={this.props.disabled ? "mainEntity" : ""} readOnly={this.props.disabled} ref="entity_company_address" aria-required="true" title="Please fill out this field"></input>
+                                        <input type="text" name="entity_company_address" id="entity_company_address" value={this.state.entity_company_address} onChange={this.changeEntity.bind(this, 'entity_company_address')} className={this.props.disabled ? "mainEntity" : ""} disabled={this.props.disabled} ref="entity_company_address" aria-required="true" title="Please fill out this field"></input>
                                         <div className='isPassValidate' id="entity_company_address_message" >This field is required!</div>
                                         <div className='isPassValidate' id="entity_company_address_repeat" >Company UEN has already been taken!</div>
                                     </td>

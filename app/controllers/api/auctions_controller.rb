@@ -421,12 +421,12 @@ class Api::AuctionsController < Api::BaseController
     elsif entity_id.blank?
       pdf, output_filename = LetterOfAward.new(pdf_param).pdf
     else
-      template_filename = if is_parent
-                            'letter_of_award_template.html'
+      template_type = if is_parent
+                            1
                           else
-                            'letter_of_award_template_nominated_entity.html'
-                          end
-      pdf, output_filename = LetterOfAwardV2.new(pdf_param, template_filename).pdf
+                            2
+                      end
+      pdf, output_filename = LetterOfAwardV2.new(pdf_param, template_type).pdf
     end
 
     send_data(pdf, filename: output_filename)

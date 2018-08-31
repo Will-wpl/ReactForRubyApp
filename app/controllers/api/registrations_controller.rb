@@ -47,7 +47,11 @@ class Api::RegistrationsController < Api::BaseController
     # get buyer entities
     buyer_entities = user.company_buyer_entities.order(is_default: :desc)
     buyer_entity_ids = []
-    buyer_entities.each { |x| buyer_entity_ids.push(x.id) }
+    buyer_entitiy_objs = []
+    buyer_entities.each { |x|
+      buyer_entity_ids.push(x.id);
+      buyer_entitiy_objs.push({entity: x, entity_logs:CompanyBuyerEntitiesUpdatedLog.find_by_entity_id(x.id)})
+    }
     # get used buyer entities
     used_buyer_entity_ids = []
     ConsumptionDetail.all().each { |x| used_buyer_entity_ids.push(x.company_buyer_entity_id) if buyer_entity_ids.include?(x.company_buyer_entity_id) }
@@ -57,15 +61,18 @@ class Api::RegistrationsController < Api::BaseController
     buyer_revv_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
     # get letter-of-authorisation document
     letter_of_authorisation_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Letter_Authorisation)
+    # get logs
+    user_logs = UserUpdatedLog.find_by_user_id(user.id)
     # return json
     user_json = { user_base_info: user,
-                  buyer_entities: buyer_entities,
+                  buyer_entities: buyer_entitiy_objs,
                   used_buyer_entity_ids: used_buyer_entity_ids,
                   self_attachment: user_attachment,
                   self_attachments: user_attachments,
                   seller_buyer_tc_attachment: seller_buyer_tc_attachment,
                   buyer_revv_tc_attachment: buyer_revv_tc_attachment,
-                  letter_of_authorisation_attachment: letter_of_authorisation_attachment}
+                  letter_of_authorisation_attachment: letter_of_authorisation_attachment,
+                  user_logs: user_logs}
     user_json
   end
 
@@ -83,7 +90,8 @@ class Api::RegistrationsController < Api::BaseController
 
     # get letter-of-authorisation document
     letter_of_authorisation_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Letter_Authorisation)
-
+    # get logs
+    user_logs = UserUpdatedLog.find_by_user_id(user_id)
     # get user info
     user = User.find(user_id)
     # return json
@@ -92,7 +100,8 @@ class Api::RegistrationsController < Api::BaseController
                   self_attachments: user_attachments,
                   seller_buyer_tc_attachment: seller_buyer_tc_attachment,
                   seller_revv_tc_attachment: seller_revv_tc_attachment,
-                  letter_of_authorisation_attachment: letter_of_authorisation_attachment }
+                  letter_of_authorisation_attachment: letter_of_authorisation_attachment,
+                  user_logs: user_logs }
     user_json
   end
 

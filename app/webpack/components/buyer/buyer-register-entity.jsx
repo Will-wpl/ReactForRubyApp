@@ -34,7 +34,8 @@ export class BuyerUserEntityRegister extends Component {
             mainEntityFinished: false,
             ismain: false,
             btnAddDisabled: false,
-            deleteIndex: -1
+            deleteIndex: -1,
+            validateErrList: []
         }
         this.entityItem = {
             id: 0,
@@ -102,7 +103,6 @@ export class BuyerUserEntityRegister extends Component {
         }
     }
     setDefaultValue(param) {
-        console.log(param)
         this.setBuyerInfo(param);
         this.setEntityInfo(param);
         this.setButton(param);
@@ -193,16 +193,16 @@ export class BuyerUserEntityRegister extends Component {
                 messageAttachmentUrl: param.letter_of_authorisation_attachment.file_path
             })
         }
-        if (param.seller_buyer_tc_attachment) {
-            let buyer = param.seller_buyer_tc_attachment;
+        if (param.buyer_revv_tc_attachment) {
+            let buyer = param.buyer_revv_tc_attachment;
             this.setState({
                 buyerTCurl: buyer.file_path,
                 buyerTCname: buyer.file_name
             })
         }
-
-        if (param.buyer_revv_tc_attachment) {
-            let revv = param.buyer_revv_tc_attachment;
+        
+        if (param.seller_buyer_tc_attachment) {
+            let revv = param.seller_buyer_tc_attachment;
             this.setState({
                 buyerRevvTCurl: revv.file_path,
                 buyerRevvTCname: revv.file_name
@@ -271,7 +271,7 @@ export class BuyerUserEntityRegister extends Component {
     tab(type) {
         $(".buyer_tab a").removeClass("selected");
         $("#tab_" + type).addClass("selected");
-        $(".buyer_list").hide();
+        $(".buyer_list1").hide();
         $("#buyer_" + type).fadeIn(500);
     }
 
@@ -356,6 +356,15 @@ export class BuyerUserEntityRegister extends Component {
     }
 
     setParams(type) {
+        if (this.state.entity_list.length > 0) {
+            let list = this.state.entity_list;
+            list[0].company_name = this.state.company_name;
+            list[0].company_uen = this.state.unique_entity_number;
+            list[0].company_address = this.state.company_address;
+            this.setState({
+                entity_list:list
+            })
+        }
         let params = {
             user: {
                 'id': this.state.id,
@@ -412,7 +421,6 @@ export class BuyerUserEntityRegister extends Component {
         else {
             hasDoc = false;
             $("#showMessage").removeClass("isPassValidate").addClass("errormessage");
-            console.log("empty file ")
         }
         $('.validate_message').find('div').each(function () {
             let className = $(this).attr('class');
@@ -496,7 +504,7 @@ export class BuyerUserEntityRegister extends Component {
                     });
                 }
                 else {
-
+                     this.validateRepeatColumn(res);
                 }
             })
         }
@@ -525,9 +533,24 @@ export class BuyerUserEntityRegister extends Component {
             return;
         }
         if (res.error_entity_indexes.length > 0) { //validate entity
-
-            this.setState({ text: "entity" })
-            this.refs.Modal.showModal();
+            let name = [], uen = [];
+            res.error_entity_indexes.map((item) => {
+                if (item.error_field_name === "company_name") {
+                    name.push(item.error_value)
+                }
+                if (item.error_field_name === "company_uen") {
+                    uen.push(item.error_value);
+                }
+            });
+            let errList = {
+                nameError: name,
+                uenError: uen
+            }
+            this.setState({
+                validateErrList: errList
+            })
+            // this.setState({ text: "entity" })
+            this.refs.Modal_EntityErr.showModal();
             this.tab("entity");
             return;
         }
@@ -572,22 +595,7 @@ export class BuyerUserEntityRegister extends Component {
         this.setState({
             entity_list: list
         })
-        // if (obj === "refrsesh") {
-        //     window.location.href = `/users/edit`;
-        // }
     }
-
-    doAction(obj) {
-        // let param = {
-        //     user_id: this.state.userid,
-        //     comment: this.state.comment,
-        //     approved: obj.action === 'reject' ? "" : 1
-        // };
-        // approveBuyerUser(param).then(res => {
-        //     location.href = "/admin/users/buyers";
-        // })
-    }
-
     acceptAddEntity(entityInfo) {
         let item = {
             id: entityInfo.id ? entityInfo.id : "",
@@ -745,12 +753,12 @@ export class BuyerUserEntityRegister extends Component {
                         <a className="col-sm-4 col-md-2 selected" onClick={this.tab.bind(this, 'base')} id="tab_base">Buyer Information</a>
                         <a className="col-sm-4 col-md-2" onClick={this.tab.bind(this, 'entity')} id="tab_entity"  >Entity</a>
                     </div>
-                    <div className="col-sm-12 buyer_list" id="buyer_base" >
+                    <div className="col-sm-12 buyer_list1" id="buyer_base" >
                         <div className="retailer_manage_coming">
                             <div id="buyer_form" >
                                 <div>
                                     <div className="u-grid admin_invitation">
-                                        <div className="col-sm-12 col-md-8 push-md-3 validate_message">
+                                        <div className="col-sm-12 col-md-8 push-md-2 validate_message">
                                             <div className="lm--formItem lm--formItem--inline string">
                                                 <label className="lm--formItem-left lm--formItem-label string required">
                                                     Status :
@@ -859,9 +867,10 @@ export class BuyerUserEntityRegister extends Component {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> 
 
-                    <div className="col-sm-12 buyer_list" id="buyer_entity">
+
+                    <div className="col-sm-12 buyer_list1" id="buyer_entity">
                         <table className="buyer_entity" cellPadding="0" cellSpacing="0">
                             <colgroup>
                                 <col width="10%" />
@@ -916,11 +925,10 @@ export class BuyerUserEntityRegister extends Component {
                             </tbody>
                         </table>
                         <div style={{ paddingLeft: "20px", paddingBottom: "20px" }}>
-                            {/* className={this.state.disabled ? "isHide" : "isDisplay addSite"}  */}
-                            {/* <a className="btnAddOption" onClick={this.add_entity.bind(this)}>Add Entity</a> */}
                             <button className="entityApprove" disabled={this.state.btnAddDisabled} onClick={this.add_entity.bind(this)}>Add</button>
                         </div>
                     </div>
+                    
                     <div className="col-sm-12 col-md-8 push-md-3 validate_message margin-t buyer_list_select">
                         <div className="lm--formItem lm--formItem--inline string">
                             <label className="lm--formItem-left lm--formItem-label string required">
@@ -946,9 +954,8 @@ export class BuyerUserEntityRegister extends Component {
                         </h4>
                         <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                         <Modal text={this.state.text} acceptFunction={this.refreshForm.bind(this)} ref="Modal" />
-                        <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
                         <Modal formSize="big" listdetailtype="entity_detail" text={this.state.text} acceptFunction={this.acceptAddEntity.bind(this)} entitList={this.state.entity_list} disabled={this.state.ismain} entityDetailItem={this.state.entityItemInfo} ref="Modal_Entity" />
-                        <Modal listdetailtype="entity_error" text={this.state.text} entityErrorList={this.state.entityErrList} ref="Modal_EntityErr" />
+                        <Modal listdetailtype="entity_error" text={this.state.text} entityErrorList={this.state.validateErrList} ref="Modal_EntityErr" />
                     </div>
                     <div className="retailer_btn">
                         {btn_html}
