@@ -168,13 +168,19 @@ class Api::ConsumptionDetailsController < Api::BaseController
     details.each_index do |index|
       details.each do |temp_detail|
         if details[index].object_id != temp_detail.object_id && details[index]['account_number'] == temp_detail['account_number']
-          error_detail_indexes.push(index)
+          error_detail_indexes.push({'consumption_detail_index': index,
+                                     'error_field_name': 'account_number',
+                                     'error_value': details[index]['account_number']})
           messages.push('There is already an existing contract for this Account Number.') unless had_error_msg_acc
           had_error_msg_acc = true
         end
         # If both Unit Number and Postal Code are the same, then fail the check.
-        if details[index].object_id != temp_detail.object_id && details[index]['unit_number'] == temp_detail['unit_number'] && details[index]['postal_code'] == temp_detail['postal_code'] then
-          error_detail_indexes.push(index)
+        if details[index].object_id != temp_detail.object_id && details[index]['unit_number'] == temp_detail['unit_number'] &&
+            details[index]['postal_code'] == temp_detail['postal_code'] then
+          error_detail_indexes.push({'consumption_detail_index': index,
+                                     'error_field_name': 'premise_address',
+                                     'error_value': { 'unit_number': details[index]['unit_number'],
+                                                      'postal_code': details[index]['postal_code']}})
           messages.push('There is already an existing contract for this premise address.') unless had_error_msg_addr
           had_error_msg_addr = true
         end
@@ -182,7 +188,9 @@ class Api::ConsumptionDetailsController < Api::BaseController
       # contract expiry date > RA's contract start date.
       if !details[index]['contract_expiry'].blank? &&
           Time.parse(details[index]['contract_expiry']) <= auction.contract_period_start_date
-        error_detail_indexes.push(index)
+        error_detail_indexes.push({'consumption_detail_index': index,
+                                   'error_field_name': 'contract_expiry',
+                                   'error_value': details[index]['contract_expiry']})
       end
     end
 
@@ -202,7 +210,9 @@ class Api::ConsumptionDetailsController < Api::BaseController
     had_error_msg_acc = false
     details.each_index do |index|
       if account_numbers.any? { |v| v == details[index]['account_number'] }
-        error_detail_indexes.push(index)
+        error_detail_indexes.push({'consumption_detail_index': index,
+                                  'error_field_name': 'account_number',
+                                  'error_value': details[index]['account_number']})
         messages.push('There is already an existing contract for this Account Number.') unless had_error_msg_acc
         had_error_msg_acc = true
       end

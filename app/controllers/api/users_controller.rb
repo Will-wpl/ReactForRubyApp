@@ -112,8 +112,9 @@ class Api::UsersController < Api::BaseController
     user = User.find(user_id)
     unless user.blank?
       user.email = string_for_user_value(user.email)
-      user.company_unique_entity_number =string_for_user_value(user.company_unique_entity_number)
+      user.company_unique_entity_number = string_for_user_value(user.company_unique_entity_number)
       user.is_deleted = 1
+      user.approval_status = User::ApprovalStatusRemoved
       user.deleted_at = DateTime.current
       user.save!
     end
@@ -191,6 +192,10 @@ class Api::UsersController < Api::BaseController
       'Pending'
     elsif user.approval_status == '3'
       'Registering'
+    elsif user.approval_status == User::ApprovalStatusDisable
+      'Disabled'
+    elsif user.approval_status == User::ApprovalStatusRemoved
+      'Removed'
     else
       ''
     end

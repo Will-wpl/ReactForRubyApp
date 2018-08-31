@@ -6,11 +6,13 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
     let!(:admin_user){ create(:user, :with_admin) }
     let!(:auction) { create(:auction, :for_next_month, :upcoming, :published, :started, contract_period_start_date: '2018-07-01') }
     let!(:company_buyer) { create(:user, :with_buyer, :with_company_buyer) }
+    let!(:company_buyer_entity) { create(:company_buyer_entity, user:company_buyer) }
+    # let!(:company_buyer) { create(:user, :with_buyer, :with_company_buyer, approval_status: '1', company_unique_entity_number: 'Test UEN', company_name: 'test buyer', email: 'test_email4@email.com') }
     let!(:consumption) { create(:consumption, user: company_buyer, auction: auction, participation_status: '1') }
-    let!(:consumption_lt) { create(:consumption_detail, :for_lt, consumption_id: consumption.id) }
-    let!(:consumption_hts) { create(:consumption_detail, :for_hts, consumption_id: consumption.id) }
-    let!(:consumption_htl) { create(:consumption_detail, :for_htl, consumption_id: consumption.id) }
-    let!(:consumption_eht) { create(:consumption_detail, :for_eht, consumption_id: consumption.id ) }
+    let!(:consumption_lt) { create(:consumption_detail, :for_lt, consumption_id: consumption.id, company_buyer_entity_id: company_buyer_entity.id) }
+    let!(:consumption_hts) { create(:consumption_detail, :for_hts, consumption_id: consumption.id, company_buyer_entity_id: company_buyer_entity.id) }
+    let!(:consumption_htl) { create(:consumption_detail, :for_htl, consumption_id: consumption.id, company_buyer_entity_id: company_buyer_entity.id) }
+    let!(:consumption_eht) { create(:consumption_detail, :for_eht, consumption_id: consumption.id, company_buyer_entity_id: company_buyer_entity.id) }
     let!(:tc1) { create(:user_attachment, file_name: 'test', file_path: 'test')}
     let!(:tc2) { create(:user_attachment, file_name: 'test', file_path: 'test')}
     let!(:tc3) { create(:user_attachment, file_name: 'test', file_path: 'test')}
@@ -146,7 +148,6 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
           expect(hash_body).to have_content('error_detail_indexes')
           expect(hash_body).to have_content('error_messages')
           expect(hash_body['validate_result']).to eq(false)
-          expect(hash_body['error_detail_indexes']).to eq([0, 1])
         end
       end
 
@@ -167,7 +168,6 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
           expect(hash_body).to have_content('error_detail_indexes')
           expect(hash_body).to have_content('error_messages')
           expect(hash_body['validate_result']).to eq(false)
-          expect(hash_body['error_detail_indexes']).to eq([1, 2])
         end
       end
 
@@ -189,7 +189,6 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
           expect(hash_body).to have_content('error_detail_indexes')
           expect(hash_body).to have_content('error_messages')
           expect(hash_body['validate_result']).to eq(false)
-          expect(hash_body['error_detail_indexes']).to eq([1])
         end
       end
       context 'success' do
