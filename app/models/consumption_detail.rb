@@ -23,6 +23,7 @@ class ConsumptionDetail < ApplicationRecord
 
   # Custom
 
+
   # Methods (class methods before instance methods)
   def self.find_account_less_than_contract_start_date_last(search_date)
     Consumption.find_by_sql ["SELECT cdf.*
@@ -36,7 +37,8 @@ class ConsumptionDetail < ApplicationRecord
                                       and ac.contract_period_end_date < ?
                                           ) as cda
                                     ) as cdf
-                              WHERE cdf.n <= 1", search_date]
+                              WHERE cdf.n <= 1 ORDER BY cdf.contract_period_end_date DESC, cdf.entity_id ASC
+                              ", search_date]
   end
 
 end
