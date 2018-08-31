@@ -35,7 +35,7 @@ export class BuyerUserEntityRegister extends Component {
             ismain: false,
             btnAddDisabled: false,
             deleteIndex: -1,
-            validateErrList: []
+            validateErrList: [], mainEntityComplete: false
         }
         this.entityItem = {
             id: 0,
@@ -235,7 +235,8 @@ export class BuyerUserEntityRegister extends Component {
             })
             this.setState({
                 entity_list: user_entity,
-                btnAddDisabled: false
+                btnAddDisabled: false,
+                mainEntityComplete: false
             })
         }
         else {
@@ -258,7 +259,8 @@ export class BuyerUserEntityRegister extends Component {
 
             this.setState({
                 entity_list: item,
-                btnAddDisabled: true
+                btnAddDisabled: true,
+                mainEntityComplete: true
             });
         }
         if (param.used_buyer_entity_ids) {
@@ -410,6 +412,10 @@ export class BuyerUserEntityRegister extends Component {
         if (this.state.entity_list.length > 0) {
             if (this.state.entity_list[0].billing_address === "") {
                 mainEntityFinished = false;
+                this.setState({
+                    text: "Please complete details for default purchasing entity."
+                })
+                this.refs.Modal.showModal();
             }
             else {
                 mainEntityFinished = true;
@@ -467,6 +473,16 @@ export class BuyerUserEntityRegister extends Component {
                             );
                             this.refs.Modal.showModal();
                         }
+                        // this.setState({
+                        //     btnAddDisabled: true
+                        // })
+
+                        if (type === "save") {
+                            this.setState({
+                                disabled: true,
+                                btnAddDisabled: true
+                            })
+                        }
                     });
                 }
                 else {
@@ -475,10 +491,10 @@ export class BuyerUserEntityRegister extends Component {
             });
         }
         else {
-            this.setState({
-                text: "Please complete the main entity."
-            })
-            this.refs.Modal.showModal();
+            // this.setState({
+            //     text: "Please complete details for default purchasing entity."
+            // })
+            // this.refs.Modal.showModal();
         }
     }
 
@@ -500,9 +516,7 @@ export class BuyerUserEntityRegister extends Component {
                             if (type === "sign_up") {
                                 window.location.href = `/buyer/home`;
                             }
-                            else {
 
-                            }
                         }
 
                     });
@@ -513,11 +527,6 @@ export class BuyerUserEntityRegister extends Component {
             })
         }
         else {
-            console.log("main entity");
-            this.setState({
-                text: "Please complete the main entity."
-            })
-            this.refs.Modal.showModal();
         }
     }
 
@@ -562,8 +571,6 @@ export class BuyerUserEntityRegister extends Component {
             this.tab("entity");
             return;
         }
-
-
     }
 
 
@@ -583,12 +590,14 @@ export class BuyerUserEntityRegister extends Component {
                 })
             }
         }
+        $("#entity_company_name").focus();
         $(".btnOption").css("pointer-events", "auto").css("color", "#00888a");
     }
 
     cancel() {
         this.setState({
-            disabled: true
+            disabled: true,
+            btnAddDisabled: true
         })
     }
 
@@ -633,7 +642,9 @@ export class BuyerUserEntityRegister extends Component {
                 entity_list: entity
             })
         }
-
+        this.setState({
+            mainEntityComplete:false
+        })
 
     }
 
@@ -663,6 +674,7 @@ export class BuyerUserEntityRegister extends Component {
             ismain: false,
             text: " "
         })
+        $("#entity_company_name").focus();
         this.refs.Modal_Entity.showModal('custom', {}, '', '-1')
     }
 
@@ -744,6 +756,7 @@ export class BuyerUserEntityRegister extends Component {
         this.refs.Modal.showModal("comfirm");
     }
 
+   
     render() {
         let btn_html;
         if (this.state.use_type === 'manage_acount') {
@@ -766,7 +779,7 @@ export class BuyerUserEntityRegister extends Component {
                 <div className="buyer_buyer_list col-sm-12 col-md-12">
                     <div className="col-sm-12 buyer_tab">
                         <a className="col-sm-4 col-md-2 selected" onClick={this.tab.bind(this, 'base')} id="tab_base">Buyer Information</a>
-                        <a className="col-sm-4 col-md-2" onClick={this.tab.bind(this, 'entity')} id="tab_entity"  >Entity</a>
+                        <a className="col-sm-4 col-md-2" onClick={this.tab.bind(this, 'entity')} id="tab_entity">Purchasing Entity</a>
                     </div>
                     <div className="col-sm-12 buyer_list1" id="buyer_base" >
                         <div className="retailer_manage_coming">
@@ -941,7 +954,7 @@ export class BuyerUserEntityRegister extends Component {
                         </table>
                         <div style={{ paddingLeft: "20px", paddingBottom: "20px" }}>
                             <button className="entityApprove" disabled={this.state.btnAddDisabled} onClick={this.add_entity.bind(this)}>Add</button>
-                            <span className={this.state.btnAddDisabled ? "errormessageline" : "isPassValidate"} > Please complete the main entity </span>
+                            <span className={this.state.mainEntityComplete ? "errormessageline" : "isPassValidate"} > Please complete details for default purchasing entity prior to adding new purchasing entities. </span>
 
                         </div>
                     </div>
@@ -971,6 +984,7 @@ export class BuyerUserEntityRegister extends Component {
                         </h4>
                         <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                         <Modal text={this.state.text} acceptFunction={this.refreshForm.bind(this)} ref="Modal" />
+                        <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrl} />
                         <Modal formSize="big" listdetailtype="entity_detail" text={this.state.text} acceptFunction={this.acceptAddEntity.bind(this)} entitList={this.state.entity_list} disabled={this.state.ismain} entityDetailItem={this.state.entityItemInfo} ref="Modal_Entity" />
                         <Modal listdetailtype="entity_error" text={this.state.text} entityErrorList={this.state.validateErrList} ref="Modal_EntityErr" />
                     </div>
