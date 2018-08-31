@@ -125,7 +125,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     validate_final_result = validate_final_result & validate_result
     unless validate_result
       error_fields.push({ error_field_name:'company_name',
-                              error_message: 'Buyer Company Name"'+ validation_user['company_name'] +'" is duplicated.'}
+                          error_value: validation_user['company_name'] }
                         )
     end
 
@@ -136,7 +136,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     validate_final_result = validate_final_result & validate_result
     unless validate_result
       error_fields.push({ error_field_name:'email',
-                          error_message: 'Buyer Email"'+ validation_user['email'] +'" is duplicated.'}
+                          error_value: validation_user['email'] }
       )
     end
 
@@ -148,7 +148,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     validate_final_result = validate_final_result & validate_result
     unless validate_result
       error_fields.push({ error_field_name:'company_unique_entity_number',
-                          error_message: 'Buyer Company UEN"'+ validation_user['company_unique_entity_number'] +'" is duplicated.'}
+                          error_value: validation_user['company_unique_entity_number'] }
       )
     end
 
@@ -300,21 +300,21 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
         if target_entity.object_id != temp_entity.object_id && target_entity['company_name'] == temp_entity['company_name']
           if only_field_name
             entity_error_info.push({ 'error_field_name' => 'company_name',
-                                         'error_message' => 'Entity Company Name "'+ target_entity['company_name'] +'" is duplicated.'})
+                                         'error_value' => target_entity['company_name'] })
           else
             entity_error_info.push({ 'entity_index' => index,
                                          'error_field_name' =>'company_name',
-                                         'error_message' => 'Entity Company Name "'+ target_entity['company_name'] +'" is duplicated.'})
+                                         'error_value' => target_entity['company_name'] })
           end
         end
         if target_entity.object_id != temp_entity.object_id && target_entity['company_uen'] == temp_entity['company_uen']
           if only_field_name
             entity_error_info.push({ 'error_field_name' => 'company_uen',
-                                         'error_message' => 'Entity Company UEN "'+ target_entity['company_uen'] +'" is duplicated.'})
+                                         'error_value' => target_entity['company_uen'] })
           else
             entity_error_info.push({ 'entity_index' => index,
                                          'error_field_name' =>'company_uen',
-                                         'error_message' => 'Entity Company UEN "'+ target_entity['company_uen'] +'" is duplicated.'})
+                                         'error_value' => target_entity['company_uen'] })
           end
         end
       end
@@ -341,10 +341,10 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
       if index > -1
         entity_error_info.push({ 'entity_index' => index,
                                      'error_field_name' => 'contact_email',
-                                     'error_message' => 'Entity Contact Email "'+ buyer_entity['contact_email'] +'" is existed.'})
+                                     'error_value' => buyer_entity['contact_email'] })
       else
         entity_error_info.push({ 'error_field_name' => 'contact_email',
-                                     'error_message' => 'Entity Contact Email "'+ buyer_entity['contact_email'] +'" is existed.'})
+                                     'error_value' => buyer_entity['contact_email'] })
       end
     end
     if buyer_entity['is_default'].equal?(1) &&
@@ -355,10 +355,10 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
       if index > -1
         entity_error_info.push({ 'entity_index' => index,
                                      'error_field_name' => 'contact_email',
-                                     'error_message' => 'Entity Contact Email "'+ buyer_entity['contact_email'] +'" is existed.'})
+                                     'error_value' => buyer_entity['contact_email'] })
       else
         entity_error_info.push({ 'error_field_name' => 'contact_email',
-                                     'error_message' => 'Entity Contact Email "'+ buyer_entity['contact_email'] +'" is existed.'})
+                                     'error_value' => buyer_entity['contact_email'] })
       end
     end
     if !buyer_entity['is_default'].equal?(1) &&
@@ -369,10 +369,10 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
       if index > -1
         entity_error_info.push({ 'entity_index' => index,
                                      'error_field_name' => 'contact_email',
-                                     'error_message' => 'Entity Contact Email "'+ buyer_entity['contact_email'] +'" is existed.'})
+                                     'error_value' => buyer_entity['contact_email'] })
       else
         entity_error_info.push({ 'error_field_name' => 'contact_email',
-                                     'error_message' => 'Entity Contact Email "'+ buyer_entity['contact_email'] +'" is existed.'})
+                                     'error_value' => buyer_entity['contact_email'] })
       end
     end
     if !buyer_entity['is_default'].equal?(1) &&
@@ -383,10 +383,10 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
       if index > -1
         entity_error_info.push({ 'entity_index' => index,
                                      'error_field_name' => 'contact_email',
-                                     'error_message' => 'Entity Contact Email "'+ buyer_entity['contact_email'] +'" is existed.'})
+                                     'error_value' => buyer_entity['contact_email'] })
       else
         entity_error_info.push({ 'error_field_name' => 'contact_email',
-                                     'error_message' => 'Entity Contact Email "'+ buyer_entity['contact_email'] +'" is existed.'})
+                                     'error_value' => buyer_entity['contact_email'] })
       end
     end
     if !buyer_entity['is_default'].equal?(1) &&
@@ -397,10 +397,10 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
       if index > -1
         entity_error_info.push({ 'entity_index' => index,
                                      'error_field_name' => 'company_name',
-                                     'error_message' => 'Entity Company Name "'+ buyer_entity['company_name'] +'" is existed.'})
+                                     'error_value' => buyer_entity['company_name'] })
       else
         entity_error_info.push({ 'error_field_name' => 'company_name',
-                                     'error_message' => 'Entity Company Name "'+ buyer_entity['company_name'] +'" is existed.'})
+                                     'error_value' => buyer_entity['company_name'] })
       end
     end
     if !buyer_entity['is_default'].equal?(1) &&
@@ -411,10 +411,10 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
       if index > -1
         entity_error_info.push({ 'entity_index' => index,
                                      'error_field_name' => 'company_name',
-                                     'error_message' => 'Entity Company Name "'+ buyer_entity['company_name'] +'" is existed.'})
+                                     'error_value' => buyer_entity['company_name'] })
       else
         entity_error_info.push({ 'error_field_name' => 'company_name',
-                                     'error_message' => 'Entity Company Name "'+ buyer_entity['company_name'] +'" is existed.'})
+                                     'error_value' => buyer_entity['company_name'] })
       end
     end
     if !buyer_entity['is_default'].equal?(1) &&
@@ -423,10 +423,10 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
       if index > -1
         entity_error_info.push({ 'entity_index' => index,
                                  'error_field_name' => 'company_name',
-                                 'error_message' => 'Entity Company Name "'+ buyer_entity['company_name'] +'" is same with Buyer Company Name.'})
+                                 'error_value' => buyer_entity['company_name'] })
       else
         entity_error_info.push({ 'error_field_name' => 'company_name',
-                                 'error_message' => 'Entity Company Name "'+ buyer_entity['company_name'] +'" is same with Buyer Company Name.'})
+                                 'error_value' => buyer_entity['company_name'] })
       end
     end
     if !buyer_entity['is_default'].equal?(1) &&
@@ -437,10 +437,10 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
       if index > -1
         entity_error_info.push({ 'entity_index' => index,
                                      'error_field_name' => 'company_uen',
-                                     'error_message' => 'Entity Company UEN "'+ buyer_entity['company_uen'] +'" is existed.'})
+                                     'error_value' => buyer_entity['company_uen'] })
       else
         entity_error_info.push({ 'error_field_name' => 'company_uen',
-                                 'error_message' => 'Entity Company UEN "'+ buyer_entity['company_uen'] +'" is existed.'})
+                                 'error_value' => buyer_entity['company_uen'] })
       end
     end
     if !buyer_entity['is_default'].equal?(1) &&
@@ -451,10 +451,10 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
       if index > -1
         entity_error_info.push({ 'entity_index' => index,
                                      'error_field_name' => 'company_uen',
-                                     'error_message' => 'Entity Company UEN "'+ buyer_entity['company_uen'] +'" is existed.'})
+                                     'error_value' => buyer_entity['company_uen'] })
       else
         entity_error_info.push({ 'error_field_name' => 'company_uen',
-                                     'error_message' => 'Entity Company UEN "'+ buyer_entity['company_uen'] +'" is existed.'})
+                                     'error_value' => buyer_entity['company_uen'] })
       end
     end
     if !buyer_entity['is_default'].equal?(1) &&
@@ -463,10 +463,10 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
       if index > -1
         entity_error_info.push({ 'entity_index' => index,
                                  'error_field_name' => 'company_uen',
-                                 'error_message' => 'Entity Company UEN "'+ buyer_entity['company_uen'] +'" is same with Buyer Company UEN.'})
+                                 'error_value' => buyer_entity['company_uen'] })
       else
         entity_error_info.push({ 'error_field_name' => 'company_uen',
-                                 'error_message' => 'Entity Company UEN "'+ buyer_entity['company_uen'] +'" is same with Buyer Company UEN.'})
+                                 'error_value' => buyer_entity['company_uen'] })
       end
     end
     entity_error_info
