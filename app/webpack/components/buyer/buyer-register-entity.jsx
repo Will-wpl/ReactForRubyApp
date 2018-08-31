@@ -387,7 +387,7 @@ export class BuyerUserEntityRegister extends Component {
                 $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
             }
         })
-        let flag = true, hasDoc = true, checkSelect = true;
+        let flag = true, hasDoc = true, checkSelect = true, mainEntityFinished = true;
         let arr = validator_Object(this.state, this.validatorBuyerInfo);
 
         if (arr) {
@@ -396,6 +396,14 @@ export class BuyerUserEntityRegister extends Component {
                 let cate = item.cate;
                 setValidationFaild(column, cate)
             })
+        }
+        if (this.state.entity_list.length > 0) {
+            if (this.state.entity_list[0].billing_address === "") {
+                mainEntityFinished = false;
+            }
+            else {
+                mainEntityFinished = true;
+            }
         }
         if (this.state.fileData['BUYER_DOCUMENTS'][0].files.length > 0) {
             hasDoc = true;
@@ -425,7 +433,7 @@ export class BuyerUserEntityRegister extends Component {
                 $("#chkRevv_message").removeClass('isPassValidate').addClass('errormessage');
             }
         }
-        return flag && hasDoc && checkSelect;
+        return flag && hasDoc && checkSelect && mainEntityFinished;
     }
 
     save(type) {
@@ -456,6 +464,9 @@ export class BuyerUserEntityRegister extends Component {
                     this.validateRepeatColumn(res)
                 }
             });
+        }
+        else {
+            console.log("main entity")
         }
     }
 
@@ -489,16 +500,38 @@ export class BuyerUserEntityRegister extends Component {
                 }
             })
         }
+        else {
+            console.log("main entity")
+        }
     }
 
     validateRepeatColumn(res) {
-        if (res.error_fields.length > 0) {
+        if (res.error_fields.length > 0) { //validate buyer
+            for (let item of res.error_fields) {
+                if (item.error_field_name === "company_unique_entity_number") {
+                    $('#unique_entity_number_repeat').removeClass('isPassValidate').addClass('errormessage');
+                    $("input[name='unique_entity_number']").focus();
+                }
+                else if (item.error_field_name === "email") {
+                    $('#email_address_repeat').removeClass('isPassValidate').addClass('errormessage');
+                    $("input[name='email_address']").focus();
+                }
+                else {
+                    $('#company_name_repeat').removeClass('isPassValidate').addClass('errormessage');
+                    $("input[name='company_name']").focus();
+                }
+            }
+            this.tab("base");
+            return;
+        }
+        if (res.error_entity_indexes.length > 0) { //validate entity
 
-            this.setState({ text: "sdfsdfasdf" })
+            this.setState({ text: "entity" })
             this.refs.Modal.showModal();
             this.tab("entity");
             return;
         }
+
 
     }
 
