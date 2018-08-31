@@ -29,7 +29,7 @@ export class Modal extends React.Component {
             modalSize: this.props.modalSize,
             entityid: '', is_default: '', user_id: "", main_id: "", user_entity_id: "",
             entity_company_name: '', entity_company_uen: '', entity_company_address: '', entity_billing_address: '', entity_bill_attention_to: '', entity_contact_name: '',
-            entity_contact_email: '', entity_contact_mobile_no: '', entity_contact_office_no: '', entitList: []
+            entity_contact_email: '', entity_contact_mobile_no: '', entity_contact_office_no: '', entitList: [], entityErrorList: []
         }
     }
 
@@ -123,6 +123,14 @@ export class Modal extends React.Component {
         if (next.entitList) {
             this.setState({ entitList: next.entitList })
         }
+
+        if (next.entityErrorList) {
+            console.log(next.entityErrorList)
+            this.setState({
+                entityErrorList: next.entityErrorList
+            })
+        }
+
         $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
         $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
     }
@@ -153,13 +161,13 @@ export class Modal extends React.Component {
             props_data: data ? data : {}
         })
         if (data) {
-            if(str=="email_template_la"){
+            if (str == "email_template_la") {
                 $(".w-e-text p").html("");
-                if($("#email_body").html() == ""){
+                if ($("#email_body").html() == "") {
                     var editor = new E('#email_body');
-                    setTimeout(()=>{editor.create();});
+                    setTimeout(() => { editor.create(); });
                 }
-                setTimeout(()=>{$(".w-e-text p").html(data)},300);
+                setTimeout(() => { $(".w-e-text p").html(data) }, 300);
             }
             if (data.subject && data.body) {
                 $(".w-e-text p").html("");
@@ -213,11 +221,11 @@ export class Modal extends React.Component {
     }
 
     Accept() {
-        if (this.state.strtype =="email_template" ||
-            this.state.strtype =="email_template_la") {
-            if(this.state.strtype =="email_template_la"){
-                this.setState({ props_data: $(".w-e-text p").html()});
-            }else{
+        if (this.state.strtype == "email_template" ||
+            this.state.strtype == "email_template_la") {
+            if (this.state.strtype == "email_template_la") {
+                this.setState({ props_data: $(".w-e-text p").html() });
+            } else {
                 let data = this.state.props_data;
                 data.subject = this.state.email_subject;
                 data.body = $(".w-e-text p").html();
@@ -226,7 +234,7 @@ export class Modal extends React.Component {
         }
 
         if (this.props.acceptFunction) {
-            setTimeout(()=>{
+            setTimeout(() => {
                 this.props.acceptFunction(this.state.props_data);
             })
             this.closeModal();
@@ -791,7 +799,7 @@ export class Modal extends React.Component {
             } else if (this.props.listdetailtype === "Email Template") {
                 if (this.props.text === '') {
                     showDetail = <div>
-                        {this.state.strtype == "email_template_la"?'':<div className="lm--formItem lm--formItem--inline string" style={{ marginLeft: "-15%" }}>
+                        {this.state.strtype == "email_template_la" ? '' : <div className="lm--formItem lm--formItem--inline string" style={{ marginLeft: "-15%" }}>
                             <label className="lm--formItem-left lm--formItem-label string required">
                                 Subject:
                             </label>
@@ -888,6 +896,43 @@ export class Modal extends React.Component {
                     <li>5) A copy of the Authorised Representative's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
                     <li>All supporting documents submitted should be in English only.</li>
                 </ul>
+            }
+            if (this.props.listdetailtype === 'entity_error') {
+
+                if (this.state.entityErrorList.nameError) {
+                    showDetail = <div>
+                        {
+                            this.state.entityErrorList.nameError ?
+                                <div>
+                                    <span>Company Name can not be duplicated:</span>
+                                    <ul className="showdetail">{
+                                        this.state.entityErrorList.nameError.map((item, index) => {
+                                            return <li key={index}>{item}</li>
+                                        })
+                                    }
+                                    </ul>
+                                </div>
+                                : <div></div>
+                        }
+                        {
+                            this.state.entityErrorList.uenError ?
+                                <div>
+                                    <span>Company UEN can not be duplicated:</span>
+                                    <ul className="showdetail">{
+                                        this.state.entityErrorList.uenError.map((item, index) => {
+                                            return <li key={index}>{item}</li>
+                                        })
+                                    }
+                                    </ul>
+                                </div>
+                                : <div></div>
+                        }
+                    </div>
+                }
+                else {
+                    showDetail = <div>asdfasdfsdafsadf</div>
+                }
+
             }
 
             if (this.props.listdetailtype === 'entity_detail') {

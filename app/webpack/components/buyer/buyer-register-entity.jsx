@@ -34,7 +34,8 @@ export class BuyerUserEntityRegister extends Component {
             mainEntityFinished: false,
             ismain: false,
             btnAddDisabled: false,
-            deleteIndex: -1
+            deleteIndex: -1,
+            validateErrList: []
         }
         this.entityItem = {
             id: 0,
@@ -525,9 +526,24 @@ export class BuyerUserEntityRegister extends Component {
             return;
         }
         if (res.error_entity_indexes.length > 0) { //validate entity
-
-            this.setState({ text: "entity" })
-            this.refs.Modal.showModal();
+            let name = [], uen = [];
+            res.error_entity_indexes.map((item) => {
+                if (item.error_field_name === "company_name") {
+                    name.push(item.error_value)
+                }
+                if (item.error_field_name === "company_uen") {
+                    uen.push(item.error_value);
+                }
+            });
+            let errList = {
+                nameError: name,
+                uenError: uen
+            }
+            this.setState({
+                validateErrList: errList
+            })
+            // this.setState({ text: "entity" })
+            this.refs.Modal_EntityErr.showModal();
             this.tab("entity");
             return;
         }
@@ -946,9 +962,8 @@ export class BuyerUserEntityRegister extends Component {
                         </h4>
                         <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                         <Modal text={this.state.text} acceptFunction={this.refreshForm.bind(this)} ref="Modal" />
-                        <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
                         <Modal formSize="big" listdetailtype="entity_detail" text={this.state.text} acceptFunction={this.acceptAddEntity.bind(this)} entitList={this.state.entity_list} disabled={this.state.ismain} entityDetailItem={this.state.entityItemInfo} ref="Modal_Entity" />
-                        <Modal listdetailtype="entity_error" text={this.state.text} entityErrorList={this.state.entityErrList} ref="Modal_EntityErr" />
+                        <Modal listdetailtype="entity_error" text={this.state.text} entityErrorList={this.state.validateErrList} ref="Modal_EntityErr" />
                     </div>
                     <div className="retailer_btn">
                         {btn_html}

@@ -232,7 +232,7 @@ export class BuyerUserManage extends Component {
             let paramArr = [];
             this.state.entity_list.map((item) => {
                 let entityId = item.id;
-                let approveStatus = item.approval_status;
+                let approveStatus = item.approval_status === "1" ? "1" : null;
                 let entity = {
                     entity_id: entityId,
                     approved_status: approveStatus
@@ -242,9 +242,7 @@ export class BuyerUserManage extends Component {
             let param = {
                 entity_statuses: JSON.stringify(paramArr)
             };
-            console.log(param);
             approveBuyerEntity(param).then(res => {
-                console.log(res)
             })
         }
     }
