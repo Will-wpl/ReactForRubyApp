@@ -24,4 +24,19 @@ class ConsumptionDetail < ApplicationRecord
   # Custom
 
   # Methods (class methods before instance methods)
+  def self.find_account_less_than_contract_start_date_last(search_date)
+    Consumption.find_by_sql ["SELECT cdf.*
+                              FROM (SELECT cda.*, row_number()
+                                    OVER (PARTITION BY cda.account_number ORDER BY cda.contract_period_end_date DESC ) as n
+                                    FROM (SELECT cd.*, a.id as auction_id, a.name as auction_name, a.published_gid as ra_id, e.user_id as buyer_id, e.company_name as entity_name, e.id as entity_id , ac.contract_period_end_date FROM consumption_details cd
+                                      JOIN company_buyer_entities e ON cd.company_buyer_entity_id = e.id
+                                      JOIN consumptions c ON cd.consumption_id = c.id
+                                      JOIN auctions a ON c.auction_id = a.id
+                                      JOIN auction_contracts ac ON a.id = ac.auction_id
+                                      and ac.contract_period_end_date < ?
+                                          ) as cda
+                                    ) as cdf
+                              WHERE cdf.n <= 1", search_date]
+  end
+
 end

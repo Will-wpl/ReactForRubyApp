@@ -28,27 +28,37 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
 
   context 'admin user' do
     before { sign_in create(:user, :with_admin) }
+    let!(:six_month_contract) { create(:auction_contract, :six_month, :total, auction: auction ) }
     let! (:buyer_a) { create(:user, :with_buyer, :with_company_buyer ) }
-    let! (:entity) {create(:company_buyer_entity, user: buyer_a)}
-    let! (:consumption_a) { create(:consumption, user: buyer_a, auction: auction, action_status: '1') }
-    let!(:consumption_lt) { create(:consumption_detail, :for_lt ,account_number: 'ddd' , consumption_id: consumption_a.id, company_buyer_entity_id: entity.id,contract_expiry: Date.current.advance(days: -1)) }
-    let!(:consumption_lt2) { create(:consumption_detail, :for_lt ,account_number: 'ddd' , consumption_id: consumption_a.id, company_buyer_entity_id: entity.id,contract_expiry: Date.current.advance(days: -10)) }
-    let!(:consumption_hts) { create(:consumption_detail, :for_hts ,account_number: 'aaa' , consumption_id: consumption_a.id, company_buyer_entity_id: entity.id,contract_expiry: Date.current.advance(days: -1)) }
-    let!(:consumption_htl) { create(:consumption_detail, :for_htl ,account_number: 'bbb' , consumption_id: consumption_a.id, company_buyer_entity_id: entity.id,contract_expiry: Date.current.advance(days: -1)) }
-    let!(:consumption_eht) { create(:consumption_detail, :for_eht ,account_number: 'ccc' , consumption_id: consumption_a.id, company_buyer_entity_id: entity.id,contract_expiry: Date.current.advance(days: -1)) }
+    let! (:entity1) {create(:company_buyer_entity, user: buyer_a)}
+    let! (:entity2) {create(:company_buyer_entity, user: buyer_a)}
+    let! (:consumption_a) { create(:consumption, user: buyer_a, auction: auction, action_status: '1', contract_duration: six_month_contract.contract_duration) }
+    let!(:consumption_lt) { create(:consumption_detail, :for_lt ,account_number: 'ddd' , consumption_id: consumption_a.id, company_buyer_entity_id: entity1.id) }
+    let!(:consumption_hts) { create(:consumption_detail, :for_hts ,account_number: 'aaa' , consumption_id: consumption_a.id, company_buyer_entity_id: entity1.id) }
+    let!(:consumption_htl) { create(:consumption_detail, :for_htl ,account_number: 'bbb' , consumption_id: consumption_a.id, company_buyer_entity_id: entity2.id) }
+    let!(:consumption_eht) { create(:consumption_detail, :for_eht ,account_number: 'ccc' , consumption_id: consumption_a.id, company_buyer_entity_id: entity2.id) }
+    let! (:auction2) { create(:auction, :for_next_month, :upcoming) }
+    let!(:twelve_month_contract) { create(:auction_contract, :twelve_month, :total, auction: auction2 ) }
+    let! (:consumption_a2) { create(:consumption, user: buyer_a, auction: auction2, action_status: '1', contract_duration: twelve_month_contract.contract_duration) }
+    let!(:consumption_lt2) { create(:consumption_detail, :for_lt ,account_number: 'ddd' , consumption_id: consumption_a2.id, company_buyer_entity_id: entity1.id) }
+    let!(:consumption_hts2) { create(:consumption_detail, :for_hts ,account_number: 'aaa' , consumption_id: consumption_a2.id, company_buyer_entity_id: entity1.id) }
+    let!(:consumption_htl2) { create(:consumption_detail, :for_htl ,account_number: 'bbb' , consumption_id: consumption_a2.id, company_buyer_entity_id: entity2.id) }
+    let!(:consumption_eht2) { create(:consumption_detail, :for_eht ,account_number: 'ccc' , consumption_id: consumption_a2.id, company_buyer_entity_id: entity2.id) }
+
+
     describe 'GET filter_date' do
 
       context 'got accounts' do
         def do_request
-          get :filter_date, params: { date: '2019-01-01' }
+          get :filter_date, params: { date: '2022-01-01' }
         end
         before { do_request }
         it 'success' do
           expect(response).to have_http_status(:ok)
           hash_body = JSON.parse(response.body)
           expect(hash_body['accounts'].size).to eq(4)
-          expect(hash_body['account_ids'].include?(consumption_lt.id)).to eq(true)
-          expect(hash_body['account_ids'].include?(consumption_lt2.id)).to eq(false)
+          expect(hash_body['account_ids'].include?(consumption_lt.id)).to eq(false)
+          expect(hash_body['account_ids'].include?(consumption_lt2.id)).to eq(true)
         end
       end
     end
