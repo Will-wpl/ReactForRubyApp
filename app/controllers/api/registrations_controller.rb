@@ -49,8 +49,8 @@ class Api::RegistrationsController < Api::BaseController
     buyer_entity_ids = []
     buyer_entitiy_objs = []
     buyer_entities.each { |x|
-      buyer_entity_ids.push(x.id);
-      buyer_entitiy_objs.push({entity: x, entity_logs:CompanyBuyerEntitiesUpdatedLog.find_by_entity_id(x.id)})
+      buyer_entity_ids.push(x.id)
+      buyer_entitiy_objs.push(get_entity_info(x))
     }
     # get used buyer entities
     used_buyer_entity_ids = []
@@ -76,6 +76,26 @@ class Api::RegistrationsController < Api::BaseController
     user_json
   end
 
+  def get_entity_info(buyer_entity)
+    {
+        company_name: buyer_entity.company_name,
+        company_uen: buyer_entity.company_uen,
+        company_address: buyer_entity.company_address,
+        billing_address: buyer_entity.billing_address,
+        bill_attention_to: buyer_entity.bill_attention_to,
+        contact_name: buyer_entity.contact_name,
+        contact_email: buyer_entity.contact_email,
+        contact_mobile_no: buyer_entity.contact_mobile_no,
+        contact_office_no: buyer_entity.contact_office_no,
+        user_id: buyer_entity.user_id,
+        is_default: buyer_entity.is_default,
+        approval_status: buyer_entity.approval_status,
+        user_entity_id: buyer_entity.user_entity_id,
+        created_at: buyer_entity.created_at,
+        updated_at: buyer_entity.updated_at,
+        entity_logs: CompanyBuyerEntitiesUpdatedLog.find_by_entity_id(buyer_entity.id)
+    }
+  end
   def get_retailer_by_id(user_id)
     # get the last updated attachment
     user_attachment = UserAttachment.find_last_by_type_user(user_id, UserAttachment::FileType_Retailer_Doc)
