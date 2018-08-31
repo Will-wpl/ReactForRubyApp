@@ -125,7 +125,6 @@ export class Modal extends React.Component {
         }
 
         if (next.entityErrorList) {
-            console.log(next.entityErrorList)
             this.setState({
                 entityErrorList: next.entityErrorList
             })
@@ -905,9 +904,9 @@ export class Modal extends React.Component {
                             this.state.entityErrorList.nameError ?
                                 <div>
                                     <span>Company Name can not be duplicated:</span>
-                                    <ul className="showdetail">{
+                                    <ul className="showdetailerr">{
                                         this.state.entityErrorList.nameError.map((item, index) => {
-                                            return <li key={index}>{item}</li>
+                                            return <li key={index}><span>{item}</span></li>
                                         })
                                     }
                                     </ul>
@@ -918,9 +917,9 @@ export class Modal extends React.Component {
                             this.state.entityErrorList.uenError ?
                                 <div>
                                     <span>Company UEN can not be duplicated:</span>
-                                    <ul className="showdetail">{
+                                    <ul className="showdetailerr">{
                                         this.state.entityErrorList.uenError.map((item, index) => {
-                                            return <li key={index}>{item}</li>
+                                            return <li key={index}><span>{item}</span></li>
                                         })
                                     }
                                     </ul>
@@ -929,10 +928,6 @@ export class Modal extends React.Component {
                         }
                     </div>
                 }
-                else {
-                    showDetail = <div>asdfasdfsdafsadf</div>
-                }
-
             }
 
             if (this.props.listdetailtype === 'entity_detail') {
@@ -947,7 +942,7 @@ export class Modal extends React.Component {
                                         <div className="isHide">
                                             <input type="text" value={this.state.entityid} onChange={this.changeEntity.bind(this, "entityid")} id="id" name="id" />
                                         </div>
-                                        <input type="text" name="entity_company_name" id="entity_company_name" value={this.state.entity_company_name} onChange={this.changeEntity.bind(this, 'entity_company_name')} className={this.props.disabled ? "mainEntity" : ""} readOnly={this.props.disabled} ref="entity_company_name" aria-required="true" title="Please fill out this field"></input>
+                                        <input type="text" name="entity_company_name" id="entity_company_name" value={this.state.entity_company_name} onChange={this.changeEntity.bind(this, 'entity_company_name')} className={this.props.disabled ? "mainEntity" : ""} disabled={this.props.disabled} ref="entity_company_name" aria-required="true" title="Please fill out this field"></input>
                                         <div className='isPassValidate' id="entity_company_name_message" >This field is required!</div>
                                         <div className='isPassValidate' id="entity_company_name_repeat" >Company name has already been taken!</div>
                                     </td>
@@ -955,7 +950,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td><abbr title="required">*</abbr>Company UEN</td>
                                     <td>
-                                        <input type="text" name="entity_company_uen" id="entity_company_uen" value={this.state.entity_company_uen} onChange={this.changeEntity.bind(this, 'entity_company_uen')} className={this.props.disabled ? "mainEntity" : ""} readOnly={this.props.disabled} ref="entity_company_uen" aria-required="true" title="Please fill out this field"></input>
+                                        <input type="text" name="entity_company_uen" id="entity_company_uen" value={this.state.entity_company_uen} onChange={this.changeEntity.bind(this, 'entity_company_uen')} className={this.props.disabled ? "mainEntity" : ""} disabled={this.props.disabled} ref="entity_company_uen" aria-required="true" title="Please fill out this field"></input>
                                         <div className='isPassValidate' id="entity_company_uen_message" >This field is required!</div>
                                         <div className='isPassValidate' id="entity_company_uen_repeat" >Company UEN has already been taken!</div>
                                     </td>
@@ -963,7 +958,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td><abbr title="required">*</abbr>Company Address</td>
                                     <td>
-                                        <input type="text" name="entity_company_address" id="entity_company_address" value={this.state.entity_company_address} onChange={this.changeEntity.bind(this, 'entity_company_address')} className={this.props.disabled ? "mainEntity" : ""} readOnly={this.props.disabled} ref="entity_company_address" aria-required="true" title="Please fill out this field"></input>
+                                        <input type="text" name="entity_company_address" id="entity_company_address" value={this.state.entity_company_address} onChange={this.changeEntity.bind(this, 'entity_company_address')} className={this.props.disabled ? "mainEntity" : ""} disabled={this.props.disabled} ref="entity_company_address" aria-required="true" title="Please fill out this field"></input>
                                         <div className='isPassValidate' id="entity_company_address_message" >This field is required!</div>
                                         <div className='isPassValidate' id="entity_company_address_repeat" >Company UEN has already been taken!</div>
                                     </td>
