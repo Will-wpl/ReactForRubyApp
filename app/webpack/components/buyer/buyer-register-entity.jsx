@@ -475,7 +475,10 @@ export class BuyerUserEntityRegister extends Component {
             });
         }
         else {
-            console.log("main entity")
+            this.setState({
+                text: "Please complete the main entity."
+            })
+            this.refs.Modal.showModal();
         }
     }
 
@@ -510,7 +513,11 @@ export class BuyerUserEntityRegister extends Component {
             })
         }
         else {
-            console.log("main entity")
+            console.log("main entity");
+            this.setState({
+                text: "Please complete the main entity."
+            })
+            this.refs.Modal.showModal();
         }
     }
 
@@ -934,6 +941,8 @@ export class BuyerUserEntityRegister extends Component {
                         </table>
                         <div style={{ paddingLeft: "20px", paddingBottom: "20px" }}>
                             <button className="entityApprove" disabled={this.state.btnAddDisabled} onClick={this.add_entity.bind(this)}>Add</button>
+                            <span className={this.state.btnAddDisabled ? "errormessageline" : "isPassValidate"} > Please complete the main entity </span>
+
                         </div>
                     </div>
 
