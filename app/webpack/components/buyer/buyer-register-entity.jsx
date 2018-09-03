@@ -35,7 +35,7 @@ export class BuyerUserEntityRegister extends Component {
             ismain: false,
             btnAddDisabled: false,
             deleteIndex: -1,
-            validateErrList: []
+            validateErrList: [],mainEntityComplete:false
         }
         this.entityItem = {
             id: 0,
@@ -235,7 +235,8 @@ export class BuyerUserEntityRegister extends Component {
             })
             this.setState({
                 entity_list: user_entity,
-                btnAddDisabled: false
+                btnAddDisabled: false,
+                mainEntityComplete:false
             })
         }
         else {
@@ -258,7 +259,8 @@ export class BuyerUserEntityRegister extends Component {
 
             this.setState({
                 entity_list: item,
-                btnAddDisabled: true
+                btnAddDisabled: true,
+                mainEntityComplete:true
             });
         }
         if (param.used_buyer_entity_ids) {
@@ -467,6 +469,10 @@ export class BuyerUserEntityRegister extends Component {
                             );
                             this.refs.Modal.showModal();
                         }
+                        console.log('success')
+                        this.setState({
+                            disabled: true
+                        })
                     });
                 }
                 else {
@@ -562,8 +568,6 @@ export class BuyerUserEntityRegister extends Component {
             this.tab("entity");
             return;
         }
-
-
     }
 
 
@@ -941,7 +945,7 @@ export class BuyerUserEntityRegister extends Component {
                         </table>
                         <div style={{ paddingLeft: "20px", paddingBottom: "20px" }}>
                             <button className="entityApprove" disabled={this.state.btnAddDisabled} onClick={this.add_entity.bind(this)}>Add</button>
-                            <span className={this.state.btnAddDisabled ? "errormessageline" : "isPassValidate"} > Please complete the main entity </span>
+                            <span className={this.state.mainEntityComplete ? "errormessageline" : "isPassValidate"} > Please complete the main entity </span>
 
                         </div>
                     </div>
