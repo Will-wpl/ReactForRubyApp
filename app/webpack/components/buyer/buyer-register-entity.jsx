@@ -770,7 +770,7 @@ export class BuyerUserEntityRegister extends Component {
                 <div className="buyer_buyer_list col-sm-12 col-md-12">
                     <div className="col-sm-12 buyer_tab">
                         <a className="col-sm-4 col-md-2 selected" onClick={this.tab.bind(this, 'base')} id="tab_base">Buyer Information</a>
-                        <a className="col-sm-4 col-md-2" onClick={this.tab.bind(this, 'entity')} id="tab_entity"  >Entity</a>
+                        <a className="col-sm-4 col-md-2" onClick={this.tab.bind(this, 'entity')} id="tab_entity">Entity</a>
                     </div>
                     <div className="col-sm-12 buyer_list1" id="buyer_base" >
                         <div className="retailer_manage_coming">
