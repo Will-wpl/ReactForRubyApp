@@ -412,6 +412,10 @@ export class BuyerUserEntityRegister extends Component {
         if (this.state.entity_list.length > 0) {
             if (this.state.entity_list[0].billing_address === "") {
                 mainEntityFinished = false;
+                this.setState({
+                    text: "Please complete details for default purchasing entity."
+                })
+                this.refs.Modal.showModal();
             }
             else {
                 mainEntityFinished = true;
@@ -469,10 +473,16 @@ export class BuyerUserEntityRegister extends Component {
                             );
                             this.refs.Modal.showModal();
                         }
-                        this.setState({
-                            disabled: true,
-                            btnAddDisabled:true
-                        })
+                        // this.setState({
+                        //     btnAddDisabled: true
+                        // })
+
+                        if (type === "save") {
+                            this.setState({
+                                disabled: true,
+                                btnAddDisabled: true
+                            })
+                        }
                     });
                 }
                 else {
@@ -481,10 +491,10 @@ export class BuyerUserEntityRegister extends Component {
             });
         }
         else {
-            this.setState({
-                text: "Please complete details for default purchasing entity."
-            })
-            this.refs.Modal.showModal();
+            // this.setState({
+            //     text: "Please complete details for default purchasing entity."
+            // })
+            // this.refs.Modal.showModal();
         }
     }
 
@@ -506,7 +516,7 @@ export class BuyerUserEntityRegister extends Component {
                             if (type === "sign_up") {
                                 window.location.href = `/buyer/home`;
                             }
-                            
+
                         }
 
                     });
@@ -517,11 +527,6 @@ export class BuyerUserEntityRegister extends Component {
             })
         }
         else {
-          
-            this.setState({
-                text: "Please complete details for default purchasing entity."
-            })
-            this.refs.Modal.showModal();
         }
     }
 
@@ -585,13 +590,14 @@ export class BuyerUserEntityRegister extends Component {
                 })
             }
         }
+        $("#entity_company_name").focus();
         $(".btnOption").css("pointer-events", "auto").css("color", "#00888a");
     }
 
     cancel() {
         this.setState({
             disabled: true,
-            btnAddDisabled:true
+            btnAddDisabled: true
         })
     }
 
@@ -636,7 +642,9 @@ export class BuyerUserEntityRegister extends Component {
                 entity_list: entity
             })
         }
-
+        this.setState({
+            mainEntityComplete:false
+        })
 
     }
 
@@ -666,6 +674,7 @@ export class BuyerUserEntityRegister extends Component {
             ismain: false,
             text: " "
         })
+        $("#entity_company_name").focus();
         this.refs.Modal_Entity.showModal('custom', {}, '', '-1')
     }
 
@@ -747,6 +756,7 @@ export class BuyerUserEntityRegister extends Component {
         this.refs.Modal.showModal("comfirm");
     }
 
+   
     render() {
         let btn_html;
         if (this.state.use_type === 'manage_acount') {
@@ -974,6 +984,7 @@ export class BuyerUserEntityRegister extends Component {
                         </h4>
                         <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                         <Modal text={this.state.text} acceptFunction={this.refreshForm.bind(this)} ref="Modal" />
+                        <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrl} />
                         <Modal formSize="big" listdetailtype="entity_detail" text={this.state.text} acceptFunction={this.acceptAddEntity.bind(this)} entitList={this.state.entity_list} disabled={this.state.ismain} entityDetailItem={this.state.entityItemInfo} ref="Modal_Entity" />
                         <Modal listdetailtype="entity_error" text={this.state.text} entityErrorList={this.state.validateErrList} ref="Modal_EntityErr" />
                     </div>
