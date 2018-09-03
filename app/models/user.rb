@@ -10,6 +10,7 @@ class User < ApplicationRecord
   ApprovalStatusPending = '2'.freeze
   ApprovalStatusRegistering = '3'.freeze
   ApprovalStatusDisable = '4'.freeze
+  ApprovalStatusRemoved = '5'.freeze
 
   ConsumerTypeCompany = '2'.freeze
   ConsumerTypeIndividual = '3'.freeze
