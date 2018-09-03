@@ -78,6 +78,7 @@ class Api::RegistrationsController < Api::BaseController
 
   def get_entity_info(buyer_entity)
     {
+        id: buyer_entity.id,
         company_name: buyer_entity.company_name,
         company_uen: buyer_entity.company_uen,
         company_address: buyer_entity.company_address,

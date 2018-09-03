@@ -44,7 +44,7 @@ export class RetailerRegister extends Component {
             revvTCurl: "",
             revvTCname: "",
             agree_seller_revv: "0",
-            messageAttachmentUrl: "",loglist:[]
+            messageAttachmentUrl: "", loglist: [],approveStatus:false
 
         }
         this.validatorItem = {
@@ -115,7 +115,8 @@ export class RetailerRegister extends Component {
                 office_number: item.account_office_number ? item.account_office_number : '',
                 agree_seller_buyer: item.agree_seller_buyer ? item.agree_seller_buyer : '0',
                 agree_seller_revv: item.agree_seller_revv ? item.agree_seller_revv : '0',
-                status: setApprovalStatus(item.approval_status,  item.approval_date_time === null ? item.created_at : item.approval_date_time)
+                status: setApprovalStatus(item.approval_status, item.approval_date_time === null ? item.created_at : item.approval_date_time),
+                approveStatus: item.approval_status === "3" ? true : false
             })
             if (this.state.agree_seller_buyer === '1') {
                 $('#chkBuyer').attr("checked", true);
@@ -163,6 +164,12 @@ export class RetailerRegister extends Component {
                 revvTCname: revv.file_name
             })
         }
+        if (param.user_logs) {
+            this.setState({
+                loglist: param.user_logs
+            })
+        }
+
         if (param.letter_of_authorisation_attachment) {
             this.setState({
                 messageAttachmentUrl: param.letter_of_authorisation_attachment.file_path
@@ -357,7 +364,7 @@ export class RetailerRegister extends Component {
                     }).then(res => {
                         $('#license_number_repeat').removeClass('errormessage').addClass('isPassValidate');
                         if (type === "sign_up") {
-                             window.location.href = `/retailer/home`;
+                            window.location.href = `/retailer/home`;
                         }
                         else {
                             this.refs.Modal.showModal();
@@ -469,17 +476,19 @@ export class RetailerRegister extends Component {
     removeInputNanNum(value) {
         removeNanNum(value);
     }
-    view_log()
-    {
-
+    view_log() {
+        this.setState({
+            text: ""
+        })
+        this.refs.Modal_Log.showModal();
     }
     render() {
         let btn_html;
         if (this.state.use_type === 'admin_approve') {
             btn_html = <div>
-                 <button id="view_log" className="lm--button lm--button--primary" onClick={this.view_log.bind(this)} >View Log</button>
-                <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'reject')}>Reject</button>
-                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'approve')}>Approve</button>
+                <button id="view_log" className="lm--button lm--button--primary" onClick={this.view_log.bind(this)} disabled={this.state.approveStatus}>View Log</button>
+                <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'reject')} disabled={this.state.approveStatus}>Reject</button>
+                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'approve')} disabled={this.state.approveStatus}>Approve</button>
             </div>;
         }
         else if (this.state.use_type === 'manage_acount') {
@@ -610,7 +619,7 @@ export class RetailerRegister extends Component {
                                         <abbr title="required">*</abbr>Upload Supporting Documents :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                                        <UploadFile type="RETAILER_DOCUMENTS" required="required"  validate="true"  showList="1" col_width="10" showWay="1" deleteType="retailer" fileData={this.state.fileData.RETAILER_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
+                                        <UploadFile type="RETAILER_DOCUMENTS" required="required" validate="true" showList="1" col_width="10" showWay="1" deleteType="retailer" fileData={this.state.fileData.RETAILER_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
 
                                         <div className="col-sm-1 col-md-1 u-cell">
                                             <button className={this.state.disabled ? "lm--button lm--button--primary buttonDisabled" : "lm--button lm--button--primary"} onClick={this.showView.bind(this)} disabled={this.state.disabled} >?</button>
@@ -648,7 +657,7 @@ export class RetailerRegister extends Component {
                                 <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrl} />
                                 <Modal text={this.state.text} ref="Modal" />
                                 <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
-                                <Modal listdetailtype="viewLog" loglist={this.state.loglist}  ref="Modal_Log" />
+                                <Modal formSize="viewlog" listdetailtype="viewRetailerLog" loglist={this.state.loglist} ref="Modal_Log" />
                             </div>
                         </div>
                     </div>

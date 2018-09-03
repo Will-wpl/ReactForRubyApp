@@ -10,7 +10,7 @@ export default class EmailTemplates extends Component {
         this.state = {
             text: "",
             email_list: [],template_type:'',template_id:'',
-            listdetail: {},la_list:[{subject:"LA entity1",id:1},{subject:"LA entity2",id:2}],advisory_list:[],
+            listdetail: {},la_list:[{subject:"LA entity1",id:1},{subject:"LA entity2",id:2}],advisory_list:[{subject:"Advisory1",id:3}],
             uploadUrl: '/api/admin/user_attachments?file_type=',
             fileData: {
                 "LETTER_OF_AUTHORISATION": [
@@ -38,7 +38,7 @@ export default class EmailTemplates extends Component {
         getEmailListItem(id,type).then(res => {
             console.log(res);
             this.setState({ listdetail: res, text: '',template_type:type,template_id:id });
-            this.refs.Modal.showModal('comfirm', res, type=='la'?'email_template_la':'email_template');
+            this.refs.Modal.showModal('comfirm', res, type=='la' || type=='advisory'?'email_template_la':'email_template');
         })
     }
     changeEmail(obj) {

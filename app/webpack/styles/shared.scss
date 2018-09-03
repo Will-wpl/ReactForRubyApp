@@ -902,6 +902,11 @@ ul.history_files{
   color:red;
   display: block;
 }
+.errormessageline{
+  color:red;
+  display: inline;
+
+}
 .isPassValidate{
   display: none;
 }
@@ -1199,8 +1204,33 @@ width: "70%"; float: "left";padding:5px;
   #buyer_entity{ display: none;}
 }
  
+.logTable{
+  width: 97%; font-size: 12px; table-layout: fixed; border:1px solid #314657; border-right:1px solid #314657;   margin: 10px 10px 20px 10px;
+  thead{
+    tr{ background: #00394A;
+     th{ 
+       height: 40px; border-right:1px solid #314657; font-size: 14px;//border-radius:5px;
+       &.table_title{border-bottom:1px solid #314657;}
+     }
+   }
+  }
+  tbody{
+    overflow:auto; height: 30px;
+    tr{ &.isbidder{background:green; transition: 0.5s all;}
+      td{border:1px solid #314657;
+         position: relative; line-height: 40px; text-align: center; height: 40px; padding:5px; word-break: break-all;
+        abbr{
+          display: inline-block; line-height: 40px; font-style: normal; transition: 0.5s all;
+          background: url("../images/notification_sent.png") no-repeat -20px 11px;
+          &.fill_yes{ background-position: 0px 11px; background-size:15px; padding-left: 20px;}
+        }
+     }   
+    }
+  }
+}
+
 .buyer_entity{
-  width: 100%; font-size: 12px; table-layout: fixed; border-top:1px solid #314657; border-left:1px solid #314657; margin: 20px 20px 20px 10px;
+  width: 100%; font-size: 12px; table-layout: fixed; border-top:1px solid #314657; border-left:1px solid #314657;  margin: 20px 20px 20px 10px;
   thead{
     tr{ background: #00394A;
      th{ 

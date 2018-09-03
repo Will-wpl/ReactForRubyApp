@@ -200,7 +200,7 @@ export class BuyerUserEntityRegister extends Component {
                 buyerTCname: buyer.file_name
             })
         }
-        
+
         if (param.seller_buyer_tc_attachment) {
             let revv = param.seller_buyer_tc_attachment;
             this.setState({
@@ -352,7 +352,7 @@ export class BuyerUserEntityRegister extends Component {
     }
 
     showView() {
-        
+
         this.refs.Modal_upload.showModal();
     }
 
@@ -363,7 +363,7 @@ export class BuyerUserEntityRegister extends Component {
             list[0].company_uen = this.state.unique_entity_number;
             list[0].company_address = this.state.company_address;
             this.setState({
-                entity_list:list
+                entity_list: list
             })
         }
         let params = {
@@ -475,7 +475,10 @@ export class BuyerUserEntityRegister extends Component {
             });
         }
         else {
-            console.log("main entity")
+            this.setState({
+                text: "Please complete the main entity."
+            })
+            this.refs.Modal.showModal();
         }
     }
 
@@ -505,12 +508,16 @@ export class BuyerUserEntityRegister extends Component {
                     });
                 }
                 else {
-                     this.validateRepeatColumn(res);
+                    this.validateRepeatColumn(res);
                 }
             })
         }
         else {
-            console.log("main entity")
+            console.log("main entity");
+            this.setState({
+                text: "Please complete the main entity."
+            })
+            this.refs.Modal.showModal();
         }
     }
 
@@ -589,14 +596,7 @@ export class BuyerUserEntityRegister extends Component {
 
     }
 
-    refreshForm(obj) {
 
-        let list = this.state.entity_list;
-        list.splice(this.state.deleteIndex, 1);
-        this.setState({
-            entity_list: list
-        })
-    }
     acceptAddEntity(entityInfo) {
         let item = {
             id: entityInfo.id ? entityInfo.id : "",
@@ -720,14 +720,28 @@ export class BuyerUserEntityRegister extends Component {
                 this.setState({ text: "The entity have available auction can't be deleted!" });
                 this.refs.Modal.showModal();
             }
+            else {
+                this.deletePop(index);
+            }
         }
         else {
-            this.setState({
-                text: "Are you sure you want to delete?",
-                deleteIndex: index
-            });
-            this.refs.Modal.showModal("comfirm");
+            this.deletePop(index)
+
         }
+    }
+    refreshForm(obj) {
+        let list = this.state.entity_list;
+        list.splice(this.state.deleteIndex, 1);
+        this.setState({
+            entity_list: list
+        })
+    }
+    deletePop(index) {
+        this.setState({
+            text: "Are you sure you want to delete?",
+            deleteIndex: index
+        });
+        this.refs.Modal.showModal("comfirm");
     }
 
     render() {
@@ -868,7 +882,7 @@ export class BuyerUserEntityRegister extends Component {
                                 </div>
                             </div>
                         </div>
-                    </div> 
+                    </div>
 
 
                     <div className="col-sm-12 buyer_list1" id="buyer_entity">
@@ -927,9 +941,11 @@ export class BuyerUserEntityRegister extends Component {
                         </table>
                         <div style={{ paddingLeft: "20px", paddingBottom: "20px" }}>
                             <button className="entityApprove" disabled={this.state.btnAddDisabled} onClick={this.add_entity.bind(this)}>Add</button>
+                            <span className={this.state.btnAddDisabled ? "errormessageline" : "isPassValidate"} > Please complete the main entity </span>
+
                         </div>
                     </div>
-                    
+
                     <div className="col-sm-12 col-md-8 push-md-3 validate_message margin-t buyer_list_select">
                         <div className="lm--formItem lm--formItem--inline string">
                             <label className="lm--formItem-left lm--formItem-label string required">
