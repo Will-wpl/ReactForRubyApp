@@ -916,6 +916,9 @@ ul.history_files{
 .isDisplay{
   display: block;
 }
+.isDisplayInLine{
+  display: inline;
+}
 .consumption_model
  {
    width:500px;
@@ -1289,4 +1292,11 @@ width: "70%"; float: "left";padding:5px;
 }
 .chkBuyerDiv{
   width: 100%;
+}
+.separate{
+  margin-top: 20px;
+}
+.particiption-note
+{
+  font-size: 12px;
 }

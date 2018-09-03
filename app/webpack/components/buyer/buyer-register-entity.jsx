@@ -35,7 +35,7 @@ export class BuyerUserEntityRegister extends Component {
             ismain: false,
             btnAddDisabled: false,
             deleteIndex: -1,
-            validateErrList: [],mainEntityComplete:false
+            validateErrList: [], mainEntityComplete: false
         }
         this.entityItem = {
             id: 0,
@@ -236,7 +236,7 @@ export class BuyerUserEntityRegister extends Component {
             this.setState({
                 entity_list: user_entity,
                 btnAddDisabled: false,
-                mainEntityComplete:false
+                mainEntityComplete: false
             })
         }
         else {
@@ -260,7 +260,7 @@ export class BuyerUserEntityRegister extends Component {
             this.setState({
                 entity_list: item,
                 btnAddDisabled: true,
-                mainEntityComplete:true
+                mainEntityComplete: true
             });
         }
         if (param.used_buyer_entity_ids) {
@@ -471,7 +471,8 @@ export class BuyerUserEntityRegister extends Component {
                         }
                         console.log('success')
                         this.setState({
-                            disabled: true
+                            disabled: true,
+                            btnAddDisabled:true
                         })
                     });
                 }
@@ -506,9 +507,7 @@ export class BuyerUserEntityRegister extends Component {
                             if (type === "sign_up") {
                                 window.location.href = `/buyer/home`;
                             }
-                            else {
-
-                            }
+                            
                         }
 
                     });
@@ -592,7 +591,8 @@ export class BuyerUserEntityRegister extends Component {
 
     cancel() {
         this.setState({
-            disabled: true
+            disabled: true,
+            btnAddDisabled:true
         })
     }
 

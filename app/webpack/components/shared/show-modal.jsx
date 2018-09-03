@@ -426,7 +426,7 @@ export class Modal extends React.Component {
         let entityItem = {
             id: this.state.entityid,
             company_name: this.state.entity_company_name,
-            company_uen: this.state.entity_company_address,
+            company_uen: this.state.entity_company_uen,
             company_address: this.state.entity_company_address,
             billing_address: this.state.entity_billing_address,
             bill_attention_to: this.state.entity_bill_attention_to,
@@ -908,7 +908,7 @@ export class Modal extends React.Component {
                         {
                             this.state.entityErrorList.nameError ?
                                 <div>
-                                    <span>Company Name can not be duplicated:</span>
+                                    <span className={this.state.entityErrorList.nameError.length > 0 ? "isDisplayInLine" : "isHide"}>Company Name can not be duplicated:</span>
                                     <ul className="showdetailerr">{
                                         this.state.entityErrorList.nameError.map((item, index) => {
                                             return <li key={index}><span>{item}</span></li>
@@ -921,7 +921,7 @@ export class Modal extends React.Component {
                         {
                             this.state.entityErrorList.uenError ?
                                 <div>
-                                    <span>Company UEN can not be duplicated:</span>
+                                    <span className={this.state.entityErrorList.uenError.length > 0 ? "isDisplayInLine" : "isHide"}>Company UEN can not be duplicated:</span>
                                     <ul className="showdetailerr">{
                                         this.state.entityErrorList.uenError.map((item, index) => {
                                             return <li key={index}><span>{item}</span></li>
