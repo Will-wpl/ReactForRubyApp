@@ -558,7 +558,7 @@ export class BuyerUserEntityRegister extends Component {
                 if (item.error_field_name === "company_uen") {
                     uen.push(item.error_value);
                 }
-                if (item.error_field_name === "company_email") {
+                if (item.error_field_name === "contact_email") {
                     email.push(item.error_value)
                 }
             });
