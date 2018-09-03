@@ -469,7 +469,6 @@ export class BuyerUserEntityRegister extends Component {
                             );
                             this.refs.Modal.showModal();
                         }
-                        console.log('success')
                         this.setState({
                             disabled: true,
                             btnAddDisabled:true
@@ -483,7 +482,7 @@ export class BuyerUserEntityRegister extends Component {
         }
         else {
             this.setState({
-                text: "Please complete the main entity."
+                text: "Please complete details for default purchasing entity."
             })
             this.refs.Modal.showModal();
         }
@@ -518,9 +517,9 @@ export class BuyerUserEntityRegister extends Component {
             })
         }
         else {
-            console.log("main entity");
+          
             this.setState({
-                text: "Please complete the main entity."
+                text: "Please complete details for default purchasing entity."
             })
             this.refs.Modal.showModal();
         }
@@ -770,7 +769,7 @@ export class BuyerUserEntityRegister extends Component {
                 <div className="buyer_buyer_list col-sm-12 col-md-12">
                     <div className="col-sm-12 buyer_tab">
                         <a className="col-sm-4 col-md-2 selected" onClick={this.tab.bind(this, 'base')} id="tab_base">Buyer Information</a>
-                        <a className="col-sm-4 col-md-2" onClick={this.tab.bind(this, 'entity')} id="tab_entity">Entity</a>
+                        <a className="col-sm-4 col-md-2" onClick={this.tab.bind(this, 'entity')} id="tab_entity">Purchasing Entity</a>
                     </div>
                     <div className="col-sm-12 buyer_list1" id="buyer_base" >
                         <div className="retailer_manage_coming">
@@ -945,7 +944,7 @@ export class BuyerUserEntityRegister extends Component {
                         </table>
                         <div style={{ paddingLeft: "20px", paddingBottom: "20px" }}>
                             <button className="entityApprove" disabled={this.state.btnAddDisabled} onClick={this.add_entity.bind(this)}>Add</button>
-                            <span className={this.state.mainEntityComplete ? "errormessageline" : "isPassValidate"} > Please complete the main entity </span>
+                            <span className={this.state.mainEntityComplete ? "errormessageline" : "isPassValidate"} > Please complete details for default purchasing entity prior to adding new purchasing entities. </span>
 
                         </div>
                     </div>
