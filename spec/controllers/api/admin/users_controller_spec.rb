@@ -263,6 +263,35 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
         end
       end
     end
+
+
+    describe 'Remove User' do
+      context 'Remove retailer' do
+        def do_request
+          put :remove_retailer, params: { user_id: temp_retailer.id }
+        end
+
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash = JSON.parse(response.body)
+          expect(hash['result']).to eq('success')
+        end
+      end
+
+      context 'Remove buyer' do
+        def do_request
+          put :remove_buyer, params: { user_id: temp_buyer.id }
+        end
+
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash = JSON.parse(response.body)
+          expect(hash['result']).to eq('success')
+        end
+      end
+    end
   end
 
 end
