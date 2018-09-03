@@ -201,3 +201,13 @@ export const approveBuyerEntity = (params) => {
 export const approveRetailerUser = (params) => {
     return put('/api/admin/users/approval_retailer', params)
 }
+
+export const removeBuyer=(params)=>{
+    console.log(params);
+    return put('/api/admin/users/remove_buyer', params)
+}
+
+export const removeRetailer=(params)=>{
+    console.log(params);
+    return put('/api/admin/users/remove_retailer', params)
+}

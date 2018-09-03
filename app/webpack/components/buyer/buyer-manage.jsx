@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { UploadFile } from '../shared/upload';
 import { Modal } from '../shared/show-modal';
 import { getBuyerUserInfo, saveBuyerUserInfo, submitBuyerUserInfo, getBuyerUserInfoByUserId, validateIsExist } from '../../javascripts/componentService/common/service';
-import { approveBuyerUser, approveBuyerEntity } from '../../javascripts/componentService/admin/service';
+import { approveBuyerUser, approveBuyerEntity, removeBuyer } from '../../javascripts/componentService/admin/service';
 import { removeNanNum, validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, setApprovalStatus } from '../../javascripts/componentService/util';
 import { textChangeRangeIsUnchanged } from 'typescript';
 import moment from 'moment';
@@ -36,7 +36,7 @@ export class BuyerUserManage extends Component {
             messageAttachmentUrl: "",
             usedEntityIdArr: [],
             submitStatus: false,
-            ismain: false, entityIndex: 0, entityId: 0, loglist: []
+            ismain: false, entityIndex: 0, entityId: 0, loglist: [], deleteButtonStatus: false
 
         }
         this.validatorComment = {
@@ -92,7 +92,8 @@ export class BuyerUserManage extends Component {
                 user_company_uen: item.company_unique_entity_number ? item.company_unique_entity_number : '',
                 user_company_address: item.company_address ? item.company_address : '',
                 status: setApprovalStatus(item.approval_status, item.approval_date_time === null ? item.created_at : item.approval_date_time),
-                submitStatus: item.approval_status !== "1" ? true : false
+                submitStatus: item.approval_status !== "1" ? true : false,
+                deleteButtonStatus: (item.approval_status === "3" || item.approval_status === "5") ? true : false
             })
 
             $('#buyer_management').val(this.state.has_tenants);
@@ -193,7 +194,7 @@ export class BuyerUserManage extends Component {
                 setValidationFaild(column, cate)
             })
         }
-        $('.validate_message').find('div').each(function () {
+        $('.validate_message').find('div').each(function() {
             let className = $(this).attr('class');
             if (className === 'errormessage') {
                 flag = false;
@@ -219,6 +220,21 @@ export class BuyerUserManage extends Component {
         }
     }
 
+    submitEntity() {
+        this.setState({
+            text: 'Are you sure you want to submit the entity status?',
+        }, () => {
+            this.refs.Modal_Option.showModal('comfirm', { action: 'submit', type: 'entity' }, '');
+        });
+    }
+    deleteUser() {
+        this.setState({
+            text: 'Are you sure you want to delete the buyer?',
+        }, () => {
+            this.refs.Modal_Option.showModal('comfirm', { action: 'delete', type: 'deleteBuyer' }, '');
+        });
+    }
+
     doAction(obj) {
         if (obj.type === 'user') {
             let param = {
@@ -237,6 +253,18 @@ export class BuyerUserManage extends Component {
                         submitStatus: true
                     })
                 }
+            })                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+        }
+        else if (obj.type === 'deleteBuyer') {
+            let param = {                                                                                                                                                                                                                                                                                                                               
+                user_id: this.state.userid
+            }
+            // let user_id = this.state.user_id                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+            removeBuyer(param).then(res => {
+                console.log(res)
+                this.setState({
+                    deleteButtonStatus: true
+                })
             })
         }
         else {
@@ -277,14 +305,7 @@ export class BuyerUserManage extends Component {
         })
 
     }
-    submitEntity() {
-        this.setState({
-            text: 'Are you sure you want to submit the entity status?',
-        }, () => {
-            this.refs.Modal_Option.showModal('comfirm', { action: 'submit', type: 'entity' }, '');
-        });
 
-    }
     view_log() {
         this.setState({
             text: ""
@@ -433,6 +454,7 @@ export class BuyerUserManage extends Component {
         }
     }
 
+
     convertEntityStatus(value) {
         if (value) {
             if (value === "0") {
@@ -453,6 +475,7 @@ export class BuyerUserManage extends Component {
         let btn_html;
         btn_html = <div>
             <button id="save_form" className="lm--button lm--button--primary" onClick={this.view_log.bind(this)} disabled={this.state.approveStatus}>View Log</button>
+            <button id="save_form" className="lm--button lm--button--primary" onClick={this.deleteUser.bind(this)} disabled={this.state.deleteButtonStatus}>Delete</button>
             <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeUserAction.bind(this, 'reject')} disabled={this.state.approveStatus}>Reject</button>
             <button id="submit_form" className="lm--button lm--button--primary" onClick={this.judgeUserAction.bind(this, 'approve')} disabled={this.state.approveStatus}>Approve</button>
         </div>;

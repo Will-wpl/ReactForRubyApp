@@ -4,7 +4,7 @@ import moment from 'moment';
 import { UploadFile } from '../shared/upload';
 import { Modal } from '../shared/show-modal';
 import { getRetailerUserInfo, saveRetailManageInfo, submitRetailManageInfo, getRetailerUserInfoByUserId, validateIsExist } from '../../javascripts/componentService/retailer/service';
-import { approveRetailerUser } from '../../javascripts/componentService/admin/service';
+import { approveRetailerUser, removeRetailer } from '../../javascripts/componentService/admin/service';
 import { validateNum, validateEmail, validator_Object, setValidationFaild, setValidationPass, changeValidate, removeNanNum, setApprovalStatus } from '../../javascripts/componentService/util';
 export class RetailerRegister extends Component {
     constructor(props) {
@@ -44,7 +44,7 @@ export class RetailerRegister extends Component {
             revvTCurl: "",
             revvTCname: "",
             agree_seller_revv: "0",
-            messageAttachmentUrl: "", loglist: [],approveStatus:false
+            messageAttachmentUrl: "", loglist: [], approveStatus: false, deleteButtonStatus: false
 
         }
         this.validatorItem = {
@@ -458,15 +458,33 @@ export class RetailerRegister extends Component {
             this.refs.Modal_Option.showModal('comfirm', { action: 'approve' }, '');
         }
     }
+    deleteUser() {
+        this.setState({ text: "Are you sure you want to delete the retailer?" });
+        this.refs.Modal_Option.showModal('comfirm', { action: 'delete' }, '');
+    }
     doAction(obj) {
-        let param = {
-            user_id: this.state.userid,
-            comment: this.state.comment,
-            approved: obj.action === 'reject' ? "" : 1
-        };
-        approveRetailerUser(param).then(res => {
-            location.href = "/admin/users/retailers";
-        })
+
+        if (obj.type === "delete") {
+
+            let param = {
+                user_id:  this.state.userid
+            }
+            removeRetailer(param).then(res => {
+                this.setState({
+                    deleteButtonStatus: true
+                })
+            })
+        }
+        else {
+            let param = {
+                user_id: this.state.userid,
+                comment: this.state.comment,
+                approved: obj.action === 'reject' ? "" : 1
+            };
+            approveRetailerUser(param).then(res => {
+                location.href = "/admin/users/retailers";
+            })
+        }
     }
 
 
@@ -487,6 +505,7 @@ export class RetailerRegister extends Component {
         if (this.state.use_type === 'admin_approve') {
             btn_html = <div>
                 <button id="view_log" className="lm--button lm--button--primary" onClick={this.view_log.bind(this)} disabled={this.state.approveStatus}>View Log</button>
+                <button id="delete" className="lm--button lm--button--primary" onClick={this.deleteUser.bind(this)} disabled={this.state.deleteButtonStatus}>Delete</button>
                 <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'reject')} disabled={this.state.approveStatus}>Reject</button>
                 <button id="submit_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'approve')} disabled={this.state.approveStatus}>Approve</button>
             </div>;

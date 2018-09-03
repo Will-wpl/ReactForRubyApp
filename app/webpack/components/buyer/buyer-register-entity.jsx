@@ -550,7 +550,7 @@ export class BuyerUserEntityRegister extends Component {
             return;
         }
         if (res.error_entity_indexes.length > 0) { //validate entity
-            let name = [], uen = [];
+            let name = [], uen = [],email=[];
             res.error_entity_indexes.map((item) => {
                 if (item.error_field_name === "company_name") {
                     name.push(item.error_value)
@@ -558,15 +558,20 @@ export class BuyerUserEntityRegister extends Component {
                 if (item.error_field_name === "company_uen") {
                     uen.push(item.error_value);
                 }
+                if (item.error_field_name === "company_email") {
+                    email.push(item.error_value)
+                }
             });
             let errList = {
                 nameError: name,
-                uenError: uen
+                uenError: uen,
+                emailError:email
             }
             this.setState({
                 validateErrList: errList
             })
-            // this.setState({ text: "entity" })
+
+            this.setState({ text: "" });
             this.refs.Modal_EntityErr.showModal();
             this.tab("entity");
             return;

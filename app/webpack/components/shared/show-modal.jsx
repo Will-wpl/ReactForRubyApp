@@ -931,6 +931,19 @@ export class Modal extends React.Component {
                                 </div>
                                 : <div></div>
                         }
+                        {
+                            this.state.entityErrorList.emailError ?
+                                <div>
+                                    <span className={this.state.entityErrorList.emailError.length > 0 ? "isDisplayInLine" : "isHide"}>Contact Email can not be duplicated:</span>
+                                    <ul className="showdetailerr">{
+                                        this.state.entityErrorList.emailError.map((item, index) => {
+                                            return <li key={index}><span>{item}</span></li>
+                                        })
+                                    }
+                                    </ul>
+                                </div>
+                                : <div></div>
+                        }
                     </div>
                 }
             }
