@@ -8,7 +8,7 @@ class ConsumptionDetail < ApplicationRecord
 
   # Associations
   belongs_to :consumption
-  belongs_to :company_buyer_entity
+  has_one :company_buyer_entity
   has_one :user_attachment
   # accepts_nested_attributes
 
