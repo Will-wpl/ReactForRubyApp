@@ -17,10 +17,10 @@ export default class CheckboxListItem extends Component {
         this.props.onCheck(id, status, color);
     }
     showTitle(id){
-        $("#title_"+this.props.type+"_"+id).fadeIn(300);
+        $("#title_"+this.props.type+"_"+id).stop(true,false).fadeIn(500);
     }
     hideTitle(id){
-        $("#title_"+this.props.type+"_"+id).hide();
+        $("#title_"+this.props.type+"_"+id).stop(false,true).fadeOut(500);
     }
     render() {
         return (

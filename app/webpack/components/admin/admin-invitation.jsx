@@ -304,14 +304,14 @@ export default class AdminInvitation extends Component {
                                     {/* accept="application/pdf,application/msword" */}
                                     {required === "required" ?
                                         <div>
-                                            <input type="file" required="required" ref={type + index} onChange={this.changefileval.bind(this, type + index)} id={type + index} name="file" disabled={this.state.disabled} />
+                                            <input type="file" required="required" ref={type + index} onChange={this.changefileval.bind(this, type + index)} id={type + index} name="file" />
                                             <b>Browse..</b>
                                             <div className="required_error">
                                                 Please select file.
                                                         </div>
                                         </div>
                                         : <div>
-                                            <input type="file" ref={type + index} onChange={this.changefileval.bind(this, type + index)} id={type + index} name="file" disabled={this.state.disabled} />
+                                            <input type="file" ref={type + index} onChange={this.changefileval.bind(this, type + index)} id={type + index} name="file" />
                                             <b>Browse..</b>
                                         </div>}
                                 </a> : ""}
