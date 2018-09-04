@@ -141,6 +141,46 @@ class Api::ConsumptionDetailsController < Api::BaseController
     
   end
 
+  def validate_single
+    error_details = []
+    detail = params[:detail]
+    consumption = Consumption.find(params[:consumption_id]) #@consumption
+    auction = Auction.find(consumption.auction_id)
+    raise ActiveRecord::RecordNotFound if auction.nil?
+    # Account must be unique within a RA.
+    account_numbers = []
+    premise_addresses = []
+    auction.consumptions.each do |consumption|
+      consumption.consumption_details.each do |consumption_detail|
+        account_numbers.push(consumption_detail.account_number)
+        premise_addresses.push({ 'unit_number' => consumption_detail.unit_number,
+                                     'postal_code' => consumption_detail.postal_code})
+      end
+    end
+
+    if account_numbers.any? { |v| v == detail['account_number'] }
+      error_details.push({ 'error_field_name': 'account_number',
+                               'error_value': detail['account_number']})
+    end
+
+    if premise_addresses.any? { |v| v['unit_number'] == detail['unit_number'] && v['postal_code'] == detail['postal_code'] }
+      error_details.push({ 'error_field_name': 'premise_addresses',
+                               'error_value': { unit_number: detail['unit_number'],
+                                                postal_code: detail['postal_code']}})
+    end
+
+    # contract expiry date > RA's contract start date.
+    if !detail['contract_expiry'].blank? &&
+        Time.parse(detail['contract_expiry']) <= auction.contract_period_start_date
+      error_details.push({ 'error_field_name': 'contract_expiry',
+                               'error_value': detail['contract_expiry']})
+    end
+
+    return_json = {validate_result: error_details.blank?,
+                   error_details: error_details}
+    render json: return_json, status: 200
+  end
+
   # Validate consumption detail
   # Loginc:
   #   1. Account number must be unique within a RA.

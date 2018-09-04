@@ -9,8 +9,8 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
     let!(:company_buyer_entity) { create(:company_buyer_entity, user:company_buyer) }
     # let!(:company_buyer) { create(:user, :with_buyer, :with_company_buyer, approval_status: '1', company_unique_entity_number: 'Test UEN', company_name: 'test buyer', email: 'test_email4@email.com') }
     let!(:consumption) { create(:consumption, user: company_buyer, auction: auction, participation_status: '1') }
-    let!(:consumption_lt) { create(:consumption_detail, :for_lt, consumption_id: consumption.id, company_buyer_entity_id: company_buyer_entity.id) }
-    let!(:consumption_hts) { create(:consumption_detail, :for_hts, consumption_id: consumption.id, company_buyer_entity_id: company_buyer_entity.id) }
+    let!(:consumption_lt) { create(:consumption_detail, :for_lt, consumption_id: consumption.id, company_buyer_entity_id: company_buyer_entity.id, account_number: '000001') }
+    let!(:consumption_hts) { create(:consumption_detail, :for_hts, consumption_id: consumption.id, company_buyer_entity_id: company_buyer_entity.id, unit_number: 'UN 1', postal_code: '4001') }
     let!(:consumption_htl) { create(:consumption_detail, :for_htl, consumption_id: consumption.id, company_buyer_entity_id: company_buyer_entity.id) }
     let!(:consumption_eht) { create(:consumption_detail, :for_eht, consumption_id: consumption.id, company_buyer_entity_id: company_buyer_entity.id) }
     let!(:tc1) { create(:user_attachment, file_name: 'test', file_path: 'test')}
@@ -136,6 +136,54 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
 
     describe 'Validate consumption detail' do
       before { sign_in company_buyer }
+
+      context '(Validate-Single)Account number do not unique' do
+        def do_request
+          detail = {id: 0, account_number: '000001', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 1', postal_code: '4001'}
+          post :validate_single, params: { consumption_id: consumption.id, detail: detail }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash_body = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+          expect(hash_body).to have_content('validate_result')
+          expect(hash_body).to have_content('error_details')
+          expect(hash_body['validate_result']).to eq(false)
+        end
+      end
+
+      context '(Validate-Single) Premise Address do not unique' do
+        def do_request
+          detail = {id: 0, account_number: '000002', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 1', postal_code: '4001'}
+          post :validate_single, params: { consumption_id: consumption.id, detail: detail }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash_body = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+          expect(hash_body).to have_content('validate_result')
+          expect(hash_body).to have_content('error_details')
+          expect(hash_body['validate_result']).to eq(false)
+        end
+      end
+
+      context '(Validate-Single) Success' do
+        def do_request
+          detail = {id: 0, account_number: '000002', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 1', postal_code: '4001'}
+          post :validate_single, params: { consumption_id: consumption.id, detail: detail }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash_body = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+          expect(hash_body).to have_content('validate_result')
+          expect(hash_body).to have_content('error_details')
+          expect(hash_body['validate_result']).to eq(true)
+        end
+      end
 
       context 'Account number do not unique' do
         def do_request

@@ -209,12 +209,13 @@ Rails.application.routes.draw do
           put 'update_attachment_status'
         end
       end
-      resources :consumption_details, only: %i[index update participate reject validate] do
+      resources :consumption_details, only: %i[index update participate reject validate validate_single] do
         collection do
           post 'participate'
           post 'reject'
           post 'save'
           post 'validate'
+          post 'validate_single'
         end
       end
       resources :auctions, only: %i[obtain published] do
