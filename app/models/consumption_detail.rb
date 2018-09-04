@@ -37,7 +37,7 @@ class ConsumptionDetail < ApplicationRecord
                                       JOIN consumptions c ON cd.consumption_id = c.id
                                       JOIN auctions a ON c.auction_id = a.id
                                       JOIN auction_contracts ac ON a.id = ac.auction_id
-                                      AND ac.contract_period_end_date + '1 day' < ?
+                                      AND (ac.contract_period_end_date + interval '1 D') < ?
                                           ) as cda
                                     ) as cdf
                               WHERE cdf.n <= 1 ORDER BY cdf.entity_id ASC, cdf.contract_period_end_date DESC
@@ -53,7 +53,7 @@ class ConsumptionDetail < ApplicationRecord
                                       JOIN consumptions c ON cd.consumption_id = c.id
                                       JOIN auctions a ON c.auction_id = a.id
                                       JOIN auction_contracts ac ON a.id = ac.auction_id
-                                      AND ac.contract_period_end_date + '1 day' = ?
+                                      AND (ac.contract_period_end_date + interval '1 D') = ?
                                           ) as cda
                                     ) as cdf
                               WHERE cdf.n <= 1 ORDER BY cdf.entity_id ASC, cdf.contract_period_end_date DESC
