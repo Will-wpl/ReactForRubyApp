@@ -6,10 +6,16 @@ export default class CheckboxList extends Component {
     constructor(props) {
         super(props);
         this.filters = [];
+        this.state={
+            list : []
+        }
     }
 
-    setList(list) {
+    setList(list,type) {
         this.list = list;
+        this.type = type;
+        this.setState({list:list})
+        console.log(list);
     }
 
     selectAll() {
@@ -64,7 +70,7 @@ export default class CheckboxList extends Component {
             if(item.status){
                 uidArray.push(item.user_id);
                 colorArray.push(item.color.split("#")[1]);
-            }           
+            }
         })
         uidObj.uid = uidArray;
         uidObj.color = colorArray;
@@ -75,7 +81,7 @@ export default class CheckboxList extends Component {
         if (this.list) {
             checkItems = this.list.map((obj, index) => {
                 return (
-                    <CheckboxListItem ref="listitem" key={obj.user_id} id={obj.user_id} display={obj.company_name}
+                    <CheckboxListItem ref="listitem" type={this.type} index={index} list={this.state.list[index]} key={obj.user_id} id={obj.user_id} display={obj.company_name}
                                       color={obj.color} status={obj.status} onCheck={this.makeCheckeds.bind(this)}/>
                 );
             })
