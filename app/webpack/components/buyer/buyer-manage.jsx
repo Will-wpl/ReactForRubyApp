@@ -700,7 +700,7 @@ export class BuyerUserManage extends Component {
                         </div>
                     </div>
                     <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
-                    <Modal formSize="viewlog" listdetailtype="viewLog" loglist={this.state.loglist} ref="Modal_Log" />
+                    <Modal formSize="viewlog" text={this.state.text} listdetailtype="viewLog" loglist={this.state.loglist} ref="Modal_Log" />
                 </div>
             </div>
         )

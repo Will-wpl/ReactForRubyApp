@@ -19,7 +19,7 @@ export class Modal extends React.Component {
             existing_plan: [], existing_plan_selected: '', contract_expiry: '', purchasing_entity: [], purchasing_entity_selectd: '', premise_address: '',
             intake_level: [], intake_level_selected: '',
             contracted_capacity: '', blk_or_unit: '', street: '', unit_number: '', postal_code: '',
-            totals: '', peak_pct: '', peak: "", attachment_ids: '', option: '',
+            totals: '', peak_pct: '', peak: "", attachment_ids: '', option: '', type: '',
             isSaved: false, uploadUrl: "/api/buyer/user_attachments?file_type=", validate: false,
             fileData: {
                 "CONSUMPTION_DOCUMENTS": [
@@ -59,8 +59,16 @@ export class Modal extends React.Component {
                 totals: next.consumption_account_item.totals ? parseInt(next.consumption_account_item.totals) : "",
                 peak_pct: next.consumption_account_item.peak_pct,
                 peak: next.consumption_account_item.peak_pct ? (100 - parseFloat(next.consumption_account_item.peak_pct)) : "",
-                option: next.consumption_account_item.option
+                option: next.consumption_account_item.option,
+                type: next.consumption_account_item.type
             });
+
+            if(next.consumption_account_item.type==="preDay")
+            {
+                this.setState({
+                    contract_expiry_disabled:true
+                })
+            }
 
             if (next.consumption_account_item.attachment_ids) {
 
@@ -438,6 +446,7 @@ export class Modal extends React.Component {
             user_id: this.state.user_id,
             main_id: this.state.main_id,
             user_entity_id: this.state.user_entity_id,
+            type: this.state.type,
             index: this.state.itemIndex
         }
         if (this.props.acceptFunction) {
@@ -1105,7 +1114,7 @@ export class Modal extends React.Component {
                                         <div className="isHide">
                                             <input type="text" value={this.state.consumptionid} onChange={this.changeConsumption.bind(this, "consumptionid")} id="id" name="id" />
                                         </div>
-                                        <input type="text" value={this.state.account_number} onChange={this.changeConsumption.bind(this, "account_number")} id="account_number" name="account_number" required aria-required="true" />
+                                        <input type="text" disabled={(this.state.type === 'preDay' || this.state.type === 'preOthers') ? true : false} value={this.state.account_number} onChange={this.changeConsumption.bind(this, "account_number")} id="account_number" name="account_number" required aria-required="true" />
                                         <div id="account_number_message" className="isPassValidate">This filed is required!</div>
                                         <div id="account_number_taken_message" className="errormessage">Account number cannot be duplicated.</div>
                                     </td>
@@ -1113,7 +1122,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td><abbr title="required">*</abbr>Existing Plan</td>
                                     <td>
-                                        <select id="existing_plan" onChange={this.changeConsumption.bind(this, 'existing_plan')} name="existing_plan" value={this.state.existing_plan_selected}>
+                                        <select id="existing_plan" onChange={this.changeConsumption.bind(this, 'existing_plan')} name="existing_plan" disabled={this.state.type === 'preDay'} value={this.state.existing_plan_selected}>
                                             {
                                                 this.state.existing_plan.map((it, i) => <option key={i} value={it}>{it}</option>)
                                             }
@@ -1270,7 +1279,7 @@ export class Modal extends React.Component {
         }
         return (
             this.props.formSize === "big" ?
-                <div id="modal_main" className={this.state.modalshowhide} style={{ width: "700px", top: "20%", left: "40%" }} >
+                <div id="modal_main" className={this.state.modalshowhide} style={{ width: "700px", top: "20%"}} >
                     <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
                     <div className="modal_detail model_detail_formHeight">
                         <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}

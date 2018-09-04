@@ -1300,3 +1300,7 @@ width: "70%"; float: "left";padding:5px;
 {
   font-size: 12px;
 }
+.fixedHead { 
+  position: relative; 
+  top:expression(this.offsetParent.scrollTop-2); 
+  } 

@@ -496,7 +496,7 @@ export class RetailerRegister extends Component {
     }
     view_log() {
         this.setState({
-            text: ""
+            text: " "
         })
         this.refs.Modal_Log.showModal();
     }
@@ -676,7 +676,7 @@ export class RetailerRegister extends Component {
                                 <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrl} />
                                 <Modal text={this.state.text} ref="Modal" />
                                 <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
-                                <Modal formSize="viewlog" listdetailtype="viewRetailerLog" loglist={this.state.loglist} ref="Modal_Log" />
+                                <Modal formSize="viewlog" text={this.state.text} listdetailtype="viewRetailerLog" loglist={this.state.loglist} ref="Modal_Log" />
                             </div>
                         </div>
                     </div>
