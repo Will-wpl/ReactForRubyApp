@@ -3,6 +3,7 @@ import { constants } from 'os';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
+import { validateConsumptionDetailRepeat } from './../../javascripts/componentService/common/service';
 import { validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum, removePostCode } from '../../javascripts/componentService/util';
 //共通弹出框组件
 import { UploadFile } from '../shared/upload';
@@ -19,7 +20,7 @@ export class Modal extends React.Component {
             existing_plan: [], existing_plan_selected: '', contract_expiry: '', purchasing_entity: [], purchasing_entity_selectd: '', premise_address: '',
             intake_level: [], intake_level_selected: '',
             contracted_capacity: '', blk_or_unit: '', street: '', unit_number: '', postal_code: '',
-            totals: '', peak_pct: '', peak: "", attachment_ids: '', option: '', type: '',
+            totals: '', peak_pct: '', peak: "", attachment_ids: '', option: '', cate_type: '',
             isSaved: false, uploadUrl: "/api/buyer/user_attachments?file_type=", validate: false,
             fileData: {
                 "CONSUMPTION_DOCUMENTS": [
@@ -36,44 +37,43 @@ export class Modal extends React.Component {
     componentWillReceiveProps(next) {
         let fileObj;
         fileObj = this.state.fileData;
-        if (next.consumption_account_item) {
+        if (next.consumptionAccountItem) {
             this.setState({
-                consumptionid: next.consumption_account_item.id,
-                isSaved: next.consumption_account_item.id ? true : false,
-                account_number: next.consumption_account_item.account_number,
-                existing_plan: next.consumption_account_item.existing_plan,
-                existing_plan_selected: next.consumption_account_item.existing_plan_selected,
-                contract_expiry: next.consumption_account_item.contract_expiry === "" ? "" : moment(next.consumption_account_item.contract_expiry),
-                purchasing_entity: next.consumption_account_item.purchasing_entity,
+                consumptionid: next.consumptionAccountItem.id,
+                isSaved: next.consumptionAccountItem.id ? true : false,
+                account_number: next.consumptionAccountItem.account_number,
+                existing_plan: next.consumptionAccountItem.existing_plan,
+                existing_plan_selected: next.consumptionAccountItem.existing_plan_selected,
+                contract_expiry: next.consumptionAccountItem.contract_expiry === "" ? "" : moment(next.consumptionAccountItem.contract_expiry),
+                purchasing_entity: next.consumptionAccountItem.purchasing_entity,
                 purchasing_entity_selectd: next.
-                    consumption_account_item.purchasing_entity_selectd ? next.consumption_account_item.purchasing_entity_selectd :
-                    next.consumption_account_item.purchasing_entity.length > 0 ? next.consumption_account_item.purchasing_entity[0].id : "",
-                premise_address: next.consumption_account_item.premise_address,
-                intake_level: next.consumption_account_item.intake_level,
-                intake_level_selected: next.consumption_account_item.intake_level_selected,
-                contracted_capacity: next.consumption_account_item.contracted_capacity ? parseInt(next.consumption_account_item.contracted_capacity) : "",
-                blk_or_unit: next.consumption_account_item.blk_or_unit,
-                street: next.consumption_account_item.street,
-                unit_number: next.consumption_account_item.unit_number,
-                postal_code: next.consumption_account_item.postal_code,
-                totals: next.consumption_account_item.totals ? parseInt(next.consumption_account_item.totals) : "",
-                peak_pct: next.consumption_account_item.peak_pct,
-                peak: next.consumption_account_item.peak_pct ? (100 - parseFloat(next.consumption_account_item.peak_pct)) : "",
-                option: next.consumption_account_item.option,
-                type: next.consumption_account_item.type
+                    consumptionAccountItem.purchasing_entity_selectd ? next.consumptionAccountItem.purchasing_entity_selectd :
+                    next.consumptionAccountItem.purchasing_entity.length > 0 ? next.consumptionAccountItem.purchasing_entity[0].id : "",
+                premise_address: next.consumptionAccountItem.premise_address,
+                intake_level: next.consumptionAccountItem.intake_level,
+                intake_level_selected: next.consumptionAccountItem.intake_level_selected,
+                contracted_capacity: next.consumptionAccountItem.contracted_capacity ? parseInt(next.consumptionAccountItem.contracted_capacity) : "",
+                blk_or_unit: next.consumptionAccountItem.blk_or_unit,
+                street: next.consumptionAccountItem.street,
+                unit_number: next.consumptionAccountItem.unit_number,
+                postal_code: next.consumptionAccountItem.postal_code,
+                totals: next.consumptionAccountItem.totals ? parseInt(next.consumptionAccountItem.totals) : "",
+                peak_pct: next.consumptionAccountItem.peak_pct,
+                peak: next.consumptionAccountItem.peak_pct ? (100 - parseFloat(next.consumptionAccountItem.peak_pct)) : "",
+                option: next.consumptionAccountItem.option,
+                cate_type: next.consumptionAccountItem.cate_type
             });
 
-            if(next.consumption_account_item.type==="preDay")
-            {
+            if (next.consumptionAccountItem.type === "preDay") {
                 this.setState({
-                    contract_expiry_disabled:true
+                    contract_expiry_disabled: true
                 })
             }
 
-            if (next.consumption_account_item.attachment_ids) {
+            if (next.consumptionAccountItem.attachment_ids) {
 
                 fileObj["CONSUMPTION_DOCUMENTS"][0].files = [];
-                fileObj["CONSUMPTION_DOCUMENTS"][0].files = next.consumption_account_item.attachment_ids;
+                fileObj["CONSUMPTION_DOCUMENTS"][0].files = next.consumptionAccountItem.attachment_ids;
                 this.setState({
                     fileData: fileObj
                 })
@@ -85,7 +85,7 @@ export class Modal extends React.Component {
                 })
             }
 
-            if (next.consumption_account_item.existing_plan_selected === "Retailer plan") {
+            if (next.consumptionAccountItem.existing_plan_selected === "Retailer plan") {
                 this.setState({
                     contract_expiry_disabled: false
                 })
@@ -95,7 +95,7 @@ export class Modal extends React.Component {
                     contract_expiry_disabled: true
                 })
             }
-            if (next.consumption_account_item.intake_level_selected === "LT") {
+            if (next.consumptionAccountItem.intake_level_selected === "LT") {
                 this.setState({
                     contracted_capacity_disabled: true
                 })
@@ -163,7 +163,6 @@ export class Modal extends React.Component {
     }
 
     showModal(type, data, str, index) {
-
         if (str) {
             this.setState({ strtype: str });
         }
@@ -375,6 +374,10 @@ export class Modal extends React.Component {
     removeInputPostCode(value) {
         removePostCode(value);
     }
+    downAttachment(attachemnts)
+    {
+        console.log(attachemnts);
+    }
 
     account_address_repeat() {
         let address = false, account = false, editNotSave = false;
@@ -430,7 +433,7 @@ export class Modal extends React.Component {
         }
 
     }
-    addEntity() {
+    addEntity() { //buyer entity
         let entityItem = {
             id: this.state.entityid,
             company_name: this.state.entity_company_name,
@@ -446,7 +449,6 @@ export class Modal extends React.Component {
             user_id: this.state.user_id,
             main_id: this.state.main_id,
             user_entity_id: this.state.user_entity_id,
-            type: this.state.type,
             index: this.state.itemIndex
         }
         if (this.props.acceptFunction) {
@@ -456,7 +458,8 @@ export class Modal extends React.Component {
             })
         }
     }
-    addToMainForm() {
+    addToMainForm() { // consumption detail 
+        console.log(this.state.cate_type)
         let siteItem = {
             consumptionid: this.state.consumptionid ? this.state.consumptionid : "",
             account_number: this.state.account_number,
@@ -472,9 +475,13 @@ export class Modal extends React.Component {
             totals: this.state.totals,
             peak_pct: this.state.peak_pct,
             index: this.state.itemIndex,
+            cate_type: this.state.cate_type,
             attachment_ids: "",
-            user_attachment: []
+            user_attachment: [],
+
+
         }
+
         if (this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0) {
             let idsArr = [];
             this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.map((item) => {
@@ -484,12 +491,27 @@ export class Modal extends React.Component {
             siteItem.user_attachment = this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files;
         }
 
-        if (this.props.acceptFunction) {
-            this.props.acceptFunction(siteItem);
-            this.setState({
-                modalshowhide: "modal_hide"
-            })
+        console.log(siteItem)
+        let param = {
+            details: JSON.stringify(siteItem)
         }
+        validateConsumptionDetailRepeat(param).then(res => {
+            if (true) {
+                if (this.props.acceptFunction) {
+                    this.props.acceptFunction(siteItem);
+                    this.setState({
+                        modalshowhide: "modal_hide"
+                    })
+                }
+            }
+            else {
+
+            }
+
+
+        })
+
+
     }
 
     changeEntity(type, e) {
@@ -713,6 +735,7 @@ export class Modal extends React.Component {
             }
         }
     }
+
     bigModal(type) {
         if (this.state.modalSize === "big") {//height:"300px", top: "40%", left: "40%"
             $("#modal_main").css({ "width": "85%", "height": "500px", "top": "30%", "left": "20%" });
@@ -729,12 +752,14 @@ export class Modal extends React.Component {
             })
         }
     }
+
     closeModalAndRefresh() {
         if (this.props.acceptFunction) {
             this.props.acceptFunction('refrsesh');
             this.closeModal();
         }
     }
+
     closeModelAndCancelSave() {
 
         let data = this.state.props_data;
@@ -744,6 +769,7 @@ export class Modal extends React.Component {
             this.closeModal();
         }
     }
+
     dateChange(data) {
         this.setState({
             contract_expiry: data
@@ -900,7 +926,7 @@ export class Modal extends React.Component {
             if (this.props.listdetailtype === 'Documents Message') {
                 showDetail = <ul className="showdetail">
                     <li>Please upload the following documentations:</li>
-                    <li>1) A print-out of this <a href={this.props.attatchment} className="urlStyleUnderline" target="_blank">Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
+                    <li>1) A print-out of this <a  href="javascript:void(0);" onClick={this.downAttachment.bind(this,this.props.attatchment)} className="urlStyleUnderline" target="_blank">Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
                     <li>2a) Your company's Accounting & Corporate Regulatory Authority (ACRA) Business Profile.</li>
                     <li>or</li>
                     <li>2b) Your company's Certificate of Incorporation if you are not registered with Accounting & Corporate Regulatory Authority (ACRA).</li>
@@ -1103,7 +1129,7 @@ export class Modal extends React.Component {
                 }
             }
             if (this.props.listdetailtype === 'consumption_detail') {
-                if (this.props.consumption_account_item !== null) {
+                if (this.props.consumptionAccountItem !== null) {
                     showDetail = <div className=" admin_invitation validate_message">
                         <h3 className="text_padding_left">My Account Information</h3>
                         <table className="consumption_table  u-mb3" cellPadding="0" cellSpacing="0" style={{ marginTop: "15px" }}>
@@ -1207,7 +1233,7 @@ export class Modal extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Postal Code:</td>
-                                    <td> <input type="text" value={this.state.postal_code} id="postal_code" maxLength="6" name="postal_code" onChange={this.changeConsumption.bind(this, "postal_code")} placeholder="" required aria-required="true" />
+                                    <td> <input type="text" value={this.state.postal_code} id="postal_code" maxLength="6" name="postal_code" onChange={this.changeConsumption.bind(this, "postal_code")} onKeyUp={this.removeInputNanNum.bind(this)} placeholder="" required aria-required="true" />
                                         <div id="postal_code_message" className="isPassValidate">This filed is required!</div>
                                         <div id="postal_code_format" className="isPassValidate">Postal code must be 6 digit interger.</div>
                                     </td>
@@ -1263,7 +1289,7 @@ export class Modal extends React.Component {
         (this.state.type == "custom") {
             btn_html = <div className="modal_btn">
                 <a onClick={this.Add.bind(this)}>{this.state.option === "update" ? "Save" : "Add"}</a>
-                <a onClick={this.closeModal.bind(this)}>Cancel</a>
+                <a onClick={this.closeModal.bind(this)}>Cance</a>
             </div>
         }
         else if (this.state.type === "defaultCallBack") {
@@ -1279,7 +1305,7 @@ export class Modal extends React.Component {
         }
         return (
             this.props.formSize === "big" ?
-                <div id="modal_main" className={this.state.modalshowhide} style={{ width: "700px", top: "20%"}} >
+                <div id="modal_main" className={this.state.modalshowhide} style={{ width: "700px", top: "20%" }} >
                     <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
                     <div className="modal_detail model_detail_formHeight">
                         <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
