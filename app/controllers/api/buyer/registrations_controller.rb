@@ -191,9 +191,9 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
   def validate_buyer_entities_info(buyer, buyer_entities)
     entity_indexes = []
     company_buy_entities = CompanyBuyerEntity.find_by_user(buyer['id'])
-    buyer_emails = [user['email']]
+    buyer_emails = [buyer['email']]
     company_buy_entities.each { |entity| buyer_emails.push(entity.contact_email)}
-    user = User.where('email not in ',buyer_emails).select(:id, :email, :company_unique_entity_number, :company_name, :entity_id)
+    user = User.where('email not in (?)', buyer_emails).select(:id, :email, :company_unique_entity_number, :company_name, :entity_id)
     # validate Entity' email must not be same with any user's email
     entity_indexes.concat(check_entities_email_with_user(buyer, buyer_entities, user))
 
