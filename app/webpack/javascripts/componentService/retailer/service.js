@@ -1,4 +1,4 @@
-import {get, update, create, Ddelete, put,post} from '../../../javascripts/http';
+import {get, update, create, Ddelete, put} from '../../../javascripts/http';
 
 export const retailManageComing = (params) => {
     return put('/api/retailer/arrangements/'+params.arrangement.id, params);

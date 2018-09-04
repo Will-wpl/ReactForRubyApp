@@ -286,15 +286,14 @@ export default class AdminInvitation extends Component {
     }
     addinputfile(type, required) {
         let uploadStatus = true
-        if (
-            this.state.retailer_send != 0
-            //   || this.state.buyer_individual_send != 0 && type === "buyer_tc_upload"
-            // || this.state.buyer_company_send != 0 && type === "buyer_tc_upload"
-            || this.state.readOnly || this.state.publish_status === "1") {
-            uploadStatus = false;
-        }
-        let fileHtml = '';
-        fileHtml = <div className="file_box">
+        // if (
+        //     this.state.retailer_send != 0
+        //     //   || this.state.buyer_individual_send != 0 && type === "buyer_tc_upload"
+        //     // || this.state.buyer_company_send != 0 && type === "buyer_tc_upload"
+        //     || this.state.readOnly || this.state.publish_status === "1") {
+        //     uploadStatus = false;
+        // }
+        let fileHtml = <div className="file_box">
             <form id={type + "_form"} encType="multipart/form-data">
                 {this.state.fileData[type].map((item, index) =>
                     <div className="u-grid mg0 u-mt1" key={index}>
@@ -627,7 +626,7 @@ export default class AdminInvitation extends Component {
                             <div className="lm--formItem lm--formItem--inline string">
                                 <label className="lm--formItem-left lm--formItem-label string required">
                                     Briefing Pack Upload :
-                        </label>
+                                </label>
                                 <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                     {this.addinputfile("birefing_pack_upload", "required")}
                                 </div>

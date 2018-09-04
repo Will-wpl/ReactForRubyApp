@@ -44,7 +44,8 @@ export class RetailerRegister extends Component {
             revvTCurl: "",
             revvTCname: "",
             agree_seller_revv: "0",
-            messageAttachmentUrl: "", loglist: [], approveStatus: false, deleteButtonStatus: false
+            messageAttachmentUrl: "", loglist: [], approveStatus: false
+
 
         }
         this.validatorItem = {
@@ -116,7 +117,7 @@ export class RetailerRegister extends Component {
                 agree_seller_buyer: item.agree_seller_buyer ? item.agree_seller_buyer : '0',
                 agree_seller_revv: item.agree_seller_revv ? item.agree_seller_revv : '0',
                 status: setApprovalStatus(item.approval_status, item.approval_date_time === null ? item.created_at : item.approval_date_time),
-                approveStatus: item.approval_status === "3" ? true : false
+                approveStatus: (item.approval_status === "3" || item.approval_status === "5") ? true : false
             })
             if (this.state.agree_seller_buyer === '1') {
                 $('#chkBuyer').attr("checked", true);
@@ -467,11 +468,14 @@ export class RetailerRegister extends Component {
         if (obj.type === "delete") {
 
             let param = {
-                user_id:  this.state.userid
+                user_id: this.state.userid
             }
             removeRetailer(param).then(res => {
+
+                let retailerStatus = setApprovalStatus("5", "");
                 this.setState({
-                    deleteButtonStatus: true
+                    approveStatus: true,
+                    status: retailerStatus
                 })
             })
         }
@@ -505,7 +509,7 @@ export class RetailerRegister extends Component {
         if (this.state.use_type === 'admin_approve') {
             btn_html = <div>
                 <button id="view_log" className="lm--button lm--button--primary" onClick={this.view_log.bind(this)} disabled={this.state.approveStatus}>View Log</button>
-                <button id="delete" className="lm--button lm--button--primary" onClick={this.deleteUser.bind(this)} disabled={this.state.deleteButtonStatus}>Delete</button>
+                <button id="delete" className="lm--button lm--button--primary" onClick={this.deleteUser.bind(this)} disabled={this.state.approveStatus}>Delete</button>
                 <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'reject')} disabled={this.state.approveStatus}>Reject</button>
                 <button id="submit_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'approve')} disabled={this.state.approveStatus}>Approve</button>
             </div>;

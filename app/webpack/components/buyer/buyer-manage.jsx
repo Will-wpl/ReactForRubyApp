@@ -36,7 +36,7 @@ export class BuyerUserManage extends Component {
             messageAttachmentUrl: "",
             usedEntityIdArr: [],
             submitStatus: false,
-            ismain: false, entityIndex: 0, entityId: 0, loglist: [], deleteButtonStatus: false
+            ismain: false, entityIndex: 0, entityId: 0, loglist: []
 
         }
         this.validatorComment = {
@@ -87,13 +87,13 @@ export class BuyerUserManage extends Component {
                 agree_seller_buyer: item.agree_seller_buyer ? item.agree_seller_buyer : '0',
                 agree_buyer_revv: item.agree_buyer_revv ? item.agree_buyer_revv : '0',
                 has_tenants: item.has_tenants ? item.has_tenants : '1',
-                approveStatus: item.approval_status === "3" ? true : false,
+                approveStatus: (item.approval_status === "3" || item.approval_status === "5") ? true : false,
                 user_company_name: item.company_name ? item.company_name : '',
                 user_company_uen: item.company_unique_entity_number ? item.company_unique_entity_number : '',
                 user_company_address: item.company_address ? item.company_address : '',
                 status: setApprovalStatus(item.approval_status, item.approval_date_time === null ? item.created_at : item.approval_date_time),
-                submitStatus: item.approval_status !== "1" ? true : false,
-                deleteButtonStatus: (item.approval_status === "3" || item.approval_status === "5") ? true : false
+                submitStatus: item.approval_status !== "1" ? true : false
+
             })
 
             $('#buyer_management').val(this.state.has_tenants);
@@ -159,17 +159,6 @@ export class BuyerUserManage extends Component {
                 loglist: param.user_logs
             })
         }
-
-        // if (param.buyer_entities) {
-        //     let entity = param.buyer_entities;
-        //     if (entity.length === 0) {
-        //         setTimeout((item) => {
-        //             this.setState({
-        //                 user_contact_email: this.state.email_address
-        //             })
-        //         }, 300);
-        //     }
-        // }
     }
     setEntityInfo(param) {
         if (param.buyer_entities) {
@@ -261,9 +250,11 @@ export class BuyerUserManage extends Component {
             }
             // let user_id = this.state.user_id                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
             removeBuyer(param).then(res => {
-                console.log(res)
+
+                let buyerStatus = setApprovalStatus("5", "");
                 this.setState({
-                    deleteButtonStatus: true
+                    approveStatus: true,
+                    status: buyerStatus
                 })
             })
         }
@@ -475,7 +466,7 @@ export class BuyerUserManage extends Component {
         let btn_html;
         btn_html = <div>
             <button id="save_form" className="lm--button lm--button--primary" onClick={this.view_log.bind(this)} disabled={this.state.approveStatus}>View Log</button>
-            <button id="save_form" className="lm--button lm--button--primary" onClick={this.deleteUser.bind(this)} disabled={this.state.deleteButtonStatus}>Delete</button>
+            <button id="save_form" className="lm--button lm--button--primary" onClick={this.deleteUser.bind(this)} disabled={this.state.approveStatus}>Delete</button>
             <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeUserAction.bind(this, 'reject')} disabled={this.state.approveStatus}>Reject</button>
             <button id="submit_form" className="lm--button lm--button--primary" onClick={this.judgeUserAction.bind(this, 'approve')} disabled={this.state.approveStatus}>Approve</button>
         </div>;
@@ -493,7 +484,7 @@ export class BuyerUserManage extends Component {
                                 <div>
                                     <div className="u-grid admin_invitation">
                                         <div className="col-sm-12 col-md-8 push-md-2 validate_message">
-                                            <div className="lm--formItem lm--formItem--inline string">
+                                            <div className="lm--formItem lm--formItem--inline string" style={{ marginTop: "15px" }}>
                                                 <label className="lm--formItem-left lm--formItem-label string required">
                                                     Status :
                                                 </label>
