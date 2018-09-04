@@ -30,7 +30,7 @@ export class Modal extends React.Component {
             modalSize: this.props.modalSize,
             entityid: '', is_default: '', user_id: "", main_id: "", user_entity_id: "",
             entity_company_name: '', entity_company_uen: '', entity_company_address: '', entity_billing_address: '', entity_bill_attention_to: '', entity_contact_name: '',
-            entity_contact_email: '', entity_contact_mobile_no: '', entity_contact_office_no: '', entitList: [], entityErrorList: [], loglist: [],attatchment:[]
+            entity_contact_email: '', entity_contact_mobile_no: '', entity_contact_office_no: '', entitList: [], entityErrorList: [], loglist: [], attatchment: []
         }
     }
 
@@ -109,10 +109,10 @@ export class Modal extends React.Component {
         if (next.siteList) {
             this.setState({ consumptionItem: next.siteList });
         }
-        if(next.attatchment)
-        {
+        if (next.attatchment) {
+           
             this.setState({
-                attatchment:next.attatchment
+                attatchment: next.attatchment
             })
         }
         if (next.entityDetailItem) {
@@ -381,6 +381,7 @@ export class Modal extends React.Component {
         removePostCode(value);
     }
     downAttachment(attachemnts) {
+        console.log(attachemnts)
         let attacheList = [];
         if (attachemnts) {
             attachemnts.map(item => {
@@ -396,12 +397,12 @@ export class Modal extends React.Component {
         }
     }
     download(file_name, file_path) {
-        let a = document.createElement("a"),  
+        let a = document.createElement("a"),
             e = document.createEvent("MouseEvents"); //创建鼠标事件对象
-            e.initEvent("click", false, false); //初始化事件对象
-            a.href = file_path; //设置下载地址
-            a.download = file_name; //设置下载文件名 
-            a.dispatchEvent(e); //给指定的元素，执行事件click事
+        e.initEvent("click", false, false); //初始化事件对象
+        a.href = file_path; //设置下载地址
+        a.download = file_name; //设置下载文件名 
+        a.dispatchEvent(e); //给指定的元素，执行事件click事
     }
     account_address_repeat() {
         let address = false, account = false, editNotSave = false;
