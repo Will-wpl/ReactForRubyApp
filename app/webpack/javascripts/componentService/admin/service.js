@@ -213,7 +213,12 @@ export const removeRetailer=(params)=>{
 }
 
 export const getExpiryList=(params)=>{
-    return get('/api/admin/auctions/filter_date?date='+params);
+    if(params.sort){
+        return get('/api/admin/auctions/filter_date?date='+params.time+"&sort_by="+JSON.stringify(params.sort));
+    }else{
+        return get('/api/admin/auctions/filter_date?date='+params.time);
+    }
+
 }
 
 export const goCreateNewRa=(params)=>{
