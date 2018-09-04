@@ -45,7 +45,9 @@ export const saveBuyerAttachmentModification=()=>{
     return put('/api/buyer/users/update_attachment_status');
 }
 
-
+export const validateConsumptionDetailRepeat=(params)=>{
+    return create('/api/buyer/consumption_details/validate',params)
+}
 
 
 

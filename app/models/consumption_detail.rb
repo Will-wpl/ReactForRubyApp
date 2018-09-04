@@ -34,10 +34,10 @@ class ConsumptionDetail < ApplicationRecord
                                       JOIN consumptions c ON cd.consumption_id = c.id
                                       JOIN auctions a ON c.auction_id = a.id
                                       JOIN auction_contracts ac ON a.id = ac.auction_id
-                                      and ac.contract_period_end_date < ?
+                                      AND ac.contract_period_end_date < ?
                                           ) as cda
                                     ) as cdf
-                              WHERE cdf.n <= 1 ORDER BY cdf.contract_period_end_date DESC, cdf.entity_id ASC
+                              WHERE cdf.n <= 1 ORDER BY cdf.entity_id ASC, cdf.contract_period_end_date DESC
                               ", search_date]
   end
 
