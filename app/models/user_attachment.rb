@@ -58,4 +58,8 @@ class UserAttachment < ApplicationRecord
   def self.find_last_by_type(file_type)
     UserAttachment.find_by_type(file_type).order(updated_at: :desc).first
   end
+
+  def self.find_list_by_type(file_type)
+    UserAttachment.find_by_type(file_type).order(updated_at: :desc)
+  end
 end

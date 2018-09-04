@@ -697,7 +697,7 @@ export class BuyerUserManage extends Component {
                                                 <td>{this.state.submitStatus ? true : (item.isApproved ? true : false)}
                                                     <button className="entityApprove" disabled={this.state.submitStatus ? true : (item.isApproved ? true : false)} onClick={this.entity_approve.bind(this, item, index)}>Approve</button>
                                                     <button className="entityApprove" disabled={this.state.submitStatus ? true : (!item.isApproved ? true : false)} onClick={this.entity_reject.bind(this, item, index)}>Reject</button>
-                                                    <button className="entityApprove" onClick={this.view_entity_log.bind(this, item)}>View Log</button>
+                                                    <button className="entityApprove" disabled={this.state.submitStatus ? true : (item.isApproved ? true : false)} onClick={this.view_entity_log.bind(this, item)}>View Log</button>
                                                 </td>
                                             </tr>
                                         })

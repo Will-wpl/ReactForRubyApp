@@ -30,6 +30,7 @@ export class BuyerUserEntityRegister extends Component {
             },
             uploadUrl: "/api/buyer/user_attachments?file_type=",
             messageAttachmentUrl: "",
+            messageAttachmentUrlArr: [],
             usedEntityIdArr: [], usedEntityIdArr: [],
             mainEntityFinished: false,
             ismain: false,
@@ -190,7 +191,7 @@ export class BuyerUserEntityRegister extends Component {
         }
         if (param.letter_of_authorisation_attachment) {
             this.setState({
-                messageAttachmentUrl: param.letter_of_authorisation_attachment.file_path
+                messageAttachmentUrlArr: param.letter_of_authorisation_attachment
             })
         }
         if (param.buyer_revv_tc_attachment) {
@@ -475,9 +476,6 @@ export class BuyerUserEntityRegister extends Component {
                             );
                             this.refs.Modal.showModal();
                         }
-                        // this.setState({
-                        //     btnAddDisabled: true
-                        // })
 
                         if (type === "save") {
                             this.setState({
@@ -491,12 +489,6 @@ export class BuyerUserEntityRegister extends Component {
                     this.validateRepeatColumn(res)
                 }
             });
-        }
-        else {
-            // this.setState({
-            //     text: "Please complete details for default purchasing entity."
-            // })
-            // this.refs.Modal.showModal();
         }
     }
 
@@ -1009,7 +1001,7 @@ export class BuyerUserEntityRegister extends Component {
                         </h4>
                         <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                         <Modal text={this.state.text} acceptFunction={this.refreshForm.bind(this)} ref="Modal" />
-                        <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrl} />
+                        <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrlArr} />
                         <Modal formSize="big" listdetailtype="entity_detail" text={this.state.text} acceptFunction={this.acceptAddEntity.bind(this)} entitList={this.state.entity_list} disabled={this.state.ismain} entityDetailItem={this.state.entityItemInfo} ref="Modal_Entity" />
                         <Modal listdetailtype="entity_error" text={this.state.text} entityErrorList={this.state.validateErrList} ref="Modal_EntityErr" />
                     </div>
