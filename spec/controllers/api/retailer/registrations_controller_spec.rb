@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Api::Retailer::RegistrationsController, type: :controller do
   let!(:admin_user) { create(:user, :with_admin) }
-  let!(:retailer_user) { create(:user, :with_retailer) }
-  let!(:retailer_user1) { create(:user, :with_retailer,company_name: 'Retailer Company', company_license_number: 'Retailer UEN') }
+  let!(:retailer_user) { create(:user, :with_retailer, company_name:'R-C', company_unique_entity_number: 'R-UEN', company_license_number:'R-001') }
+  let!(:retailer_user1) { create(:user, :with_retailer, company_name: 'Retailer Company', company_license_number: 'Retailer UEN') }
 
   context 'save retailer information' do
     before { sign_in retailer_user }
@@ -12,7 +12,7 @@ RSpec.describe Api::Retailer::RegistrationsController, type: :controller do
       context 'success' do
         def do_request
           put :validate, params: { id: retailer_user.id, user: { id: retailer_user.id,
-                                                                 company_name: 'Retailer Company',
+                                                                 company_name: 'Retailer Company Test User',
                                                                  company_unique_entity_number: 'UEN',
                                                                  email: 'abc@emaiol.com',
                                                                  company_license_number: 'abc'} }
@@ -59,7 +59,7 @@ RSpec.describe Api::Retailer::RegistrationsController, type: :controller do
 
     describe 'Put update' do
       def do_request
-        put :update, params: { id: retailer_user.id, user: {id: '10',
+        put :update, params: { id: retailer_user.id, user: {id: retailer_user.id,
                                                             email: 'retailer3@example.com',
                                                             company_name: 'Retailer3 Company',
                                                             company_unique_entity_number: 'UEN 01234',
@@ -80,7 +80,8 @@ RSpec.describe Api::Retailer::RegistrationsController, type: :controller do
 
     describe 'Put sign up' do
       def do_request
-        put :sign_up, params: { id: retailer_user.id, user:{id: retailer_user.id, agree_seller_buyer: '1', agree_seller_revv: '0'} }
+        user = {id: retailer_user.id, company_name:'R-C', company_unique_entity_number: 'R-UEN', company_license_number:'R-001', agree_seller_buyer: '1', agree_seller_revv: '0'}
+        put :sign_up, params: { id: retailer_user.id, user: user}
       end
       before { do_request }
       it 'success' do
