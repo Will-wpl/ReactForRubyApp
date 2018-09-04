@@ -101,14 +101,6 @@ export class BuyerUserEntityRegister extends Component {
         if (this.isApprove) {
             $("#buyer_management").addClass("tenant_management");
         }
-
-
-        $(window).on("load resize ", function () {
-            var scrollWidth = $('.tbl-content').width() - $('.tbl-content table').width();
-            $('.tbl-header').css({ 'padding-right': scrollWidth });
-        }).resize();
-
-
     }
     setDefaultValue(param) {
         this.setBuyerInfo(param);

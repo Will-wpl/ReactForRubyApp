@@ -386,6 +386,9 @@ export const setApprovalStatus = (status, dt) => {
         case '3':
             approvalStatus = 'Registering';
             break;
+        case '5':
+            approvalStatus = 'Removed';
+            break;
         default:
             approvalStatus = 'Registering';
             break;
