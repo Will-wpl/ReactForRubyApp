@@ -29,7 +29,7 @@ export class BuyerRegister extends Component {
                 ]
             },
             uploadUrl: "/api/buyer/user_attachments?file_type=",
-            messageAttachmentUrl: "",
+            messageAttachmentUrlArr: [],
             usedEntityIdArr: []
         };
         this.validatorItem = {
@@ -114,7 +114,6 @@ export class BuyerRegister extends Component {
     }
 
     setDefault(param) {
-        console.log(param)
         let fileObj, entityObj;
         fileObj = this.state.fileData;
         entityObj = this.state.user_entity_data;
@@ -172,7 +171,7 @@ export class BuyerRegister extends Component {
         }
         if (param.letter_of_authorisation_attachment) {
             this.setState({
-                messageAttachmentUrl: param.letter_of_authorisation_attachment.file_path
+                messageAttachmentUrlArr: param.letter_of_authorisation_attachment
             })
         }
 
@@ -962,7 +961,7 @@ export class BuyerRegister extends Component {
                     </div>
 
                     <Modal text={this.state.text} acceptFunction={this.refreshForm.bind(this)} ref="Modal" />
-                    <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrl} />
+                    <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrlArr} />
                     <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
                 </div>
             </div>

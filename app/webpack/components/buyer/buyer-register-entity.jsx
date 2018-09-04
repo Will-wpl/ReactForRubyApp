@@ -29,7 +29,6 @@ export class BuyerUserEntityRegister extends Component {
                 ]
             },
             uploadUrl: "/api/buyer/user_attachments?file_type=",
-            messageAttachmentUrl: "",
             messageAttachmentUrlArr: [],
             usedEntityIdArr: [], usedEntityIdArr: [],
             mainEntityFinished: false,

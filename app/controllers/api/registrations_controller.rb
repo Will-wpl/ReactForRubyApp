@@ -110,7 +110,7 @@ class Api::RegistrationsController < Api::BaseController
     seller_revv_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_REVV_TC)
 
     # get letter-of-authorisation document
-    letter_of_authorisation_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Letter_Authorisation)
+    letter_of_authorisation_attachment = UserAttachment.find_list_by_type(UserAttachment::FileType_Letter_Authorisation)
     # get logs
     user_logs = UserUpdatedLog.find_by_user_id(user_id)
     # get user info

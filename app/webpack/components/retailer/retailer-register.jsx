@@ -44,7 +44,7 @@ export class RetailerRegister extends Component {
             revvTCurl: "",
             revvTCname: "",
             agree_seller_revv: "0",
-            messageAttachmentUrl: "", loglist: [], approveStatus: false
+            messageAttachmentUrlArr: [], loglist: [], approveStatus: false
 
 
         }
@@ -173,7 +173,7 @@ export class RetailerRegister extends Component {
 
         if (param.letter_of_authorisation_attachment) {
             this.setState({
-                messageAttachmentUrl: param.letter_of_authorisation_attachment.file_path
+                messageAttachmentUrlArr: param.letter_of_authorisation_attachment
             })
         }
     }
@@ -677,7 +677,7 @@ export class RetailerRegister extends Component {
                                 <div className="retailer_btn">
                                     {btn_html}
                                 </div>
-                                <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrl} />
+                                <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrlArr} />
                                 <Modal text={this.state.text} ref="Modal" />
                                 <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
                                 <Modal formSize="viewlog" text={this.state.text} listdetailtype="viewRetailerLog" loglist={this.state.loglist} ref="Modal_Log" />
