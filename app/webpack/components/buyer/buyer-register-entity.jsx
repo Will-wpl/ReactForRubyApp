@@ -354,7 +354,9 @@ export class BuyerUserEntityRegister extends Component {
     }
 
     showView() {
-
+        this.setState({
+            text:" "
+        })
         this.refs.Modal_upload.showModal();
     }
 
@@ -571,7 +573,7 @@ export class BuyerUserEntityRegister extends Component {
                 validateErrList: errList
             })
 
-            this.setState({ text: "" });
+            this.setState({ text: " " });
             this.refs.Modal_EntityErr.showModal();
             this.tab("entity");
             return;
