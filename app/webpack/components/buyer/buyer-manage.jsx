@@ -194,7 +194,7 @@ export class BuyerUserManage extends Component {
                 setValidationFaild(column, cate)
             })
         }
-        $('.validate_message').find('div').each(function() {
+        $('.validate_message').find('div').each(function () {
             let className = $(this).attr('class');
             if (className === 'errormessage') {
                 flag = false;
@@ -253,10 +253,10 @@ export class BuyerUserManage extends Component {
                         submitStatus: true
                     })
                 }
-            })                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+            })
         }
         else if (obj.type === 'deleteBuyer') {
-            let param = {                                                                                                                                                                                                                                                                                                                               
+            let param = {
                 user_id: this.state.userid
             }
             // let user_id = this.state.user_id                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
@@ -642,59 +642,78 @@ export class BuyerUserManage extends Component {
                         </div>
                     </div>
                     <div className="col-sm-12 buyer_list1 " id="buyer_entity">
-                        <table className="buyer_entity" cellPadding="0" cellSpacing="0">
-                            <colgroup>
-                                <col width="10%" />
-                                <col width="10%" />
-                                <col width="10%" />
-                                <col width="10%" />
-                                <col width="10%" />
-                                <col width="10%" />
-                                <col width="10%" />
-                                <col width="10%" />
-                                <col width="10%" />
-                                <col width="10%" />
-                                <col width="10%" />
-                            </colgroup>
-                            <thead>
-                                <tr>
-                                    <th>Purchase Entity/Company Name</th>
-                                    <th>Company UEN</th>
-                                    <th>Company Address</th>
-                                    <th>Billing Address</th>
-                                    <th>Bill Attention To</th>
-                                    <th>Contact Name</th>
-                                    <th>Contact Email</th>
-                                    <th>Contact Mobile No.</th>
-                                    <th>Contact Office No.</th>
-                                    <th>Status</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    this.state.entity_list.map((item, index) => {
-                                        return <tr key={index}>
-                                            <td>{item.company_name}</td>
-                                            <td>{item.company_uen}</td>
-                                            <td>{item.company_address}</td>
-                                            <td>{item.billing_address}</td>
-                                            <td>{item.bill_attention_to}</td>
-                                            <td>{item.contact_name}</td>
-                                            <td>{item.contact_email}</td>
-                                            <td>{item.contact_mobile_no}</td>
-                                            <td>{item.contact_office_no}</td>
-                                            <td>{item.isApproved}{item.approval_status_name}</td>
-                                            <td>{this.state.submitStatus ? true : (item.isApproved ? true : false)}
-                                                <button className="entityApprove" disabled={this.state.submitStatus ? true : (item.isApproved ? true : false)} onClick={this.entity_approve.bind(this, item, index)}>Approve</button>
-                                                <button className="entityApprove" disabled={this.state.submitStatus ? true : (!item.isApproved ? true : false)} onClick={this.entity_reject.bind(this, item, index)}>Reject</button>
-                                                <button className="entityApprove" onClick={this.view_entity_log.bind(this, item)}>View Log</button>
-                                            </td>
-                                        </tr>
-                                    })
-                                }
-                            </tbody>
-                        </table>
+                        <div className="table-head">
+                            <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                                <colgroup>
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>Purchase Entity/Company Name</th>
+                                        <th>Company UEN</th>
+                                        <th>Company Address</th>
+                                        <th>Billing Address</th>
+                                        <th>Bill Attention To</th>
+                                        <th>Contact Name</th>
+                                        <th>Contact Email</th>
+                                        <th>Contact Mobile No.</th>
+                                        <th>Contact Office No.</th>
+                                        <th>Status</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div className="table-body">
+                            <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                                <colgroup>
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                    <col width="10%" />
+                                </colgroup>
+                                <tbody>
+                                    {
+                                        this.state.entity_list.map((item, index) => {
+                                            return <tr key={index}>
+                                                <td>{item.company_name}</td>
+                                                <td>{item.company_uen}</td>
+                                                <td>{item.company_address}</td>
+                                                <td>{item.billing_address}</td>
+                                                <td>{item.bill_attention_to}</td>
+                                                <td>{item.contact_name}</td>
+                                                <td>{item.contact_email}</td>
+                                                <td>{item.contact_mobile_no}</td>
+                                                <td>{item.contact_office_no}</td>
+                                                <td>{item.isApproved}{item.approval_status_name}</td>
+                                                <td>{this.state.submitStatus ? true : (item.isApproved ? true : false)}
+                                                    <button className="entityApprove" disabled={this.state.submitStatus ? true : (item.isApproved ? true : false)} onClick={this.entity_approve.bind(this, item, index)}>Approve</button>
+                                                    <button className="entityApprove" disabled={this.state.submitStatus ? true : (!item.isApproved ? true : false)} onClick={this.entity_reject.bind(this, item, index)}>Reject</button>
+                                                    <button className="entityApprove" onClick={this.view_entity_log.bind(this, item)}>View Log</button>
+                                                </td>
+                                            </tr>
+                                        })
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                         <div className="retailer_btn">
                             <button id="save_form" className="lm--button lm--button--primary" style={{ marginRight: "10px" }} onClick={this.submitEntity.bind(this)} disabled={this.state.submitStatus}>Submit</button>
                         </div>
