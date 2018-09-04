@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import DatePicker from 'react-datepicker';
-import moment from 'moment'; 
+import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 import {searchTypeData} from '../../../javascripts/componentService/common/searchConfig';
 export class SearchType extends Component {
@@ -63,14 +63,14 @@ export class SearchType extends Component {
                     needData += '"'+item.type+'":["'+this.state.start_datetime.format()+'","'+item.operator+'","'+item.table+'"],';
                 }else{
                     needData += '"'+item.type+'":["'+$('#'+item.type).val()+'","'+item.operator+'","'+item.table+'"],';
-                }      
+                }
             }else{
                 if(item.type == "start_datetime" && this.state.start_datetime != ""){
                     needData += '"'+item.type+'":["'+this.state.start_datetime.format()+'","'+item.operator+'"],';
                 }else{
                     needData += '"'+item.type+'":["'+$('#'+item.type).val()+'","'+item.operator+'"],';
                 }
-                
+
             }
         })
         needData = needData.substr(0,needData.length-1);
@@ -119,7 +119,7 @@ export class SearchType extends Component {
                         <button className="lm--button lm--button--primary search_btn" onClick={this.goSearch.bind(this)}>Search</button>
                         <button className="lm--button lm--button--primary reset_btn" onClick={this.goReset.bind(this)}>Reset</button>
                     </dd>
-                    {this.props.type === "Unpublished Auction List" ?<dd className="fright"><a className="lm--button lm--button--primary create_btn" onClick={this.getAuctionId.bind(this,"new")} href="/admin/auctions/new">Create</a></dd> : ""}                   
+                    {this.props.type === "Unpublished Auction List" ?<dd className="fright"><a className="lm--button lm--button--primary create_btn" onClick={this.getAuctionId.bind(this,"new")} href="/admin/auctions/contract_expiry">Create</a></dd> : ""}
                 </dl>
             </div>
         )}

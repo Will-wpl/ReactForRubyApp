@@ -361,7 +361,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
   }
   ol{ margin: 20px auto 0px auto;}
 }
- 
+
 
 .admin_hold{ position: absolute; color:red; top:25%;}
 ::-webkit-scrollbar
@@ -1194,8 +1194,8 @@ width: "70%"; float: "left";padding:5px;
 
 .buyer_buyer_list{
   .buyer_tab{
-    a{ 
-      background: #24425a; color: #fff; display:inline-block; 
+    a{
+      background: #24425a; color: #fff; display:inline-block;
       text-align: center; height:42px; line-height: 42px;
       border-radius: 5px 5px 0px 0px; margin-right: 5px; transition: 0.5s all; cursor: pointer;
       &.selected,&:hover{background: #1b3146;}
@@ -1206,12 +1206,12 @@ width: "70%"; float: "left";padding:5px;
   }
   #buyer_entity{ display: none;}
 }
- 
+
 .logTable{
   width: 97%; font-size: 12px; table-layout: fixed; border:1px solid #314657; border-right:1px solid #314657;   margin: 10px 10px 20px 10px;
   thead{
     tr{ background: #00394A;
-     th{ 
+     th{
        height: 40px; border-right:1px solid #314657; font-size: 14px;//border-radius:5px;
        &.table_title{border-bottom:1px solid #314657;}
      }
@@ -1227,7 +1227,7 @@ width: "70%"; float: "left";padding:5px;
           background: url("../images/notification_sent.png") no-repeat -20px 11px;
           &.fill_yes{ background-position: 0px 11px; background-size:15px; padding-left: 20px;}
         }
-     }   
+     }
     }
   }
 }
@@ -1236,7 +1236,7 @@ width: "70%"; float: "left";padding:5px;
   width: 100%; font-size: 12px; table-layout: fixed; border-top:1px solid #314657; border-left:1px solid #314657;  margin: 20px 20px 20px 10px;
   thead{
     tr{ background: #00394A;
-     th{ 
+     th{
        height: 40px; border-right:1px solid #314657; font-size: 14px;
        &.table_title{border-bottom:1px solid #314657;}
      }
@@ -1251,7 +1251,7 @@ width: "70%"; float: "left";padding:5px;
           background: url("../images/notification_sent.png") no-repeat -20px 11px;
           &.fill_yes{ background-position: 0px 11px; background-size:15px; padding-left: 20px;}
         }
-     }   
+     }
     }
   }
   .addSite{ width: 100%; margin: 10px auto;
@@ -1272,7 +1272,7 @@ width: "70%"; float: "left";padding:5px;
   .viewEntity{ width: 100%; margin: 10px 5px 10px 5px auto;
     a{padding-left:20px;color:#00888a; cursor: pointer; background: url("../images/view.png") no-repeat left; }
   }
-  
+
 }
 .addSite{ width: 100%; margin: 10px auto;
   a{color:#00888a; cursor: pointer; background: url("../images/add.png") no-repeat left; padding-left:18px;}
@@ -1299,4 +1299,11 @@ width: "70%"; float: "left";padding:5px;
 .particiption-note
 {
   font-size: 12px;
+}
+.fixedHead {
+  position: relative;
+  top:expression(this.offsetParent.scrollTop-2);
+  }
+.admin_expiry{
+  button{ margin-left: 15px;  }
 }
