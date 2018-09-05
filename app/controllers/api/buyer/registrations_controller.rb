@@ -20,6 +20,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     update_user_params = filter_user_password(update_user_params)
     user = User.find(params[:user]['id'])
     buyer_entities = JSON.parse(params[:buyer_entities])
+    add_log_flag = false
     # need admin approval if company name / UEN changed.
     if !user.blank? && update_status_flag.eql?("1")
       if(user.approval_status == User::ApprovalStatusReject ||
@@ -28,7 +29,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
           ( !user.company_unique_entity_number && user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase ))
         if (user.company_name.downcase != update_user_params['company_name'].downcase ||
             user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase )
-          add_user_log(user)
+          add_log_flag = true
         end
         update_user_params['approval_status'] = User::ApprovalStatusPending
         update_user_params['approval_date_time'] = DateTime.current
@@ -39,6 +40,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     end
     ActiveRecord::Base.transaction do
       @user.update(update_user_params)
+      add_user_log(@user) if add_log_flag
       # update buyer entity registration information
       # buyer_entities.push(build_default_entity( update_user_params )) unless buyer_entities.any?{ |v| v['is_default'] == 1 }
       saved_entities = update_buyer_entities(buyer_entities,true)
@@ -55,28 +57,29 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     saved_entities = nil
     update_user_params = model_params
     update_user_params = filter_user_password(update_user_params)
-    user = User.find(params[:user]['id'])
+    # user = User.find(params[:user]['id'])
 
-    update_user_params['approval_status'] = User::ApprovalStatusRegistering
+    update_user_params['approval_status'] = User::ApprovalStatusPending
 
     buyer_entities = JSON.parse(params[:buyer_entities])
 
-    unless user.blank?
-      if(user.approval_status == User::ApprovalStatusReject ||
-          user.approval_status == User::ApprovalStatusRegistering ||
-          (user.company_name.downcase != update_user_params['company_name'].downcase ||
-              user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase ))
-        if (user.company_name.downcase != update_user_params['company_name'].downcase ||
-            user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase )
-          add_user_log(user)
-        end
-        update_user_params['approval_status'] = User::ApprovalStatusPending
-        update_user_params['approval_date_time'] = DateTime.current
-      end
-    end
+    # unless user.blank?
+    #   if(user.approval_status == User::ApprovalStatusReject ||
+    #       user.approval_status == User::ApprovalStatusRegistering ||
+    #       (user.company_name.downcase != update_user_params['company_name'].downcase ||
+    #           user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase ))
+    #     # if (user.company_name.downcase != update_user_params['company_name'].downcase ||
+    #     #     user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase )
+    #     #   add_user_log(user)
+    #     # end
+    #     update_user_params['approval_status'] = User::ApprovalStatusPending
+    #     update_user_params['approval_date_time'] = DateTime.current
+    #   end
+    # end
     update_user_params['approval_date_time'] = DateTime.current
     ActiveRecord::Base.transaction do
       @user.update(update_user_params)
+      add_user_log(@user)
       # update buyer entity registration information}
       saved_entities = update_buyer_entities(buyer_entities, true)
     end
