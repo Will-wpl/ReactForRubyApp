@@ -1029,7 +1029,7 @@ export class Modal extends React.Component {
                                 return <tr key={index}>
                                     <td>{item.company_name}</td>
                                     <td>{item.company_uen}</td>
-                                    <td>{moment(item.updated_at).format('YYYY-MM-DD')}</td>
+                                    <td>{moment(item.updated_at).format('YYYY-MM-DD HH:mm:ss ')}</td>
                                 </tr>
                             })
                         }
@@ -1059,7 +1059,7 @@ export class Modal extends React.Component {
                                     <td>{item.company_name}</td>
                                     <td>{item.company_uen}</td>
                                     <td>{item.license_number}</td>
-                                    <td>{moment(item.updated_at).format('YYYY-MM-DD')}</td>
+                                    <td>{moment(item.updated_at).format('YYYY-MM-DD HH:mm:ss')}</td>
                                 </tr>
                             })
                         }
