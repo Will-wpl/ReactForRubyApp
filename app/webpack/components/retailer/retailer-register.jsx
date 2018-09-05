@@ -464,19 +464,19 @@ export class RetailerRegister extends Component {
         this.refs.Modal_Option.showModal('comfirm', { action: 'delete' }, '');
     }
     doAction(obj) {
-
-        if (obj.type === "delete") {
+        if (obj.action === "delete") {
 
             let param = {
                 user_id: this.state.userid
             }
             removeRetailer(param).then(res => {
 
-                let retailerStatus = setApprovalStatus("5", "");
-                this.setState({
-                    approveStatus: true,
-                    status: retailerStatus
-                })
+                // let retailerStatus = setApprovalStatus("5", "");
+                // this.setState({
+                //     approveStatus: true,
+                //     status: retailerStatus
+                // })
+                location.href = "/admin/users/retailers";
             })
         }
         else {

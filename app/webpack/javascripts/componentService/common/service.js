@@ -46,7 +46,7 @@ export const saveBuyerAttachmentModification=()=>{
 }
 
 export const validateConsumptionDetailRepeat=(params)=>{
-    return create('/api/buyer/consumption_details/validate',params)
+    return create('/api/buyer/consumption_details/validate_single',params)
 }
 
 

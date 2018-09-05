@@ -31,7 +31,8 @@ export class FillConsumption extends Component {
             account_list: [],
             contract_capacity_disabled: true,
             contract_expiry_disabled: true,
-            dateIssuecount: 0
+            dateIssuecount: 0,
+            consumption_id:0
         }
         this.accountItem = {
             account_number: '',
@@ -57,12 +58,19 @@ export class FillConsumption extends Component {
             attachId: "",
             attachment_ids: '',
             id: 0,
+            consumption_id:0,
             cid: Math.floor((Math.random() * 10000) + 1),
             option: 'insert',
             cate_type: ""
         };
         this.purchaseList = [];
-        this.consumptions_id = (window.location.href.split("consumptions/")[1]).split("/edit")[0];
+        // this.consumptions_id = (window.location.href.split("consumptions/")[1]).split("/edit")[0];
+    }
+    componentWillMount()
+    {
+        this.setState({
+            consumption_id:(window.location.href.split("consumptions/")[1]).split("/edit")[0]
+        })
     }
 
     componentDidMount() {
@@ -70,7 +78,8 @@ export class FillConsumption extends Component {
     }
 
     BuyerParticipateList() {
-        getBuyerParticipate('/api/buyer/consumption_details?consumption_id=' + this.consumptions_id).then((res) => {
+        getBuyerParticipate('/api/buyer/consumption_details?consumption_id=' + this.state.consumption_id).then((res) => {
+           console.log(res)
             this.site_list = res.consumption_details;
             this.status = res.consumption.participation_status === '1' ? "Confirmed" :
                 (res.consumption.participation_status === '2' ? "Pending" : "Rejected")
@@ -100,13 +109,13 @@ export class FillConsumption extends Component {
             if (res.consumption_details.length > 0) {
                 this.setState({ site_list: res.consumption_details });
             }
-            // if(res.ddd.length>0)
-            // {
-            //     this.setState({preDayList:res.ddd})
-            // }
-            // if (res.eee.length > 0) {
-            //     this.setState({ preOtherList: res.eee })
-            // }
+            if(res.consumption_details_last_day.length>0)
+            {
+                this.setState({preDayList:res.consumption_details_last_day})
+            }
+            if (res.consumption_details_before_yesterday.length > 0) {
+                this.setState({ preOtherList: res.consumption_details_before_yesterday })
+            }
 
             if (this.state.checked) {
                 $(".btnOption").css("pointer-events", "none").css("color", "#4B4941");
@@ -135,6 +144,7 @@ export class FillConsumption extends Component {
             }
         })
         this.accountItem.id = "";
+        this.accountItem.consumption_id=this.state.consumption_id;
         this.accountItem.account_number = "";
         this.accountItem.existing_plan = ['SPS tariff', 'SPS wholesale', 'Retailer plan'];
         this.accountItem.existing_plan_selected = "SPS tariff";
@@ -169,6 +179,7 @@ export class FillConsumption extends Component {
         this.setState({ account_detail: {} });
         this.accountItem = {};
         this.accountItem.id = item.id;
+        this.accountItem.consumption_id=this.state.consumption_id;
         this.accountItem.account_number = item.account_number;
         this.accountItem.existing_plan = ['SPS tariff', 'SPS wholesale', 'Retailer plan'];
         this.accountItem.existing_plan_selected = item.existing_plan;
@@ -186,6 +197,7 @@ export class FillConsumption extends Component {
         this.accountItem.peak_pct = item.peak_pct;
         this.accountItem.peak = 10;
         this.accountItem.attachment_ids = item.user_attachment;
+        this.accountItem.consumption_id=this.consumption_id;
         this.accountItem.option = 'update';
         if (type === "current") {
             this.accountItem.cate_type = "current";
@@ -208,6 +220,7 @@ export class FillConsumption extends Component {
         console.log(siteInfo)
         let item = {
             id: siteInfo.consumptionid ? siteInfo.consumptionid : "",
+            consumption_id:siteInfo.consumption_id,
             account_number: siteInfo.account_number,
             existing_plan: siteInfo.existing_plan_selected,
             contract_expiry: siteInfo.contract_expiry ? moment(siteInfo.contract_expiry) : "",
@@ -308,7 +321,7 @@ export class FillConsumption extends Component {
             buyerlist.push(siteItem);
         })
         makeData = {
-            consumption_id: this.consumptions_id,
+            consumption_id: this.state.consumption_id,
             details: JSON.stringify(buyerlist),
             contract_duration: $("#selDuration").val()
         }
@@ -344,7 +357,7 @@ export class FillConsumption extends Component {
 
     doAccept() {
         if (this.state.submit_type === "Reject") { //do Reject
-            setBuyerParticipate({ consumption_id: this.consumptions_id }, '/api/buyer/consumption_details/reject').then((res) => {
+            setBuyerParticipate({ consumption_id: this.state.consumption_id }, '/api/buyer/consumption_details/reject').then((res) => {
                 this.refs.Modal.showModal();
                 this.setState({ text: "Thank you for the confirmation. You have rejected this auction." });
                 setTimeout(() => {
@@ -399,16 +412,16 @@ export class FillConsumption extends Component {
             this.passValidateSave();
         }
     }
-    // validateListComplete() {
-    //     let flag = true;
-    //     this.state.preOtherList.map(item => {
-    //         if (item.existing_plan === "") {
-    //             flag = false;
-    //             break;
-    //         }
-    //     })
-    //     return flag;
-    // }
+    validateListComplete() {
+        let flag = true;
+        this.state.preOtherList.map(item => {
+            if (item.existing_plan === "") {
+                flag = false;
+               // break;
+            }
+        })
+        return flag;
+    }
 
     passValidateSave() {
         if (this.state.submit_type === "Participate") {
@@ -479,7 +492,7 @@ export class FillConsumption extends Component {
                         {/* one day  */}
                         <h4 className="col-sm-12 u-mb2">Last Status of Participation : {this.status}</h4>
                         <h4 className="col-sm-12 u-mb2">Accounts on Continuous Purchase</h4>
-                        <span className="particiption">Note: Please update Consumption Details if there is significant change in your account's consumption since your last participation.</span>
+                        <span className="particiption-note">Note: Please update Consumption Details if there is significant change in your account's consumption since your last participation.</span>
                         <div className="col-sm-12 col-md-12">
                             <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                                 <colgroup>
@@ -548,7 +561,7 @@ export class FillConsumption extends Component {
                         </div>
                         {/* one day before others */}
                         <h4 className="col-sm-12 u-mb2 separate">Accounts with Purchase Gap</h4>
-                        <span className="particiption">Note: Please update Consumption Details if there is significant change in your account's consumption since your last participation.</span>
+                        <span className="particiption-note">Note: Please update Consumption Details if there is significant change in your account's consumption since your last participation.</span>
                         <div className="col-sm-12 col-md-12">
                             <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                                 <colgroup>

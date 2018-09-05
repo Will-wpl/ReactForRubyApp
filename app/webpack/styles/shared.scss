@@ -1305,14 +1305,15 @@ width: "70%"; float: "left";padding:5px;
 .separate{
   margin-top: 20px;
 }
+.particiption-title{
+  font-size: 14px;
+}
 .particiption-note
 {
   font-size: 12px;
+  margin-bottom: 15px;
 }
-.fixedHead {
-  position: relative;
-  top:expression(this.offsetParent.scrollTop-2);
-  }
+
 .admin_expiry{
   button{ margin-left: 15px;  }
 }

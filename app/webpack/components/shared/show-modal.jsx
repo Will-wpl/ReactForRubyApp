@@ -16,7 +16,7 @@ export class Modal extends React.Component {
             modalshowhide: "modal_hide",
             type: 'default', secondStatus: "live_hide", itemIndex: "", props_data: {},
             strtype: '', email_subject: '', email_body: '', consumptionItem: [],
-            contracted_capacity_disabled: true, contract_expiry_disabled: true, disabled: false, id: "", consumptionid: "", account_number: '',
+            contracted_capacity_disabled: true, contract_expiry_disabled: true, disabled: false, id: "", consumption_detail_id: "",consumption_id:"", account_number: '',
             existing_plan: [], existing_plan_selected: '', contract_expiry: '', purchasing_entity: [], purchasing_entity_selectd: '', premise_address: '',
             intake_level: [], intake_level_selected: '',
             contracted_capacity: '', blk_or_unit: '', street: '', unit_number: '', postal_code: '',
@@ -39,7 +39,8 @@ export class Modal extends React.Component {
         fileObj = this.state.fileData;
         if (next.consumptionAccountItem) {
             this.setState({
-                consumptionid: next.consumptionAccountItem.id,
+                consumption_id:next.consumptionAccountItem.consumption_id,
+                consumption_detail_id: next.consumptionAccountItem.id,
                 isSaved: next.consumptionAccountItem.id ? true : false,
                 account_number: next.consumptionAccountItem.account_number,
                 existing_plan: next.consumptionAccountItem.existing_plan,
@@ -410,10 +411,10 @@ export class Modal extends React.Component {
         this.state.consumptionItem.map((item, index) => {
             if (this.state.option === 'update') {
                 if (item.id) {
-                    if ((this.state.unit_number == item.unit_number) && (this.state.postal_code == item.postal_code) && (this.state.consumptionid !== item.id)) {
+                    if ((this.state.unit_number == item.unit_number) && (this.state.postal_code == item.postal_code) && (this.state.consumption_detail_id !== item.id)) {
                         address_count++;
                     }
-                    if (this.state.account_number === item.account_number && (this.state.consumptionid !== item.id)) {
+                    if (this.state.account_number === item.account_number && (this.state.consumption_detail_id !== item.id)) {
                         account_count++;
                     }
                 }
@@ -486,7 +487,7 @@ export class Modal extends React.Component {
     addToMainForm() { // consumption detail 
         console.log(this.state.cate_type)
         let siteItem = {
-            consumptionid: this.state.consumptionid ? this.state.consumptionid : "",
+            consumption_detail_id: this.state.consumption_detail_id ? this.state.consumption_detail_id : "",
             account_number: this.state.account_number,
             existing_plan_selected: this.state.existing_plan_selected,
             contract_expiry: this.state.contract_expiry ? this.state.contract_expiry : "",
@@ -503,8 +504,7 @@ export class Modal extends React.Component {
             cate_type: this.state.cate_type,
             attachment_ids: "",
             user_attachment: [],
-
-
+            consumption_id:this.state.consumption_id
         }
 
         if (this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0) {
@@ -518,8 +518,11 @@ export class Modal extends React.Component {
 
         console.log(siteItem)
         let param = {
-            details: JSON.stringify(siteItem)
+             detail: siteItem,
+             consumption_id:this.state.consumption_id
+            // details:siteItem
         }
+        console.log(param)
         validateConsumptionDetailRepeat(param).then(res => {
             if (true) {
                 if (this.props.acceptFunction) {
@@ -604,9 +607,9 @@ export class Modal extends React.Component {
     changeConsumption(type, e) {
         let value = e.target.value;
         switch (type) {
-            case "consumptionid":
+            case "consumption_detail_id":
                 this.setState({
-                    consumptionid: value
+                    consumption_detail_id: value
                 })
                 break;
             case "account_number":
@@ -1163,7 +1166,7 @@ export class Modal extends React.Component {
                                     <td style={{ width: "30%" }}><abbr title="required">*</abbr>Account No.</td>
                                     <td style={{ width: "70%" }}>
                                         <div className="isHide">
-                                            <input type="text" value={this.state.consumptionid} onChange={this.changeConsumption.bind(this, "consumptionid")} id="id" name="id" />
+                                            <input type="text" value={this.state.consumption_detail_id} onChange={this.changeConsumption.bind(this, "consumption_detail_id")} id="id" name="id" />
                                         </div>
                                         <input type="text" disabled={(this.state.type === 'preDay' || this.state.type === 'preOthers') ? true : false} value={this.state.account_number} onChange={this.changeConsumption.bind(this, "account_number")} id="account_number" name="account_number" required aria-required="true" />
                                         <div id="account_number_message" className="isPassValidate">This filed is required!</div>
