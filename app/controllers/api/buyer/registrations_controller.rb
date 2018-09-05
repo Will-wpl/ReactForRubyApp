@@ -295,6 +295,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     else
       target_buyer_entity.approval_status = buyer_entity['approval_status'] unless buyer_entity['approval_status'].blank?
       if (original_company_name != target_buyer_entity.company_name || original_company_uen != target_buyer_entity.company_uen )
+        target_buyer_entity.approval_status = CompanyBuyerEntity::ApprovalStatusPending
         add_entity_log(target_buyer_entity)
       end
     end
