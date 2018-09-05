@@ -13,6 +13,7 @@ export class FillConsumption extends Component {
         this.state = {
             text: "",
             submit_type: "",
+            delete_type: "",
             site_list: [],
             preDayList: [],
             preOtherList: [],
@@ -175,11 +176,11 @@ export class FillConsumption extends Component {
     edit_site(item, index, type) {
         this.setState({ account_detail: {} });
         this.accountItem = {};
-        this.accountItem.id = item.id;
+        this.accountItem.id = item.id !== null ? item.id : "";
         this.accountItem.consumption_id = this.state.consumption_id;
         this.accountItem.account_number = item.account_number;
         this.accountItem.existing_plan = ['SPS tariff', 'SPS wholesale', 'Retailer plan'];
-        this.accountItem.existing_plan_selected = item.existing_plan;
+        this.accountItem.existing_plan_selected = item.existing_plan !== null ? item.existing_plan : "";
         this.accountItem.contract_expiry = item.contract_expiry ? moment(item.contract_expiry) : "";
         this.accountItem.purchasing_entity = this.purchaseList;
         this.accountItem.purchasing_entity_selectd = item.company_buyer_entity_id;
@@ -273,10 +274,11 @@ export class FillConsumption extends Component {
     remove_site(index, type) {
         if (this.props.onAddClick) {
             this.props.onAddClick();
-        }
+        }           //{ action: 'reject', type: 'user' }
+
         this.deleteNum = index;
         this.refs.Modal.showModal("comfirm");
-        this.setState({ text: "Are you sure you want to delete ?", submit_type: "delete" });
+        this.setState({ text: "Are you sure you want to delete ?", submit_type: "delete", delete_type: type });
     }
 
     dateCompare(arr) {
@@ -410,9 +412,22 @@ export class FillConsumption extends Component {
         } else if (this.state.submit_type === "Participate") { //do Participate
             this.doSave('participate');
         } else if (this.state.submit_type === "delete") {
-            const site_listObj = this.state.site_list;
-            site_listObj.splice(this.deleteNum, 1);
-            this.setState({ site_list: site_listObj });
+            if (this.state.delete_type === "preDay") {
+                const site_listObj = this.state.preDayList;
+                site_listObj.splice(this.deleteNum, 1);
+                this.setState({ preDayList: site_listObj });
+            }
+            else if (this.state.delete_type === "preOthers") {
+                const site_listObj = this.state.preOtherList;
+                site_listObj.splice(this.deleteNum, 1);
+                this.setState({ preOtherList: site_listObj });
+            }
+            else {
+                const site_listObj = this.state.site_list;
+                site_listObj.splice(this.deleteNum, 1);
+                this.setState({ site_list: site_listObj });
+            }
+
             setTimeout(() => {
                 this.doSave('delete');
             }, 500);
@@ -434,6 +449,8 @@ export class FillConsumption extends Component {
     // validate the page required field and  contact expiry date.
     checkSuccess(event) {
         event.preventDefault();
+        let isNotNull = this.validateListComplete();
+        console.log(isNotNull);
         let count = this.dateCompare(this.state.site_list);
         this.setState({
             dateIssuecount: count
@@ -455,7 +472,7 @@ export class FillConsumption extends Component {
     validateListComplete() {
         let flag = true;
         this.state.preOtherList.map(item => {
-            if (item.existing_plan === "") {
+            if (item.existing_plan === "" || item.existing_plan === null) {
                 flag = false;
                 // break;
             }

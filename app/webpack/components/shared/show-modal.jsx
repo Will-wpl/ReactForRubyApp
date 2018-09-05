@@ -298,7 +298,7 @@ export class Modal extends React.Component {
                 case 'false|true':
                     $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
                     $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
-                    $("#permise_address").focus();
+                    $("#unit_number").focus();
                     break;
                 case 'true|false':
                     $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
@@ -535,7 +535,18 @@ export class Modal extends React.Component {
                 }
             }
             else {
-
+                if (res.error_details) {
+                    res.error_details.map(item => {
+                        if (item.error_field_name === "account_number") {
+                            $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                            $("#account_number").focus();
+                        }
+                        else {
+                            $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                            $("#unit_number").focus();
+                        }
+                    })
+                }
             }
         })
 
@@ -761,6 +772,14 @@ export class Modal extends React.Component {
                 $(".email_body").css({ "height": "170px" });
             }
         }
+
+        $('.validate_message').find('div').each(function () {
+            let className = $(this).attr('class');
+            if (className === 'errormessage') {
+                let divid = $(this).attr("id");
+                $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
+            }
+        })
     }
 
     bigModal(type) {
