@@ -282,6 +282,7 @@ export class FillConsumption extends Component {
     }
 
     dateCompare(arr) {
+     
         let count = 0;
         let startDate = moment(this.state.contact_start_date).format('YYYY-MM-DD');
         for (let i in arr) {
@@ -428,9 +429,9 @@ export class FillConsumption extends Component {
                 this.setState({ site_list: site_listObj });
             }
 
-            setTimeout(() => {
-                this.doSave('delete');
-            }, 500);
+            // setTimeout(() => {
+            //     this.doSave('delete');
+            // }, 500);
         }
     }
 
@@ -450,9 +451,12 @@ export class FillConsumption extends Component {
     checkSuccess(event) {
         event.preventDefault();
         let isNotNull = this.validateListComplete();
-        console.log(isNotNull);
         if (isNotNull) {
-            let count = this.dateCompare(this.state.site_list);
+            let totalList=this.state.site_list.concat(this.state.preDayList).concat(this.state.preOtherList);
+            let count = this.dateCompare(totalList);
+
+
+
             this.setState({
                 dateIssuecount: count
             })
