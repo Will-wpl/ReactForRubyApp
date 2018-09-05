@@ -2,7 +2,8 @@ class Api::ConsumptionDetailsController < Api::BaseController
   before_action :set_consumption, only: %i[index save participate reject validate]
   def index
     unless params[:consumption_id].nil?
-      consumption = @consumption
+      consumption_id = params[:consumption_id].to_i
+      consumption = Consumption.find(consumption_id) # @consumption
       consumption_details = consumption.consumption_details
       consumption_details_new = []
       consumption_details.each { |detail| consumption_details_new.push(detail) if detail.draft_flag.blank?}
@@ -291,7 +292,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
   def consumption_details_before_yesterday(consumption_details_before_yesterday, auction, consumption)
     consumption_details_all_before_yesterday = []
     if consumption_details_before_yesterday.blank?
-      details = ConsumptionDetail.find_account_less_than_contract_start_date_last(auction.contract_period_start_date)
+      details = ConsumptionDetail.find_account_less_than_contract_start_date_last(auction.contract_period_start_date,current_user.id)
       details.each do |consumption_detail|
         user_attachments = UserAttachment.find_consumption_attachment_by_user_type(consumption_detail.id,
                                                                                    consumption.user_id,
@@ -322,7 +323,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
   def consumption_details_yesterday(consumption_details_yesterday, auction, consumption)
     consumption_details_all_yesterday = []
     if consumption_details_yesterday.blank?
-      details = ConsumptionDetail.find_account_equal_to_contract_start_date_last(auction.contract_period_start_date)
+      details = ConsumptionDetail.find_account_equal_to_contract_start_date_last(auction.contract_period_start_date, current_user.id)
       details.each do |consumption_detail|
         user_attachments = UserAttachment.find_consumption_attachment_by_user_type(consumption_detail.id,
                                                                                    consumption.user_id,

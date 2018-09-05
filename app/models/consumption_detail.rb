@@ -46,35 +46,35 @@ class ConsumptionDetail < ApplicationRecord
                               ", search_date]
   end
 
-  def self.find_account_less_than_contract_start_date_last(search_date)
+  def self.find_account_less_than_contract_start_date_last(search_date, user_id)
     Consumption.find_by_sql ["SELECT cdf.*
                               FROM (SELECT cda.*, row_number()
                                     OVER (PARTITION BY cda.account_number ORDER BY cda.contract_period_end_date DESC ) as n
                                     FROM (SELECT cd.*, a.id as auction_id, a.name as auction_name, a.published_gid as ra_id, e.user_id as buyer_id, e.company_name as entity_name, e.id as entity_id , ac.contract_period_end_date FROM consumption_details cd
                                       JOIN company_buyer_entities e ON cd.company_buyer_entity_id = e.id
-                                      JOIN consumptions c ON cd.consumption_id = c.id
+                                      JOIN consumptions c ON cd.consumption_id = c.id And c.user_id = :User_id
                                       JOIN auctions a ON c.auction_id = a.id
                                       JOIN auction_contracts ac ON a.id = ac.auction_id
-                                      AND (ac.contract_period_end_date + interval '1 D') < ?
+                                      AND (ac.contract_period_end_date + interval '1 D') < :Search_date
                                           ) as cda
                                     ) as cdf
                               WHERE cdf.n <= 1 ORDER BY cdf.entity_id ASC, cdf.contract_period_end_date DESC
-                              ", search_date]
+                              ", { :Search_date => search_date, :User_id => user_id }]
   end
 
-  def self.find_account_equal_to_contract_start_date_last(search_date)
+  def self.find_account_equal_to_contract_start_date_last(search_date, user_id)
     Consumption.find_by_sql ["SELECT cdf.*
                               FROM (SELECT cda.*, row_number()
                                     OVER (PARTITION BY cda.account_number ORDER BY cda.contract_period_end_date DESC ) as n
                                     FROM (SELECT cd.*, a.id as auction_id, a.name as auction_name, a.published_gid as ra_id, e.user_id as buyer_id, e.company_name as entity_name, e.id as entity_id , ac.contract_period_end_date FROM consumption_details cd
                                       JOIN company_buyer_entities e ON cd.company_buyer_entity_id = e.id
-                                      JOIN consumptions c ON cd.consumption_id = c.id
+                                      JOIN consumptions c ON cd.consumption_id = c.id And c.user_id = :User_id
                                       JOIN auctions a ON c.auction_id = a.id
                                       JOIN auction_contracts ac ON a.id = ac.auction_id
-                                      AND (ac.contract_period_end_date + interval '1 D') = ?
+                                      AND (ac.contract_period_end_date + interval '1 D') = :Search_date
                                           ) as cda
                                     ) as cdf
                               WHERE cdf.n <= 1 ORDER BY cdf.entity_id ASC, cdf.contract_period_end_date DESC
-                              ", search_date]
+                              ", { :Search_date => search_date, :User_id => user_id}]
   end
 end
