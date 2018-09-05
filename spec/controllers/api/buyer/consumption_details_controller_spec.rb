@@ -96,7 +96,10 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
           details = []
           details.push({id: 0, account_number: '000001', intake_level: 'LT' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '2018-08-01',attachment_ids:entity_1_attachment_ids.to_json})
           details.push({id: 0, account_number: '000002', intake_level: 'HTS' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '01-08-2018',attachment_ids:entity_2_attachment_ids.to_json})
-          put :participate, params: { consumption_id: consumption.id, details: details.to_json}
+          put :participate, params: { consumption_id: consumption.id,
+                                      details: details.to_json,
+                                      details_yesterday: [].to_json,
+                                      details_before_yesterday: [].to_json}
         end
 
         before { do_request }
@@ -156,7 +159,7 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
       context '(Validate-Single) Premise Address do not unique' do
         def do_request
           detail = {id: 0, account_number: '000002', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 1', postal_code: '4001'}
-          post :validate_single, params: { consumption_id: consumption.id, detail: detail }
+          put :validate_single, params: { consumption_id: consumption.id, detail: detail }
         end
 
         before { do_request }
@@ -171,8 +174,8 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
 
       context '(Validate-Single) Success' do
         def do_request
-          detail = {id: 0, account_number: '000002', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 1', postal_code: '4001'}
-          post :validate_single, params: { consumption_id: consumption.id, detail: detail }
+          detail = {id: 0, account_number: '000002', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 2', postal_code: '4001'}
+          put :validate_single, params: { consumption_id: consumption.id, detail: detail }
         end
 
         before { do_request }
@@ -248,7 +251,7 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
       context 'success' do
         def do_request
           details = []
-          details.push({id: 0, account_number: '000001', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 1', postal_code: '4001'})
+          details.push({id: 0, account_number: '000000', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 1', postal_code: '4001'})
           details.push({id: 0, account_number: '000002', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 2', postal_code: '4002'})
           details.push({id: 0, account_number: '000003', intake_level: 'HTS' , peak: 100, off_peak: 100, unit_number: 'UN 3', postal_code: '4003'})
           put :validate, params: { consumption_id: consumption.id , details: details.to_json}

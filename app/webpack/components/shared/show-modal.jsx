@@ -516,7 +516,7 @@ export class Modal extends React.Component {
             siteItem.user_attachment = this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files;
         }
 
-        console.log(siteItem)
+        console.log('siteItem',siteItem)
         let param = {
              detail: siteItem,
              consumption_id:this.state.consumption_id
