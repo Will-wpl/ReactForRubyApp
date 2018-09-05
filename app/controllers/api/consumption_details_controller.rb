@@ -58,10 +58,10 @@ class Api::ConsumptionDetailsController < Api::BaseController
       end
 
       consumption_details_yesterday = consumption.consumption_details.where('draft_flag = ?', 1)
-      consumption_details_all_yesterday = consumption_details_yesterday(consumption_details_yesterday, auction, consumption.user_id)
+      consumption_details_all_yesterday = consumption_details_yesterday(consumption_details_yesterday, auction, consumption)
 
       consumption_details_before_yesterday = consumption.consumption_details.where('draft_flag = ?', 2)
-      consumption_details_all_before_yesterday = consumption_details_before_yesterday(consumption_details_before_yesterday, auction, consumption.user_id)
+      consumption_details_all_before_yesterday = consumption_details_before_yesterday(consumption_details_before_yesterday, auction, consumption)
 
       render json: { consumption_details: consumption_details_all,
                      consumption_details_last_day: consumption_details_all_yesterday,
