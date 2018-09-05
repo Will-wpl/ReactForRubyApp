@@ -152,18 +152,25 @@ class Api::ConsumptionDetailsController < Api::BaseController
     premise_addresses = []
     auction.consumptions.each do |consumption|
       consumption.consumption_details.each do |consumption_detail|
-        account_numbers.push(consumption_detail.account_number)
-        premise_addresses.push({ 'unit_number' => consumption_detail.unit_number,
-                                     'postal_code' => consumption_detail.postal_code})
+        account_numbers.push(consumption_detail.account_number) unless consumption_detail.account_number.blank?
+        if !consumption_detail.unit_number.blank? && !consumption_detail.postal_code.blank?
+          premise_addresses.push({ 'unit_number' => consumption_detail.unit_number,
+                                       'postal_code' => consumption_detail.postal_code})
+        end
       end
     end
 
-    if account_numbers.any? { |v| v == detail['account_number'] }
+    if detail['account_number'].blank? ||
+       (!detail['account_number'].blank? && account_numbers.any? { |v| v.downcase == detail['account_number'].downcase })
       error_details.push({ 'error_field_name': 'account_number',
                                'error_value': detail['account_number']})
     end
 
-    if premise_addresses.any? { |v| v['unit_number'] == detail['unit_number'] && v['postal_code'] == detail['postal_code'] }
+    if detail['unit_number'].blank? ||
+       detail['postal_code'].blank? ||
+       (!detail['unit_number'].blank? &&
+           !detail['postal_code'].blank? &&
+           premise_addresses.any? { |v| v['unit_number'].downcase == detail['unit_number'].downcase && v['postal_code'].downcase == detail['postal_code'].downcase })
       error_details.push({ 'error_field_name': 'premise_addresses',
                                'error_value': { unit_number: detail['unit_number'],
                                                 postal_code: detail['postal_code']}})
