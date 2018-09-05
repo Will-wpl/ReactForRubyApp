@@ -215,7 +215,7 @@ Rails.application.routes.draw do
           post 'reject'
           post 'save'
           post 'validate'
-          post 'validate_single'
+          put 'validate_single'
         end
       end
       resources :auctions, only: %i[obtain published] do
