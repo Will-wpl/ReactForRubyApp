@@ -16,7 +16,7 @@ export class Modal extends React.Component {
             modalshowhide: "modal_hide",
             type: 'default', secondStatus: "live_hide", itemIndex: "", props_data: {},
             strtype: '', email_subject: '', email_body: '', consumptionItem: [],
-            contracted_capacity_disabled: true, contract_expiry_disabled: true, disabled: false, id: "", consumption_detail_id: "",consumption_id:"", account_number: '',
+            contracted_capacity_disabled: true, contract_expiry_disabled: true, disabled: false, id: "", consumption_detail_id: "", consumption_id: "", account_number: '',
             existing_plan: [], existing_plan_selected: '', contract_expiry: '', purchasing_entity: [], purchasing_entity_selectd: '', premise_address: '',
             intake_level: [], intake_level_selected: '',
             contracted_capacity: '', blk_or_unit: '', street: '', unit_number: '', postal_code: '',
@@ -39,7 +39,7 @@ export class Modal extends React.Component {
         fileObj = this.state.fileData;
         if (next.consumptionAccountItem) {
             this.setState({
-                consumption_id:next.consumptionAccountItem.consumption_id,
+                consumption_id: next.consumptionAccountItem.consumption_id,
                 consumption_detail_id: next.consumptionAccountItem.id,
                 isSaved: next.consumptionAccountItem.id ? true : false,
                 account_number: next.consumptionAccountItem.account_number,
@@ -111,7 +111,7 @@ export class Modal extends React.Component {
             this.setState({ consumptionItem: next.siteList });
         }
         if (next.attatchment) {
-           
+
             this.setState({
                 attatchment: next.attatchment
             })
@@ -382,7 +382,6 @@ export class Modal extends React.Component {
         removePostCode(value);
     }
     downAttachment(attachemnts) {
-        console.log(attachemnts)
         let attacheList = [];
         if (attachemnts) {
             attachemnts.map(item => {
@@ -485,7 +484,6 @@ export class Modal extends React.Component {
         }
     }
     addToMainForm() { // consumption detail 
-        console.log(this.state.cate_type)
         let siteItem = {
             consumption_detail_id: this.state.consumption_detail_id ? this.state.consumption_detail_id : "",
             account_number: this.state.account_number,
@@ -504,7 +502,7 @@ export class Modal extends React.Component {
             cate_type: this.state.cate_type,
             attachment_ids: "",
             user_attachment: [],
-            consumption_id:this.state.consumption_id
+            consumption_id: this.state.consumption_id
         }
 
         if (this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0) {
@@ -516,13 +514,16 @@ export class Modal extends React.Component {
             siteItem.user_attachment = this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files;
         }
 
-        console.log(siteItem)
-        let param = {
-             detail: siteItem,
-             consumption_id:this.state.consumption_id
-            // details:siteItem
+        let validateItem={
+            account_number: this.state.account_number,
+            unit_number: this.state.unit_number,
+            postal_code: this.state.postal_code,
         }
-        console.log(param)
+
+        let param = {
+            detail: validateItem,
+            consumption_id: this.state.consumption_id
+        }
         validateConsumptionDetailRepeat(param).then(res => {
             if (true) {
                 if (this.props.acceptFunction) {
@@ -535,10 +536,13 @@ export class Modal extends React.Component {
             else {
 
             }
-
-
         })
-
+        // if (this.props.acceptFunction) {
+        //     this.props.acceptFunction(siteItem);
+        //     this.setState({
+        //         modalshowhide: "modal_hide"
+        //     })
+        // }
 
     }
 
@@ -637,8 +641,9 @@ export class Modal extends React.Component {
                 })
                 break;
             case "contract_expiry":
+                console.log(value)
                 this.setState({
-                    contract_expiry: value
+                    contract_expiry: value//moment(value).format('YYYY-MM-DD')
                 })
                 changeValidate('contract_expiry', value);
                 break;
