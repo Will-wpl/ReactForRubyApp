@@ -451,23 +451,33 @@ export class FillConsumption extends Component {
         event.preventDefault();
         let isNotNull = this.validateListComplete();
         console.log(isNotNull);
-        let count = this.dateCompare(this.state.site_list);
-        this.setState({
-            dateIssuecount: count
-        })
-        if (count > 0) {
-            if ($("#div_warning").is(":visible")) {
-                if ($("#chk_Warning").is(":checked")) {
-                    this.passValidateSave();
-                }
-                else {
-                    return false;
+        if (isNotNull) {
+            let count = this.dateCompare(this.state.site_list);
+            this.setState({
+                dateIssuecount: count
+            })
+            if (count > 0) {
+                if ($("#div_warning").is(":visible")) {
+                    if ($("#chk_Warning").is(":checked")) {
+                        this.passValidateSave();
+                    }
+                    else {
+                        return false;
+                    }
                 }
             }
+            else {
+                this.passValidateSave();
+            }
         }
-        else {
-            this.passValidateSave();
+        else
+        {
+            this.setState({
+                text:"Please complete the consumption account information."
+            })
+            this.refs.Modal.showModal()
         }
+
     }
     validateListComplete() {
         let flag = true;
