@@ -79,6 +79,7 @@ export class FillConsumption extends Component {
 
     BuyerParticipateList() {
         getBuyerParticipate('/api/buyer/consumption_details?consumption_id=' + this.state.consumption_id).then((res) => {
+           console.log(res)
             this.site_list = res.consumption_details;
             this.status = res.consumption.participation_status === '1' ? "Confirmed" :
                 (res.consumption.participation_status === '2' ? "Pending" : "Rejected")
@@ -108,13 +109,13 @@ export class FillConsumption extends Component {
             if (res.consumption_details.length > 0) {
                 this.setState({ site_list: res.consumption_details });
             }
-            // if(res.ddd.length>0)
-            // {
-            //     this.setState({preDayList:res.ddd})
-            // }
-            // if (res.eee.length > 0) {
-            //     this.setState({ preOtherList: res.eee })
-            // }
+            if(res.consumption_details_last_day.length>0)
+            {
+                this.setState({preDayList:res.consumption_details_last_day})
+            }
+            if (res.consumption_details_before_yesterday.length > 0) {
+                this.setState({ preOtherList: res.consumption_details_before_yesterday })
+            }
 
             if (this.state.checked) {
                 $(".btnOption").css("pointer-events", "none").css("color", "#4B4941");

@@ -242,20 +242,15 @@ export class BuyerUserManage extends Component {
                         submitStatus: true
                     })
                 }
+                location.refresh();
             })
         }
         else if (obj.type === 'deleteBuyer') {
             let param = {
                 user_id: this.state.userid
             }
-            // let user_id = this.state.user_id                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
             removeBuyer(param).then(res => {
-
-                let buyerStatus = setApprovalStatus("5", "");
-                this.setState({
-                    approveStatus: true,
-                    status: buyerStatus
-                })
+                location.href = "/admin/users/buyers";
             })
         }
         else {
@@ -452,7 +447,7 @@ export class BuyerUserManage extends Component {
                 return "Reject"
             }
             else if (value === "1") {
-                return "Approve"
+                return "Approved"
             }
             else {
                 return "Pending"
@@ -695,8 +690,8 @@ export class BuyerUserManage extends Component {
                                                 <td>{item.contact_office_no}</td>
                                                 <td>{item.isApproved}{item.approval_status_name}</td>
                                                 <td>{this.state.submitStatus ? true : (item.isApproved ? true : false)}
-                                                    <button className="entityApprove" disabled={this.state.submitStatus ? true : (item.isApproved ? true : false)} onClick={this.entity_approve.bind(this, item, index)}>Approve</button>
-                                                    <button className="entityApprove" disabled={this.state.submitStatus ? true : (!item.isApproved ? true : false)} onClick={this.entity_reject.bind(this, item, index)}>Reject</button>
+                                                    <button className="entityApprove" disabled={this.state.submitStatus ? true : ((item.approval_status === "2" || item.approval_status === null) ? false : (item.isApproved ? true : false))} onClick={this.entity_approve.bind(this, item, index)}>Approve</button>
+                                                    <button className="entityApprove" disabled={this.state.submitStatus ? true : ((item.approval_status === "2" || item.approval_status === null) ? false : (!item.isApproved ? true : false))} onClick={this.entity_reject.bind(this, item, index)}>Reject</button>
                                                     <button className="entityApprove" disabled={this.state.submitStatus ? true : (item.isApproved ? true : false)} onClick={this.view_entity_log.bind(this, item)}>View Log</button>
                                                 </td>
                                             </tr>

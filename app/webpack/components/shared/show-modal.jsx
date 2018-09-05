@@ -1317,7 +1317,7 @@ export class Modal extends React.Component {
         (this.state.type == "custom") {
             btn_html = <div className="modal_btn">
                 <a onClick={this.Add.bind(this)}>{this.state.option === "update" ? "Save" : "Add"}</a>
-                <a onClick={this.closeModal.bind(this)}>Cance</a>
+                <a onClick={this.closeModal.bind(this)}>Cancel</a>
             </div>
         }
         else if (this.state.type === "defaultCallBack") {
