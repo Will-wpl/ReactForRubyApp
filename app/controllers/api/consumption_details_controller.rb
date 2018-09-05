@@ -154,7 +154,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
     premise_addresses = []
     auction.consumptions.each do |consumption|
       consumption.consumption_details.each do |consumption_detail|
-        if !consumption_detail.unit_number.blank? && !consumption_detail.postal_code.blank?
+        if !consumption_detail.unit_number.blank? && !consumption_detail.postal_code.blank? && consumption_detail.id != detail['id']
           premise_addresses.push({ 'unit_number' => consumption_detail.unit_number,
                                        'postal_code' => consumption_detail.postal_code})
         end
@@ -162,7 +162,9 @@ class Api::ConsumptionDetailsController < Api::BaseController
     end
     consumptions.each do |consumption|
       consumption.consumption_details.each do |consumption_detail|
-        account_numbers.push(consumption_detail.account_number) unless consumption_detail.account_number.blank?
+        if !consumption_detail.account_number.blank? && consumption_detail.id != detail['id']
+          account_numbers.push(consumption_detail.account_number)
+        end
       end
     end
 
