@@ -245,7 +245,7 @@ export class BuyerUserManage extends Component {
                     })
                     location.href = "/admin/users/buyers";
                 }
-                location.refresh();
+                
             })
         }
         else if (obj.type === 'deleteBuyer') {

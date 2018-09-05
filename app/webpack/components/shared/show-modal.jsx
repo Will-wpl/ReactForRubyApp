@@ -38,6 +38,7 @@ export class Modal extends React.Component {
         let fileObj;
         fileObj = this.state.fileData;
         if (next.consumptionAccountItem) {
+            console.log(next.consumptionAccountItem)
             this.setState({
                 consumption_id: next.consumptionAccountItem.consumption_id,
                 consumption_detail_id: next.consumptionAccountItem.id,
@@ -298,7 +299,7 @@ export class Modal extends React.Component {
                 case 'false|true':
                     $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
                     $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
-                    $("#permise_address").focus();
+                    $("#unit_number").focus();
                     break;
                 case 'true|false':
                     $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
@@ -535,7 +536,18 @@ export class Modal extends React.Component {
                 }
             }
             else {
-
+                if (res.error_details) {
+                    res.error_details.map(item => {
+                        if (item.error_field_name === "account_number") {
+                            $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                            $("#account_number").focus();
+                        }
+                        else {
+                            $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                            $("#unit_number").focus();
+                        }
+                    })
+                }
             }
         })
 
@@ -761,6 +773,14 @@ export class Modal extends React.Component {
                 $(".email_body").css({ "height": "170px" });
             }
         }
+
+        $('.validate_message').find('div').each(function () {
+            let className = $(this).attr('class');
+            if (className === 'errormessage') {
+                let divid = $(this).attr("id");
+                $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
+            }
+        })
     }
 
     bigModal(type) {
@@ -1029,7 +1049,7 @@ export class Modal extends React.Component {
                                 return <tr key={index}>
                                     <td>{item.company_name}</td>
                                     <td>{item.company_uen}</td>
-                                    <td>{moment(item.updated_at).format('YYYY-MM-DD')}</td>
+                                    <td>{moment(item.updated_at).format('YYYY-MM-DD HH:mm:ss ')}</td>
                                 </tr>
                             })
                         }
@@ -1059,7 +1079,7 @@ export class Modal extends React.Component {
                                     <td>{item.company_name}</td>
                                     <td>{item.company_uen}</td>
                                     <td>{item.license_number}</td>
-                                    <td>{moment(item.updated_at).format('YYYY-MM-DD')}</td>
+                                    <td>{moment(item.updated_at).format('YYYY-MM-DD HH:mm:ss')}</td>
                                 </tr>
                             })
                         }
@@ -1167,7 +1187,7 @@ export class Modal extends React.Component {
                                         <div className="isHide">
                                             <input type="text" value={this.state.consumption_detail_id} onChange={this.changeConsumption.bind(this, "consumption_detail_id")} id="id" name="id" />
                                         </div>
-                                        <input type="text" disabled={(this.state.type === 'preDay' || this.state.type === 'preOthers') ? true : false} value={this.state.account_number} onChange={this.changeConsumption.bind(this, "account_number")} id="account_number" name="account_number" required aria-required="true" />
+                                        <input type="text" disabled={(this.state.cate_type === 'preDay' || this.state.cate_type === 'preOthers') ? true : false} value={this.state.account_number} onChange={this.changeConsumption.bind(this, "account_number")} id="account_number" name="account_number" required aria-required="true" />
                                         <div id="account_number_message" className="isPassValidate">This filed is required!</div>
                                         <div id="account_number_taken_message" className="errormessage">Account number cannot be duplicated.</div>
                                     </td>
@@ -1175,7 +1195,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td><abbr title="required">*</abbr>Existing Plan</td>
                                     <td>
-                                        <select id="existing_plan" onChange={this.changeConsumption.bind(this, 'existing_plan')} name="existing_plan" disabled={this.state.type === 'preDay'} value={this.state.existing_plan_selected}>
+                                        <select id="existing_plan" onChange={this.changeConsumption.bind(this, 'existing_plan')} name="existing_plan" disabled={this.state.cate_type === 'preDay'} value={this.state.existing_plan_selected}>
                                             {
                                                 this.state.existing_plan.map((it, i) => <option key={i} value={it}>{it}</option>)
                                             }
@@ -1187,7 +1207,7 @@ export class Modal extends React.Component {
                                         <span className={this.state.existing_plan_selected === "Retailer plan" ? "isDisplay" : "isHide"}>*</span>
                                     </abbr>Contract Expiry</td>
                                     <td>
-                                        <DatePicker selected={this.state.contract_expiry} className="date_ico" disabled={this.state.contract_expiry_disabled} onKeyDown={this.noPermitInput.bind(this)} ref="contract_expiry" shouldCloseOnSelect={true} name="contract_expiry" minDate={moment()} required aria-required="true" dateFormat="DD-MM-YYYY" selectsStart onChange={this.dateChange.bind(this)} title="Time must not be in the past." />
+                                        <DatePicker selected={this.state.contract_expiry} className="date_ico" disabled={this.state.cate_type === 'preDay' ? true : this.state.contract_expiry_disabled} onKeyDown={this.noPermitInput.bind(this)} ref="contract_expiry" shouldCloseOnSelect={true} name="contract_expiry" minDate={moment()} required aria-required="true" dateFormat="DD-MM-YYYY" selectsStart onChange={this.dateChange.bind(this)} title="Time must not be in the past." />
                                         <div id="contract_expiry_message" className="isPassValidate">This filed is required!</div>
                                     </td>
                                 </tr>
