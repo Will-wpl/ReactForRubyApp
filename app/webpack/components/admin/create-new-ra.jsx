@@ -87,7 +87,9 @@ export class CreateNewRA extends Component {
                 }
             }
             if (res.name == null) {
-                this.setState({ id: res.id })
+                this.setState({ 
+                    id: res.id,
+                    startDate: res.contract_period_start_date == null ? '' : moment(res.contract_period_start_date) })
             } else {
                 this.setState({
                     id: res.id,

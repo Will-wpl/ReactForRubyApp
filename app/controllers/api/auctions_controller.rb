@@ -20,7 +20,7 @@ class Api::AuctionsController < Api::BaseController
     account_ids = []
     buyer_ids = []
 
-    details = ConsumptionDetail.find_account_less_than_contract_start_date_last(search_start_date)
+    details = ConsumptionDetail.find_account_less_than_contract_start_date(search_start_date)
     details.each do |detail|
       account_ids.push(detail.id)
       buyer_ids.push(detail.buyer_id) unless buyer_ids.include?(detail.buyer_id)
