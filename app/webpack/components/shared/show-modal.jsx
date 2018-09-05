@@ -38,7 +38,6 @@ export class Modal extends React.Component {
         let fileObj;
         fileObj = this.state.fileData;
         if (next.consumptionAccountItem) {
-            console.log(next.consumptionAccountItem)
             this.setState({
                 consumption_id: next.consumptionAccountItem.consumption_id,
                 consumption_detail_id: next.consumptionAccountItem.id,
@@ -516,6 +515,7 @@ export class Modal extends React.Component {
         }
 
         let validateItem = {
+            id:this.state.consumption_detail_id,
             account_number: this.state.account_number,
             unit_number: this.state.unit_number,
             postal_code: this.state.postal_code,
@@ -526,7 +526,6 @@ export class Modal extends React.Component {
             consumption_id: this.state.consumption_id
         }
         validateConsumptionDetailRepeat(param).then(res => {
-            console.log(res)
             if (res.validate_result) {
                 if (this.props.acceptFunction) {
                     this.props.acceptFunction(siteItem);
