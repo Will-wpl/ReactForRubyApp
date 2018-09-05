@@ -514,7 +514,7 @@ export class Modal extends React.Component {
             siteItem.user_attachment = this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files;
         }
 
-        let validateItem={
+        let validateItem = {
             account_number: this.state.account_number,
             unit_number: this.state.unit_number,
             postal_code: this.state.postal_code,
@@ -525,7 +525,8 @@ export class Modal extends React.Component {
             consumption_id: this.state.consumption_id
         }
         validateConsumptionDetailRepeat(param).then(res => {
-            if (true) {
+            console.log(res)
+            if (res.validate_result) {
                 if (this.props.acceptFunction) {
                     this.props.acceptFunction(siteItem);
                     this.setState({
@@ -537,12 +538,6 @@ export class Modal extends React.Component {
 
             }
         })
-        // if (this.props.acceptFunction) {
-        //     this.props.acceptFunction(siteItem);
-        //     this.setState({
-        //         modalshowhide: "modal_hide"
-        //     })
-        // }
 
     }
 
@@ -641,7 +636,6 @@ export class Modal extends React.Component {
                 })
                 break;
             case "contract_expiry":
-                console.log(value)
                 this.setState({
                     contract_expiry: value//moment(value).format('YYYY-MM-DD')
                 })

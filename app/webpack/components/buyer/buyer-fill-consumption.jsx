@@ -213,7 +213,7 @@ export class FillConsumption extends Component {
     }
     //when user finished adding a new account, list page will add/update the new account information.
     doAddAccountAction(siteInfo) {
-        console.log(siteInfo)
+
         let item = {
             id: siteInfo.consumptionid ? siteInfo.consumptionid : "",
             consumption_id: siteInfo.consumption_id,
@@ -295,7 +295,7 @@ export class FillConsumption extends Component {
 
     doSave(type) {
         let makeData = {},
-            buyerlist = [];
+            buyerlist = [], yesterday = [], beforeYesterda = [];
         this.state.site_list.map((item, index) => {
             let siteItem = {
                 account_number: item.account_number,
@@ -316,9 +316,53 @@ export class FillConsumption extends Component {
             }
             buyerlist.push(siteItem);
         })
+        this.state.preDayList.map((item, index) => {
+            let siteItem = {
+                account_number: item.account_number,
+                existing_plan: item.existing_plan,
+                contract_expiry: item.contract_expiry ? moment(item.contract_expiry).format() : "",
+                company_buyer_entity_id: item.company_buyer_entity_id,
+                intake_level: item.intake_level,
+                contracted_capacity: item.contracted_capacity,
+                blk_or_unit: item.blk_or_unit,
+                street: item.street,
+                unit_number: item.unit_number,
+                postal_code: item.postal_code,
+                totals: item.totals,
+                peak_pct: item.peak_pct,
+                user_attachment_id: item.user_attachment_id,
+                attachment_ids: item.attachment_ids,
+                user_attachment: item.user_attachment
+            }
+            yesterday.push(siteItem);
+        })
+        this.state.preOtherList.map((item, index) => {
+            let siteItem = {
+                account_number: item.account_number,
+                existing_plan: item.existing_plan,
+                contract_expiry: item.contract_expiry ? moment(item.contract_expiry).format() : "",
+                company_buyer_entity_id: item.company_buyer_entity_id,
+                intake_level: item.intake_level,
+                contracted_capacity: item.contracted_capacity,
+                blk_or_unit: item.blk_or_unit,
+                street: item.street,
+                unit_number: item.unit_number,
+                postal_code: item.postal_code,
+                totals: item.totals,
+                peak_pct: item.peak_pct,
+                user_attachment_id: item.user_attachment_id,
+                attachment_ids: item.attachment_ids,
+                user_attachment: item.user_attachment
+            }
+            beforeYesterda.push(siteItem);
+        })
+
+
         makeData = {
             consumption_id: this.state.consumption_id,
             details: JSON.stringify(buyerlist),
+            details_yesterday: JSON.stringify(yesterday),
+            details_before_yesterday: JSON.stringify(beforeYesterda),
             contract_duration: $("#selDuration").val()
         }
         setBuyerParticipate(makeData, '/api/buyer/consumption_details/save').then((res) => {
@@ -488,7 +532,7 @@ export class FillConsumption extends Component {
                         {/* one day  */}
                         <h4 className="col-sm-12 u-mb2">Last Status of Participation : {this.status}</h4>
 
-                       <h4 className="col-sm-12 u-mb2">Accounts on Continuous Purchase</h4>
+                        <h4 className="col-sm-12 u-mb2">Accounts on Continuous Purchase</h4>
                         <span className="particiption-note">Note: Please update Consumption Details if there is significant change in your account's consumption since your last participation.</span>
                         <div className="col-sm-12 col-md-12">
                             <div className="table-head">
@@ -574,7 +618,7 @@ export class FillConsumption extends Component {
                                 </table>
                             </div>
                         </div>
-                       
+
 
 
                         <h4 className="col-sm-12 u-mb2 separate">Accounts with Purchase Gap</h4>
@@ -590,7 +634,7 @@ export class FillConsumption extends Component {
                                         <col width="10%" />
                                         <col width="10%" />
                                         <col width="10%" />
-                                        <col width="20%" /> 
+                                        <col width="20%" />
                                         <col width="10%" />
                                     </colgroup>
                                     <thead>
@@ -662,7 +706,7 @@ export class FillConsumption extends Component {
                                 </table>
                             </div>
                         </div>
-                        
+
                         <h4 className="col-sm-12 u-mb2 separate">New Accounts</h4>
                         <div className="col-sm-12 col-md-12">
                             <div className="table-head">
@@ -712,7 +756,7 @@ export class FillConsumption extends Component {
                                                 return <tr key={index}>
                                                     <td>{item.account_number} </td>
                                                     <td>{item.existing_plan}</td>
-                                                    <td>{item.contract_expiry  ? moment(item.contract_expiry).format('YYYY-MM-DD') : "—"}</td>
+                                                    <td>{item.contract_expiry ? moment(item.contract_expiry).format('YYYY-MM-DD') : "—"}</td>
                                                     <td>{this.getPurchase(item.company_buyer_entity_id)} </td>
                                                     <td>{item.intake_level}</td>
                                                     <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
