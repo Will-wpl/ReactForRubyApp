@@ -145,19 +145,24 @@ class Api::ConsumptionDetailsController < Api::BaseController
   def validate_single
     error_details = []
     detail = params[:detail]
-    consumption = Consumption.find(params[:consumption_id]) #@consumption
-    auction = Auction.find(consumption.auction_id)
+    current_consumption = Consumption.find(params[:consumption_id]) #@consumption
+    auction = Auction.find(current_consumption.auction_id)
+    consumptions = Consumption.mine(current_user.id)
     raise ActiveRecord::RecordNotFound if auction.nil?
     # Account must be unique within a RA.
     account_numbers = []
     premise_addresses = []
     auction.consumptions.each do |consumption|
       consumption.consumption_details.each do |consumption_detail|
-        account_numbers.push(consumption_detail.account_number) unless consumption_detail.account_number.blank?
         if !consumption_detail.unit_number.blank? && !consumption_detail.postal_code.blank?
           premise_addresses.push({ 'unit_number' => consumption_detail.unit_number,
                                        'postal_code' => consumption_detail.postal_code})
         end
+      end
+    end
+    consumptions.each do |consumption|
+      consumption.consumption_details.each do |consumption_detail|
+        account_numbers.push(consumption_detail.account_number) unless consumption_detail.account_number.blank?
       end
     end
 
@@ -449,7 +454,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
       consumption_detail.peak_pct = detail['peak_pct']
       consumption_detail.peak = (detail['totals'].to_f * detail['peak_pct'].to_f / 100).round() unless detail['peak_pct'].blank?
       consumption_detail.off_peak = detail['totals'].to_i - consumption_detail.peak unless detail['peak_pct'].blank?
-      consumption_detail.contract_expiry = Date.parse(detail['contract_expiry'])
+      consumption_detail.contract_expiry = Date.parse(detail['contract_expiry']) unless detail['contract_expiry'].blank?
       consumption_detail.blk_or_unit = detail['blk_or_unit']
       consumption_detail.street = detail['street']
       consumption_detail.unit_number = detail['unit_number']
