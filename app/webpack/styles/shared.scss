@@ -295,7 +295,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 .checkitem{ list-style: none; line-height:22px; position: relative;
   div{
     position: absolute; display: none; padding-bottom: 5px; top:22px; background: #314657; color: #fff; left: 0px; z-index: 9;
-    b{display:block; padding: 0px 5px; line-height: 20px; font-weight: normal; font-size: 12px;
+    b{display:block; padding: 0px 5px; word-break: break-word; line-height: 20px; font-weight: normal; font-size: 12px;
       bdo{ display: block; background: #00888a; text-indent: 5px;}
     }
   }
