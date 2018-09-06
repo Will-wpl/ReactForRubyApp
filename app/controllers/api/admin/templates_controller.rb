@@ -2,11 +2,6 @@ class Api::Admin::TemplatesController < Api::BaseController
   before_action :admin_required
   # skip_before_action :verify_authenticity_token
 
-
-  LETTER_OF_AWARD_TEMPLATE = 1.freeze
-  NOMINATED_ENTITY_TEMPLATE = 2.freeze
-  ADVISORY_TEMPLATE = 3.freeze
-
   def show
     type = params[:id]
     template = get_template_content type
