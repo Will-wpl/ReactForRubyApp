@@ -15,7 +15,7 @@ class Api::AuctionsController < Api::BaseController
   # end
 
   def filter_date
-    search_start_date = Date.parse(params[:date]).advance(days: -1)
+    search_start_date = Date.parse(params[:date])#.advance(days: -1)
     accounts = []
     account_ids = []
     buyer_ids = []

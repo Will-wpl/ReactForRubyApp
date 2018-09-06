@@ -22,9 +22,9 @@ RSpec.describe Api::Admin::ConsumptionDetailsController, type: :controller do
       before { do_request }
       it 'Success' do
         hash = JSON.parse(response.body)
-        expect(hash.size).to eq(9)
+        expect(hash.size).to eq(10)
         expect(hash['consumption_details'].size).to eq(4)
-        expect(hash['consumption_details'][0]['intake_level']).to eq('LT')
+        expect(hash['consumption_details'][0]['intake_level']).to eq('EHT')
         expect(response).to have_http_status(:ok)
       end
     end

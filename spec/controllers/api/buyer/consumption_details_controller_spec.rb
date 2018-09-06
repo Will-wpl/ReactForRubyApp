@@ -28,7 +28,7 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
         before { do_request }
         it 'Success' do
           hash = JSON.parse(response.body)
-          expect(hash.size).to eq(9)
+          expect(hash.size).to eq(10)
           expect(hash['consumption_details'].size).to eq(4)
           expect(response).to have_http_status(:ok)
         end
@@ -302,7 +302,10 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
           details = []
           details.push({id: 0, account_number: '000001', intake_level: 'LT' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '2018-08-01',attachment_ids:entity_1_attachment_ids.to_json})
           details.push({id: 0, account_number: '000002', intake_level: 'HTS' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '01-08-2018',attachment_ids:entity_2_attachment_ids.to_json})
-          put :participate, params: { consumption_id: consumption.id, details: details.to_json}
+          put :participate, params: { consumption_id: consumption.id,
+                                      details: details.to_json,
+                                      details_yesterday: [].to_json,
+                                      details_before_yesterday: [].to_json }
         end
 
         before { do_request }

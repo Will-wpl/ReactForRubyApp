@@ -57,14 +57,15 @@ class Api::ConsumptionDetailsController < Api::BaseController
         }
         consumption_details_all.push(final_detail)
       end
+      only_read_records = !consumption_details_all.blank?
 
-      # get yesterday consumption details
+          # get yesterday consumption details
       consumption_details_yesterday = consumption.consumption_details.where('draft_flag = ?', 1)
-      consumption_details_all_yesterday = consumption_details_yesterday(consumption_details_yesterday, auction, consumption)
+      consumption_details_all_yesterday = consumption_details_yesterday(consumption_details_yesterday, auction, consumption, only_read_records)
 
       # get before yesterday consumption details
       consumption_details_before_yesterday = consumption.consumption_details.where('draft_flag = ?', 2)
-      consumption_details_all_before_yesterday = consumption_details_before_yesterday(consumption_details_before_yesterday, auction, consumption)
+      consumption_details_all_before_yesterday = consumption_details_before_yesterday(consumption_details_before_yesterday, auction, consumption, only_read_records)
       removed_consumption_details = []
       consumption_details_all_before_yesterday.each do |consumption_detail|
         if consumption_details_all_yesterday.any?{ |x| x.account_number == consumption_detail.account_number }
@@ -307,9 +308,9 @@ class Api::ConsumptionDetailsController < Api::BaseController
 
   private
 
-  def consumption_details_before_yesterday(consumption_details_before_yesterday, auction, consumption)
+  def consumption_details_before_yesterday(consumption_details_before_yesterday, auction, consumption, only_read_records = false)
     consumption_details_all_before_yesterday = []
-    if consumption_details_before_yesterday.blank?
+    if consumption_details_before_yesterday.blank? && !only_read_records
       details = ConsumptionDetail.find_account_less_than_contract_start_date_last(auction.contract_period_start_date,current_user.id)
       details.each do |consumption_detail|
         user_attachments = UserAttachment.find_consumption_attachment_by_user_type(consumption_detail.id,
@@ -338,9 +339,9 @@ class Api::ConsumptionDetailsController < Api::BaseController
     consumption_details_all_before_yesterday
   end
 
-  def consumption_details_yesterday(consumption_details_yesterday, auction, consumption)
+  def consumption_details_yesterday(consumption_details_yesterday, auction, consumption, only_read_records = false)
     consumption_details_all_yesterday = []
-    if consumption_details_yesterday.blank?
+    if consumption_details_yesterday.blank? && !only_read_records
       details = ConsumptionDetail.find_account_equal_to_contract_start_date_last(auction.contract_period_start_date, current_user.id)
       details.each do |consumption_detail|
         user_attachments = UserAttachment.find_consumption_attachment_by_user_type(consumption_detail.id,
