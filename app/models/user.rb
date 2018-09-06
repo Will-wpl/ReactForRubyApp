@@ -59,11 +59,11 @@ class User < ApplicationRecord
   validates_presence_of :name
 
   # Scopes
-  scope :retailers, -> { includes(:roles).where(roles: { name: 'retailer' }).where('is_deleted <> 1') }
+  scope :retailers, -> { includes(:roles).where(roles: { name: 'retailer' }).where('is_deleted is NULL OR is_deleted <> 1') }
   scope :retailers_deleted, -> { includes(:roles).where(roles: { name: 'retailer' }).where('is_deleted = 1') }
   scope :retailer_approved, -> { where(approval_status: ApprovalStatusApproved) } # "approval_status = '1'"
   scope :buyer_approved, -> { where(approval_status: ApprovalStatusApproved) }
-  scope :buyers, -> { includes(:roles).where(roles: { name: 'buyer' }).where('is_deleted <> 1') }
+  scope :buyers, -> { includes(:roles).where(roles: { name: 'buyer' }).where('is_deleted is NULL OR is_deleted <> 1') }
   scope :buyers_deleted, -> { includes(:roles).where(roles: { name: 'buyer' }).where('is_deleted = 1') }
   scope :buyer_entities, -> { includes(:roles).where(roles: { name: 'entity' }) }
   scope :tenants, -> { includes(:roles).where(roles: { name: 'tenant' }) }
