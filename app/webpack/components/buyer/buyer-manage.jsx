@@ -304,7 +304,7 @@ export class BuyerUserManage extends Component {
                 location.href = "/admin/users/buyers";
             })
         }
-        else { //entity  
+        else { //entity submit
             let paramArr = [];
             this.state.entity_list.map((item) => {
                 let entityId = item.id;
@@ -319,6 +319,7 @@ export class BuyerUserManage extends Component {
                 entity_statuses: JSON.stringify(paramArr)
             };
             approveBuyerEntity(param).then(res => {
+                window.location.href()
             })
         }
     }

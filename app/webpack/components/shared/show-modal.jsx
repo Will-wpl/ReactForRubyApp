@@ -16,7 +16,7 @@ export class Modal extends React.Component {
             modalshowhide: "modal_hide",
             type: 'default', secondStatus: "live_hide", itemIndex: "", props_data: {},
             strtype: '', email_subject: '', email_body: '', consumptionItem: [],
-            contracted_capacity_disabled: true, contract_expiry_disabled: true, disabled: false, id: "", consumption_detail_id: "", consumption_id: "", account_number: '',
+            contracted_capacity_disabled: true, contract_expiry_disabled: true, disabled: false, id: "", consumption_id: "", account_number: '',
             existing_plan: [], existing_plan_selected: '', contract_expiry: '', purchasing_entity: [], purchasing_entity_selectd: '', premise_address: '',
             intake_level: [], intake_level_selected: '',
             contracted_capacity: '', blk_or_unit: '', street: '', unit_number: '', postal_code: '',
@@ -39,9 +39,8 @@ export class Modal extends React.Component {
         fileObj = this.state.fileData;
         if (next.consumptionAccountItem) {
             this.setState({
-
                 consumption_id: next.consumptionAccountItem.consumption_id,
-                consumption_detail_id: next.consumptionAccountItem.id,
+                id: next.consumptionAccountItem.id,
                 isSaved: next.consumptionAccountItem.id ? true : false,
                 account_number: next.consumptionAccountItem.account_number,
                 existing_plan: next.consumptionAccountItem.existing_plan,
@@ -413,10 +412,10 @@ export class Modal extends React.Component {
         this.state.consumptionItem.map((item, index) => {
             if (this.state.option === 'update') {
                 if (item.id) {
-                    if ((this.state.unit_number == item.unit_number) && (this.state.postal_code == item.postal_code) && (this.state.consumption_detail_id !== item.id)) {
+                    if ((this.state.unit_number == item.unit_number) && (this.state.postal_code == item.postal_code) && (this.state.id !== item.id)) {
                         address_count++;
                     }
-                    if (this.state.account_number === item.account_number && (this.state.consumption_detail_id !== item.id)) {
+                    if (this.state.account_number === item.account_number && (this.state.id !== item.id)) {
                         account_count++;
                     }
                 }
@@ -488,8 +487,10 @@ export class Modal extends React.Component {
         }
     }
     addToMainForm() { // consumption detail 
+
         let siteItem = {
-            consumption_detail_id: this.state.consumption_detail_id ? this.state.consumption_detail_id : "",
+            consumption_id: this.state.consumption_id,
+            id: this.state.id,
             account_number: this.state.account_number,
             existing_plan_selected: this.state.existing_plan_selected,
             contract_expiry: this.state.contract_expiry ? this.state.contract_expiry : "",
@@ -505,8 +506,8 @@ export class Modal extends React.Component {
             index: this.state.itemIndex,
             cate_type: this.state.cate_type,
             attachment_ids: "",
-            user_attachment: [],
-            consumption_id: this.state.consumption_id
+            user_attachment: []
+
         }
 
         if (this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0) {
@@ -519,7 +520,7 @@ export class Modal extends React.Component {
         }
 
         let validateItem = {
-            id: this.state.consumption_detail_id,
+            id: this.state.id,
             account_number: this.state.account_number,
             unit_number: this.state.unit_number,
             postal_code: this.state.postal_code,
@@ -621,9 +622,9 @@ export class Modal extends React.Component {
     changeConsumption(type, e) {
         let value = e.target.value;
         switch (type) {
-            case "consumption_detail_id":
+            case "id":
                 this.setState({
-                    consumption_detail_id: value
+                    id: value
                 })
                 break;
             case "account_number":
@@ -776,8 +777,7 @@ export class Modal extends React.Component {
                 $(".email_body").css({ "height": "170px" });
             }
         }
-        if(this.props.listdetailtype==="entity_detail"||this.props.listdetailtype==="consumption_detail")
-        {
+        if (this.props.listdetailtype === "entity_detail" || this.props.listdetailtype === "consumption_detail") {
             $('.validate_message').find('div').each(function () {
                 let className = $(this).attr('class');
                 if (className === 'errormessage') {
@@ -786,7 +786,6 @@ export class Modal extends React.Component {
                 }
             })
         }
-        
     }
 
     bigModal(type) {
@@ -1191,7 +1190,7 @@ export class Modal extends React.Component {
                                     <td style={{ width: "30%" }}><abbr title="required">*</abbr>Account No.</td>
                                     <td style={{ width: "70%" }}>
                                         <div className="isHide">
-                                            <input type="text" value={this.state.consumption_detail_id} onChange={this.changeConsumption.bind(this, "consumption_detail_id")} id="id" name="id" />
+                                            <input type="text" value={this.state.id} onChange={this.changeConsumption.bind(this, "id")} id="id" name="id" />
                                         </div>
                                         <input type="text" disabled={(this.state.cate_type === 'preDay' || this.state.cate_type === 'preOthers') ? true : false} value={this.state.account_number} onChange={this.changeConsumption.bind(this, "account_number")} id="account_number" name="account_number" required aria-required="true" />
                                         <div id="account_number_message" className="isPassValidate">This filed is required!</div>
