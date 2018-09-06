@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 import { validateConsumptionDetailRepeat } from './../../javascripts/componentService/common/service';
-import { validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum, removePostCode } from '../../javascripts/componentService/util';
+import { validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum, removePostCode,validatePostCode } from '../../javascripts/componentService/util';
 //共通弹出框组件
 import { UploadFile } from '../shared/upload';
 import E from 'wangeditor'
@@ -30,7 +30,7 @@ export class Modal extends React.Component {
             modalSize: this.props.modalSize, approval_status: 2,
             entityid: '', is_default: '', user_id: "", main_id: "", user_entity_id: "",
             entity_company_name: '', entity_company_uen: '', entity_company_address: '', entity_billing_address: '', entity_bill_attention_to: '', entity_contact_name: '',
-            entity_contact_email: '', entity_contact_mobile_no: '', entity_contact_office_no: '', entitList: [], entityErrorList: [], loglist: [], attatchment: []
+            entity_contact_email: '', entity_contact_mobile_no: '', entity_contact_office_no: '', entitList: [], entityErrorList: [], loglist: [], attatchment: [], advisory: ""
         }
     }
 
@@ -114,6 +114,11 @@ export class Modal extends React.Component {
 
             this.setState({
                 attatchment: next.attatchment
+            })
+        }
+        if (next.advisory) {
+            this.setState({
+                advisory: next.advisory
             })
         }
         if (next.entityDetailItem) {
@@ -251,7 +256,6 @@ export class Modal extends React.Component {
                 this.setState({ props_data: data });
             }
         }
-
         if (this.props.acceptFunction) {
             setTimeout(() => {
                 this.props.acceptFunction(this.state.props_data);
@@ -272,185 +276,9 @@ export class Modal extends React.Component {
 
     }
 
-    checkModelSuccess(event) {
-        let flag = true, hasDoc = true;
-        let validateItem = {
-            peak_pct: { cate: 'decimal' },
-            totals: { cate: 'num10' },
-            postal_code: { cate: 'postcode' },
-            unit_number: { cate: 'required' },
-            street: { cate: 'required' },
-            blk_or_unit: { cate: 'required' },
-            contracted_capacity: { cate: 'num4' },
-            purchasing_entity_selectd: { cate: 'required' },
-            contract_expiry: { cate: 'required' },
-            account_number: { cate: 'required' }
-        }
-        if (this.state.existing_plan_selected !== "Retailer plan") {
-            delete validateItem.contract_expiry;
-        }
-        if (this.state.intake_level_selected === "LT") {
-            delete validateItem.contracted_capacity;
-        }
-        let validateResult = validator_Object(this.state, validateItem);
-        flag = validateResult.length > 0 ? false : true;
-        if (flag) {
-            let status = this.account_address_repeat();
-            switch (status) {
-                case 'false|true':
-                    $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
-                    $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
-                    $("#unit_number").focus();
-                    break;
-                case 'true|false':
-                    $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
-                    $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
-                    $("#account_number").focus();
-                    break;
-                case 'true|true':
-                    $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
-                    $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
-                    $("#account_number").focus();
-                    break;
-                default:
-                    this.addToMainForm();
-                    break;
-            }
-        }
-        else {
-            $('.validate_message').find('div').each(function () {
-                let className = $(this).attr('class');
-                if (className === 'errormessage') {
-                    let divid = $(this).attr("id");
-                    $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
-                }
-            })
-            validateResult.map((item, index) => {
-                let column = item.column;
-                let cate = item.cate;
-                setValidationFaild(column, cate);
-                if (column === "contract_expiry") {
-                    setTimeout(() => {
-                        $(".react-datepicker-popper").addClass("isHide");
-                    });
-                }
-            })
-        }
-    }
-
-    checkEntitySuccess() {
-        let flag = true;
-        let validateItem = {
-            // company_name:"required",
-            entity_contact_office_no: { cate: 'num' },
-            entity_contact_mobile_no: { cate: 'num' },
-            entity_contact_email: { cate: 'email' },
-            entity_contact_name: { cate: 'required' },
-            entity_bill_attention_to: { cate: 'required' },
-            entity_billing_address: { cate: 'required' },
-            entity_company_address: { cate: 'required' },
-            entity_company_uen: { cate: 'required' },
-            entity_company_name: { cate: 'required' }
-        }
-        let validateResult = validator_Object(this.state, validateItem);
-        flag = validateResult.length > 0 ? false : true;
-        if (flag) {
-            //need  validate
-            if (true) {
-
-                this.addEntity();
-            }
-
-        }
-        else {
-            $('.validate_message').find('div').each(function () {
-                let className = $(this).attr('class');
-                if (className === 'errormessage') {
-                    let divid = $(this).attr("id");
-                    $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
-                }
-            })
-            validateResult.map((item, index) => {
-                let column = item.column;
-                let cate = item.cate;
-                setValidationFaild(column, cate);
-            })
-        }
-    }
-    removeInputNanNum(value) {
-        removeNanNum(value)
-    }
-    removeInputPostCode(value) {
-        removePostCode(value);
-    }
-    downAttachment(attachemnts) {
-        let attacheList = [];
-        if (attachemnts) {
-            attachemnts.map(item => {
-                attacheList.push({
-                    file_name: item.file_name,
-                    file_path: item.file_path
-                })
-            })
-        }
-
-        for (let i = 0; i < attacheList.length; i++) {
-            this.download(attacheList[i].file_name, attacheList[i].file_path);
-        }
-    }
-    download(file_name, file_path) {
-        let a = document.createElement("a"),
-            e = document.createEvent("MouseEvents"); //创建鼠标事件对象
-        e.initEvent("click", false, false); //初始化事件对象
-        a.href = file_path; //设置下载地址
-        a.download = file_name; //设置下载文件名 
-        a.dispatchEvent(e); //给指定的元素，执行事件click事
-    }
-    account_address_repeat() {
-        let address = false, account = false, editNotSave = false;
-        let address_count = 0, account_count = 0;
-        this.state.consumptionItem.map((item, index) => {
-            if (this.state.option === 'update') {
-                if (item.id) {
-                    if ((this.state.unit_number == item.unit_number) && (this.state.postal_code == item.postal_code) && (this.state.id !== item.id)) {
-                        address_count++;
-                    }
-                    if (this.state.account_number === item.account_number && (this.state.id !== item.id)) {
-                        account_count++;
-                    }
-                }
-                else {
-                    if ((this.state.unit_number === item.unit_number) && (this.state.postal_code === item.postal_code)) {
-                        if (index != this.state.itemIndex) {
-                            address_count++;
-                        }
-                    }
-                    if (this.state.account_number === item.account_number) {
-                        if (index != this.state.itemIndex) {
-                            account_count++;
-                        }
-                    }
-                }
-            }
-            else {
-                if ((this.state.unit_number === item.unit_number) && (this.state.postal_code === item.postal_code)) {
-                    address_count++;
-                }
-                if (this.state.account_number === item.account_number) {
-                    account_count++;
-                }
-            }
-        })
-
-        if (address_count > 0) {
-            address = true;
-        }
-        if (account_count > 0) {
-            account = true;
-        }
-        return account + "|" + address;
-    }
-
+ 
+   
+   
     Add() {
         if (this.props.listdetailtype === 'entity_detail') {
             this.checkEntitySuccess();
@@ -458,8 +286,8 @@ export class Modal extends React.Component {
         else {
             this.checkModelSuccess();
         }
-
     }
+
     addEntity() { //buyer entity
         let entityItem = {
             id: this.state.entityid,
@@ -486,75 +314,41 @@ export class Modal extends React.Component {
             })
         }
     }
-    addToMainForm() { // consumption detail 
 
-        let siteItem = {
-            consumption_id: this.state.consumption_id,
-            id: this.state.id,
-            account_number: this.state.account_number,
-            existing_plan_selected: this.state.existing_plan_selected,
-            contract_expiry: this.state.contract_expiry ? this.state.contract_expiry : "",
-            purchasing_entity_selectd: this.state.purchasing_entity_selectd,
-            intake_level_selected: this.state.intake_level_selected,
-            contracted_capacity: this.state.contracted_capacity,
-            blk_or_unit: this.state.blk_or_unit,
-            street: this.state.street,
-            unit_number: this.state.unit_number,
-            postal_code: this.state.postal_code,
-            totals: this.state.totals,
-            peak_pct: this.state.peak_pct,
-            index: this.state.itemIndex,
-            cate_type: this.state.cate_type,
-            attachment_ids: "",
-            user_attachment: []
-
-        }
-
-        if (this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0) {
-            let idsArr = [];
-            this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.map((item) => {
-                idsArr.push(item.id);
-            })
-            siteItem.attachment_ids = JSON.stringify(idsArr);
-            siteItem.user_attachment = this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files;
-        }
-
+    checkEntitySuccess() {
+        let flag = true;
         let validateItem = {
-            id: this.state.id,
-            account_number: this.state.account_number,
-            unit_number: this.state.unit_number,
-            postal_code: this.state.postal_code,
+            // company_name:"required",
+            entity_contact_office_no: { cate: 'num' },
+            entity_contact_mobile_no: { cate: 'num' },
+            entity_contact_email: { cate: 'email' },
+            entity_contact_name: { cate: 'required' },
+            entity_bill_attention_to: { cate: 'required' },
+            entity_billing_address: { cate: 'required' },
+            entity_company_address: { cate: 'required' },
+            entity_company_uen: { cate: 'required' },
+            entity_company_name: { cate: 'required' }
         }
-
-        let param = {
-            detail: validateItem,
-            consumption_id: this.state.consumption_id
+        let validateResult = validator_Object(this.state, validateItem);
+        flag = validateResult.length > 0 ? false : true;
+        if (flag) {
+            //need  validate
+            this.addEntity();
         }
-        validateConsumptionDetailRepeat(param).then(res => {
-            if (res.validate_result) {
-                if (this.props.acceptFunction) {
-                    this.props.acceptFunction(siteItem);
-                    this.setState({
-                        modalshowhide: "modal_hide"
-                    })
+        else {
+            $('.validate_message').find('div').each(function () {
+                let className = $(this).attr('class');
+                if (className === 'errormessage') {
+                    let divid = $(this).attr("id");
+                    $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
                 }
-            }
-            else {
-                if (res.error_details) {
-                    res.error_details.map(item => {
-                        if (item.error_field_name === "account_number") {
-                            $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
-                            $("#account_number").focus();
-                        }
-                        else {
-                            $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
-                            $("#unit_number").focus();
-                        }
-                    })
-                }
-            }
-        })
-
+            })
+            validateResult.map((item, index) => {
+                let column = item.column;
+                let cate = item.cate;
+                setValidationFaild(column, cate);
+            })
+        }
     }
 
     changeEntity(type, e) {
@@ -617,6 +411,76 @@ export class Modal extends React.Component {
                 }
                 break;
         }
+    }
+
+
+    addToMainForm() { // consumption detail 
+        let siteItem = {
+            consumption_id: this.state.consumption_id,
+            id: this.state.id,
+            account_number: this.state.account_number,
+            existing_plan_selected: this.state.existing_plan_selected,
+            contract_expiry: this.state.contract_expiry ? this.state.contract_expiry : "",
+            purchasing_entity_selectd: this.state.purchasing_entity_selectd,
+            intake_level_selected: this.state.intake_level_selected,
+            contracted_capacity: this.state.contracted_capacity,
+            blk_or_unit: this.state.blk_or_unit,
+            street: this.state.street,
+            unit_number: this.state.unit_number,
+            postal_code: this.state.postal_code,
+            totals: this.state.totals,
+            peak_pct: this.state.peak_pct,
+            index: this.state.itemIndex,
+            cate_type: this.state.cate_type,
+            attachment_ids: "",
+            user_attachment: []
+        }
+
+        if (this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0) {
+            let idsArr = [];
+            this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.map((item) => {
+                idsArr.push(item.id);
+            })
+            siteItem.attachment_ids = JSON.stringify(idsArr);
+            siteItem.user_attachment = this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files;
+        }
+
+        let validateItem = {
+            id: this.state.id,
+            account_number: this.state.account_number,
+            unit_number: this.state.unit_number,
+            postal_code: this.state.postal_code,
+        }
+
+        let param = {
+            detail: validateItem,
+            consumption_id: this.state.consumption_id
+        }
+
+        validateConsumptionDetailRepeat(param).then(res => {
+            if (res.validate_result) {
+                if (this.props.acceptFunction) {
+                    this.props.acceptFunction(siteItem);
+                    this.setState({
+                        modalshowhide: "modal_hide"
+                    })
+                }
+            }
+            else {
+                if (res.error_details) {
+                    res.error_details.map(item => {
+                        if (item.error_field_name === "account_number") {
+                            $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                            $("#account_number").focus();
+                        }
+                        else {
+                            $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                            $("#unit_number").focus();
+                        }
+                    })
+                }
+            }
+        })
     }
 
     changeConsumption(type, e) {
@@ -710,7 +574,13 @@ export class Modal extends React.Component {
                 this.setState({
                     postal_code: value
                 })
-                changeValidate('postal_code', value);
+                // changeValidate('postal_code', value);
+                if (!validatePostCode(value)) {
+                    setValidationFaild('postal_code', 2)
+                } else {
+                    setValidationPass('postal_code', 2)
+                }
+
                 break;
             case "totals":
                 this.setState({
@@ -746,6 +616,72 @@ export class Modal extends React.Component {
         }
     }
 
+    checkModelSuccess(event) { //check consumption account form
+        let flag = true, hasDoc = true;
+        let validateItem = {
+            peak_pct: { cate: 'decimal' },
+            totals: { cate: 'num10' },
+            postal_code: { cate: 'postcode' },
+            unit_number: { cate: 'required' },
+            street: { cate: 'required' },
+            blk_or_unit: { cate: 'required' },
+            contracted_capacity: { cate: 'num4' },
+            purchasing_entity_selectd: { cate: 'required' },
+            contract_expiry: { cate: 'required' },
+            account_number: { cate: 'required' }
+        }
+        if (this.state.existing_plan_selected !== "Retailer plan") {
+            delete validateItem.contract_expiry;
+        }
+        if (this.state.intake_level_selected === "LT") {
+            delete validateItem.contracted_capacity;
+        }
+        let validateResult = validator_Object(this.state, validateItem);
+        flag = validateResult.length > 0 ? false : true;
+        if (flag) {
+            let status = this.account_address_repeat();
+            switch (status) {
+                case 'false|true':
+                    $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                    $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
+                    $("#unit_number").focus();
+                    break;
+                case 'true|false':
+                    $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
+                    $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                    $("#account_number").focus();
+                    break;
+                case 'true|true':
+                    $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                    $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                    $("#account_number").focus();
+                    break;
+                default:
+                    this.addToMainForm();
+                    break;
+            }
+        }
+        else {
+            $('.validate_message').find('div').each(function () {
+                let className = $(this).attr('class');
+                if (className === 'errormessage') {
+                    let divid = $(this).attr("id");
+                    $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
+                }
+            })
+            validateResult.map((item, index) => {
+                let column = item.column;
+                let cate = item.cate;
+                setValidationFaild(column, cate);
+                if (column === "contract_expiry") {
+                    setTimeout(() => {
+                        $(".react-datepicker-popper").addClass("isHide");
+                    });
+                }
+            })
+        }
+    }
+
     removefile(type, index, id) {
         if (confirm("Are you sure you want to delete this file?")) {
             if (this.props.otherFunction) {
@@ -753,7 +689,86 @@ export class Modal extends React.Component {
             }
         }
     }
+
     Change(type, e) { }
+
+    removeInputNanNum(value) {
+        removeNanNum(value)
+    }
+
+    removeInputPostCode(value) {
+        removePostCode(value);
+    }
+
+    downAttachment(attachemnts) {
+        let attacheList = [];
+        if (attachemnts) {
+            attachemnts.map(item => {
+                attacheList.push({
+                    file_name: item.file_name,
+                    file_path: item.file_path
+                })
+            })
+        }
+
+        for (let i = 0; i < attacheList.length; i++) {
+            this.download(attacheList[i].file_name, attacheList[i].file_path);
+        }
+    }
+
+    download(file_name, file_path) {
+        let a = document.createElement("a"),
+            e = document.createEvent("MouseEvents"); //创建鼠标事件对象
+        e.initEvent("click", false, false); //初始化事件对象
+        a.href = file_path; //设置下载地址
+        a.download = file_name; //设置下载文件名 
+        a.dispatchEvent(e); //给指定的元素，执行事件click事
+    }
+
+    account_address_repeat() {
+        let address = false, account = false, editNotSave = false;
+        let address_count = 0, account_count = 0;
+        this.state.consumptionItem.map((item, index) => {
+            if (this.state.option === 'update') {
+                if (item.id) {
+                    if ((this.state.unit_number == item.unit_number) && (this.state.postal_code == item.postal_code) && (this.state.id !== item.id)) {
+                        address_count++;
+                    }
+                    if (this.state.account_number === item.account_number && (this.state.id !== item.id)) {
+                        account_count++;
+                    }
+                }
+                else {
+                    if ((this.state.unit_number === item.unit_number) && (this.state.postal_code === item.postal_code)) {
+                        if (index != this.state.itemIndex) {
+                            address_count++;
+                        }
+                    }
+                    if (this.state.account_number === item.account_number) {
+                        if (index != this.state.itemIndex) {
+                            account_count++;
+                        }
+                    }
+                }
+            }
+            else {
+                if ((this.state.unit_number === item.unit_number) && (this.state.postal_code === item.postal_code)) {
+                    address_count++;
+                }
+                if (this.state.account_number === item.account_number) {
+                    account_count++;
+                }
+            }
+        })
+
+        if (address_count > 0) {
+            address = true;
+        }
+        if (account_count > 0) {
+            account = true;
+        }
+        return account + "|" + address;
+    }
 
     closeModal() {
         if (this.state.type === "chkSelectedBuyers") {
@@ -813,7 +828,6 @@ export class Modal extends React.Component {
     }
 
     closeModelAndCancelSave() {
-
         let data = this.state.props_data;
         data.action = "cancel";
         if (this.props.acceptFunction) {
@@ -1091,6 +1105,11 @@ export class Modal extends React.Component {
                     </tbody>
                 </table>
             }
+            if (this.props.listdetailtype === "market-insight") {
+                showDetail = <div>
+                    {this.state.advisory}
+                </div>
+            }
 
             if (this.props.listdetailtype === 'entity_detail') {
                 if (this.props.entity_detail_item !== null) {
@@ -1288,7 +1307,7 @@ export class Modal extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Postal Code:</td>
-                                    <td> <input type="text" value={this.state.postal_code} id="postal_code" maxLength="6" name="postal_code" onChange={this.changeConsumption.bind(this, "postal_code")} onKeyUp={this.removeInputNanNum.bind(this)} placeholder="" required aria-required="true" />
+                                    <td> <input type="text" value={this.state.postal_code} id="postal_code" maxLength="6" name="postal_code" onChange={this.changeConsumption.bind(this, "postal_code")} onKeyUp={this.removeInputPostCode.bind(this)} placeholder="" required aria-required="true" />
                                         <div id="postal_code_message" className="isPassValidate">This filed is required!</div>
                                         <div id="postal_code_format" className="isPassValidate">Postal code must be 6 digit interger.</div>
                                     </td>

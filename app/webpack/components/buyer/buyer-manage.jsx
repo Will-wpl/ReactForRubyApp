@@ -272,11 +272,10 @@ export class BuyerUserManage extends Component {
                 approved: obj.action === 'reject' ? "" : 1
             };
 
-            if (this.state.buyerApproveStatus==="0")
-            {
-                this.state.entity_list.map((item)=>{
-                    item.approval_status="2";
-                    item.approval_status_name="Pending";
+            if (this.state.buyerApproveStatus === "0") {
+                this.state.entity_list.map((item) => {
+                    item.approval_status = "2";
+                    item.approval_status_name = "Pending";
                 })
             }
             approveBuyerUser(param).then(res => {
@@ -308,7 +307,8 @@ export class BuyerUserManage extends Component {
             let paramArr = [];
             this.state.entity_list.map((item) => {
                 let entityId = item.id;
-                let approveStatus = item.approval_status === "1" ? "1" : null;
+                let approveStatus = item.approval_status === "1" ? "1" : item.approval_status === "0" ? 0 : null;
+
                 let entity = {
                     entity_id: entityId,
                     approved_status: approveStatus
@@ -319,7 +319,7 @@ export class BuyerUserManage extends Component {
                 entity_statuses: JSON.stringify(paramArr)
             };
             approveBuyerEntity(param).then(res => {
-                window.location.href()
+                window.location.href = '/admin/users/' + this.state.userid + '/manage';
             })
         }
     }

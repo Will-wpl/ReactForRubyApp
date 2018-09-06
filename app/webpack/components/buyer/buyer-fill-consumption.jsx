@@ -92,7 +92,7 @@ export class FillConsumption extends Component {
                 contract_duration: res.consumption.contract_duration ? res.consumption.contract_duration : "",
                 buyer_link: res.buyer_revv_tc_attachment ? res.buyer_revv_tc_attachment.file_path : "",
                 seller_link: res.seller_buyer_tc_attachment ? res.seller_buyer_tc_attachment.file_path : "",
-                advisory: res.advisory
+                advisory: res.advisory.content
             })
             if (res.consumption.participation_status === '1' || res.auction.publish_status === "1") {
                 $("input[type='checkbox']").attr("checked", true);
@@ -555,7 +555,10 @@ export class FillConsumption extends Component {
         return count;
     }
     showMarketInsight() {
-
+        this.setState({
+            text: ""
+        })
+        this.refs.market.showModal()
     }
     render() {
         return (
@@ -886,6 +889,7 @@ export class FillConsumption extends Component {
                     <Modal text={this.state.text} acceptFunction={this.doAccept.bind(this)} ref="Modal" />
                 </form>
                 <Modal formSize="big" text={this.state.text} acceptFunction={this.doAddAccountAction.bind(this)} siteList={this.state.site_list} consumptionAccountItem={this.state.account_detail} listdetailtype='consumption_detail' ref="consumption" />
+                <Modal formSize="middle" text={this.state.text} advisory={this.state.advisory} listdetailtype='market-insight' ref="market" />
             </div >
         )
     }

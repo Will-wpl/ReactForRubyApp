@@ -144,12 +144,14 @@ export const validateDecimal = (value) => {
 
 export const validatePostCode = (value) => {
     let express = /^[0-9]{6}$/;
-    if (!express.test(value)) {
+    if (value > -1) {
+        if (!express.test(value)) {
+            return false;
+        }
+    } else {
         return false;
     }
-    else {
-        return true;
-    }
+    return true;
 }
 export const validator_Object = (param, paramType) => {
     let errArr = [];
