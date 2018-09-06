@@ -87,7 +87,7 @@ export class CreateNewRA extends Component {
                 }
             }
             if (res.name == null) {
-                this.setState({ 
+                this.setState({
                     id: res.id,
                     single_multiple: res.buyer_type,
                     startDate: res.contract_period_start_date == null ? '' : moment(res.contract_period_start_date) })
@@ -695,7 +695,7 @@ export class CreateNewRA extends Component {
             if (obj.action === "proceed") {
                 deleteSelectedBuyer(param).then(res => {
                     if (res.status === "1") {
-                        this.doNext();
+                        window.location.href = `/admin/auctions/${this.auction.id}/invitation`;
                     }
                 })
             }
