@@ -28,7 +28,7 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
         before { do_request }
         it 'Success' do
           hash = JSON.parse(response.body)
-          expect(hash.size).to eq(9)
+          expect(hash.size).to eq(10)
           expect(hash['consumption_details'].size).to eq(4)
           expect(response).to have_http_status(:ok)
         end
