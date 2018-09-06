@@ -74,6 +74,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
       removed_consumption_details.each do |consumption_detail|
         consumption_details_all_before_yesterday.delete(consumption_detail)
       end
+      advisory_template = RichTemplate.find_by type: RichTemplate::ADVISORY_TEMPLATE
       render json: { consumption_details: consumption_details_all,
                      consumption_details_last_day: consumption_details_all_yesterday,
                      consumption_details_before_yesterday: consumption_details_all_before_yesterday,
@@ -82,7 +83,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
                                 contract_period_start_date: auction.contract_period_start_date,
                                 publish_status: auction.publish_status },
                      buyer_entities: buyer_entities, seller_buyer_tc_attachment:seller_buyer_tc_attachment,
-                     buyer_revv_tc_attachment: buyer_revv_tc_attachment, contract_duration: contract_duration }, status: 200
+                     buyer_revv_tc_attachment: buyer_revv_tc_attachment, contract_duration: contract_duration, advisory: advisory_template }, status: 200
     end
   end
 
