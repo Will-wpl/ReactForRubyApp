@@ -23,7 +23,7 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
           expect(hash['headers'].size).to eq(3)
-          expect(hash['bodies']['total']).to eq(0)
+          expect(hash['bodies']['total']).to eq(51)
           expect(hash['actions'].size).to eq(1)
         end
       end
