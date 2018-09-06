@@ -11,6 +11,40 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
   context 'admin user' do
     before { sign_in create(:user, :with_admin) }
 
+    describe 'GET Deleted retailers' do
+
+      context 'Base Search' do
+        def do_request
+          get :retailers_deleted
+        end
+
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash = JSON.parse(response.body)
+          expect(hash['headers'].size).to eq(3)
+          expect(hash['bodies']['total']).to eq(51)
+          expect(hash['actions'].size).to eq(1)
+        end
+      end
+
+      context 'Pager Search' do
+        def do_request
+          get :retailers_deleted, params: {page_size: '10', page_index: '1' }
+        end
+
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash = JSON.parse(response.body)
+          expect(hash['headers'].size).to eq(3)
+          expect(hash['bodies']['total']).to eq(0)
+          expect(hash['actions'].size).to eq(1)
+        end
+      end
+
+    end
+
     describe 'GET retailers' do
 
       context 'Base Search' do
@@ -75,6 +109,54 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
         end
       end
 
+    end
+
+    describe 'GET Deleted buyers' do
+
+      context 'Base Search' do
+        def do_request
+          get :buyers_deleted
+        end
+
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash = JSON.parse(response.body)
+          expect(hash['headers'].size).to eq(5)
+          expect(hash['actions'].size).to eq(1)
+        end
+      end
+
+
+      context 'Pager Search' do
+        def do_request
+          get :buyers_deleted, params: { page_size: '10', page_index: '1' }
+        end
+
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash = JSON.parse(response.body)
+          expect(hash['headers'].size).to eq(5)
+          expect(hash['bodies']['total']).to eq(0)
+          expect(hash['actions'].size).to eq(1)
+        end
+      end
+
+
+      context 'Conditions Pager Search' do
+        def do_request
+          get :buyers_deleted, params: { consumer_type: [2, '='], page_size: '10', page_index: '1' }
+        end
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash = JSON.parse(response.body)
+          expect(hash['headers'].size).to eq(4)
+          expect(hash['bodies']['total']).to eq(0)
+          expect(hash['actions'].size).to eq(1)
+        end
+      end
     end
 
     describe 'GET buyers' do

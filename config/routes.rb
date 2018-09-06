@@ -30,10 +30,12 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :admin do
-      resources :users, only: %i[show retailers buyers approval_buyer_entities approval_buyer approval_retailer remove_retailer remove_buyer] do
+      resources :users, only: %i[show retailers retailers_deleted buyers buyers_deleted approval_buyer_entities approval_buyer approval_retailer remove_retailer remove_buyer] do
         collection do
           get 'retailers'
+          get 'retailers_deleted'
           get 'buyers'
+          get 'buyers_deleted'
           put 'approval_buyer_entities'
           put 'approval_buyer'
           put 'approval_retailer'
@@ -271,6 +273,8 @@ Rails.application.routes.draw do
       collection do
         get 'retailers'
         get 'buyers'
+        get 'del_retailers'
+        get 'del_buyers'
         patch 'approval'
       end
     end

@@ -225,7 +225,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     will_del_buyer_entity.each do |buyer_entity|
       # User.buyer_entities_by_email(buyer_entity.contact_email).destroy
       unless buyer_entity.user_entity_id.blank?
-        unless buyer_entities.any? { |x| x['user_entity_id'] == buyer_entity.user_entity_id}
+        unless buyer_entities.any? { |x| x['user_entity_id'] == buyer_entity.user_entity_id }
           entity_user = User.find(buyer_entity.user_entity_id)
           entity_user.destroy unless entity_user.blank?
         end
