@@ -22,8 +22,12 @@ export default class AdminExpiry extends Component {
             start_datetime: data
         })
     }
-    goSearch(){
-        getExpiryList(moment(this.state.start_datetime).format()).then(res=>{
+    goSearch(sort){
+        let obj = {
+            time:moment(this.state.start_datetime).format(),
+            sort:sort?sort:null
+        }
+        getExpiryList(obj).then(res=>{
             this.setState({
                 expiry_list:res.accounts?res.accounts:[],
                 buyer_ids:res.buyer_ids?res.buyer_ids:[]
@@ -35,6 +39,11 @@ export default class AdminExpiry extends Component {
             sessionStorage.auction_id = res.auction.id;
             setTimeout(()=>{window.location.href="/admin/auctions/new"},100);
         })
+    }
+    dosort(field_name,sort){
+        $(".lm--table th dfn").removeClass("selected");
+        $(".search_list_"+sort+"."+field_name+"").addClass("selected");
+        this.goSearch([field_name,sort]);
     }
 render() {
     return (
@@ -54,17 +63,42 @@ render() {
                         </dd>
                     </dl>
                 </div>
-                <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                <div className={"lm--table-container"}>
+                <table className="lm--table lm--table--responsive" cellPadding="0" cellSpacing="0">
                     <thead>
                     <tr>
-                        <th>Account<br/>No.</th>
-                        <th>During<br/>Entity</th>
-                        <th>RA ID</th>
-                        <th>Contract<br/>Expiry</th>
-                        <th>Intake<br/>Level</th>
-                        <th>Contract<br/>Capacity</th>
-                        <th>Peak<br/>(kWh/mth)</th>
-                        <th>Off-Peak<br/>(kWh/mth)</th>
+                        <th>Account<br/>No.
+                            <div><dfn className={"search_list_asc account_number"} onClick={this.dosort.bind(this,'account_number','asc')}></dfn>
+                                <dfn className={"search_list_desc account_number"} onClick={this.dosort.bind(this,'account_number','desc')}></dfn></div>
+                        </th>
+                        <th>Puchasing<br/>Entity
+                            <div><dfn className={"search_list_asc entity_name"} onClick={this.dosort.bind(this,'entity_name','asc')}></dfn>
+                                <dfn className={"search_list_desc entity_name"} onClick={this.dosort.bind(this,'entity_name','desc')}></dfn></div>
+                        </th>
+                        <th>RA ID
+                            <div><dfn className={"search_list_asc ra_id"} onClick={this.dosort.bind(this,'ra_id','asc')}></dfn>
+                                <dfn className={"search_list_desc ra_id"} onClick={this.dosort.bind(this,'ra_id','desc')}></dfn></div>
+                        </th>
+                        <th>Contract<br/>Expiry
+                            <div><dfn className={"search_list_asc contract_period_end_date"} onClick={this.dosort.bind(this,'contract_period_end_date','asc')}></dfn>
+                                <dfn className={"search_list_desc contract_period_end_date"} onClick={this.dosort.bind(this,'contract_period_end_date','desc')}></dfn></div>
+                        </th>
+                        <th>Intake<br/>Level
+                            <div><dfn className={"search_list_asc intake_level"} onClick={this.dosort.bind(this,'intake_level','asc')}></dfn>
+                                <dfn className={"search_list_desc intake_level"} onClick={this.dosort.bind(this,'intake_level','desc')}></dfn></div>
+                        </th>
+                        <th>Contract<br/>Capacity
+                            <div><dfn className={"search_list_asc contracted_capacity"} onClick={this.dosort.bind(this,'contracted_capacity','asc')}></dfn>
+                                <dfn className={"search_list_desc contracted_capacity"} onClick={this.dosort.bind(this,'contracted_capacity','desc')}></dfn></div>
+                        </th>
+                        <th>Peak<br/>(kWh/mth)
+                            <div><dfn className={"search_list_asc peak"} onClick={this.dosort.bind(this,'peak','asc')}></dfn>
+                                <dfn className={"search_list_desc peak"} onClick={this.dosort.bind(this,'peak','desc')}></dfn></div>
+                        </th>
+                        <th>Off-Peak<br/>(kWh/mth)
+                            <div><dfn className={"search_list_asc off_peak"} onClick={this.dosort.bind(this,'off_peak','asc')}></dfn>
+                                <dfn className={"search_list_desc off_peak"} onClick={this.dosort.bind(this,'off_peak','desc')}></dfn></div>
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -82,6 +116,7 @@ render() {
                     })}
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
     )

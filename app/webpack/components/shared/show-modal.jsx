@@ -27,7 +27,7 @@ export class Modal extends React.Component {
                     { buttonName: "none", files: [] }
                 ]
             },
-            modalSize: this.props.modalSize,
+            modalSize: this.props.modalSize, approval_status: 2,
             entityid: '', is_default: '', user_id: "", main_id: "", user_entity_id: "",
             entity_company_name: '', entity_company_uen: '', entity_company_address: '', entity_billing_address: '', entity_bill_attention_to: '', entity_contact_name: '',
             entity_contact_email: '', entity_contact_mobile_no: '', entity_contact_office_no: '', entitList: [], entityErrorList: [], loglist: [], attatchment: []
@@ -39,6 +39,7 @@ export class Modal extends React.Component {
         fileObj = this.state.fileData;
         if (next.consumptionAccountItem) {
             this.setState({
+
                 consumption_id: next.consumptionAccountItem.consumption_id,
                 consumption_detail_id: next.consumptionAccountItem.id,
                 isSaved: next.consumptionAccountItem.id ? true : false,
@@ -132,7 +133,8 @@ export class Modal extends React.Component {
                 user_id: next.entityDetailItem.user_id,
                 main_id: next.entityDetailItem.main_id,
                 user_entity_id: next.entityDetailItem.user_entity_id,
-                option: next.entityDetailItem.option
+                option: next.entityDetailItem.option,
+                approval_status: next.entityDetailItem.approval_status
             })
         }
         if (next.entitList) {
@@ -281,6 +283,7 @@ export class Modal extends React.Component {
             street: { cate: 'required' },
             blk_or_unit: { cate: 'required' },
             contracted_capacity: { cate: 'num4' },
+            purchasing_entity_selectd: { cate: 'required' },
             contract_expiry: { cate: 'required' },
             account_number: { cate: 'required' }
         }
@@ -474,6 +477,7 @@ export class Modal extends React.Component {
             user_id: this.state.user_id,
             main_id: this.state.main_id,
             user_entity_id: this.state.user_entity_id,
+            approval_status: this.state.approval_status,
             index: this.state.itemIndex
         }
         if (this.props.acceptFunction) {
@@ -515,7 +519,7 @@ export class Modal extends React.Component {
         }
 
         let validateItem = {
-            id:this.state.consumption_detail_id,
+            id: this.state.consumption_detail_id,
             account_number: this.state.account_number,
             unit_number: this.state.unit_number,
             postal_code: this.state.postal_code,
@@ -1216,10 +1220,13 @@ export class Modal extends React.Component {
                                         <select id="purchasing_entity" onChange={this.changeConsumption.bind(this, "purchasing_entity")} name="purchasing_entity" value={this.state.purchasing_entity_selectd} required>
                                             {
                                                 this.state.purchasing_entity.map(item => {
-                                                    return <option key={item.id} value={item.id}>{item.company_name}</option>
+                                                    if (item.approval_status === "1") {
+                                                        return <option key={item.id} value={item.id}>{item.company_name}</option>
+                                                    }
                                                 })
                                             }
                                         </select>
+                                        <div id="purchasing_entity_selectd_message" className="isPassValidate">This filed is required!</div>
                                     </td>
                                 </tr>
                                 <tr>

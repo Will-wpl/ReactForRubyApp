@@ -16,7 +16,7 @@ export class BuyerUserEntityRegister extends Component {
             email_address: "", company_name: "", unique_entity_number: "", company_address: "", billing_address: "", contact_name: "",
             mobile_number: "", office_number: "", entityStatus: "", approveStatus: false, status: '', main_id: '',
 
-            buyerTCurl: "", buyerTCname: "", agree_seller_buyer: "0",
+            buyerTCurl: "", buyerTCname: "", agree_seller_buyer: "0", approval_status: 2, tabSelected: "base",
             buyerRevvTCurl: "", buyerRevvTCname: "", agree_buyer_revv: "0", has_tenants: "1", entity_list: [], entityItemInfo: this.entityItem,
             user_entity_data: {
                 "ENTITY_LIST": [
@@ -28,6 +28,7 @@ export class BuyerUserEntityRegister extends Component {
                     { buttonName: "none", files: [] }
                 ]
             },
+
             uploadUrl: "/api/buyer/user_attachments?file_type=",
             messageAttachmentUrlArr: [],
             usedEntityIdArr: [], usedEntityIdArr: [],
@@ -51,6 +52,7 @@ export class BuyerUserEntityRegister extends Component {
             contact_email: "",
             contact_mobile_no: "",
             contact_office_no: "",
+            approval_status: "",
             option: "",
             is_default: 0
         }
@@ -230,14 +232,17 @@ export class BuyerUserEntityRegister extends Component {
                     contact_mobile_no: entity[index].contact_mobile_no ? entity[index].contact_mobile_no : '',
                     contact_office_no: entity[index].contact_office_no ? entity[index].contact_office_no : '',
                     approval_status: entity[index].approval_status,
+                    approval_status_name: this.convertEntityStatus(entity[index].approval_status),
                     is_default: entity[index].is_default,
                 });
             })
+
             this.setState({
                 entity_list: user_entity,
                 btnAddDisabled: false,
                 mainEntityComplete: false
             })
+            this.entity_list_back = this.state.entity_list;
         }
         else {
             let item = [{
@@ -254,7 +259,9 @@ export class BuyerUserEntityRegister extends Component {
                 contact_email: this.state.email_address,
                 contact_mobile_no: "",
                 contact_office_no: "",
-                is_default: 1
+                is_default: 1,
+                approval_status: 2,
+                approval_status_name: "Pending"
             }]
 
             this.setState({
@@ -275,6 +282,9 @@ export class BuyerUserEntityRegister extends Component {
         $("#tab_" + type).addClass("selected");
         $(".buyer_list1").hide();
         $("#buyer_" + type).fadeIn(500);
+        this.setState({
+            tabSelected: type
+        })
     }
 
     Change(type, e) {
@@ -475,7 +485,6 @@ export class BuyerUserEntityRegister extends Component {
                             );
                             this.refs.Modal.showModal();
                         }
-
                         if (type === "save") {
                             this.setState({
                                 disabled: true,
@@ -523,55 +532,168 @@ export class BuyerUserEntityRegister extends Component {
         }
     }
 
-    validateRepeatColumn(res) {
-        if (res.error_fields.length > 0) { //validate buyer
-            for (let item of res.error_fields) {
-                if (item.error_field_name === "company_unique_entity_number") {
-                    $('#unique_entity_number_repeat').removeClass('isPassValidate').addClass('errormessage');
-                    $("input[name='unique_entity_number']").focus();
-                }
-                else if (item.error_field_name === "email") {
-                    $('#email_address_repeat').removeClass('isPassValidate').addClass('errormessage');
-                    $("input[name='email_address']").focus();
-                }
-                else {
-                    $('#company_name_repeat').removeClass('isPassValidate').addClass('errormessage');
-                    $("input[name='company_name']").focus();
-                }
-            }
-            this.tab("base");
-            return;
+    //add & delete entity
+    add_entity() {
+        if (this.props.onAddClick) {
+            this.props.onAddClick();
         }
-        if (res.error_entity_indexes.length > 0) { //validate entity
-            let name = [], uen = [], email = [];
-            res.error_entity_indexes.map((item) => {
-                if (item.error_field_name === "company_name") {
-                    name.push(item.error_value)
-                }
-                if (item.error_field_name === "company_uen") {
-                    uen.push(item.error_value);
-                }
-                if (item.error_field_name === "contact_email") {
-                    email.push(item.error_value)
-                }
-            });
-            let errList = {
-                nameError: name,
-                uenError: uen,
-                emailError: email
-            }
-            this.setState({
-                validateErrList: errList
-            })
+        this.removeError();
+        this.entityItem.id = '';
+        this.entityItem.main_id = "";
+        this.entityItem.user_entity_id = "";
+        this.entityItem.user_id = this.state.id;
+        this.entityItem.company_name = '';
+        this.entityItem.company_uen = '';
+        this.entityItem.company_address = '';
+        this.entityItem.billing_address = '';
+        this.entityItem.bill_attention_to = '';
+        this.entityItem.contact_name = '';
+        this.entityItem.contact_email = '';
+        this.entityItem.contact_mobile_no = '';
+        this.entityItem.contact_office_no = '';
+        this.entityItem.is_default = 0;
+        this.entityItem.approval_status = 2;
+        this.entityItem.option = 'Insert';
 
-            this.setState({ text: " " });
-            this.refs.Modal_EntityErr.showModal();
-            this.tab("entity");
-            return;
+        this.setState({
+            entityItemInfo: this.entityItem,
+            ismain: false,
+            text: " "
+        })
+        $("#entity_company_name").focus();
+        this.refs.Modal_Entity.showModal('custom', {}, '', '-1')
+    }
+
+    edit_entity(item, index) {
+        this.removeError();
+        this.setState({ entityItemInfo: {} });
+        this.entityItem.id = item.id;
+        this.entityItem.user_id = this.state.id;
+        this.entityItem.main_id = item.main_id ? item.main_id : null;
+        this.entityItem.user_entity_id = item.user_entity_id ? item.user_entity_id : null;
+        this.entityItem.company_name = item.company_name;
+        this.entityItem.company_uen = item.company_uen;
+        this.entityItem.company_address = item.company_address;
+        this.entityItem.billing_address = item.billing_address;
+        this.entityItem.bill_attention_to = item.bill_attention_to;
+        this.entityItem.contact_name = item.contact_name;
+        this.entityItem.contact_email = item.contact_email;
+        this.entityItem.contact_mobile_no = item.contact_mobile_no;
+        this.entityItem.contact_office_no = item.contact_office_no;
+        this.entityItem.approval_status = item.approval_status;
+        this.entityItem.option = 'update';
+        if (index === 0) {
+            this.entityItem.is_default = 1;
+            this.setState({
+                ismain: true
+            });
+        }
+        else {
+            this.entityItem.is_default = 0;
+            this.setState({
+                ismain: false
+            });
+        }
+
+        this.setState({
+            text: " ",
+            entityItemInfo: this.entityItem
+        })
+        this.refs.Modal_Entity.showModal('custom', {}, '', index)
+    }
+
+    acceptAddEntity(entityInfo) {
+        let item = {
+            id: entityInfo.id ? entityInfo.id : "",
+            company_name: entityInfo.company_name,
+            company_uen: entityInfo.company_uen,
+            company_address: entityInfo.company_address,
+            billing_address: entityInfo.billing_address,
+            bill_attention_to: entityInfo.bill_attention_to,
+            contact_name: entityInfo.contact_name,
+            contact_email: entityInfo.contact_email,
+            contact_mobile_no: entityInfo.contact_mobile_no,
+            contact_office_no: entityInfo.contact_office_no,
+            is_default: entityInfo.is_default,
+            user_id: this.state.id,
+            main_id: entityInfo.main_id,
+            user_entity_id: entityInfo.user_entity_id,
+            approval_status: entityInfo.approval_status,
+            // approval_status_name: this.convertEntityStatus(entityInfo.approval_status)
+        };
+        let status = this.judgeEntityStatus(item);
+        item.approval_status = status;
+        item.approval_status_name = this.convertEntityStatus(status);
+        let entity = [].concat(this.state.entity_list);
+        if (entityInfo.index >= 0) {
+            entity[entityInfo.index] = item;
+        }
+        else {
+            entity.push(item)
+        }
+        if (entityInfo.index === 0) {
+            this.setState({
+                entity_list: entity,
+                btnAddDisabled: false
+            })
+        }
+        else {
+            this.setState({
+                entity_list: entity
+            })
+        }
+        this.setState({
+            mainEntityComplete: false
+        })
+
+    }
+    judgeEntityStatus(entity) {
+        let status = 2;
+        for (let item of this.entity_list_back) {
+            if (item.id === entity.id) {
+                if (item.company_name === entity.company_name && item.company_uen === entity.company_uen) {
+                    status = entity.approval_status;
+                }
+                break;
+            }
+        }
+        return status;
+    }
+
+    //delete  entity
+    deletePop(index) {
+        this.setState({
+            text: "Are you sure you want to delete this entity?",
+            deleteIndex: index
+        });
+        this.refs.Modal.showModal("comfirm");
+    }
+
+    delete_entity(index, mainId) {
+        if (this.state.usedEntityIdArr.length > 0) {
+            if (this.state.usedEntityIdArr.indexOf(mainId) > -1) {
+                this.setState({ text: "The entity have available auction can't be deleted!" });
+                this.refs.Modal.showModal();
+            }
+            else {
+                this.deletePop(index);
+            }
+        }
+        else {
+            this.deletePop(index)
+
         }
     }
 
-
+    refreshForm(obj) {
+        let list = this.state.entity_list;
+        list.splice(this.state.deleteIndex, 1);
+        this.setState({
+            entity_list: list
+        })
+    }
+    
+    //edit button to cancel disabled status,every element can be edited
     edit() {
         this.setState({
             disabled: false
@@ -599,81 +721,21 @@ export class BuyerUserEntityRegister extends Component {
         })
     }
 
-    judgeAction(type) {
-
-    }
-
-
-    acceptAddEntity(entityInfo) {
-        let item = {
-            id: entityInfo.id ? entityInfo.id : "",
-            company_name: entityInfo.company_name,
-            company_uen: entityInfo.company_uen,
-            company_address: entityInfo.company_address,
-            billing_address: entityInfo.billing_address,
-            bill_attention_to: entityInfo.bill_attention_to,
-            contact_name: entityInfo.contact_name,
-            contact_email: entityInfo.contact_email,
-            contact_mobile_no: entityInfo.contact_mobile_no,
-            contact_office_no: entityInfo.contact_office_no,
-            is_default: entityInfo.is_default,
-            user_id: this.state.id,
-            main_id: entityInfo.main_id,
-            user_entity_id: entityInfo.user_entity_id
-        };
-
-        let entity = this.state.entity_list;
-        if (entityInfo.index >= 0) {
-            entity[entityInfo.index] = item;
+    convertEntityStatus(value) {
+        if (value) {
+            if (value === "0") {
+                return "Reject"
+            }
+            else if (value === "1") {
+                return "Approved"
+            }
+            else {
+                return "Pending"
+            }
         }
         else {
-            entity.push(item)
+            return "Pending"
         }
-        if (entityInfo.index === 0) {
-            this.setState({
-                entity_list: entity,
-                btnAddDisabled: false
-            })
-        }
-        else {
-            this.setState({
-                entity_list: entity
-            })
-        }
-        this.setState({
-            mainEntityComplete: false
-        })
-
-    }
-
-    add_entity() {
-        if (this.props.onAddClick) {
-            this.props.onAddClick();
-        }
-        this.removeError();
-        this.entityItem.id = '';
-        this.entityItem.main_id = "";
-        this.entityItem.user_entity_id = "";
-        this.entityItem.user_id = this.state.id;
-        this.entityItem.company_name = '';
-        this.entityItem.company_uen = '';
-        this.entityItem.company_address = '';
-        this.entityItem.billing_address = '';
-        this.entityItem.bill_attention_to = '';
-        this.entityItem.contact_name = '';
-        this.entityItem.contact_email = '';
-        this.entityItem.contact_mobile_no = '';
-        this.entityItem.contact_office_no = '';
-        this.entityItem.is_default = 0;
-        this.entityItem.option = 'Insert';
-
-        this.setState({
-            entityItemInfo: this.entityItem,
-            ismain: false,
-            text: " "
-        })
-        $("#entity_company_name").focus();
-        this.refs.Modal_Entity.showModal('custom', {}, '', '-1')
     }
 
     removeError() {
@@ -686,74 +748,60 @@ export class BuyerUserEntityRegister extends Component {
         })
     }
 
-    edit_entity(item, index) {
-        this.removeError();
-        this.setState({ entityItemInfo: {} });
-        this.entityItem.id = item.id;
-        this.entityItem.user_id = this.state.id;
-        this.entityItem.main_id = item.main_id ? item.main_id : null;
-        this.entityItem.user_entity_id = item.user_entity_id ? item.user_entity_id : null;
-        this.entityItem.company_name = item.company_name;
-        this.entityItem.company_uen = item.company_uen;
-        this.entityItem.company_address = item.company_address;
-        this.entityItem.billing_address = item.billing_address;
-        this.entityItem.bill_attention_to = item.bill_attention_to;
-        this.entityItem.contact_name = item.contact_name;
-        this.entityItem.contact_email = item.contact_email;
-        this.entityItem.contact_mobile_no = item.contact_mobile_no;
-        this.entityItem.contact_office_no = item.contact_office_no;
-        this.entityItem.option = 'update';
-        if (index === 0) {
-            this.entityItem.is_default = 1;
-            this.setState({
-                ismain: true
-            });
-        }
-        else {
-            this.entityItem.is_default = 0;
-            this.setState({
-                ismain: false
-            });
-        }
-
-        this.setState({
-            text: " ",
-            entityItemInfo: this.entityItem
-        })
-
-        this.refs.Modal_Entity.showModal('custom', {}, '', index)
-    }
-
-    delete_entity(index, mainId) {
-        if (this.state.usedEntityIdArr.length > 0) {
-            if (this.state.usedEntityIdArr.indexOf(mainId) > -1) {
-                this.setState({ text: "The entity have available auction can't be deleted!" });
-                this.refs.Modal.showModal();
+    //page element validation
+    validateRepeatColumn(res) {
+        if (res.error_fields.length > 0) { //validate buyer
+            for (let item of res.error_fields) {
+                if (item.error_field_name === "company_unique_entity_number") {
+                    $('#unique_entity_number_repeat').removeClass('isPassValidate').addClass('errormessage');
+                    $("input[name='unique_entity_number']").focus();
+                }
+                else if (item.error_field_name === "email") {
+                    $('#email_address_repeat').removeClass('isPassValidate').addClass('errormessage');
+                    $("input[name='email_address']").focus();
+                }
+                else {
+                    $('#company_name_repeat').removeClass('isPassValidate').addClass('errormessage');
+                    $("input[name='company_name']").focus();
+                }
             }
-            else {
-                this.deletePop(index);
+            this.tab("base");
+            this.setState({
+                tabSelected: "base"
+            })
+            return;
+        }
+        if (res.error_entity_indexes.length > 0) { //validate entity
+            let name = [], uen = [], email = [];
+            res.error_entity_indexes.map((item) => {
+                if (item.error_field_name === "company_name") {
+                    name.push(item.error_value)
+                }
+                if (item.error_field_name === "company_uen") {
+                    uen.push(item.error_value);
+                }
+                if (item.error_field_name === "contact_email") {
+                    email.push(item.error_value)
+                }
+            });
+            let errList = {
+                nameError: name,
+                uenError: uen,
+                emailError: email
             }
-        }
-        else {
-            this.deletePop(index)
+            this.setState({
+                validateErrList: errList
+            })
 
+            this.setState({ text: " " });
+            this.refs.Modal_EntityErr.showModal();
+            this.tab("entity");
+            this.setState({
+                tabSelected: "entity"
+            })
+            return;
         }
     }
-    refreshForm(obj) {
-        let list = this.state.entity_list;
-        list.splice(this.state.deleteIndex, 1);
-        this.setState({
-            entity_list: list
-        })
-    }
-    deletePop(index) {
-        this.setState({
-            text: "Are you sure you want to delete?",
-            deleteIndex: index
-        });
-        this.refs.Modal.showModal("comfirm");
-    }
-
 
     render() {
         let btn_html;
@@ -910,6 +958,7 @@ export class BuyerUserEntityRegister extends Component {
                                     <col width="10%" />
                                     <col width="10%" />
                                     <col width="10%" />
+                                    <col width="10%" />
                                 </colgroup>
                                 <thead>
                                     <tr>
@@ -922,6 +971,7 @@ export class BuyerUserEntityRegister extends Component {
                                         <th>Contact Email</th>
                                         <th>Contact Mobile No.</th>
                                         <th>Contact Office No.</th>
+                                        <th>Status</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -930,6 +980,7 @@ export class BuyerUserEntityRegister extends Component {
                         <div className="table-body">
                             <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                                 <colgroup>
+                                    <col width="10%" />
                                     <col width="10%" />
                                     <col width="10%" />
                                     <col width="10%" />
@@ -954,6 +1005,7 @@ export class BuyerUserEntityRegister extends Component {
                                                 <td>{item.contact_email}</td>
                                                 <td>{item.contact_mobile_no}</td>
                                                 <td>{item.contact_office_no}</td>
+                                                <td>{item.approval_status_name}</td>
                                                 <td>
                                                     <div className="editSite">
                                                         <button className="entityApprove" disabled={this.state.disabled} onClick={this.edit_entity.bind(this, item, index)}>Edit</button>
