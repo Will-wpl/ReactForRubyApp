@@ -16,7 +16,7 @@ export class BuyerUserEntityRegister extends Component {
             email_address: "", company_name: "", unique_entity_number: "", company_address: "", billing_address: "", contact_name: "",
             mobile_number: "", office_number: "", entityStatus: "", approveStatus: false, status: '', main_id: '',
 
-            buyerTCurl: "", buyerTCname: "", agree_seller_buyer: "0",
+            buyerTCurl: "", buyerTCname: "", agree_seller_buyer: "0", approval_status: 2,
             buyerRevvTCurl: "", buyerRevvTCname: "", agree_buyer_revv: "0", has_tenants: "1", entity_list: [], entityItemInfo: this.entityItem,
             user_entity_data: {
                 "ENTITY_LIST": [
@@ -51,6 +51,7 @@ export class BuyerUserEntityRegister extends Component {
             contact_email: "",
             contact_mobile_no: "",
             contact_office_no: "",
+            approval_status: "",
             option: "",
             is_default: 0
         }
@@ -230,6 +231,7 @@ export class BuyerUserEntityRegister extends Component {
                     contact_mobile_no: entity[index].contact_mobile_no ? entity[index].contact_mobile_no : '',
                     contact_office_no: entity[index].contact_office_no ? entity[index].contact_office_no : '',
                     approval_status: entity[index].approval_status,
+                    approval_status_name:this.convertEntityStatus(entity[index].approval_status),
                     is_default: entity[index].is_default,
                 });
             })
@@ -254,7 +256,9 @@ export class BuyerUserEntityRegister extends Component {
                 contact_email: this.state.email_address,
                 contact_mobile_no: "",
                 contact_office_no: "",
-                is_default: 1
+                is_default: 1,
+                approval_status:2,
+                approval_status_name:"Pending"
             }]
 
             this.setState({
@@ -603,8 +607,24 @@ export class BuyerUserEntityRegister extends Component {
 
     }
 
-
+    convertEntityStatus(value) {
+        if (value) {
+            if (value === "0") {
+                return "Reject"
+            }
+            else if (value === "1") {
+                return "Approved"
+            }
+            else {
+                return "Pending"
+            }
+        }
+        else {
+            return "Pending"
+        }
+    }
     acceptAddEntity(entityInfo) {
+        console.log(entityInfo);
         let item = {
             id: entityInfo.id ? entityInfo.id : "",
             company_name: entityInfo.company_name,
@@ -619,7 +639,9 @@ export class BuyerUserEntityRegister extends Component {
             is_default: entityInfo.is_default,
             user_id: this.state.id,
             main_id: entityInfo.main_id,
-            user_entity_id: entityInfo.user_entity_id
+            user_entity_id: entityInfo.user_entity_id,
+            approval_status :entityInfo.approval_status,
+            approval_status_name:this.convertEntityStatus(entityInfo.approval_status)
         };
 
         let entity = this.state.entity_list;
@@ -665,6 +687,7 @@ export class BuyerUserEntityRegister extends Component {
         this.entityItem.contact_mobile_no = '';
         this.entityItem.contact_office_no = '';
         this.entityItem.is_default = 0;
+        this.entityItem.approval_status = 2;
         this.entityItem.option = 'Insert';
 
         this.setState({
@@ -702,6 +725,7 @@ export class BuyerUserEntityRegister extends Component {
         this.entityItem.contact_email = item.contact_email;
         this.entityItem.contact_mobile_no = item.contact_mobile_no;
         this.entityItem.contact_office_no = item.contact_office_no;
+        this.entityItem.approval_status = item.approval_status;
         this.entityItem.option = 'update';
         if (index === 0) {
             this.entityItem.is_default = 1;
@@ -910,6 +934,7 @@ export class BuyerUserEntityRegister extends Component {
                                     <col width="10%" />
                                     <col width="10%" />
                                     <col width="10%" />
+                                    <col width="10%" />
                                 </colgroup>
                                 <thead>
                                     <tr>
@@ -922,6 +947,7 @@ export class BuyerUserEntityRegister extends Component {
                                         <th>Contact Email</th>
                                         <th>Contact Mobile No.</th>
                                         <th>Contact Office No.</th>
+                                        <th>Status</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -930,6 +956,7 @@ export class BuyerUserEntityRegister extends Component {
                         <div className="table-body">
                             <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                                 <colgroup>
+                                    <col width="10%" />
                                     <col width="10%" />
                                     <col width="10%" />
                                     <col width="10%" />
@@ -954,6 +981,7 @@ export class BuyerUserEntityRegister extends Component {
                                                 <td>{item.contact_email}</td>
                                                 <td>{item.contact_mobile_no}</td>
                                                 <td>{item.contact_office_no}</td>
+                                                <td>{item.approval_status_name}</td>
                                                 <td>
                                                     <div className="editSite">
                                                         <button className="entityApprove" disabled={this.state.disabled} onClick={this.edit_entity.bind(this, item, index)}>Edit</button>

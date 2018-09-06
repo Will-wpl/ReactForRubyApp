@@ -2,7 +2,8 @@ class Api::ConsumptionDetailsController < Api::BaseController
   before_action :set_consumption, only: %i[index save participate reject validate]
   def index
     unless params[:consumption_id].nil?
-      consumption = @consumption
+      consumption_id = params[:consumption_id].to_i
+      consumption = Consumption.find(consumption_id) # @consumption
       consumption_details = consumption.consumption_details
       consumption_details_new = []
       consumption_details.each { |detail| consumption_details_new.push(detail) if detail.draft_flag.blank?}
@@ -144,18 +145,25 @@ class Api::ConsumptionDetailsController < Api::BaseController
   def validate_single
     error_details = []
     detail = params[:detail]
-    consumption = Consumption.find(params[:consumption_id]) #@consumption
-    auction = Auction.find(consumption.auction_id)
+    current_consumption = Consumption.find(params[:consumption_id]) #@consumption
+    auction = Auction.find(current_consumption.auction_id)
+    consumptions = Consumption.mine(current_user.id)
     raise ActiveRecord::RecordNotFound if auction.nil?
     # Account must be unique within a RA.
     account_numbers = []
     premise_addresses = []
     auction.consumptions.each do |consumption|
       consumption.consumption_details.each do |consumption_detail|
-        account_numbers.push(consumption_detail.account_number) unless consumption_detail.account_number.blank?
-        if !consumption_detail.unit_number.blank? && !consumption_detail.postal_code.blank?
+        if !consumption_detail.unit_number.blank? && !consumption_detail.postal_code.blank? && consumption_detail.id.to_s != detail['id']
           premise_addresses.push({ 'unit_number' => consumption_detail.unit_number,
                                        'postal_code' => consumption_detail.postal_code})
+        end
+      end
+    end
+    consumptions.each do |consumption|
+      consumption.consumption_details.each do |consumption_detail|
+        if !consumption_detail.account_number.blank? && consumption_detail.id.to_s != detail['id']
+          account_numbers.push(consumption_detail.account_number)
         end
       end
     end
@@ -291,7 +299,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
   def consumption_details_before_yesterday(consumption_details_before_yesterday, auction, consumption)
     consumption_details_all_before_yesterday = []
     if consumption_details_before_yesterday.blank?
-      details = ConsumptionDetail.find_account_less_than_contract_start_date_last(auction.contract_period_start_date)
+      details = ConsumptionDetail.find_account_less_than_contract_start_date_last(auction.contract_period_start_date,current_user.id)
       details.each do |consumption_detail|
         user_attachments = UserAttachment.find_consumption_attachment_by_user_type(consumption_detail.id,
                                                                                    consumption.user_id,
@@ -322,7 +330,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
   def consumption_details_yesterday(consumption_details_yesterday, auction, consumption)
     consumption_details_all_yesterday = []
     if consumption_details_yesterday.blank?
-      details = ConsumptionDetail.find_account_equal_to_contract_start_date_last(auction.contract_period_start_date)
+      details = ConsumptionDetail.find_account_equal_to_contract_start_date_last(auction.contract_period_start_date, current_user.id)
       details.each do |consumption_detail|
         user_attachments = UserAttachment.find_consumption_attachment_by_user_type(consumption_detail.id,
                                                                                    consumption.user_id,
@@ -448,7 +456,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
       consumption_detail.peak_pct = detail['peak_pct']
       consumption_detail.peak = (detail['totals'].to_f * detail['peak_pct'].to_f / 100).round() unless detail['peak_pct'].blank?
       consumption_detail.off_peak = detail['totals'].to_i - consumption_detail.peak unless detail['peak_pct'].blank?
-      consumption_detail.contract_expiry = Date.parse(detail['contract_expiry'])
+      consumption_detail.contract_expiry = Date.parse(detail['contract_expiry']) unless detail['contract_expiry'].blank?
       consumption_detail.blk_or_unit = detail['blk_or_unit']
       consumption_detail.street = detail['street']
       consumption_detail.unit_number = detail['unit_number']

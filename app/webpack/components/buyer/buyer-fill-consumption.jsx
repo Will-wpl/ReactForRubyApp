@@ -13,6 +13,7 @@ export class FillConsumption extends Component {
         this.state = {
             text: "",
             submit_type: "",
+            delete_type: "",
             site_list: [],
             preDayList: [],
             preOtherList: [],
@@ -175,11 +176,11 @@ export class FillConsumption extends Component {
     edit_site(item, index, type) {
         this.setState({ account_detail: {} });
         this.accountItem = {};
-        this.accountItem.id = item.id;
+        this.accountItem.id = item.id !== null ? item.id : "";
         this.accountItem.consumption_id = this.state.consumption_id;
         this.accountItem.account_number = item.account_number;
         this.accountItem.existing_plan = ['SPS tariff', 'SPS wholesale', 'Retailer plan'];
-        this.accountItem.existing_plan_selected = item.existing_plan;
+        this.accountItem.existing_plan_selected = item.existing_plan !== null ? item.existing_plan : "";
         this.accountItem.contract_expiry = item.contract_expiry ? moment(item.contract_expiry) : "";
         this.accountItem.purchasing_entity = this.purchaseList;
         this.accountItem.purchasing_entity_selectd = item.company_buyer_entity_id;
@@ -213,7 +214,7 @@ export class FillConsumption extends Component {
     }
     //when user finished adding a new account, list page will add/update the new account information.
     doAddAccountAction(siteInfo) {
-        console.log(siteInfo)
+
         let item = {
             id: siteInfo.consumptionid ? siteInfo.consumptionid : "",
             consumption_id: siteInfo.consumption_id,
@@ -273,13 +274,15 @@ export class FillConsumption extends Component {
     remove_site(index, type) {
         if (this.props.onAddClick) {
             this.props.onAddClick();
-        }
+        }           //{ action: 'reject', type: 'user' }
+
         this.deleteNum = index;
         this.refs.Modal.showModal("comfirm");
-        this.setState({ text: "Are you sure you want to delete ?", submit_type: "delete" });
+        this.setState({ text: "Are you sure you want to delete ?", submit_type: "delete", delete_type: type });
     }
 
     dateCompare(arr) {
+     
         let count = 0;
         let startDate = moment(this.state.contact_start_date).format('YYYY-MM-DD');
         for (let i in arr) {
@@ -295,7 +298,7 @@ export class FillConsumption extends Component {
 
     doSave(type) {
         let makeData = {},
-            buyerlist = [];
+            buyerlist = [], yesterday = [], beforeYesterda = [];
         this.state.site_list.map((item, index) => {
             let siteItem = {
                 account_number: item.account_number,
@@ -316,9 +319,53 @@ export class FillConsumption extends Component {
             }
             buyerlist.push(siteItem);
         })
+        this.state.preDayList.map((item, index) => {
+            let siteItem = {
+                account_number: item.account_number,
+                existing_plan: item.existing_plan,
+                contract_expiry: item.contract_expiry ? moment(item.contract_expiry).format() : "",
+                company_buyer_entity_id: item.company_buyer_entity_id,
+                intake_level: item.intake_level,
+                contracted_capacity: item.contracted_capacity,
+                blk_or_unit: item.blk_or_unit,
+                street: item.street,
+                unit_number: item.unit_number,
+                postal_code: item.postal_code,
+                totals: item.totals,
+                peak_pct: item.peak_pct,
+                user_attachment_id: item.user_attachment_id,
+                attachment_ids: item.attachment_ids,
+                user_attachment: item.user_attachment
+            }
+            yesterday.push(siteItem);
+        })
+        this.state.preOtherList.map((item, index) => {
+            let siteItem = {
+                account_number: item.account_number,
+                existing_plan: item.existing_plan,
+                contract_expiry: item.contract_expiry ? moment(item.contract_expiry).format() : "",
+                company_buyer_entity_id: item.company_buyer_entity_id,
+                intake_level: item.intake_level,
+                contracted_capacity: item.contracted_capacity,
+                blk_or_unit: item.blk_or_unit,
+                street: item.street,
+                unit_number: item.unit_number,
+                postal_code: item.postal_code,
+                totals: item.totals,
+                peak_pct: item.peak_pct,
+                user_attachment_id: item.user_attachment_id,
+                attachment_ids: item.attachment_ids,
+                user_attachment: item.user_attachment
+            }
+            beforeYesterda.push(siteItem);
+        })
+
+
         makeData = {
             consumption_id: this.state.consumption_id,
             details: JSON.stringify(buyerlist),
+            details_yesterday: JSON.stringify(yesterday),
+            details_before_yesterday: JSON.stringify(beforeYesterda),
             contract_duration: $("#selDuration").val()
         }
         setBuyerParticipate(makeData, '/api/buyer/consumption_details/save').then((res) => {
@@ -366,12 +413,25 @@ export class FillConsumption extends Component {
         } else if (this.state.submit_type === "Participate") { //do Participate
             this.doSave('participate');
         } else if (this.state.submit_type === "delete") {
-            const site_listObj = this.state.site_list;
-            site_listObj.splice(this.deleteNum, 1);
-            this.setState({ site_list: site_listObj });
-            setTimeout(() => {
-                this.doSave('delete');
-            }, 500);
+            if (this.state.delete_type === "preDay") {
+                const site_listObj = this.state.preDayList;
+                site_listObj.splice(this.deleteNum, 1);
+                this.setState({ preDayList: site_listObj });
+            }
+            else if (this.state.delete_type === "preOthers") {
+                const site_listObj = this.state.preOtherList;
+                site_listObj.splice(this.deleteNum, 1);
+                this.setState({ preOtherList: site_listObj });
+            }
+            else {
+                const site_listObj = this.state.site_list;
+                site_listObj.splice(this.deleteNum, 1);
+                this.setState({ site_list: site_listObj });
+            }
+
+            // setTimeout(() => {
+            //     this.doSave('delete');
+            // }, 500);
         }
     }
 
@@ -390,28 +450,43 @@ export class FillConsumption extends Component {
     // validate the page required field and  contact expiry date.
     checkSuccess(event) {
         event.preventDefault();
-        let count = this.dateCompare(this.state.site_list);
-        this.setState({
-            dateIssuecount: count
-        })
-        if (count > 0) {
-            if ($("#div_warning").is(":visible")) {
-                if ($("#chk_Warning").is(":checked")) {
-                    this.passValidateSave();
-                }
-                else {
-                    return false;
+        let isNotNull = this.validateListComplete();
+        if (isNotNull) {
+            let totalList=this.state.site_list.concat(this.state.preDayList).concat(this.state.preOtherList);
+            let count = this.dateCompare(totalList);
+
+
+
+            this.setState({
+                dateIssuecount: count
+            })
+            if (count > 0) {
+                if ($("#div_warning").is(":visible")) {
+                    if ($("#chk_Warning").is(":checked")) {
+                        this.passValidateSave();
+                    }
+                    else {
+                        return false;
+                    }
                 }
             }
+            else {
+                this.passValidateSave();
+            }
         }
-        else {
-            this.passValidateSave();
+        else
+        {
+            this.setState({
+                text:"Please complete the consumption account information."
+            })
+            this.refs.Modal.showModal()
         }
+
     }
     validateListComplete() {
         let flag = true;
         this.state.preOtherList.map(item => {
-            if (item.existing_plan === "") {
+            if (item.existing_plan === "" || item.existing_plan === null) {
                 flag = false;
                 // break;
             }
@@ -488,7 +563,7 @@ export class FillConsumption extends Component {
                         {/* one day  */}
                         <h4 className="col-sm-12 u-mb2">Last Status of Participation : {this.status}</h4>
 
-                       <h4 className="col-sm-12 u-mb2">Accounts on Continuous Purchase</h4>
+                        <h4 className="col-sm-12 u-mb2">Accounts on Continuous Purchase</h4>
                         <span className="particiption-note">Note: Please update Consumption Details if there is significant change in your account's consumption since your last participation.</span>
                         <div className="col-sm-12 col-md-12">
                             <div className="table-head">
@@ -574,7 +649,7 @@ export class FillConsumption extends Component {
                                 </table>
                             </div>
                         </div>
-                       
+
 
 
                         <h4 className="col-sm-12 u-mb2 separate">Accounts with Purchase Gap</h4>
@@ -590,7 +665,7 @@ export class FillConsumption extends Component {
                                         <col width="10%" />
                                         <col width="10%" />
                                         <col width="10%" />
-                                        <col width="20%" /> 
+                                        <col width="20%" />
                                         <col width="10%" />
                                     </colgroup>
                                     <thead>
@@ -662,7 +737,7 @@ export class FillConsumption extends Component {
                                 </table>
                             </div>
                         </div>
-                        
+
                         <h4 className="col-sm-12 u-mb2 separate">New Accounts</h4>
                         <div className="col-sm-12 col-md-12">
                             <div className="table-head">
@@ -712,7 +787,7 @@ export class FillConsumption extends Component {
                                                 return <tr key={index}>
                                                     <td>{item.account_number} </td>
                                                     <td>{item.existing_plan}</td>
-                                                    <td>{item.contract_expiry  ? moment(item.contract_expiry).format('YYYY-MM-DD') : "—"}</td>
+                                                    <td>{item.contract_expiry ? moment(item.contract_expiry).format('YYYY-MM-DD') : "—"}</td>
                                                     <td>{this.getPurchase(item.company_buyer_entity_id)} </td>
                                                     <td>{item.intake_level}</td>
                                                     <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>

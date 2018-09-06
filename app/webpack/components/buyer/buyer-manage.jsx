@@ -236,13 +236,16 @@ export class BuyerUserManage extends Component {
                     this.setState({
                         submitStatus: false
                     })
+                    this.tab("entity");
                 }
                 else {
+
                     this.setState({
                         submitStatus: true
                     })
+                    location.href = "/admin/users/buyers";
                 }
-                location.refresh();
+                
             })
         }
         else if (obj.type === 'deleteBuyer') {
