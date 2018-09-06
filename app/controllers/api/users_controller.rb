@@ -138,7 +138,7 @@ class Api::UsersController < Api::BaseController
       end
       search_where_array = set_search_params(search_params)
       if is_deleted
-        users = User.buyers.where(search_where_array)
+        users = User.buyers_deleted.where(search_where_array)
                     .page(params[:page_index]).per(params[:page_size])
       else
         users = User.buyers.where(search_where_array)
@@ -166,13 +166,12 @@ class Api::UsersController < Api::BaseController
     if params.key?(:page_size) && params.key?(:page_index)
       search_where_array = get_search_where_array(params)
       if is_deleted
-        users = User.retailers.where(search_where_array)
+        users = User.retailers_deleted.where(search_where_array)
                     .page(params[:page_index]).per(params[:page_size])
       else
         users = User.retailers.where(search_where_array)
                     .page(params[:page_index]).per(params[:page_size])
       end
-
       total = users.total_count
     else
       users = User.retailers
