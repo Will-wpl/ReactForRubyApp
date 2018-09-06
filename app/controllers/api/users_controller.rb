@@ -1,13 +1,29 @@
 class Api::UsersController < Api::BaseController
   # user.approval_status['0', '1', '2'] '0':rejected '1':approved '2':pending
+
+  def del_retailers
+    result = get_retailers(params,true)
+    render json: result, status: 200
+  end
+
   def retailers
+    result = get_retailers(params,false)
+    render json: result, status: 200
+  end
+
+  def del_buyers
+    result = get_buyers(params, true)
+    render json: result, status: 200
+  end
+
+  def retailers_deleted
     if params.key?(:page_size) && params.key?(:page_index)
       search_where_array = get_search_where_array(params)
-      users = User.retailers.where(search_where_array)
+      users = User.retailers_deleted.where(search_where_array)
                   .page(params[:page_index]).per(params[:page_size])
       total = users.total_count
     else
-      users = User.retailers
+      users = User.retailers_deleted
       total = users.count
     end
     headers = [
@@ -26,6 +42,11 @@ class Api::UsersController < Api::BaseController
 
   # user.user_detail.consumer_type['0', '1'] '0':company '1':individual
   def buyers
+    result = get_buyers(params, false)
+    render json: result, status: 200
+  end
+
+  def buyers_deleted
     if params.key?(:page_size) && params.key?(:page_index)
       search_params = reject_params(params, %w[controller action sort_by])
       if !params[:name].nil? && params[:consumer_type][0] == '2'
@@ -34,11 +55,11 @@ class Api::UsersController < Api::BaseController
         search_params = search_params.merge(company_name)
       end
       search_where_array = set_search_params(search_params)
-      users = User.buyers.where(search_where_array)
+      users = User.buyers_deleted.where(search_where_array)
                   .page(params[:page_index]).per(params[:page_size])
       total = users.total_count
     else
-      users = User.buyers
+      users = User.buyers_deleted
       total = users.count
     end
     headers = get_buyer_headers(params)
@@ -103,7 +124,73 @@ class Api::UsersController < Api::BaseController
     end
     render json: { result: 'success' }, status: 200
   end
+
+
   protected
+
+  def get_buyers(params, is_deleted)
+    if params.key?(:page_size) && params.key?(:page_index)
+      search_params = reject_params(params, %w[controller action sort_by])
+      if !params[:name].nil? && params[:consumer_type][0] == '2'
+        company_name = { company_name: params[:name] }
+        search_params = reject_params(search_params, %w[name])
+        search_params = search_params.merge(company_name)
+      end
+      search_where_array = set_search_params(search_params)
+      if is_deleted
+        users = User.buyers_deleted.where(search_where_array)
+                    .page(params[:page_index]).per(params[:page_size])
+      else
+        users = User.buyers.where(search_where_array)
+                    .page(params[:page_index]).per(params[:page_size])
+      end
+
+      total = users.total_count
+    else
+      users = User.buyers
+      total = users.count
+    end
+    headers = get_buyer_headers(params)
+    actions = [{ url: '/admin/users/:id/manage', name: 'Manage', icon: 'manage' }]
+    data = get_data(params, headers, users)
+    data = data.each do |user|
+      user.consumer_type = user.consumer_type == '2' ? 'Company' : 'Individual'
+      user.approval_status = get_approval_status_string(user)
+    end
+    bodies = { data: data, total: total }
+    result = { headers: headers, bodies: bodies, actions: actions }
+    result
+  end
+
+  def get_retailers(params, is_deleted)
+    if params.key?(:page_size) && params.key?(:page_index)
+      search_where_array = get_search_where_array(params)
+      if is_deleted
+        users = User.retailers_deleted.where(search_where_array)
+                    .page(params[:page_index]).per(params[:page_size])
+      else
+        users = User.retailers.where(search_where_array)
+                    .page(params[:page_index]).per(params[:page_size])
+      end
+      total = users.total_count
+    else
+      users = User.retailers
+      total = users.count
+    end
+    headers = [
+        { name: 'Company Name', field_name: 'company_name' },
+        { name: 'License Number', field_name: 'company_license_number' },
+        { name: 'Status', field_name: 'approval_status' }
+    ]
+    actions = [{ url: '/admin/users/:id/manage', name: 'Manage', icon: 'manage' }]
+    users = get_retailer_order_list(params, headers, users)
+    data = users.each do |user|
+      user.approval_status = get_approval_status_string(user)
+    end
+    bodies = { data: data, total: total }
+    result = { headers: headers, bodies: bodies, actions: actions }
+    result
+  end
 
   # Remove User
   # Params:

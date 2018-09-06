@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import { Modal } from '../shared/show-modal';
 import { DoFillConsumption } from './fill-consumption'
-
+import marketImg from '../../images/marketinsights.png'
 import { getBuyerParticipate, setBuyerParticipate } from '../../javascripts/componentService/common/service';
 import moment from 'moment';
 
@@ -282,7 +282,7 @@ export class FillConsumption extends Component {
     }
 
     dateCompare(arr) {
-     
+
         let count = 0;
         let startDate = moment(this.state.contact_start_date).format('YYYY-MM-DD');
         for (let i in arr) {
@@ -452,7 +452,7 @@ export class FillConsumption extends Component {
         event.preventDefault();
         let isNotNull = this.validateListComplete();
         if (isNotNull) {
-            let totalList=this.state.site_list.concat(this.state.preDayList).concat(this.state.preOtherList);
+            let totalList = this.state.site_list.concat(this.state.preDayList).concat(this.state.preOtherList);
             let count = this.dateCompare(totalList);
 
 
@@ -474,10 +474,9 @@ export class FillConsumption extends Component {
                 this.passValidateSave();
             }
         }
-        else
-        {
+        else {
             this.setState({
-                text:"Please complete the consumption account information."
+                text: "Please complete the consumption account information."
             })
             this.refs.Modal.showModal()
         }
@@ -538,30 +537,40 @@ export class FillConsumption extends Component {
         return (
             <div>
                 <h1>Buyer Participation</h1>
-                <h4 className="col-sm-12 u-mb2">Invitation to RA: {this.state.name} on {moment(this.state.time).format('D MMM YYYY hh:mm a')}</h4>
-                <h4 className="col-sm-12 u-mb2">Contract Start Date: {moment(this.state.contact_start_date).format('D MMM YYYY')}</h4>
-                <h4 >
-                    <div className="row col-sm-12 u-mb2">
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td>Purchase Duration : </td>
-                                    <td> <select id="selDuration" style={{ 'width': '200px', marginLeft: "5px" }} onChange={this.durationChange.bind(this)} value={this.state.contract_duration}>
-                                        {
-                                            this.state.durationList.map(item => {
-                                                return <option key={item.contract_duration} value={item.contract_duration}>{item.contract_duration + " months"}</option>
-                                            })
-                                        }
-                                    </select></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </h4>
+                <table className="consumption_table_top" cellPadding="0" cellSpacing="0">
+                    <tbody>
+                        <tr>
+                            <td style={{ width: "80%" }}>  <h4 className="col-sm-12 u-mb2">Invitation to RA: {this.state.name} on {moment(this.state.time).format('D MMM YYYY hh:mm a')}</h4></td>
+                            <td style={{ width: "20%" }} rowSpan="3">
+                                <img  src={marketImg} className="marketImg"></img>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><h4 className="col-sm-12 u-mb2">Contract Start Date: {moment(this.state.contact_start_date).format('D MMM YYYY')}</h4></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Purchase Duration : <select id="selDuration" style={{ width: '200px', marginLeft: "5px", display: "inline-block" }} onChange={this.durationChange.bind(this)} value={this.state.contract_duration}>
+                                    {
+                                        this.state.durationList.map(item => {
+                                            return <option key={item.contract_duration} value={item.contract_duration}>{item.contract_duration + " months"}</option>
+                                        })
+                                    }
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h4 className="col-sm-12 u-mb2" style={{ "paddingTop": "15px" }}>Last Status of Participation : {this.status}</h4>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
                 <form name="buyer_form" method="post" onSubmit={this.checkSuccess.bind(this)}>
                     <div className="u-grid buyer mg0">
                         {/* one day  */}
-                        <h4 className="col-sm-12 u-mb2">Last Status of Participation : {this.status}</h4>
+
 
                         <h4 className="col-sm-12 u-mb2">Accounts on Continuous Purchase</h4>
                         <span className="particiption-note">Note: Please update Consumption Details if there is significant change in your account's consumption since your last participation.</span>
