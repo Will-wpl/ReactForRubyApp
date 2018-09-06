@@ -8,7 +8,7 @@ export default class EmailTemplates extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            text: "",
+            text: "",size:'',
             email_list: [],template_type:'',template_id:'',
             listdetail: {},la_list:[{subject:"LA entity1",id:1},{subject:"LA entity2",id:2}],advisory_list:[{subject:"Advisory1",id:3}],
             uploadUrl: '/api/admin/user_attachments?file_type=',
@@ -37,13 +37,13 @@ export default class EmailTemplates extends Component {
     showEmail(id,type) {
         getEmailListItem(id,type).then(res => {
             console.log(res);
-            this.setState({ listdetail: res, text: '',template_type:type,template_id:id });
+            this.setState({ listdetail: res, text: '',template_type:type,template_id:id,size:'big' });
             this.refs.Modal.showModal('comfirm', res, type=='la' || type=='advisory'?'email_template_la':'email_template');
         })
     }
     changeEmail(obj) {
         getEmailItemUpdate(obj,this.state.template_type,this.state.template_id).then(res => {
-            this.setState({ text: "Email Update Successful!" })
+            this.setState({ text: "Email Update Successful!",size:'small' })
             setTimeout(() => {
                 this.refs.Modal.showModal();
             }, 200)
@@ -90,7 +90,7 @@ export default class EmailTemplates extends Component {
                         </div>
                     </div>
                 </div>
-                <Modal formSize="big" modalSize="big" text={this.state.text} acceptFunction={this.changeEmail.bind(this)} listdetail={this.state.listdetail}  listdetailtype="Email Template" ref="Modal" />
+                <Modal formSize={this.state.size} modalSize={this.state.size} text={this.state.text} acceptFunction={this.changeEmail.bind(this)} listdetail={this.state.listdetail}  listdetailtype="Email Template" ref="Modal" />
             </div>
 
         )
