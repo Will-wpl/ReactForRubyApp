@@ -33,7 +33,7 @@ class ConsumptionDetail < ApplicationRecord
 
 
   def self.find_account_less_than_contract_start_date(search_date, sort_by)
-    default_sort = "cdf.entity_id ASC, cdf.contract_period_end_date DESC, cdf.entity_name ASC"
+    default_sort = "cdf.contract_period_end_date DESC, cdf.entity_id ASC, cdf.entity_name ASC"
     sort_by = default_sort if sort_by.nil?
     Consumption.find_by_sql ["SELECT cdf.*
                               FROM (SELECT cda.*, row_number()
