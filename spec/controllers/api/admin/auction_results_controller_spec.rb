@@ -5,7 +5,7 @@ RSpec.describe Api::Admin::AuctionResultsController, type: :controller do
   let!(:retailer_user) { create(:user, :with_retailer) }
   let!(:buyer_user){ create(:user, :with_buyer, :with_company_buyer) }
   let!(:consumption) { create(:consumption, :init, user: buyer_user, auction: auction, participation_status: '1', acknowledge: '1' ) }
-  let!(:result) { create(:auction_result, auction: auction, user_id: retailer_user.id) }
+  let!(:result) { create(:auction_result, auction: auction, user_id: retailer_user.id, status: '1') }
 
   context 'admin user' do
     before { sign_in create(:user, :with_admin) }
@@ -71,7 +71,7 @@ RSpec.describe Api::Admin::AuctionResultsController, type: :controller do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
           expect(hash['headers'].size).to eq(11)
-          expect(hash['bodies']['data'].size).to eq(2)
+          expect(hash['bodies']['data'].size).to eq(1)
         end
       end
     end
