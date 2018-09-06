@@ -273,6 +273,8 @@ Rails.application.routes.draw do
       collection do
         get 'retailers'
         get 'buyers'
+        get 'del_retailers'
+        get 'del_buyers'
         patch 'approval'
       end
     end
