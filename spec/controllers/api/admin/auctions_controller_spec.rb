@@ -48,9 +48,24 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       let!(:consumption_htl2) { create(:consumption_detail, :for_htl ,account_number: 'bbb' , consumption_id: consumption_a2.id, company_buyer_entity_id: entity2.id) }
       let!(:consumption_eht2) { create(:consumption_detail, :for_eht ,account_number: 'ccc' , consumption_id: consumption_a2.id, company_buyer_entity_id: entity2.id) }
 
-      context 'got accounts' do
+      context 'got base accounts' do
         def do_request
           get :filter_date, params: { date: '2022-01-01' }
+        end
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash_body = JSON.parse(response.body)
+          expect(hash_body['accounts'].size).to eq(4)
+          expect(hash_body['account_ids'].include?(consumption_lt.id)).to eq(false)
+          expect(hash_body['account_ids'].include?(consumption_lt2.id)).to eq(true)
+        end
+      end
+
+      context 'got sort accounts' do
+        def do_request
+          sort_by = ["ra_id", 'asc']
+          get :filter_date, params: { date: '2022-01-01', sort_by: sort_by.to_json }
         end
         before { do_request }
         it 'success' do

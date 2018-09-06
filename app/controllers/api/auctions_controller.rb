@@ -19,8 +19,11 @@ class Api::AuctionsController < Api::BaseController
     accounts = []
     account_ids = []
     buyer_ids = []
-
-    details = ConsumptionDetail.find_account_less_than_contract_start_date(search_start_date)
+    unless params[:sort_by].nil?
+      sort_by = JSON.parse(params[:sort_by])
+      sort_by = "cdf.#{sort_by[0]} #{sort_by[1]}"
+    end
+    details = ConsumptionDetail.find_account_less_than_contract_start_date(search_start_date, sort_by)
     details.each do |detail|
       account_ids.push(detail.id)
       buyer_ids.push(detail.buyer_id) unless buyer_ids.include?(detail.buyer_id)
