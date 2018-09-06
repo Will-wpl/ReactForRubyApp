@@ -675,36 +675,36 @@ export class CreateNewRA extends Component {
             buyer_type: this.state.single_multiple
         }
         if (obj.method === "save") {
-            if (obj.action === "proceed") {
+            //if (obj.action === "proceed") {
                 deleteSelectedBuyer(param).then(res => {
                     if (res.status === "1") {
                         this.doSave();
                     }
                 })
-            }
-            else {
+            //}
+            //else {
 
                 this.setState({
                     disabled: false,
                     submit_btn: true
                 })
 
-            }
+            //}
         }
         if (obj.method === "next") {
-            if (obj.action === "proceed") {
+            //if (obj.action === "proceed") {
                 deleteSelectedBuyer(param).then(res => {
                     if (res.status === "1") {
                         window.location.href = `/admin/auctions/${this.auction.id}/invitation`;
                     }
                 })
-            }
-            else {
+            //}
+            //else {
                 this.setState({
                     disabled: false,
                     submit_btn: true
                 })
-            }
+            //}
         }
     }
     render() {
