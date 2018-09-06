@@ -9,7 +9,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
       consumption_details.each { |detail| consumption_details_new.push(detail) if detail.draft_flag.blank?}
       auction = consumption.auction
       contract_duration = auction.auction_contracts.select('contract_duration').sort_by {|contract| contract.contract_duration.to_i}
-      buyer_entities = CompanyBuyerEntity.find_by_status_user(CompanyBuyerEntity::ApprovalStatusApproved, consumption.user_id).order(is_default: :desc)
+      buyer_entities = CompanyBuyerEntity.find_by_user(consumption.user_id).order(is_default: :desc)
       if auction.auction_contracts.blank?
         buyer_revv_tc_attachment = AuctionAttachment.find_by(auction_id: consumption.auction_id, file_type: 'buyer_tc_upload')
         seller_buyer_tc_attachment = nil
