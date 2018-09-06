@@ -58,12 +58,22 @@ class Api::ConsumptionDetailsController < Api::BaseController
         consumption_details_all.push(final_detail)
       end
 
+      # get yesterday consumption details
       consumption_details_yesterday = consumption.consumption_details.where('draft_flag = ?', 1)
       consumption_details_all_yesterday = consumption_details_yesterday(consumption_details_yesterday, auction, consumption)
 
+      # get before yesterday consumption details
       consumption_details_before_yesterday = consumption.consumption_details.where('draft_flag = ?', 2)
       consumption_details_all_before_yesterday = consumption_details_before_yesterday(consumption_details_before_yesterday, auction, consumption)
-
+      removed_consumption_details = []
+      consumption_details_all_before_yesterday.each do |consumption_detail|
+        if consumption_details_all_yesterday.any?{ |x| x.account_number == consumption_detail.account_number }
+          removed_consumption_details.push(consumption_detail)
+        end
+      end
+      removed_consumption_details.each do |consumption_detail|
+        consumption_details_all_before_yesterday.delete(consumption_detail)
+      end
       render json: { consumption_details: consumption_details_all,
                      consumption_details_last_day: consumption_details_all_yesterday,
                      consumption_details_before_yesterday: consumption_details_all_before_yesterday,

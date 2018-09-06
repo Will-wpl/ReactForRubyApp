@@ -32,6 +32,8 @@ class Api::Admin::UsersController < Api::UsersController
   #   approved -> Indicate this is approval operation if this param is not nil. Otherwise, it is reject operation.
   #   comment -> Indicate a comment to this operation.
   def approval_buyer
+    target_user = User.find(params[:user_id])
+    original_status = target_user.approval_status
     result_json = approval_user
     if params[:approved].blank?
       # Update entity approval status to approved
@@ -42,7 +44,10 @@ class Api::Admin::UsersController < Api::UsersController
       entites.each { |x| entity_user_ids.push(x.user_entity_id) unless x.user_entity_id.blank? }
       User.where('id in (?)', entity_user_ids).delete_all
     end
-    # approval_status = params[:approved].blank? ? User::ApprovalStatusReject : User::ApprovalStatusApproved
+    approval_status = params[:approved].blank? ? User::ApprovalStatusReject : User::ApprovalStatusApproved
+    if approval_status == User::ApprovalStatusApproved && original_status == User::ApprovalStatusReject
+      CompanyBuyerEntity.find_by_user(params[:user_id]).update(approval_status: CompanyBuyerEntity::ApprovalStatusPending)
+    end
     # company_buyer_entity_ids = []
     # CompanyBuyerEntity.find_by_user(params[:user_id]).each { |x| company_buyer_entity_ids.push(x.id) if x.is_default != 1 && x.approval_status = CompanyBuyerEntity::ApprovalStatusPending}
     # if approval_status == User::ApprovalStatusApproved
