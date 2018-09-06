@@ -776,14 +776,17 @@ export class Modal extends React.Component {
                 $(".email_body").css({ "height": "170px" });
             }
         }
-
-        $('.validate_message').find('div').each(function () {
-            let className = $(this).attr('class');
-            if (className === 'errormessage') {
-                let divid = $(this).attr("id");
-                $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
-            }
-        })
+        if(this.props.listdetailtype==="entity_detail"||this.props.listdetailtype==="consumption_detail")
+        {
+            $('.validate_message').find('div').each(function () {
+                let className = $(this).attr('class');
+                if (className === 'errormessage') {
+                    let divid = $(this).attr("id");
+                    $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
+                }
+            })
+        }
+        
     }
 
     bigModal(type) {
