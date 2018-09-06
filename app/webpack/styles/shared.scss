@@ -1310,10 +1310,21 @@ width: "70%"; float: "left";padding:5px;
 }
 .particiption-note
 {
-  font-size: 12px;
+  font-size: 14px;
   margin-bottom: 15px;
 }
 
 .admin_expiry{
   button{ margin-left: 15px;  }
+}
+.consumption_table_top{
+  width: 100%;
+  border: 0px ;
+  td{
+    height: 40px;
+  }
+  img{
+    widows: 50px;
+    height: 140px;
+  }
 }

@@ -398,10 +398,10 @@ export class RetailerRegister extends Component {
                         $('#license_number_repeat').removeClass('errormessage').addClass('isPassValidate');
                         this.refs.Modal.showModal();
                         this.setState({
-                            disabled:true,
+                            disabled: true,
                             text: "Your details have been successfully saved. "
                         });
-
+                        
                     })
                 }
                 else {
