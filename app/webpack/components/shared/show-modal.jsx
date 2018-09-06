@@ -904,20 +904,20 @@ export class Modal extends React.Component {
             } else if (this.props.listdetailtype === "Email Template") {
                 if (this.props.text === '') {
                     showDetail = <div>
-                        {this.state.strtype == "email_template_la" ? '' : <div className="lm--formItem lm--formItem--inline string" style={{ marginLeft: "-15%" }}>
-                            <label className="lm--formItem-left lm--formItem-label string required">
+                        {this.state.strtype == "email_template_la" ? '' : <div className="lm--formItem lm--formItem--inline string">
+                            <label className="lm--formItem-label string required">
                                 Subject:
                             </label>
-                            <div className="lm--formItem-right lm--formItem-control">
+                            <div className="lm--formItem-control">
                                 <input type="text" name="email_subject" value={this.state.email_subject} onChange={this.Change.bind(this, 'email_subject')} disabled={this.state.disabled} ref="email_subject" maxLength="50" required aria-required="true" />
                             </div>
                         </div>}
-                        <div className="lm--formItem lm--formItem--inline string" style={{ marginLeft: "-15%" }}>
-                            <label className="lm--formItem-left lm--formItem-label string required">
+                        <div className="lm--formItem lm--formItem--inline string">
+                            <label className="lm--formItem-label string required">
                                 Body:
                             </label>
-                            <div className="lm--formItem-right lm--formItem-control">
-                                <div name="email_body" className="email_body" id={"email_body"} style={{ height: "330px" }} onChange={this.Change.bind(this, 'email_body')} disabled={this.state.disabled} ref="email_body" required aria-required="true" />
+                            <div className="lm--formItem-control">
+                                <div name="email_body" className="email_body" id={"email_body"} style={this.state.strtype == "email_template_la"?{ height: "425px" }:{ height: "360px" }} onChange={this.Change.bind(this, 'email_body')} disabled={this.state.disabled} ref="email_body" required aria-required="true" />
                             </div>
                         </div>
                     </div>
@@ -1378,7 +1378,7 @@ export class Modal extends React.Component {
         }
         return (
             this.props.formSize === "big" ?
-                <div id="modal_main" className={this.state.modalshowhide} style={this.props.modalSize=="big"?{ width: "85%", height:"500px", top: "20%",marginLeft: "-42.5%"}:{ width: "700px", top: "20%",marginLeft: "-350px"}} >
+                <div id="modal_main" className={this.state.modalshowhide} style={this.props.modalSize=="big"?{ width: "98%", height:"500px", top: "20%",marginLeft: "-49%"}:{ width: "700px", top: "20%",marginLeft: "-350px"}} >
                     <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
                     <div className="modal_detail model_detail_formHeight">
                         <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
