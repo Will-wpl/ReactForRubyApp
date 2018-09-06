@@ -36,6 +36,7 @@ export class BuyerUserManage extends Component {
             messageAttachmentUrl: "",
             usedEntityIdArr: [],
             submitStatus: false,
+            buyerApproveStatus: 3,
             ismain: false, entityIndex: 0, entityId: 0, loglist: []
 
         }
@@ -67,6 +68,7 @@ export class BuyerUserManage extends Component {
     setDefaultValue(param) {
         this.setBuyerInfo(param);
         this.setEntityInfo(param);
+        this.setDefaultTab(param);
     }
     setBuyerInfo(param) {
         let fileObj, entityObj;
@@ -87,13 +89,14 @@ export class BuyerUserManage extends Component {
                 agree_seller_buyer: item.agree_seller_buyer ? item.agree_seller_buyer : '0',
                 agree_buyer_revv: item.agree_buyer_revv ? item.agree_buyer_revv : '0',
                 has_tenants: item.has_tenants ? item.has_tenants : '1',
-                approveStatus: (item.approval_status === "3" || item.approval_status === "5") ? true : false,
+
                 user_company_name: item.company_name ? item.company_name : '',
                 user_company_uen: item.company_unique_entity_number ? item.company_unique_entity_number : '',
                 user_company_address: item.company_address ? item.company_address : '',
+                buyerApproveStatus: item.approval_status,
+                approveStatus: (item.approval_status === "3" || item.approval_status === "5") ? true : false,
                 status: setApprovalStatus(item.approval_status, item.approval_date_time === null ? item.created_at : item.approval_date_time),
                 submitStatus: item.approval_status !== "1" ? true : false
-
             })
 
             $('#buyer_management').val(this.state.has_tenants);
@@ -159,6 +162,8 @@ export class BuyerUserManage extends Component {
                 loglist: param.user_logs
             })
         }
+
+        console.log(this.state.buyerApproveStatus);
     }
     setEntityInfo(param) {
         if (param.buyer_entities) {
@@ -173,8 +178,40 @@ export class BuyerUserManage extends Component {
         }
     }
 
-    checkRejectAction() { //when admin reject the request 
+    setDefaultTab(param) {
+        let buyer = 0, entity = 0;
+        if (param.user_base_info) {
+            let item = param.user_base_info;
+            if (item.approval_status === "2" || item.approval_status === "3" || item.approval_status === "5") { //judge buyer approve_status
+                buyer = 0;
+            }
+            else {
+                buyer = 1;
+            }
+        }
+        if (param.buyer_entities) {  //judge entity approve_status,if have any one is pending ,should display entity page
+            let entityList = param.buyer_entities;
+            entityList.map(item => {
+                if (item.approval_status === "3" || item.approval_status === "2") {
+                    entity++;
+                }
+            })
+        }
 
+        if (buyer === 0) {
+            this.tab("base");
+        }
+        else {
+            if (entity > 0) {
+                this.tab("entity");
+            }
+            else {
+                this.tab("base");
+            }
+        }
+    }
+
+    checkRejectAction() { //when admin reject the request 
         let flag = true;
         let arr = validator_Object(this.state, this.validatorComment);
         if (arr) {
@@ -234,22 +271,30 @@ export class BuyerUserManage extends Component {
                 comment: this.state.comment,
                 approved: obj.action === 'reject' ? "" : 1
             };
+
+            if (this.state.buyerApproveStatus==="0")
+            {
+                this.state.entity_list.map((item)=>{
+                    item.approval_status="2";
+                    item.approval_status_name="Pending";
+                })
+            }
             approveBuyerUser(param).then(res => {
-                if (obj.action !== 'reject') {
+                if (obj.action !== 'reject') { //buyer approve
                     this.setState({
                         submitStatus: false
                     })
+
                     this.tab("entity");
                 }
-                else {
-
+                else { //buyer reject
                     this.setState({
                         submitStatus: true
                     })
                     location.href = "/admin/users/buyers";
                 }
-
             })
+
         }
         else if (obj.type === 'deleteBuyer') {
             let param = {
@@ -259,7 +304,7 @@ export class BuyerUserManage extends Component {
                 location.href = "/admin/users/buyers";
             })
         }
-        else {
+        else { //entity  
             let paramArr = [];
             this.state.entity_list.map((item) => {
                 let entityId = item.id;
@@ -656,7 +701,7 @@ export class BuyerUserManage extends Component {
                                                 <td>{this.state.submitStatus ? true : (item.isApproved ? true : false)}
                                                     <button className="entityApprove" disabled={this.state.submitStatus ? true : ((item.approval_status === "2" || item.approval_status === null) ? false : (item.isApproved ? true : false))} onClick={this.entity_approve.bind(this, item, index)}>Approve</button>
                                                     <button className="entityApprove" disabled={this.state.submitStatus ? true : ((item.approval_status === "2" || item.approval_status === null) ? false : (!item.isApproved ? true : false))} onClick={this.entity_reject.bind(this, item, index)}>Reject</button>
-                                                    <button className="entityApprove" disabled={this.state.submitStatus ? true : (item.isApproved ? true : false)} onClick={this.view_entity_log.bind(this, item)}>View Log</button>
+                                                    <button className="entityApprove" disabled={this.state.approveStatus} onClick={this.view_entity_log.bind(this, item)}>View Log</button>
                                                 </td>
                                             </tr>
                                         })
