@@ -321,7 +321,7 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
         end
       end
 
-      context 'Reject buyer entity' do
+      context 'Pending buyer entity' do
         def do_request
           buyer_entity_1 = CompanyBuyerEntity.new
           buyer_entity_1.company_name = 'Test_Company_Name_1'
@@ -341,7 +341,7 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
         it 'success' do
           expect(response).to have_http_status(:ok)
           hash = JSON.parse(response.body)
-          expect(hash['company_buyer_entities'][0]['approval_status']).to eq('0')
+          expect(hash['company_buyer_entities'][0]['approval_status']).to eq('2')
         end
       end
     end
