@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 import { validateConsumptionDetailRepeat } from './../../javascripts/componentService/common/service';
-import { validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum, removePostCode,validatePostCode } from '../../javascripts/componentService/util';
+import { validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum, removePostCode, validatePostCode } from '../../javascripts/componentService/util';
 //共通弹出框组件
 import { UploadFile } from '../shared/upload';
 import E from 'wangeditor'
@@ -38,6 +38,7 @@ export class Modal extends React.Component {
         let fileObj;
         fileObj = this.state.fileData;
         if (next.consumptionAccountItem) {
+            console.log(next.consumptionAccountItem)
             this.setState({
                 consumption_id: next.consumptionAccountItem.consumption_id,
                 id: next.consumptionAccountItem.id,
@@ -276,9 +277,9 @@ export class Modal extends React.Component {
 
     }
 
- 
-   
-   
+
+
+
     Add() {
         if (this.props.listdetailtype === 'entity_detail') {
             this.checkEntitySuccess();
@@ -1106,9 +1107,8 @@ export class Modal extends React.Component {
                 </table>
             }
             if (this.props.listdetailtype === "market-insight") {
-                showDetail = <div>
-                    {this.state.advisory}
-                </div>
+                $("#advisoryDiv").html(this.state.advisory)
+                showDetail = <div id="advisoryDiv" style={{height:"220px"}}> </div>
             }
 
             if (this.props.listdetailtype === 'entity_detail') {
