@@ -38,7 +38,6 @@ export class Modal extends React.Component {
         let fileObj;
         fileObj = this.state.fileData;
         if (next.consumptionAccountItem) {
-            console.log(next.consumptionAccountItem)
             this.setState({
                 consumption_id: next.consumptionAccountItem.consumption_id,
                 id: next.consumptionAccountItem.id,
@@ -420,7 +419,7 @@ export class Modal extends React.Component {
             consumption_id: this.state.consumption_id,
             id: this.state.id,
             account_number: this.state.account_number,
-            existing_plan_selected: this.state.existing_plan_selected,
+            existing_plan_selected: (this.state.existing_plan_selected !== null && this.state.existing_plan_selected !== "") ? this.state.existing_plan_selected : this.state.existing_plan[0],
             contract_expiry: this.state.contract_expiry ? this.state.contract_expiry : "",
             purchasing_entity_selectd: this.state.purchasing_entity_selectd,
             intake_level_selected: this.state.intake_level_selected,
@@ -1108,7 +1107,7 @@ export class Modal extends React.Component {
             }
             if (this.props.listdetailtype === "market-insight") {
                 $("#advisoryDiv").html(this.state.advisory)
-                showDetail = <div id="advisoryDiv" style={{height:"220px"}}> </div>
+                showDetail = <div id="advisoryDiv" style={{ height: "220px" }}> </div>
             }
 
             if (this.props.listdetailtype === 'entity_detail') {

@@ -187,6 +187,7 @@ export class FillConsumption extends Component {
 
     // edit an account information
     edit_site(item, index, type) {
+        
         this.setState({ account_detail: {} });
         this.accountItem = {};
         this.accountItem.id = item.id !== null ? item.id : "";//consumption detial  id
