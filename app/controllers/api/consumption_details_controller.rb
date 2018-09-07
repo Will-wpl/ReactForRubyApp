@@ -166,7 +166,9 @@ class Api::ConsumptionDetailsController < Api::BaseController
     premise_addresses = []
     auction.consumptions.each do |consumption|
       consumption.consumption_details.each do |consumption_detail|
-        if !consumption_detail.unit_number.blank? && !consumption_detail.postal_code.blank? && consumption_detail.id.to_s != detail['id']
+        consumption_detail_id = detail['id'].blank? ? detail['orignal_id'] : detail['id']
+        if !consumption_detail.unit_number.blank? && !consumption_detail.postal_code.blank? &&
+            consumption_detail.id.to_s != consumption_detail_id
           premise_addresses.push({ 'unit_number' => consumption_detail.unit_number,
                                        'postal_code' => consumption_detail.postal_code})
         end
@@ -174,7 +176,8 @@ class Api::ConsumptionDetailsController < Api::BaseController
     end
     consumptions.each do |consumption|
       consumption.consumption_details.each do |consumption_detail|
-        if !consumption_detail.account_number.blank? && consumption_detail.id.to_s != detail['id']
+        consumption_detail_id = detail['id'].blank? ? detail['orignal_id'] : detail['id']
+        if !consumption_detail.account_number.blank? && consumption_detail.id.to_s != consumption_detail_id
           account_numbers.push(consumption_detail.account_number)
         end
       end
@@ -373,7 +376,6 @@ class Api::ConsumptionDetailsController < Api::BaseController
   end
 
   def put_in_consuption_detail(consumption_detail,duration ,user_attachments, attachment_ids, draft_flag = nil)
-    existing_plan = nil
     if draft_flag ==  ConsumptionDetail::DraftFlagYesterday
       existing_plan = consumption_detail.existing_plan
     elsif draft_flag ==  ConsumptionDetail::DraftFlagBeforeYesterday
@@ -382,7 +384,6 @@ class Api::ConsumptionDetailsController < Api::BaseController
       existing_plan = consumption_detail.existing_plan
     end
 
-    contract_expiry = nil
     if draft_flag ==  ConsumptionDetail::DraftFlagYesterday
       contract_expiry = consumption_detail.contract_expiry + duration.month
     elsif draft_flag ==  ConsumptionDetail::DraftFlagBeforeYesterday
@@ -393,6 +394,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
 
     final_detail = {
         "id" => draft_flag.blank? ? consumption_detail.id : nil,
+        "orignal_id" => draft_flag.blank? ? nil : consumption_detail.id,
         "account_number" => consumption_detail.account_number,
         "intake_level" => consumption_detail.intake_level,
         "peak" => consumption_detail.peak,
