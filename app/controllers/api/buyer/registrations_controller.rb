@@ -26,7 +26,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
       if(user.approval_status == User::ApprovalStatusReject ||
           user.approval_status == User::ApprovalStatusRegistering ||
           ( !user.company_name.blank? && user.company_name.downcase != update_user_params['company_name'].downcase) ||
-          ( !user.company_unique_entity_number && user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase ))
+          ( !user.company_unique_entity_number.blank? && user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase ))
         if (user.company_name.downcase != update_user_params['company_name'].downcase ||
             user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase )
           add_log_flag = true

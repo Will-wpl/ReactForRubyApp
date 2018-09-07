@@ -23,12 +23,12 @@ class Api::Retailer::RegistrationsController < Api::RegistrationsController
       if ( user.approval_status == User::ApprovalStatusReject ||
           user.approval_status == User::ApprovalStatusRegistering ||
            ( !user.company_name.blank? && user.company_name.downcase != update_user_params['company_name'].downcase) ||
-           ( !user.company_unique_entity_number && user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase ) ||
-           ( !user.company_license_number && user.company_license_number.downcase != update_user_params['company_license_number'].downcase )
+           ( !user.company_unique_entity_number.blank? && user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase ) ||
+           ( !user.company_license_number.blank? && user.company_license_number.downcase != update_user_params['company_license_number'].downcase )
         )
         if (( !user.company_name.blank? && user.company_name.downcase != update_user_params['company_name'].downcase) ||
-            ( !user.company_unique_entity_number && user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase ) ||
-            ( !user.company_license_number && user.company_license_number.downcase != update_user_params['company_license_number'].downcase ))
+            ( !user.company_unique_entity_number.blank? && user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase ) ||
+            ( !user.company_license_number.blank? && user.company_license_number.downcase != update_user_params['company_license_number'].downcase ))
           add_log_flag = true
         end
         update_user_params['approval_status'] = User::ApprovalStatusPending
