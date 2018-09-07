@@ -132,6 +132,9 @@ export class RetailerRegister extends Component {
                 $('#chkRevv').attr("checked", false);
             }
 
+            this.company_name_back = item.company_name;
+            this.company_unique_entity_number_back = item.company_unique_entity_number;
+            this.company_license_number_back = item.company_license_number;
         }
         if (param.self_attachments) {
             let attachments = param.self_attachments;
@@ -401,7 +404,12 @@ export class RetailerRegister extends Component {
                             disabled: true,
                             text: "Your details have been successfully saved. "
                         });
-                        
+                        if (type === "save") {
+                            if ((this.state.company_name !== this.company_name_back) || (this.state.company_unique_entity_number !== this.company_unique_entity_number_back) || (this.state.license_number !== this.company_license_number_back)) {
+                                window.location.href = `/retailer/home`;
+                            }
+                        }
+
                     })
                 }
                 else {

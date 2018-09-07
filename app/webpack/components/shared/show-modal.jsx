@@ -16,7 +16,7 @@ export class Modal extends React.Component {
             modalshowhide: "modal_hide",
             type: 'default', secondStatus: "live_hide", itemIndex: "", props_data: {},
             strtype: '', email_subject: '', email_body: '', consumptionItem: [],
-            contracted_capacity_disabled: true, contract_expiry_disabled: true, disabled: false, id: "", consumption_id: "", account_number: '',
+            contracted_capacity_disabled: true, contract_expiry_disabled: true, disabled: false, id: "",orignal_id:"", consumption_id: "", account_number: '',
             existing_plan: [], existing_plan_selected: '', contract_expiry: '', purchasing_entity: [], purchasing_entity_selectd: '', premise_address: '',
             intake_level: [], intake_level_selected: '',
             contracted_capacity: '', blk_or_unit: '', street: '', unit_number: '', postal_code: '',
@@ -41,6 +41,7 @@ export class Modal extends React.Component {
             this.setState({
                 consumption_id: next.consumptionAccountItem.consumption_id,
                 id: next.consumptionAccountItem.id,
+                orignal_id:next.consumptionAccountItem.orignal_id,
                 isSaved: next.consumptionAccountItem.id ? true : false,
                 account_number: next.consumptionAccountItem.account_number,
                 existing_plan: next.consumptionAccountItem.existing_plan,
@@ -270,7 +271,7 @@ export class Modal extends React.Component {
         })
 
         if (this.props.formSize === "middle") {
-            $("#modal_main").css({ "width": "50%", "height": "310px", "top": "40%", "left": "40%" });
+            $("#modal_main").css({ "width": "50%", "height": "310px", "top": "40%", "marginLeft": "-25%" });
             $(".email_body").css({ "height": "170px" });
         }
 
@@ -414,10 +415,11 @@ export class Modal extends React.Component {
     }
 
 
-    addToMainForm() { // consumption detail 
+    addToMainForm() { // consumption detail
         let siteItem = {
             consumption_id: this.state.consumption_id,
             id: this.state.id,
+            orignal_id:this.state.orignal_id,
             account_number: this.state.account_number,
             existing_plan_selected: (this.state.existing_plan_selected !== null && this.state.existing_plan_selected !== "") ? this.state.existing_plan_selected : this.state.existing_plan[0],
             contract_expiry: this.state.contract_expiry ? this.state.contract_expiry : "",
@@ -450,6 +452,7 @@ export class Modal extends React.Component {
             account_number: this.state.account_number,
             unit_number: this.state.unit_number,
             postal_code: this.state.postal_code,
+            orignal_id:this.state.orignal_id
         }
 
         let param = {
@@ -721,7 +724,7 @@ export class Modal extends React.Component {
             e = document.createEvent("MouseEvents"); //创建鼠标事件对象
         e.initEvent("click", false, false); //初始化事件对象
         a.href = file_path; //设置下载地址
-        a.download = file_name; //设置下载文件名 
+        a.download = file_name; //设置下载文件名
         a.dispatchEvent(e); //给指定的元素，执行事件click事
     }
 
@@ -805,14 +808,14 @@ export class Modal extends React.Component {
 
     bigModal(type) {
         if (this.state.modalSize === "big") {//height:"300px", top: "40%", left: "40%"
-            $("#modal_main").css({ "width": "85%", "height": "500px", "top": "30%", "left": "20%" });
+            $("#modal_main").css({ "width": "85%", "height": "500px", "top": "30%", "marginLeft": "-42.5%" });
             $(".email_body").css({ "height": "330px" });
             this.setState({
                 modalSize: "small"
             })
         }
         else {
-            $("#modal_main").css({ "width": "50%", "height": "310px", "top": "40%", "left": "40%" });
+            $("#modal_main").css({ "width": "50%", "height": "310px", "top": "40%", "marginLeft": "-25%" });
             $(".email_body").css({ "height": "170px" });
             this.setState({
                 modalSize: "big"
@@ -904,20 +907,20 @@ export class Modal extends React.Component {
             } else if (this.props.listdetailtype === "Email Template") {
                 if (this.props.text === '') {
                     showDetail = <div>
-                        {this.state.strtype == "email_template_la" ? '' : <div className="lm--formItem lm--formItem--inline string" style={{ marginLeft: "-15%" }}>
-                            <label className="lm--formItem-left lm--formItem-label string required">
+                        {this.state.strtype == "email_template_la" ? '' : <div className="lm--formItem lm--formItem--inline string">
+                            <label className="lm--formItem-label string required">
                                 Subject:
                             </label>
-                            <div className="lm--formItem-right lm--formItem-control">
+                            <div className="lm--formItem-control">
                                 <input type="text" name="email_subject" value={this.state.email_subject} onChange={this.Change.bind(this, 'email_subject')} disabled={this.state.disabled} ref="email_subject" maxLength="50" required aria-required="true" />
                             </div>
                         </div>}
-                        <div className="lm--formItem lm--formItem--inline string" style={{ marginLeft: "-15%" }}>
-                            <label className="lm--formItem-left lm--formItem-label string required">
+                        <div className="lm--formItem lm--formItem--inline string">
+                            <label className="lm--formItem-label string required">
                                 Body:
                             </label>
-                            <div className="lm--formItem-right lm--formItem-control">
-                                <div name="email_body" className="email_body" id={"email_body"} style={{ height: "170px" }} onChange={this.Change.bind(this, 'email_body')} disabled={this.state.disabled} ref="email_body" required aria-required="true" />
+                            <div className="lm--formItem-control">
+                                <div name="email_body" className="email_body" id={"email_body"} style={this.state.strtype == "email_template_la"?{ height: "425px" }:{ height: "360px" }} onChange={this.Change.bind(this, 'email_body')} disabled={this.state.disabled} ref="email_body" required aria-required="true" />
                             </div>
                         </div>
                     </div>
@@ -1378,7 +1381,7 @@ export class Modal extends React.Component {
         }
         return (
             this.props.formSize === "big" ?
-                <div id="modal_main" className={this.state.modalshowhide} style={{ width: "700px", top: "20%" }} >
+                <div id="modal_main" className={this.state.modalshowhide} style={this.props.modalSize=="big"?{ width: "98%", height:"500px", top: "20%",marginLeft: "-49%"}:{ width: "700px", top: "20%",marginLeft: "-350px"}} >
                     <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
                     <div className="modal_detail model_detail_formHeight">
                         <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
