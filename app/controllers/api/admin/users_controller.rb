@@ -20,7 +20,7 @@ class Api::Admin::UsersController < Api::UsersController
     buyer_entities.each do |temp_entity_status|
       entity_id = temp_entity_status['entity_id']
       approved_status = CompanyBuyerEntity::ApprovalStatusPending if temp_entity_status['approved_status'].blank?
-      approved_status = temp_entity_status['approved_status'] unless temp_entity_status['approved_status'].blank?
+      approved_status = temp_entity_status['approved_status'].to_s unless temp_entity_status['approved_status'].blank?
       company_buyer_entity = approval_buyer_entity(entity_id, approved_status)
       company_buyer_entities.push(company_buyer_entity)
     end
