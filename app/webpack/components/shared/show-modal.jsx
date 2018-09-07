@@ -16,7 +16,7 @@ export class Modal extends React.Component {
             modalshowhide: "modal_hide",
             type: 'default', secondStatus: "live_hide", itemIndex: "", props_data: {},
             strtype: '', email_subject: '', email_body: '', consumptionItem: [],
-            contracted_capacity_disabled: true, contract_expiry_disabled: true, disabled: false, id: "", consumption_id: "", account_number: '',
+            contracted_capacity_disabled: true, contract_expiry_disabled: true, disabled: false, id: "",orignal_id:"", consumption_id: "", account_number: '',
             existing_plan: [], existing_plan_selected: '', contract_expiry: '', purchasing_entity: [], purchasing_entity_selectd: '', premise_address: '',
             intake_level: [], intake_level_selected: '',
             contracted_capacity: '', blk_or_unit: '', street: '', unit_number: '', postal_code: '',
@@ -41,6 +41,7 @@ export class Modal extends React.Component {
             this.setState({
                 consumption_id: next.consumptionAccountItem.consumption_id,
                 id: next.consumptionAccountItem.id,
+                orignal_id:next.consumptionAccountItem.orignal_id,
                 isSaved: next.consumptionAccountItem.id ? true : false,
                 account_number: next.consumptionAccountItem.account_number,
                 existing_plan: next.consumptionAccountItem.existing_plan,
@@ -418,6 +419,7 @@ export class Modal extends React.Component {
         let siteItem = {
             consumption_id: this.state.consumption_id,
             id: this.state.id,
+            orignal_id:this.state.orignal_id,
             account_number: this.state.account_number,
             existing_plan_selected: (this.state.existing_plan_selected !== null && this.state.existing_plan_selected !== "") ? this.state.existing_plan_selected : this.state.existing_plan[0],
             contract_expiry: this.state.contract_expiry ? this.state.contract_expiry : "",
@@ -450,6 +452,7 @@ export class Modal extends React.Component {
             account_number: this.state.account_number,
             unit_number: this.state.unit_number,
             postal_code: this.state.postal_code,
+            orignal_id:this.state.orignal_id
         }
 
         let param = {

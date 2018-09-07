@@ -62,6 +62,7 @@ export class FillConsumption extends Component {
             attachment_ids: '',
             id: 0,
             consumption_id: 0,
+            orignal_id: 0,
             cid: Math.floor((Math.random() * 10000) + 1),
             option: 'insert',
             cate_type: ""
@@ -155,6 +156,7 @@ export class FillConsumption extends Component {
             }
         })
         this.accountItem.id = "";
+        this.accountItem.orignal_id = "";
         this.accountItem.consumption_id = this.state.consumption_id;
         this.accountItem.account_number = "";
         this.accountItem.existing_plan = ['SPS tariff', 'SPS wholesale', 'Retailer plan'];
@@ -187,10 +189,11 @@ export class FillConsumption extends Component {
 
     // edit an account information
     edit_site(item, index, type) {
-        
+
         this.setState({ account_detail: {} });
         this.accountItem = {};
         this.accountItem.id = item.id !== null ? item.id : "";//consumption detial  id
+        this.accountItem.orignal_id = item.orignal_id !== null ? item.orignal_id : "";
         this.accountItem.consumption_id = this.state.consumption_id; //consumptions id
         this.accountItem.account_number = item.account_number;
         this.accountItem.existing_plan = ['SPS tariff', 'SPS wholesale', 'Retailer plan'];
@@ -236,6 +239,7 @@ export class FillConsumption extends Component {
     doAddAccountAction(siteInfo) {
         let item = {
             id: siteInfo.id ? siteInfo.id : "",
+            orignal_id: siteInfo.orignal_id ? siteInfo.orignal_id : "",
             consumption_id: siteInfo.consumption_id,
             account_number: siteInfo.account_number,
             existing_plan: siteInfo.existing_plan_selected,
