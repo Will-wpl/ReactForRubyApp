@@ -86,6 +86,7 @@ export class BuyerUserEntityRegister extends Component {
             company_name: { cate: 'required' },
             email_address: { cate: 'email' }
         }
+        this.entity_list_back=[];
     }
     componentWillMount() {
     }
@@ -243,6 +244,8 @@ export class BuyerUserEntityRegister extends Component {
                 mainEntityComplete: false
             })
             this.entity_list_back = this.state.entity_list;
+            console.log(this.state.entity_list)
+            console.log(this.entity_list_back);
         }
         else {
             let item = [{
@@ -651,7 +654,7 @@ export class BuyerUserEntityRegister extends Component {
         let status = 2;
         for (let item of this.entity_list_back) {
             if (item.id === entity.id) {
-                if (item.company_name === entity.company_name && item.company_uen === entity.company_uen) {
+                if ((item.company_name === entity.company_name) || (item.company_uen === entity.company_uen)) {
                     status = entity.approval_status;
                 }
                 break;

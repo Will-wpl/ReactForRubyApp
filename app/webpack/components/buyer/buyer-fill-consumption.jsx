@@ -33,8 +33,10 @@ export class FillConsumption extends Component {
             contract_capacity_disabled: true,
             contract_expiry_disabled: true,
             dateIssuecount: 0,
-            consumption_id: 0
+            consumption_id: 0,
+            advisory: ""
         }
+
         this.accountItem = {
             account_number: '',
             existing_plan: ['SPS tariff', 'SPS wholesale', 'Retailer plan'],
@@ -65,8 +67,8 @@ export class FillConsumption extends Component {
             cate_type: ""
         };
         this.purchaseList = [];
-        // this.consumptions_id = (window.location.href.split("consumptions/")[1]).split("/edit")[0];
     }
+
     componentWillMount() {
         this.setState({
             consumption_id: (window.location.href.split("consumptions/")[1]).split("/edit")[0]
@@ -82,13 +84,15 @@ export class FillConsumption extends Component {
             this.site_list = res.consumption_details;
             this.status = res.consumption.participation_status === '1' ? "Confirmed" :
                 (res.consumption.participation_status === '2' ? "Pending" : "Rejected")
+
             this.setState({
                 name: res.auction.name,
                 time: res.auction.actual_begin_time,
                 contact_start_date: res.auction.contract_period_start_date,
                 contract_duration: res.consumption.contract_duration ? res.consumption.contract_duration : "",
                 buyer_link: res.buyer_revv_tc_attachment ? res.buyer_revv_tc_attachment.file_path : "",
-                seller_link: res.seller_buyer_tc_attachment ? res.seller_buyer_tc_attachment.file_path : ""
+                seller_link: res.seller_buyer_tc_attachment ? res.seller_buyer_tc_attachment.file_path : "",
+                advisory: res.advisory.content
             })
             if (res.consumption.participation_status === '1' || res.auction.publish_status === "1") {
                 $("input[type='checkbox']").attr("checked", true);
@@ -106,13 +110,26 @@ export class FillConsumption extends Component {
                 this.purchaseList = res.buyer_entities;
             }
             if (res.consumption_details.length > 0) {
-                this.setState({ site_list: res.consumption_details });
+                let list = res.consumption_details;
+                list.map(item => {
+                    item.entityName = this.getPurchase(item.company_buyer_entity_id);
+                })
+                this.setState({ site_list: list });
             }
             if (res.consumption_details_last_day.length > 0) {
-                this.setState({ preDayList: res.consumption_details_last_day })
+
+                let list = res.consumption_details_last_day;
+                list.map(item => {
+                    item.entityName = this.getPurchase(item.company_buyer_entity_id);
+                })
+                this.setState({ preDayList: list })
             }
             if (res.consumption_details_before_yesterday.length > 0) {
-                this.setState({ preOtherList: res.consumption_details_before_yesterday })
+                let list = res.consumption_details_before_yesterday;
+                list.map(item => {
+                    item.entityName = this.getPurchase(item.company_buyer_entity_id);
+                })
+                this.setState({ preOtherList: list })
             }
 
             if (this.state.checked) {
@@ -124,11 +141,7 @@ export class FillConsumption extends Component {
             this.setState({ text: "Interface failed" });
         })
     }
-    changeSiteList(val, index) {
-        let list = this.state.site_list;
-        this.site_list[index].intake_level_selected = val;
-        this.setState({ site_list: list })
-    }
+    // edit and add account
 
     add_site() {
         if (this.props.onAddClick) {
@@ -176,8 +189,8 @@ export class FillConsumption extends Component {
     edit_site(item, index, type) {
         this.setState({ account_detail: {} });
         this.accountItem = {};
-        this.accountItem.id = item.id !== null ? item.id : "";
-        this.accountItem.consumption_id = this.state.consumption_id;
+        this.accountItem.id = item.id !== null ? item.id : "";//consumption detial  id
+        this.accountItem.consumption_id = this.state.consumption_id; //consumptions id
         this.accountItem.account_number = item.account_number;
         this.accountItem.existing_plan = ['SPS tariff', 'SPS wholesale', 'Retailer plan'];
         this.accountItem.existing_plan_selected = item.existing_plan !== null ? item.existing_plan : "";
@@ -212,16 +225,22 @@ export class FillConsumption extends Component {
         $("#account_number").focus();
         this.refs.consumption.showModal('custom', {}, '', index)
     }
+    changeSiteList(val, index) {
+        let list = this.state.site_list;
+        this.site_list[index].intake_level_selected = val;
+        this.setState({ site_list: list })
+    }
+
     //when user finished adding a new account, list page will add/update the new account information.
     doAddAccountAction(siteInfo) {
-
         let item = {
-            id: siteInfo.consumptionid ? siteInfo.consumptionid : "",
+            id: siteInfo.id ? siteInfo.id : "",
             consumption_id: siteInfo.consumption_id,
             account_number: siteInfo.account_number,
             existing_plan: siteInfo.existing_plan_selected,
             contract_expiry: siteInfo.contract_expiry ? moment(siteInfo.contract_expiry) : "",
             company_buyer_entity_id: siteInfo.purchasing_entity_selectd,
+            entityName: this.getPurchase(siteInfo.purchasing_entity_selectd),
             intake_level: siteInfo.intake_level_selected,
             contracted_capacity: siteInfo.contracted_capacity,
             blk_or_unit: siteInfo.blk_or_unit,
@@ -231,8 +250,9 @@ export class FillConsumption extends Component {
             totals: siteInfo.totals,
             peak_pct: siteInfo.peak_pct,
             attachment_ids: siteInfo.attachment_ids,
-            user_attachment: siteInfo.user_attachment
+            user_attachment: siteInfo.user_attachment,
         };
+
         if (siteInfo.cate_type === "current") {
             let entity = this.state.site_list;
             if (siteInfo.index >= 0) {
@@ -279,21 +299,6 @@ export class FillConsumption extends Component {
         this.deleteNum = index;
         this.refs.Modal.showModal("comfirm");
         this.setState({ text: "Are you sure you want to delete ?", submit_type: "delete", delete_type: type });
-    }
-
-    dateCompare(arr) {
-
-        let count = 0;
-        let startDate = moment(this.state.contact_start_date).format('YYYY-MM-DD');
-        for (let i in arr) {
-            if (arr[i].contract_expiry) {
-                let contract_expiry_date = moment(arr[i].contract_expiry).format('YYYY-MM-DD');
-                if (contract_expiry_date >= startDate) {
-                    count++;
-                }
-            }
-        }
-        return count;
     }
 
     doSave(type) {
@@ -429,9 +434,6 @@ export class FillConsumption extends Component {
                 this.setState({ site_list: site_listObj });
             }
 
-            // setTimeout(() => {
-            //     this.doSave('delete');
-            // }, 500);
         }
     }
 
@@ -454,9 +456,6 @@ export class FillConsumption extends Component {
         if (isNotNull) {
             let totalList = this.state.site_list.concat(this.state.preDayList).concat(this.state.preOtherList);
             let count = this.dateCompare(totalList);
-
-
-
             this.setState({
                 dateIssuecount: count
             })
@@ -476,21 +475,30 @@ export class FillConsumption extends Component {
         }
         else {
             this.setState({
-                text: "Please complete the consumption account information."
+                text: "Please complete all required fields."
             })
             this.refs.Modal.showModal()
         }
-
     }
+
     validateListComplete() {
-        let flag = true;
+        let flag_current = true, flag_yesterday = true, flag_before_yesterday = true;
         this.state.preOtherList.map(item => {
-            if (item.existing_plan === "" || item.existing_plan === null) {
-                flag = false;
-                // break;
+            if (item.existing_plan === "" || item.existing_plan === null || item.entityName === "" || item.entityName === "") {
+                flag_yesterday = false;
             }
         })
-        return flag;
+        this.state.preOtherList.map(item => {
+            if (item.existing_plan === "" || item.existing_plan === null || item.entityName === "" || item.entityName === "") {
+                flag_before_yesterday = false;
+            }
+        })
+        this.state.site_list.map(item => {
+            if (item.existing_plan === "" || item.existing_plan === null || item.entityName === "" || item.entityName === "") {
+                flag_current = false;
+            }
+        })
+        return flag_current && flag_yesterday && flag_before_yesterday;
     }
 
     passValidateSave() {
@@ -533,6 +541,25 @@ export class FillConsumption extends Component {
         return name;
     }
 
+    dateCompare(arr) {
+        let count = 0;
+        let startDate = moment(this.state.contact_start_date).format('YYYY-MM-DD');
+        for (let i in arr) {
+            if (arr[i].contract_expiry) {
+                let contract_expiry_date = moment(arr[i].contract_expiry).format('YYYY-MM-DD');
+                if (contract_expiry_date >= startDate) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+    showMarketInsight() {
+        this.setState({
+            text: ""
+        })
+        this.refs.market.showModal()
+    }
     render() {
         return (
             <div>
@@ -541,8 +568,8 @@ export class FillConsumption extends Component {
                     <tbody>
                         <tr>
                             <td style={{ width: "80%" }}>  <h4 className="col-sm-12 u-mb2">Invitation to RA: {this.state.name} on {moment(this.state.time).format('D MMM YYYY hh:mm a')}</h4></td>
-                            <td style={{ width: "20%" }} rowSpan="3">
-                                <img  src={marketImg} className="marketImg"></img>
+                            <td style={{ width: "20%" }} rowSpan="4">
+                                <img src={marketImg} className="marketImg" onClick={this.showMarketInsight.bind(this)}></img>
                             </td>
                         </tr>
                         <tr>
@@ -563,7 +590,6 @@ export class FillConsumption extends Component {
                             <td>
                                 <h4 className="col-sm-12 u-mb2" style={{ "paddingTop": "15px" }}>Last Status of Participation : {this.status}</h4>
                             </td>
-                            <td></td>
                         </tr>
                     </tbody>
                 </table>
@@ -577,7 +603,6 @@ export class FillConsumption extends Component {
                         <div className="col-sm-12 col-md-12">
                             <div className="table-head">
                                 <table className="retailer_fill" cellPadding="0" cellSpacing="0">
-
                                     <colgroup>
                                         <col width="10%" />
                                         <col width="10%" />
@@ -624,7 +649,8 @@ export class FillConsumption extends Component {
                                                     <td>{item.account_number} </td>
                                                     <td>{item.existing_plan}</td>
                                                     <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('YYYY-MM-DD') : "—"}</td>
-                                                    <td>{this.getPurchase(item.company_buyer_entity_id)} </td>
+                                                    {/* <td>{this.getPurchase(item.company_buyer_entity_id)} </td> */}
+                                                    <td>{item.entityName}</td>
                                                     <td>{item.intake_level}</td>
                                                     <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
                                                     <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
@@ -712,7 +738,9 @@ export class FillConsumption extends Component {
                                                     <td>{item.account_number} </td>
                                                     <td>{item.existing_plan}</td>
                                                     <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('YYYY-MM-DD') : "—"}</td>
-                                                    <td>{this.getPurchase(item.company_buyer_entity_id)} </td>
+                                                    {/* <td>{this.getPurchase(item.company_buyer_entity_id)} </td> */}
+
+                                                    <td>{item.entityName}</td>
                                                     <td>{item.intake_level}</td>
                                                     <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
                                                     <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
@@ -797,7 +825,8 @@ export class FillConsumption extends Component {
                                                     <td>{item.account_number} </td>
                                                     <td>{item.existing_plan}</td>
                                                     <td>{item.contract_expiry ? moment(item.contract_expiry).format('YYYY-MM-DD') : "—"}</td>
-                                                    <td>{this.getPurchase(item.company_buyer_entity_id)} </td>
+                                                    {/* <td>{this.getPurchase(item.company_buyer_entity_id)} </td> */}
+                                                    <td>{item.entityName}</td>
                                                     <td>{item.intake_level}</td>
                                                     <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
                                                     <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
@@ -860,6 +889,7 @@ export class FillConsumption extends Component {
                     <Modal text={this.state.text} acceptFunction={this.doAccept.bind(this)} ref="Modal" />
                 </form>
                 <Modal formSize="big" text={this.state.text} acceptFunction={this.doAddAccountAction.bind(this)} siteList={this.state.site_list} consumptionAccountItem={this.state.account_detail} listdetailtype='consumption_detail' ref="consumption" />
+                <Modal formSize="middle" text={this.state.text} advisory={this.state.advisory} listdetailtype='market-insight' ref="market" />
             </div >
         )
     }

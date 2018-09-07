@@ -5,7 +5,7 @@ class Api::Admin::AuctionResultsController < Api::AuctionResultsController
     if params.key?(:page_size) && params.key?(:page_index)
       search_params = reject_params(params, %w[controller action sort_by])
       search_where_array = set_search_params(search_params)
-      result = AuctionResult.left_outer_joins(:auction).where(search_where_array)
+      result = AuctionResult.left_outer_joins(:auction).where('auction_results.status = ?', '1').where(search_where_array)
                    .page(params[:page_index]).per(params[:page_size])
       total = result.total_count
     else
