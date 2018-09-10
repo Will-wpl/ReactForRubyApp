@@ -389,7 +389,7 @@ export const setApprovalStatus = (status, dt) => {
             approvalStatus = 'Registering';
             break;
         case '5':
-            approvalStatus = 'Removed' + approvalDateTime;;
+            approvalStatus = 'Deleted' + approvalDateTime;;
             break;
         default:
             approvalStatus = 'Registering';
