@@ -159,26 +159,44 @@ class Api::ConsumptionDetailsController < Api::BaseController
     detail = params[:detail]
     current_consumption = Consumption.find(params[:consumption_id]) #@consumption
     auction = Auction.find(current_consumption.auction_id)
+    auction_contract = AuctionContract.find_by auction_id: current_consumption.auction_id, contract_duration: current_consumption.contract_duration
     consumptions = Consumption.mine(current_user.id)
     raise ActiveRecord::RecordNotFound if auction.nil?
+    raise ActiveRecord::RecordNotFound if auction_contract.nil?
+    contract_period_start_date = auction.contract_period_start_date
+    contract_period_end_date = auction_contract.contract_period_end_date
     # Account must be unique within a RA.
     account_numbers = []
     premise_addresses = []
-    auction.consumptions.each do |consumption|
-      consumption.consumption_details.each do |consumption_detail|
-        consumption_detail_id = detail['id'].blank? ? detail['orignal_id'] : detail['id']
-        if !consumption_detail.unit_number.blank? && !consumption_detail.postal_code.blank? &&
-            consumption_detail.id.to_s != consumption_detail_id
-          premise_addresses.push({ 'unit_number' => consumption_detail.unit_number,
-                                       'postal_code' => consumption_detail.postal_code})
-        end
-      end
-    end
+    # auction.consumptions.each do |consumption|
+    #   consumption.consumption_details.each do |consumption_detail|
+    #     consumption_detail_id = detail['id'].blank? ? detail['orignal_id'] : detail['id']
+    #     if !consumption_detail.unit_number.blank? && !consumption_detail.postal_code.blank? &&
+    #         consumption_detail.id.to_s != consumption_detail_id
+    #       premise_addresses.push({ 'unit_number' => consumption_detail.unit_number,
+    #                                    'postal_code' => consumption_detail.postal_code})
+    #     end
+    #   end
+    # end
     consumptions.each do |consumption|
+      temp_auction = Auction.find(current_consumption.auction_id)
+      temp_auction_contract = AuctionContract.find_by auction_id: current_consumption.auction_id, contract_duration: current_consumption.contract_duration
+
+      temp_contract_period_start_date = temp_auction.contract_period_start_date
+      temp_contract_period_end_date = temp_auction_contract.contract_period_end_date
+      if temp_contract_period_end_date < contract_period_start_date ||
+          temp_contract_period_start_date > contract_period_end_date
+        next
+      end
       consumption.consumption_details.each do |consumption_detail|
         consumption_detail_id = detail['id'].blank? ? detail['orignal_id'] : detail['id']
         if !consumption_detail.account_number.blank? && consumption_detail.id.to_s != consumption_detail_id
           account_numbers.push(consumption_detail.account_number)
+        end
+        if !consumption_detail.unit_number.blank? && !consumption_detail.postal_code.blank? &&
+            consumption_detail.id.to_s != consumption_detail_id
+          premise_addresses.push({ 'unit_number' => consumption_detail.unit_number,
+                                   'postal_code' => consumption_detail.postal_code})
         end
       end
     end
@@ -322,7 +340,6 @@ class Api::ConsumptionDetailsController < Api::BaseController
         attachment_ids = []
         user_attachments.each{ |x| attachment_ids.push(x.id) }
         final_detail = put_in_consuption_detail(consumption_detail,
-                                                auction.contract_period_start_date + auction.duration.month,
                                                 user_attachments, attachment_ids,
                                                 ConsumptionDetail::DraftFlagBeforeYesterday)
         consumption_details_all_before_yesterday.push(final_detail)
@@ -335,7 +352,6 @@ class Api::ConsumptionDetailsController < Api::BaseController
         attachment_ids = []
         user_attachments.each{ |x| attachment_ids.push(x.id) }
         final_detail = put_in_consuption_detail(consumption_detail,
-                                                auction.contract_period_start_date + auction.duration.month,
                                                 user_attachments,
                                                 attachment_ids)
         consumption_details_all_before_yesterday.push(final_detail)
@@ -355,7 +371,6 @@ class Api::ConsumptionDetailsController < Api::BaseController
         attachment_ids = []
         user_attachments.each{ |x| attachment_ids.push(x.id) }
         final_detail = put_in_consuption_detail(consumption_detail,
-                                                auction.contract_period_start_date + auction.duration.month,
                                                 user_attachments,
                                                 attachment_ids,
                                                 ConsumptionDetail::DraftFlagYesterday)
@@ -369,7 +384,6 @@ class Api::ConsumptionDetailsController < Api::BaseController
         attachment_ids = []
         user_attachments.each{ |x| attachment_ids.push(x.id) }
         final_detail = put_in_consuption_detail(consumption_detail,
-                                                auction.contract_period_start_date + auction.duration.month,
                                                 user_attachments,
                                                 attachment_ids)
         consumption_details_all_yesterday.push(final_detail)
@@ -378,7 +392,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
     consumption_details_all_yesterday
   end
 
-  def put_in_consuption_detail(consumption_detail,contract_expire ,user_attachments, attachment_ids, draft_flag = nil)
+  def put_in_consuption_detail(consumption_detail,user_attachments, attachment_ids, draft_flag = nil)
     if draft_flag ==  ConsumptionDetail::DraftFlagYesterday
       existing_plan = consumption_detail.existing_plan
     elsif draft_flag ==  ConsumptionDetail::DraftFlagBeforeYesterday
@@ -387,12 +401,12 @@ class Api::ConsumptionDetailsController < Api::BaseController
       existing_plan = consumption_detail.existing_plan
     end
 
-    if draft_flag ==  ConsumptionDetail::DraftFlagYesterday && !consumption_detail.contract_expiry.blank?
-      contract_expiry = contract_expire
+    if draft_flag ==  ConsumptionDetail::DraftFlagYesterday
+      contract_expiry = consumption_detail.contract_period_end_date
     elsif draft_flag ==  ConsumptionDetail::DraftFlagBeforeYesterday
       contract_expiry = nil
     else
-      contract_expiry = contract_expire
+      contract_expiry = consumption_detail.contract_expiry
     end
 
     final_detail = {
