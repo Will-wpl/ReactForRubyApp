@@ -191,7 +191,7 @@ class Api::UsersController < Api::BaseController
 
 
   def string_for_user_value(val)
-    'deleted_' + DateTime.current.strftime('%Y%m%d%H%M').to_s + '_' + val
+    'deleted_' + DateTime.current.strftime('%Y%m%d%H%M').to_s + '_' + val unless val.blank?
   end
 
   def get_buyer_headers(params)
