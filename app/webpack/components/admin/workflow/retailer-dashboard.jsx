@@ -42,7 +42,7 @@ export class Adminretailerdashboard extends Component {
         return (
             <div className="col-sm-12">
                 <h2 className="u-mt2 u-mb2">{this.props.title}</h2>
-                <h4 className="u-mt1 u-mb1">Total Number : {this.props.step_counts[0]}</h4>
+                <h4 className="u-mt1 u-mb1">Total number of Retailers : {this.props.step_counts[0]}</h4>
                 <div className="col-sm-12 col-md-12 propose_deviations">
                     {this.props.retailer_list.length > 0 ?
                     <table className="retailer_fill w_100" cellPadding="0" cellSpacing="0">

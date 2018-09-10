@@ -1390,7 +1390,7 @@ export class Modal extends React.Component {
                 </div>
                 :
                 this.props.formSize === "middle" ?
-                    <div id="modal_main" name="middleModal" className={this.state.modalshowhide} style={{ width: "50%", height: "310px", top: "40%" }} >
+                    <div id="modal_main" name="middleModal" className={this.state.modalshowhide} style={{ width: "50%", height: "310px", top: "40%",marginLeft:"-25%" }} >
                         <h4><a onClick={this.closeModal.bind(this)}>X</a><a onClick={this.bigModal.bind(this, this.state.modalSize)}>口</a></h4>
                         <div className="modal_detail model_detail_formHeight">
                             <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
@@ -1399,7 +1399,7 @@ export class Modal extends React.Component {
                     </div>
                     :
                     this.props.formSize === 'viewlog' ?
-                        <div id="modal_main" className={this.state.modalshowhide} style={{ width: "600px", top: "20%" }}>
+                        <div id="modal_main" className={this.state.modalshowhide} style={{ width: "600px", top: "20%",marginLeft:"-300px" }}>
                             <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
                             <div className="modal_detail">
                                 <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}

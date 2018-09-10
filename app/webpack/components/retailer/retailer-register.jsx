@@ -30,7 +30,7 @@ export class RetailerRegister extends Component {
             office_number: "",
             comment: "",
             validate: true,
-            retailerApproveStatys:"",
+            retailerApproveStatys: "",
 
             fileData: {
                 "RETAILER_DOCUMENTS": [
@@ -89,6 +89,16 @@ export class RetailerRegister extends Component {
         if (this.state.userid) {
             getRetailerUserInfoByUserId(this.state.userid).then(res => {
                 this.setDefult(res);
+                $("#btnRetailerBack").bind('click',()=>{
+                    if(this.state.retailerApproveStatys==="5")
+                    {
+                        window.location.href="/admin/users/del_retailers";
+                    }
+                    else
+                    {
+                        window.location.href="/admin/users/retailers";
+                    }
+                })
             })
         }
         else {
@@ -117,9 +127,9 @@ export class RetailerRegister extends Component {
                 office_number: item.account_office_number ? item.account_office_number : '',
                 agree_seller_buyer: item.agree_seller_buyer ? item.agree_seller_buyer : '0',
                 agree_seller_revv: item.agree_seller_revv ? item.agree_seller_revv : '0',
-                status: setApprovalStatus(item.approval_status, item.approval_date_time === null ? item.created_at : item.approval_date_time),
+                status: setApprovalStatus(item.approval_status, item.approval_status === "5" ? item.deleted_at : item.approval_date_time === null ? item.created_at : item.approval_date_time),
                 approveStatus: (item.approval_status === "3" || item.approval_status === "5") ? true : false,
-                retailerApproveStatys:item.approval_status
+                retailerApproveStatys: item.approval_status
             })
             if (this.state.agree_seller_buyer === '1') {
                 $('#chkBuyer').attr("checked", true);
@@ -365,20 +375,10 @@ export class RetailerRegister extends Component {
             }).then(res => {
                 if (res.validate_result)//validate pass
                 {
-                    submitRetailManageInfo({
-                        user: param
-                    }).then(res => {
-                        $('#license_number_repeat').removeClass('errormessage').addClass('isPassValidate');
-                        if (type === "sign_up") {
-                            window.location.href = `/retailer/home`;
-                        }
-                        else {
-                            this.refs.Modal.showModal();
-                            this.setState({
-                                text: "Your details have been successfully submitted. "
-                            });
-                        }
+                    this.setState({
+                        text: "Are you sure you want to complete the Sign Up?"
                     })
+                    this.refs.Modal_Option.showModal('comfirm', { action: 'submit' }, '');
                 }
                 else {
                     if (res.error_fields) {
@@ -465,6 +465,7 @@ export class RetailerRegister extends Component {
                 });
             }
         }
+
         else {
             this.setState({ text: "Are you sure you want to approve the request?" });
             this.refs.Modal_Option.showModal('comfirm', { action: 'approve' }, '');
@@ -476,18 +477,32 @@ export class RetailerRegister extends Component {
     }
     doAction(obj) {
         if (obj.action === "delete") {
-
             let param = {
                 user_id: this.state.userid
             }
             removeRetailer(param).then(res => {
+                location.href = "/admin/users/del_retailers";
+            })
+        }
+        else if (obj.action === "submit") {
+            let param = this.getParam();
+            submitRetailManageInfo({
+                user: param
+            }).then(res => {
 
-                // let retailerStatus = setApprovalStatus("5", "");
-                // this.setState({
-                //     approveStatus: true,
-                //     status: retailerStatus
-                // })
-                location.href = "/admin/users/retailers";
+                $('#license_number_repeat').removeClass('errormessage').addClass('isPassValidate');
+
+
+                if (res.result === "failed") {
+                    this.setState(
+                        {
+                            text: "Failure to submit. "
+                        }
+                    );
+                    this.refs.Modal.showModal();
+                } else {
+                    window.location.href = `/retailer/home`;
+                }
             })
         }
         else {
@@ -519,7 +534,7 @@ export class RetailerRegister extends Component {
         let btn_html;
         if (this.state.use_type === 'admin_approve') {
             btn_html = <div>
-                <button id="view_log" className="lm--button lm--button--primary" onClick={this.view_log.bind(this)} disabled={this.state.retailerApproveStatys==="3"?true:false}>View Log</button>
+                <button id="view_log" className="lm--button lm--button--primary" onClick={this.view_log.bind(this)} disabled={this.state.retailerApproveStatys === "3" ? true : false}>View Log</button>
                 <button id="delete" className="lm--button lm--button--primary" onClick={this.deleteUser.bind(this)} disabled={this.state.approveStatus}>Delete</button>
                 <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'reject')} disabled={this.state.approveStatus}>Reject</button>
                 <button id="submit_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'approve')} disabled={this.state.approveStatus}>Approve</button>

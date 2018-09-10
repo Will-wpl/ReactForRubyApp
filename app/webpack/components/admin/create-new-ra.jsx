@@ -87,8 +87,9 @@ export class CreateNewRA extends Component {
                 }
             }
             if (res.name == null) {
-                this.setState({ 
+                this.setState({
                     id: res.id,
+                    single_multiple: res.buyer_type,
                     startDate: res.contract_period_start_date == null ? '' : moment(res.contract_period_start_date) })
             } else {
                 this.setState({
@@ -674,36 +675,36 @@ export class CreateNewRA extends Component {
             buyer_type: this.state.single_multiple
         }
         if (obj.method === "save") {
-            if (obj.action === "proceed") {
+            //if (obj.action === "proceed") {
                 deleteSelectedBuyer(param).then(res => {
                     if (res.status === "1") {
                         this.doSave();
                     }
                 })
-            }
-            else {
+            //}
+            //else {
 
                 this.setState({
                     disabled: false,
                     submit_btn: true
                 })
 
-            }
+            //}
         }
         if (obj.method === "next") {
-            if (obj.action === "proceed") {
+            //if (obj.action === "proceed") {
                 deleteSelectedBuyer(param).then(res => {
                     if (res.status === "1") {
-                        this.doNext();
+                        window.location.href = `/admin/auctions/${this.auction.id}/invitation`;
                     }
                 })
-            }
-            else {
+            //}
+            //else {
                 this.setState({
                     disabled: false,
                     submit_btn: true
                 })
-            }
+            //}
         }
     }
     render() {
