@@ -55,8 +55,6 @@ Rails.application.configure do
   # Mail
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 
-  ENV["REDISTOGO_URL"] = 'redis://localhost:6379/0'
-  
   # Custom Generators
   config.generators do |g|
     g.template_engine     :slim

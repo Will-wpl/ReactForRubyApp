@@ -38,6 +38,9 @@ sudo apt-get install chromium-chromedriver
 # install rails external libraries
 bundle install -j4
 
+# copy env variables from env sample file then update it as you need
+cp .env.sample .env
+
 # install react of webpacker external library
 bundle exec rails webpacker:install:react
 
@@ -140,4 +143,3 @@ bundle exec rspec spec/controllers/admin/auctions_controller_spec.rb
 
 If you want to install front end package, can do:
 - yarn add package-name
-
