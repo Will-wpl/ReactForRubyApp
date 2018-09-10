@@ -112,6 +112,6 @@
   /h1 Please select account type before.
 div.createRaMain.u-grid
   - if @user.has_role?(:buyer)
-    a.lm--button.lm--button--primary.u-mt3 href="/admin/users/buyers" Back
+    a.lm--button.lm--button--primary.u-mt3 id="btnBuyerBack"  href="javascript:void(0)" Back
   - if @user.has_role?(:retailer)
-    a.lm--button.lm--button--primary.u-mt3 href="/admin/users/retailers" Back
+    a.lm--button.lm--button--primary.u-mt3 id="btnRetailerBack" href="javascript:void(0)" Back

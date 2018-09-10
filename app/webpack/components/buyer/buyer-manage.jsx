@@ -60,6 +60,16 @@ export class BuyerUserManage extends Component {
         if (this.state.userid) {
             getBuyerUserInfoByUserId(this.state.userid).then(res => {
                 this.setDefaultValue(res);
+                $("#btnBuyerBack").bind('click',()=>{
+                    if(this.state.buyerApproveStatus==="5")
+                    {
+                        window.location.href="/admin/users/del_buyers";
+                    }
+                    else
+                    {
+                        window.location.href="/admin/users/buyers";
+                    }
+                })
             })
         }
         $("#buyer_management").addClass("tenant_management");
@@ -95,7 +105,7 @@ export class BuyerUserManage extends Component {
                 user_company_address: item.company_address ? item.company_address : '',
                 buyerApproveStatus: item.approval_status,
                 approveStatus: (item.approval_status === "3" || item.approval_status === "5") ? true : false,
-                status: setApprovalStatus(item.approval_status, item.approval_date_time === null ? item.created_at : item.approval_date_time),
+                status: setApprovalStatus(item.approval_status, item.approval_status === "5" ? item.deleted_at : item.approval_date_time === null ? item.created_at : item.approval_date_time),
                 submitStatus: item.approval_status !== "1" ? true : false
             })
 
@@ -162,8 +172,7 @@ export class BuyerUserManage extends Component {
                 loglist: param.user_logs
             })
         }
-
-        console.log(this.state.buyerApproveStatus);
+       
     }
     setEntityInfo(param) {
         if (param.buyer_entities) {
@@ -300,7 +309,7 @@ export class BuyerUserManage extends Component {
                 user_id: this.state.userid
             }
             removeBuyer(param).then(res => {
-                location.href = "/admin/users/buyers";
+                location.href = "/admin/users/del_buyers";
             })
         }
         else { //entity submit
@@ -467,7 +476,7 @@ export class BuyerUserManage extends Component {
     render() {
         let btn_html;
         btn_html = <div>
-            <button id="save_form" className="lm--button lm--button--primary" onClick={this.view_log.bind(this)} disabled={this.state.buyerApproveStatus==="3"?true:false}>View Log</button>
+            <button id="save_form" className="lm--button lm--button--primary" onClick={this.view_log.bind(this)} disabled={this.state.buyerApproveStatus === "3" ? true : false}>View Log</button>
             <button id="save_form" className="lm--button lm--button--primary" onClick={this.deleteUser.bind(this)} disabled={this.state.approveStatus}>Delete</button>
             <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeUserAction.bind(this, 'reject')} disabled={this.state.approveStatus}>Reject</button>
             <button id="submit_form" className="lm--button lm--button--primary" onClick={this.judgeUserAction.bind(this, 'approve')} disabled={this.state.approveStatus}>Approve</button>
@@ -702,7 +711,7 @@ export class BuyerUserManage extends Component {
                                                 <td>{this.state.submitStatus ? true : (item.isApproved ? true : false)}
                                                     <button className="entityApprove" disabled={this.state.submitStatus ? true : ((item.approval_status === "2" || item.approval_status === null) ? false : (item.isApproved ? true : false))} onClick={this.entity_approve.bind(this, item, index)}>Approve</button>
                                                     <button className="entityApprove" disabled={this.state.submitStatus ? true : ((item.approval_status === "2" || item.approval_status === null) ? false : (!item.isApproved ? true : false))} onClick={this.entity_reject.bind(this, item, index)}>Reject</button>
-                                                    <button className="entityApprove" disabled={this.state.approveStatus} onClick={this.view_entity_log.bind(this, item)}>View Log</button>
+                                                    <button className="entityApprove" disabled={item.approval_status === "3" ? true : false} onClick={this.view_entity_log.bind(this, item)}>View Log</button>
                                                 </td>
                                             </tr>
                                         })

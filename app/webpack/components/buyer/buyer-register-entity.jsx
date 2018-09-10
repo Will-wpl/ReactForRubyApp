@@ -15,7 +15,7 @@ export class BuyerUserEntityRegister extends Component {
             id: "", userid: "", text: "", btn_status: false, disabled: false, havedata: false, allbtnStatus: true, validate: true, use_type: "",
             email_address: "", company_name: "", unique_entity_number: "", company_address: "", billing_address: "", contact_name: "",
             mobile_number: "", office_number: "", entityStatus: "", approveStatus: false, status: '', main_id: '',
-          
+
             buyerTCurl: "", buyerTCname: "", agree_seller_buyer: "0", approval_status: 2, tabSelected: "base",
             buyerRevvTCurl: "", buyerRevvTCname: "", agree_buyer_revv: "0", has_tenants: "1", entity_list: [], entityItemInfo: this.entityItem,
             user_entity_data: {
@@ -86,7 +86,7 @@ export class BuyerUserEntityRegister extends Component {
             company_name: { cate: 'required' },
             email_address: { cate: 'email' }
         }
-        this.entity_list_back=[];
+        this.entity_list_back = [];
     }
     componentWillMount() {
     }
@@ -159,8 +159,8 @@ export class BuyerUserEntityRegister extends Component {
                 approveStatus: item.approval_status === "3" ? true : false,
                 status: setApprovalStatus(item.approval_status, item.approval_date_time === null ? item.created_at : item.approval_date_time)
             })
-            this.company_name_back=item.company_name;
-            this.unique_entity_number_back=item.company_unique_entity_number;
+            this.company_name_back = item.company_name;
+            this.unique_entity_number_back = item.company_unique_entity_number;
             $('#buyer_management').val(this.state.has_tenants);
             if (this.state.agree_seller_buyer === "1") {
                 $('#chkBuyer').attr("checked", true);
@@ -493,9 +493,8 @@ export class BuyerUserEntityRegister extends Component {
                                 disabled: true,
                                 btnAddDisabled: true
                             })
-                            if((this.state.company_name!==this.company_name_back) || (this.state.unique_entity_number!==this.unique_entity_number_back))
-                            {
-                                window.location.href=`/buyer/home`;
+                            if ((this.state.company_name !== this.company_name_back) || (this.state.unique_entity_number !== this.unique_entity_number_back)) {
+                                window.location.href = `/buyer/home`;
                             }
                         }
                     });
@@ -513,22 +512,27 @@ export class BuyerUserEntityRegister extends Component {
             let buyerParam = this.setParams();
             validateIsExist(buyerParam).then(res => {
                 if (res.validate_result) {
-                    submitBuyerUserInfo(buyerParam).then(res => {
-                        if (res.result === "failed") {
-                            this.setState(
-                                {
-                                    text: "Failure to submit. "
-                                }
-                            );
-                            this.refs.Modal.showModal();
-                        } else {
-                            if (type === "sign_up") {
-                                window.location.href = `/buyer/home`;
-                            }
 
-                        }
+                    // submitBuyerUserInfo(buyerParam).then(res => {
+                    //     if (res.result === "failed") {
+                    //         this.setState(
+                    //             {
+                    //                 text: "Failure to submit. "
+                    //             }
+                    //         );
+                    //         this.refs.Modal.showModal();
+                    //     } else {
+                    //         if (type === "sign_up") {
+                    //             window.location.href = `/buyer/home`;
+                    //         }
 
-                    });
+                    //     }
+
+                    // });
+                    this.setState({
+                        text: "Are you sure you want to complete the Sign Up?"
+                    })
+                    this.refs.Modal.showModal('comfirm', { action: 'submit' }, '');
                 }
                 else {
                     this.validateRepeatColumn(res);
@@ -693,13 +697,32 @@ export class BuyerUserEntityRegister extends Component {
     }
 
     refreshForm(obj) {
-        let list = this.state.entity_list;
-        list.splice(this.state.deleteIndex, 1);
-        this.setState({
-            entity_list: list
-        })
+        if (obj.action === "submit") {
+            let buyerParam = this.setParams();
+            submitBuyerUserInfo(buyerParam).then(res => {
+                if (res.result === "failed") {
+                    this.setState(
+                        {
+                            text: "Failure to submit. "
+                        }
+                    );
+                    this.refs.Modal.showModal();
+                } else {
+                    window.location.href = `/buyer/home`;
+                }
+
+            });
+        }
+        else {
+
+            let list = this.state.entity_list;
+            list.splice(this.state.deleteIndex, 1);
+            this.setState({
+                entity_list: list
+            })
+        }
     }
-    
+
     //edit button to cancel disabled status,every element can be edited
     edit() {
         this.setState({
