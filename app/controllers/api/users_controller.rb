@@ -68,6 +68,7 @@ class Api::UsersController < Api::BaseController
       buyer_entities.each do |temp_entity|
         remove_user(temp_entity.user_entity_id) unless temp_entity.user_entity_id.blank?
       end
+      buyer_entities.update(is_default: 1, approval_status: CompanyBuyerEntity::ApprovalStatusRemoved)
       remove_user(user_id)
     end
     render json: { result: 'success' }, status: 200
@@ -99,7 +100,8 @@ class Api::UsersController < Api::BaseController
       total = users.count
     end
     headers = get_buyer_headers(params)
-    actions = [{ url: '/admin/users/:id/manage', name: 'Manage', icon: 'manage' }]
+    actions_name = is_deleted ? 'View': 'Manage'
+    actions = [{ url: '/admin/users/:id/manage', name: actions_name, icon: 'manage' }]
     data = get_data(params, headers, users)
     data = data.each do |user|
       user.consumer_type = user.consumer_type == '2' ? 'Company' : 'Individual'
@@ -130,7 +132,8 @@ class Api::UsersController < Api::BaseController
         { name: 'License Number', field_name: 'company_license_number' },
         { name: 'Status', field_name: 'approval_status' }
     ]
-    actions = [{ url: '/admin/users/:id/manage', name: 'Manage', icon: 'manage' }]
+    actions_name = is_deleted ? 'View': 'Manage'
+    actions = [{ url: '/admin/users/:id/manage', name: actions_name, icon: 'manage' }]
     users = get_retailer_order_list(params, headers, users)
     data = users.each do |user|
       user.approval_status = get_approval_status_string(user)
