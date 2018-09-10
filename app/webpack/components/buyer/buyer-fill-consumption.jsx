@@ -17,6 +17,7 @@ export class FillConsumption extends Component {
             site_list: [],
             preDayList: [],
             preOtherList: [],
+            totalList: [],
             purchasing_entity: [],
             disabled: '',
             checked: false,
@@ -97,10 +98,12 @@ export class FillConsumption extends Component {
             })
             if (res.consumption.participation_status === '1' || res.auction.publish_status === "1") {
                 $("input[type='checkbox']").attr("checked", true);
+
                 this.setState({
                     disabled: 'disabled',
                     checked: true,
                 })
+
             }
             if (res.contract_duration) {
                 this.setState({
@@ -132,6 +135,13 @@ export class FillConsumption extends Component {
                 })
                 this.setState({ preOtherList: list })
             }
+            this.setState({
+                totalList: []
+            })
+            let total = this.state.totalList.concat(res.consumption_details).concat(res.consumption_details_last_day).concat(res.consumption_details_before_yesterday);
+            this.setState({
+                totalList: total
+            })
 
             if (this.state.checked) {
                 $(".btnOption").css("pointer-events", "none").css("color", "#4B4941");
@@ -294,6 +304,13 @@ export class FillConsumption extends Component {
                 preOtherList: entity
             })
         }
+        this.setState({
+            totalList: []
+        })
+        let total = this.state.totalList.concat(this.state.site_list).concat(this.state.preDayList).concat(this.state.preOtherList);
+        this.setState({
+            totalList: total
+        })
     }
 
     remove_site(index, type) {
@@ -438,6 +455,13 @@ export class FillConsumption extends Component {
                 site_listObj.splice(this.deleteNum, 1);
                 this.setState({ site_list: site_listObj });
             }
+            this.setState({
+                totalList: []
+            })
+            let total = this.state.totalList.concat(this.state.site_list).concat(this.state.preDayList).concat(this.state.preOtherList);
+            this.setState({
+                totalList: total
+            })
 
         }
     }
@@ -656,7 +680,7 @@ export class FillConsumption extends Component {
                                                 return <tr key={index}>
                                                     <td>{item.account_number} </td>
                                                     <td>{item.existing_plan}</td>
-                                                    <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('YYYY-MM-DD') : ""}</td>                          
+                                                    <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('YYYY-MM-DD') : ""}</td>
                                                     <td>{item.entityName}</td>
                                                     <td>{item.intake_level}</td>
                                                     <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
@@ -875,7 +899,7 @@ export class FillConsumption extends Component {
                             </div>
                             <div>
                                 <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
-                                    <input name="agree_declare" type="checkbox" id="chkAgree_declare" required />
+                                    <input name="agree_declare" type="checkbox" id="chkAgree_declare" disabled={this.state.disabled} required />
                                     {/* <span>I declare that all data submited is true and shall be used for the auction, and that i am bounded by <a target="_blank" href={this.state.link} className="urlStyle">Buyer T&C.</a></span> */}
                                     <span>I declare that all data submitted is true and shall be used for the auction, and that I am bounded by the <a target="_blank" href={this.state.buyer_link} className="urlStyleUnderline">Buyer Platform Terms of Use</a> and <a target="_blank" href={this.state.seller_link} className="urlStyleUnderline">Electricity Procurement Agreement</a>. </span>
                                 </h4>
@@ -892,7 +916,7 @@ export class FillConsumption extends Component {
                     </div>
                     <Modal text={this.state.text} acceptFunction={this.doAccept.bind(this)} ref="Modal" />
                 </form>
-                <Modal formSize="big" text={this.state.text} acceptFunction={this.doAddAccountAction.bind(this)} siteList={this.state.site_list} consumptionAccountItem={this.state.account_detail} listdetailtype='consumption_detail' ref="consumption" />
+                <Modal formSize="big" text={this.state.text} acceptFunction={this.doAddAccountAction.bind(this)} siteList={this.state.totalList} consumptionAccountItem={this.state.account_detail} listdetailtype='consumption_detail' ref="consumption" />
                 <Modal formSize="middle" text={this.state.text} advisory={this.state.advisory} listdetailtype='market-insight' ref="market" />
             </div >
         )
