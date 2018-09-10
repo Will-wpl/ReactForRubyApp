@@ -90,7 +90,7 @@ export class RetailerRegister extends Component {
             getRetailerUserInfoByUserId(this.state.userid).then(res => {
                 this.setDefult(res);
                 $("#btnRetailerBack").bind('click',()=>{
-                    if(this.state.buyerApproveStatus==="5")
+                    if(this.state.retailerApproveStatys==="5")
                     {
                         window.location.href="/admin/users/del_retailers";
                     }
