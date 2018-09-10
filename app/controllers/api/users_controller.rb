@@ -230,7 +230,7 @@ class Api::UsersController < Api::BaseController
     elsif user.approval_status == User::ApprovalStatusDisable
       'Disabled'
     elsif user.approval_status == User::ApprovalStatusRemoved
-      'Removed'
+      'Deleted'
     else
       ''
     end
