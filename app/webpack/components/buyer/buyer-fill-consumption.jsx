@@ -509,7 +509,10 @@ export class FillConsumption extends Component {
     passValidateSave() {
         if (this.state.submit_type === "Participate") {
             let siteCount = this.state.site_list.length;
-            if (siteCount === 0) {
+            let preCount = this.state.preDayList.length;
+            let beforeYesterday = this.state.preOtherList.length;
+            let total = siteCount + preCount + beforeYesterday;
+            if (total === 0) {
                 setTimeout(() => {
                     this.setState({ text: "Please add account to participate." });
                 }, 200);
