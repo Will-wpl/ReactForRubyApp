@@ -384,7 +384,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
       existing_plan = consumption_detail.existing_plan
     end
 
-    if draft_flag ==  ConsumptionDetail::DraftFlagYesterday
+    if draft_flag ==  ConsumptionDetail::DraftFlagYesterday && !consumption_detail.contract_expiry.blank?
       contract_expiry = consumption_detail.contract_expiry + duration.month
     elsif draft_flag ==  ConsumptionDetail::DraftFlagBeforeYesterday
       contract_expiry = nil
