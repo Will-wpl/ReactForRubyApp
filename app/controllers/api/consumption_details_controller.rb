@@ -68,7 +68,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
       consumption_details_all_before_yesterday = consumption_details_before_yesterday(consumption_details_before_yesterday, auction, consumption, only_read_records)
       removed_consumption_details = []
       consumption_details_all_before_yesterday.each do |consumption_detail|
-        if consumption_details_all_yesterday.any?{ |x| x.account_number == consumption_detail.account_number }
+        if consumption_details_all_yesterday.any?{ |x| x['account_number'] == consumption_detail['account_number'] }
           removed_consumption_details.push(consumption_detail)
         end
       end

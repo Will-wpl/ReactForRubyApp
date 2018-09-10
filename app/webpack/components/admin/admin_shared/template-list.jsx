@@ -19,8 +19,8 @@ export default class TemplatesList extends Component {
                             <table className="retailer_fill">
                                 <thead>
                                     <tr>
-                                        <th width={"69.7%"}>Name</th>
-                                        <th>Email</th>
+                                        <th width={"69.7%"}>{this.props.type=="email"?"Name":"Report"}</th>
+                                        <th>{this.props.type=="email"?"Email":""}</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -32,7 +32,7 @@ export default class TemplatesList extends Component {
                                         this.props.email_list?this.props.email_list.map((item, index) => {
                                             return (
                                                 <tr key={index}>
-                                                    <td width={"70%"} style={{"textAlign":"left","paddingLeft":"15px"}}>{item.subject}</td>
+                                                    <td width={"69.7%"} style={{"textAlign":"left","paddingLeft":"15px"}}>{item.subject}</td>
                                                     <td><a onClick={this.props.showEmail.bind(this, item.id,this.props.type)} className={"edit"}>edit</a></td>
                                                 </tr>
                                             )
