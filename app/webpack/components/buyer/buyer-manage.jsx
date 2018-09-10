@@ -467,7 +467,7 @@ export class BuyerUserManage extends Component {
     render() {
         let btn_html;
         btn_html = <div>
-            <button id="save_form" className="lm--button lm--button--primary" onClick={this.view_log.bind(this)} disabled={this.state.approveStatus}>View Log</button>
+            <button id="save_form" className="lm--button lm--button--primary" onClick={this.view_log.bind(this)} disabled={this.state.buyerApproveStatus==="3"?true:false}>View Log</button>
             <button id="save_form" className="lm--button lm--button--primary" onClick={this.deleteUser.bind(this)} disabled={this.state.approveStatus}>Delete</button>
             <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeUserAction.bind(this, 'reject')} disabled={this.state.approveStatus}>Reject</button>
             <button id="submit_form" className="lm--button lm--button--primary" onClick={this.judgeUserAction.bind(this, 'approve')} disabled={this.state.approveStatus}>Approve</button>
