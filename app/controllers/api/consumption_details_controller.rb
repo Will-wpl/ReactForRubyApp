@@ -321,7 +321,8 @@ class Api::ConsumptionDetailsController < Api::BaseController
                                                                                    UserAttachment::FileType_Consumption_Detail_Doc)
         attachment_ids = []
         user_attachments.each{ |x| attachment_ids.push(x.id) }
-        final_detail = put_in_consuption_detail(consumption_detail,auction.duration,
+        final_detail = put_in_consuption_detail(consumption_detail,
+                                                auction.contract_period_start_date + auction.duration.month,
                                                 user_attachments, attachment_ids,
                                                 ConsumptionDetail::DraftFlagBeforeYesterday)
         consumption_details_all_before_yesterday.push(final_detail)
@@ -333,7 +334,8 @@ class Api::ConsumptionDetailsController < Api::BaseController
                                                                                    UserAttachment::FileType_Consumption_Detail_Doc)
         attachment_ids = []
         user_attachments.each{ |x| attachment_ids.push(x.id) }
-        final_detail = put_in_consuption_detail(consumption_detail,auction.duration,
+        final_detail = put_in_consuption_detail(consumption_detail,
+                                                auction.contract_period_start_date + auction.duration.month,
                                                 user_attachments,
                                                 attachment_ids)
         consumption_details_all_before_yesterday.push(final_detail)
@@ -352,7 +354,8 @@ class Api::ConsumptionDetailsController < Api::BaseController
                                                                                    UserAttachment::FileType_Consumption_Detail_Doc)
         attachment_ids = []
         user_attachments.each{ |x| attachment_ids.push(x.id) }
-        final_detail = put_in_consuption_detail(consumption_detail,auction.duration,
+        final_detail = put_in_consuption_detail(consumption_detail,
+                                                auction.contract_period_start_date + auction.duration.month,
                                                 user_attachments,
                                                 attachment_ids,
                                                 ConsumptionDetail::DraftFlagYesterday)
@@ -366,7 +369,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
         attachment_ids = []
         user_attachments.each{ |x| attachment_ids.push(x.id) }
         final_detail = put_in_consuption_detail(consumption_detail,
-                                                auction.duration,
+                                                auction.contract_period_start_date + auction.duration.month,
                                                 user_attachments,
                                                 attachment_ids)
         consumption_details_all_yesterday.push(final_detail)
@@ -375,7 +378,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
     consumption_details_all_yesterday
   end
 
-  def put_in_consuption_detail(consumption_detail,duration ,user_attachments, attachment_ids, draft_flag = nil)
+  def put_in_consuption_detail(consumption_detail,contract_expire ,user_attachments, attachment_ids, draft_flag = nil)
     if draft_flag ==  ConsumptionDetail::DraftFlagYesterday
       existing_plan = consumption_detail.existing_plan
     elsif draft_flag ==  ConsumptionDetail::DraftFlagBeforeYesterday
@@ -385,11 +388,11 @@ class Api::ConsumptionDetailsController < Api::BaseController
     end
 
     if draft_flag ==  ConsumptionDetail::DraftFlagYesterday && !consumption_detail.contract_expiry.blank?
-      contract_expiry = consumption_detail.contract_expiry + duration.month
+      contract_expiry = contract_expire
     elsif draft_flag ==  ConsumptionDetail::DraftFlagBeforeYesterday
       contract_expiry = nil
     else
-      contract_expiry = consumption_detail.contract_expiry
+      contract_expiry = contract_expire
     end
 
     final_detail = {
