@@ -504,6 +504,13 @@ export class BuyerUserEntityRegister extends Component {
                 }
             });
         }
+        else
+        {
+            this.tab("base");
+            this.setState({
+                tabSelected: "base"
+            })
+        } 
     }
 
     submit(type) {
@@ -539,8 +546,13 @@ export class BuyerUserEntityRegister extends Component {
                 }
             })
         }
-        else {
-        }
+        else
+        {
+            this.tab("base");
+            this.setState({
+                tabSelected: "base"
+            })
+        } 
     }
 
     //add & delete entity
