@@ -33,6 +33,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
           ( !user.company_unique_entity_number.blank? && user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase )
         update_user_params['approval_status'] = User::ApprovalStatusPending
         update_user_params['approval_date_time'] = DateTime.current
+        add_log_flag = true
       end
     elsif user.approval_status == User::ApprovalStatusReject
       update_user_params['approval_status'] = User::ApprovalStatusPending
