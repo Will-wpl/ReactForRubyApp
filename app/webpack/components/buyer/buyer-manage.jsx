@@ -60,14 +60,12 @@ export class BuyerUserManage extends Component {
         if (this.state.userid) {
             getBuyerUserInfoByUserId(this.state.userid).then(res => {
                 this.setDefaultValue(res);
-                $("#btnBuyerBack").bind('click',()=>{
-                    if(this.state.buyerApproveStatus==="5")
-                    {
-                        window.location.href="/admin/users/del_buyers";
+                $("#btnBuyerBack").bind('click', () => {
+                    if (this.state.buyerApproveStatus === "5") {
+                        window.location.href = "/admin/users/del_buyers";
                     }
-                    else
-                    {
-                        window.location.href="/admin/users/buyers";
+                    else {
+                        window.location.href = "/admin/users/buyers";
                     }
                 })
             })
@@ -172,7 +170,7 @@ export class BuyerUserManage extends Component {
                 loglist: param.user_logs
             })
         }
-       
+
     }
     setEntityInfo(param) {
         if (param.buyer_entities) {
@@ -292,8 +290,8 @@ export class BuyerUserManage extends Component {
                     this.setState({
                         submitStatus: false
                     })
-
-                    this.tab("entity");
+                    window.location.href = '/admin/users/' + this.state.userid + '/manage';
+                    // this.tab("entity");
                 }
                 else { //buyer reject
                     this.setState({
