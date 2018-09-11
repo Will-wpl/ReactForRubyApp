@@ -593,7 +593,7 @@ dfn.manage_label{
           &.cancel_invite{background:url("../images/cancel_invite.png") no-repeat left;}
         }
         abbr{
-          display: block; padding:10px 0px; font-style: normal;
+          display: block; padding:10px 0px; font-style: normal; word-break: break-word;
         }
         a{
           margin: 0px auto; display: inline-block; min-width: 24px; cursor: pointer;

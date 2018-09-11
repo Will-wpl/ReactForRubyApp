@@ -633,10 +633,12 @@ export class CreateNewRA extends Component {
                 this.setState({
                     text: this.auction.name + " has been successfully updated. "
                 });
+                this.doGetData();
             } else {
                 this.setState({
                     text: this.auction.name + " has been successfully saved. "
                 });
+                this.doGetData('create');
             }
         }, error => {
             this.setState({
