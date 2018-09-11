@@ -173,7 +173,8 @@ export class BuyerUserManage extends Component {
 
     }
     setEntityInfo(param) {
-        if (param.buyer_entities) {
+
+        if (param.buyer_entities.length > 0) {
             let user_entity = param.buyer_entities;
             user_entity.map((item) => {
                 item.approval_status_name = this.convertEntityStatus(item.approval_status);
@@ -183,8 +184,7 @@ export class BuyerUserManage extends Component {
                 entity_list: user_entity
             })
         }
-        else
-        {
+        else {
             let item = [{
                 id: "",
                 user_id: this.state.id,
