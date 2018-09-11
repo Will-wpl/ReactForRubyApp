@@ -31,7 +31,7 @@ export class Keppelproposedeviations extends Component {
                     fileObj[item.file_type][0].files.push({
                         id:item.id,
                         file_name:item.file_name,
-                        file_path:item.file_path 
+                        file_path:item.file_path
                     })
                 })
                 this.setState({deviations_list:res.chats,fileData:fileObj,user_id:res.retailer_id});
@@ -48,12 +48,18 @@ export class Keppelproposedeviations extends Component {
     editData(){
         let deviationslist = [];
         this.state.deviations_list.map((item, index) => {
-            deviationslist += '{"id":"'+item.id+'","sp_response":"'+(item.sp_response!=null?item.sp_response:"")+'","sp_response_status":"'+item.sp_response_status+'"},';
+            let obj = {
+                id:""+item.id+"",
+                sp_response:item.sp_response!=null?item.sp_response:"",
+                sp_response_status:item.sp_response_status
+            }
+            deviationslist.push(obj);
+            //deviationslist += '{"id":"'+item.id+'","sp_response":"'+(item.sp_response!=null?item.sp_response:"")+'","sp_response_status":"'+item.sp_response_status+'"},';
         })
-        deviationslist = deviationslist.substr(0, deviationslist.length-1);
-        deviationslist = '['+deviationslist+']';
-        //console.log(deviationslist);
-        return deviationslist;
+        //deviationslist = deviationslist.substr(0, deviationslist.length-1);
+        //deviationslist = '['+deviationslist+']';
+        //console.log(JSON.stringify(deviationslist));
+        return JSON.stringify(deviationslist);
     }
     showConfirm(type,obj){
         this.setState({buttonType:type});
@@ -100,7 +106,7 @@ export class Keppelproposedeviations extends Component {
             textdisabled:disabled,
             status:status
         })
-        this.refs.history.showModal();
+        this.refs.history.showModal(null,"propose");
     }
     editDetail(detail){
         //console.log(this.state.detail_id);
@@ -108,7 +114,7 @@ export class Keppelproposedeviations extends Component {
             let list = this.state.deviations_list,id=this.state.detail_id;
             list[id.split("_")[1]].sp_response = detail;
             this.setState({deviations_list:list});
-        }   
+        }
     }
     send_response(){
         adminSendResponse(this.props.current.current.arrangement_id,this.editData()).then(res=>{
@@ -119,7 +125,7 @@ export class Keppelproposedeviations extends Component {
             setTimeout(()=>{
                 window.location.href="/admin/auctions/"+sessionStorage.auction_id+"/retailer_dashboard";
             },3000)
-            
+
         })
     }
     do_keppel(obj){
@@ -135,13 +141,13 @@ export class Keppelproposedeviations extends Component {
         let fileHtml = '';
         fileHtml = <div className="file_box">
                     <form id={type+"_form"} encType="multipart/form-data">
-                        {this.state.fileData[type].map((item, index) => 
+                        {this.state.fileData[type].map((item, index) =>
                                 <div className="u-grid mg0 u-mt1" key={index}>
                                     <div className="col-sm-12 col-md-10 u-cell">
                                         <a className="upload_file_btn">
                                             <dfn>No file selected...</dfn>
                                             {/* accept="application/pdf,application/msword" */}
-                                            {required === "required" ? 
+                                            {required === "required" ?
                                             <div>
                                                 <input type="file" required="required" ref={type+index}  onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.props.propsdisabled?true:(window.location.href.indexOf("past")>0?true:this.state.disabled)} />
                                                 <b>Browse..</b>
@@ -232,7 +238,7 @@ export class Keppelproposedeviations extends Component {
                         disabled: false
                     })
                 },2000);
-               
+
                 fileObj = this.state.fileData;
                 fileObj[type].map((item,index)=>{
                     item.files.push({
@@ -281,7 +287,7 @@ export class Keppelproposedeviations extends Component {
                     })
                     this.refs.Modal.showModal();
                 },error=>{
-        
+
                 })
             }
     render (){
@@ -350,7 +356,7 @@ export class Keppelproposedeviations extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="workflow_btn u-mt2">    
+                <div className="workflow_btn u-mt2">
                     <button className="lm--button lm--button--primary" disabled={this.props.readOnly} onClick={this.showConfirm.bind(this,'Send_Response')}>Send Response</button>
                 </div>
             </div>

@@ -195,25 +195,71 @@ export class Proposedeviations extends React.Component{
             let deviation = item.propose_deviation,response = item.retailer_response;
             if(item.sp_response_status != sum){
                 if(item.sp_response_status == ""){
-                    deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+deviation+'","retailer_response":"'+response+'","sp_response_status":"'+sum+'"},';
+                    let obj={
+                        id:"" + item.id + "",
+                        item:$("#item_"+(index)).val(),
+                        clause:$("#clause_"+(index)).val(),
+                        propose_deviation:deviation,
+                        retailer_response:response,
+                        sp_response_status:""+sum+""
+                    }
+                    deviationslist.push(obj);
+                    //deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+deviation+'","retailer_response":"'+response+'","sp_response_status":"'+sum+'"},';
                 }else{
                     if(item.sp_response_status == "0"){
-                        deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+deviation+'","retailer_response":"'+response+'","sp_response_status":"3"},';
+                       let obj={
+                            id:"" + item.id + "",
+                            item:$("#item_"+(index)).val(),
+                            clause:$("#clause_"+(index)).val(),
+                            propose_deviation:deviation,
+                            retailer_response:response,
+                            sp_response_status:"3"
+                        }
+                        deviationslist.push(obj);
+                        //deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+deviation+'","retailer_response":"'+response+'","sp_response_status":"3"},';
                     }else if(item.sp_response_status == "2"){
                         if(sum == "3"){
-                            deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+deviation+'","retailer_response":"'+response+'","sp_response_status":"3"},';
+                            let obj={
+                                id:"" + item.id + "",
+                                item:$("#item_"+(index)).val(),
+                                clause:$("#clause_"+(index)).val(),
+                                propose_deviation:deviation,
+                                retailer_response:response,
+                                sp_response_status:"3"
+                            }
+                            deviationslist.push(obj);
+                            //deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+deviation+'","retailer_response":"'+response+'","sp_response_status":"3"},';
                         }
                     }else{
-                        deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+deviation+'","retailer_response":"'+response+'","sp_response_status":"'+item.sp_response_status+'"},';
+                       let obj={
+                            id:"" + item.id + "",
+                            item:$("#item_"+(index)).val(),
+                            clause:$("#clause_"+(index)).val(),
+                            propose_deviation:deviation,
+                            retailer_response:response,
+                            sp_response_status:item.sp_response_status
+                        }
+                        deviationslist.push(obj);
+                        //deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+deviation+'","retailer_response":"'+response+'","sp_response_status":"'+item.sp_response_status+'"},';
                     }
                 }
             }else{
-                deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+deviation+'","retailer_response":"'+response+'","sp_response_status":"'+sum+'"},';
+                let obj={
+                    id:"" + item.id + "",
+                    item:$("#item_"+(index)).val(),
+                    clause:$("#clause_"+(index)).val(),
+                    propose_deviation:deviation,
+                    retailer_response:response,
+                    sp_response_status:""+sum+""
+                }
+                deviationslist.push(obj);
+                //deviationslist += '{"id":"'+item.id+'","item":"'+$("#item_"+(index)).val()+'","clause":"'+$("#clause_"+(index)).val()+'","propose_deviation":"'+deviation+'","retailer_response":"'+response+'","sp_response_status":"'+sum+'"},';
             }
         })
-        deviationslist = deviationslist.substr(0, deviationslist.length-1);
-        deviationslist = '['+deviationslist+']';
-        return deviationslist;
+        // console.log(JSON.stringify(deviationslist));
+        //deviationslist = deviationslist.substr(0, deviationslist.length-1);
+        //deviationslist = '['+deviationslist+']';
+        return JSON.stringify(deviationslist);
     }
 
     addDeviations(){
@@ -254,10 +300,10 @@ export class Proposedeviations extends React.Component{
             textdisabled:disabled,
             status:status
         })
-        this.refs.history.showModal();
+        this.refs.history.showModal(null,"propose");
     }
     editDetail(detail){
-        //console.log(detail);
+        console.log(detail);
         if(this.state.detail_id != ''){
             let list = this.state.deviations_list,id=this.state.detail_id;
             //$("#"+this.state.detail_id).val(detail);
