@@ -327,12 +327,12 @@ class Api::ConsumptionDetailsController < Api::BaseController
     if consumption.contract_duration.blank?
       period_end_date = auction.contract_period_end_date
     else
-      auction_contract = AuctionContract.find_by auction_id: current_consumption.auction_id, contract_duration: current_consumption.contract_duration
+      auction_contract = AuctionContract.find_by auction_id: consumption.auction_id, contract_duration: consumption.contract_duration
       period_end_date = auction_contract.nil? ? auction.contract_period_end_date: auction_contract.contract_period_end_date
     end
     [period_start_date ,period_end_date]
   end
-  
+
   def consumption_details_before_yesterday(consumption_details_before_yesterday, auction, consumption, only_read_records = false)
     consumption_details_all_before_yesterday = []
     if consumption_details_before_yesterday.blank? && !only_read_records
