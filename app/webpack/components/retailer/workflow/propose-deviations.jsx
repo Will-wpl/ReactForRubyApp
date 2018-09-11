@@ -272,7 +272,7 @@ export class Proposedeviations extends React.Component{
     goBack(){
         if(this.state.deviations_list.length>0 && this.state.deviations_list[0].item != ""){
             this.refs.Modal.showModal('comfirm');
-            this.setState({text:"Please confirm that you want to return to the previous step. <br>All deviations will be deleted.(Yes,No). <br>The saved data will be removed if click Yes, <br>and page forward back to Step page2.",buttonType:"goback"});
+            this.setState({text:"Please confirm that you want to return to the previous step. <br>All deviations will be deleted.",buttonType:"goback"});
         }else{
             this.doBack();
         }
@@ -385,7 +385,7 @@ export class Proposedeviations extends React.Component{
                     <div className="workflow_btn u-mt3">
                         {!this.props.tender ?
                         <div>
-                            {this.props.current.actions.node3_retailer_back?<button className="lm--button lm--button--primary" disabled={this.props.propsdisabled} onClick={this.goBack.bind(this)}>Back</button>:''}
+                            {this.props.current.actions.node3_retailer_back?<button className="lm--button lm--button--primary" disabled={this.props.propsdisabled} onClick={this.goBack.bind(this)}>Previous</button>:''}
                             <button className="lm--button lm--button--primary" disabled={this.props.propsdisabled?true:(this.state.alldisabled?true:(!this.props.current.actions.node3_retailer_withdraw_all_deviations))} onClick={this.showConfirm.bind(this,'Withdraw_Deviations')}>Withdraw All Deviations</button>
                             <button className="lm--button lm--button--primary" onClick={this.save.bind(this)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Save</button>
                             <button className="lm--button lm--button--primary" disabled={this.props.propsdisabled?true:(this.state.alldisabled?true:(!this.props.current.actions.node3_retailer_submit_deviations))} onClick={this.showConfirm.bind(this,'Submit_Deviations')}>Submit Deviations</button></div> :
