@@ -57,7 +57,17 @@ class ConsumptionDetail < ApplicationRecord
     Consumption.find_by_sql ["SELECT cdf.*
                               FROM (SELECT cda.*, row_number()
                                     OVER (PARTITION BY cda.account_number ORDER BY cda.contract_period_end_date DESC ) as n
-                                    FROM (SELECT cd.*, a.id as auction_id, a.name as auction_name, a.published_gid as ra_id, e.user_id as buyer_id, e.company_name as entity_name, e.id as entity_id , ac.contract_period_end_date FROM consumption_details cd
+                                    FROM (SELECT cd.*,
+                                            a.id as auction_id,
+                                            a.name as auction_name,
+                                            a.published_gid as ra_id,
+                                            e.user_id as buyer_id,
+                                            e.company_name as entity_name,
+                                            e.id as entity_id ,
+                                            ac.contract_duration,
+                                            a.contract_period_start_date,
+                                            ac.contract_period_end_date
+                                          FROM consumption_details cd
                                       JOIN company_buyer_entities e ON cd.company_buyer_entity_id = e.id
                                       JOIN consumptions c ON cd.consumption_id = c.id And c.user_id = :User_id And c.accept_status = :Consumption_status
                                       JOIN auctions a ON c.auction_id = a.id
@@ -73,7 +83,17 @@ class ConsumptionDetail < ApplicationRecord
     Consumption.find_by_sql ["SELECT cdf.*
                               FROM (SELECT cda.*, row_number()
                                     OVER (PARTITION BY cda.account_number ORDER BY cda.contract_period_end_date DESC ) as n
-                                    FROM (SELECT cd.*, a.id as auction_id, a.name as auction_name, a.published_gid as ra_id, e.user_id as buyer_id, e.company_name as entity_name, e.id as entity_id , ac.contract_period_end_date FROM consumption_details cd
+                                    FROM (SELECT cd.*,
+                                            a.id as auction_id,
+                                            a.name as auction_name,
+                                            a.published_gid as ra_id,
+                                            e.user_id as buyer_id,
+                                            e.company_name as entity_name,
+                                            e.id as entity_id ,
+                                            ac.contract_duration,
+                                            a.contract_period_start_date,
+                                            ac.contract_period_end_date
+                                          FROM consumption_details cd
                                       JOIN company_buyer_entities e ON cd.company_buyer_entity_id = e.id
                                       JOIN consumptions c ON cd.consumption_id = c.id And c.user_id = :User_id And c.accept_status = :Consumption_status
                                       JOIN auctions a ON c.auction_id = a.id
