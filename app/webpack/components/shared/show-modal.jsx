@@ -111,6 +111,8 @@ export class Modal extends React.Component {
         if (next.siteList) {
             this.setState({ consumptionItem: next.siteList });
         }
+
+        
         if (next.attatchment) {
 
             this.setState({
@@ -731,6 +733,7 @@ export class Modal extends React.Component {
     account_address_repeat() {
         let address = false, account = false, editNotSave = false;
         let address_count = 0, account_count = 0;
+        console.log(this.state.consumptionItem);
         this.state.consumptionItem.map((item, index) => {
             if (this.state.option === 'update') {
                 if (item.id) {

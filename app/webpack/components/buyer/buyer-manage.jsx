@@ -183,6 +183,32 @@ export class BuyerUserManage extends Component {
                 entity_list: user_entity
             })
         }
+        else
+        {
+            let item = [{
+                id: "",
+                user_id: this.state.id,
+                main_id: "",
+                user_entity_id: "",
+                company_name: this.state.company_name,
+                company_uen: this.state.unique_entity_number,
+                company_address: this.state.company_address,
+                billing_address: "",
+                bill_attention_to: "",
+                contact_name: "",
+                contact_email: this.state.email_address,
+                contact_mobile_no: "",
+                contact_office_no: "",
+                is_default: 1,
+                approval_status: 2,
+                approval_status_name: "Pending"
+            }]
+
+            this.setState({
+                entity_list: item
+            });
+        }
+
     }
 
     setDefaultTab(param) {
