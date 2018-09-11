@@ -484,7 +484,7 @@ export class BuyerUserManage extends Component {
     convertEntityStatus(value) {
         if (value) {
             if (value === "0") {
-                return "Reject"
+                return "Rejected"
             }
             else if (value === "1") {
                 return "Approved"
