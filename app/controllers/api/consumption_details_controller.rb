@@ -159,7 +159,11 @@ class Api::ConsumptionDetailsController < Api::BaseController
     detail = params[:detail]
     current_consumption = Consumption.find(params[:consumption_id]) #@consumption
     consumptions = Consumption.mine(current_user.id)
-    contract_period_start_date, contract_period_end_date = get_auction_period(current_consumption)
+    auction = Auction.find(current_consumption.auction_id)
+    raise ActiveRecord::RecordNotFound if auction.nil?
+    contract_period_start_date = auction.contract_period_start_date
+
+    # contract_period_start_date, contract_period_end_date = get_auction_period(current_consumption)
     # Account must be unique within a RA.
     account_numbers = []
     premise_addresses = []
@@ -175,8 +179,10 @@ class Api::ConsumptionDetailsController < Api::BaseController
     # end
     consumptions.each do |consumption|
       temp_contract_period_start_date ,temp_contract_period_end_date = get_auction_period(consumption)
-      if temp_contract_period_end_date < contract_period_start_date ||
-          temp_contract_period_start_date > contract_period_end_date
+
+      if temp_contract_period_start_date.nil? ||
+          temp_contract_period_end_date.nil? ||
+          temp_contract_period_end_date < contract_period_start_date
         next
       end
       consumption.consumption_details.each do |consumption_detail|
