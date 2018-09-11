@@ -37,7 +37,7 @@ export class BuyerUserManage extends Component {
             usedEntityIdArr: [],
             submitStatus: false,
             buyerApproveStatus: 3,
-            ismain: false, entityIndex: 0, entityId: 0, loglist: []
+            ismain: false, entityIndex: 0, entityId: 0, buyerLogList: [], loglist: []
 
         }
         this.validatorComment = {
@@ -167,7 +167,8 @@ export class BuyerUserManage extends Component {
                 // item.updated_at = moment(item.updated_at).format('YYYY-MM-DD');
             })
             this.setState({
-                loglist: param.user_logs
+                loglist: list,
+                buyerLogList: list
             })
         }
 
@@ -379,8 +380,10 @@ export class BuyerUserManage extends Component {
 
     view_log() {
         this.setState({
-            text: ""
+            text: "",
+            loglist: this.state.buyerLogList
         })
+
         this.refs.Modal_Log.showModal();
     }
     view_entity_log(item) {
