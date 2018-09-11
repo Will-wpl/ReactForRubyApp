@@ -504,7 +504,7 @@ export class BuyerUserEntityRegister extends Component {
                 }
             });
         }
-        else {
+        else {            
             this.tab("base");
             this.setState({
                 tabSelected: "base"
