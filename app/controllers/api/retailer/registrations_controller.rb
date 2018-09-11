@@ -55,7 +55,7 @@ class Api::Retailer::RegistrationsController < Api::RegistrationsController
     #   end
     # end
     @user.update(update_user_params)
-    add_user_log(user) if add_log_flag
+    add_user_log(User.find(@user.id)) if add_log_flag
     render json: { user: @user }, status: 200
   end
 

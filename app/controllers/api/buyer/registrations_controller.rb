@@ -57,7 +57,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     # end
     ActiveRecord::Base.transaction do
       @user.update(update_user_params)
-      add_user_log(@user) if add_log_flag
+      add_user_log(User.find(@user.id)) if add_log_flag
       # update buyer entity registration information
       # buyer_entities.push(build_default_entity( update_user_params )) unless buyer_entities.any?{ |v| v['is_default'] == 1 }
       saved_entities = update_buyer_entities(buyer_entities,true)
@@ -278,6 +278,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
         # entity_user.entity_id = target_buyer_entity.id
         if entity_user.save!
           entity_user.add_role(:entity)
+          add_user_log(entity_user)
         end
       end
       CompanyBuyerEntity.find(target_buyer_entity.id).update(user_entity_id: entity_user.id)
@@ -290,6 +291,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
   end
 
   def update_buyer_entity(buyer_entity)
+    add_log_flag = false
     target_buyer_entity = if buyer_entity['main_id'].to_i == 0
                             CompanyBuyerEntity.new
                           else
@@ -310,17 +312,20 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     target_buyer_entity.is_default = buyer_entity['is_default'].blank? ? 0 : buyer_entity['is_default']
     if buyer_entity['main_id'].to_i == 0
       target_buyer_entity.approval_status = CompanyBuyerEntity::ApprovalStatusPending
+      add_log_flag = true
     else
       target_buyer_entity.approval_status = buyer_entity['approval_status'] unless buyer_entity['approval_status'].blank?
       if (original_company_name != target_buyer_entity.company_name ||
           original_company_uen != target_buyer_entity.company_uen ||
           original_approval_status == CompanyBuyerEntity::ApprovalStatusReject)
         target_buyer_entity.approval_status = CompanyBuyerEntity::ApprovalStatusPending
-        add_entity_log(target_buyer_entity)
+        add_log_flag = true
       end
     end
     target_buyer_entity.user = current_user
     success_saved = (target_buyer_entity.save!)
+    add_entity_log(target_buyer_entity) if add_log_flag && success_saved
+
     [success_saved, target_buyer_entity]
   end
 
