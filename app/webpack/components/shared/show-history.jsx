@@ -95,6 +95,8 @@ export class Showhistory extends React.Component{
                     '靠左':'left',
                     '靠右':'right',
                     '居中':'center',
+                    '宋体':'song',
+                    '微软雅黑':'yahei'
                     // 还可自定添加更多
                 };
             setTimeout(() => { editor.create() });
