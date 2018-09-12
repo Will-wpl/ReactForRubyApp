@@ -49,6 +49,17 @@ class Api::UsersController < Api::BaseController
     render json: current_user, status: 200
   end
 
+  # Validate user for delete
+  # Params:
+  #   user_id  -> Indicate a user's id
+  def validate_for_delete
+    user_id = params[:user_id]
+    validate_result = validate_in_auction_result(user_id)
+    validate_result = validate_in_consumption(user_id) if validate_result == 0
+
+    render json: { validate_result: validate_result }, status: 200
+  end
+
   # Remove Retailer
   # Params:
   #   user_id  -> Indicate a user's id
@@ -149,6 +160,7 @@ class Api::UsersController < Api::BaseController
   def remove_user(user_id)
     user = User.find(user_id)
     unless user.blank?
+      Consumption.delete(user_id: user_id, action_status: Consumption::ActionStatusPending)
       user.email = string_for_user_value(user.email)
       user.company_unique_entity_number = string_for_user_value(user.company_unique_entity_number)
       user.company_license_number = string_for_user_value(user.company_license_number)
@@ -279,4 +291,33 @@ class Api::UsersController < Api::BaseController
     end
 
   end
+
+
+  def validate_in_auction_result(user_id)
+    validate_result = 0
+    user_auction_res = AuctionResultContract.find_by user_id: user_id
+    if user_auction_res.any? { |x| x.contract_period_end_date > DateTime.current && x.status != 'void' }
+      validate_result = 1
+    end
+    validate_result
+  end
+
+  def validate_in_consumption(user_id)
+    validate_result = 0
+    consumptions = Consumption.find_by user_id: user_id
+    if consumptions.any? { |x| x.action_status == Consumption::ActionStatusPending }
+      validate_result = 3
+    elsif consumptions.any? { |x| x.action_status == Consumption::ActionStatusSent }
+      consumptions_sent = consumptions.where(action_status: Consumption::ActionStatusSent)
+      consumptions_sent.each do |temp_consumption|
+        if !AuctionResultContract.any? { |x| x.auction_id == temp_consumption.auction_id &&
+            x.contract_duration == temp_consumption.contract_duration
+        }
+          validate_result = 2
+        end
+      end
+    end
+    validate_result
+  end
+
 end
