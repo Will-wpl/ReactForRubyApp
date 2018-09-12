@@ -493,9 +493,12 @@ export class BuyerUserEntityRegister extends Component {
                                 disabled: true,
                                 btnAddDisabled: true
                             })
-                            if ((this.state.company_name !== this.company_name_back) || (this.state.unique_entity_number !== this.unique_entity_number_back)) {
-                                window.location.href = `/buyer/home`;
-                            }
+                            // if ((this.state.company_name !== this.company_name_back) || (this.state.unique_entity_number !== this.unique_entity_number_back)) {
+                                setTimeout(() => {
+                                    window.location.href = `/buyer/home`;
+                                }, 2000);
+                                
+                            // }
                         }
                     });
                 }
