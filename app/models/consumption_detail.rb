@@ -48,7 +48,7 @@ class ConsumptionDetail < ApplicationRecord
                                       AND (u.is_deleted is NULL OR u.is_deleted <> 1)
                                           ) as cda
                                     ) as cdf
-                              WHERE cdf.n <= 1 AND ac.contract_period_end_date < ? ORDER BY #{sort_by}
+                              WHERE cdf.n <= 1 AND cdf.contract_period_end_date < ? ORDER BY #{sort_by}
                               ", search_date]
   end
 
