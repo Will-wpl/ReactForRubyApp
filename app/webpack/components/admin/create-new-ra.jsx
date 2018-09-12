@@ -696,10 +696,10 @@ export class CreateNewRA extends Component {
         if (obj.method === "next") {
             if (obj.action === "proceed") {
                 deleteSelectedBuyer(param).then(res => {
-             
+
                     if (res.status === "1") {
-                        // window.location.href = `/admin/auctions/${this.auction.id}/invitation`;
-                        this.doNext();
+                        window.location.href = `/admin/auctions/${this.auction.id}/invitation`;
+                        //this.doNext();
                     }
                 })
             }
