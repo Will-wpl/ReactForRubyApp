@@ -112,7 +112,7 @@ export class Modal extends React.Component {
             this.setState({ consumptionItem: next.siteList });
         }
 
-        
+
         if (next.attatchment) {
 
             this.setState({
@@ -194,7 +194,7 @@ export class Modal extends React.Component {
                     var editor = new E('#email_body');
                     setTimeout(() => { editor.create(); });
                 }
-                setTimeout(() => { $(".w-e-text p").html(data) }, 300);
+                setTimeout(() => { $(".w-e-text").html("").html(data==""?"<p></p>":data) }, 300);
             }
             if (data.subject && data.body) {
                 $(".w-e-text p").html("");
@@ -206,7 +206,7 @@ export class Modal extends React.Component {
                     email_subject: data.subject,
                     email_body: data.body
                 })
-                setTimeout(() => { $(".w-e-text p").html(this.state.email_body) }, 300);
+                setTimeout(() => { $(".w-e-text").html("").html(this.state.email_body==""?"<p></p>":this.state.email_body) }, 300);
             }
         }
         if (type == "comfirm") {
@@ -251,11 +251,11 @@ export class Modal extends React.Component {
         if (this.state.strtype == "email_template" ||
             this.state.strtype == "email_template_la") {
             if (this.state.strtype == "email_template_la") {
-                this.setState({ props_data: $(".w-e-text p").html() });
+                this.setState({ props_data: $(".w-e-text").html() });
             } else {
                 let data = this.state.props_data;
                 data.subject = this.state.email_subject;
-                data.body = $(".w-e-text p").html();
+                data.body = $(".w-e-text").html();
                 this.setState({ props_data: data });
             }
         }
