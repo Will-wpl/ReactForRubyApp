@@ -147,17 +147,17 @@ export class Showhistory extends React.Component{
                                     {item.propose_deviation ?
                                     <dd>
                                         <dfn><abbr></abbr>{this.state.ratailer_name}</dfn>
-                                        <span>
+                                        <aside>
                                             <b>Proposed Deviation : </b><div className={"devation_text_"+index}>{this.showHtml("devation_text_"+index,item.propose_deviation?item.propose_deviation:"")}</div><br/>
                                             <b>Comments : </b><div className={"comments_text_"+index}>{this.showHtml("devation_text_"+index,item.retailer_response?item.retailer_response:"")}</div>
-                                        </span>
+                                        </aside>
                                     </dd>:''}
                                     {item.sp_response!=null?
                                     <dt>
                                         <dfn><abbr></abbr>SP Group</dfn>
                                         {item.response_status == "0"?
-                                            <span className={item.sp_response===""?"short":""}><b>Rejected : </b>{item.sp_response===""?"":<div className={"sp_text_"+index}>{item.sp_response}</div>}</span>:
-                                            <span className={item.sp_response===""?"short":""}><b>Accepted : </b>{item.sp_response===""?"":<div className={"sp_text_"+index}>{item.sp_response}</div>}</span>}
+                                            <aside className={item.sp_response===""?"short":""}><b>Rejected : </b>{item.sp_response===""?"":<div className={"sp_text_"+index}>{item.sp_response}</div>}</aside>:
+                                            <aside className={item.sp_response===""?"short":""}><b>Accepted : </b>{item.sp_response===""?"":<div className={"sp_text_"+index}>{item.sp_response}</div>}</aside>}
                                     </dt>:''}
                                 </dl>
                     })}
