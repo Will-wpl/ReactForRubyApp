@@ -29,7 +29,6 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
         update_user_params['approval_date_time'] = DateTime.current
         add_log_flag = true
       end
-    elsif user.approval_status != User::ApprovalStatusRemoved
       if ( !user.company_name.blank? && user.company_name.downcase != update_user_params['company_name'].downcase) ||
           ( !user.company_unique_entity_number.blank? && user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase )
         update_user_params['approval_status'] = User::ApprovalStatusPending
@@ -419,7 +418,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     if !buyer_entity['is_default'].equal?(1) &&
         !buyer_entity['contact_email'].blank? &&
         user.any?{ |v| !v.email.blank? && v.email.downcase == buyer_entity['contact_email'].downcase &&
-            buyer_entity['user_id'].blank? &&
+            buyer_entity['user_entity_id'].blank? &&
             v.id != buyer['id'] }
       if index > -1
         entity_error_info.push({ 'entity_index' => index,
