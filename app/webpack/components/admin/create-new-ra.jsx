@@ -698,7 +698,7 @@ export class CreateNewRA extends Component {
                 deleteSelectedBuyer(param).then(res => {
 
                     if (res.status === "1") {
-                        window.location.href = `/admin/auctions/${this.auction.id}/invitation`;
+                        //window.location.href = `/admin/auctions/${this.auction.id}/invitation`;
                         //this.doNext();
                     }
                 })
