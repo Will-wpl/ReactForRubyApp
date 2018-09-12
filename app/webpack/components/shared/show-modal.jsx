@@ -192,20 +192,20 @@ export class Modal extends React.Component {
                 $(".w-e-text p").html("");
                 if ($("#email_body").html() == "") {
                     var editor = new E('#email_body');
-                    editor.customConfig.menus = [
-                        'head',
-                        'bold',
-                        'fontSize',
-                        'fontName',
-                        'italic',
-                        'underline',
-                        'strikeThrough',
-                        'foreColor',
-                        'backColor',
-                        'justify',
-                        'undo',
-                        'redo'
-                    ];
+                    // editor.customConfig.menus = [
+                    //     'head',
+                    //     'bold',
+                    //     'fontSize',
+                    //     'fontName',
+                    //     'italic',
+                    //     'underline',
+                    //     'strikeThrough',
+                    //     'foreColor',
+                    //     'backColor',
+                    //     'justify',
+                    //     'undo',
+                    //     'redo'
+                    // ];
                     editor.customConfig.lang = {
                         '字号': 'font size',
                         '字体': 'font',
@@ -227,20 +227,20 @@ export class Modal extends React.Component {
                 $(".w-e-text p").html("");
                 if ($("#email_body").html() == "") {
                     var editor = new E('#email_body');
-                    editor.customConfig.menus = [
-                        'head',
-                        'bold',
-                        'fontSize',
-                        'fontName',
-                        'italic',
-                        'underline',
-                        'strikeThrough',
-                        'foreColor',
-                        'backColor',
-                        'justify',
-                        'undo',
-                        'redo'
-                    ];
+                    // editor.customConfig.menus = [
+                    //     'head',
+                    //     'bold',
+                    //     'fontSize',
+                    //     'fontName',
+                    //     'italic',
+                    //     'underline',
+                    //     'strikeThrough',
+                    //     'foreColor',
+                    //     'backColor',
+                    //     'justify',
+                    //     'undo',
+                    //     'redo'
+                    // ];
                     editor.customConfig.lang = {
                         '字号': 'font size',
                         '字体': 'font',
