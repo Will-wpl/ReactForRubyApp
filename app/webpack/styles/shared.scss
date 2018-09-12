@@ -2,6 +2,10 @@
 body a{outline:none; cursor: default;}
 .link_hand a{cursor: pointer;}
 button{ cursor: pointer; transition: 0.5s all;}
+html{
+  body,div,table,thead,tbody,tfoot,tr,th,td,p { font-family:geomanist, Arial; font-size:12px; }
+}
+
 .green{color:green;}
 .red{color:red;}
 .cursor_link{cursor: pointer !important;}
