@@ -27,21 +27,27 @@ class BaseTenderWorkflow < Workflow
   def get_action_state_machine(auction_id)
     arrangements = []
     Arrangement.find_by_auction_id(auction_id).joins(:user).order('users.company_name asc').each do |arrangement|
-      arrangements.push(company_name: arrangement.user.company_name, arrangement_id: arrangement.id, status: set_arrangement_accept_status(arrangement.accept_status), detail: get_arrangement_state_machine(arrangement.id))
+      arrangements.push(company_name: arrangement.user.company_name, arrangement_id: arrangement.id, status: set_user_accept_status(arrangement.user.approval_status), detail: get_arrangement_state_machine(arrangement.id))
     end
     arrangements
   end
 
-  def set_arrangement_accept_status(accept_status)
-    case accept_status
+  def set_user_accept_status(approval_status)
+    case approval_status
       when '0'
         status = 'Reject'
       when '1'
         status = 'Accept'
       when '2'
         status = 'Pending'
+      when '3'
+        status = 'Registering'
+      when '4'
+        status = 'Disable'
+      when '2'
+        status = 'Removed'
       else
-        status = nil
+        status = 'Registering'
     end
     status
   end
