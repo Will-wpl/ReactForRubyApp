@@ -65,7 +65,7 @@ export default class EmailTemplates extends Component {
                     <div className="admin_buyer_list col-sm-12 col-md-12">
                         <div className="col-sm-12 buyer_tab">
                             <a className="col-sm-4 col-md-2 selected" onClick={this.tab.bind(this,'email')} id="tab_email">Email Templates</a>
-                            <a className="col-sm-4 col-md-2" onClick={this.tab.bind(this,'la')} id="tab_la">Letter of Award Templates</a>
+                            <a className="col-sm-4 col-md-3" onClick={this.tab.bind(this,'la')} id="tab_la">Letter of Award Templates</a>
                             <a className="col-sm-4 col-md-2" onClick={this.tab.bind(this,'advisory')} id="tab_advisory">Advisory Templates</a>
                             <a className="col-sm-4 col-md-2" onClick={this.tab.bind(this,'registration')} id="tab_registration">Registration Templates</a>
                         </div>
