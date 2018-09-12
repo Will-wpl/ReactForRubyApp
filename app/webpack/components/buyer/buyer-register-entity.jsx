@@ -14,7 +14,7 @@ export class BuyerUserEntityRegister extends Component {
         this.state = {
             id: "", userid: "", text: "", btn_status: false, disabled: false, havedata: false, allbtnStatus: true, validate: true, use_type: "",
             email_address: "", company_name: "", unique_entity_number: "", company_address: "", billing_address: "", contact_name: "",
-            mobile_number: "", office_number: "", entityStatus: "", approveStatus: false, status: '', main_id: '',
+            mobile_number: "", office_number: "", entityStatus: "", approveStatus: false, status: '', main_id: '',approveStatusOld:"",
 
             buyerTCurl: "", buyerTCname: "", agree_seller_buyer: "0", approval_status: 2, tabSelected: "base",
             buyerRevvTCurl: "", buyerRevvTCname: "", agree_buyer_revv: "0", has_tenants: "1", entity_list: [], entityItemInfo: this.entityItem,
@@ -157,6 +157,7 @@ export class BuyerUserEntityRegister extends Component {
                 agree_buyer_revv: item.agree_buyer_revv ? item.agree_buyer_revv : '0',
                 has_tenants: item.has_tenants ? item.has_tenants : '1',
                 approveStatus: item.approval_status === "3" ? true : false,
+                approveStatusOld:item.approval_status,
                 status: setApprovalStatus(item.approval_status, item.approval_date_time === null ? item.created_at : item.approval_date_time)
             })
             this.company_name_back = item.company_name;
@@ -467,6 +468,11 @@ export class BuyerUserEntityRegister extends Component {
     }
 
     save(type) {
+        let needRedirect=false;
+        if(this.state.approveStatusOld==='0')
+        {
+            needRedirect=true;
+        }
         let isValidator = this.checkRequired();
         if (isValidator) {
             validateIsExist(this.setParams()).then(res => {
@@ -493,12 +499,18 @@ export class BuyerUserEntityRegister extends Component {
                                 disabled: true,
                                 btnAddDisabled: true
                             })
-                            // if ((this.state.company_name !== this.company_name_back) || (this.state.unique_entity_number !== this.unique_entity_number_back)) {
+                            if ((this.state.company_name !== this.company_name_back) 
+                            || (this.state.unique_entity_number !== this.unique_entity_number_back)) {
                                 setTimeout(() => {
                                     window.location.href = `/buyer/home`;
-                                }, 2000);
-                                
-                            // }
+                                }, 2000);   
+                            }
+                            else{
+                                if(needRedirect)
+                                {
+                                    window.location.href = `/users/edit`;
+                                }
+                            }
                         }
                     });
                 }

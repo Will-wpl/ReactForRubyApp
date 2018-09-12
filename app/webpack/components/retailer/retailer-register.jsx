@@ -30,7 +30,7 @@ export class RetailerRegister extends Component {
             office_number: "",
             comment: "",
             validate: true,
-            retailerApproveStatys: "",
+            retailerApproveStatus: "",
 
             fileData: {
                 "RETAILER_DOCUMENTS": [
@@ -90,7 +90,7 @@ export class RetailerRegister extends Component {
             getRetailerUserInfoByUserId(this.state.userid).then(res => {
                 this.setDefult(res);
                 $("#btnRetailerBack").bind('click',()=>{
-                    if(this.state.retailerApproveStatys==="5")
+                    if(this.state.retailerApproveStatus==="5")
                     {
                         window.location.href="/admin/users/del_retailers";
                     }
@@ -129,7 +129,7 @@ export class RetailerRegister extends Component {
                 agree_seller_revv: item.agree_seller_revv ? item.agree_seller_revv : '0',
                 status: setApprovalStatus(item.approval_status, item.approval_status === "5" ? item.deleted_at : item.approval_date_time === null ? item.created_at : item.approval_date_time),
                 approveStatus: (item.approval_status === "3" || item.approval_status === "5") ? true : false,
-                retailerApproveStatys: item.approval_status
+                retailerApproveStatus: item.approval_status
             })
             if (this.state.agree_seller_buyer === '1') {
                 $('#chkBuyer').attr("checked", true);
@@ -390,6 +390,12 @@ export class RetailerRegister extends Component {
     }
 
     save(type) {
+        let isNeedRedirect=false;
+        if(this.state.retailerApproveStatus==='0')
+        {
+            isNeedRedirect=true
+        }
+
         let param = this.getParam();
         if (this.checkValidation()) {
             validateIsExist({
@@ -401,15 +407,23 @@ export class RetailerRegister extends Component {
                         user: this.getParam(type == "save" ? 1 : null)
                     }).then(res => {
                         $('#license_number_repeat').removeClass('errormessage').addClass('isPassValidate');
-                        this.refs.Modal.showModal();
+                      
                         this.setState({
                             disabled: true,
                             text: "Your details have been successfully saved. "
                         });
+                          this.refs.Modal.showModal();
                         if (type === "save") {
-                            if ((this.state.company_name !== this.company_name_back) || (this.state.company_unique_entity_number !== this.company_unique_entity_number_back) || (this.state.license_number !== this.company_license_number_back)) {
+                             if ((this.state.company_name !== this.company_name_back) || (this.state.company_unique_entity_number !== this.company_unique_entity_number_back) || (this.state.license_number !== this.company_license_number_back)) {
                                 window.location.href = `/retailer/home`;
-                            }
+                             }
+                             else
+                             {
+                                 if(isNeedRedirect)
+                                 {
+                                    window.location.href = `/users/edit`;
+                                 }
+                             }
                         }
 
                     })
@@ -534,7 +548,7 @@ export class RetailerRegister extends Component {
         let btn_html;
         if (this.state.use_type === 'admin_approve') {
             btn_html = <div>
-                <button id="view_log" className="lm--button lm--button--primary" onClick={this.view_log.bind(this)} disabled={this.state.retailerApproveStatys === "3" ? true : false}>View Log</button>
+                <button id="view_log" className="lm--button lm--button--primary" onClick={this.view_log.bind(this)} disabled={this.state.retailerApproveStatus === "3" ? true : false}>View Log</button>
                 <button id="delete" className="lm--button lm--button--primary" onClick={this.deleteUser.bind(this)} disabled={this.state.approveStatus}>Delete</button>
                 <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'reject')} disabled={this.state.approveStatus}>Reject</button>
                 <button id="submit_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'approve')} disabled={this.state.approveStatus}>Approve</button>
