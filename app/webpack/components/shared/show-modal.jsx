@@ -835,19 +835,19 @@ export class Modal extends React.Component {
         // a.download = file_name; //设置下载文件名
         // console.log(a);
         // a.dispatchEvent(e); //给指定的元素，执行事件click事
-       
+
 
         // for (let i = 0; i < fileContents.length; i++) {
         //     let a = document.createElement('a');
         //     let blob = fileContents[i].blob;
         //     let filename = fileContents[i].filename;
-            
+
         //     /** // 如果文件名有中文，win平台需要转成gb2312编码，否则文件名乱码
         //      * if ((navigator.platform == "Win32") || (navigator.platform == "Windows")) {
         //         return Utf8ToGb2312(filename);
         //     }
         //      * */
-    
+
         //     a.download = filename;
         //     a.href = window.URL.createObjectURL(blob);
         //     a.dispatchEvent(new MouseEvent('click'));
@@ -869,7 +869,7 @@ export class Modal extends React.Component {
             setTimeout(function () {
                 document.body.removeChild(frame);
             }, 1000);
-    
+
         })
     }
 
@@ -1083,6 +1083,11 @@ export class Modal extends React.Component {
                                 <input type="text" name="email_subject" value={this.state.email_subject} onChange={this.Change.bind(this, 'email_subject')} disabled={this.state.disabled} ref="email_subject" required aria-required="true" />
                             </div>
                         </div>}
+                        <div className="lm--formItem lm--formItem--inline string">
+                            <div className="lm--formItem-control">
+                                *Note: Please DO NOT edit the words start with #, they are predefined parameters to retrieve specific value from database.
+                            </div>
+                        </div>
                         <div className="lm--formItem lm--formItem--inline string">
                             <label className="lm--formItem-label string required">
                                 Body:
@@ -1549,7 +1554,7 @@ export class Modal extends React.Component {
         }
         return (
             this.props.formSize === "big" ?
-                <div id="modal_main" className={this.state.modalshowhide} style={this.props.modalSize == "big" ? { width: "98%", height: "500px", top: "20%", marginLeft: "-49%" } : { width: "700px", top: "20%", marginLeft: "-350px" }} >
+                <div id="modal_main" className={this.state.modalshowhide} style={this.props.modalSize == "big" ? { width: "98%", height: "550", top: "20%", marginLeft: "-49%" } : { width: "700px", top: "20%", marginLeft: "-350px" }} >
                     <h4><a onClick={this.closeModal.bind(this, 1)}>X</a></h4>
                     <div className="modal_detail model_detail_formHeight">
                         <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
