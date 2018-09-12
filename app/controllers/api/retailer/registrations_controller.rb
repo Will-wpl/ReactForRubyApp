@@ -27,7 +27,7 @@ class Api::Retailer::RegistrationsController < Api::RegistrationsController
         update_user_params['approval_date_time'] = DateTime.current
         add_log_flag = true
       end
-    elsif user.approval_status != User::ApprovalStatusReject
+    elsif user.approval_status == User::ApprovalStatusReject
       update_user_params['approval_status'] = User::ApprovalStatusPending
       update_user_params['approval_date_time'] = DateTime.current
       if ( !user.company_name.blank? && user.company_name.downcase != update_user_params['company_name'].downcase) ||
