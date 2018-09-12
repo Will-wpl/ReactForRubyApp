@@ -88,7 +88,7 @@ export default class AdminComsumptionList extends Component {
                                                 return (<tr key={i}>
                                                     <td>{it.account_number}</td>
                                                     <td>{it.existing_plan}</td>
-                                                    <td>{it.contract_expiry !== "" ? moment(it.contract_expiry).format('YYYY-MM-DD') : "—"}</td>
+                                                    <td>{(it.contract_expiry !== "" && it.contract_expiry !==null) ? moment(it.contract_expiry).format('YYYY-MM-DD') : "—"}</td>
                                                     <td>{this.getPurchase(it.company_buyer_entity_id,index)}</td>
                                                     <td>{it.intake_level}</td>
                                                     <td>{it.contracted_capacity ? parseInt(it.contracted_capacity) : '—'}</td>

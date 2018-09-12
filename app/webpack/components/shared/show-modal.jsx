@@ -744,16 +744,28 @@ export class Modal extends React.Component {
                     }
                 }
                 else {
-                    if ((this.state.unit_number === item.unit_number) && (this.state.postal_code === item.postal_code)) {
-                        if (index != this.state.itemIndex) {
+                    if(item.orignal_id)
+                    {
+                        if ((this.state.unit_number == item.unit_number) && (this.state.postal_code == item.postal_code) && (this.state.orignal_id !== item.orignal_id)) {
                             address_count++;
                         }
-                    }
-                    if (this.state.account_number === item.account_number) {
-                        if (index != this.state.itemIndex) {
+                        if (this.state.account_number === item.account_number && (this.state.orignal_id !== item.orignal_id)) {
                             account_count++;
                         }
+                    }else
+                    {
+                        if ((this.state.unit_number === item.unit_number) && (this.state.postal_code === item.postal_code)) {
+                            if (index != this.state.itemIndex) {
+                                address_count++;
+                            }
+                        }
+                        if (this.state.account_number === item.account_number) {
+                            if (index != this.state.itemIndex) {
+                                account_count++;
+                            }
+                        }
                     }
+
                 }
             }
             else {
@@ -775,10 +787,14 @@ export class Modal extends React.Component {
         return account + "|" + address;
     }
 
-    closeModal() {
+    closeModal(type) {
+    
         if (this.state.type === "chkSelectedBuyers") {
             let data = this.state.props_data;
-            data.action = "cancel";
+            if(type===0)
+            {
+                data.action = "cancel";
+            }
             if (this.props.acceptFunction) {
                 this.props.acceptFunction(data);
                 this.setState({
@@ -1384,7 +1400,7 @@ export class Modal extends React.Component {
         return (
             this.props.formSize === "big" ?
                 <div id="modal_main" className={this.state.modalshowhide} style={this.props.modalSize=="big"?{ width: "98%", height:"500px", top: "20%",marginLeft: "-49%"}:{ width: "700px", top: "20%",marginLeft: "-350px"}} >
-                    <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
+                    <h4><a onClick={this.closeModal.bind(this,1)}>X</a></h4>
                     <div className="modal_detail model_detail_formHeight">
                         <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
                     </div>
@@ -1393,7 +1409,7 @@ export class Modal extends React.Component {
                 :
                 this.props.formSize === "middle" ?
                     <div id="modal_main" name="middleModal" className={this.state.modalshowhide} style={{ width: "50%", height: "310px", top: "40%",marginLeft:"-25%" }} >
-                        <h4><a onClick={this.closeModal.bind(this)}>X</a><a onClick={this.bigModal.bind(this, this.state.modalSize)}>口</a></h4>
+                        <h4><a onClick={this.closeModal.bind(this,1)}>X</a><a onClick={this.bigModal.bind(this, this.state.modalSize)}>口</a></h4>
                         <div className="modal_detail model_detail_formHeight">
                             <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
                         </div>
@@ -1402,7 +1418,7 @@ export class Modal extends React.Component {
                     :
                     this.props.formSize === 'viewlog' ?
                         <div id="modal_main" className={this.state.modalshowhide} style={{ width: "600px", top: "20%",marginLeft:"-300px" }}>
-                            <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
+                            <h4><a onClick={this.closeModal.bind(this,1)}>X</a></h4>
                             <div className="modal_detail">
                                 <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
                             </div>
@@ -1410,7 +1426,7 @@ export class Modal extends React.Component {
                         </div>
                         :
                         <div id="modal_main" className={this.state.modalshowhide} >
-                            <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
+                            <h4><a onClick={this.closeModal.bind(this,0)}>X</a></h4>
                             <div className="modal_detail">
                                 <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
                             </div>

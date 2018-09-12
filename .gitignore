@@ -17,6 +17,9 @@
 .byebug_history
 
 .env
+.env.development
+.env.test
+dump.rdb
 vendor/bundle
 
 /erd.pdf
