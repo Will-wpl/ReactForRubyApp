@@ -181,8 +181,13 @@ export class RetailerRegister extends Component {
             })
         }
         if (param.user_logs) {
+            let list=param.user_logs;
+            list.map(item=>{
+                item.company_uen=item.company_unique_entity_number,
+                item.license_number=item.company_license_number
+            })
             this.setState({
-                loglist: param.user_logs
+                loglist: list
             })
         }
 
