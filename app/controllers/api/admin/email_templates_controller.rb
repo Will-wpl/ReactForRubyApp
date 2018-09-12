@@ -3,7 +3,7 @@ class Api::Admin::EmailTemplatesController < Api::BaseController
   # skip_before_action :verify_authenticity_token
 
   def index
-    render json: EmailTemplate.all, status: 200
+    render json: EmailTemplate.all.order(:id), status: 200
   end
 
   def show
