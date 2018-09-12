@@ -158,13 +158,8 @@ class Api::ConsumptionDetailsController < Api::BaseController
     error_details = []
     detail = params[:detail]
     current_consumption = Consumption.find(params[:consumption_id]) #@consumption
-    auction = Auction.find(current_consumption.auction_id)
-    auction_contract = AuctionContract.find_by auction_id: current_consumption.auction_id, contract_duration: current_consumption.contract_duration
     consumptions = Consumption.mine(current_user.id)
-    raise ActiveRecord::RecordNotFound if auction.nil?
-    # raise ActiveRecord::RecordNotFound if auction_contract.nil?
-    contract_period_start_date = auction.contract_period_start_date
-    contract_period_end_date = auction_contract.nil? ? auction.contract_period_end_date: auction_contract.contract_period_end_date
+    contract_period_start_date, contract_period_end_date = get_auction_period(current_consumption)
     # Account must be unique within a RA.
     account_numbers = []
     premise_addresses = []
@@ -179,15 +174,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
     #   end
     # end
     consumptions.each do |consumption|
-      temp_auction = Auction.find(current_consumption.auction_id)
-      temp_auction_contract = AuctionContract.find_by auction_id: current_consumption.auction_id, contract_duration: current_consumption.contract_duration
-
-      temp_contract_period_start_date = temp_auction.contract_period_start_date
-      if temp_auction_contract.nil?
-        temp_contract_period_end_date = temp_auction.contract_period_end_date
-      else
-        temp_contract_period_end_date = temp_auction_contract.contract_period_end_date
-      end
+      temp_contract_period_start_date ,temp_contract_period_end_date = get_auction_period(consumption)
       if temp_contract_period_end_date < contract_period_start_date ||
           temp_contract_period_start_date > contract_period_end_date
         next
@@ -332,6 +319,19 @@ class Api::ConsumptionDetailsController < Api::BaseController
   end
 
   private
+
+  def get_auction_period(consumption)
+    auction = Auction.find(consumption.auction_id)
+    raise ActiveRecord::RecordNotFound if auction.nil?
+    period_start_date = auction.contract_period_start_date
+    if consumption.contract_duration.blank?
+      period_end_date = auction.contract_period_end_date
+    else
+      auction_contract = AuctionContract.find_by auction_id: consumption.auction_id, contract_duration: consumption.contract_duration
+      period_end_date = auction_contract.nil? ? auction.contract_period_end_date: auction_contract.contract_period_end_date
+    end
+    [period_start_date ,period_end_date]
+  end
 
   def consumption_details_before_yesterday(consumption_details_before_yesterday, auction, consumption, only_read_records = false)
     consumption_details_all_before_yesterday = []
