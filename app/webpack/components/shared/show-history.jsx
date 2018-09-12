@@ -72,7 +72,32 @@ export class Showhistory extends React.Component{
         if(type == "propose"){
             //if ($("#deviation_body").length>0) {
                 let editor = new E('#deviation_body');
-                setTimeout(() => { editor.create() });
+                editor.customConfig.menus = [
+                    'head',
+                    'bold',
+                    'fontSize',
+                    'fontName',
+                    'italic',
+                    'underline',
+                    'strikeThrough',
+                    'foreColor',
+                    'backColor',
+                    'justify',
+                    'undo',
+                    'redo'
+                ];
+                editor.customConfig.lang = {
+                    '字号': 'font size',
+                    '字体': 'font',
+                    '文字颜色': 'font color',
+                    '背景色': 'background color',
+                    '对齐方式': 'alignment',
+                    '靠左':'left',
+                    '靠右':'right',
+                    '居中':'center',
+                    // 还可自定添加更多
+                };
+            setTimeout(() => { editor.create() });
             //}
             setTimeout(() => { $(".w-e-text").html("").html(this.props.detail==""?"<p></p>":this.props.detail) }, 100);
         }else{
