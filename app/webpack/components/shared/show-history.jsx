@@ -113,7 +113,7 @@ export class Showhistory extends React.Component{
             <div id="modal_history" className={this.state.modalshowhide}>
             {this.props.type === "history"?
                 <div className={this.state.showWindow?"history_box showbig":"history_box"}>
-                    <h4><span>History</span><a onClick={this.closeModal.bind(this)}>X</a><a onClick={this.showWindow.bind(this)}>口</a></h4>
+                    <h4 className={"title"}><span>History</span><a onClick={this.closeModal.bind(this)}>X</a><a onClick={this.showWindow.bind(this)}>口</a></h4>
                     <div className="history_nr">
                     {this.state.props_data.map((item,index)=>{
                         return <dl key={index}>
