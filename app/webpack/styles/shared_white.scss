@@ -1117,7 +1117,7 @@ body.choose{
   min-width:800px;margin: 60px auto;
   height:250px;;
   border-radius:5px;overflow: hidden;    font-size:16px;
-  background: #314657;
+  background: #fff;
   .title{  width: 100%;  padding:20px 10px 20px 10px; text-align: left;
     a{
       cursor: pointer
@@ -1134,7 +1134,7 @@ body.choose{
     //  bottom:30px;
     // button { width: 80px; float:right; margin-left: 10px; cursor: pointer;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; }
   }
-  h4{ padding:0px 10px 0px 10px;color:#fff !important; font-size:16px; }
+  h4{ padding:0px 10px 0px 10px;color:#333 !important; font-size:16px; }
 }
 .checkBuyer{
   margin:5px auto !important;
