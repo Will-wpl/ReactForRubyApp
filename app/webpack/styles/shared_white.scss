@@ -644,6 +644,27 @@ dfn.manage_label{
     &.participation_status_0{background:url("../images/images_for_white/red_ico.png") no-repeat left;}
   }
 }
+#email_body,#deviation_body{position: relative;
+  div.w-e-toolbar{
+    position: absolute; top:0px; left:0px; width: 100%; z-index:10001;
+    flex-wrap: wrap !important;
+    div.w-e-menu{
+      &:hover{z-index:10002 !important;}
+    }
+  }
+  div.w-e-text-container{
+    height:100% !important;
+    .w-e-text{
+      padding: 34px 10px 0px 10px;
+      p{margin:0;}
+    }
+  }
+}
+#deviation_body{
+  .w-e-text{
+    padding: 56px 10px 0px 10px !important;
+  }
+}
 .mg0{ margin: 0 auto;}
 body.choose{
   header.lm--header{display: none;}
