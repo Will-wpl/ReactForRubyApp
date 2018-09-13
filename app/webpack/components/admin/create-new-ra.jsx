@@ -885,9 +885,10 @@ export class CreateNewRA extends Component {
                                         {/*})}*/}
                                     </div>) : ''
                                 }
-                                <dd className="lm--formItem lm--formItem--inline string optional">
-                                    <span className="lm--formItem-left lm--formItem-label string optional">Reverse Auction Parameters</span>
-                                </dd>
+                                <h3 className={"middleFont u-mb2"}>Reverse Auction Parameters</h3>
+                                {/*<dd className="lm--formItem lm--formItem--inline string optional">*/}
+                                    {/*<span className="lm--formItem-left lm--formItem-label string optional middleFont">Reverse Auction Parameters</span>*/}
+                                {/*</dd>*/}
                                 <dd className="lm--formItem lm--formItem--inline string optional">
                                     <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Date/Time of Reverse Auction :</span>
                                     <label className="lm--formItem-right lm--formItem-control" id="start_datetime">
