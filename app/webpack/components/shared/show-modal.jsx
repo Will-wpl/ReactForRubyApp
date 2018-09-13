@@ -1166,7 +1166,7 @@ export class Modal extends React.Component {
                 }
             }
             if (this.props.listdetailtype === 'viewLog') {
-                showDetail = <table className="logTable" cellPadding="0" cellSpacing="0">
+                showDetail = <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                     <colgroup>
                         <col width="33.33%" />
                         <col width="33.33%" />
