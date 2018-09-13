@@ -5,6 +5,7 @@ import { Modal } from '../shared/show-modal';
 import { getEmailFile } from '../../javascripts/componentService/admin/service';
 import { UploadFile } from '../shared/upload';
 import TemplatesList from './admin_shared/template-list';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 export default class CommonTemplates extends Component {
     constructor(props) {
         super(props);
@@ -46,6 +47,12 @@ export default class CommonTemplates extends Component {
             fileData: file
         })
     }
+    copy(index){
+        $("button.copy").text("Copy");
+        $("button.copy").css("background","#00b0b2");
+        $("#copy_"+index).text("Copied");
+        $("#copy_"+index).css("background","red");
+    }
     render() {
         //console.log('ranking', this.props.ranking)
         return (
@@ -62,17 +69,19 @@ export default class CommonTemplates extends Component {
                     <table className={"retailer_fill common_template"}>
 
                         <thead>
-                            <tr><th width={"25%"}>File Name</th>
-                                <th width={"55%"}>File Url</th>
+                            <tr><th width={"80%"}>File Name</th>
+                                {/*<th width={"55%"}>File Url</th>*/}
                                 <th width={"20%"}>Operation</th></tr>
                         </thead>
                         <tbody>
                             {this.state.fileData.COMMON[0].files.map((item, index) => {
                                 return <tr key={index}>
-                                    <td width={"25%"}><a target="_blank" download={item.file_name} href={item.file_path}>{item.file_name}</a></td>
-                                    <td width={"55%"}>{item.file_path}</td>
+                                    <td width={"80%"}><a target="_blank" download={item.file_name} href={item.file_path}>{item.file_name}</a></td>
+                                    {/*<td width={"55%"}>{item.file_path}</td>*/}
                                     <td width={"20%"} style={{ "textAlign": "center" }} >
-                                        <button className="lm--button lm--button--primary">Copy</button>
+                                        <CopyToClipboard text={item.file_path} onCopy={this.copy.bind(this,index)}>
+                                            <button className="lm--button lm--button--primary copy" id={"copy_"+index}>Copy</button>
+                                        </CopyToClipboard>
                                         <button className="lm--button lm--button--primary" onClick={this.remove_file.bind(this, 0, index, item.id)}>Delete</button>
                                     </td></tr>
                             })}
