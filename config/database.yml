@@ -20,9 +20,9 @@ default: &default
   # For details on connection pooling, see rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  host: localhost
-  username: reverse_auction
-  password: 1qaz2wsx#EDC
+  host: <%= ENV.fetch("DATABASE_HOST") { "localhost" } %>
+  username: <%= ENV["DATABASE_USERNAME"] %>
+  password: <%= ENV["DATABASE_PASSWORD"] %>
 
 development:
   <<: *default
@@ -85,4 +85,3 @@ production:
   <<: *default
   database: reverse_auction_production
   username: reverse_auction
-  password: <%= ENV['DATABASE_PASSWORD'] %>
