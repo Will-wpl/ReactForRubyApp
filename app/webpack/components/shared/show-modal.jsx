@@ -218,16 +218,18 @@ export class Modal extends React.Component {
                         '宋体': 'song',
                         '微软雅黑': 'yahei',
                         "设置标题":"Title",
-                        "设置列表":"Set List",
-                        "有序列表":"Ordered List",
-                        "无序列表":"Unordered List",
-                        "图片链接":"Picture Link",
+                        "设置列表":"set List",
+                        "有序列表":"ordered list",
+                        "无序列表":"unordered list",
+                        "图片链接":"picture link",
                         "插入":"Insert",
                         "创建":"Create",
                         "行":"Row",
                         "列":"Column",
                         "格式如":"Format like",
-                        "链接文字":"Text Link"
+                        "链接文字":"Text Link",
+                        "的表格":"Table",
+                        "正文":"Content"
                     };
                     setTimeout(() => { editor.create(); });
                 }
@@ -263,16 +265,18 @@ export class Modal extends React.Component {
                         '宋体': 'song',
                         '微软雅黑': 'yahei',
                         "设置标题":"Title",
-                        "设置列表":"Set List",
-                        "有序列表":"Ordered List",
-                        "无序列表":"Unordered List",
-                        "图片链接":"Picture Link",
+                        "设置列表":"set List",
+                        "有序列表":"ordered list",
+                        "无序列表":"unordered list",
+                        "图片链接":"picture link",
                         "插入":"Insert",
                         "创建":"Create",
                         "行":"Row",
                         "列":"Column",
                         "格式如":"Format like",
-                        "链接文字":"Text Link"
+                        "链接文字":"Text Link",
+                        "的表格":"Table",
+                        "正文":"Content"
                     };
                     setTimeout(() => { editor.create(); })
                 }
