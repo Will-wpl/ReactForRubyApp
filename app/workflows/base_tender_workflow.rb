@@ -24,6 +24,15 @@ class BaseTenderWorkflow < Workflow
     { flows: flow_array.sort_by! { |p| p }, current: current, actions: actions }
   end
 
+  def get_action_state_machine_only_approval_pending(auction_id)
+    arrangements = []
+    Arrangement.find_by_auction_id(auction_id).joins(:user).order('users.company_name asc').each do |arrangement|
+      next unless arrangement.user.approval_status == User::ApprovalStatusApproved || arrangement.user.approval_status == User::ApprovalStatusPending
+      arrangements.push(company_name: arrangement.user.company_name, arrangement_id: arrangement.id, status: arrangement.user.approval_status, detail: get_arrangement_state_machine(arrangement.id))
+    end
+    arrangements
+  end
+
   def get_action_state_machine(auction_id)
     arrangements = []
     Arrangement.find_by_auction_id(auction_id).joins(:user).order('users.company_name asc').each do |arrangement|
