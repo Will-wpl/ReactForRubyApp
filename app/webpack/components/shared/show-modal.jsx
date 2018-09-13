@@ -744,16 +744,28 @@ export class Modal extends React.Component {
                     }
                 }
                 else {
-                    if ((this.state.unit_number === item.unit_number) && (this.state.postal_code === item.postal_code)) {
-                        if (index != this.state.itemIndex) {
+                    if(item.orignal_id)
+                    {
+                        if ((this.state.unit_number == item.unit_number) && (this.state.postal_code == item.postal_code) && (this.state.orignal_id !== item.orignal_id)) {
                             address_count++;
                         }
-                    }
-                    if (this.state.account_number === item.account_number) {
-                        if (index != this.state.itemIndex) {
+                        if (this.state.account_number === item.account_number && (this.state.orignal_id !== item.orignal_id)) {
                             account_count++;
                         }
+                    }else
+                    {
+                        if ((this.state.unit_number === item.unit_number) && (this.state.postal_code === item.postal_code)) {
+                            if (index != this.state.itemIndex) {
+                                address_count++;
+                            }
+                        }
+                        if (this.state.account_number === item.account_number) {
+                            if (index != this.state.itemIndex) {
+                                account_count++;
+                            }
+                        }
                     }
+
                 }
             }
             else {
