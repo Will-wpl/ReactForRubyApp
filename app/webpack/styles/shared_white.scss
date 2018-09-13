@@ -1,7 +1,7 @@
 //all
 body{background: #f3f6f7;}
 html{
-  body,div,table,thead,tbody,tfoot,tr,th,td,p { font-family:geomanist, Arial; font-size: 0.875rem;}
+  body,div,table,thead,tbody,tfoot,tr,th,td,p { font-family:geomanist, Arial; font-size: 12px;}
 }
 .lm--header{ background: #fff; border-bottom:1px solid #ccc;
   [class^='lm--icon-'],[class*='lm--icon-']{color:#333 !important;}
@@ -28,7 +28,7 @@ h2{color:#4f5a60; font-size: 32px; font-weight: normal;}
 h1.search_list_type{font-weight:normal;background: #fff;  margin-bottom: 0px;  padding: 25px 24px;}
 .padLR24{padding:0 24px;}
 .bgwhite{background: #fff;}
-body a{outline:none; cursor: default;}
+body a{outline:none; cursor: default; color:#333;}
 .link_hand a{cursor: pointer; color:#333;}
 button{ cursor: pointer; transition: 0.5s all;}
 .green{color:green;}
