@@ -1,10 +1,10 @@
 development:
   adapter: redis
-  url: redis://127.0.0.1:6379/10
+  url: <%= ENV["REDISTOGO_URL"] %>
 
 test:
   adapter: redis
-  url: redis://127.0.0.1:6379/11
+  url: <%= ENV["REDISTOGO_URL"] %>
 
 production:
   adapter: redis

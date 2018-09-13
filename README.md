@@ -38,8 +38,9 @@ sudo apt-get install chromium-chromedriver
 # install rails external libraries
 bundle install -j4
 
-# copy env variables from env sample file then update it as you need
-cp .env.sample .env
+# copy env files from env sample file then update it as you need
+cp .env.sample .env.development
+cp .env.sample .env.test
 
 # install react of webpacker external library
 bundle exec rails webpacker:install:react
