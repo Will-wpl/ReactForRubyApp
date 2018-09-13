@@ -92,7 +92,7 @@ export class SearchList extends Component {
                 window.location.href=`${url.replace(":id",id)}`;
             }
         }
-        
+
     }
     showDelete(auction_name){
         this.refs.Modal.showModal("comfirm");
@@ -200,6 +200,9 @@ export class SearchList extends Component {
             }
         }
     }
+    goDeleteList(type){
+        window.location.href=`/admin/users/${type}`;
+    }
     render (){
         if(this.props.table_data){
             return (
@@ -217,7 +220,7 @@ export class SearchList extends Component {
                                                     <dfn className={"search_list_desc "+item.field_name} onClick={this.dosort.bind(this,item.field_name,'desc',item.table_name?item.table_name:'')}></dfn></div>:''}
                                                 </th>
                                     }
-                                    
+
                                 })
                             }
                         {this.props.table_data.actions?<th/>:null}
@@ -233,10 +236,10 @@ export class SearchList extends Component {
                                                             console.log(item[`lock`])
                                                             return <td key={i}>
                                                                     {item[`lock`] === false ?
-                                                                        item[`${it.field_name}`] === null 
-                                                                        ? <span className={'invite'} onClick={this.doinvite.bind(this,'invite',item.user_id)}>Invite</span> 
+                                                                        item[`${it.field_name}`] === null
+                                                                        ? <span className={'invite'} onClick={this.doinvite.bind(this,'invite',item.user_id)}>Invite</span>
                                                                         :(
-                                                                            item[`select_status`] === '2' 
+                                                                            item[`select_status`] === '2'
                                                                             ? <span className={'cancel_invite'} onClick={this.doinvite.bind(this,'not_invite',item.user_id,item.select_action)}>Cancel Invite</span>
                                                                             : (item[`select_status`] === null ? <span className={'invite'} onClick={this.doinvite.bind(this,'invite',item.user_id)}>Invite</span>  : '')
                                                                         ):''
@@ -301,7 +304,7 @@ export class SearchList extends Component {
                                                                 }
                                                             }
                                                         } else if(it.field_name === 'actions'){
-                                        
+
                                                         }else if(it.field_name==="logged_in_status"){
                                                             return <td key={i}>
                                                                     {item[`${it.field_name}`]==="1" ? "Success":"Fail"}
@@ -345,7 +348,7 @@ export class SearchList extends Component {
                                                                 }
                                                                 </td>
                                                         }
-                                                        
+
                                                     })
                                                 }
                                                 {this.props.table_data.actions?
@@ -356,11 +359,11 @@ export class SearchList extends Component {
                                                                     if(item["actions"] === k){
                                                                         if(item['auction_status'] === 'In Progress' && ik.name === 'View'){
                                                                         }else{
-                                                                            return <a key={k} className={this.props.table_data.actions[item["actions"]].icon} 
+                                                                            return <a key={k} className={this.props.table_data.actions[item["actions"]].icon}
                                                                                 onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,this.props.table_data.actions[item["actions"]].url,this.props.table_data.actions[item["actions"]].name,this.props.table_data.actions[item["actions"]].interface_type ? this.props.table_data.actions[item["actions"]].interface_type : "",item.name ? item.name : '',item.auction_id)}>
                                                                                 {this.props.table_data.actions[item["actions"]].name}</a>
                                                                         }
-                                                                        
+
                                                                     }
                                                                 }else{
                                                                     if(item['auction_status'] === 'Upcoming' && ik.name === 'Manage'){
@@ -373,10 +376,10 @@ export class SearchList extends Component {
                                                                         }else{
                                                                             return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>{ik.name}{ik.name=="Buyer Dashboard" && item.all_accept==false?<span title={"There is outstanding Buyer Participation details pending for approval."} className={"font_arial"}>!</span>:''}</a>
                                                                         }
-                                                                        
+
                                                                     }
-                                                                    
-                                                                }                                                           
+
+                                                                }
                                                             })
                                                         }
                                                     </td>:null}
@@ -385,6 +388,8 @@ export class SearchList extends Component {
                             }
                         </tbody>
                     </table>
+                    {this.props.type == "Retailer List"?<button className="lm--button lm--button--primary reset_btn u-mt1 u-mb1" onClick={this.goDeleteList.bind(this,'del_retailers')}>Retailer Deleted List</button>:""}
+                    {this.props.type == "Buyer List"?<button className="lm--button lm--button--primary reset_btn u-mt1 u-mb1" onClick={this.goDeleteList.bind(this,'del_buyers')}>Buyer Deleted List</button>:""}
                     <div className="table_page">
                         <span onClick={this.gotopage.bind(this,'prev')}>{"<"}</span>
                         {
