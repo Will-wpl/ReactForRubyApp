@@ -44,7 +44,7 @@ class BaseTenderWorkflow < Workflow
         status = 'Registering'
       when '4'
         status = 'Disabled'
-      when '2'
+      when '5'
         status = 'Deleted'
       else
         status = 'Registering'
