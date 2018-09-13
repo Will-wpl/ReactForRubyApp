@@ -47,9 +47,10 @@ class Api::UserAttachmentsController < Api::BaseController
   # create a user attachment
   def create
     # coding
+    file = params[:file]
     uploader = upload_file
     attachment = UserAttachment.new
-    attachment.file_name = uploader.filename
+    attachment.file_name = file.original_filename #filename
     attachment.file_type = params[:file_type]
     attachment.file_path = uploader.url
     attachment.user_id = current_user.id unless current_user&.has_role?(:admin)
@@ -92,13 +93,13 @@ class Api::UserAttachmentsController < Api::BaseController
   def destroy
     attachment = UserAttachment.find_by_id(params[:id])
     file_type = attachment.file_type
-    url = attachment.file_path
+    file_name = attachment.file_name
     attachment.destroy
     if file_type.eql?(UserAttachment::FileType_Letter_Authorisation)
       zip_file_name = 'letter_authorisation.zip'
       destination_file_path = upload_file_path(zip_file_name)
       download_letter_authorisatoin(destination_file_path)
-      zip_attachments_remove(destination_file_path,[url])
+      zip_attachments_remove(destination_file_path,[file_name])
       if UserAttachment.find_by_type(UserAttachment::FileType_Letter_Authorisation).count <= 1
         UserAttachment.where(' file_name = ? ',zip_file_name).destroy_all
       end
