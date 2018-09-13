@@ -235,7 +235,7 @@ export class Modal extends React.Component {
                         "链接文字": "Text Link",
                         "的表格": "'s table",
                         "正文": "Content",
-                        "删除链接":"Delete"
+                        "删除链接":"Delete Link"
                     };
                     setTimeout(() => { editor.create(); });
                 }
@@ -283,7 +283,7 @@ export class Modal extends React.Component {
                         "链接文字": "Text Link",
                         "的表格": "'s table",
                         "正文": "Content",
-                        "删除链接":"Delete"
+                        "删除链接":"Delete Link"
                     };
                     setTimeout(() => { editor.create(); })
                 }
@@ -763,7 +763,7 @@ export class Modal extends React.Component {
         this.setState({
             totals: this.state.totals.replace(',', '')
         })
-       
+
         setTimeout(() => {
             let validateResult = validator_Object(this.state, validateItem);
             flag = validateResult.length > 0 ? false : true;
