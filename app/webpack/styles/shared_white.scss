@@ -123,7 +123,13 @@ button[disabled='']{background: #666 !important; color:#999 !important; cursor: 
 .invitation_main{
   padding: 15px; background: #fff; color: #333;
 }
-
+.alternative-winner{
+  background: #fff !important;
+}
+.retailor_justification{ text-align: right;
+  h2{ text-align:left;}
+  button{margin-left: 15px;}
+}
 //retailer manage coming
 .link_file{line-height: 40px; text-decoration: underline;}
 abbr[title]{color: #fe0000; text-decoration: none;}
