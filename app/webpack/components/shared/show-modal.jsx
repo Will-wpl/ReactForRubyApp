@@ -228,7 +228,7 @@ export class Modal extends React.Component {
                         "列":"Column",
                         "格式如":"Format like",
                         "链接文字":"Text Link",
-                        "的表格":"Table",
+                        "的表格":"'s table",
                         "正文":"Content"
                     };
                     setTimeout(() => { editor.create(); });
@@ -275,7 +275,7 @@ export class Modal extends React.Component {
                         "列":"Column",
                         "格式如":"Format like",
                         "链接文字":"Text Link",
-                        "的表格":"Table",
+                        "的表格":"'s table",
                         "正文":"Content"
                     };
                     setTimeout(() => { editor.create(); })
