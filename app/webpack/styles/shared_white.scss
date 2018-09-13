@@ -167,6 +167,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
         }
         a{
           display: block; width: 100%; height: 100%; cursor: pointer; color:#333;
+          &.edit{height: auto; margin-bottom: 0px;}
           &.report{background: url("../images/images_for_white/Reverse_Auction_Report.png") no-repeat center; background-size:19px;}
           &.log,&.award{background: url("../images/images_for_white/Activity_Log.png") no-repeat center; background-size:19px;}
         }
