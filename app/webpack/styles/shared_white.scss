@@ -875,11 +875,11 @@ body.choose{
 .bidderStatus{
   .color_show label dfn{color: #333;}
   .bidders_list{
-    *{color: #333 !important;}
+    *{color: #333;}
     li{ background: #eee !important;
       &:last-child{ border: none !important;}
       span{
-        border-right:1px solid #ccc !important; color:#333 !important;
+        border-right:1px solid #ccc !important; color:#333;
       }
     }
   }

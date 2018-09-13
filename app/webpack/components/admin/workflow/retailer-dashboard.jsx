@@ -62,7 +62,7 @@ export class Adminretailerdashboard extends Component {
                                 {
                                     this.props.retailer_list.map((item,index)=>{
                                         return <tr key={index}>
-                                                    <td>{item.company_name}<br/><span className="statusBack">({getUserApprovalStatus(item.status)})</span></td>
+                                                    <td>{item.company_name}<br/><span className="statusBack" style={item.status=='0'?{"color":"red"}:(item.status=='2'?{"color":"orange"}:{"color":"#54BD1B"})}>({getUserApprovalStatus(item.status)})</span></td>
                                                         {
                                                             this.state.step.map((it,i)=>{
                                                                 let flows = [null,null,null,null];
