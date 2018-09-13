@@ -48,6 +48,7 @@ class ConsumptionDetail < ApplicationRecord
                                       AND u.approval_status = '1'
                                       AND (u.is_deleted is NULL OR u.is_deleted <> 1)
                                       AND c.accept_status = '1'
+                                      AND c.contract_duration = ac.contract_duration
                                           ) as cda
                                     ) as cdf
                               WHERE cdf.n <= 1 AND cdf.contract_period_end_date < ? ORDER BY #{sort_by}

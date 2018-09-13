@@ -7,6 +7,59 @@ class Api::BaseController < ApplicationController
 
   protected
 
+  def upload_file_url(dest_path)
+    work_space_directories = dest_path.to_s.split("/")
+    finial_file_path = []
+    build_flag = false
+    work_space_directories.each do |directory|
+      if directory == "uploads"
+        build_flag = true
+      end
+      finial_file_path.push(directory) if build_flag
+    end
+    File::join(finial_file_path)
+  end
+
+  def upload_file_path(dest_path,is_attachment = false)
+    current_path = Pathname.new(File.dirname(__FILE__)).realpath
+    work_space_directories = current_path.to_s.split("/")
+    finial_file_path = []
+    work_space_directories.each do |directory|
+      if directory != "app"
+        finial_file_path.push(directory)
+      else
+        finial_file_path.push("public")
+        finial_file_path.push("uploads").push("attachments") unless is_attachment
+        finial_file_path.push(dest_path)
+        break
+      end
+    end
+    File::join(finial_file_path)
+  end
+
+  def zip_attachments(zip_file_path, attachments)
+    require 'zip'
+    Zip::File.open(zip_file_path, Zip::File::CREATE) {
+        |zipfile|
+      # path = "public" + attachments[0]
+      attachments.each do |attachment|
+        zipfile.get_output_stream(attachment.original_filename) { |f| f.puts attachment.read }
+        # zipfile.add(File::basename(path), path){true}
+      end
+    }
+  end
+
+  def zip_attachments_remove(zip_file_path, attachments)
+    require 'zip'
+    Zip::File.open(zip_file_path, Zip::File::CREATE) {
+        |zipfile|
+      # path = "public" + attachments[0]
+      attachments.each do |attachment|
+        zipfile.remove(File::basename(attachment))
+      end
+    }
+  end
+
   def get_search_where_array(params)
     search_params = reject_params(params, %w[controller action sort_by])
     set_search_params(search_params)
