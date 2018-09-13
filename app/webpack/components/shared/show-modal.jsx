@@ -216,8 +216,18 @@ export class Modal extends React.Component {
                         '靠右': 'right',
                         '居中': 'center',
                         '宋体': 'song',
-                        '微软雅黑': 'yahei'
-                        // 还可自定添加更多
+                        '微软雅黑': 'yahei',
+                        "设置标题":"Title",
+                        "设置列表":"Set List",
+                        "有序列表":"Ordered List",
+                        "无序列表":"Unordered List",
+                        "图片链接":"Picture Link",
+                        "插入":"Insert",
+                        "创建":"Create",
+                        "行":"Row",
+                        "列":"Column",
+                        "格式如":"Format like",
+                        "链接文字":"Text Link"
                     };
                     setTimeout(() => { editor.create(); });
                 }
@@ -251,8 +261,18 @@ export class Modal extends React.Component {
                         '靠右': 'right',
                         '居中': 'center',
                         '宋体': 'song',
-                        '微软雅黑': 'yahei'
-                        // 还可自定添加更多
+                        '微软雅黑': 'yahei',
+                        "设置标题":"Title",
+                        "设置列表":"Set List",
+                        "有序列表":"Ordered List",
+                        "无序列表":"Unordered List",
+                        "图片链接":"Picture Link",
+                        "插入":"Insert",
+                        "创建":"Create",
+                        "行":"Row",
+                        "列":"Column",
+                        "格式如":"Format like",
+                        "链接文字":"Text Link"
                     };
                     setTimeout(() => { editor.create(); })
                 }
