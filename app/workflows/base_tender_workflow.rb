@@ -35,17 +35,17 @@ class BaseTenderWorkflow < Workflow
   def set_user_accept_status(approval_status)
     case approval_status
       when '0'
-        status = 'Reject'
+        status = 'Rejected'
       when '1'
-        status = 'Accept'
+        status = 'Approved'
       when '2'
         status = 'Pending'
       when '3'
         status = 'Registering'
       when '4'
-        status = 'Disable'
+        status = 'Disabled'
       when '2'
-        status = 'Removed'
+        status = 'Deleted'
       else
         status = 'Registering'
     end

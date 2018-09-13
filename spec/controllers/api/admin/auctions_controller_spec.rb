@@ -33,8 +33,8 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
     describe 'GET filter_date' do
       let!(:six_month_contract) { create(:auction_contract, :six_month, :total, auction: auction ) }
       let! (:buyer_a) { create(:user, :with_buyer, :with_company_buyer ) }
-      let! (:entity1) {create(:company_buyer_entity, user: buyer_a)}
-      let! (:entity2) {create(:company_buyer_entity, user: buyer_a)}
+      let! (:entity1) {create(:company_buyer_entity, user: buyer_a, approval_status: '1')}
+      let! (:entity2) {create(:company_buyer_entity, user: buyer_a, approval_status: '1')}
       let! (:consumption_a) { create(:consumption, user: buyer_a, auction: auction, action_status: '1', contract_duration: six_month_contract.contract_duration, accept_status: '1') }
       let!(:consumption_lt) { create(:consumption_detail, :for_lt ,account_number: 'ddd' , consumption_id: consumption_a.id, company_buyer_entity_id: entity1.id) }
       let!(:consumption_hts) { create(:consumption_detail, :for_hts ,account_number: 'aaa' , consumption_id: consumption_a.id, company_buyer_entity_id: entity1.id) }
