@@ -778,7 +778,7 @@ export class Modal extends React.Component {
     closeModal() {
         if (this.state.type === "chkSelectedBuyers") {
             let data = this.state.props_data;
-            data.action = "cancel";
+            // data.action = "cancel";
             if (this.props.acceptFunction) {
                 this.props.acceptFunction(data);
                 this.setState({
