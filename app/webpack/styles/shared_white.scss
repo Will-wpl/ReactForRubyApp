@@ -471,7 +471,13 @@ input[type="number"]{
   border-radius: 5px; overflow: hidden; display: table;
   p{ background: #00afb1; width: 100%; color:#fff; font-size: 18px; padding:60px 10px 60px 10px; text-align: center}
 }
-
+.live_modal_reject{
+  text-align:center;
+  width:480px;margin: 60px auto;
+  border-radius:5px;overflow: hidden;
+  .p1{ background: #00afb1; width: 100%; font-size: 18px; padding:60px 10px 7px 10px; text-align: center;}
+  .p2{ background: #00afb1; width: 100%; font-size: 18px; padding:8px 10px 60px 10px; text-align: center;}
+}
 .registration{ margin: 30px auto; min-height: 400px;
   h4{text-align: center; margin: 20px auto;}
   a{width:190px; margin: 40px auto; border-radius:6px; display: block; transition: 0.3s all; cursor: pointer; height:248px; text-indent: -9999px;
