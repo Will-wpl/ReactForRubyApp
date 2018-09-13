@@ -588,7 +588,6 @@ export class CreateNewRA extends Component {
 
         }
         if (this.state.btn_type == "next") {
-            console.log(1232132133)
             sessionStorage.isAuctionId = "yes";
             if (!this.auction.buyer_notify) {
                 if (this.state.id > 0) {
@@ -596,7 +595,6 @@ export class CreateNewRA extends Component {
                         id: this.state.id,
                         buyer_type: this.state.single_multiple
                     }
-                    console.log(this.state.single_multiple)
                     checkBuyerType(param).then(res => {
                         if (res.count > 0) {
                             this.setState({
