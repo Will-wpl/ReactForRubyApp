@@ -790,7 +790,7 @@ export class Modal extends React.Component {
     downAttachment(attachemnts) {
         let attacheList = [];
         if (attachemnts) {
-            
+
             attachemnts.map(item => {
                 attacheList.push({
                     file_name: item.file_name,
@@ -799,7 +799,7 @@ export class Modal extends React.Component {
             })
         }
 
-        
+
         for (let i = 0; i < attacheList.length; i++) {
             this.download(attacheList[i].file_name, attacheList[i].file_path);
         }
@@ -1032,7 +1032,10 @@ export class Modal extends React.Component {
                             </div>
                         </div>}
                         <div className="lm--formItem lm--formItem--inline string">
-                            <div className="lm--formItem-control">
+                            <label className="lm--formItem-label string required">
+
+                            </label>
+                            <div className="lm--formItem-control" style={{"color":"red","padding-left":"35px"}}>
                                 *Note: Please DO NOT edit the words start with #, they are predefined parameters to retrieve specific value from database.
                             </div>
                         </div>
