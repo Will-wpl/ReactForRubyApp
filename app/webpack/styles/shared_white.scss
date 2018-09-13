@@ -96,7 +96,14 @@ button[disabled='']{background: #666 !important; color:#999 !important; cursor: 
     .mask{ width: 100%; height: 100%; position: absolute; left: 0; top:0;}
   }
 }
-
+.peak_error_border{
+  border: 1px solid red !important;
+}
+.peak_correct_border{
+  border: 1px solid fff !important;
+}
+.peak_error{  display: block; top:60px; left:0; width: 100%; padding:5px 10px; color:red; font-size: 15px;z-index: 10}
+.peak_correct{display:none;}
 .invitation_main{
   padding: 15px; background: #fff; color: #333;
 }
