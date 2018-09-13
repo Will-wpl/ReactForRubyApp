@@ -23,6 +23,7 @@ class Api::BaseController < ApplicationController
   def upload_file_path(dest_path,is_attachment = false)
     work_space_directories = Rails.root.join('public', 'uploads', 'attachments', dest_path).to_s
     work_space_directories
+
     # current_path = Pathname.new(File.dirname(__FILE__)).realpath
     # work_space_directories = current_path.to_s.split("/")
     # finial_file_path = []

@@ -97,6 +97,7 @@ class Api::UserAttachmentsController < Api::BaseController
     if file_type.eql?(UserAttachment::FileType_Letter_Authorisation)
       zip_file_name = 'letter_authorisation.zip'
       destination_file_path = upload_file_path(zip_file_name)
+      download_letter_authorisatoin(destination_file_path)
       zip_attachments_remove(destination_file_path,[url])
       if UserAttachment.find_by_type(UserAttachment::FileType_Letter_Authorisation).count <= 1
         UserAttachment.where(' file_name = ? ',zip_file_name).destroy_all
@@ -130,6 +131,7 @@ class Api::UserAttachmentsController < Api::BaseController
     file = params[:file]
     zip_file_name = 'letter_authorisation.zip'
     destination_file_path = upload_file_path(zip_file_name)
+    download_letter_authorisatoin(destination_file_path)
     zip_attachments(destination_file_path, [file])
     mounted_as = []
     # mounted_as.push('')
@@ -139,5 +141,17 @@ class Api::UserAttachmentsController < Api::BaseController
     uploader.store!(file1)
     uploader
     # { url: '/' + uploader.store_path(zip_file_name), filename: zip_file_name }
+  end
+
+  def download_letter_authorisatoin(file)
+    require 'open-uri'
+
+    attachments = UserAttachment.find_list_by_type(UserAttachment::FileType_Letter_Authorisation).where("file_path like '%.zip'")
+    unless attachments.blank?
+      url = attachments.first.file_path
+      open(file, 'wb') do |f|
+        f << open(url).read
+      end
+    end
   end
 end
