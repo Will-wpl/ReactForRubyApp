@@ -1185,7 +1185,10 @@ export class Modal extends React.Component {
                                 return <tr key={index}>
                                     <td>{item.company_name}</td>
                                     <td>{item.company_uen}</td>
-                                    <td>{moment(item.created_at).format('YYYY-MM-DD HH:mm:ss ')}</td>
+                                    <td>
+                                        {(moment(item.created_at).format('YYYY-MM-DD HH:mm:ss ')).split(" ")[0]}<br/>
+                                        {(moment(item.created_at).format('YYYY-MM-DD HH:mm:ss ')).split(" ")[1]}
+                                    </td>
                                 </tr>
                             })
                         }
