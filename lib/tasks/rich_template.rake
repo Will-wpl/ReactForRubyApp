@@ -50,9 +50,7 @@ namespace :rich_template do
 
   private
   def get_file_content(filename)
-    file_content = nil
-    file_content = File.read(filename) if File.exist?(filename)
-    file_content
+    File.read(filename) if File.exist?(filename)
   end
 
 end
