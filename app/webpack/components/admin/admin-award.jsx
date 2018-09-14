@@ -59,7 +59,7 @@ export default class AdminAward extends Component{
                 </ul>
                 <div className="color_show">
                     <label><dfn>Retailer: </dfn></label>
-                    <label><span className="green"></span><dfn>Acknowledged</dfn></label>
+                    <label><span className="green"></span><dfn style={{color:"#fff"}}>Acknowledged</dfn></label>
                     <label><span className="yellow"></span><dfn>Pending</dfn></label>
                 </div>
                 <div className="createRaMain u-grid">
