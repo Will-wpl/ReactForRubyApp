@@ -46,10 +46,9 @@ class ConsumptionDetail < ApplicationRecord
                                       JOIN auction_contracts ac ON a.id = ac.auction_id
                                       AND u.approval_status = '1'
                                       AND (u.is_deleted is NULL OR u.is_deleted <> 1)
-                                      AND ac.contract_period_end_date < ?
                                           ) as cda
                                     ) as cdf
-                              WHERE cdf.n <= 1 ORDER BY #{sort_by}
+                              WHERE cdf.n <= 1 AND ac.contract_period_end_date < ? ORDER BY #{sort_by}
                               ", search_date]
   end
 
