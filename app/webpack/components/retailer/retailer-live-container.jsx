@@ -50,7 +50,7 @@ export class RetailerLiveContainer extends Component {
         if(this.timeTend){
             clearTimeout(this.timeTend);
         }
-        this.setState({extendVisible:min,extendTime:true}
+        this.setState({extendVisible:min,extendTime:true})
         this.timeTend = setTimeout(()=>{
             this.setState({extendTime:false})
         },5000)
