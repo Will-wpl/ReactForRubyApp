@@ -461,6 +461,13 @@ export default class AdminInvitation extends Component {
                         {this.state.publish_status === "1" ? (!data.has_htl ? <td style={{ display: 'none' }}></td> : <td >{data.total_htl_peak ? formatPower(parseInt(Number(data.total_htl_off_peak)), 0, '') : 0}</td>) : <td >{data.total_htl_off_peak ? formatPower(parseInt(Number(data.total_htl_off_peak)), 0, '') : 0}</td>}
                         {this.state.publish_status === "1" ? (!data.has_eht ? <td style={{ display: 'none' }}></td> : <td >{data.total_eht_peak ? formatPower(parseInt(Number(data.total_eht_off_peak)), 0, '') : 0}</td>) : <td >{data.total_eht_off_peak ? formatPower(parseInt(Number(data.total_eht_off_peak)), 0, '') : 0}</td>}
                     </tr>
+                    <tr>
+                        <td>Total</td>
+                        {this.state.publish_status === "1" ? (!data.has_lt ? <td style={{ display: 'none' }}></td> : <td >{data.total_lt_peak ? formatPower(parseInt(Number(data.total_lt_peak)+Number(data.total_lt_off_peak)), 0, '') : 0}</td>) : <td >{data.total_lt_off_peak ? formatPower(parseInt(Number(data.total_lt_off_peak)), 0, '') : 0}</td>}
+                        {this.state.publish_status === "1" ? (!data.has_hts ? <td style={{ display: 'none' }}></td> : <td >{data.total_hts_peak ? formatPower(parseInt(Number(data.total_hts_peak)+Number(data.total_hts_off_peak)), 0, '') : 0}</td>) : <td >{data.total_hts_off_peak ? formatPower(parseInt(Number(data.total_hts_off_peak)), 0, '') : 0}</td>}
+                        {this.state.publish_status === "1" ? (!data.has_htl ? <td style={{ display: 'none' }}></td> : <td >{data.total_htl_peak ? formatPower(parseInt(Number(data.total_htl_peak)+Number( data.total_htl_off_peak)), 0, '') : 0}</td>) : <td >{data.total_htl_off_peak ? formatPower(parseInt(Number(data.total_htl_off_peak)), 0, '') : 0}</td>}
+                        {this.state.publish_status === "1" ? (!data.has_eht ? <td style={{ display: 'none' }}></td> : <td >{data.total_eht_peak ? formatPower(parseInt(Number(data.total_eht_peak)+Number(data.total_eht_off_peak)), 0, '') : 0}</td>) : <td >{data.total_eht_off_peak ? formatPower(parseInt(Number(data.total_eht_off_peak)), 0, '') : 0}</td>}
+                    </tr>
                 </tbody>
             </table>
             <div className="col-sm-12 col-md-6"><a href={`/admin/auctions/${sessionStorage.auction_id}/consumption?type=2&contract_duration=${data.contract_duration}`} className="lm--button lm--button--primary col-sm-12"><span>Company Consumption Details</span></a></div>
@@ -581,6 +588,13 @@ export default class AdminInvitation extends Component {
                                                         <td >{formatPower(this.state.off_peak_hts,0,'')}</td>
                                                         <td >{formatPower(this.state.off_peak_htl,0,'')}</td>
                                                         <td >{formatPower(this.state.off_peak_eht,0,'')}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Total</td>
+                                                        <td >{formatPower((this.state.peak_lt + this.state.off_peak_lt), 0, '')}</td>
+                                                        <td >{formatPower((this.state.peak_hts + this.state.off_peak_hts), 0, '')}</td>
+                                                        <td >{formatPower((this.state.peak_htl + this.state.off_peak_htl), 0, '')}</td>
+                                                        <td >{formatPower((this.state.peak_eht + this.state.off_peak_eht), 0, '')}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>}

@@ -99,6 +99,13 @@ export class Tenderdocuments extends React.Component {
                                             {item.has_htl?<td className="htl">{item.total_htl_off_peak ? formatPower(parseInt(Number(item.total_htl_off_peak)), 0, '') : 0}</td>:<td style={{display:'none'}}></td>}
                                             {item.has_eht?<td className="eht">{item.total_eht_off_peak ? formatPower(parseInt(Number(item.total_eht_off_peak)), 0, '') : 0}</td>:<td style={{display:'none'}}></td>}
                                         </tr>
+                                        <tr>
+                                            <td>Total</td>
+                                            {item.has_lt?<td className="lt">{item.total_lt_off_peak ? formatPower(parseInt(Number(item.total_lt_off_peak)+Number(item.total_lt_peak)), 0, '') : 0}</td>:<td style={{display:'none'}}></td>}
+                                            {item.has_hts?<td className="hts">{item.total_hts_off_peak ? formatPower(parseInt(Number(item.total_hts_off_peak)+Number(item.total_hts_peak)), 0, '') : 0}</td>:<td style={{display:'none'}}></td>}
+                                            {item.has_htl?<td className="htl">{item.total_htl_off_peak ? formatPower(parseInt(Number(item.total_htl_off_peak)+Number(item.total_htl_peak)), 0, '') : 0}</td>:<td style={{display:'none'}}></td>}
+                                            {item.has_eht?<td className="eht">{item.total_eht_off_peak ? formatPower(parseInt(Number(item.total_eht_off_peak)+Number(item.total_eht_peak)), 0, '') : 0}</td>:<td style={{display:'none'}}></td>}
+                                        </tr>
                                     </tbody>
                                 </table>
                                 {this.props.single != 5 ? <a href={`/retailer/auctions/${this.props.auction.id}/consumption?type=2&contract_duration=${item.contract_duration}`} className="col-sm-4 lm--button lm--button--primary u-mt1 a_center">View Details</a> : ''}
