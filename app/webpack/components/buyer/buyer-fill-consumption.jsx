@@ -401,6 +401,10 @@ export class FillConsumption extends Component {
                     this.setState({ text: "Delete successful!" });
                 } else {
                     this.setState({ text: "Save successful!" });
+                    setTimeout(()=>{
+                        window.location.href="/buyer/consumptions/"+this.state.consumption_id+"/edit";
+                    },2000)
+
                 }
                 this.refs.Modal.showModal();
             } else {
