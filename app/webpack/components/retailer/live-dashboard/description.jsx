@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 export default class Description extends Component {
     mouthsHtml(data,index){
         const html = <div key={index} className="col-sm-12">
-            <h3 className={"u-mt1 u-mb1"}>Starting Price : {data.contract_duration} months</h3>
+            <h3 className={"u-mt1 u-mb1"}>Starting Price ({data.contract_duration} months)</h3>
             <div className="lm--formItem lm--formItem--inline string optional">
                 <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                     <thead>
