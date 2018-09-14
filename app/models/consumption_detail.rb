@@ -68,14 +68,14 @@ class ConsumptionDetail < ApplicationRecord
                                             a.contract_period_start_date,
                                             ac.contract_period_end_date
                                           FROM consumption_details cd
-                                      JOIN company_buyer_entities e ON cd.company_buyer_entity_id = e.id
+                                      JOIN company_buyer_entities e ON cd.company_buyer_entity_id = e.id And e.approval_status = '1'
                                       JOIN consumptions c ON cd.consumption_id = c.id And c.user_id = :User_id And c.accept_status = :Consumption_status
                                       JOIN auctions a ON c.auction_id = a.id
                                       JOIN auction_contracts ac ON a.id = ac.auction_id
-                                      AND (ac.contract_period_end_date + interval '1 D') < :Search_date
                                           ) as cda
                                     ) as cdf
-                              WHERE cdf.n <= 1 ORDER BY cdf.entity_id ASC, cdf.contract_period_end_date DESC
+                              WHERE cdf.n <= 1 AND (cdf.contract_period_end_date + interval '1 D') < :Search_date
+                              ORDER BY cdf.entity_id ASC, cdf.contract_period_end_date DESC
                               ", { :Search_date => search_date, :User_id => user_id, :Consumption_status => Consumption::AcceptStatusApproved }]
   end
 
@@ -94,14 +94,14 @@ class ConsumptionDetail < ApplicationRecord
                                             a.contract_period_start_date,
                                             ac.contract_period_end_date
                                           FROM consumption_details cd
-                                      JOIN company_buyer_entities e ON cd.company_buyer_entity_id = e.id
+                                      JOIN company_buyer_entities e ON cd.company_buyer_entity_id = e.id And e.approval_status = '1'
                                       JOIN consumptions c ON cd.consumption_id = c.id And c.user_id = :User_id And c.accept_status = :Consumption_status
                                       JOIN auctions a ON c.auction_id = a.id
                                       JOIN auction_contracts ac ON a.id = ac.auction_id
-                                      AND (ac.contract_period_end_date + interval '1 D') = :Search_date
                                           ) as cda
                                     ) as cdf
-                              WHERE cdf.n <= 1 ORDER BY cdf.entity_id ASC, cdf.contract_period_end_date DESC
+                              WHERE cdf.n <= 1 AND (cdf.contract_period_end_date + interval '1 D') = :Search_date
+                              ORDER BY cdf.entity_id ASC, cdf.contract_period_end_date DESC
                               ", { :Search_date => search_date, :User_id => user_id, :Consumption_status => Consumption::AcceptStatusApproved }]
   end
 end
