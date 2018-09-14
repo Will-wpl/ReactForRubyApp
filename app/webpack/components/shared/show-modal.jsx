@@ -240,7 +240,7 @@ export class Modal extends React.Component {
                         "删除图片":"Delete Picture",
                         "增加":"Add ",
                         "删除":"Delete ",
-                        "删除表格":"Delete Table"
+                        "表格":"Table"
                     };
                     setTimeout(() => { editor.create(); });
                 }
@@ -293,7 +293,7 @@ export class Modal extends React.Component {
                         "删除图片":"Delete Picture",
                         "增加":"Add ",
                         "删除":"Delete ",
-                        "删除表格":"Delete Table"
+                        "表格":"Table"
                     };
                     setTimeout(() => { editor.create(); })
                 }
