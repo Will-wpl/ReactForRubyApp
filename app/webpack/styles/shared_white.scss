@@ -45,7 +45,7 @@ h2{color:#4f5a60; font-size: 32px; font-weight: normal;}
 h1.search_list_type{font-weight:normal;background: #fff;  margin-bottom: 0px;  padding: 25px 24px;}
 .padLR24{padding:0 24px;}
 .bgwhite{background: #fff;}
-body a{outline:none; cursor: default; color:#00b0b2;}
+body a{outline:none; cursor: pointer; color:#00b0b2;}
 .link_hand a{cursor: pointer; color:#333;}
 button{ cursor: pointer; transition: 0.5s all;}
 .green{color:green;}
@@ -479,8 +479,8 @@ input[type="number"]{
   text-align:center;
   width:480px;margin: 60px auto;
   border-radius:5px;overflow: hidden;
-  .p1{ background: #00afb1; width: 100%; font-size: 18px; padding:60px 10px 7px 10px; text-align: center;}
-  .p2{ background: #00afb1; width: 100%; font-size: 18px; padding:8px 10px 60px 10px; text-align: center;}
+  .p1{ background: #00afb1; width: 100%; font-size: 18px; padding:60px 10px 7px 10px; text-align: center; color: #fff;}
+  .p2{ background: #00afb1; width: 100%; font-size: 18px; padding:8px 10px 60px 10px; text-align: center; color: #fff;}
 }
 .registration{ margin: 30px auto; min-height: 400px;
   h4{text-align: center; margin: 20px auto;}
@@ -599,6 +599,7 @@ dfn.manage_label{
         }
         span{
           cursor: pointer; padding-left: 20px;
+          &.font_arial{font-family: normal; color:red; padding-left: 10px; font-weight: bold;}
           &.invite{background:url("../images/images_for_white/invite.png") no-repeat left;}
           &.cancel_invite{background:url("../images/images_for_white/cancel_invite.png") no-repeat left;}
         }
@@ -756,7 +757,10 @@ body.choose{
 
 .workflowtab{
   margin:30px 0px;
-  table{ width: 100%; table-layout: fixed;
+  table{ width: 100%; table-layout: fixed; margin: 0 auto;
+    &.w_100{width: 100%;}
+    &.w_80{width: 80%;}
+    &.w_60{width: 60%;}
     td{height:110px;
       div{ cursor: pointer;
         width: 100%; height: 100%; background: #fff; position: relative;
@@ -796,7 +800,12 @@ body.choose{
     .download_ico{background: url("../images/images_for_white/file.png") no-repeat center; cursor: pointer; float: left; width: 45px; height: 54px;}
   }
 }
-
+.winner_btn{
+  border-top:1px solid #00afb1;
+  padding-top:15px;
+  text-align:center;
+  a{margin:0 auto;}
+}
 .tender_documents{
   .tender_list{
     li{ line-height:45px; list-style: none; overflow:hidden;
