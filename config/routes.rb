@@ -39,7 +39,7 @@ Rails.application.routes.draw do
           put 'approval_buyer_entities'
           put 'approval_buyer'
           put 'approval_retailer'
-          pub 'validate_for_delete'
+          put 'validate_for_delete'
           put 'remove_retailer'
           put 'remove_buyer'
         end
