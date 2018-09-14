@@ -61,7 +61,7 @@ export class Tenderdocuments extends React.Component {
             this.props.page();
         }, error => {
 
-        })
+        }) 
     }
     render() {
         return (
