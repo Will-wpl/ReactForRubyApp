@@ -373,6 +373,20 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
           expect(hash['result']).to eq('success')
         end
       end
+
+
+      context 'validate buyer' do
+        def do_request
+          put :validate_for_delete, params: { user_id: temp_buyer.id }
+        end
+
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash = JSON.parse(response.body)
+          expect(hash['validate_result']).to eq(0)
+        end
+      end
     end
   end
 
