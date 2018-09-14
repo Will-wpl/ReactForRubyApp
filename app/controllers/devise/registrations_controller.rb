@@ -33,10 +33,7 @@ class Devise::RegistrationsController < DeviseController
         User.admins.each do |admin_user|
           UserMailer.registered_email(admin_user, resource).deliver_later
         end
-      elsif params[:type] == '2'
-        User.admins.each do |admin_user|
-          UserMailer.buyer_registered_email(admin_user, resource).deliver_later
-        end
+      #elsif params[:type] == '2'
       end
     else
       clean_up_passwords resource
