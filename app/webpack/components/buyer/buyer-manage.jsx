@@ -721,7 +721,7 @@ export class BuyerUserManage extends Component {
                                                 <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                                                 <h4 className="lm--formItem lm--formItem--inline string chk">
                                                     <input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} />
-                                                    <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyleUnderline">Energy Procurement Agreement</a></span>
+                                                    <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyleUnderline">Electricity Procurement Agreement</a></span>
                                                 </h4>
                                                 <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                                             </div>
