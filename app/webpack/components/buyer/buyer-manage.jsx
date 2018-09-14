@@ -713,7 +713,7 @@ export class BuyerUserManage extends Component {
                                                 </div>
                                             </div>
 
-                                            <div className="col-sm-12 col-md-8 push-md-3  margin-t" >
+                                            <div className="col-sm-12 col-md-10 push-md-3  margin-t" >
                                                 <h4 className="lm--formItem lm--formItem--inline string chk">
                                                     <input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} />
                                                     <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerTCurl} className="urlStyleUnderline">Buyer Platform Terms of Use</a></span>
