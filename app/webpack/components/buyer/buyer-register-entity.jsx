@@ -127,7 +127,6 @@ export class BuyerUserEntityRegister extends Component {
                     use_type: 'sign_up', entityStatus: "register"
                 });
                 this.isApprove = false;
-                alert(1111);
             }
             else if (window.location.href.indexOf('users/edit') > 0) {
                 this.setState({ use_type: 'manage_acount', entityStatus: "manage", disabled: true, btnAddDisabled: true });
@@ -291,13 +290,28 @@ export class BuyerUserEntityRegister extends Component {
     }
 
     tab(type) {
-        $(".buyer_tab a").removeClass("selected");
-        $("#tab_" + type).addClass("selected");
-        $(".buyer_list1").hide();
-        $("#buyer_" + type).fadeIn(500);
-        this.setState({
-            tabSelected: type
-        })
+        if (this.state.use_type === "sign_up") {
+            let passValidate = this.checkTabOneFinished()
+            if (passValidate) {
+                $(".buyer_tab a").removeClass("selected");
+                $("#tab_" + type).addClass("selected");
+                $(".buyer_list1").hide();
+                $("#buyer_" + type).fadeIn(500);
+                this.setState({
+                    tabSelected: type
+                })
+            }
+        }
+        else {
+            $(".buyer_tab a").removeClass("selected");
+            $("#tab_" + type).addClass("selected");
+            $(".buyer_list1").hide();
+            $("#buyer_" + type).fadeIn(500);
+            this.setState({
+                tabSelected: type
+            })
+        }
+
     }
 
     Change(type, e) {
@@ -434,6 +448,75 @@ export class BuyerUserEntityRegister extends Component {
                 setValidationFaild(column, cate)
             })
         }
+
+        if (this.state.fileData['BUYER_DOCUMENTS'][0].files.length > 0) {
+            hasDoc = true;
+            $("#showMessage").removeClass("errormessage").addClass("isPassValidate");
+        }
+        else {
+            hasDoc = false;
+            $("#showMessage").removeClass("isPassValidate").addClass("errormessage");
+        }
+        $('.validate_message').find('div').each(function () {
+            let className = $(this).attr('class');
+            if (className === 'errormessage') {
+                flag = false;
+                return false;
+            }
+        })
+        if ($('#chkBuyer').is(':checked') && $('#chkRevv').is(':checked')) {
+            checkSelect = true;
+        }
+        else {
+            checkSelect = false;
+            if (!$('#chkBuyer').is(':checked')) {
+                $("#chkBuyer_message").removeClass('isPassValidate').addClass('errormessage');
+            }
+            if (!$('#chkRevv').is(':checked')) {
+                $("#chkRevv_message").removeClass('isPassValidate').addClass('errormessage');
+            }
+        }
+        return flag && hasDoc && checkSelect;
+    }
+    checkTabOneFinished() {
+        let flag = true, hasDoc = true, checkSelect = true;
+        let arr = validator_Object(this.state, this.validatorBuyerInfo);
+        if (arr.length > 0) {
+            flag = false;
+        }
+        if (this.state.fileData['BUYER_DOCUMENTS'][0].files.length > 0) {
+            hasDoc = true;
+        }
+        else {
+            hasDoc = false;
+        }
+        if ($('#chkBuyer').is(':checked') && $('#chkRevv').is(':checked')) {
+            checkSelect = true;
+        }
+        else {
+            checkSelect = false;
+        }
+        return flag && hasDoc && checkSelect;
+    }
+
+    checkAll() {
+        $('.validate_message').find('div').each(function () {
+            let className = $(this).attr('class');
+            if (className === 'errormessage') {
+                let divid = $(this).attr("id");
+                $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
+            }
+        })
+        let flag = true, hasDoc = true, checkSelect = true, mainEntityFinished = true;
+        let arr = validator_Object(this.state, this.validatorBuyerInfo);
+
+        if (arr) {
+            arr.map((item, index) => {
+                let column = item.column;
+                let cate = item.cate;
+                setValidationFaild(column, cate)
+            })
+        }
         if (this.state.entity_list.length > 0) {
             if (this.state.entity_list[0].billing_address === "") {
                 mainEntityFinished = false;
@@ -473,13 +556,13 @@ export class BuyerUserEntityRegister extends Component {
                 $("#chkRevv_message").removeClass('isPassValidate').addClass('errormessage');
             }
         }
-        return flag && hasDoc && checkSelect && mainEntityFinished;
+        let returnValue = flag && hasDoc && checkSelect + "|" + mainEntityFinished
+        return returnValue;
     }
 
     save(type) {
-
-        let isValidator = this.checkRequired();
-        if (isValidator) {
+        let isValidator = this.checkAll();
+        if (isValidator === "true|true") {
             validateIsExist(this.setParams()).then(res => {
                 if (res.validate_result) {
                     saveBuyerUserInfo(this.setParams(type == "save" ? 1 : null)).then(res => {
@@ -529,36 +612,32 @@ export class BuyerUserEntityRegister extends Component {
             });
         }
         else {
-            this.tab("base");
-            this.setState({
-                tabSelected: "base"
-            })
+
+            let formVal = isValidator.split('|')[0];
+            let entityVal = isValidator.split('|')[1];
+            if (formVal) {
+                if (entityVal) {
+                    this.tab("entity");
+                    this.setState({
+                        tabSelected: "entity"
+                    })
+                }
+            }
+            else {
+                this.tab("base");
+                this.setState({
+                    tabSelected: "base"
+                })
+            }
         }
     }
 
     submit(type) {
-        let isValidator = this.checkRequired();
-        if (isValidator) {
+        let isValidator = this.checkAll();
+        if (isValidator === "true|true") {
             let buyerParam = this.setParams();
             validateIsExist(buyerParam).then(res => {
                 if (res.validate_result) {
-
-                    // submitBuyerUserInfo(buyerParam).then(res => {
-                    //     if (res.result === "failed") {
-                    //         this.setState(
-                    //             {
-                    //                 text: "Failure to submit. "
-                    //             }
-                    //         );
-                    //         this.refs.Modal.showModal();
-                    //     } else {
-                    //         if (type === "sign_up") {
-                    //             window.location.href = `/buyer/home`;
-                    //         }
-
-                    //     }
-
-                    // });
                     this.setState({
                         text: "Are you sure you want to complete the Sign Up?"
                     })
@@ -570,10 +649,22 @@ export class BuyerUserEntityRegister extends Component {
             })
         }
         else {
-            this.tab("base");
-            this.setState({
-                tabSelected: "base"
-            })
+            let formVal = isValidator.split('|')[0];
+            let entityVal = isValidator.split('|')[1];
+            if (formVal) {
+                if (entityVal) {
+                    this.tab("entity");
+                    this.setState({
+                        tabSelected: "entity"
+                    })
+                }
+            }
+            else {
+                this.tab("base");
+                this.setState({
+                    tabSelected: "base"
+                })
+            }
         }
     }
 
@@ -852,12 +943,15 @@ export class BuyerUserEntityRegister extends Component {
         }
     }
 
-    goNext()
-    {
-        this.setState({
-            tabSelected: "entity"
-        })
-        this.tab("entity")
+    goNext() {
+
+        let isValidator = this.checkRequired();
+        if (isValidator) {
+            this.setState({
+                tabSelected: "entity"
+            })
+            this.tab("entity")
+        }
     }
     render() {
         let btn_html;
