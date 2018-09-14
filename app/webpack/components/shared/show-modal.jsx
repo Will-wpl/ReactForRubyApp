@@ -1084,15 +1084,15 @@ export class Modal extends React.Component {
                             {((this.props.listdetail.hts_peak == 0.0) && (this.props.listdetail.hts_off_peak == 0.0)) ?
                                 "" :
                                 <div>
-                                    <li>HT (small) Peak: $ {parseFloat(this.props.listdetail.hts_peak).toFixed(4)}</li>
-                                    <li>HT (small) Off Peak: $ {parseFloat(this.props.listdetail.hts_off_peak).toFixed(4)}</li>
+                                    <li>HTS Peak: $ {parseFloat(this.props.listdetail.hts_peak).toFixed(4)}</li>
+                                    <li>HTS Off Peak: $ {parseFloat(this.props.listdetail.hts_off_peak).toFixed(4)}</li>
                                 </div>
                             }
                             {((this.props.listdetail.htl_peak == 0.0) && (this.props.listdetail.htl_peak == 0.0)) ?
                                 "" :
                                 <div>
-                                    <li>HT (large) Peak: $ {parseFloat(this.props.listdetail.htl_peak).toFixed(4)}</li>
-                                    <li>HT (large) Off Peak: $ {parseFloat(this.props.listdetail.htl_peak).toFixed(4)}</li>
+                                    <li>HTL Peak: $ {parseFloat(this.props.listdetail.htl_peak).toFixed(4)}</li>
+                                    <li>HTL Off Peak: $ {parseFloat(this.props.listdetail.htl_peak).toFixed(4)}</li>
                                 </div>
                             }
                             {((this.props.listdetail.eht_peak == 0.0) && (this.props.listdetail.eht_off_peak == 0.0)) ?

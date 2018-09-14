@@ -114,7 +114,7 @@ export class RetailerRegister extends Component {
         if (param.user_base_info) {
             let item = param.user_base_info;
             this.setState({
-                id: item.id,
+                id: item.id, 
                 email_address: item.email ? item.email : '',
                 company_name: item.company_name ? item.company_name : '',
                 unique_entity_number: item.company_unique_entity_number ? item.company_unique_entity_number : '',
@@ -394,10 +394,10 @@ export class RetailerRegister extends Component {
     }
 
     save(type) {
-        let isNeedRedirect = false;
-        if (this.state.retailerApproveStatus === '0') {
-            isNeedRedirect = true
-        }
+        // let isNeedRedirect = false;
+        // if (this.state.retailerApproveStatus === '0') {
+        //     isNeedRedirect = true
+        // }
 
         let param = this.getParam();
         if (this.checkValidation()) {
@@ -417,17 +417,17 @@ export class RetailerRegister extends Component {
                         });
                         this.refs.Modal.showModal();
                         if (type === "save") {
-                            if ((this.state.company_name !== this.company_name_back) || (this.state.company_unique_entity_number !== this.company_unique_entity_number_back) || (this.state.license_number !== this.company_license_number_back)) {
+                            if ((this.state.company_name !== this.company_name_back) || (this.state.unique_entity_number !== this.company_unique_entity_number_back) || (this.state.license_number !== this.company_license_number_back)) {
                                 setTimeout(() => {
-                                    window.location.href = `/retailer/home`;
+                                     window.location.href = `/retailer/home`;
                                 }, 1000);
                             }
                             else {
-                                if (isNeedRedirect) {
+                                // if (isNeedRedirect) {
                                     setTimeout(() => {
                                         window.location.href = `/users/edit`;
                                     }, 1000);
-                                }
+                                // }
                             }
                         }
 
@@ -580,10 +580,7 @@ export class RetailerRegister extends Component {
             submitRetailManageInfo({
                 user: param
             }).then(res => {
-
                 $('#license_number_repeat').removeClass('errormessage').addClass('isPassValidate');
-
-
                 if (res.result === "failed") {
                     this.setState(
                         {

@@ -79,8 +79,8 @@ export class Tenderdocuments extends React.Component {
                                         <tr>
                                             <th></th>
                                             {item.has_lt?<th className="lt">LT</th>:<th style={{display:'none'}}></th>}
-                                            {item.has_hts?<th className="hts">HT (Small)</th>:<th style={{display:'none'}}></th>}
-                                            {item.has_htl?<th className="htl">HT (Large)</th>:<th style={{display:'none'}}></th>}
+                                            {item.has_hts?<th className="hts">HTS</th>:<th style={{display:'none'}}></th>}
+                                            {item.has_htl?<th className="htl">HTL</th>:<th style={{display:'none'}}></th>}
                                             {item.has_eht?<th className="eht">EHT</th>:<th style={{display:'none'}}></th>}
                                         </tr>
                                     </thead>
@@ -116,7 +116,7 @@ export class Tenderdocuments extends React.Component {
                 </div>
                 {this.props.single==4?<div className="lm--formItem lm--formItem--inline string u-mt1">
                     <label className=" lm--formItem-label ">
-                        Click on 'Accept & Proceed' if you do not wish to propose deviations to the <a target="_blank" disabled={this.props.propsdisabled} download={this.state.attachments.length>0?this.state.attachments[0].file_name:''} href={this.state.attachments.length>0?this.state.attachments[0].file_path:'#'}>Electricity Procurement Agreement.</a>
+                        Click on 'Accept & Proceed' if you do not wish to propose deviations to the <a target="_blank"  style={{"cursor": "pointer"}} disabled={this.props.propsdisabled} download={this.state.attachments.length>0?this.state.attachments[0].file_name:''} href={this.state.attachments.length>0?this.state.attachments[0].file_path:'#'}>Electricity Procurement Agreement.</a>
                     </label>
                 </div>:''}
                 {/*<div className="lm--formItem lm--formItem--inline string u-mt3 role_select">*/}
