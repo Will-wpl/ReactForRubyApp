@@ -77,7 +77,7 @@ export default class WinnerPrice extends Component {
                         <li><span>Contract Period: </span><span>{moment(this.props.winner.auction.contract_period_start_date).format('D MMM YYYY')} to {moment(this.props.winner.auction.contract_period_end_date).format('D MMM YYYY')}</span></li>
                         <li><span>Total Volume: </span><span>{this.toThousands(Math.round(Number(this.props.winner.auction.total_volume)))} kWh (forecasted)</span></li>
                         <li>
-                            <h4>Aggregate Consumption<br /> (kWh/month)</h4>
+                            <h4>Aggregate Consumption</h4>
                             <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                                 <thead>
                                     <tr>
