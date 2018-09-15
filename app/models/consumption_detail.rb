@@ -121,7 +121,7 @@ class ConsumptionDetail < ApplicationRecord
                                           CASE WHEN c.contract_duration IS NULL
                                             THEN a.contract_period_end_date
                                           ELSE CASE WHEN ac.contract_duration IS NULL
-                                            THEN a.contract_period_start_date + INTERVAL ':Contract_duration M'
+                                            THEN a.contract_period_start_date + (c.contract_duration || ' month')::interval --INTERVAL ':Contract_duration M'
                                                ELSE ac.contract_period_end_date
                                                END
                                           END                          AS contract_period_end_date,
@@ -131,7 +131,7 @@ class ConsumptionDetail < ApplicationRecord
                                           c.accept_status
                                         FROM consumptions c
                                           INNER JOIN auctions a ON c.auction_id = a.id
-                                          LEFT JOIN auction_contracts ac ON ac.auction_id = a.id
+                                          LEFT JOIN auction_contracts ac ON ac.auction_id = c.auction_id and ac.contract_duration = c.contract_duration
                                         WHERE (c.participation_status != '0' OR c.participation_status IS NULL)
                                               AND (c.accept_status != '0' OR c.accept_status IS NULL)
                                         and c.id <> :Current_consumption_id
