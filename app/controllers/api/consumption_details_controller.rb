@@ -100,9 +100,10 @@ class Api::ConsumptionDetailsController < Api::BaseController
     # Category 1
     unless details_yesterday.blank?
       errors_category_1 = []
-      details_yesterday.each do |consumption_detail|
+      details_yesterday.each_index do |index|
+        consumption_detail = details_yesterday.at(index)
         error = validate_consumption_detail(consumption_detail, consumption)
-        errors_category_1.push(consumption_detail) unless error.blank?
+        errors_category_1.push(consumption_detail_include_index(index,consumption_detail)) unless error.blank?
       end
       error_all.push({type:'category_1', error_details: errors_category_1}) unless errors_category_1.blank?
     end
@@ -110,9 +111,10 @@ class Api::ConsumptionDetailsController < Api::BaseController
     # Category 2
     unless details_before_yesterday.blank?
       errors_category_2 = []
-      details_before_yesterday.each do |consumption_detail|
+      details_before_yesterday.each_index do |index|
+        consumption_detail = details_before_yesterday.at(index)
         error = validate_consumption_detail(consumption_detail, consumption)
-        errors_category_2.push(consumption_detail) unless error.blank?
+        errors_category_2.push(consumption_detail_include_index(index,consumption_detail)) unless error.blank?
       end
       error_all.push({type:'category_2', error_details: errors_category_2}) unless errors_category_2.blank?
     end
@@ -120,22 +122,32 @@ class Api::ConsumptionDetailsController < Api::BaseController
     # New
     unless details.blank?
       errors_new = []
-      details.each do |consumption_detail|
+      details.each_index do |index|
+        consumption_detail = details.at(index)
         error = validate_consumption_detail(consumption_detail, consumption)
-        errors_new.push(consumption_detail) unless error.blank?
+        errors_new.push(consumption_detail_include_index(index,consumption_detail)) unless error.blank?
       end
       error_all.push({type:'new', error_details: errors_new}) unless errors_new.blank?
     end
     error_all
   end
 
+  def consumption_detail_include_index(index,consumption_detail)
+    {
+        index: index,
+        account_number: consumption_detail['account_number'],
+        unit_number: consumption_detail['unit_number'],
+        postal_code: consumption_detail['postal_code']
+    }
+  end
+
   def save
     error_all = validate_all_details
     if error_all.blank?
       saved_details = save_comsumption_details()
-      render json: { result: 'success', details: saved_details} , status: 200
+      render json: { result: 'success', details: saved_details}, status: 200
     else
-      render json: { result: 'failed', errors: error_all} , status: 200
+      render json: { result: 'failed', errors: error_all}, status: 200
     end
   end
 
@@ -329,7 +341,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
     consumptions.each do |consumption|
       temp_contract_period_start_date ,temp_contract_period_end_date = get_auction_period(consumption)
 
-      next if consumption.accept_status == Consumption::AcceptStatusReject
+      next if consumption.participation_status == Consumption::ParticipationStatusReject || consumption.accept_status == Consumption::AcceptStatusReject
       consumption.consumption_details.each do |consumption_detail|
         consumption_detail_id = detail['id'].blank? ? detail['orignal_id'] : detail['id']
         if temp_contract_period_start_date.nil? ||

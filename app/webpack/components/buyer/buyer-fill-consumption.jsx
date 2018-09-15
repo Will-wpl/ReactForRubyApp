@@ -37,7 +37,8 @@ export class FillConsumption extends Component {
             dateIssuecount: 0,
             consumption_id: 0,
             advisory: "",
-            isValidate: false
+            isValidate: false,
+            takenList: []
         }
 
         this.accountItem = {
@@ -425,15 +426,37 @@ export class FillConsumption extends Component {
                 this.refs.Modal.showModal();
             } else {
                 setBuyerParticipate(makeData, '/api/buyer/consumption_details/participate').then((res) => {
-                    this.setState({
-                        disabled: 'disabled',
-                        checked: true,
-                    })
-                    this.refs.Modal.showModal();
-                    this.setState({ text: "Congratulations, your participation in this auction has been confirmed." });
-                    setTimeout(() => {
-                        window.location.href = "/buyer/auctions";
-                    }, 3000)
+                    if (res.result === 'success') {
+                        this.setState({
+                            disabled: 'disabled',
+                            checked: true,
+                        })
+                        this.refs.Modal.showModal();
+                        this.setState({ text: "Congratulations, your participation in this auction has been confirmed." });
+                        setTimeout(() => {
+                            window.location.href = "/buyer/auctions";
+                        }, 3000)
+                    }
+                    else {
+                        let account_list = [];
+                        if (res.errors.length > 0) {
+                            res.errors.map(item => {
+                                item.error_details.map(it => {
+                                    account_list.push(it.account_number)
+                                })
+                                $("#cate1 tr:eq(" + item.index + ") td:eq(0)").find("div").removeClass("commonBorder").addClass("redBorder");
+                                $("#cate1 tr:eq(" + item.index + ") td:eq(0)").find("div").attr("name","isRed")
+                            })
+                            this.setState({
+                                takenList: account_list
+                            })
+                            this.refs.accountTaken.showModal();
+
+
+                        }
+
+                    }
+
                 }, (error) => {
                     this.refs.Modal.showModal();
                     this.setState({ text: "Interface failed" });
@@ -464,6 +487,28 @@ export class FillConsumption extends Component {
                 const site_listObj = this.state.preDayList;
                 site_listObj.splice(this.deleteNum, 1);
                 this.setState({ preDayList: site_listObj });
+                setTimeout(() => {
+                    let count=0;
+                    for (let i = 0; i < this.state.preDayList.length; i++) {
+                        let classborder = $("#cate1 tr:eq(" + i + ") td:eq(0)").find("div").attr("class");
+                        if (classborder === 'redBorder') {
+                            count++ 
+                        }
+                    }
+                    if(count>0)
+                    {
+
+                        // let classborder = $("#cate1 tr:eq(" + i + ") td:eq(1)").find("div").attr("class");
+                        for (let i = 0; i < this.state.preDayList.length; i++) {
+                            let name = $("#cate1 tr:eq(" + i + ") td:eq(0)").find("div").attr("name");
+                            if(name==='isRed')
+                            {
+                                $("#cate1 tr:eq(" + i + ") td:eq(0)").find("div").removeClass('commonBorder').addClass('redBorder')
+                            }
+
+                        }
+                    }
+                });
             }
             else if (this.state.delete_type === "preOthers") {
                 const site_listObj = this.state.preOtherList;
@@ -737,7 +782,7 @@ export class FillConsumption extends Component {
                                             {
                                                 this.state.preDayList.map((item, index) => {
                                                     return <tr key={index}>
-                                                        <td>{item.account_number} </td>
+                                                        <td><div name="12" className="" style={{ "height": "25px" }}>{item.account_number}</div> </td>
                                                         <td>{item.existing_plan}</td>
                                                         <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
                                                         <td>{item.entityName}</td>
@@ -826,7 +871,7 @@ export class FillConsumption extends Component {
                                                 this.state.preOtherList.map((item, index) => {
                                                     return <tr key={index}>
                                                         <td>{item.account_number} </td>
-                                                        <td><div className="commonBorder" style={{ "height": "25px" }}>{item.existing_plan}</div></td>
+                                                        <td><div   className="commonBorder" style={{ "height": "25px" }}>{item.existing_plan}</div></td>
                                                         <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
                                                         <td>{item.entityName}</td>
                                                         <td>{item.intake_level}</td>
@@ -980,9 +1025,12 @@ export class FillConsumption extends Component {
                 </form>
                 <Modal formSize="big" text={this.state.text} acceptFunction={this.doAddAccountAction.bind(this)} siteList={this.state.totalList} consumptionAccountItem={this.state.account_detail} listdetailtype='consumption_detail' ref="consumption" />
                 <Modal formSize="middle" text={this.state.text} advisory={this.state.advisory} listdetailtype='market-insight' ref="market" />
+                <Modal listdetailtype="accountTaken" text={this.state.text} takenList={this.state.takenList} ref="accountTaken" />
             </div>
         )
     }
+
+
 }
 
 FillConsumption.propTypes = { onAddClick: () => { } };
