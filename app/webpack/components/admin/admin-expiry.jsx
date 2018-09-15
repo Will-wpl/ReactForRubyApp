@@ -40,6 +40,7 @@ export default class AdminExpiry extends Component {
     goCreate() {
         goCreateNewRa({ date: moment(this.state.start_datetime).format(), buyer_ids: JSON.stringify(this.state.buyer_ids) }).then(res => {
             sessionStorage.auction_id = res.auction.id;
+            this.goSearch();
             setTimeout(() => { window.location.href = "/admin/auctions/new" }, 100);
         })
     }
