@@ -923,20 +923,35 @@ export class BuyerUserEntityRegister extends Component {
         if (res.error_entity_indexes.length > 0) { //validate entity
             let name = [], uen = [], email = [], column = 0;;
             res.error_entity_indexes.map((item) => {
-                if (item.error_field_name === "company_name") {
-                    name.push(item.error_value)
+                if (item.detail.error_field_name === "company_name") {
+                    name.push(item.detail.error_value)
                     column = 0;
+                    if (item.indexs.length > 0) {
+                        item.indexs.map(i=>{
+                            this.setRedRece(i,column);
+                        })
+                    }
                 }
-                if (item.error_field_name === "company_uen") {
-                    uen.push(item.error_value);
+                if (item.detail.error_field_name === "company_uen") {
+                    uen.push(item.detail.error_value);
                     column = 1;
+                    if (item.indexs.length > 0) {
+                        item.indexs.map(i=>{
+                            this.setRedRece(i,column);
+                        })
+                    }
                 }
-                if (item.error_field_name === "contact_email") {
-                    email.push(item.error_value)
+                if (item.detail.error_field_name === "contact_email") {
+                    email.push(item.detail.error_value)
                     column = 6;
+                    if (item.indexs.length > 0) {
+                        item.indexs.map(i=>{
+                            this.setRedRece(i,column);
+                        })
+                    }
                 }
                 let row = item.entity_index;
-                $("#tabEntity tr:eq(" + row + ") td:eq(" + column + ")").find("div").css({ 'color': 'red', "border": "1px red solid" })
+                
             });
             let errList = {
                 nameError: name,
@@ -946,9 +961,6 @@ export class BuyerUserEntityRegister extends Component {
             this.setState({
                 validateErrList: errList
             })
-
-
-
             this.setState({ text: " " });
             this.refs.Modal_EntityErr.showModal();
             this.tab("entity");
@@ -957,6 +969,10 @@ export class BuyerUserEntityRegister extends Component {
             })
             return;
         }
+    }
+    setRedRece(row,column)
+    {
+        $("#tabEntity tr:eq(" + row + ") td:eq(" + column + ")").find("div").css({ 'color': 'red', "border": "1px red solid" })
     }
 
     goNext() {

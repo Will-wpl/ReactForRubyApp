@@ -56,8 +56,8 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
           buyer_entity.user = company_buyer
           buyer_entity.save
           details = []
-          details.push({id: 0, account_number: '000001', intake_level: 'LT' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '2018-08-01',attachment_ids:entity_1_attachment_ids.to_json})
-          details.push({id: 0, account_number: '000002', intake_level: 'HTS' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '01-08-2018',attachment_ids:entity_2_attachment_ids.to_json})
+          details.push({id: 0, account_number: '00000A', intake_level: 'LT' , peak: 100, unit_number: 'UN A', postal_code: '4001A', company_buyer_entity_id:buyer_entity.id, contract_expiry: '2018-08-01',attachment_ids:entity_1_attachment_ids.to_json})
+          details.push({id: 0, account_number: '00000B', intake_level: 'HTS' , peak: 100, unit_number: 'UN B', postal_code: '4001B', company_buyer_entity_id:buyer_entity.id, contract_expiry: '01-08-2018',attachment_ids:entity_2_attachment_ids.to_json})
           details_yesterday = []
           details_yesterday.push({id: 0, account_number: '000002', intake_level: 'HTS' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '01-08-2018',attachment_ids:entity_2_attachment_ids.to_json})
           details_yesterday.push({id: 0, account_number: '000002', intake_level: 'HTS' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '01-08-2018',attachment_ids:entity_2_attachment_ids.to_json})
@@ -97,8 +97,8 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
           buyer_entity.user = company_buyer
           buyer_entity.save
           details = []
-          details.push({id: 0, account_number: '000001', intake_level: 'LT' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '2018-08-01',attachment_ids:entity_1_attachment_ids.to_json})
-          details.push({id: 0, account_number: '000002', intake_level: 'HTS' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '01-08-2018',attachment_ids:entity_2_attachment_ids.to_json})
+          details.push({id: 0, account_number: '00000A', intake_level: 'LT' , peak: 100, unit_number: 'UN A', postal_code: '4001A', company_buyer_entity_id:buyer_entity.id, contract_expiry: '2018-08-01',attachment_ids:entity_1_attachment_ids.to_json})
+          details.push({id: 0, account_number: '00000B', intake_level: 'HTS' , peak: 100, unit_number: 'UN B', postal_code: '4001B', company_buyer_entity_id:buyer_entity.id, contract_expiry: '01-08-2018',attachment_ids:entity_2_attachment_ids.to_json})
           put :participate, params: { consumption_id: consumption.id,
                                       details: details.to_json,
                                       details_yesterday: [].to_json,

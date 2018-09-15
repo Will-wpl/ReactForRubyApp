@@ -195,13 +195,20 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
       index_list = []
       error_entity_detail_list = []
       entity_indexes.each do |error_entity|
-        index_list.push(error_entity['entity_index']) unless error_entity['entity_index'].blank?
+        # index_list.push(error_entity['entity_index']) unless error_entity['entity_index'].blank?
         error_entity_detail = {error_field_name: error_entity['error_field_name'], error_value: error_entity['error_value']}
-        unless error_entity_detail_list.any?{|x| x['error_field_name'] == error_entity_detail['error_field_name'] && x['error_value'] == error_entity_detail['error_value'] }
-          error_entity_detail_list.push(error_entity_detail)
+        if error_entity_detail_list.any?{|x| x[:detail][:error_field_name] == error_entity_detail[:error_field_name] && x[:detail][:error_value] == error_entity_detail[:error_value] }
+          error_entity_detail_list.each_index do |index|
+            detail = error_entity_detail_list.at(index)
+            if detail[:detail][:error_field_name] == error_entity_detail[:error_field_name] && detail[:detail][:error_value] == error_entity_detail[:error_value]
+              detail[:indexs].push(error_entity['entity_index']) unless detail[:indexs].any?{|x| x == error_entity['entity_index']}
+            end
+          end
+        else
+          error_entity_detail_list.push(detail: error_entity_detail, indexs:[error_entity['entity_index']])
         end
       end
-      error_entity_indexes = {index_list: index_list, error_entity_detail_list: error_entity_detail_list}
+      error_entity_indexes = error_entity_detail_list
     end
     render json: { validate_result: validate_final_result,
                    error_fields: error_fields,
