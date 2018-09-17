@@ -2,6 +2,10 @@
 body a{outline:none; cursor: default;}
 .link_hand a{cursor: pointer;}
 button{ cursor: pointer; transition: 0.5s all;}
+html{
+  body,div,table,thead,tbody,tfoot,tr,th,td,p { font-family:geomanist, Arial; font-size:12px; }
+}
+
 .green{color:green;}
 .red{color:red;}
 .cursor_link{cursor: pointer !important;}
@@ -846,7 +850,8 @@ ul.history_files{
   table.retailer_fill{
     tbody{
       tr{
-        td{
+        td{color:#fff;
+          div{color:#fff;}
           input,select,textarea{
             width:90%; margin: 0px auto; padding: 2px; border:1px solid #fff;
           }
