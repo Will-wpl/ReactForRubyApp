@@ -603,11 +603,9 @@ class Api::AuctionsController < Api::BaseController
       month = contract['contract_duration'].to_i
       contract['contract_period_end_date'] = auction.contract_period_start_date.advance(months: month).advance(days: -1)
       if contract['id'].to_i == 0
-        if auction.auction_contracts.where(contract_duration: contract['contract_duration']).count == 0
-          contract['auction_id'] = auction.id
-          contract['id'] = nil
-          AuctionContract.create!(contract)
-        end
+        contract['auction_id'] = auction.id
+        contract['id'] = nil
+        AuctionContract.create!(contract)
       else
         AuctionContract.find(contract['id']).update!(contract)
       end
