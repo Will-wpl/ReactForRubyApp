@@ -308,9 +308,7 @@ class Api::UsersController < Api::BaseController
     validate_result = 0
     consumptions = Consumption.find_by_user(user_id)
     if !consumptions.blank?
-      if consumptions.any? { |x| x.action_status == Consumption::ActionStatusPending }
-        validate_result = 3
-      elsif consumptions.any? { |x| x.action_status == Consumption::ActionStatusSent }
+      if consumptions.any? { |x| x.action_status == Consumption::ActionStatusSent }
         consumptions_sent = consumptions.where(action_status: Consumption::ActionStatusSent)
         consumptions_sent.each do |temp_consumption|
           if !AuctionResultContract.any? { |x| x.auction_id == temp_consumption.auction_id &&
@@ -319,6 +317,8 @@ class Api::UsersController < Api::BaseController
             validate_result = 2
           end
         end
+      elsif consumptions.any? { |x| x.action_status == Consumption::ActionStatusPending }
+        validate_result = 3
       end
     end
     validate_result
