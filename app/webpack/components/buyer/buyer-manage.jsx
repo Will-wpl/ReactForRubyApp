@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { UploadFile } from '../shared/upload';
 import { Modal } from '../shared/show-modal';
 import { getBuyerUserInfo, saveBuyerUserInfo, submitBuyerUserInfo, getBuyerUserInfoByUserId, validateIsExist } from '../../javascripts/componentService/common/service';
+import { validate_delete_reject_user } from '../../javascripts/componentService/admin/service';
 import { approveBuyerUser, approveBuyerEntity, removeBuyer } from '../../javascripts/componentService/admin/service';
 import { removeNanNum, validateNum, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, setApprovalStatus } from '../../javascripts/componentService/util';
 import { textChangeRangeIsUnchanged } from 'typescript';
@@ -270,11 +271,47 @@ export class BuyerUserManage extends Component {
 
         if (type === 'reject') {
             if (this.checkRejectAction()) {
-                this.setState({
-                    text: 'Are you sure you want to reject the request?',
-                }, () => {
-                    this.refs.Modal_Option.showModal('comfirm', { action: 'reject', type: 'user' }, '');
-                });
+                // this.setState({
+                //     text: 'Are you sure you want to reject the request?',
+                // }, () => {
+                //     this.refs.Modal_Option.showModal('comfirm', { action: 'reject', type: 'user' }, '');
+                // });
+                let param = {
+                    user_id: this.state.userid
+                }
+                validate_delete_reject_user(param).then(res => {
+                    switch (res.validate_result) {
+                        case 0:
+                            this.setState({
+                                text: 'Are you sure you want to reject the buyer?',
+                            }, () => {
+                                this.refs.Modal_Option.showModal('comfirm', { action: 'reject', type: 'user' }, '');
+                            });
+                            break;
+                        case 1:
+                            this.setState({
+                                text: "Current Buyer has ongoing Auction, which can't be reject at present. ",
+                            }, () => {
+                                this.refs.Modal_Option.showModal();
+                            });
+                            break;
+                        case 2:
+                            this.setState({
+                                text: "Current Buyer has ongoing Auction, which can't be reject at present. ",
+                            }, () => {
+                                this.refs.Modal_Option.showModal();
+                            });
+                            break;
+                        case 3:
+                            this.setState({
+                                text: "Current Buyer has pending Auction invitation,would you proceed anyway? Once proceeded,pending invitation will be cancalled as well. ",
+                            }, () => {
+                                this.refs.Modal_Option.showModal('comfirm', { action: 'reject', type: 'user'}, '');
+                            });
+                            break;
+                    }
+                })
+        
             }
         }
         else {
@@ -291,11 +328,42 @@ export class BuyerUserManage extends Component {
         });
     }
     deleteUser() {
-        this.setState({
-            text: 'Are you sure you want to delete the buyer?',
-        }, () => {
-            this.refs.Modal_Option.showModal('comfirm', { action: 'delete', type: 'deleteBuyer' }, '');
-        });
+        let param = {
+            user_id: this.state.userid
+        }
+        validate_delete_reject_user(param).then(res => {
+            switch (res.validate_result) {
+                case 0:
+                    this.setState({
+                        text: 'Are you sure you want to delete the buyer?',
+                    }, () => {
+                        this.refs.Modal_Option.showModal('comfirm', { action: 'delete', type: 'deleteBuyer' }, '');
+                    });
+                    break;
+                case 1:
+                    this.setState({
+                        text: "Current Buyer has ongoing Auction, which can't be deleted at present. ",
+                    }, () => {
+                        this.refs.Modal_Option.showModal();
+                    });
+                    break;
+                case 2:
+                    this.setState({
+                        text: "Current Buyer has ongoing Auction, which can't be deleted at present. ",
+                    }, () => {
+                        this.refs.Modal_Option.showModal();
+                    });
+                    break;
+                case 3:
+                    this.setState({
+                        text: "Current Buyer has pending Auction invitation,would you proceed anyway? Once proceeded,pending invitation will be cancalled as well. ",
+                    }, () => {
+                        this.refs.Modal_Option.showModal('comfirm', { action: 'delete', type: 'deleteBuyer'});
+                    });
+                    break;
+            }
+        })
+
     }
 
     doAction(obj) {

@@ -6,6 +6,7 @@ import { Modal } from '../shared/show-modal';
 import { getRetailerUserInfo, saveRetailManageInfo, submitRetailManageInfo, getRetailerUserInfoByUserId, validateIsExist } from '../../javascripts/componentService/retailer/service';
 import { approveRetailerUser, removeRetailer } from '../../javascripts/componentService/admin/service';
 import { validateNum, validateEmail, validator_Object, setValidationFaild, setValidationPass, changeValidate, removeNanNum, setApprovalStatus } from '../../javascripts/componentService/util';
+import { validate_delete_reject_user } from '../../javascripts/componentService/admin/service';
 export class RetailerRegister extends Component {
     constructor(props) {
         super(props);
@@ -477,11 +478,46 @@ export class RetailerRegister extends Component {
     judgeAction(type) {
         if (type === 'reject') {
             if (this.checkRejectAction()) {
-                this.setState({
-                    text: 'Are you sure you want to reject the request?',
-                }, () => {
-                    this.refs.Modal_Option.showModal('comfirm', { action: 'reject' }, '');
-                });
+                // this.setState({
+                //     text: 'Are you sure you want to reject the request?',
+                // }, () => {
+                //     this.refs.Modal_Option.showModal('comfirm', { action: 'reject' }, '');
+                // });
+                let param = {
+                    user_id: this.state.userid
+                }
+                validate_delete_reject_user(param).then(res => {
+                    switch (res.validate_result) {
+                        case 0:
+                            this.setState({
+                                text: 'Are you sure you want to reject the retailer?',
+                            }, () => {
+                                this.refs.Modal_Option.showModal('comfirm', { action: 'reject' }, '');
+                            });
+                            break;
+                        case 1:
+                            this.setState({
+                                text: "Current Retailer has ongoing Auction, which can't be deleted at present. ",
+                            }, () => {
+                                this.refs.Modal_Option.showModal();
+                            });
+                            break;
+                        case 2:
+                            this.setState({
+                                text: "Current Retailer has ongoing Auction, which can't be deleted at present. ",
+                            }, () => {
+                                this.refs.Modal_Option.showModal();
+                            });
+                            break;
+                        case 3:
+                            this.setState({
+                                text: "Current Retailer has pending Auction invitation,would you proceed anyway? Once proceeded,pending invitation will be cancalled as well. ",
+                            }, () => {
+                                this.refs.Modal_Option.showModal('comfirm', { action: 'delete'}, '');
+                            });
+                            break;
+                    }
+                })
             }
         }
 
@@ -491,8 +527,45 @@ export class RetailerRegister extends Component {
         }
     }
     deleteUser() {
-        this.setState({ text: "Are you sure you want to delete the retailer?" });
-        this.refs.Modal_Option.showModal('comfirm', { action: 'delete' }, '');
+
+
+        // this.setState({ text: "Are you sure you want to delete the retailer?" });
+        // this.refs.Modal_Option.showModal('comfirm', { action: 'delete' }, '');
+        let param = {
+            user_id: this.state.userid
+        }
+        validate_delete_reject_user(param).then(res => {
+            switch (res.validate_result) {
+                case 0:
+                    this.setState({
+                        text: 'Are you sure you want to delete the retailer?',
+                    }, () => {
+                        this.refs.Modal_Option.showModal('comfirm', { action: 'delete' }, '');
+                    });
+                    break;
+                case 1:
+                    this.setState({
+                        text: "Current Retailer has ongoing Auction, which can't be deleted at present. ",
+                    }, () => {
+                        this.refs.Modal_Option.showModal();
+                    });
+                    break;
+                case 2:
+                    this.setState({
+                        text: "Current Retailer has ongoing Auction, which can't be deleted at present. ",
+                    }, () => {
+                        this.refs.Modal_Option.showModal();
+                    });
+                    break;
+                case 3:
+                    this.setState({
+                        text: "Current Retailer has pending Auction invitation,would you proceed anyway? Once proceeded,pending invitation will be cancalled as well. ",
+                    }, () => {
+                        this.refs.Modal_Option.showModal('comfirm', { action: 'delete'}, '');
+                    });
+                    break;
+            }
+        })
     }
     doAction(obj) {
         if (obj.action === "delete") {

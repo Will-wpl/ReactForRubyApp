@@ -684,7 +684,7 @@ export class FillConsumption extends Component {
                                                 return <tr key={index}>
                                                     <td>{item.account_number} </td>
                                                     <td>{item.existing_plan}</td>
-                                                    <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('YYYY-MM-DD') : ""}</td>
+                                                    <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
                                                     <td>{item.entityName}</td>
                                                     <td>{item.intake_level}</td>
                                                     <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
@@ -772,7 +772,7 @@ export class FillConsumption extends Component {
                                                 return <tr key={index}>
                                                     <td>{item.account_number} </td>
                                                     <td>{item.existing_plan}</td>
-                                                    <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('YYYY-MM-DD') : ""}</td>
+                                                    <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
                                                     <td>{item.entityName}</td>
                                                     <td>{item.intake_level}</td>
                                                     <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
@@ -857,7 +857,7 @@ export class FillConsumption extends Component {
                                                 return <tr key={index}>
                                                     <td>{item.account_number} </td>
                                                     <td>{item.existing_plan}</td>
-                                                    <td>{(item.contract_expiry!=="" && item.contract_expiry!==null) ? moment(item.contract_expiry).format('YYYY-MM-DD') : ""}</td>
+                                                    <td>{(item.contract_expiry!=="" && item.contract_expiry!==null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
                                                     <td>{item.entityName}</td>
                                                     <td>{item.intake_level}</td>
                                                     <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
