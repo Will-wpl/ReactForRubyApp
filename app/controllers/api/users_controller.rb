@@ -295,7 +295,7 @@ class Api::UsersController < Api::BaseController
 
   def validate_in_auction_result(user_id)
     validate_result = 0
-    user_auction_res = AuctionResultContract.find_by user_id: user_id
+    user_auction_res = AuctionResultContract.find_by_user(user_id)
     if !user_auction_res.blank?
       if user_auction_res.any? { |x| x.contract_period_end_date > DateTime.current && x.status != 'void' }
         validate_result = 1
@@ -306,7 +306,7 @@ class Api::UsersController < Api::BaseController
 
   def validate_in_consumption(user_id)
     validate_result = 0
-    consumptions = Consumption.find_by user_id: user_id
+    consumptions = Consumption.find_by_user(user_id)
     if !consumptions.blank?
       if consumptions.any? { |x| x.action_status == Consumption::ActionStatusPending }
         validate_result = 3
