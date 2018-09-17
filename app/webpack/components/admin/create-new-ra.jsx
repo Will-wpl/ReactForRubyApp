@@ -117,10 +117,6 @@ export class CreateNewRA extends Component {
                 this.setState({ checkArray: arr.sort(this.sortNumber), contractArray: res.contract, contract_end_list: res.contract_end_list });
 
                 this.setState({ live_auction_contracts: res.live_auction_contracts });
-                console.log("this.state.live_auction_contracts");
-                console.log(this.state.live_auction_contracts);
-                console.log("res");
-                console.log(res)
                 res.auction_contracts.map((item) => {
                     let index = item.contract_duration;
                     switch (index) {
@@ -242,7 +238,6 @@ export class CreateNewRA extends Component {
         })
     }
     timeChange(data) {
-        console.log(data)
         this.setState({
             start_datetime: data
         })
@@ -465,7 +460,6 @@ export class CreateNewRA extends Component {
                 arr.push(type.target.value);
             }
             arr.sort(this.sortNumber);
-            console.log(arr);
             this.setState({ checkArray: arr });
             //this.doGetData("create");
         } else {
@@ -473,7 +467,6 @@ export class CreateNewRA extends Component {
                 return item != type.target.value
             })
             arr.sort(this.sortNumber);
-            console.log(arr);
             this.setState({ checkArray: arr });
         }
     }
@@ -677,39 +670,50 @@ export class CreateNewRA extends Component {
             id: this.state.id,
             buyer_type: this.state.single_multiple
         }
-        if (obj.method === "save") {
-            if (obj.action === "proceed") {
-                deleteSelectedBuyer(param).then(res => {
-                    if (res.status === "1") {
-                        this.doSave();
-                    }
-                })
+        if (obj.action !== 'cancel'){
+            if (obj.method === "save") {
+                if (obj.action === "proceed") {
+                    deleteSelectedBuyer(param).then(res => {
+                        if (res.status === "1") {
+                            this.doSave();
+                        }
+                    })
+                }
+                else {
+                    this.setState({
+                        disabled: false,
+                        submit_btn: true
+                    })
+                }
             }
-            else {
-                this.setState({
-                    disabled: false,
-                    submit_btn: true
-                })
+
+            if (obj.method === "next") {
+                if (obj.action === "proceed") {
+                    deleteSelectedBuyer(param).then(res => {
+
+                        if (res.status === "1") {
+                            this.doSave();
+                            window.location.href = `/admin/auctions/${this.auction.id}/invitation`;
+                            //this.doNext();
+                        }
+                    })
+                }
+                else {
+                    this.setState({
+                        disabled: false,
+                        submit_btn: true
+                    })
+                }
             }
+        }
+        else {
+            this.setState({
+                disabled: false,
+                submit_btn: true
+            })
         }
 
-        if (obj.method === "next") {
-            if (obj.action === "proceed") {
-                deleteSelectedBuyer(param).then(res => {
-             
-                    if (res.status === "1") {
-                        // window.location.href = `/admin/auctions/${this.auction.id}/invitation`;
-                        this.doNext();
-                    }
-                })
-            }
-            else {
-                this.setState({
-                    disabled: false,
-                    submit_btn: true
-                })
-            }
-        }
+
     }
     render() {
         let left_name = "";

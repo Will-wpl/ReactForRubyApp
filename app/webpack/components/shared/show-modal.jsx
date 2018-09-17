@@ -259,12 +259,42 @@ export class Modal extends React.Component {
                 this.setState({ props_data: data });
             }
         }
+        // if(this.state.type === "chkSelectedBuyers")
+        // {
+        //     let data=this.state.props_data;
+        //     if(data.action==="proceed")
+        //     {
+        //
+        //     }
+        // }
+        // else {
+        //     if (this.props.acceptFunction) {
+        //         setTimeout(() => {
+        //             this.props.acceptFunction(this.state.props_data);
+        //         })
+        //         this.closeModal();
+        //     }
+        // }
         if (this.props.acceptFunction) {
             setTimeout(() => {
-                this.props.acceptFunction(this.state.props_data);
+                let data=this.state.props_data;
+                if(data.action==="proceed")
+                {
+                    this.props.acceptFunction(this.state.props_data);
+                    this.setState({
+                        modalSize: "small",
+                        modalshowhide: "modal_hide"
+                    })
+                }
+                else
+                {
+                    this.props.acceptFunction(this.state.props_data);
+                    this.closeModal();
+                }
             })
-            this.closeModal();
+
         }
+
         if (this.props.dodelete) {
             this.props.dodelete();
         }
@@ -788,7 +818,6 @@ export class Modal extends React.Component {
     }
 
     closeModal(type) {
-    
         if (this.state.type === "chkSelectedBuyers") {
             let data = this.state.props_data;
             if(type===0)
@@ -802,6 +831,7 @@ export class Modal extends React.Component {
                     modalshowhide: "modal_hide"
                 })
             }
+
         }
         else {
             this.setState({
@@ -1391,7 +1421,7 @@ export class Modal extends React.Component {
         }
         else if (this.state.type === "chkSelectedBuyers") {
             btn_html =
-                <div className="modal_btn"><a onClick={this.Accept.bind(this)}>Proceed</a><a onClick={this.closeModelAndCancelSave.bind(this)}>Cancel</a></div>;
+                <div className="modal_btn"><a onClick={this.Accept.bind(this)}>Proceed</a><a onClick={this.closeModelAndCancelSave.bind(this,0)}>Cancel</a></div>;
         }
         else {
             btn_html =

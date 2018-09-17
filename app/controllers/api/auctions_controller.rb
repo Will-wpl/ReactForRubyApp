@@ -891,7 +891,7 @@ class Api::AuctionsController < Api::BaseController
 
   def push_data_to_contract_end_list(contract)
     count = Consumption.where(contract_duration: contract.contract_duration, auction_id: contract.auction_id).is_participation.is_accpet.count
-    { id: contract.auction_id, contract_duration: contract.contract_duration, contract_period_end_date: contract.contract_period_end_date, count: count, link: "/admin/auctions/#{contract.auction_id}/consumption?type=2&contract_duration=#{contract.contract_duration}&from=1" }
+    { id: contract.auction_id, contract_duration: contract.contract_duration, contract_period_end_date: contract.contract_period_end_date.strftime("%d-%m-%Y"), count: count, link: "/admin/auctions/#{contract.auction_id}/consumption?type=2&contract_duration=#{contract.contract_duration}&from=1" }
   end
 
   def set_contract_duration_confirm(params, auction_result)
