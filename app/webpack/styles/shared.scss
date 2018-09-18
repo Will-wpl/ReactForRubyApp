@@ -1312,7 +1312,12 @@ width: "70%"; float: "left";padding:5px;
   background: '#35404c' !important;
 }
 .entityApprove{
-  width: 60px; float:center; margin-left: 10px; margin-top: 10px; cursor: pointer;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block;
+  width: 70px; float:center; 
+  margin-left: 10px; margin-top: 10px;
+   cursor: pointer;  padding: 3px 0px; 
+   text-align: center; background: #54B41B; 
+   border-radius: 5px; color:#fff; display: inline-block;
+   font-size: 0.875rem !important
 }
 .btnFont{
   font-size: 1.0625rem !important;
