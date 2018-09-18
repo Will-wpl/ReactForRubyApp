@@ -162,6 +162,7 @@ class Api::UsersController < Api::BaseController
     user = User.find(user_id)
     unless user.blank?
       Consumption.delete(user_id: user_id, action_status: Consumption::ActionStatusPending)
+      Arrangement.delete(user_id: user_id, action_status: Consumption::ActionStatusPending)
       user.email = string_for_user_value(user.email)
       user.company_unique_entity_number = string_for_user_value(user.company_unique_entity_number)
       user.company_license_number = string_for_user_value(user.company_license_number)
@@ -331,7 +332,8 @@ class Api::UsersController < Api::BaseController
             validate_result = 2
           end
         end
-      elsif consumptions.any? { |x| x.action_status == Consumption::ActionStatusPending }
+      end
+      if validate_result == 0 && consumptions.any? { |x| x.action_status == Consumption::ActionStatusPending }
         validate_result = 3
       end
     end
@@ -356,7 +358,8 @@ class Api::UsersController < Api::BaseController
           #   validate_result = 2
           # end
         end
-      elsif arrangements.any? { |x| x.action_status == Arrangement::ActionStatusPending }
+      end
+      if validate_result == 0 && arrangements.any? { |x| x.action_status == Arrangement::ActionStatusPending }
         validate_result = 3
       end
     end
