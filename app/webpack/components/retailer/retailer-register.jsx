@@ -497,21 +497,21 @@ export class RetailerRegister extends Component {
                             break;
                         case 1:
                             this.setState({
-                                text: "Current Retailer has ongoing Auction, which can't be deleted at present. ",
+                                text: "Current retailer has ongoing Auction, which can't be deleted at present. ",
                             }, () => {
                                 this.refs.Modal_Option.showModal();
                             });
                             break;
                         case 2:
                             this.setState({
-                                text: "Current Retailer has ongoing Auction, which can't be deleted at present. ",
+                                text: "Current retailer has ongoing Auction, which can't be deleted at present. ",
                             }, () => {
                                 this.refs.Modal_Option.showModal();
                             });
                             break;
                         case 3:
                             this.setState({
-                                text: "Current Retailer has pending Auction invitation,would you proceed anyway? Once proceeded,pending invitation will be cancalled as well. ",
+                                text: "Current retailer has pending auction invitation, would you proceed anyway? Once proceeded, pending invitation will be cancelled as well. ",
                             }, () => {
                                 this.refs.Modal_Option.showModal('comfirm', { action: 'delete'}, '');
                             });
@@ -545,21 +545,21 @@ export class RetailerRegister extends Component {
                     break;
                 case 1:
                     this.setState({
-                        text: "Current Retailer has ongoing Auction, which can't be deleted at present. ",
+                        text: "Current retailer has ongoing Auction, which can't be deleted at present. ",
                     }, () => {
                         this.refs.Modal_Option.showModal();
                     });
                     break;
                 case 2:
                     this.setState({
-                        text: "Current Retailer has ongoing Auction, which can't be deleted at present. ",
+                        text: "Current retailer has ongoing Auction, which can't be deleted at present. ",
                     }, () => {
                         this.refs.Modal_Option.showModal();
                     });
                     break;
                 case 3:
                     this.setState({
-                        text: "Current Retailer has pending Auction invitation,would you proceed anyway? Once proceeded,pending invitation will be cancalled as well. ",
+                        text: "Current retailer has pending Auction invitation, would you proceed anyway? Once proceeded, pending invitation will be cancelled as well. ",
                     }, () => {
                         this.refs.Modal_Option.showModal('comfirm', { action: 'delete'}, '');
                     });
