@@ -3,96 +3,79 @@ import { constants } from 'os';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
-import { validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum, removePostCode } from '../../javascripts/componentService/util';
+import { validateConsumptionDetailRepeat } from './../../javascripts/componentService/common/service';
+import { validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum, removePostCode, validatePostCode } from '../../javascripts/componentService/util';
 //共通弹出框组件
 import { UploadFile } from '../shared/upload';
+import E from 'wangeditor'
 
 export class Modal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             modalshowhide: "modal_hide",
-            type: 'default',
-            secondStatus: "live_hide",
-            itemIndex: "",
-            props_data: {},
-            strtype: '',
-            email_subject: '',
-            email_body: '',
-            consumptionItem: [],
-            contracted_capacity_disabled: true,
-            contract_expiry_disabled: true,
-            disabled: false,
-            id: "",
-            consumptionid: "",
-            account_number: '',
-            existing_plan: [],
-            existing_plan_selected: '',
-            contract_expiry: '',
-            purchasing_entity: [],
-            purchasing_entity_selectd: '',
-            premise_address: '',
-            intake_level: [],
-            intake_level_selected: '',
-            contracted_capacity: '',
-            blk_or_unit: '',
-            street: '',
-            unit_number: '',
-            postal_code: '',
-            totals: '',
-            peak_pct: '',
-            peak: "",
-            attachment_ids: '',
-            option: '',
-            isSaved: false,
-            uploadUrl: "/api/buyer/user_attachments?file_type=",
-            validate: false,
+            type: 'default', secondStatus: "live_hide", itemIndex: "", props_data: {},
+            strtype: '', email_subject: '', email_body: '', consumptionItem: [],
+            contracted_capacity_disabled: true, contract_expiry_disabled: true, disabled: false, id: "",orignal_id:"", consumption_id: "", account_number: '',
+            existing_plan: [], existing_plan_selected: '', contract_expiry: '', purchasing_entity: [], purchasing_entity_selectd: '', premise_address: '',
+            intake_level: [], intake_level_selected: '',
+            contracted_capacity: '', blk_or_unit: '', street: '', unit_number: '', postal_code: '',
+            totals: '', peak_pct: '', peak: "", attachment_ids: '', option: '', cate_type: '',
+            isSaved: false, uploadUrl: "/api/buyer/user_attachments?file_type=", validate: false,
             fileData: {
                 "CONSUMPTION_DOCUMENTS": [
                     { buttonName: "none", files: [] }
                 ]
             },
-            modalSize: this.props.modalSize
+            modalSize: this.props.modalSize, approval_status: 2,
+            entityid: '', is_default: '', user_id: "", main_id: "", user_entity_id: "",
+            entity_company_name: '', entity_company_uen: '', entity_company_address: '', entity_billing_address: '', entity_bill_attention_to: '', entity_contact_name: '',
+            entity_contact_email: '', entity_contact_mobile_no: '', entity_contact_office_no: '', entitList: [], entityErrorList: [], loglist: [], attatchment: [], advisory: ""
         }
     }
 
     componentWillReceiveProps(next) {
         let fileObj;
         fileObj = this.state.fileData;
-        if (next.consumption_account_item) {
+        if (next.consumptionAccountItem) {
             this.setState({
-                consumptionid: next.consumption_account_item.id,
-                isSaved: next.consumption_account_item.id ? true : false,
-                account_number: next.consumption_account_item.account_number,
-                existing_plan: next.consumption_account_item.existing_plan,
-                existing_plan_selected: next.consumption_account_item.existing_plan_selected,
-                contract_expiry: next.consumption_account_item.contract_expiry === "" ? "" : moment(next.consumption_account_item.contract_expiry),
-                purchasing_entity: next.consumption_account_item.purchasing_entity,
+                consumption_id: next.consumptionAccountItem.consumption_id,
+                id: next.consumptionAccountItem.id,
+                orignal_id:next.consumptionAccountItem.orignal_id,
+                isSaved: next.consumptionAccountItem.id ? true : false,
+                account_number: next.consumptionAccountItem.account_number,
+                existing_plan: next.consumptionAccountItem.existing_plan,
+                existing_plan_selected: next.consumptionAccountItem.existing_plan_selected,
+                contract_expiry: next.consumptionAccountItem.contract_expiry === "" ? "" : moment(next.consumptionAccountItem.contract_expiry),
+                purchasing_entity: next.consumptionAccountItem.purchasing_entity,
                 purchasing_entity_selectd: next.
-                    consumption_account_item.purchasing_entity_selectd ? next.consumption_account_item.purchasing_entity_selectd :
-                    next.consumption_account_item.purchasing_entity.length > 0 ? next.consumption_account_item.purchasing_entity[0].id : "",
-                premise_address: next.consumption_account_item.premise_address,
-                intake_level: next.consumption_account_item.intake_level,
-                intake_level_selected: next.consumption_account_item.intake_level_selected,
-                contracted_capacity: next.consumption_account_item.contracted_capacity ? parseInt(next.consumption_account_item.contracted_capacity) : "",
-                blk_or_unit: next.consumption_account_item.blk_or_unit,
-                street: next.consumption_account_item.street,
-                unit_number: next.consumption_account_item.unit_number,
-                postal_code: next.consumption_account_item.postal_code,
-                totals: next.consumption_account_item.totals ? parseInt(next.consumption_account_item.totals) : "",
-                peak_pct: next.consumption_account_item.peak_pct,
-                peak: next.consumption_account_item.peak_pct ? (100 - parseFloat(next.consumption_account_item.peak_pct)) : "",
-                option: next.consumption_account_item.option
+                    consumptionAccountItem.purchasing_entity_selectd ? next.consumptionAccountItem.purchasing_entity_selectd :
+                    next.consumptionAccountItem.purchasing_entity.length > 0 ? next.consumptionAccountItem.purchasing_entity[0].id : "",
+                premise_address: next.consumptionAccountItem.premise_address,
+                intake_level: next.consumptionAccountItem.intake_level,
+                intake_level_selected: next.consumptionAccountItem.intake_level_selected,
+                contracted_capacity: next.consumptionAccountItem.contracted_capacity ? parseInt(next.consumptionAccountItem.contracted_capacity) : "",
+                blk_or_unit: next.consumptionAccountItem.blk_or_unit,
+                street: next.consumptionAccountItem.street,
+                unit_number: next.consumptionAccountItem.unit_number,
+                postal_code: next.consumptionAccountItem.postal_code,
+                totals: next.consumptionAccountItem.totals ? parseInt(next.consumptionAccountItem.totals) : "",
+                peak_pct: next.consumptionAccountItem.peak_pct,
+                peak: next.consumptionAccountItem.peak_pct ? (100 - parseFloat(next.consumptionAccountItem.peak_pct)) : "",
+                option: next.consumptionAccountItem.option,
+                cate_type: next.consumptionAccountItem.cate_type
             });
 
-            if (next.consumption_account_item.attachment_ids) {
-                // let obj = {
-                //     id: next.consumption_account_item.id,
-                //     file_name: next.consumption_account_item.file_name,
-                //     file_path: next.consumption_account_item.file_path
-                // }
+            if (next.consumptionAccountItem.type === "preDay") {
+                this.setState({
+                    contract_expiry_disabled: true
+                })
+            }
+
+            if (next.consumptionAccountItem.attachment_ids) {
+
                 fileObj["CONSUMPTION_DOCUMENTS"][0].files = [];
-                fileObj["CONSUMPTION_DOCUMENTS"][0].files = next.consumption_account_item.attachment_ids;
+                fileObj["CONSUMPTION_DOCUMENTS"][0].files = next.consumptionAccountItem.attachment_ids;
                 this.setState({
                     fileData: fileObj
                 })
@@ -104,7 +87,7 @@ export class Modal extends React.Component {
                 })
             }
 
-            if (next.consumption_account_item.existing_plan_selected === "Retailer plan") {
+            if (next.consumptionAccountItem.existing_plan_selected === "Retailer plan") {
                 this.setState({
                     contract_expiry_disabled: false
                 })
@@ -114,7 +97,7 @@ export class Modal extends React.Component {
                     contract_expiry_disabled: true
                 })
             }
-            if (next.consumption_account_item.intake_level_selected === "LT") {
+            if (next.consumptionAccountItem.intake_level_selected === "LT") {
                 this.setState({
                     contracted_capacity_disabled: true
                 })
@@ -128,12 +111,59 @@ export class Modal extends React.Component {
         if (next.siteList) {
             this.setState({ consumptionItem: next.siteList });
         }
+
+
+        if (next.attatchment) {
+
+            this.setState({
+                attatchment: next.attatchment
+            })
+        }
+        if (next.advisory) {
+            this.setState({
+                advisory: next.advisory
+            })
+        }
+        if (next.entityDetailItem) {
+            this.setState({
+                entityid: next.entityDetailItem.id,
+                entity_company_name: next.entityDetailItem.company_name,
+                entity_company_uen: next.entityDetailItem.company_uen,
+                entity_company_address: next.entityDetailItem.company_address,
+                entity_billing_address: next.entityDetailItem.billing_address,
+                entity_bill_attention_to: next.entityDetailItem.bill_attention_to,
+                entity_contact_name: next.entityDetailItem.contact_name,
+                entity_contact_email: next.entityDetailItem.contact_email,
+                entity_contact_mobile_no: next.entityDetailItem.contact_mobile_no,
+                entity_contact_office_no: next.entityDetailItem.contact_office_no,
+                is_default: next.entityDetailItem.is_default,
+                user_id: next.entityDetailItem.user_id,
+                main_id: next.entityDetailItem.main_id,
+                user_entity_id: next.entityDetailItem.user_entity_id,
+                option: next.entityDetailItem.option,
+                approval_status: next.entityDetailItem.approval_status
+            })
+        }
+        if (next.entitList) {
+            this.setState({ entitList: next.entitList })
+        }
+
+        if (next.entityErrorList) {
+            this.setState({
+                entityErrorList: next.entityErrorList
+            })
+        }
+        if (next.loglist) {
+            this.setState({
+                loglist: next.loglist
+            })
+        }
+
         $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
         $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
     }
 
     componentDidMount() {
-
         if (this.props.formSize === "big") {
             $("#btnUpload").removeClass("col-md-2 u-cell").addClass("col-md-3");
         }
@@ -146,7 +176,6 @@ export class Modal extends React.Component {
                 $(".react-datepicker-popper").removeClass("isHide");
             }
         })
-
     }
 
     showModal(type, data, str, index) {
@@ -159,11 +188,25 @@ export class Modal extends React.Component {
             props_data: data ? data : {}
         })
         if (data) {
+            if (str == "email_template_la") {
+                $(".w-e-text p").html("");
+                if ($("#email_body").html() == "") {
+                    var editor = new E('#email_body');
+                    setTimeout(() => { editor.create(); });
+                }
+                setTimeout(() => { $(".w-e-text").html("").html(data==""?"<p></p>":data) }, 300);
+            }
             if (data.subject && data.body) {
+                $(".w-e-text p").html("");
+                if ($("#email_body").html() == "") {
+                    var editor = new E('#email_body');
+                    setTimeout(() => { editor.create(); })
+                }
                 this.setState({
                     email_subject: data.subject,
                     email_body: data.body
                 })
+                setTimeout(() => { $(".w-e-text").html("").html(this.state.email_body==""?"<p></p>":this.state.email_body) }, 300);
             }
         }
         if (type == "comfirm") {
@@ -195,8 +238,6 @@ export class Modal extends React.Component {
                 itemIndex: index
             })
         }
-
-
     }
 
     do_text(text) {
@@ -207,17 +248,53 @@ export class Modal extends React.Component {
     }
 
     Accept() {
-        if (this.state.strtype === "email_template") {
-            let data = this.state.props_data;
-            data.subject = this.state.email_subject;
-            data.body = this.state.email_body;
-            this.setState({ props_data: data });
+        if (this.state.strtype == "email_template" ||
+            this.state.strtype == "email_template_la") {
+            if (this.state.strtype == "email_template_la") {
+                this.setState({ props_data: $(".w-e-text").html() });
+            } else {
+                let data = this.state.props_data;
+                data.subject = this.state.email_subject;
+                data.body = $(".w-e-text").html();
+                this.setState({ props_data: data });
+            }
+        }
+        // if(this.state.type === "chkSelectedBuyers")
+        // {
+        //     let data=this.state.props_data;
+        //     if(data.action==="proceed")
+        //     {
+        //
+        //     }
+        // }
+        // else {
+        //     if (this.props.acceptFunction) {
+        //         setTimeout(() => {
+        //             this.props.acceptFunction(this.state.props_data);
+        //         })
+        //         this.closeModal();
+        //     }
+        // }
+        if (this.props.acceptFunction) {
+            setTimeout(() => {
+                let data=this.state.props_data;
+                if(data.action==="proceed")
+                {
+                    this.props.acceptFunction(this.state.props_data);
+                    this.setState({
+                        modalSize: "small",
+                        modalshowhide: "modal_hide"
+                    })
+                }
+                else
+                {
+                    this.props.acceptFunction(this.state.props_data);
+                    this.closeModal();
+                }
+            })
+
         }
 
-        if (this.props.acceptFunction) {
-            this.props.acceptFunction(this.state.props_data);
-            this.closeModal();
-        }
         if (this.props.dodelete) {
             this.props.dodelete();
         }
@@ -226,56 +303,70 @@ export class Modal extends React.Component {
         })
 
         if (this.props.formSize === "middle") {
-            $("#modal_main").css({ "width": "50%", "height": "300px", "top": "40%", "left": "40%" });
-            $(".email_body").css({ "height": "140px" });
+            $("#modal_main").css({ "width": "50%", "height": "310px", "top": "40%", "marginLeft": "-25%" });
+            $(".email_body").css({ "height": "170px" });
         }
 
     }
 
-    checkModelSuccess(event) {
-        // event.preventDefault();
-        let flag = true, hasDoc = true;
+
+
+
+    Add() {
+        if (this.props.listdetailtype === 'entity_detail') {
+            this.checkEntitySuccess();
+        }
+        else {
+            this.checkModelSuccess();
+        }
+    }
+
+    addEntity() { //buyer entity
+        let entityItem = {
+            id: this.state.entityid,
+            company_name: this.state.entity_company_name,
+            company_uen: this.state.entity_company_uen,
+            company_address: this.state.entity_company_address,
+            billing_address: this.state.entity_billing_address,
+            bill_attention_to: this.state.entity_bill_attention_to,
+            contact_name: this.state.entity_contact_name,
+            contact_email: this.state.entity_contact_email,
+            contact_mobile_no: this.state.entity_contact_mobile_no,
+            contact_office_no: this.state.entity_contact_office_no,
+            is_default: this.state.is_default,
+            user_id: this.state.user_id,
+            main_id: this.state.main_id,
+            user_entity_id: this.state.user_entity_id,
+            approval_status: this.state.approval_status,
+            index: this.state.itemIndex
+        }
+        if (this.props.acceptFunction) {
+            this.props.acceptFunction(entityItem);
+            this.setState({
+                modalshowhide: "modal_hide"
+            })
+        }
+    }
+
+    checkEntitySuccess() {
+        let flag = true;
         let validateItem = {
-            peak_pct: { cate: 'decimal' },
-            totals: { cate: 'num10' },
-            postal_code: { cate: 'postcode' },
-            unit_number: { cate: 'required' },
-            street: { cate: 'required' },
-            blk_or_unit: { cate: 'required' },
-            contracted_capacity: { cate: 'num4' },
-            contract_expiry: { cate: 'required' },
-            account_number: { cate: 'required' }
-        }
-        if (this.state.existing_plan_selected !== "Retailer plan") {
-            delete validateItem.contract_expiry;
-        }
-        if (this.state.intake_level_selected === "LT") {
-            delete validateItem.contracted_capacity;
+            // company_name:"required",
+            entity_contact_office_no: { cate: 'num' },
+            entity_contact_mobile_no: { cate: 'num' },
+            entity_contact_email: { cate: 'email' },
+            entity_contact_name: { cate: 'required' },
+            entity_bill_attention_to: { cate: 'required' },
+            entity_billing_address: { cate: 'required' },
+            entity_company_address: { cate: 'required' },
+            entity_company_uen: { cate: 'required' },
+            entity_company_name: { cate: 'required' }
         }
         let validateResult = validator_Object(this.state, validateItem);
         flag = validateResult.length > 0 ? false : true;
         if (flag) {
-            let status = this.account_address_repeat();
-            switch (status) {
-                case 'false|true':
-                    $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
-                    $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
-                    $("#permise_address").focus();
-                    break;
-                case 'true|false':
-                    $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
-                    $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
-                    $("#account_number").focus();
-                    break;
-                case 'true|true':
-                    $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
-                    $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
-                    $("#account_number").focus();
-                    break;
-                default:
-                    this.addToMainForm();
-                    break;
-            }
+            //need  validate
+            this.addEntity();
         }
         else {
             $('.validate_message').find('div').each(function () {
@@ -288,28 +379,81 @@ export class Modal extends React.Component {
             validateResult.map((item, index) => {
                 let column = item.column;
                 let cate = item.cate;
-
                 setValidationFaild(column, cate);
-                if (column === "contract_expiry") {
-                    setTimeout(() => {
-                        $(".react-datepicker-popper").addClass("isHide");
-                    });
-                }
             })
         }
     }
 
-    removeInputNanNum(value) {
-        removeNanNum(value)
+    changeEntity(type, e) {
+        let itemValue = e.target.value;
+        switch (type) {
+            case "entityid":
+                this.setState({
+                    entityid: value
+                })
+                break;
+            case "entity_company_name":
+                this.setState(
+                    { entity_company_name: itemValue }
+                );
+                changeValidate('entity_company_name', itemValue);
+                break;
+
+            case 'entity_company_uen':
+                this.setState({ entity_company_uen: itemValue });
+                changeValidate('entity_company_uen', itemValue);
+                break;
+            case 'entity_company_address':
+                this.setState({ entity_company_address: itemValue });
+                changeValidate('entity_company_address', itemValue);
+                break;
+            case 'entity_billing_address':
+                this.setState({ entity_billing_address: itemValue });
+                changeValidate('entity_billing_address', itemValue);
+                break;
+            case 'entity_bill_attention_to':
+                this.setState({ entity_bill_attention_to: itemValue });
+                changeValidate('entity_bill_attention_to', itemValue);
+                break;
+            case 'entity_contact_name':
+                this.setState({ entity_contact_name: itemValue });
+                changeValidate('entity_contact_name', itemValue);
+                break;
+            case 'entity_contact_email':
+                this.setState({ entity_contact_email: itemValue });
+                if (!validateEmail(itemValue)) {
+                    setValidationFaild('entity_contact_email', 2)
+                } else {
+                    setValidationPass('entity_contact_email', 2)
+                }
+                break;
+            case 'entity_contact_mobile_no':
+                this.setState({ entity_contact_mobile_no: itemValue });
+                if (!validateNum(itemValue)) {
+                    setValidationFaild('entity_contact_mobile_no', 2)
+                } else {
+                    setValidationPass('entity_contact_mobile_no', 2)
+                }
+                break;
+            case 'entity_contact_office_no':
+                this.setState({ entity_contact_office_no: itemValue });
+                if (!validateNum(itemValue)) {
+                    setValidationFaild('entity_contact_office_no', 2)
+                } else {
+                    setValidationPass('entity_contact_office_no', 2)
+                }
+                break;
+        }
     }
-    removeInputPostCode(value) {
-        removePostCode(value);
-    }
-    getFormsValue() {
+
+
+    addToMainForm() { // consumption detail
         let siteItem = {
-            consumptionid: this.state.consumptionid ? this.state.consumptionid : "",
+            consumption_id: this.state.consumption_id,
+            id: this.state.id,
+            orignal_id:this.state.orignal_id,
             account_number: this.state.account_number,
-            existing_plan_selected: this.state.existing_plan_selected,
+            existing_plan_selected: (this.state.existing_plan_selected !== null && this.state.existing_plan_selected !== "") ? this.state.existing_plan_selected : this.state.existing_plan[0],
             contract_expiry: this.state.contract_expiry ? this.state.contract_expiry : "",
             purchasing_entity_selectd: this.state.purchasing_entity_selectd,
             intake_level_selected: this.state.intake_level_selected,
@@ -321,98 +465,11 @@ export class Modal extends React.Component {
             totals: this.state.totals,
             peak_pct: this.state.peak_pct,
             index: this.state.itemIndex,
-            user_attachment_id: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].id : "",
-            file_name: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_name : "",
-            file_path: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_path : ""
-        }
-        return siteItem;
-    }
-
-    modifySiteListInLocal() {
-        let siteItem = this.getFormsValue();
-        let entity = this.state.consumptionItem;
-        if (this.state.itemIndex >= 0) {
-            entity[this.state.itemIndex] = siteItem;
-        } else {
-
-            entity.push(siteItem);
-        }
-        this.setState({
-            consumptionItem: entity
-        })
-    }
-
-    account_address_repeat() {
-        let address = false, account = false, editNotSave = false;
-        let address_count = 0, account_count = 0;
-        this.state.consumptionItem.map((item, index) => {
-            if (this.state.option === 'update') {
-                if (item.id) {
-                    if ((this.state.unit_number == item.unit_number) && (this.state.postal_code == item.postal_code) && (this.state.consumptionid !== item.id)) {
-                        address_count++;
-                    }
-                    if (this.state.account_number === item.account_number && (this.state.consumptionid !== item.id)) {
-                        account_count++;
-                    }
-                }
-                else {
-                    if ((this.state.unit_number === item.unit_number) && (this.state.postal_code === item.postal_code)) {
-                        if (index != this.state.itemIndex) {
-                            address_count++;
-                        }
-                    }
-                    if (this.state.account_number === item.account_number) {
-                        if (index != this.state.itemIndex) {
-                            account_count++;
-                        }
-                    }
-                }
-            }
-            else {
-                if ((this.state.unit_number === item.unit_number) && (this.state.postal_code === item.postal_code)) {
-                    address_count++;
-                }
-                if (this.state.account_number === item.account_number) {
-                    account_count++;
-                }
-            }
-        })
-
-        if (address_count > 0) {
-            address = true;
-        }
-        if (account_count > 0) {
-            account = true;
-        }
-        return account + "|" + address;
-    }
-
-    Add() {
-        this.checkModelSuccess();
-    }
-
-    addToMainForm() {
-        let siteItem = {
-            consumptionid: this.state.consumptionid ? this.state.consumptionid : "",
-            account_number: this.state.account_number,
-            existing_plan_selected: this.state.existing_plan_selected,
-            contract_expiry: this.state.contract_expiry ? this.state.contract_expiry : "",
-            purchasing_entity_selectd: this.state.purchasing_entity_selectd,
-            intake_level_selected: this.state.intake_level_selected,
-            contracted_capacity: this.state.contracted_capacity,
-            blk_or_unit: this.state.blk_or_unit,
-            street: this.state.street,
-            unit_number: this.state.unit_number,
-            postal_code: this.state.postal_code,
-            totals: this.state.totals,
-            peak_pct: this.state.peak_pct,
-            index: this.state.itemIndex,
+            cate_type: this.state.cate_type,
             attachment_ids: "",
             user_attachment: []
-            // user_attachment_id: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].id : "",
-            // file_name: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_name : "",
-            // file_path: this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0 ? this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files[0].file_path : ""
         }
+
         if (this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0) {
             let idsArr = [];
             this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.map((item) => {
@@ -422,21 +479,51 @@ export class Modal extends React.Component {
             siteItem.user_attachment = this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files;
         }
 
-        if (this.props.acceptFunction) {
-            this.props.acceptFunction(siteItem);
-            this.setState({
-                modalshowhide: "modal_hide"
-            })
+        let validateItem = {
+            id: this.state.id,
+            account_number: this.state.account_number,
+            unit_number: this.state.unit_number,
+            postal_code: this.state.postal_code,
+            orignal_id:this.state.orignal_id
         }
-    }
 
+        let param = {
+            detail: validateItem,
+            consumption_id: this.state.consumption_id
+        }
+
+        validateConsumptionDetailRepeat(param).then(res => {
+            if (res.validate_result) {
+                if (this.props.acceptFunction) {
+                    this.props.acceptFunction(siteItem);
+                    this.setState({
+                        modalshowhide: "modal_hide"
+                    })
+                }
+            }
+            else {
+                if (res.error_details) {
+                    res.error_details.map(item => {
+                        if (item.error_field_name === "account_number") {
+                            $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                            $("#account_number").focus();
+                        }
+                        else {
+                            $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                            $("#unit_number").focus();
+                        }
+                    })
+                }
+            }
+        })
+    }
 
     changeConsumption(type, e) {
         let value = e.target.value;
         switch (type) {
-            case "consumptionid":
+            case "id":
                 this.setState({
-                    consumptionid: value
+                    id: value
                 })
                 break;
             case "account_number":
@@ -465,7 +552,7 @@ export class Modal extends React.Component {
                 break;
             case "contract_expiry":
                 this.setState({
-                    contract_expiry: value
+                    contract_expiry: value//moment(value).format('YYYY-MM-DD')
                 })
                 changeValidate('contract_expiry', value);
                 break;
@@ -522,7 +609,13 @@ export class Modal extends React.Component {
                 this.setState({
                     postal_code: value
                 })
-                changeValidate('postal_code', value);
+                // changeValidate('postal_code', value);
+                if (!validatePostCode(value)) {
+                    setValidationFaild('postal_code', 2)
+                } else {
+                    setValidationPass('postal_code', 2)
+                }
+
                 break;
             case "totals":
                 this.setState({
@@ -558,6 +651,72 @@ export class Modal extends React.Component {
         }
     }
 
+    checkModelSuccess(event) { //check consumption account form
+        let flag = true, hasDoc = true;
+        let validateItem = {
+            peak_pct: { cate: 'decimal' },
+            totals: { cate: 'num10' },
+            postal_code: { cate: 'postcode' },
+            unit_number: { cate: 'required' },
+            street: { cate: 'required' },
+            blk_or_unit: { cate: 'required' },
+            contracted_capacity: { cate: 'num4' },
+            purchasing_entity_selectd: { cate: 'required' },
+            contract_expiry: { cate: 'required' },
+            account_number: { cate: 'required' }
+        }
+        if (this.state.existing_plan_selected !== "Retailer plan") {
+            delete validateItem.contract_expiry;
+        }
+        if (this.state.intake_level_selected === "LT") {
+            delete validateItem.contracted_capacity;
+        }
+        let validateResult = validator_Object(this.state, validateItem);
+        flag = validateResult.length > 0 ? false : true;
+        if (flag) {
+            let status = this.account_address_repeat();
+            switch (status) {
+                case 'false|true':
+                    $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                    $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
+                    $("#unit_number").focus();
+                    break;
+                case 'true|false':
+                    $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
+                    $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                    $("#account_number").focus();
+                    break;
+                case 'true|true':
+                    $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                    $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                    $("#account_number").focus();
+                    break;
+                default:
+                    this.addToMainForm();
+                    break;
+            }
+        }
+        else {
+            $('.validate_message').find('div').each(function () {
+                let className = $(this).attr('class');
+                if (className === 'errormessage') {
+                    let divid = $(this).attr("id");
+                    $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
+                }
+            })
+            validateResult.map((item, index) => {
+                let column = item.column;
+                let cate = item.cate;
+                setValidationFaild(column, cate);
+                if (column === "contract_expiry") {
+                    setTimeout(() => {
+                        $(".react-datepicker-popper").addClass("isHide");
+                    });
+                }
+            })
+        }
+    }
+
     removefile(type, index, id) {
         if (confirm("Are you sure you want to delete this file?")) {
             if (this.props.otherFunction) {
@@ -565,43 +724,161 @@ export class Modal extends React.Component {
             }
         }
     }
+
     Change(type, e) { }
 
-    closeModal() {
-        this.setState({
-            modalSize: "small",
-            modalshowhide: "modal_hide"
-        })
-        if (this.props.formSize === "middle") {
-            $("#modal_main").css({ "width": "50%", "height": "300px", "top": "40%", "left": "40%" });
-            $(".email_body").css({ "height": "140px" });
+    removeInputNanNum(value) {
+        removeNanNum(value)
+    }
+
+    removeInputPostCode(value) {
+        removePostCode(value);
+    }
+
+    downAttachment(attachemnts) {
+        let attacheList = [];
+        if (attachemnts) {
+            attachemnts.map(item => {
+                attacheList.push({
+                    file_name: item.file_name,
+                    file_path: item.file_path
+                })
+            })
         }
 
+        for (let i = 0; i < attacheList.length; i++) {
+            this.download(attacheList[i].file_name, attacheList[i].file_path);
+        }
     }
+
+    download(file_name, file_path) {
+        let a = document.createElement("a"),
+            e = document.createEvent("MouseEvents"); //创建鼠标事件对象
+        e.initEvent("click", false, false); //初始化事件对象
+        a.href = file_path; //设置下载地址
+        a.download = file_name; //设置下载文件名
+        a.dispatchEvent(e); //给指定的元素，执行事件click事
+    }
+
+    account_address_repeat() {
+        let address = false, account = false, editNotSave = false;
+        let address_count = 0, account_count = 0;
+        this.state.consumptionItem.map((item, index) => {
+            if (this.state.option === 'update') {
+                if (item.id) {
+                    if ((this.state.unit_number == item.unit_number) && (this.state.postal_code == item.postal_code) && (this.state.id !== item.id)) {
+                        address_count++;
+                    }
+                    if (this.state.account_number === item.account_number && (this.state.id !== item.id)) {
+                        account_count++;
+                    }
+                }
+                else {
+                    if(item.orignal_id)
+                    {
+                        if ((this.state.unit_number == item.unit_number) && (this.state.postal_code == item.postal_code) && (this.state.orignal_id !== item.orignal_id)) {
+                            address_count++;
+                        }
+                        if (this.state.account_number === item.account_number && (this.state.orignal_id !== item.orignal_id)) {
+                            account_count++;
+                        }
+                    }else
+                    {
+                        if ((this.state.unit_number === item.unit_number) && (this.state.postal_code === item.postal_code)) {
+                            if (index != this.state.itemIndex) {
+                                address_count++;
+                            }
+                        }
+                        if (this.state.account_number === item.account_number) {
+                            if (index != this.state.itemIndex) {
+                                account_count++;
+                            }
+                        }
+                    }
+
+                }
+            }
+            else {
+                if ((this.state.unit_number === item.unit_number) && (this.state.postal_code === item.postal_code)) {
+                    address_count++;
+                }
+                if (this.state.account_number === item.account_number) {
+                    account_count++;
+                }
+            }
+        })
+
+        if (address_count > 0) {
+            address = true;
+        }
+        if (account_count > 0) {
+            account = true;
+        }
+        return account + "|" + address;
+    }
+
+    closeModal(type) {
+        if (this.state.type === "chkSelectedBuyers") {
+            let data = this.state.props_data;
+            if(type===0)
+            {
+                data.action = "cancel";
+            }
+            if (this.props.acceptFunction) {
+                this.props.acceptFunction(data);
+                this.setState({
+                    modalSize: "small",
+                    modalshowhide: "modal_hide"
+                })
+            }
+
+        }
+        else {
+            this.setState({
+                modalSize: "small",
+                modalshowhide: "modal_hide"
+            })
+            if (this.props.formSize === "middle") {
+                $("#modal_main").css({ "width": "50%", "height": "310px", "top": "40%", "left": "40%" });
+                $(".email_body").css({ "height": "170px" });
+            }
+        }
+        if (this.props.listdetailtype === "entity_detail" || this.props.listdetailtype === "consumption_detail") {
+            $('.validate_message').find('div').each(function () {
+                let className = $(this).attr('class');
+                if (className === 'errormessage') {
+                    let divid = $(this).attr("id");
+                    $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
+                }
+            })
+        }
+    }
+
     bigModal(type) {
         if (this.state.modalSize === "big") {//height:"300px", top: "40%", left: "40%"
-            $("#modal_main").css({ "width": "85%", "height": "500px", "top": "30%", "left": "20%" });
+            $("#modal_main").css({ "width": "85%", "height": "500px", "top": "30%", "marginLeft": "-42.5%" });
             $(".email_body").css({ "height": "330px" });
             this.setState({
                 modalSize: "small"
             })
         }
         else {
-            $("#modal_main").css({ "width": "50%", "height": "300px", "top": "40%", "left": "40%" });
-            $(".email_body").css({ "height": "140px" });
+            $("#modal_main").css({ "width": "50%", "height": "310px", "top": "40%", "marginLeft": "-25%" });
+            $(".email_body").css({ "height": "170px" });
             this.setState({
                 modalSize: "big"
             })
         }
     }
+
     closeModalAndRefresh() {
         if (this.props.acceptFunction) {
             this.props.acceptFunction('refrsesh');
             this.closeModal();
         }
     }
+
     closeModelAndCancelSave() {
-    
         let data = this.state.props_data;
         data.action = "cancel";
         if (this.props.acceptFunction) {
@@ -609,6 +886,7 @@ export class Modal extends React.Component {
             this.closeModal();
         }
     }
+
     dateChange(data) {
         this.setState({
             contract_expiry: data
@@ -620,7 +898,6 @@ export class Modal extends React.Component {
     }
 
     render() {
-        // console.log(this.state.modalSize)
         let showDetail = '', secondary = '', secondStatus = '';
         if (this.props.showdetail && !this.props.text) {
             this.secondaryData = [
@@ -678,20 +955,20 @@ export class Modal extends React.Component {
             } else if (this.props.listdetailtype === "Email Template") {
                 if (this.props.text === '') {
                     showDetail = <div>
-                        <div className="lm--formItem lm--formItem--inline string" style={{ marginLeft: "-15%" }}>
-                            <label className="lm--formItem-left lm--formItem-label string required">
+                        {this.state.strtype == "email_template_la" ? '' : <div className="lm--formItem lm--formItem--inline string">
+                            <label className="lm--formItem-label string required">
                                 Subject:
                             </label>
-                            <div className="lm--formItem-right lm--formItem-control">
+                            <div className="lm--formItem-control">
                                 <input type="text" name="email_subject" value={this.state.email_subject} onChange={this.Change.bind(this, 'email_subject')} disabled={this.state.disabled} ref="email_subject" maxLength="50" required aria-required="true" />
                             </div>
-                        </div>
-                        <div className="lm--formItem lm--formItem--inline string" style={{ marginLeft: "-15%" }}>
-                            <label className="lm--formItem-left lm--formItem-label string required">
+                        </div>}
+                        <div className="lm--formItem lm--formItem--inline string">
+                            <label className="lm--formItem-label string required">
                                 Body:
                             </label>
-                            <div className="lm--formItem-right lm--formItem-control">
-                                <textarea name="email_body" className="email_body" style={{ height: "140px" }} value={this.state.email_body} onChange={this.Change.bind(this, 'email_body')} disabled={this.state.disabled} ref="email_body" required aria-required="true" />
+                            <div className="lm--formItem-control">
+                                <div name="email_body" className="email_body" id={"email_body"} style={this.state.strtype == "email_template_la"?{ height: "425px" }:{ height: "360px" }} onChange={this.Change.bind(this, 'email_body')} disabled={this.state.disabled} ref="email_body" required aria-required="true" />
                             </div>
                         </div>
                     </div>
@@ -766,7 +1043,7 @@ export class Modal extends React.Component {
             if (this.props.listdetailtype === 'Documents Message') {
                 showDetail = <ul className="showdetail">
                     <li>Please upload the following documentations:</li>
-                    <li>1) A print-out of this <a href={this.props.attatchment} className="urlStyleUnderline" target="_blank">Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
+                    <li>1) A print-out of this <a href="javascript:void(0);" onClick={this.downAttachment.bind(this, this.state.attatchment)} className="urlStyleUnderline" target="_blank">Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
                     <li>2a) Your company's Accounting & Corporate Regulatory Authority (ACRA) Business Profile.</li>
                     <li>or</li>
                     <li>2b) Your company's Certificate of Incorporation if you are not registered with Accounting & Corporate Regulatory Authority (ACRA).</li>
@@ -776,8 +1053,204 @@ export class Modal extends React.Component {
                     <li>All supporting documents submitted should be in English only.</li>
                 </ul>
             }
+            if (this.props.listdetailtype === 'entity_error') {
+
+                if (this.props.entityErrorList.nameError) {
+                    showDetail = <div>
+                        {
+                            this.props.entityErrorList.nameError ?
+                                <div>
+                                    <span className={this.props.entityErrorList.nameError.length > 0 ? "isDisplayInLine" : "isHide"}>Company Name can not be duplicated:</span>
+                                    <ul className="showdetailerr">{
+                                        this.props.entityErrorList.nameError.map((item, index) => {
+                                            return <li key={index}><span>{item}</span></li>
+                                        })
+                                    }
+                                    </ul>
+                                </div>
+                                : <div></div>
+                        }
+                        {
+                            this.props.entityErrorList.uenError ?
+                                <div>
+                                    <span className={this.props.entityErrorList.uenError.length > 0 ? "isDisplayInLine" : "isHide"}>Company UEN can not be duplicated:</span>
+                                    <ul className="showdetailerr">{
+                                        this.props.entityErrorList.uenError.map((item, index) => {
+                                            return <li key={index}><span>{item}</span></li>
+                                        })
+                                    }
+                                    </ul>
+                                </div>
+                                : <div></div>
+                        }
+                        {
+                            this.props.entityErrorList.emailError ?
+                                <div>
+                                    <span className={this.props.entityErrorList.emailError.length > 0 ? "isDisplayInLine" : "isHide"}>Contact Email can not be duplicated:</span>
+                                    <ul className="showdetailerr">{
+                                        this.props.entityErrorList.emailError.map((item, index) => {
+                                            return <li key={index}><span>{item}</span></li>
+                                        })
+                                    }
+                                    </ul>
+                                </div>
+                                : <div></div>
+                        }
+                    </div>
+                }
+            }
+            if (this.props.listdetailtype === 'viewLog') {
+                showDetail = <table className="logTable" cellPadding="0" cellSpacing="0">
+                    <colgroup>
+                        <col width="33.33%" />
+                        <col width="33.33%" />
+                        <col width="33.33%" />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>Company Name</th>
+                            <th>Company UEN</th>
+                            <th>Update Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            this.state.loglist.map((item, index) => {
+                                return <tr key={index}>
+                                    <td>{item.company_name}</td>
+                                    <td>{item.company_uen}</td>
+                                    <td>{moment(item.updated_at).format('YYYY-MM-DD HH:mm:ss ')}</td>
+                                </tr>
+                            })
+                        }
+                    </tbody>
+                </table>
+            }
+            if (this.props.listdetailtype === 'viewRetailerLog') {
+                showDetail = <table className="logTable" cellPadding="0" cellSpacing="0">
+                    <colgroup>
+                        <col width="25%" />
+                        <col width="25%" />
+                        <col width="25%" />
+                        <col width="25%" />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>Company Name</th>
+                            <th>Company UEN</th>
+                            <th>Retailer License Number</th>
+                            <th>Update Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            this.state.loglist.map((item, index) => {
+                                return <tr key={index}>
+                                    <td>{item.company_name}</td>
+                                    <td>{item.company_uen}</td>
+                                    <td>{item.license_number}</td>
+                                    <td>{moment(item.updated_at).format('YYYY-MM-DD HH:mm:ss')}</td>
+                                </tr>
+                            })
+                        }
+                    </tbody>
+                </table>
+            }
+            if (this.props.listdetailtype === "market-insight") {
+                $("#advisoryDiv").html(this.state.advisory)
+                showDetail = <div id="advisoryDiv" style={{ height: "220px" }}> </div>
+            }
+
+            if (this.props.listdetailtype === 'entity_detail') {
+                if (this.props.entity_detail_item !== null) {
+                    showDetail = <div className=" admin_invitation validate_message">
+                        <h3 className="text_padding_left">Entity Information</h3>
+                        <table className="consumption_table  u-mb3" cellPadding="0" cellSpacing="0" style={{ marginTop: "15px" }}>
+                            <tbody>
+                                <tr>
+                                    <td style={{ width: "30%" }}><abbr title="required">*</abbr>Purchase Entity/Company Name</td>
+                                    <td style={{ width: "70%" }}>
+                                        <div className="isHide">
+                                            <input type="text" value={this.state.entityid} onChange={this.changeEntity.bind(this, "entityid")} id="id" name="id" />
+                                        </div>
+                                        <input type="text" name="entity_company_name" id="entity_company_name" value={this.state.entity_company_name} onChange={this.changeEntity.bind(this, 'entity_company_name')} className={this.props.disabled ? "mainEntity" : ""} disabled={this.props.disabled} ref="entity_company_name" aria-required="true" title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id="entity_company_name_message" >This field is required!</div>
+                                        <div className='isPassValidate' id="entity_company_name_repeat" >Company name has already been taken!</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><abbr title="required">*</abbr>Company UEN</td>
+                                    <td>
+                                        <input type="text" name="entity_company_uen" id="entity_company_uen" value={this.state.entity_company_uen} onChange={this.changeEntity.bind(this, 'entity_company_uen')} className={this.props.disabled ? "mainEntity" : ""} disabled={this.props.disabled} ref="entity_company_uen" aria-required="true" title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id="entity_company_uen_message" >This field is required!</div>
+                                        <div className='isPassValidate' id="entity_company_uen_repeat" >Company UEN has already been taken!</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><abbr title="required">*</abbr>Company Address</td>
+                                    <td>
+                                        <input type="text" name="entity_company_address" id="entity_company_address" value={this.state.entity_company_address} onChange={this.changeEntity.bind(this, 'entity_company_address')} className={this.props.disabled ? "mainEntity" : ""} disabled={this.props.disabled} ref="entity_company_address" aria-required="true" title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id="entity_company_address_message" >This field is required!</div>
+                                        <div className='isPassValidate' id="entity_company_address_repeat" >Company UEN has already been taken!</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><abbr title="required">*</abbr>Billing Address</td>
+                                    <td>
+                                        <input type="text" name="entity_billing_address" id="entity_billing_address" value={this.state.entity_billing_address} onChange={this.changeEntity.bind(this, 'entity_billing_address')} ref="entity_billing_address" aria-required="true" title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id="entity_billing_address_message" >This field is required!</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <abbr title="required">*</abbr>Bill Attention To</td>
+                                    <td>
+                                        <input type="text" name="entity_bill_attention_to" id="entity_bill_attention_to" value={this.state.entity_bill_attention_to} onChange={this.changeEntity.bind(this, 'entity_bill_attention_to')} ref="entity_bill_attention_to" aria-required="true" title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id="entity_bill_attention_to_message" >This field is required!</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <abbr title="required">*</abbr>Contact Name</td>
+                                    <td>
+                                        <input type="text" name="entity_contact_name" id="entity_contact_name" value={this.state.entity_contact_name} onChange={this.changeEntity.bind(this, 'entity_contact_name')} ref="entity_contact_name" aria-required="true" title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id="entity_contact_name_message" >This field is required!</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <abbr title="required">*</abbr>Contact Email</td>
+                                    <td>
+                                        <input type="text" name="entity_contact_email" id="entity_contact_email" value={this.state.entity_contact_email} onChange={this.changeEntity.bind(this, 'entity_contact_email')} ref="entity_contact_email" aria-required="true" title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id="entity_contact_email_message" >This field is required!</div>
+                                        <div className='isPassValidate' id='entity_contact_email_format' >Incorrect mail format!</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <abbr title="required">*</abbr>Contact Mobile No.</td>
+                                    <td>
+                                        <input type="text" name="entity_contact_mobile_no" id="entity_contact_mobile_no" value={this.state.entity_contact_mobile_no} onChange={this.changeEntity.bind(this, 'entity_contact_mobile_no')} maxLength="8" onKeyUp={this.removeInputNanNum.bind(this)} ref="entity_contact_mobile_no" aria-required="true" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id="entity_contact_mobile_no_message" >This field is required!</div>
+                                        <div className='isPassValidate' id='entity_contact_mobile_no_format' >Number should contain 8 integers.</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <abbr title="required">*</abbr>Contact Office No.</td>
+                                    <td>
+                                        <input type="text" name="entity_contact_office_no" id="entity_contact_office_no" value={this.state.entity_contact_office_no} onChange={this.changeEntity.bind(this, 'entity_contact_office_no')} maxLength="8" onKeyUp={this.removeInputNanNum.bind(this)} ref="entity_contact_office_no" aria-required="true" maxLength="8" placeholder="Number should contain 8 integers." title="Please fill out this field"></input>
+                                        <div className='isPassValidate' id="entity_contact_office_no_message" >This field is required!</div>
+                                        <div className='isPassValidate' id='entity_contact_office_no_format' >Number should contain 8 integers.</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            }
             if (this.props.listdetailtype === 'consumption_detail') {
-                if (this.props.consumption_account_item !== null) {
+                if (this.props.consumptionAccountItem !== null) {
                     showDetail = <div className=" admin_invitation validate_message">
                         <h3 className="text_padding_left">My Account Information</h3>
                         <table className="consumption_table  u-mb3" cellPadding="0" cellSpacing="0" style={{ marginTop: "15px" }}>
@@ -786,9 +1259,9 @@ export class Modal extends React.Component {
                                     <td style={{ width: "30%" }}><abbr title="required">*</abbr>Account No.</td>
                                     <td style={{ width: "70%" }}>
                                         <div className="isHide">
-                                            <input type="text" value={this.state.consumptionid} onChange={this.changeConsumption.bind(this, "consumptionid")} id="id" name="id" />
+                                            <input type="text" value={this.state.id} onChange={this.changeConsumption.bind(this, "id")} id="id" name="id" />
                                         </div>
-                                        <input type="text" value={this.state.account_number} onChange={this.changeConsumption.bind(this, "account_number")} id="account_number" name="account_number" required aria-required="true" />
+                                        <input type="text" disabled={(this.state.cate_type === 'preDay' || this.state.cate_type === 'preOthers') ? true : false} value={this.state.account_number} onChange={this.changeConsumption.bind(this, "account_number")} id="account_number" name="account_number" required aria-required="true" />
                                         <div id="account_number_message" className="isPassValidate">This filed is required!</div>
                                         <div id="account_number_taken_message" className="errormessage">Account number cannot be duplicated.</div>
                                     </td>
@@ -796,7 +1269,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td><abbr title="required">*</abbr>Existing Plan</td>
                                     <td>
-                                        <select id="existing_plan" onChange={this.changeConsumption.bind(this, 'existing_plan')} name="existing_plan" value={this.state.existing_plan_selected}>
+                                        <select id="existing_plan" onChange={this.changeConsumption.bind(this, 'existing_plan')} name="existing_plan" disabled={this.state.cate_type === 'preDay'} value={this.state.existing_plan_selected}>
                                             {
                                                 this.state.existing_plan.map((it, i) => <option key={i} value={it}>{it}</option>)
                                             }
@@ -808,7 +1281,7 @@ export class Modal extends React.Component {
                                         <span className={this.state.existing_plan_selected === "Retailer plan" ? "isDisplay" : "isHide"}>*</span>
                                     </abbr>Contract Expiry</td>
                                     <td>
-                                        <DatePicker selected={this.state.contract_expiry} className="date_ico" disabled={this.state.contract_expiry_disabled} onKeyDown={this.noPermitInput.bind(this)} ref="contract_expiry" shouldCloseOnSelect={true} name="contract_expiry" minDate={moment()} required aria-required="true" dateFormat="DD-MM-YYYY" selectsStart onChange={this.dateChange.bind(this)} title="Time must not be in the past." />
+                                        <DatePicker selected={this.state.contract_expiry} className="date_ico" disabled={this.state.cate_type === 'preDay' ? true : this.state.contract_expiry_disabled} onKeyDown={this.noPermitInput.bind(this)} ref="contract_expiry" shouldCloseOnSelect={true} name="contract_expiry" minDate={moment()} required aria-required="true" dateFormat="DD-MM-YYYY" selectsStart onChange={this.dateChange.bind(this)} title="Time must not be in the past." />
                                         <div id="contract_expiry_message" className="isPassValidate">This filed is required!</div>
                                     </td>
                                 </tr>
@@ -818,10 +1291,13 @@ export class Modal extends React.Component {
                                         <select id="purchasing_entity" onChange={this.changeConsumption.bind(this, "purchasing_entity")} name="purchasing_entity" value={this.state.purchasing_entity_selectd} required>
                                             {
                                                 this.state.purchasing_entity.map(item => {
-                                                    return <option key={item.id} value={item.id}>{item.company_name}</option>
+                                                    if (item.approval_status === "1") {
+                                                        return <option key={item.id} value={item.id}>{item.company_name}</option>
+                                                    }
                                                 })
                                             }
                                         </select>
+                                        <div id="purchasing_entity_selectd_message" className="isPassValidate">This filed is required!</div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -881,7 +1357,7 @@ export class Modal extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Postal Code:</td>
-                                    <td> <input type="text" value={this.state.postal_code} id="postal_code" maxLength="6" name="postal_code" onChange={this.changeConsumption.bind(this, "postal_code")} placeholder="" required aria-required="true" />
+                                    <td> <input type="text" value={this.state.postal_code} id="postal_code" maxLength="6" name="postal_code" onChange={this.changeConsumption.bind(this, "postal_code")} onKeyUp={this.removeInputPostCode.bind(this)} placeholder="" required aria-required="true" />
                                         <div id="postal_code_message" className="isPassValidate">This filed is required!</div>
                                         <div id="postal_code_format" className="isPassValidate">Postal code must be 6 digit interger.</div>
                                     </td>
@@ -945,7 +1421,7 @@ export class Modal extends React.Component {
         }
         else if (this.state.type === "chkSelectedBuyers") {
             btn_html =
-                <div className="modal_btn"><a onClick={this.Accept.bind(this)}>Proceed</a><a onClick={this.closeModelAndCancelSave.bind(this)}>Cancel</a></div>;
+                <div className="modal_btn"><a onClick={this.Accept.bind(this)}>Proceed</a><a onClick={this.closeModelAndCancelSave.bind(this,0)}>Cancel</a></div>;
         }
         else {
             btn_html =
@@ -953,8 +1429,8 @@ export class Modal extends React.Component {
         }
         return (
             this.props.formSize === "big" ?
-                <div id="modal_main" className={this.state.modalshowhide} style={{ width: "700px", top: "20%", left: "40%" }} >
-                    <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
+                <div id="modal_main" className={this.state.modalshowhide} style={this.props.modalSize=="big"?{ width: "98%", height:"500px", top: "20%",marginLeft: "-49%"}:{ width: "700px", top: "20%",marginLeft: "-350px"}} >
+                    <h4><a onClick={this.closeModal.bind(this,1)}>X</a></h4>
                     <div className="modal_detail model_detail_formHeight">
                         <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
                     </div>
@@ -962,21 +1438,30 @@ export class Modal extends React.Component {
                 </div>
                 :
                 this.props.formSize === "middle" ?
-                    <div id="modal_main" name="middleModal" className={this.state.modalshowhide} style={{ width: "50%", height: "300px", top: "40%", left: "40%" }} >
-                        <h4><a onClick={this.closeModal.bind(this)}>X</a><a onClick={this.bigModal.bind(this, this.state.modalSize)}>口</a></h4>
-                        <div className="modal_detail model_detail_formHeight" style={{ "marginBottom": "30px" }}>
+                    <div id="modal_main" name="middleModal" className={this.state.modalshowhide} style={{ width: "50%", height: "310px", top: "40%",marginLeft:"-25%" }} >
+                        <h4><a onClick={this.closeModal.bind(this,1)}>X</a><a onClick={this.bigModal.bind(this, this.state.modalSize)}>口</a></h4>
+                        <div className="modal_detail model_detail_formHeight">
                             <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
                         </div>
                         {btn_html}
                     </div>
                     :
-                    <div id="modal_main" className={this.state.modalshowhide} >
-                        <h4><a onClick={this.closeModal.bind(this)}>X</a></h4>
-                        <div className="modal_detail">
-                            <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
+                    this.props.formSize === 'viewlog' ?
+                        <div id="modal_main" className={this.state.modalshowhide} style={{ width: "600px", top: "20%",marginLeft:"-300px" }}>
+                            <h4><a onClick={this.closeModal.bind(this,1)}>X</a></h4>
+                            <div className="modal_detail">
+                                <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
+                            </div>
+                            {btn_html}
                         </div>
-                        {btn_html}
-                    </div>
+                        :
+                        <div id="modal_main" className={this.state.modalshowhide} >
+                            <h4><a onClick={this.closeModal.bind(this,0)}>X</a></h4>
+                            <div className="modal_detail">
+                                <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
+                            </div>
+                            {btn_html}
+                        </div>
         )
     }
 }

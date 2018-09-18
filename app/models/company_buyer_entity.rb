@@ -16,11 +16,12 @@ class CompanyBuyerEntity < ApplicationRecord
   ApprovalStatusReject = '0'.freeze
   ApprovalStatusApproved = '1'.freeze
   ApprovalStatusPending = '2'.freeze
+  ApprovalStatusRemoved = '5'.freeze
 
   # Scopes
   scope :find_by_user, ->(user_id) { where('user_id = ?', user_id) }
   scope :find_by_status_user, ->(status, user_id) { where('user_id = ? and approval_status = ?', user_id, status) }
-  
+  scope :find_by_user_entity_id, ->(user_entity_id) { where('user_entity_id = ?', user_entity_id) }
   # Callbacks
 
   # Delegates

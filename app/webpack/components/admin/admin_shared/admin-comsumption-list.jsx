@@ -88,7 +88,7 @@ export default class AdminComsumptionList extends Component {
                                                 return (<tr key={i}>
                                                     <td>{it.account_number}</td>
                                                     <td>{it.existing_plan}</td>
-                                                    <td>{it.contract_expiry !== "" ? moment(it.contract_expiry).format('YYYY-MM-DD') : "—"}</td>
+                                                    <td>{(it.contract_expiry !== "" && it.contract_expiry !==null) ? moment(it.contract_expiry).format('DD-MM-YYYY') : "—"}</td>
                                                     <td>{this.getPurchase(it.company_buyer_entity_id,index)}</td>
                                                     <td>{it.intake_level}</td>
                                                     <td>{it.contracted_capacity ? parseInt(it.contracted_capacity) : '—'}</td>
@@ -103,7 +103,7 @@ export default class AdminComsumptionList extends Component {
                                                                 {
                                                                     it.user_attachment ? it.user_attachment.map((item, i) => {
                                                                         return <li key={i}>
-                                                                            <a href={item.file_path ? item.file_path : "#"} target="_blank">{item.file_name ? item.file_name : ""}</a>
+                                                                            <a className={"cursor_link"} href={item.file_path ? item.file_path : "#"} target="_blank">{item.file_name ? item.file_name : ""}</a>
                                                                         </li>
                                                                     }) :
                                                                         <li> </li>

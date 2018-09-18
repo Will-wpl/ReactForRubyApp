@@ -714,6 +714,23 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
           count = TenderChat.where('arrangement_id = ?', arrangement.id).count
           expect(count).to eq(3)
         end
+
+      end
+
+      describe 'POST node3_retailer_back' do
+        let!(:chat1_1) { create(:tender_chat, arrangement: arrangement) }
+        let!(:chat1_detail1) { create(:tender_chat_detail, :with_retailer, tender_chat: chat1_1) }
+        def do_request
+          post :node3_retailer_back, params: { id: arrangement.id }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash_body = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+          count = TenderChat.where('arrangement_id = ?', arrangement.id).count
+          expect(count).to eq(0)
+        end
       end
 
       describe 'POST node3_retailer_withdraw' do
@@ -734,8 +751,6 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
       end
 
     end
-
-
 
     context 'node5' do
       let!(:tender_node1_accept) { create(:tender_state_machine, arrangement: arrangement, previous_node: 1, current_node: 2, turn_to_role: 2,current_role: 2) }

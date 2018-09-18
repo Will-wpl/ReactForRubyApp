@@ -4,8 +4,9 @@ import moment from 'moment';
 import { UploadFile } from '../shared/upload';
 import { Modal } from '../shared/show-modal';
 import { getRetailerUserInfo, saveRetailManageInfo, submitRetailManageInfo, getRetailerUserInfoByUserId, validateIsExist } from '../../javascripts/componentService/retailer/service';
-import { approveRetailerUser } from '../../javascripts/componentService/admin/service';
+import { approveRetailerUser, removeRetailer } from '../../javascripts/componentService/admin/service';
 import { validateNum, validateEmail, validator_Object, setValidationFaild, setValidationPass, changeValidate, removeNanNum, setApprovalStatus } from '../../javascripts/componentService/util';
+import { validate_delete_reject_user } from '../../javascripts/componentService/admin/service';
 export class RetailerRegister extends Component {
     constructor(props) {
         super(props);
@@ -30,6 +31,7 @@ export class RetailerRegister extends Component {
             office_number: "",
             comment: "",
             validate: true,
+            retailerApproveStatus: "",
 
             fileData: {
                 "RETAILER_DOCUMENTS": [
@@ -44,7 +46,8 @@ export class RetailerRegister extends Component {
             revvTCurl: "",
             revvTCname: "",
             agree_seller_revv: "0",
-            messageAttachmentUrl: ""
+            messageAttachmentUrlArr: [], loglist: [], approveStatus: false
+
 
         }
         this.validatorItem = {
@@ -87,6 +90,16 @@ export class RetailerRegister extends Component {
         if (this.state.userid) {
             getRetailerUserInfoByUserId(this.state.userid).then(res => {
                 this.setDefult(res);
+                $("#btnRetailerBack").bind('click',()=>{
+                    if(this.state.retailerApproveStatus==="5")
+                    {
+                        window.location.href="/admin/users/del_retailers";
+                    }
+                    else
+                    {
+                        window.location.href="/admin/users/retailers";
+                    }
+                })
             })
         }
         else {
@@ -115,7 +128,9 @@ export class RetailerRegister extends Component {
                 office_number: item.account_office_number ? item.account_office_number : '',
                 agree_seller_buyer: item.agree_seller_buyer ? item.agree_seller_buyer : '0',
                 agree_seller_revv: item.agree_seller_revv ? item.agree_seller_revv : '0',
-                status: setApprovalStatus(item.approval_status,  item.approval_date_time === null ? item.created_at : item.approval_date_time)
+                status: setApprovalStatus(item.approval_status, item.approval_status === "5" ? item.deleted_at : item.approval_date_time === null ? item.created_at : item.approval_date_time),
+                approveStatus: (item.approval_status === "3" || item.approval_status === "5") ? true : false,
+                retailerApproveStatus: item.approval_status
             })
             if (this.state.agree_seller_buyer === '1') {
                 $('#chkBuyer').attr("checked", true);
@@ -130,6 +145,9 @@ export class RetailerRegister extends Component {
                 $('#chkRevv').attr("checked", false);
             }
 
+            this.company_name_back = item.company_name;
+            this.company_unique_entity_number_back = item.company_unique_entity_number;
+            this.company_license_number_back = item.company_license_number;
         }
         if (param.self_attachments) {
             let attachments = param.self_attachments;
@@ -149,23 +167,34 @@ export class RetailerRegister extends Component {
                 fileData: fileObj
             })
         }
-        if (param.seller_buyer_tc_attachment) {
-            let seller = param.seller_buyer_tc_attachment;
+        if (param.seller_revv_tc_attachment) {
+            let seller = param.seller_revv_tc_attachment;
             this.setState({
                 sellerTCurl: seller.file_path,
                 sellerTCname: seller.file_name
             })
         }
-        if (param.seller_revv_tc_attachment) {
-            let revv = param.seller_revv_tc_attachment;
+        if (param.seller_buyer_tc_attachment) {
+            let revv = param.seller_buyer_tc_attachment;
             this.setState({
                 revvTCurl: revv.file_path,
                 revvTCname: revv.file_name
             })
         }
+        if (param.user_logs) {
+            let list=param.user_logs;
+            list.map(item=>{
+                item.company_uen=item.company_unique_entity_number,
+                item.license_number=item.company_license_number
+            })
+            this.setState({
+                loglist: list
+            })
+        }
+
         if (param.letter_of_authorisation_attachment) {
             this.setState({
-                messageAttachmentUrl: param.letter_of_authorisation_attachment.file_path
+                messageAttachmentUrlArr: param.letter_of_authorisation_attachment
             })
         }
     }
@@ -352,20 +381,10 @@ export class RetailerRegister extends Component {
             }).then(res => {
                 if (res.validate_result)//validate pass
                 {
-                    submitRetailManageInfo({
-                        user: param
-                    }).then(res => {
-                        $('#license_number_repeat').removeClass('errormessage').addClass('isPassValidate');
-                        if (type === "sign_up") {
-                             window.location.href = `/retailer/home`;
-                        }
-                        else {
-                            this.refs.Modal.showModal();
-                            this.setState({
-                                text: "Your details have been successfully submitted. "
-                            });
-                        }
+                    this.setState({
+                        text: "Are you sure you want to complete the Sign Up?"
                     })
+                    this.refs.Modal_Option.showModal('comfirm', { action: 'submit' }, '');
                 }
                 else {
                     if (res.error_fields) {
@@ -377,6 +396,12 @@ export class RetailerRegister extends Component {
     }
 
     save(type) {
+        let isNeedRedirect=false;
+        if(this.state.retailerApproveStatus==='0')
+        {
+            isNeedRedirect=true
+        }
+
         let param = this.getParam();
         if (this.checkValidation()) {
             validateIsExist({
@@ -388,10 +413,24 @@ export class RetailerRegister extends Component {
                         user: this.getParam(type == "save" ? 1 : null)
                     }).then(res => {
                         $('#license_number_repeat').removeClass('errormessage').addClass('isPassValidate');
-                        this.refs.Modal.showModal();
+                      
                         this.setState({
+                            disabled: true,
                             text: "Your details have been successfully saved. "
                         });
+                          this.refs.Modal.showModal();
+                        if (type === "save") {
+                             if ((this.state.company_name !== this.company_name_back) || (this.state.company_unique_entity_number !== this.company_unique_entity_number_back) || (this.state.license_number !== this.company_license_number_back)) {
+                                window.location.href = `/retailer/home`;
+                             }
+                             else
+                             {
+                                 if(isNeedRedirect)
+                                 {
+                                    window.location.href = `/users/edit`;
+                                 }
+                             }
+                        }
 
                     })
                 }
@@ -439,27 +478,135 @@ export class RetailerRegister extends Component {
     judgeAction(type) {
         if (type === 'reject') {
             if (this.checkRejectAction()) {
-                this.setState({
-                    text: 'Are you sure you want to reject the request?',
-                }, () => {
-                    this.refs.Modal_Option.showModal('comfirm', { action: 'reject' }, '');
-                });
+                // this.setState({
+                //     text: 'Are you sure you want to reject the request?',
+                // }, () => {
+                //     this.refs.Modal_Option.showModal('comfirm', { action: 'reject' }, '');
+                // });
+                let param = {
+                    user_id: this.state.userid
+                }
+                validate_delete_reject_user(param).then(res => {
+                    switch (res.validate_result) {
+                        case 0:
+                            this.setState({
+                                text: 'Are you sure you want to reject the retailer?',
+                            }, () => {
+                                this.refs.Modal_Option.showModal('comfirm', { action: 'reject' }, '');
+                            });
+                            break;
+                        case 1:
+                            this.setState({
+                                text: "Current Retailer has ongoing Auction, which can't be deleted at present. ",
+                            }, () => {
+                                this.refs.Modal_Option.showModal();
+                            });
+                            break;
+                        case 2:
+                            this.setState({
+                                text: "Current Retailer has ongoing Auction, which can't be deleted at present. ",
+                            }, () => {
+                                this.refs.Modal_Option.showModal();
+                            });
+                            break;
+                        case 3:
+                            this.setState({
+                                text: "Current Retailer has pending Auction invitation,would you proceed anyway? Once proceeded,pending invitation will be cancalled as well. ",
+                            }, () => {
+                                this.refs.Modal_Option.showModal('comfirm', { action: 'delete'}, '');
+                            });
+                            break;
+                    }
+                })
             }
         }
+
         else {
             this.setState({ text: "Are you sure you want to approve the request?" });
             this.refs.Modal_Option.showModal('comfirm', { action: 'approve' }, '');
         }
     }
-    doAction(obj) {
+    deleteUser() {
+
+
+        // this.setState({ text: "Are you sure you want to delete the retailer?" });
+        // this.refs.Modal_Option.showModal('comfirm', { action: 'delete' }, '');
         let param = {
-            user_id: this.state.userid,
-            comment: this.state.comment,
-            approved: obj.action === 'reject' ? "" : 1
-        };
-        approveRetailerUser(param).then(res => {
-            location.href = "/admin/users/retailers";
+            user_id: this.state.userid
+        }
+        validate_delete_reject_user(param).then(res => {
+            switch (res.validate_result) {
+                case 0:
+                    this.setState({
+                        text: 'Are you sure you want to delete the retailer?',
+                    }, () => {
+                        this.refs.Modal_Option.showModal('comfirm', { action: 'delete' }, '');
+                    });
+                    break;
+                case 1:
+                    this.setState({
+                        text: "Current Retailer has ongoing Auction, which can't be deleted at present. ",
+                    }, () => {
+                        this.refs.Modal_Option.showModal();
+                    });
+                    break;
+                case 2:
+                    this.setState({
+                        text: "Current Retailer has ongoing Auction, which can't be deleted at present. ",
+                    }, () => {
+                        this.refs.Modal_Option.showModal();
+                    });
+                    break;
+                case 3:
+                    this.setState({
+                        text: "Current Retailer has pending Auction invitation,would you proceed anyway? Once proceeded,pending invitation will be cancalled as well. ",
+                    }, () => {
+                        this.refs.Modal_Option.showModal('comfirm', { action: 'delete'}, '');
+                    });
+                    break;
+            }
         })
+    }
+    doAction(obj) {
+        if (obj.action === "delete") {
+            let param = {
+                user_id: this.state.userid
+            }
+            removeRetailer(param).then(res => {
+                location.href = "/admin/users/del_retailers";
+            })
+        }
+        else if (obj.action === "submit") {
+            let param = this.getParam();
+            submitRetailManageInfo({
+                user: param
+            }).then(res => {
+
+                $('#license_number_repeat').removeClass('errormessage').addClass('isPassValidate');
+
+
+                if (res.result === "failed") {
+                    this.setState(
+                        {
+                            text: "Failure to submit. "
+                        }
+                    );
+                    this.refs.Modal.showModal();
+                } else {
+                    window.location.href = `/retailer/home`;
+                }
+            })
+        }
+        else {
+            let param = {
+                user_id: this.state.userid,
+                comment: this.state.comment,
+                approved: obj.action === 'reject' ? "" : 1
+            };
+            approveRetailerUser(param).then(res => {
+                location.href = "/admin/users/retailers";
+            })
+        }
     }
 
 
@@ -469,12 +616,20 @@ export class RetailerRegister extends Component {
     removeInputNanNum(value) {
         removeNanNum(value);
     }
+    view_log() {
+        this.setState({
+            text: " "
+        })
+        this.refs.Modal_Log.showModal();
+    }
     render() {
         let btn_html;
         if (this.state.use_type === 'admin_approve') {
             btn_html = <div>
-                <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'reject')}>Reject</button>
-                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'approve')}>Approve</button>
+                <button id="view_log" className="lm--button lm--button--primary" onClick={this.view_log.bind(this)} disabled={this.state.retailerApproveStatus === "3" ? true : false}>View Log</button>
+                <button id="delete" className="lm--button lm--button--primary" onClick={this.deleteUser.bind(this)} disabled={this.state.approveStatus}>Delete</button>
+                <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'reject')} disabled={this.state.approveStatus}>Reject</button>
+                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'approve')} disabled={this.state.approveStatus}>Approve</button>
             </div>;
         }
         else if (this.state.use_type === 'manage_acount') {
@@ -605,7 +760,7 @@ export class RetailerRegister extends Component {
                                         <abbr title="required">*</abbr>Upload Supporting Documents :
                                     </label>
                                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                                        <UploadFile type="RETAILER_DOCUMENTS" required="required"  validate="true"  showList="1" col_width="10" showWay="1" deleteType="retailer" fileData={this.state.fileData.RETAILER_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
+                                        <UploadFile type="RETAILER_DOCUMENTS" required="required" validate="true" showList="1" col_width="10" showWay="1" deleteType="retailer" fileData={this.state.fileData.RETAILER_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
 
                                         <div className="col-sm-1 col-md-1 u-cell">
                                             <button className={this.state.disabled ? "lm--button lm--button--primary buttonDisabled" : "lm--button lm--button--primary"} onClick={this.showView.bind(this)} disabled={this.state.disabled} >?</button>
@@ -640,9 +795,10 @@ export class RetailerRegister extends Component {
                                 <div className="retailer_btn">
                                     {btn_html}
                                 </div>
-                                <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrl} />
+                                <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrlArr} />
                                 <Modal text={this.state.text} ref="Modal" />
                                 <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
+                                <Modal formSize="viewlog" text={this.state.text} listdetailtype="viewRetailerLog" loglist={this.state.loglist} ref="Modal_Log" />
                             </div>
                         </div>
                     </div>

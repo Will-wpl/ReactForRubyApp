@@ -144,12 +144,14 @@ export const validateDecimal = (value) => {
 
 export const validatePostCode = (value) => {
     let express = /^[0-9]{6}$/;
-    if (!express.test(value)) {
+    if (value > -1) {
+        if (!express.test(value)) {
+            return false;
+        }
+    } else {
         return false;
     }
-    else {
-        return true;
-    }
+    return true;
 }
 export const validator_Object = (param, paramType) => {
     let errArr = [];
@@ -270,7 +272,7 @@ export const validator_Array = (param, paramType) => {
 }
 
 export const setValidationFaild = (item, type) => {
-    console.log($("input[name='" + item + "']"))
+
     if (type === 1) {
         $('#' + item + "_message").removeClass('isPassValidate').addClass('errormessage');
         $('#' + item + "_format").removeClass('errormessage').addClass('isPassValidate');
@@ -385,6 +387,9 @@ export const setApprovalStatus = (status, dt) => {
             break;
         case '3':
             approvalStatus = 'Registering';
+            break;
+        case '5':
+            approvalStatus = 'Deleted ' + approvalDateTime;;
             break;
         default:
             approvalStatus = 'Registering';

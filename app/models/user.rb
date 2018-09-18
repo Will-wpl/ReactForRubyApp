@@ -10,6 +10,7 @@ class User < ApplicationRecord
   ApprovalStatusPending = '2'.freeze
   ApprovalStatusRegistering = '3'.freeze
   ApprovalStatusDisable = '4'.freeze
+  ApprovalStatusRemoved = '5'.freeze
 
   ConsumerTypeCompany = '2'.freeze
   ConsumerTypeIndividual = '3'.freeze
@@ -58,10 +59,12 @@ class User < ApplicationRecord
   validates_presence_of :name
 
   # Scopes
-  scope :retailers, -> { includes(:roles).where(roles: { name: 'retailer' }) }
+  scope :retailers, -> { includes(:roles).where(roles: { name: 'retailer' }).where('is_deleted is NULL OR is_deleted <> 1') }
+  scope :retailers_deleted, -> { includes(:roles).where(roles: { name: 'retailer' }).where('is_deleted = 1') }
   scope :retailer_approved, -> { where(approval_status: ApprovalStatusApproved) } # "approval_status = '1'"
   scope :buyer_approved, -> { where(approval_status: ApprovalStatusApproved) }
-  scope :buyers, -> { includes(:roles).where(roles: { name: 'buyer' }) }
+  scope :buyers, -> { includes(:roles).where(roles: { name: 'buyer' }).where('is_deleted is NULL OR is_deleted <> 1') }
+  scope :buyers_deleted, -> { includes(:roles).where(roles: { name: 'buyer' }).where('is_deleted = 1') }
   scope :buyer_entities, -> { includes(:roles).where(roles: { name: 'entity' }) }
   scope :tenants, -> { includes(:roles).where(roles: { name: 'tenant' }) }
   scope :selected_retailers, ->(auction_id) { includes(:arrangements).where(arrangements: { auction_id: auction_id }) }
@@ -70,7 +73,7 @@ class User < ApplicationRecord
   scope :selected_buyers_action_status, ->(auction_id, action_status) { includes(:consumptions).where(consumptions: { auction_id: auction_id, action_status: action_status }) }
   scope :exclude, ->(ids) { where('users.id not in (?)', ids) }
   scope :admins, -> { includes(:roles).where(roles: { name: 'admin' }) }
-  scope :buyer_entities_by_email, ->(email) { includes(:roles).where(roles: { name: 'entity' }).where('users.email = ? ', email) }
+  scope :buyer_entities_by_email, ->(email) { includes(:roles).where('users.email = ? ', email) }
   # Callbacks
 
   # Delegates

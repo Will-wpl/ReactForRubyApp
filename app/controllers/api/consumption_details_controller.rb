@@ -2,8 +2,11 @@ class Api::ConsumptionDetailsController < Api::BaseController
   before_action :set_consumption, only: %i[index save participate reject validate]
   def index
     unless params[:consumption_id].nil?
-      consumption = @consumption
+      consumption_id = params[:consumption_id].to_i
+      consumption = Consumption.find(consumption_id) # @consumption
       consumption_details = consumption.consumption_details
+      consumption_details_new = []
+      consumption_details.each { |detail| consumption_details_new.push(detail) if detail.draft_flag.blank?}
       auction = consumption.auction
       contract_duration = auction.auction_contracts.select('contract_duration').sort_by {|contract| contract.contract_duration.to_i}
       buyer_entities = CompanyBuyerEntity.find_by_status_user(CompanyBuyerEntity::ApprovalStatusApproved, consumption.user_id).order(is_default: :desc)
@@ -19,7 +22,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
         buyer_revv_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
       end
       consumption_details_all = []
-      consumption_details.each do |consumption_detail|
+      consumption_details_new.each do |consumption_detail|
         # if consumption_detail.user_attachment_id.blank?
         #   user_attachments = nil
         # else
@@ -54,12 +57,34 @@ class Api::ConsumptionDetailsController < Api::BaseController
         }
         consumption_details_all.push(final_detail)
       end
-      render json: { consumption_details: consumption_details_all, consumption: consumption,
+      only_read_records = !consumption_details_all.blank?
+
+          # get yesterday consumption details
+      consumption_details_yesterday = consumption.consumption_details.where('draft_flag = ?', 1)
+      consumption_details_all_yesterday = consumption_details_yesterday(consumption_details_yesterday, auction, consumption, only_read_records)
+
+      # get before yesterday consumption details
+      consumption_details_before_yesterday = consumption.consumption_details.where('draft_flag = ?', 2)
+      consumption_details_all_before_yesterday = consumption_details_before_yesterday(consumption_details_before_yesterday, auction, consumption, only_read_records)
+      removed_consumption_details = []
+      consumption_details_all_before_yesterday.each do |consumption_detail|
+        if consumption_details_all_yesterday.any?{ |x| x['account_number'] == consumption_detail['account_number'] }
+          removed_consumption_details.push(consumption_detail)
+        end
+      end
+      removed_consumption_details.each do |consumption_detail|
+        consumption_details_all_before_yesterday.delete(consumption_detail)
+      end
+      advisory_template = RichTemplate.find_by type: RichTemplate::ADVISORY_TEMPLATE
+      render json: { consumption_details: consumption_details_all,
+                     consumption_details_last_day: consumption_details_all_yesterday,
+                     consumption_details_before_yesterday: consumption_details_all_before_yesterday,
+                     consumption: consumption,
                      auction: { id: auction.id, name: auction.name, actual_begin_time: auction.actual_begin_time,
                                 contract_period_start_date: auction.contract_period_start_date,
                                 publish_status: auction.publish_status },
                      buyer_entities: buyer_entities, seller_buyer_tc_attachment:seller_buyer_tc_attachment,
-                     buyer_revv_tc_attachment: buyer_revv_tc_attachment, contract_duration: contract_duration }, status: 200
+                     buyer_revv_tc_attachment: buyer_revv_tc_attachment, contract_duration: contract_duration, advisory: advisory_template }, status: 200
     end
   end
 
@@ -129,6 +154,78 @@ class Api::ConsumptionDetailsController < Api::BaseController
     
   end
 
+  def validate_single
+    error_details = []
+    detail = params[:detail]
+    current_consumption = Consumption.find(params[:consumption_id]) #@consumption
+    consumptions = Consumption.mine(current_user.id)
+    auction = Auction.find(current_consumption.auction_id)
+    raise ActiveRecord::RecordNotFound if auction.nil?
+    contract_period_start_date = auction.contract_period_start_date
+
+    # contract_period_start_date, contract_period_end_date = get_auction_period(current_consumption)
+    # Account must be unique within a RA.
+    account_numbers = []
+    premise_addresses = []
+    # auction.consumptions.each do |consumption|
+    #   consumption.consumption_details.each do |consumption_detail|
+    #     consumption_detail_id = detail['id'].blank? ? detail['orignal_id'] : detail['id']
+    #     if !consumption_detail.unit_number.blank? && !consumption_detail.postal_code.blank? &&
+    #         consumption_detail.id.to_s != consumption_detail_id
+    #       premise_addresses.push({ 'unit_number' => consumption_detail.unit_number,
+    #                                    'postal_code' => consumption_detail.postal_code})
+    #     end
+    #   end
+    # end
+    consumptions.each do |consumption|
+      temp_contract_period_start_date ,temp_contract_period_end_date = get_auction_period(consumption)
+
+      if temp_contract_period_start_date.nil? ||
+          temp_contract_period_end_date.nil? ||
+          temp_contract_period_end_date < contract_period_start_date
+        next
+      end
+      consumption.consumption_details.each do |consumption_detail|
+        consumption_detail_id = detail['id'].blank? ? detail['orignal_id'] : detail['id']
+        if !consumption_detail.account_number.blank? && consumption_detail.id.to_s != consumption_detail_id
+          account_numbers.push(consumption_detail.account_number)
+        end
+        if !consumption_detail.unit_number.blank? && !consumption_detail.postal_code.blank? &&
+            consumption_detail.id.to_s != consumption_detail_id
+          premise_addresses.push({ 'unit_number' => consumption_detail.unit_number,
+                                   'postal_code' => consumption_detail.postal_code})
+        end
+      end
+    end
+
+    if detail['account_number'].blank? ||
+       (!detail['account_number'].blank? && account_numbers.any? { |v| v.downcase == detail['account_number'].downcase })
+      error_details.push({ 'error_field_name': 'account_number',
+                               'error_value': detail['account_number']})
+    end
+
+    if detail['unit_number'].blank? ||
+       detail['postal_code'].blank? ||
+       (!detail['unit_number'].blank? &&
+           !detail['postal_code'].blank? &&
+           premise_addresses.any? { |v| v['unit_number'].downcase == detail['unit_number'].downcase && v['postal_code'].downcase == detail['postal_code'].downcase })
+      error_details.push({ 'error_field_name': 'premise_addresses',
+                               'error_value': { unit_number: detail['unit_number'],
+                                                postal_code: detail['postal_code']}})
+    end
+
+    # contract expiry date > RA's contract start date.
+    if !detail['contract_expiry'].blank? &&
+        Time.parse(detail['contract_expiry']) <= auction.contract_period_start_date
+      error_details.push({ 'error_field_name': 'contract_expiry',
+                               'error_value': detail['contract_expiry']})
+    end
+
+    return_json = {validate_result: error_details.blank?,
+                   error_details: error_details}
+    render json: return_json, status: 200
+  end
+
   # Validate consumption detail
   # Loginc:
   #   1. Account number must be unique within a RA.
@@ -168,13 +265,19 @@ class Api::ConsumptionDetailsController < Api::BaseController
     details.each_index do |index|
       details.each do |temp_detail|
         if details[index].object_id != temp_detail.object_id && details[index]['account_number'] == temp_detail['account_number']
-          error_detail_indexes.push(index)
+          error_detail_indexes.push({'consumption_detail_index': index,
+                                     'error_field_name': 'account_number',
+                                     'error_value': details[index]['account_number']})
           messages.push('There is already an existing contract for this Account Number.') unless had_error_msg_acc
           had_error_msg_acc = true
         end
         # If both Unit Number and Postal Code are the same, then fail the check.
-        if details[index].object_id != temp_detail.object_id && details[index]['unit_number'] == temp_detail['unit_number'] && details[index]['postal_code'] == temp_detail['postal_code'] then
-          error_detail_indexes.push(index)
+        if details[index].object_id != temp_detail.object_id && details[index]['unit_number'] == temp_detail['unit_number'] &&
+            details[index]['postal_code'] == temp_detail['postal_code'] then
+          error_detail_indexes.push({'consumption_detail_index': index,
+                                     'error_field_name': 'premise_address',
+                                     'error_value': { 'unit_number': details[index]['unit_number'],
+                                                      'postal_code': details[index]['postal_code']}})
           messages.push('There is already an existing contract for this premise address.') unless had_error_msg_addr
           had_error_msg_addr = true
         end
@@ -182,7 +285,9 @@ class Api::ConsumptionDetailsController < Api::BaseController
       # contract expiry date > RA's contract start date.
       if !details[index]['contract_expiry'].blank? &&
           Time.parse(details[index]['contract_expiry']) <= auction.contract_period_start_date
-        error_detail_indexes.push(index)
+        error_detail_indexes.push({'consumption_detail_index': index,
+                                   'error_field_name': 'contract_expiry',
+                                   'error_value': details[index]['contract_expiry']})
       end
     end
 
@@ -202,7 +307,9 @@ class Api::ConsumptionDetailsController < Api::BaseController
     had_error_msg_acc = false
     details.each_index do |index|
       if account_numbers.any? { |v| v == details[index]['account_number'] }
-        error_detail_indexes.push(index)
+        error_detail_indexes.push({'consumption_detail_index': index,
+                                  'error_field_name': 'account_number',
+                                  'error_value': details[index]['account_number']})
         messages.push('There is already an existing contract for this Account Number.') unless had_error_msg_acc
         had_error_msg_acc = true
       end
@@ -219,13 +326,140 @@ class Api::ConsumptionDetailsController < Api::BaseController
 
   private
 
+  def get_auction_period(consumption)
+    auction = Auction.find(consumption.auction_id)
+    raise ActiveRecord::RecordNotFound if auction.nil?
+    period_start_date = auction.contract_period_start_date
+    if consumption.contract_duration.blank?
+      period_end_date = auction.contract_period_end_date
+    else
+      auction_contract = AuctionContract.find_by auction_id: consumption.auction_id, contract_duration: consumption.contract_duration
+      period_end_date = auction_contract.nil? ? auction.contract_period_end_date: auction_contract.contract_period_end_date
+    end
+    [period_start_date ,period_end_date]
+  end
+
+  def consumption_details_before_yesterday(consumption_details_before_yesterday, auction, consumption, only_read_records = false)
+    consumption_details_all_before_yesterday = []
+    if consumption_details_before_yesterday.blank? && !only_read_records
+      details = ConsumptionDetail.find_account_less_than_contract_start_date_last(auction.contract_period_start_date,current_user.id)
+      details.each do |consumption_detail|
+        user_attachments = UserAttachment.find_consumption_attachment_by_user_type(consumption_detail.id,
+                                                                                   consumption.user_id,
+                                                                                   UserAttachment::FileType_Consumption_Detail_Doc)
+        attachment_ids = []
+        user_attachments.each{ |x| attachment_ids.push(x.id) }
+        final_detail = put_in_consuption_detail(consumption_detail,
+                                                user_attachments, attachment_ids,
+                                                ConsumptionDetail::DraftFlagBeforeYesterday)
+        consumption_details_all_before_yesterday.push(final_detail)
+      end
+    else
+      consumption_details_before_yesterday.each do |consumption_detail|
+        user_attachments = UserAttachment.find_consumption_attachment_by_user_type(consumption_detail.id,
+                                                                                   consumption.user_id,
+                                                                                   UserAttachment::FileType_Consumption_Detail_Doc)
+        attachment_ids = []
+        user_attachments.each{ |x| attachment_ids.push(x.id) }
+        final_detail = put_in_consuption_detail(consumption_detail,
+                                                user_attachments,
+                                                attachment_ids)
+        consumption_details_all_before_yesterday.push(final_detail)
+      end
+    end
+    consumption_details_all_before_yesterday
+  end
+
+  def consumption_details_yesterday(consumption_details_yesterday, auction, consumption, only_read_records = false)
+    consumption_details_all_yesterday = []
+    if consumption_details_yesterday.blank? && !only_read_records
+      details = ConsumptionDetail.find_account_equal_to_contract_start_date_last(auction.contract_period_start_date, current_user.id)
+      details.each do |consumption_detail|
+        user_attachments = UserAttachment.find_consumption_attachment_by_user_type(consumption_detail.id,
+                                                                                   consumption.user_id,
+                                                                                   UserAttachment::FileType_Consumption_Detail_Doc)
+        attachment_ids = []
+        user_attachments.each{ |x| attachment_ids.push(x.id) }
+        final_detail = put_in_consuption_detail(consumption_detail,
+                                                user_attachments,
+                                                attachment_ids,
+                                                ConsumptionDetail::DraftFlagYesterday)
+        consumption_details_all_yesterday.push(final_detail)
+      end
+    else
+      consumption_details_yesterday.each do |consumption_detail|
+        user_attachments = UserAttachment.find_consumption_attachment_by_user_type(consumption_detail.id,
+                                                                                   consumption.user_id,
+                                                                                   UserAttachment::FileType_Consumption_Detail_Doc)
+        attachment_ids = []
+        user_attachments.each{ |x| attachment_ids.push(x.id) }
+        final_detail = put_in_consuption_detail(consumption_detail,
+                                                user_attachments,
+                                                attachment_ids)
+        consumption_details_all_yesterday.push(final_detail)
+      end
+    end
+    consumption_details_all_yesterday
+  end
+
+  def put_in_consuption_detail(consumption_detail,user_attachments, attachment_ids, draft_flag = nil)
+    if draft_flag ==  ConsumptionDetail::DraftFlagYesterday
+      existing_plan = consumption_detail.existing_plan
+    elsif draft_flag ==  ConsumptionDetail::DraftFlagBeforeYesterday
+      existing_plan = nil
+    else
+      existing_plan = consumption_detail.existing_plan
+    end
+
+    if draft_flag ==  ConsumptionDetail::DraftFlagYesterday
+      contract_expiry = consumption_detail.contract_period_end_date
+    elsif draft_flag ==  ConsumptionDetail::DraftFlagBeforeYesterday
+      contract_expiry = nil
+    else
+      contract_expiry = consumption_detail.contract_expiry
+    end
+
+    final_detail = {
+        "id" => draft_flag.blank? ? consumption_detail.id : nil,
+        "orignal_id" => draft_flag.blank? ? nil : consumption_detail.id,
+        "account_number" => consumption_detail.account_number,
+        "intake_level" => consumption_detail.intake_level,
+        "peak" => consumption_detail.peak,
+        "off_peak" => consumption_detail.off_peak,
+        "consumption_id" => consumption_detail.consumption_id,
+        "created_at" => consumption_detail.created_at,
+        "updated_at" => consumption_detail.updated_at,
+        "premise_address" => consumption_detail.premise_address,
+        "contracted_capacity" => consumption_detail.contracted_capacity,
+        "existing_plan" => existing_plan,
+        "contract_expiry" => contract_expiry,
+        "blk_or_unit" => consumption_detail.blk_or_unit,
+        "street" => consumption_detail.street,
+        "unit_number" => consumption_detail.unit_number,
+        "postal_code" => consumption_detail.postal_code,
+        "totals" => consumption_detail.totals,
+        "peak_pct" => consumption_detail.peak_pct,
+        "company_buyer_entity_id" => consumption_detail.company_buyer_entity_id,
+        "user_attachment_id" => consumption_detail.user_attachment_id,
+        "user_attachment" =>user_attachments,
+        "attachment_ids" => attachment_ids.to_json,
+        "draft_flag" => draft_flag}
+    final_detail
+  end
+
   def save_comsumption_details()
     @consumption.contract_duration = params[:contract_duration]
     @consumption.update(contract_duration: params[:contract_duration])
     consumption = @consumption
+    details_all = []
     details = JSON.parse(params[:details])
+    details_yesterday = JSON.parse(params[:details_yesterday])
+    details_before_yesterday = JSON.parse(params[:details_before_yesterday])
+    details_all.concat(details)
+    details_all.concat(details_yesterday)
+    details_all.concat(details_before_yesterday)
     ids = []
-    details.each do |detail|
+    details_all.each do |detail|
       ids.push(detail['id']) if detail['id'].to_i != 0
     end
     will_del_details = consumption.consumption_details.reject do |detail|
@@ -236,42 +470,51 @@ class Api::ConsumptionDetailsController < Api::BaseController
     end
     saved_details = []
     ActiveRecord::Base.transaction do
-      details.each do |detail|
-        consumption_detail = if detail['id'].to_i == 0
-                               ConsumptionDetail.new
-                             else
-                               ConsumptionDetail.find(detail['id'])
-                             end
-        consumption_detail.account_number = detail['account_number']
-        consumption_detail.intake_level = detail['intake_level']
-        consumption_detail.peak = detail['peak']
-        consumption_detail.off_peak = detail['off_peak']
-        consumption_detail.premise_address = detail['premise_address']
-        consumption_detail.contracted_capacity = detail['contracted_capacity']
-        # update - new fields (20180709) - Start
-        consumption_detail.existing_plan = detail['existing_plan']
-        consumption_detail.totals = detail['totals']
-        consumption_detail.peak_pct = detail['peak_pct']
-        consumption_detail.peak = (detail['totals'].to_f * detail['peak_pct'].to_f / 100).round() unless detail['peak_pct'].blank?
-        consumption_detail.off_peak = detail['totals'].to_i - consumption_detail.peak unless detail['peak_pct'].blank?
-        consumption_detail.contract_expiry = detail['contract_expiry']
-        consumption_detail.blk_or_unit = detail['blk_or_unit']
-        consumption_detail.street = detail['street']
-        consumption_detail.unit_number = detail['unit_number']
-        consumption_detail.postal_code = detail['postal_code']
-        consumption_detail.company_buyer_entity_id = detail['company_buyer_entity_id']
-        # consumption_detail.user_attachment_id = detail['user_attachment_id']
-        # Update -new fields (20180709) - End
-        # update - new fields (20180726) - Start
-        # consumption_detail.approval_status = ConsumptionDetail::ApprovalStatusPending
-        # update - new fields (20180726) - End
-        consumption_detail.consumption_id = params[:consumption_id]
-        if consumption_detail.save!
-          saved_details.push(consumption_detail)
-          unless detail['attachment_ids'].blank?
-            attachment_id_array = JSON.parse(detail['attachment_ids'])
-            UserAttachment.find_by_ids(attachment_id_array).update(consumption_detail_id: consumption_detail.id)
-          end
+      saved_details.concat(save_details(details))
+      saved_details.concat(save_details(details_yesterday, ConsumptionDetail::DraftFlagYesterday))
+      saved_details.concat(save_details(details_before_yesterday, ConsumptionDetail::DraftFlagBeforeYesterday))
+    end
+    saved_details
+  end
+
+  def save_details(details, draft_flag = nil)
+    saved_details = []
+    details.each do |detail|
+      consumption_detail = if detail['id'].to_i == 0
+                             ConsumptionDetail.new
+                           else
+                             ConsumptionDetail.find(detail['id'])
+                           end
+      consumption_detail.account_number = detail['account_number']
+      consumption_detail.intake_level = detail['intake_level']
+      consumption_detail.peak = detail['peak']
+      consumption_detail.off_peak = detail['off_peak']
+      consumption_detail.premise_address = detail['premise_address']
+      consumption_detail.contracted_capacity = detail['contracted_capacity']
+      # update - new fields (20180709) - Start
+      consumption_detail.existing_plan = detail['existing_plan']
+      consumption_detail.totals = detail['totals']
+      consumption_detail.peak_pct = detail['peak_pct']
+      consumption_detail.peak = (detail['totals'].to_f * detail['peak_pct'].to_f / 100).round() unless detail['peak_pct'].blank?
+      consumption_detail.off_peak = detail['totals'].to_i - consumption_detail.peak unless detail['peak_pct'].blank?
+      consumption_detail.contract_expiry = Date.parse(detail['contract_expiry']) unless detail['contract_expiry'].blank?
+      consumption_detail.blk_or_unit = detail['blk_or_unit']
+      consumption_detail.street = detail['street']
+      consumption_detail.unit_number = detail['unit_number']
+      consumption_detail.postal_code = detail['postal_code']
+      consumption_detail.company_buyer_entity_id = detail['company_buyer_entity_id']
+      # consumption_detail.user_attachment_id = detail['user_attachment_id']
+      # Update -new fields (20180709) - End
+      # update - new fields (20180726) - Start
+      # consumption_detail.approval_status = ConsumptionDetail::ApprovalStatusPending
+      # update - new fields (20180726) - End
+      consumption_detail.consumption_id = params[:consumption_id]
+      consumption_detail.draft_flag = draft_flag
+      if consumption_detail.save!
+        saved_details.push(consumption_detail)
+        unless detail['attachment_ids'].blank?
+          attachment_id_array = JSON.parse(detail['attachment_ids'])
+          UserAttachment.find_by_ids(attachment_id_array).update(consumption_detail_id: consumption_detail.id)
         end
       end
     end

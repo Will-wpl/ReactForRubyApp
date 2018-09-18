@@ -14,6 +14,30 @@ class Api::RegistrationsController < Api::BaseController
 
   protected
 
+  def add_user_log(user)
+    user_updated_log = UserUpdatedLog.new
+    user_updated_log.name = user.name
+    user_updated_log.email =  user.email
+    user_updated_log.company_name =  user.company_name
+    user_updated_log.approval_status =  user.approval_status
+    user_updated_log.consumer_type =  user.consumer_type
+    user_updated_log.company_address =  user.company_address
+    user_updated_log.company_unique_entity_number =  user.company_unique_entity_number
+    user_updated_log.company_license_number =  user.company_license_number
+    user_updated_log.account_fin =  user.account_fin
+    user_updated_log.account_mobile_number =  user.account_mobile_number
+    user_updated_log.account_office_number =  user.account_office_number
+    user_updated_log.account_home_number =  user.account_home_number
+    user_updated_log.account_housing_type =  user.account_housing_type
+    user_updated_log.account_home_address =  user.account_home_address
+    user_updated_log.comment =  user.comment
+    user_updated_log.billing_address =  user.billing_address
+    user_updated_log.gst_no =  user.gst_no
+    user_updated_log.created_at = user.created_at
+    user_updated_log.users_id =  user.id
+    user_updated_log.save!
+  end
+
   # get buyer registration information
   def get_buyer_by_id(user)
     # get the last uploaded business file
@@ -23,7 +47,11 @@ class Api::RegistrationsController < Api::BaseController
     # get buyer entities
     buyer_entities = user.company_buyer_entities.order(is_default: :desc)
     buyer_entity_ids = []
-    buyer_entities.each { |x| buyer_entity_ids.push(x.id) }
+    buyer_entitiy_objs = []
+    buyer_entities.each { |x|
+      buyer_entity_ids.push(x.id)
+      buyer_entitiy_objs.push(get_entity_info(x))
+    }
     # get used buyer entities
     used_buyer_entity_ids = []
     ConsumptionDetail.all().each { |x| used_buyer_entity_ids.push(x.company_buyer_entity_id) if buyer_entity_ids.include?(x.company_buyer_entity_id) }
@@ -32,19 +60,43 @@ class Api::RegistrationsController < Api::BaseController
     # get buyer-revv-t&c document
     buyer_revv_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
     # get letter-of-authorisation document
-    letter_of_authorisation_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Letter_Authorisation)
+    letter_of_authorisation_attachment = UserAttachment.find_list_by_type(UserAttachment::FileType_Letter_Authorisation)
+    # get logs
+    user_logs = UserUpdatedLog.find_by_user_id(user.id)
     # return json
     user_json = { user_base_info: user,
-                  buyer_entities: buyer_entities,
+                  buyer_entities: buyer_entitiy_objs,
                   used_buyer_entity_ids: used_buyer_entity_ids,
                   self_attachment: user_attachment,
                   self_attachments: user_attachments,
                   seller_buyer_tc_attachment: seller_buyer_tc_attachment,
                   buyer_revv_tc_attachment: buyer_revv_tc_attachment,
-                  letter_of_authorisation_attachment: letter_of_authorisation_attachment}
+                  letter_of_authorisation_attachment: letter_of_authorisation_attachment,
+                  user_logs: user_logs}
     user_json
   end
 
+  def get_entity_info(buyer_entity)
+    {
+        id: buyer_entity.id,
+        company_name: buyer_entity.company_name,
+        company_uen: buyer_entity.company_uen,
+        company_address: buyer_entity.company_address,
+        billing_address: buyer_entity.billing_address,
+        bill_attention_to: buyer_entity.bill_attention_to,
+        contact_name: buyer_entity.contact_name,
+        contact_email: buyer_entity.contact_email,
+        contact_mobile_no: buyer_entity.contact_mobile_no,
+        contact_office_no: buyer_entity.contact_office_no,
+        user_id: buyer_entity.user_id,
+        is_default: buyer_entity.is_default,
+        approval_status: buyer_entity.approval_status,
+        user_entity_id: buyer_entity.user_entity_id,
+        created_at: buyer_entity.created_at,
+        updated_at: buyer_entity.updated_at,
+        entity_logs: CompanyBuyerEntitiesUpdatedLog.find_by_entity_id(buyer_entity.id)
+    }
+  end
   def get_retailer_by_id(user_id)
     # get the last updated attachment
     user_attachment = UserAttachment.find_last_by_type_user(user_id, UserAttachment::FileType_Retailer_Doc)
@@ -58,8 +110,9 @@ class Api::RegistrationsController < Api::BaseController
     seller_revv_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_REVV_TC)
 
     # get letter-of-authorisation document
-    letter_of_authorisation_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Letter_Authorisation)
-
+    letter_of_authorisation_attachment = UserAttachment.find_list_by_type(UserAttachment::FileType_Letter_Authorisation)
+    # get logs
+    user_logs = UserUpdatedLog.find_by_user_id(user_id)
     # get user info
     user = User.find(user_id)
     # return json
@@ -68,7 +121,8 @@ class Api::RegistrationsController < Api::BaseController
                   self_attachments: user_attachments,
                   seller_buyer_tc_attachment: seller_buyer_tc_attachment,
                   seller_revv_tc_attachment: seller_revv_tc_attachment,
-                  letter_of_authorisation_attachment: letter_of_authorisation_attachment }
+                  letter_of_authorisation_attachment: letter_of_authorisation_attachment,
+                  user_logs: user_logs }
     user_json
   end
 

@@ -13,11 +13,55 @@ class Api::Retailer::RegistrationsController < Api::RegistrationsController
     update_status_flag = params['update_status_flag']
     update_user_params = model_params
     update_user_params = filter_user_password(update_user_params)
-    if update_status_flag.eql?("1")
+    user = User.find(params[:user]['id'])
+    raise ActiveRecord::RecordNotFound if user.nil?
+    # update_user_params['approval_status'] = User::ApprovalStatusPending
+    # if update_status_flag.eql?("1")
+    #   update_user_params['approval_status'] = User::ApprovalStatusPending
+    #   update_user_params['approval_date_time'] = DateTime.current
+    # end
+    add_log_flag = false
+    if user.approval_status == User::ApprovalStatusRegistering
+      if update_status_flag.eql?("1")
+        update_user_params['approval_status'] = User::ApprovalStatusPending
+        update_user_params['approval_date_time'] = DateTime.current
+        add_log_flag = true
+      end
+    elsif user.approval_status == User::ApprovalStatusReject
       update_user_params['approval_status'] = User::ApprovalStatusPending
       update_user_params['approval_date_time'] = DateTime.current
+      if ( !user.company_name.blank? && user.company_name.downcase != update_user_params['company_name'].downcase) ||
+          ( !user.company_unique_entity_number.blank? && user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase) ||
+          ( !user.company_license_number.blank? && user.company_license_number.downcase != update_user_params['company_license_number'].downcase )
+        add_log_flag = true
+      end
+    elsif user.approval_status != User::ApprovalStatusRemoved
+      if ( !user.company_name.blank? && user.company_name.downcase != update_user_params['company_name'].downcase) ||
+          ( !user.company_unique_entity_number.blank? && user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase) ||
+          ( !user.company_license_number.blank? && user.company_license_number.downcase != update_user_params['company_license_number'].downcase )
+          update_user_params['approval_status'] = User::ApprovalStatusPending
+          update_user_params['approval_date_time'] = DateTime.current
+          add_log_flag = true
+      end
     end
+    # if !user.blank? && update_status_flag.eql?("1")
+    #   if ( user.approval_status == User::ApprovalStatusReject ||
+    #       user.approval_status == User::ApprovalStatusRegistering ||
+    #        ( !user.company_name.blank? && user.company_name.downcase != update_user_params['company_name'].downcase) ||
+    #        ( !user.company_unique_entity_number.blank? && user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase ) ||
+    #        ( !user.company_license_number.blank? && user.company_license_number.downcase != update_user_params['company_license_number'].downcase )
+    #     )
+    #     if (( !user.company_name.blank? && user.company_name.downcase != update_user_params['company_name'].downcase) ||
+    #         ( !user.company_unique_entity_number.blank? && user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase ) ||
+    #         ( !user.company_license_number.blank? && user.company_license_number.downcase != update_user_params['company_license_number'].downcase ))
+    #       add_log_flag = true
+    #     end
+    #     update_user_params['approval_status'] = User::ApprovalStatusPending
+    #     update_user_params['approval_date_time'] = DateTime.current
+    #   end
+    # end
     @user.update(update_user_params)
+    add_user_log(User.find(@user.id)) if add_log_flag
     render json: { user: @user }, status: 200
   end
 
@@ -27,13 +71,28 @@ class Api::Retailer::RegistrationsController < Api::RegistrationsController
     update_user_params = filter_user_password(update_user_params)
     user = User.find(params[:user]['id'])
 
-    unless user.blank?
-      update_user_params['approval_status'] = User::ApprovalStatusPending
-    else
-      update_user_params['approval_status'] = User::ApprovalStatusRegistering
-    end
+    # unless user.blank?
+    #   # update_user_params['approval_status'] = User::ApprovalStatusPending
+    #   if ( user.approval_status == User::ApprovalStatusReject ||
+    #       user.approval_status == User::ApprovalStatusRegistering ||
+    #         ( !user.company_name.blank? && user.company_name.downcase != update_user_params['company_name'].downcase) ||
+    #         ( !user.company_unique_entity_number && user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase ) ||
+    #         ( !user.company_license_number && user.company_license_number.downcase != update_user_params['company_license_number'].downcase )
+    #     )
+    #     if (( !user.company_name.blank? && user.company_name.downcase != update_user_params['company_name'].downcase) ||
+    #         ( !user.company_unique_entity_number && user.company_unique_entity_number.downcase != update_user_params['company_unique_entity_number'].downcase ) ||
+    #         ( !user.company_license_number && user.company_license_number.downcase != update_user_params['company_license_number'].downcase ))
+    #       add_user_log(user)
+    #     end
+    #     update_user_params['approval_status'] = User::ApprovalStatusPending
+    #     update_user_params['approval_date_time'] = DateTime.current
+    #   end
+    # else
+    # end
+    update_user_params['approval_status'] = User::ApprovalStatusPending
     update_user_params['approval_date_time'] = DateTime.current
     @user.update(update_user_params)
+    add_user_log(@user)
     render json: { user: @user }, status: 200
   end
 

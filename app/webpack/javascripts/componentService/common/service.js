@@ -1,4 +1,4 @@
-import {Ws, create, get, put} from '../../../javascripts/http';
+import {Ws, create, get, put,post} from '../../../javascripts/http';
 
 export const getAuctionTimeRule = (auction) => get(`/api/auctions/${auction}/timer`)
 
@@ -25,7 +25,8 @@ export const getBuyerUserInfoByUserId=(id)=>{
 }
 
 export const validateIsExist=(params)=>{
-    return put('/api/buyer/registrations/'+params.user.id+'/validate', params);
+     return put('/api/buyer/registrations/'+params.user.id+'/validate', params);
+    // return put('/api/buyer/registrations/validate_buyer_entity', params);
 }
  
 export const saveBuyerUserInfo=(params)=>{
@@ -36,6 +37,17 @@ export const submitBuyerUserInfo=(params)=>{
     return put('/api/buyer/registrations/'+params.user.id+'/sign_up',params);
 }
 
+export const getNeedBuyerApproveAttachments=()=>{
+    return get('/api/buyer/users/show_current_user');
+}
+
+export const saveBuyerAttachmentModification=()=>{
+    return put('/api/buyer/users/update_attachment_status');
+}
+
+export const validateConsumptionDetailRepeat=(params)=>{
+    return put('/api/buyer/consumption_details/validate_single',params)
+}
 
 
 

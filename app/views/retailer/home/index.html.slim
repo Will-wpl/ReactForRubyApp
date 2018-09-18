@@ -1,4 +1,4 @@
-- if current_user.approval_status == '1'
+- if current_user.approval_status == '1' && current_user.agree_seller_buyer=='1' && current_user.agree_seller_revv=='1'
   div.col-sm-12.col-md-6.push-md-3.admin_btn
     a.lm--button.lm--button--primary.col-sm-12.col-md-12 href= "/retailer/auctions" Manage Upcoming Reverse Auction
     /div.col-sm-12.col-md-3.push-md-1.begin_auction
@@ -24,3 +24,7 @@
     p Account Status: Pending administrator's approval.
   /div.createRaMain.u-grid
   /  a.lm--button.lm--button--primary.u-mt3 href="/retailer/home" Back to Homepage
+
+ 
+- if current_user.approval_status == '1' && ((current_user.agree_seller_buyer == nil || current_user.agree_seller_buyer=='0')||(current_user.agree_seller_revv== nil || current_user.agree_seller_revv=='0'))
+  div.col-sm-12.col-md-6.push-md-3 id="retailer_upload_new_attachment"

@@ -29,7 +29,7 @@ export class BuyerRegister extends Component {
                 ]
             },
             uploadUrl: "/api/buyer/user_attachments?file_type=",
-            messageAttachmentUrl: "",
+            messageAttachmentUrlArr: [],
             usedEntityIdArr: []
         };
         this.validatorItem = {
@@ -114,7 +114,6 @@ export class BuyerRegister extends Component {
     }
 
     setDefault(param) {
-        console.log(param)
         let fileObj, entityObj;
         fileObj = this.state.fileData;
         entityObj = this.state.user_entity_data;
@@ -172,7 +171,7 @@ export class BuyerRegister extends Component {
         }
         if (param.letter_of_authorisation_attachment) {
             this.setState({
-                messageAttachmentUrl: param.letter_of_authorisation_attachment.file_path
+                messageAttachmentUrlArr: param.letter_of_authorisation_attachment
             })
         }
 
@@ -220,12 +219,12 @@ export class BuyerRegister extends Component {
                 }
             }
             else {
-                 setTimeout((item) => {
+                setTimeout((item) => {
                     this.setState({
                         user_contact_email: this.state.email_address
-                    }) 
-                 }, 300);
-                
+                    })
+                }, 300);
+
             }
         }
 
@@ -350,7 +349,7 @@ export class BuyerRegister extends Component {
                 contact_mobile_no: this.state.user_contact_mobile_no,
                 contact_office_no: this.state.user_contact_office_no,
                 is_default: 1,
-                user_id:this.state.id
+                user_id: this.state.id
             }
         ];
 
@@ -369,8 +368,8 @@ export class BuyerRegister extends Component {
                     contact_email: item.contact_email,
                     contact_mobile_no: item.contact_mobile_no,
                     contact_office_no: item.contact_office_no,
-                    is_default: 0, 
-                   user_id:this.state.id
+                    is_default: 0,
+                    user_id: this.state.id
                 }
                 entity.push(paramObj);
             })
@@ -607,20 +606,7 @@ export class BuyerRegister extends Component {
                             this.refs.Modal.showModal();
                         }
                         else {
-                            if (type === "sign_up") {
-                                window.location.href = `/buyer/home`;
-                            }
-                            else {
-                                this.setState(
-                                    {
-                                        user_company_name: this.state.company_name,
-                                        user_company_uen: this.state.unique_entity_number,
-                                        user_company_address: this.state.company_address,
-                                        text: "Your details have been successfully submitted. "
-                                    }
-                                );
-                                this.refs.Modal.showModal();
-                            }
+                            window.location.href = `/buyer/home`;
                         }
                     })
                 }
@@ -840,7 +826,7 @@ export class BuyerRegister extends Component {
                                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                         <UploadFile type="BUYER_DOCUMENTS" required="required" validate="true" deleteType="buyer" showList="1" col_width="10" showWay="1" fileData={this.state.fileData.BUYER_DOCUMENTS} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
                                         <div className="col-sm-1 col-md-1 u-cell">
-                                            <button className={this.state.disabled ? "lm--button lm--button--primary buttonDisabled" : "lm--button lm--button--primary"} title="this is retailer upload documents" disabled={this.state.disabled} onClick={this.showView.bind(this)} >?</button>
+                                            <button className={this.state.disabled ? "lm--button lm--button--primary buttonDisabled" : "lm--button lm--button--primary"} disabled={this.state.disabled} onClick={this.showView.bind(this)} >?</button>
                                         </div>
                                         <div id="showMessage" className="isPassValidate">This field is required!</div>
                                     </div>
@@ -949,8 +935,6 @@ export class BuyerRegister extends Component {
                                         </select>
                                     </div>
                                 </div>
-
-
                                 <h4 className="lm--formItem lm--formItem--inline string chkBuyer"><input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /><span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerTCurl} className="urlStyleUnderline">Buyer Platform Terms of Use</a></span></h4>
                                 <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                                 <h4 className="lm--formItem lm--formItem--inline string chkBuyer"><input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} /><span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyleUnderline">Energy Procurement Agreement</a></span></h4>
@@ -977,7 +961,7 @@ export class BuyerRegister extends Component {
                     </div>
 
                     <Modal text={this.state.text} acceptFunction={this.refreshForm.bind(this)} ref="Modal" />
-                    <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrl} />
+                    <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrlArr} />
                     <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
                 </div>
             </div>

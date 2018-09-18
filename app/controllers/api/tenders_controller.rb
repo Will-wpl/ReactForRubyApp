@@ -137,6 +137,12 @@ class Api::TendersController < Api::TendersBaseController
     render json: workflow, status: 200
   end
 
+  def node3_retailer_back
+    node3_retailer_back_biz(params[:id])
+    workflow = TenderHelper.execute(:node3, :back, params[:id])
+    render json: workflow, status: 200
+  end
+
   def node3_send_response
     workflow = nil
     chats = JSON.parse(params[:chats])
@@ -204,6 +210,13 @@ class Api::TendersController < Api::TendersBaseController
     chat_info = set_withdraw_tender_chat(tender_chat, chat)
     chat = TenderChatDetail.chat_save(tender_chat, chat_info)
     render json: chat, status: 200
+  end
+
+  def node3_retailer_back_biz(arrangement_id)
+    # delete step3 to step2 at state machines
+    TenderStateMachine.where(current_node: 3, arrangement_id: arrangement_id).destroy_all
+    # delete step3 chats at tender chats
+    TenderChat.where(arrangement_id: arrangement_id).destroy_all
   end
 
   def node3_retailer_save

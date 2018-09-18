@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180823013016) do
+ActiveRecord::Schema.define(version: 20180904072136) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -253,6 +253,25 @@ ActiveRecord::Schema.define(version: 20180823013016) do
     t.index ["user_id"], name: "index_company_buyer_entities_on_user_id"
   end
 
+  create_table "company_buyer_entities_updated_logs", force: :cascade do |t|
+    t.string "company_name"
+    t.string "company_uen"
+    t.string "company_address"
+    t.string "billing_address"
+    t.string "bill_attention_to"
+    t.string "contact_name"
+    t.string "contact_email"
+    t.string "contact_mobile_no"
+    t.string "contact_office_no"
+    t.bigint "user_id"
+    t.integer "is_default"
+    t.string "approval_status"
+    t.bigint "user_entity_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "entity_id"
+  end
+
   create_table "consumption_details", force: :cascade do |t|
     t.string "account_number"
     t.string "intake_level"
@@ -264,7 +283,6 @@ ActiveRecord::Schema.define(version: 20180823013016) do
     t.string "premise_address"
     t.decimal "contracted_capacity"
     t.string "existing_plan"
-    t.string "contract_expiry"
     t.string "blk_or_unit"
     t.string "street"
     t.string "unit_number"
@@ -274,6 +292,8 @@ ActiveRecord::Schema.define(version: 20180823013016) do
     t.bigint "company_buyer_entity_id"
     t.bigint "user_attachment_id"
     t.string "approval_status"
+    t.date "contract_expiry"
+    t.integer "draft_flag"
     t.index ["company_buyer_entity_id"], name: "index_consumption_details_on_company_buyer_entity_id"
     t.index ["consumption_id"], name: "index_consumption_details_on_consumption_id"
     t.index ["user_attachment_id"], name: "index_consumption_details_on_user_attachment_id"
@@ -310,6 +330,13 @@ ActiveRecord::Schema.define(version: 20180823013016) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
+  end
+
+  create_table "rich_templates", force: :cascade do |t|
+    t.integer "type"
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "roles", id: :serial, force: :cascade do |t|
@@ -384,6 +411,30 @@ ActiveRecord::Schema.define(version: 20180823013016) do
     t.index ["user_id"], name: "index_user_extensions_on_user_id"
   end
 
+  create_table "user_updated_logs", force: :cascade do |t|
+    t.string "name"
+    t.string "email", default: "", null: false
+    t.string "company_name"
+    t.string "approval_status"
+    t.string "consumer_type"
+    t.string "company_address"
+    t.string "company_unique_entity_number"
+    t.string "company_license_number"
+    t.string "account_fin"
+    t.string "account_mobile_number"
+    t.string "account_office_number"
+    t.string "account_home_number"
+    t.string "account_housing_type"
+    t.string "account_home_address"
+    t.text "comment"
+    t.string "billing_address"
+    t.string "gst_no"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "users_id"
+    t.index ["users_id"], name: "index_user_updated_logs_on_users_id"
+  end
+
   create_table "users", id: :serial, force: :cascade do |t|
     t.string "name"
     t.string "email", default: "", null: false
@@ -421,7 +472,8 @@ ActiveRecord::Schema.define(version: 20180823013016) do
     t.bigint "entity_id"
     t.bigint "tenant_id"
     t.datetime "approval_date_time"
-    t.integer "tc_attachment_update_flag"
+    t.integer "is_deleted"
+    t.datetime "deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

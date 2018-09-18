@@ -21,7 +21,7 @@ export class CreateNewRA extends Component {
             left_name: this.props.left_name,
             btn_type: "", text: "", id: "0",
             edit_btn: "lm--button lm--button--primary show",
-            edit_change: "lm--button lm--button--primary hide", contractArray: [],
+            edit_change: "lm--button lm--button--primary hide", contractArray: [], contract_end_list: [],
             disabled: false, live_modal: "", live_modal_do: "", holdOrend: "", checkArray: [],
             contract_duration_6: false, contract_duration_12: false, contract_duration_24: false,
             required: false, check_required: true, single_multiple: "1", allow_deviation: "1",
@@ -87,7 +87,11 @@ export class CreateNewRA extends Component {
                 }
             }
             if (res.name == null) {
-                this.setState({ id: res.id })
+                this.setState({
+                    id: res.id,
+                    single_multiple: res.buyer_type,
+                    startDate: res.contract_period_start_date == null ? '' : moment(res.contract_period_start_date)
+                })
             } else {
                 this.setState({
                     id: res.id,
@@ -110,13 +114,9 @@ export class CreateNewRA extends Component {
                 //     res.live_auction_contracts.map((item) => {return item.contract_duration;})
                 //     :res.auction_contracts.map((item) => {return item.contract_duration;})
                 let arr = res.auction_contracts.map((item) => { return item.contract_duration; })
-                this.setState({ checkArray: arr.sort(this.sortNumber), contractArray: res.auction_contracts });
+                this.setState({ checkArray: arr.sort(this.sortNumber), contractArray: res.contract, contract_end_list: res.contract_end_list });
 
                 this.setState({ live_auction_contracts: res.live_auction_contracts });
-                console.log("this.state.live_auction_contracts");
-                console.log(this.state.live_auction_contracts);
-                console.log("res");
-                console.log(res)
                 res.auction_contracts.map((item) => {
                     let index = item.contract_duration;
                     switch (index) {
@@ -238,7 +238,6 @@ export class CreateNewRA extends Component {
         })
     }
     timeChange(data) {
-        console.log(data)
         this.setState({
             start_datetime: data
         })
@@ -461,7 +460,6 @@ export class CreateNewRA extends Component {
                 arr.push(type.target.value);
             }
             arr.sort(this.sortNumber);
-            console.log(arr);
             this.setState({ checkArray: arr });
             //this.doGetData("create");
         } else {
@@ -469,7 +467,6 @@ export class CreateNewRA extends Component {
                 return item != type.target.value
             })
             arr.sort(this.sortNumber);
-            console.log(arr);
             this.setState({ checkArray: arr });
         }
     }
@@ -630,10 +627,12 @@ export class CreateNewRA extends Component {
                 this.setState({
                     text: this.auction.name + " has been successfully updated. "
                 });
+                this.doGetData();
             } else {
                 this.setState({
                     text: this.auction.name + " has been successfully saved. "
                 });
+                this.doGetData('create');
             }
         }, error => {
             this.setState({
@@ -671,38 +670,50 @@ export class CreateNewRA extends Component {
             id: this.state.id,
             buyer_type: this.state.single_multiple
         }
-        if (obj.method === "save") {
-            if (obj.action === "proceed") {
-                deleteSelectedBuyer(param).then(res => {
-                    if (res.status === "1") {
-                        this.doSave();
-                    }
-                })
+        if (obj.action !== 'cancel'){
+            if (obj.method === "save") {
+                if (obj.action === "proceed") {
+                    deleteSelectedBuyer(param).then(res => {
+                        if (res.status === "1") {
+                            this.doSave();
+                        }
+                    })
+                }
+                else {
+                    this.setState({
+                        disabled: false,
+                        submit_btn: true
+                    })
+                }
             }
-            else {
 
-                this.setState({
-                    disabled: false,
-                    submit_btn: true
-                })
+            if (obj.method === "next") {
+                if (obj.action === "proceed") {
+                    deleteSelectedBuyer(param).then(res => {
 
+                        if (res.status === "1") {
+                            this.doSave();
+                            window.location.href = `/admin/auctions/${this.auction.id}/invitation`;
+                            //this.doNext();
+                        }
+                    })
+                }
+                else {
+                    this.setState({
+                        disabled: false,
+                        submit_btn: true
+                    })
+                }
             }
         }
-        if (obj.method === "next") {
-            if (obj.action === "proceed") {
-                deleteSelectedBuyer(param).then(res => {
-                    if (res.status === "1") {
-                        this.doNext();
-                    }
-                })
-            }
-            else {
-                this.setState({
-                    disabled: false,
-                    submit_btn: true
-                })
-            }
+        else {
+            this.setState({
+                disabled: false,
+                submit_btn: true
+            })
         }
+
+
     }
     render() {
         let left_name = "";
@@ -798,13 +809,13 @@ export class CreateNewRA extends Component {
                                         <label className={"checkbox_div"}><input className={"checkbox"} type="checkbox" required={this.state.check_required} ref="contract_duration_24" disabled={this.state.disabled ? true : (this.auction.buyer_notify ? true : false)} name="contract_duration" value={"24"} id={"contract_duration_24"} checked={this.state.contract_duration_24} onChange={this.contractChange.bind(this)} /> 24 Months</label>
                                     </div>
                                 </dd>
-                                {this.state.contractArray.length > 0 ?
+                                {this.state.contract_end_list.length > 0 ?
                                     (<div>
                                         <dd className="lm--formItem lm--formItem--inline string optional">
                                             <span className="lm--formItem-left lm--formItem-label string optional">Contract End Date :</span>
                                             <div className="lm--formItem-right lm--formItem-control">
-                                                {this.state.contractArray.map((item, index) => {
-                                                    return <label key={index} className={'lm--formItem-label lm--formItem-control'}>Buyers on {item.contract_duration} months [{item.contract_period_end_date}]</label>
+                                                {this.state.contract_end_list.map((item, index) => {
+                                                    return <label key={index} className={'lm--formItem-label lm--formItem-control'}>Buyers on {item.contract_duration} months [ {item.contract_period_end_date} ] count [ {item.count} ] <a href={item.link} className="lm--button lm--button--primary">Details</a></label>
                                                 })}
                                             </div>
                                         </dd>

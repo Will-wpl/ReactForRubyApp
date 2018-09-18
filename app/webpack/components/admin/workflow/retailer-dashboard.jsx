@@ -14,10 +14,10 @@ export class Adminretailerdashboard extends Component {
         this.holdStatus = false;
     }
     componentDidMount(){
-        
+
     }
     componentWillMount(){
-        
+
     }
     showDetail(id){
         if(this.props.onAddClick){
@@ -41,19 +41,20 @@ export class Adminretailerdashboard extends Component {
     render (){
         return (
             <div className="col-sm-12">
-                <h2 className="u-mt3 u-mb3">{this.props.title}</h2>
+                <h2 className="u-mt2 u-mb2">{this.props.title}</h2>
+                <h4 className="u-mt1 u-mb1">Total number of Retailers : {this.props.step_counts[0]}</h4>
                 <div className="col-sm-12 col-md-12 propose_deviations">
-                    {this.props.retailer_list.length > 0 ? 
+                    {this.props.retailer_list.length > 0 ?
                     <table className="retailer_fill w_100" cellPadding="0" cellSpacing="0">
                             <thead>
                             <tr>
-                                <th></th>
-                                <th>Confidentiality Undertaking</th>
-                                <th>Tender Documents</th>
-                                <th>Deviations (if any)</th>
+                                <th>Name</th>
+                                <th>Confidentiality Undertaking<br/>({this.props.step_counts[1]})</th>
+                                <th>Tender Documents<br/>({this.props.step_counts[2]})</th>
+                                <th>Deviations (if any)<br/>({this.props.step_counts[3]})</th>
                                 {/*<th>Submit Form of Tender</th>*/}
-                                <th>Contact Details</th>
-                                <th></th>
+                                <th>Contact Details<br/>({this.props.step_counts[5]})</th>
+                                <th>Finished<br/>({this.props.step_counts[6]})</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -73,8 +74,8 @@ export class Adminretailerdashboard extends Component {
 
                                                                 })
                                                                 return <td key={i}>{
-                                                                                flows[i] ? 
-                                                                                (item.detail.current.current_node === it ? 
+                                                                                flows[i] ?
+                                                                                (item.detail.current.current_node === it ?
                                                                                     (item.detail.current.current_status === '2' ? <abbr className="step_pending" onClick={item.detail.current.turn_to_role === 2?this.manage_contact.bind(this,item.arrangement_id,item.company_name,false):this.manage_contact.bind(this,item.arrangement_id,item.company_name,true)}></abbr> : // 2 retailer click submit in step4
                                                                                     (item.detail.current.current_status === '0' ? <abbr className="step_pending" onClick={item.detail.current.turn_to_role === 2?this.manage_contact.bind(this,item.arrangement_id,item.company_name,false):this.manage_contact.bind(this,item.arrangement_id,item.company_name,true)}></abbr> : // 0 in progress
                                                                                     (item.detail.current.current_status === '4' ? <abbr className="step_pending" onClick={item.detail.current.turn_to_role === 2?this.manage_contact.bind(this,item.arrangement_id,item.company_name,false):this.manage_contact.bind(this,item.arrangement_id,item.company_name,true)}></abbr> : //4 admin reject

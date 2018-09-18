@@ -5,40 +5,66 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
   let!(:company_buyer) { create(:user, :with_buyer, :with_company_buyer, approval_status: '1', company_unique_entity_number: 'Test UEN', company_name: 'test buyer', email: 'test_email4@email.com') }
   let!(:company_buyer1) { create(:user, :with_buyer, :with_company_buyer, email:'test_email1@email.com') }
 
-  context 'save retailer information' do
+  context 'save buyer information' do
     before { sign_in company_buyer }
 
     describe 'Validate user info' do
-      context 'test buyer entity company_name/emails duplicated' do
+      context 'test buyer entity company_name/company_uen duplicated' do
         def do_request
           buyer_entities_json = [{ company_name: 'AA',
                                    company_uen: 'Test UEN AA - 1',
-                                   contact_email: 'test_email1@email.com', is_default:1 },
+                                   contact_email: 'test_email_a1@email.com', is_default: 1 },
                                  { company_name: 'AA',
                                    company_uen: 'Test UEN AA - 2',
-                                   contact_email: 'test_email1@email.com' },
+                                   contact_email: 'test_email_a2@email.com' },
                                  { company_name: 'BB',
                                    company_uen: 'Test UEN BB - 1',
-                                   contact_email: 'test_email2@email.com' },
+                                   contact_email: 'test_email_b1@email.com' },
                                  { company_name: 'BB',
                                    company_uen: 'Test UEN BB - 2',
-                                   contact_email: 'test_email3@email.com' },
+                                   contact_email: 'test_email_b2@email.com' },
                                  { company_name: 'test buyer',
                                    company_uen: 'Test UEN',
-                                   contact_email: 'test_email4@email.com' }].to_json
-          put :validate, params: { id: company_buyer.id,
-                                   user: { id: company_buyer.id,
-                                           company_name: 'AA',
-                                           company_unique_entity_number: 'UEN',
-                                           email: 'test_email@email.com' },
-                                   buyer_entities: buyer_entities_json}
+                                   contact_email: 'test_email@email.com' }].to_json
+          put :validate_buyer_entity, params: { user: { id: company_buyer.id, company_name: 'AA', company_unique_entity_number: 'UEN',
+                                      email: 'test_email@email.com' },
+                              buyer_entities: buyer_entities_json, buyer_entity_index: 4 }
         end
         before { do_request }
         it 'success' do
           hash_body = JSON.parse(response.body)
           expect(hash_body).to have_content('validate_result')
           expect(hash_body).to have_content('error_fields')
-          expect(hash_body).to have_content('error_entity_indexes')
+          expect(hash_body['validate_result']).to eq(false)
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
+      context 'test buyer email is same with existing user email' do
+        def do_request
+          buyer_entities_json = [{ company_name: 'AA',
+                                   company_uen: 'Test UEN AA',
+                                   contact_email: 'test_email3@email.com' },
+                                 { company_name: 'BB',
+                                   company_uen: 'Test UEN BB',
+                                   contact_email: 'test_email3@email.com' },
+                                 { company_name: 'abc',
+                                   company_uen: 'Test UEN BB',
+                                   contact_email: 'test_email2@email.com' }].to_json
+
+          put :validate, params: { id: company_buyer.id,
+                                   user: {id: company_buyer.id,
+                                          company_name: 'abc',
+                                          company_unique_entity_number: 'UEN',
+                                          email: 'test_email1@email.com'},
+                                   buyer_entities: buyer_entities_json
+                                  }
+        end
+        before { do_request }
+        it 'success' do
+          hash_body = JSON.parse(response.body)
+          expect(hash_body).to have_content('validate_result')
+          expect(hash_body).to have_content('error_fields')
           expect(hash_body['validate_result']).to eq(false)
           expect(response).to have_http_status(:ok)
         end
@@ -67,36 +93,7 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
           hash_body = JSON.parse(response.body)
           expect(hash_body).to have_content('validate_result')
           expect(hash_body).to have_content('error_fields')
-          expect(hash_body).to have_content('error_entity_indexes')
           expect(hash_body['validate_result']).to eq(true)
-          expect(response).to have_http_status(:ok)
-        end
-      end
-
-      context 'test buyer email is same with existing user email' do
-        def do_request
-          put :validate, params: { id: company_buyer.id,
-                                   user: {id: company_buyer.id,
-                                          company_name: 'abc',
-                                          company_unique_entity_number: 'UEN',
-                                          email: 'test_email@email.com'},
-                                   buyer_entities: [{ company_name: 'AA',
-                                                      company_uen: 'Test UEN AA',
-                                                      contact_email: 'admin@email.com' },
-                                                    { company_name: 'BB',
-                                                      company_uen: 'Test UEN BB',
-                                                      contact_email: 'test_email1@email.com' }].to_json}
-        end
-        before { do_request }
-        it 'success' do
-          hash_body = JSON.parse(response.body)
-          expect(hash_body).to have_content('validate_result')
-          expect(hash_body).to have_content('error_fields')
-          expect(hash_body).to have_content('error_entity_indexes')
-          expect(hash_body['validate_result']).to eq(false)
-          error_entities = [{'entity_index'=>0, 'error_field_name'=>'contact_email'},
-                            {'entity_index'=>1, 'error_field_name'=>'contact_email'}]
-          expect(hash_body['error_entity_indexes']).to eq(error_entities)
           expect(response).to have_http_status(:ok)
         end
       end
@@ -120,7 +117,6 @@ RSpec.describe Api::Buyer::RegistrationsController, type: :controller do
           hash_body = JSON.parse(response.body)
           expect(hash_body).to have_content('validate_result')
           expect(hash_body).to have_content('error_fields')
-          expect(hash_body).to have_content('error_entity_indexes')
           expect(hash_body['validate_result']).to eq(true)
           expect(response).to have_http_status(:ok)
         end

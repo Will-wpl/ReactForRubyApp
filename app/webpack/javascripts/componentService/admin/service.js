@@ -43,12 +43,12 @@ export const createRa = (params) => {
     return put('/api/admin/auctions/' + params.auction.id, params);
 }
 
-export const checkBuyerType=(params)=>{
-    return put('/api/admin/auctions/' + params.id + '/check_buyer_type',params)
+export const checkBuyerType = (params) => {
+    return put('/api/admin/auctions/' + params.id + '/check_buyer_type', params)
 }
 
-export const deleteSelectedBuyer=(params)=>{
-    return put('/api/admin/auctions/' + params.id + '/delete_selected_buyer',params)
+export const deleteSelectedBuyer = (params) => {
+    return put('/api/admin/auctions/' + params.id + '/delete_selected_buyer', params)
 }
 
 export const deleteAuction = (params) => {
@@ -170,11 +170,21 @@ export const deleteContractAttachmentById = (param) => {
 export const getEmailList = () => {
     return get('/api/admin/email_templates/');
 }
-export const getEmailListItem = (id) => {
-    return get('/api/admin/email_templates/' + id);
+export const getEmailListItem = (id, type) => {
+    if (type == "la" || type == "advisory") {
+        return get(`/api/admin/templates/` + id, {}, 'html');
+    } else {
+        return get(`/api/admin/${type}_templates/` + id, {});
+    }
+
 }
-export const getEmailItemUpdate = (param) => {
-    return put('/api/admin/email_templates/' + param.id, { subject: param.subject, body: param.body });
+export const getEmailItemUpdate = (param, type, id) => {
+    if (type == "la" || type == "advisory") {
+        return put(`/api/admin/templates/` + id, { body: param });
+    } else {
+        return put(`/api/admin/${type}_templates/` + id, { subject: param.subject, body: param.body });
+    }
+
 }
 export const getEmailFile = (type) => {
     return get('/api/admin/user_attachments?file_type=' + type);
@@ -184,6 +194,37 @@ export const approveBuyerUser = (params) => {
     return put('/api/admin/users/approval_buyer', params)
 }
 
+export const approveBuyerEntity = (params) => {
+    return put('/api/admin/users/approval_buyer_entities', params)
+}
+
 export const approveRetailerUser = (params) => {
     return put('/api/admin/users/approval_retailer', params)
 }
+
+export const removeBuyer = (params) => {
+    console.log(params);
+    return put('/api/admin/users/remove_buyer', params)
+}
+
+export const removeRetailer = (params) => {
+    return put('/api/admin/users/remove_retailer', params)
+}
+
+export const getExpiryList = (params) => {
+    if (params.sort) {
+        return get('/api/admin/auctions/filter_date?date=' + params.time + "&sort_by=" + JSON.stringify(params.sort));
+    } else {
+        return get('/api/admin/auctions/filter_date?date=' + params.time);
+    }
+
+}
+
+export const goCreateNewRa = (params) => {
+    return create('/api/admin/auctions', params);
+}
+
+export const validate_delete_reject_user = (params) => {
+    return put('/api/admin/users/validate_for_delete', params);
+}
+

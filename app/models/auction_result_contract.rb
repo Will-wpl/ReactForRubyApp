@@ -14,6 +14,9 @@ class AuctionResultContract < ApplicationRecord
   # Validations
 
   # Scopes
+  scope :find_by_user, ->(user_id) { where('user_id =?', user_id) }
+  scope :find_by_auction_id, ->(auction_id) { where('auction_id =?', auction_id) }
+  scope :find_by_auction_id_duration, ->(auction_id, duration) { where('auction_id =? and contract_duration = ?', auction_id, duration) }
 
   # Callbacks
 

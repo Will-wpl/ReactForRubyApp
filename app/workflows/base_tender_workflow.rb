@@ -72,6 +72,12 @@ class BaseTenderWorkflow < Workflow
     count != 0
   end
 
+  def node3_retailer_has_submit?(sm)
+    arrangement_id = sm.arrangement_id
+    count = TenderStateMachine.find_by_arrangement_id(arrangement_id).where(current_node: 3, current_status: 2, turn_to_role: 1, current_role: 2).count
+    count != 0
+  end
+
   def node3_admin?(sm)
     sm.current_node == 3 && sm.current_role = 1
   end

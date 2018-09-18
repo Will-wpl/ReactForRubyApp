@@ -30,12 +30,18 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :admin do
-      resources :users, only: %i[show retailers buyers approval_retailer approval_buyer] do
+      resources :users, only: %i[show retailers retailers_deleted buyers buyers_deleted approval_buyer_entities approval_buyer approval_retailer validate_for_delete remove_retailer remove_buyer] do
         collection do
           get 'retailers'
+          get 'retailers_deleted'
           get 'buyers'
-          put 'approval_retailer'
+          get 'buyers_deleted'
+          put 'approval_buyer_entities'
           put 'approval_buyer'
+          put 'approval_retailer'
+          put 'validate_for_delete'
+          put 'remove_retailer'
+          put 'remove_buyer'
         end
       end
       resources :auctions, only: %i[obtain link create update delete publish hold confirm destroy unpublished published retailers buyers selects send_mails check_buyer_type delete_selected_buyer] do
@@ -59,6 +65,7 @@ Rails.application.routes.draw do
           get 'unpublished'
           get 'published'
           get 'letter_of_award_pdf'
+          get 'filter_date'
         end
       end
       resource :auction_histories, only: %i[list last] do
@@ -112,7 +119,7 @@ Rails.application.routes.draw do
       end
       resources :user_extensions, only: %i[index]
       resources :email_templates, only: %i[index show update]
-      resources :la_templates, only: %i[show update]
+      resources :templates, only: %i[show update]
       resources :registrations, only: %i[index retailer_info buyer_info] do
         member do
           get 'retailer_info'
@@ -124,6 +131,12 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :retailer do
+      resources :users, only: %i[show_current_user update_attachment_status] do
+        collection do
+          get 'show_current_user'
+          put 'update_attachment_status'
+        end
+      end
       resources :auctions, only: %i[obtain published] do
         collection do
           get 'obtain'
@@ -161,6 +174,7 @@ Rails.application.routes.draw do
           get 'node5_retailer'
           post 'node3_retailer_withdraw'
           post 'node3_retailer_save'
+          post 'node3_retailer_back'
         end
         collection do
           get 'history'
@@ -185,23 +199,26 @@ Rails.application.routes.draw do
           put 'validate'
         end
       end
-      resources :user_attachments, only: %i[create destroy updated_attachment reset_updated_attachment] do
-        collection do
-          put 'updated_attachment'
-          put 'reset_updated_attachment'
-        end
+      resources :user_attachments, only: %i[create destroy] do
       end
     end
   end
 
   namespace :api do
     namespace :buyer do
-      resources :consumption_details, only: %i[index update participate reject validate] do
+      resources :users, only: %i[show_current_user update_attachment_status] do
+        collection do
+          get 'show_current_user'
+          put 'update_attachment_status'
+        end
+      end
+      resources :consumption_details, only: %i[index update participate reject validate validate_single] do
         collection do
           post 'participate'
           post 'reject'
           post 'save'
           post 'validate'
+          put 'validate_single'
         end
       end
       resources :auctions, only: %i[obtain published] do
@@ -217,17 +234,18 @@ Rails.application.routes.draw do
       resources :auction_results, only: %i[index] do
 
       end
-      resources :registrations, only: %i[index update sign_up validate] do
+      resources :registrations, only: %i[index update sign_up validate_buyer_entity validate] do
         member do
           put 'sign_up'
           put 'validate'
         end
+        collection do
+          put 'validate_buyer_entity'
+        end
       end
-      resources :user_attachments, only: %i[create destroy patch_update_consumption_detail_id updated_attachment reset_updated_attachment] do
+      resources :user_attachments, only: %i[create destroy patch_update_consumption_detail_id] do
         collection do
           put 'patch_update_consumption_detail_id'
-          put 'updated_attachment'
-          put 'reset_updated_attachment'
         end
       end
     end
@@ -256,6 +274,8 @@ Rails.application.routes.draw do
       collection do
         get 'retailers'
         get 'buyers'
+        get 'del_retailers'
+        get 'del_buyers'
         patch 'approval'
       end
     end
@@ -266,7 +286,7 @@ Rails.application.routes.draw do
     resources :arrangements, only: []
     resources :user_extensions, only: %i[index]
     resources :auction_extend_times, only: []
-    resources :auctions, only: %i[new empty goto upcoming online dashboard confirm result report log invitation select comsumption unpublished published buyer_dashboard retailer_dashboard tender] do
+    resources :auctions, only: %i[new empty goto upcoming online dashboard confirm result report log invitation select comsumption unpublished published buyer_dashboard retailer_dashboard tender contract_expiry] do
       member do
         get 'upcoming' # published and pre-auction page
         get 'online' # published and pre-auction page to retailer online status page
@@ -289,6 +309,7 @@ Rails.application.routes.draw do
         get 'goto'
         get 'unpublished'
         get 'published'
+        get 'contract_expiry'
       end
     end
     resources :contract, only: %i[index]

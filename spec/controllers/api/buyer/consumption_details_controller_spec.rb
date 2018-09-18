@@ -5,12 +5,15 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
   context 'OLD' do
     let!(:admin_user){ create(:user, :with_admin) }
     let!(:auction) { create(:auction, :for_next_month, :upcoming, :published, :started, contract_period_start_date: '2018-07-01') }
+    let!(:auction_contract) { create(:auction_contract,auction:auction, contract_duration: 6, contract_period_end_date: '2019-01-01') }
     let!(:company_buyer) { create(:user, :with_buyer, :with_company_buyer) }
-    let!(:consumption) { create(:consumption, user: company_buyer, auction: auction, participation_status: '1') }
-    let!(:consumption_lt) { create(:consumption_detail, :for_lt, consumption_id: consumption.id) }
-    let!(:consumption_hts) { create(:consumption_detail, :for_hts, consumption_id: consumption.id) }
-    let!(:consumption_htl) { create(:consumption_detail, :for_htl, consumption_id: consumption.id) }
-    let!(:consumption_eht) { create(:consumption_detail, :for_eht, consumption_id: consumption.id ) }
+    let!(:company_buyer_entity) { create(:company_buyer_entity, user:company_buyer) }
+    # let!(:company_buyer) { create(:user, :with_buyer, :with_company_buyer, approval_status: '1', company_unique_entity_number: 'Test UEN', company_name: 'test buyer', email: 'test_email4@email.com') }
+    let!(:consumption) { create(:consumption, user: company_buyer, auction: auction, participation_status: '1', contract_duration:6) }
+    let!(:consumption_lt) { create(:consumption_detail, :for_lt, consumption_id: consumption.id, company_buyer_entity_id: company_buyer_entity.id, account_number: '000001') }
+    let!(:consumption_hts) { create(:consumption_detail, :for_hts, consumption_id: consumption.id, company_buyer_entity_id: company_buyer_entity.id, unit_number: 'UN 1', postal_code: '4001') }
+    let!(:consumption_htl) { create(:consumption_detail, :for_htl, consumption_id: consumption.id, company_buyer_entity_id: company_buyer_entity.id) }
+    let!(:consumption_eht) { create(:consumption_detail, :for_eht, consumption_id: consumption.id, company_buyer_entity_id: company_buyer_entity.id) }
     let!(:tc1) { create(:user_attachment, file_name: 'test', file_path: 'test')}
     let!(:tc2) { create(:user_attachment, file_name: 'test', file_path: 'test')}
     let!(:tc3) { create(:user_attachment, file_name: 'test', file_path: 'test')}
@@ -26,9 +29,8 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
         before { do_request }
         it 'Success' do
           hash = JSON.parse(response.body)
-          expect(hash.size).to eq(7)
+          expect(hash.size).to eq(10)
           expect(hash['consumption_details'].size).to eq(4)
-          expect(hash['consumption_details'][0]['intake_level']).to eq('EHT')
           expect(response).to have_http_status(:ok)
         end
       end
@@ -54,7 +56,13 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
           details = []
           details.push({id: 0, account_number: '000001', intake_level: 'LT' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '2018-08-01',attachment_ids:entity_1_attachment_ids.to_json})
           details.push({id: 0, account_number: '000002', intake_level: 'HTS' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '01-08-2018',attachment_ids:entity_2_attachment_ids.to_json})
-          put :save, params: { consumption_id: consumption.id , details: details.to_json}
+          details_yesterday = []
+          details_yesterday.push({id: 0, account_number: '000002', intake_level: 'HTS' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '01-08-2018',attachment_ids:entity_2_attachment_ids.to_json})
+          details_yesterday.push({id: 0, account_number: '000002', intake_level: 'HTS' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '01-08-2018',attachment_ids:entity_2_attachment_ids.to_json})
+          put :save, params: { consumption_id: consumption.id ,
+                               details: details.to_json,
+                               details_yesterday: [].to_json,
+                               details_before_yesterday: [].to_json}
         end
 
         before { do_request }
@@ -89,7 +97,10 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
           details = []
           details.push({id: 0, account_number: '000001', intake_level: 'LT' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '2018-08-01',attachment_ids:entity_1_attachment_ids.to_json})
           details.push({id: 0, account_number: '000002', intake_level: 'HTS' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '01-08-2018',attachment_ids:entity_2_attachment_ids.to_json})
-          put :participate, params: { consumption_id: consumption.id, details: details.to_json}
+          put :participate, params: { consumption_id: consumption.id,
+                                      details: details.to_json,
+                                      details_yesterday: [].to_json,
+                                      details_before_yesterday: [].to_json}
         end
 
         before { do_request }
@@ -130,6 +141,54 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
     describe 'Validate consumption detail' do
       before { sign_in company_buyer }
 
+      context '(Validate-Single)Account number do not unique' do
+        def do_request
+          detail = {id: 0, account_number: '000001', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 1', postal_code: '4001'}
+          post :validate_single, params: { consumption_id: consumption.id, detail: detail }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash_body = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+          expect(hash_body).to have_content('validate_result')
+          expect(hash_body).to have_content('error_details')
+          expect(hash_body['validate_result']).to eq(false)
+        end
+      end
+
+      context '(Validate-Single) Premise Address do not unique' do
+        def do_request
+          detail = {id: 0, account_number: '000002', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 1', postal_code: '4001'}
+          put :validate_single, params: { consumption_id: consumption.id, detail: detail }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash_body = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+          expect(hash_body).to have_content('validate_result')
+          expect(hash_body).to have_content('error_details')
+          expect(hash_body['validate_result']).to eq(false)
+        end
+      end
+
+      context '(Validate-Single) Success' do
+        def do_request
+          detail = {id: 0, account_number: '000002', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 2', postal_code: '4001'}
+          put :validate_single, params: { consumption_id: consumption.id, detail: detail }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash_body = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+          expect(hash_body).to have_content('validate_result')
+          expect(hash_body).to have_content('error_details')
+          expect(hash_body['validate_result']).to eq(true)
+        end
+      end
+
       context 'Account number do not unique' do
         def do_request
           details = []
@@ -147,7 +206,6 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
           expect(hash_body).to have_content('error_detail_indexes')
           expect(hash_body).to have_content('error_messages')
           expect(hash_body['validate_result']).to eq(false)
-          expect(hash_body['error_detail_indexes']).to eq([0, 1])
         end
       end
 
@@ -168,7 +226,6 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
           expect(hash_body).to have_content('error_detail_indexes')
           expect(hash_body).to have_content('error_messages')
           expect(hash_body['validate_result']).to eq(false)
-          expect(hash_body['error_detail_indexes']).to eq([1, 2])
         end
       end
 
@@ -190,13 +247,12 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
           expect(hash_body).to have_content('error_detail_indexes')
           expect(hash_body).to have_content('error_messages')
           expect(hash_body['validate_result']).to eq(false)
-          expect(hash_body['error_detail_indexes']).to eq([1])
         end
       end
       context 'success' do
         def do_request
           details = []
-          details.push({id: 0, account_number: '000001', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 1', postal_code: '4001'})
+          details.push({id: 0, account_number: '000000', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 1', postal_code: '4001'})
           details.push({id: 0, account_number: '000002', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 2', postal_code: '4002'})
           details.push({id: 0, account_number: '000003', intake_level: 'HTS' , peak: 100, off_peak: 100, unit_number: 'UN 3', postal_code: '4003'})
           put :validate, params: { consumption_id: consumption.id , details: details.to_json}
@@ -247,7 +303,10 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
           details = []
           details.push({id: 0, account_number: '000001', intake_level: 'LT' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '2018-08-01',attachment_ids:entity_1_attachment_ids.to_json})
           details.push({id: 0, account_number: '000002', intake_level: 'HTS' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '01-08-2018',attachment_ids:entity_2_attachment_ids.to_json})
-          put :participate, params: { consumption_id: consumption.id, details: details.to_json}
+          put :participate, params: { consumption_id: consumption.id,
+                                      details: details.to_json,
+                                      details_yesterday: [].to_json,
+                                      details_before_yesterday: [].to_json }
         end
 
         before { do_request }

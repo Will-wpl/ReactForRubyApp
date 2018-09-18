@@ -40,6 +40,8 @@ class Consumption < ApplicationRecord
   scope :find_by_user_consumer_type, ->(consumer_type) { includes(:user).where(users: { consumer_type: consumer_type }) }
   scope :is_participation, -> { where(participation_status: ParticipationStatusParticipate) }
   scope :is_accpet, -> { where( accept_status: Consumption::AcceptStatusApproved)}
+  scope :find_by_user, ->(user_id) { where('user_id =?', user_id) }
+
   scope :find_by_auction_and_user, ->(auction_id, user_id) { where('auction_id = ? and user_id =?', auction_id, user_id) }
   scope :is_not_notify, -> { where(action_status: ActionStatusPending) } # "action_status = '2'"
   scope :admin_find_by_id, ->(id) { where(id: id).take }

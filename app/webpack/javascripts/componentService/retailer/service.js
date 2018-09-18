@@ -44,6 +44,10 @@ export const retailerDeviationsSave = (arrangement,data) => {
     return create('/api/retailer/tenders/'+arrangement+'/node3_retailer_save',{chats:data});
 }
 
+export const retailer_back = (arrangement) => {
+    return create('/api/retailer/tenders/'+arrangement+'/node3_retailer_back');
+}
+
 export const retailerWithdraw = (arrangement,data) => {
     //console.log(data);
     return create('/api/retailer/tenders/'+arrangement+'/node3_retailer_withdraw',{chat:data});
@@ -113,4 +117,10 @@ export const validateIsExist=(params)=>{
 }
 export const getRetailerUserInfoByUserId=(id)=>{
     return get(`/api/admin/registrations/${id}/retailer_info?user_id=${id}`);
+}
+export const getNeedRetailerApproveAttachments=()=>{
+    return get('/api/retailer/users/show_current_user');
+}
+export const saveRetailerAttachmentModification=()=>{
+    return put('/api/retailer/users/update_attachment_status');
 }

@@ -50,13 +50,13 @@ export class AdminDashboard extends Component {
                 });
                 this.refresh();
                 this.userLen = users.length;
-                this.priceUsers.setList(JSON.parse(JSON.stringify(users)));
-                this.rankingUsers.setList(JSON.parse(JSON.stringify(users)));
+                this.priceUsers.setList(JSON.parse(JSON.stringify(users)),'price');
+                this.rankingUsers.setList(JSON.parse(JSON.stringify(users)),'ranking');
                 this.priceUsers.selectAll();
                 this.rankingUsers.selectAll();
             }, error => {
             });
-            
+
         })
         // setTimeout(()=>{
         //     this.refresh();

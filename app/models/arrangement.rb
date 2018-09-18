@@ -14,6 +14,8 @@ class Arrangement < ApplicationRecord
   AcceptStatusAccept = '1'.freeze
   AcceptStatusPending = '2'.freeze
 
+  ActionStatusSent = '1'.freeze
+  ActionStatusPending = '2'.freeze
   # Extends
 
   # Includes
@@ -37,6 +39,7 @@ class Arrangement < ApplicationRecord
   scope :find_published_result_auction, ->{ includes(auction: :auction_result).where(auctions: { publish_status: '1' }, auction_results: { status: nil }) }
   scope :find_notify_retailer,  ->(user_id) { where("arrangements.user_id = ? and action_status = '1'", user_id) }
   scope :admin_find_by_id, ->(id) { where(id: id).take }
+  scope :find_by_user, ->(user_id) { where('user_id =?', user_id) }
   # Callbacks
 
   # Delegates

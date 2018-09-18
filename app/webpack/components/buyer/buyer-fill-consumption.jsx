@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import { Modal } from '../shared/show-modal';
 import { DoFillConsumption } from './fill-consumption'
-
+import marketImg from '../../images/marketinsights.png'
 import { getBuyerParticipate, setBuyerParticipate } from '../../javascripts/componentService/common/service';
 import moment from 'moment';
 
@@ -13,7 +13,11 @@ export class FillConsumption extends Component {
         this.state = {
             text: "",
             submit_type: "",
+            delete_type: "",
             site_list: [],
+            preDayList: [],
+            preOtherList: [],
+            totalList: [],
             purchasing_entity: [],
             disabled: '',
             checked: false,
@@ -29,8 +33,11 @@ export class FillConsumption extends Component {
             account_list: [],
             contract_capacity_disabled: true,
             contract_expiry_disabled: true,
-            dateIssuecount: 0
+            dateIssuecount: 0,
+            consumption_id: 0,
+            advisory: ""
         }
+
         this.accountItem = {
             account_number: '',
             existing_plan: ['SPS tariff', 'SPS wholesale', 'Retailer plan'],
@@ -55,11 +62,19 @@ export class FillConsumption extends Component {
             attachId: "",
             attachment_ids: '',
             id: 0,
+            consumption_id: 0,
+            orignal_id: 0,
             cid: Math.floor((Math.random() * 10000) + 1),
-            option: 'insert'
+            option: 'insert',
+            cate_type: ""
         };
         this.purchaseList = [];
-        this.consumptions_id = (window.location.href.split("consumptions/")[1]).split("/edit")[0];
+    }
+
+    componentWillMount() {
+        this.setState({
+            consumption_id: (window.location.href.split("consumptions/")[1]).split("/edit")[0]
+        })
     }
 
     componentDidMount() {
@@ -67,24 +82,28 @@ export class FillConsumption extends Component {
     }
 
     BuyerParticipateList() {
-        getBuyerParticipate('/api/buyer/consumption_details?consumption_id=' + this.consumptions_id).then((res) => {
+        getBuyerParticipate('/api/buyer/consumption_details?consumption_id=' + this.state.consumption_id).then((res) => {
             this.site_list = res.consumption_details;
             this.status = res.consumption.participation_status === '1' ? "Confirmed" :
                 (res.consumption.participation_status === '2' ? "Pending" : "Rejected")
+
             this.setState({
                 name: res.auction.name,
                 time: res.auction.actual_begin_time,
                 contact_start_date: res.auction.contract_period_start_date,
                 contract_duration: res.consumption.contract_duration ? res.consumption.contract_duration : "",
                 buyer_link: res.buyer_revv_tc_attachment ? res.buyer_revv_tc_attachment.file_path : "",
-                seller_link: res.seller_buyer_tc_attachment ? res.seller_buyer_tc_attachment.file_path : ""
+                seller_link: res.seller_buyer_tc_attachment ? res.seller_buyer_tc_attachment.file_path : "",
+                advisory: res.advisory.content
             })
             if (res.consumption.participation_status === '1' || res.auction.publish_status === "1") {
                 $("input[type='checkbox']").attr("checked", true);
+
                 this.setState({
                     disabled: 'disabled',
                     checked: true,
                 })
+
             }
             if (res.contract_duration) {
                 this.setState({
@@ -95,8 +114,34 @@ export class FillConsumption extends Component {
                 this.purchaseList = res.buyer_entities;
             }
             if (res.consumption_details.length > 0) {
-                this.setState({ site_list: res.consumption_details });
+                let list = res.consumption_details;
+                list.map(item => {
+                    item.entityName = this.getPurchase(item.company_buyer_entity_id);
+                })
+                this.setState({ site_list: list });
             }
+            if (res.consumption_details_last_day.length > 0) {
+
+                let list = res.consumption_details_last_day;
+                list.map(item => {
+                    item.entityName = this.getPurchase(item.company_buyer_entity_id);
+                })
+                this.setState({ preDayList: list })
+            }
+            if (res.consumption_details_before_yesterday.length > 0) {
+                let list = res.consumption_details_before_yesterday;
+                list.map(item => {
+                    item.entityName = this.getPurchase(item.company_buyer_entity_id);
+                })
+                this.setState({ preOtherList: list })
+            }
+            this.setState({
+                totalList: []
+            })
+            let total = this.state.totalList.concat(res.consumption_details).concat(res.consumption_details_last_day).concat(res.consumption_details_before_yesterday);
+            this.setState({
+                totalList: total
+            })
 
             if (this.state.checked) {
                 $(".btnOption").css("pointer-events", "none").css("color", "#4B4941");
@@ -107,11 +152,7 @@ export class FillConsumption extends Component {
             this.setState({ text: "Interface failed" });
         })
     }
-    changeSiteList(val, index) {
-        let list = this.state.site_list;
-        this.site_list[index].intake_level_selected = val;
-        this.setState({ site_list: list })
-    }
+    // edit and add account
 
     add_site() {
         if (this.props.onAddClick) {
@@ -125,6 +166,8 @@ export class FillConsumption extends Component {
             }
         })
         this.accountItem.id = "";
+        this.accountItem.orignal_id = "";
+        this.accountItem.consumption_id = this.state.consumption_id;
         this.accountItem.account_number = "";
         this.accountItem.existing_plan = ['SPS tariff', 'SPS wholesale', 'Retailer plan'];
         this.accountItem.existing_plan_selected = "SPS tariff";
@@ -145,6 +188,7 @@ export class FillConsumption extends Component {
         this.accountItem.file_path = "";
         this.accountItem.file_name = "";
         this.accountItem.attachment_ids = "";
+        this.accountItem.cate_type = "current";
         this.setState({
             account_detail: this.accountItem,
             text: " "
@@ -154,13 +198,16 @@ export class FillConsumption extends Component {
     }
 
     // edit an account information
-    edit_site(item, index) {
+    edit_site(item, index, type) {
+
         this.setState({ account_detail: {} });
         this.accountItem = {};
-        this.accountItem.id = item.id;
+        this.accountItem.id = item.id !== null ? item.id : "";//consumption detial  id
+        this.accountItem.orignal_id = item.orignal_id !== null ? item.orignal_id : "";
+        this.accountItem.consumption_id = this.state.consumption_id; //consumptions id
         this.accountItem.account_number = item.account_number;
         this.accountItem.existing_plan = ['SPS tariff', 'SPS wholesale', 'Retailer plan'];
-        this.accountItem.existing_plan_selected = item.existing_plan;
+        this.accountItem.existing_plan_selected = item.existing_plan !== null ? item.existing_plan : "";
         this.accountItem.contract_expiry = item.contract_expiry ? moment(item.contract_expiry) : "";
         this.accountItem.purchasing_entity = this.purchaseList;
         this.accountItem.purchasing_entity_selectd = item.company_buyer_entity_id;
@@ -176,6 +223,15 @@ export class FillConsumption extends Component {
         this.accountItem.peak = 10;
         this.accountItem.attachment_ids = item.user_attachment;
         this.accountItem.option = 'update';
+        if (type === "current") {
+            this.accountItem.cate_type = "current";
+        }
+        else if (type === "preDay") {
+            this.accountItem.cate_type = "preDay";
+        }
+        else {
+            this.accountItem.cate_type = "preOthers";
+        }
         this.setState({
             text: " ",
             account_detail: this.accountItem
@@ -183,14 +239,23 @@ export class FillConsumption extends Component {
         $("#account_number").focus();
         this.refs.consumption.showModal('custom', {}, '', index)
     }
+    changeSiteList(val, index) {
+        let list = this.state.site_list;
+        this.site_list[index].intake_level_selected = val;
+        this.setState({ site_list: list })
+    }
+
     //when user finished adding a new account, list page will add/update the new account information.
     doAddAccountAction(siteInfo) {
         let item = {
-            id: siteInfo.consumptionid ? siteInfo.consumptionid : "",
+            id: siteInfo.id ? siteInfo.id : "",
+            orignal_id: siteInfo.orignal_id ? siteInfo.orignal_id : "",
+            consumption_id: siteInfo.consumption_id,
             account_number: siteInfo.account_number,
             existing_plan: siteInfo.existing_plan_selected,
             contract_expiry: siteInfo.contract_expiry ? moment(siteInfo.contract_expiry) : "",
             company_buyer_entity_id: siteInfo.purchasing_entity_selectd,
+            entityName: this.getPurchase(siteInfo.purchasing_entity_selectd),
             intake_level: siteInfo.intake_level_selected,
             contracted_capacity: siteInfo.contracted_capacity,
             blk_or_unit: siteInfo.blk_or_unit,
@@ -200,44 +265,67 @@ export class FillConsumption extends Component {
             totals: siteInfo.totals,
             peak_pct: siteInfo.peak_pct,
             attachment_ids: siteInfo.attachment_ids,
-            user_attachment: siteInfo.user_attachment
+            user_attachment: siteInfo.user_attachment,
         };
 
-        let entity = this.state.site_list;
-        if (siteInfo.index >= 0) { entity[siteInfo.index] = item; }
-        else { entity.push(item) }
+        if (siteInfo.cate_type === "current") {
+            let entity = this.state.site_list;
+            if (siteInfo.index >= 0) {
+                entity[siteInfo.index] = item;
+            }
+            else {
+                entity.push(item)
+            }
+            this.setState({
+                site_list: entity
+            })
+        }
+        else if (siteInfo.cate_type === "preDay") {
+            let entity = this.state.preDayList;
+            if (siteInfo.index >= 0) {
+                entity[siteInfo.index] = item;
+            }
+            else {
+                entity.push(item)
+            }
+            this.setState({
+                preDayList: entity
+            })
+        }
+        else {
+            let entity = this.state.preOtherList;
+            if (siteInfo.index >= 0) {
+                entity[siteInfo.index] = item;
+            }
+            else {
+                entity.push(item)
+            }
+            this.setState({
+                preOtherList: entity
+            })
+        }
         this.setState({
-            site_list: entity
+            totalList: []
+        })
+        let total = this.state.totalList.concat(this.state.site_list).concat(this.state.preDayList).concat(this.state.preOtherList);
+        this.setState({
+            totalList: total
         })
     }
 
-    remove_site(index) {
+    remove_site(index, type) {
         if (this.props.onAddClick) {
             this.props.onAddClick();
-        }
+        }           //{ action: 'reject', type: 'user' }
+
         this.deleteNum = index;
         this.refs.Modal.showModal("comfirm");
-        this.setState({ text: "Are you sure you want to delete ?", submit_type: "delete" });
-    }
-
-    dateCompare(arr) {
-        let count = 0;
-        let startDate = moment(this.state.contact_start_date).format('YYYY-MM-DD');
-        for (let i in arr) {
-            if (arr[i].contract_expiry) {
-                let contract_expiry_date = moment(arr[i].contract_expiry).format('YYYY-MM-DD');
-                if (contract_expiry_date >= startDate) {
-                    count++;
-                }
-            }
-        }
-        return count;
+        this.setState({ text: "Are you sure you want to delete ?", submit_type: "delete", delete_type: type });
     }
 
     doSave(type) {
         let makeData = {},
-            buyerlist = [];
-
+            buyerlist = [], yesterday = [], beforeYesterda = [];
         this.state.site_list.map((item, index) => {
             let siteItem = {
                 account_number: item.account_number,
@@ -258,9 +346,53 @@ export class FillConsumption extends Component {
             }
             buyerlist.push(siteItem);
         })
+        this.state.preDayList.map((item, index) => {
+            let siteItem = {
+                account_number: item.account_number,
+                existing_plan: item.existing_plan,
+                contract_expiry: item.contract_expiry ? moment(item.contract_expiry).format() : "",
+                company_buyer_entity_id: item.company_buyer_entity_id,
+                intake_level: item.intake_level,
+                contracted_capacity: item.contracted_capacity,
+                blk_or_unit: item.blk_or_unit,
+                street: item.street,
+                unit_number: item.unit_number,
+                postal_code: item.postal_code,
+                totals: item.totals,
+                peak_pct: item.peak_pct,
+                user_attachment_id: item.user_attachment_id,
+                attachment_ids: item.attachment_ids,
+                user_attachment: item.user_attachment
+            }
+            yesterday.push(siteItem);
+        })
+        this.state.preOtherList.map((item, index) => {
+            let siteItem = {
+                account_number: item.account_number,
+                existing_plan: item.existing_plan,
+                contract_expiry: item.contract_expiry ? moment(item.contract_expiry).format() : "",
+                company_buyer_entity_id: item.company_buyer_entity_id,
+                intake_level: item.intake_level,
+                contracted_capacity: item.contracted_capacity,
+                blk_or_unit: item.blk_or_unit,
+                street: item.street,
+                unit_number: item.unit_number,
+                postal_code: item.postal_code,
+                totals: item.totals,
+                peak_pct: item.peak_pct,
+                user_attachment_id: item.user_attachment_id,
+                attachment_ids: item.attachment_ids,
+                user_attachment: item.user_attachment
+            }
+            beforeYesterda.push(siteItem);
+        })
+
+
         makeData = {
-            consumption_id: this.consumptions_id,
+            consumption_id: this.state.consumption_id,
             details: JSON.stringify(buyerlist),
+            details_yesterday: JSON.stringify(yesterday),
+            details_before_yesterday: JSON.stringify(beforeYesterda),
             contract_duration: $("#selDuration").val()
         }
         setBuyerParticipate(makeData, '/api/buyer/consumption_details/save').then((res) => {
@@ -269,6 +401,10 @@ export class FillConsumption extends Component {
                     this.setState({ text: "Delete successful!" });
                 } else {
                     this.setState({ text: "Save successful!" });
+                    setTimeout(()=>{
+                        window.location.href="/buyer/consumptions/"+this.state.consumption_id+"/edit";
+                    },2000)
+
                 }
                 this.refs.Modal.showModal();
             } else {
@@ -295,7 +431,7 @@ export class FillConsumption extends Component {
 
     doAccept() {
         if (this.state.submit_type === "Reject") { //do Reject
-            setBuyerParticipate({ consumption_id: this.consumptions_id }, '/api/buyer/consumption_details/reject').then((res) => {
+            setBuyerParticipate({ consumption_id: this.state.consumption_id }, '/api/buyer/consumption_details/reject').then((res) => {
                 this.refs.Modal.showModal();
                 this.setState({ text: "Thank you for the confirmation. You have rejected this auction." });
                 setTimeout(() => {
@@ -308,12 +444,29 @@ export class FillConsumption extends Component {
         } else if (this.state.submit_type === "Participate") { //do Participate
             this.doSave('participate');
         } else if (this.state.submit_type === "delete") {
-            const site_listObj = this.state.site_list;
-            site_listObj.splice(this.deleteNum, 1);
-            this.setState({ site_list: site_listObj });
-            setTimeout(() => {
-                this.doSave('delete');
-            }, 500);
+            if (this.state.delete_type === "preDay") {
+                const site_listObj = this.state.preDayList;
+                site_listObj.splice(this.deleteNum, 1);
+                this.setState({ preDayList: site_listObj });
+            }
+            else if (this.state.delete_type === "preOthers") {
+                const site_listObj = this.state.preOtherList;
+                site_listObj.splice(this.deleteNum, 1);
+                this.setState({ preOtherList: site_listObj });
+            }
+            else {
+                const site_listObj = this.state.site_list;
+                site_listObj.splice(this.deleteNum, 1);
+                this.setState({ site_list: site_listObj });
+            }
+            this.setState({
+                totalList: []
+            })
+            let total = this.state.totalList.concat(this.state.site_list).concat(this.state.preDayList).concat(this.state.preOtherList);
+            this.setState({
+                totalList: total
+            })
+
         }
     }
 
@@ -332,29 +485,62 @@ export class FillConsumption extends Component {
     // validate the page required field and  contact expiry date.
     checkSuccess(event) {
         event.preventDefault();
-        let count = this.dateCompare(this.state.site_list);
-        this.setState({
-            dateIssuecount: count
-        })
-        if (count > 0) {
-            if ($("#div_warning").is(":visible")) {
-                if ($("#chk_Warning").is(":checked")) {
-                    this.passValidateSave();
+        let isNotNull = this.validateListComplete();
+        if (isNotNull) {
+            let totalList = this.state.site_list.concat(this.state.preDayList).concat(this.state.preOtherList);
+            let count = this.dateCompare(totalList);
+            this.setState({
+                dateIssuecount: count
+            })
+            if (count > 0) {
+                if ($("#div_warning").is(":visible")) {
+                    if ($("#chk_Warning").is(":checked")) {
+                        this.passValidateSave();
+                    }
+                    else {
+                        return false;
+                    }
                 }
-                else {
-                    return false;
-                }
+            }
+            else {
+                this.passValidateSave();
             }
         }
         else {
-            this.passValidateSave();
+            this.setState({
+                text: "Please complete all required fields."
+            })
+            this.refs.Modal.showModal()
         }
+    }
+
+    validateListComplete() {
+        let flag_current = true, flag_yesterday = true, flag_before_yesterday = true;
+        this.state.preOtherList.map(item => {
+            if (item.existing_plan === "" || item.existing_plan === null || item.entityName === "" || item.entityName === "") {
+                flag_yesterday = false;
+            }
+        })
+        this.state.preOtherList.map(item => {
+            if (item.existing_plan === "" || item.existing_plan === null || item.entityName === "" || item.entityName === "") {
+                flag_before_yesterday = false;
+            }
+        })
+        this.state.site_list.map(item => {
+            if (item.existing_plan === "" || item.existing_plan === null || item.entityName === "" || item.entityName === "") {
+                flag_current = false;
+            }
+        })
+        return flag_current && flag_yesterday && flag_before_yesterday;
     }
 
     passValidateSave() {
         if (this.state.submit_type === "Participate") {
             let siteCount = this.state.site_list.length;
-            if (siteCount === 0) {
+            let preCount = this.state.preDayList.length;
+            let beforeYesterday = this.state.preOtherList.length;
+            let total = siteCount + preCount + beforeYesterday;
+            if (total === 0) {
                 setTimeout(() => {
                     this.setState({ text: "Please add account to participate." });
                 }, 200);
@@ -391,113 +577,333 @@ export class FillConsumption extends Component {
         return name;
     }
 
+    dateCompare(arr) {
+        let count = 0;
+        let startDate = moment(this.state.contact_start_date).format('YYYY-MM-DD');
+        for (let i in arr) {
+            if (arr[i].contract_expiry) {
+                let contract_expiry_date = moment(arr[i].contract_expiry).format('YYYY-MM-DD');
+                if (contract_expiry_date >= startDate) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+    showMarketInsight() {
+        this.setState({
+            text: ""
+        })
+        this.refs.market.showModal()
+    }
     render() {
         return (
             <div>
                 <h1>Buyer Participation</h1>
-                <h4 className="col-sm-12 u-mb2">Invitation to RA: {this.state.name} on {moment(this.state.time).format('D MMM YYYY hh:mm a')}</h4>
-                <h4 className="col-sm-12 u-mb2">Contract Start Date: {moment(this.state.contact_start_date).format('D MMM YYYY')}</h4>
-                <h4 >
-                    <div className="row col-sm-12 u-mb2">
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td>Purchase Duration : </td>
-                                    <td> <select id="selDuration" style={{ 'width': '200px', marginLeft: "5px" }} onChange={this.durationChange.bind(this)} value={this.state.contract_duration}>
-                                        {
-                                            this.state.durationList.map(item => {
-                                                return <option key={item.contract_duration} value={item.contract_duration}>{item.contract_duration + " months"}</option>
-                                            })
-                                        }
-                                    </select></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </h4>
-                <form name="buyer_form" method="post" onSubmit={this.checkSuccess.bind(this)}>
-                    <div className="u-grid buyer mg0">
-                        <h4 className="col-sm-12 u-mb2">Last Status of Participation : {this.status}</h4>
-                        <h4 className="col-sm-12 u-mb2">New Accounts</h4>
-                        <div className="col-sm-12 col-md-12">
-                            <table className="retailer_fill" cellPadding="0" cellSpacing="0">
-                                <colgroup>
-                                    <col width="10%" />
-                                    <col width="10%" />
-                                    <col width="10%" />
-                                    <col width="10%" />
-                                    <col width="10%" />
-                                    <col width="10%" />
-                                    <col width="10%" />
-                                    <col width="20%" />
-                                    <col width="10%" />
-                                </colgroup>
-                                <thead>
-                                    <tr>
-                                        <th>Account No.</th>
-                                        <th>Existing Plan</th>
-                                        <th>Contract Expiry</th>
-                                        <th>Purchasing Entity</th>
-                                        <th>Intake Level</th>
-                                        <th>Contracted Capacity</th>
-                                        <th>Premise Address</th>
-                                        <th>Consumption Details</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                <table className="consumption_table_top" cellPadding="0" cellSpacing="0">
+                    <tbody>
+                        <tr>
+                            <td style={{ width: "80%" }}>  <h4 className="col-sm-12 u-mb2">Invitation to RA: {this.state.name} on {moment(this.state.time).format('D MMM YYYY hh:mm a')}</h4></td>
+                            <td style={{ width: "20%" }} rowSpan="4">
+                                <img src={marketImg} className="marketImg" onClick={this.showMarketInsight.bind(this)}></img>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><h4 className="col-sm-12 u-mb2">Contract Start Date: {moment(this.state.contact_start_date).format('D MMM YYYY')}</h4></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Purchase Duration : <select id="selDuration" style={{ width: '200px', marginLeft: "5px", display: "inline-block" }} onChange={this.durationChange.bind(this)} value={this.state.contract_duration}>
                                     {
-                                        this.state.site_list.map((item, index) => {
-                                            return <tr key={index}>
-                                                <td>{item.account_number} </td>
-                                                <td>{item.existing_plan}</td>
-                                                <td>{item.contract_expiry !== "" ? moment(item.contract_expiry).format('YYYY-MM-DD') : "—"}</td>
-                                                <td>{this.getPurchase(item.company_buyer_entity_id)} </td>
-                                                <td>{item.intake_level}</td>
-                                                <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
-                                                <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
-                                                <td className="left">
-                                                    <div><span>Total Monthly: </span><span className="textDecoration" >{parseInt(item.totals)}</span><span> kWh/month</span></div>
-                                                    <div><span>Peak: </span><span><span>{parseInt(Math.round(item.totals * (item.peak_pct) / 100))} kWh/month </span>({parseFloat(item.peak_pct).toFixed(2)}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
-                                                    <div><span>Off-Peak: </span><span>{item.totals - parseInt(Math.round(item.totals * (item.peak_pct) / 100))} kWh/month </span><span>({parseFloat(100 - item.peak_pct).toFixed(2)}%)</span></div>
-
-
-                                                    <div className={item.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span>
-                                                        <span>
-                                                            <ul className="attachementList">
-                                                                {
-                                                                    item.user_attachment ? item.user_attachment.map((item, i) => {
-                                                                        return <li key={i}>
-                                                                            <a href={item.file_path ? item.file_path : "#"} target="_blank">{item.file_name ? item.file_name : ""}</a>
-                                                                        </li>
-                                                                    }) :
-                                                                        <li> </li>
-                                                                }
-                                                            </ul>
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div className="editSite"><a className="btnOption" onClick={this.edit_site.bind(this, item, index)}>Edit </a></div>
-                                                    <div className="delSite"><a className="btnOption" onClick={this.remove_site.bind(this, index)}>Delete </a></div>
-                                                </td>
-                                            </tr>
+                                        this.state.durationList.map(item => {
+                                            return <option key={item.contract_duration} value={item.contract_duration}>{item.contract_duration + " months"}</option>
                                         })
                                     }
-                                </tbody>
-                            </table>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h4 className="col-sm-12 u-mb2" style={{ "paddingTop": "15px" }}>Last Status of Participation : {this.status}</h4>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <form name="buyer_form" method="post" onSubmit={this.checkSuccess.bind(this)}>
+                    <div className="u-grid buyer mg0">
+                        {/* one day  */}
+
+
+                        <h4 className="col-sm-12 u-mb2">Accounts on Continuous Purchase</h4>
+                        <span className="particiption-note">Note: Please update Consumption Details if there is significant change in your account's consumption since your last participation.</span>
+                        <div className="col-sm-12 col-md-12">
+                            <div className="table-head">
+                                <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                                    <colgroup>
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="20%" />
+                                        <col width="10%" />
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th>Account No.</th>
+                                            <th>Existing Plan</th>
+                                            <th>Contract Expiry</th>
+                                            <th>Purchasing Entity</th>
+                                            <th>Intake Level</th>
+                                            <th>Contracted Capacity</th>
+                                            <th>Premise Address</th>
+                                            <th>Consumption Details</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div className="table-body">
+                                <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                                    <colgroup>
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="20%" />
+                                        <col width="10%" />
+                                    </colgroup>
+                                    <tbody>
+                                        {
+                                            this.state.preDayList.map((item, index) => {
+                                                return <tr key={index}>
+                                                    <td>{item.account_number} </td>
+                                                    <td>{item.existing_plan}</td>
+                                                    <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
+                                                    <td>{item.entityName}</td>
+                                                    <td>{item.intake_level}</td>
+                                                    <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
+                                                    <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
+                                                    <td className="left">
+                                                        <div><span>Total Monthly: </span><span className="textDecoration" >{parseInt(item.totals)}</span><span> kWh/month</span></div>
+                                                        <div><span>Peak: </span><span><span>{parseInt(Math.round(item.totals * (item.peak_pct) / 100))} kWh/month </span>({parseFloat(item.peak_pct).toFixed(2)}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
+                                                        <div><span>Off-Peak: </span><span>{item.totals - parseInt(Math.round(item.totals * (item.peak_pct) / 100))} kWh/month </span><span>({parseFloat(100 - item.peak_pct).toFixed(2)}%)</span></div>
+                                                        <div className={item.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span>
+                                                            <span>
+                                                                <ul className="attachementList">
+                                                                    {
+                                                                        item.user_attachment ? item.user_attachment.map((item, i) => {
+                                                                            return <li key={i}>
+                                                                                <a href={item.file_path ? item.file_path : "#"} target="_blank">{item.file_name ? item.file_name : ""}</a>
+                                                                            </li>
+                                                                        }) :
+                                                                            <li> </li>
+                                                                    }
+                                                                </ul>
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div className="editSite"><a className="btnOption" onClick={this.edit_site.bind(this, item, index, "preDay")}>Edit </a></div>
+                                                        <div className="delSite"><a className="btnOption" onClick={this.remove_site.bind(this, index, "preDay")}>Delete </a></div>
+                                                    </td>
+                                                </tr>
+                                            })
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+
+                        <h4 className="col-sm-12 u-mb2 separate">Accounts with Purchase Gap</h4>
+                        <span className="particiption-note">Note: Please update Consumption Details if there is significant change in your account's consumption since your last participation.</span>
+                        <div className="col-sm-12 col-md-12">
+                            <div className="table-head">
+                                <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                                    <colgroup>
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="20%" />
+                                        <col width="10%" />
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th>Account No.</th>
+                                            <th>Existing Plan</th>
+                                            <th>Contract Expiry</th>
+                                            <th>Purchasing Entity</th>
+                                            <th>Intake Level</th>
+                                            <th>Contracted Capacity</th>
+                                            <th>Premise Address</th>
+                                            <th>Consumption Details</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div className="table-body">
+                                <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                                    <colgroup>
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="20%" />
+                                        <col width="10%" />
+                                    </colgroup>
+                                    <tbody>
+                                        {
+                                            this.state.preOtherList.map((item, index) => {
+                                                return <tr key={index}>
+                                                    <td>{item.account_number} </td>
+                                                    <td>{item.existing_plan}</td>
+                                                    <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
+                                                    <td>{item.entityName}</td>
+                                                    <td>{item.intake_level}</td>
+                                                    <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
+                                                    <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
+                                                    <td className="left">
+                                                        <div><span>Total Monthly: </span><span className="textDecoration" >{parseInt(item.totals)}</span><span> kWh/month</span></div>
+                                                        <div><span>Peak: </span><span><span>{parseInt(Math.round(item.totals * (item.peak_pct) / 100))} kWh/month </span>({parseFloat(item.peak_pct).toFixed(2)}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
+                                                        <div><span>Off-Peak: </span><span>{item.totals - parseInt(Math.round(item.totals * (item.peak_pct) / 100))} kWh/month </span><span>({parseFloat(100 - item.peak_pct).toFixed(2)}%)</span></div>
+                                                        <div className={item.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span>
+                                                            <span>
+                                                                <ul className="attachementList">
+                                                                    {
+                                                                        item.user_attachment ? item.user_attachment.map((item, i) => {
+                                                                            return <li key={i}>
+                                                                                <a href={item.file_path ? item.file_path : "#"} target="_blank">{item.file_name ? item.file_name : ""}</a>
+                                                                            </li>
+                                                                        }) :
+                                                                            <li> </li>
+                                                                    }
+                                                                </ul>
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div className="editSite"><a className="btnOption" onClick={this.edit_site.bind(this, item, index, "preOthers")}>Edit </a></div>
+                                                        <div className="delSite"><a className="btnOption" onClick={this.remove_site.bind(this, index, "preOthers")}>Delete </a></div>
+                                                    </td>
+                                                </tr>
+                                            })
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <h4 className="col-sm-12 u-mb2 separate">New Accounts</h4>
+                        <div className="col-sm-12 col-md-12">
+                            <div className="table-head">
+                                <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                                    <colgroup>
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="20%" />
+                                        <col width="10%" />
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th>Account No.</th>
+                                            <th>Existing Plan</th>
+                                            <th>Contract Expiry</th>
+                                            <th>Purchasing Entity</th>
+                                            <th>Intake Level</th>
+                                            <th>Contracted Capacity</th>
+                                            <th>Premise Address</th>
+                                            <th>Consumption Details</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div className="table-body">
+                                <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                                    <colgroup>
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="10%" />
+                                        <col width="20%" />
+                                        <col width="10%" />
+                                    </colgroup>
+                                    <tbody>
+                                        {
+                                            this.state.site_list.map((item, index) => {
+                                                return <tr key={index}>
+                                                    <td>{item.account_number} </td>
+                                                    <td>{item.existing_plan}</td>
+                                                    <td>{(item.contract_expiry!=="" && item.contract_expiry!==null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
+                                                    <td>{item.entityName}</td>
+                                                    <td>{item.intake_level}</td>
+                                                    <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
+                                                    <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
+                                                    <td className="left">
+                                                        <div><span>Total Monthly: </span><span className="textDecoration" >{parseInt(item.totals)}</span><span> kWh/month</span></div>
+                                                        <div><span>Peak: </span><span><span>{parseInt(Math.round(item.totals * (item.peak_pct) / 100))} kWh/month </span>({parseFloat(item.peak_pct).toFixed(2)}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
+                                                        <div><span>Off-Peak: </span><span>{item.totals - parseInt(Math.round(item.totals * (item.peak_pct) / 100))} kWh/month </span><span>({parseFloat(100 - item.peak_pct).toFixed(2)}%)</span></div>
+                                                        <div className={item.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span>
+                                                            <span>
+                                                                <ul className="attachementList">
+                                                                    {
+                                                                        item.user_attachment ? item.user_attachment.map((item, i) => {
+                                                                            return <li key={i}>
+                                                                                <a href={item.file_path ? item.file_path : "#"} target="_blank">{item.file_name ? item.file_name : ""}</a>
+                                                                            </li>
+                                                                        }) :
+                                                                            <li> </li>
+                                                                    }
+                                                                </ul>
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div className="editSite"><a className="btnOption" onClick={this.edit_site.bind(this, item, index, "current")}>Edit </a></div>
+                                                        <div className="delSite"><a className="btnOption" onClick={this.remove_site.bind(this, index, "current")}>Delete </a></div>
+                                                    </td>
+                                                </tr>
+                                            })
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+
                             {this.state.checked ? '' : <div className="addSite"><a onClick={this.add_site.bind(this)}>Add Account</a></div>}
                             <div id="div_warning" className="warning">
                                 {
                                     this.state.dateIssuecount > 0 ?
-                                    <h4 className="lm--formItem lm--formItem--inline string chkBuyer" >
-                                    <input type="checkbox" id="chkBuyer" id="chk_Warning" required /><span>Warning: [{this.state.dateIssuecount}] account(s) detected to have expiry date on  or after new contract start date. Please tick the checkbox
+                                        <h4 className="lm--formItem lm--formItem--inline string chkBuyer" >
+                                            <input type="checkbox" id="chkBuyer" id="chk_Warning" required /><span>Warning: [{this.state.dateIssuecount}] account(s) detected to have expiry date on  or after new contract start date. Please tick the checkbox
                                              to confirm that you aware and would like to proceed with including such account(s) in this auction.</span> </h4> : <div></div>
                                 }
                             </div>
                             <div>
                                 <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
-                                    <input name="agree_declare" type="checkbox" id="chkAgree_declare" required />
+                                    <input name="agree_declare" type="checkbox" id="chkAgree_declare" disabled={this.state.disabled} required />
                                     {/* <span>I declare that all data submited is true and shall be used for the auction, and that i am bounded by <a target="_blank" href={this.state.link} className="urlStyle">Buyer T&C.</a></span> */}
                                     <span>I declare that all data submitted is true and shall be used for the auction, and that I am bounded by the <a target="_blank" href={this.state.buyer_link} className="urlStyleUnderline">Buyer Platform Terms of Use</a> and <a target="_blank" href={this.state.seller_link} className="urlStyleUnderline">Electricity Procurement Agreement</a>. </span>
                                 </h4>
@@ -514,8 +920,9 @@ export class FillConsumption extends Component {
                     </div>
                     <Modal text={this.state.text} acceptFunction={this.doAccept.bind(this)} ref="Modal" />
                 </form>
-                <Modal formSize="big" text={this.state.text} acceptFunction={this.doAddAccountAction.bind(this)} contract_capacity_disabled={this.state.contract_capacity_disabled} contract_expiry_disabled={this.state.contract_expiry_disabled} siteList={this.state.site_list} consumption_account_item={this.state.account_detail} listdetailtype='consumption_detail' ref="consumption" />
-            </div>
+                <Modal formSize="big" text={this.state.text} acceptFunction={this.doAddAccountAction.bind(this)} siteList={this.state.totalList} consumptionAccountItem={this.state.account_detail} listdetailtype='consumption_detail' ref="consumption" />
+                <Modal formSize="middle" text={this.state.text} advisory={this.state.advisory} listdetailtype='market-insight' ref="market" />
+            </div >
         )
     }
 }
