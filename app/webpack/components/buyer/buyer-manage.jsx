@@ -290,21 +290,21 @@ export class BuyerUserManage extends Component {
                             break;
                         case 1:
                             this.setState({
-                                text: "Current Buyer has ongoing Auction, which can't be reject at present. ",
+                                text: "Current buyer has ongoing auction, which can't be rejected at present. ",
                             }, () => {
                                 this.refs.Modal_Option.showModal();
                             });
                             break;
                         case 2:
                             this.setState({
-                                text: "Current Buyer has ongoing Auction, which can't be reject at present. ",
+                                text: "Current buyer has ongoing auction, which can't be rejected at present. ",
                             }, () => {
                                 this.refs.Modal_Option.showModal();
                             });
                             break;
                         case 3:
                             this.setState({
-                                text: "Current Buyer has pending auction invitation, would you proceed anyway? Once proceeded, pending invitation will be cancelled as well. ",
+                                text: "Current buyer has pending auction invitation, would you proceed anyway? Once proceeded, pending invitation will be cancelled as well. ",
                             }, () => {
                                 this.refs.Modal_Option.showModal('comfirm', { action: 'reject', type: 'user'}, '');
                             });
@@ -356,7 +356,7 @@ export class BuyerUserManage extends Component {
                     break;
                 case 3:
                     this.setState({
-                        text: "Current buyer has pending action invitation, would you proceed anyway? Once proceeded, pending invitation will be cancelled as well. ",
+                        text: "Current buyer has pending auction invitation, would you proceed anyway? Once proceeded, pending invitation will be cancelled as well. ",
                     }, () => {
                         this.refs.Modal_Option.showModal('comfirm', { action: 'delete', type: 'deleteBuyer'});
                     });
