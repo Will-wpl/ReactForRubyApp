@@ -56,6 +56,7 @@ class Api::UsersController < Api::BaseController
     user_id = params[:user_id]
     validate_result = validate_in_auction_result(user_id)
     validate_result = validate_in_consumption(user_id) if validate_result == 0
+    validate_result = validate_in_arrangements(user_id) if validate_result == 0
 
     render json: { validate_result: validate_result }, status: 200
   end
@@ -295,10 +296,23 @@ class Api::UsersController < Api::BaseController
 
   def validate_in_auction_result(user_id)
     validate_result = 0
-    user_auction_res = AuctionResultContract.find_by_user(user_id)
-    if !user_auction_res.blank?
-      if user_auction_res.any? { |x| x.contract_period_end_date > DateTime.current && x.status != 'void' }
+    # Retailer
+    retailer_auction_res = AuctionResultContract.find_by_user(user_id)
+    if !retailer_auction_res.blank?
+      if retailer_auction_res.any? { |x| x.contract_period_end_date > DateTime.current && x.status != 'void' }
         validate_result = 1
+      end
+    end
+
+    #Buyer
+    buyer_consumptions = Consumption.find_by_user(user_id)
+    unless buyer_consumptions.blank?
+      buyer_consumptions.each do |consumption|
+        if AuctionResultContract.any? { |x| x.auction_id == consumption.auction_id &&
+            x.contract_duration == consumption.contract_duration &&
+            x.contract_period_end_date > DateTime.current && x.status != 'void' }
+          validate_result = 1
+        end
       end
     end
     validate_result
@@ -324,4 +338,28 @@ class Api::UsersController < Api::BaseController
     validate_result
   end
 
+  def validate_in_arrangements(user_id)
+    validate_result = 0
+    arrangements = Arrangement.find_by_user(user_id)
+    unless arrangements.blank?
+      if arrangements.any? { |x| x.action_status == Arrangement::ActionStatusSent }
+        arrangements_sent = arrangements.where(action_status: Arrangement::ActionStatusSent)
+        arrangements_sent.each do |temp_arrangement|
+          if !AuctionResultContract.any? { |x| x.auction_id == temp_arrangement.auction_id && x.user_id == user_id }
+            validate_result = 2
+          end
+          # auction_contracts = AuctionContract.find_by_auction_id(temp_arrangement.auction_id)
+          # auction_results = AuctionResultContract.find_by_auction_id(temp_arrangement.auction_id)
+          # if auction_results.blank? #!AuctionResultContract.any? { |x| x.auction_id == temp_arrangement.auction_id }
+          #   validate_result = 2
+          # elsif !auction_contracts.blank? && auction_contracts.count != auction_results.count
+          #   validate_result = 2
+          # end
+        end
+      elsif arrangements.any? { |x| x.action_status == Arrangement::ActionStatusPending }
+        validate_result = 3
+      end
+    end
+    validate_result
+  end
 end

@@ -11,7 +11,7 @@ class AuctionContract < ApplicationRecord
   # Validations
 
   # Scopes
-
+  scope :find_by_auction_id, ->(auction_id) { where('auction_id =?', auction_id) }
   # Callbacks
 
   # Delegates
