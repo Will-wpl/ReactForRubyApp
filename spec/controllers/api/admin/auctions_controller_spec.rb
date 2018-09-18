@@ -418,9 +418,9 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
 
       context 'has updated an auction' do
         let! (:auction_new) { create(:auction, :for_next_month, :upcoming) }
-        let!(:six_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '6') }
-        let!(:twelve_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '12') }
-        let!(:twenty_four_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '24') }
+        let!(:six_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '6', contract_period_end_date: DateTime.current) }
+        let!(:twelve_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '12', contract_period_end_date: DateTime.current) }
+        let!(:twenty_four_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '24', contract_period_end_date: DateTime.current) }
         before do
           contract_6 = six_month_contract
           contracts = [contract_6]
@@ -457,9 +457,9 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
 
       context 'has updated same data an auction' do
         let! (:auction_new) { create(:auction, :for_next_month, :upcoming) }
-        let!(:six_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '6') }
-        let!(:twelve_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '12') }
-        let!(:twenty_four_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '24') }
+        let!(:six_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '6', contract_period_end_date: DateTime.current) }
+        let!(:twelve_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '12', contract_period_end_date: DateTime.current) }
+        let!(:twenty_four_month_contract) { create(:auction_contract, auction: auction_new, contract_duration: '24', contract_period_end_date: DateTime.current) }
         before do
 
           contracts = [six_month_contract, twelve_month_contract, twenty_four_month_contract]
