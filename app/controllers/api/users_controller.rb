@@ -161,8 +161,8 @@ class Api::UsersController < Api::BaseController
   def remove_user(user_id)
     user = User.find(user_id)
     unless user.blank?
-      Consumption.delete(user_id: user_id, action_status: Consumption::ActionStatusPending)
-      Arrangement.delete(user_id: user_id, action_status: Consumption::ActionStatusPending)
+      Consumption.where(user_id: user_id, action_status: Consumption::ActionStatusPending).delete_all
+      Arrangement.where(user_id: user_id, action_status: Consumption::ActionStatusPending).delete_all
       user.email = string_for_user_value(user.email)
       user.company_unique_entity_number = string_for_user_value(user.company_unique_entity_number)
       user.company_license_number = string_for_user_value(user.company_license_number)
