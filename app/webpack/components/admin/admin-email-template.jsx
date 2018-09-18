@@ -10,7 +10,7 @@ export default class EmailTemplates extends Component {
         this.state = {
             text: "",size:'',
             email_list: [],template_type:'',template_id:'',
-            listdetail: {},la_list:[{subject:"LA entity1",id:1},{subject:"LA entity2",id:2}],advisory_list:[{subject:"Advisory1",id:3}],
+            listdetail: {},la_list:[{subject:"Parent LA template",id:1},{subject:"Nominated LA template",id:2}],advisory_list:[{subject:"Buyer market insights",id:3}],
             uploadUrl: '/api/admin/user_attachments?file_type=',
             fileData: {
                 "LETTER_OF_AUTHORISATION": [
@@ -64,8 +64,8 @@ export default class EmailTemplates extends Component {
                 <div className="retailrank_main-new  col-md-8 col-sm-10 ">
                     <div className="admin_buyer_list col-sm-12 col-md-12">
                         <div className="col-sm-12 buyer_tab">
-                            <a className="col-sm-4 col-md-2 selected" onClick={this.tab.bind(this,'email')} id="tab_email">Email</a>
-                            <a className="col-sm-4 col-md-2" onClick={this.tab.bind(this,'la')} id="tab_la">LA</a>
+                            <a className="col-sm-4 col-md-2 selected" onClick={this.tab.bind(this,'email')} id="tab_email">Email Templates</a>
+                            <a className="col-sm-4 col-md-3" onClick={this.tab.bind(this,'la')} id="tab_la">Letter of Award Templates</a>
                             <a className="col-sm-4 col-md-2" onClick={this.tab.bind(this,'advisory')} id="tab_advisory">Advisory Templates</a>
                             <a className="col-sm-4 col-md-2" onClick={this.tab.bind(this,'registration')} id="tab_registration">Registration Templates</a>
                         </div>
