@@ -40,6 +40,7 @@ class Arrangement < ApplicationRecord
   scope :find_notify_retailer,  ->(user_id) { where("arrangements.user_id = ? and action_status = '1'", user_id) }
   scope :admin_find_by_id, ->(id) { where(id: id).take }
   scope :find_by_user, ->(user_id) { where('user_id =?', user_id) }
+  scope :find_by_approvaled_user, -> { includes(:user).where(users: { approval_status: '1' }) }
   # Callbacks
 
   # Delegates
