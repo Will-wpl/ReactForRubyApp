@@ -330,7 +330,7 @@ class Api::AuctionsController < Api::BaseController
   end
 
   def selects
-    retailers = Arrangement.find_by_auction_id(params[:id]).group(:action_status).count
+    retailers = Arrangement.find_by_auction_id(params[:id]).find_by_approvaled_user.group(:action_status).count
     company_buyers = Consumption.find_by_auction_id(params[:id]).find_by_user_consumer_type('2').group(:action_status).count
     individual_buyers = Consumption.find_by_auction_id(params[:id]).find_by_user_consumer_type('3').group(:action_status).count
 
