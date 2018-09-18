@@ -438,7 +438,7 @@ export class BuyerUserManage extends Component {
     entity_reject(item, index) {
         let list = this.state.entity_list;
         list[index].approval_status = "0";
-        list[index].approval_status_name = "Reject";
+        list[index].approval_status_name = "Rejected";
         list[index].isApproved = false;
         this.setState({
             entity_list: list
