@@ -6,6 +6,10 @@ class Api::Admin::UsersController < Api::UsersController
   #   comment -> Indicate a comment to this operation.
   def approval_retailer
     result_json = approval_user
+    approval_status = params[:approved].blank? ? User::ApprovalStatusReject : User::ApprovalStatusApproved
+    if approval_status == User::ApprovalStatusReject
+      Arrangement.delete(user_id: params[:user_id], action_status: Consumption::ActionStatusPending)
+    end
     render json: result_json, status: 200
   end
 
@@ -41,6 +45,8 @@ class Api::Admin::UsersController < Api::UsersController
       # Update entity approval status to approved
       entites = CompanyBuyerEntity.find_by_user(params[:user_id])
       entites.update(approval_status: CompanyBuyerEntity::ApprovalStatusReject)
+      # Remove consumption
+      Consumption.delete(user_id: params[:user_id], action_status: Consumption::ActionStatusPending)
       # Remove entity users
       entity_user_ids = []
       entites.each { |x| entity_user_ids.push(x.user_entity_id) unless x.user_entity_id.blank? }
