@@ -163,8 +163,8 @@ class Api::UsersController < Api::BaseController
   def remove_user(user_id)
     user = User.find(user_id)
     unless user.blank?
-      Consumption.delete(user_id: user_id, action_status: Consumption::ActionStatusPending)
-      Arrangement.delete(user_id: user_id, action_status: Consumption::ActionStatusPending)
+      Consumption.where(user_id: user_id, action_status: Consumption::ActionStatusPending).delete_all
+      Arrangement.where(user_id: user_id, action_status: Consumption::ActionStatusPending).delete_all
       user.email = string_for_user_value(user.email)
       user.company_unique_entity_number = string_for_user_value(user.company_unique_entity_number)
       user.company_license_number = string_for_user_value(user.company_license_number)
@@ -349,7 +349,8 @@ class Api::UsersController < Api::BaseController
       if arrangements.any? { |x| x.action_status == Arrangement::ActionStatusSent }
         arrangements_sent = arrangements.where(action_status: Arrangement::ActionStatusSent)
         arrangements_sent.each do |temp_arrangement|
-          if !AuctionResultContract.any? { |x| x.auction_id == temp_arrangement.auction_id && x.user_id == user_id }
+          if AuctionResultContract.any? { |x| x.auction_id == temp_arrangement.auction_id && x.user_id == user_id &&
+              x.contract_period_end_date > DateTime.current && x.status != 'void' }
             validate_result = 2
           end
           # auction_contracts = AuctionContract.find_by_auction_id(temp_arrangement.auction_id)

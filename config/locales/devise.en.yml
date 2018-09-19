@@ -46,6 +46,7 @@ en:
       updated: "Your account has been updated successfully."
       signed_up_but_not_approved: "Your application has been successfully submitted and is pending approval by the administrator. You will be notified via email once approved."
     sessions:
+      deleted: "Your account has been deleted."
       signed_in: "Logged in successfully."
       signed_out: "Logged out successfully."
       already_signed_out: "Logged out successfully."

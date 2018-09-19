@@ -72,7 +72,34 @@ export class Showhistory extends React.Component{
         if(type == "propose"){
             //if ($("#deviation_body").length>0) {
                 let editor = new E('#deviation_body');
-                setTimeout(() => { editor.create() });
+                editor.customConfig.menus = [
+                    'head',
+                    'bold',
+                    'fontSize',
+                    'fontName',
+                    'italic',
+                    'underline',
+                    'strikeThrough',
+                    'foreColor',
+                    'backColor',
+                    'justify',
+                    'undo',
+                    'redo'
+                ];
+                editor.customConfig.lang = {
+                    '字号': 'font size',
+                    '字体': 'font',
+                    '文字颜色': 'font color',
+                    '背景色': 'background color',
+                    '对齐方式': 'alignment',
+                    '靠左':'left',
+                    '靠右':'right',
+                    '居中':'center',
+                    '宋体':'song',
+                    '微软雅黑':'yahei'
+                    // 还可自定添加更多
+                };
+            setTimeout(() => { editor.create() });
             //}
             setTimeout(() => { $(".w-e-text").html("").html(this.props.detail==""?"<p></p>":this.props.detail) }, 100);
         }else{
@@ -120,17 +147,17 @@ export class Showhistory extends React.Component{
                                     {item.propose_deviation ?
                                     <dd>
                                         <dfn><abbr></abbr>{this.state.ratailer_name}</dfn>
-                                        <span>
+                                        <aside>
                                             <b>Proposed Deviation : </b><div className={"devation_text_"+index}>{this.showHtml("devation_text_"+index,item.propose_deviation?item.propose_deviation:"")}</div><br/>
                                             <b>Comments : </b><div className={"comments_text_"+index}>{this.showHtml("devation_text_"+index,item.retailer_response?item.retailer_response:"")}</div>
-                                        </span>
+                                        </aside>
                                     </dd>:''}
                                     {item.sp_response!=null?
                                     <dt>
                                         <dfn><abbr></abbr>SP Group</dfn>
                                         {item.response_status == "0"?
-                                            <span className={item.sp_response===""?"short":""}><b>Rejected : </b>{item.sp_response===""?"":<div className={"sp_text_"+index}>{item.sp_response}</div>}</span>:
-                                            <span className={item.sp_response===""?"short":""}><b>Accepted : </b>{item.sp_response===""?"":<div className={"sp_text_"+index}>{item.sp_response}</div>}</span>}
+                                            <aside className={item.sp_response===""?"short":""}><b>Rejected : </b>{item.sp_response===""?"":<div className={"sp_text_"+index}>{item.sp_response}</div>}</aside>:
+                                            <aside className={item.sp_response===""?"short":""}><b>Accepted : </b>{item.sp_response===""?"":<div className={"sp_text_"+index}>{item.sp_response}</div>}</aside>}
                                     </dt>:''}
                                 </dl>
                     })}

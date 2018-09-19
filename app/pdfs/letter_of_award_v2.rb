@@ -63,4 +63,10 @@ class LetterOfAwardV2 < LetterOfAward
     "#{blk_or_unit} #{street} #{unit_number} #{postal_code}"
   end
 
+  def get_template_content
+    pdf_template = RichTemplate.find_by type: pdf_template_type
+    return nil if pdf_template.nil?
+    Nokogiri::HTML(pdf_template.content, nil, 'UTF-8')
+  end
+
 end

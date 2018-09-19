@@ -192,6 +192,33 @@ export class Modal extends React.Component {
                 $(".w-e-text p").html("");
                 if ($("#email_body").html() == "") {
                     var editor = new E('#email_body');
+                    editor.customConfig.menus = [
+                        'head',
+                        'bold',
+                        'fontSize',
+                        'fontName',
+                        'italic',
+                        'underline',
+                        'strikeThrough',
+                        'foreColor',
+                        'backColor',
+                        'justify',
+                        'undo',
+                        'redo'
+                    ];
+                    editor.customConfig.lang = {
+                        '字号': 'font size',
+                        '字体': 'font',
+                        '文字颜色': 'font color',
+                        '背景色': 'background color',
+                        '对齐方式': 'alignment',
+                        '靠左':'left',
+                        '靠右':'right',
+                        '居中':'center',
+                        '宋体':'song',
+                        '微软雅黑':'yahei'
+                        // 还可自定添加更多
+                    };
                     setTimeout(() => { editor.create(); });
                 }
                 setTimeout(() => { $(".w-e-text").html("").html(data == "" ? "<p></p>" : data) }, 300);
@@ -200,6 +227,33 @@ export class Modal extends React.Component {
                 $(".w-e-text p").html("");
                 if ($("#email_body").html() == "") {
                     var editor = new E('#email_body');
+                    editor.customConfig.menus = [
+                        'head',
+                        'bold',
+                        'fontSize',
+                        'fontName',
+                        'italic',
+                        'underline',
+                        'strikeThrough',
+                        'foreColor',
+                        'backColor',
+                        'justify',
+                        'undo',
+                        'redo'
+                    ];
+                    editor.customConfig.lang = {
+                        '字号': 'font size',
+                        '字体': 'font',
+                        '文字颜色': 'font color',
+                        '背景色': 'background color',
+                        '对齐方式': 'alignment',
+                        '靠左':'left',
+                        '靠右':'right',
+                        '居中':'center',
+                        '宋体':'song',
+                        '微软雅黑':'yahei'
+                        // 还可自定添加更多
+                    };
                     setTimeout(() => { editor.create(); })
                 }
                 this.setState({
@@ -888,7 +942,13 @@ export class Modal extends React.Component {
             contract_expiry: data
         })
     }
-
+    Change(type,e){
+        if(type == "email_subject"){
+            this.setState({
+                email_subject:e.target.value
+            })
+        }
+    }
     noPermitInput(event) {
         event.preventDefault();
     }
