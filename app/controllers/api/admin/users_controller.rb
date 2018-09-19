@@ -50,6 +50,7 @@ class Api::Admin::UsersController < Api::UsersController
       # Remove entity users
       entity_user_ids = []
       entites.each { |x| entity_user_ids.push(x.user_entity_id) unless x.user_entity_id.blank? }
+      entity_user_ids.delete(params[:user_id].to_i)
       User.where('id in (?)', entity_user_ids).delete_all
     end
     if approval_status == User::ApprovalStatusApproved && original_status == User::ApprovalStatusReject
