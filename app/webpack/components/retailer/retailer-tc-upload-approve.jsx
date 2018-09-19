@@ -1,14 +1,18 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import { saveRetailerAttachmentModification, getNeedRetailerApproveAttachments } from './../../javascripts/componentService/retailer/service';
+import { setValidationFaild, setValidationPass } from './../../javascripts/componentService/util';
+
 export class RetailerTCUploadApprove extends Component {
     constructor(props) {
         super(props);
         this.state = {
             epaIsExist: false,
             epaUrl: "",
+            epaChecked: false,
             bptIsExist: false,
-            bptUrl: ""
+            bptUrl: "",
+            bptChecked: false
         }
     }
 
@@ -43,34 +47,80 @@ export class RetailerTCUploadApprove extends Component {
         })
     }
 
-    Change(type) {
-
+    Change(type, e) {
+        let itemValue = e.target.value;
+        switch (type) {
+            case 'chkEPA':
+                if ($('#chkEPA').is(':checked')) {
+                    this.setState({ epaChecked: true })
+                    setValidationPass('chkEPA', 1)
+                } else {
+                    this.setState({ epaChecked: false })
+                    setValidationFaild('chkEPA', 1);
+                }
+                break;
+            case 'chkBPT':
+                if ($('#chkBPT').is(':checked')) {
+                    this.setState({ bptChecked: true })
+                    setValidationPass('chkBPT', 1)
+                } else {
+                    this.setState({ bptChecked: false })
+                    setValidationFaild('chkBPT', 1);
+                }
+                break;
+        }
     }
     checkSuccess() {
-        saveRetailerAttachmentModification().then(res => {
-            window.location.href = `/retailer/home`;
-        })
+        if ($('#chkEPA').is(':checked')) {
+            setValidationPass('chkEPA', 1);
+        } else {
+            setValidationFaild('chkEPA', 1);
+        }
+        if ($('#chkBPT').is(':checked')) {
+            setValidationPass('chkBPT', 1);
+        } else {
+            setValidationFaild('chkBPT', 1);
+        }
+        let epa = true, bpt = true;
+        if (this.state.epaIsExist) {
+            epa = this.state.epaChecked ? true : false;
+        }
+        if (this.state.bptIsExist) {
+            bpt = this.state.bptChecked ? true : false;
+        }
+        return epa && bpt;
     }
     doSubmit() {
+        console.log()
+        if (this.checkSuccess()) {
+            saveRetailerAttachmentModification().then(res => {
+                setTimeout(() => {
+                    window.location.href = '/retailer/home';
+                }, 1000)
+            })
+        }
+
     }
     render() {
         return (
-            <form name="retailer_form" method="get" onSubmit={this.checkSuccess.bind(this)}>
-                <div className="live_modal_approve_attachment">
+            <div className="live_modal_approve_attachment">
                 <div className="attachment">
-                    <div className="title">The <span className={this.state.epaIsExist ? "displayline" : "isHide"}><a href={this.state.epaUrl} target="_blank">[Electricity Procurement Agreement]</a></span><span className={(this.state.bptIsExist && this.state.epaIsExist) ? "displayline" : "isHide"}>, </span><span className={this.state.bptIsExist ? "displayline" : "isHide"}><a href={this.state.bptUrl} target="_blank">[Seller Platform Terms of Use]</a></span><span className={(this.state.epaIsExist && this.state.bptIsExist)?"displayline":"isHide"}> have</span><span className={(this.state.epaIsExist && this.state.bptIsExist)?"isHide":"displayline"}> has</span> changed. Please confirm:</div>
-                        {this.state.epaIsExist ? <div><h4 className="lm--formItem lm--formItem--inline string checkBuyer"><input type="checkbox" id="chkEPA" name="epa" onChange={this.Change.bind(this, 'chkRevv')} required /><span>Check here to indicate that you have read and agree to the ELectrictiy Procurement Agreement. </span></h4></div> : <div></div>}
-                        {this.state.bptIsExist ? <div><h4 className="lm--formItem lm--formItem--inline string checkBuyer"><input type="checkbox" id="chkBPT" name="bpt" onChange={this.Change.bind(this, 'chkBuyer')} required /><span>Check here to indicate that you have read and agree to the Seller Platform Terms of Use. </span></h4></div> : <div></div>}
+                    <div className="title">The <span className={this.state.epaIsExist ? "displayline" : "isHide"}><a href={this.state.epaUrl} target="_blank">[Electricity Procurement Agreement]</a></span><span className={(this.state.bptIsExist && this.state.epaIsExist) ? "displayline" : "isHide"}>, </span><span className={this.state.bptIsExist ? "displayline" : "isHide"}><a href={this.state.bptUrl} target="_blank">[Seller Platform Terms of Use]</a></span><span className={(this.state.epaIsExist && this.state.bptIsExist) ? "displayline" : "isHide"}> have</span><span className={(this.state.epaIsExist && this.state.bptIsExist) ? "isHide" : "displayline"}> has</span> changed. Please confirm:</div>
+                    {this.state.epaIsExist ? <div><h4 className="lm--formItem lm--formItem--inline string checkBuyer"><input type="checkbox" id="chkEPA" name="epa" onChange={this.Change.bind(this, 'chkEPA')} required /><span>Check here to indicate that you have read and agree to the Electrictiy Procurement Agreement. </span></h4>
+                        <div id="chkEPA_message" className="isPassValidate" style={{ marginLeft: "33px" }}>Please check this box if you want to proceed.</div>
+                    </div> : <div></div>}
+                    {this.state.bptIsExist ? <div><h4 className="lm--formItem lm--formItem--inline string checkBuyer"><input type="checkbox" id="chkBPT" name="bpt" onChange={this.Change.bind(this, 'chkBPT')} required /><span>Check here to indicate that you have read and agree to the Seller Platform Terms of Use. </span></h4>
+                        <div id="chkBPT_message" className="isPassValidate" style={{ marginLeft: "33px" }}> Please check this box if you want to proceed.</div>
+                    </div> : <div></div>}
+                </div>
+                <div className="col-sm-12 col-md-12 u-grid  btnProceed">
+                    <div className="col-md-10 u-cell">
                     </div>
-                    <div className="col-sm-12 col-md-12 u-grid  btnProceed">
-                        <div className="col-md-10 u-cell">
-                        </div>
-                        <div className="col-md-2 u-cell">
-                            <button className="lm--button lm--button--primary" onClick={this.doSubmit.bind(this)}>Proceed</button>
-                        </div>
+                    <div className="col-md-2 u-cell">
+                        <button className="lm--button lm--button--primary" onClick={this.doSubmit.bind(this)}>Proceed</button>
                     </div>
                 </div>
-            </form >
+            </div>
         )
     }
 }

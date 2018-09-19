@@ -40,12 +40,14 @@ class Api::UsersController < Api::BaseController
   end
 
   def update_attachment_status
+    user = User.find(current_user.id)
     if current_user.has_role?(:retailer)
-      current_user.update(agree_seller_buyer: User::AgreeSellerBuyerYes, agree_seller_revv: User::AgreeSellerRevvYes)
+      user.update(agree_seller_buyer: User::AgreeSellerBuyerYes, agree_seller_revv: User::AgreeSellerRevvYes)
     end
     if current_user.has_role?(:buyer)
-      current_user.update(agree_seller_buyer: User::AgreeSellerBuyerYes, agree_buyer_revv: User::AgreeBuyerRevvYes)
+      user.update(agree_seller_buyer: User::AgreeSellerBuyerYes, agree_buyer_revv: User::AgreeBuyerRevvYes)
     end
+    current_user = user
     render json: current_user, status: 200
   end
 

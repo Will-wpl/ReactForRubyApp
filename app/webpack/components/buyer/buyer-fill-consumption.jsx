@@ -401,9 +401,9 @@ export class FillConsumption extends Component {
                     this.setState({ text: "Delete successful!" });
                 } else {
                     this.setState({ text: "Save successful!" });
-                    setTimeout(()=>{
-                        window.location.href="/buyer/consumptions/"+this.state.consumption_id+"/edit";
-                    },2000)
+                    setTimeout(() => {
+                        window.location.href = "/buyer/consumptions/" + this.state.consumption_id + "/edit";
+                    }, 2000)
 
                 }
                 this.refs.Modal.showModal();
@@ -633,181 +633,181 @@ export class FillConsumption extends Component {
                     <div className="u-grid buyer mg0">
                         {/* one day  */}
 
-
-                        <h4 className="col-sm-12 u-mb2">Accounts on Continuous Purchase</h4>
-                        <span className="particiption-note">Note: Please update Consumption Details if there is significant change in your account's consumption since your last participation.</span>
-                        <div className="col-sm-12 col-md-12">
-                            <div className="table-head">
-                                <table className="retailer_fill" cellPadding="0" cellSpacing="0">
-                                    <colgroup>
-                                        <col width="10%" />
-                                        <col width="10%" />
-                                        <col width="10%" />
-                                        <col width="10%" />
-                                        <col width="10%" />
-                                        <col width="10%" />
-                                        <col width="10%" />
-                                        <col width="20%" />
-                                        <col width="10%" />
-                                    </colgroup>
-                                    <thead>
-                                        <tr>
-                                            <th>Account No.</th>
-                                            <th>Existing Plan</th>
-                                            <th>Contract Expiry</th>
-                                            <th>Purchasing Entity</th>
-                                            <th>Intake Level</th>
-                                            <th>Contracted Capacity</th>
-                                            <th>Premise Address</th>
-                                            <th>Consumption Details</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                            <div className="table-body">
-                                <table className="retailer_fill" cellPadding="0" cellSpacing="0">
-                                    <colgroup>
-                                        <col width="10%" />
-                                        <col width="10%" />
-                                        <col width="10%" />
-                                        <col width="10%" />
-                                        <col width="10%" />
-                                        <col width="10%" />
-                                        <col width="10%" />
-                                        <col width="20%" />
-                                        <col width="10%" />
-                                    </colgroup>
-                                    <tbody>
-                                        {
-                                            this.state.preDayList.map((item, index) => {
-                                                return <tr key={index}>
-                                                    <td>{item.account_number} </td>
-                                                    <td>{item.existing_plan}</td>
-                                                    <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
-                                                    <td>{item.entityName}</td>
-                                                    <td>{item.intake_level}</td>
-                                                    <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
-                                                    <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
-                                                    <td className="left">
-                                                        <div><span>Total Monthly: </span><span className="textDecoration" >{parseInt(item.totals)}</span><span> kWh/month</span></div>
-                                                        <div><span>Peak: </span><span><span>{parseInt(Math.round(item.totals * (item.peak_pct) / 100))} kWh/month </span>({parseFloat(item.peak_pct).toFixed(2)}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
-                                                        <div><span>Off-Peak: </span><span>{item.totals - parseInt(Math.round(item.totals * (item.peak_pct) / 100))} kWh/month </span><span>({parseFloat(100 - item.peak_pct).toFixed(2)}%)</span></div>
-                                                        <div className={item.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span>
-                                                            <span>
-                                                                <ul className="attachementList">
-                                                                    {
-                                                                        item.user_attachment ? item.user_attachment.map((item, i) => {
-                                                                            return <li key={i}>
-                                                                                <a href={item.file_path ? item.file_path : "#"} target="_blank">{item.file_name ? item.file_name : ""}</a>
-                                                                            </li>
-                                                                        }) :
-                                                                            <li> </li>
-                                                                    }
-                                                                </ul>
-                                                            </span>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div className="editSite"><a className="btnOption" onClick={this.edit_site.bind(this, item, index, "preDay")}>Edit </a></div>
-                                                        <div className="delSite"><a className="btnOption" onClick={this.remove_site.bind(this, index, "preDay")}>Delete </a></div>
-                                                    </td>
-                                                </tr>
-                                            })
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-
-
-                        <h4 className="col-sm-12 u-mb2 separate">Accounts with Purchase Gap</h4>
-                        <span className="particiption-note">Note: Please update Consumption Details if there is significant change in your account's consumption since your last participation.</span>
-                        <div className="col-sm-12 col-md-12">
-                            <div className="table-head">
-                                <table className="retailer_fill" cellPadding="0" cellSpacing="0">
-                                    <colgroup>
-                                        <col width="10%" />
-                                        <col width="10%" />
-                                        <col width="10%" />
-                                        <col width="10%" />
-                                        <col width="10%" />
-                                        <col width="10%" />
-                                        <col width="10%" />
-                                        <col width="20%" />
-                                        <col width="10%" />
-                                    </colgroup>
-                                    <thead>
-                                        <tr>
-                                            <th>Account No.</th>
-                                            <th>Existing Plan</th>
-                                            <th>Contract Expiry</th>
-                                            <th>Purchasing Entity</th>
-                                            <th>Intake Level</th>
-                                            <th>Contracted Capacity</th>
-                                            <th>Premise Address</th>
-                                            <th>Consumption Details</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                            <div className="table-body">
-                                <table className="retailer_fill" cellPadding="0" cellSpacing="0">
-                                    <colgroup>
-                                        <col width="10%" />
-                                        <col width="10%" />
-                                        <col width="10%" />
-                                        <col width="10%" />
-                                        <col width="10%" />
-                                        <col width="10%" />
-                                        <col width="10%" />
-                                        <col width="20%" />
-                                        <col width="10%" />
-                                    </colgroup>
-                                    <tbody>
-                                        {
-                                            this.state.preOtherList.map((item, index) => {
-                                                return <tr key={index}>
-                                                    <td>{item.account_number} </td>
-                                                    <td>{item.existing_plan}</td>
-                                                    <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
-                                                    <td>{item.entityName}</td>
-                                                    <td>{item.intake_level}</td>
-                                                    <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
-                                                    <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
-                                                    <td className="left">
-                                                        <div><span>Total Monthly: </span><span className="textDecoration" >{parseInt(item.totals)}</span><span> kWh/month</span></div>
-                                                        <div><span>Peak: </span><span><span>{parseInt(Math.round(item.totals * (item.peak_pct) / 100))} kWh/month </span>({parseFloat(item.peak_pct).toFixed(2)}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
-                                                        <div><span>Off-Peak: </span><span>{item.totals - parseInt(Math.round(item.totals * (item.peak_pct) / 100))} kWh/month </span><span>({parseFloat(100 - item.peak_pct).toFixed(2)}%)</span></div>
-                                                        <div className={item.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span>
-                                                            <span>
-                                                                <ul className="attachementList">
-                                                                    {
-                                                                        item.user_attachment ? item.user_attachment.map((item, i) => {
-                                                                            return <li key={i}>
-                                                                                <a href={item.file_path ? item.file_path : "#"} target="_blank">{item.file_name ? item.file_name : ""}</a>
-                                                                            </li>
-                                                                        }) :
-                                                                            <li> </li>
-                                                                    }
-                                                                </ul>
-                                                            </span>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div className="editSite"><a className="btnOption" onClick={this.edit_site.bind(this, item, index, "preOthers")}>Edit </a></div>
-                                                        <div className="delSite"><a className="btnOption" onClick={this.remove_site.bind(this, index, "preOthers")}>Delete </a></div>
-                                                    </td>
-                                                </tr>
-                                            })
-                                        }
-                                    </tbody>
-                                </table>
+                        <div className={this.state.preDayList.length > 0 ? "isDisplay" : "isHide"}>
+                            <h4 className="col-sm-12 u-mb2">Accounts on Continuous Purchase</h4>
+                            <span className="particiption-note">Note: Please update Consumption Details if there is significant change in your account's consumption since your last participation.</span>
+                            <div className="col-sm-12 col-md-12">
+                                <div className="table-head">
+                                    <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                                        <colgroup>
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="20%" />
+                                            <col width="10%" />
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th>Account No.</th>
+                                                <th>Existing Plan</th>
+                                                <th>Contract Expiry</th>
+                                                <th>Purchasing Entity</th>
+                                                <th>Intake Level</th>
+                                                <th>Contracted Capacity</th>
+                                                <th>Premise Address</th>
+                                                <th>Consumption Details</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div className="table-body">
+                                    <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                                        <colgroup>
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="20%" />
+                                            <col width="10%" />
+                                        </colgroup>
+                                        <tbody>
+                                            {
+                                                this.state.preDayList.map((item, index) => {
+                                                    return <tr key={index}>
+                                                        <td>{item.account_number} </td>
+                                                        <td>{item.existing_plan}</td>
+                                                        <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
+                                                        <td>{item.entityName}</td>
+                                                        <td>{item.intake_level}</td>
+                                                        <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
+                                                        <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
+                                                        <td className="left">
+                                                            <div><span>Total Monthly: </span><span className="textDecoration" >{parseInt(item.totals)}</span><span> kWh/month</span></div>
+                                                            <div><span>Peak: </span><span><span>{parseInt(Math.round(item.totals * (item.peak_pct) / 100))} kWh/month </span>({parseFloat(item.peak_pct).toFixed(2)}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
+                                                            <div><span>Off-Peak: </span><span>{item.totals - parseInt(Math.round(item.totals * (item.peak_pct) / 100))} kWh/month </span><span>({parseFloat(100 - item.peak_pct).toFixed(2)}%)</span></div>
+                                                            <div className={item.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span>
+                                                                <span>
+                                                                    <ul className="attachementList">
+                                                                        {
+                                                                            item.user_attachment ? item.user_attachment.map((item, i) => {
+                                                                                return <li key={i}>
+                                                                                    <a href={item.file_path ? item.file_path : "#"} target="_blank">{item.file_name ? item.file_name : ""}</a>
+                                                                                </li>
+                                                                            }) :
+                                                                                <li> </li>
+                                                                        }
+                                                                    </ul>
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div className="editSite"><a className="btnOption" onClick={this.edit_site.bind(this, item, index, "preDay")}>Edit </a></div>
+                                                            <div className="delSite"><a className="btnOption" onClick={this.remove_site.bind(this, index, "preDay")}>Delete </a></div>
+                                                        </td>
+                                                    </tr>
+                                                })
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
 
+                        <div className={this.state.preOtherList.length > 0 ? "isDisplay" : "isHide"}>
+                            <h4 className="col-sm-12 u-mb2 separate">Accounts with Purchase Gap</h4>
+                            <span className="particiption-note">Note: Please update Consumption Details if there is significant change in your account's consumption since your last participation.</span>
+                            <div className="col-sm-12 col-md-12">
+                                <div className="table-head">
+                                    <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                                        <colgroup>
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="20%" />
+                                            <col width="10%" />
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th>Account No.</th>
+                                                <th>Existing Plan</th>
+                                                <th>Contract Expiry</th>
+                                                <th>Purchasing Entity</th>
+                                                <th>Intake Level</th>
+                                                <th>Contracted Capacity</th>
+                                                <th>Premise Address</th>
+                                                <th>Consumption Details</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div className="table-body">
+                                    <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                                        <colgroup>
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="10%" />
+                                            <col width="20%" />
+                                            <col width="10%" />
+                                        </colgroup>
+                                        <tbody>
+                                            {
+                                                this.state.preOtherList.map((item, index) => {
+                                                    return <tr key={index}>
+                                                        <td>{item.account_number} </td>
+                                                        <td>{item.existing_plan}</td>
+                                                        <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
+                                                        <td>{item.entityName}</td>
+                                                        <td>{item.intake_level}</td>
+                                                        <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
+                                                        <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
+                                                        <td className="left">
+                                                            <div><span>Total Monthly: </span><span className="textDecoration" >{parseInt(item.totals)}</span><span> kWh/month</span></div>
+                                                            <div><span>Peak: </span><span><span>{parseInt(Math.round(item.totals * (item.peak_pct) / 100))} kWh/month </span>({parseFloat(item.peak_pct).toFixed(2)}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
+                                                            <div><span>Off-Peak: </span><span>{item.totals - parseInt(Math.round(item.totals * (item.peak_pct) / 100))} kWh/month </span><span>({parseFloat(100 - item.peak_pct).toFixed(2)}%)</span></div>
+                                                            <div className={item.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span>
+                                                                <span>
+                                                                    <ul className="attachementList">
+                                                                        {
+                                                                            item.user_attachment ? item.user_attachment.map((item, i) => {
+                                                                                return <li key={i}>
+                                                                                    <a href={item.file_path ? item.file_path : "#"} target="_blank">{item.file_name ? item.file_name : ""}</a>
+                                                                                </li>
+                                                                            }) :
+                                                                                <li> </li>
+                                                                        }
+                                                                    </ul>
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div className="editSite"><a className="btnOption" onClick={this.edit_site.bind(this, item, index, "preOthers")}>Edit </a></div>
+                                                            <div className="delSite"><a className="btnOption" onClick={this.remove_site.bind(this, index, "preOthers")}>Delete </a></div>
+                                                        </td>
+                                                    </tr>
+                                                })
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                         <h4 className="col-sm-12 u-mb2 separate">New Accounts</h4>
                         <div className="col-sm-12 col-md-12">
                             <div className="table-head">
@@ -857,7 +857,7 @@ export class FillConsumption extends Component {
                                                 return <tr key={index}>
                                                     <td>{item.account_number} </td>
                                                     <td>{item.existing_plan}</td>
-                                                    <td>{(item.contract_expiry!=="" && item.contract_expiry!==null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
+                                                    <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
                                                     <td>{item.entityName}</td>
                                                     <td>{item.intake_level}</td>
                                                     <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
@@ -921,8 +921,8 @@ export class FillConsumption extends Component {
                     <Modal text={this.state.text} acceptFunction={this.doAccept.bind(this)} ref="Modal" />
                 </form>
                 <Modal formSize="big" text={this.state.text} acceptFunction={this.doAddAccountAction.bind(this)} siteList={this.state.totalList} consumptionAccountItem={this.state.account_detail} listdetailtype='consumption_detail' ref="consumption" />
-                <Modal formSize="middle" text={this.state.text} advisory={this.state.advisory} listdetailtype='market-insight' ref="market" />
-            </div >
+                <Modal formSize="big" text={this.state.text} advisory={this.state.advisory} listdetailtype='market-insight' ref="market" />
+            </div>
         )
     }
 }
