@@ -347,7 +347,8 @@ class Api::UsersController < Api::BaseController
       if arrangements.any? { |x| x.action_status == Arrangement::ActionStatusSent }
         arrangements_sent = arrangements.where(action_status: Arrangement::ActionStatusSent)
         arrangements_sent.each do |temp_arrangement|
-          if !AuctionResultContract.any? { |x| x.auction_id == temp_arrangement.auction_id && x.user_id == user_id }
+          if AuctionResultContract.any? { |x| x.auction_id == temp_arrangement.auction_id && x.user_id == user_id &&
+              x.contract_period_end_date > DateTime.current && x.status != 'void' }
             validate_result = 2
           end
           # auction_contracts = AuctionContract.find_by_auction_id(temp_arrangement.auction_id)
