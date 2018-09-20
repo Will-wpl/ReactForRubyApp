@@ -242,7 +242,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
                 display: flex;flex-direction: column;align-items: center;
                 abbr{ width: 52px; height: 42px; display: block; background: url("../images/SP_Group_Logo.jpg") no-repeat center; background-size: 42px; }
               }
-              span{ background: #9fdd9f;  word-break:break-all; padding: 10px; border-radius: 5px; color:#666; display: block; overflow: hidden;
+              aside{ background: #9fdd9f;  word-break:break-all; padding: 10px; border-radius: 5px; color:#666; display: block; overflow: hidden;
                 div{border:1px dashed #fff;}
                 &.short{min-width:80px; max-width: 350px; float: right;}
               }
