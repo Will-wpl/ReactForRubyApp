@@ -562,8 +562,9 @@ class Api::AuctionsController < Api::BaseController
                                   LEFT JOIN users ON cns.user_id = users.\"id\",
                                     ( SELECT ent.company_name, ent.company_uen FROM company_buyer_entities ent WHERE ent.user_id = ? AND \"id\" = ? LIMIT 1 ) entity
                                   WHERE
-                                    cns.user_id = ? AND auction_id = ? AND contract_duration = ? AND accept_status = '1'",
+                                    cns.user_id = ? AND auction_id = ? AND contract_duration = ?",
                                            user_id, entity_id, user_id, auction_id, contract_duration]
+    # AND accept_status = '1'
     return nil, nil,nil, nil, nil if (consumption.empty?)
     auction_result = AuctionResultContract.select("users.id, users.name, coalesce(users.company_name, '') company_name,
                                   coalesce(users.company_address, '') company_address,
@@ -948,10 +949,10 @@ class Api::AuctionsController < Api::BaseController
   end
 
   def set_auction_result_template_id(auction_result_contract)
-    parent_template = RichTemplate.find_by_type_last(RichTemplate::LETTER_OF_AWARD_TEMPLATE)
-    entity_template = RichTemplate.find_by_type_last(RichTemplate::NOMINATED_ENTITY_TEMPLATE)
-    auction_result_contract.parent_template_id = parent_template[0].id unless parent_template.empty?
-    auction_result_contract.entity_template_id = entity_template[0].id unless entity_template.empty?
+    parent_template = RichTemplate.where(type: RichTemplate::LETTER_OF_AWARD_TEMPLATE).last
+    entity_template = RichTemplate.where(type: RichTemplate::NOMINATED_ENTITY_TEMPLATE).last
+    auction_result_contract.parent_template_id = parent_template.id if parent_template
+    auction_result_contract.entity_template_id = entity_template.id if entity_template
   end
 
   def set_old_confirm(params, auction_result)
