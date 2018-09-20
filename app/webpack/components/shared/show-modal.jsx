@@ -1214,7 +1214,7 @@ export class Modal extends React.Component {
             }
             if (this.props.listdetailtype === "market-insight") {
                 $("#advisoryDiv").html(this.state.advisory)
-                showDetail = <div id="advisoryDiv" style={{ height: "220px" }}> </div>
+                showDetail = <div id="advisoryDiv"  style={{ height: "380px" ,marginBottom:"30px" }}> </div>
             }
 
             if (this.props.listdetailtype === 'entity_detail') {
