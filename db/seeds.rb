@@ -202,7 +202,3 @@ email_templates.each do |template|
   end
 
 end
-
-
-
-# templates
