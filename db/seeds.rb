@@ -221,3 +221,9 @@ rich_templates.each do |template|
   end
 
 end
+
+# templates
+parent_template = RichTemplate.find_by_type_last(RichTemplate::LETTER_OF_AWARD_TEMPLATE)
+entity_template = RichTemplate.find_by_type_last(RichTemplate::NOMINATED_ENTITY_TEMPLATE)
+AuctionResultContract.where('parent_template_id is null').update(parent_template_id: parent_template[0].id) unless parent_template.empty?
+AuctionResultContract.where('entity_template_id is null').update(entity_template_id: entity_template[0].id) unless entity_template.empty?

@@ -34,7 +34,7 @@ class Api::Admin::TemplatesController < Api::BaseController
   def get_template_content(type)
     content = ''
     if type.to_i == RichTemplate::LETTER_OF_AWARD_TEMPLATE || type.to_i === RichTemplate::NOMINATED_ENTITY_TEMPLATE
-      template = RichTemplate.where("type = ?", type).order("id desc").limit(1)
+      template = RichTemplate.find_by_type_last(type)
       template = if template.empty?
                    nil
                  else
