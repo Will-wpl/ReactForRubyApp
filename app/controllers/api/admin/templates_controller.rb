@@ -14,10 +14,17 @@ class Api::Admin::TemplatesController < Api::BaseController
     body = params[:body]
     return render json: nil, status: 400 if type.nil? || body.nil?
 
-    template = RichTemplate.find_by(type: type)
-    return render json: nil, status: 400 if template.nil?
+    if type.to_i == RichTemplate::LETTER_OF_AWARD_TEMPLATE || type.to_i == RichTemplate::NOMINATED_ENTITY_TEMPLATE
+      template = RichTemplate.new
+      template.type = type
+      template.content = body
+      template.save
+    else
+      template = RichTemplate.find_by(type: type)
+      return render json: nil, status: 400 if template.nil?
+      template.update(content: body)
+    end
 
-    template.update(content: body)
     render json: nil, status: 200
   end
 
@@ -25,8 +32,17 @@ class Api::Admin::TemplatesController < Api::BaseController
 
 
   def get_template_content(type)
-    template = RichTemplate.find_by type: type
     content = ''
+    if type.to_i == RichTemplate::LETTER_OF_AWARD_TEMPLATE || type.to_i === RichTemplate::NOMINATED_ENTITY_TEMPLATE
+      template = RichTemplate.find_by_type_last(type)
+      template = if template.empty?
+                   nil
+                 else
+                   template.first
+                 end
+    else
+      template = RichTemplate.find_by type: type
+    end
     content = template.content unless template.nil?
     content
   end
