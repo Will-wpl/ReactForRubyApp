@@ -64,7 +64,14 @@ class LetterOfAwardV2 < LetterOfAward
   end
 
   def get_template_content
-    pdf_template = RichTemplate.find_by type: pdf_template_type
+    template_id = nil
+    if pdf_template_type == RichTemplate::LETTER_OF_AWARD_TEMPLATE
+      template_id = param[:auction_result][0].parent_template_id
+    elsif pdf_template_type == RichTemplate::NOMINATED_ENTITY_TEMPLATE
+      template_id = param[:auction_result][0].entity_template_id
+    end
+
+    pdf_template = RichTemplate.find_by id: template_id unless template_id.nil?
     return nil if pdf_template.nil?
     Nokogiri::HTML(pdf_template.content, nil, 'UTF-8')
   end
