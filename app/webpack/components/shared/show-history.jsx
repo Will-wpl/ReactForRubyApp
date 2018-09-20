@@ -146,7 +146,7 @@ export class Showhistory extends React.Component{
                         return <dl key={index}>
                                     {item.propose_deviation ?
                                     <dd>
-                                        <dfn><abbr></abbr>{this.state.ratailer_name}</dfn>
+                                        <dfn><bdo></bdo>{this.state.ratailer_name}</dfn>
                                         <aside>
                                             <b>Proposed Deviation : </b><div className={"devation_text_"+index}>{this.showHtml("devation_text_"+index,item.propose_deviation?item.propose_deviation:"")}</div><br/>
                                             <b>Comments : </b><div className={"comments_text_"+index}>{this.showHtml("devation_text_"+index,item.retailer_response?item.retailer_response:"")}</div>
@@ -154,7 +154,7 @@ export class Showhistory extends React.Component{
                                     </dd>:''}
                                     {item.sp_response!=null?
                                     <dt>
-                                        <dfn><abbr></abbr>SP Group</dfn>
+                                        <dfn><bdo></bdo>SP Group</dfn>
                                         {item.response_status == "0"?
                                             <aside className={item.sp_response===""?"short":""}><b>Rejected : </b>{item.sp_response===""?"":<div className={"sp_text_"+index}>{item.sp_response}</div>}</aside>:
                                             <aside className={item.sp_response===""?"short":""}><b>Accepted : </b>{item.sp_response===""?"":<div className={"sp_text_"+index}>{item.sp_response}</div>}</aside>}

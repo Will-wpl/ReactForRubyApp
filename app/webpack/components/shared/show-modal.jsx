@@ -1080,7 +1080,7 @@ export class Modal extends React.Component {
                                 Subject:
                             </label>
                             <div className="lm--formItem-control">
-                                <input type="text" name="email_subject" value={this.state.email_subject} onChange={this.Change.bind(this, 'email_subject')} disabled={this.state.disabled} ref="email_subject" maxLength="50" required aria-required="true" />
+                                <input type="text" name="email_subject" value={this.state.email_subject} onChange={this.Change.bind(this, 'email_subject')} disabled={this.state.disabled} ref="email_subject" required aria-required="true" />
                             </div>
                         </div>}
                         <div className="lm--formItem lm--formItem--inline string">
