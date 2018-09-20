@@ -330,7 +330,7 @@ class Api::AuctionsController < Api::BaseController
   end
 
   def selects
-    retailers = Arrangement.find_by_auction_id(params[:id]).group(:action_status).count
+    retailers = Arrangement.find_by_auction_id(params[:id]).find_by_approvaled_user.group(:action_status).count
     company_buyers = Consumption.find_by_auction_id(params[:id]).find_by_user_consumer_type('2').group(:action_status).count
     individual_buyers = Consumption.find_by_auction_id(params[:id]).find_by_user_consumer_type('3').group(:action_status).count
 
@@ -442,9 +442,9 @@ class Api::AuctionsController < Api::BaseController
       pdf, output_filename = LetterOfAward.new(pdf_param).pdf
     else
       template_type = if is_parent
-                        1
+                        RichTemplate::LETTER_OF_AWARD_TEMPLATE
                       else
-                        2
+                        RichTemplate::NOMINATED_ENTITY_TEMPLATE
                       end
       pdf, output_filename = LetterOfAwardV2.new(pdf_param, template_type).pdf
     end
@@ -930,6 +930,7 @@ class Api::AuctionsController < Api::BaseController
       auction_result_contract.auction_id = params[:id].to_i
       auction_result_contract.auction_result = auction_result
       auction_result_contract.contract_duration = params[:contract_duration]
+      set_auction_result_template_id auction_result_contract
       if auction_result_contract.save!
         live_auction_contracts_count = get_lived_auction_contracts(@auction, true).count
         result_auction_contracts_count = AuctionResultContract.where(auction_result_id: auction_result.id).count
@@ -944,6 +945,13 @@ class Api::AuctionsController < Api::BaseController
     auction_result_contract_hash = auction_result_contract.attributes.dup
     auction_result_contract_hash['contract_period_start_date'] = auction_result.contract_period_start_date
     auction_result_contract_hash
+  end
+
+  def set_auction_result_template_id(auction_result_contract)
+    parent_template = RichTemplate.find_by_type_last(RichTemplate::LETTER_OF_AWARD_TEMPLATE)
+    entity_template = RichTemplate.find_by_type_last(RichTemplate::NOMINATED_ENTITY_TEMPLATE)
+    auction_result_contract.parent_template_id = parent_template[0].id unless parent_template.empty?
+    auction_result_contract.entity_template_id = entity_template[0].id unless entity_template.empty?
   end
 
   def set_old_confirm(params, auction_result)

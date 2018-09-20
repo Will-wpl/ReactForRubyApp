@@ -290,21 +290,21 @@ export class BuyerUserManage extends Component {
                             break;
                         case 1:
                             this.setState({
-                                text: "Current Buyer has ongoing Auction, which can't be reject at present. ",
+                                text: "Current buyer has ongoing auction, which can't be rejected at present. ",
                             }, () => {
                                 this.refs.Modal_Option.showModal();
                             });
                             break;
                         case 2:
                             this.setState({
-                                text: "Current Buyer has ongoing Auction, which can't be reject at present. ",
+                                text: "Current buyer has ongoing auction, which can't be rejected at present. ",
                             }, () => {
                                 this.refs.Modal_Option.showModal();
                             });
                             break;
                         case 3:
                             this.setState({
-                                text: "Current Buyer has pending Auction invitation,would you proceed anyway? Once proceeded,pending invitation will be cancalled as well. ",
+                                text: "Current buyer has pending auction invitation, would you proceed anyway? Once proceeded, pending invitation will be cancelled as well. ",
                             }, () => {
                                 this.refs.Modal_Option.showModal('comfirm', { action: 'reject', type: 'user'}, '');
                             });
@@ -342,21 +342,21 @@ export class BuyerUserManage extends Component {
                     break;
                 case 1:
                     this.setState({
-                        text: "Current Buyer has ongoing Auction, which can't be deleted at present. ",
+                        text: "Current buyer has ongoing auction, which can't be deleted at present. ",
                     }, () => {
                         this.refs.Modal_Option.showModal();
                     });
                     break;
                 case 2:
                     this.setState({
-                        text: "Current Buyer has ongoing Auction, which can't be deleted at present. ",
+                        text: "Current buyer has ongoing auction, which can't be deleted at present. ",
                     }, () => {
                         this.refs.Modal_Option.showModal();
                     });
                     break;
                 case 3:
                     this.setState({
-                        text: "Current Buyer has pending Auction invitation,would you proceed anyway? Once proceeded,pending invitation will be cancalled as well. ",
+                        text: "Current buyer has pending auction invitation, would you proceed anyway? Once proceeded, pending invitation will be cancelled as well. ",
                     }, () => {
                         this.refs.Modal_Option.showModal('comfirm', { action: 'delete', type: 'deleteBuyer'});
                     });
@@ -438,7 +438,7 @@ export class BuyerUserManage extends Component {
     entity_reject(item, index) {
         let list = this.state.entity_list;
         list[index].approval_status = "0";
-        list[index].approval_status_name = "Reject";
+        list[index].approval_status_name = "Rejected";
         list[index].isApproved = false;
         this.setState({
             entity_list: list

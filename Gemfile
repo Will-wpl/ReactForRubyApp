@@ -85,6 +85,7 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 
   gem 'rails-erd'
+  gem 'letter_opener_web', '~> 1.0'
 end
 
 group :test do

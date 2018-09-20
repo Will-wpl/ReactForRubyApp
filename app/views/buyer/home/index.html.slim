@@ -1,26 +1,29 @@
-- if current_user.approval_status == '1' &&  (current_user.agree_seller_buyer=='1' && current_user.agree_buyer_revv=='1')
+- if @current_user.approval_status == '1' &&  (@current_user.agree_seller_buyer=='1' && @current_user.agree_buyer_revv=='1')
   div.col-sm-12.col-md-6.push-md-3.admin_btn
     a.lm--button.lm--button--primary.col-sm-12.col-md-12 href= "/buyer/auctions" Manage Upcoming Reverse Auction
     a.lm--button.lm--button--primary.col-sm-12.col-md-12 href= "/buyer/auction_results" View Past Reverse Auction
   div id='checkNetwork'
+- else
+    - if @current_user.approval_status == '1' && ((@current_user.agree_seller_buyer==nil || @current_user.agree_seller_buyer=='0') || (@current_user.agree_buyer_revv==nil || @current_user.agree_buyer_revv=='0'))
+      div.col-sm-12.col-md-6.push-md-3 id="buyer_upload_new_attachment"
+ 
 
-- if current_user.approval_status == '0' 
+- if @current_user.approval_status == '0' 
   div.live_modal_reject
     p.p1 Account Status: Rejected by administrator.
     p.p2 Please update your details under 'Manage Account'.
 
 
-- if current_user.approval_status == '3' 
+- if @current_user.approval_status == '3' 
   /h1 = 'Account Status: Rejected by Admin'
   div id="buyer_register"
 
-- if current_user.approval_status == '2'
+- if @current_user.approval_status == '2'
   div.live_modal  
     p Account Status: Pending administrator's approval.
 
-- if current_user.approval_status == '1' && ((current_user.agree_seller_buyer==nil || current_user.agree_seller_buyer=='0') || (current_user.agree_buyer_revv==nil || current_user.agree_buyer_revv=='0'))
-  div.col-sm-12.col-md-6.push-md-3 id="buyer_upload_new_attachment"
 
 
 
-/&& (current_user.tc_attachment_update_flag == nil || current_user.tc_attachment_update_flag == 0)   && current_user.tc_attachment_update_flag > 0
+
+/&& (@current_user.tc_attachment_update_flag == nil || @current_user.tc_attachment_update_flag == 0)   && @current_user.tc_attachment_update_flag > 0

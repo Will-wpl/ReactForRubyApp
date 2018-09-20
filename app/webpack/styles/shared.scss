@@ -232,17 +232,17 @@ abbr[title]{color: #fe0000; text-decoration: none;}
                 color:#666;
                 float: left; margin-right:15px; text-align: center; overflow: hidden;
                 display: flex;flex-direction: column;align-items: center;
-                abbr{ width: 42px; height: 42px; font-style: normal;display: block; background: url("../images/retailer_icon.png") no-repeat center; background-size: 42px; }
+                bdo{ width: 42px; height: 42px; font-style: normal;display: block; background: url("../images/retailer_icon.png") no-repeat center; background-size: 42px; }
               }
-              span{ background: #eee; overflow: hidden;  padding: 10px; word-break:break-all; border-radius: 5px; color:#666; display: block}
+              aside{ background: #eee; overflow: hidden;  padding: 10px; word-break:break-all; border-radius: 5px; color:#666; display: block}
             }
             dt{width:92%; display: block; overflow: hidden; margin: 15px auto; font-weight: normal;
               dfn{color:#666;
                 float: right; margin-left:15px; text-align: center; overflow: hidden;
                 display: flex;flex-direction: column;align-items: center;
-                abbr{ width: 52px; height: 42px; display: block; background: url("../images/SP_Group_Logo.jpg") no-repeat center; background-size: 42px; }
+                bdo{ width: 52px; height: 42px; display: block; background: url("../images/SP_Group_Logo.jpg") no-repeat center; background-size: 42px; }
               }
-              span{ background: #9fdd9f;  word-break:break-all; padding: 10px; border-radius: 5px; color:#666; display: block; overflow: hidden;
+              aside{ background: #9fdd9f;  word-break:break-all; padding: 10px; border-radius: 5px; color:#666; display: block; overflow: hidden;
                 div{border:1px dashed #fff;}
                 &.short{min-width:80px; max-width: 350px; float: right;}
               }
@@ -1312,7 +1312,12 @@ width: "70%"; float: "left";padding:5px;
   background: '#35404c' !important;
 }
 .entityApprove{
-  width: 60px; float:center; margin-left: 10px; margin-top: 10px; cursor: pointer;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block;
+  width: 70px; float:center;
+  margin-left: 10px; margin-top: 10px;
+   cursor: pointer;  padding: 3px 0px;
+   text-align: center; background: #54B41B;
+   border-radius: 5px; color:#fff; display: inline-block;
+   font-size: 0.875rem !important
 }
 .btnFont{
   font-size: 1.0625rem !important;
@@ -1343,5 +1348,6 @@ width: "70%"; float: "left";padding:5px;
   }
   img{
     height: 120px;
+    cursor: pointer;
   }
 }
