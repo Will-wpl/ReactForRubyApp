@@ -91,7 +91,6 @@ export class RetailerTCUploadApprove extends Component {
         return epa && bpt;
     }
     doSubmit() {
-        console.log()
         if (this.checkSuccess()) {
             saveRetailerAttachmentModification().then(res => {
                 setTimeout(() => {

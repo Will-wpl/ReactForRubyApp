@@ -212,11 +212,11 @@ export class Modal extends React.Component {
                         '文字颜色': 'font color',
                         '背景色': 'background color',
                         '对齐方式': 'alignment',
-                        '靠左':'left',
-                        '靠右':'right',
-                        '居中':'center',
-                        '宋体':'song',
-                        '微软雅黑':'yahei'
+                        '靠左': 'left',
+                        '靠右': 'right',
+                        '居中': 'center',
+                        '宋体': 'song',
+                        '微软雅黑': 'yahei'
                         // 还可自定添加更多
                     };
                     setTimeout(() => { editor.create(); });
@@ -247,11 +247,11 @@ export class Modal extends React.Component {
                         '文字颜色': 'font color',
                         '背景色': 'background color',
                         '对齐方式': 'alignment',
-                        '靠左':'left',
-                        '靠右':'right',
-                        '居中':'center',
-                        '宋体':'song',
-                        '微软雅黑':'yahei'
+                        '靠左': 'left',
+                        '靠右': 'right',
+                        '居中': 'center',
+                        '宋体': 'song',
+                        '微软雅黑': 'yahei'
                         // 还可自定添加更多
                     };
                     setTimeout(() => { editor.create(); })
@@ -798,20 +798,84 @@ export class Modal extends React.Component {
             })
         }
 
+        // attacheList = [
+        //     {
+        //         file_name: "file.pdf",
+        //         file_path: "http://www.example.com/file.pdf"
+        //     }
+        //     // {
+        //     //     file_name: "Beon_Solar.png",
+        //     //     file_path: "https://revvstorage.blob.core.windows.net/documentstorage/uploads/attachments/15373338138269758/Beon_Solar.png"
+        //     // },
+        //     // {
+        //     //     file_name: "Retailer_Tender_Submission_1.pdf",
+        //     //     file_path: "https://revvstorage.blob.core.windows.net/documentstorage/uploads/attachments/15373302046031258/Retailer_Tender_Submission_1.pdf"
+        //     // },
+        // ];
         for (let i = 0; i < attacheList.length; i++) {
             this.download(attacheList[i].file_name, attacheList[i].file_path);
+            // console.log(i)
         }
     }
 
+
     download(file_name, file_path) {
-        let a = document.createElement("a"),
-            e = document.createEvent("MouseEvents"); //创建鼠标事件对象
-        e.initEvent("click", false, false); //初始化事件对象
-        a.href = file_path; //设置下载地址
-        a.target = "_blank";
-        a.download = file_name; //设置下载文件名
-        a.dispatchEvent(e); //给指定的元素，执行事件click事
+        // console.log(file_path)
+        // let a = document.createElement("a"),
+        //     // blob = new Blob([file_path]),
+        //     e = document.createEvent("MouseEvents"); //创建鼠标事件对象
+        // document.body.appendChild(a);
+        // Response.addre
+        // e.initEvent("click", false, false); //初始化事件对象
+        // // a.href = URL.createObjectURL(blob); //设置下载地址
+        // a.href = file_path;
+        // a.target = "_blank";
+        // a.className="";
+        // a.download
+        // a.download = file_name; //设置下载文件名
+        // console.log(a);
+        // a.dispatchEvent(e); //给指定的元素，执行事件click事
+       
+
+        // for (let i = 0; i < fileContents.length; i++) {
+        //     let a = document.createElement('a');
+        //     let blob = fileContents[i].blob;
+        //     let filename = fileContents[i].filename;
+            
+        //     /** // 如果文件名有中文，win平台需要转成gb2312编码，否则文件名乱码
+        //      * if ((navigator.platform == "Win32") || (navigator.platform == "Windows")) {
+        //         return Utf8ToGb2312(filename);
+        //     }
+        //      * */
+    
+        //     a.download = filename;
+        //     a.href = window.URL.createObjectURL(blob);
+        //     a.dispatchEvent(new MouseEvent('click'));
+        // }
+
+
+        setTimeout(() => {
+            let frame = document.createElement("iframe");
+            frame.id="download";
+            frame.name="download";
+            frame.style = 'display: none;';
+            frame.class = 'multi-download';
+            frame.src = file_path,
+            document.body.appendChild(frame);
+            // Response.ContentType = "image/png";
+            console.log(frame)
+            frame.contentWindow.document.execCommand("saveAs", true, file_name);
+
+            setTimeout(function () {
+                document.body.removeChild(frame);
+            }, 1000);
+    
+        })
     }
+
+
+
+
 
     account_address_repeat() {
         let address = false, account = false, editNotSave = false;
@@ -942,10 +1006,10 @@ export class Modal extends React.Component {
             contract_expiry: data
         })
     }
-    Change(type,e){
-        if(type == "email_subject"){
+    Change(type, e) {
+        if (type == "email_subject") {
             this.setState({
-                email_subject:e.target.value
+                email_subject: e.target.value
             })
         }
     }
@@ -1214,7 +1278,7 @@ export class Modal extends React.Component {
             }
             if (this.props.listdetailtype === "market-insight") {
                 $("#advisoryDiv").html(this.state.advisory)
-                showDetail = <div id="advisoryDiv"  style={{ height: "380px" ,marginBottom:"30px" }}> </div>
+                showDetail = <div id="advisoryDiv" style={{ height: "220px" }}> </div>
             }
 
             if (this.props.listdetailtype === 'entity_detail') {
@@ -1517,6 +1581,7 @@ export class Modal extends React.Component {
                                 <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
                             </div>
                             {btn_html}
+                            {/* <base target="download"></base> */}
                         </div>
         )
     }
