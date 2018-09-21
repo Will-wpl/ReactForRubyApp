@@ -192,20 +192,20 @@ export class Modal extends React.Component {
                 $(".w-e-text p").html("");
                 if ($("#email_body").html() == "") {
                     var editor = new E('#email_body');
-                    editor.customConfig.menus = [
-                        'head',
-                        'bold',
-                        'fontSize',
-                        'fontName',
-                        'italic',
-                        'underline',
-                        'strikeThrough',
-                        'foreColor',
-                        'backColor',
-                        'justify',
-                        'undo',
-                        'redo'
-                    ];
+                    // editor.customConfig.menus = [
+                    //     'head',
+                    //     'bold',
+                    //     'fontSize',
+                    //     'fontName',
+                    //     'italic',
+                    //     'underline',
+                    //     'strikeThrough',
+                    //     'foreColor',
+                    //     'backColor',
+                    //     'justify',
+                    //     'undo',
+                    //     'redo'
+                    // ];
                     editor.customConfig.lang = {
                         '字号': 'font size',
                         '字体': 'font',
@@ -227,20 +227,20 @@ export class Modal extends React.Component {
                 $(".w-e-text p").html("");
                 if ($("#email_body").html() == "") {
                     var editor = new E('#email_body');
-                    editor.customConfig.menus = [
-                        'head',
-                        'bold',
-                        'fontSize',
-                        'fontName',
-                        'italic',
-                        'underline',
-                        'strikeThrough',
-                        'foreColor',
-                        'backColor',
-                        'justify',
-                        'undo',
-                        'redo'
-                    ];
+                    // editor.customConfig.menus = [
+                    //     'head',
+                    //     'bold',
+                    //     'fontSize',
+                    //     'fontName',
+                    //     'italic',
+                    //     'underline',
+                    //     'strikeThrough',
+                    //     'foreColor',
+                    //     'backColor',
+                    //     'justify',
+                    //     'undo',
+                    //     'redo'
+                    // ];
                     editor.customConfig.lang = {
                         '字号': 'font size',
                         '字体': 'font',
@@ -818,7 +818,7 @@ export class Modal extends React.Component {
         a.target = "_blank";
         a.download = file_name; //设置下载文件名
         a.dispatchEvent(e); //给指定的元素，执行事件click事
-        
+        document.body.removeChild(a);
     }
 
 
@@ -1031,6 +1031,11 @@ export class Modal extends React.Component {
                                 <input type="text" name="email_subject" value={this.state.email_subject} onChange={this.Change.bind(this, 'email_subject')} disabled={this.state.disabled} ref="email_subject" required aria-required="true" />
                             </div>
                         </div>}
+                        <div className="lm--formItem lm--formItem--inline string">
+                            <div className="lm--formItem-control">
+                                *Note: Please DO NOT edit the words start with #, they are predefined parameters to retrieve specific value from database.
+                            </div>
+                        </div>
                         <div className="lm--formItem lm--formItem--inline string">
                             <label className="lm--formItem-label string required">
                                 Body:
@@ -1506,7 +1511,7 @@ export class Modal extends React.Component {
         }
         return (
             this.props.formSize === "big" ?
-                <div id="modal_main" className={this.state.modalshowhide} style={this.props.modalSize == "big" ? { width: "98%", height: "500px", top: "20%", marginLeft: "-49%" } : { width: "700px", top: "20%", marginLeft: "-350px" }} >
+                <div id="modal_main" className={this.state.modalshowhide} style={this.props.modalSize == "big" ? { width: "98%", height: "550", top: "20%", marginLeft: "-49%" } : { width: "700px", top: "20%", marginLeft: "-350px" }} >
                     <h4><a onClick={this.closeModal.bind(this, 1)}>X</a></h4>
                     <div className="modal_detail model_detail_formHeight">
                         <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
