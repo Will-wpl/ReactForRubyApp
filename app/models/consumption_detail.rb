@@ -44,6 +44,7 @@ class ConsumptionDetail < ApplicationRecord
                                       JOIN consumptions c ON cd.consumption_id = c.id
                                       JOIN auctions a ON c.auction_id = a.id
                                       JOIN auction_contracts ac ON a.id = ac.auction_id
+                                      AND e.approval_status = '1'
                                       AND u.approval_status = '1'
                                       AND (u.is_deleted is NULL OR u.is_deleted <> 1)
                                       AND c.accept_status = '1'
