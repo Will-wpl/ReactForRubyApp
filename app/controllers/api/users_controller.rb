@@ -78,6 +78,8 @@ class Api::UsersController < Api::BaseController
     buyer_entities = CompanyBuyerEntity.find_by_user(user_id)
     ActiveRecord::Base.transaction do
       buyer_entities.each do |temp_entity|
+        temp_entity.company_uen = string_for_user_value(temp_entity.company_uen)
+        temp_entity.contact_email = string_for_user_value(temp_entity.contact_email)
         remove_user(temp_entity.user_entity_id) unless temp_entity.user_entity_id.blank?
       end
       buyer_entities.update(is_default: 1, approval_status: CompanyBuyerEntity::ApprovalStatusRemoved)

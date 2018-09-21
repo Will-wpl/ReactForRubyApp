@@ -28,11 +28,18 @@ class Api::UserAttachmentsController < Api::BaseController
   #   user.save!
   #   render json: user, status: 200
   # end
-
+  Letter_Authorisation_Zip_File = 'letter_authorisation.zip'.freeze
   # get user attachments by user id
   def index
     file_type = params[:file_type]
-    attachments = UserAttachment.find_by_type(file_type).order(created_at: :desc)
+    attachments = UserAttachment.find_by_type(file_type).where("file_path not like '%letter_authorisation.zip' ").order(created_at: :desc)
+    # if params[:file_type].eql?(UserAttachment::FileType_Letter_Authorisation)
+    #   removed_attachment = nil
+    #   attachments.each do |attachment|
+    #     removed_attachment = attachment if attachment.file_path.include? 'letter_authorisation.zip'
+    #   end
+    #   attachments.delete(removed_attachment) unless removed_attachment.blank?
+    # end
     render json: attachments, status: 200
   end
 
@@ -49,6 +56,18 @@ class Api::UserAttachmentsController < Api::BaseController
     attachment.consumption_detail_id = params[:consumption_detail_id] unless params[:consumption_detail_id].blank?
 
     attachment.save!
+    if params[:file_type].eql?(UserAttachment::FileType_Letter_Authorisation)
+      zip_file = upload_letter_authorisation
+      unless UserAttachment.any?{|x| x.file_name == zip_file[:filename]}
+        zip_attachment = UserAttachment.new
+        zip_attachment.file_name = zip_file[:filename]
+        zip_attachment.file_type = params[:file_type]
+        zip_attachment.file_path = zip_file[:url]
+        zip_attachment.user_id = current_user.id unless current_user&.has_role?(:admin)
+        zip_attachment.consumption_detail_id = params[:consumption_detail_id] unless params[:consumption_detail_id].blank?
+        zip_attachment.save!
+      end
+    end
 
     if attachment.file_type.eql?(UserAttachment::FileType_Seller_Buyer_TC)
       # User.update_attachment_update_flag(User.buyers,UserAttachment::FileFlag_Seller_Buyer_TC)
@@ -72,7 +91,14 @@ class Api::UserAttachmentsController < Api::BaseController
 
   def destroy
     attachment = UserAttachment.find_by_id(params[:id])
+    file_type = attachment.file_type
+    url = attachment.file_path
     attachment.destroy
+    if file_type.eql?(UserAttachment::FileType_Letter_Authorisation)
+      zip_file_name = 'letter_authorisation.zip'
+      destination_file_path = upload_file_path(zip_file_name)
+      zip_attachments_remove(destination_file_path,[url])
+    end
     render json: nil, status: 200
   end
 
@@ -88,5 +114,16 @@ class Api::UserAttachmentsController < Api::BaseController
     uploader = AvatarUploader.new(UserAttachment, mounted_as)
     uploader.store!(file)
     uploader
+  end
+
+  def upload_letter_authorisation
+    file = params[:file]
+    zip_file_name = UserAttachmentsController::Letter_Authorisation_Zip_File
+    destination_file_path = upload_file_path(zip_file_name)
+    zip_attachments(destination_file_path, [file])
+    mounted_as = []
+    mounted_as.push('letter_authorisation')
+    uploader = AvatarUploader.new(UserAttachment, mounted_as)
+    { url: uploader.store_path(zip_file_name), filename: zip_file_name }
   end
 end
