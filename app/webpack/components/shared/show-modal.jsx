@@ -1080,7 +1080,7 @@ export class Modal extends React.Component {
         else {
             if (this.props.listdetailtype === 'Documents Message') {
                 showDetail = <ul className="showdetail">
-                    <li>Please upload the following documentations: {this.state.attatchment.file_name}{this.state.attatchment.file_path}</li>
+                    <li>Please upload the following documentations:</li>
                     <li>1) A print-out of this <a href={this.state.attatchment.file_path} download={this.state.attatchment.file_name} className="urlStyleUnderline" target="_blank">Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
                     <li>2a) Your company's Accounting & Corporate Regulatory Authority (ACRA) Business Profile.</li>
                     <li>or</li>
@@ -1089,15 +1089,6 @@ export class Modal extends React.Component {
                     <li>4) A copy of the Applicant's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
                     <li>5) A copy of the Authorised Representative's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
                     <li>All supporting documents submitted should be in English only.</li>
-                    <li>
-                        <div className="downloadAttach">
-                            {
-                                this.state.attatchment.map((item, index) => {
-                                    return <a id={"attach_" + index} key={index} href={item.file_path} target="_blank" download={item.file_name}>{item.file_name}22</a>
-                                })
-                            }
-                        </div>
-                    </li>
                 </ul>
             }
             if (this.props.listdetailtype === 'entity_error') {
