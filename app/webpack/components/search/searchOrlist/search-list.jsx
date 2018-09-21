@@ -388,8 +388,8 @@ export class SearchList extends Component {
                             }
                         </tbody>
                     </table>
-                    {this.props.type == "Retailer List"?<button className="lm--button lm--button--primary reset_btn u-mt1 u-mb1" onClick={this.goDeleteList.bind(this,'del_retailers')}>Retailer Deleted List</button>:""}
-                    {this.props.type == "Buyer List"?<button className="lm--button lm--button--primary reset_btn u-mt1 u-mb1" onClick={this.goDeleteList.bind(this,'del_buyers')}>Buyer Deleted List</button>:""}
+                    {this.props.type == "Retailer List"?<button className="lm--button lm--button--primary reset_btn u-mt1 u-mb1" onClick={this.goDeleteList.bind(this,'del_retailers')}>Deleted Retailer List</button>:""}
+                    {this.props.type == "Buyer List"?<button className="lm--button lm--button--primary reset_btn u-mt1 u-mb1" onClick={this.goDeleteList.bind(this,'del_buyers')}>Deleted Buyer List</button>:""}
                     <div className="table_page">
                         <span onClick={this.gotopage.bind(this,'prev')}>{"<"}</span>
                         {
