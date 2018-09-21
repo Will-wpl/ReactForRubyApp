@@ -290,14 +290,14 @@ export class BuyerUserManage extends Component {
                             break;
                         case 1:
                             this.setState({
-                                text: ""+this.state.company_name+" cannot be deleted due to on-going auction(s).",
+                                text: ""+this.state.company_name+" cannot be rejected due to on-going auction(s).",
                             }, () => {
                                 this.refs.Modal_Option.showModal();
                             });
                             break;
                         case 2:
                             this.setState({
-                                text: ""+this.state.company_name+" cannot be deleted due to on-going auction(s).",
+                                text: ""+this.state.company_name+" cannot be rejected due to on-going auction(s).",
                             }, () => {
                                 this.refs.Modal_Option.showModal();
                             });
@@ -432,7 +432,6 @@ export class BuyerUserManage extends Component {
         list[index].approval_status = "1";
         // list[index].approval_status_name = "Approved";
         list[index].isApproved = true;
-        console.log(1111)
         this.setState({
             entity_list: list,
             entityStatusChanged: true
