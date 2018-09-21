@@ -61,7 +61,7 @@ export class Adminretailerdashboard extends Component {
                                 {
                                     this.props.retailer_list.map((item,index)=>{
                                         return <tr key={index}>
-                                                    <td>{item.company_name}</td>
+                                                    <td>{item.company_name} ( {item.status} )</td>
                                                         {
                                                             this.state.step.map((it,i)=>{
                                                                 let flows = [null,null,null,null];
