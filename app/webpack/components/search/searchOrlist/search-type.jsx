@@ -98,9 +98,6 @@ export class SearchType extends Component {
     getAuctionId(type,obj){
         sessionStorage.auction_id=type;
     }
-    goDeleteList(type){
-        window.location.href=`/admin/users/${type}`;
-    }
     render (){
         return (
             <div className="search_type">
@@ -121,8 +118,6 @@ export class SearchType extends Component {
                     <dd>
                         <button className="lm--button lm--button--primary search_btn" onClick={this.goSearch.bind(this)}>Search</button>
                         <button className="lm--button lm--button--primary reset_btn" onClick={this.goReset.bind(this)}>Reset</button>
-                        {this.props.type == "Retailer List"?<button className="lm--button lm--button--primary reset_btn" onClick={this.goDeleteList.bind(this,'del_retailers')}>Retailer Deleted List</button>:""}
-                        {this.props.type == "Buyer List"?<button className="lm--button lm--button--primary reset_btn" onClick={this.goDeleteList.bind(this,'del_buyers')}>Buyer Deleted List</button>:""}
                     </dd>
                     {this.props.type === "Unpublished Auction List" ?<dd className="fright"><a className="lm--button lm--button--primary create_btn" onClick={this.getAuctionId.bind(this,"new")} href="/admin/auctions/contract_expiry">Create</a></dd> : ""}
                 </dl>
