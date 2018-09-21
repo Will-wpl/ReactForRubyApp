@@ -730,7 +730,7 @@ body.choose{
           &:nth-child(odd){background: rgba(225,255,255,0.15);}
         }
         a{ cursor: pointer; color: #00b0b2; float: left; margin: 0;
-          &.no_link{cursor: default; color: #fff;}
+          &.no_link{cursor: auto; color: #fff;}
         }
         span.remove_file{background:url("../images/remove.png") no-repeat center; cursor: pointer; width: 26px; height: 26px; float: right;}
       }
