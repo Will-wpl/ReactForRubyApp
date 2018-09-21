@@ -206,7 +206,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
     a { width: 60px; float:right; cursor: pointer; margin-left: 10px;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; }
     button { width: 60px; float:right; margin-left: 10px; cursor: pointer;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; }
   }
-  .model_detail_formHeight{max-height: 450px}
+  .model_detail_formHeight{max-height: 470px}
   .model_detail_formWidth{width:800px;}
 }
 .u-contain{overflow:hidden;}
@@ -232,17 +232,17 @@ abbr[title]{color: #fe0000; text-decoration: none;}
                 color:#666;
                 float: left; margin-right:15px; text-align: center; overflow: hidden;
                 display: flex;flex-direction: column;align-items: center;
-                abbr{ width: 42px; height: 42px; font-style: normal;display: block; background: url("../images/retailer_icon.png") no-repeat center; background-size: 42px; }
+                bdo{ width: 42px; height: 42px; font-style: normal;display: block; background: url("../images/retailer_icon.png") no-repeat center; background-size: 42px; }
               }
-              span{ background: #eee; overflow: hidden;  padding: 10px; word-break:break-all; border-radius: 5px; color:#666; display: block}
+              aside{ background: #eee; overflow: hidden;  padding: 10px; word-break:break-all; border-radius: 5px; color:#666; display: block}
             }
             dt{width:92%; display: block; overflow: hidden; margin: 15px auto; font-weight: normal;
               dfn{color:#666;
                 float: right; margin-left:15px; text-align: center; overflow: hidden;
                 display: flex;flex-direction: column;align-items: center;
-                abbr{ width: 52px; height: 42px; display: block; background: url("../images/SP_Group_Logo.jpg") no-repeat center; background-size: 42px; }
+                bdo{ width: 52px; height: 42px; display: block; background: url("../images/SP_Group_Logo.jpg") no-repeat center; background-size: 42px; }
               }
-              span{ background: #9fdd9f;  word-break:break-all; padding: 10px; border-radius: 5px; color:#666; display: block; overflow: hidden;
+              aside{ background: #9fdd9f;  word-break:break-all; padding: 10px; border-radius: 5px; color:#666; display: block; overflow: hidden;
                 div{border:1px dashed #fff;}
                 &.short{min-width:80px; max-width: 350px; float: right;}
               }
@@ -725,7 +725,13 @@ body.choose{
     ul{
       li{list-style: none; line-height: 26px; overflow: hidden;
         &.lineHeight42{line-height: 42px;}
-        a{ cursor: pointer; color: #00b0b2; float: left; margin: 0;}
+        &.common_bg{
+          padding:10px;
+          &:nth-child(odd){background: rgba(225,255,255,0.15);}
+        }
+        a{ cursor: pointer; color: #00b0b2; float: left; margin: 0;
+          &.no_link{cursor: auto; color: #fff;}
+        }
         span.remove_file{background:url("../images/remove.png") no-repeat center; cursor: pointer; width: 26px; height: 26px; float: right;}
       }
     }
@@ -1086,16 +1092,16 @@ width: "70%"; float: "left";padding:5px;
   margin:10px auto !important;
   display: inline-block;
   vertical-align: middle;
-  span{margin:0px 10px;}
+  span{margin:0px 5px;}
 }
 .chk{
   margin:10px auto !important;
   display: inline-block;
   vertical-align: middle;
-  span{margin:10px 10px;}
-  input{
-    width: 20px;
-  }
+  span{margin:0px 5px;}
+  // input{
+  //   width: 13px;
+  // }
 }
 
 
@@ -1312,10 +1318,10 @@ width: "70%"; float: "left";padding:5px;
   background: '#35404c' !important;
 }
 .entityApprove{
-  width: 70px; float:center; 
+  width: 70px; float:center;
   margin-left: 10px; margin-top: 10px;
-   cursor: pointer;  padding: 3px 0px; 
-   text-align: center; background: #54B41B; 
+   cursor: pointer;  padding: 3px 0px;
+   text-align: center; background: #54B41B;
    border-radius: 5px; color:#fff; display: inline-block;
    font-size: 0.875rem !important
 }
@@ -1348,5 +1354,6 @@ width: "70%"; float: "left";padding:5px;
   }
   img{
     height: 120px;
+    cursor: pointer;
   }
 }

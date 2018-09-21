@@ -442,9 +442,9 @@ class Api::AuctionsController < Api::BaseController
       pdf, output_filename = LetterOfAward.new(pdf_param).pdf
     else
       template_type = if is_parent
-                        1
+                        RichTemplate::LETTER_OF_AWARD_TEMPLATE
                       else
-                        2
+                        RichTemplate::NOMINATED_ENTITY_TEMPLATE
                       end
       pdf, output_filename = LetterOfAwardV2.new(pdf_param, template_type).pdf
     end
@@ -562,8 +562,9 @@ class Api::AuctionsController < Api::BaseController
                                   LEFT JOIN users ON cns.user_id = users.\"id\",
                                     ( SELECT ent.company_name, ent.company_uen FROM company_buyer_entities ent WHERE ent.user_id = ? AND \"id\" = ? LIMIT 1 ) entity
                                   WHERE
-                                    cns.user_id = ? AND auction_id = ? AND contract_duration = ? AND accept_status = '1'",
+                                    cns.user_id = ? AND auction_id = ? AND contract_duration = ?",
                                            user_id, entity_id, user_id, auction_id, contract_duration]
+    # AND accept_status = '1'
     return nil, nil,nil, nil, nil if (consumption.empty?)
     auction_result = AuctionResultContract.select("users.id, users.name, coalesce(users.company_name, '') company_name,
                                   coalesce(users.company_address, '') company_address,
@@ -930,6 +931,7 @@ class Api::AuctionsController < Api::BaseController
       auction_result_contract.auction_id = params[:id].to_i
       auction_result_contract.auction_result = auction_result
       auction_result_contract.contract_duration = params[:contract_duration]
+      set_auction_result_template_id auction_result_contract
       if auction_result_contract.save!
         live_auction_contracts_count = get_lived_auction_contracts(@auction, true).count
         result_auction_contracts_count = AuctionResultContract.where(auction_result_id: auction_result.id).count
@@ -944,6 +946,13 @@ class Api::AuctionsController < Api::BaseController
     auction_result_contract_hash = auction_result_contract.attributes.dup
     auction_result_contract_hash['contract_period_start_date'] = auction_result.contract_period_start_date
     auction_result_contract_hash
+  end
+
+  def set_auction_result_template_id(auction_result_contract)
+    parent_template = RichTemplate.where(type: RichTemplate::LETTER_OF_AWARD_TEMPLATE).last
+    entity_template = RichTemplate.where(type: RichTemplate::NOMINATED_ENTITY_TEMPLATE).last
+    auction_result_contract.parent_template_id = parent_template.id if parent_template
+    auction_result_contract.entity_template_id = entity_template.id if entity_template
   end
 
   def set_old_confirm(params, auction_result)

@@ -16,7 +16,7 @@ export class Modal extends React.Component {
             modalshowhide: "modal_hide",
             type: 'default', secondStatus: "live_hide", itemIndex: "", props_data: {},
             strtype: '', email_subject: '', email_body: '', consumptionItem: [],
-            contracted_capacity_disabled: true, contract_expiry_disabled: true, disabled: false, id: "",orignal_id:"", consumption_id: "", account_number: '',
+            contracted_capacity_disabled: true, contract_expiry_disabled: true, disabled: false, id: "", orignal_id: "", consumption_id: "", account_number: '',
             existing_plan: [], existing_plan_selected: '', contract_expiry: '', purchasing_entity: [], purchasing_entity_selectd: '', premise_address: '',
             intake_level: [], intake_level_selected: '',
             contracted_capacity: '', blk_or_unit: '', street: '', unit_number: '', postal_code: '',
@@ -41,7 +41,7 @@ export class Modal extends React.Component {
             this.setState({
                 consumption_id: next.consumptionAccountItem.consumption_id,
                 id: next.consumptionAccountItem.id,
-                orignal_id:next.consumptionAccountItem.orignal_id,
+                orignal_id: next.consumptionAccountItem.orignal_id,
                 isSaved: next.consumptionAccountItem.id ? true : false,
                 account_number: next.consumptionAccountItem.account_number,
                 existing_plan: next.consumptionAccountItem.existing_plan,
@@ -192,21 +192,75 @@ export class Modal extends React.Component {
                 $(".w-e-text p").html("");
                 if ($("#email_body").html() == "") {
                     var editor = new E('#email_body');
+                    // editor.customConfig.menus = [
+                    //     'head',
+                    //     'bold',
+                    //     'fontSize',
+                    //     'fontName',
+                    //     'italic',
+                    //     'underline',
+                    //     'strikeThrough',
+                    //     'foreColor',
+                    //     'backColor',
+                    //     'justify',
+                    //     'undo',
+                    //     'redo'
+                    // ];
+                    editor.customConfig.lang = {
+                        '字号': 'font size',
+                        '字体': 'font',
+                        '文字颜色': 'font color',
+                        '背景色': 'background color',
+                        '对齐方式': 'alignment',
+                        '靠左': 'left',
+                        '靠右': 'right',
+                        '居中': 'center',
+                        '宋体': 'song',
+                        '微软雅黑': 'yahei'
+                        // 还可自定添加更多
+                    };
                     setTimeout(() => { editor.create(); });
                 }
-                setTimeout(() => { $(".w-e-text").html("").html(data==""?"<p></p>":data) }, 300);
+                setTimeout(() => { $(".w-e-text").html("").html(data == "" ? "<p></p>" : data) }, 300);
             }
             if (data.subject && data.body) {
                 $(".w-e-text p").html("");
                 if ($("#email_body").html() == "") {
                     var editor = new E('#email_body');
+                    // editor.customConfig.menus = [
+                    //     'head',
+                    //     'bold',
+                    //     'fontSize',
+                    //     'fontName',
+                    //     'italic',
+                    //     'underline',
+                    //     'strikeThrough',
+                    //     'foreColor',
+                    //     'backColor',
+                    //     'justify',
+                    //     'undo',
+                    //     'redo'
+                    // ];
+                    editor.customConfig.lang = {
+                        '字号': 'font size',
+                        '字体': 'font',
+                        '文字颜色': 'font color',
+                        '背景色': 'background color',
+                        '对齐方式': 'alignment',
+                        '靠左': 'left',
+                        '靠右': 'right',
+                        '居中': 'center',
+                        '宋体': 'song',
+                        '微软雅黑': 'yahei'
+                        // 还可自定添加更多
+                    };
                     setTimeout(() => { editor.create(); })
                 }
                 this.setState({
                     email_subject: data.subject,
                     email_body: data.body
                 })
-                setTimeout(() => { $(".w-e-text").html("").html(this.state.email_body==""?"<p></p>":this.state.email_body) }, 300);
+                setTimeout(() => { $(".w-e-text").html("").html(this.state.email_body == "" ? "<p></p>" : this.state.email_body) }, 300);
             }
         }
         if (type == "comfirm") {
@@ -277,17 +331,15 @@ export class Modal extends React.Component {
         // }
         if (this.props.acceptFunction) {
             setTimeout(() => {
-                let data=this.state.props_data;
-                if(data.action==="proceed")
-                {
+                let data = this.state.props_data;
+                if (data.action === "proceed") {
                     this.props.acceptFunction(this.state.props_data);
                     this.setState({
                         modalSize: "small",
                         modalshowhide: "modal_hide"
                     })
                 }
-                else
-                {
+                else {
                     this.props.acceptFunction(this.state.props_data);
                     this.closeModal();
                 }
@@ -451,7 +503,7 @@ export class Modal extends React.Component {
         let siteItem = {
             consumption_id: this.state.consumption_id,
             id: this.state.id,
-            orignal_id:this.state.orignal_id,
+            orignal_id: this.state.orignal_id,
             account_number: this.state.account_number,
             existing_plan_selected: (this.state.existing_plan_selected !== null && this.state.existing_plan_selected !== "") ? this.state.existing_plan_selected : this.state.existing_plan[0],
             contract_expiry: this.state.contract_expiry ? this.state.contract_expiry : "",
@@ -484,7 +536,7 @@ export class Modal extends React.Component {
             account_number: this.state.account_number,
             unit_number: this.state.unit_number,
             postal_code: this.state.postal_code,
-            orignal_id:this.state.orignal_id
+            orignal_id: this.state.orignal_id
         }
 
         let param = {
@@ -738,6 +790,7 @@ export class Modal extends React.Component {
     downAttachment(attachemnts) {
         let attacheList = [];
         if (attachemnts) {
+            
             attachemnts.map(item => {
                 attacheList.push({
                     file_name: item.file_name,
@@ -746,19 +799,31 @@ export class Modal extends React.Component {
             })
         }
 
+        
         for (let i = 0; i < attacheList.length; i++) {
             this.download(attacheList[i].file_name, attacheList[i].file_path);
         }
     }
 
+
     download(file_name, file_path) {
         let a = document.createElement("a"),
+            blob = new Blob([file_path]),
             e = document.createEvent("MouseEvents"); //创建鼠标事件对象
+        document.body.appendChild(a);
+
         e.initEvent("click", false, false); //初始化事件对象
-        a.href = file_path; //设置下载地址
+        a.href = URL.createObjectURL(blob); //设置下载地址
+        a.href = file_path;
+        a.target = "_blank";
         a.download = file_name; //设置下载文件名
         a.dispatchEvent(e); //给指定的元素，执行事件click事
+        document.body.removeChild(a);
     }
+
+
+
+
 
     account_address_repeat() {
         let address = false, account = false, editNotSave = false;
@@ -774,16 +839,14 @@ export class Modal extends React.Component {
                     }
                 }
                 else {
-                    if(item.orignal_id)
-                    {
+                    if (item.orignal_id) {
                         if ((this.state.unit_number == item.unit_number) && (this.state.postal_code == item.postal_code) && (this.state.orignal_id !== item.orignal_id)) {
                             address_count++;
                         }
                         if (this.state.account_number === item.account_number && (this.state.orignal_id !== item.orignal_id)) {
                             account_count++;
                         }
-                    }else
-                    {
+                    } else {
                         if ((this.state.unit_number === item.unit_number) && (this.state.postal_code === item.postal_code)) {
                             if (index != this.state.itemIndex) {
                                 address_count++;
@@ -820,8 +883,7 @@ export class Modal extends React.Component {
     closeModal(type) {
         if (this.state.type === "chkSelectedBuyers") {
             let data = this.state.props_data;
-            if(type===0)
-            {
+            if (type === 0) {
                 data.action = "cancel";
             }
             if (this.props.acceptFunction) {
@@ -892,7 +954,13 @@ export class Modal extends React.Component {
             contract_expiry: data
         })
     }
-
+    Change(type, e) {
+        if (type == "email_subject") {
+            this.setState({
+                email_subject: e.target.value
+            })
+        }
+    }
     noPermitInput(event) {
         event.preventDefault();
     }
@@ -960,15 +1028,20 @@ export class Modal extends React.Component {
                                 Subject:
                             </label>
                             <div className="lm--formItem-control">
-                                <input type="text" name="email_subject" value={this.state.email_subject} onChange={this.Change.bind(this, 'email_subject')} disabled={this.state.disabled} ref="email_subject" maxLength="50" required aria-required="true" />
+                                <input type="text" name="email_subject" value={this.state.email_subject} onChange={this.Change.bind(this, 'email_subject')} disabled={this.state.disabled} ref="email_subject" required aria-required="true" />
                             </div>
                         </div>}
+                        <div className="lm--formItem lm--formItem--inline string">
+                            <div className="lm--formItem-control">
+                                *Note: Please DO NOT edit the words start with #, they are predefined parameters to retrieve specific value from database.
+                            </div>
+                        </div>
                         <div className="lm--formItem lm--formItem--inline string">
                             <label className="lm--formItem-label string required">
                                 Body:
                             </label>
                             <div className="lm--formItem-control">
-                                <div name="email_body" className="email_body" id={"email_body"} style={this.state.strtype == "email_template_la"?{ height: "425px" }:{ height: "360px" }} onChange={this.Change.bind(this, 'email_body')} disabled={this.state.disabled} ref="email_body" required aria-required="true" />
+                                <div name="email_body" className="email_body" id={"email_body"} style={this.state.strtype == "email_template_la" ? { height: "425px" } : { height: "360px" }} onChange={this.Change.bind(this, 'email_body')} disabled={this.state.disabled} ref="email_body" required aria-required="true" />
                             </div>
                         </div>
                     </div>
@@ -1051,6 +1124,15 @@ export class Modal extends React.Component {
                     <li>4) A copy of the Applicant's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
                     <li>5) A copy of the Authorised Representative's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
                     <li>All supporting documents submitted should be in English only.</li>
+                    {/* <li>
+                        <div className="downloadAttach">
+                            {
+                                this.state.attatchment.map((item, index) => {
+                                    return <a id={"attach_" + index} key={index} href={item.file_path} target="_blank" download={item.file_name}>{item.file_name}</a>
+                                })
+                            }
+                        </div>
+                    </li> */}
                 </ul>
             }
             if (this.props.listdetailtype === 'entity_error') {
@@ -1421,7 +1503,7 @@ export class Modal extends React.Component {
         }
         else if (this.state.type === "chkSelectedBuyers") {
             btn_html =
-                <div className="modal_btn"><a onClick={this.Accept.bind(this)}>Proceed</a><a onClick={this.closeModelAndCancelSave.bind(this,0)}>Cancel</a></div>;
+                <div className="modal_btn"><a onClick={this.Accept.bind(this)}>Proceed</a><a onClick={this.closeModelAndCancelSave.bind(this, 0)}>Cancel</a></div>;
         }
         else {
             btn_html =
@@ -1429,8 +1511,8 @@ export class Modal extends React.Component {
         }
         return (
             this.props.formSize === "big" ?
-                <div id="modal_main" className={this.state.modalshowhide} style={this.props.modalSize=="big"?{ width: "98%", height:"500px", top: "20%",marginLeft: "-49%"}:{ width: "700px", top: "20%",marginLeft: "-350px"}} >
-                    <h4><a onClick={this.closeModal.bind(this,1)}>X</a></h4>
+                <div id="modal_main" className={this.state.modalshowhide} style={this.props.modalSize == "big" ? { width: "98%", height: "550", top: "20%", marginLeft: "-49%" } : { width: "700px", top: "20%", marginLeft: "-350px" }} >
+                    <h4><a onClick={this.closeModal.bind(this, 1)}>X</a></h4>
                     <div className="modal_detail model_detail_formHeight">
                         <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
                     </div>
@@ -1438,8 +1520,8 @@ export class Modal extends React.Component {
                 </div>
                 :
                 this.props.formSize === "middle" ?
-                    <div id="modal_main" name="middleModal" className={this.state.modalshowhide} style={{ width: "50%", height: "310px", top: "40%",marginLeft:"-25%" }} >
-                        <h4><a onClick={this.closeModal.bind(this,1)}>X</a><a onClick={this.bigModal.bind(this, this.state.modalSize)}>口</a></h4>
+                    <div id="modal_main" name="middleModal" className={this.state.modalshowhide} style={{ width: "50%", height: "310px", top: "40%", marginLeft: "-25%" }} >
+                        <h4><a onClick={this.closeModal.bind(this, 1)}>X</a></h4>
                         <div className="modal_detail model_detail_formHeight">
                             <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
                         </div>
@@ -1447,8 +1529,8 @@ export class Modal extends React.Component {
                     </div>
                     :
                     this.props.formSize === 'viewlog' ?
-                        <div id="modal_main" className={this.state.modalshowhide} style={{ width: "600px", top: "20%",marginLeft:"-300px" }}>
-                            <h4><a onClick={this.closeModal.bind(this,1)}>X</a></h4>
+                        <div id="modal_main" className={this.state.modalshowhide} style={{ width: "600px", top: "20%", marginLeft: "-300px" }}>
+                            <h4><a onClick={this.closeModal.bind(this, 1)}>X</a></h4>
                             <div className="modal_detail">
                                 <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
                             </div>
@@ -1456,11 +1538,12 @@ export class Modal extends React.Component {
                         </div>
                         :
                         <div id="modal_main" className={this.state.modalshowhide} >
-                            <h4><a onClick={this.closeModal.bind(this,0)}>X</a></h4>
+                            <h4><a onClick={this.closeModal.bind(this, 0)}>X</a></h4>
                             <div className="modal_detail">
                                 <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
                             </div>
                             {btn_html}
+                            {/* <base target="download"></base> */}
                         </div>
         )
     }
