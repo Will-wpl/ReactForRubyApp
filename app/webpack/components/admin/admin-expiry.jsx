@@ -107,7 +107,7 @@ export default class AdminExpiry extends Component {
                                         <td>{item.account_number}</td>
                                         <td>{item.entity_name}</td>
                                         <td>{item.ra_id}</td>
-                                        <td>{moment(item.contract_period_end_date).format('D-MM-YYYY')}</td>
+                                        <td>{moment(item.contract_period_end_date).format('DD-MM-YYYY')}</td>
                                         <td>{item.intake_level}</td>
                                         <td>{item.contracted_capacity}</td>
                                         <td>{item.peak}</td>

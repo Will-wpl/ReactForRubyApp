@@ -22,6 +22,7 @@ import "components/admin/admin-choose-alternative-winner";
 import "components/admin/admin-user-extends";
 import "components/admin/admin-contact";
 import "components/admin/admin-email-template";
+import "components/admin/admin-common-template";
 import "components/buyer/buyer-manage";
 import "components/retailer/retailer-register";
 import "components/admin/admin-expiry";

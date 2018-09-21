@@ -206,7 +206,7 @@ abbr[title]{color: #fe0000; text-decoration: none;}
     a { width: 60px; float:right; cursor: pointer; margin-left: 10px;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; }
     button { width: 60px; float:right; margin-left: 10px; cursor: pointer;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; }
   }
-  .model_detail_formHeight{max-height: 450px}
+  .model_detail_formHeight{max-height: 470px}
   .model_detail_formWidth{width:800px;}
 }
 .u-contain{overflow:hidden;}
@@ -725,13 +725,25 @@ body.choose{
     ul{
       li{list-style: none; line-height: 26px; overflow: hidden;
         &.lineHeight42{line-height: 42px;}
-        a{ cursor: pointer; color: #00b0b2; float: left; margin: 0;}
+        &.common_bg{
+          padding:10px;
+          &:nth-child(odd){background: rgba(225,255,255,0.15);}
+        }
+        a{ cursor: pointer; color: #00b0b2; float: left; margin: 0;
+          &.no_link{cursor: auto; color: #fff;}
+        }
         span.remove_file{background:url("../images/remove.png") no-repeat center; cursor: pointer; width: 26px; height: 26px; float: right;}
       }
     }
   }
   .btnFont{
     font-size: 18px  !important;
+  }
+}
+.retailer_fill.common_template{ width: 70%; margin: 0 auto;
+  tbody tr td{ text-align: left; padding: 5px 10px; font-size: 12px;
+    button{padding: 4px 10px; margin-right: 10px; font-size: 12px;}
+    a{height: auto;}
   }
 }
 ul.history_files{
@@ -1086,16 +1098,16 @@ width: "70%"; float: "left";padding:5px;
   margin:10px auto !important;
   display: inline-block;
   vertical-align: middle;
-  span{margin:0px 10px;}
+  span{margin:0px 5px;}
 }
 .chk{
   margin:10px auto !important;
   display: inline-block;
   vertical-align: middle;
-  span{margin:10px 10px;}
-  input{
-    width: 20px;
-  }
+  span{margin:0px 5px;}
+  // input{
+  //   width: 13px;
+  // }
 }
 
 

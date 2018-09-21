@@ -38,7 +38,7 @@ export class BuyerUserManage extends Component {
             usedEntityIdArr: [],
             submitStatus: false,
             buyerApproveStatus: 3,
-            ismain: false, entityIndex: 0, entityId: 0, buyerLogList: [], loglist: []
+            ismain: false, entityIndex: 0, entityId: 0, buyerLogList: [], loglist: [], entityStatusChanged: false
 
         }
         this.validatorComment = {
@@ -283,35 +283,35 @@ export class BuyerUserManage extends Component {
                     switch (res.validate_result) {
                         case 0:
                             this.setState({
-                                text: 'Are you sure you want to reject the buyer?',
+                                text: 'Are you sure you want to reject the '+this.state.company_name+'?',
                             }, () => {
                                 this.refs.Modal_Option.showModal('comfirm', { action: 'reject', type: 'user' }, '');
                             });
                             break;
                         case 1:
                             this.setState({
-                                text: "Current buyer has ongoing auction, which can't be rejected at present. ",
+                                text: ""+this.state.company_name+" cannot be rejected due to on-going auction(s).",
                             }, () => {
                                 this.refs.Modal_Option.showModal();
                             });
                             break;
                         case 2:
                             this.setState({
-                                text: "Current buyer has ongoing auction, which can't be rejected at present. ",
+                                text: ""+this.state.company_name+" cannot be rejected due to on-going auction(s).",
                             }, () => {
                                 this.refs.Modal_Option.showModal();
                             });
                             break;
                         case 3:
                             this.setState({
-                                text: "Current buyer has pending auction invitation, would you proceed anyway? Once proceeded, pending invitation will be cancelled as well. ",
+                                text: ""+this.state.company_name+" has pending auction invitation, would you proceed anyway? Once proceeded, pending invitation will be cancelled as well. ",
                             }, () => {
-                                this.refs.Modal_Option.showModal('comfirm', { action: 'reject', type: 'user'}, '');
+                                this.refs.Modal_Option.showModal('comfirm', { action: 'reject', type: 'user' }, '');
                             });
                             break;
                     }
                 })
-        
+
             }
         }
         else {
@@ -335,30 +335,30 @@ export class BuyerUserManage extends Component {
             switch (res.validate_result) {
                 case 0:
                     this.setState({
-                        text: 'Are you sure you want to delete the buyer?',
+                        text: 'Are you sure you want to delete the '+this.state.company_name+'?',
                     }, () => {
                         this.refs.Modal_Option.showModal('comfirm', { action: 'delete', type: 'deleteBuyer' }, '');
                     });
                     break;
                 case 1:
                     this.setState({
-                        text: "Current buyer has ongoing auction, which can't be deleted at present. ",
+                        text: ""+this.state.company_name+" cannot be deleted due to on-going auction(s).",
                     }, () => {
                         this.refs.Modal_Option.showModal();
                     });
                     break;
                 case 2:
                     this.setState({
-                        text: "Current buyer has ongoing auction, which can't be deleted at present. ",
+                        text: ""+this.state.company_name+" cannot be deleted due to on-going auction(s).",
                     }, () => {
                         this.refs.Modal_Option.showModal();
                     });
                     break;
                 case 3:
                     this.setState({
-                        text: "Current buyer has pending auction invitation, would you proceed anyway? Once proceeded, pending invitation will be cancelled as well. ",
+                        text: ""+this.state.company_name+" has pending auction invitation, would you proceed anyway? Once proceeded, pending invitation will be cancelled as well. ",
                     }, () => {
-                        this.refs.Modal_Option.showModal('comfirm', { action: 'delete', type: 'deleteBuyer'});
+                        this.refs.Modal_Option.showModal('comfirm', { action: 'delete', type: 'deleteBuyer' });
                     });
                     break;
             }
@@ -427,21 +427,26 @@ export class BuyerUserManage extends Component {
     }
 
     entity_approve(item, index) {
+
         let list = this.state.entity_list;
         list[index].approval_status = "1";
-        list[index].approval_status_name = "Approved";
+        // list[index].approval_status_name = "Approved";
         list[index].isApproved = true;
         this.setState({
-            entity_list: list
+            entity_list: list,
+            entityStatusChanged: true
         })
     }
     entity_reject(item, index) {
+
         let list = this.state.entity_list;
         list[index].approval_status = "0";
-        list[index].approval_status_name = "Rejected";
+        // list[index].approval_status_name = "Rejected";
+        console.log(2222)
         list[index].isApproved = false;
         this.setState({
-            entity_list: list
+            entity_list: list,
+            entityStatusChanged: true
         })
 
     }
@@ -815,7 +820,8 @@ export class BuyerUserManage extends Component {
                             </table>
                         </div>
                         <div className="retailer_btn">
-                            <button id="save_form" className="lm--button lm--button--primary" style={{ marginRight: "10px" }} onClick={this.submitEntity.bind(this)} disabled={this.state.submitStatus}>Submit</button>
+
+                            <button id="save_form" className="lm--button lm--button--primary" style={{ marginRight: "10px" }} onClick={this.submitEntity.bind(this)} disabled={this.state.submitStatus ? true : (this.state.entityStatusChanged ? false : true)}>Submit</button>
                         </div>
                     </div>
                     <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />

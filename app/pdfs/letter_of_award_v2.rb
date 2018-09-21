@@ -64,6 +64,7 @@ class LetterOfAwardV2 < LetterOfAward
   end
 
   def get_template_content
+    return nil if param[:auction_result][0].blank?
     template_id = nil
     if pdf_template_type == RichTemplate::LETTER_OF_AWARD_TEMPLATE
       template_id = param[:auction_result][0].parent_template_id

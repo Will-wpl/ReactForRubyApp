@@ -192,20 +192,20 @@ export class Modal extends React.Component {
                 $(".w-e-text p").html("");
                 if ($("#email_body").html() == "") {
                     var editor = new E('#email_body');
-                    editor.customConfig.menus = [
-                        'head',
-                        'bold',
-                        'fontSize',
-                        'fontName',
-                        'italic',
-                        'underline',
-                        'strikeThrough',
-                        'foreColor',
-                        'backColor',
-                        'justify',
-                        'undo',
-                        'redo'
-                    ];
+                    // editor.customConfig.menus = [
+                    //     'head',
+                    //     'bold',
+                    //     'fontSize',
+                    //     'fontName',
+                    //     'italic',
+                    //     'underline',
+                    //     'strikeThrough',
+                    //     'foreColor',
+                    //     'backColor',
+                    //     'justify',
+                    //     'undo',
+                    //     'redo'
+                    // ];
                     editor.customConfig.lang = {
                         '字号': 'font size',
                         '字体': 'font',
@@ -227,20 +227,20 @@ export class Modal extends React.Component {
                 $(".w-e-text p").html("");
                 if ($("#email_body").html() == "") {
                     var editor = new E('#email_body');
-                    editor.customConfig.menus = [
-                        'head',
-                        'bold',
-                        'fontSize',
-                        'fontName',
-                        'italic',
-                        'underline',
-                        'strikeThrough',
-                        'foreColor',
-                        'backColor',
-                        'justify',
-                        'undo',
-                        'redo'
-                    ];
+                    // editor.customConfig.menus = [
+                    //     'head',
+                    //     'bold',
+                    //     'fontSize',
+                    //     'fontName',
+                    //     'italic',
+                    //     'underline',
+                    //     'strikeThrough',
+                    //     'foreColor',
+                    //     'backColor',
+                    //     'justify',
+                    //     'undo',
+                    //     'redo'
+                    // ];
                     editor.customConfig.lang = {
                         '字号': 'font size',
                         '字体': 'font',
@@ -790,6 +790,7 @@ export class Modal extends React.Component {
     downAttachment(attachemnts) {
         let attacheList = [];
         if (attachemnts) {
+
             attachemnts.map(item => {
                 attacheList.push({
                     file_name: item.file_name,
@@ -798,79 +799,26 @@ export class Modal extends React.Component {
             })
         }
 
-        // attacheList = [
-        //     {
-        //         file_name: "file.pdf",
-        //         file_path: "http://www.example.com/file.pdf"
-        //     }
-        //     // {
-        //     //     file_name: "Beon_Solar.png",
-        //     //     file_path: "https://revvstorage.blob.core.windows.net/documentstorage/uploads/attachments/15373338138269758/Beon_Solar.png"
-        //     // },
-        //     // {
-        //     //     file_name: "Retailer_Tender_Submission_1.pdf",
-        //     //     file_path: "https://revvstorage.blob.core.windows.net/documentstorage/uploads/attachments/15373302046031258/Retailer_Tender_Submission_1.pdf"
-        //     // },
-        // ];
+
         for (let i = 0; i < attacheList.length; i++) {
             this.download(attacheList[i].file_name, attacheList[i].file_path);
-            // console.log(i)
         }
     }
 
 
     download(file_name, file_path) {
-        // console.log(file_path)
-        // let a = document.createElement("a"),
-        //     // blob = new Blob([file_path]),
-        //     e = document.createEvent("MouseEvents"); //创建鼠标事件对象
-        // document.body.appendChild(a);
-        // Response.addre
-        // e.initEvent("click", false, false); //初始化事件对象
-        // // a.href = URL.createObjectURL(blob); //设置下载地址
-        // a.href = file_path;
-        // a.target = "_blank";
-        // a.className="";
-        // a.download
-        // a.download = file_name; //设置下载文件名
-        // console.log(a);
-        // a.dispatchEvent(e); //给指定的元素，执行事件click事
-       
+        let a = document.createElement("a"),
+            blob = new Blob([file_path]),
+            e = document.createEvent("MouseEvents"); //创建鼠标事件对象
+        document.body.appendChild(a);
 
-        // for (let i = 0; i < fileContents.length; i++) {
-        //     let a = document.createElement('a');
-        //     let blob = fileContents[i].blob;
-        //     let filename = fileContents[i].filename;
-            
-        //     /** // 如果文件名有中文，win平台需要转成gb2312编码，否则文件名乱码
-        //      * if ((navigator.platform == "Win32") || (navigator.platform == "Windows")) {
-        //         return Utf8ToGb2312(filename);
-        //     }
-        //      * */
-    
-        //     a.download = filename;
-        //     a.href = window.URL.createObjectURL(blob);
-        //     a.dispatchEvent(new MouseEvent('click'));
-        // }
-
-
-        setTimeout(() => {
-            let frame = document.createElement("iframe");
-            frame.id="download";
-            frame.name="download";
-            frame.style = 'display: none;';
-            frame.class = 'multi-download';
-            frame.src = file_path,
-            document.body.appendChild(frame);
-            // Response.ContentType = "image/png";
-            console.log(frame)
-            frame.contentWindow.document.execCommand("saveAs", true, file_name);
-
-            setTimeout(function () {
-                document.body.removeChild(frame);
-            }, 1000);
-    
-        })
+        e.initEvent("click", false, false); //初始化事件对象
+        a.href = URL.createObjectURL(blob); //设置下载地址
+        a.href = file_path;
+        a.target = "_blank";
+        a.download = file_name; //设置下载文件名
+        a.dispatchEvent(e); //给指定的元素，执行事件click事
+        document.body.removeChild(a);
     }
 
 
@@ -1085,6 +1033,14 @@ export class Modal extends React.Component {
                         </div>}
                         <div className="lm--formItem lm--formItem--inline string">
                             <label className="lm--formItem-label string required">
+
+                            </label>
+                            <div className="lm--formItem-control" style={{"color":"red","padding-left":"35px"}}>
+                                *Note: Please DO NOT edit the words start with #, they are predefined parameters to retrieve specific value from database.
+                            </div>
+                        </div>
+                        <div className="lm--formItem lm--formItem--inline string">
+                            <label className="lm--formItem-label string required">
                                 Body:
                             </label>
                             <div className="lm--formItem-control">
@@ -1171,6 +1127,15 @@ export class Modal extends React.Component {
                     <li>4) A copy of the Applicant's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
                     <li>5) A copy of the Authorised Representative's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
                     <li>All supporting documents submitted should be in English only.</li>
+                    {/* <li>
+                        <div className="downloadAttach">
+                            {
+                                this.state.attatchment.map((item, index) => {
+                                    return <a id={"attach_" + index} key={index} href={item.file_path} target="_blank" download={item.file_name}>{item.file_name}</a>
+                                })
+                            }
+                        </div>
+                    </li> */}
                 </ul>
             }
             if (this.props.listdetailtype === 'entity_error') {
@@ -1549,7 +1514,7 @@ export class Modal extends React.Component {
         }
         return (
             this.props.formSize === "big" ?
-                <div id="modal_main" className={this.state.modalshowhide} style={this.props.modalSize == "big" ? { width: "98%", height: "500px", top: "20%", marginLeft: "-49%" } : { width: "700px", top: "20%", marginLeft: "-350px" }} >
+                <div id="modal_main" className={this.state.modalshowhide} style={this.props.modalSize == "big" ? { width: "98%", height: "550", top: "20%", marginLeft: "-49%" } : { width: "700px", top: "20%", marginLeft: "-350px" }} >
                     <h4><a onClick={this.closeModal.bind(this, 1)}>X</a></h4>
                     <div className="modal_detail model_detail_formHeight">
                         <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
