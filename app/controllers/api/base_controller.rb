@@ -55,7 +55,10 @@ class Api::BaseController < ApplicationController
         |zipfile|
       # path = "public" + attachments[0]
       attachments.each do |attachment|
-        zipfile.remove(File::basename(attachment))
+        file_name = File::basename(attachment)
+        if zipfile.any?{ |f| File::basename(f.name) == file_name }
+          zipfile.remove(file_name)
+        end
       end
     }
   end
