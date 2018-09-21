@@ -122,8 +122,8 @@ class Api::UserAttachmentsController < Api::BaseController
     destination_file_path = upload_file_path(zip_file_name)
     zip_attachments(destination_file_path, [file])
     mounted_as = []
-    mounted_as.push('letter_authorisation')
+    # mounted_as.push('')
     uploader = AvatarUploader.new(UserAttachment, mounted_as)
-    { url: uploader.store_path(zip_file_name), filename: zip_file_name }
+    { url: '/' + uploader.store_path(zip_file_name), filename: zip_file_name }
   end
 end

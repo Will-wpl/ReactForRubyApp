@@ -740,6 +740,12 @@ body.choose{
     font-size: 18px  !important;
   }
 }
+.retailer_fill.common_template{ width: 70%; margin: 0 auto;
+  tbody tr td{ text-align: left; padding: 5px 10px; font-size: 12px;
+    button{padding: 4px 10px; margin-right: 10px; font-size: 12px;}
+    a{height: auto;}
+  }
+}
 ul.history_files{
     li{list-style: none; line-height: 26px; overflow: hidden;
       &.lineHeight42{line-height: 42px;}

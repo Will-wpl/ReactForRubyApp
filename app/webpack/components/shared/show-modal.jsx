@@ -994,7 +994,10 @@ export class Modal extends React.Component {
                             </div>
                         </div>}
                         <div className="lm--formItem lm--formItem--inline string">
-                            <div className="lm--formItem-control">
+                            <label className="lm--formItem-label string required">
+
+                            </label>
+                            <div className="lm--formItem-control" style={{"color":"red","padding-left":"35px"}}>
                                 *Note: Please DO NOT edit the words start with #, they are predefined parameters to retrieve specific value from database.
                             </div>
                         </div>
