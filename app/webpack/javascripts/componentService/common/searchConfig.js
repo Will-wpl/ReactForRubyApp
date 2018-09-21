@@ -7,13 +7,15 @@ export const searchTypeData = {
                     {title:"License Number:",type:"company_license_number",species:"input",operator:'like'},
                     {title:"Status:",type:"approval_status",operator:'=',table:'users',species:"select",options:[{option:"All",value:""},{option:"Rejected",value:"0"},{option:"Approved",value:"1"},{option:"Pending",value:"2"}]}
                 ]
-    },
+    },	
+    
     "Buyer List":{//connect back end OK
         list_url:"/api/admin/users/buyers",
         list_data:[
             {title:"Name:",type:"name",species:"input",operator:'like',table:'users'},
             {title:"Email:",type:"email",species:"input",operator:'like'},
-            {title:"Consumer Type:",type:"consumer_type",operator:'=',species:"select",options:[{option:"Company",value:"2"},{option:"Individual",value:"3"}]}
+            {title:"Consumer Type:",type:"consumer_type",operator:'=',species:"select",options:[{option:"Company",value:"2"},{option:"Individual",value:"3"}]},
+            {title:"Status:",type:"approval_status",operator:'=',table:'users',species:"select",options:[{option:"All",value:""},{option:"Rejected",value:"0"},{option:"Approved",value:"1"},{option:"Pending",value:"2"},{option:"Registering",value:"3"}]}
         ]
     },
     "Deleted Retailer List":{//connect back end OK
