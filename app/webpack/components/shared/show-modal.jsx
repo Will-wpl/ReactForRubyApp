@@ -30,7 +30,9 @@ export class Modal extends React.Component {
             modalSize: this.props.modalSize, approval_status: 2,
             entityid: '', is_default: '', user_id: "", main_id: "", user_entity_id: "",
             entity_company_name: '', entity_company_uen: '', entity_company_address: '', entity_billing_address: '', entity_bill_attention_to: '', entity_contact_name: '',
-            entity_contact_email: '', entity_contact_mobile_no: '', entity_contact_office_no: '', entitList: [], entityErrorList: [], loglist: [], attatchment: [], advisory: ""
+            entity_contact_email: '', entity_contact_mobile_no: '', entity_contact_office_no: '', entitList: [], entityErrorList: [], loglist: [], attatchment: [], 
+            attatchment_file_name:"",attatchment_file_path:"",
+            advisory: ""
         }
     }
 
@@ -115,9 +117,13 @@ export class Modal extends React.Component {
 
         if (next.attatchment) {
 
-            this.setState({
-                attatchment: next.attatchment
-            })
+            if(next.attatchment[0])
+            {
+                this.setState({
+                    attatchment_file_name: next.attatchment[0].file_name,
+                    attatchment_file_path: next.attatchment[0].file_path
+                })
+            }
         }
         if (next.advisory) {
             this.setState({
@@ -1101,7 +1107,7 @@ export class Modal extends React.Component {
             if (this.props.listdetailtype === 'Documents Message') {
                 showDetail = <ul className="showdetail">
                     <li>Please upload the following documentations:</li>
-                    <li>1) A print-out of this <a href={this.state.attatchment.file_path} download={this.state.attatchment.file_name} className="urlStyleUnderline" target="_blank">Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
+                    <li>1) A print-out of this <a href={this.state.attatchment_file_path} download={this.state.attatchment_file_name} className="urlStyleUnderline" target="_blank">Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
                     <li>2a) Your company's Accounting & Corporate Regulatory Authority (ACRA) Business Profile.</li>
                     <li>or</li>
                     <li>2b) Your company's Certificate of Incorporation if you are not registered with Accounting & Corporate Regulatory Authority (ACRA).</li>
