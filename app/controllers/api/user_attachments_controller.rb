@@ -118,7 +118,7 @@ class Api::UserAttachmentsController < Api::BaseController
 
   def upload_letter_authorisation
     file = params[:file]
-    zip_file_name = UserAttachmentsController::Letter_Authorisation_Zip_File
+    zip_file_name = 'letter_authorisation.zip'
     destination_file_path = upload_file_path(zip_file_name)
     zip_attachments(destination_file_path, [file])
     mounted_as = []
