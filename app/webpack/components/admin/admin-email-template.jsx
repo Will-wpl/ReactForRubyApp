@@ -43,10 +43,11 @@ export default class EmailTemplates extends Component {
     }
     changeEmail(obj) {
         getEmailItemUpdate(obj,this.state.template_type,this.state.template_id).then(res => {
-            this.setState({ text: "Update Successful!",size:'small' })
+            this.setState({ text: "Update Successful!",size:'small' });
+            this.refs.Modal.showModal();
             setTimeout(() => {
-                this.refs.Modal.showModal();
-            }, 200)
+                window.location.reload();
+            }, 2000)
         }, error => {
 
         })

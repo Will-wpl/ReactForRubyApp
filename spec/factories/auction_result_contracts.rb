@@ -15,6 +15,8 @@ FactoryBot.define do
     htl_off_peak '9.99'
     eht_peak '9.99'
     eht_off_peak '9.99'
+    parent_template_id 1
+    entity_template_id 2
     user nil
     auction nil
     trait :status_nil do

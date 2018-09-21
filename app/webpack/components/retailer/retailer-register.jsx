@@ -90,14 +90,12 @@ export class RetailerRegister extends Component {
         if (this.state.userid) {
             getRetailerUserInfoByUserId(this.state.userid).then(res => {
                 this.setDefult(res);
-                $("#btnRetailerBack").bind('click',()=>{
-                    if(this.state.retailerApproveStatus==="5")
-                    {
-                        window.location.href="/admin/users/del_retailers";
+                $("#btnRetailerBack").bind('click', () => {
+                    if (this.state.retailerApproveStatus === "5") {
+                        window.location.href = "/admin/users/del_retailers";
                     }
-                    else
-                    {
-                        window.location.href="/admin/users/retailers";
+                    else {
+                        window.location.href = "/admin/users/retailers";
                     }
                 })
             })
@@ -182,10 +180,10 @@ export class RetailerRegister extends Component {
             })
         }
         if (param.user_logs) {
-            let list=param.user_logs;
-            list.map(item=>{
-                item.company_uen=item.company_unique_entity_number,
-                item.license_number=item.company_license_number
+            let list = param.user_logs;
+            list.map(item => {
+                item.company_uen = item.company_unique_entity_number,
+                    item.license_number = item.company_license_number
             })
             this.setState({
                 loglist: list
@@ -396,10 +394,9 @@ export class RetailerRegister extends Component {
     }
 
     save(type) {
-        let isNeedRedirect=false;
-        if(this.state.retailerApproveStatus==='0')
-        {
-            isNeedRedirect=true
+        let isNeedRedirect = false;
+        if (this.state.retailerApproveStatus === '0') {
+            isNeedRedirect = true
         }
 
         let param = this.getParam();
@@ -413,23 +410,21 @@ export class RetailerRegister extends Component {
                         user: this.getParam(type == "save" ? 1 : null)
                     }).then(res => {
                         $('#license_number_repeat').removeClass('errormessage').addClass('isPassValidate');
-                      
+
                         this.setState({
                             disabled: true,
                             text: "Your details have been successfully saved. "
                         });
-                          this.refs.Modal.showModal();
+                        this.refs.Modal.showModal();
                         if (type === "save") {
-                             if ((this.state.company_name !== this.company_name_back) || (this.state.company_unique_entity_number !== this.company_unique_entity_number_back) || (this.state.license_number !== this.company_license_number_back)) {
+                            if ((this.state.company_name !== this.company_name_back) || (this.state.company_unique_entity_number !== this.company_unique_entity_number_back) || (this.state.license_number !== this.company_license_number_back)) {
                                 window.location.href = `/retailer/home`;
-                             }
-                             else
-                             {
-                                 if(isNeedRedirect)
-                                 {
+                            }
+                            else {
+                                if (isNeedRedirect) {
                                     window.location.href = `/users/edit`;
-                                 }
-                             }
+                                }
+                            }
                         }
 
                     })
@@ -490,30 +485,30 @@ export class RetailerRegister extends Component {
                     switch (res.validate_result) {
                         case 0:
                             this.setState({
-                                text: 'Are you sure you want to reject the retailer?',
+                                text: 'Are you sure you want to reject the ' + this.state.company_name + '?',
                             }, () => {
                                 this.refs.Modal_Option.showModal('comfirm', { action: 'reject' }, '');
                             });
                             break;
                         case 1:
                             this.setState({
-                                text: "Current retailer has ongoing auction, which can't be rejected at present. ",
+                                text: "" + this.state.company_name + " cannot be rejected due to on-going auction(s).",
                             }, () => {
                                 this.refs.Modal_Option.showModal();
                             });
                             break;
                         case 2:
                             this.setState({
-                                text: "Current retailer has ongoing auction, which can't be rejected at present. ",
+                                text: "" + this.state.company_name + " cannot be rejected due to on-going auction(s). ",
                             }, () => {
                                 this.refs.Modal_Option.showModal();
                             });
                             break;
                         case 3:
                             this.setState({
-                                text: "Current retailer has pending auction invitation, would you proceed anyway? Once proceeded, pending invitation will be cancelled as well. ",
+                                text: "" + this.state.company_name + " has pending auction invitation, would you proceed anyway? Once proceeded, pending invitation will be cancelled as well. ",
                             }, () => {
-                                this.refs.Modal_Option.showModal('comfirm', { action: 'delete'}, '');
+                                this.refs.Modal_Option.showModal('comfirm', { action: 'delete' }, '');
                             });
                             break;
                     }
@@ -538,30 +533,30 @@ export class RetailerRegister extends Component {
             switch (res.validate_result) {
                 case 0:
                     this.setState({
-                        text: 'Are you sure you want to delete the retailer?',
+                        text: 'Are you sure you want to delete the ' + this.state.company_name + '?',
                     }, () => {
                         this.refs.Modal_Option.showModal('comfirm', { action: 'delete' }, '');
                     });
                     break;
                 case 1:
                     this.setState({
-                        text: "Current retailer has ongoing auction, which can't be deleted at present. ",
+                        text: "" + this.state.company_name + " cannot be deleted due to on-going auction(s).",
                     }, () => {
                         this.refs.Modal_Option.showModal();
                     });
                     break;
                 case 2:
                     this.setState({
-                        text: "Current retailer has ongoing auction, which can't be deleted at present. ",
+                        text: "" + this.state.company_name + " cannot be deleted due to on-going auction(s).",
                     }, () => {
                         this.refs.Modal_Option.showModal();
                     });
                     break;
                 case 3:
                     this.setState({
-                        text: "Current retailer has pending auction invitation, would you proceed anyway? Once proceeded, pending invitation will be cancelled as well. ",
+                        text: "" + this.state.company_name + " has pending auction invitation, would you proceed anyway? Once proceeded, pending invitation will be cancelled as well. ",
                     }, () => {
-                        this.refs.Modal_Option.showModal('comfirm', { action: 'delete'}, '');
+                        this.refs.Modal_Option.showModal('comfirm', { action: 'delete' }, '');
                     });
                     break;
             }

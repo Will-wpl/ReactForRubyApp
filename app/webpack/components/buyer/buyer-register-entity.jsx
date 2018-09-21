@@ -14,7 +14,7 @@ export class BuyerUserEntityRegister extends Component {
         this.state = {
             id: "", userid: "", text: "", btn_status: false, disabled: false, havedata: false, allbtnStatus: true, validate: true, use_type: "",
             email_address: "", company_name: "", unique_entity_number: "", company_address: "", billing_address: "", contact_name: "",
-            mobile_number: "", office_number: "", entityStatus: "", approveStatus: false, status: '', main_id: '',approveStatusOld:"",
+            mobile_number: "", office_number: "", entityStatus: "", approveStatus: false, status: '', main_id: '',
 
             buyerTCurl: "", buyerTCname: "", agree_seller_buyer: "0", approval_status: 2, tabSelected: "base",
             buyerRevvTCurl: "", buyerRevvTCname: "", agree_buyer_revv: "0", has_tenants: "1", entity_list: [], entityItemInfo: this.entityItem,
@@ -157,7 +157,7 @@ export class BuyerUserEntityRegister extends Component {
                 agree_buyer_revv: item.agree_buyer_revv ? item.agree_buyer_revv : '0',
                 has_tenants: item.has_tenants ? item.has_tenants : '1',
                 approveStatus: item.approval_status === "3" ? true : false,
-                approveStatusOld:item.approval_status,
+
                 status: setApprovalStatus(item.approval_status, item.approval_date_time === null ? item.created_at : item.approval_date_time)
             })
             this.company_name_back = item.company_name;
@@ -468,11 +468,7 @@ export class BuyerUserEntityRegister extends Component {
     }
 
     save(type) {
-        let needRedirect=false;
-        if(this.state.approveStatusOld==='0')
-        {
-            needRedirect=true;
-        }
+
         let isValidator = this.checkRequired();
         if (isValidator) {
             validateIsExist(this.setParams()).then(res => {
@@ -499,17 +495,14 @@ export class BuyerUserEntityRegister extends Component {
                                 disabled: true,
                                 btnAddDisabled: true
                             })
-                            if ((this.state.company_name !== this.company_name_back) 
-                            || (this.state.unique_entity_number !== this.unique_entity_number_back)) {
+                            if ((this.state.company_name !== this.company_name_back)
+                                || (this.state.unique_entity_number !== this.unique_entity_number_back)) {
                                 setTimeout(() => {
                                     window.location.href = `/buyer/home`;
-                                }, 2000);   
+                                }, 2000);
                             }
-                            else{
-                                if(needRedirect)
-                                {
-                                    window.location.href = `/users/edit`;
-                                }
+                            else {
+                                window.location.href = `/users/edit`;
                             }
                         }
                     });
@@ -519,7 +512,7 @@ export class BuyerUserEntityRegister extends Component {
                 }
             });
         }
-        else {            
+        else {
             this.tab("base");
             this.setState({
                 tabSelected: "base"
@@ -655,12 +648,15 @@ export class BuyerUserEntityRegister extends Component {
             main_id: entityInfo.main_id,
             user_entity_id: entityInfo.user_entity_id,
             approval_status: entityInfo.approval_status,
-            // approval_status_name: this.convertEntityStatus(entityInfo.approval_status)
+            approval_status_name: this.convertEntityStatus(entityInfo.approval_status)
         };
-        let status = this.judgeEntityStatus(item);
-        item.approval_status = status;
-        item.approval_status_name = this.convertEntityStatus(status);
-        let entity = [].concat(this.state.entity_list);
+        // let status = this.judgeEntityStatus(item);
+        // item.approval_status = status;
+        // item.approval_status_name = this.convertEntityStatus(status);
+        // let entity = [].concat(this.state.entity_list);
+        // console.log(entityInfo)
+        // console.log(this.state.entity_list)
+        let entity = this.state.entity_list;
         if (entityInfo.index >= 0) {
             entity[entityInfo.index] = item;
         }
@@ -683,18 +679,18 @@ export class BuyerUserEntityRegister extends Component {
         })
 
     }
-    judgeEntityStatus(entity) {
-        let status = 2;
-        for (let item of this.entity_list_back) {
-            if (item.id === entity.id) {
-                if ((item.company_name === entity.company_name) && (item.company_uen === entity.company_uen)) {
-                    status = entity.approval_status;
-                }
-                break;
-            }
-        }
-        return status;
-    }
+    // judgeEntityStatus(entity) {
+    //     let status = 2;
+    //     for (let item of this.entity_list_back) {
+    //         if (item.id === entity.id) {
+    //             if ((item.company_name === entity.company_name) && (item.company_uen === entity.company_uen)) {
+    //                 status = entity.approval_status;
+    //             }
+    //             break;
+    //         }
+    //     }
+    //     return status;
+    // }
 
     //delete  entity
     deletePop(index) {

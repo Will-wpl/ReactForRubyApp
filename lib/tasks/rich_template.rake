@@ -24,9 +24,9 @@ namespace :rich_template do
 
 
   task :seed => [:environment, :init] do
-    parent_template = RichTemplate.find_by_type_last(RichTemplate::LETTER_OF_AWARD_TEMPLATE)
-    entity_template = RichTemplate.find_by_type_last(RichTemplate::NOMINATED_ENTITY_TEMPLATE)
-    AuctionResultContract.where('parent_template_id is null').update(parent_template_id: parent_template[0].id) unless parent_template.empty?
-    AuctionResultContract.where('entity_template_id is null').update(entity_template_id: entity_template[0].id) unless entity_template.empty?
+    parent_template = RichTemplate.where(type: RichTemplate::LETTER_OF_AWARD_TEMPLATE).last
+    entity_template = RichTemplate.where(type: RichTemplate::NOMINATED_ENTITY_TEMPLATE).last
+    AuctionResultContract.where(parent_template_id: nil).update(parent_template_id: parent_template.id) if parent_template
+    AuctionResultContract.where(entity_template_id: nil).update(entity_template_id: entity_template.id) if entity_template
   end
 end

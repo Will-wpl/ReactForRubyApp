@@ -46,10 +46,9 @@ export class UploadFile extends React.Component {
                                 {this.state.showList == 1 ?
                                     <ul>
                                         {
-                                            this.state.showWay == 1 ?
-                                                item.files.map((it, i) => {
+                                            this.state.showWay == 1 ?(this.props.type == "COMMON"?"":item.files.map((it, i) => {
                                                     return <li key={i}><a target="_blank" id="uploadAttachment2" download={it.file_name} href={it.file_path}>{it.file_name}</a>{this.props.propsdisabled ? '' : (this.state.disabled ? '' : (window.location.href.indexOf("past") > 0 ? '' : <span className="remove_file" onClick={this.remove_file.bind(this, type, index, i, it.id)}></span>))}</li>
-                                                })
+                                                }))
                                                 : item.files.map((it, i) => {
                                                     let length;
                                                     if (this.state.showWay == 0) {
@@ -66,7 +65,7 @@ export class UploadFile extends React.Component {
                                     <div></div>
                                 }
                             </div>
-                        </div>   
+                        </div>
                         <div className={`col-sm-12 col-md-${buttonWidth } u-cell` }>
                             {
                                 this.props.propsdisabled ?
