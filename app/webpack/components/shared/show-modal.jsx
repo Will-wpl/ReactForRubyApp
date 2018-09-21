@@ -787,44 +787,6 @@ export class Modal extends React.Component {
         removePostCode(value);
     }
 
-    downAttachment(attachemnts) {
-        let attacheList = [];
-        if (attachemnts) {
-            
-            attachemnts.map(item => {
-                attacheList.push({
-                    file_name: item.file_name,
-                    file_path: item.file_path
-                })
-            })
-        }
-
-        
-        for (let i = 0; i < attacheList.length; i++) {
-            this.download(attacheList[i].file_name, attacheList[i].file_path);
-        }
-    }
-
-
-    download(file_name, file_path) {
-        let a = document.createElement("a"),
-            blob = new Blob([file_path]),
-            e = document.createEvent("MouseEvents"); //创建鼠标事件对象
-        document.body.appendChild(a);
-
-        e.initEvent("click", false, false); //初始化事件对象
-        a.href = URL.createObjectURL(blob); //设置下载地址
-        a.href = file_path;
-        a.target = "_blank";
-        a.download = file_name; //设置下载文件名
-        a.dispatchEvent(e); //给指定的元素，执行事件click事
-        document.body.removeChild(a);
-    }
-
-
-
-
-
     account_address_repeat() {
         let address = false, account = false, editNotSave = false;
         let address_count = 0, account_count = 0;
@@ -1115,8 +1077,8 @@ export class Modal extends React.Component {
         else {
             if (this.props.listdetailtype === 'Documents Message') {
                 showDetail = <ul className="showdetail">
-                    <li>Please upload the following documentations:</li>
-                    <li>1) A print-out of this <a href="javascript:void(0);" onClick={this.downAttachment.bind(this, this.state.attatchment)} className="urlStyleUnderline" target="_blank">Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
+                    <li>Please upload the following documentations: {this.state.attatchment.file_name}{this.state.attatchment.file_path}</li>
+                    <li>1) A print-out of this <a href={this.state.attatchment.file_path} download={this.state.attatchment.file_name} className="urlStyleUnderline" target="_blank">Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
                     <li>2a) Your company's Accounting & Corporate Regulatory Authority (ACRA) Business Profile.</li>
                     <li>or</li>
                     <li>2b) Your company's Certificate of Incorporation if you are not registered with Accounting & Corporate Regulatory Authority (ACRA).</li>
@@ -1124,15 +1086,15 @@ export class Modal extends React.Component {
                     <li>4) A copy of the Applicant's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
                     <li>5) A copy of the Authorised Representative's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
                     <li>All supporting documents submitted should be in English only.</li>
-                    {/* <li>
+                    <li>
                         <div className="downloadAttach">
                             {
                                 this.state.attatchment.map((item, index) => {
-                                    return <a id={"attach_" + index} key={index} href={item.file_path} target="_blank" download={item.file_name}>{item.file_name}</a>
+                                    return <a id={"attach_" + index} key={index} href={item.file_path} target="_blank" download={item.file_name}>{item.file_name}22</a>
                                 })
                             }
                         </div>
-                    </li> */}
+                    </li>
                 </ul>
             }
             if (this.props.listdetailtype === 'entity_error') {
