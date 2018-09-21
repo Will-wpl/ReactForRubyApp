@@ -218,16 +218,18 @@ export class Modal extends React.Component {
                         '宋体': 'song',
                         '微软雅黑': 'yahei',
                         "设置标题":"Title",
-                        "设置列表":"Set List",
-                        "有序列表":"Ordered List",
-                        "无序列表":"Unordered List",
-                        "图片链接":"Picture Link",
+                        "设置列表":"set List",
+                        "有序列表":"ordered list",
+                        "无序列表":"unordered list",
+                        "图片链接":"picture link",
                         "插入":"Insert",
                         "创建":"Create",
                         "行":"Row",
                         "列":"Column",
                         "格式如":"Format like",
-                        "链接文字":"Text Link"
+                        "链接文字":"Text Link",
+                        "的表格":"'s table",
+                        "正文":"Content"
                     };
                     setTimeout(() => { editor.create(); });
                 }
@@ -263,16 +265,18 @@ export class Modal extends React.Component {
                         '宋体': 'song',
                         '微软雅黑': 'yahei',
                         "设置标题":"Title",
-                        "设置列表":"Set List",
-                        "有序列表":"Ordered List",
-                        "无序列表":"Unordered List",
-                        "图片链接":"Picture Link",
+                        "设置列表":"set List",
+                        "有序列表":"ordered list",
+                        "无序列表":"unordered list",
+                        "图片链接":"picture link",
                         "插入":"Insert",
                         "创建":"Create",
                         "行":"Row",
                         "列":"Column",
                         "格式如":"Format like",
-                        "链接文字":"Text Link"
+                        "链接文字":"Text Link",
+                        "的表格":"'s table",
+                        "正文":"Content"
                     };
                     setTimeout(() => { editor.create(); })
                 }
@@ -1100,7 +1104,7 @@ export class Modal extends React.Component {
         else {
             if (this.props.listdetailtype === 'Documents Message') {
                 showDetail = <ul className="showdetail">
-                    <li>Please upload the following documentations: {this.state.attatchment.file_name}{this.state.attatchment.file_path}</li>
+                    <li>Please upload the following documentations:</li>
                     <li>1) A print-out of this <a href={this.state.attatchment.file_path} download={this.state.attatchment.file_name} className="urlStyleUnderline" target="_blank">Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
                     <li>2a) Your company's Accounting & Corporate Regulatory Authority (ACRA) Business Profile.</li>
                     <li>or</li>
@@ -1109,15 +1113,6 @@ export class Modal extends React.Component {
                     <li>4) A copy of the Applicant's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
                     <li>5) A copy of the Authorised Representative's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
                     <li>All supporting documents submitted should be in English only.</li>
-                    <li>
-                        <div className="downloadAttach">
-                            {
-                                this.state.attatchment.map((item, index) => {
-                                    return <a id={"attach_" + index} key={index} href={item.file_path} target="_blank" download={item.file_name}>{item.file_name}22</a>
-                                })
-                            }
-                        </div>
-                    </li>
                 </ul>
             }
             if (this.props.listdetailtype === 'entity_error') {

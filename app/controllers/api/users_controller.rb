@@ -82,9 +82,12 @@ class Api::UsersController < Api::BaseController
       buyer_entities.each do |temp_entity|
         temp_entity.company_uen = string_for_user_value(temp_entity.company_uen)
         temp_entity.contact_email = string_for_user_value(temp_entity.contact_email)
+        temp_entity.is_default = 1
+        temp_entity.approval_status = CompanyBuyerEntity::ApprovalStatusRemoved
+        temp_entity.save!
         remove_user(temp_entity.user_entity_id) unless temp_entity.user_entity_id.blank?
       end
-      buyer_entities.update(is_default: 1, approval_status: CompanyBuyerEntity::ApprovalStatusRemoved)
+      # buyer_entities.update
       remove_user(user_id)
     end
     render json: { result: 'success' }, status: 200
