@@ -28,7 +28,7 @@ class Api::UserAttachmentsController < Api::BaseController
   #   user.save!
   #   render json: user, status: 200
   # end
-  
+
   # get user attachments by user id
   def index
     file_type = params[:file_type]
