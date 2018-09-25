@@ -20,7 +20,7 @@ export default class EmailTemplates extends Component {
         }
     }
     componentDidMount() {
-        
+
         getEmailList().then(res => {
             this.setState({ email_list: res });
         }, error => {
@@ -32,8 +32,8 @@ export default class EmailTemplates extends Component {
             this.setState({
                 fileData: file
             })
+            $("#template_advisory").show();
         })
-        $("#template_advisory").show();
     }
     showEmail(id, type) {
         getEmailListItem(id, type).then(res => {
