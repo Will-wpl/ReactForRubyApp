@@ -109,9 +109,9 @@ export default class AdminExpiry extends Component {
                                         <td>{item.ra_id}</td>
                                         <td>{moment(item.contract_period_end_date).format('DD-MM-YYYY')}</td>
                                         <td>{item.intake_level}</td>
-                                        <td>{parseInt(item.contracted_capacity)}</td>
-                                        <td>{parseInt(item.peak)}</td>
-                                        <td>{item.off_peak}</td>
+                                        <td>{(item.contracted_capacity!==null && item.contracted_capacity!=="")?parseInt(item.contracted_capacity):""}</td>
+                                        <td>{(item.peak!==null && item.peak!=="")?parseInt(item.peak):""}</td>
+                                        <td>{(item.off_peak!==null && item.off_peak!=="")?parseInt(item.off_peak):""}</td>
                                     </tr>
                                 })}
                             </tbody>
