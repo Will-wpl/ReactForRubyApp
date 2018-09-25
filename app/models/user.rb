@@ -44,14 +44,14 @@ class User < ApplicationRecord
 
   # Associations
   # has_and_belongs_to_many :roles, join_table: :users_roles
-  has_one :user_extension
-  has_many :company_buyer_entities
-  has_many :arrangements
+  has_one :user_extension, dependent: :destroy
+  has_many :company_buyer_entities, dependent: :destroy
+  has_many :arrangements, dependent: :destroy
   has_many :auctions, through: :arrangements
-  has_many :auction_events
-  has_many :auction_extend_times
-  has_many :auction_histories
-  has_many :consumptions
+  has_many :auction_events, dependent: :destroy
+  has_many :auction_extend_times, dependent: :destroy
+  has_many :auction_histories, dependent: :destroy
+  has_many :consumptions, dependent: :destroy
 
   # accepts_nested_attributes
 
