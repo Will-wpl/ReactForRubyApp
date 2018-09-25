@@ -26,6 +26,7 @@ export class AdminDashboard extends Component {
         this.lastInput = 1;
         this.priceCheckAllStatus = true;
         this.rankingCheckAllStatus = true;
+        this.interval = undefined;
     }
 
     componentDidMount() {
@@ -42,21 +43,23 @@ export class AdminDashboard extends Component {
                     livetype:res.live_auction_contracts[0].contract_duration
                 });
             }
-            getArrangements(res.id, ACCEPT_STATUS.ACCEPT).then(res => {
-                let limit = findUpLimit(res.length);
-                let users = res.map((element, index) => {
-                    element['color'] = getRandomColor(index + 1, limit);
-                    return element;
+            this.interval = setInterval(() => {
+                getArrangements(res.id, ACCEPT_STATUS.ACCEPT).then(res => {
+                    console.log(res);
+                    let limit = findUpLimit(res.length);
+                    let users = res.map((element, index) => {
+                        element['color'] = getRandomColor(index + 1, limit);
+                        return element;
+                    });
+                    this.refresh();
+                    this.userLen = users.length;
+                    this.priceUsers.setList(JSON.parse(JSON.stringify(users)),'price');
+                    this.rankingUsers.setList(JSON.parse(JSON.stringify(users)),'ranking');
+                    this.priceUsers.selectAll();
+                    this.rankingUsers.selectAll();
+                }, error => {
                 });
-                this.refresh();
-                this.userLen = users.length;
-                this.priceUsers.setList(JSON.parse(JSON.stringify(users)),'price');
-                this.rankingUsers.setList(JSON.parse(JSON.stringify(users)),'ranking');
-                this.priceUsers.selectAll();
-                this.rankingUsers.selectAll();
-            }, error => {
-            });
-
+            }, 10000);
         })
         // setTimeout(()=>{
         //     this.refresh();
@@ -159,6 +162,7 @@ export class AdminDashboard extends Component {
     }
 
     componentWillUnmount() {
+        clearInterval(this.interval);
         if (this.ws) {
             this.ws.stopConnect();
         }
