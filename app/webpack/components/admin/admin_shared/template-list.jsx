@@ -19,7 +19,8 @@ export default class TemplatesList extends Component {
                             <table className="retailer_fill">
                                 <thead>
                                     <tr>
-                                        <th width={"69.7%"}>{this.props.type=="email"?"Name":"Report"}</th>
+                                    {/* {this.props.type=="email"?"Description":"Report"} */}
+                                        <th width={"69.7%"}>Description</th>
                                         <th>{this.props.type=="email"?"Email":""}</th>
                                     </tr>
                                 </thead>

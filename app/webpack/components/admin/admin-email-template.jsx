@@ -8,9 +8,9 @@ export default class EmailTemplates extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            text: "",size:'',
-            email_list: [],template_type:'',template_id:'',
-            listdetail: {},la_list:[{subject:"Parent LA template",id:1},{subject:"Nominated LA template",id:2}],advisory_list:[{subject:"Buyer market insights",id:3}],
+            text: "", size: '',
+            email_list: [], template_type: '', template_id: '',
+            listdetail: {}, la_list: [{ subject: "Parent LA template", id: 1 }, { subject: "Nominated LA template", id: 2 }], advisory_list: [{ subject: "Buyer market insights", id: 3 }],
             uploadUrl: '/api/admin/user_attachments?file_type=',
             fileData: {
                 "LETTER_OF_AUTHORISATION": [
@@ -20,6 +20,7 @@ export default class EmailTemplates extends Component {
         }
     }
     componentDidMount() {
+        
         getEmailList().then(res => {
             this.setState({ email_list: res });
         }, error => {
@@ -32,18 +33,17 @@ export default class EmailTemplates extends Component {
                 fileData: file
             })
         })
-        $("#template_email").show();
+        $("#template_advisory").show();
     }
-    showEmail(id,type) {
-        getEmailListItem(id,type).then(res => {
-            console.log(res);
-            this.setState({ listdetail: res, text: '',template_type:type,template_id:id,size:'big' });
-            this.refs.Modal.showModal('comfirm', res, type=='la' || type=='advisory'?'email_template_la':'email_template');
+    showEmail(id, type) {
+        getEmailListItem(id, type).then(res => {
+            this.setState({ listdetail: res, text: '', template_type: type, template_id: id, size: 'big' });
+            this.refs.Modal.showModal('comfirm', res, type == 'la' || type == 'advisory' ? 'email_template_la' : 'email_template');
         })
     }
     changeEmail(obj) {
-        getEmailItemUpdate(obj,this.state.template_type,this.state.template_id).then(res => {
-            this.setState({ text: "Update Successful!",size:'small' });
+        getEmailItemUpdate(obj, this.state.template_type, this.state.template_id).then(res => {
+            this.setState({ text: "Update Successful!", size: 'small' });
             this.refs.Modal.showModal();
             setTimeout(() => {
                 window.location.reload();
@@ -52,11 +52,12 @@ export default class EmailTemplates extends Component {
 
         })
     }
-    tab(type){
+    tab(type) {
+        console.log(type)
         $(".buyer_tab a").removeClass("selected");
-        $("#tab_"+type).addClass("selected");
+        $("#tab_" + type).addClass("selected");
         $(".buyer_list").hide();
-        $("#template_"+type).fadeIn(500);
+        $("#template_" + type).fadeIn(500);
     }
     render() {
         //console.log('ranking', this.props.ranking)
@@ -65,19 +66,19 @@ export default class EmailTemplates extends Component {
                 <div className="retailrank_main-new  col-md-8 col-sm-10 ">
                     <div className="admin_buyer_list col-sm-12 col-md-12">
                         <div className="col-sm-12 buyer_tab">
-                            <a className="col-sm-4 col-md-2 selected" onClick={this.tab.bind(this,'email')} id="tab_email">Email Templates</a>
-                            <a className="col-sm-4 col-md-3" onClick={this.tab.bind(this,'la')} id="tab_la">Letter of Award Templates</a>
-                            <a className="col-sm-4 col-md-2" onClick={this.tab.bind(this,'advisory')} id="tab_advisory">Advisory Templates</a>
-                            <a className="col-sm-4 col-md-2" onClick={this.tab.bind(this,'registration')} id="tab_registration">Registration Templates</a>
-                        </div>
-                        <div className="col-sm-12 buyer_list" id="template_email">
-                            <TemplatesList type={"email"} email_list={this.state.email_list} showEmail={this.showEmail.bind(this)}  />
-                        </div>
-                        <div className="col-sm-12 buyer_list" id="template_la">
-                            <TemplatesList type={"la"} email_list={this.state.la_list} showEmail={this.showEmail.bind(this)}  />
+                            <a className="col-sm-4 col-md-2 selected" onClick={this.tab.bind(this, 'advisory')} id="tab_advisory">Advisory Templates</a>
+                            <a className="col-sm-4 col-md-2" onClick={this.tab.bind(this, 'email')} id="tab_email">Email Templates</a>
+                            <a className="col-sm-4 col-md-3" onClick={this.tab.bind(this, 'la')} id="tab_la">Letter of Award Templates</a>
+                            <a className="col-sm-4 col-md-2" onClick={this.tab.bind(this, 'registration')} id="tab_registration">Registration Templates</a>
                         </div>
                         <div className="col-sm-12 buyer_list" id="template_advisory">
-                            <TemplatesList type={"advisory"} email_list={this.state.advisory_list} showEmail={this.showEmail.bind(this)}  />
+                            <TemplatesList type={"advisory"} email_list={this.state.advisory_list} showEmail={this.showEmail.bind(this)} />
+                        </div>
+                        <div className="col-sm-12 buyer_list" id="template_email">
+                            <TemplatesList type={"email"} email_list={this.state.email_list} showEmail={this.showEmail.bind(this)} />
+                        </div>
+                        <div className="col-sm-12 buyer_list" id="template_la">
+                            <TemplatesList type={"la"} email_list={this.state.la_list} showEmail={this.showEmail.bind(this)} />
                         </div>
                         <div className="col-sm-12 buyer_list" id="template_registration">
                             <div className="admin_invitation lm--formItem lm--formItem--inline string u-mt2 u-mb2">
@@ -91,7 +92,7 @@ export default class EmailTemplates extends Component {
                         </div>
                     </div>
                 </div>
-                <Modal formSize={this.state.size} modalSize={this.state.size} text={this.state.text} acceptFunction={this.changeEmail.bind(this)} listdetail={this.state.listdetail}  listdetailtype="Email Template" ref="Modal" />
+                <Modal formSize={this.state.size} modalSize={this.state.size} text={this.state.text} acceptFunction={this.changeEmail.bind(this)} listdetail={this.state.listdetail} listdetailtype="Email Template" ref="Modal" />
             </div>
 
         )

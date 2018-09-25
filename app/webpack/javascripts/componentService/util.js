@@ -398,3 +398,32 @@ export const setApprovalStatus = (status, dt) => {
     return approvalStatus;
 }
 
+
+export const getUserApprovalStatus = (status) => {
+    let approvalStatus = null;
+    switch (status) {
+        case '0':
+            approvalStatus = 'Rejected';
+            break;
+        case '1':
+            approvalStatus = 'Approved';
+            break;
+        case '2':
+            approvalStatus = 'Pending';
+            break;
+        case '3':
+            approvalStatus = 'Registering';
+            break;
+        case '4':
+            approvalStatus = 'Disabled';
+            break;
+        case '5':
+            approvalStatus = 'Deleted';
+            break;
+        default:
+            approvalStatus = 'Registering';
+            break;
+    }
+    return approvalStatus;
+}
+
