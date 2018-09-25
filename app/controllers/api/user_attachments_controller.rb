@@ -28,7 +28,7 @@ class Api::UserAttachmentsController < Api::BaseController
   #   user.save!
   #   render json: user, status: 200
   # end
-  Letter_Authorisation_Zip_File = 'letter_authorisation.zip'.freeze
+
   # get user attachments by user id
   def index
     file_type = params[:file_type]

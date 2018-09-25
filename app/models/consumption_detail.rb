@@ -72,7 +72,7 @@ class ConsumptionDetail < ApplicationRecord
                                           FROM consumption_details cd
                                       JOIN company_buyer_entities e ON cd.company_buyer_entity_id = e.id And e.approval_status = '1'
                                       JOIN users u ON e.user_id = u.id AND u.approval_status = '1' AND (u.is_deleted is NULL OR u.is_deleted <> 1)
-                                      JOIN consumptions c ON cd.consumption_id = c.id And c.user_id = :User_id And c.accept_status = :Consumption_status
+                                      JOIN consumptions c ON cd.consumption_id = c.id And c.user_id = :User_id And c.accept_status = :Consumption_status AND c.accept_status = '1'
                                       JOIN auctions a ON c.auction_id = a.id
                                       JOIN auction_contracts ac ON a.id = ac.auction_id AND c.contract_duration = ac.contract_duration
                                           ) as cda
@@ -99,7 +99,7 @@ class ConsumptionDetail < ApplicationRecord
                                           FROM consumption_details cd
                                       JOIN company_buyer_entities e ON cd.company_buyer_entity_id = e.id And e.approval_status = '1'
                                       JOIN users u ON e.user_id = u.id AND u.approval_status = '1' AND (u.is_deleted is NULL OR u.is_deleted <> 1)
-                                      JOIN consumptions c ON cd.consumption_id = c.id And c.user_id = :User_id And c.accept_status = :Consumption_status
+                                      JOIN consumptions c ON cd.consumption_id = c.id And c.user_id = :User_id And c.accept_status = :Consumption_status AND c.accept_status = '1'
                                       JOIN auctions a ON c.auction_id = a.id
                                       JOIN auction_contracts ac ON a.id = ac.auction_id AND c.contract_duration = ac.contract_duration
                                           ) as cda
