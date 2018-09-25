@@ -7,6 +7,11 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
   let!(:company_buyers) { create_list(:user, 30, :with_buyer, :with_company_buyer) }
   let!(:individual_buyers) { create_list(:user, 30, :with_buyer, :with_individual_buyer) }
   let!(:temp_entity_user) { create(:user, :with_buyer_entity, consumer_type: '4', approval_status: '4' ) }
+  let!(:auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
+  let!(:result) { create(:auction_result, auction: auction, user_id: temp_buyer.id, status: '1') }
+  let!(:result_contract) { create(:auction_result_contract, auction: auction, auction_result: result, user: retailers[0], status: '1', contract_duration: 6, contract_period_end_date: '2020-12-31', status: 'void') }
+  let!(:consumption) { create(:consumption, user: temp_buyer, auction: auction, participation_status: '1', contract_duration: 6) }
+  let! (:arrangement) { create(:arrangement, user: retailers[0], auction: auction, action_status: '1') }
 
   context 'admin user' do
     before { sign_in create(:user, :with_admin) }
@@ -363,6 +368,26 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
 
       context 'Remove buyer' do
         def do_request
+
+          buyer_entity_1 = CompanyBuyerEntity.new
+          buyer_entity_1.company_name = 'Test_Company_Name_1'
+          buyer_entity_1.company_uen = 'Test_Company_UEN_1'
+          buyer_entity_1.company_address = 'Test_Company_Address_1'
+          buyer_entity_1.contact_email = 'Buyer_entity_1@email.com'
+          buyer_entity_1.user_id = temp_buyer.id
+          buyer_entity_1.user_entity_id = temp_entity_user.id
+          buyer_entity_1.approval_status = '2'
+          buyer_entity_1.save!
+
+          buyer_entity_2 = CompanyBuyerEntity.new
+          buyer_entity_2.company_name = 'Test_Company_Name_2'
+          buyer_entity_2.company_uen = 'Test_Company_UEN_2'
+          buyer_entity_2.company_address = 'Test_Company_Address_2'
+          buyer_entity_2.contact_email = 'Buyer_entity_1@email.com'
+          buyer_entity_2.user_id = temp_buyer.id
+          buyer_entity_2.user_entity_id = temp_entity_user.id
+          buyer_entity_2.approval_status = '2'
+          buyer_entity_2.save!
           put :remove_buyer, params: { user_id: temp_buyer.id }
         end
 
@@ -374,10 +399,22 @@ RSpec.describe Api::Admin::UsersController, type: :controller do
         end
       end
 
-
       context 'validate buyer' do
         def do_request
           put :validate_for_delete, params: { user_id: temp_buyer.id }
+        end
+
+        before { do_request }
+        it 'success' do
+          expect(response).to have_http_status(:ok)
+          hash = JSON.parse(response.body)
+          expect(hash['validate_result']).to eq(3)
+        end
+      end
+
+      context 'validate retaler' do
+        def do_request
+          put :validate_for_delete, params: { user_id: retailers[0].id }
         end
 
         before { do_request }
