@@ -43,7 +43,7 @@ export default class CommonTemplates extends Component {
         let file = this.state.fileData;
         file["COMMON"][0].files = obj[0].files;
         this.setState({
-            fileData:file
+            fileData: file
         })
     }
     render() {
@@ -63,15 +63,15 @@ export default class CommonTemplates extends Component {
 
                         <thead>
                             <tr><th width={"25%"}>File Name</th>
-                                <th width={"60%"}>File Url</th>
-                                <th width={"15%"}>Operation</th></tr>
+                                <th width={"55%"}>File Url</th>
+                                <th width={"20%"}>Operation</th></tr>
                         </thead>
                         <tbody>
                             {this.state.fileData.COMMON[0].files.map((item, index) => {
                                 return <tr key={index}>
                                     <td width={"25%"}><a target="_blank" download={item.file_name} href={item.file_path}>{item.file_name}</a></td>
-                                    <td width={"60%"}>{item.file_path}</td>
-                                    <td width={"15%"} >
+                                    <td width={"55%"}>{item.file_path}</td>
+                                    <td width={"20%"} style={{ "textAlign": "center" }} >
                                         <button className="lm--button lm--button--primary">Copy</button>
                                         <button className="lm--button lm--button--primary" onClick={this.remove_file.bind(this, 0, index, item.id)}>Delete</button>
                                     </td></tr>
