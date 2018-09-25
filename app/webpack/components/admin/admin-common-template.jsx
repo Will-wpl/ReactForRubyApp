@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
-import { removeUserAttachFile} from '../../javascripts/componentService/admin/service';
+import { removeUserAttachFile } from '../../javascripts/componentService/admin/service';
 import { Modal } from '../shared/show-modal';
 import { getEmailFile } from '../../javascripts/componentService/admin/service';
 import { UploadFile } from '../shared/upload';
@@ -9,7 +9,7 @@ export default class CommonTemplates extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            text: "",size:'',
+            text: "", size: '',
             uploadUrl: '/api/admin/user_attachments?file_type=',
             fileData: {
                 "COMMON": [
@@ -28,16 +28,23 @@ export default class CommonTemplates extends Component {
         })
     }
     remove_file(typeindex, fileindex, fileid) {
-            let fileObj;
-            removeUserAttachFile(fileid).then(res => {
-                fileObj = this.state.fileData;
-                fileObj['COMMON'][typeindex].files.splice(fileindex, 1);
-                this.setState({
-                    fileData: fileObj
-                })
-            }, error => {
-
+        let fileObj;
+        removeUserAttachFile(fileid).then(res => {
+            fileObj = this.state.fileData;
+            fileObj['COMMON'][typeindex].files.splice(fileindex, 1);
+            this.setState({
+                fileData: fileObj
             })
+        }, error => {
+
+        })
+    }
+    refreshForm(obj) {
+        let file = this.state.fileData;
+        file["COMMON"][0].files = obj[0].files;
+        this.setState({
+            fileData:file
+        })
     }
     render() {
         //console.log('ranking', this.props.ranking)
@@ -49,23 +56,26 @@ export default class CommonTemplates extends Component {
                             <abbr title="required">*</abbr> Common templates :
                         </label>
                         <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                            <UploadFile type="COMMON" required="required" deleteType="userAttach" showList="1" col_width="10" showWay="1" fileData={this.state.fileData.COMMON} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
+                            <UploadFile type="COMMON" required="required" deleteType="userAttach" showList="1" col_width="10" showWay="1" calbackFn={this.refreshForm.bind(this)} fileData={this.state.fileData.COMMON} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
                         </div>
                     </div>
                     <table className={"retailer_fill common_template"}>
+
                         <thead>
-                        <tr><th width={"25%"}>File Name</th><th>File Url</th><th>Operation</th></tr>
+                            <tr><th width={"25%"}>File Name</th>
+                                <th width={"60%"}>File Url</th>
+                                <th width={"15%"}>Operation</th></tr>
                         </thead>
                         <tbody>
-                        {this.state.fileData.COMMON[0].files.map((item,index)=>{
-                            return <tr key={index}>
-                                <td><a target="_blank" download={item.file_name} href={item.file_path}>{item.file_name}</a></td>
-                                <td>{item.file_path}</td>
-                                <td>
-                                    <button className="lm--button lm--button--primary">Copy</button>
-                                    <button className="lm--button lm--button--primary" onClick={this.remove_file.bind(this, 0, index, item.id)}>Delete</button>
-                                </td></tr>
-                        })}
+                            {this.state.fileData.COMMON[0].files.map((item, index) => {
+                                return <tr key={index}>
+                                    <td width={"25%"}><a target="_blank" download={item.file_name} href={item.file_path}>{item.file_name}</a></td>
+                                    <td width={"60%"}>{item.file_path}</td>
+                                    <td width={"15%"} >
+                                        <button className="lm--button lm--button--primary">Copy</button>
+                                        <button className="lm--button lm--button--primary" onClick={this.remove_file.bind(this, 0, index, item.id)}>Delete</button>
+                                    </td></tr>
+                            })}
                         </tbody>
                     </table>
                 </div>

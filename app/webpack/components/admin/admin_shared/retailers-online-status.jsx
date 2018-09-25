@@ -36,7 +36,7 @@ export class RetailsOnlineStatus extends Component {
                         this.props.list_data.length > 0 ? this.props.list_data.map((item,index) => {
                         return(
                             <li key={index} className="u-grid">
-                                <span className="col-sm-9 col-md-9 showclick" style={{cursor:'pointer'}} onClick={this.showDetail.bind(this,item.id)} title={item.company_name}>{item.company_name}({getUserApprovalStatus(item.approval_status)})</span>
+                                <span className="col-sm-9 col-md-9 showclick" style={{cursor:'pointer'}} onClick={this.showDetail.bind(this,item.id)} title={item.company_name}>{item.company_name} ({getUserApprovalStatus(item.approval_status)})</span>
                                 <span className="col-sm-3 col-md-3"><abbr className={this.props.onlineStatus}></abbr></span>
                             </li>
                             )
