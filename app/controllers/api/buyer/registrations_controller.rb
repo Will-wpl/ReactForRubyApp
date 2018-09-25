@@ -304,7 +304,15 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
                           end
     original_company_name = target_buyer_entity.company_name
     original_company_uen = target_buyer_entity.company_uen
+    original_company_address = target_buyer_entity.company_address
+    original_billing_address = target_buyer_entity.billing_address
+    original_bill_attention_to = target_buyer_entity.bill_attention_to
+    original_contact_name = target_buyer_entity.contact_name
+    original_contact_email = target_buyer_entity.contact_email
+    original_contact_mobile_no = target_buyer_entity.contact_mobile_no
+    original_contact_office_no = target_buyer_entity.contact_office_no
     original_approval_status = target_buyer_entity.approval_status
+    # original_buyer_entity = target_buyer_entity.clone
     target_buyer_entity.company_name = buyer_entity['company_name'] unless buyer_entity['company_name'].blank?
     target_buyer_entity.company_uen = buyer_entity['company_uen'] unless buyer_entity['company_uen'].blank?
     target_buyer_entity.company_address = buyer_entity['company_address'] unless buyer_entity['company_address'].blank?
@@ -321,7 +329,20 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     else
       target_buyer_entity.approval_status = buyer_entity['approval_status'] unless buyer_entity['approval_status'].blank?
       if (original_company_name != target_buyer_entity.company_name ||
-          original_company_uen != target_buyer_entity.company_uen)
+          original_company_uen != target_buyer_entity.company_uen) && original_approval_status != CompanyBuyerEntity::ApprovalStatusReject
+        target_buyer_entity.approval_status = CompanyBuyerEntity::ApprovalStatusPending
+        add_log_flag = true
+      elsif original_approval_status == CompanyBuyerEntity::ApprovalStatusReject &&
+        ( original_company_name != target_buyer_entity.company_name ||
+            original_company_uen != target_buyer_entity.company_uen ||
+            original_company_address != target_buyer_entity.company_address ||
+            original_billing_address != target_buyer_entity.billing_address ||
+            original_bill_attention_to != target_buyer_entity.bill_attention_to ||
+            original_contact_name != target_buyer_entity.contact_name ||
+            original_contact_email != target_buyer_entity.contact_email ||
+            original_contact_mobile_no != target_buyer_entity.contact_mobile_no ||
+            original_contact_office_no != target_buyer_entity.contact_office_no
+        )
         target_buyer_entity.approval_status = CompanyBuyerEntity::ApprovalStatusPending
         add_log_flag = true
       end
