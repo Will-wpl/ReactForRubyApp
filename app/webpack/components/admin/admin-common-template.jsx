@@ -53,7 +53,7 @@ export default class CommonTemplates extends Component {
                 <div className="col-sm-12 buyer_list" id="template_registration">
                     <div className="admin_invitation lm--formItem lm--formItem--inline string u-mt2 u-mb2">
                         <label className="lm--formItem-left lm--formItem-label string required" >
-                            <abbr title="required">*</abbr> Common templates :
+                            <abbr title="required">*</abbr> Common Files :
                         </label>
                         <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                             <UploadFile type="COMMON" required="required" deleteType="userAttach" showList="1" col_width="10" showWay="1" calbackFn={this.refreshForm.bind(this)} fileData={this.state.fileData.COMMON} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
