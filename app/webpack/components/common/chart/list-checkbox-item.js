@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import selected from '../../../images/selected.png';
 import unselected from '../../../images/unselected.png';
+import {getUserApprovalStatus} from '../../../javascripts/componentService/util';
 
 export default class CheckboxListItem extends Component {
 
@@ -26,7 +27,7 @@ export default class CheckboxListItem extends Component {
         return (
             <li className="checkitem" onMouseOver={this.showTitle.bind(this,this.props.index)} onMouseLeave={this.hideTitle.bind(this,this.props.index)} onClick={this.onItemClick.bind(this, this.props.id, !this.state.status, this.props.color)} style={{ color:this.props.color,cursor: 'pointer' }}>
                 <img src={this.state.status ? selected : unselected} alt="selectstatus" />
-                <span>{this.props.display}</span>
+                <span>{this.props.display} ({getUserApprovalStatus(this.state.list.approval_status)})</span>
                 {this.props.type && this.state.list?<div id={"title_"+this.props.type+"_"+this.props.index}>
                     <b>Name : <bdo>{this.state.list?this.state.list.main_name:""}</bdo></b>
                     <b>Email Address : <bdo>{this.state.list?this.state.list.main_email_address:""}</bdo></b>
