@@ -43,23 +43,20 @@ export class AdminDashboard extends Component {
                     livetype:res.live_auction_contracts[0].contract_duration
                 });
             }
-            this.interval = setInterval(() => {
-                getArrangements(res.id, ACCEPT_STATUS.ACCEPT).then(res => {
-                    console.log(res);
-                    let limit = findUpLimit(res.length);
-                    let users = res.map((element, index) => {
-                        element['color'] = getRandomColor(index + 1, limit);
-                        return element;
-                    });
-                    this.refresh();
-                    this.userLen = users.length;
-                    this.priceUsers.setList(JSON.parse(JSON.stringify(users)),'price');
-                    this.rankingUsers.setList(JSON.parse(JSON.stringify(users)),'ranking');
-                    this.priceUsers.selectAll();
-                    this.rankingUsers.selectAll();
-                }, error => {
+            getArrangements(res.id, ACCEPT_STATUS.ACCEPT).then(res => {
+                let limit = findUpLimit(res.length);
+                let users = res.map((element, index) => {
+                    element['color'] = getRandomColor(index + 1, limit);
+                    return element;
                 });
-            }, 10000);
+                this.refresh();
+                this.userLen = users.length;
+                this.priceUsers.setList(JSON.parse(JSON.stringify(users)),'price');
+                this.rankingUsers.setList(JSON.parse(JSON.stringify(users)),'ranking');
+                this.priceUsers.selectAll();
+                this.rankingUsers.selectAll();
+            }, error => {
+            });
         })
         // setTimeout(()=>{
         //     this.refresh();
