@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import {Modal} from '../../shared/show-modal';
 import {arrangementDetail} from '../../../javascripts/componentService/admin/service';
+import {getUserApprovalStatus} from '../../../javascripts/componentService/util';
 export class RetailsOnlineStatus extends Component {
     constructor(props){
         super(props);
@@ -35,7 +36,7 @@ export class RetailsOnlineStatus extends Component {
                         this.props.list_data.length > 0 ? this.props.list_data.map((item,index) => {
                         return(
                             <li key={index} className="u-grid">
-                                <span className="col-sm-9 col-md-9 showclick" style={{cursor:'pointer'}} onClick={this.showDetail.bind(this,item.id)} title={item.company_name}>{item.company_name}</span>
+                                <span className="col-sm-9 col-md-9 showclick" style={{cursor:'pointer'}} onClick={this.showDetail.bind(this,item.id)} title={item.company_name}>{item.company_name}({getUserApprovalStatus(item.status)})</span>
                                 <span className="col-sm-3 col-md-3"><abbr className={this.props.onlineStatus}></abbr></span>
                             </li>
                             )
