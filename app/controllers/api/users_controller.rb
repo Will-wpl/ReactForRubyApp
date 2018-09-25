@@ -85,7 +85,9 @@ class Api::UsersController < Api::BaseController
         temp_entity.is_default = 1
         temp_entity.approval_status = CompanyBuyerEntity::ApprovalStatusRemoved
         temp_entity.save!
-        remove_user(temp_entity.user_entity_id) unless temp_entity.user_entity_id.blank?
+        if !temp_entity.user_entity_id.blank? && temp_entity.user_entity_id != temp_entity.user_id
+          remove_user(temp_entity.user_entity_id)
+        end
       end
       # buyer_entities.update
       remove_user(user_id)
