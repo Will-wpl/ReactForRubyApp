@@ -1355,16 +1355,28 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td><abbr title="required">*</abbr>Purchasing Entity</td>
                                     <td>
-                                        <select id="purchasing_entity" onChange={this.changeConsumption.bind(this, "purchasing_entity")} name="purchasing_entity" value={this.state.purchasing_entity_selectd} required>
+                                        <div className={(this.state.cate_type === 'preDay' || this.state.cate_type === 'preOthers') ? "isDisplay" : "isHide"}>
                                             {
                                                 this.state.purchasing_entity.map(item => {
-                                                    if (item.approval_status === "1") {
-                                                        return <option key={item.id} value={item.id}>{item.company_name}</option>
+                                                    if (item.id === this.state.purchasing_entity_selectd) {
+                                                        return <p style={{"paddingLeft":"3px"}}>{item.company_name}</p>
                                                     }
                                                 })
                                             }
-                                        </select>
-                                        <div id="purchasing_entity_selectd_message" className="isPassValidate">This filed is required!</div>
+                                        </div>
+                                        <div className={(this.state.cate_type !== 'preDay' && this.state.cate_type !== 'preOthers') ? "isDisplay" : "isHide"}>
+                                            <select id="purchasing_entity" onChange={this.changeConsumption.bind(this, "purchasing_entity")} name="purchasing_entity" value={this.state.purchasing_entity_selectd} required>
+                                                {
+                                                    this.state.purchasing_entity.map(item => {
+                                                        if (item.approval_status === "1") {
+                                                            return <option key={item.id} value={item.id}>{item.company_name}</option>
+                                                        }
+                                                    })
+                                                }
+                                            </select>
+                                            <div id="purchasing_entity_selectd_message" className="isPassValidate">This filed is required!</div>
+                                        </div>
+
                                     </td>
                                 </tr>
                                 <tr>
