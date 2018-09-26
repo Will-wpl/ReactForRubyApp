@@ -499,11 +499,18 @@ export class BuyerUserEntityRegister extends Component {
                                 || (this.state.unique_entity_number !== this.unique_entity_number_back)) {
                                 setTimeout(() => {
                                     window.location.href = `/buyer/home`;
-                                }, 2000);
+                                }, 1000);
                             }
                             else {
-                                window.location.href = `/users/edit`;
+                                setTimeout(() => {
+                                    window.location.href = `/users/edit`;
+                                }, 1000);
                             }
+                        }
+                        if (type === "register") {
+                            setTimeout(() => {
+                                window.location.href = `/buyer/home`;
+                            }, 1000);
                         }
                     });
                 }
@@ -650,12 +657,7 @@ export class BuyerUserEntityRegister extends Component {
             approval_status: entityInfo.approval_status,
             approval_status_name: this.convertEntityStatus(entityInfo.approval_status)
         };
-        // let status = this.judgeEntityStatus(item);
-        // item.approval_status = status;
-        // item.approval_status_name = this.convertEntityStatus(status);
-        // let entity = [].concat(this.state.entity_list);
-        // console.log(entityInfo)
-        // console.log(this.state.entity_list)
+
         let entity = this.state.entity_list;
         if (entityInfo.index >= 0) {
             entity[entityInfo.index] = item;
@@ -677,20 +679,7 @@ export class BuyerUserEntityRegister extends Component {
         this.setState({
             mainEntityComplete: false
         })
-
     }
-    // judgeEntityStatus(entity) {
-    //     let status = 2;
-    //     for (let item of this.entity_list_back) {
-    //         if (item.id === entity.id) {
-    //             if ((item.company_name === entity.company_name) && (item.company_uen === entity.company_uen)) {
-    //                 status = entity.approval_status;
-    //             }
-    //             break;
-    //         }
-    //     }
-    //     return status;
-    // }
 
     //delete  entity
     deletePop(index) {
