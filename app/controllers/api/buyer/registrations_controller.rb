@@ -257,12 +257,12 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     end
 
     buyer_entities.each do |buyer_entity|
-      unless buyer_entity['main_id'].to_i != 0
+      if buyer_entity['main_id'].to_i != 0 && !buyer_entity['user_entity_id'].blank?
         original_user = User.find(buyer_entity['user_entity_id'])
         if original_user.email.downcase != buyer_entity['contact_email'].downcase &&
-            original_user.user_id != original_user.user_entity_id &&
-            CompanyBuyerEntity.where(' contact_email = ? ',buyer_entity['contact_email']).count == 1
-          User.find(buyer_entity.user_entity_id).destory!
+            buyer_entity['user_id'] != buyer_entity['user_entity_id'] &&
+            CompanyBuyerEntity.where(' contact_email = ? ', original_user.email).count == 1
+          User.find(buyer_entity['user_entity_id']).destroy!
         end
       end
     end
