@@ -255,6 +255,18 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
       # entity_user.destroy unless entity_user.blank?
       CompanyBuyerEntity.find(buyer_entity.id).destroy
     end
+
+    buyer_entities.each do |buyer_entity|
+      if buyer_entity['main_id'].to_i != 0 && !buyer_entity['user_entity_id'].blank?
+        original_user = User.find(buyer_entity['user_entity_id'])
+        if original_user.email.downcase != buyer_entity['contact_email'].downcase &&
+            buyer_entity['user_id'] != buyer_entity['user_entity_id'] &&
+            CompanyBuyerEntity.where(' contact_email = ? ', original_user.email).count == 1
+          User.find(buyer_entity['user_entity_id']).destroy!
+        end
+      end
+    end
+
     buyer_entities.each do |buyer_entity|
       save_result= update_buyer_entity(buyer_entity)
       if save_result[0]
@@ -304,7 +316,15 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
                           end
     original_company_name = target_buyer_entity.company_name
     original_company_uen = target_buyer_entity.company_uen
+    original_company_address = target_buyer_entity.company_address
+    original_billing_address = target_buyer_entity.billing_address
+    original_bill_attention_to = target_buyer_entity.bill_attention_to
+    original_contact_name = target_buyer_entity.contact_name
+    original_contact_email = target_buyer_entity.contact_email
+    original_contact_mobile_no = target_buyer_entity.contact_mobile_no
+    original_contact_office_no = target_buyer_entity.contact_office_no
     original_approval_status = target_buyer_entity.approval_status
+    # original_buyer_entity = target_buyer_entity.clone
     target_buyer_entity.company_name = buyer_entity['company_name'] unless buyer_entity['company_name'].blank?
     target_buyer_entity.company_uen = buyer_entity['company_uen'] unless buyer_entity['company_uen'].blank?
     target_buyer_entity.company_address = buyer_entity['company_address'] unless buyer_entity['company_address'].blank?
@@ -321,8 +341,20 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     else
       target_buyer_entity.approval_status = buyer_entity['approval_status'] unless buyer_entity['approval_status'].blank?
       if (original_company_name != target_buyer_entity.company_name ||
-          original_company_uen != target_buyer_entity.company_uen ||
-          original_approval_status == CompanyBuyerEntity::ApprovalStatusReject)
+          original_company_uen != target_buyer_entity.company_uen) && original_approval_status != CompanyBuyerEntity::ApprovalStatusReject
+        target_buyer_entity.approval_status = CompanyBuyerEntity::ApprovalStatusPending
+        add_log_flag = true
+      elsif original_approval_status == CompanyBuyerEntity::ApprovalStatusReject &&
+        ( original_company_name != target_buyer_entity.company_name ||
+            original_company_uen != target_buyer_entity.company_uen ||
+            original_company_address != target_buyer_entity.company_address ||
+            original_billing_address != target_buyer_entity.billing_address ||
+            original_bill_attention_to != target_buyer_entity.bill_attention_to ||
+            original_contact_name != target_buyer_entity.contact_name ||
+            original_contact_email != target_buyer_entity.contact_email ||
+            original_contact_mobile_no != target_buyer_entity.contact_mobile_no ||
+            original_contact_office_no != target_buyer_entity.contact_office_no
+        )
         target_buyer_entity.approval_status = CompanyBuyerEntity::ApprovalStatusPending
         add_log_flag = true
       end

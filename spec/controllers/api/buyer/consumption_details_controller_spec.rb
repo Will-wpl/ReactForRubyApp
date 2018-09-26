@@ -7,9 +7,11 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
     let!(:auction) { create(:auction, :for_next_month, :upcoming, :published, :started, contract_period_start_date: '2018-07-01') }
     let!(:auction_contract) { create(:auction_contract,auction:auction, contract_duration: 6, contract_period_end_date: '2019-01-01') }
     let!(:company_buyer) { create(:user, :with_buyer, :with_company_buyer) }
+    let!(:company_buyer1) { create(:user, :with_buyer, :with_company_buyer) }
     let!(:company_buyer_entity) { create(:company_buyer_entity, user:company_buyer) }
     # let!(:company_buyer) { create(:user, :with_buyer, :with_company_buyer, approval_status: '1', company_unique_entity_number: 'Test UEN', company_name: 'test buyer', email: 'test_email4@email.com') }
     let!(:consumption) { create(:consumption, user: company_buyer, auction: auction, participation_status: '1', contract_duration:6) }
+    let!(:consumption1) { create(:consumption, user: company_buyer1, auction: auction, participation_status: '1', contract_duration:12) }
     let!(:consumption_lt) { create(:consumption_detail, :for_lt, consumption_id: consumption.id, company_buyer_entity_id: company_buyer_entity.id, account_number: '000001') }
     let!(:consumption_hts) { create(:consumption_detail, :for_hts, consumption_id: consumption.id, company_buyer_entity_id: company_buyer_entity.id, unit_number: 'UN 1', postal_code: '4001') }
     let!(:consumption_htl) { create(:consumption_detail, :for_htl, consumption_id: consumption.id, company_buyer_entity_id: company_buyer_entity.id) }
@@ -144,7 +146,7 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
       context '(Validate-Single)Account number do not unique' do
         def do_request
           detail = {id: 0, account_number: '000001', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 1', postal_code: '4001'}
-          post :validate_single, params: { consumption_id: consumption.id, detail: detail }
+          post :validate_single, params: { consumption_id: consumption1.id, detail: detail }
         end
 
         before { do_request }

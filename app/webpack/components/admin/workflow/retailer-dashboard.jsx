@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import moment from 'moment';
 import {Modal} from '../../shared/show-modal';
 import {arrangementDetail} from '../../../javascripts/componentService/admin/service';
+import {getUserApprovalStatus } from '../../../javascripts/componentService/util';
 export class Adminretailerdashboard extends Component {
     constructor(props, context){
         super(props);
@@ -61,7 +62,7 @@ export class Adminretailerdashboard extends Component {
                                 {
                                     this.props.retailer_list.map((item,index)=>{
                                         return <tr key={index}>
-                                                    <td>{item.company_name}<br/>({item.status})</td>
+                                                    <td>{item.company_name}<br/>({getUserApprovalStatus(item.status)})</td>
                                                         {
                                                             this.state.step.map((it,i)=>{
                                                                 let flows = [null,null,null,null];

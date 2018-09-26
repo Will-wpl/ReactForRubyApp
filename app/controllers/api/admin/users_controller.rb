@@ -8,7 +8,7 @@ class Api::Admin::UsersController < Api::UsersController
     result_json = approval_user
     approval_status = params[:approved].blank? ? User::ApprovalStatusReject : User::ApprovalStatusApproved
     if approval_status == User::ApprovalStatusReject
-      Arrangement.where(user_id: params[:user_id], action_status: Consumption::ActionStatusPending).delete_all
+      Arrangement.where(user_id: params[:user_id], action_status: Consumption::ActionStatusPending).destroy_all #.delete_all
     end
     render json: result_json, status: 200
   end
@@ -46,12 +46,12 @@ class Api::Admin::UsersController < Api::UsersController
       entites = CompanyBuyerEntity.find_by_user(params[:user_id])
       entites.update(approval_status: CompanyBuyerEntity::ApprovalStatusReject)
       # Remove consumption
-      Consumption.where(user_id: params[:user_id], action_status: Consumption::ActionStatusPending).delete_all
+      Consumption.where(user_id: params[:user_id], action_status: Consumption::ActionStatusPending).destroy_all #.delete_all
       # Remove entity users
       entity_user_ids = []
       entites.each { |x| entity_user_ids.push(x.user_entity_id) unless x.user_entity_id.blank? }
       entity_user_ids.delete(params[:user_id].to_i)
-      User.where('id in (?)', entity_user_ids).delete_all
+      User.where('id in (?)', entity_user_ids).destroy_all #.delete_all
     end
     if approval_status == User::ApprovalStatusApproved && original_status == User::ApprovalStatusReject
       CompanyBuyerEntity.find_by_user(params[:user_id]).update(approval_status: CompanyBuyerEntity::ApprovalStatusPending)
@@ -93,8 +93,8 @@ class Api::Admin::UsersController < Api::UsersController
     elsif approval_status == CompanyBuyerEntity::ApprovalStatusReject
       # Remove entity users
       unless company_buyer_entity.user_entity_id.blank?
-        if CompanyBuyerEntity.find_by_user_entity_id(company_buyer_entity.user_entity_id).count <= 1
-          User.find(company_buyer_entity.user_entity_id).delete #unless company_buyer_entity.user_entity_id.blank?
+        if CompanyBuyerEntity.find_by_user_entity_id(company_buyer_entity.user_entity_id).count <= 1 && company_buyer_entity.user_id != company_buyer_entity.user_entity_id
+          User.find(company_buyer_entity.user_entity_id).destroy #unless company_buyer_entity.user_entity_id.blank?
         end
       end
       # Update entity approval status to approved

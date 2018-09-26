@@ -430,7 +430,6 @@ export class BuyerUserManage extends Component {
 
         let list = this.state.entity_list;
         list[index].approval_status = "1";
-        // list[index].approval_status_name = "Approved";
         list[index].isApproved = true;
         this.setState({
             entity_list: list,
@@ -441,8 +440,7 @@ export class BuyerUserManage extends Component {
 
         let list = this.state.entity_list;
         list[index].approval_status = "0";
-        // list[index].approval_status_name = "Rejected";
-        console.log(2222)
+ 
         list[index].isApproved = false;
         this.setState({
             entity_list: list,
@@ -560,10 +558,17 @@ export class BuyerUserManage extends Component {
     convertEntityStatus(value) {
         if (value) {
             if (value === "0") {
-                return "Rejected"
+                return "Rejected";
             }
             else if (value === "1") {
-                return "Approved"
+                return "Approved";
+            }
+            else if (value === "3") {
+                return "Registering";
+            }
+            else if(value==="5")
+            {
+                return "Deleted";
             }
             else {
                 return "Pending"

@@ -169,7 +169,6 @@ export class UploadFile extends React.Component {
             contentType: false,
             xhr: () => {
                 var xhr = new window.XMLHttpRequest();
-
                 this.setState({
                     disabled: true
                 })
@@ -210,7 +209,7 @@ export class UploadFile extends React.Component {
                     fileData: fileObj
                 })
                 if (this.props.calbackFn) {
-                    this.props.calbackFn();
+                    this.props.calbackFn(this.state.fileData);
                 }
                 // $('#showMessage').removeClass('errormessage').addClass('isPassValidate')
                 $("#" + type + index).val('');

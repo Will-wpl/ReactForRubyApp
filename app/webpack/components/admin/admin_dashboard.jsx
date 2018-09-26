@@ -26,6 +26,7 @@ export class AdminDashboard extends Component {
         this.lastInput = 1;
         this.priceCheckAllStatus = true;
         this.rankingCheckAllStatus = true;
+        this.interval = undefined;
     }
 
     componentDidMount() {
@@ -56,7 +57,6 @@ export class AdminDashboard extends Component {
                 this.rankingUsers.selectAll();
             }, error => {
             });
-
         })
         // setTimeout(()=>{
         //     this.refresh();
@@ -159,6 +159,7 @@ export class AdminDashboard extends Component {
     }
 
     componentWillUnmount() {
+        clearInterval(this.interval);
         if (this.ws) {
             this.ws.stopConnect();
         }

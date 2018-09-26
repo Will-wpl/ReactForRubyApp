@@ -52,7 +52,7 @@ export default class AdminExpiry extends Component {
                     <div className="search_type">
                         <dl className="lm--formItem string optional">
                             <dd>
-                                <span className="lm--formItem-label string optional">Account Eligille for New Contract Start Date :</span>
+                                <span className="lm--formItem-label string optional">Account Eligible for New Contract Start Date :</span>
                                 <label className="lm--formItem-control">
                                     <DatePicker selected={this.state.start_datetime} disabled={this.state.disabled} ref="start_datetime" shouldCloseOnSelect={true} name="start_datetime" dateFormat="DD-MM-YYYY" className="time_ico" onChange={this.timeChange.bind(this)} minDate={moment()} title="Time must not be in the past." required aria-required="true" />
                                 </label>
@@ -109,9 +109,9 @@ export default class AdminExpiry extends Component {
                                         <td>{item.ra_id}</td>
                                         <td>{moment(item.contract_period_end_date).format('DD-MM-YYYY')}</td>
                                         <td>{item.intake_level}</td>
-                                        <td>{item.contracted_capacity}</td>
-                                        <td>{item.peak}</td>
-                                        <td>{item.off_peak}</td>
+                                        <td>{(item.contracted_capacity!==null && item.contracted_capacity!=="")?parseInt(item.contracted_capacity):""}</td>
+                                        <td>{(item.peak!==null && item.peak!=="")?parseInt(item.peak):""}</td>
+                                        <td>{(item.off_peak!==null && item.off_peak!=="")?parseInt(item.off_peak):""}</td>
                                     </tr>
                                 })}
                             </tbody>

@@ -85,7 +85,9 @@ class Api::UsersController < Api::BaseController
         temp_entity.is_default = 1
         temp_entity.approval_status = CompanyBuyerEntity::ApprovalStatusRemoved
         temp_entity.save!
-        remove_user(temp_entity.user_entity_id) unless temp_entity.user_entity_id.blank?
+        if !temp_entity.user_entity_id.blank? && temp_entity.user_entity_id != temp_entity.user_id
+          remove_user(temp_entity.user_entity_id)
+        end
       end
       # buyer_entities.update
       remove_user(user_id)
@@ -168,8 +170,8 @@ class Api::UsersController < Api::BaseController
   def remove_user(user_id)
     user = User.find(user_id)
     unless user.blank?
-      Consumption.where(user_id: user_id, action_status: Consumption::ActionStatusPending).delete_all
-      Arrangement.where(user_id: user_id, action_status: Consumption::ActionStatusPending).delete_all
+      Consumption.where(user_id: user_id, action_status: Consumption::ActionStatusPending).destroy_all#.delete_all
+      Arrangement.where(user_id: user_id, action_status: Consumption::ActionStatusPending).destroy_all#.delete_all
       user.email = string_for_user_value(user.email)
       user.company_unique_entity_number = string_for_user_value(user.company_unique_entity_number)
       user.company_license_number = string_for_user_value(user.company_license_number)

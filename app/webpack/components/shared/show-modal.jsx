@@ -30,7 +30,9 @@ export class Modal extends React.Component {
             modalSize: this.props.modalSize, approval_status: 2,
             entityid: '', is_default: '', user_id: "", main_id: "", user_entity_id: "",
             entity_company_name: '', entity_company_uen: '', entity_company_address: '', entity_billing_address: '', entity_bill_attention_to: '', entity_contact_name: '',
-            entity_contact_email: '', entity_contact_mobile_no: '', entity_contact_office_no: '', entitList: [], entityErrorList: [], loglist: [], attatchment: [], advisory: ""
+            entity_contact_email: '', entity_contact_mobile_no: '', entity_contact_office_no: '', entitList: [], entityErrorList: [], loglist: [], attatchment: [],
+            attatchment_file_name: "", attatchment_file_path: "",
+            advisory: ""
         }
     }
 
@@ -115,9 +117,12 @@ export class Modal extends React.Component {
 
         if (next.attatchment) {
 
-            this.setState({
-                attatchment: next.attatchment
-            })
+            if (next.attatchment[0]) {
+                this.setState({
+                    attatchment_file_name: next.attatchment[0].file_name,
+                    attatchment_file_path: next.attatchment[0].file_path
+                })
+            }
         }
         if (next.advisory) {
             this.setState({
@@ -217,19 +222,19 @@ export class Modal extends React.Component {
                         '居中': 'center',
                         '宋体': 'song',
                         '微软雅黑': 'yahei',
-                        "设置标题":"Title",
-                        "设置列表":"set List",
-                        "有序列表":"ordered list",
-                        "无序列表":"unordered list",
-                        "图片链接":"picture link",
-                        "插入":"Insert",
-                        "创建":"Create",
-                        "行":"Row",
-                        "列":"Column",
-                        "格式如":"Format like",
-                        "链接文字":"Text Link",
-                        "的表格":"'s table",
-                        "正文":"Content"
+                        "设置标题": "Title",
+                        "设置列表": "set List",
+                        "有序列表": "ordered list",
+                        "无序列表": "unordered list",
+                        "图片链接": "picture link",
+                        "插入": "Insert",
+                        "创建": "Create",
+                        "行": "Row",
+                        "列": "Column",
+                        "格式如": "Format like",
+                        "链接文字": "Text Link",
+                        "的表格": "'s table",
+                        "正文": "Content"
                     };
                     setTimeout(() => { editor.create(); });
                 }
@@ -264,19 +269,19 @@ export class Modal extends React.Component {
                         '居中': 'center',
                         '宋体': 'song',
                         '微软雅黑': 'yahei',
-                        "设置标题":"Title",
-                        "设置列表":"set List",
-                        "有序列表":"ordered list",
-                        "无序列表":"unordered list",
-                        "图片链接":"picture link",
-                        "插入":"Insert",
-                        "创建":"Create",
-                        "行":"Row",
-                        "列":"Column",
-                        "格式如":"Format like",
-                        "链接文字":"Text Link",
-                        "的表格":"'s table",
-                        "正文":"Content"
+                        "设置标题": "Title",
+                        "设置列表": "set List",
+                        "有序列表": "ordered list",
+                        "无序列表": "unordered list",
+                        "图片链接": "picture link",
+                        "插入": "Insert",
+                        "创建": "Create",
+                        "行": "Row",
+                        "列": "Column",
+                        "格式如": "Format like",
+                        "链接文字": "Text Link",
+                        "的表格": "'s table",
+                        "正文": "Content"
                     };
                     setTimeout(() => { editor.create(); })
                 }
@@ -1021,8 +1026,8 @@ export class Modal extends React.Component {
                             <label className="lm--formItem-label string required">
 
                             </label>
-                            <div className="lm--formItem-control" style={{"color":"red","padding-left":"35px"}}>
-                                *Note: Please DO NOT edit the words start with #, they are predefined parameters to retrieve specific value from database.
+                            <div className="lm--formItem-control" style={{ "color": "red", "padding-left": "35px" }}>
+                                Important: Do NOT edit any text starting with #, as these are predefined parameters which will affect system stability.
                             </div>
                         </div>
                         <div className="lm--formItem lm--formItem--inline string">
@@ -1105,7 +1110,7 @@ export class Modal extends React.Component {
             if (this.props.listdetailtype === 'Documents Message') {
                 showDetail = <ul className="showdetail">
                     <li>Please upload the following documentations:</li>
-                    <li>1) A print-out of this <a href={this.state.attatchment.file_path} download={this.state.attatchment.file_name} className="urlStyleUnderline" target="_blank">Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
+                    <li>1) A print-out of this <a href={this.state.attatchment_file_path} download={this.state.attatchment_file_name} className="urlStyleUnderline" target="_blank">Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
                     <li>2a) Your company's Accounting & Corporate Regulatory Authority (ACRA) Business Profile.</li>
                     <li>or</li>
                     <li>2b) Your company's Certificate of Incorporation if you are not registered with Accounting & Corporate Regulatory Authority (ACRA).</li>
@@ -1350,16 +1355,28 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td><abbr title="required">*</abbr>Purchasing Entity</td>
                                     <td>
-                                        <select id="purchasing_entity" onChange={this.changeConsumption.bind(this, "purchasing_entity")} name="purchasing_entity" value={this.state.purchasing_entity_selectd} required>
+                                        <div className={(this.state.cate_type === 'preDay' || this.state.cate_type === 'preOthers') ? "isDisplay" : "isHide"}>
                                             {
                                                 this.state.purchasing_entity.map(item => {
-                                                    if (item.approval_status === "1") {
-                                                        return <option key={item.id} value={item.id}>{item.company_name}</option>
+                                                    if (item.id === this.state.purchasing_entity_selectd) {
+                                                        return <p style={{"paddingLeft":"3px"}}>{item.company_name}</p>
                                                     }
                                                 })
                                             }
-                                        </select>
-                                        <div id="purchasing_entity_selectd_message" className="isPassValidate">This filed is required!</div>
+                                        </div>
+                                        <div className={(this.state.cate_type !== 'preDay' && this.state.cate_type !== 'preOthers') ? "isDisplay" : "isHide"}>
+                                            <select id="purchasing_entity" onChange={this.changeConsumption.bind(this, "purchasing_entity")} name="purchasing_entity" value={this.state.purchasing_entity_selectd} required>
+                                                {
+                                                    this.state.purchasing_entity.map(item => {
+                                                        if (item.approval_status === "1") {
+                                                            return <option key={item.id} value={item.id}>{item.company_name}</option>
+                                                        }
+                                                    })
+                                                }
+                                            </select>
+                                            <div id="purchasing_entity_selectd_message" className="isPassValidate">This filed is required!</div>
+                                        </div>
+
                                     </td>
                                 </tr>
                                 <tr>
