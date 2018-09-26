@@ -180,16 +180,18 @@ class Api::ConsumptionDetailsController < Api::BaseController
     consumptions.each do |consumption|
       temp_contract_period_start_date ,temp_contract_period_end_date = get_auction_period(consumption)
 
-      if temp_contract_period_start_date.nil? ||
-          temp_contract_period_end_date.nil? ||
-          temp_contract_period_end_date < contract_period_start_date
-        next
-      end
       consumption.consumption_details.each do |consumption_detail|
         consumption_detail_id = detail['id'].blank? ? detail['orignal_id'] : detail['id']
         if !consumption_detail.account_number.blank? && consumption_detail.id.to_s != consumption_detail_id
           account_numbers.push(consumption_detail.account_number)
         end
+
+        if temp_contract_period_start_date.nil? ||
+            temp_contract_period_end_date.nil? ||
+            temp_contract_period_end_date < contract_period_start_date
+          next
+        end
+
         if !consumption_detail.unit_number.blank? && !consumption_detail.postal_code.blank? &&
             consumption_detail.id.to_s != consumption_detail_id
           premise_addresses.push({ 'unit_number' => consumption_detail.unit_number,
