@@ -158,7 +158,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
     error_details = []
     detail = params[:detail]
     current_consumption = Consumption.find(params[:consumption_id]) #@consumption
-    consumptions = Consumption.mine(current_user.id)
+    consumptions = Consumption.all #mine(current_user.id)
     auction = Auction.find(current_consumption.auction_id)
     raise ActiveRecord::RecordNotFound if auction.nil?
     contract_period_start_date = auction.contract_period_start_date
