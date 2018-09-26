@@ -418,11 +418,15 @@ export class RetailerRegister extends Component {
                         this.refs.Modal.showModal();
                         if (type === "save") {
                             if ((this.state.company_name !== this.company_name_back) || (this.state.company_unique_entity_number !== this.company_unique_entity_number_back) || (this.state.license_number !== this.company_license_number_back)) {
-                                window.location.href = `/retailer/home`;
+                                setTimeout(() => {
+                                    window.location.href = `/retailer/home`;
+                                }, 1000);
                             }
                             else {
                                 if (isNeedRedirect) {
-                                    window.location.href = `/users/edit`;
+                                    setTimeout(() => {
+                                        window.location.href = `/users/edit`;
+                                    }, 1000);
                                 }
                             }
                         }
