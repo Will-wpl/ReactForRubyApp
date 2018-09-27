@@ -386,13 +386,6 @@ ActiveRecord::Schema.define(version: 20180927014848) do
     t.index ["arrangement_id"], name: "index_tender_state_machines_on_arrangement_id"
   end
 
-  create_table "upload_files", force: :cascade do |t|
-    t.binary "content"
-    t.integer "file_type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "user_attachments", force: :cascade do |t|
     t.string "file_type"
     t.string "file_name"
