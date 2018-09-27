@@ -119,7 +119,11 @@ Rails.application.routes.draw do
       end
       resources :user_extensions, only: %i[index]
       resources :email_templates, only: %i[index show update]
-      resources :templates, only: %i[show update]
+      resources :templates, only: %i[show update list] do
+        collection do
+          get 'list'
+        end
+      end
       resources :registrations, only: %i[index retailer_info buyer_info] do
         member do
           get 'retailer_info'

@@ -10,7 +10,7 @@ export default class EmailTemplates extends Component {
         this.state = {
             text: "", size: '',
             email_list: [], template_type: '', template_id: '',
-            listdetail: {}, la_list: [{ subject: "Parent LA template", id: 1 }, { subject: "Nominated LA template", id: 2 }], advisory_list: [{ subject: "Buyer market insights", id: 3 }],
+            listdetail: {}, la_list: [{ name: "Parent LA template", id: 1}, { name: "Nominated LA template", id: 2,updated_at:"" }], advisory_list: [{ name: "Buyer market insights", id: 3,updated_at:"" }],
             uploadUrl: '/api/admin/user_attachments?file_type=',
             fileData: {
                 "LETTER_OF_AUTHORISATION": [
