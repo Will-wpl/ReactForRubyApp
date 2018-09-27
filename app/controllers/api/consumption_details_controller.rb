@@ -118,6 +118,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
       auction_name = auction.name
       auction_start_datetime = auction.start_datetime.strftime('%Y-%m-%d %H:%M:%S').to_s
       consumption.comments = nil
+      consumption.is_saved = 1
       consumption.accept_status = Consumption::AcceptStatusPending
       if consumption.save!
         # Change -- [do not save acution. move this logic to admin approval logic] - Start
@@ -344,7 +345,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
 
   def consumption_details_before_yesterday(consumption_details_before_yesterday, auction, consumption, only_read_records = false)
     consumption_details_all_before_yesterday = []
-    if consumption_details_before_yesterday.blank? && !only_read_records
+    if consumption.is_saved != 1 && !only_read_records # consumption_details_before_yesterday.blank?
       details = ConsumptionDetail.find_account_less_than_contract_start_date_last(auction.contract_period_start_date,current_user.id)
       details.each do |consumption_detail|
         user_attachments = UserAttachment.find_consumption_attachment_by_user_type(consumption_detail.id,
@@ -375,7 +376,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
 
   def consumption_details_yesterday(consumption_details_yesterday, auction, consumption, only_read_records = false)
     consumption_details_all_yesterday = []
-    if consumption_details_yesterday.blank? && !only_read_records
+    if consumption.is_saved != 1 && !only_read_records #consumption_details_yesterday.blank?
       details = ConsumptionDetail.find_account_equal_to_contract_start_date_last(auction.contract_period_start_date, current_user.id)
       details.each do |consumption_detail|
         user_attachments = UserAttachment.find_consumption_attachment_by_user_type(consumption_detail.id,
@@ -473,6 +474,8 @@ class Api::ConsumptionDetailsController < Api::BaseController
     end
     saved_details = []
     ActiveRecord::Base.transaction do
+      consumption.is_saved = 1
+      consumption.save!
       saved_details.concat(save_details(details))
       saved_details.concat(save_details(details_yesterday, ConsumptionDetail::DraftFlagYesterday))
       saved_details.concat(save_details(details_before_yesterday, ConsumptionDetail::DraftFlagBeforeYesterday))
