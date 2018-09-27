@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import { Modal } from '../shared/show-modal';
-import { getEmailList, getEmailListItem, getEmailItemUpdate, getEmailFile } from '../../javascripts/componentService/admin/service';
+import { getEmailList, getEmailListItem, getEmailItemUpdate, getEmailFile, getTemplate } from '../../javascripts/componentService/admin/service';
 import { UploadFile } from '../shared/upload';
 import TemplatesList from './admin_shared/template-list';
 export default class EmailTemplates extends Component {
@@ -10,7 +10,9 @@ export default class EmailTemplates extends Component {
         this.state = {
             text: "", size: '',
             email_list: [], template_type: '', template_id: '',
-            listdetail: {}, la_list: [{ name: "Parent LA template", id: 1}, { name: "Nominated LA template", id: 2,updated_at:"" }], advisory_list: [{ name: "Buyer market insights", id: 3,updated_at:"" }],
+            listdetail: {},
+            la_list: [],
+            advisory_list: [],
             uploadUrl: '/api/admin/user_attachments?file_type=',
             fileData: {
                 "LETTER_OF_AUTHORISATION": [
@@ -20,10 +22,33 @@ export default class EmailTemplates extends Component {
         }
     }
     componentDidMount() {
+        let ad = [], la = [];
+        getTemplate().then(res => {
+            if (res) {
+                res.map(item => {
+                    let entity = {
+                        name: item.name,
+                        id: item.type,
+                        updated_at: item.updated_at
+                    }
+                    if (item.type === 3) {
+                        ad.push(entity)
+                    }
+                    else {
+                        la.push(entity)
+                    }
+                })
+            }
+            this.setState({
+                la_list: la,
+                advisory_list: ad
+            })
+            $("#template_advisory").show();
+        })
 
         getEmailList().then(res => {
             this.setState({ email_list: res });
-            $("#template_advisory").show();
+
         }, error => {
 
         })
@@ -33,7 +58,7 @@ export default class EmailTemplates extends Component {
             this.setState({
                 fileData: file
             })
-          
+
         })
     }
     showEmail(id, type) {
