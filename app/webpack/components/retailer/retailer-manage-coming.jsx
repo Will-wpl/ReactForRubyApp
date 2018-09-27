@@ -283,7 +283,7 @@ export class RetailerManage extends Component {
                         <abbr title="required">*</abbr> Mobile Number: (+65)
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="main_mobile_number" value={this.state.main_mobile_number} onChange={this.Change.bind(this,'main_mobile_number')} disabled={this.state.disabled} ref="main_mobile_number" maxLength="50" required aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
+                            <input type="text" name="main_mobile_number" maxLength="8" value={this.state.main_mobile_number} onChange={this.Change.bind(this,'main_mobile_number')} disabled={this.state.disabled} ref="main_mobile_number"   required aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -291,7 +291,7 @@ export class RetailerManage extends Component {
                         <abbr title="required">*</abbr> Office Number: (+65)
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="main_office_number" value={this.state.main_office_number} onChange={this.Change.bind(this,'main_office_number')} disabled={this.state.disabled} ref="main_office_number" maxLength="50" required aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
+                            <input type="text" name="main_office_number" maxLength="8" value={this.state.main_office_number} onChange={this.Change.bind(this,'main_office_number')} disabled={this.state.disabled} ref="main_office_number"  required aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
                         </div>
                     </div>
                     <h4 className="lm--formItem lm--formItem--inline string">Alternative Contact Person on Actual Bidding Day:</h4>

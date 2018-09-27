@@ -27,7 +27,9 @@ export default class CheckboxListItem extends Component {
         return (
             <li className="checkitem" onMouseOver={this.showTitle.bind(this,this.props.index)} onMouseLeave={this.hideTitle.bind(this,this.props.index)} onClick={this.onItemClick.bind(this, this.props.id, !this.state.status, this.props.color)} style={{ color:this.props.color,cursor: 'pointer' }}>
                 <img src={this.state.status ? selected : unselected} alt="selectstatus" />
-                <span>{this.props.display} {this.state.list? ' (' + getUserApprovalStatus(this.state.list.approval_status) + ')' : ''}
+                <span>{this.props.display}
+                <p className={this.state.list? (this.state.list.approval_status==="2"?"isDisplayInLine":"isHide"):''}>{this.state.list? ' (' + getUserApprovalStatus(this.state.list.approval_status) + ')' : ''}</p>
+                {/* {this.state.list? ' (' + getUserApprovalStatus(this.state.list.approval_status) + ')' : ''} */}
                 </span>
                 {this.props.type && this.state.list?<div id={"title_"+this.props.type+"_"+this.props.index}>
                     <b>Name : <bdo>{this.state.list?this.state.list.main_name:""}</bdo></b>
