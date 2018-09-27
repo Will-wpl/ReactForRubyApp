@@ -36,7 +36,7 @@ export default class TemplatesList extends Component {
                                             return (  
                                                 <tr key={index}>
                                                     <td width={"50%"} style={{"textAlign":"left","paddingLeft":"15px"}}>{item.name}</td>
-                                                    <td width={"30%"} style={{"textAlign":"center"}}>{(item.updated_at!==null && item.updated_at!=="")?moment(item.updated_at).format('DD-MM-YYYY hh:mm:ss '):""}</td>
+                                                    <td width={"30%"} style={{"textAlign":"center"}}>{(item.updated_at!==null && item.updated_at!=="")?moment(item.updated_at).format('DD-MM-YYYY HH:mm:ss '):""}</td>
                                                     <td width={"20%"}><a onClick={this.props.showEmail.bind(this, item.id,this.props.type)} className={"edit"}>edit</a></td>
                                                 </tr>
                                             )
