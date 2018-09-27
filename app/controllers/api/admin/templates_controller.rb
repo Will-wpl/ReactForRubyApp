@@ -2,6 +2,20 @@ class Api::Admin::TemplatesController < Api::BaseController
   before_action :admin_required
   # skip_before_action :verify_authenticity_token
 
+  def list
+    id = params[:id]
+    templates = []
+    if id.to_i == RichTemplate::LETTER_OF_AWARD_TEMPLATE
+      parent_template = RichTemplate.where(type: RichTemplate::LETTER_OF_AWARD_TEMPLATE).last
+      entity_template = RichTemplate.where(type: RichTemplate::NOMINATED_ENTITY_TEMPLATE).last
+
+      templates.push({id: parent_template.id, name: parent_template.name, type: parent_template.type, updated_at: parent_template.updated_at}) if parent_template
+      templates.push({id: entity_template.id, name: entity_template.name, type: entity_template.type, updated_at: entity_template.updated_at}) if entity_template
+
+    end
+    render json: templates, status: 200
+  end
+
   def show
     type = params[:id]
     template = get_template_content type
