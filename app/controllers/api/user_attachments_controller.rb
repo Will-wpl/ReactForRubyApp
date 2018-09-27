@@ -101,6 +101,12 @@ class Api::UserAttachmentsController < Api::BaseController
       elsif
         destination_file_path = upload_file_path(zip_file_name)
         zip_attachments_remove(destination_file_path,[url])
+
+        #upload file
+        mounted_as = []
+        uploader = AvatarUploader.new(UserAttachment, mounted_as)
+        file = File.open(destination_file_path)
+        uploader.store!(file)
       end
     end
     render json: nil, status: 200
