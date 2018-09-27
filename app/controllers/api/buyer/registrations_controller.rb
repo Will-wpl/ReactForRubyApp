@@ -257,7 +257,9 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     end
 
     buyer_entities.each do |buyer_entity|
-      if buyer_entity['main_id'].to_i != 0 && !buyer_entity['user_entity_id'].blank?
+      if buyer_entity['main_id'].to_i != 0 &&
+          !buyer_entity['user_entity_id'].blank? &&
+          User.any?{|x|x.id == buyer_entity['user_entity_id']}
         original_user = User.find(buyer_entity['user_entity_id'])
         if original_user.email.downcase != buyer_entity['contact_email'].downcase &&
             buyer_entity['user_id'] != buyer_entity['user_entity_id'] &&

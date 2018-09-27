@@ -58,11 +58,11 @@ class Api::UserAttachmentsController < Api::BaseController
     attachment.save!
     if params[:file_type].eql?(UserAttachment::FileType_Letter_Authorisation)
       zip_file = upload_letter_authorisation
-      unless UserAttachment.any?{|x| x.file_name == zip_file[:filename]}
+      unless UserAttachment.any?{ |x| x.file_name == zip_file.filename }
         zip_attachment = UserAttachment.new
-        zip_attachment.file_name = zip_file[:filename]
+        zip_attachment.file_name = zip_file.filename
         zip_attachment.file_type = params[:file_type]
-        zip_attachment.file_path = zip_file[:url]
+        zip_attachment.file_path = zip_file.url
         zip_attachment.user_id = current_user.id unless current_user&.has_role?(:admin)
         zip_attachment.consumption_detail_id = params[:consumption_detail_id] unless params[:consumption_detail_id].blank?
         zip_attachment.save!
@@ -96,8 +96,12 @@ class Api::UserAttachmentsController < Api::BaseController
     attachment.destroy
     if file_type.eql?(UserAttachment::FileType_Letter_Authorisation)
       zip_file_name = 'letter_authorisation.zip'
-      destination_file_path = upload_file_path(zip_file_name)
-      zip_attachments_remove(destination_file_path,[url])
+      if UserAttachment.find_by_type(UserAttachment::FileType_Letter_Authorisation).count <= 1
+        UserAttachment.where(' file_name = ? ',zip_file_name).destroy_all
+      elsif
+        destination_file_path = upload_file_path(zip_file_name)
+        zip_attachments_remove(destination_file_path,[url])
+      end
     end
     render json: nil, status: 200
   end
@@ -124,6 +128,10 @@ class Api::UserAttachmentsController < Api::BaseController
     mounted_as = []
     # mounted_as.push('')
     uploader = AvatarUploader.new(UserAttachment, mounted_as)
-    { url: '/' + uploader.store_path(zip_file_name), filename: zip_file_name }
+    # uploader = AvatarUploader.new(destination_file_path)
+    file1 = File.open(destination_file_path)
+    uploader.store!(file1)
+    uploader
+    # { url: '/' + uploader.store_path(zip_file_name), filename: zip_file_name }
   end
 end

@@ -3,9 +3,9 @@ namespace :rich_template do
 
   task :init => :environment do
     rich_templates = [
-        {type: 1},
-        {type: 2},
-        {type: 3},
+        {type: 1, name: 'Parent LA template'},
+        {type: 2, name: 'Nominated LA template'},
+        {type: 3, name: 'Buyer market insights'},
 
     ]
 
@@ -17,6 +17,7 @@ namespace :rich_template do
         file_content = nil
         file_content = File.read(template_file) if File.exist?(template_file)
         this_template.content = file_content
+        this_template.name = template[:name]
       end
     end
 
@@ -29,4 +30,10 @@ namespace :rich_template do
     AuctionResultContract.where(parent_template_id: nil).update(parent_template_id: parent_template.id) if parent_template
     AuctionResultContract.where(entity_template_id: nil).update(entity_template_id: entity_template.id) if entity_template
   end
+
+  task :delete => [:environment] do
+    RichTemplate.all.delete_all
+  end
+
+  task :reset => [:environment, :delete, :seed]
 end

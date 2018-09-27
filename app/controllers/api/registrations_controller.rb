@@ -33,7 +33,7 @@ class Api::RegistrationsController < Api::BaseController
     user_updated_log.comment =  user.comment
     user_updated_log.billing_address =  user.billing_address
     user_updated_log.gst_no =  user.gst_no
-    user_updated_log.created_at = user.created_at
+    user_updated_log.created_at = DateTime.current #user.created_at
     user_updated_log.users_id =  user.id
     user_updated_log.save!
   end
