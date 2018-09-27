@@ -22,7 +22,7 @@ export default class TemplatesList extends Component {
                                     <tr>
                                     {/* {this.props.type=="email"?"Description":"Report"} */}
                                         <th width={"50%"}>Description</th>
-                                        <th width={"30%"}>Last Update</th>
+                                        <th width={"30%"}>Last Updated</th>
                                         <th width={"20%"}>{this.props.type=="email"?"Email":""}</th>
                                     </tr>
                                 </thead>
