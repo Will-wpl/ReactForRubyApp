@@ -58,9 +58,9 @@ export default class EmailTemplates extends Component {
             this.setState({
                 fileData: file
             })
-
         })
     }
+    
     showEmail(id, type) {
         getEmailListItem(id, type).then(res => {
             this.setState({ listdetail: res, text: '', template_type: type, template_id: id, size: 'big' });
@@ -79,7 +79,6 @@ export default class EmailTemplates extends Component {
         })
     }
     tab(type) {
-        console.log(type)
         $(".buyer_tab a").removeClass("selected");
         $("#tab_" + type).addClass("selected");
         $(".buyer_list").hide();

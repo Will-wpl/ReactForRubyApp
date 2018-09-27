@@ -21,8 +21,8 @@ export default class TemplatesList extends Component {
                                 <thead>
                                     <tr>
                                     {/* {this.props.type=="email"?"Description":"Report"} */}
-                                        <th width={"50%"}>Description</th>
-                                        <th width={"30%"}>Last Updated</th>
+                                        <th width={"60%"}>Description</th>
+                                        <th width={"20%"}>Last Updated</th>
                                         <th width={"20%"}>{this.props.type=="email"?"Email":""}</th>
                                     </tr>
                                 </thead>
@@ -35,8 +35,8 @@ export default class TemplatesList extends Component {
                                         this.props.email_list?this.props.email_list.map((item, index) => {
                                             return (  
                                                 <tr key={index}>
-                                                    <td width={"50%"} style={{"textAlign":"left","paddingLeft":"15px"}}>{item.name}</td>
-                                                    <td width={"30%"} style={{"textAlign":"center"}}>{(item.updated_at!==null && item.updated_at!=="")?moment(item.updated_at).format('DD-MM-YYYY HH:mm:ss '):""}</td>
+                                                    <td width={"60%"} style={{"textAlign":"left","paddingLeft":"15px"}}>{item.name}</td>
+                                                    <td width={"20%"} style={{"textAlign":"center"}}>{(item.updated_at!==null && item.updated_at!=="")?moment(item.updated_at).format('DD-MM-YYYY HH:mm:ss '):""}</td>
                                                     <td width={"20%"}><a onClick={this.props.showEmail.bind(this, item.id,this.props.type)} className={"edit"}>edit</a></td>
                                                 </tr>
                                             )
