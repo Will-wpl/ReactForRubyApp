@@ -31,9 +31,19 @@ namespace :rich_template do
     AuctionResultContract.where(entity_template_id: nil).update(entity_template_id: entity_template.id) if entity_template
   end
 
-  task :delete => [:environment] do
-    RichTemplate.delete_all
+  # task :delete => [:environment] do
+  #   RichTemplate.delete_all
+  # end
+
+  # task :reset => [:environment, :delete, :seed]
+  task :update_name => [:environment] do
+    RichTemplate.where(type: RichTemplate::ADVISORY_TEMPLATE).update_all name: 'Buyer Market Insights'
   end
 
-  task :reset => [:environment, :delete, :seed]
+  task :update_template_id => [:environment] do
+    parent_template = RichTemplate.where(type: RichTemplate::LETTER_OF_AWARD_TEMPLATE).last
+    entity_template = RichTemplate.where(type: RichTemplate::NOMINATED_ENTITY_TEMPLATE).last
+    AuctionResultContract.update_all(parent_template_id: parent_template.id) if parent_template
+    AuctionResultContract.update_all(entity_template_id: entity_template.id) if entity_template
+  end
 end
