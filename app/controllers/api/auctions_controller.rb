@@ -353,9 +353,10 @@ class Api::AuctionsController < Api::BaseController
   end
 
   def retailer_dashboard
-    tenders = TenderWorkflow.new.get_action_state_machine(params[:id])
+    tenders = TenderWorkflow.new.get_action_state_machine_only_approval_pending(params[:id]) #get_action_state_machine
     step_counts = [0, 0, 0, 0, 0, 0, 0]
     tenders.each do |tender|
+
       step_counts[0] += 1
       step_counts[6] += 1 if tender[:detail][:current][:current_status] == 'closed'
       flows = tender[:detail][:flows]
