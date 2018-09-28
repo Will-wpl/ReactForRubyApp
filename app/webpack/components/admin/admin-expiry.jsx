@@ -52,7 +52,7 @@ export default class AdminExpiry extends Component {
                     <div className="search_type">
                         <dl className="lm--formItem string optional">
                             <dd>
-                                <span className="lm--formItem-label string optional">Accounts Eligible for New Contract Start Date :</span>
+                                <span className="lm--formItem-label string optional">Account(s) Eligible for New Contract Start Date :</span>
                                 <label className="lm--formItem-control">
                                     <DatePicker selected={this.state.start_datetime} disabled={this.state.disabled} ref="start_datetime" shouldCloseOnSelect={true} name="start_datetime" dateFormat="DD-MM-YYYY" className="time_ico" onChange={this.timeChange.bind(this)} minDate={moment()} title="Time must not be in the past." required aria-required="true" />
                                 </label>

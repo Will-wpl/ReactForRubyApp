@@ -387,11 +387,7 @@ export class Modal extends React.Component {
             $("#modal_main").css({ "width": "50%", "height": "310px", "top": "40%", "marginLeft": "-25%" });
             $(".email_body").css({ "height": "170px" });
         }
-
     }
-
-
-
 
     Add() {
         if (this.props.listdetailtype === 'entity_detail') {

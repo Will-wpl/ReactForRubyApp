@@ -13,6 +13,7 @@ export default class EmailTemplates extends Component {
             listdetail: {},
             la_list: [],
             advisory_list: [],
+            currentTab: "",
             uploadUrl: '/api/admin/user_attachments?file_type=',
             fileData: {
                 "LETTER_OF_AUTHORISATION": [
@@ -21,6 +22,17 @@ export default class EmailTemplates extends Component {
             }
         }
     }
+
+    componentWillMount() {
+        let tab = "advisory";
+        if (window.location.href.indexOf("currentTab") > -1) {
+            tab = window.location.href.split("=")[1];
+        }
+        this.setState({
+            currentTab: tab
+        })
+    }
+
     componentDidMount() {
         let ad = [], la = [];
         getTemplate().then(res => {
@@ -43,7 +55,8 @@ export default class EmailTemplates extends Component {
                 la_list: la,
                 advisory_list: ad
             })
-            $("#template_advisory").show();
+            this.setDefaultTab(this.state.currentTab);
+
         })
 
         getEmailList().then(res => {
@@ -61,6 +74,31 @@ export default class EmailTemplates extends Component {
         })
     }
 
+    setDefaultTab(type) {
+        $("#template_advisory").show();
+        switch (type) {
+            case "advisory":
+                this.tab("advisory");
+                $("#template_advisory").show();
+                break;
+            case "email":
+                this.tab("email");
+                $("#template_email").show();
+                break;
+            case "la":
+                this.tab("la");
+                $("#template_la").show();
+                break;
+            case "registration":
+                this.tab("registration");
+                $("#tab_registration").show();
+                break;
+            default:
+                this.tab(advisory);
+                $("#template_advisory").show();
+                break;
+        }
+    }
     showEmail(id, type) {
         getEmailListItem(id, type).then(res => {
             this.setState({ listdetail: res, text: '', template_type: type, template_id: id, size: 'big' });
@@ -72,7 +110,8 @@ export default class EmailTemplates extends Component {
             this.setState({ text: "Update Successful!", size: 'small' });
             this.refs.Modal.showModal();
             setTimeout(() => {
-                window.location.reload();
+                window.location.href = "/admin/templates?currentTab=" + this.state.currentTab
+                // window.location.reload();
             }, 1000)
         }, error => {
 
@@ -83,6 +122,9 @@ export default class EmailTemplates extends Component {
         $("#tab_" + type).addClass("selected");
         $(".buyer_list").hide();
         $("#template_" + type).fadeIn(500);
+        this.setState({
+            currentTab: type
+        })
     }
     render() {
         //console.log('ranking', this.props.ranking)
