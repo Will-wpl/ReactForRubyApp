@@ -163,7 +163,7 @@ export class Modal extends React.Component {
                 loglist: next.loglist
             })
         }
-
+        $(".btn").css("pointer-events", "auto");
         $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
         $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
     }
@@ -387,11 +387,7 @@ export class Modal extends React.Component {
             $("#modal_main").css({ "width": "50%", "height": "310px", "top": "40%", "marginLeft": "-25%" });
             $(".email_body").css({ "height": "170px" });
         }
-
     }
-
-
-
 
     Add() {
         if (this.props.listdetailtype === 'entity_detail') {
@@ -403,6 +399,7 @@ export class Modal extends React.Component {
     }
 
     addEntity() { //buyer entity
+        $(".btn").css("pointer-events", "none");
         let entityItem = {
             id: this.state.entityid,
             company_name: this.state.entity_company_name,
@@ -529,6 +526,7 @@ export class Modal extends React.Component {
 
 
     addToMainForm() { // consumption detail
+        $(".btn").css("pointer-events", "none");
         let siteItem = {
             consumption_id: this.state.consumption_id,
             id: this.state.id,
@@ -583,6 +581,7 @@ export class Modal extends React.Component {
                 }
             }
             else {
+                $(".btn").css("pointer-events", "auto");
                 if (res.error_details) {
                     res.error_details.map(item => {
                         if (item.error_field_name === "account_number") {
@@ -1360,7 +1359,7 @@ export class Modal extends React.Component {
                                             {
                                                 this.state.purchasing_entity.map(item => {
                                                     if (item.id === this.state.purchasing_entity_selectd) {
-                                                        return <p style={{ "paddingLeft": "3px" }}>{item.company_name}</p>
+                                                        return <p key={item.id}   style={{ "paddingLeft": "3px" }}>{item.company_name}</p>
                                                     }
                                                 })
                                             }
@@ -1492,8 +1491,8 @@ export class Modal extends React.Component {
         else if
         (this.state.type == "custom") {
             btn_html = <div className="modal_btn">
-                <a onClick={this.Add.bind(this)}>{this.state.option === "update" ? "Save" : "Add"}</a>
-                <a onClick={this.closeModal.bind(this)}>Cancel</a>
+                <a className="btn" onClick={this.Add.bind(this)}>{this.state.option === "update" ? "Save" : "Add"}</a>
+                <a className="btn" onClick={this.closeModal.bind(this)}>Cancel</a>
             </div>
         }
         else if (this.state.type === "defaultCallBack") {

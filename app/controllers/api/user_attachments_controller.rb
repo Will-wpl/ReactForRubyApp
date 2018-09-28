@@ -96,12 +96,18 @@ class Api::UserAttachmentsController < Api::BaseController
     attachment.destroy
     if file_type.eql?(UserAttachment::FileType_Letter_Authorisation)
       zip_file_name = 'letter_authorisation.zip'
+      destination_file_path = upload_file_path(zip_file_name)
+      zip_attachments_remove(destination_file_path,[url])
       if UserAttachment.find_by_type(UserAttachment::FileType_Letter_Authorisation).count <= 1
         UserAttachment.where(' file_name = ? ',zip_file_name).destroy_all
-      elsif
-        destination_file_path = upload_file_path(zip_file_name)
-        zip_attachments_remove(destination_file_path,[url])
       end
+
+      #upload file
+      mounted_as = []
+      uploader = AvatarUploader.new(UserAttachment, mounted_as)
+      file = File.open(destination_file_path)
+      uploader.store!(file)
+
     end
     render json: nil, status: 200
   end

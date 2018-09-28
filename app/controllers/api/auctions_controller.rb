@@ -353,9 +353,10 @@ class Api::AuctionsController < Api::BaseController
   end
 
   def retailer_dashboard
-    tenders = TenderWorkflow.new.get_action_state_machine(params[:id])
+    tenders = TenderWorkflow.new.get_action_state_machine_only_approval_pending(params[:id]) #get_action_state_machine
     step_counts = [0, 0, 0, 0, 0, 0, 0]
     tenders.each do |tender|
+
       step_counts[0] += 1
       step_counts[6] += 1 if tender[:detail][:current][:current_status] == 'closed'
       flows = tender[:detail][:flows]
@@ -374,13 +375,13 @@ class Api::AuctionsController < Api::BaseController
     consumptions_company = []
     consumptions = Consumption.find_by_auction_id(params[:id])
     consumptions.find_by_user_consumer_type('2').order(:participation_status).each do |consumption|
-      consumptions_company.push(id: consumption.id, name: consumption.user.company_name, participation_status: consumption.participation_status, accept_status: consumption.accept_status)
+      consumptions_company.push(id: consumption.id, name: consumption.user.company_name, participation_status: consumption.participation_status, accept_status: consumption.accept_status, user_status:consumption.user.approval_status )
     end
     count_company = consumptions_company.count
 
     consumptions_individual = []
     consumptions.find_by_user_consumer_type('3').order(:participation_status).each do |consumption|
-      consumptions_individual.push(id: consumption.id, name: consumption.user.name, participation_status: consumption.participation_status, accept_status: consumption.accept_status)
+      consumptions_individual.push(id: consumption.id, name: consumption.user.name, participation_status: consumption.participation_status, accept_status: consumption.accept_status, user_status:consumption.user.approval_status )
     end
     count_individual = consumptions_individual.count
     render json: { consumptions_company: consumptions_company, count_company: count_company, consumptions_individual: consumptions_individual, count_individual: count_individual }, status: 200

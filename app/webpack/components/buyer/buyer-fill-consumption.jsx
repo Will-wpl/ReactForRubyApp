@@ -188,6 +188,7 @@ export class FillConsumption extends Component {
         this.accountItem.file_path = "";
         this.accountItem.file_name = "";
         this.accountItem.attachment_ids = "";
+        this.accountItem.option = 'add';
         this.accountItem.cate_type = "current";
         this.setState({
             account_detail: this.accountItem,
