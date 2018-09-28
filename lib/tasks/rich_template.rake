@@ -32,7 +32,7 @@ namespace :rich_template do
   end
 
   task :delete => [:environment] do
-    RichTemplate.all.delete_all
+    RichTemplate.delete_all
   end
 
   task :reset => [:environment, :delete, :seed]
