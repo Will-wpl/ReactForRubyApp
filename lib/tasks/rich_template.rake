@@ -5,7 +5,7 @@ namespace :rich_template do
     rich_templates = [
         {type: 1, name: 'Parent LA template'},
         {type: 2, name: 'Nominated LA template'},
-        {type: 3, name: 'Buyer market insights'},
+        {type: 3, name: 'Buyer Market Insights'},
 
     ]
 
@@ -32,7 +32,7 @@ namespace :rich_template do
   end
 
   task :delete => [:environment] do
-    RichTemplate.all.delete_all
+    RichTemplate.delete_all
   end
 
   task :reset => [:environment, :delete, :seed]
