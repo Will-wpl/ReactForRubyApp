@@ -1,14 +1,14 @@
 development:
   adapter: redis
   url: <%= ENV["REDISTOGO_URL"] %>
-  password: url: <%= ENV["REDISTOGO_PASSWORD"] %>
+  password: <%= ENV["REDISTOGO_PASSWORD"] %>
 
 test:
   adapter: redis
   url: <%= ENV["REDISTOGO_URL"] %>
-  password: url: <%= ENV["REDISTOGO_PASSWORD"] %>
+  password: <%= ENV["REDISTOGO_PASSWORD"] %>
 
 production:
   adapter: redis
   url: <%= ENV["REDISTOGO_URL"] %>
-  password: url: <%= ENV["REDISTOGO_PASSWORD"] %>
+  password: <%= ENV["REDISTOGO_PASSWORD"] %>
