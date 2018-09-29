@@ -4,8 +4,8 @@ namespace :user_attachment do
   task :init => :environment do
     # Remove zip file record from DB
     zip_file_name = 'letter_authorisation.zip'
-    UserAttachment.where(' file_name = ? ', zip_file_name).destroy_all
-
+    attachments = UserAttachment.find_by_file_type(UserAttachment::FileType_Letter_Authorisation)
+    attachments.destroy_all unless attachments.blank?
     # Upload a new empty zip file to replace the old one.
     require 'zip'
     destination_file_path = zip_file_name #upload_file_path(zip_file_name)
