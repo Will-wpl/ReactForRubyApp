@@ -25,5 +25,4 @@ COPY . .
 RUN chmod -R +x bin
 RUN rake db:create
 RUN RAILS_ENV=production rails assets:precompile
-RUN RAILS_ENV=production REDISTOGO_URL=${REDISTOGO_URL} DATABASE_HOST=${DATABASE_HOST} DATABASE_PORT=${DATABASE_PORT} DATABASE_USERNAME=${DATABASE_USERNAME} DATABASE_PASSWORD=${DATABASE_PASSWORD} rails assets:precompile
 CMD ["rails", "server", "-b", "0.0.0.0", "-e", "production"]
