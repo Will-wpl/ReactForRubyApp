@@ -1,0 +1,122 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ra-web-queue-deployment
+  labels:
+    app: ra-web-queue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ra-web-queue
+  template:
+    metadata:
+      labels:
+        app: ra-web-queue
+    spec:
+      containers:
+        - name: ra-web-queue-image
+          image: ${DOCKER_REGISTRY_IP_PORT}/${IMAGE_NAME}:${BUILD_ID}
+          command: [ "bundle", "exec", "sidekiq", "-t", "25", "-C", "config/sidekiq.yml" ]
+          #lifecycle:
+          #  postStart:
+          #    exec:
+          #      command: ["/bin/sh", "start.sh"]
+          env:
+            - name: DATABASE_HOST
+              value: ${DATABASE_HOST}
+            - name: DATABASE_PORT
+              value: ${DATABASE_PORT}
+            - name: DATABASE_USERNAME
+              value: ${DATABASE_USERNAME}
+            - name: DATABASE_PASSWORD
+              value: ${DATABASE_PASSWORD}
+            - name: REDISTOGO_URL
+              value: "${REDISTOGO_URL}"
+            - name: REDISTOGO_PASSWORD
+              value: ${REDISTOGO_PASSWORD}  
+            - name: SECRET_KEY_BASE
+              value: ${SECRET_KEY_BASE}
+            - name: CARRIERWAVE_STORAGE
+              value: azure
+            - name: AZURE_STORAGE_ACCOUNT_NAME
+              value: "${AZURE_STORAGE_ACCOUNT_NAME}"
+            - name: AZURE_STORAGE_ACCESS_KEY
+              value: "${AZURE_STORAGE_ACCESS_KEY}"
+            - name: AZURE_CONTAINER
+              value: "${AZURE_CONTAINER}"
+          ports:
+            - containerPort: 3000
+
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ra-web-deployment
+  labels:
+    app: ra-web
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ra-web
+  template:
+    metadata:
+      labels:
+        app: ra-web
+    spec:
+      containers:
+        - name: ra-web-image
+          image: ${DOCKER_REGISTRY_IP_PORT}/${IMAGE_NAME}:${BUILD_ID}
+          #lifecycle:
+          #  postStart:
+          #    exec:
+          #      command: ["/bin/sh", "-c", "./start.sh"]
+          env:
+            - name: RAKE_TYPE
+              value: ${RAKE_TYPE}
+            - name: RAILS_SERVE_STATIC_FILES
+              value: true
+            - name: RAILS_ENV
+              value: production
+            - name: DATABASE_HOST
+              value: ${DATABASE_HOST}
+            - name: DATABASE_PORT
+              value: ${DATABASE_PORT}
+            - name: DATABASE_USERNAME
+              value: ${DATABASE_USERNAME}
+            - name: DATABASE_PASSWORD
+              value: ${DATABASE_PASSWORD}
+            - name: REDISTOGO_URL
+              value: ${REDISTOGO_URL}
+            - name: REDISTOGO_PASSWORD
+              value: ${REDISTOGO_PASSWORD}  
+            - name: SECRET_KEY_BASE
+              value: ${SECRET_KEY_BASE}
+            - name: CARRIERWAVE_STORAGE
+              value: azure
+            - name: AZURE_STORAGE_ACCOUNT_NAME
+              value: ${AZURE_STORAGE_ACCOUNT_NAME}
+            - name: AZURE_STORAGE_ACCESS_KEY
+              value: ${AZURE_STORAGE_ACCESS_KEY}
+            - name: AZURE_CONTAINER
+              value: ${AZURE_CONTAINER}
+          ports:
+            - containerPort: 3000
+        
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: ra-web-service
+spec:
+  #type: LoadBalancer
+  #type: NodePort 
+  selector:
+    app: ra-web
+  ports:
+  - port: 3000
+  #  nodePort: 30006
