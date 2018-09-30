@@ -10,7 +10,7 @@ export default class BidHistory extends Component {
                     <td>{index + 1}</td>
                     <td>{element.bid_time}</td>
                     <td style={this.props.isLtVisible ? {} : {display: 'none'}}>$ {element.lt_peak}</td>
-                    <td style={this.props.isLtVisible ? {} : {display: 'none'}}>$ {element.lt_off_peak}</td>                   
+                    <td style={this.props.isLtVisible ? {} : {display: 'none'}}>$ {element.lt_off_peak}</td>
                     <td style={this.props.isHtsVisible ? {} : {display: 'none'}}>$ {element.hts_peak}</td>
                     <td style={this.props.isHtsVisible ? {} : {display: 'none'}}>$ {element.hts_off_peak}</td>
                     <td style={this.props.isHtlVisible ? {} : {display: 'none'}}>$ {element.htl_peak}</td>
@@ -28,7 +28,7 @@ export default class BidHistory extends Component {
                     <td>{i + 1}</td>
                     <td>{element.bid_time}</td>
                     <td style={this.props.isLtVisible ? {} : {display: 'none'}}>$ {element.lt_peak}</td>
-                    <td style={this.props.isLtVisible ? {} : {display: 'none'}}>$ {element.lt_off_peak}</td>                 
+                    <td style={this.props.isLtVisible ? {} : {display: 'none'}}>$ {element.lt_off_peak}</td>
                     <td style={this.props.isHtsVisible ? {} : {display: 'none'}}>$ {element.hts_peak}</td>
                     <td style={this.props.isHtsVisible ? {} : {display: 'none'}}>$ {element.hts_off_peak}</td>
                     <td style={this.props.isHtlVisible ? {} : {display: 'none'}}>$ {element.htl_peak}</td>
@@ -47,40 +47,7 @@ export default class BidHistory extends Component {
                 <h3>My Bid History</h3>
                 <div className="table-head">
                 <table className="retailer_fill u-mt2">
-                    <colgroup>  
-                        <col style={{width: 50 +'px'}} />  
-                        <col style={{width: 100 +'px'}} />
-                        <col style={this.props.isLtVisible ? {width: 50 +'px'} : {display: 'none'}} />
-                        <col style={this.props.isLtVisible ? {width: 50 +'px'} : {display: 'none'}} />
-                        <col style={this.props.isHtsVisible ? {width: 50 +'px'} : {display: 'none'}} />
-                        <col style={this.props.isHtsVisible ? {width: 50 +'px'} : {display: 'none'}} />
-                        <col style={this.props.isHtlVisible ? {width: 50 +'px'} : {display: 'none'}} />
-                        <col style={this.props.isHtlVisible ? {width: 50 +'px'} : {display: 'none'}} />
-                        <col style={this.props.isEhtVisible ? {width: 50 +'px'} : {display: 'none'}} />
-                        <col style={this.props.isEhtVisible ? {width: 50 +'px'} : {display: 'none'}} />
-                    </colgroup>  
-                    <thead>
-                    <tr>
-                        <th colSpan={2 + a + b + c + d} className="table_title">Bid Price</th>
-                    </tr>
-                    <tr>
-                        <th>S/N</th>
-                        <th>Time</th>
-                        <th style={this.props.isLtVisible ? {} : {display: 'none'}}>LT (Peak)</th>
-                        <th style={this.props.isLtVisible ? {} : {display: 'none'}}>LT (Off-Peak)</th>
-                        <th style={this.props.isHtsVisible ? {} : {display: 'none'}}>HTS (Peak)</th>
-                        <th style={this.props.isHtsVisible ? {} : {display: 'none'}}>HTS (Off-Peak)</th>
-                        <th style={this.props.isHtlVisible ? {} : {display: 'none'}}>HTL (Peak)</th>
-                        <th style={this.props.isHtlVisible ? {} : {display: 'none'}}>HTL (Off-Peak)</th>
-                        <th style={this.props.isEhtVisible ? {} : {display: 'none'}}>EHT (Peak)</th>
-                        <th style={this.props.isEhtVisible ? {} : {display: 'none'}}>EHT (Off-Peak)</th>
-                    </tr>
-                    </thead>
-                </table>
-                </div>
-                <div className="table-body">
-                <table className="retailer_fill">
-                    <colgroup>  
+                    <colgroup>
                         <col style={{width: 50 +'px'}} />
                         <col style={{width: 100 +'px'}} />
                         <col style={this.props.isLtVisible ? {width: 50 +'px'} : {display: 'none'}} />
@@ -91,7 +58,40 @@ export default class BidHistory extends Component {
                         <col style={this.props.isHtlVisible ? {width: 50 +'px'} : {display: 'none'}} />
                         <col style={this.props.isEhtVisible ? {width: 50 +'px'} : {display: 'none'}} />
                         <col style={this.props.isEhtVisible ? {width: 50 +'px'} : {display: 'none'}} />
-                    </colgroup>  
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th colSpan={2 + a + b + c + d} className="table_title">Bid Price</th>
+                    </tr>
+                    <tr>
+                        <th>S/N</th>
+                        <th>Time</th>
+                        <th style={this.props.isLtVisible ? {} : {display: 'none'}}>LT (Peak)<br/>($/kWh)</th>
+                        <th style={this.props.isLtVisible ? {} : {display: 'none'}}>LT (Off-Peak)<br/>($/kWh)</th>
+                        <th style={this.props.isHtsVisible ? {} : {display: 'none'}}>HTS (Peak)<br/>($/kWh)</th>
+                        <th style={this.props.isHtsVisible ? {} : {display: 'none'}}>HTS (Off-Peak)<br/>($/kWh)</th>
+                        <th style={this.props.isHtlVisible ? {} : {display: 'none'}}>HTL (Peak)<br/>($/kWh)</th>
+                        <th style={this.props.isHtlVisible ? {} : {display: 'none'}}>HTL (Off-Peak)<br/>($/kWh)</th>
+                        <th style={this.props.isEhtVisible ? {} : {display: 'none'}}>EHT (Peak)<br/>($/kWh)</th>
+                        <th style={this.props.isEhtVisible ? {} : {display: 'none'}}>EHT (Off-Peak)<br/>($/kWh)</th>
+                    </tr>
+                    </thead>
+                </table>
+                </div>
+                <div className="table-body">
+                <table className="retailer_fill">
+                    <colgroup>
+                        <col style={{width: 50 +'px'}} />
+                        <col style={{width: 100 +'px'}} />
+                        <col style={this.props.isLtVisible ? {width: 50 +'px'} : {display: 'none'}} />
+                        <col style={this.props.isLtVisible ? {width: 50 +'px'} : {display: 'none'}} />
+                        <col style={this.props.isHtsVisible ? {width: 50 +'px'} : {display: 'none'}} />
+                        <col style={this.props.isHtsVisible ? {width: 50 +'px'} : {display: 'none'}} />
+                        <col style={this.props.isHtlVisible ? {width: 50 +'px'} : {display: 'none'}} />
+                        <col style={this.props.isHtlVisible ? {width: 50 +'px'} : {display: 'none'}} />
+                        <col style={this.props.isEhtVisible ? {width: 50 +'px'} : {display: 'none'}} />
+                        <col style={this.props.isEhtVisible ? {width: 50 +'px'} : {display: 'none'}} />
+                    </colgroup>
                     <tbody>
                     {trs}
                     </tbody>
