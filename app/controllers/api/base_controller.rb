@@ -21,20 +21,22 @@ class Api::BaseController < ApplicationController
   end
 
   def upload_file_path(dest_path,is_attachment = false)
-    current_path = Pathname.new(File.dirname(__FILE__)).realpath
-    work_space_directories = current_path.to_s.split("/")
-    finial_file_path = []
-    work_space_directories.each do |directory|
-      if directory != "app"
-        finial_file_path.push(directory)
-      else
-        finial_file_path.push("public")
-        finial_file_path.push("uploads").push("attachments") unless is_attachment
-        finial_file_path.push(dest_path)
-        break
-      end
-    end
-    File::join(finial_file_path)
+    work_space_directories = Rails.root.join('public', 'uploads', 'attachments', dest_path).to_s
+    work_space_directories
+    # current_path = Pathname.new(File.dirname(__FILE__)).realpath
+    # work_space_directories = current_path.to_s.split("/")
+    # finial_file_path = []
+    # work_space_directories.each do |directory|
+    #   if directory != "app"
+    #     finial_file_path.push(directory)
+    #   else
+    #     finial_file_path.push("public")
+    #     finial_file_path.push("uploads").push("attachments") unless is_attachment
+    #     finial_file_path.push(dest_path)
+    #     break
+    #   end
+    # end
+    # File::join(finial_file_path)
   end
 
   def zip_attachments(zip_file_path, attachments)
