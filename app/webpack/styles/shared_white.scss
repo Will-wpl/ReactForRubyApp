@@ -123,7 +123,13 @@ button[disabled='']{background: #666 !important; color:#999 !important; cursor: 
 .invitation_main{
   padding: 15px; background: #fff; color: #333;
 }
-
+.alternative-winner{
+  background: #fff !important;
+}
+.retailor_justification{ text-align: right;
+  h2{ text-align:left;}
+  button{margin-left: 15px;}
+}
 //retailer manage coming
 .link_file{line-height: 40px; text-decoration: underline;}
 abbr[title]{color: #fe0000; text-decoration: none;}
@@ -585,6 +591,9 @@ dfn.manage_label{
           cursor: pointer; padding-left: 20px;
           &.invite{background:url("../images/images_for_white/invite.png") no-repeat left;}
           &.cancel_invite{background:url("../images/images_for_white/cancel_invite.png") no-repeat left;}
+        }
+        abbr{
+          display: block; padding:10px 0px; font-style: normal; word-break: break-word;
         }
         a{
           margin: 0px auto; display: block; width: 100%; cursor: pointer;
