@@ -241,7 +241,7 @@ function getTemplate(props) {
                 },
                 axisLine: {
                     lineStyle: {
-                        color: 'white'
+                        color: '#333'
                     }
                 }
             },
@@ -257,7 +257,7 @@ function getTemplate(props) {
                 },
                 axisLine: {
                     lineStyle: {
-                        color: 'white'
+                        color: '#333'
                     }
                 }
             },
@@ -362,7 +362,7 @@ function getTemplate(props) {
             },
             axisLine: {
                 lineStyle: {
-                    color: 'white'
+                    color: '#333'
                 }
             }
         },
@@ -386,7 +386,7 @@ function getTemplate(props) {
             },
             axisLine: {
                 lineStyle: {
-                    color: 'white'
+                    color: '#333'
                 }
             },
             triggerEvent: true

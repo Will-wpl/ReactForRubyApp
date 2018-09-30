@@ -307,9 +307,9 @@ abbr[title]{color: #fe0000; text-decoration: none;}
 //checkitem
 .checkitem{ list-style: none; line-height:22px; position: relative;
   div{
-    position: absolute; display: none; padding-bottom: 5px; top:22px; background: #314657; color: #fff; left: 0px; z-index: 9;
+    position: absolute; display: none; padding-bottom: 5px; top:22px; background: #eee; color: #333; left: 0px; z-index: 9;
     b{display:block; padding: 0px 5px; word-break: break-word; line-height: 20px; font-weight: normal; font-size: 12px;
-      bdo{ display: block; background: #00888a; text-indent: 5px;}
+      bdo{ display: block; background: #fff; text-indent: 5px;}
     }
   }
   img{ margin-right:10px;}
@@ -632,12 +632,12 @@ dfn.manage_label{
         }
       }
     }
-    .table_page{
-      width: 100%; text-align: left; margin: 30px auto 0px auto;
-      span{ display: inline-block; line-height: 32px; color:#fff; cursor: pointer; padding: 0px 15px; transition: 0.5s all;
-        &.table_page_selected,&:hover{ background:#314657; }
-      }
-    }
+  }
+}
+.table_page{
+  width: 100%; text-align: left; margin: 30px auto 0px auto;
+  span{ display: inline-block; line-height: 32px; color:#fff; cursor: pointer; padding: 0px 15px; transition: 0.5s all;
+    &.table_page_selected,&:hover{ background:#314657; }
   }
 }
 .select_ico_tab{ overflow: hidden;

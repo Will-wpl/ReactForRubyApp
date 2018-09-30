@@ -136,7 +136,7 @@ export class AdminReport extends Component {
                                 </ChartRealtimeHoc>
                             </div>
                             <div className="col-sm-2 push-md-1">
-                                <CheckboxListItem key={0} id={0} display={'Check All'} color={'white'} status={this.priceCheckAllStatus} onCheck={(id, status, color) => {
+                                <CheckboxListItem key={0} id={0} display={'Check All'} color={'#333'} status={this.priceCheckAllStatus} onCheck={(id, status, color) => {
                                     this.priceCheckAllStatus = status;
                                     if (status) {
                                         this.priceUsers.selectAll();
@@ -163,7 +163,7 @@ export class AdminReport extends Component {
                                 </ChartRealtimeHoc>
                             </div>
                             <div className="col-sm-2 push-md-1">
-                                <CheckboxListItem key={0} id={0} display={'Check All'} color={'white'} status={this.rankingCheckAllStatus} onCheck={(id, status, color) => {
+                                <CheckboxListItem key={0} id={0} display={'Check All'} color={'#333'} status={this.rankingCheckAllStatus} onCheck={(id, status, color) => {
                                     this.rankingCheckAllStatus = status;
                                     if (status) {
                                         this.rankingUsers.selectAll();
