@@ -18,6 +18,9 @@ pipeline {
 		KUBERNETES_CONTAINER_SERVICE = credentials('ra-kubernetes-container-service')
 		KUBERNETES_RESOURCE_GROUP = credentials('ra-kubernetes-resource-group')
 		KUBERNETES_AZURE_CREDENTIALS_ID = credentials('ra-kubernetes-azure-credentials-id')
+		AZURE_CONTAINER = credentials('ra-azure-container')
+        AZURE_STORAGE_ACCESS_KEY = credentials('ra-azure-storage-access-key')
+        AZURE_STORAGE_ACCOUNT_NAME = credentials('ra-azure-storage-account-name')
 
     }
 	
