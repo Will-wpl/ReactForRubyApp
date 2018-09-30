@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import selected from '../../../images/selected.png';
-import unselected from '../../../images/unselected.png';
+import selected from '../../../images/images_for_white/selected.png';
+import unselected from '../../../images/images_for_white/unselected.png';
 import {getUserApprovalStatus} from '../../../javascripts/componentService/util';
 
 export default class CheckboxListItem extends Component {
