@@ -28,6 +28,9 @@ export default class AdminExpiry extends Component {
             sort: sort instanceof Array ? sort : null
         }
         getExpiryList(obj).then(res => {
+            $(".u-contain").css("padding","0px");
+            $(".lm--header").css("margin-bottom","0px");
+            $(".createRaMain a,.lm--footer div").css("margin-left","24px");
             this.setState({
                 expiry_list: res.accounts ? res.accounts : [],
                 buyer_ids: res.buyer_ids ? res.buyer_ids : []
@@ -47,9 +50,9 @@ export default class AdminExpiry extends Component {
     }
     render() {
         return (
-            <div className="u-grid admin_expiry" id={"users_search_list"}>
+            <div className="admin_expiry" id={"users_search_list"}>
                 <div className="col-sm-12 col-md-12">
-                    <div className="search_type">
+                    <div className="search_type padLR24 bgwhite">
                         <dl className="lm--formItem string optional">
                             <dd>
                                 <span className="lm--formItem-label string optional">Account(s) Eligible for New Contract Start Date :</span>
@@ -63,6 +66,7 @@ export default class AdminExpiry extends Component {
                             </dd>
                         </dl>
                     </div>
+                    <div className={"padLR24"}>
                     <div className={"lm--table-container"}>
                         <table className="lm--table lm--table--responsive" cellPadding="0" cellSpacing="0">
                             <thead>
@@ -117,6 +121,7 @@ export default class AdminExpiry extends Component {
                             </tbody>
                         </table>
                     </div>
+                </div>
                 </div>
             </div>
         )

@@ -1166,7 +1166,7 @@ export class Modal extends React.Component {
                 }
             }
             if (this.props.listdetailtype === 'viewLog') {
-                showDetail = <table className="logTable" cellPadding="0" cellSpacing="0">
+                showDetail = <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                     <colgroup>
                         <col width="33.33%" />
                         <col width="33.33%" />
@@ -1185,7 +1185,10 @@ export class Modal extends React.Component {
                                 return <tr key={index}>
                                     <td>{item.company_name}</td>
                                     <td>{item.company_uen}</td>
-                                    <td>{moment(item.created_at).format('YYYY-MM-DD HH:mm:ss ')}</td>
+                                    <td>
+                                        {(moment(item.created_at).format('YYYY-MM-DD HH:mm:ss ')).split(" ")[0]}<br/>
+                                        {(moment(item.created_at).format('YYYY-MM-DD HH:mm:ss ')).split(" ")[1]}
+                                    </td>
                                 </tr>
                             })
                         }
@@ -1193,7 +1196,7 @@ export class Modal extends React.Component {
                 </table>
             }
             if (this.props.listdetailtype === 'viewRetailerLog') {
-                showDetail = <table className="logTable" cellPadding="0" cellSpacing="0">
+                showDetail = <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                     <colgroup>
                         <col width="25%" />
                         <col width="25%" />
@@ -1215,7 +1218,10 @@ export class Modal extends React.Component {
                                     <td>{item.company_name}</td>
                                     <td>{item.company_uen}</td>
                                     <td>{item.license_number}</td>
-                                    <td>{moment(item.created_at).format('YYYY-MM-DD HH:mm:ss')}</td>
+                                    <td>
+                                        {(moment(item.created_at).format('YYYY-MM-DD HH:mm:ss ')).split(" ")[0]}<br/>
+                                        {(moment(item.created_at).format('YYYY-MM-DD HH:mm:ss ')).split(" ")[1]}
+                                    </td>
                                 </tr>
                             })
                         }

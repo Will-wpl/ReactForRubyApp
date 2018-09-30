@@ -206,6 +206,7 @@ export class SearchList extends Component {
     render (){
         if(this.props.table_data){
             return (
+                <div>
                 <div className="lm--table-container">
                     <table className="lm--table lm--table--responsive">
                         <thead>
@@ -390,7 +391,10 @@ export class SearchList extends Component {
                     </table>
                     {this.props.type == "Retailer List"?<button className="lm--button lm--button--primary reset_btn u-mt1 u-mb1" onClick={this.goDeleteList.bind(this,'del_retailers')}>Deleted Retailer List</button>:""}
                     {this.props.type == "Buyer List"?<button className="lm--button lm--button--primary reset_btn u-mt1 u-mb1" onClick={this.goDeleteList.bind(this,'del_buyers')}>Deleted Buyer List</button>:""}
-                    <div className="table_page">
+                    <Modal text={this.state.text} listdetail={this.state.params_type ? this.state.showDetail : null} listdetailtype={this.props.type} dodelete={this.delete.bind(this)} ref="Modal" />
+                </div>
+                <div className="table_page">
+                    <ol>
                         <span onClick={this.gotopage.bind(this,'prev')}>{"<"}</span>
                         {
                             this.props.page_total.map((item,index)=>{
@@ -398,8 +402,8 @@ export class SearchList extends Component {
                             })
                         }
                         <span onClick={this.gotopage.bind(this,'next')}>{">"}</span>
-                    </div>
-                    <Modal text={this.state.text} listdetail={this.state.params_type ? this.state.showDetail : null} listdetailtype={this.props.type} dodelete={this.delete.bind(this)} ref="Modal" />
+                    </ol>
+                </div>
                 </div>
             )
         }else{

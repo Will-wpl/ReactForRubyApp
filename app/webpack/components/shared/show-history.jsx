@@ -92,11 +92,24 @@ export class Showhistory extends React.Component{
                     '文字颜色': 'font color',
                     '背景色': 'background color',
                     '对齐方式': 'alignment',
-                    '靠左':'left',
-                    '靠右':'right',
-                    '居中':'center',
-                    '宋体':'song',
-                    '微软雅黑':'yahei'
+                    '靠左': 'left',
+                    '靠右': 'right',
+                    '居中': 'center',
+                    '宋体': 'song',
+                    '微软雅黑': 'yahei',
+                    "设置标题": "Header",
+                    "设置列表": "set List",
+                    "有序列表": "ordered list",
+                    "无序列表": "unordered list",
+                    "图片链接": "picture link",
+                    "插入": "Insert",
+                    "创建": "Create",
+                    "行": "Row",
+                    "列": "Column",
+                    "格式如": "Format like",
+                    "链接文字": "Text Link",
+                    "的表格": "'s table",
+                    "正文": "Content"
                     // 还可自定添加更多
                 };
             setTimeout(() => { editor.create() });
