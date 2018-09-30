@@ -130,7 +130,7 @@ export default class EmailTemplates extends Component {
         //console.log('ranking', this.props.ranking)
         return (
             <div>
-                <div className="retailrank_main-new  col-md-8 col-sm-10 ">
+                <div className="retailrank_main-new col-sm-12 col-md-10 push-md-1 ">
                     <div className="admin_buyer_list col-sm-12 col-md-12">
                         <div className="col-sm-12 buyer_tab">
                             <a className="col-sm-4 col-md-2 selected" onClick={this.tab.bind(this, 'advisory')} id="tab_advisory">Advisory Templates</a>

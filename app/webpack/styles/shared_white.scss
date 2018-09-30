@@ -7,7 +7,7 @@ html{
 .red{color:red;}
 .cursor_link{cursor: pointer !important;}
 .a_center{text-align: center; display: inline-block;}
-button[disabled=''],input[disabled=''],select[disabled='']{background: #666 !important; color:#999 !important; cursor: default !important;}
+button[disabled=''],input[disabled=''],select[disabled='']{background: #999 !important; color:#ddd !important; cursor: default !important;}
 textarea{resize: none;}
 ul, menu, dir {
   display: block;
@@ -123,7 +123,13 @@ button[disabled='']{background: #666 !important; color:#999 !important; cursor: 
 .invitation_main{
   padding: 15px; background: #fff; color: #333;
 }
-
+.alternative-winner{
+  background: #fff !important;
+}
+.retailor_justification{ text-align: right;
+  h2{ text-align:left;}
+  button{margin-left: 15px;}
+}
 //retailer manage coming
 .link_file{line-height: 40px; text-decoration: underline;}
 abbr[title]{color: #fe0000; text-decoration: none;}
@@ -465,7 +471,13 @@ input[type="number"]{
   border-radius: 5px; overflow: hidden; display: table;
   p{ background: #00afb1; width: 100%; color:#fff; font-size: 18px; padding:60px 10px 60px 10px; text-align: center}
 }
-
+.live_modal_reject{
+  text-align:center;
+  width:480px;margin: 60px auto;
+  border-radius:5px;overflow: hidden;
+  .p1{ background: #00afb1; width: 100%; font-size: 18px; padding:60px 10px 7px 10px; text-align: center;}
+  .p2{ background: #00afb1; width: 100%; font-size: 18px; padding:8px 10px 60px 10px; text-align: center;}
+}
 .registration{ margin: 30px auto; min-height: 400px;
   h4{text-align: center; margin: 20px auto;}
   a{width:190px; margin: 40px auto; border-radius:6px; display: block; transition: 0.3s all; cursor: pointer; height:248px; text-indent: -9999px;
@@ -586,6 +598,9 @@ dfn.manage_label{
           &.invite{background:url("../images/images_for_white/invite.png") no-repeat left;}
           &.cancel_invite{background:url("../images/images_for_white/cancel_invite.png") no-repeat left;}
         }
+        abbr{
+          display: block; padding:10px 0px; font-style: normal; word-break: break-word;
+        }
         a{
           margin: 0px auto; display: block; width: 100%; cursor: pointer;
           &.report{background: url("../images/images_for_white/Reverse_Auction_Report.png") no-repeat left; background-size:19px; height: 20px;}
@@ -627,6 +642,28 @@ dfn.manage_label{
     &.participation_status_1{background:url("../images/images_for_white/green_ico.png") no-repeat left;}
     &.participation_status_2{background:url("../images/images_for_white/yellow_ico.png") no-repeat left;}
     &.participation_status_0{background:url("../images/images_for_white/red_ico.png") no-repeat left;}
+  }
+}
+#email_body,#deviation_body{position: relative;
+  div.w-e-toolbar{
+    position: absolute; top:0px; left:0px; width: 100%; z-index:10001;
+    flex-wrap: wrap !important;
+    div.w-e-menu{
+      &:hover{z-index:10002 !important;}
+    }
+  }
+  w-e-panel-tab-title{display: none;}
+  div.w-e-text-container{
+    height:100% !important;
+    .w-e-text{
+      padding: 34px 10px 0px 10px;
+      p{margin:0;}
+    }
+  }
+}
+#deviation_body{
+  .w-e-text{
+    padding: 56px 10px 0px 10px !important;
   }
 }
 .mg0{ margin: 0 auto;}
@@ -821,7 +858,7 @@ body.choose{
   .bidderStatus{
     *{color:#333;}
     .bidders_list{ width:96%; margin:0px; margin-top: 5px;
-      li{ background: #eee;
+      li{ background: #fff;
         span{
           &:last-child{text-decoration: none; cursor: default;}
           font{color:#00afb2; cursor: pointer; text-decoration: underline;}
@@ -857,9 +894,9 @@ body.choose{
 }
 .checkitem{ list-style: none; line-height:22px; position: relative;
   div{
-    position: absolute; display: none; padding-bottom: 5px; top:22px; background: #314657; color: #fff; left: 0px; z-index: 9;
+    position: absolute; display: none; box-shadow: 0px 0px 10px #ddd; padding-bottom: 5px; top:22px; background: #fff; color: #333; left: 0px; z-index: 9;
     b{display:block; padding: 0px 5px; word-break: break-word; line-height: 20px; font-weight: normal; font-size: 12px;
-      bdo{ display: block; background: #00888a; text-indent: 5px;}
+      bdo{ display: block; background: #f1f1f1; text-indent: 5px;}
     }
   }
   img{ margin-right:10px;}
@@ -890,7 +927,7 @@ body.choose{
   display: block;
 }
 .isDisplayInLine{
-  display: inline;
+  display: inline; text-decoration: none;
 }
 .consumption_model
 {
@@ -1080,7 +1117,7 @@ body.choose{
   min-width:800px;margin: 60px auto;
   height:250px;;
   border-radius:5px;overflow: hidden;    font-size:16px;
-  background: #314657;
+  background: #fff;
   .title{  width: 100%;  padding:20px 10px 20px 10px; text-align: left;
     a{
       cursor: pointer
@@ -1097,7 +1134,7 @@ body.choose{
     //  bottom:30px;
     // button { width: 80px; float:right; margin-left: 10px; cursor: pointer;  padding: 3px 0px; text-align: center; background: #54B41B; border-radius: 5px; color:#fff; display: inline-block; }
   }
-  h4{ padding:0px 10px 0px 10px;color:#fff !important; font-size:16px; }
+  h4{ padding:0px 10px 0px 10px;color:#333 !important; font-size:16px; }
 }
 .checkBuyer{
   margin:5px auto !important;
@@ -1105,7 +1142,7 @@ body.choose{
   vertical-align: middle;
   span{margin:0px 10px;}
 }
-
+.lm--table-actions a{color: #333;}
 .approve_btn{
   button{
     background:#00afb1; margin: 0 10px;margin-right: 10px;
@@ -1279,7 +1316,18 @@ body.choose{
   font-size: 14px;
   margin-bottom: 15px;
 }
-
+.admin_result_list{
+  ul{ width: 100%;
+    li{ width: 100%; margin: 15px auto; cursor: pointer; list-style: none; padding:30px 0px; background: #fff !important;
+      a{
+        line-height: 26px; padding-right: 25px; text-decoration: none; padding-left: 26px; cursor: pointer;
+        &.report{background: url("../images/Reverse_Auction_Report.png") no-repeat right; background-size:19px;}
+        &.log{background: url("../images/Activity_Log.png") no-repeat right; background-size:19px;}
+        &.ddd{background: url("../images/letter_of_award.png") no-repeat right; background-size:19px;}
+      }
+    }
+  }
+}
 .admin_expiry{
   button{ margin-left: 15px;  }
 }

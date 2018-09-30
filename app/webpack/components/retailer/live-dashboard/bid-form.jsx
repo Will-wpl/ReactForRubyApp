@@ -180,38 +180,38 @@ export default class BidForm extends Component {
                         <tr>
                             <td>Peak<br/>(7am-7pm)</td>
                             <td style={this.props.isLtVisible ? {} : {display: 'none'}}>$0.<input type="text" name="peak_lt" value={this.state.configs[1]}
-                                          style={{borderColor: this.state.status[1] ? 'white' : 'red'}}
+                                          style={{borderColor: this.state.status[1] ? '#ced5dc' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 1)}
                                           maxLength={4}/></td>
                             <td style={this.props.isHtsVisible ? {} : {display: 'none'}}>$0.<input type="text" name="peak_hts" value={this.state.configs[3]}
-                                          style={{borderColor: this.state.status[3] ? 'white' : 'red'}}
+                                          style={{borderColor: this.state.status[3] ? '#ced5dc' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 3)}
                                           maxLength={4}/></td>
                             <td style={this.props.isHtlVisible ? {} : {display: 'none'}}>$0.<input type="text" name="peak_htl" value={this.state.configs[5]}
-                                          style={{borderColor: this.state.status[5] ? 'white' : 'red'}}
+                                          style={{borderColor: this.state.status[5] ? '#ced5dc' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 5)}
                                           maxLength={4}/></td>
                             <td style={this.props.isEhtVisible ? {} : {display: 'none'}}>$0.<input type="text" name="peak_eht" value={this.state.configs[7]}
-                                           style={{borderColor: this.state.status[7] ? 'white' : 'red'}}
+                                           style={{borderColor: this.state.status[7] ? '#ced5dc' : 'red'}}
                                            onChange={this.onInputChanged.bind(this, 7)}
                                            maxLength={4}/></td>
                         </tr>
                         <tr>
                             <td>Off-Peak <br/>(7pm-7am)</td>
                             <td style={this.props.isLtVisible ? {} : {display: 'none'}}>$0.<input type="text" name="off_peak_lt" value={this.state.configs[0]}
-                                          style={{borderColor: this.state.status[0] ? 'white' : 'red'}}
+                                          style={{borderColor: this.state.status[0] ? '#ced5dc' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 0)}
                                           maxLength={4}/></td>
                             <td style={this.props.isHtsVisible ? {} : {display: 'none'}}>$0.<input type="text" name="off_peak_hts" value={this.state.configs[2]}
-                                          style={{borderColor: this.state.status[2] ? 'white' : 'red'}}
+                                          style={{borderColor: this.state.status[2] ? '#ced5dc' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 2)}
                                           maxLength={4}/></td>
                             <td style={this.props.isHtlVisible ? {} : {display: 'none'}}>$0.<input type="text" name="off_peak_htl" value={this.state.configs[4]}
-                                          style={{borderColor: this.state.status[4] ? 'white' : 'red'}}
+                                          style={{borderColor: this.state.status[4] ? '#ced5dc' : 'red'}}
                                           onChange={this.onInputChanged.bind(this, 4)}
                                           maxLength={4}/></td>
                             <td style={this.props.isEhtVisible ? {} : {display: 'none'}}>$0.<input type="text" name="off_peak_eht" value={this.state.configs[6]}
-                                           style={{borderColor: this.state.status[6] ? 'white' : 'red'}}
+                                           style={{borderColor: this.state.status[6] ? '#ced5dc' : 'red'}}
                                            onChange={this.onInputChanged.bind(this, 6)}
                                            maxLength={4}/></td>
                         </tr>

@@ -8,8 +8,15 @@ namespace :user_attachment do
     attachments.destroy_all unless attachments.blank?
     # Upload a new empty zip file to replace the old one.
     require 'zip'
+    require 'open-uri'
     destination_file_path = Rails.root.join('public', 'uploads', 'attachments', zip_file_name).to_s #upload_file_path(zip_file_name)
-
+    attachments = UserAttachment.find_list_by_type(UserAttachment::FileType_Letter_Authorisation).where("file_path like '%.zip'")
+    unless attachments.blank?
+      url = attachments.first.file_path
+      open(destination_file_path, 'wb') do |f|
+        f << open(url).read
+      end
+    end
     puts(destination_file_path)
     Zip::File.open(destination_file_path, Zip::File::CREATE) {
         |zipfile|
