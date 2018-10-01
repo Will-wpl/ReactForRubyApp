@@ -83,6 +83,14 @@ export const getNumBref = (num, standard = false) => {
 
 }
 
+
+export const trim=(str)=>
+{
+    return str.replace(/(^\s*)|(\s*$)/g, "");
+}
+
+ 
+
 export const getStandardNumBref = (num) => {
     return getNumBref(num, true);
 
@@ -120,6 +128,8 @@ export const validateNum10 = (value) => {
     }
     return true;
 }
+
+
 
 export const validateEmail = (value) => {
     let num = /^([a-zA-Z0-9._-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;

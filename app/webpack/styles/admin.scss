@@ -1,14 +1,14 @@
-@import 'shared';
+@import 'shared_white';
 @import 'chart';
 
 //bidders Status of retailers
-.bidderStatus{ 
+.bidderStatus{
      overflow: hidden; text-align: left;
      *{color:#fff;}
      h4,h3{ margin: 10px auto 25px; width: 80%;}
-     .color_show{ 
+     .color_show{
          width: 80%; margin: 0 auto; display:block; text-align: center;
-         label{ 
+         label{
              margin:0 15px;
              span{
                  display: inline-block; width:10px; height: 10px; background: #54BD1B; margin-right: 5px;
@@ -20,11 +20,11 @@
     }
     .bidders_list{
          margin: 10px auto; overflow-y: auto; font-size: 12px;
-        li{ width: 100%; height: 32px; line-height: 32px; 
-            margin-bottom: 5px; 
+        li{ width: 100%; height: 32px; line-height: 32px;
+            margin-bottom: 5px;
             background: #183243; overflow: hidden;
             span{
-                 color:#00afb2; overflow: hidden; white-space:nowrap; text-overflow: ellipsis; border-right: 1px solid #485A68; 
+                 color:#00afb2; overflow: hidden; white-space:nowrap; text-overflow: ellipsis; border-right: 1px solid #485A68;
                 abbr{
                     display:block; width:60%; height: 20px; margin: 6px auto;
                     &.color1{ background:#54BD1B;color: #183243; text-align: center; line-height: 20px; text-decoration: none; }
@@ -52,7 +52,7 @@
     display: none;
 }
 .onlineStatusMain{
-    .ros_tab{ 
+    .ros_tab{
         width:100%; overflow: hidden; margin: 0px auto;
         li{
             font-size: 12px; color:#fff; line-height:26px; text-align: left; padding-left: 25px;
@@ -61,7 +61,7 @@
             &.off{ background: url("../images/red.png") no-repeat left;}
         }
     }
-    button{ 
+    button{
         width: 99px; height:89px; text-indent: -9999px; outline: none;
         &.startHold{background: url("../images/go.png") no-repeat center;}
         &.endHold{background: url("../images/stop.png") no-repeat center;}
@@ -75,7 +75,7 @@
 
 .admin_result_list{
     ul{ width: 100%;
-        li{ width: 100%; margin: 15px auto; cursor: pointer; list-style: none; padding:30px 0px; background: #183243; 
+        li{ width: 100%; margin: 15px auto; cursor: pointer; list-style: none; padding:30px 0px; background: #183243;
             a{
                 line-height: 26px; padding-right: 25px; text-decoration: none; padding-left: 26px; cursor: pointer;
                 &.report{background: url("../images/Reverse_Auction_Report.png") no-repeat right; background-size:19px;}

@@ -16,6 +16,9 @@ export class ListHome extends Component {
     }
     doSearch(data,url){
         getRoleList(data,url).then(res => {
+            $(".u-contain").css("padding","0px");
+            $(".lm--header").css("margin-bottom","0px");
+            $(".createRaMain a,.lm--footer div").css("margin-left","24px");
             let total = [],total_size=1;
             //console.log(res);
             if(res.bodies.total%data.page_size != 0){
@@ -50,10 +53,10 @@ export class ListHome extends Component {
     render (){
         return (
             <div className="u-grid u-mt3 mg0">
-                <div className="col-sm-12 col-md-12">
+                <div className="col-sm-12 col-md-12 padLR24 bgwhite">
                     <SearchType type={this.searchType} doSearch={this.doSearch.bind(this)}/>
                 </div>
-                <div className="col-sm-12 col-md-12">
+                <div className="col-sm-12 col-md-12 padLR24">
                     <SearchList type={this.searchType} table_data={this.state.table_data} page_total={this.state.total} list_data={this.state.list_data} list_url={this.state.list_url} doSearch={this.doSearch.bind(this)}/>
                 </div>
             </div>
@@ -69,7 +72,7 @@ export class ListHome extends Component {
             );
         }
     }
-    
+
     const loadedStates = [
         'complete',
         'loaded',

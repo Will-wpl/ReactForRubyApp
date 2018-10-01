@@ -198,7 +198,7 @@ const getTemplate = (props) => {
                 },
                 axisLine: {
                     lineStyle: {
-                        color: 'white'
+                        color: '#333'
                     }
                 }
             },
@@ -224,7 +224,7 @@ const getTemplate = (props) => {
                 },
                 axisLine: {
                     lineStyle: {
-                        color: 'white'
+                        color: '#333'
                     }
                 },
                 minInterval: 1
@@ -310,7 +310,7 @@ const getTemplate = (props) => {
             },
             axisLine: {
                 lineStyle: {
-                    color: 'white'
+                    color: '#333'
                 }
             }
         },
@@ -336,7 +336,7 @@ const getTemplate = (props) => {
             },
             axisLine: {
                 lineStyle: {
-                    color: 'white'
+                    color: '#333'
                 }
             },
             minInterval: 1

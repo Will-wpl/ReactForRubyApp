@@ -600,7 +600,7 @@ export class FillConsumption extends Component {
     render() {
         return (
             <div>
-                <h1>Buyer Participation</h1>
+                <h1 className={"largeFont"}>Buyer Participation</h1>
                 <table className="consumption_table_top" cellPadding="0" cellSpacing="0">
                     <tbody>
                         <tr>

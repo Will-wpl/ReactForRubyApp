@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 import { validateConsumptionDetailRepeat } from './../../javascripts/componentService/common/service';
-import { validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum, removePostCode, validatePostCode } from '../../javascripts/componentService/util';
+import { trim,validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum, removePostCode, validatePostCode } from '../../javascripts/componentService/util';
 //共通弹出框组件
 import { UploadFile } from '../shared/upload';
 import E from 'wangeditor'
@@ -821,28 +821,28 @@ export class Modal extends React.Component {
         this.state.consumptionItem.map((item, index) => {
             if (this.state.option === 'update') {
                 if (item.id) {
-                    if ((this.state.unit_number == item.unit_number) && (this.state.postal_code == item.postal_code) && (this.state.id !== item.id)) {
+                    if ((trim(this.state.unit_number) == trim(item.unit_number)) && (trim(this.state.postal_code) == trim(item.postal_code)) && (this.state.id !== item.id)) {
                         address_count++;
                     }
-                    if (this.state.account_number === item.account_number && (this.state.id !== item.id)) {
+                    if (trim(this.state.account_number) === trim(item.account_number) && (this.state.id !== item.id)) {
                         account_count++;
                     }
                 }
                 else {
                     if (item.orignal_id) {
-                        if ((this.state.unit_number == item.unit_number) && (this.state.postal_code == item.postal_code) && (this.state.orignal_id !== item.orignal_id)) {
+                        if ((trim(this.state.unit_number) == trim(item.unit_number)) && (trim(this.state.postal_code) == trim(item.postal_code)) && (this.state.orignal_id !== item.orignal_id)) {
                             address_count++;
                         }
-                        if (this.state.account_number === item.account_number && (this.state.orignal_id !== item.orignal_id)) {
+                        if (trim(this.state.account_number) === trim(item.account_number) && (this.state.orignal_id !== item.orignal_id)) {
                             account_count++;
                         }
                     } else {
-                        if ((this.state.unit_number === item.unit_number) && (this.state.postal_code === item.postal_code)) {
+                        if ((trim(this.state.unit_number) === trim(item.unit_number)) && (trim(this.state.postal_code) === (item.postal_code))) {
                             if (index != this.state.itemIndex) {
                                 address_count++;
                             }
                         }
-                        if (this.state.account_number === item.account_number) {
+                        if (trim(this.state.account_number) === trim(item.account_number)) {
                             if (index != this.state.itemIndex) {
                                 account_count++;
                             }
@@ -852,10 +852,10 @@ export class Modal extends React.Component {
                 }
             }
             else {
-                if ((this.state.unit_number === item.unit_number) && (this.state.postal_code === item.postal_code)) {
+                if ((trim(this.state.unit_number) === trim(item.unit_number)) && (trim(this.state.postal_code) === trim(item.postal_code))) {
                     address_count++;
                 }
-                if (this.state.account_number === item.account_number) {
+                if (trim(this.state.account_number) === trim(item.account_number)) {
                     account_count++;
                 }
             }
@@ -1166,7 +1166,7 @@ export class Modal extends React.Component {
                 }
             }
             if (this.props.listdetailtype === 'viewLog') {
-                showDetail = <table className="logTable" cellPadding="0" cellSpacing="0">
+                showDetail = <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                     <colgroup>
                         <col width="33.33%" />
                         <col width="33.33%" />
@@ -1185,7 +1185,10 @@ export class Modal extends React.Component {
                                 return <tr key={index}>
                                     <td>{item.company_name}</td>
                                     <td>{item.company_uen}</td>
-                                    <td>{moment(item.created_at).format('YYYY-MM-DD HH:mm:ss ')}</td>
+                                    <td>
+                                        {(moment(item.created_at).format('YYYY-MM-DD HH:mm:ss ')).split(" ")[0]}<br/>
+                                        {(moment(item.created_at).format('YYYY-MM-DD HH:mm:ss ')).split(" ")[1]}
+                                    </td>
                                 </tr>
                             })
                         }
@@ -1193,7 +1196,7 @@ export class Modal extends React.Component {
                 </table>
             }
             if (this.props.listdetailtype === 'viewRetailerLog') {
-                showDetail = <table className="logTable" cellPadding="0" cellSpacing="0">
+                showDetail = <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                     <colgroup>
                         <col width="25%" />
                         <col width="25%" />
@@ -1215,7 +1218,10 @@ export class Modal extends React.Component {
                                     <td>{item.company_name}</td>
                                     <td>{item.company_uen}</td>
                                     <td>{item.license_number}</td>
-                                    <td>{moment(item.created_at).format('YYYY-MM-DD HH:mm:ss')}</td>
+                                    <td>
+                                        {(moment(item.created_at).format('YYYY-MM-DD HH:mm:ss ')).split(" ")[0]}<br/>
+                                        {(moment(item.created_at).format('YYYY-MM-DD HH:mm:ss ')).split(" ")[1]}
+                                    </td>
                                 </tr>
                             })
                         }
