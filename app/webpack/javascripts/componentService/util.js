@@ -89,6 +89,12 @@ export const trim = (str) => {
 }
 
 
+export const replaceSymbol=(str)=>{
+ 
+    let value= str.replace((/\,|\"/g), "");
+    return value;
+}
+
 export const getStandardNumBref = (num) => {
     return getNumBref(num, true);
 
