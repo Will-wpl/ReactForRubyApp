@@ -898,10 +898,10 @@ export class FillConsumption extends Component {
                             </div>
 
                             {this.state.checked ? '' : <div className="addSite"><a onClick={this.add_site.bind(this)}>Add Account</a></div>}
-                            <div id="div_warning" className="warning">
+                            <div id="div_warning">
                                 {
                                     this.state.dateIssuecount > 0 ?
-                                        <h4 className="lm--formItem lm--formItem--inline string chkBuyer" >
+                                        <h4 className="lm--formItem lm--formItem--inline string chkBuyer warning" >
                                             <input type="checkbox" id="chkBuyer" id="chk_Warning" required /><span>Warning: [{this.state.dateIssuecount}] account(s) detected to have expiry date on  or after new contract start date. Please tick the checkbox
                                              to confirm that you aware and would like to proceed with including such account(s) in this auction.</span> </h4> : <div></div>
                                 }
