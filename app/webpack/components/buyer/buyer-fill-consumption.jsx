@@ -5,6 +5,7 @@ import { DoFillConsumption } from './fill-consumption'
 import marketImg from '../../images/marketinsights.png'
 import { getBuyerParticipate, setBuyerParticipate } from '../../javascripts/componentService/common/service';
 import moment from 'moment';
+import {formatPower} from './../../javascripts/componentService/util'
 
 export class FillConsumption extends Component {
     constructor(props) {
@@ -248,6 +249,7 @@ export class FillConsumption extends Component {
 
     //when user finished adding a new account, list page will add/update the new account information.
     doAddAccountAction(siteInfo) {
+         
         let item = {
             id: siteInfo.id ? siteInfo.id : "",
             orignal_id: siteInfo.orignal_id ? siteInfo.orignal_id : "",
@@ -689,11 +691,11 @@ export class FillConsumption extends Component {
                                                         <td>{item.entityName}</td>
                                                         <td>{item.intake_level}</td>
                                                         <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
-                                                        <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
+                                                        <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td> 
                                                         <td className="left">
-                                                            <div><span>Total Monthly: </span><span className="textDecoration" >{parseInt(item.totals)}</span><span> kWh/month</span></div>
-                                                            <div><span>Peak: </span><span><span>{parseInt(Math.round(item.totals * (item.peak_pct) / 100))} kWh/month </span>({parseFloat(item.peak_pct).toFixed(2)}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
-                                                            <div><span>Off-Peak: </span><span>{item.totals - parseInt(Math.round(item.totals * (item.peak_pct) / 100))} kWh/month </span><span>({parseFloat(100 - item.peak_pct).toFixed(2)}%)</span></div>
+                                                        <div><span>Total Monthly: </span><span className="textDecoration" >{formatPower(parseInt(Number(item.totals)), 0, '')}</span><span> kWh/month</span></div>
+                                                        <div><span>Peak: </span><span><span>{formatPower(parseInt(Math.round(item.totals * (item.peak_pct) / 100)),0,'')} kWh/month </span>({parseFloat(item.peak_pct).toFixed(2)}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
+                                                        <div><span>Off-Peak: </span><span>{formatPower(item.totals - parseInt(Math.round(item.totals * (item.peak_pct) / 100)),0,'')} kWh/month </span><span>({parseFloat(100 - item.peak_pct).toFixed(2)}%)</span></div>
                                                             <div className={item.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span>
                                                                 <span>
                                                                     <ul className="attachementList">
@@ -779,9 +781,9 @@ export class FillConsumption extends Component {
                                                         <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
                                                         <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
                                                         <td className="left">
-                                                            <div><span>Total Monthly: </span><span className="textDecoration" >{parseInt(item.totals)}</span><span> kWh/month</span></div>
-                                                            <div><span>Peak: </span><span><span>{parseInt(Math.round(item.totals * (item.peak_pct) / 100))} kWh/month </span>({parseFloat(item.peak_pct).toFixed(2)}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
-                                                            <div><span>Off-Peak: </span><span>{item.totals - parseInt(Math.round(item.totals * (item.peak_pct) / 100))} kWh/month </span><span>({parseFloat(100 - item.peak_pct).toFixed(2)}%)</span></div>
+                                                        <div><span>Total Monthly: </span><span className="textDecoration" >{formatPower(parseInt(Number(item.totals)), 0, '')}</span><span> kWh/month</span></div>
+                                                        <div><span>Peak: </span><span><span>{formatPower(parseInt(Math.round(item.totals * (item.peak_pct) / 100)),0,'')} kWh/month </span>({parseFloat(item.peak_pct).toFixed(2)}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
+                                                        <div><span>Off-Peak: </span><span>{formatPower(item.totals - parseInt(Math.round(item.totals * (item.peak_pct) / 100)),0,'')} kWh/month </span><span>({parseFloat(100 - item.peak_pct).toFixed(2)}%)</span></div>
                                                             <div className={item.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span>
                                                                 <span>
                                                                     <ul className="attachementList">
@@ -864,9 +866,9 @@ export class FillConsumption extends Component {
                                                     <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
                                                     <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
                                                     <td className="left">
-                                                        <div><span>Total Monthly: </span><span className="textDecoration" >{parseInt(item.totals)}</span><span> kWh/month</span></div>
-                                                        <div><span>Peak: </span><span><span>{parseInt(Math.round(item.totals * (item.peak_pct) / 100))} kWh/month </span>({parseFloat(item.peak_pct).toFixed(2)}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
-                                                        <div><span>Off-Peak: </span><span>{item.totals - parseInt(Math.round(item.totals * (item.peak_pct) / 100))} kWh/month </span><span>({parseFloat(100 - item.peak_pct).toFixed(2)}%)</span></div>
+                                                        <div><span>Total Monthly: </span><span className="textDecoration" >{formatPower(parseInt(Number(item.totals)), 0, '')}</span><span> kWh/month</span></div>
+                                                        <div><span>Peak: </span><span><span>{formatPower(parseInt(Math.round(item.totals * (item.peak_pct) / 100)),0,'')} kWh/month </span>({parseFloat(item.peak_pct).toFixed(2)}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
+                                                        <div><span>Off-Peak: </span><span>{formatPower(item.totals - parseInt(Math.round(item.totals * (item.peak_pct) / 100)),0,'')} kWh/month </span><span>({parseFloat(100 - item.peak_pct).toFixed(2)}%)</span></div>
                                                         <div className={item.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span>
                                                             <span>
                                                                 <ul className="attachementList">

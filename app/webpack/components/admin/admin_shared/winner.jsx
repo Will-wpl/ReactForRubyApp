@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
+import { formatPower } from '../../../javascripts/componentService/util';
 export default class WinnerPrice extends Component {
     constructor(props) {
         super(props);
@@ -39,7 +40,7 @@ export default class WinnerPrice extends Component {
             this.props.winner.data.status ?
                 <div className="winnerPrice_main">
                     <h2 className={this.props.showOrhide}>{this.props.winner.data.status === 'win' ? <span className="green">Status : Awarded</span> : <span className="red">Status : Void</span>}</h2>
-                    {this.props.winner.data.justification?(this.props.winner.data.justification.length > 0 ? <div><h4 className="u-mt1">Justification: {this.props.winner.data.justification}</h4></div> : ""):""}
+                    {this.props.winner.data.justification ? (this.props.winner.data.justification.length > 0 ? <div><h4 className="u-mt1">Justification: {this.props.winner.data.justification}</h4></div> : "") : ""}
                     <div>{this.props.winner.data.status === 'win' ? <h4 className="u-mt1">Summary of Winner</h4> : <h4 className="u-mt1">Summary of Lowest Bidder</h4>} </div>
                     <ul>
                         <li>{this.props.winner.data.status === 'win' ? <span>Winning Bidder: </span> : <span>Lowest Price Bidder: </span>}<span className="bidder_name">{this.props.winner.data.lowest_price_bidder}</span></li>
@@ -90,17 +91,17 @@ export default class WinnerPrice extends Component {
                                 <tbody>
                                     <tr>
                                         <td>Peak<br />(7am-7pm)</td>
-                                        {this.props.consumption.has_lt ? <td >{this.props.consumption.total_lt_peak} kWh</td> : <td className={'live_hide'}></td>}
-                                        {this.props.consumption.has_hts ? <td >{this.props.consumption.total_hts_peak} kWh</td> : <td className={'live_hide'}></td>}
-                                        {this.props.consumption.has_htl ? <td >{this.props.consumption.total_htl_peak} kWh</td> : <td className={'live_hide'}></td>}
-                                        {this.props.consumption.has_eht ? <td >{this.props.consumption.total_eht_peak} kWh</td> : <td className={'live_hide'}></td>}
+                                        {this.props.consumption.has_lt ? <td >{formatPower(this.props.consumption.total_lt_peak,0,'')} kWh</td> : <td className={'live_hide'}></td>}
+                                        {this.props.consumption.has_hts ? <td >{formatPower(this.props.consumption.total_hts_peak,0,'')} kWh</td> : <td className={'live_hide'}></td>}
+                                        {this.props.consumption.has_htl ? <td >{formatPower(this.props.consumption.total_htl_peak,0,'')} kWh</td> : <td className={'live_hide'}></td>}
+                                        {this.props.consumption.has_eht ? <td >{formatPower(this.props.consumption.total_eht_peak,0,'')} kWh</td> : <td className={'live_hide'}></td>}
                                     </tr>
                                     <tr>
                                         <td>Off-Peak<br />(7pm-7am)</td>
-                                        {this.props.consumption.has_lt ? <td >{this.props.consumption.total_lt_off_peak} kWh</td> : <td className={'live_hide'}></td>}
-                                        {this.props.consumption.has_hts ? <td >{this.props.consumption.total_hts_off_peak} kWh</td> : <td className={'live_hide'}></td>}
-                                        {this.props.consumption.has_htl ? <td >{this.props.consumption.total_htl_off_peak} kWh</td> : <td className={'live_hide'}></td>}
-                                        {this.props.consumption.has_eht ? <td >{this.props.consumption.total_eht_off_peak} kWh</td> : <td className={'live_hide'}></td>}
+                                        {this.props.consumption.has_lt ? <td >{formatPower(this.props.consumption.total_lt_off_peak,0,'')} kWh</td> : <td className={'live_hide'}></td>}
+                                        {this.props.consumption.has_hts ? <td >{formatPower(this.props.consumption.total_hts_off_peak,0,'')} kWh</td> : <td className={'live_hide'}></td>}
+                                        {this.props.consumption.has_htl ? <td >{formatPower(this.props.consumption.total_htl_off_peak,0,'')} kWh</td> : <td className={'live_hide'}></td>}
+                                        {this.props.consumption.has_eht ? <td >{formatPower(this.props.consumption.total_eht_off_peak,0,'')} kWh</td> : <td className={'live_hide'}></td>}
                                     </tr>
                                 </tbody>
                             </table>

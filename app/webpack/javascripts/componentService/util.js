@@ -84,12 +84,10 @@ export const getNumBref = (num, standard = false) => {
 }
 
 
-export const trim=(str)=>
-{
+export const trim = (str) => {
     return str.replace(/(^\s*)|(\s*$)/g, "");
 }
 
- 
 
 export const getStandardNumBref = (num) => {
     return getNumBref(num, true);
@@ -150,6 +148,34 @@ export const validateDecimal = (value) => {
         return false;
     }
     return true;
+}
+export const validateTwoDecimal = (value) => {
+    let total;
+    let decimalValue = value.split('.')[1];
+
+    if (decimalValue) {
+        if (decimalValue.length > 2) {
+            total = value.split('.')[0] + "." + value.split('.')[1].substr(0, 2);
+        }
+        else
+        {
+            total = value; 
+        }
+    }
+    else {
+        total = value;
+    }
+    let num = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/;
+    if (total >= 0) {
+        if (!num.test(total)) {
+            return false;
+        }
+    }
+    else {
+        return false;
+    }
+    return true;
+
 }
 
 export const validatePostCode = (value) => {
@@ -227,6 +253,16 @@ export const validator_Object = (param, paramType) => {
             }
             else {
                 if (!validateDecimal(value)) {
+                    errArr.push({ column: key, cate: 2 })
+                }
+            }
+        }
+        else if (type.cate === 'decimalTwo') {
+            if (value === null || value.length === 0) {
+                errArr.push({ column: key, cate: 1 });
+            }
+            else {
+                if (!validateTwoDecimal(value)) {
                     errArr.push({ column: key, cate: 2 })
                 }
             }
@@ -324,6 +360,20 @@ export const removePostCode = (value) => {
     value.target.value = value.target.value.replace(/[^\d.]/g, "");
     value.target.value = value.target.value.replace(/\.{2,}/g, ".");
     value.target.value = value.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+    return value;
+}
+export const removeDecimal = (value) => {
+    let decimalValue = value.target.value.split('.')[1];
+    if (decimalValue) {
+        if (decimalValue.length > 2) {
+            decimalValue = decimalValue.substr(0, 2);
+            value.target.value = value.target.value.split('.')[0] + "." + decimalValue;
+            $("#totals_format").removeClass("errormessage").addClass("isPassValidate");
+        }
+        if (decimalValue.length <= 2) {
+            $("#totals_format").removeClass("errormessage").addClass("isPassValidate");
+        }
+    }
     return value;
 }
 export const changeValidate = (type, value) => {
