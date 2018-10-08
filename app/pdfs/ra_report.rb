@@ -43,14 +43,11 @@ class RAReport < Pdf
       ranking_param = get_ranking_chart_data({:hash => hash2, :user_company_name_hash => user_company_name_hash2, :chart_color => chart_color, :uid => uid2, :ranking => ranking, :pdf => pdf, :start_datetime => start_datetime2, :end_datetime => end_datetime2,
                                               :start_time_i => start_time2_i, :end_time_i => end_time2_i, :min_price => min_price, :max_price => max_price})
       PdfRankChart.new(ranking_param).chart
-      pdf.fill_color "ffffff"
       pdf_draw_left_info(param.merge({:pdf => pdf,  :price_table => price_table}))
       unless param[:auction_result].nil?
-        pdf.fill_color "ffffff"
         pdf.grid([0, 19], [22, 29]).bounding_box do
           pdf_draw_right_info(param.merge({:pdf => pdf, :auction_contract => param[:auction_contract], :auction_result => auction_result, :price_table => price_table,
                                :auction => auction,:histories_achieved => param[:histories_achieved]}))
-
         end
       end
     end

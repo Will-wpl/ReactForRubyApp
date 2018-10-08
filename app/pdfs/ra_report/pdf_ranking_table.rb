@@ -25,9 +25,9 @@ class PdfRankingTable
     #col1_width = (pdf.bounds.right - col0_width)/2.0 + 20.0
     #col2_width = pdf.bounds.right - col0_width - col1_width
     #[col0_width, col1_width, col2_width]
-    pdf.table(ranking_table, :column_widths => {0 => col0_width}, :width => pdf.bounds.right, :header => true, :cell_style => {:size => 9, :align => :center, :valign => :center, :padding => [8, 2, 14], :inline_format => true, :border_width => 0.01, :border_color => "424242"}) do
+    pdf.table(ranking_table, :column_widths => {0 => col0_width}, :width => pdf.bounds.right, :header => true, :cell_style => {:size => 9, :align => :center, :valign => :center, :padding => [8, 2, 14], :inline_format => true, :border_width => 0.01, :border_color => "dddddd"}) do
       values = cells.columns(0..-1).rows(0..0)
-      values.background_color = "00394A"
+      values.background_color = "eeeeee"
       #~ highlight
       #values = cells.columns(0..-1).rows(is_bidder_index..is_bidder_index)
       #values.background_color = "228B22"
