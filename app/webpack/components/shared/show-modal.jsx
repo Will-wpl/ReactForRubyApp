@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 import { validateConsumptionDetailRepeat } from './../../javascripts/componentService/common/service';
-import { trim,validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum, removePostCode, validatePostCode } from '../../javascripts/componentService/util';
+import { formatPower, removeDecimal, trim, validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validateTwoDecimal, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum, removePostCode, validatePostCode } from '../../javascripts/componentService/util';
 //共通弹出框组件
 import { UploadFile } from '../shared/upload';
 import E from 'wangeditor'
@@ -61,7 +61,7 @@ export class Modal extends React.Component {
                 street: next.consumptionAccountItem.street,
                 unit_number: next.consumptionAccountItem.unit_number,
                 postal_code: next.consumptionAccountItem.postal_code,
-                totals: next.consumptionAccountItem.totals ? parseInt(next.consumptionAccountItem.totals) : "",
+                totals: formatPower((next.consumptionAccountItem.totals ? next.consumptionAccountItem.totals : ""), 2, ''),
                 peak_pct: next.consumptionAccountItem.peak_pct,
                 peak: next.consumptionAccountItem.peak_pct ? (100 - parseFloat(next.consumptionAccountItem.peak_pct)) : "",
                 option: next.consumptionAccountItem.option,
@@ -234,7 +234,8 @@ export class Modal extends React.Component {
                         "格式如": "Format like",
                         "链接文字": "Text Link",
                         "的表格": "'s table",
-                        "正文": "Content"
+                        "正文": "Content",
+                        "删除链接":"Delete"
                     };
                     setTimeout(() => { editor.create(); });
                 }
@@ -281,7 +282,8 @@ export class Modal extends React.Component {
                         "格式如": "Format like",
                         "链接文字": "Text Link",
                         "的表格": "'s table",
-                        "正文": "Content"
+                        "正文": "Content",
+                        "删除链接":"Delete"
                     };
                     setTimeout(() => { editor.create(); })
                 }
@@ -689,19 +691,25 @@ export class Modal extends React.Component {
                 this.setState({
                     postal_code: value
                 })
-                // changeValidate('postal_code', value);
                 if (!validatePostCode(value)) {
                     setValidationFaild('postal_code', 2)
                 } else {
                     setValidationPass('postal_code', 2)
                 }
-
                 break;
             case "totals":
+                let total = value.replace(',', '')
+                let decimalValue = total.split('.')[1];
+                if (decimalValue) {
+                    if (decimalValue.length > 2) {
+                        decimalValue = decimalValue.substr(0, 2);
+                        total = value.split('.')[0] + "." + decimalValue;
+                    }
+                }
                 this.setState({
-                    totals: value
+                    totals: total
                 })
-                if (!validateNum4(value)) {
+                if (!validateTwoDecimal(total)) {
                     setValidationFaild('totals', 2)
                 } else {
                     setValidationPass('totals', 2)
@@ -735,7 +743,7 @@ export class Modal extends React.Component {
         let flag = true, hasDoc = true;
         let validateItem = {
             peak_pct: { cate: 'decimal' },
-            totals: { cate: 'num10' },
+            totals: { cate: 'decimalTwo' },
             postal_code: { cate: 'postcode' },
             unit_number: { cate: 'required' },
             street: { cate: 'required' },
@@ -751,50 +759,60 @@ export class Modal extends React.Component {
         if (this.state.intake_level_selected === "LT") {
             delete validateItem.contracted_capacity;
         }
-        let validateResult = validator_Object(this.state, validateItem);
-        flag = validateResult.length > 0 ? false : true;
-        if (flag) {
-            let status = this.account_address_repeat();
-            switch (status) {
-                case 'false|true':
-                    $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
-                    $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
-                    $("#unit_number").focus();
-                    break;
-                case 'true|false':
-                    $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
-                    $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
-                    $("#account_number").focus();
-                    break;
-                case 'true|true':
-                    $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
-                    $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
-                    $("#account_number").focus();
-                    break;
-                default:
-                    this.addToMainForm();
-                    break;
+
+        this.setState({
+            totals: this.state.totals.replace(',', '')
+        })
+       
+        setTimeout(() => {
+            let validateResult = validator_Object(this.state, validateItem);
+            flag = validateResult.length > 0 ? false : true;
+            if (flag) {
+                let status = this.account_address_repeat();
+                switch (status) {
+                    case 'false|true':
+                        $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                        $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
+                        $("#unit_number").focus();
+                        break;
+                    case 'true|false':
+                        $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
+                        $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                        $("#account_number").focus();
+                        break;
+                    case 'true|true':
+                        $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                        $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                        $("#account_number").focus();
+                        break;
+                    default:
+                        this.addToMainForm();
+                        break;
+                }
             }
-        }
-        else {
-            $('.validate_message').find('div').each(function () {
-                let className = $(this).attr('class');
-                if (className === 'errormessage') {
-                    let divid = $(this).attr("id");
-                    $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
-                }
-            })
-            validateResult.map((item, index) => {
-                let column = item.column;
-                let cate = item.cate;
-                setValidationFaild(column, cate);
-                if (column === "contract_expiry") {
-                    setTimeout(() => {
-                        $(".react-datepicker-popper").addClass("isHide");
-                    });
-                }
-            })
-        }
+            else {
+                $('.validate_message').find('div').each(function () {
+                    let className = $(this).attr('class');
+                    if (className === 'errormessage') {
+                        let divid = $(this).attr("id");
+                        $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
+                    }
+                })
+                validateResult.map((item, index) => {
+                    let column = item.column;
+                    let cate = item.cate;
+                    setValidationFaild(column, cate);
+                    if (column === "contract_expiry") {
+                        setTimeout(() => {
+                            $(".react-datepicker-popper").addClass("isHide");
+                        });
+                    }
+                })
+            }
+        }, 500);
+
+
+
     }
 
     removefile(type, index, id) {
@@ -811,6 +829,9 @@ export class Modal extends React.Component {
         removeNanNum(value)
     }
 
+    removeTwoDemical(value) {
+        removeDecimal(value);
+    }
     removeInputPostCode(value) {
         removePostCode(value);
     }
@@ -1186,7 +1207,7 @@ export class Modal extends React.Component {
                                     <td>{item.company_name}</td>
                                     <td>{item.company_uen}</td>
                                     <td>
-                                        {(moment(item.created_at).format('YYYY-MM-DD HH:mm:ss ')).split(" ")[0]}<br/>
+                                        {(moment(item.created_at).format('YYYY-MM-DD HH:mm:ss ')).split(" ")[0]}<br />
                                         {(moment(item.created_at).format('YYYY-MM-DD HH:mm:ss ')).split(" ")[1]}
                                     </td>
                                 </tr>
@@ -1219,7 +1240,7 @@ export class Modal extends React.Component {
                                     <td>{item.company_uen}</td>
                                     <td>{item.license_number}</td>
                                     <td>
-                                        {(moment(item.created_at).format('YYYY-MM-DD HH:mm:ss ')).split(" ")[0]}<br/>
+                                        {(moment(item.created_at).format('YYYY-MM-DD HH:mm:ss ')).split(" ")[0]}<br />
                                         {(moment(item.created_at).format('YYYY-MM-DD HH:mm:ss ')).split(" ")[1]}
                                     </td>
                                 </tr>
@@ -1365,7 +1386,7 @@ export class Modal extends React.Component {
                                             {
                                                 this.state.purchasing_entity.map(item => {
                                                     if (item.id === this.state.purchasing_entity_selectd) {
-                                                        return <p key={item.id}   style={{ "paddingLeft": "3px" }}>{item.company_name}</p>
+                                                        return <p key={item.id} style={{ "paddingLeft": "3px" }}>{item.company_name}</p>
                                                     }
                                                 })
                                             }
@@ -1455,9 +1476,9 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Total Monthly:</td>
                                     <td>
-                                        <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" name="totals" onKeyUp={this.removeInputNanNum.bind(this)} required aria-required="true" maxLength="10" /><div>kWh/month</div>
+                                        <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" name="totals" onKeyUp={this.removeTwoDemical.bind(this)} required aria-required="true" maxLength="10" /><div>kWh/month</div>
                                         <div id="totals_message" className="isPassValidate">This filed is required!</div>
-                                        <div id="totals_format" className="isPassValidate">Please input an integer greater than 0.</div>
+                                        <div id="totals_format" className="isPassValidate">Please input an number greater than 0.</div>
                                     </td>
                                 </tr>
                                 <tr>
