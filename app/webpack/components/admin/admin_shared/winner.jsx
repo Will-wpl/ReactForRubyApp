@@ -82,10 +82,10 @@ export default class WinnerPrice extends Component {
                                 <thead>
                                     <tr>
                                         <th></th>
-                                        {this.props.consumption.has_lt ? <th>LT</th> : <th className={'live_hide'}></th>}
-                                        {this.props.consumption.has_hts ? <th>HT (Small)</th> : <th className={'live_hide'}></th>}
-                                        {this.props.consumption.has_htl ? <th>HT (Large)</th> : <th className={'live_hide'}></th>}
-                                        {this.props.consumption.has_eht ? <th>EHT</th> : <th className={'live_hide'}></th>}
+                                        {this.props.consumption.has_lt ? <th style={{"text-align":"center"}}>LT</th> : <th className={'live_hide'}></th>}
+                                        {this.props.consumption.has_hts ? <th style={{"text-align":"center"}}>HT (Small)</th> : <th className={'live_hide'}></th>}
+                                        {this.props.consumption.has_htl ? <th style={{"text-align":"center"}}>HT (Large)</th> : <th className={'live_hide'}></th>}
+                                        {this.props.consumption.has_eht ? <th style={{"text-align":"center"}}>EHT</th> : <th className={'live_hide'}></th>}
                                     </tr>
                                 </thead>
                                 <tbody>
