@@ -61,7 +61,7 @@ export class Modal extends React.Component {
                 street: next.consumptionAccountItem.street,
                 unit_number: next.consumptionAccountItem.unit_number,
                 postal_code: next.consumptionAccountItem.postal_code,
-                totals: formatPower((next.consumptionAccountItem.totals ? next.consumptionAccountItem.totals : ""), 0, ''),
+                totals: formatPower((next.consumptionAccountItem.totals ? next.consumptionAccountItem.totals : ""), 2, ''),
                 peak_pct: next.consumptionAccountItem.peak_pct,
                 peak: next.consumptionAccountItem.peak_pct ? (100 - parseFloat(next.consumptionAccountItem.peak_pct)) : "",
                 option: next.consumptionAccountItem.option,
