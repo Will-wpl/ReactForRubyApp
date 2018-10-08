@@ -235,7 +235,7 @@ export class Modal extends React.Component {
                         "链接文字": "Text Link",
                         "的表格": "'s table",
                         "正文": "Content",
-                        "删除链接": "Delete"
+                        "删除链接":"Delete Link"
                     };
                     setTimeout(() => { editor.create(); });
                 }
@@ -283,7 +283,11 @@ export class Modal extends React.Component {
                         "链接文字": "Text Link",
                         "的表格": "'s table",
                         "正文": "Content",
+<<<<<<< HEAD
                         "删除链接": "Delete"
+=======
+                        "删除链接":"Delete Link"
+>>>>>>> 3ada0cd20632673e61ab22eaf94bc639efabbfab
                     };
                     setTimeout(() => { editor.create(); })
                 }
