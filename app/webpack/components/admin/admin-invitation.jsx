@@ -570,17 +570,17 @@ export default class AdminInvitation extends Component {
                                                 <tbody>
                                                     <tr>
                                                         <td>Peak<br />(7am-7pm)</td>
-                                                        <td >{this.state.peak_lt}</td>
-                                                        <td >{this.state.peak_hts}</td>
-                                                        <td >{this.state.peak_htl}</td>
-                                                        <td >{this.state.peak_eht}</td>
+                                                        <td >{formatPower(this.state.peak_lt,0,'')}</td>
+                                                        <td >{formatPower(this.state.peak_hts,0,'')}</td>
+                                                        <td >{formatPower(this.state.peak_htl,0,'')}</td>
+                                                        <td >{formatPower(this.state.peak_eht,0,'')}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Off-Peak<br />(7pm-7am)</td>
-                                                        <td >{this.state.off_peak_lt}</td>
-                                                        <td >{this.state.off_peak_hts}</td>
-                                                        <td >{this.state.off_peak_htl}</td>
-                                                        <td >{this.state.off_peak_eht}</td>
+                                                        <td >{formatPower(this.state.off_peak_lt,0,'')}</td>
+                                                        <td >{formatPower(this.state.off_peak_hts,0,'')}</td>
+                                                        <td >{formatPower(this.state.off_peak_htl,0,'')}</td>
+                                                        <td >{formatPower(this.state.off_peak_eht,0,'')}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>}
