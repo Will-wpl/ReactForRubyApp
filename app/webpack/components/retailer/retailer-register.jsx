@@ -131,16 +131,16 @@ export class RetailerRegister extends Component {
                 retailerApproveStatus: item.approval_status
             })
             if (this.state.agree_seller_buyer === '1') {
-                $('#chkBuyer').attr("checked", true);
-            }
-            else {
-                $('#chkBuyer').attr("checked", false);
-            }
-            if (this.state.agree_seller_revv === '1') {
                 $('#chkRevv').attr("checked", true);
             }
             else {
                 $('#chkRevv').attr("checked", false);
+            }
+            if (this.state.agree_seller_revv === '1') {
+                $('#chkBuyer').attr("checked", true);
+            }
+            else {
+                $('#chkBuyer').attr("checked", false);
             }
 
             this.company_name_back = item.company_name;
@@ -327,20 +327,20 @@ export class RetailerRegister extends Component {
                 break;
             case 'chkBuyer':
                 if ($('#chkBuyer').is(':checked')) {
-                    this.setState({ agree_seller_buyer: 1 });
+                    this.setState({ agree_seller_revv: 1 });
                     setValidationPass('chkBuyer', 1)
                 } else {
-                    this.setState({ agree_seller_buyer: 0 });
+                    this.setState({ agree_seller_revv: 0 });
                     setValidationFaild('chkBuyer', 1);
                 }
                 break;
             case 'chkRevv':
                 if ($('#chkRevv').is(':checked')) {
-                    this.setState({ agree_seller_revv: 1 });
+                    this.setState({ agree_seller_buyer: 1 });
                     setValidationPass('chkRevv', 1)
                 } else {
                     setValidationFaild('chkRevv', 1);
-                    this.setState({ agree_seller_revv: 0 });
+                    this.setState({ agree_seller_buyer: 0 });
                 }
                 break;
 

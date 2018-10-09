@@ -489,6 +489,7 @@ export class FillConsumption extends Component {
     checkSuccess(event) {
         event.preventDefault();
         let isNotNull = this.validateListComplete();
+        console.log(isNotNull)
         if (isNotNull) {
             let totalList = this.state.site_list.concat(this.state.preDayList).concat(this.state.preOtherList);
             let count = this.dateCompare(totalList);
@@ -534,6 +535,7 @@ export class FillConsumption extends Component {
                 flag_current = false;
             }
         })
+    
         return flag_current && flag_yesterday && flag_before_yesterday;
     }
 
@@ -690,7 +692,7 @@ export class FillConsumption extends Component {
                                                         <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
                                                         <td>{item.entityName}</td>
                                                         <td>{item.intake_level}</td>
-                                                        <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
+                                                        <td>{item.contracted_capacity ? formatPower(parseInt(item.contracted_capacity),0,'') : "—"}</td>
                                                         <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td> 
                                                         <td className="left">
                                                         <div><span>Total Monthly: </span><span className="textDecoration" >{formatPower(parseInt(Number(item.totals)), 0, '')}</span><span> kWh/month</span></div>
@@ -778,7 +780,7 @@ export class FillConsumption extends Component {
                                                         <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
                                                         <td>{item.entityName}</td>
                                                         <td>{item.intake_level}</td>
-                                                        <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
+                                                        <td>{item.contracted_capacity ? formatPower(parseInt(item.contracted_capacity) ,0,'') : "—"}</td>
                                                         <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
                                                         <td className="left">
                                                         <div><span>Total Monthly: </span><span className="textDecoration" >{formatPower(parseInt(Number(item.totals)), 0, '')}</span><span> kWh/month</span></div>
@@ -863,7 +865,7 @@ export class FillConsumption extends Component {
                                                     <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
                                                     <td>{item.entityName}</td>
                                                     <td>{item.intake_level}</td>
-                                                    <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
+                                                    <td>{item.contracted_capacity ? formatPower(parseInt(item.contracted_capacity) ,0,'') : "—"}</td>
                                                     <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
                                                     <td className="left">
                                                         <div><span>Total Monthly: </span><span className="textDecoration" >{formatPower(parseInt(Number(item.totals)), 0, '')}</span><span> kWh/month</span></div>

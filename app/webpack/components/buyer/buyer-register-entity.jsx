@@ -157,23 +157,23 @@ export class BuyerUserEntityRegister extends Component {
                 agree_buyer_revv: item.agree_buyer_revv ? item.agree_buyer_revv : '0',
                 has_tenants: item.has_tenants ? item.has_tenants : '1',
                 approveStatus: item.approval_status === "3" ? true : false,
-
                 status: setApprovalStatus(item.approval_status, item.approval_date_time === null ? item.created_at : item.approval_date_time)
             })
             this.company_name_back = item.company_name;
             this.unique_entity_number_back = item.company_unique_entity_number;
             $('#buyer_management').val(this.state.has_tenants);
             if (this.state.agree_seller_buyer === "1") {
-                $('#chkBuyer').attr("checked", true);
-            }
-            else {
-                $('#chkBuyer').attr("checked", false);
-            }
-            if (this.state.agree_buyer_revv === "1") {
                 $('#chkRevv').attr("checked", true);
             }
             else {
                 $('#chkRevv').attr("checked", false);
+               
+            }
+            if (this.state.agree_buyer_revv === "1") {
+                $('#chkBuyer').attr("checked", true);
+            }
+            else {
+                $('#chkBuyer').attr("checked", false);
             }
         }
 
@@ -344,19 +344,19 @@ export class BuyerUserEntityRegister extends Component {
                 break;
             case 'chkBuyer':
                 if ($('#chkBuyer').is(':checked')) {
-                    this.setState({ agree_seller_buyer: 1 });
+                    this.setState({ agree_buyer_revv: 1 });
                     setValidationPass('chkBuyer', 1)
                 } else {
-                    this.setState({ agree_seller_buyer: 0 });
+                    this.setState({ agree_buyer_revv: 0 });
                     setValidationFaild('chkBuyer', 1);
                 }
                 break;
             case 'chkRevv':
                 if ($('#chkRevv').is(':checked')) {
-                    this.setState({ agree_buyer_revv: 1 });
+                    this.setState({ agree_seller_buyer: 1 });
                     setValidationPass('chkRevv', 1)
                 } else {
-                    this.setState({ agree_buyer_revv: 0 });
+                    this.setState({ agree_seller_buyer: 0 });
                     setValidationFaild('chkRevv', 1);
                 }
                 break;

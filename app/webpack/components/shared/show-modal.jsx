@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 import { validateConsumptionDetailRepeat } from './../../javascripts/componentService/common/service';
-import { formatPower, removeDecimal, trim, validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validateTwoDecimal, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum, removePostCode, validatePostCode } from '../../javascripts/componentService/util';
+import { formatPower, removeDecimal, replaceSymbol, trim, validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validateTwoDecimal, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum, removePostCode, validatePostCode } from '../../javascripts/componentService/util';
 //共通弹出框组件
 import { UploadFile } from '../shared/upload';
 import E from 'wangeditor'
@@ -56,12 +56,12 @@ export class Modal extends React.Component {
                 premise_address: next.consumptionAccountItem.premise_address,
                 intake_level: next.consumptionAccountItem.intake_level,
                 intake_level_selected: next.consumptionAccountItem.intake_level_selected,
-                contracted_capacity: next.consumptionAccountItem.contracted_capacity ? parseInt(next.consumptionAccountItem.contracted_capacity) : "",
+                contracted_capacity: next.consumptionAccountItem.contracted_capacity ? formatPower(parseInt(next.consumptionAccountItem.contracted_capacity), 0, '') : "",
                 blk_or_unit: next.consumptionAccountItem.blk_or_unit,
                 street: next.consumptionAccountItem.street,
                 unit_number: next.consumptionAccountItem.unit_number,
                 postal_code: next.consumptionAccountItem.postal_code,
-                totals: formatPower((next.consumptionAccountItem.totals ? next.consumptionAccountItem.totals : ""), 2, ''),
+                totals: next.consumptionAccountItem.totals ? formatPower(parseInt(next.consumptionAccountItem.totals), 0, '') : "",
                 peak_pct: next.consumptionAccountItem.peak_pct,
                 peak: next.consumptionAccountItem.peak_pct ? (100 - parseFloat(next.consumptionAccountItem.peak_pct)) : "",
                 option: next.consumptionAccountItem.option,
@@ -235,7 +235,7 @@ export class Modal extends React.Component {
                         "链接文字": "Text Link",
                         "的表格": "'s table",
                         "正文": "Content",
-                        "删除链接":"Delete"
+                        "删除链接":"Delete Link"
                     };
                     setTimeout(() => { editor.create(); });
                 }
@@ -283,7 +283,7 @@ export class Modal extends React.Component {
                         "链接文字": "Text Link",
                         "的表格": "'s table",
                         "正文": "Content",
-                        "删除链接":"Delete"
+                        "删除链接":"Delete Link"
                     };
                     setTimeout(() => { editor.create(); })
                 }
@@ -344,22 +344,6 @@ export class Modal extends React.Component {
                 this.setState({ props_data: data });
             }
         }
-        // if(this.state.type === "chkSelectedBuyers")
-        // {
-        //     let data=this.state.props_data;
-        //     if(data.action==="proceed")
-        //     {
-        //
-        //     }
-        // }
-        // else {
-        //     if (this.props.acceptFunction) {
-        //         setTimeout(() => {
-        //             this.props.acceptFunction(this.state.props_data);
-        //         })
-        //         this.closeModal();
-        //     }
-        // }
         if (this.props.acceptFunction) {
             setTimeout(() => {
                 let data = this.state.props_data;
@@ -375,7 +359,6 @@ export class Modal extends React.Component {
                     this.closeModal();
                 }
             })
-
         }
 
         if (this.props.dodelete) {
@@ -536,21 +519,21 @@ export class Modal extends React.Component {
             account_number: this.state.account_number,
             existing_plan_selected: (this.state.existing_plan_selected !== null && this.state.existing_plan_selected !== "") ? this.state.existing_plan_selected : this.state.existing_plan[0],
             contract_expiry: this.state.contract_expiry ? this.state.contract_expiry : "",
-            purchasing_entity_selectd: this.state.purchasing_entity_selectd,
+            purchasing_entity_selectd: this.state.purchasing_entity.length === 1 ? this.state.purchasing_entity[0].id : this.state.purchasing_entity_selectd,
             intake_level_selected: this.state.intake_level_selected,
             contracted_capacity: this.state.contracted_capacity,
             blk_or_unit: this.state.blk_or_unit,
             street: this.state.street,
             unit_number: this.state.unit_number,
             postal_code: this.state.postal_code,
-            totals: this.state.totals,
+            totals: Math.round(this.state.totals),
             peak_pct: this.state.peak_pct,
             index: this.state.itemIndex,
             cate_type: this.state.cate_type,
             attachment_ids: "",
             user_attachment: []
         }
-
+        console.log(siteItem)
         if (this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0) {
             let idsArr = [];
             this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.map((item) => {
@@ -639,6 +622,7 @@ export class Modal extends React.Component {
                 changeValidate('contract_expiry', value);
                 break;
             case "purchasing_entity":
+                console.log(1111111)
                 this.setState({
                     purchasing_entity_selectd: value
                 })
@@ -660,8 +644,9 @@ export class Modal extends React.Component {
                 })
                 break;
             case "contracted_capacity":
+                let capacity = replaceSymbol(value)
                 this.setState({
-                    contracted_capacity: value
+                    contracted_capacity: capacity
                 })
                 if (!validateNum4(value)) {
                     setValidationFaild('contracted_capacity', 2)
@@ -698,7 +683,7 @@ export class Modal extends React.Component {
                 }
                 break;
             case "totals":
-                let total = value.replace(',', '')
+                let total = replaceSymbol(value)
                 let decimalValue = total.split('.')[1];
                 if (decimalValue) {
                     if (decimalValue.length > 2) {
@@ -761,9 +746,12 @@ export class Modal extends React.Component {
         }
 
         this.setState({
-            totals: this.state.totals.replace(',', '')
+            totals: replaceSymbol(this.state.totals),
+            contracted_capacity: replaceSymbol(this.state.contracted_capacity)
         })
-       
+
+        // console.log(this.state.totals)
+        // console.log(this.state.contracted_capacity)
         setTimeout(() => {
             let validateResult = validator_Object(this.state, validateItem);
             flag = validateResult.length > 0 ? false : true;
@@ -810,9 +798,6 @@ export class Modal extends React.Component {
                 })
             }
         }, 500);
-
-
-
     }
 
     removefile(type, index, id) {
