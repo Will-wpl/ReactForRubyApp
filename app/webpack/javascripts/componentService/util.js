@@ -172,7 +172,7 @@ export const validateTwoDecimal = (value) => {
         total = value;
     }
     let num = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/;
-    if (total >= 0) {
+    if (total > 0) {
         if (!num.test(total)) {
             return false;
         }

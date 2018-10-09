@@ -1132,7 +1132,7 @@ export class Modal extends React.Component {
                         {
                             this.props.entityErrorList.nameError ?
                                 <div>
-                                    <span className={this.props.entityErrorList.nameError.length > 0 ? "isDisplayInLine" : "isHide"}>Company Name can not be duplicated:</span>
+                                    <span className={this.props.entityErrorList.nameError.length > 0 ? "isDisplayInLine" : "isHide"}>Company Name cannot be duplicated:</span>
                                     <ul className="showdetailerr">{
                                         this.props.entityErrorList.nameError.map((item, index) => {
                                             return <li key={index}><span>{item}</span></li>
@@ -1145,7 +1145,7 @@ export class Modal extends React.Component {
                         {
                             this.props.entityErrorList.uenError ?
                                 <div>
-                                    <span className={this.props.entityErrorList.uenError.length > 0 ? "isDisplayInLine" : "isHide"}>Company UEN can not be duplicated:</span>
+                                    <span className={this.props.entityErrorList.uenError.length > 0 ? "isDisplayInLine" : "isHide"}>Company UEN cannot be duplicated:</span>
                                     <ul className="showdetailerr">{
                                         this.props.entityErrorList.uenError.map((item, index) => {
                                             return <li key={index}><span>{item}</span></li>
@@ -1158,7 +1158,7 @@ export class Modal extends React.Component {
                         {
                             this.props.entityErrorList.emailError ?
                                 <div>
-                                    <span className={this.props.entityErrorList.emailError.length > 0 ? "isDisplayInLine" : "isHide"}>Contact Email can not be duplicated:</span>
+                                    <span className={this.props.entityErrorList.emailError.length > 0 ? "isDisplayInLine" : "isHide"}>Contact Email cannot be duplicated:</span>
                                     <ul className="showdetailerr">{
                                         this.props.entityErrorList.emailError.map((item, index) => {
                                             return <li key={index}><span>{item}</span></li>
