@@ -1406,7 +1406,7 @@ export class Modal extends React.Component {
                                         <span className={this.state.intake_level_selected === "LT" ? "isHide" : "isDisplay"}>*</span>
                                     </abbr>Contract Capacity</td>
                                     <td>
-                                        <input type="text" disabled={this.state.contracted_capacity_disabled} value={this.state.contracted_capacity} onChange={this.changeConsumption.bind(this, "contracted_capacity")} id="contracted_capacity" name="contracted_capacity" onKeyUp={this.removeInputNanNum.bind(this)} required aria-required="true" maxLength="10" />
+                                        <input type="text" disabled={this.state.contracted_capacity_disabled} value={this.state.contracted_capacity} onChange={this.changeConsumption.bind(this, "contracted_capacity")} id="contracted_capacity" name="contracted_capacity" onKeyUp={this.removeInputNanNum.bind(this)} required aria-required="true" maxLength="20" />
                                         <div id="contracted_capacity_message" className="isPassValidate">This filed is required!</div>
                                         <div id="contracted_capacity_format" className="isPassValidate">Must be positive integers,and first cannot be 0!</div>
                                     </td>
@@ -1461,7 +1461,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Total Monthly:</td>
                                     <td>
-                                        <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" name="totals" onKeyUp={this.removeTwoDemical.bind(this)} required aria-required="true" maxLength="10" /><div>kWh/month</div>
+                                        <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" name="totals" onKeyUp={this.removeTwoDemical.bind(this)} required aria-required="true" maxLength="20" /><div>kWh/month</div>
                                         <div id="totals_message" className="isPassValidate">This filed is required!</div>
                                         <div id="totals_format" className="isPassValidate">Please input an number greater than 0.</div>
                                     </td>
