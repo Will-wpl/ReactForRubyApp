@@ -555,7 +555,7 @@ export default class AdminInvitation extends Component {
                             )}
                             <div className="lm--formItem lm--formItem--inline string">
                                 <label className="lm--formItem-left lm--formItem-label string required">
-                                    Aggregate Consumption:
+                                    Aggregate Consumption:<br /> (kWh/month)
                         </label>
                                 <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                     <div className="col-sm-12 u-cell consumption" id="aggregate_consumption">

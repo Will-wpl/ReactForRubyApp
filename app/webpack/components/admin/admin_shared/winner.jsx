@@ -77,7 +77,7 @@ export default class WinnerPrice extends Component {
                         <li><span>Contract Period: </span><span>{moment(this.props.winner.auction.contract_period_start_date).format('D MMM YYYY')} to {moment(this.props.winner.auction.contract_period_end_date).format('D MMM YYYY')}</span></li>
                         <li><span>Total Volume: </span><span>{this.toThousands(Math.round(Number(this.props.winner.auction.total_volume)))} kWh (forecasted)</span></li>
                         <li>
-                            <h4>Aggregate Consumption</h4>
+                            <h4>Aggregate Consumption<br /> (kWh/month)</h4>
                             <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                                 <thead>
                                     <tr>
@@ -105,10 +105,10 @@ export default class WinnerPrice extends Component {
                                     </tr>
                                     <tr>
                                         <td>Total</td>
-                                        {this.props.consumption.has_lt ? <td >{formatPower((this.props.consumption.total_lt_off_peak+this.props.consumption.total_lt_peak),0,'')} kWh</td> : <td className={'live_hide'}></td>}
-                                        {this.props.consumption.has_hts ? <td >{formatPower((this.props.consumption.total_hts_off_peak+this.props.consumption.total_hts_peak),0,'')} kWh</td> : <td className={'live_hide'}></td>}
-                                        {this.props.consumption.has_htl ? <td >{formatPower((this.props.consumption.total_htl_off_peak+this.props.consumption.total_htl_peak),0,'')} kWh</td> : <td className={'live_hide'}></td>}
-                                        {this.props.consumption.has_eht ? <td >{formatPower((this.props.consumption.total_eht_off_peak+this.props.consumption.total_eht_peak),0,'')} kWh</td> : <td className={'live_hide'}></td>}
+                                        {this.props.consumption.has_lt ?  <td >{formatPower(parseInt(Number(this.props.consumption.total_lt_off_peak)+Number(this.props.consumption.total_lt_peak)),0,'')} kWh</td> : <td className={'live_hide'}></td>}
+                                        {this.props.consumption.has_hts ? <td >{formatPower(parseInt(Number(this.props.consumption.total_hts_off_peak)+Number(this.props.consumption.total_hts_peak)),0,'')} kWh</td> : <td className={'live_hide'}></td>}
+                                        {this.props.consumption.has_htl ? <td >{formatPower(parseInt(Number(this.props.consumption.total_htl_off_peak)+Number(this.props.consumption.total_htl_peak)),0,'')} kWh</td> : <td className={'live_hide'}></td>}
+                                        {this.props.consumption.has_eht ? <td >{formatPower(parseInt(Number(this.props.consumption.total_eht_off_peak)+Number(this.props.consumption.total_eht_peak)),0,'')} kWh</td> : <td className={'live_hide'}></td>}
                                     </tr>
                                 </tbody>
                             </table>
