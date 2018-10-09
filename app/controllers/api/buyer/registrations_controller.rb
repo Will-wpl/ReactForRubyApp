@@ -106,6 +106,10 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
       saved_entities = update_buyer_entities(buyer_entities, true)
     end
 
+    #registered email
+    User.admins.each do |admin_user|
+      UserMailer.buyer_registered_email(admin_user, @user).deliver_later
+    end
     render json: { result: 'success', user: @user, entities: saved_entities }, status: 200
 
   rescue Exception => ex
