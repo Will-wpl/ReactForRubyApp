@@ -87,7 +87,7 @@ export default class WinnerPrice extends Component {
                                         {this.props.consumption.has_htl ? <th style={{"text-align":"center"}}>HT (Large)</th> : <th className={'live_hide'}></th>}
                                         {this.props.consumption.has_eht ? <th style={{"text-align":"center"}}>EHT</th> : <th className={'live_hide'}></th>}
                                     </tr>
-                                </thead>
+                                </thead> 
                                 <tbody>
                                     <tr>
                                         <td>Peak<br />(7am-7pm)</td>

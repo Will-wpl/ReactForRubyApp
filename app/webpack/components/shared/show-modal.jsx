@@ -1138,7 +1138,7 @@ export class Modal extends React.Component {
                                             return <li key={index}><span>{item}</span></li>
                                         })
                                     }
-                                    </ul>
+                                    </ul> 
                                 </div>
                                 : <div></div>
                         }
