@@ -110,16 +110,16 @@ export class BuyerUserManage extends Component {
 
             $('#buyer_management').val(this.state.has_tenants);
             if (this.state.agree_seller_buyer === "1") {
-                $('#chkBuyer').attr("checked", true);
-            }
-            else {
-                $('#chkBuyer').attr("checked", false);
-            }
-            if (this.state.agree_buyer_revv === "1") {
                 $('#chkRevv').attr("checked", true);
             }
             else {
                 $('#chkRevv').attr("checked", false);
+            }
+            if (this.state.agree_buyer_revv === "1") {
+                $('#chkBuyer').attr("checked", true);
+            }
+            else {
+                $('#chkBuyer').attr("checked", false);
             }
         }
 

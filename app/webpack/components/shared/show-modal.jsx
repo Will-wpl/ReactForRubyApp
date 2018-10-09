@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 import { validateConsumptionDetailRepeat } from './../../javascripts/componentService/common/service';
-import { formatPower, removeDecimal, trim, validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validateTwoDecimal, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum, removePostCode, validatePostCode } from '../../javascripts/componentService/util';
+import { formatPower, removeDecimal, replaceSymbol, trim, validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validateTwoDecimal, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum, removePostCode, validatePostCode } from '../../javascripts/componentService/util';
 //共通弹出框组件
 import { UploadFile } from '../shared/upload';
 import E from 'wangeditor'
@@ -56,12 +56,12 @@ export class Modal extends React.Component {
                 premise_address: next.consumptionAccountItem.premise_address,
                 intake_level: next.consumptionAccountItem.intake_level,
                 intake_level_selected: next.consumptionAccountItem.intake_level_selected,
-                contracted_capacity: next.consumptionAccountItem.contracted_capacity ? parseInt(next.consumptionAccountItem.contracted_capacity) : "",
+                contracted_capacity: next.consumptionAccountItem.contracted_capacity ? formatPower(parseInt(next.consumptionAccountItem.contracted_capacity), 0, '') : "",
                 blk_or_unit: next.consumptionAccountItem.blk_or_unit,
                 street: next.consumptionAccountItem.street,
                 unit_number: next.consumptionAccountItem.unit_number,
                 postal_code: next.consumptionAccountItem.postal_code,
-                totals: formatPower((next.consumptionAccountItem.totals ? next.consumptionAccountItem.totals : ""), 2, ''),
+                totals: next.consumptionAccountItem.totals ? formatPower(parseInt(next.consumptionAccountItem.totals), 0, '') : "",
                 peak_pct: next.consumptionAccountItem.peak_pct,
                 peak: next.consumptionAccountItem.peak_pct ? (100 - parseFloat(next.consumptionAccountItem.peak_pct)) : "",
                 option: next.consumptionAccountItem.option,
@@ -344,22 +344,6 @@ export class Modal extends React.Component {
                 this.setState({ props_data: data });
             }
         }
-        // if(this.state.type === "chkSelectedBuyers")
-        // {
-        //     let data=this.state.props_data;
-        //     if(data.action==="proceed")
-        //     {
-        //
-        //     }
-        // }
-        // else {
-        //     if (this.props.acceptFunction) {
-        //         setTimeout(() => {
-        //             this.props.acceptFunction(this.state.props_data);
-        //         })
-        //         this.closeModal();
-        //     }
-        // }
         if (this.props.acceptFunction) {
             setTimeout(() => {
                 let data = this.state.props_data;
@@ -375,7 +359,6 @@ export class Modal extends React.Component {
                     this.closeModal();
                 }
             })
-
         }
 
         if (this.props.dodelete) {
@@ -536,21 +519,21 @@ export class Modal extends React.Component {
             account_number: this.state.account_number,
             existing_plan_selected: (this.state.existing_plan_selected !== null && this.state.existing_plan_selected !== "") ? this.state.existing_plan_selected : this.state.existing_plan[0],
             contract_expiry: this.state.contract_expiry ? this.state.contract_expiry : "",
-            purchasing_entity_selectd: this.state.purchasing_entity_selectd,
+            purchasing_entity_selectd: this.state.purchasing_entity.length === 1 ? this.state.purchasing_entity[0].id : this.state.purchasing_entity_selectd,
             intake_level_selected: this.state.intake_level_selected,
             contracted_capacity: this.state.contracted_capacity,
             blk_or_unit: this.state.blk_or_unit,
             street: this.state.street,
             unit_number: this.state.unit_number,
             postal_code: this.state.postal_code,
-            totals: this.state.totals,
+            totals: Math.round(this.state.totals),
             peak_pct: this.state.peak_pct,
             index: this.state.itemIndex,
             cate_type: this.state.cate_type,
             attachment_ids: "",
             user_attachment: []
         }
-
+        console.log(siteItem)
         if (this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0) {
             let idsArr = [];
             this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.map((item) => {
@@ -639,6 +622,7 @@ export class Modal extends React.Component {
                 changeValidate('contract_expiry', value);
                 break;
             case "purchasing_entity":
+                console.log(1111111)
                 this.setState({
                     purchasing_entity_selectd: value
                 })
@@ -660,8 +644,9 @@ export class Modal extends React.Component {
                 })
                 break;
             case "contracted_capacity":
+                let capacity = replaceSymbol(value)
                 this.setState({
-                    contracted_capacity: value
+                    contracted_capacity: capacity
                 })
                 if (!validateNum4(value)) {
                     setValidationFaild('contracted_capacity', 2)
@@ -698,7 +683,7 @@ export class Modal extends React.Component {
                 }
                 break;
             case "totals":
-                let total = value.replace(',', '')
+                let total = replaceSymbol(value)
                 let decimalValue = total.split('.')[1];
                 if (decimalValue) {
                     if (decimalValue.length > 2) {
@@ -761,9 +746,12 @@ export class Modal extends React.Component {
         }
 
         this.setState({
-            totals: this.state.totals.replace(',', '')
+            totals: replaceSymbol(this.state.totals),
+            contracted_capacity: replaceSymbol(this.state.contracted_capacity)
         })
 
+        // console.log(this.state.totals)
+        // console.log(this.state.contracted_capacity)
         setTimeout(() => {
             let validateResult = validator_Object(this.state, validateItem);
             flag = validateResult.length > 0 ? false : true;
@@ -810,9 +798,6 @@ export class Modal extends React.Component {
                 })
             }
         }, 500);
-
-
-
     }
 
     removefile(type, index, id) {
@@ -1147,20 +1132,20 @@ export class Modal extends React.Component {
                         {
                             this.props.entityErrorList.nameError ?
                                 <div>
-                                    <span className={this.props.entityErrorList.nameError.length > 0 ? "isDisplayInLine" : "isHide"}>Company Name can not be duplicated:</span>
+                                    <span className={this.props.entityErrorList.nameError.length > 0 ? "isDisplayInLine" : "isHide"}>Company Name cannot be duplicated:</span>
                                     <ul className="showdetailerr">{
                                         this.props.entityErrorList.nameError.map((item, index) => {
                                             return <li key={index}><span>{item}</span></li>
                                         })
                                     }
-                                    </ul>
+                                    </ul> 
                                 </div>
                                 : <div></div>
                         }
                         {
                             this.props.entityErrorList.uenError ?
                                 <div>
-                                    <span className={this.props.entityErrorList.uenError.length > 0 ? "isDisplayInLine" : "isHide"}>Company UEN can not be duplicated:</span>
+                                    <span className={this.props.entityErrorList.uenError.length > 0 ? "isDisplayInLine" : "isHide"}>Company UEN cannot be duplicated:</span>
                                     <ul className="showdetailerr">{
                                         this.props.entityErrorList.uenError.map((item, index) => {
                                             return <li key={index}><span>{item}</span></li>
@@ -1173,7 +1158,7 @@ export class Modal extends React.Component {
                         {
                             this.props.entityErrorList.emailError ?
                                 <div>
-                                    <span className={this.props.entityErrorList.emailError.length > 0 ? "isDisplayInLine" : "isHide"}>Contact Email can not be duplicated:</span>
+                                    <span className={this.props.entityErrorList.emailError.length > 0 ? "isDisplayInLine" : "isHide"}>Contact Email cannot be duplicated:</span>
                                     <ul className="showdetailerr">{
                                         this.props.entityErrorList.emailError.map((item, index) => {
                                             return <li key={index}><span>{item}</span></li>
@@ -1421,7 +1406,7 @@ export class Modal extends React.Component {
                                         <span className={this.state.intake_level_selected === "LT" ? "isHide" : "isDisplay"}>*</span>
                                     </abbr>Contract Capacity</td>
                                     <td>
-                                        <input type="text" disabled={this.state.contracted_capacity_disabled} value={this.state.contracted_capacity} onChange={this.changeConsumption.bind(this, "contracted_capacity")} id="contracted_capacity" name="contracted_capacity" onKeyUp={this.removeInputNanNum.bind(this)} required aria-required="true" maxLength="10" />
+                                        <input type="text" disabled={this.state.contracted_capacity_disabled} value={this.state.contracted_capacity} onChange={this.changeConsumption.bind(this, "contracted_capacity")} id="contracted_capacity" name="contracted_capacity" onKeyUp={this.removeInputNanNum.bind(this)} required aria-required="true" maxLength="20" />
                                         <div id="contracted_capacity_message" className="isPassValidate">This filed is required!</div>
                                         <div id="contracted_capacity_format" className="isPassValidate">Must be positive integers,and first cannot be 0!</div>
                                     </td>
@@ -1476,7 +1461,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Total Monthly:</td>
                                     <td>
-                                        <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" name="totals" onKeyUp={this.removeTwoDemical.bind(this)} required aria-required="true" maxLength="10" /><div>kWh/month</div>
+                                        <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" name="totals" onKeyUp={this.removeTwoDemical.bind(this)} required aria-required="true" maxLength="20" /><div>kWh/month</div>
                                         <div id="totals_message" className="isPassValidate">This filed is required!</div>
                                         <div id="totals_format" className="isPassValidate">Please input an number greater than 0.</div>
                                     </td>

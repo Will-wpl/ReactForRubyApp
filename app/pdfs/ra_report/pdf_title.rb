@@ -12,14 +12,15 @@ class PdfTitle
     auction = param[:auction]
     zone_time = param[:zone_time]
     pdf.cap_style = :round
-    pdf.fill_color "183243"
-    pdf.fill {pdf.rounded_rectangle [0, pdf.bounds.top], pdf.bounds.absolute_right - 35, 50, 20}
+    pdf.fill_color "ffffff"
+    pdf.stroke_color "dddddd"
+    pdf.fill_and_stroke {pdf.rounded_rectangle [0, pdf.bounds.top], pdf.bounds.absolute_right - 35, 50, 20}
     title1 = auction.name + " on " + (auction.start_datetime + zone_time).strftime("%-d %b %Y") #'D MMM YYYY'
     duration = ((auction.actual_end_time - auction.actual_begin_time) / 60).to_i
     title2 = (auction.actual_begin_time + zone_time).strftime("Start Time : %l:%M %p") + (auction.actual_end_time + zone_time).strftime(", End Time : %l:%M %p") + " Total Auction Duration : #{duration} minutes"
 
 
-    pdf.fill_color "ffffff"
+    pdf.fill_color Pdf::FONT_COLOR
     pdf.draw_text title1, :at => [15, pdf.bounds.top - 22]
     pdf.draw_text title2, :at => [15, pdf.bounds.top - 40]
 
@@ -30,7 +31,7 @@ class PdfTitle
     pdf.grid([0, 19], [1, 29]).bounding_box do
       pdf.formatted_text_box [
                                  {:text => reserve_price,
-                                  :color => "FFFFFF",
+                                  :color => Pdf::FONT_COLOR,
                                   :size => 12},
                                  {:text => achieved_str,
                                   :color => achieved_color,

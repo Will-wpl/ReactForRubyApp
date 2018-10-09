@@ -111,7 +111,7 @@ export default class RetailerLetterOfAward extends React.Component{
                             }):<div className="downLoadIcon" onClick={this.download.bind(this,e,null)}></div>}
                         </span>
                         <span className="col-sm-4 ">
-                            <button
+                            <button style={{"color":"#fff"}}
                                 disabled={e.disabled}
                                 className="lm--button lm--button--primary"
                                 onClick={this.acknowledged.bind(this,e,i)}

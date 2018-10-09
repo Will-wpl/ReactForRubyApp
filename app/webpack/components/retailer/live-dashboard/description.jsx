@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 export default class Description extends Component {
     mouthsHtml(data,index){
         const html = <div key={index} className="col-sm-12">
-            <h3 className={"u-mt1 u-mb1"}>Starting Price : {data.contract_duration} months</h3>
+            <h3 className={"u-mt1 u-mb1"}>Starting Price ({data.contract_duration} months)</h3>
             <div className="lm--formItem lm--formItem--inline string optional">
                 <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                     <thead>
@@ -16,14 +16,14 @@ export default class Description extends Component {
                     </thead>
                     <tbody>
                     <tr>
-                        <td>Peak</td>
+                        <td>Peak<br/>(7am-7pm)</td>
                         {data.has_lt?<td>{parseFloat(data.starting_price_lt_peak).toFixed(4)}</td>:<td style={{display:"none"}}></td>}
                         {data.has_hts?<td>{parseFloat(data.starting_price_hts_peak).toFixed(4)}</td>:<td style={{display:"none"}}></td>}
                         {data.has_htl?<td>{parseFloat(data.starting_price_htl_peak).toFixed(4)}</td>:<td style={{display:"none"}}></td>}
                         {data.has_eht?<td>{parseFloat(data.starting_price_eht_peak).toFixed(4)}</td>:<td style={{display:"none"}}></td>}
                     </tr>
                     <tr>
-                        <td>Off Peak</td>
+                        <td>Off Peak<br/>(7am-7pm)</td>
                         {data.has_lt?<td>{parseFloat(data.starting_price_lt_off_peak).toFixed(4)}</td>:<td style={{display:"none"}}></td>}
                         {data.has_hts?<td>{parseFloat(data.starting_price_hts_off_peak).toFixed(4)}</td>:<td style={{display:"none"}}></td>}
                         {data.has_htl?<td>{parseFloat(data.starting_price_htl_off_peak).toFixed(4)}</td>:<td style={{display:"none"}}></td>}

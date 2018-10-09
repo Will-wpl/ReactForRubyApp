@@ -1,5 +1,7 @@
 class Pdf
 
+  FONT_COLOR = '000000'.freeze
+
   def get_pdf_datetime_zone
     zone = 8
     (zone * 60 * 60)

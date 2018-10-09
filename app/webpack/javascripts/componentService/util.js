@@ -89,6 +89,12 @@ export const trim = (str) => {
 }
 
 
+export const replaceSymbol = (str) => {
+
+    let value = str.replace((/\,|\"/g), "");
+    return value;
+}
+
 export const getStandardNumBref = (num) => {
     return getNumBref(num, true);
 
@@ -157,16 +163,15 @@ export const validateTwoDecimal = (value) => {
         if (decimalValue.length > 2) {
             total = value.split('.')[0] + "." + value.split('.')[1].substr(0, 2);
         }
-        else
-        {
-            total = value; 
+        else {
+            total = value;
         }
     }
     else {
         total = value;
     }
     let num = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/;
-    if (total >= 0) {
+    if (total > 0) {
         if (!num.test(total)) {
             return false;
         }
@@ -368,10 +373,15 @@ export const removeDecimal = (value) => {
         if (decimalValue.length > 2) {
             decimalValue = decimalValue.substr(0, 2);
             value.target.value = value.target.value.split('.')[0] + "." + decimalValue;
-            $("#totals_format").removeClass("errormessage").addClass("isPassValidate");
+            if (value.target.value != 0) {
+                $("#totals_format").removeClass("errormessage").addClass("isPassValidate");
+            }
+
         }
         if (decimalValue.length <= 2) {
-            $("#totals_format").removeClass("errormessage").addClass("isPassValidate");
+            if (value.target.value != 0) {
+                $("#totals_format").removeClass("errormessage").addClass("isPassValidate");
+            }
         }
     }
     return value;

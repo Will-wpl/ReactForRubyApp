@@ -7,6 +7,7 @@ html{
 .red{color:red;}
 .cursor_link{cursor: pointer !important;}
 .a_center{text-align: center; display: inline-block;}
+a{cursor: pointer;}
 button[disabled=''],input[disabled=''],select[disabled='']{background: #999 !important; color:#ddd !important; cursor: default !important;}
 textarea{resize: none;}
 ul, menu, dir {
@@ -173,6 +174,9 @@ abbr[title]{color: #fe0000; text-decoration: none;}
         }
         a{
           display: block; width: 100%; height: 100%; cursor: pointer; color:#333;
+          &.btnOption{
+            color:#fff; cursor: pointer; border-radius: 3px; background:#00afb1; display: block; margin: 5px auto; width: 60px; height: 20px; text-align: center;
+          }
           &.edit{height: auto; margin-bottom: 0px;}
           &.report{background: url("../images/images_for_white/Reverse_Auction_Report.png") no-repeat center; background-size:19px;}
           &.log,&.award{background: url("../images/images_for_white/Activity_Log.png") no-repeat center; background-size:19px;}
@@ -1288,7 +1292,6 @@ body.choose{
 .spaceDiv{
   height: 25px;
 }
-
 .mainEntity{
   background: '#35404c' !important;
 }
@@ -1328,6 +1331,9 @@ body.choose{
     }
   }
 }
+.mouth_tab{
+  .selected{background:forestgreen;}
+}
 .admin_expiry{
   button{ margin-left: 15px;  }
 }
@@ -1350,5 +1356,5 @@ body.choose{
   color: forestgreen
 }
 .statusBackBuyer{
-  color:#54BD1B !important
+  color:#54BD1B
 }

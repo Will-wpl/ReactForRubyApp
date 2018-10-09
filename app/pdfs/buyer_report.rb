@@ -30,7 +30,7 @@ class BuyerReport <Pdf
                              :background => background_img,
                              :page_size => "LETTER",
                              :page_layout => :portrait) do |pdf|
-      pdf.fill_color "183243"
+      pdf.fill_color "f3f6f7"
       pdf.fill { pdf.rounded_rectangle [-18, pdf.bounds.top+18], pdf.bounds.absolute_right-1, 756, 5}
       pdf.define_grid(:columns => 22, :rows => 35, :gutter => 1)
 
@@ -39,12 +39,13 @@ class BuyerReport <Pdf
 
       pdf.grid([4,1],[35,19]).bounding_box do
         #font "consola", :style => :bold_italic, :size => 14
+        pdf.fill_color "000000"
         pdf.font_size(14) { pdf.draw_text "Reverse Auction  #{auction_name_date}.", :at => [pdf.bounds.left, pdf.bounds.top]}
         pdf.move_down 12
         pdf_auction_result_table({:pdf => pdf, :auction => auction, :auction_result => auction_result,
                                      :total_volume => total_volume, :total_award_sum => total_award_sum,
                                      :font_size => 14})
-        pdf.move_down 15
+        pdf.move_down 15; pdf.fill_color "000000"
         pdf.table([["Price:"]], :cell_style => {:size => 16, :padding => [12,2],
                                                 :inline_format => true, :width => pdf.bounds.right, :border_width => 0})
         pdf.move_down 12
@@ -62,7 +63,7 @@ class BuyerReport <Pdf
   private
 
   def pdf_draw_title(pdf, auction)
-    pdf.fill_color "ffffff"
+    pdf.fill_color "000000"
     pdf.grid([1,1],[1,21]).bounding_box do
       pdf.font_size(26){
         pdf.draw_text "Buyer Report - #{auction.published_gid.to_s}", :at => [pdf.bounds.left, pdf.bounds.top-18]
@@ -96,6 +97,7 @@ class BuyerReport <Pdf
 
     col0_len = pdf.bounds.right/2-100
     col1_len = pdf.bounds.right - col0_len
+    pdf.fill_color "000000"
     pdf.table(auction_result_table, :column_widths => [col0_len, col1_len],
               :cell_style => {:size => font_size, :padding => [12,2], :inline_format => true, :border_width => 0})
   end
@@ -108,9 +110,9 @@ class BuyerReport <Pdf
                               :padding => [8,2,14],
                               :inline_format => true,
                               :width => pdf.bounds.right/price_table_data[0].size,
-                              :border_width => 0.01,:border_color => "696969"}) do
+                              :border_width => 0.01,:border_color => "dddddd"}) do
       values = cells.columns(0..-1).rows(0..0)
-      values.background_color = "00394A"
+      values.background_color = "eeeeee"
     end
   end
 
@@ -122,9 +124,9 @@ class BuyerReport <Pdf
                                                       :inline_format => true,
                                                       :width => pdf.bounds.right/consumption_table_data[0].size,
                                                       :border_width => 0.01,
-                                                      :border_color => "696969"}) do
+                                                      :border_color => "dddddd"}) do
       values = cells.columns(0..-1).rows(0..0)
-      values.background_color = "00394A"
+      values.background_color = "eeeeee"
     end
   end
 

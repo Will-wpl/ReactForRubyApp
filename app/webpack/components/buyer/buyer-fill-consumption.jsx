@@ -489,6 +489,7 @@ export class FillConsumption extends Component {
     checkSuccess(event) {
         event.preventDefault();
         let isNotNull = this.validateListComplete();
+        console.log(isNotNull)
         if (isNotNull) {
             let totalList = this.state.site_list.concat(this.state.preDayList).concat(this.state.preOtherList);
             let count = this.dateCompare(totalList);
@@ -534,6 +535,7 @@ export class FillConsumption extends Component {
                 flag_current = false;
             }
         })
+    
         return flag_current && flag_yesterday && flag_before_yesterday;
     }
 
@@ -690,7 +692,7 @@ export class FillConsumption extends Component {
                                                         <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
                                                         <td>{item.entityName}</td>
                                                         <td>{item.intake_level}</td>
-                                                        <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
+                                                        <td>{item.contracted_capacity ? formatPower(parseInt(item.contracted_capacity),0,'') : "—"}</td>
                                                         <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td> 
                                                         <td className="left">
                                                         <div><span>Total Monthly: </span><span className="textDecoration" >{formatPower(parseInt(Number(item.totals)), 0, '')}</span><span> kWh/month</span></div>
@@ -778,7 +780,7 @@ export class FillConsumption extends Component {
                                                         <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
                                                         <td>{item.entityName}</td>
                                                         <td>{item.intake_level}</td>
-                                                        <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
+                                                        <td>{item.contracted_capacity ? formatPower(parseInt(item.contracted_capacity) ,0,'') : "—"}</td>
                                                         <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
                                                         <td className="left">
                                                         <div><span>Total Monthly: </span><span className="textDecoration" >{formatPower(parseInt(Number(item.totals)), 0, '')}</span><span> kWh/month</span></div>
@@ -863,7 +865,7 @@ export class FillConsumption extends Component {
                                                     <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
                                                     <td>{item.entityName}</td>
                                                     <td>{item.intake_level}</td>
-                                                    <td>{item.contracted_capacity ? parseInt(item.contracted_capacity) : "—"}</td>
+                                                    <td>{item.contracted_capacity ? formatPower(parseInt(item.contracted_capacity) ,0,'') : "—"}</td>
                                                     <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
                                                     <td className="left">
                                                         <div><span>Total Monthly: </span><span className="textDecoration" >{formatPower(parseInt(Number(item.totals)), 0, '')}</span><span> kWh/month</span></div>
@@ -896,10 +898,10 @@ export class FillConsumption extends Component {
                             </div>
 
                             {this.state.checked ? '' : <div className="addSite"><a onClick={this.add_site.bind(this)}>Add Account</a></div>}
-                            <div id="div_warning" className="warning">
+                            <div id="div_warning">
                                 {
                                     this.state.dateIssuecount > 0 ?
-                                        <h4 className="lm--formItem lm--formItem--inline string chkBuyer" >
+                                        <h4 className="lm--formItem lm--formItem--inline string chkBuyer warning" >
                                             <input type="checkbox" id="chkBuyer" id="chk_Warning" required /><span>Warning: [{this.state.dateIssuecount}] account(s) detected to have expiry date on  or after new contract start date. Please tick the checkbox
                                              to confirm that you aware and would like to proceed with including such account(s) in this auction.</span> </h4> : <div></div>
                                 }
