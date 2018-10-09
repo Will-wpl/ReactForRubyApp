@@ -8,7 +8,7 @@ export const findUpLimit = (curValue) => {
         // return curValue * 10 / Number(`${curValue}`.substr(0, 1));
         return arr.join('');
     }
-    return 1; 
+    return 1;
 }
 
 export const findUpLimitZero = (curValue) => {
@@ -89,9 +89,9 @@ export const trim = (str) => {
 }
 
 
-export const replaceSymbol=(str)=>{
- 
-    let value= str.replace((/\,|\"/g), "");
+export const replaceSymbol = (str) => {
+
+    let value = str.replace((/\,|\"/g), "");
     return value;
 }
 
@@ -163,9 +163,8 @@ export const validateTwoDecimal = (value) => {
         if (decimalValue.length > 2) {
             total = value.split('.')[0] + "." + value.split('.')[1].substr(0, 2);
         }
-        else
-        {
-            total = value; 
+        else {
+            total = value;
         }
     }
     else {
@@ -374,10 +373,15 @@ export const removeDecimal = (value) => {
         if (decimalValue.length > 2) {
             decimalValue = decimalValue.substr(0, 2);
             value.target.value = value.target.value.split('.')[0] + "." + decimalValue;
-            $("#totals_format").removeClass("errormessage").addClass("isPassValidate");
+            if (value.target.value != 0) {
+                $("#totals_format").removeClass("errormessage").addClass("isPassValidate");
+            }
+
         }
         if (decimalValue.length <= 2) {
-            $("#totals_format").removeClass("errormessage").addClass("isPassValidate");
+            if (value.target.value != 0) {
+                $("#totals_format").removeClass("errormessage").addClass("isPassValidate");
+            }
         }
     }
     return value;
