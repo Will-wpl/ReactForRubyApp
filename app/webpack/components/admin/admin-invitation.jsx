@@ -591,10 +591,10 @@ export default class AdminInvitation extends Component {
                                                     </tr>
                                                     <tr>
                                                         <td>Total</td>
-                                                        <td >{formatPower((this.state.peak_lt + this.state.off_peak_lt), 0, '')}</td>
-                                                        <td >{formatPower((this.state.peak_hts + this.state.off_peak_hts), 0, '')}</td>
-                                                        <td >{formatPower((this.state.peak_htl + this.state.off_peak_htl), 0, '')}</td>
-                                                        <td >{formatPower((this.state.peak_eht + this.state.off_peak_eht), 0, '')}</td>
+                                                        <td >{formatPower((parseInt(Number(this.state.peak_lt) + Number(this.state.off_peak_lt))), 0, '')}</td>
+                                                        <td >{formatPower((parseInt(Number(this.state.peak_hts) + Number(this.state.off_peak_hts))), 0, '')}</td>
+                                                        <td >{formatPower((parseInt(Number(this.state.peak_htl) + Number(this.state.off_peak_htl))), 0, '')}</td>
+                                                        <td >{formatPower((parseInt(Number(this.state.peak_eht) + Number(this.state.off_peak_eht))), 0, '')}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>}
