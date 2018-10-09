@@ -30,7 +30,7 @@ class BuyerReport <Pdf
                              :background => background_img,
                              :page_size => "LETTER",
                              :page_layout => :portrait) do |pdf|
-      pdf.fill_color "ffffff"
+      pdf.fill_color "f3f6f7"
       pdf.fill { pdf.rounded_rectangle [-18, pdf.bounds.top+18], pdf.bounds.absolute_right-1, 756, 5}
       pdf.define_grid(:columns => 22, :rows => 35, :gutter => 1)
 
