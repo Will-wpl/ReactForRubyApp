@@ -47,12 +47,12 @@ export class RetailerLiveContainer extends Component {
         this.refs.LiveHomePage.getHistory();
     }
     extendTime(min){
-        if(this.time){
-            clearTimeout(this.time);
+        if(this.timeTend){
+            clearTimeout(this.timeTend);
         }
         this.setState({extendVisible:min,extendTime:true}
-        this.time = setTimeout(()=>{
-            this.setState({extendTime:false}
+        this.timeTend = setTimeout(()=>{
+            this.setState({extendTime:false})
         },5000)
     }
     render() {
