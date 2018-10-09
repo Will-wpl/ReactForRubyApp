@@ -8,7 +8,7 @@ class PdfReversePriceTable
   def table
     pdf, auction_contract = param[:pdf], param[:auction_contract]
     auction_result = param[:auction_result]
-
+    pdf.fill_color "000000"
     pdf.table [["Reverse Price"]], :cell_style => {:size => 16, :inline_format => true, :width => pdf.bounds.right, :border_width => 0}
     head_row, peak_row, off_peak_row = [''], ['Peak'], ['Off Peak']
     push_colume_data({:pdf => param[:pdf], :head_row => head_row, :peak_row => peak_row, :off_peak_row => off_peak_row, :title => 'LT', :peak => auction_contract.reserve_price_lt_peak, :off_peak => auction_contract.reserve_price_lt_off_peak, :result_peak => auction_result.lt_peak, :result_off_peak => auction_result.lt_off_peak}) if param[:visibilities][:visibility_lt]
@@ -18,9 +18,9 @@ class PdfReversePriceTable
     push_colume_data({:pdf => param[:pdf], :head_row => head_row, :peak_row => peak_row, :off_peak_row => off_peak_row, :title => 'EHT', :peak => auction_contract.reserve_price_eht_peak, :off_peak => auction_contract.reserve_price_eht_off_peak, :result_peak => auction_result.eht_peak, :result_off_peak => auction_result.eht_off_peak}) if param[:visibilities][:visibility_eht]
 
 #
-    pdf.table([head_row, peak_row, off_peak_row], :header => true, :cell_style => {:width => pdf.bounds.right / head_row.size, :size => 9, :align => :center, :valign => :center, :padding => [8, 6, 14], :inline_format => true, :border_width => 0.01, :border_color => "424242"}) do
+    pdf.table([head_row, peak_row, off_peak_row], :header => true, :cell_style => {:width => pdf.bounds.right / head_row.size, :size => 9, :align => :center, :valign => :center, :padding => [8, 6, 14], :inline_format => true, :border_width => 0.01, :border_color => "dddddd"}) do
       values = cells.columns(0..-1).rows(0..0)
-      values.background_color = "00394A"
+      values.background_color = "EEEEEE"
     end
   end
 

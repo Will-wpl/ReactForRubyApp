@@ -41,7 +41,7 @@ class PdfRankChart < PdfChart
 
     pdf.move_down 10
     #stroke_axis
-    pdf.stroke_color "ffffff"
+    pdf.stroke_color "000000"
     pdf.line_width = 1.0
     pdf.stroke do
       # X
