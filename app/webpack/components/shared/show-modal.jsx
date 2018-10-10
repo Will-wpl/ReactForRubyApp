@@ -235,7 +235,12 @@ export class Modal extends React.Component {
                         "链接文字": "Text Link",
                         "的表格": "'s table",
                         "正文": "Content",
-                        "删除链接": "Delete Link"
+                        "删除链接":"Delete Link",
+                        "最大宽度":"Maximum Width",
+                        "删除图片":"Delete Picture",
+                        "增加":"Add ",
+                        "删除":"Delete ",
+                        "删除表格":"Delete Table"
                     };
                     setTimeout(() => { editor.create(); });
                 }
@@ -270,7 +275,7 @@ export class Modal extends React.Component {
                         '居中': 'center',
                         '宋体': 'song',
                         '微软雅黑': 'yahei',
-                        "设置标题": "Title",
+                        "设置标题": "Header",
                         "设置列表": "set List",
                         "有序列表": "ordered list",
                         "无序列表": "unordered list",
@@ -283,7 +288,12 @@ export class Modal extends React.Component {
                         "链接文字": "Text Link",
                         "的表格": "'s table",
                         "正文": "Content",
-                        "删除链接": "Delete Link"
+                        "删除链接":"Delete Link",
+                        "最大宽度":"Maximum Width",
+                        "删除图片":"Delete Picture",
+                        "增加":"Add ",
+                        "删除":"Delete ",
+                        "删除表格":"Delete Table"
                     };
                     setTimeout(() => { editor.create(); })
                 }
