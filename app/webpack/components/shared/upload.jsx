@@ -123,8 +123,8 @@ export class UploadFile extends React.Component {
                     this.setState({
                         fileData: fileObj
                     })
-                    $("#isLoading").removeClass("isDisplay").addClass("idHide");
-                    $("#isLoading").hide()
+                    // $("#isLoading").removeClass("isDisplay").addClass("idHide");
+                    // $("#isLoading").hide()
                 }, error => {
 
                 })

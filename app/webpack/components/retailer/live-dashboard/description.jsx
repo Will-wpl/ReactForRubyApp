@@ -23,7 +23,7 @@ export default class Description extends Component {
                         {data.has_eht?<td>{parseFloat(data.starting_price_eht_peak).toFixed(4)}</td>:<td style={{display:"none"}}></td>}
                     </tr>
                     <tr>
-                        <td>Off Peak<br/>(7am-7pm)</td>
+                        <td>Off Peak<br/>(7pm-7am)</td>
                         {data.has_lt?<td>{parseFloat(data.starting_price_lt_off_peak).toFixed(4)}</td>:<td style={{display:"none"}}></td>}
                         {data.has_hts?<td>{parseFloat(data.starting_price_hts_off_peak).toFixed(4)}</td>:<td style={{display:"none"}}></td>}
                         {data.has_htl?<td>{parseFloat(data.starting_price_htl_off_peak).toFixed(4)}</td>:<td style={{display:"none"}}></td>}
