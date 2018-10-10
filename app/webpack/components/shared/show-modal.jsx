@@ -235,7 +235,7 @@ export class Modal extends React.Component {
                         "链接文字": "Text Link",
                         "的表格": "'s table",
                         "正文": "Content",
-                        "删除链接":"Delete Link"
+                        "删除链接": "Delete Link"
                     };
                     setTimeout(() => { editor.create(); });
                 }
@@ -283,7 +283,7 @@ export class Modal extends React.Component {
                         "链接文字": "Text Link",
                         "的表格": "'s table",
                         "正文": "Content",
-                        "删除链接":"Delete Link"
+                        "删除链接": "Delete Link"
                     };
                     setTimeout(() => { editor.create(); })
                 }
@@ -1138,7 +1138,7 @@ export class Modal extends React.Component {
                                             return <li key={index}><span>{item}</span></li>
                                         })
                                     }
-                                    </ul> 
+                                    </ul>
                                 </div>
                                 : <div></div>
                         }
@@ -1379,9 +1379,12 @@ export class Modal extends React.Component {
                                         <div className={(this.state.cate_type !== 'preDay' && this.state.cate_type !== 'preOthers') ? "isDisplay" : "isHide"}>
                                             <select id="purchasing_entity" onChange={this.changeConsumption.bind(this, "purchasing_entity")} name="purchasing_entity" value={this.state.purchasing_entity_selectd} required>
                                                 {
-                                                    this.state.purchasing_entity.map(item => {
+                                                    this.state.purchasing_entity.map((item, index) => {
                                                         if (item.approval_status === "1") {
                                                             return <option key={item.id} value={item.id}>{item.company_name}</option>
+                                                        }
+                                                        else {
+                                                            return <option disabled key={item.id} value={item.id}>{item.company_name}  (pending) </option>
                                                         }
                                                     })
                                                 }
