@@ -15,13 +15,14 @@ export class UploadFile extends React.Component {
     componentDidMount() {
     }
     addinputfile(type, required) {
+
         let buttonWidth = 12 - parseInt(this.props.col_width);
         let fileHtml = '';
         fileHtml = <form id={type + "_form"} encType="multipart/form-data">
             {
                 this.state.fileData.map((item, index) =>
                     <div className="col-sm-12 col-md-12 u-grid" key={index}>
-                       
+
                         <div className={`col-sm-12 col-md-${this.props.col_width ? this.props.col_width : "10"} u-cell`}>
                             <a className="upload_file_btn">
                                 <dfn className="dfn">No file selected...</dfn>
@@ -88,7 +89,6 @@ export class UploadFile extends React.Component {
         fileObj.parent().prev("dfn").text(fileObj.val());
     }
     remove_file(filetype, typeindex, fileindex, fileid) {
-        console.log(this.props.deleteType)
         let fileObj;
         if (this.props.deleteType === "buyer") {
             removeBuyerFile(fileid).then(res => {
@@ -114,16 +114,32 @@ export class UploadFile extends React.Component {
 
         }
         else if (this.props.deleteType === "userAttach") {
+            if (this.props.loading) {
+                $("#isLoading").removeClass("idHide").addClass("isDisplay");
+                $("#isLoading").show()
+                removeUserAttachFile(fileid).then(res => {
+                    fileObj = this.state.fileData;
+                    fileObj[typeindex].files.splice(fileindex, 1);
+                    this.setState({
+                        fileData: fileObj
+                    })
+                    $("#isLoading").removeClass("isDisplay").addClass("idHide");
+                    $("#isLoading").hide()
+                }, error => {
 
-            removeUserAttachFile(fileid).then(res => {
-                fileObj = this.state.fileData;
-                fileObj[typeindex].files.splice(fileindex, 1);
-                this.setState({
-                    fileData: fileObj
                 })
-            }, error => {
+            }
+            else {
+                removeUserAttachFile(fileid).then(res => {
+                    fileObj = this.state.fileData;
+                    fileObj[typeindex].files.splice(fileindex, 1);
+                    this.setState({
+                        fileData: fileObj
+                    })
+                }, error => {
 
-            })
+                })
+            }
         }
         else if (this.props.deleteType === "consumption") {
             removeBuyerFile(fileid).then(res => {
@@ -144,6 +160,7 @@ export class UploadFile extends React.Component {
                 this.setState({
                     fileData: fileObj
                 })
+
             }, error => {
 
             })

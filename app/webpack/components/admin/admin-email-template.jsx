@@ -4,7 +4,7 @@ import { Modal } from '../shared/show-modal';
 import { getEmailList, getEmailListItem, getEmailItemUpdate, getEmailFile, getTemplate } from '../../javascripts/componentService/admin/service';
 import { UploadFile } from '../shared/upload';
 import TemplatesList from './admin_shared/template-list';
-// import loadingPic  from '../../images/loading.gif'
+ import loadingPic  from '../../images/loading.gif'
  
 export default class EmailTemplates extends Component {
     constructor(props) {
@@ -155,16 +155,16 @@ export default class EmailTemplates extends Component {
                                     <abbr title="required">*</abbr> Letter Of Authorisation :
                                 </label>
                                 <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                                    <UploadFile type="LETTER_OF_AUTHORISATION" required="required" deleteType="userAttach" showList="1" col_width="8" showWay="1" fileData={this.state.fileData.LETTER_OF_AUTHORISATION} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
+                                    <UploadFile loading="true" type="LETTER_OF_AUTHORISATION" required="required" deleteType="userAttach" showList="1" col_width="8" showWay="1" fileData={this.state.fileData.LETTER_OF_AUTHORISATION} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <Modal formSize={this.state.size} modalSize={this.state.size} text={this.state.text} acceptFunction={this.changeEmail.bind(this)} listdetail={this.state.listdetail} listdetailtype="Email Template" ref="Modal" />
-                {/* <div id="loading">dfsfdfd
-                    <img  src="../images/loading.gif" />
-                </div> */}
+                <div id="loading">
+                    <img src={loadingPic}  id="isLoading" className="isHide"/>
+                </div>
             </div>
 
         )
