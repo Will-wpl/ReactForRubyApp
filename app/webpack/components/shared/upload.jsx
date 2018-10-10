@@ -115,16 +115,18 @@ export class UploadFile extends React.Component {
         }
         else if (this.props.deleteType === "userAttach") {
             if (this.props.loading) {
-                $("#isLoading").removeClass("idHide").addClass("isDisplay");
-                $("#isLoading").show()
+                // $("#bg").show();
+                // $("#show").show();
+                // $("#isLoading").removeClass("idHide").addClass("isDisplay");
                 removeUserAttachFile(fileid).then(res => {
                     fileObj = this.state.fileData;
                     fileObj[typeindex].files.splice(fileindex, 1);
                     this.setState({
                         fileData: fileObj
                     })
+                    // $("#bg").hide();
+                    // $("#show").hide();
                     // $("#isLoading").removeClass("isDisplay").addClass("idHide");
-                    // $("#isLoading").hide()
                 }, error => {
 
                 })
