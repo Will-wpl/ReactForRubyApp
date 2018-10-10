@@ -4,6 +4,8 @@ import { Modal } from '../shared/show-modal';
 import { getEmailList, getEmailListItem, getEmailItemUpdate, getEmailFile, getTemplate } from '../../javascripts/componentService/admin/service';
 import { UploadFile } from '../shared/upload';
 import TemplatesList from './admin_shared/template-list';
+// import loadingPic  from '../../images/loading.gif'
+ 
 export default class EmailTemplates extends Component {
     constructor(props) {
         super(props);
@@ -160,6 +162,9 @@ export default class EmailTemplates extends Component {
                     </div>
                 </div>
                 <Modal formSize={this.state.size} modalSize={this.state.size} text={this.state.text} acceptFunction={this.changeEmail.bind(this)} listdetail={this.state.listdetail} listdetailtype="Email Template" ref="Modal" />
+                {/* <div id="loading">dfsfdfd
+                    <img  src="../images/loading.gif" />
+                </div> */}
             </div>
 
         )

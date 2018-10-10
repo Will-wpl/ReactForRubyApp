@@ -21,9 +21,7 @@ export class UploadFile extends React.Component {
             {
                 this.state.fileData.map((item, index) =>
                     <div className="col-sm-12 col-md-12 u-grid" key={index}>
-                        <div id="loading">
-                            <img  className="loadingPic"/>
-                        </div>
+                       
                         <div className={`col-sm-12 col-md-${this.props.col_width ? this.props.col_width : "10"} u-cell`}>
                             <a className="upload_file_btn">
                                 <dfn className="dfn">No file selected...</dfn>

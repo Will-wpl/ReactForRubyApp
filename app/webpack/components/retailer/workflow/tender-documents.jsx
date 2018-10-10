@@ -79,8 +79,8 @@ export class Tenderdocuments extends React.Component {
                                         <tr>
                                             <th></th>
                                             {item.has_lt?<th className="lt">LT</th>:<th style={{display:'none'}}></th>}
-                                            {item.has_hts?<th className="hts">HT (Small)</th>:<th style={{display:'none'}}></th>}
-                                            {item.has_htl?<th className="htl">HT (Large)</th>:<th style={{display:'none'}}></th>}
+                                            {item.has_hts?<th className="hts">HTS</th>:<th style={{display:'none'}}></th>}
+                                            {item.has_htl?<th className="htl">HTL</th>:<th style={{display:'none'}}></th>}
                                             {item.has_eht?<th className="eht">EHT</th>:<th style={{display:'none'}}></th>}
                                         </tr>
                                     </thead>

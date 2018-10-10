@@ -145,7 +145,7 @@ export class FillConsumption extends Component {
             })
 
             if (this.state.checked) {
-                $(".btnOption").css("pointer-events", "none").css({"color":"#4B4941","background":"#666"});
+                $(".btnOption").css("pointer-events", "none").css({"color":"#999","background":"#666"});
             }
 
         }, (error) => {
@@ -489,7 +489,6 @@ export class FillConsumption extends Component {
     checkSuccess(event) {
         event.preventDefault();
         let isNotNull = this.validateListComplete();
-        console.log(isNotNull)
         if (isNotNull) {
             let totalList = this.state.site_list.concat(this.state.preDayList).concat(this.state.preOtherList);
             let count = this.dateCompare(totalList);
@@ -714,7 +713,7 @@ export class FillConsumption extends Component {
                                                             </div>
                                                         </td>
                                                         <td>
-                                                            <div className="editSite"><a className="btnOption" onClick={this.edit_site.bind(this, item, index, "preDay")}>Edit </a></div>
+                                                            <div className="editSite"><a className="btnOption" style={{marginTop:"20px"}} onClick={this.edit_site.bind(this, item, index, "preDay")}>Edit </a></div>
                                                             <div className="delSite"><a className="btnOption" onClick={this.remove_site.bind(this, index, "preDay")}>Delete </a></div>
                                                         </td>
                                                     </tr>
