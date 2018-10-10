@@ -151,7 +151,7 @@ class Api::UserAttachmentsController < Api::BaseController
     unless letter_authorisatoin_files.blank?
       letter_authorisatoin_filenames = []
       letter_authorisatoin_files.each do |file|
-        letter_authorisatoin_filenames.push(File::basename(file.file_path))
+        letter_authorisatoin_filenames.push(file.file_name)
       end
       zip_attachments_remove(zip_file_local_path,letter_authorisatoin_filenames,true)
     end
