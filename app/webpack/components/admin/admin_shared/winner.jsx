@@ -51,8 +51,8 @@ export default class WinnerPrice extends Component {
                             <tr>
                                 <th></th>
                                 <th className={this.props.isLtVisible ? '' : "live_hide"}>LT</th>
-                                <th className={this.props.isHtsVisible ? '' : "live_hide"}>HT (Small)</th>
-                                <th className={this.props.isHtlVisible ? '' : "live_hide"}>HT (Large)</th>
+                                <th className={this.props.isHtsVisible ? '' : "live_hide"}>HTS</th>
+                                <th className={this.props.isHtlVisible ? '' : "live_hide"}>HTL</th>
                                 <th className={this.props.isEhtVisible ? '' : "live_hide"}>EHT</th>
                             </tr>
                         </thead>
@@ -83,8 +83,8 @@ export default class WinnerPrice extends Component {
                                     <tr>
                                         <th></th>
                                         {this.props.consumption.has_lt ? <th style={{"text-align":"center"}}>LT</th> : <th className={'live_hide'}></th>}
-                                        {this.props.consumption.has_hts ? <th style={{"text-align":"center"}}>HT (Small)</th> : <th className={'live_hide'}></th>}
-                                        {this.props.consumption.has_htl ? <th style={{"text-align":"center"}}>HT (Large)</th> : <th className={'live_hide'}></th>}
+                                        {this.props.consumption.has_hts ? <th style={{"text-align":"center"}}>HTS</th> : <th className={'live_hide'}></th>}
+                                        {this.props.consumption.has_htl ? <th style={{"text-align":"center"}}>HTL</th> : <th className={'live_hide'}></th>}
                                         {this.props.consumption.has_eht ? <th style={{"text-align":"center"}}>EHT</th> : <th className={'live_hide'}></th>}
                                     </tr>
                                 </thead> 
@@ -128,8 +128,8 @@ export default class WinnerPrice extends Component {
                             <tr>
                                 <th></th>
                                 <th className={this.props.isLtVisible ? '' : "live_hide"}>LT</th>
-                                <th className={this.props.isHtsVisible ? '' : "live_hide"}>HT (Small)</th>
-                                <th className={this.props.isHtlVisible ? '' : "live_hide"}>HT (Large)</th>
+                                <th className={this.props.isHtsVisible ? '' : "live_hide"}>HTS</th>
+                                <th className={this.props.isHtlVisible ? '' : "live_hide"}>HTL</th>
                                 <th className={this.props.isEhtVisible ? '' : "live_hide"}>EHT</th>
                             </tr>
                         </thead>

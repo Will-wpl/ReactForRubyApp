@@ -441,8 +441,8 @@ export default class AdminInvitation extends Component {
                     <tr>
                         <th></th>
                         {this.state.publish_status === "1" ? (!data.has_lt ? <th style={{ display: 'none' }}></th> : <th>LT</th>) : <th>LT</th>}
-                        {this.state.publish_status === "1" ? (!data.has_hts ? <th style={{ display: 'none' }}></th> : <th>HT (Small)</th>) : <th>HT (Small)</th>}
-                        {this.state.publish_status === "1" ? (!data.has_htl ? <th style={{ display: 'none' }}></th> : <th>HT (Large)</th>) : <th>HT (Large)</th>}
+                        {this.state.publish_status === "1" ? (!data.has_hts ? <th style={{ display: 'none' }}></th> : <th>HTS</th>) : <th>HTS</th>}
+                        {this.state.publish_status === "1" ? (!data.has_htl ? <th style={{ display: 'none' }}></th> : <th>HTL</th>) : <th>HTL</th>}
                         {this.state.publish_status === "1" ? (!data.has_eht ? <th style={{ display: 'none' }}></th> : <th>EHT</th>) : <th>EHT</th>}
                     </tr>
                 </thead>
@@ -569,8 +569,8 @@ export default class AdminInvitation extends Component {
                                                     <tr>
                                                         <th></th>
                                                         <th>LT</th>
-                                                        <th>HT (Small)</th>
-                                                        <th>HT (Large)</th>
+                                                        <th>HTS</th>
+                                                        <th>HTL</th>
                                                         <th>EHT</th>
                                                     </tr>
                                                 </thead>

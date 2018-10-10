@@ -235,7 +235,12 @@ export class Modal extends React.Component {
                         "链接文字": "Text Link",
                         "的表格": "'s table",
                         "正文": "Content",
-                        "删除链接":"Delete Link"
+                        "删除链接":"Delete Link",
+                        "最大宽度":"Maximum Width",
+                        "删除图片":"Delete Picture",
+                        "增加":"Add ",
+                        "删除":"Delete ",
+                        "删除表格":"Delete Table"
                     };
                     setTimeout(() => { editor.create(); });
                 }
@@ -270,7 +275,7 @@ export class Modal extends React.Component {
                         '居中': 'center',
                         '宋体': 'song',
                         '微软雅黑': 'yahei',
-                        "设置标题": "Title",
+                        "设置标题": "Header",
                         "设置列表": "set List",
                         "有序列表": "ordered list",
                         "无序列表": "unordered list",
@@ -283,7 +288,12 @@ export class Modal extends React.Component {
                         "链接文字": "Text Link",
                         "的表格": "'s table",
                         "正文": "Content",
-                        "删除链接":"Delete Link"
+                        "删除链接":"Delete Link",
+                        "最大宽度":"Maximum Width",
+                        "删除图片":"Delete Picture",
+                        "增加":"Add ",
+                        "删除":"Delete ",
+                        "删除表格":"Delete Table"
                     };
                     setTimeout(() => { editor.create(); })
                 }
@@ -1074,15 +1084,15 @@ export class Modal extends React.Component {
                             {((this.props.listdetail.hts_peak == 0.0) && (this.props.listdetail.hts_off_peak == 0.0)) ?
                                 "" :
                                 <div>
-                                    <li>HT (small) Peak: $ {parseFloat(this.props.listdetail.hts_peak).toFixed(4)}</li>
-                                    <li>HT (small) Off Peak: $ {parseFloat(this.props.listdetail.hts_off_peak).toFixed(4)}</li>
+                                    <li>HTS Peak: $ {parseFloat(this.props.listdetail.hts_peak).toFixed(4)}</li>
+                                    <li>HTS Off Peak: $ {parseFloat(this.props.listdetail.hts_off_peak).toFixed(4)}</li>
                                 </div>
                             }
                             {((this.props.listdetail.htl_peak == 0.0) && (this.props.listdetail.htl_peak == 0.0)) ?
                                 "" :
                                 <div>
-                                    <li>HT (large) Peak: $ {parseFloat(this.props.listdetail.htl_peak).toFixed(4)}</li>
-                                    <li>HT (large) Off Peak: $ {parseFloat(this.props.listdetail.htl_peak).toFixed(4)}</li>
+                                    <li>HTL Peak: $ {parseFloat(this.props.listdetail.htl_peak).toFixed(4)}</li>
+                                    <li>HTL Off Peak: $ {parseFloat(this.props.listdetail.htl_peak).toFixed(4)}</li>
                                 </div>
                             }
                             {((this.props.listdetail.eht_peak == 0.0) && (this.props.listdetail.eht_off_peak == 0.0)) ?
@@ -1379,9 +1389,12 @@ export class Modal extends React.Component {
                                         <div className={(this.state.cate_type !== 'preDay' && this.state.cate_type !== 'preOthers') ? "isDisplay" : "isHide"}>
                                             <select id="purchasing_entity" onChange={this.changeConsumption.bind(this, "purchasing_entity")} name="purchasing_entity" value={this.state.purchasing_entity_selectd} required>
                                                 {
-                                                    this.state.purchasing_entity.map(item => {
+                                                    this.state.purchasing_entity.map((item, index) => {
                                                         if (item.approval_status === "1") {
                                                             return <option key={item.id} value={item.id}>{item.company_name}</option>
+                                                        }
+                                                        else {
+                                                            return <option disabled key={item.id} value={item.id}>{item.company_name}  (pending) </option>
                                                         }
                                                     })
                                                 }

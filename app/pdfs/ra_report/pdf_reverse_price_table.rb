@@ -10,11 +10,11 @@ class PdfReversePriceTable
     auction_result = param[:auction_result]
     pdf.fill_color "000000"
     pdf.table [["Reverse Price"]], :cell_style => {:size => 16, :inline_format => true, :width => pdf.bounds.right, :border_width => 0}
-    head_row, peak_row, off_peak_row = [''], ['Peak'], ['Off Peak']
+    head_row, peak_row, off_peak_row = [''], ['Peak<br/>(7am-7pm)'], ['Off Peak<br/>(7pm-7am)']
     push_colume_data({:pdf => param[:pdf], :head_row => head_row, :peak_row => peak_row, :off_peak_row => off_peak_row, :title => 'LT', :peak => auction_contract.reserve_price_lt_peak, :off_peak => auction_contract.reserve_price_lt_off_peak, :result_peak => auction_result.lt_peak, :result_off_peak => auction_result.lt_off_peak}) if param[:visibilities][:visibility_lt]
-    push_colume_data({:pdf => param[:pdf], :head_row => head_row, :peak_row => peak_row, :off_peak_row => off_peak_row, :title => 'HT(Small)', :peak => auction_contract.reserve_price_hts_peak, :off_peak => auction_contract.reserve_price_hts_off_peak, :result_peak => auction_result.hts_peak, :result_off_peak => auction_result.hts_off_peak}) if param[:visibilities][:visibility_hts]
+    push_colume_data({:pdf => param[:pdf], :head_row => head_row, :peak_row => peak_row, :off_peak_row => off_peak_row, :title => 'HTS', :peak => auction_contract.reserve_price_hts_peak, :off_peak => auction_contract.reserve_price_hts_off_peak, :result_peak => auction_result.hts_peak, :result_off_peak => auction_result.hts_off_peak}) if param[:visibilities][:visibility_hts]
 
-    push_colume_data({:pdf => param[:pdf], :head_row => head_row, :peak_row => peak_row, :off_peak_row => off_peak_row, :title => 'HT(Large)', :peak => auction_contract.reserve_price_htl_peak, :off_peak => auction_contract.reserve_price_htl_off_peak, :result_peak => auction_result.htl_peak, :result_off_peak => auction_result.htl_off_peak}) if param[:visibilities][:visibility_htl]
+    push_colume_data({:pdf => param[:pdf], :head_row => head_row, :peak_row => peak_row, :off_peak_row => off_peak_row, :title => 'HTL', :peak => auction_contract.reserve_price_htl_peak, :off_peak => auction_contract.reserve_price_htl_off_peak, :result_peak => auction_result.htl_peak, :result_off_peak => auction_result.htl_off_peak}) if param[:visibilities][:visibility_htl]
     push_colume_data({:pdf => param[:pdf], :head_row => head_row, :peak_row => peak_row, :off_peak_row => off_peak_row, :title => 'EHT', :peak => auction_contract.reserve_price_eht_peak, :off_peak => auction_contract.reserve_price_eht_off_peak, :result_peak => auction_result.eht_peak, :result_off_peak => auction_result.eht_off_peak}) if param[:visibilities][:visibility_eht]
 
 #

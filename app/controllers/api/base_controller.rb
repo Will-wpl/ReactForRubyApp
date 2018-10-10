@@ -56,15 +56,28 @@ class Api::BaseController < ApplicationController
     }
   end
 
-  def zip_attachments_remove(zip_file_path, attachments)
+  def zip_attachments_remove(zip_file_path, attachments, is_keep = false)
     require 'zip'
     Zip::File.open(zip_file_path, Zip::File::CREATE) {
         |zipfile|
       # path = "public" + attachments[0]
-      attachments.each do |attachment|
+      if is_keep
+        remove_files = []
+        zipfile.each do |f|
+          file_name = File::basename(f.name)
+          if !attachments.any?{ |attachment| File::basename(attachment) == file_name }
+            remove_files.push(f.name)
+          end
+        end
+        remove_files.each do |file|
+          zipfile.remove(file)
+        end
+      else
+        attachments.each do |attachment|
         file_name = File::basename(attachment)
-        if zipfile.any?{ |f| File::basename(f.name) == file_name }
-          zipfile.remove(file_name)
+          if zipfile.any?{ |f| File::basename(f.name) == file_name }
+            zipfile.remove(file_name)
+          end
         end
       end
     }
