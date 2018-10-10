@@ -145,7 +145,7 @@ export class FillConsumption extends Component {
             })
 
             if (this.state.checked) {
-                $(".btnOption").css("pointer-events", "none").css("color", "#4B4941");
+                $(".btnOption").css("pointer-events", "none").css({"color":"#4B4941","background":"#666"});
             }
 
         }, (error) => {
