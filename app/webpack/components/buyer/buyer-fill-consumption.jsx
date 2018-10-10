@@ -150,7 +150,7 @@ export class FillConsumption extends Component {
                 $(".btnOption").css("pointer-events", "none").css({ "color": "#999", "background": "#666" });
             }
             let dis = false;
-            if ((res.consumption.participation_status === "1" || res.consumption.participation_status === "2") && this.state.site_list.length ===0) {
+            if ((res.consumption.participation_status === "1" || res.consumption.accept_status === "1") && this.state.site_list.length ===0) {
                 dis = true;
             }
             else {
