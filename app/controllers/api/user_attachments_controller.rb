@@ -133,6 +133,14 @@ class Api::UserAttachmentsController < Api::BaseController
     zip_file_name = 'letter_authorisation.zip'
     destination_file_path = upload_file_path(zip_file_name)
     download_letter_authorisatoin(destination_file_path)
+    letter_authorisatoin_files = UserAttachment.find_by_type(UserAttachment::FileType_Letter_Authorisation)
+    unless letter_authorisatoin_files.blank?
+      letter_authorisatoin_filenames = []
+      letter_authorisatoin_files.each do |file|
+        letter_authorisatoin_filenames.push(File::basename(file))
+      end
+      zip_attachments_remove(destination_file_path,letter_authorisatoin_filenames,true)
+    end
     zip_attachments(destination_file_path, [file])
     mounted_as = []
     # mounted_as.push('')
