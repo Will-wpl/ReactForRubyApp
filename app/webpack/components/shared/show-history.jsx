@@ -115,7 +115,7 @@ export class Showhistory extends React.Component{
                     "删除图片":"Delete Picture",
                     "增加":"Add ",
                     "删除":"Delete ",
-                    "删除表格":"Delete Table"
+                    "表格":"Table"
                     // 还可自定添加更多
                 };
             setTimeout(() => { editor.create() });

@@ -263,6 +263,7 @@ export class FillConsumption extends Component {
 
     //when user finished adding a new account, list page will add/update the new account information.
     doAddAccountAction(siteInfo) {
+
         let item = {
             id: siteInfo.id ? siteInfo.id : "",
             orignal_id: siteInfo.orignal_id ? siteInfo.orignal_id : "",
@@ -548,6 +549,7 @@ export class FillConsumption extends Component {
                 flag_current = false;
             }
         })
+
         return flag_current && flag_yesterday && flag_before_yesterday;
     }
 

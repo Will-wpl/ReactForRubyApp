@@ -162,10 +162,10 @@ export default class EmailTemplates extends Component {
                     </div>
                 </div>
                 <Modal formSize={this.state.size} modalSize={this.state.size} text={this.state.text} acceptFunction={this.changeEmail.bind(this)} listdetail={this.state.listdetail} listdetailtype="Email Template" ref="Modal" />
-                {/* <div id="bg"></div>
-                <div id="show">dsd
+                <div id="bg"></div>
+                <div id="show">
                     <img src={loadingPic} id="isLoading" />
-                </div> */}
+                </div>
 
             </div>
         )

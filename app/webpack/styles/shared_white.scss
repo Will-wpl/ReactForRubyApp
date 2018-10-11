@@ -940,7 +940,7 @@ body.choose{
   display: block;
 }
 .isDisplayInLine{
-  display: inline; text-decoration: none;
+  display: inline; text-decoration: none !important;
 }
 .consumption_model
 {

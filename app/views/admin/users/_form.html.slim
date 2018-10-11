@@ -16,9 +16,9 @@
       .lm--formItem-right.lm--formItem-right-push
         - if f.object.new_record?
           => f.button :button, class: "lm--button lm--button--primary", data: { disable_with: t("views.disable_with") } do
-            = icon "check-square-o", t("views.forms.create", model: f.object.class.model_name.human.titleize)
-          = link_to t(".cancel", default: t("views.actions.cancel")), admin_users_path, { class: 'lm--button' }
+            = t("views.forms.create", model: f.object.class.model_name.human.titleize)
+          = link_to t(".cancel", default: t("views.actions.cancel")), admin_users_path, { class: 'lm--button lm--button--primary' }
         - else
           => f.button :button, class: "lm--button lm--button--primary", data: { disable_with: t("views.disable_with") } do
-            = icon "check-square-o", t("views.forms.update", model: f.object.class.model_name.human.titleize)
-          = link_to t(".cancel", default: t("views.actions.cancel")), admin_user_path(f.object), { class: 'lm--button' }
+            = t("views.forms.update", model: f.object.class.model_name.human.titleize)
+          = link_to t(".cancel", default: t("views.actions.cancel")), admin_user_path(f.object), { class: 'lm--button lm--button--primary' }

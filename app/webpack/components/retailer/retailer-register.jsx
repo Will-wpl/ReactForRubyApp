@@ -417,13 +417,18 @@ export class RetailerRegister extends Component {
                         });
                         this.refs.Modal.showModal();
                         if (type === "save") {
-                            if ((this.state.company_name !== this.company_name_back) || (this.state.company_unique_entity_number !== this.company_unique_entity_number_back) || (this.state.license_number !== this.company_license_number_back)) {
+                            if ((this.state.company_name !== this.company_name_back) || (this.state.unique_entity_number !== this.company_unique_entity_number_back) || (this.state.license_number !== this.company_license_number_back)) {
                                 setTimeout(() => {
                                     window.location.href = `/retailer/home`;
                                 }, 1000);
                             }
                             else {
                                 if (isNeedRedirect) {
+                                    setTimeout(() => {
+                                        window.location.href = `/retailer/home`;
+                                    }, 1000);
+                                }
+                                else {
                                     setTimeout(() => {
                                         window.location.href = `/users/edit`;
                                     }, 1000);
@@ -580,10 +585,7 @@ export class RetailerRegister extends Component {
             submitRetailManageInfo({
                 user: param
             }).then(res => {
-
                 $('#license_number_repeat').removeClass('errormessage').addClass('isPassValidate');
-
-
                 if (res.result === "failed") {
                     this.setState(
                         {
