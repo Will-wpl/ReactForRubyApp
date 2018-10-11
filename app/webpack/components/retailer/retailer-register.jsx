@@ -114,7 +114,7 @@ export class RetailerRegister extends Component {
         if (param.user_base_info) {
             let item = param.user_base_info;
             this.setState({
-                id: item.id,
+                id: item.id, 
                 email_address: item.email ? item.email : '',
                 company_name: item.company_name ? item.company_name : '',
                 unique_entity_number: item.company_unique_entity_number ? item.company_unique_entity_number : '',
@@ -417,9 +417,10 @@ export class RetailerRegister extends Component {
                         });
                         this.refs.Modal.showModal();
                         if (type === "save") {
-                            if ((this.state.company_name !== this.company_name_back) || (this.state.company_unique_entity_number !== this.company_unique_entity_number_back) || (this.state.license_number !== this.company_license_number_back)) {
+                           
+                            if ((this.state.company_name !== this.company_name_back) || (this.state.unique_entity_number !== this.company_unique_entity_number_back) || (this.state.license_number !== this.company_license_number_back)) {
                                 setTimeout(() => {
-                                    window.location.href = `/retailer/home`;
+                                     window.location.href = `/retailer/home`;
                                 }, 1000);
                             }
                             else {
