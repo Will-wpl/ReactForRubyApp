@@ -394,10 +394,10 @@ export class RetailerRegister extends Component {
     }
 
     save(type) {
-        let isNeedRedirect = false;
-        if (this.state.retailerApproveStatus === '0') {
-            isNeedRedirect = true
-        }
+        // let isNeedRedirect = false;
+        // if (this.state.retailerApproveStatus === '0') {
+        //     isNeedRedirect = true
+        // }
 
         let param = this.getParam();
         if (this.checkValidation()) {
