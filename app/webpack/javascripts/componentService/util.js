@@ -143,7 +143,6 @@ export const validateEmail = (value) => {
     return true;
 }
 export const validateDecimal = (value) => {
-
     let num = /^100$|^(\d|[1-9]\d)(\.\d+)*$/;
     if (value >= 0) {
         if (!num.test(value)) {
@@ -155,6 +154,22 @@ export const validateDecimal = (value) => {
     }
     return true;
 }
+
+export const validateLess100 = (value) => {
+    let num = /^100$|^(\d|[1-9]\d)*$/;
+    if (value >= 0) {
+        if (!num.test(value)) {
+            return false;
+        }
+    }
+    else {
+        return false;
+    }
+    return true;
+}
+
+
+
 export const validateTwoDecimal = (value) => {
     let total;
     let decimalValue = value.split('.')[1];
@@ -180,7 +195,18 @@ export const validateTwoDecimal = (value) => {
         return false;
     }
     return true;
+}
 
+export const validateInteger = (value) => {
+    let express = /^[0-9]*[1-9][0-9]*$/;
+    if (value > 0) {
+        if (!express.test(value)) {
+            return false;
+        }
+    } else {
+        return false;
+    }
+    return true;
 }
 
 export const validatePostCode = (value) => {
@@ -268,6 +294,26 @@ export const validator_Object = (param, paramType) => {
             }
             else {
                 if (!validateTwoDecimal(value)) {
+                    errArr.push({ column: key, cate: 2 })
+                }
+            }
+        }
+        else if (type.cate === 'integer') {
+            if (value === null || value.length === 0) {
+                errArr.push({ column: key, cate: 1 });
+            }
+            else {
+                if (!validateInteger(value)) {
+                    errArr.push({ column: key, cate: 2 })
+                }
+            }
+        }
+        else if (type.cate === 'less100integer') {
+            if (value === null || value.length === 0) {
+                errArr.push({ column: key, cate: 1 });
+            }
+            else {
+                if (!validateLess100(value)) {
                     errArr.push({ column: key, cate: 2 })
                 }
             }
@@ -376,7 +422,6 @@ export const removeDecimal = (value) => {
             if (value.target.value != 0) {
                 $("#totals_format").removeClass("errormessage").addClass("isPassValidate");
             }
-
         }
         if (decimalValue.length <= 2) {
             if (value.target.value != 0) {
@@ -386,6 +431,33 @@ export const removeDecimal = (value) => {
     }
     return value;
 }
+export const removeAsInteger = (value) => {
+    value.target.value = value.target.value.replace(/[^\d.]/g, "");
+    value.target.value = value.target.value.replace(/\.{2,}/g, ".");
+    value.target.value = value.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+    if (value.target.value.indexOf('.') > -1) {
+        if (value.target.value > 0) {
+            value.target.value = value.target.value.substr(0, value.target.value.length - 1)
+        }
+    }
+    return value;
+}
+
+export const removeAsIntegerPercent = (value) => {
+    value.target.value = value.target.value.replace(/[^\d.]/g, "");
+    value.target.value = value.target.value.replace(/\.{2,}/g, ".");
+    value.target.value = value.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+    if (value.target.value.indexOf('.') > -1) {
+        if (value.target.value > 0) {
+            value.target.value = value.target.value.substr(0, value.target.value.length - 1)
+            // if (value.target.value > 0) {}
+                $("#peak_pct_format").removeClass("errormessage").addClass("isPassValidate");
+            
+        }
+    }
+    return value;
+}
+
 export const changeValidate = (type, value) => {
     if (value) {
         setValidationPass(type, 1);
