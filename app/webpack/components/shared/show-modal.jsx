@@ -458,6 +458,7 @@ export class Modal extends React.Component {
                 let cate = item.cate;
                 setValidationFaild(column, cate);
             })
+            $(".btn").css("pointer-events", "auto");
         }
     }
 
@@ -818,6 +819,7 @@ export class Modal extends React.Component {
                         });
                     }
                 })
+                $(".btn").css("pointer-events", "auto")
             }
         }, 500);
     }
@@ -846,10 +848,10 @@ export class Modal extends React.Component {
     removeInputPostCode(value) {
         removePostCode(value);
     }
-    removeAsIntegerPercent(value)
-    {
-        removeAsIntegerPercent(value)
-    }
+    // removeAsIntegerPercent(value)
+    // {
+    //     removeAsIntegerPercent(value)
+    // }
     account_address_repeat() {
         let address = false, account = false, editNotSave = false;
         let address_count = 0, account_count = 0;
@@ -1494,7 +1496,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Peak:</td>
                                     <td>
-                                        <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} onKeyUp={this.removeAsIntegerPercent.bind(this)} id="peak_pct" name="peak_pct" required aria-required="true" maxLength="3" placeholder="0-100" max="100" /> <div>%</div>
+                                        <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")}  id="peak_pct" name="peak_pct" required aria-required="true" maxLength="3" placeholder="0-100" max="100" /> <div>%</div>
                                         <div id="peak_pct_message" className="isPassValidate">This filed is required!</div>
                                         <div id="peak_pct_format" className="isPassValidate">Please input a integer between 0 and 100.</div>
                                     </td>
