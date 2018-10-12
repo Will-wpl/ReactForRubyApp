@@ -160,12 +160,12 @@ export const validateLess100 = (value) => {
     let num = /^(?:0|[1-9][0-9]?|100)$/;
     if (value >= 0) {
         if (!num.test(value)) {
-         
+
             return false;
         }
     }
     else {
-       
+
         return false;
     }
     return true;
@@ -437,12 +437,23 @@ export const removeDecimal = (value) => {
     return value;
 }
 export const removeAsInteger = (value) => {
-    value.target.value = value.target.value.replace(/[^\d.]/g, "");
-    value.target.value = value.target.value.replace(/\.{2,}/g, ".");
-    value.target.value = value.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
-    if (value.target.value.indexOf('.') > -1) {
-        if (value.target.value > 0) {
-            value.target.value = value.target.value.substr(0, value.target.value.length - 1)
+    // value.target.value = value.target.value.replace(/[^\d.]/g, "");
+    // value.target.value = value.target.value.replace(/\.{2,}/g, ".");
+    // value.target.value = value.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+    // if (value.target.value.indexOf('.') > -1) {
+    //     if (value.target.value > 0) {
+    //         value.target.value = value.target.value.substr(0, value.target.value.length - 1)
+    //     }
+    // }
+
+    // return value;
+
+    value = value.replace(/[^\d.]/g, "");
+    value = value.replace(/\.{2,}/g, ".");
+    value = value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+    if (value.indexOf('.') > -1) {
+        if (value > 0) {
+            value = value.substr(0, value.length - 1)
         }
     }
 
@@ -450,23 +461,36 @@ export const removeAsInteger = (value) => {
 }
 
 export const removeAsIntegerPercent = (value) => {
-    value.target.value = value.target.value.replace(/[^\d.]/g, "");
-    value.target.value = value.target.value.replace(/\.{2,}/g, ".");
-    value.target.value = value.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
-    if (value.target.value.indexOf('.') > -1) {
-        if (value.target.value > 0) {
-            value.target.value = value.target.value.substr(0, value.target.value.length - 1)
-            if (value.target.value <= 100 && value.target.value>=0) {
+    // value.target.value = value.target.value.replace(/[^\d.]/g, "");
+    // value.target.value = value.target.value.replace(/\.{2,}/g, ".");
+    // value.target.value = value.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+    // if (value.target.value.indexOf('.') > -1) {
+    //     if (value.target.value > 0) {
+    //         value.target.value = value.target.value.substr(0, value.target.value.length - 1)
+    //         if (value.target.value <= 100 && value.target.value >= 0) {
+    //             $("#peak_pct_format").removeClass("errormessage").addClass("isPassValidate");
+    //         }
+    //     }
+    // }
+    // else {
+    //     if (value.target.value <= 100 && value.target.value >= 0) {
+    //         $("#peak_pct_format").removeClass("errormessage").addClass("isPassValidate");
+    //     }
+    // }
+    // return value;
+    value = value.replace(/[^\d.]/g, "");
+    value = value.replace(/\.{2,}/g, ".");
+    value = value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+    if (value.indexOf('.') > -1) {
+        if (value > 0) {
+            value = value.substr(0, value.length - 1)
+            if (value <= 100 && value >= 0) {
                 $("#peak_pct_format").removeClass("errormessage").addClass("isPassValidate");
             }
         }
     }
-    else
-    {
-        console.log(222)
-        console.log()
-        if (value.target.value <= 100 && value.target.value>=0) {
-            console.log(1111)
+    else {
+        if (value <= 100 && value >= 0) {
             $("#peak_pct_format").removeClass("errormessage").addClass("isPassValidate");
         }
     }

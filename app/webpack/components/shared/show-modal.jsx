@@ -710,10 +710,10 @@ export class Modal extends React.Component {
                 //         total = value.split('.')[0] + "." + decimalValue;
                 //     }
                 // }
+                value= removeAsInteger(value);
                 this.setState({
                     totals: value
                 })
-                console.log("total:"+value)
                 if (!validateInteger(value)) {
                     setValidationFaild('totals', 2)
                 } else {
@@ -721,10 +721,11 @@ export class Modal extends React.Component {
                 }
                 break;
             case "peak_pct":
+
+                value=removeAsIntegerPercent(value)
                 this.setState({
                     peak_pct: value
                 })
-                console.log("peak_pct:"+value)
 
                 if (!validateLess100(value)) {
                     setValidationFaild('peak_pct', 2)
@@ -834,10 +835,10 @@ export class Modal extends React.Component {
     removeInputNanNum(value) {
         removeNanNum(value)
     }
-    removeAsInteger(value)
-    {
-        removeAsInteger(value)
-    }
+    // removeAsInteger(value)
+    // {
+    //     removeAsInteger(value)
+    // }
 
     removeTwoDemical(value) {
         removeDecimal(value);
@@ -1484,7 +1485,8 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Total Monthly:</td>
                                     <td>
-                                        <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" name="totals"  onKeyUp={this.removeAsInteger.bind(this)} required aria-required="true" maxLength="20" /><div>kWh/month</div>
+                                    {/* onKeyUp={this.removeAsInteger.bind(this)} */}
+                                        <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" name="totals"   required aria-required="true" maxLength="20" /><div>kWh/month</div>
                                         <div id="totals_message" className="isPassValidate">This filed is required!</div>
                                         {/* <div id="totals_format" className="isPassValidate">Please input an integer greater than 0.</div> */}
                                     </td>
