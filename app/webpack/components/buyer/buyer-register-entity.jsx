@@ -912,17 +912,22 @@ export class BuyerUserEntityRegister extends Component {
             return;
         }
         if (res.error_entity_indexes.length > 0) { //validate entity
-            let name = [], uen = [], email = [];
+            let name = [], uen = [], email = [], column = 0;;
             res.error_entity_indexes.map((item) => {
                 if (item.error_field_name === "company_name") {
                     name.push(item.error_value)
+                    column = 0;
                 }
                 if (item.error_field_name === "company_uen") {
                     uen.push(item.error_value);
+                    column = 1;
                 }
                 if (item.error_field_name === "contact_email") {
                     email.push(item.error_value)
+                    column = 6;
                 }
+                let row = item.entity_index;
+                $("#tabEntity tr:eq(" + row + ") td:eq(" + column + ")").css({'color':'red'})
             });
             let errList = {
                 nameError: name,
@@ -932,6 +937,8 @@ export class BuyerUserEntityRegister extends Component {
             this.setState({
                 validateErrList: errList
             })
+
+
 
             this.setState({ text: " " });
             this.refs.Modal_EntityErr.showModal();
@@ -1137,7 +1144,7 @@ export class BuyerUserEntityRegister extends Component {
                             </table>
                         </div>
                         <div className="table-body">
-                            <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                            <table className="retailer_fill" cellPadding="0" cellSpacing="0" id="tabEntity">
                                 <colgroup>
                                     <col width="10%" />
                                     <col width="10%" />
@@ -1185,7 +1192,7 @@ export class BuyerUserEntityRegister extends Component {
 
                         </div>
                     </div>
-                    <div className="col-sm-12" style={{"backgroundColor":"#fff","marginTop":"-20px"}}>
+                    <div className="col-sm-12" style={{ "backgroundColor": "#fff", "marginTop": "-20px" }}>
                         <div className="col-sm-12 col-md-8 push-md-3 validate_message margin-t buyer_list_select">
                             <div className="lm--formItem lm--formItem--inline string">
                                 <label className="lm--formItem-left lm--formItem-label string required">

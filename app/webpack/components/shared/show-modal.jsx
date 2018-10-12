@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 import { validateConsumptionDetailRepeat } from './../../javascripts/componentService/common/service';
-import { formatPower,validateInteger, removeDecimal,removeAsInteger, removeAsIntegerPercent, replaceSymbol, trim, validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validateTwoDecimal, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum, removePostCode, validatePostCode } from '../../javascripts/componentService/util';
+import { formatPower,validateInteger, validateLess100,removeDecimal,removeAsInteger, removeAsIntegerPercent, replaceSymbol, trim, validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validateTwoDecimal, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum, removePostCode, validatePostCode } from '../../javascripts/componentService/util';
 //共通弹出框组件
 import { UploadFile } from '../shared/upload';
 import E from 'wangeditor'
@@ -388,6 +388,7 @@ export class Modal extends React.Component {
     }
 
     Add() {
+        $(".btn").css("pointer-events", "none");
         if (this.props.listdetailtype === 'entity_detail') {
             this.checkEntitySuccess();
         }
@@ -397,7 +398,7 @@ export class Modal extends React.Component {
     }
 
     addEntity() { //buyer entity
-        $(".btn").css("pointer-events", "none");
+        // $(".btn").css("pointer-events", "none");
         let entityItem = {
             id: this.state.entityid,
             company_name: this.state.entity_company_name,
@@ -524,7 +525,7 @@ export class Modal extends React.Component {
 
 
     addToMainForm() { // consumption detail
-        $(".btn").css("pointer-events", "none");
+        // $(".btn").css("pointer-events", "none");
         let siteItem = {
             consumption_id: this.state.consumption_id,
             id: this.state.id,
@@ -612,7 +613,6 @@ export class Modal extends React.Component {
                 break;
             case "existing_plan":
                 let existing_plan_dis = true;
-
                 if (value === 'Retailer plan') {
                     existing_plan_dis = false;
                 }
@@ -638,6 +638,13 @@ export class Modal extends React.Component {
                 this.setState({
                     purchasing_entity_selectd: value
                 })
+                if(value)
+                {
+                    setValidationPass('purchasing_entity_selectd', 1)
+                }
+                else{
+                    setValidationFaild('purchasing_entity_selectd', 1)
+                }
                 break;
             case "intake_level":
                 let contracted_capacity_dis = true;
@@ -706,7 +713,7 @@ export class Modal extends React.Component {
                 this.setState({
                     totals: value
                 })
-    
+                console.log("total:"+value)
                 if (!validateInteger(value)) {
                     setValidationFaild('totals', 2)
                 } else {
@@ -717,7 +724,9 @@ export class Modal extends React.Component {
                 this.setState({
                     peak_pct: value
                 })
-                if (!validateDecimal(value)) {
+                console.log("peak_pct:"+value)
+
+                if (!validateLess100(value)) {
                     setValidationFaild('peak_pct', 2)
                 } else {
                     setValidationPass('peak_pct', 2)
@@ -728,7 +737,6 @@ export class Modal extends React.Component {
                     })
                 }
                 else {
-
                     this.setState({
                         peak: 100
                     })
@@ -1484,7 +1492,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Peak:</td>
                                     <td>
-                                        <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} id="peak_pct" name="peak_pct" onKeyUp={this.removeAsIntegerPercent.bind(this)} required aria-required="true" maxLength="3" placeholder="0-100" max="100" /> <div>%</div>
+                                        <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} onKeyUp={this.removeAsIntegerPercent.bind(this)} id="peak_pct" name="peak_pct" required aria-required="true" maxLength="3" placeholder="0-100" max="100" /> <div>%</div>
                                         <div id="peak_pct_message" className="isPassValidate">This filed is required!</div>
                                         <div id="peak_pct_format" className="isPassValidate">Please input a integer between 0 and 100.</div>
                                     </td>

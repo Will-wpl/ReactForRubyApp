@@ -156,13 +156,28 @@ export const validateDecimal = (value) => {
 }
 
 export const validateLess100 = (value) => {
-    let num = /^100$|^(\d|[1-9]\d)*$/;
+
+    let num = /^(?:0|[1-9][0-9]?|100)$/;
     if (value >= 0) {
         if (!num.test(value)) {
+         
             return false;
         }
     }
     else {
+       
+        return false;
+    }
+    return true;
+}
+
+export const validateInteger = (value) => {
+    let express = /^[0-9]*[1-9][0-9]*$/;
+    if (value > 0) {
+        if (!express.test(value)) {
+            return false;
+        }
+    } else {
         return false;
     }
     return true;
@@ -197,17 +212,7 @@ export const validateTwoDecimal = (value) => {
     return true;
 }
 
-export const validateInteger = (value) => {
-    let express = /^[0-9]*[1-9][0-9]*$/;
-    if (value > 0) {
-        if (!express.test(value)) {
-            return false;
-        }
-    } else {
-        return false;
-    }
-    return true;
-}
+
 
 export const validatePostCode = (value) => {
     let express = /^[0-9]{6}$/;
@@ -440,6 +445,7 @@ export const removeAsInteger = (value) => {
             value.target.value = value.target.value.substr(0, value.target.value.length - 1)
         }
     }
+
     return value;
 }
 
@@ -450,9 +456,18 @@ export const removeAsIntegerPercent = (value) => {
     if (value.target.value.indexOf('.') > -1) {
         if (value.target.value > 0) {
             value.target.value = value.target.value.substr(0, value.target.value.length - 1)
-            // if (value.target.value > 0) {}
+            if (value.target.value <= 100 && value.target.value>=0) {
                 $("#peak_pct_format").removeClass("errormessage").addClass("isPassValidate");
-            
+            }
+        }
+    }
+    else
+    {
+        console.log(222)
+        console.log()
+        if (value.target.value <= 100 && value.target.value>=0) {
+            console.log(1111)
+            $("#peak_pct_format").removeClass("errormessage").addClass("isPassValidate");
         }
     }
     return value;
