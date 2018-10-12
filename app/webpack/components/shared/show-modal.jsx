@@ -50,9 +50,11 @@ export class Modal extends React.Component {
                 existing_plan_selected: next.consumptionAccountItem.existing_plan_selected,
                 contract_expiry: next.consumptionAccountItem.contract_expiry === "" ? "" : moment(next.consumptionAccountItem.contract_expiry),
                 purchasing_entity: next.consumptionAccountItem.purchasing_entity,
+                // purchasing_entity_selectd: next.
+                //     consumptionAccountItem.purchasing_entity_selectd ? next.consumptionAccountItem.purchasing_entity_selectd :
+                //     next.consumptionAccountItem.purchasing_entity.length > 0 ? next.consumptionAccountItem.purchasing_entity[0].id : "",
                 purchasing_entity_selectd: next.
-                    consumptionAccountItem.purchasing_entity_selectd ? next.consumptionAccountItem.purchasing_entity_selectd :
-                    next.consumptionAccountItem.purchasing_entity.length > 0 ? next.consumptionAccountItem.purchasing_entity[0].id : "",
+                    consumptionAccountItem.purchasing_entity_selectd ? next.consumptionAccountItem.purchasing_entity_selectd : "",
                 premise_address: next.consumptionAccountItem.premise_address,
                 intake_level: next.consumptionAccountItem.intake_level,
                 intake_level_selected: next.consumptionAccountItem.intake_level_selected,
@@ -235,12 +237,12 @@ export class Modal extends React.Component {
                         "链接文字": "Text Link",
                         "的表格": "'s table",
                         "正文": "Content",
-                        "删除链接":"Delete Link",
-                        "最大宽度":"Maximum Width",
-                        "删除图片":"Delete Picture",
-                        "增加":"Add ",
-                        "删除":"Delete ",
-                        "表格":"Table"
+                        "删除链接": "Delete Link",
+                        "最大宽度": "Maximum Width",
+                        "删除图片": "Delete Picture",
+                        "增加": "Add ",
+                        "删除": "Delete ",
+                        "表格": "Table"
                     };
                     setTimeout(() => { editor.create(); });
                 }
@@ -288,12 +290,12 @@ export class Modal extends React.Component {
                         "链接文字": "Text Link",
                         "的表格": "'s table",
                         "正文": "Content",
-                        "删除链接":"Delete Link",
-                        "最大宽度":"Maximum Width",
-                        "删除图片":"Delete Picture",
-                        "增加":"Add ",
-                        "删除":"Delete ",
-                        "表格":"Table"
+                        "删除链接": "Delete Link",
+                        "最大宽度": "Maximum Width",
+                        "删除图片": "Delete Picture",
+                        "增加": "Add ",
+                        "删除": "Delete ",
+                        "表格": "Table"
                     };
                     setTimeout(() => { editor.create(); })
                 }
@@ -1377,7 +1379,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td><abbr title="required">*</abbr>Purchasing Entity</td>
                                     <td>
-                                        <div className={(this.state.cate_type === 'preDay' || this.state.cate_type === 'preOthers') ? "isDisplay" : "isHide"}>
+                                        {/* <div className={(this.state.cate_type === 'preDay' || this.state.cate_type === 'preOthers') ? "isDisplay" : "isHide"}>
                                             {
                                                 this.state.purchasing_entity.map(item => {
                                                     if (item.id === this.state.purchasing_entity_selectd) {
@@ -1385,18 +1387,19 @@ export class Modal extends React.Component {
                                                     }
                                                 })
                                             }
-                                        </div>
-                                        <div className={(this.state.cate_type !== 'preDay' && this.state.cate_type !== 'preOthers') ? "isDisplay" : "isHide"}>
-                                            <select id="purchasing_entity" onChange={this.changeConsumption.bind(this, "purchasing_entity")} name="purchasing_entity" value={this.state.purchasing_entity_selectd} required>
+                                        </div> */}
+                                        <div>
+                                            <select id="purchasing_entity" disabled={this.state.cate_type === 'preDay' || this.state.cate_type === 'preOthers'} onChange={this.changeConsumption.bind(this, "purchasing_entity")} name="purchasing_entity" value={this.state.purchasing_entity_selectd} required>
+                                                <option key="" value="">--Please select Purchasing Entity-- </option>
                                                 {
-                                                    this.state.purchasing_entity.map((item, index) => {
-                                                        if (item.approval_status === "1") {
-                                                            return <option key={item.id} value={item.id}>{item.company_name}</option>
-                                                        }
-                                                        else {
-                                                            return <option disabled  key={item.id} value={item.id}  style={{"backgroundColor":"#ccc"}}> {item.company_name}  (Pending) </option>
-                                                        }
-                                                    })
+                                                        this.state.purchasing_entity.map((item, index) => {
+                                                            if (item.approval_status === "1") {
+                                                                return <option key={item.id} value={item.id}>{item.company_name}</option>
+                                                            }
+                                                            else {
+                                                                return <option disabled key={item.id} value={item.id} style={{ "backgroundColor": "#ccc" }}> {item.company_name}  (Pending) </option>
+                                                            }
+                                                        })
                                                 }
                                             </select>
                                             <div id="purchasing_entity_selectd_message" className="isPassValidate">This filed is required!</div>
