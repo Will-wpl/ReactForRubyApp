@@ -154,33 +154,6 @@ export const validateDecimal = (value) => {
     }
     return true;
 }
-export const validateTwoDecimal = (value) => {
-    let total;
-    let decimalValue = value.split('.')[1];
-
-    if (decimalValue) {
-        if (decimalValue.length > 2) {
-            total = value.split('.')[0] + "." + value.split('.')[1].substr(0, 2);
-        }
-        else {
-            total = value;
-        }
-    }
-    else {
-        total = value;
-    }
-    let num = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/;
-    if (total > 0) {
-        if (!num.test(total)) {
-            return false;
-        }
-    }
-    else {
-        return false;
-    }
-    return true;
-
-}
 
 export const validateLess100 = (value) => {
 

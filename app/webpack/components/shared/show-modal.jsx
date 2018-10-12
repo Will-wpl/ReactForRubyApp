@@ -636,7 +636,6 @@ export class Modal extends React.Component {
                 changeValidate('contract_expiry', value);
                 break;
             case "purchasing_entity":
-                console.log(1111111)
                 this.setState({
                     purchasing_entity_selectd: value
                 })
@@ -714,7 +713,7 @@ export class Modal extends React.Component {
                 // }
                 value= removeAsInteger(value);
                 this.setState({
-                    totals: total
+                    totals: value
                 })
                 if (!validateInteger(value)) {
                     setValidationFaild('totals', 2)
@@ -1170,7 +1169,7 @@ export class Modal extends React.Component {
                                             return <li key={index}><span>{item}</span></li>
                                         })
                                     }
-                                    </ul> 
+                                    </ul>
                                 </div>
                                 : <div></div>
                         }

@@ -503,7 +503,6 @@ export class FillConsumption extends Component {
     checkSuccess(event) {
         event.preventDefault();
         let isNotNull = this.validateListComplete();
-        console.log(isNotNull)
         if (isNotNull) {
             let totalList = this.state.site_list.concat(this.state.preDayList).concat(this.state.preOtherList);
             let count = this.dateCompare(totalList);

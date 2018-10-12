@@ -170,7 +170,7 @@ export default class BidForm extends Component {
                                 <div>($/kWh)</div>
                             </th>
                             <th style={this.props.isHtlVisible ? {} : {display: 'none'}}>
-                                <div>HTL</div>
+                                <div>HT Large</div>
                                 <div>($/kWh)</div>
                             </th>
                             <th style={this.props.isEhtVisible ? {} : {display: 'none'}}>
