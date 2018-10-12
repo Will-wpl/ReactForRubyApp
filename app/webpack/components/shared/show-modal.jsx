@@ -20,7 +20,8 @@ export class Modal extends React.Component {
             existing_plan: [], existing_plan_selected: '', contract_expiry: '', purchasing_entity: [], purchasing_entity_selectd: '', premise_address: '',
             intake_level: [], intake_level_selected: '',
             contracted_capacity: '', blk_or_unit: '', street: '', unit_number: '', postal_code: '',
-            totals: '', peak_pct: '', peak: "", attachment_ids: '', option: '', cate_type: '',
+            totals: '', peak_pct: '', peak: ""
+            , attachment_ids: '', option: '', cate_type: '',
             isSaved: false, uploadUrl: "/api/buyer/user_attachments?file_type=", validate: false,
             fileData: {
                 "CONSUMPTION_DOCUMENTS": [
@@ -1388,7 +1389,7 @@ export class Modal extends React.Component {
                                     <td>
                                         <div>
                                             <select id="purchasing_entity" disabled={this.state.cate_type === 'preDay' || this.state.cate_type === 'preOthers'} onChange={this.changeConsumption.bind(this, "purchasing_entity")} name="purchasing_entity" value={this.state.purchasing_entity_selectd} required>
-                                                <option key="" value="">--Please select Purchasing Entity-- </option>
+                                                <option key="" value="">--Please select-- </option>
                                                 {
                                                         this.state.purchasing_entity.map((item, index) => {
                                                             if (item.approval_status === "1") {
