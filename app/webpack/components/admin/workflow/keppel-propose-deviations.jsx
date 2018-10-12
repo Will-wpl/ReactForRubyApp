@@ -298,7 +298,7 @@ export class Keppelproposedeviations extends Component {
                 <table className="retailer_fill w_100" cellPadding="0" cellSpacing="0">
                     <thead>
                         <tr>
-                            <th>Item</th>
+                            {/*<th>Item</th>*/}
                             <th>Clause</th>
                             <th>Propose Deviation</th>
                             <th>Retailer Comments</th>
@@ -312,7 +312,7 @@ export class Keppelproposedeviations extends Component {
                                 if(!item.type){
                                     if(item.sp_response_status === '4' || item.sp_response_status === '1'){
                                         return <tr key={index}>
-                                                <td>{item.item}</td>
+                                                {/*<td>{item.item}</td>*/}
                                                 <td >{item.clause}</td>
                                                 <td><button onClick={this.showpropose.bind(this,"Propose Deviation",item.propose_deviation,'',true,false)}>Details</button></td>
                                                 <td><button onClick={this.showpropose.bind(this,"Retailer Comments",item.retailer_response,'',true,false)} >Details</button></td>
@@ -327,7 +327,7 @@ export class Keppelproposedeviations extends Component {
                                     }
                                 }
                                 return <tr key={index}>
-                                            <td>{item.item}</td>
+                                            {/*<td>{item.item}</td>*/}
                                             <td >{item.clause}</td>
                                             <td><button onClick={this.showpropose.bind(this,"Propose Deviation",item.propose_deviation,'',true,false)}>Details</button></td>
                                             <td><button onClick={this.showpropose.bind(this,"Retailer Comments",item.retailer_response,'',true,false)} >Details</button></td>

@@ -550,7 +550,7 @@ export default class AdminInvitation extends Component {
                                         <div className="required_error">
                                             Select at least one buyer and upload Buyer T&C.
                             </div>
-                                    </div> 
+                                    </div>
                                 </div>
                             )}
                             <div className="lm--formItem lm--formItem--inline string">

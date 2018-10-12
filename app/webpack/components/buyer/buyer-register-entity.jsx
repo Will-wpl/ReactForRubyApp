@@ -912,17 +912,22 @@ export class BuyerUserEntityRegister extends Component {
             return;
         }
         if (res.error_entity_indexes.length > 0) { //validate entity
-            let name = [], uen = [], email = [];
+            let name = [], uen = [], email = [], column = 0;;
             res.error_entity_indexes.map((item) => {
                 if (item.error_field_name === "company_name") {
                     name.push(item.error_value)
+                    column = 0;
                 }
                 if (item.error_field_name === "company_uen") {
                     uen.push(item.error_value);
+                    column = 1;
                 }
                 if (item.error_field_name === "contact_email") {
                     email.push(item.error_value)
+                    column = 6;
                 }
+                let row = item.entity_index;
+                $("#tabEntity tr:eq(" + row + ") td:eq(" + column + ")").css({'color':'red'})
             });
             let errList = {
                 nameError: name,
@@ -932,6 +937,8 @@ export class BuyerUserEntityRegister extends Component {
             this.setState({
                 validateErrList: errList
             })
+
+
 
             this.setState({ text: " " });
             this.refs.Modal_EntityErr.showModal();
@@ -1137,7 +1144,7 @@ export class BuyerUserEntityRegister extends Component {
                             </table>
                         </div>
                         <div className="table-body">
-                            <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                            <table className="retailer_fill" cellPadding="0" cellSpacing="0" id="tabEntity">
                                 <colgroup>
                                     <col width="10%" />
                                     <col width="10%" />
@@ -1185,35 +1192,36 @@ export class BuyerUserEntityRegister extends Component {
 
                         </div>
                     </div>
-
-                    <div className="col-sm-12 col-md-8 push-md-3 validate_message margin-t buyer_list_select">
-                        <div className="lm--formItem lm--formItem--inline string">
-                            <label className="lm--formItem-left lm--formItem-label string required">
-                                <abbr title="required">*</abbr> Tenant Management Service Required :
+                    <div className="col-sm-12" style={{ "backgroundColor": "#fff", "marginTop": "-20px" }}>
+                        <div className="col-sm-12 col-md-8 push-md-3 validate_message margin-t buyer_list_select">
+                            <div className="lm--formItem lm--formItem--inline string">
+                                <label className="lm--formItem-left lm--formItem-label string required">
+                                    <abbr title="required">*</abbr> Tenant Management Service Required :
                                     </label>
-                            <div className="lm--formItem-right lm--formItem-control">
-                                <select className="selectController" name="buyer_management" id="buyer_management" onChange={this.Change.bind(this, 'buyer_management')} defaultValue={this.state.buyer_management} disabled={this.state.disabled} ref="buyer_management" aria-required="true">
-                                    <option value="1">Yes</option>
-                                    <option value="0">No</option>
-                                </select>
+                                <div className="lm--formItem-right lm--formItem-control">
+                                    <select className="selectController" name="buyer_management" id="buyer_management" onChange={this.Change.bind(this, 'buyer_management')} defaultValue={this.state.buyer_management} disabled={this.state.disabled} ref="buyer_management" aria-required="true">
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="col-sm-12 col-md-8 push-md-3 validate_message margin-t" >
-                        <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
-                            <input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} />
-                            <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerTCurl} className="urlStyleUnderline">Buyer Platform Terms of Use</a></span>
-                        </h4>
-                        <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
-                        <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
-                            <input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} />
-                            <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyleUnderline">Energy Procurement Agreement</a></span>
-                        </h4>
-                        <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
-                        <Modal text={this.state.text} acceptFunction={this.refreshForm.bind(this)} ref="Modal" />
-                        <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrlArr} />
-                        <Modal formSize="big" listdetailtype="entity_detail" text={this.state.text} acceptFunction={this.acceptAddEntity.bind(this)} entitList={this.state.entity_list} disabled={this.state.ismain} entityDetailItem={this.state.entityItemInfo} ref="Modal_Entity" />
-                        <Modal listdetailtype="entity_error" text={this.state.text} entityErrorList={this.state.validateErrList} ref="Modal_EntityErr" />
+                        <div className="col-sm-12 col-md-8 push-md-3 validate_message margin-t" >
+                            <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
+                                <input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} />
+                                <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerTCurl} className="urlStyleUnderline">Buyer Platform Terms of Use</a></span>
+                            </h4>
+                            <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
+                            <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
+                                <input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} />
+                                <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyleUnderline">Electricity Procurement Agreement</a></span>
+                            </h4>
+                            <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
+                            <Modal text={this.state.text} acceptFunction={this.refreshForm.bind(this)} ref="Modal" />
+                            <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrlArr} />
+                            <Modal formSize="big" listdetailtype="entity_detail" text={this.state.text} acceptFunction={this.acceptAddEntity.bind(this)} entitList={this.state.entity_list} disabled={this.state.ismain} entityDetailItem={this.state.entityItemInfo} ref="Modal_Entity" />
+                            <Modal listdetailtype="entity_error" text={this.state.text} entityErrorList={this.state.validateErrList} ref="Modal_EntityErr" />
+                        </div>
                     </div>
                     <div className="retailer_btn">
                         {btn_html}
