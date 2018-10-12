@@ -227,7 +227,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     entity_indexes.concat(check_entities_email_with_user(buyer, buyer_entities, user))
 
     # validate Entity' email must be unique
-    entity_indexes.concat(check_entities_email_duplicated(buyer_entities,true))
+    entity_indexes.concat(check_entities_email_duplicated(buyer_entities))#,true
 
     entity_indexes = entity_indexes.uniq
     [entity_indexes.blank?, entity_indexes]
@@ -412,7 +412,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     entity_indexes = []
     buyer_entities.each_index do |index|
       buyer_entity = buyer_entities[index]
-      entity_indexes.concat(check_entity_email_with_user(buyer, buyer_entity, user)) #, index
+      entity_indexes.concat(check_entity_email_with_user(buyer, buyer_entity, user, index)) #
     end
     entity_indexes
   end

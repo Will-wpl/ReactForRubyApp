@@ -1047,7 +1047,7 @@ body.choose{
   }
 }
 .warning{
-  color:yellow;
+  color:red;
 }
 .custombtn{
   background-color: #00d900;
@@ -1341,7 +1341,7 @@ body.choose{
   }
 }
 .mouth_tab{
-  .selected{background:forestgreen;}
+  .selected{box-shadow: 0px 0px 20px forestgreen !important;}
 }
 .admin_expiry{
   button{ margin-left: 15px;  }
