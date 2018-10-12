@@ -1394,7 +1394,7 @@ export class Modal extends React.Component {
                                                             return <option key={item.id} value={item.id}>{item.company_name}</option>
                                                         }
                                                         else {
-                                                            return <option disabled key={item.id} value={item.id}>{item.company_name}  (pending) </option>
+                                                            return <option disabled  key={item.id} value={item.id}  style={{"backgroundColor":"#ccc"}}> {item.company_name}  (Pending) </option>
                                                         }
                                                     })
                                                 }
