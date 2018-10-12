@@ -4,7 +4,7 @@
 
 .page-header
   .u-pull-right
-    = link_to icon("plus", t("views.actions.new", model: User.model_name.human)), new_admin_user_path, class: "lm--button lm--button--primary"
+    = link_to t("views.actions.new", model: User.model_name.human), new_admin_user_path, class: "lm--button lm--button--primary"
   h1= page_title(model: User.model_name.human.pluralize)
 
 .lm--table-container

@@ -21,7 +21,7 @@ export class AdminDashboard extends Component {
         super(props);
         this.state = {
             users:[], realtimeData:[], realtimeRanking:[],
-            currentPrice:'0.0000',livetype:'6',compare:{},
+            currentPrice:'0.0000',livetype:'6',compare:{},disabled:false,
             live_auction_contracts:[],contracts:[],auction:{},livetab:false}
         this.lastInput = 1;
         this.priceCheckAllStatus = true;
@@ -166,11 +166,18 @@ export class AdminDashboard extends Component {
     }
 
     onExtendInputChanged(e) {
-        if (Number(e.target.value) >0 && Number(e.target.value) <=60) {
+        if (Number(e.target.value) >=0 && Number(e.target.value) <=60) {
             this.refs.extendedValue.value = e.target.value;
             this.lastInput = e.target.value;
+            this.setState({disabled:false});
         } else {
-            this.refs.extendedValue.value = this.lastInput;
+            if(e.target.value == ""){
+                this.refs.extendedValue.value = "";
+                this.setState({disabled:true});
+            }else{
+                this.refs.extendedValue.value = this.lastInput;
+            }
+
         }
     }
     showModal(){
@@ -227,7 +234,7 @@ export class AdminDashboard extends Component {
                         <span>Extend Time:</span>
                         <input type="number" className="fill_hold" maxLength="2" ref="extendedValue" defaultValue={1} onChange={this.onExtendInputChanged.bind(this)}/>
                         <span>Min</span>
-                        <input type="button" className="hold_submit" value="Submit" onClick={this.showModal.bind(this)} ref="submitBtn" />
+                        <input type="button" className="hold_submit" disabled={this.state.disabled} value="Submit" onClick={this.showModal.bind(this)} ref="submitBtn" />
                     </div>
                 </DuringCountDown>
                 {this.state.live_auction_contracts.length>0?
