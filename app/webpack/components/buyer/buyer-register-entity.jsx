@@ -559,8 +559,16 @@ export class BuyerUserEntityRegister extends Component {
         let returnValue = flag && hasDoc && checkSelect + "|" + mainEntityFinished
         return returnValue;
     }
-
+    clearErrorValildation() {
+        $("#tabEntity").find("tr").each(function () {
+            $(this).children('td').each(function (j) {
+                $(this).find("div").css('color', "#333");
+                $(this).find("div").css('border', "0px");
+            })
+        });
+    }
     save(type) {
+        this.clearErrorValildation();
         let isValidator = this.checkAll();
         if (isValidator === "true|true") {
             validateIsExist(this.setParams()).then(res => {
@@ -633,6 +641,7 @@ export class BuyerUserEntityRegister extends Component {
     }
 
     submit(type) {
+        this.clearErrorValildation();
         let isValidator = this.checkAll();
         if (isValidator === "true|true") {
             let buyerParam = this.setParams();
@@ -927,7 +936,7 @@ export class BuyerUserEntityRegister extends Component {
                     column = 6;
                 }
                 let row = item.entity_index;
-                $("#tabEntity tr:eq(" + row + ") td:eq(" + column + ")").css({'color':'red'})
+                $("#tabEntity tr:eq(" + row + ") td:eq(" + column + ")").find("div").css({ 'color': 'red', "border": "1px red solid" })
             });
             let errList = {
                 nameError: name,
@@ -1162,13 +1171,13 @@ export class BuyerUserEntityRegister extends Component {
                                     {
                                         this.state.entity_list.map((item, index) => {
                                             return <tr key={index}>
-                                                <td>{item.company_name}</td>
-                                                <td>{item.company_uen}</td>
+                                                <td><div>{item.company_name}</div></td>
+                                                <td><div>{item.company_uen}</div></td>
                                                 <td>{item.company_address}</td>
                                                 <td>{item.billing_address}</td>
                                                 <td>{item.bill_attention_to}</td>
                                                 <td>{item.contact_name}</td>
-                                                <td>{item.contact_email}</td>
+                                                <td><div>{item.contact_email}</div></td>
                                                 <td>{item.contact_mobile_no}</td>
                                                 <td>{item.contact_office_no}</td>
                                                 <td>{item.approval_status_name}</td>

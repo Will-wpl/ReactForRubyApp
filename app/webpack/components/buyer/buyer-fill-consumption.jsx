@@ -150,14 +150,14 @@ export class FillConsumption extends Component {
                 $(".btnOption").css("pointer-events", "none").css({ "color": "#999", "background": "#666" });
             }
             let dis = false;
-            if ((res.consumption.participation_status === "1" || res.consumption.accept_status === "1") && this.state.site_list.length ===0) {
+            if ((res.consumption.participation_status === "1" || res.consumption.accept_status === "1") && this.state.site_list.length === 0) {
                 dis = true;
             }
             else {
                 dis = false;
             }
             this.setState({
-                isValidate:dis
+                isValidate: dis
             })
 
         }, (error) => {
@@ -235,7 +235,7 @@ export class FillConsumption extends Component {
         this.accountItem.unit_number = item.unit_number;
         this.accountItem.postal_code = item.postal_code;
         this.accountItem.totals = item.totals;
-        this.accountItem.peak_pct = item.peak_pct;
+        this.accountItem.peak_pct = parseInt(Math.round(item.peak_pct));
         this.accountItem.peak = 10;
         this.accountItem.attachment_ids = item.user_attachment;
         this.accountItem.option = 'update';
@@ -263,7 +263,6 @@ export class FillConsumption extends Component {
 
     //when user finished adding a new account, list page will add/update the new account information.
     doAddAccountAction(siteInfo) {
-
         let item = {
             id: siteInfo.id ? siteInfo.id : "",
             orignal_id: siteInfo.orignal_id ? siteInfo.orignal_id : "",
@@ -280,7 +279,7 @@ export class FillConsumption extends Component {
             unit_number: siteInfo.unit_number,
             postal_code: siteInfo.postal_code,
             totals: siteInfo.totals,
-            peak_pct: siteInfo.peak_pct,
+            peak_pct: parseInt(Math.round(siteInfo.peak_pct)),
             attachment_ids: siteInfo.attachment_ids,
             user_attachment: siteInfo.user_attachment,
         };
@@ -320,6 +319,7 @@ export class FillConsumption extends Component {
             this.setState({
                 preOtherList: entity
             })
+            this.clearNullError(siteInfo.index);
         }
         this.setState({
             totalList: []
@@ -470,6 +470,11 @@ export class FillConsumption extends Component {
                 const site_listObj = this.state.preOtherList;
                 site_listObj.splice(this.deleteNum, 1);
                 this.setState({ preOtherList: site_listObj });
+                setTimeout(() => {
+                    this.clearAllError();
+                    this.validateIsNull();
+                });
+                
             }
             else {
                 const site_listObj = this.state.site_list;
@@ -502,6 +507,7 @@ export class FillConsumption extends Component {
     // validate the page required field and  contact expiry date.
     checkSuccess(event) {
         event.preventDefault();
+        this.validateIsNull();
         let isNotNull = this.validateListComplete();
         if (isNotNull) {
             let totalList = this.state.site_list.concat(this.state.preDayList).concat(this.state.preOtherList);
@@ -530,6 +536,27 @@ export class FillConsumption extends Component {
             this.refs.Modal.showModal()
         }
     }
+
+    validateIsNull() {
+ 
+        for (let i = 0; i < this.state.preOtherList.length; i++) {
+            if (this.state.preOtherList[i].existing_plan === "" || this.state.preOtherList[i].existing_plan === null) {
+                $("#cate2 tr:eq(" + i + ") td:eq(1)").find("div").css({ "border": "1px red solid" })
+            }
+        }
+    }
+    clearNullError(i) {
+        $("#cate2 tr:eq(" + i + ") td:eq(1)").find("div").css({ "border": "0px" })
+    }
+    clearAllError()
+    {
+        $("#cate2").find("tr").each(function () {
+            $(this).children('td').each(function (j) {
+                $(this).find("div").css('border', "0px");
+            })
+        });
+    }
+
 
     validateListComplete() {
         let flag_current = true, flag_yesterday = true, flag_before_yesterday = true;
@@ -579,6 +606,7 @@ export class FillConsumption extends Component {
         this.setState({
             contract_duration: itemValue
         })
+        
     }
 
     getPurchase(id) {
@@ -711,8 +739,8 @@ export class FillConsumption extends Component {
                                                         <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
                                                         <td className="left">
                                                             <div><span>Total Monthly: </span><span className="textDecoration" >{formatPower(parseInt(Number(item.totals)), 0, '')}</span><span> kWh/month</span></div>
-                                                            <div><span>Peak: </span><span><span>{formatPower(parseInt(Math.round(item.totals * (item.peak_pct) / 100)), 0, '')} kWh/month </span>({parseFloat(item.peak_pct).toFixed(2)}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
-                                                            <div><span>Off-Peak: </span><span>{formatPower(item.totals - parseInt(Math.round(item.totals * (item.peak_pct) / 100)), 0, '')} kWh/month </span><span>({parseFloat(100 - item.peak_pct).toFixed(2)}%)</span></div>
+                                                            <div><span>Peak: </span><span><span>{formatPower(parseInt(Math.round(item.totals * (Math.round(item.peak_pct) / 100))), 0, '')} kWh/month </span>({parseInt(Math.round(item.peak_pct))}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
+                                                            <div><span>Off-Peak: </span><span>{formatPower(item.totals - parseInt(Math.round(item.totals * (Math.round(item.peak_pct) / 100))), 0, '')} kWh/month </span><span>({parseInt(Math.round(100 - item.peak_pct))}%)</span></div>
                                                             <div className={item.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span>
                                                                 <span>
                                                                     <ul className="attachementList">
@@ -773,7 +801,7 @@ export class FillConsumption extends Component {
                                         </thead>
                                     </table>
                                 </div>
-                                <div className="table-body">
+                                <div className="table-body" id="cate2">
                                     <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                                         <colgroup>
                                             <col width="10%" />
@@ -791,7 +819,7 @@ export class FillConsumption extends Component {
                                                 this.state.preOtherList.map((item, index) => {
                                                     return <tr key={index}>
                                                         <td>{item.account_number} </td>
-                                                        <td>{item.existing_plan}</td>
+                                                        <td><div style={{"height":"25px"}}>{item.existing_plan}</div></td>
                                                         <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
                                                         <td>{item.entityName}</td>
                                                         <td>{item.intake_level}</td>
@@ -799,8 +827,8 @@ export class FillConsumption extends Component {
                                                         <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
                                                         <td className="left">
                                                             <div><span>Total Monthly: </span><span className="textDecoration" >{formatPower(parseInt(Number(item.totals)), 0, '')}</span><span> kWh/month</span></div>
-                                                            <div><span>Peak: </span><span><span>{formatPower(parseInt(Math.round(item.totals * (item.peak_pct) / 100)), 0, '')} kWh/month </span>({parseFloat(item.peak_pct).toFixed(2)}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
-                                                            <div><span>Off-Peak: </span><span>{formatPower(item.totals - parseInt(Math.round(item.totals * (item.peak_pct) / 100)), 0, '')} kWh/month </span><span>({parseFloat(100 - item.peak_pct).toFixed(2)}%)</span></div>
+                                                            <div><span>Peak: </span><span><span>{formatPower(parseInt(Math.round(item.totals * (Math.round(item.peak_pct) / 100))), 0, '')} kWh/month </span>({parseInt(Math.round(item.peak_pct))}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
+                                                            <div><span>Off-Peak: </span><span>{formatPower(item.totals - parseInt(Math.round(item.totals * (Math.round(item.peak_pct) / 100))), 0, '')} kWh/month </span><span>({parseInt(Math.round(100 - item.peak_pct))}%)</span></div>
                                                             <div className={item.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span>
                                                                 <span>
                                                                     <ul className="attachementList">
@@ -886,8 +914,8 @@ export class FillConsumption extends Component {
                                                         <td>{item.blk_or_unit} {item.street} {item.unit_number} {item.postal_code} </td>
                                                         <td className="left">
                                                             <div><span>Total Monthly: </span><span className="textDecoration" >{formatPower(parseInt(Number(item.totals)), 0, '')}</span><span> kWh/month</span></div>
-                                                            <div><span>Peak: </span><span><span>{formatPower(parseInt(Math.round(item.totals * (item.peak_pct) / 100)), 0, '')} kWh/month </span>({parseFloat(item.peak_pct).toFixed(2)}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
-                                                            <div><span>Off-Peak: </span><span>{formatPower(item.totals - parseInt(Math.round(item.totals * (item.peak_pct) / 100)), 0, '')} kWh/month </span><span>({parseFloat(100 - item.peak_pct).toFixed(2)}%)</span></div>
+                                                            <div><span>Peak: </span><span><span>{formatPower(parseInt(Math.round(item.totals * (Math.round(item.peak_pct) / 100))), 0, '')} kWh/month </span>({parseInt(Math.round(item.peak_pct))}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
+                                                            <div><span>Off-Peak: </span><span>{formatPower(item.totals - parseInt(Math.round(item.totals * (Math.round(item.peak_pct) / 100))), 0, '')} kWh/month </span><span>({parseInt(Math.round(100 - item.peak_pct))}%)</span></div>
                                                             <div className={item.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span>
                                                                 <span>
                                                                     <ul className="attachementList">
@@ -920,7 +948,7 @@ export class FillConsumption extends Component {
                                 {
                                     this.state.dateIssuecount > 0 ?
                                         <h4 className="lm--formItem lm--formItem--inline string chkBuyer" >
-                                            <input type="checkbox" id="chkBuyer" id="chk_Warning" required /><span className="warning" style={{"color:":"red"}}>Warning: [{this.state.dateIssuecount}] account(s) detected to have expiry date on  or after new contract start date. Please tick the checkbox
+                                            <input type="checkbox" id="chkBuyer" id="chk_Warning" required /><span className="warning" style={{ "color:": "red" }}>Warning: [{this.state.dateIssuecount}] account(s) detected to have expiry date on  or after new contract start date. Please tick the checkbox
                                              to confirm that you aware and would like to proceed with including such account(s) in this auction.</span> </h4> : <div></div>
                                 }
                             </div>

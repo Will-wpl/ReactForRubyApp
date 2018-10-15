@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import moment from 'moment';
 import { formatPower } from '../../../javascripts/componentService/util';
 
- 
+
 export default class AdminComsumptionList extends Component {
     constructor(props) {
         super(props);
@@ -37,7 +37,7 @@ export default class AdminComsumptionList extends Component {
             this.props.detail(index, id);
         }
     }
-    getPurchase(id,index) {
+    getPurchase(id, index) {
         let name = "";
         if (this.state.comsumption_list[index].entities.length > 0) {
             for (let i = 0; i < this.state.comsumption_list[index].entities.length; i++) {
@@ -90,29 +90,37 @@ export default class AdminComsumptionList extends Component {
                                                 return (<tr key={i}>
                                                     <td>{it.account_number}</td>
                                                     <td>{it.existing_plan}</td>
-                                                    <td>{(it.contract_expiry !== "" && it.contract_expiry !==null) ? moment(it.contract_expiry).format('DD-MM-YYYY') : "—"}</td>
-                                                    <td>{this.getPurchase(it.company_buyer_entity_id,index)}</td>
+                                                    <td>{(it.contract_expiry !== "" && it.contract_expiry !== null) ? moment(it.contract_expiry).format('DD-MM-YYYY') : "—"}</td>
+                                                    <td>{this.getPurchase(it.company_buyer_entity_id, index)}</td>
                                                     <td>{it.intake_level}</td>
-                                                    <td>{it.contracted_capacity ?formatPower(parseInt(it.contracted_capacity),0,'') : '—'}</td>
+                                                    <td>{it.contracted_capacity ? formatPower(parseInt(it.contracted_capacity), 0, '') : '—'}</td>
                                                     <td>{it.blk_or_unit} {it.street} {it.unit_number} {it.postal_code} </td>
                                                     <td className="left">
-                                                        <div><span>Total Monthly: </span><span className="textDecoration" >{formatPower(parseInt(it.totals),0,'')}</span><span> kWh/month</span></div>
-                                                        <div><span>Peak: </span><span><span>{formatPower(parseInt(it.peak),0,'')} kWh/month </span>({parseFloat(it.peak_pct).toFixed(2)}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
-                                                        <div><span>Off-Peak: </span><span>{formatPower(parseInt(it.off_peak),0,'')} kWh/month </span><span>({ parseFloat(100 - it.peak_pct).toFixed(2)}%)</span></div>
+                                                        <div><span>Total Monthly: </span><span className="textDecoration" >{formatPower(parseInt(it.totals), 0, '')}</span><span> kWh/month</span></div>
+                                                        {/* <div><span>Peak: </span><span><span>{formatPower(parseInt(it.peak),0,'')} kWh/month </span>({parseInt(Math.round(it.peak_pct))}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
+                                                        <div><span>Off-Peak: </span><span>{formatPower(parseInt(it.off_peak),0,'')} kWh/month </span><span>({ parseInt(Math.round(100 - it.peak_pct))}%)</span></div> */}
+
+
+                                                        <div><span>Peak: </span><span><span>{formatPower(parseInt(Math.round(it.totals * (Math.round(it.peak_pct) / 100))), 0, '')}  </span> kWh/month ({parseInt(Math.round(it.peak_pct))}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
+                                                        <div><span>Off-Peak: </span><span>{formatPower(it.totals - parseInt(Math.round(it.totals * (Math.round(it.peak_pct) / 100))), 0, '')}  </span> kWh/month <span>({parseInt(Math.round(100 - it.peak_pct))}%)</span></div>
+
+                                                        {/* <div><span>Peak: </span><span><span>{formatPower(parseInt(it.totals * (Math.round(it.peak_pct) / 100)), 0, '')} kWh/month </span>({parseInt(Math.round(it.peak_pct))}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
+                                                        <div><span>Off-Peak: </span><span>{formatPower(it.totals - parseInt(Math.round(it.totals * (it.peak_pct) / 100)), 0, '')} kWh/month </span><span>({parseInt(Math.round(100 - it.peak_pct))}%)</span></div> */}
+
                                                         <div className={it.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span>
-                                                        <span>
-                                                            <ul className="attachementList">
-                                                                {
-                                                                    it.user_attachment ? it.user_attachment.map((item, i) => {
-                                                                        return <li key={i}>
-                                                                            <a className={"cursor_link"} href={item.file_path ? item.file_path : "#"} target="_blank">{item.file_name ? item.file_name : ""}</a>
-                                                                        </li>
-                                                                    }) :
-                                                                        <li> </li>
-                                                                }
-                                                            </ul>
-                                                        </span>
-                                                    </div>
+                                                            <span>
+                                                                <ul className="attachementList">
+                                                                    {
+                                                                        it.user_attachment ? it.user_attachment.map((item, i) => {
+                                                                            return <li key={i}>
+                                                                                <a className={"cursor_link"} href={item.file_path ? item.file_path : "#"} target="_blank">{item.file_name ? item.file_name : ""}</a>
+                                                                            </li>
+                                                                        }) :
+                                                                            <li> </li>
+                                                                    }
+                                                                </ul>
+                                                            </span>
+                                                        </div>
                                                     </td>
                                                 </tr>)
                                             })}

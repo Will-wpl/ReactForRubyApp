@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 import { validateConsumptionDetailRepeat } from './../../javascripts/componentService/common/service';
-import { formatPower,validateInteger, validateLess100,removeDecimal,removeAsInteger, removeAsIntegerPercent, replaceSymbol, trim, validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validateTwoDecimal, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum, removePostCode, validatePostCode } from '../../javascripts/componentService/util';
+import { formatPower, validateInteger, validateLess100, removeDecimal, removeAsInteger, removeAsIntegerPercent, replaceSymbol, trim, validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validateTwoDecimal, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum, removePostCode, validatePostCode } from '../../javascripts/componentService/util';
 //共通弹出框组件
 import { UploadFile } from '../shared/upload';
 import E from 'wangeditor'
@@ -65,7 +65,7 @@ export class Modal extends React.Component {
                 unit_number: next.consumptionAccountItem.unit_number,
                 postal_code: next.consumptionAccountItem.postal_code,
                 totals: next.consumptionAccountItem.totals ? formatPower(parseInt(next.consumptionAccountItem.totals), 0, '') : "",
-                peak_pct: next.consumptionAccountItem.peak_pct,
+                peak_pct: next.consumptionAccountItem.peak_pct==="" ? "" : parseInt(Math.round(next.consumptionAccountItem.peak_pct)),
                 peak: next.consumptionAccountItem.peak_pct ? (100 - parseFloat(next.consumptionAccountItem.peak_pct)) : "",
                 option: next.consumptionAccountItem.option,
                 cate_type: next.consumptionAccountItem.cate_type
@@ -425,7 +425,7 @@ export class Modal extends React.Component {
         }
     }
 
-    checkEntitySuccess() {
+    checkEntitySuccess() {//  user entity validate
         let flag = true;
         let validateItem = {
             // company_name:"required",
@@ -525,7 +525,7 @@ export class Modal extends React.Component {
     }
 
 
-    addToMainForm() { // consumption detail
+    addToMainForm() { // consumption detail validate-behand side
         // $(".btn").css("pointer-events", "none");
         let siteItem = {
             consumption_id: this.state.consumption_id,
@@ -548,7 +548,6 @@ export class Modal extends React.Component {
             attachment_ids: "",
             user_attachment: []
         }
-         
         if (this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.length > 0) {
             let idsArr = [];
             this.state.fileData["CONSUMPTION_DOCUMENTS"][0].files.map((item) => {
@@ -639,11 +638,10 @@ export class Modal extends React.Component {
                 this.setState({
                     purchasing_entity_selectd: value
                 })
-                if(value)
-                {
+                if (value) {
                     setValidationPass('purchasing_entity_selectd', 1)
                 }
-                else{
+                else {
                     setValidationFaild('purchasing_entity_selectd', 1)
                 }
                 break;
@@ -711,7 +709,7 @@ export class Modal extends React.Component {
                 //         total = value.split('.')[0] + "." + decimalValue;
                 //     }
                 // }
-                value= removeAsInteger(value);
+                value = removeAsInteger(value);
                 this.setState({
                     totals: value
                 })
@@ -723,7 +721,7 @@ export class Modal extends React.Component {
                 break;
             case "peak_pct":
 
-                value=removeAsIntegerPercent(value)
+                value = removeAsIntegerPercent(value)
                 this.setState({
                     peak_pct: value
                 })
@@ -785,16 +783,19 @@ export class Modal extends React.Component {
                         $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
                         $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
                         $("#unit_number").focus();
+                        $(".btn").css("pointer-events", "auto")
                         break;
                     case 'true|false':
                         $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
                         $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
                         $("#account_number").focus();
+                        $(".btn").css("pointer-events", "auto")
                         break;
                     case 'true|true':
                         $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
                         $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
                         $("#account_number").focus();
+                        $(".btn").css("pointer-events", "auto")
                         break;
                     default:
                         this.addToMainForm();
@@ -1402,14 +1403,14 @@ export class Modal extends React.Component {
                                             <select id="purchasing_entity" disabled={this.state.cate_type === 'preDay' || this.state.cate_type === 'preOthers'} onChange={this.changeConsumption.bind(this, "purchasing_entity")} name="purchasing_entity" value={this.state.purchasing_entity_selectd} required>
                                                 <option key="" value="">--Please select-- </option>
                                                 {
-                                                        this.state.purchasing_entity.map((item, index) => {
-                                                            if (item.approval_status === "1") {
-                                                                return <option key={item.id} value={item.id}>{item.company_name}</option>
-                                                            }
-                                                            else {
-                                                                return <option disabled key={item.id} value={item.id} style={{ "backgroundColor": "#ccc" }}> {item.company_name}  (Pending) </option>
-                                                            }
-                                                        })
+                                                    this.state.purchasing_entity.map((item, index) => {
+                                                        if (item.approval_status === "1") {
+                                                            return <option key={item.id} value={item.id}>{item.company_name}</option>
+                                                        }
+                                                        else {
+                                                            return <option disabled key={item.id} value={item.id} style={{ "backgroundColor": "#ccc" }}> {item.company_name}  (Pending) </option>
+                                                        }
+                                                    })
                                                 }
                                             </select>
                                             <div id="purchasing_entity_selectd_message" className="isPassValidate">This filed is required!</div>
@@ -1487,8 +1488,8 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Total Monthly:</td>
                                     <td>
-                                    {/* onKeyUp={this.removeAsInteger.bind(this)} */}
-                                        <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" name="totals"   required aria-required="true" maxLength="20" /><div>kWh/month</div>
+                                        {/* onKeyUp={this.removeAsInteger.bind(this)} */}
+                                        <input type="text" value={this.state.totals} onChange={this.changeConsumption.bind(this, "totals")} id="totals" name="totals" required aria-required="true" maxLength="20" /><div>kWh/month</div>
                                         <div id="totals_message" className="isPassValidate">This filed is required!</div>
                                         {/* <div id="totals_format" className="isPassValidate">Please input an integer greater than 0.</div> */}
                                     </td>
@@ -1496,7 +1497,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td>&nbsp;&nbsp;&nbsp;<abbr title="required">*</abbr>Peak:</td>
                                     <td>
-                                        <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")}  id="peak_pct" name="peak_pct" required aria-required="true" maxLength="3" placeholder="0-100" max="100" /> <div>%</div>
+                                        <input type="text" value={this.state.peak_pct} onChange={this.changeConsumption.bind(this, "peak_pct")} id="peak_pct" name="peak_pct" required aria-required="true" maxLength="3" placeholder="0-100" max="100" /> <div>%</div>
                                         <div id="peak_pct_message" className="isPassValidate">This filed is required!</div>
                                         <div id="peak_pct_format" className="isPassValidate">Please input a integer between 0 and 100.</div>
                                     </td>
