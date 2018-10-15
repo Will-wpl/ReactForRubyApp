@@ -470,6 +470,11 @@ export class FillConsumption extends Component {
                 const site_listObj = this.state.preOtherList;
                 site_listObj.splice(this.deleteNum, 1);
                 this.setState({ preOtherList: site_listObj });
+                setTimeout(() => {
+                    this.clearAllError();
+                    this.validateIsNull();
+                });
+                
             }
             else {
                 const site_listObj = this.state.site_list;
@@ -534,6 +539,7 @@ export class FillConsumption extends Component {
     }
 
     validateIsNull() {
+ 
         for (let i = 0; i < this.state.preOtherList.length; i++) {
             if (this.state.preOtherList[i].existing_plan === "" || this.state.preOtherList[i].existing_plan === null) {
                 $("#cate2 tr:eq(" + i + ") td:eq(1)").find("div").css({ "border": "1px red solid" })
@@ -542,6 +548,14 @@ export class FillConsumption extends Component {
     }
     clearNullError(i) {
         $("#cate2 tr:eq(" + i + ") td:eq(1)").find("div").css({ "border": "0px" })
+    }
+    clearAllError()
+    {
+        $("#cate2").find("tr").each(function () {
+            $(this).children('td').each(function (j) {
+                $(this).find("div").css('border', "0px");
+            })
+        });
     }
 
 
