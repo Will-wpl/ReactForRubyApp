@@ -470,6 +470,11 @@ export class FillConsumption extends Component {
                 const site_listObj = this.state.preOtherList;
                 site_listObj.splice(this.deleteNum, 1);
                 this.setState({ preOtherList: site_listObj });
+                setTimeout(() => {
+                    this.clearAllError();
+                    this.validateIsNull();
+                });
+                
             }
             else {
                 const site_listObj = this.state.site_list;
@@ -534,6 +539,7 @@ export class FillConsumption extends Component {
     }
 
     validateIsNull() {
+ 
         for (let i = 0; i < this.state.preOtherList.length; i++) {
             if (this.state.preOtherList[i].existing_plan === "" || this.state.preOtherList[i].existing_plan === null) {
                 $("#cate2 tr:eq(" + i + ") td:eq(1)").find("div").css({ "border": "1px red solid" })
@@ -542,6 +548,14 @@ export class FillConsumption extends Component {
     }
     clearNullError(i) {
         $("#cate2 tr:eq(" + i + ") td:eq(1)").find("div").css({ "border": "0px" })
+    }
+    clearAllError()
+    {
+        $("#cate2").find("tr").each(function () {
+            $(this).children('td').each(function (j) {
+                $(this).find("div").css('border', "0px");
+            })
+        });
     }
 
 
@@ -727,7 +741,7 @@ export class FillConsumption extends Component {
                                                         <td className="left">
                                                             <div><span>Total Monthly: </span><span className="textDecoration" >{formatPower(parseInt(Number(item.totals)), 0, '')}</span><span> kWh/month</span></div>
                                                             <div><span>Peak: </span><span><span>{formatPower(parseInt(Math.round(item.totals * (item.peak_pct) / 100)), 0, '')} kWh/month </span>({parseInt(Math.round(item.peak_pct))}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
-                                                            <div><span>Off-Peak: </span><span>{formatPower(item.totals - parseInt(Math.round(item.totals * (item.peak_pct) / 100)), 0, '')} kWh/month </span><span>({parseFloat(100 - item.peak_pct).toFixed(2)}%)</span></div>
+                                                            <div><span>Off-Peak: </span><span>{formatPower(item.totals - parseInt(Math.round(item.totals * (item.peak_pct) / 100)), 0, '')} kWh/month </span><span>({parseInt(Math.round(100 - item.peak_pct))}%)</span></div>
                                                             <div className={item.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span>
                                                                 <span>
                                                                     <ul className="attachementList">
