@@ -374,7 +374,7 @@ export class CreateNewRA extends Component {
         }
 
         const html = <div key={mouth} className={flag ? 'isHide' : 'isDisplay'}>
-            <h3 id="dateMonth" month={mouth} className={"u-mt2 u-mb2"}>{mouth} months</h3>
+            <h3 id="dateMonth" month={mouth} className={"u-mt2 u-mb2"}>{mouth} months ($/kWh)</h3>
             <div className="lm--formItem lm--formItem--inline string optional">
                 <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                     <thead>
