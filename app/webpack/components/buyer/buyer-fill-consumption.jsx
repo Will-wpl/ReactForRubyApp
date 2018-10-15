@@ -741,7 +741,7 @@ export class FillConsumption extends Component {
                                                         <td className="left">
                                                             <div><span>Total Monthly: </span><span className="textDecoration" >{formatPower(parseInt(Number(item.totals)), 0, '')}</span><span> kWh/month</span></div>
                                                             <div><span>Peak: </span><span><span>{formatPower(parseInt(Math.round(item.totals * (item.peak_pct) / 100)), 0, '')} kWh/month </span>({parseInt(Math.round(item.peak_pct))}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
-                                                            <div><span>Off-Peak: </span><span>{formatPower(item.totals - parseInt(Math.round(item.totals * (item.peak_pct) / 100)), 0, '')} kWh/month </span><span>({parseFloat(100 - item.peak_pct).toFixed(2)}%)</span></div>
+                                                            <div><span>Off-Peak: </span><span>{formatPower(item.totals - parseInt(Math.round(item.totals * (item.peak_pct) / 100)), 0, '')} kWh/month </span><span>({parsInt(Math.round(100 - item.peak_pct))}%)</span></div>
                                                             <div className={item.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span>
                                                                 <span>
                                                                     <ul className="attachementList">
