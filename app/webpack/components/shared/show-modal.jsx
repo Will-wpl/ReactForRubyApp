@@ -425,7 +425,7 @@ export class Modal extends React.Component {
         }
     }
 
-    checkEntitySuccess() {
+    checkEntitySuccess() {//  user entity validate
         let flag = true;
         let validateItem = {
             // company_name:"required",
@@ -525,7 +525,7 @@ export class Modal extends React.Component {
     }
 
 
-    addToMainForm() { // consumption detail
+    addToMainForm() { // consumption detail validate-behand side
         // $(".btn").css("pointer-events", "none");
         let siteItem = {
             consumption_id: this.state.consumption_id,
@@ -784,16 +784,19 @@ export class Modal extends React.Component {
                         $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
                         $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
                         $("#unit_number").focus();
+                        $(".btn").css("pointer-events", "auto")
                         break;
                     case 'true|false':
                         $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
                         $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
                         $("#account_number").focus();
+                        $(".btn").css("pointer-events", "auto")
                         break;
                     case 'true|true':
                         $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
                         $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
                         $("#account_number").focus();
+                        $(".btn").css("pointer-events", "auto")
                         break;
                     default:
                         this.addToMainForm();

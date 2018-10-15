@@ -593,6 +593,7 @@ export class FillConsumption extends Component {
         this.setState({
             contract_duration: itemValue
         })
+        
     }
 
     getPurchase(id) {
