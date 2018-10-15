@@ -22,7 +22,7 @@ export class RetailerBeforeLive extends Component {
     }
     mouthsHtml(data,index){
         const html = <div key={index} className="col-sm-12">
-            <h3 className={"u-mt2 u-mb2"}>{data.contract_duration} months</h3>
+            <h3 className={"u-mt2 u-mb2"}>{data.contract_duration} months ($/kWh)</h3>
             <div className="lm--formItem lm--formItem--inline string optional">
                 <table className="retailer_fill" cellPadding="0" cellSpacing="0">
                     <thead>
