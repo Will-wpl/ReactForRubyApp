@@ -101,8 +101,11 @@ export default class AdminComsumptionList extends Component {
                                                         <div><span>Off-Peak: </span><span>{formatPower(parseInt(it.off_peak),0,'')} kWh/month </span><span>({ parseInt(Math.round(100 - it.peak_pct))}%)</span></div> */}
 
 
-                                                        <div><span>Peak: </span><span><span>{formatPower(parseInt(it.totals * (Math.round(it.peak_pct) / 100)), 0, '')} kWh/month </span>({parseInt(Math.round(it.peak_pct))}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
-                                                        <div><span>Off-Peak: </span><span>{formatPower(it.totals - parseInt(Math.round(it.totals * (it.peak_pct) / 100)), 0, '')} kWh/month </span><span>({parseInt(Math.round(100 - it.peak_pct))}%)</span></div>
+                                                        <div><span>Peak: </span><span><span className="textDecoration">{formatPower(parseInt(Math.round(it.totals * (Math.round(it.peak_pct) / 100))), 0, '')} kWh/month </span>({parseInt(Math.round(it.peak_pct))}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
+                                                        <div><span>Off-Peak: </span><span>{formatPower(it.totals - parseInt(Math.round(it.totals * (Math.round(it.peak_pct) / 100))), 0, '')} kWh/month </span><span>({parseInt(Math.round(100 - it.peak_pct))}%)</span></div>
+
+                                                        {/* <div><span>Peak: </span><span><span>{formatPower(parseInt(it.totals * (Math.round(it.peak_pct) / 100)), 0, '')} kWh/month </span>({parseInt(Math.round(it.peak_pct))}%</span>)<span style={{ fontWeight: "bold", fontSize: "14px" }} title="Off Peak is auto calculated by 1-Peak." >&nbsp;&nbsp;?</span></div>
+                                                        <div><span>Off-Peak: </span><span>{formatPower(it.totals - parseInt(Math.round(it.totals * (it.peak_pct) / 100)), 0, '')} kWh/month </span><span>({parseInt(Math.round(100 - it.peak_pct))}%)</span></div> */}
 
                                                         <div className={it.user_attachment ? "isDisplay" : "isHide"}><span>Upload bill(s):</span>
                                                             <span>
