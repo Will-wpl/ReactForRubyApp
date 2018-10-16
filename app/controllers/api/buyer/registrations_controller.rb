@@ -191,7 +191,18 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     buyer_entities = JSON.parse(params[:buyer_entities])
     validate_result, entity_indexes = validate_buyer_entities_info(validation_user, buyer_entities)
     validate_final_result = validate_final_result & validate_result
-    error_entity_indexes = entity_indexes unless validate_result
+    unless validate_result # instance_variable_get
+      index_list = []
+      error_entity_detail_list = []
+      entity_indexes.each do |error_entity|
+        index_list.push(error_entity['entity_index']) unless error_entity['entity_index'].blank?
+        error_entity_detail = {error_field_name: error_entity['error_field_name'], error_value: error_entity['error_value']}
+        unless error_entity_detail_list.any?{|x| x['error_field_name'] == error_entity_detail['error_field_name'] && x['error_value'] == error_entity_detail['error_value'] }
+          error_entity_detail_list.push(error_entity_detail)
+        end
+      end
+      error_entity_indexes = {index_list: index_list, error_entity_detail_list: error_entity_detail_list}
+    end
     render json: { validate_result: validate_final_result,
                    error_fields: error_fields,
                    error_entity_indexes: error_entity_indexes }, status: 200
