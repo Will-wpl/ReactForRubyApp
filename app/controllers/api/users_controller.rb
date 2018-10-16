@@ -131,7 +131,7 @@ class Api::UsersController < Api::BaseController
       all_count = entites.count()
       approval_count = entites.where(approval_status: CompanyBuyerEntity::ApprovalStatusApproved).count()
       unless all_count == approval_count
-        user.approval_status += " (Entity Pending)"
+        user.approval_status += "!"
       end
     end
     bodies = { data: data, total: total }
