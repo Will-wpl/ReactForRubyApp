@@ -329,6 +329,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
     consumptions.each do |consumption|
       temp_contract_period_start_date ,temp_contract_period_end_date = get_auction_period(consumption)
 
+      next if consumption.accept_status == Consumption::AcceptStatusReject
       consumption.consumption_details.each do |consumption_detail|
         consumption_detail_id = detail['id'].blank? ? detail['orignal_id'] : detail['id']
         if temp_contract_period_start_date.nil? ||
@@ -383,7 +384,13 @@ class Api::ConsumptionDetailsController < Api::BaseController
       period_end_date = auction.contract_period_end_date
     else
       auction_contract = AuctionContract.find_by auction_id: consumption.auction_id, contract_duration: consumption.contract_duration
-      period_end_date = auction_contract.nil? ? auction.contract_period_end_date: auction_contract.contract_period_end_date
+      if auction_contract.nil?
+        months = consumption.contract_duration.to_i
+        period_end_date = period_start_date + months.months
+      else
+        period_end_date = auction_contract.contract_period_end_date
+      end
+      # period_end_date = auction_contract.nil? ? auction.contract_period_end_date: auction_contract.contract_period_end_date
     end
     [period_start_date ,period_end_date]
   end
