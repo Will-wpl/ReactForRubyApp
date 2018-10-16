@@ -133,16 +133,16 @@ class Api::ConsumptionDetailsController < Api::BaseController
     error_all = validate_all_details
     if error_all.blank?
       saved_details = save_comsumption_details()
-      render json: saved_details, status: 200
+      render json: { result: 'success', details: saved_details} , status: 200
     else
-      render json: error_all, status: 500
+      render json: { result: 'failed', errors: error_all} , status: 200
     end
   end
 
   def participate
     error_all = validate_all_details
     unless error_all.blank?
-      render json: error_all, status: 500
+      render json: { result: 'failed', errors: error_all} , status: 200
       return
     end
     ActiveRecord::Base.transaction do
