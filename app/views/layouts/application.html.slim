@@ -67,6 +67,8 @@ html(lang="en")
                       = link_to 'Manage Contract', admin_contract_index_path, class: 'lm--dropdown-link'
                     li
                       = link_to 'Manage Templates', admin_templates_path, class: 'lm--dropdown-link'
+                    li
+                      = link_to 'File Management', admin_common_templates_path, class: 'lm--dropdown-link'
                   - else
                     -if current_user.approval_status == '1' || current_user.approval_status == '0'
                       li
