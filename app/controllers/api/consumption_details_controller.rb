@@ -341,7 +341,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
     consumptions.each do |consumption|
       temp_contract_period_start_date ,temp_contract_period_end_date = get_auction_period(consumption)
 
-      next if consumption.accept_status == Consumption::AcceptStatusReject
+      next if consumption.participation_status == Consumption::ParticipationStatusReject || consumption.accept_status == Consumption::AcceptStatusReject
       consumption.consumption_details.each do |consumption_detail|
         consumption_detail_id = detail['id'].blank? ? detail['orignal_id'] : detail['id']
         if temp_contract_period_start_date.nil? ||
