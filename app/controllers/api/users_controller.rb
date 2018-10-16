@@ -127,6 +127,12 @@ class Api::UsersController < Api::BaseController
     data = data.each do |user|
       user.consumer_type = user.consumer_type == '2' ? 'Company' : 'Individual'
       user.approval_status = get_approval_status_string(user)
+      entites = CompanyBuyerEntity.find_by_user(user.id)
+      all_count = entites.count()
+      approval_count = entites.where(approval_status: CompanyBuyerEntity::ApprovalStatusApproved).count()
+      unless all_count == approval_count
+        user.approval_status += "!"
+      end
     end
     bodies = { data: data, total: total }
     result = { headers: headers, bodies: bodies, actions: actions }
