@@ -159,7 +159,6 @@ export class FillConsumption extends Component {
             this.setState({
                 isValidate: dis
             })
-
         }, (error) => {
             this.refs.Modal.showModal();
             this.setState({ text: "Interface failed" });
@@ -471,10 +470,19 @@ export class FillConsumption extends Component {
                 site_listObj.splice(this.deleteNum, 1);
                 this.setState({ preOtherList: site_listObj });
                 setTimeout(() => {
-                    this.clearAllError();
-                    this.validateIsNull();
+                    let count = 0;
+                    for (let i = 0; i < this.state.preOtherList.length; i++) {
+                        let classborder = $("#cate2 tr:eq(" + i + ") td:eq(1)").find("div").attr("class");
+                        if (classborder === 'redBorder') {
+                            count++
+                        }
+                    }
+                    if (count > 0) {
+                        this.clearAllError();
+                        this.validateIsNull();
+                    }
                 });
-                
+
             }
             else {
                 const site_listObj = this.state.site_list;
@@ -539,21 +547,21 @@ export class FillConsumption extends Component {
     }
 
     validateIsNull() {
- 
         for (let i = 0; i < this.state.preOtherList.length; i++) {
             if (this.state.preOtherList[i].existing_plan === "" || this.state.preOtherList[i].existing_plan === null) {
-                $("#cate2 tr:eq(" + i + ") td:eq(1)").find("div").css({ "border": "1px red solid" })
+                $("#cate2 tr:eq(" + i + ") td:eq(1)").find("div").removeClass("commonBorder").addClass("redBorder");
             }
         }
     }
+
     clearNullError(i) {
-        $("#cate2 tr:eq(" + i + ") td:eq(1)").find("div").css({ "border": "0px" })
+        $("#cate2 tr:eq(" + i + ") td:eq(1)").find("div").removeClass("redBorder").addClass("commonBorder");
     }
-    clearAllError()
-    {
+
+    clearAllError() {
         $("#cate2").find("tr").each(function () {
             $(this).children('td').each(function (j) {
-                $(this).find("div").css('border', "0px");
+                $(this).find("div").removeClass("redBorder").addClass("commonBorder");
             })
         });
     }
@@ -607,7 +615,7 @@ export class FillConsumption extends Component {
         this.setState({
             contract_duration: itemValue
         })
-        
+
     }
 
     getPurchase(id) {
@@ -644,8 +652,6 @@ export class FillConsumption extends Component {
         this.refs.market.showModal()
     }
     render() {
-
-
         return (
             <div>
                 <h1 className={"largeFont"}>Buyer Participation</h1>
@@ -715,7 +721,7 @@ export class FillConsumption extends Component {
                                     </table>
                                 </div>
                                 <div className="table-body">
-                                    <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                                    <table className="retailer_fill" cellPadding="0" cellSpacing="0" id="cate1">
                                         <colgroup>
                                             <col width="10%" />
                                             <col width="10%" />
@@ -802,8 +808,8 @@ export class FillConsumption extends Component {
                                         </thead>
                                     </table>
                                 </div>
-                                <div className="table-body" id="cate2">
-                                    <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                                <div className="table-body" >
+                                    <table className="retailer_fill" cellPadding="0" cellSpacing="0" id="cate2">
                                         <colgroup>
                                             <col width="10%" />
                                             <col width="10%" />
@@ -820,7 +826,7 @@ export class FillConsumption extends Component {
                                                 this.state.preOtherList.map((item, index) => {
                                                     return <tr key={index}>
                                                         <td>{item.account_number} </td>
-                                                        <td><div style={{"height":"25px"}}>{item.existing_plan}</div></td>
+                                                        <td><div className="commonBorder" style={{ "height": "25px" }}>{item.existing_plan}</div></td>
                                                         <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
                                                         <td>{item.entityName}</td>
                                                         <td>{item.intake_level}</td>
@@ -890,7 +896,7 @@ export class FillConsumption extends Component {
                                     </table>
                                 </div>
                                 <div className="table-body">
-                                    <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                                    <table className="retailer_fill" cellPadding="0" cellSpacing="0" id="cate3">
                                         <colgroup>
                                             <col width="10%" />
                                             <col width="10%" />
