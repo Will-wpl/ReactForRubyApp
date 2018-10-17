@@ -5,6 +5,7 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
   context 'OLD' do
     let!(:admin_user){ create(:user, :with_admin) }
     let!(:auction) { create(:auction, :for_next_month, :upcoming, :published, :started, contract_period_start_date: '2018-07-01') }
+    let!(:auction1) { create(:auction, :for_next_month, :upcoming, :published, :started, contract_period_start_date: '2018-07-01') }
     let!(:auction_contract) { create(:auction_contract,auction:auction, contract_duration: 6, contract_period_end_date: '2019-01-01') }
     let!(:company_buyer) { create(:user, :with_buyer, :with_company_buyer) }
     let!(:company_buyer1) { create(:user, :with_buyer, :with_company_buyer) }
@@ -12,6 +13,7 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
     # let!(:company_buyer) { create(:user, :with_buyer, :with_company_buyer, approval_status: '1', company_unique_entity_number: 'Test UEN', company_name: 'test buyer', email: 'test_email4@email.com') }
     let!(:consumption) { create(:consumption, user: company_buyer, auction: auction, participation_status: '1', contract_duration:6) }
     let!(:consumption1) { create(:consumption, user: company_buyer1, auction: auction, participation_status: '1', contract_duration:12) }
+    let!(:consumption2) { create(:consumption, user: company_buyer1, auction: auction1, participation_status: '1', contract_duration:12) }
     let!(:consumption_lt) { create(:consumption_detail, :for_lt, consumption_id: consumption.id, company_buyer_entity_id: company_buyer_entity.id, account_number: '000001') }
     let!(:consumption_hts) { create(:consumption_detail, :for_hts, consumption_id: consumption.id, company_buyer_entity_id: company_buyer_entity.id, unit_number: 'UN 1', postal_code: '4001') }
     let!(:consumption_htl) { create(:consumption_detail, :for_htl, consumption_id: consumption.id, company_buyer_entity_id: company_buyer_entity.id) }
@@ -56,8 +58,8 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
           buyer_entity.user = company_buyer
           buyer_entity.save
           details = []
-          details.push({id: 0, account_number: '000001', intake_level: 'LT' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '2018-08-01',attachment_ids:entity_1_attachment_ids.to_json})
-          details.push({id: 0, account_number: '000002', intake_level: 'HTS' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '01-08-2018',attachment_ids:entity_2_attachment_ids.to_json})
+          details.push({id: 0, account_number: '00000A', intake_level: 'LT' , peak: 100, unit_number: 'UN A', postal_code: '4001A', company_buyer_entity_id:buyer_entity.id, contract_expiry: '2018-08-01',attachment_ids:entity_1_attachment_ids.to_json})
+          details.push({id: 0, account_number: '00000B', intake_level: 'HTS' , peak: 100, unit_number: 'UN B', postal_code: '4001B', company_buyer_entity_id:buyer_entity.id, contract_expiry: '01-08-2018',attachment_ids:entity_2_attachment_ids.to_json})
           details_yesterday = []
           details_yesterday.push({id: 0, account_number: '000002', intake_level: 'HTS' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '01-08-2018',attachment_ids:entity_2_attachment_ids.to_json})
           details_yesterday.push({id: 0, account_number: '000002', intake_level: 'HTS' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '01-08-2018',attachment_ids:entity_2_attachment_ids.to_json})
@@ -72,9 +74,6 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
           array = JSON.parse(response.body)
           expect(response).to have_http_status(:ok)
           expect(array.length).to eq(2)
-          detail_entities = ConsumptionDetail.where('company_buyer_entity_id = (?)', array[0]['company_buyer_entity_id'])
-          expect(detail_entities.length).to eq(2)
-          expect(array[0]['company_buyer_entity_id']).to eq(array[1]['company_buyer_entity_id'])
         end
       end
     end
@@ -97,8 +96,8 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
           buyer_entity.user = company_buyer
           buyer_entity.save
           details = []
-          details.push({id: 0, account_number: '000001', intake_level: 'LT' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '2018-08-01',attachment_ids:entity_1_attachment_ids.to_json})
-          details.push({id: 0, account_number: '000002', intake_level: 'HTS' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '01-08-2018',attachment_ids:entity_2_attachment_ids.to_json})
+          details.push({id: 0, account_number: '00000A', intake_level: 'LT' , peak: 100, unit_number: 'UN A', postal_code: '4001A', company_buyer_entity_id:buyer_entity.id, contract_expiry: '2018-08-01',attachment_ids:entity_1_attachment_ids.to_json})
+          details.push({id: 0, account_number: '00000B', intake_level: 'HTS' , peak: 100, unit_number: 'UN B', postal_code: '4001B', company_buyer_entity_id:buyer_entity.id, contract_expiry: '01-08-2018',attachment_ids:entity_2_attachment_ids.to_json})
           put :participate, params: { consumption_id: consumption.id,
                                       details: details.to_json,
                                       details_yesterday: [].to_json,
@@ -109,13 +108,13 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
         it 'Success' do
           hash = JSON.parse(response.body)
           expect(response).to have_http_status(:ok)
-          expect(hash['participation_status']).to eq('1')
-          expect(hash['lt_peak']).to eq('100.0')
-          expect(hash['lt_off_peak']).to eq('100.0')
-          expect(hash['hts_peak']).to eq('100.0')
-          expect(hash['hts_off_peak']).to eq('100.0')
-          expect(hash['htl_peak']).to eq('100.0')
-          expect(hash['htl_off_peak']).to eq('100.0')
+          expect(hash['consumption']['participation_status']).to eq('1')
+          expect(hash['consumption']['lt_peak']).to eq('100.0')
+          expect(hash['consumption']['lt_off_peak']).to eq('100.0')
+          expect(hash['consumption']['hts_peak']).to eq('100.0')
+          expect(hash['consumption']['hts_off_peak']).to eq('100.0')
+          expect(hash['consumption']['htl_peak']).to eq('100.0')
+          expect(hash['consumption']['htl_off_peak']).to eq('100.0')
           # auction = Auction.find(hash['auction_id'])
           # expect(auction.total_lt_peak.to_s).to eq('2468475.0')
         end
@@ -145,7 +144,7 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
 
       context '(Validate-Single)Account number do not unique' do
         def do_request
-          detail = {id: 0, account_number: '000001', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 1', postal_code: '4001'}
+          detail = {id: 0, account_number: '000001',consumption_id: consumption.id, intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 1', postal_code: '4001'}
           post :validate_single, params: { consumption_id: consumption1.id, detail: detail }
         end
 
@@ -161,8 +160,8 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
 
       context '(Validate-Single) Premise Address do not unique' do
         def do_request
-          detail = {id: 0, account_number: '000002', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 1', postal_code: '4001'}
-          put :validate_single, params: { consumption_id: consumption.id, detail: detail }
+          detail = {id: 0, account_number: '000002', intake_level: 'LT', consumption_id: consumption1.id , peak: 100, off_peak: 100, unit_number: 'UN 1', postal_code: '4001'}
+          put :validate_single, params: { consumption_id: consumption2.id, detail: detail }
         end
 
         before { do_request }
@@ -303,8 +302,8 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
           buyer_entity.user = company_buyer
           buyer_entity.save
           details = []
-          details.push({id: 0, account_number: '000001', intake_level: 'LT' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '2018-08-01',attachment_ids:entity_1_attachment_ids.to_json})
-          details.push({id: 0, account_number: '000002', intake_level: 'HTS' , peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '01-08-2018',attachment_ids:entity_2_attachment_ids.to_json})
+          details.push({id: 0, account_number: '00000A', intake_level: 'LT' ,unit_number: 'UN A', postal_code: '400A', peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '2018-08-01',attachment_ids:entity_1_attachment_ids.to_json})
+          details.push({id: 0, account_number: '00000B', intake_level: 'HTS' ,unit_number: 'UN B', postal_code: '400B', peak: 100, company_buyer_entity_id:buyer_entity.id, contract_expiry: '01-08-2018',attachment_ids:entity_2_attachment_ids.to_json})
           put :participate, params: { consumption_id: consumption.id,
                                       details: details.to_json,
                                       details_yesterday: [].to_json,
@@ -315,14 +314,14 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
         it 'Success' do
           hash = JSON.parse(response.body)
           expect(response).to have_http_status(:ok)
-          expect(hash['participation_status']).to eq('1')
-          expect(hash['lt_peak']).to eq('100.0')
-          expect(hash['lt_off_peak']).to eq('100.0')
-          expect(hash['hts_peak']).to eq('100.0')
-          expect(hash['hts_off_peak']).to eq('100.0')
-          expect(hash['htl_peak']).to eq('100.0')
-          expect(hash['htl_off_peak']).to eq('100.0')
-          contract_duration = Auction.find(hash['auction_id']).auction_contracts.where(contract_duration: '6').take
+          expect(hash['consumption']['participation_status']).to eq('1')
+          expect(hash['consumption']['lt_peak']).to eq('100.0')
+          expect(hash['consumption']['lt_off_peak']).to eq('100.0')
+          expect(hash['consumption']['hts_peak']).to eq('100.0')
+          expect(hash['consumption']['hts_off_peak']).to eq('100.0')
+          expect(hash['consumption']['htl_peak']).to eq('100.0')
+          expect(hash['consumption']['htl_off_peak']).to eq('100.0')
+          contract_duration = Auction.find(hash['consumption']['auction_id']).auction_contracts.where(contract_duration: '6').take
           expect(contract_duration.total_lt_peak.to_s).to eq('1000.0')
         end
       end

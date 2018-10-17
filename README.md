@@ -141,6 +141,8 @@ bundle exec rspec spec/controllers/admin/auctions_controller_spec.rb
 
 
 ## For CSI dev team
+If out of memory when you run `./bin/webpack-dev-server --hot`, can do:
+- `export NODE_OPTIONS=--max-old-space-size=4000`
 
 If you want to install front end package, can do:
 - yarn add package-name

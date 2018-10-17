@@ -37,7 +37,8 @@ export class FillConsumption extends Component {
             dateIssuecount: 0,
             consumption_id: 0,
             advisory: "",
-            isValidate: false
+            isValidate: false,
+            takenList: []
         }
 
         this.accountItem = {
@@ -159,7 +160,6 @@ export class FillConsumption extends Component {
             this.setState({
                 isValidate: dis
             })
-
         }, (error) => {
             this.refs.Modal.showModal();
             this.setState({ text: "Interface failed" });
@@ -359,7 +359,10 @@ export class FillConsumption extends Component {
                 peak_pct: item.peak_pct,
                 user_attachment_id: item.user_attachment_id,
                 attachment_ids: item.attachment_ids,
-                user_attachment: item.user_attachment
+                user_attachment: item.user_attachment,
+                id: item.id,
+                orignal_id: item.orignal_id
+
             }
             buyerlist.push(siteItem);
         })
@@ -379,7 +382,9 @@ export class FillConsumption extends Component {
                 peak_pct: item.peak_pct,
                 user_attachment_id: item.user_attachment_id,
                 attachment_ids: item.attachment_ids,
-                user_attachment: item.user_attachment
+                user_attachment: item.user_attachment,
+                id: item.id,
+                orignal_id: item.orignal_id
             }
             yesterday.push(siteItem);
         })
@@ -399,11 +404,12 @@ export class FillConsumption extends Component {
                 peak_pct: item.peak_pct,
                 user_attachment_id: item.user_attachment_id,
                 attachment_ids: item.attachment_ids,
-                user_attachment: item.user_attachment
+                user_attachment: item.user_attachment,
+                id: item.id,
+                orignal_id: item.orignal_id
             }
             beforeYesterda.push(siteItem);
         })
-
 
         makeData = {
             consumption_id: this.state.consumption_id,
@@ -412,29 +418,42 @@ export class FillConsumption extends Component {
             details_before_yesterday: JSON.stringify(beforeYesterda),
             contract_duration: $("#selDuration").val()
         }
+         
         setBuyerParticipate(makeData, '/api/buyer/consumption_details/save').then((res) => {
             if (type != "participate") {
                 if (type == "delete") {
                     this.setState({ text: "Delete successful!" });
                 } else {
-                    this.setState({ text: "Save successful!" });
-                    setTimeout(() => {
-                        window.location.href = "/buyer/consumptions/" + this.state.consumption_id + "/edit";
-                    }, 2000)
 
+                    if (res.result === 'success') {
+                        this.setState({ text: "Save successful!" });
+                        setTimeout(() => {
+                            window.location.href = "/buyer/consumptions/" + this.state.consumption_id + "/edit";
+                        }, 2000)
+                        this.refs.Modal.showModal();
+                    }
+                    else {
+                        this.validateTaken(res)
+                    }
                 }
-                this.refs.Modal.showModal();
+
             } else {
                 setBuyerParticipate(makeData, '/api/buyer/consumption_details/participate').then((res) => {
-                    this.setState({
-                        disabled: 'disabled',
-                        checked: true,
-                    })
-                    this.refs.Modal.showModal();
-                    this.setState({ text: "Congratulations, your participation in this auction has been confirmed." });
-                    setTimeout(() => {
-                        window.location.href = "/buyer/auctions";
-                    }, 3000)
+                    if (res.result === 'success') {
+                        this.setState({
+                            disabled: 'disabled',
+                            checked: true,
+                        })
+                        this.refs.Modal.showModal();
+                        this.setState({ text: "Congratulations, your participation in this auction has been confirmed." });
+                        setTimeout(() => {
+                            window.location.href = "/buyer/auctions";
+                        }, 3000)
+                    }
+                    else {
+                        this.validateTaken(res);
+                    }
+
                 }, (error) => {
                     this.refs.Modal.showModal();
                     this.setState({ text: "Interface failed" });
@@ -444,6 +463,40 @@ export class FillConsumption extends Component {
             this.refs.Modal.showModal();
             this.setState({ text: "Interface failed" });
         })
+    }
+
+    validateTaken(res) {
+        let account_list = [];
+        if (res.errors.length > 0) {
+            res.errors.map(item => {
+                if (item.type === "category_1") {
+                    item.error_details.map(it => {
+                        account_list.push(it.account_number)
+                        $("#cate1 tr:eq(" + it.index + ") td:eq(0)").find("div").removeClass("commonBorder").addClass("redBorder");
+                        $("#cate1 tr:eq(" + it.index + ") td:eq(0)").find("div").attr("name", "isRed")
+                    })
+                }
+                if (item.type === "category_2") {
+                    item.error_details.map(it => {
+                        account_list.push(it.account_number)
+                        $("#cate2 tr:eq(" + it.index + ") td:eq(0)").find("div").removeClass("commonBorder").addClass("redBorder");
+                        $("#cate2 tr:eq(" + it.index + ") td:eq(0)").find("div").attr("name", "isRed")
+                    })
+                }
+                if (item.type === "new") {
+                    item.error_details.map(it => {
+                        account_list.push(it.account_number)
+                        $("#cate3 tr:eq(" + it.index + ") td:eq(0)").find("div").removeClass("commonBorder").addClass("redBorder");
+                        $("#cate3 tr:eq(" + it.index + ") td:eq(0)").find("div").attr("name", "isRed")
+                    })
+                }
+            })
+            this.setState({
+                takenList: account_list,
+                text: ""
+            })
+            this.refs.accountTaken.showModal();
+        }
     }
 
     doAccept() {
@@ -465,21 +518,81 @@ export class FillConsumption extends Component {
                 const site_listObj = this.state.preDayList;
                 site_listObj.splice(this.deleteNum, 1);
                 this.setState({ preDayList: site_listObj });
+                setTimeout(() => {
+                    let count = 0;
+                    for (let i = 0; i < this.state.preDayList.length; i++) {
+                        let classborder = $("#cate1 tr:eq(" + i + ") td:eq(0)").find("div").attr("class");
+                        if (classborder === 'redBorder') {
+                            count++
+                        }
+                    }
+                    if (count > 0) {
+                        for (let i = 0; i < this.state.preDayList.length; i++) {
+                            let name = $("#cate1 tr:eq(" + i + ") td:eq(0)").find("div").attr("name");
+                            if (name === 'isRed') {
+                                $("#cate1 tr:eq(" + i + ") td:eq(0)").find("div").removeClass('commonBorder').addClass('redBorder')
+                            }
+                        }
+                    }
+                });
             }
             else if (this.state.delete_type === "preOthers") {
                 const site_listObj = this.state.preOtherList;
                 site_listObj.splice(this.deleteNum, 1);
                 this.setState({ preOtherList: site_listObj });
                 setTimeout(() => {
-                    this.clearAllError();
-                    this.validateIsNull();
+                    let count = 0;
+                    for (let i = 0; i < this.state.preOtherList.length; i++) {
+                        let classborder = $("#cate2 tr:eq(" + i + ") td:eq(1)").find("div").attr("class");
+                        if (classborder === 'redBorder') {
+                            count++
+                        }
+                    }
+                    if (count > 0) {
+                        this.clearAllError();
+                        this.validateIsNull();
+                    }
+                    let count_c2 = 0;
+                    for (let i = 0; i < this.state.site_list.length; i++) {
+                        let classborder = $("#cate2 tr:eq(" + i + ") td:eq(0)").find("div").attr("class");
+                        if (classborder === 'redBorder') {
+                            count_c2++
+                        }
+                    }
+                    if (count_c2 > 0) {
+                        for (let i = 0; i < this.state.site_list.length; i++) {
+                            let name = $("#cate2 tr:eq(" + i + ") td:eq(0)").find("div").attr("name");
+                            if (name === 'isRed') {
+                                $("#cate2 tr:eq(" + i + ") td:eq(0)").find("div").removeClass('commonBorder').addClass('redBorder')
+                            }
+                        }
+                    }
                 });
-                
             }
             else {
                 const site_listObj = this.state.site_list;
                 site_listObj.splice(this.deleteNum, 1);
                 this.setState({ site_list: site_listObj });
+                setTimeout(() => {
+                    let count = 0;
+                    for (let i = 0; i < this.state.site_list.length; i++) {
+                        let classborder = $("#cate3 tr:eq(" + i + ") td:eq(0)").find("div").attr("class");
+                        if (classborder === 'redBorder') {
+                            count++
+                        }
+                    }
+                    if (count > 0) {
+                        for (let i = 0; i < this.state.site_list.length; i++) {
+                            let name = $("#cate3 tr:eq(" + i + ") td:eq(0)").find("div").attr("name");
+                            if (name === 'isRed') {
+                                $("#cate3 tr:eq(" + i + ") td:eq(0)").find("div").removeClass('commonBorder').addClass('redBorder')
+                            }
+                        }
+                    }
+                });
+
+
+
             }
             this.setState({
                 totalList: []
@@ -509,6 +622,7 @@ export class FillConsumption extends Component {
         event.preventDefault();
         this.validateIsNull();
         let isNotNull = this.validateListComplete();
+
         if (isNotNull) {
             let totalList = this.state.site_list.concat(this.state.preDayList).concat(this.state.preOtherList);
             let count = this.dateCompare(totalList);
@@ -538,21 +652,21 @@ export class FillConsumption extends Component {
     }
 
     validateIsNull() {
- 
         for (let i = 0; i < this.state.preOtherList.length; i++) {
             if (this.state.preOtherList[i].existing_plan === "" || this.state.preOtherList[i].existing_plan === null) {
-                $("#cate2 tr:eq(" + i + ") td:eq(1)").find("div").css({ "border": "1px red solid" })
+                $("#cate2 tr:eq(" + i + ") td:eq(1)").find("div").removeClass("commonBorder").addClass("redBorder");
             }
         }
     }
+
     clearNullError(i) {
-        $("#cate2 tr:eq(" + i + ") td:eq(1)").find("div").css({ "border": "0px" })
+        $("#cate2 tr:eq(" + i + ") td:eq(1)").find("div").removeClass("redBorder").addClass("commonBorder");
     }
-    clearAllError()
-    {
+
+    clearAllError() {
         $("#cate2").find("tr").each(function () {
             $(this).children('td').each(function (j) {
-                $(this).find("div").css('border', "0px");
+                $(this).find("div").removeClass("redBorder").addClass("commonBorder");
             })
         });
     }
@@ -606,7 +720,7 @@ export class FillConsumption extends Component {
         this.setState({
             contract_duration: itemValue
         })
-        
+
     }
 
     getPurchase(id) {
@@ -643,8 +757,6 @@ export class FillConsumption extends Component {
         this.refs.market.showModal()
     }
     render() {
-
-
         return (
             <div>
                 <h1 className={"largeFont"}>Buyer Participation</h1>
@@ -714,7 +826,7 @@ export class FillConsumption extends Component {
                                     </table>
                                 </div>
                                 <div className="table-body">
-                                    <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                                    <table className="retailer_fill" cellPadding="0" cellSpacing="0" id="cate1">
                                         <colgroup>
                                             <col width="10%" />
                                             <col width="10%" />
@@ -730,7 +842,7 @@ export class FillConsumption extends Component {
                                             {
                                                 this.state.preDayList.map((item, index) => {
                                                     return <tr key={index}>
-                                                        <td>{item.account_number} </td>
+                                                        <td><div name="12" className="" style={{ "height": "25px" }}>{item.account_number}</div> </td>
                                                         <td>{item.existing_plan}</td>
                                                         <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
                                                         <td>{item.entityName}</td>
@@ -801,8 +913,8 @@ export class FillConsumption extends Component {
                                         </thead>
                                     </table>
                                 </div>
-                                <div className="table-body" id="cate2">
-                                    <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                                <div className="table-body" >
+                                    <table className="retailer_fill" cellPadding="0" cellSpacing="0" id="cate2">
                                         <colgroup>
                                             <col width="10%" />
                                             <col width="10%" />
@@ -818,8 +930,8 @@ export class FillConsumption extends Component {
                                             {
                                                 this.state.preOtherList.map((item, index) => {
                                                     return <tr key={index}>
-                                                        <td>{item.account_number} </td>
-                                                        <td><div style={{"height":"25px"}}>{item.existing_plan}</div></td>
+                                                        <td><div name="12" className="" style={{ "height": "25px" }}>{item.account_number}</div> </td>
+                                                        <td><div className="commonBorder" style={{ "height": "25px" }}>{item.existing_plan}</div></td>
                                                         <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
                                                         <td>{item.entityName}</td>
                                                         <td>{item.intake_level}</td>
@@ -889,7 +1001,7 @@ export class FillConsumption extends Component {
                                     </table>
                                 </div>
                                 <div className="table-body">
-                                    <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                                    <table className="retailer_fill" cellPadding="0" cellSpacing="0" id="cate3">
                                         <colgroup>
                                             <col width="10%" />
                                             <col width="10%" />
@@ -905,7 +1017,7 @@ export class FillConsumption extends Component {
                                             {
                                                 this.state.site_list.map((item, index) => {
                                                     return <tr key={index}>
-                                                        <td>{item.account_number} </td>
+                                                        <td><div name="12" className="" style={{ "height": "25px" }}>{item.account_number}</div></td>
                                                         <td>{item.existing_plan}</td>
                                                         <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
                                                         <td>{item.entityName}</td>
@@ -973,9 +1085,12 @@ export class FillConsumption extends Component {
                 </form>
                 <Modal formSize="big" text={this.state.text} acceptFunction={this.doAddAccountAction.bind(this)} siteList={this.state.totalList} consumptionAccountItem={this.state.account_detail} listdetailtype='consumption_detail' ref="consumption" />
                 <Modal formSize="middle" text={this.state.text} advisory={this.state.advisory} listdetailtype='market-insight' ref="market" />
+                <Modal listdetailtype="accountTaken" text={this.state.text} takenList={this.state.takenList} ref="accountTaken" />
             </div>
         )
     }
+
+
 }
 
 FillConsumption.propTypes = { onAddClick: () => { } };
