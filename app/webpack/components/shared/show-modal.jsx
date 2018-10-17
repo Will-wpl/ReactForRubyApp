@@ -65,7 +65,7 @@ export class Modal extends React.Component {
                 unit_number: next.consumptionAccountItem.unit_number,
                 postal_code: next.consumptionAccountItem.postal_code,
                 totals: next.consumptionAccountItem.totals ? formatPower(parseInt(next.consumptionAccountItem.totals), 0, '') : "",
-                peak_pct: next.consumptionAccountItem.peak_pct==="" ? "" : parseInt(Math.round(next.consumptionAccountItem.peak_pct)),
+                peak_pct: next.consumptionAccountItem.peak_pct === "" ? "" : parseInt(Math.round(next.consumptionAccountItem.peak_pct)),
                 peak: next.consumptionAccountItem.peak_pct ? (100 - parseFloat(next.consumptionAccountItem.peak_pct)) : "",
                 option: next.consumptionAccountItem.option,
                 cate_type: next.consumptionAccountItem.cate_type
@@ -170,7 +170,7 @@ export class Modal extends React.Component {
         $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
         $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
         $("#account_number_taken_already_message").removeClass("errormessage").addClass('isPassValidate');
-        
+
     }
 
     componentDidMount() {
@@ -1160,10 +1160,17 @@ export class Modal extends React.Component {
                     <li>All supporting documents submitted should be in English only.</li>
                 </ul>
             }
-            if(this.props.listdetail==='accountTaken')
-            {
-                showDetail=<div>
-                    
+            if (this.props.listdetail === 'accountTaken') {
+                showDetail = <div>
+                    {this.props.takenList.length > 0 ? <div>
+                        <span className={this.props.takenList.length > 0 ? "isDisplayInLine" : "isHide"}>Highlighted Account No had already been occupied. </span>
+                        <ul className="showdetailerr">{
+                            this.props.takenList.nameError.map((item, index) => {
+                                return <li key={index}><span>{item}</span></li>
+                            })
+                        }
+                        </ul>
+                    </div> : <div></div>}
                 </div>
             }
             if (this.props.listdetailtype === 'entity_error') {
