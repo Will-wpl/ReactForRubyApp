@@ -167,6 +167,7 @@ export class Modal extends React.Component {
                 loglist: next.loglist
             })
         }
+        
         $(".btn").css("pointer-events", "auto");
         $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
         $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
@@ -803,6 +804,7 @@ export class Modal extends React.Component {
                         $(".btn").css("pointer-events", "auto")
                         break;
                     default:
+
                         $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
                         $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
                         this.addToMainForm();
