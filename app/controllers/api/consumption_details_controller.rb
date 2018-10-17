@@ -142,7 +142,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
   end
 
   def save
-    error_all = nil #validate_all_details
+    error_all = validate_all_details
     if error_all.blank?
       saved_details = save_comsumption_details()
       render json: { result: 'success', details: saved_details}, status: 200
@@ -152,7 +152,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
   end
 
   def participate
-    error_all = nil #validate_all_details
+    error_all = validate_all_details
     unless error_all.blank?
       render json: { result: 'failed', errors: error_all} , status: 200
       return
