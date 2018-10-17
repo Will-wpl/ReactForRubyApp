@@ -587,12 +587,13 @@ export class Modal extends React.Component {
             else {
                 $(".btn").css("pointer-events", "auto");
                 if (res.error_details) {
+                    console.log(res.error_details)
                     res.error_details.map(item => {
                         if (item.error_field_name === "account_number") {
                             $("#account_number_taken_already_message").removeClass("isPassValidate").addClass('errormessage');
                             $("#account_number").focus();
                         }
-                        else {
+                        else if(item.error_field_name === "account_number") {
                             $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
                             $("#unit_number").focus();
                         }
@@ -786,25 +787,28 @@ export class Modal extends React.Component {
                 console.log(status)
                 switch (status) {
                     case 'false|true':
+                    console.log(1)
                         $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
                         $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
                         $("#unit_number").focus();
                         $(".btn").css("pointer-events", "auto")
                         break;
                     case 'true|false':
+                    console.log(3)
                         $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
                         $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
                         $("#account_number").focus();
                         $(".btn").css("pointer-events", "auto")
                         break;
                     case 'true|true':
+                    console.log(3)
                         $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
                         $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
                         $("#account_number").focus();
                         $(".btn").css("pointer-events", "auto")
                         break;
                     default:
-
+                    console.log(4)
                         $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
                         $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
                         this.addToMainForm();
