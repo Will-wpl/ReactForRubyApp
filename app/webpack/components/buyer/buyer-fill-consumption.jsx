@@ -404,7 +404,6 @@ export class FillConsumption extends Component {
             beforeYesterda.push(siteItem);
         })
 
-
         makeData = {
             consumption_id: this.state.consumption_id,
             details: JSON.stringify(buyerlist),
@@ -417,13 +416,32 @@ export class FillConsumption extends Component {
                 if (type == "delete") {
                     this.setState({ text: "Delete successful!" });
                 } else {
-                    this.setState({ text: "Save successful!" });
-                    setTimeout(() => {
-                        window.location.href = "/buyer/consumptions/" + this.state.consumption_id + "/edit";
-                    }, 2000)
 
+                    if (res.result === 'success') {
+                        this.setState({ text: "Save successful!" });
+                        setTimeout(() => {
+                            window.location.href = "/buyer/consumptions/" + this.state.consumption_id + "/edit";
+                        }, 2000)
+                        this.refs.Modal.showModal();
+                    }
+                    else {
+                        let account_list = [];
+                        if (res.errors.length > 0) {
+                            res.errors.map(item => {
+                                item.error_details.map(it => {
+                                    account_list.push(it.account_number)
+                                    $("#cate1 tr:eq(" + it.index + ") td:eq(0)").find("div").removeClass("commonBorder").addClass("redBorder");
+                                    $("#cate1 tr:eq(" + it.index + ") td:eq(0)").find("div").attr("name", "isRed")
+                                })
+                            })
+                            this.setState({
+                                takenList: account_list
+                            })
+                            this.refs.accountTaken.showModal();
+                        }
+                    }
                 }
-                this.refs.Modal.showModal();
+
             } else {
                 setBuyerParticipate(makeData, '/api/buyer/consumption_details/participate').then((res) => {
                     if (res.result === 'success') {
@@ -443,18 +461,15 @@ export class FillConsumption extends Component {
                             res.errors.map(item => {
                                 item.error_details.map(it => {
                                     account_list.push(it.account_number)
+                                    $("#cate1 tr:eq(" + it.index + ") td:eq(0)").find("div").removeClass("commonBorder").addClass("redBorder");
+                                    $("#cate1 tr:eq(" + it.index + ") td:eq(0)").find("div").attr("name", "isRed");
                                 })
-                                $("#cate1 tr:eq(" + item.index + ") td:eq(0)").find("div").removeClass("commonBorder").addClass("redBorder");
-                                $("#cate1 tr:eq(" + item.index + ") td:eq(0)").find("div").attr("name","isRed")
                             })
                             this.setState({
                                 takenList: account_list
                             })
                             this.refs.accountTaken.showModal();
-
-
                         }
-
                     }
 
                 }, (error) => {
@@ -488,21 +503,19 @@ export class FillConsumption extends Component {
                 site_listObj.splice(this.deleteNum, 1);
                 this.setState({ preDayList: site_listObj });
                 setTimeout(() => {
-                    let count=0;
+                    let count = 0;
                     for (let i = 0; i < this.state.preDayList.length; i++) {
                         let classborder = $("#cate1 tr:eq(" + i + ") td:eq(0)").find("div").attr("class");
                         if (classborder === 'redBorder') {
-                            count++ 
+                            count++
                         }
                     }
-                    if(count>0)
-                    {
+                    if (count > 0) {
 
                         // let classborder = $("#cate1 tr:eq(" + i + ") td:eq(1)").find("div").attr("class");
                         for (let i = 0; i < this.state.preDayList.length; i++) {
                             let name = $("#cate1 tr:eq(" + i + ") td:eq(0)").find("div").attr("name");
-                            if(name==='isRed')
-                            {
+                            if (name === 'isRed') {
                                 $("#cate1 tr:eq(" + i + ") td:eq(0)").find("div").removeClass('commonBorder').addClass('redBorder')
                             }
 
@@ -871,7 +884,7 @@ export class FillConsumption extends Component {
                                                 this.state.preOtherList.map((item, index) => {
                                                     return <tr key={index}>
                                                         <td>{item.account_number} </td>
-                                                        <td><div   className="commonBorder" style={{ "height": "25px" }}>{item.existing_plan}</div></td>
+                                                        <td><div className="commonBorder" style={{ "height": "25px" }}>{item.existing_plan}</div></td>
                                                         <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
                                                         <td>{item.entityName}</td>
                                                         <td>{item.intake_level}</td>

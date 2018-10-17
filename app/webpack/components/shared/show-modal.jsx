@@ -8,6 +8,7 @@ import { formatPower, validateInteger, validateLess100, removeDecimal, removeAsI
 //共通弹出框组件
 import { UploadFile } from '../shared/upload';
 import E from 'wangeditor'
+import { isForStatement } from 'typescript';
 
 export class Modal extends React.Component {
     constructor(props) {
@@ -781,6 +782,7 @@ export class Modal extends React.Component {
             flag = validateResult.length > 0 ? false : true;
             if (flag) {
                 let status = this.account_address_repeat();
+                console.log(status)
                 switch (status) {
                     case 'false|true':
                         $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
@@ -801,6 +803,8 @@ export class Modal extends React.Component {
                         $(".btn").css("pointer-events", "auto")
                         break;
                     default:
+                        $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
+                        $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
                         this.addToMainForm();
                         break;
                 }
@@ -852,16 +856,14 @@ export class Modal extends React.Component {
     removeInputPostCode(value) {
         removePostCode(value);
     }
-    // removeAsIntegerPercent(value)
-    // {
-    //     removeAsIntegerPercent(value)
-    // }
+
     account_address_repeat() {
-        let address = false, account = false, editNotSave = false;
+        let address = false, account = false;
         let address_count = 0, account_count = 0;
         this.state.consumptionItem.map((item, index) => {
             if (this.state.option === 'update') {
                 if (item.id) {
+
                     if ((trim(this.state.unit_number) == trim(item.unit_number)) && (trim(this.state.postal_code) == trim(item.postal_code)) && (this.state.id !== item.id)) {
                         address_count++;
                     }
@@ -878,12 +880,12 @@ export class Modal extends React.Component {
                             account_count++;
                         }
                     } else {
-                        if ((trim(this.state.unit_number) === trim(item.unit_number)) && (trim(this.state.postal_code) === (item.postal_code))) {
+                        if ((trim(this.state.unit_number) == trim(item.unit_number)) && (trim(this.state.postal_code) == (item.postal_code))) {
                             if (index != this.state.itemIndex) {
                                 address_count++;
                             }
                         }
-                        if (trim(this.state.account_number) === trim(item.account_number)) {
+                        if (trim(this.state.account_number) == trim(item.account_number)) {
                             if (index != this.state.itemIndex) {
                                 account_count++;
                             }
@@ -1160,12 +1162,12 @@ export class Modal extends React.Component {
                     <li>All supporting documents submitted should be in English only.</li>
                 </ul>
             }
-            if (this.props.listdetail === 'accountTaken') {
+            if (this.props.listdetailtype === 'accountTaken') {
                 showDetail = <div>
                     {this.props.takenList.length > 0 ? <div>
                         <span className={this.props.takenList.length > 0 ? "isDisplayInLine" : "isHide"}>Highlighted Account No had already been occupied. </span>
                         <ul className="showdetailerr">{
-                            this.props.takenList.nameError.map((item, index) => {
+                            this.props.takenList.map((item, index) => {
                                 return <li key={index}><span>{item}</span></li>
                             })
                         }
