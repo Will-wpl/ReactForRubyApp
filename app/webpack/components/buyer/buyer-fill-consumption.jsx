@@ -416,10 +416,9 @@ export class FillConsumption extends Component {
             details: JSON.stringify(buyerlist),
             details_yesterday: JSON.stringify(yesterday),
             details_before_yesterday: JSON.stringify(beforeYesterda),
-            contract_duration: $("#selDuration").val(),
+            contract_duration: $("#selDuration").val()
         }
-        console.log(makeData)
-
+         
         setBuyerParticipate(makeData, '/api/buyer/consumption_details/save').then((res) => {
             if (type != "participate") {
                 if (type == "delete") {
@@ -470,14 +469,14 @@ export class FillConsumption extends Component {
         let account_list = [];
         if (res.errors.length > 0) {
             res.errors.map(item => {
-                if (item.type === "cagetory_1") {
+                if (item.type === "category_1") {
                     item.error_details.map(it => {
                         account_list.push(it.account_number)
                         $("#cate1 tr:eq(" + it.index + ") td:eq(0)").find("div").removeClass("commonBorder").addClass("redBorder");
                         $("#cate1 tr:eq(" + it.index + ") td:eq(0)").find("div").attr("name", "isRed")
                     })
                 }
-                if (item.type === "cagetory_2") {
+                if (item.type === "category_2") {
                     item.error_details.map(it => {
                         account_list.push(it.account_number)
                         $("#cate2 tr:eq(" + it.index + ") td:eq(0)").find("div").removeClass("commonBorder").addClass("redBorder");
