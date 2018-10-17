@@ -208,7 +208,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
         # end
         # -- Now logic - 20170726
         send_participated_mail(auction_name, auction_start_datetime)
-        render json: consumption, status: 200
+        render json: {result: 'success' ,consumption: consumption}, status: 200
         # Change -- [do not save acution. move this logic to admin approval logic] - End
       else
         render json: nil, status: 500
@@ -341,7 +341,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
     consumptions.each do |consumption|
       temp_contract_period_start_date ,temp_contract_period_end_date = get_auction_period(consumption)
 
-      next if consumption.participation_status == Consumption::ParticipationStatusReject || consumption.accept_status == Consumption::AcceptStatusReject
+      next if consumption.id == current_consumption.id || consumption.participation_status == Consumption::ParticipationStatusReject || consumption.accept_status == Consumption::AcceptStatusReject
       consumption.consumption_details.each do |consumption_detail|
         consumption_detail_id = detail['id'].blank? ? detail['orignal_id'] : detail['id']
         if temp_contract_period_start_date.nil? ||

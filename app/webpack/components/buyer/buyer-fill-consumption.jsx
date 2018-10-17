@@ -359,7 +359,10 @@ export class FillConsumption extends Component {
                 peak_pct: item.peak_pct,
                 user_attachment_id: item.user_attachment_id,
                 attachment_ids: item.attachment_ids,
-                user_attachment: item.user_attachment
+                user_attachment: item.user_attachment,
+                id:item.id,
+                orignal_id:item.orignal_id
+
             }
             buyerlist.push(siteItem);
         })
@@ -379,7 +382,9 @@ export class FillConsumption extends Component {
                 peak_pct: item.peak_pct,
                 user_attachment_id: item.user_attachment_id,
                 attachment_ids: item.attachment_ids,
-                user_attachment: item.user_attachment
+                user_attachment: item.user_attachment,
+                id:item.id,
+                orignal_id:item.orignal_id
             }
             yesterday.push(siteItem);
         })
@@ -399,7 +404,9 @@ export class FillConsumption extends Component {
                 peak_pct: item.peak_pct,
                 user_attachment_id: item.user_attachment_id,
                 attachment_ids: item.attachment_ids,
-                user_attachment: item.user_attachment
+                user_attachment: item.user_attachment,
+                id:item.id,
+                orignal_id:item.orignal_id
             }
             beforeYesterda.push(siteItem);
         })
@@ -409,8 +416,10 @@ export class FillConsumption extends Component {
             details: JSON.stringify(buyerlist),
             details_yesterday: JSON.stringify(yesterday),
             details_before_yesterday: JSON.stringify(beforeYesterda),
-            contract_duration: $("#selDuration").val()
+            contract_duration: $("#selDuration").val(),
         }
+        console.log(makeData)
+    
         setBuyerParticipate(makeData, '/api/buyer/consumption_details/save').then((res) => {
             if (type != "participate") {
                 if (type == "delete") {
@@ -425,21 +434,22 @@ export class FillConsumption extends Component {
                         this.refs.Modal.showModal();
                     }
                     else {
-                        let account_list = [];
-                        if (res.errors.length > 0) {
-                            res.errors.map(item => {
-                                item.error_details.map(it => {
-                                    account_list.push(it.account_number)
-                                    $("#cate1 tr:eq(" + it.index + ") td:eq(0)").find("div").removeClass("commonBorder").addClass("redBorder");
-                                    $("#cate1 tr:eq(" + it.index + ") td:eq(0)").find("div").attr("name", "isRed")
-                                })
-                            })
-                            this.setState({
-                                takenList: account_list,
-                                text: "" 
-                            })
-                            this.refs.accountTaken.showModal();
-                        }
+                        // let account_list = [];
+                        // if (res.errors.length > 0) {
+                        //     res.errors.map(item => {
+                        //         item.error_details.map(it => {
+                        //             account_list.push(it.account_number)
+                        //             $("#cate1 tr:eq(" + it.index + ") td:eq(0)").find("div").removeClass("commonBorder").addClass("redBorder");
+                        //             $("#cate1 tr:eq(" + it.index + ") td:eq(0)").find("div").attr("name", "isRed")
+                        //         })
+                        //     })
+                        //     this.setState({
+                        //         takenList: account_list,
+                        //         text: ""
+                        //     })
+                        //     this.refs.accountTaken.showModal();
+                        // }
+                        this.validateTaken(res)
                     }
                 }
 
@@ -457,21 +467,22 @@ export class FillConsumption extends Component {
                         }, 3000)
                     }
                     else {
-                        let account_list = [];
-                        if (res.errors.length > 0) {
-                            res.errors.map(item => {
-                                item.error_details.map(it => {
-                                    account_list.push(it.account_number)
-                                    $("#cate1 tr:eq(" + it.index + ") td:eq(0)").find("div").removeClass("commonBorder").addClass("redBorder");
-                                    $("#cate1 tr:eq(" + it.index + ") td:eq(0)").find("div").attr("name", "isRed");
-                                })
-                            })
-                            this.setState({
-                                takenList: account_list,
-                                text: ""
-                            })
-                            this.refs.accountTaken.showModal();
-                        }
+                        // let account_list = [];
+                        // if (res.errors.length > 0) {
+                        //     res.errors.map(item => {
+                        //         item.error_details.map(it => {
+                        //             account_list.push(it.account_number)
+                        //             $("#cate1 tr:eq(" + it.index + ") td:eq(0)").find("div").removeClass("commonBorder").addClass("redBorder");
+                        //             $("#cate1 tr:eq(" + it.index + ") td:eq(0)").find("div").attr("name", "isRed");
+                        //         })
+                        //     })
+                        //     this.setState({
+                        //         takenList: account_list,
+                        //         text: ""
+                        //     })
+                        //     this.refs.accountTaken.showModal();
+                        // }
+                        this.validateTaken(res);
                     }
 
                 }, (error) => {
@@ -483,6 +494,24 @@ export class FillConsumption extends Component {
             this.refs.Modal.showModal();
             this.setState({ text: "Interface failed" });
         })
+    }
+
+    validateTaken(res) {
+        let account_list = [];
+        if (res.errors.length > 0) {
+            res.errors.map(item => {
+                item.error_details.map(it => {
+                    account_list.push(it.account_number)
+                    $("#cate1 tr:eq(" + it.index + ") td:eq(0)").find("div").removeClass("commonBorder").addClass("redBorder");
+                    $("#cate1 tr:eq(" + it.index + ") td:eq(0)").find("div").attr("name", "isRed")
+                })
+            })
+            this.setState({
+                takenList: account_list,
+                text: ""
+            })
+            this.refs.accountTaken.showModal();
+        }
     }
 
     doAccept() {
