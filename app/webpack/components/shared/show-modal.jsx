@@ -587,13 +587,13 @@ export class Modal extends React.Component {
             else {
                 $(".btn").css("pointer-events", "auto");
                 if (res.error_details) {
-                    console.log(res.error_details)
+                
                     res.error_details.map(item => {
                         if (item.error_field_name === "account_number") {
                             $("#account_number_taken_already_message").removeClass("isPassValidate").addClass('errormessage');
                             $("#account_number").focus();
                         }
-                        else if(item.error_field_name === "account_number") {
+                        else if(item.error_field_name === "premise_addresses") {
                             $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
                             $("#unit_number").focus();
                         }
@@ -777,38 +777,34 @@ export class Modal extends React.Component {
             contracted_capacity: replaceSymbol(this.state.contracted_capacity)
         })
 
-        // console.log(this.state.totals)
-        // console.log(this.state.contracted_capacity)
+       
+        
         setTimeout(() => {
             let validateResult = validator_Object(this.state, validateItem);
             flag = validateResult.length > 0 ? false : true;
             if (flag) {
                 let status = this.account_address_repeat();
-                console.log(status)
+            
                 switch (status) {
                     case 'false|true':
-                    console.log(1)
                         $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
                         $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
                         $("#unit_number").focus();
                         $(".btn").css("pointer-events", "auto")
                         break;
                     case 'true|false':
-                    console.log(3)
                         $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
                         $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
                         $("#account_number").focus();
                         $(".btn").css("pointer-events", "auto")
                         break;
                     case 'true|true':
-                    console.log(3)
                         $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
                         $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
                         $("#account_number").focus();
                         $(".btn").css("pointer-events", "auto")
                         break;
                     default:
-                    console.log(4)
                         $("#permise_address_taken_message").removeClass("errormessage").addClass('isPassValidate');
                         $("#account_number_taken_message").removeClass("errormessage").addClass('isPassValidate');
                         this.addToMainForm();
@@ -1399,7 +1395,7 @@ export class Modal extends React.Component {
                                         <input type="text" disabled={(this.state.cate_type === 'preDay' || this.state.cate_type === 'preOthers') ? true : false} value={this.state.account_number} onChange={this.changeConsumption.bind(this, "account_number")} id="account_number" name="account_number" required aria-required="true" />
                                         <div id="account_number_message" className="isPassValidate">This filed is required!</div>
                                         <div id="account_number_taken_message" className="errormessage">Account number cannot be duplicated.</div>
-                                        <div id="account_number_taken_already_message" className="errormessage">There is one ongoing Auction already occupied account {this.state.account_number}, please  use other account.</div>
+                                        <div id="account_number_taken_already_message"  style={{ "wordBreak":"keep-all"}}className="errormessage">There is one ongoing Auction already occupied account {this.state.account_number}, please  use other account.</div>
                                     </td>
                                 </tr>
                                 <tr>

@@ -435,7 +435,8 @@ export class FillConsumption extends Component {
                                 })
                             })
                             this.setState({
-                                takenList: account_list
+                                takenList: account_list,
+                                text: "" 
                             })
                             this.refs.accountTaken.showModal();
                         }
@@ -466,7 +467,8 @@ export class FillConsumption extends Component {
                                 })
                             })
                             this.setState({
-                                takenList: account_list
+                                takenList: account_list,
+                                text: ""
                             })
                             this.refs.accountTaken.showModal();
                         }
