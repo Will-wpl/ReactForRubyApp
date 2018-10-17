@@ -360,8 +360,8 @@ export class FillConsumption extends Component {
                 user_attachment_id: item.user_attachment_id,
                 attachment_ids: item.attachment_ids,
                 user_attachment: item.user_attachment,
-                id:item.id,
-                orignal_id:item.orignal_id
+                id: item.id,
+                orignal_id: item.orignal_id
 
             }
             buyerlist.push(siteItem);
@@ -383,8 +383,8 @@ export class FillConsumption extends Component {
                 user_attachment_id: item.user_attachment_id,
                 attachment_ids: item.attachment_ids,
                 user_attachment: item.user_attachment,
-                id:item.id,
-                orignal_id:item.orignal_id
+                id: item.id,
+                orignal_id: item.orignal_id
             }
             yesterday.push(siteItem);
         })
@@ -405,8 +405,8 @@ export class FillConsumption extends Component {
                 user_attachment_id: item.user_attachment_id,
                 attachment_ids: item.attachment_ids,
                 user_attachment: item.user_attachment,
-                id:item.id,
-                orignal_id:item.orignal_id
+                id: item.id,
+                orignal_id: item.orignal_id
             }
             beforeYesterda.push(siteItem);
         })
@@ -416,10 +416,9 @@ export class FillConsumption extends Component {
             details: JSON.stringify(buyerlist),
             details_yesterday: JSON.stringify(yesterday),
             details_before_yesterday: JSON.stringify(beforeYesterda),
-            contract_duration: $("#selDuration").val(),
+            contract_duration: $("#selDuration").val()
         }
-        console.log(makeData)
-    
+         
         setBuyerParticipate(makeData, '/api/buyer/consumption_details/save').then((res) => {
             if (type != "participate") {
                 if (type == "delete") {
@@ -434,21 +433,6 @@ export class FillConsumption extends Component {
                         this.refs.Modal.showModal();
                     }
                     else {
-                        // let account_list = [];
-                        // if (res.errors.length > 0) {
-                        //     res.errors.map(item => {
-                        //         item.error_details.map(it => {
-                        //             account_list.push(it.account_number)
-                        //             $("#cate1 tr:eq(" + it.index + ") td:eq(0)").find("div").removeClass("commonBorder").addClass("redBorder");
-                        //             $("#cate1 tr:eq(" + it.index + ") td:eq(0)").find("div").attr("name", "isRed")
-                        //         })
-                        //     })
-                        //     this.setState({
-                        //         takenList: account_list,
-                        //         text: ""
-                        //     })
-                        //     this.refs.accountTaken.showModal();
-                        // }
                         this.validateTaken(res)
                     }
                 }
@@ -467,21 +451,6 @@ export class FillConsumption extends Component {
                         }, 3000)
                     }
                     else {
-                        // let account_list = [];
-                        // if (res.errors.length > 0) {
-                        //     res.errors.map(item => {
-                        //         item.error_details.map(it => {
-                        //             account_list.push(it.account_number)
-                        //             $("#cate1 tr:eq(" + it.index + ") td:eq(0)").find("div").removeClass("commonBorder").addClass("redBorder");
-                        //             $("#cate1 tr:eq(" + it.index + ") td:eq(0)").find("div").attr("name", "isRed");
-                        //         })
-                        //     })
-                        //     this.setState({
-                        //         takenList: account_list,
-                        //         text: ""
-                        //     })
-                        //     this.refs.accountTaken.showModal();
-                        // }
                         this.validateTaken(res);
                     }
 
@@ -500,11 +469,27 @@ export class FillConsumption extends Component {
         let account_list = [];
         if (res.errors.length > 0) {
             res.errors.map(item => {
-                item.error_details.map(it => {
-                    account_list.push(it.account_number)
-                    $("#cate1 tr:eq(" + it.index + ") td:eq(0)").find("div").removeClass("commonBorder").addClass("redBorder");
-                    $("#cate1 tr:eq(" + it.index + ") td:eq(0)").find("div").attr("name", "isRed")
-                })
+                if (item.type === "category_1") {
+                    item.error_details.map(it => {
+                        account_list.push(it.account_number)
+                        $("#cate1 tr:eq(" + it.index + ") td:eq(0)").find("div").removeClass("commonBorder").addClass("redBorder");
+                        $("#cate1 tr:eq(" + it.index + ") td:eq(0)").find("div").attr("name", "isRed")
+                    })
+                }
+                if (item.type === "category_2") {
+                    item.error_details.map(it => {
+                        account_list.push(it.account_number)
+                        $("#cate2 tr:eq(" + it.index + ") td:eq(0)").find("div").removeClass("commonBorder").addClass("redBorder");
+                        $("#cate2 tr:eq(" + it.index + ") td:eq(0)").find("div").attr("name", "isRed")
+                    })
+                }
+                if (item.type === "new") {
+                    item.error_details.map(it => {
+                        account_list.push(it.account_number)
+                        $("#cate3 tr:eq(" + it.index + ") td:eq(0)").find("div").removeClass("commonBorder").addClass("redBorder");
+                        $("#cate3 tr:eq(" + it.index + ") td:eq(0)").find("div").attr("name", "isRed")
+                    })
+                }
             })
             this.setState({
                 takenList: account_list,
@@ -542,14 +527,11 @@ export class FillConsumption extends Component {
                         }
                     }
                     if (count > 0) {
-
-                        // let classborder = $("#cate1 tr:eq(" + i + ") td:eq(1)").find("div").attr("class");
                         for (let i = 0; i < this.state.preDayList.length; i++) {
                             let name = $("#cate1 tr:eq(" + i + ") td:eq(0)").find("div").attr("name");
                             if (name === 'isRed') {
                                 $("#cate1 tr:eq(" + i + ") td:eq(0)").find("div").removeClass('commonBorder').addClass('redBorder')
                             }
-
                         }
                     }
                 });
@@ -570,13 +552,47 @@ export class FillConsumption extends Component {
                         this.clearAllError();
                         this.validateIsNull();
                     }
+                    let count_c2 = 0;
+                    for (let i = 0; i < this.state.site_list.length; i++) {
+                        let classborder = $("#cate2 tr:eq(" + i + ") td:eq(0)").find("div").attr("class");
+                        if (classborder === 'redBorder') {
+                            count_c2++
+                        }
+                    }
+                    if (count_c2 > 0) {
+                        for (let i = 0; i < this.state.site_list.length; i++) {
+                            let name = $("#cate2 tr:eq(" + i + ") td:eq(0)").find("div").attr("name");
+                            if (name === 'isRed') {
+                                $("#cate2 tr:eq(" + i + ") td:eq(0)").find("div").removeClass('commonBorder').addClass('redBorder')
+                            }
+                        }
+                    }
                 });
-
             }
             else {
                 const site_listObj = this.state.site_list;
                 site_listObj.splice(this.deleteNum, 1);
                 this.setState({ site_list: site_listObj });
+                setTimeout(() => {
+                    let count = 0;
+                    for (let i = 0; i < this.state.site_list.length; i++) {
+                        let classborder = $("#cate3 tr:eq(" + i + ") td:eq(0)").find("div").attr("class");
+                        if (classborder === 'redBorder') {
+                            count++
+                        }
+                    }
+                    if (count > 0) {
+                        for (let i = 0; i < this.state.site_list.length; i++) {
+                            let name = $("#cate3 tr:eq(" + i + ") td:eq(0)").find("div").attr("name");
+                            if (name === 'isRed') {
+                                $("#cate3 tr:eq(" + i + ") td:eq(0)").find("div").removeClass('commonBorder').addClass('redBorder')
+                            }
+                        }
+                    }
+                });
+
+
+
             }
             this.setState({
                 totalList: []
@@ -914,7 +930,7 @@ export class FillConsumption extends Component {
                                             {
                                                 this.state.preOtherList.map((item, index) => {
                                                     return <tr key={index}>
-                                                        <td>{item.account_number} </td>
+                                                        <td><div name="12" className="" style={{ "height": "25px" }}>{item.account_number}</div> </td>
                                                         <td><div className="commonBorder" style={{ "height": "25px" }}>{item.existing_plan}</div></td>
                                                         <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
                                                         <td>{item.entityName}</td>
@@ -1001,7 +1017,7 @@ export class FillConsumption extends Component {
                                             {
                                                 this.state.site_list.map((item, index) => {
                                                     return <tr key={index}>
-                                                        <td>{item.account_number} </td>
+                                                        <td><div name="12" className="" style={{ "height": "25px" }}>{item.account_number}</div></td>
                                                         <td>{item.existing_plan}</td>
                                                         <td>{(item.contract_expiry !== "" && item.contract_expiry !== null) ? moment(item.contract_expiry).format('DD-MM-YYYY') : ""}</td>
                                                         <td>{item.entityName}</td>
