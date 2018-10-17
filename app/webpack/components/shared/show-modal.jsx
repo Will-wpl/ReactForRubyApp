@@ -1391,7 +1391,7 @@ export class Modal extends React.Component {
                                         <input type="text" disabled={(this.state.cate_type === 'preDay' || this.state.cate_type === 'preOthers') ? true : false} value={this.state.account_number} onChange={this.changeConsumption.bind(this, "account_number")} id="account_number" name="account_number" required aria-required="true" />
                                         <div id="account_number_message" className="isPassValidate">This filed is required!</div>
                                         <div id="account_number_taken_message" className="errormessage">Account number cannot be duplicated.</div>
-                                        <div id="account_number_taken_already_message" className="errormessage">There is one ongoing auction already occupied account {this.state.account_number},please  use other account.</div>
+                                        <div id="account_number_taken_already_message" className="errormessage">There is one ongoing Auction already occupied account {this.state.account_number}, please  use other account.</div>
                                     </td>
                                 </tr>
                                 <tr>
