@@ -89,6 +89,16 @@ class Api::ConsumptionDetailsController < Api::BaseController
     end
   end
 
+  def detail_validate_form(detail)
+    {
+        "id" => detail['id'],
+        "account_number" => detail['account_number'],
+        "unit_number" => detail['unit_number'],
+        "postal_code" => detail['postal_code'],
+        "orignal_id" => detail['orignal_id']
+    }
+  end
+
   def validate_all_details
     error_all = []
     details = JSON.parse(params[:details])
@@ -101,7 +111,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
     unless details_yesterday.blank?
       errors_category_1 = []
       details_yesterday.each_index do |index|
-        consumption_detail = details_yesterday.at(index)
+        consumption_detail = detail_validate_form(details_yesterday.at(index))
         error = validate_consumption_detail(consumption_detail, consumption)
         errors_category_1.push(consumption_detail_include_index(index,consumption_detail)) unless error.blank?
       end
@@ -112,7 +122,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
     unless details_before_yesterday.blank?
       errors_category_2 = []
       details_before_yesterday.each_index do |index|
-        consumption_detail = details_before_yesterday.at(index)
+        consumption_detail = detail_validate_form(details_before_yesterday.at(index))
         error = validate_consumption_detail(consumption_detail, consumption)
         errors_category_2.push(consumption_detail_include_index(index,consumption_detail)) unless error.blank?
       end
@@ -123,7 +133,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
     unless details.blank?
       errors_new = []
       details.each_index do |index|
-        consumption_detail = details.at(index)
+        consumption_detail = detail_validate_form(details.at(index))
         error = validate_consumption_detail(consumption_detail, consumption)
         errors_new.push(consumption_detail_include_index(index,consumption_detail)) unless error.blank?
       end
@@ -528,7 +538,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
     details_all.concat(details_before_yesterday)
     ids = []
     details_all.each do |detail|
-      ids.push(detail['id']) if detail['id'].to_i != 0
+      ids.push(detail['id'].to_s) if detail['id'].to_i != 0
     end
     will_del_details = consumption.consumption_details.reject do |detail|
       ids.include?(detail.id.to_s)
