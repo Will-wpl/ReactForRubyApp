@@ -149,7 +149,7 @@ jobs:
             git push --force git@heroku.com:$HEROKU_STAGING.git HEAD:refs/heads/master
             heroku run --app $HEROKU_STAGING rake db:migrate
             heroku restart web --app $HEROKU_STAGING
-          no_output_timeout: 30m
+          no_output_timeout: 60m
 
 workflows:
   version: 2
