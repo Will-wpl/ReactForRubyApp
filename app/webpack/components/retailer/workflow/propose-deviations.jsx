@@ -197,7 +197,7 @@ export class Proposedeviations extends React.Component{
                 if(item.sp_response_status == ""){
                     let obj={
                         id:"" + item.id + "",
-                        item:$("#item_"+(index)).val(),
+                        item:"1",//$("#item_"+(index)).val(),
                         clause:$("#clause_"+(index)).val(),
                         propose_deviation:deviation,
                         retailer_response:response,
@@ -209,7 +209,7 @@ export class Proposedeviations extends React.Component{
                     if(item.sp_response_status == "0"){
                        let obj={
                             id:"" + item.id + "",
-                            item:$("#item_"+(index)).val(),
+                            item:"1",//$("#item_"+(index)).val(),
                             clause:$("#clause_"+(index)).val(),
                             propose_deviation:deviation,
                             retailer_response:response,
@@ -221,7 +221,7 @@ export class Proposedeviations extends React.Component{
                         if(sum == "3"){
                             let obj={
                                 id:"" + item.id + "",
-                                item:$("#item_"+(index)).val(),
+                                item:"1",//$("#item_"+(index)).val(),
                                 clause:$("#clause_"+(index)).val(),
                                 propose_deviation:deviation,
                                 retailer_response:response,
@@ -233,7 +233,7 @@ export class Proposedeviations extends React.Component{
                     }else{
                        let obj={
                             id:"" + item.id + "",
-                            item:$("#item_"+(index)).val(),
+                            item:"1",//$("#item_"+(index)).val(),
                             clause:$("#clause_"+(index)).val(),
                             propose_deviation:deviation,
                             retailer_response:response,
@@ -246,7 +246,7 @@ export class Proposedeviations extends React.Component{
             }else{
                 let obj={
                     id:"" + item.id + "",
-                    item:$("#item_"+(index)).val(),
+                    item:"1",//$("#item_"+(index)).val(),
                     clause:$("#clause_"+(index)).val(),
                     propose_deviation:deviation,
                     retailer_response:response,
@@ -263,7 +263,7 @@ export class Proposedeviations extends React.Component{
     }
 
     addDeviations(){
-        let add_new = {id:0,item:'',clause:'',
+        let add_new = {id:0,item:"1",clause:'',
                         propose_deviation:'',
                         retailer_response:'',
                         sp_response_status:'',key:Math.floor((Math.random()*10000)+1)},list = this.state.deviations_list;
@@ -338,7 +338,7 @@ export class Proposedeviations extends React.Component{
                     <table className="retailer_fill w_100" cellPadding="0" cellSpacing="0">
                         <thead>
                             <tr>
-                                <th>Item</th>
+                                {/*<th>Item</th>*/}
                                 <th>Clause</th>
                                 <th>Propose Deviation</th>
                                 <th>Retailer Comments</th>
@@ -352,7 +352,7 @@ export class Proposedeviations extends React.Component{
                                     this.state.deviations_list.map((item,index)=>{
                                         if(item.sp_response_status === "1" || item.sp_response_status === "4"){
                                             return (<tr key={item.id}>
-                                                    <td>{item.item}<input id={"item_"+(index)} type="hidden" defaultValue={item.item}/></td>
+                                                    {/*<td>{item.item}<input id={"item_"+(index)} type="hidden" defaultValue={item.item}/></td>*/}
                                                     <td >{item.clause}<input type="hidden" id={"clause_"+(index)} defaultValue={item.clause}/></td>
                                                     <td><button onClick={this.showpropose.bind(this,"Propose Deviation",item.propose_deviation,'',true,false)}>Details</button><input type="hidden" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
                                                     <td><button onClick={this.showpropose.bind(this,"Retailer Comments",item.retailer_response,'',true,false)} >Details</button><input disabled type="hidden" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>
@@ -365,18 +365,18 @@ export class Proposedeviations extends React.Component{
                                                     </tr>)
                                         }else{
                                             return (<tr key={item.id===0?item.key:item.id}>
-                                                        <td>
-                                                            {this.props.propsdisabled?<div>{item.item}<input id={"item_"+(index)} type="hidden" defaultValue={item.item}/></div>
-                                                            :(this.state.alldisabled?<div>{item.item}<input id={"item_"+(index)} type="hidden" defaultValue={item.item}/></div>:(item.sp_response_status !='2'?(item.sp_response_status ==''?<select id={"item_"+(index)} defaultValue={item.item} >
-                                                                {this.state.select_list.map((it,i)=>{
-                                                                    return <option key={i} value={it}>{it}</option>
-                                                                })}
-                                                            </select>:<div>{item.item}<input id={"item_"+(index)} type="hidden" defaultValue={item.item}/></div>):<select id={"item_"+(index)} defaultValue={item.item}>
-                                                                {this.state.select_list.map((it,i)=>{
-                                                                    return <option key={i} value={it}>{it}</option>
-                                                                })}
-                                                            </select>))}
-                                                        </td>
+                                                        {/*<td>*/}
+                                                            {/*{this.props.propsdisabled?<div>{item.item}<input id={"item_"+(index)} type="hidden" defaultValue={item.item}/></div>*/}
+                                                            {/*:(this.state.alldisabled?<div>{item.item}<input id={"item_"+(index)} type="hidden" defaultValue={item.item}/></div>:(item.sp_response_status !='2'?(item.sp_response_status ==''?<select id={"item_"+(index)} defaultValue={item.item} >*/}
+                                                                {/*{this.state.select_list.map((it,i)=>{*/}
+                                                                    {/*return <option key={i} value={it}>{it}</option>*/}
+                                                                {/*})}*/}
+                                                            {/*</select>:<div>{item.item}<input id={"item_"+(index)} type="hidden" defaultValue={item.item}/></div>):<select id={"item_"+(index)} defaultValue={item.item}>*/}
+                                                                {/*{this.state.select_list.map((it,i)=>{*/}
+                                                                    {/*return <option key={i} value={it}>{it}</option>*/}
+                                                                {/*})}*/}
+                                                            {/*</select>))}*/}
+                                                        {/*</td>*/}
                                                         <td >{this.props.propsdisabled?
                                                             <div>{item.clause}<input type="hidden" id={"clause_"+(index)} defaultValue={item.clause}/></div>:
                                                             (this.state.alldisabled?<div>{item.clause}<input type="hidden" id={"clause_"+(index)} defaultValue={item.clause}/></div>:
@@ -388,7 +388,7 @@ export class Proposedeviations extends React.Component{
                                                         <td><button id={"response_"+(index)} onClick={this.showpropose.bind(this,"Retailer Comments",item.retailer_response,'response_'+index,this.props.propsdisabled?true:(this.state.alldisabled),false)} >Details</button></td>
                                                         <td><button onClick={this.showpropose.bind(this,"SP Response",item.sp_response,'',true,item.response_status)} >Details</button></td>
                                                         <td>{item.sp_response_status === "0" || item.sp_response_status === "3"?(item.response_status[1]=="0"?"Rejected":""):""}</td>
-                                                        <td>{item.item === ""?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>:
+                                                        <td>{item.clause === ""?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>:
                                                         (item.sp_response_status==='2'?<button id={"remove_"+index} onClick={this.removeDeviations.bind(this,index)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Remove</button>
                                                         :<div>
                                                             <button onClick={this.showhistory.bind(this,item.id) } id={"history_"+index}>History</button>
@@ -400,7 +400,7 @@ export class Proposedeviations extends React.Component{
                                         })
                                 :this.state.deviations_list.map((item,index)=>{
                                     return <tr key={item.id}>
-                                                <td>{item.item}</td>
+                                                {/*<td>{item.item}</td>*/}
                                                 <td>{item.clause}</td>
                                                 <td><button onClick={this.showpropose.bind(this,"Propose Deviation",item.propose_deviation,'',true,false)}>Details</button><input type="hidden" id={"deviation_"+(index)} defaultValue={item.propose_deviation}/></td>
                                                 <td><button onClick={this.showpropose.bind(this,"Retailer Comments",item.retailer_response,'',true,false)} >Details</button><input disabled type="hidden" id={"response_"+(index)} defaultValue={item.retailer_response}/></td>

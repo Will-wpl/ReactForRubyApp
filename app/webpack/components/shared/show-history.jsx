@@ -110,7 +110,12 @@ export class Showhistory extends React.Component{
                     "链接文字": "Text Link",
                     "的表格": "'s table",
                     "正文": "Content",
-                    "删除链接":"Delete Link"
+                    "删除链接":"Delete Link",
+                    "最大宽度":"Maximum Width",
+                    "删除图片":"Delete Picture",
+                    "增加":"Add ",
+                    "删除":"Delete ",
+                    "表格":"Table"
                     // 还可自定添加更多
                 };
             setTimeout(() => { editor.create() });

@@ -23,7 +23,7 @@ export const findUpLimitZero = (curValue) => {
     }
 }
 
-const defaultColors = ['#22ad38', '#ffff00', '#f53d0b', '#8ff830', '#f13de8', '#37b8ff', '#ffffff', '#ffc000'
+const defaultColors = ['#22ad38', '#ff26ff', '#f53d0b', '#8ff830', '#f13de8', '#37b8ff', '#001a66', '#ffc000'
     , '#3366ff', '#9933ff', '#868686', '#0ba55c', '#fa9106', '#ffafff', '#c00000', '#46f0f0', '#49702e', '#ffff99'
     , '#993300', '#8e8cf4']
 export const getRandomColor = (intNum, limit = 100, totallyRandom = false) => {
@@ -89,9 +89,9 @@ export const trim = (str) => {
 }
 
 
-export const replaceSymbol=(str)=>{
- 
-    let value= str.replace((/\,|\"/g), "");
+export const replaceSymbol = (str) => {
+
+    let value = str.replace((/\,|\"/g), "");
     return value;
 }
 
@@ -143,7 +143,6 @@ export const validateEmail = (value) => {
     return true;
 }
 export const validateDecimal = (value) => {
-
     let num = /^100$|^(\d|[1-9]\d)(\.\d+)*$/;
     if (value >= 0) {
         if (!num.test(value)) {
@@ -155,6 +154,37 @@ export const validateDecimal = (value) => {
     }
     return true;
 }
+
+export const validateLess100 = (value) => {
+
+    let num = /^(?:0|[1-9][0-9]?|100)$/;
+    if (value >= 0) {
+        if (!num.test(value)) {
+
+            return false;
+        }
+    }
+    else {
+
+        return false;
+    }
+    return true;
+}
+
+export const validateInteger = (value) => {
+    let express = /^[0-9]*[1-9][0-9]*$/;
+    if (value > 0) {
+        if (!express.test(value)) {
+            return false;
+        }
+    } else {
+        return false;
+    }
+    return true;
+}
+
+
+
 export const validateTwoDecimal = (value) => {
     let total;
     let decimalValue = value.split('.')[1];
@@ -163,16 +193,15 @@ export const validateTwoDecimal = (value) => {
         if (decimalValue.length > 2) {
             total = value.split('.')[0] + "." + value.split('.')[1].substr(0, 2);
         }
-        else
-        {
-            total = value; 
+        else {
+            total = value;
         }
     }
     else {
         total = value;
     }
     let num = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/;
-    if (total >= 0) {
+    if (total > 0) {
         if (!num.test(total)) {
             return false;
         }
@@ -181,8 +210,9 @@ export const validateTwoDecimal = (value) => {
         return false;
     }
     return true;
-
 }
+
+
 
 export const validatePostCode = (value) => {
     let express = /^[0-9]{6}$/;
@@ -269,6 +299,26 @@ export const validator_Object = (param, paramType) => {
             }
             else {
                 if (!validateTwoDecimal(value)) {
+                    errArr.push({ column: key, cate: 2 })
+                }
+            }
+        }
+        else if (type.cate === 'integer') {
+            if (value === null || value.length === 0) {
+                errArr.push({ column: key, cate: 1 });
+            }
+            else {
+                if (!validateInteger(value)) {
+                    errArr.push({ column: key, cate: 2 })
+                }
+            }
+        }
+        else if (type.cate === 'less100integer') {
+            if (value === null || value.length === 0) {
+                errArr.push({ column: key, cate: 1 });
+            }
+            else {
+                if (!validateLess100(value)) {
                     errArr.push({ column: key, cate: 2 })
                 }
             }
@@ -374,14 +424,79 @@ export const removeDecimal = (value) => {
         if (decimalValue.length > 2) {
             decimalValue = decimalValue.substr(0, 2);
             value.target.value = value.target.value.split('.')[0] + "." + decimalValue;
-            $("#totals_format").removeClass("errormessage").addClass("isPassValidate");
+            if (value.target.value != 0) {
+                $("#totals_format").removeClass("errormessage").addClass("isPassValidate");
+            }
         }
         if (decimalValue.length <= 2) {
-            $("#totals_format").removeClass("errormessage").addClass("isPassValidate");
+            if (value.target.value != 0) {
+                $("#totals_format").removeClass("errormessage").addClass("isPassValidate");
+            }
         }
     }
     return value;
 }
+export const removeAsInteger = (value) => {
+    // value.target.value = value.target.value.replace(/[^\d.]/g, "");
+    // value.target.value = value.target.value.replace(/\.{2,}/g, ".");
+    // value.target.value = value.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+    // if (value.target.value.indexOf('.') > -1) {
+    //     if (value.target.value > 0) {
+    //         value.target.value = value.target.value.substr(0, value.target.value.length - 1)
+    //     }
+    // }
+
+    // return value;
+
+    value = value.replace(/[^\d.]/g, "");
+    value = value.replace(/\.{2,}/g, ".");
+    value = value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+    if (value.indexOf('.') > -1) {
+        if (value > 0) {
+            value = value.substr(0, value.length - 1)
+        }
+    }
+
+    return value;
+}
+
+export const removeAsIntegerPercent = (value) => {
+    // value.target.value = value.target.value.replace(/[^\d.]/g, "");
+    // value.target.value = value.target.value.replace(/\.{2,}/g, ".");
+    // value.target.value = value.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+    // if (value.target.value.indexOf('.') > -1) {
+    //     if (value.target.value > 0) {
+    //         value.target.value = value.target.value.substr(0, value.target.value.length - 1)
+    //         if (value.target.value <= 100 && value.target.value >= 0) {
+    //             $("#peak_pct_format").removeClass("errormessage").addClass("isPassValidate");
+    //         }
+    //     }
+    // }
+    // else {
+    //     if (value.target.value <= 100 && value.target.value >= 0) {
+    //         $("#peak_pct_format").removeClass("errormessage").addClass("isPassValidate");
+    //     }
+    // }
+    // return value;
+    value = value.replace(/[^\d.]/g, "");
+    value = value.replace(/\.{2,}/g, ".");
+    value = value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+    if (value.indexOf('.') > -1) {
+        if (value > 0) {
+            value = value.substr(0, value.length - 1)
+            if (value <= 100 && value >= 0) {
+                $("#peak_pct_format").removeClass("errormessage").addClass("isPassValidate");
+            }
+        }
+    }
+    else {
+        if (value <= 100 && value >= 0) {
+            $("#peak_pct_format").removeClass("errormessage").addClass("isPassValidate");
+        }
+    }
+    return value;
+}
+
 export const changeValidate = (type, value) => {
     if (value) {
         setValidationPass(type, 1);

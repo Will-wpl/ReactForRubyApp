@@ -10,7 +10,7 @@ export class RetailerLiveContainer extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {extendVisible: false, holdStatus:false,livetype:'6'};
+        this.state = {extendVisible: false, holdStatus:false,livetype:'6',extendTime:true};
     }
     componentDidMount() {
         if (this.props.auction) {
@@ -46,6 +46,15 @@ export class RetailerLiveContainer extends Component {
         this.setState({livetype:index});
         this.refs.LiveHomePage.getHistory();
     }
+    extendTime(min){
+        if(this.timeTend){
+            clearTimeout(this.timeTend);
+        }
+        this.setState({extendVisible:min,extendTime:true})
+        this.timeTend = setTimeout(()=>{
+            this.setState({extendTime:false})
+        },5000)
+    }
     render() {
         let content = <div></div>;
         if (this.props.auction) {
@@ -55,7 +64,7 @@ export class RetailerLiveContainer extends Component {
                 ) : (
                     <div>
                         <DuringCountDown auction={this.props.auction} countDownOver={this.goToFinish.bind(this)}>
-                            <div id="retailer_hold" className={this.state.extendVisible ? '' : 'live_hide'}>
+                            <div id="retailer_hold" className={this.state.extendVisible && this.state.extendTime? '' : 'live_hide'}>
                                 <b>Admin has extended auction duration by {this.state.extendVisible} mins.</b>
                             </div>
                         </DuringCountDown>
@@ -71,7 +80,7 @@ export class RetailerLiveContainer extends Component {
                                 })
                             }
                         </div>:''}
-                    <LiveHomePage ref="LiveHomePage" auction={this.props.auction} livetype={this.state.livetype} extend={(min)=>{this.setState({extendVisible:min})}}/>
+                    <LiveHomePage ref="LiveHomePage" auction={this.props.auction} livetype={this.state.livetype} extend={this.extendTime.bind(this)}/>
                     </div>
                 )
             }

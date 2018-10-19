@@ -9,7 +9,8 @@ class Api::ConsumptionDetailsController < Api::BaseController
       consumption_details.each { |detail| consumption_details_new.push(detail) if detail.draft_flag.blank?}
       auction = consumption.auction
       contract_duration = auction.auction_contracts.select('contract_duration').sort_by {|contract| contract.contract_duration.to_i}
-      buyer_entities = CompanyBuyerEntity.find_by_status_user(CompanyBuyerEntity::ApprovalStatusApproved, consumption.user_id).order(is_default: :desc)
+      # buyer_entities = CompanyBuyerEntity.find_by_status_user(CompanyBuyerEntity::ApprovalStatusApproved, consumption.user_id).order(is_default: :desc)
+      buyer_entities = CompanyBuyerEntity.where('user_id = ? and approval_status in (?)', consumption.user_id, [CompanyBuyerEntity::ApprovalStatusApproved , CompanyBuyerEntity::ApprovalStatusPending])
       if auction.auction_contracts.blank?
         buyer_revv_tc_attachment = AuctionAttachment.find_by(auction_id: consumption.auction_id, file_type: 'buyer_tc_upload')
         seller_buyer_tc_attachment = nil
@@ -88,12 +89,84 @@ class Api::ConsumptionDetailsController < Api::BaseController
     end
   end
 
+  def detail_validate_form(detail)
+    {
+        "id" => detail['id'],
+        "account_number" => detail['account_number'],
+        "unit_number" => detail['unit_number'],
+        "postal_code" => detail['postal_code'],
+        "orignal_id" => detail['orignal_id']
+    }
+  end
+
+  def validate_all_details
+    error_all = []
+    details = JSON.parse(params[:details])
+    details_yesterday = JSON.parse(params[:details_yesterday])
+    details_before_yesterday = JSON.parse(params[:details_before_yesterday])
+
+    consumption = @consumption
+
+    # Category 1
+    unless details_yesterday.blank?
+      errors_category_1 = []
+      details_yesterday.each_index do |index|
+        consumption_detail = detail_validate_form(details_yesterday.at(index))
+        error = validate_consumption_detail(consumption_detail, consumption)
+        errors_category_1.push(consumption_detail_include_index(index,consumption_detail)) unless error.blank?
+      end
+      error_all.push({type:'category_1', error_details: errors_category_1}) unless errors_category_1.blank?
+    end
+
+    # Category 2
+    unless details_before_yesterday.blank?
+      errors_category_2 = []
+      details_before_yesterday.each_index do |index|
+        consumption_detail = detail_validate_form(details_before_yesterday.at(index))
+        error = validate_consumption_detail(consumption_detail, consumption)
+        errors_category_2.push(consumption_detail_include_index(index,consumption_detail)) unless error.blank?
+      end
+      error_all.push({type:'category_2', error_details: errors_category_2}) unless errors_category_2.blank?
+    end
+
+    # New
+    unless details.blank?
+      errors_new = []
+      details.each_index do |index|
+        consumption_detail = detail_validate_form(details.at(index))
+        error = validate_consumption_detail(consumption_detail, consumption)
+        errors_new.push(consumption_detail_include_index(index,consumption_detail)) unless error.blank?
+      end
+      error_all.push({type:'new', error_details: errors_new}) unless errors_new.blank?
+    end
+    error_all
+  end
+
+  def consumption_detail_include_index(index,consumption_detail)
+    {
+        index: index,
+        account_number: consumption_detail['account_number'],
+        unit_number: consumption_detail['unit_number'],
+        postal_code: consumption_detail['postal_code']
+    }
+  end
+
   def save
-    saved_details = save_comsumption_details()
-    render json: saved_details, status: 200
+    error_all = validate_all_details
+    if error_all.blank?
+      saved_details = save_comsumption_details()
+      render json: { result: 'success', details: saved_details}, status: 200
+    else
+      render json: { result: 'failed', errors: error_all}, status: 200
+    end
   end
 
   def participate
+    error_all = validate_all_details
+    unless error_all.blank?
+      render json: { result: 'failed', errors: error_all} , status: 200
+      return
+    end
     ActiveRecord::Base.transaction do
       save_comsumption_details()
       consumption = @consumption
@@ -145,7 +218,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
         # end
         # -- Now logic - 20170726
         send_participated_mail(auction_name, auction_start_datetime)
-        render json: consumption, status: 200
+        render json: {result: 'success' ,consumption: consumption}, status: 200
         # Change -- [do not save acution. move this logic to admin approval logic] - End
       else
         render json: nil, status: 500
@@ -156,77 +229,11 @@ class Api::ConsumptionDetailsController < Api::BaseController
   end
 
   def validate_single
-    error_details = []
     detail = params[:detail]
     current_consumption = Consumption.find(params[:consumption_id]) #@consumption
-    consumptions = Consumption.all #mine(current_user.id)
-    auction = Auction.find(current_consumption.auction_id)
-    raise ActiveRecord::RecordNotFound if auction.nil?
-    contract_period_start_date = auction.contract_period_start_date
 
-    # contract_period_start_date, contract_period_end_date = get_auction_period(current_consumption)
-    # Account must be unique within a RA.
-    account_numbers = []
-    premise_addresses = []
-    # auction.consumptions.each do |consumption|
-    #   consumption.consumption_details.each do |consumption_detail|
-    #     consumption_detail_id = detail['id'].blank? ? detail['orignal_id'] : detail['id']
-    #     if !consumption_detail.unit_number.blank? && !consumption_detail.postal_code.blank? &&
-    #         consumption_detail.id.to_s != consumption_detail_id
-    #       premise_addresses.push({ 'unit_number' => consumption_detail.unit_number,
-    #                                    'postal_code' => consumption_detail.postal_code})
-    #     end
-    #   end
-    # end
-    consumptions.each do |consumption|
-      temp_contract_period_start_date ,temp_contract_period_end_date = get_auction_period(consumption)
-
-      consumption.consumption_details.each do |consumption_detail|
-        consumption_detail_id = detail['id'].blank? ? detail['orignal_id'] : detail['id']
-        if temp_contract_period_start_date.nil? ||
-            temp_contract_period_end_date.nil? ||
-            temp_contract_period_end_date < contract_period_start_date
-          next
-        end
-
-        if !consumption_detail.account_number.blank? && consumption_detail.id.to_s != consumption_detail_id
-          account_numbers.push(consumption_detail.account_number)
-        end
-
-
-        if !consumption_detail.unit_number.blank? && !consumption_detail.postal_code.blank? &&
-            consumption_detail.id.to_s != consumption_detail_id
-          premise_addresses.push({ 'unit_number' => consumption_detail.unit_number,
-                                   'postal_code' => consumption_detail.postal_code})
-        end
-      end
-    end
-
-    if detail['account_number'].blank? ||
-       (!detail['account_number'].blank? && account_numbers.any? { |v| v.downcase == detail['account_number'].downcase })
-      error_details.push({ 'error_field_name': 'account_number',
-                               'error_value': detail['account_number']})
-    end
-
-    if detail['unit_number'].blank? ||
-       detail['postal_code'].blank? ||
-       (!detail['unit_number'].blank? &&
-           !detail['postal_code'].blank? &&
-           premise_addresses.any? { |v| v['unit_number'].downcase == detail['unit_number'].downcase && v['postal_code'].downcase == detail['postal_code'].downcase })
-      error_details.push({ 'error_field_name': 'premise_addresses',
-                               'error_value': { unit_number: detail['unit_number'],
-                                                postal_code: detail['postal_code']}})
-    end
-
-    # contract expiry date > RA's contract start date.
-    if !detail['contract_expiry'].blank? &&
-        Time.parse(detail['contract_expiry']) <= auction.contract_period_start_date
-      error_details.push({ 'error_field_name': 'contract_expiry',
-                               'error_value': detail['contract_expiry']})
-    end
-
-    return_json = {validate_result: error_details.blank?,
-                   error_details: error_details}
+    error_details = validate_consumption_detail(detail, current_consumption)
+    return_json = { validate_result: error_details.blank?, error_details: error_details }
     render json: return_json, status: 200
   end
 
@@ -330,6 +337,67 @@ class Api::ConsumptionDetailsController < Api::BaseController
 
   private
 
+  def validate_consumption_detail(detail,current_consumption)
+    error_details = []
+    consumptions = Consumption.all #mine(current_user.id)
+    auction = Auction.find(current_consumption.auction_id)
+    raise ActiveRecord::RecordNotFound if auction.nil?
+    contract_period_start_date = auction.contract_period_start_date
+
+    # contract_period_start_date, contract_period_end_date = get_auction_period(current_consumption)
+    # Account must be unique within a RA.
+    account_numbers = []
+    premise_addresses = []
+    consumptions.each do |consumption|
+      temp_contract_period_start_date ,temp_contract_period_end_date = get_auction_period(consumption)
+
+      next if consumption.id == current_consumption.id || consumption.participation_status == Consumption::ParticipationStatusReject || consumption.accept_status == Consumption::AcceptStatusReject
+      consumption.consumption_details.each do |consumption_detail|
+        consumption_detail_id = detail['id'].blank? ? detail['orignal_id'] : detail['id']
+        if temp_contract_period_start_date.nil? ||
+            temp_contract_period_end_date.nil? ||
+            temp_contract_period_end_date < contract_period_start_date
+          next
+        end
+
+        if !consumption_detail.account_number.blank? && consumption_detail.id.to_s != consumption_detail_id
+          account_numbers.push(consumption_detail.account_number)
+        end
+
+
+        if !consumption_detail.unit_number.blank? && !consumption_detail.postal_code.blank? &&
+            consumption_detail.id.to_s != consumption_detail_id
+          premise_addresses.push({ 'unit_number' => consumption_detail.unit_number,
+                                   'postal_code' => consumption_detail.postal_code})
+        end
+      end
+    end
+
+    if detail['account_number'].blank? ||
+        (!detail['account_number'].blank? && account_numbers.any? { |v| v.downcase == detail['account_number'].downcase })
+      error_details.push({ 'error_field_name': 'account_number',
+                           'error_value': detail['account_number']})
+    end
+
+    if detail['unit_number'].blank? ||
+        detail['postal_code'].blank? ||
+        (!detail['unit_number'].blank? &&
+            !detail['postal_code'].blank? &&
+            premise_addresses.any? { |v| v['unit_number'].downcase == detail['unit_number'].downcase && v['postal_code'].downcase == detail['postal_code'].downcase })
+      error_details.push({ 'error_field_name': 'premise_addresses',
+                           'error_value': { unit_number: detail['unit_number'],
+                                            postal_code: detail['postal_code']}})
+    end
+
+    # contract expiry date > RA's contract start date.
+    if !detail['contract_expiry'].blank? &&
+        Time.parse(detail['contract_expiry']) <= auction.contract_period_start_date
+      error_details.push({ 'error_field_name': 'contract_expiry',
+                           'error_value': detail['contract_expiry']})
+    end
+    error_details
+  end
+
   def get_auction_period(consumption)
     auction = Auction.find(consumption.auction_id)
     raise ActiveRecord::RecordNotFound if auction.nil?
@@ -338,7 +406,13 @@ class Api::ConsumptionDetailsController < Api::BaseController
       period_end_date = auction.contract_period_end_date
     else
       auction_contract = AuctionContract.find_by auction_id: consumption.auction_id, contract_duration: consumption.contract_duration
-      period_end_date = auction_contract.nil? ? auction.contract_period_end_date: auction_contract.contract_period_end_date
+      if auction_contract.nil?
+        months = consumption.contract_duration.to_i
+        period_end_date = period_start_date + months.months
+      else
+        period_end_date = auction_contract.contract_period_end_date
+      end
+      # period_end_date = auction_contract.nil? ? auction.contract_period_end_date: auction_contract.contract_period_end_date
     end
     [period_start_date ,period_end_date]
   end
@@ -464,7 +538,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
     details_all.concat(details_before_yesterday)
     ids = []
     details_all.each do |detail|
-      ids.push(detail['id']) if detail['id'].to_i != 0
+      ids.push(detail['id'].to_s) if detail['id'].to_i != 0
     end
     will_del_details = consumption.consumption_details.reject do |detail|
       ids.include?(detail.id.to_s)

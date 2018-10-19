@@ -35,8 +35,8 @@ export class RetailsOnlineStatus extends Component {
                     {
                         this.props.list_data.length > 0 ? this.props.list_data.map((item,index) => {
                         return(
-                            <li key={index} className="u-grid">   
-                                <span className="col-sm-9 col-md-9 showclick" style={{cursor:'pointer'}} onClick={this.showDetail.bind(this,item.id)} title={item.company_name}>{item.company_name} <span className={item.approval_status==='2'?"isDisplayInLine":"isHide"}>({getUserApprovalStatus(item.approval_status)})</span></span>
+                            <li key={index} className="u-grid">
+                                <span className="col-sm-9 col-md-9 showclick" style={{"cursor":'pointer',"color":'#333'}} onClick={this.showDetail.bind(this,item.id)} title={item.company_name}>{item.company_name} <span className={item.approval_status==='2'?"isDisplayInLine":"isHide"} style={item.approval_status==='0'?{"color":"red"}:(item.approval_status==='2'?{"color":"orange"}:{"color":"#54BD1B"})}>({getUserApprovalStatus(item.approval_status)})</span></span>
                                 <span className="col-sm-3 col-md-3"><abbr className={this.props.onlineStatus}></abbr></span>
                             </li>
                             )
@@ -45,7 +45,7 @@ export class RetailsOnlineStatus extends Component {
                                 <span className="col-sm-3 col-md-3"><abbr className={this.props.onlineStatus}></abbr></span>
                             </li>
                     }
-                </ul>               
+                </ul>
                 </div>
             </div>
             <Modal showdetail={this.state.showDetail} ref="Modal" />

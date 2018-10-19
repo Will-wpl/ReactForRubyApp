@@ -111,6 +111,7 @@ export class BuyerUserEntityRegister extends Component {
         this.setButton(param);
     }
     setButton(param) {
+
         let userid;
         if (param.buyer_entities.length > 0) {
             if (window.location.href.indexOf("admin/users/") > -1) {
@@ -135,6 +136,13 @@ export class BuyerUserEntityRegister extends Component {
                 $(".btnOption").css("pointer-events", "none").css("color", "#4B4941");
             }
         }
+        else {
+            this.setState({
+                use_type: 'sign_up',
+                tabSelected: "base"
+            });
+        }
+
     }
 
     setBuyerInfo(param) {
@@ -157,23 +165,23 @@ export class BuyerUserEntityRegister extends Component {
                 agree_buyer_revv: item.agree_buyer_revv ? item.agree_buyer_revv : '0',
                 has_tenants: item.has_tenants ? item.has_tenants : '1',
                 approveStatus: item.approval_status === "3" ? true : false,
+
                 status: setApprovalStatus(item.approval_status, item.approval_date_time === null ? item.created_at : item.approval_date_time)
             })
             this.company_name_back = item.company_name;
             this.unique_entity_number_back = item.company_unique_entity_number;
             $('#buyer_management').val(this.state.has_tenants);
             if (this.state.agree_seller_buyer === "1") {
-                $('#chkRevv').attr("checked", true);
-            }
-            else {
-                $('#chkRevv').attr("checked", false);
-               
-            }
-            if (this.state.agree_buyer_revv === "1") {
                 $('#chkBuyer').attr("checked", true);
             }
             else {
                 $('#chkBuyer').attr("checked", false);
+            }
+            if (this.state.agree_buyer_revv === "1") {
+                $('#chkRevv').attr("checked", true);
+            }
+            else {
+                $('#chkRevv').attr("checked", false);
             }
         }
 
@@ -282,13 +290,28 @@ export class BuyerUserEntityRegister extends Component {
     }
 
     tab(type) {
-        $(".buyer_tab a").removeClass("selected");
-        $("#tab_" + type).addClass("selected");
-        $(".buyer_list1").hide();
-        $("#buyer_" + type).fadeIn(500);
-        this.setState({
-            tabSelected: type
-        })
+        if (this.state.use_type === "sign_up") {
+            let passValidate = this.checkTabOneFinished()
+            if (passValidate) {
+                $(".buyer_tab a").removeClass("selected");
+                $("#tab_" + type).addClass("selected");
+                $(".buyer_list1").hide();
+                $("#buyer_" + type).fadeIn(500);
+                this.setState({
+                    tabSelected: type
+                })
+            }
+        }
+        else {
+            $(".buyer_tab a").removeClass("selected");
+            $("#tab_" + type).addClass("selected");
+            $(".buyer_list1").hide();
+            $("#buyer_" + type).fadeIn(500);
+            this.setState({
+                tabSelected: type
+            })
+        }
+
     }
 
     Change(type, e) {
@@ -344,19 +367,19 @@ export class BuyerUserEntityRegister extends Component {
                 break;
             case 'chkBuyer':
                 if ($('#chkBuyer').is(':checked')) {
-                    this.setState({ agree_buyer_revv: 1 });
+                    this.setState({ agree_seller_buyer: 1 });
                     setValidationPass('chkBuyer', 1)
                 } else {
-                    this.setState({ agree_buyer_revv: 0 });
+                    this.setState({ agree_seller_buyer: 0 });
                     setValidationFaild('chkBuyer', 1);
                 }
                 break;
             case 'chkRevv':
                 if ($('#chkRevv').is(':checked')) {
-                    this.setState({ agree_seller_buyer: 1 });
+                    this.setState({ agree_buyer_revv: 1 });
                     setValidationPass('chkRevv', 1)
                 } else {
-                    this.setState({ agree_seller_buyer: 0 });
+                    this.setState({ agree_buyer_revv: 0 });
                     setValidationFaild('chkRevv', 1);
                 }
                 break;
@@ -425,6 +448,75 @@ export class BuyerUserEntityRegister extends Component {
                 setValidationFaild(column, cate)
             })
         }
+
+        if (this.state.fileData['BUYER_DOCUMENTS'][0].files.length > 0) {
+            hasDoc = true;
+            $("#showMessage").removeClass("errormessage").addClass("isPassValidate");
+        }
+        else {
+            hasDoc = false;
+            $("#showMessage").removeClass("isPassValidate").addClass("errormessage");
+        }
+        $('.validate_message').find('div').each(function () {
+            let className = $(this).attr('class');
+            if (className === 'errormessage') {
+                flag = false;
+                return false;
+            }
+        })
+        if ($('#chkBuyer').is(':checked') && $('#chkRevv').is(':checked')) {
+            checkSelect = true;
+        }
+        else {
+            checkSelect = false;
+            if (!$('#chkBuyer').is(':checked')) {
+                $("#chkBuyer_message").removeClass('isPassValidate').addClass('errormessage');
+            }
+            if (!$('#chkRevv').is(':checked')) {
+                $("#chkRevv_message").removeClass('isPassValidate').addClass('errormessage');
+            }
+        }
+        return flag && hasDoc && checkSelect;
+    }
+    checkTabOneFinished() {
+        let flag = true, hasDoc = true, checkSelect = true;
+        let arr = validator_Object(this.state, this.validatorBuyerInfo);
+        if (arr.length > 0) {
+            flag = false;
+        }
+        if (this.state.fileData['BUYER_DOCUMENTS'][0].files.length > 0) {
+            hasDoc = true;
+        }
+        else {
+            hasDoc = false;
+        }
+        if ($('#chkBuyer').is(':checked') && $('#chkRevv').is(':checked')) {
+            checkSelect = true;
+        }
+        else {
+            checkSelect = false;
+        }
+        return flag && hasDoc && checkSelect;
+    }
+
+    checkAll() {
+        $('.validate_message').find('div').each(function () {
+            let className = $(this).attr('class');
+            if (className === 'errormessage') {
+                let divid = $(this).attr("id");
+                $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
+            }
+        })
+        let flag = true, hasDoc = true, checkSelect = true, mainEntityFinished = true;
+        let arr = validator_Object(this.state, this.validatorBuyerInfo);
+
+        if (arr) {
+            arr.map((item, index) => {
+                let column = item.column;
+                let cate = item.cate;
+                setValidationFaild(column, cate)
+            })
+        }
         if (this.state.entity_list.length > 0) {
             if (this.state.entity_list[0].billing_address === "") {
                 mainEntityFinished = false;
@@ -464,13 +556,21 @@ export class BuyerUserEntityRegister extends Component {
                 $("#chkRevv_message").removeClass('isPassValidate').addClass('errormessage');
             }
         }
-        return flag && hasDoc && checkSelect && mainEntityFinished;
+        let returnValue = flag && hasDoc && checkSelect + "|" + mainEntityFinished
+        return returnValue;
     }
-
+    clearErrorValildation() {
+        $("#tabEntity").find("tr").each(function () {
+            $(this).children('td').each(function (j) {
+                $(this).find("div").css('color', "#333");
+                $(this).find("div").css('border', "0px");
+            })
+        });
+    }
     save(type) {
-
-        let isValidator = this.checkRequired();
-        if (isValidator) {
+        this.clearErrorValildation();
+        let isValidator = this.checkAll();
+        if (isValidator === "true|true") {
             validateIsExist(this.setParams()).then(res => {
                 if (res.validate_result) {
                     saveBuyerUserInfo(this.setParams(type == "save" ? 1 : null)).then(res => {
@@ -520,36 +620,33 @@ export class BuyerUserEntityRegister extends Component {
             });
         }
         else {
-            this.tab("base");
-            this.setState({
-                tabSelected: "base"
-            })
+
+            let formVal = isValidator.split('|')[0];
+            let entityVal = isValidator.split('|')[1];
+            if (formVal) {
+                if (entityVal) {
+                    this.tab("entity");
+                    this.setState({
+                        tabSelected: "entity"
+                    })
+                }
+            }
+            else {
+                this.tab("base");
+                this.setState({
+                    tabSelected: "base"
+                })
+            }
         }
     }
 
     submit(type) {
-        let isValidator = this.checkRequired();
-        if (isValidator) {
+        this.clearErrorValildation();
+        let isValidator = this.checkAll();
+        if (isValidator === "true|true") {
             let buyerParam = this.setParams();
             validateIsExist(buyerParam).then(res => {
                 if (res.validate_result) {
-
-                    // submitBuyerUserInfo(buyerParam).then(res => {
-                    //     if (res.result === "failed") {
-                    //         this.setState(
-                    //             {
-                    //                 text: "Failure to submit. "
-                    //             }
-                    //         );
-                    //         this.refs.Modal.showModal();
-                    //     } else {
-                    //         if (type === "sign_up") {
-                    //             window.location.href = `/buyer/home`;
-                    //         }
-
-                    //     }
-
-                    // });
                     this.setState({
                         text: "Are you sure you want to complete the Sign Up?"
                     })
@@ -561,10 +658,22 @@ export class BuyerUserEntityRegister extends Component {
             })
         }
         else {
-            this.tab("base");
-            this.setState({
-                tabSelected: "base"
-            })
+            let formVal = isValidator.split('|')[0];
+            let entityVal = isValidator.split('|')[1];
+            if (formVal) {
+                if (entityVal) {
+                    this.tab("entity");
+                    this.setState({
+                        tabSelected: "entity"
+                    })
+                }
+            }
+            else {
+                this.tab("base");
+                this.setState({
+                    tabSelected: "base"
+                })
+            }
         }
     }
 
@@ -812,17 +921,37 @@ export class BuyerUserEntityRegister extends Component {
             return;
         }
         if (res.error_entity_indexes.length > 0) { //validate entity
-            let name = [], uen = [], email = [];
+            let name = [], uen = [], email = [], column = 0;;
             res.error_entity_indexes.map((item) => {
-                if (item.error_field_name === "company_name") {
-                    name.push(item.error_value)
+                if (item.detail.error_field_name === "company_name") {
+                    name.push(item.detail.error_value)
+                    column = 0;
+                    if (item.indexs.length > 0) {
+                        item.indexs.map(i=>{
+                            this.setRedRece(i,column);
+                        })
+                    }
                 }
-                if (item.error_field_name === "company_uen") {
-                    uen.push(item.error_value);
+                if (item.detail.error_field_name === "company_uen") {
+                    uen.push(item.detail.error_value);
+                    column = 1;
+                    if (item.indexs.length > 0) {
+                        item.indexs.map(i=>{
+                            this.setRedRece(i,column);
+                        })
+                    }
                 }
-                if (item.error_field_name === "contact_email") {
-                    email.push(item.error_value)
+                if (item.detail.error_field_name === "contact_email") {
+                    email.push(item.detail.error_value)
+                    column = 6;
+                    if (item.indexs.length > 0) {
+                        item.indexs.map(i=>{
+                            this.setRedRece(i,column);
+                        })
+                    }
                 }
+                let row = item.entity_index;
+                
             });
             let errList = {
                 nameError: name,
@@ -832,7 +961,6 @@ export class BuyerUserEntityRegister extends Component {
             this.setState({
                 validateErrList: errList
             })
-
             this.setState({ text: " " });
             this.refs.Modal_EntityErr.showModal();
             this.tab("entity");
@@ -842,7 +970,21 @@ export class BuyerUserEntityRegister extends Component {
             return;
         }
     }
+    setRedRece(row,column)
+    {
+        $("#tabEntity tr:eq(" + row + ") td:eq(" + column + ")").find("div").css({ 'color': 'red', "border": "1px red solid" })
+    }
 
+    goNext() {
+
+        let isValidator = this.checkRequired();
+        if (isValidator) {
+            this.setState({
+                tabSelected: "entity"
+            })
+            this.tab("entity")
+        }
+    }
     render() {
         let btn_html;
         if (this.state.use_type === 'manage_acount') {
@@ -854,10 +996,19 @@ export class BuyerUserEntityRegister extends Component {
                 </div>;
         }
         else {
-            btn_html = <div>
-                <button id="save_form" className="lm--button lm--button--primary" onClick={this.save.bind(this, "register")}>Save</button>
-                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this, 'sign_up')}>Complete Sign Up</button>
-            </div>;
+            if (this.state.use_type === 'sign_up') {
+                if (this.state.tabSelected === 'entity') {
+                    btn_html = <div>
+                        <button id="save_form" className="lm--button lm--button--primary" onClick={this.save.bind(this, "register")}>Save</button>
+                        <button id="submit_form" className="lm--button lm--button--primary" onClick={this.submit.bind(this, 'sign_up')}>Complete Sign Up</button>
+                    </div>;
+                }
+                else {
+                    btn_html = <div>
+                        <button id="save_form" className="lm--button lm--button--primary" onClick={this.goNext.bind(this)}>Next</button>
+                    </div>;
+                }
+            }
         }
         return (
             <div className="u-grid mg0 div-center" >
@@ -1018,7 +1169,7 @@ export class BuyerUserEntityRegister extends Component {
                             </table>
                         </div>
                         <div className="table-body">
-                            <table className="retailer_fill" cellPadding="0" cellSpacing="0">
+                            <table className="retailer_fill" cellPadding="0" cellSpacing="0" id="tabEntity">
                                 <colgroup>
                                     <col width="10%" />
                                     <col width="10%" />
@@ -1036,13 +1187,13 @@ export class BuyerUserEntityRegister extends Component {
                                     {
                                         this.state.entity_list.map((item, index) => {
                                             return <tr key={index}>
-                                                <td>{item.company_name}</td>
-                                                <td>{item.company_uen}</td>
+                                                <td><div>{item.company_name}</div></td>
+                                                <td><div>{item.company_uen}</div></td>
                                                 <td>{item.company_address}</td>
                                                 <td>{item.billing_address}</td>
                                                 <td>{item.bill_attention_to}</td>
                                                 <td>{item.contact_name}</td>
-                                                <td>{item.contact_email}</td>
+                                                <td><div>{item.contact_email}</div></td>
                                                 <td>{item.contact_mobile_no}</td>
                                                 <td>{item.contact_office_no}</td>
                                                 <td>{item.approval_status_name}</td>
@@ -1066,35 +1217,36 @@ export class BuyerUserEntityRegister extends Component {
 
                         </div>
                     </div>
-
-                    <div className="col-sm-12 col-md-8 push-md-3 validate_message margin-t buyer_list_select">
-                        <div className="lm--formItem lm--formItem--inline string">
-                            <label className="lm--formItem-left lm--formItem-label string required">
-                                <abbr title="required">*</abbr> Tenant Management Service Required :
+                    <div className="col-sm-12" style={{ "backgroundColor": "#fff", "marginTop": "-20px" }}>
+                        <div className="col-sm-12 col-md-8 push-md-3 validate_message margin-t buyer_list_select">
+                            <div className="lm--formItem lm--formItem--inline string">
+                                <label className="lm--formItem-left lm--formItem-label string required">
+                                    <abbr title="required">*</abbr> Tenant Management Service Required :
                                     </label>
-                            <div className="lm--formItem-right lm--formItem-control">
-                                <select className="selectController" name="buyer_management" id="buyer_management" onChange={this.Change.bind(this, 'buyer_management')} defaultValue={this.state.buyer_management} disabled={this.state.disabled} ref="buyer_management" aria-required="true">
-                                    <option value="1">Yes</option>
-                                    <option value="0">No</option>
-                                </select>
+                                <div className="lm--formItem-right lm--formItem-control">
+                                    <select className="selectController" name="buyer_management" id="buyer_management" onChange={this.Change.bind(this, 'buyer_management')} defaultValue={this.state.buyer_management} disabled={this.state.disabled} ref="buyer_management" aria-required="true">
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="col-sm-12 col-md-8 push-md-3 validate_message margin-t" >
-                        <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
-                            <input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} />
-                            <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerTCurl} className="urlStyleUnderline">Buyer Platform Terms of Use</a></span>
-                        </h4>
-                        <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
-                        <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
-                            <input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} />
-                            <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyleUnderline">Energy Procurement Agreement</a></span>
-                        </h4>
-                        <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
-                        <Modal text={this.state.text} acceptFunction={this.refreshForm.bind(this)} ref="Modal" />
-                        <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrlArr} />
-                        <Modal formSize="big" listdetailtype="entity_detail" text={this.state.text} acceptFunction={this.acceptAddEntity.bind(this)} entitList={this.state.entity_list} disabled={this.state.ismain} entityDetailItem={this.state.entityItemInfo} ref="Modal_Entity" />
-                        <Modal listdetailtype="entity_error" text={this.state.text} entityErrorList={this.state.validateErrList} ref="Modal_EntityErr" />
+                        <div className="col-sm-12 col-md-8 push-md-3 validate_message margin-t" >
+                            <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
+                                <input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} />
+                                <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerTCurl} className="urlStyleUnderline">Buyer Platform Terms of Use</a></span>
+                            </h4>
+                            <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
+                            <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
+                                <input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} />
+                                <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyleUnderline">Electricity Procurement Agreement</a></span>
+                            </h4>
+                            <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
+                            <Modal text={this.state.text} acceptFunction={this.refreshForm.bind(this)} ref="Modal" />
+                            <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrlArr} />
+                            <Modal formSize="big" listdetailtype="entity_detail" text={this.state.text} acceptFunction={this.acceptAddEntity.bind(this)} entitList={this.state.entity_list} disabled={this.state.ismain} entityDetailItem={this.state.entityItemInfo} ref="Modal_Entity" />
+                            <Modal listdetailtype="entity_error" text={this.state.text} entityErrorList={this.state.validateErrList} ref="Modal_EntityErr" />
+                        </div>
                     </div>
                     <div className="retailer_btn">
                         {btn_html}

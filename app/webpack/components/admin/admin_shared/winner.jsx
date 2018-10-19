@@ -51,8 +51,8 @@ export default class WinnerPrice extends Component {
                             <tr>
                                 <th></th>
                                 <th className={this.props.isLtVisible ? '' : "live_hide"}>LT</th>
-                                <th className={this.props.isHtsVisible ? '' : "live_hide"}>HT (Small)</th>
-                                <th className={this.props.isHtlVisible ? '' : "live_hide"}>HT (Large)</th>
+                                <th className={this.props.isHtsVisible ? '' : "live_hide"}>HTS</th>
+                                <th className={this.props.isHtlVisible ? '' : "live_hide"}>HTL</th>
                                 <th className={this.props.isEhtVisible ? '' : "live_hide"}>EHT</th>
                             </tr>
                         </thead>
@@ -83,8 +83,8 @@ export default class WinnerPrice extends Component {
                                     <tr>
                                         <th></th>
                                         {this.props.consumption.has_lt ? <th style={{"text-align":"center"}}>LT</th> : <th className={'live_hide'}></th>}
-                                        {this.props.consumption.has_hts ? <th style={{"text-align":"center"}}>HT (Small)</th> : <th className={'live_hide'}></th>}
-                                        {this.props.consumption.has_htl ? <th style={{"text-align":"center"}}>HT (Large)</th> : <th className={'live_hide'}></th>}
+                                        {this.props.consumption.has_hts ? <th style={{"text-align":"center"}}>HTS</th> : <th className={'live_hide'}></th>}
+                                        {this.props.consumption.has_htl ? <th style={{"text-align":"center"}}>HTL</th> : <th className={'live_hide'}></th>}
                                         {this.props.consumption.has_eht ? <th style={{"text-align":"center"}}>EHT</th> : <th className={'live_hide'}></th>}
                                     </tr>
                                 </thead>
@@ -102,6 +102,13 @@ export default class WinnerPrice extends Component {
                                         {this.props.consumption.has_hts ? <td >{formatPower(this.props.consumption.total_hts_off_peak,0,'')} kWh</td> : <td className={'live_hide'}></td>}
                                         {this.props.consumption.has_htl ? <td >{formatPower(this.props.consumption.total_htl_off_peak,0,'')} kWh</td> : <td className={'live_hide'}></td>}
                                         {this.props.consumption.has_eht ? <td >{formatPower(this.props.consumption.total_eht_off_peak,0,'')} kWh</td> : <td className={'live_hide'}></td>}
+                                    </tr>
+                                    <tr>
+                                        <td>Total</td>
+                                        {this.props.consumption.has_lt ?  <td >{formatPower(parseInt(Number(this.props.consumption.total_lt_off_peak)+Number(this.props.consumption.total_lt_peak)),0,'')} kWh</td> : <td className={'live_hide'}></td>}
+                                        {this.props.consumption.has_hts ? <td >{formatPower(parseInt(Number(this.props.consumption.total_hts_off_peak)+Number(this.props.consumption.total_hts_peak)),0,'')} kWh</td> : <td className={'live_hide'}></td>}
+                                        {this.props.consumption.has_htl ? <td >{formatPower(parseInt(Number(this.props.consumption.total_htl_off_peak)+Number(this.props.consumption.total_htl_peak)),0,'')} kWh</td> : <td className={'live_hide'}></td>}
+                                        {this.props.consumption.has_eht ? <td >{formatPower(parseInt(Number(this.props.consumption.total_eht_off_peak)+Number(this.props.consumption.total_eht_peak)),0,'')} kWh</td> : <td className={'live_hide'}></td>}
                                     </tr>
                                 </tbody>
                             </table>
@@ -121,8 +128,8 @@ export default class WinnerPrice extends Component {
                             <tr>
                                 <th></th>
                                 <th className={this.props.isLtVisible ? '' : "live_hide"}>LT</th>
-                                <th className={this.props.isHtsVisible ? '' : "live_hide"}>HT (Small)</th>
-                                <th className={this.props.isHtlVisible ? '' : "live_hide"}>HT (Large)</th>
+                                <th className={this.props.isHtsVisible ? '' : "live_hide"}>HTS</th>
+                                <th className={this.props.isHtlVisible ? '' : "live_hide"}>HTL</th>
                                 <th className={this.props.isEhtVisible ? '' : "live_hide"}>EHT</th>
                             </tr>
                         </thead>

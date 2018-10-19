@@ -18,7 +18,7 @@ class BuyerEntityReport < BuyerReport
                              :background => background_img,
                              :page_size => "LETTER",
                              :page_layout => :portrait) do |pdf|
-      pdf.fill_color "ffffff"
+      pdf.fill_color "000000"
       pdf.define_grid(:columns => 22, :rows => 35, :gutter => 1)
       #main page 1
       pdf.grid([1, 1], [35, 19]).bounding_box do
@@ -69,9 +69,9 @@ class BuyerEntityReport < BuyerReport
                                 :padding => [8, 2, 14],
                                 :inline_format => true,
                                 :width => pdf.bounds.right/table_head.size,
-                                :border_width => 0.01, :border_color => "696969"}) do
+                                :border_width => 0.01, :border_color => "dddddd"}) do
         values = cells.columns(0..-1).rows(0..0)
-        values.background_color = "00394A"
+        values.background_color = "eeeeee"
       end
     end
   end
@@ -142,14 +142,14 @@ class BuyerEntityReport < BuyerReport
                               :padding => [8, 2, 14],
                               :inline_format => true,
                               :width => pdf.bounds.right/table_head.size,
-                              :border_width => 0.01, :border_color => "696969"}) do
+                              :border_width => 0.01, :border_color => "dddddd"}) do
       values = cells.columns(0..-1).rows(0..0)
-      values.background_color = "00394A"
+      values.background_color = "eeeeee"
     end
   end
 
   def pdf_entity_info(pdf, entity_company_name, entities_data)
-    # pdf.fill_color "ffffff"
+    pdf.fill_color "000000"
     auction = param[:auction]
     auction_result = param[:auction_result]
     contract_period_start_date = get_contract_period_start_date(auction)
@@ -185,7 +185,7 @@ class BuyerEntityReport < BuyerReport
   end
 
   def pdf_draw_info(pdf, current_user, entities)
-    # pdf.fill_color "ffffff"
+    pdf.fill_color "000000"
     auction = param[:auction]
     auction_result = param[:auction_result]
     contract_period_start_date = get_contract_period_start_date(auction)
@@ -267,9 +267,9 @@ class BuyerEntityReport < BuyerReport
                               :padding => [8, 2, 14],
                               :inline_format => true,
                               :width => pdf.bounds.right/price_table_data[0].size,
-                              :border_width => 0.01, :border_color => "696969"}) do
+                              :border_width => 0.01, :border_color => "dddddd"}) do
       values = cells.columns(0..-1).rows(0..0)
-      values.background_color = "00394A"
+      values.background_color = "eeeeee"
     end
   end
 
@@ -292,9 +292,9 @@ class BuyerEntityReport < BuyerReport
                               :padding => [8, 2, 14],
                               :inline_format => true,
                               :width => pdf.bounds.right/table_head.size,
-                              :border_width => 0.01, :border_color => "696969"}) do
+                              :border_width => 0.01, :border_color => "dddddd"}) do
       values = cells.columns(0..-1).rows(0..0)
-      values.background_color = "00394A"
+      values.background_color = "eeeeee"
     end
 
   end

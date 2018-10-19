@@ -36,7 +36,7 @@ class PdfPriceChart < PdfChart
     step_number = param[:step_number]
     pdf.move_down 10
     #stroke_axis
-    pdf.stroke_color "ffffff"
+    pdf.stroke_color "000000"
     pdf.stroke do
       # X Y
       PdfUtils.draw_axis(param)

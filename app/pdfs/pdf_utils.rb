@@ -1,6 +1,6 @@
 class PdfUtils
 
-  HEAD_STRING_HASH = {"LT" => 'LT', 'HTS' => 'HT (Small)', 'HTL' => 'HT (Large)', 'EHT' => 'EHT'}.freeze
+  HEAD_STRING_HASH = {"LT" => 'LT', 'HTS' => 'HTS', 'HTL' => 'HTL', 'EHT' => 'EHT'}.freeze
 
 
   def self.number_helper
@@ -88,7 +88,7 @@ class PdfUtils
     pdf.vertical_line 20, 20 + 210, :at => number_x[0]
     # X
     pdf.horizontal_line number_x[0], number_x[0] + 360, :at => 20
-
+    pdf.fill_color "000000"
     (1..number_x.size - 1).each do |i|
       pdf.vertical_line 20, 25, :at => number_x[i]
       #font_size(7) { text_box str_date[i], :at => [base_x + (350.0/step_number)*i-14, 20-4]}

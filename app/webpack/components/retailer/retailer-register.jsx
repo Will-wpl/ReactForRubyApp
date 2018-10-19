@@ -417,13 +417,18 @@ export class RetailerRegister extends Component {
                         });
                         this.refs.Modal.showModal();
                         if (type === "save") {
-                            if ((this.state.company_name !== this.company_name_back) || (this.state.company_unique_entity_number !== this.company_unique_entity_number_back) || (this.state.license_number !== this.company_license_number_back)) {
+                            if ((this.state.company_name !== this.company_name_back) || (this.state.unique_entity_number !== this.company_unique_entity_number_back) || (this.state.license_number !== this.company_license_number_back)) {
                                 setTimeout(() => {
                                     window.location.href = `/retailer/home`;
                                 }, 1000);
                             }
                             else {
                                 if (isNeedRedirect) {
+                                    setTimeout(() => {
+                                        window.location.href = `/retailer/home`;
+                                    }, 1000);
+                                }
+                                else {
                                     setTimeout(() => {
                                         window.location.href = `/users/edit`;
                                     }, 1000);
@@ -580,10 +585,7 @@ export class RetailerRegister extends Component {
             submitRetailManageInfo({
                 user: param
             }).then(res => {
-
                 $('#license_number_repeat').removeClass('errormessage').addClass('isPassValidate');
-
-
                 if (res.result === "failed") {
                     this.setState(
                         {
@@ -770,7 +772,7 @@ export class RetailerRegister extends Component {
 
                                 <h4 className="lm--formItem lm--formItem--inline string chkBuyer"><input id="chkBuyer" type="checkbox" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /><span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.sellerTCurl} className="urlStyleUnderline">Seller Platform Terms of Use</a></span></h4>
                                 <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
-                                <h4 className="lm--formItem lm--formItem--inline string chkBuyer"><input id="chkRevv" type="checkbox" onChange={this.Change.bind(this, 'chkRevv')} name={"seller_revv_tc"} disabled={this.state.disabled} /><span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.revvTCurl} className="urlStyleUnderline">Energy Procurement Agreement</a></span></h4>
+                                <h4 className="lm--formItem lm--formItem--inline string chkBuyer"><input id="chkRevv" type="checkbox" onChange={this.Change.bind(this, 'chkRevv')} name={"seller_revv_tc"} disabled={this.state.disabled} /><span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.revvTCurl} className="urlStyleUnderline">Electricity Procurement Agreement</a></span></h4>
                                 <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                                 <div className={this.state.use_type === 'admin_approve' ? 'isDisplay' : 'isHide'}>
                                     <div className="dividerline"></div>

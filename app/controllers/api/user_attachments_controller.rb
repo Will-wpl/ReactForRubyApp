@@ -99,6 +99,7 @@ class Api::UserAttachmentsController < Api::BaseController
       zip_file_name = 'letter_authorisation.zip'
       destination_file_path = upload_file_path(zip_file_name)
       download_letter_authorisatoin(destination_file_path)
+      reset_letter_authorisatoin(destination_file_path)
       zip_attachments_remove(destination_file_path,[file_name])
       if UserAttachment.find_by_type(UserAttachment::FileType_Letter_Authorisation).count <= 1
         UserAttachment.where(' file_name = ? ',zip_file_name).destroy_all
@@ -111,7 +112,7 @@ class Api::UserAttachmentsController < Api::BaseController
       uploader.store!(file)
 
     end
-    render json: nil, status: 200
+    render json: {result:'success'}, status: 200
   end
 
   private
@@ -133,6 +134,7 @@ class Api::UserAttachmentsController < Api::BaseController
     zip_file_name = 'letter_authorisation.zip'
     destination_file_path = upload_file_path(zip_file_name)
     download_letter_authorisatoin(destination_file_path)
+    reset_letter_authorisatoin(destination_file_path)
     zip_attachments(destination_file_path, [file])
     mounted_as = []
     # mounted_as.push('')
@@ -142,6 +144,17 @@ class Api::UserAttachmentsController < Api::BaseController
     uploader.store!(file1)
     uploader
     # { url: '/' + uploader.store_path(zip_file_name), filename: zip_file_name }
+  end
+
+  def reset_letter_authorisatoin(zip_file_local_path)
+    letter_authorisatoin_files = UserAttachment.find_by_type(UserAttachment::FileType_Letter_Authorisation)
+    unless letter_authorisatoin_files.blank?
+      letter_authorisatoin_filenames = []
+      letter_authorisatoin_files.each do |file|
+        letter_authorisatoin_filenames.push(file.file_name)
+      end
+      zip_attachments_remove(zip_file_local_path,letter_authorisatoin_filenames,true)
+    end
   end
 
   def download_letter_authorisatoin(file)

@@ -71,14 +71,14 @@ export class RetailerLive extends Component {
                     </thead>
                     <tbody>
                     <tr>
-                        <td>Peak</td>
+                        <td>Peak<br/>(7am-7pm)</td>
                         {data.has_lt?<td>{data.starting_price_lt_peak}</td>:''}
                         {data.has_hts?<td>{data.starting_price_hts_peak}</td>:''}
                         {data.has_htl?<td>{data.starting_price_htl_peak}</td>:''}
                         {data.has_eht?<td>{data.starting_price_eht_peak}</td>:''}
                     </tr>
                     <tr>
-                        <td>Off Peak</td>
+                        <td>Off Peak<br/>(7pm-7am)</td>
                         {data.has_lt?<td>{data.starting_price_lt_off_peak}</td>:''}
                         {data.has_hts?<td>{data.starting_price_hts_off_peak}</td>:''}
                         {data.has_htl?<td>{data.starting_price_htl_off_peak}</td>:''}

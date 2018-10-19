@@ -345,7 +345,7 @@ export class SearchList extends Component {
                                                                         }
                                                                     })
                                                                     :<abbr>{(it.field_name === "actual_begin_time" || it.field_name === "start_datetime" || it.field_name ==="logged_in_last_time" ||it.field_name ==="ws_connected_last_time" || it.field_name === "ws_send_message_last_time"|| it.field_name === "auction_when")
-                                                                    ? moment(item[`${it.field_name}`]).format('D MMM YYYY hh:mm A'):item[`${it.field_name}`]}</abbr>
+                                                                    ? moment(item[`${it.field_name}`]).format('D MMM YYYY hh:mm A'):(item[`${it.field_name}`]?(item[`${it.field_name}`].indexOf("!")>0?<bdo>{item[`${it.field_name}`].split("!")[0]} <b title="Purchasing Entity Pending" style={{"color":"red"}}>!</b></bdo>:item[`${it.field_name}`]):null)}</abbr>
                                                                 }
                                                                 </td>
                                                         }
@@ -375,7 +375,7 @@ export class SearchList extends Component {
                                                                         }else if(item['status'] === 'Upcoming' && ik.name === 'Manage'){
                                                                             return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>Manage{item.incomplete?incompleteHtml:''}</a>
                                                                         }else{
-                                                                            return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>{ik.name}{ik.name=="Buyer Dashboard" && item.all_accept==false?<span title={"There is outstanding Buyer Participation details pending for approval."} className={"font_arial"}>!</span>:''}</a>
+                                                                            return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>{ik.name}{(ik.name=="Buyer Dashboard" || ik.name=="Buyer List" || ik.name=="Retailer List") && item.all_accept==false?<span title={"There is outstanding Buyer Participation details pending for approval."} className={"font_arial"} style={{"color":"red"}}>!</span>:''}</a>
                                                                         }
 
                                                                     }

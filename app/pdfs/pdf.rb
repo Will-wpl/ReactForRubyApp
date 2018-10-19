@@ -1,5 +1,7 @@
 class Pdf
 
+  FONT_COLOR = '000000'.freeze
+
   def get_pdf_datetime_zone
     zone = 8
     (zone * 60 * 60)
@@ -22,10 +24,10 @@ class Pdf
     lt_param = {:visibility => visibility_lt, :title => '<b>LT</b>', :peak => auction_result.lt_peak.to_f, :off_peak => auction_result.lt_off_peak.to_f,
                 :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :price_row0 => price_row0, :price_row1 => price_row1}
     push_data(lt_param)
-    hts_param = {:visibility => visibility_hts, :title => '<b>HT (Small)</b>', :peak => auction_result.hts_peak.to_f, :off_peak => auction_result.hts_off_peak.to_f,
+    hts_param = {:visibility => visibility_hts, :title => '<b>HTS</b>', :peak => auction_result.hts_peak.to_f, :off_peak => auction_result.hts_off_peak.to_f,
                  :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :price_row0 => price_row0, :price_row1 => price_row1}
     push_data(hts_param)
-    htl_param = {:visibility => visibility_htl, :title => '<b>HT (Large)</b>', :peak => auction_result.htl_peak.to_f, :off_peak => auction_result.htl_off_peak.to_f,
+    htl_param = {:visibility => visibility_htl, :title => '<b>HTL</b>', :peak => auction_result.htl_peak.to_f, :off_peak => auction_result.htl_off_peak.to_f,
                  :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :price_row0 => price_row0, :price_row1 => price_row1}
     push_data(htl_param)
     eht_param = {:visibility => visibility_eht, :title => '<b>EHT</b>', :peak => auction_result.eht_peak.to_f, :off_peak => auction_result.eht_off_peak.to_f,
@@ -132,12 +134,12 @@ class Pdf
                                                             :period_days => period_days, :price_data => price_data, :total_volume => total_volume, :total_award_sum => total_award_sum, :visibility => visibilities[:visibility_lt]
                                                            }, 0)
 
-      total_volume, total_award_sum = get_consumption_data({:title => "<b>HT (Small)</b>", :current_user_consumption => current_user_consumption,
+      total_volume, total_award_sum = get_consumption_data({:title => "<b>HTS</b>", :current_user_consumption => current_user_consumption,
                                                             :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :row0_data => row0_data, :row1_data => row1_data,
                                                             :peak => current_user_consumption.hts_peak.to_f, :off_peak => current_user_consumption.hts_off_peak.to_f,
                                                             :period_days => period_days, :price_data => price_data, :total_volume => total_volume, :total_award_sum => total_award_sum, :visibility => visibilities[:visibility_hts]
                                                            }, 1)
-      total_volume, total_award_sum = get_consumption_data({:title => "<b>HT (Large)</b>", :current_user_consumption => current_user_consumption,
+      total_volume, total_award_sum = get_consumption_data({:title => "<b>HTL</b>", :current_user_consumption => current_user_consumption,
                                                             :peak => current_user_consumption.htl_peak.to_f, :off_peak => current_user_consumption.htl_off_peak.to_f,
                                                             :table_head => table_head, :price_data => price_data, :total_volume => total_volume, :row0_data => row0_data, :row1_data => row1_data,
                                                             :period_days => period_days, :table_row0 => table_row0, :table_row1 => table_row1, :total_award_sum => total_award_sum, :visibility => visibilities[:visibility_htl]
@@ -178,10 +180,10 @@ class Pdf
     lt_param = {:visibility => visibility_lt, :title => '<b>LT</b>', :peak => auction_result.lt_peak.to_f, :off_peak => auction_result.lt_off_peak.to_f,
                 :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :prefix => 'LT', :price_hash => price_hash}
     push_data_v2(lt_param)
-    hts_param = {:visibility => visibility_hts, :title => '<b>HT (Small)</b>', :peak => auction_result.hts_peak.to_f, :off_peak => auction_result.hts_off_peak.to_f,
+    hts_param = {:visibility => visibility_hts, :title => '<b>HTS</b>', :peak => auction_result.hts_peak.to_f, :off_peak => auction_result.hts_off_peak.to_f,
                  :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :prefix => 'HTS', :price_hash => price_hash}
     push_data_v2(hts_param)
-    htl_param = {:visibility => visibility_htl, :title => '<b>HT (Large)</b>', :peak => auction_result.htl_peak.to_f, :off_peak => auction_result.htl_off_peak.to_f,
+    htl_param = {:visibility => visibility_htl, :title => '<b>HTL</b>', :peak => auction_result.htl_peak.to_f, :off_peak => auction_result.htl_off_peak.to_f,
                  :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :prefix => 'HTL', :price_hash => price_hash}
     push_data_v2(htl_param)
     eht_param = {:visibility => visibility_eht, :title => '<b>EHT</b>', :peak => auction_result.eht_peak.to_f, :off_peak => auction_result.eht_off_peak.to_f,

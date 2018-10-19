@@ -6,12 +6,12 @@ export default class AdminComsumptionPrice extends Component {
   constructor(props){
     super(props);
     this.state={
-        
+
     }
 }
 
 componentDidMount() {
-    
+
 }
 render() {
     return (
@@ -23,8 +23,8 @@ render() {
                <tr>
                    <th></th>
                    <th>LT</th>
-                   <th>HT (Small)</th>
-                   <th>HT (Large)</th>
+                   <th>HTS</th>
+                   <th>HTL</th>
                    <th>EHT</th>
                    </tr>
                </thead>

@@ -191,7 +191,25 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     buyer_entities = JSON.parse(params[:buyer_entities])
     validate_result, entity_indexes = validate_buyer_entities_info(validation_user, buyer_entities)
     validate_final_result = validate_final_result & validate_result
-    error_entity_indexes = entity_indexes unless validate_result
+    unless validate_result # instance_variable_get
+      index_list = []
+      error_entity_detail_list = []
+      entity_indexes.each do |error_entity|
+        # index_list.push(error_entity['entity_index']) unless error_entity['entity_index'].blank?
+        error_entity_detail = {error_field_name: error_entity['error_field_name'], error_value: error_entity['error_value']}
+        if error_entity_detail_list.any?{|x| x[:detail][:error_field_name] == error_entity_detail[:error_field_name] && x[:detail][:error_value] == error_entity_detail[:error_value] }
+          error_entity_detail_list.each_index do |index|
+            detail = error_entity_detail_list.at(index)
+            if detail[:detail][:error_field_name] == error_entity_detail[:error_field_name] && detail[:detail][:error_value] == error_entity_detail[:error_value]
+              detail[:indexs].push(error_entity['entity_index']) unless detail[:indexs].any?{|x| x == error_entity['entity_index']}
+            end
+          end
+        else
+          error_entity_detail_list.push(detail: error_entity_detail, indexs:[error_entity['entity_index']])
+        end
+      end
+      error_entity_indexes = error_entity_detail_list
+    end
     render json: { validate_result: validate_final_result,
                    error_fields: error_fields,
                    error_entity_indexes: error_entity_indexes }, status: 200
@@ -227,7 +245,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     entity_indexes.concat(check_entities_email_with_user(buyer, buyer_entities, user))
 
     # validate Entity' email must be unique
-    entity_indexes.concat(check_entities_email_duplicated(buyer_entities,true))
+    entity_indexes.concat(check_entities_email_duplicated(buyer_entities))#,true
 
     entity_indexes = entity_indexes.uniq
     [entity_indexes.blank?, entity_indexes]
@@ -412,7 +430,7 @@ class Api::Buyer::RegistrationsController < Api::RegistrationsController
     entity_indexes = []
     buyer_entities.each_index do |index|
       buyer_entity = buyer_entities[index]
-      entity_indexes.concat(check_entity_email_with_user(buyer, buyer_entity, user)) #, index
+      entity_indexes.concat(check_entity_email_with_user(buyer, buyer_entity, user, index)) #
     end
     entity_indexes
   end
