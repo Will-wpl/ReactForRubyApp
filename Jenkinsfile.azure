@@ -1,7 +1,7 @@
 pipeline {
     agent any
     parameters {
-        choice(name: 'CHOICE', choices: ['normal', 'command'], description: 'normal:git->build image->test->push image->command->deploy. \n command: execute command')
+        choice(name: 'CHOICE', choices: ['normal', 'command'], description: 'normal:git pull->build image->test->push image->command->deploy. \n command: execute command')
 		text(name: 'COMMAND', defaultValue: '', description: 'Enter command')
     }
 	
