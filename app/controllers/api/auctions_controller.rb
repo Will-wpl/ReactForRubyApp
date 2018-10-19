@@ -39,6 +39,8 @@ class Api::AuctionsController < Api::BaseController
     @auction.contract_period_start_date = search_start_date
     @auction.buyer_type = if buyer_ids.size == 1
                             Auction::SingleBuyerType
+                          elsif buyer_ids.size == 0
+                            Auction::MultipleBuyerType
                           elsif buyer_ids.size > 1
                             Auction::MultipleBuyerType
                           end
