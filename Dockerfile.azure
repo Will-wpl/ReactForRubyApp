@@ -16,5 +16,6 @@ RUN bundle install -j4 && \
 
 RUN chmod -R +x bin
 RUN rake db:create
-RUN rails assets:precompile
+RUN export NODE_OPTIONS=--max-old-space-size=3096 && \
+    rails assets:precompile
 CMD ["rails", "server", "-b", "0.0.0.0", "-e", "production"]
