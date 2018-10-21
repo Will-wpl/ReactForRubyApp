@@ -339,7 +339,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
 
   def validate_consumption_detail(detail,current_consumption)
     error_details = []
-    consumptions = Consumption.all #mine(current_user.id)
+    # consumptions = Consumption.all #mine(current_user.id)
     auction = Auction.find(current_consumption.auction_id)
     raise ActiveRecord::RecordNotFound if auction.nil?
     contract_period_start_date = auction.contract_period_start_date
@@ -348,30 +348,42 @@ class Api::ConsumptionDetailsController < Api::BaseController
     # Account must be unique within a RA.
     account_numbers = []
     premise_addresses = []
-    consumptions.each do |consumption|
-      temp_contract_period_start_date ,temp_contract_period_end_date = get_auction_period(consumption)
-
-      next if consumption.id == current_consumption.id || consumption.participation_status == Consumption::ParticipationStatusReject || consumption.accept_status == Consumption::AcceptStatusReject
-      consumption.consumption_details.each do |consumption_detail|
-        consumption_detail_id = detail['id'].blank? ? detail['orignal_id'] : detail['id']
-        if temp_contract_period_start_date.nil? ||
-            temp_contract_period_end_date.nil? ||
-            temp_contract_period_end_date < contract_period_start_date
-          next
-        end
-
-        if !consumption_detail.account_number.blank? && consumption_detail.id.to_s != consumption_detail_id
-          account_numbers.push(consumption_detail.account_number)
-        end
-
-
-        if !consumption_detail.unit_number.blank? && !consumption_detail.postal_code.blank? &&
-            consumption_detail.id.to_s != consumption_detail_id
-          premise_addresses.push({ 'unit_number' => consumption_detail.unit_number,
-                                   'postal_code' => consumption_detail.postal_code})
+    validate_info =ConsumptionDetail.validation_info(current_consumption.id, current_consumption.contract_duration.to_i, contract_period_start_date)
+    unless validate_info.blank?
+      validate_info.each do |info|
+        account_number = info.account_number.nil? ? '' : info.account_number
+        unit_number = info.unit_number.nil? ? '' : info.unit_number
+        postal_code = info.postal_code.nil? ? '' : info.postal_code
+        account_numbers.push(account_number) unless account_numbers.any?{|x| x == account_number}
+        unless premise_addresses.any?{|x| x['unit_number'] == unit_number && x['postal_code'] == postal_code }
+          premise_addresses.push({ 'unit_number' => unit_number, 'postal_code' => postal_code})
         end
       end
     end
+    # consumptions.each do |consumption|
+    #   temp_contract_period_start_date ,temp_contract_period_end_date = get_auction_period(consumption)
+    #
+    #   next if consumption.id == current_consumption.id || consumption.participation_status == Consumption::ParticipationStatusReject || consumption.accept_status == Consumption::AcceptStatusReject
+    #   consumption.consumption_details.each do |consumption_detail|
+    #     consumption_detail_id = detail['id'].blank? ? detail['orignal_id'] : detail['id']
+    #     if temp_contract_period_start_date.nil? ||
+    #         temp_contract_period_end_date.nil? ||
+    #         temp_contract_period_end_date < contract_period_start_date
+    #       next
+    #     end
+    #
+    #     if !consumption_detail.account_number.blank? && consumption_detail.id.to_s != consumption_detail_id
+    #       account_numbers.push(consumption_detail.account_number)
+    #     end
+    #
+    #
+    #     if !consumption_detail.unit_number.blank? && !consumption_detail.postal_code.blank? &&
+    #         consumption_detail.id.to_s != consumption_detail_id
+    #       premise_addresses.push({ 'unit_number' => consumption_detail.unit_number,
+    #                                'postal_code' => consumption_detail.postal_code})
+    #     end
+    #   end
+    # end
 
     if detail['account_number'].blank? ||
         (!detail['account_number'].blank? && account_numbers.any? { |v| v.downcase == detail['account_number'].downcase })

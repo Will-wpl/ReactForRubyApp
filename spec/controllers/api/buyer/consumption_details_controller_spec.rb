@@ -177,7 +177,7 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
       context '(Validate-Single) Success' do
         def do_request
           detail = {id: 0, account_number: '000002', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 2', postal_code: '4001'}
-          put :validate_single, params: { consumption_id: consumption.id, detail: detail }
+          put :validate_single, params: { consumption_id: consumption1.id, detail: detail }
         end
 
         before { do_request }
