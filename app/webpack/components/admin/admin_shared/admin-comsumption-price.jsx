@@ -17,7 +17,11 @@ render() {
     return (
         <div className="u-grid mg0">
                <div className="col-sm-12 u-mb1" id="price_title">{this.props.type === 'View Company Consumption Details' ? 'Company' : 'Individual'} Consumption Total Summary:</div>
-               <div className="col-sm-12 u-mb1" id="price_number">Number of Buyers: {this.props.price.consumption_count} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Number of Accounts: {this.props.price.account_count}</div>
+               <div className="col-sm-12 u-mb1" id="price_number">
+                   Number of Buyers: {this.props.price.consumption_count} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                   Number of Accounts: {this.props.price.account_count} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                   Unit: kWh
+               </div>
                <table className="retailer_fill w_100"  cellPadding="0" cellSpacing="0">
                <thead>
                <tr>

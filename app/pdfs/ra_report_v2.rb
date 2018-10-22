@@ -9,7 +9,7 @@ require 'ra_report/pdf_total_info'
 require 'ra_report/pdf_title_v2'
 require 'ra_report/pdf_total_info_v2'
 require 'ra_report/pdf_aggregate_consumption'
-require 'ra_report/pdf_reverse_price_table'
+require 'ra_report/pdf_reserve_price_table.rb'
 require 'ra_report/pdf_total_award_sum_v2'
 
 class RAReportV2 < RAReport
@@ -22,7 +22,7 @@ class RAReportV2 < RAReport
     pdf = param[:pdf]
     pdf.grid([0, 0], [22, 17]).bounding_box do
       pdf.move_down 650
-      PdfReversePriceTable.new(param.merge({:pdf => pdf, :visibilities => @visibilities})).table
+      PdfReservePriceTable.new(param.merge({:pdf => pdf, :visibilities => @visibilities})).table
     end
 
   end

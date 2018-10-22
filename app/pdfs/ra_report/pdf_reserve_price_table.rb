@@ -1,4 +1,4 @@
-class PdfReversePriceTable
+class PdfReservePriceTable
   attr_reader :param
 
   def initialize(param)
@@ -9,7 +9,7 @@ class PdfReversePriceTable
     pdf, auction_contract = param[:pdf], param[:auction_contract]
     auction_result = param[:auction_result]
     pdf.fill_color "000000"
-    pdf.table [["Reverse Price"]], :cell_style => {:size => 16, :inline_format => true, :width => pdf.bounds.right, :border_width => 0}
+    pdf.table [["Reserve Price"]], :cell_style => {:size => 16, :inline_format => true, :width => pdf.bounds.right, :border_width => 0}
     head_row, peak_row, off_peak_row = [''], ['Peak<br/>(7am-7pm)'], ['Off Peak<br/>(7pm-7am)']
     push_colume_data({:pdf => param[:pdf], :head_row => head_row, :peak_row => peak_row, :off_peak_row => off_peak_row, :title => '<b>LT</b>', :peak => auction_contract.reserve_price_lt_peak, :off_peak => auction_contract.reserve_price_lt_off_peak, :result_peak => auction_result.lt_peak, :result_off_peak => auction_result.lt_off_peak}) if param[:visibilities][:visibility_lt]
     push_colume_data({:pdf => param[:pdf], :head_row => head_row, :peak_row => peak_row, :off_peak_row => off_peak_row, :title => '<b>HTS</b>', :peak => auction_contract.reserve_price_hts_peak, :off_peak => auction_contract.reserve_price_hts_off_peak, :result_peak => auction_result.hts_peak, :result_off_peak => auction_result.hts_off_peak}) if param[:visibilities][:visibility_hts]
