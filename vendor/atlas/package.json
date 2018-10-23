@@ -35,7 +35,7 @@
     "style-loader": "^0.18.2",
     "susy": "^3.0.0",
     "svgo": "^0.7.2",
-    "webpack": "^3.0.0",
-    "webpack-dev-server": "^2.5.0"
+    "webpack": "^3.5.5",
+    "webpack-dev-server": "^2.7.1"
   }
 }
