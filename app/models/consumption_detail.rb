@@ -108,4 +108,39 @@ class ConsumptionDetail < ApplicationRecord
                               ORDER BY cdf.entity_id ASC, cdf.contract_period_end_date DESC
                               ", { :Search_date => search_date, :User_id => user_id, :Consumption_status => Consumption::AcceptStatusApproved }]
   end
+
+  def self.validation_info(consumption_id, contract_duration, current_contract_period_start_date)
+    ConsumptionDetail.find_by_sql ["select cd.id, c_1.id, cd.account_number, cd.postal_code, cd.unit_number,old_c.contract_duration, old_c.contract_pariod_start_date, old_c.contract_period_end_date
+                                    from consumption_details cd
+                                    inner join consumptions c_1 on cd.consumption_id = c_1.id
+                                    inner join auctions a_1 on c_1.auction_id = a_1.id
+                                    inner join (
+                                        SELECT
+                                          c.id                         AS consumption_id,
+                                          a.contract_period_start_date AS contract_pariod_start_date,
+                                          CASE WHEN c.contract_duration IS NULL
+                                            THEN a.contract_period_end_date
+                                          ELSE CASE WHEN ac.contract_duration IS NULL
+                                            THEN a.contract_period_start_date + INTERVAL ':Contract_duration M'
+                                               ELSE ac.contract_period_end_date
+                                               END
+                                          END                          AS contract_period_end_date,
+                                          case when ac.contract_duration is null then c.contract_duration
+                                            else ac.contract_duration end AS contract_duration,
+                                          c.participation_status,
+                                          c.accept_status
+                                        FROM consumptions c
+                                          INNER JOIN auctions a ON c.auction_id = a.id
+                                          LEFT JOIN auction_contracts ac ON ac.auction_id = a.id
+                                        WHERE (c.participation_status != '0' OR c.participation_status IS NULL)
+                                              AND (c.accept_status != '0' OR c.accept_status IS NULL)
+                                        and c.id <> :Current_consumption_id
+                                        ) old_c on c_1.id = old_c.consumption_id
+                                    where old_c.contract_pariod_start_date is not null
+                                          and old_c.contract_period_end_date is not null
+                                          and old_c.contract_period_end_date >= :Current_contract_period_start_date
+                                    ", { :Current_consumption_id => consumption_id,
+                                         :Contract_duration => contract_duration,
+                                         :Current_contract_period_start_date => current_contract_period_start_date }]
+  end
 end
