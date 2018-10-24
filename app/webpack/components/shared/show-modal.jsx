@@ -8,7 +8,6 @@ import { formatPower, validateInteger, validateLess100, removeDecimal, removeAsI
 //共通弹出框组件
 import { UploadFile } from '../shared/upload';
 import E from 'wangeditor'
-import { isForStatement } from 'typescript';
 
 export class Modal extends React.Component {
     constructor(props) {
@@ -593,7 +592,7 @@ export class Modal extends React.Component {
                             $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
                             $("#unit_number").focus();
                         }
-                        
+
                         if (item.error_field_name === "account_number") {
                             $("#account_number_taken_already_message").removeClass("isPassValidate").addClass('errormessage');
                             $("#account_number").focus();
