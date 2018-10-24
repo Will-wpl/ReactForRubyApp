@@ -150,7 +150,7 @@ export class Showhistory extends React.Component{
         })
     }
     showHtml(className,val){
-        console.log(val);
+        // console.log(val);
         let html = `<div>${val}</div>`;
         return html
     }

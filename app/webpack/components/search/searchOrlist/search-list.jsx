@@ -20,7 +20,7 @@ export class SearchList extends Component {
                     this.setState({
                         buyer_type:res.buyer_type
                     })
-                    console.log(this.auction);
+                    // console.log(this.auction);
                 })
             }
         }
@@ -113,7 +113,7 @@ export class SearchList extends Component {
             })
     }
     doinvite(type,user_id,select_action){
-        console.log(this.props.table_data)
+        // console.log(this.props.table_data)
         let invite_type = this.props.type === 'Select Retailers' ? 'arrangements' : 'consumptions';
         if(this.state.buyer_type == '0' && window.location.href.indexOf("type=2")>0){
             this.props.table_data.bodies.data.map((item)=>{
@@ -234,7 +234,7 @@ export class SearchList extends Component {
                                                 {
                                                     this.props.table_data.headers.map((it,i)=>{
                                                         if(it.field_name === 'select_action'){
-                                                            console.log(item[`lock`])
+                                                            // console.log(item[`lock`])
                                                             return <td key={i}>
                                                                     {item[`lock`] === false ?
                                                                         item[`${it.field_name}`] === null

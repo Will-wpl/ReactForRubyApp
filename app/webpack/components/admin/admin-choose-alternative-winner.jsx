@@ -198,7 +198,7 @@ export default class ChooseAlternativeWinner extends React.Component{
     }
     goToresult(){
         let thisId = window.location.href.split("auctions/")[1].split("/choose_winner")[0];
-        console.log(this.state.resultarray);
+        // console.log(this.state.resultarray);
         let turly = this.state.resultarray.find(item=>{
             return item.result == null;
         })

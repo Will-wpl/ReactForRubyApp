@@ -10,7 +10,7 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = merge(sharedConfig, {
   output: { filename: '[name]-[chunkhash].js' },
-  devtool: 'source-map',
+  // devtool: 'source-map',
   stats: 'normal',
 
   plugins: [
