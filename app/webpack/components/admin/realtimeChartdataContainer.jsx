@@ -11,8 +11,8 @@ export default class ChartRealtimeHoc extends Component {
     }
 
     componentWillReceiveProps(next) {
-        console.log('ChartRealtimeHoc ---------------------');
-        console.log(next.dataStore);
+        // console.log('ChartRealtimeHoc ---------------------');
+        // console.log(next.dataStore);
         if(next.livetab){
             this.list=[];
         }

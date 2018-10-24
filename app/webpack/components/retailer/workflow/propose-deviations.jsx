@@ -303,7 +303,7 @@ export class Proposedeviations extends React.Component{
         this.refs.history.showModal(null,"propose");
     }
     editDetail(detail){
-        console.log(detail);
+        // console.log(detail);
         if(this.state.detail_id != ''){
             let list = this.state.deviations_list,id=this.state.detail_id;
             //$("#"+this.state.detail_id).val(detail);

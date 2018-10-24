@@ -420,6 +420,7 @@ export class FillConsumption extends Component {
             details_before_yesterday: JSON.stringify(beforeYesterda),
             contract_duration: $("#selDuration").val()
         }
+
         setBuyerParticipate(makeData, '/api/buyer/consumption_details/save').then((res) => {
             $("#bg").hide();
             $("#show").hide();
