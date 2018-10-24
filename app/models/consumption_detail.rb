@@ -121,7 +121,7 @@ class ConsumptionDetail < ApplicationRecord
                                           CASE WHEN c.contract_duration IS NULL
                                             THEN a.contract_period_end_date
                                           ELSE CASE WHEN ac.contract_duration IS NULL
-                                            THEN a.contract_period_start_date + INTERVAL ':Contract_duration M'
+                                            THEN a.contract_period_start_date + (c.contract_duration || ' month')::interval --INTERVAL ':Contract_duration M'
                                                ELSE ac.contract_period_end_date
                                                END
                                           END                          AS contract_period_end_date,
