@@ -38,7 +38,7 @@ export class AdminReport extends Component {
                 let live = auction.live_auction_contracts.filter(item=>{
                     return contract_duration === item.contract_duration
                 })
-                console.log(live);
+                // console.log(live);
                 this.setState({
                     live_auction_contracts:live
                 });

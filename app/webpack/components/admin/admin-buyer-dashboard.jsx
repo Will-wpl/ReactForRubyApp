@@ -24,7 +24,7 @@ export default class AdminBuyerDashboard extends Component {
 
 componentDidMount() {
     getAdminBuyerDashboard(sessionStorage.auction_id).then(res=>{
-        console.log(res)
+        // console.log(res)
         this.setState({
             buyer_company:{
                 count:res.count_company,
