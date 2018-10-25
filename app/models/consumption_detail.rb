@@ -20,12 +20,14 @@ class ConsumptionDetail < ApplicationRecord
   # Scopes
   scope :find_by_consumption_id, ->(consumption_id) { where('consumption_id = ?', consumption_id) }
   scope :find_account_less_than_contract_start_date_last, ->(search_date, account_num) { joins(:company_buyer_entity, consumption: [:auction, :user]).where('contract_expiry < ? and account_number = ?', search_date, account_num).order(:contract_expiry).last }
-  scope :find_duplicated_account_number, ->(account_number, id) {
+  scope :find_duplicated_account_number_except_id, ->(account_number, id) {
     where('account_number = ? and id <> ?', account_number, id)
   }
-  scope :find_duplicated_address, ->(unit_number, postal_code, id) {
+  scope :find_duplicated_account_number, ->(account_number) { where('account_number = ?', account_number) }
+  scope :find_duplicated_address_except_id, ->(unit_number, postal_code, id) {
     where('unit_number = ? and postal_code = ? and id <> ?', unit_number, postal_code, id)
   }
+  scope :find_duplicated_address, ->(unit_number, postal_code) { where('unit_number = ? and postal_code = ?', unit_number, postal_code) }
   # Callbacks
 
   # Delegates
