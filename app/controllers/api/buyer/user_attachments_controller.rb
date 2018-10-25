@@ -8,7 +8,5 @@ class Api::Buyer::UserAttachmentsController < Api::UserAttachmentsController
     UserAttachment.find_by_ids(id_array).update(consumption_detail_id: consumption_detail_id)
     consumption_detail_attachments = UserAttachment.find_by_ids(id_array)
     render json: { result: 'success', consumption_detail_attachments:consumption_detail_attachments }, status: 200
-
-    # render json: nil, status: 200
   end
 end

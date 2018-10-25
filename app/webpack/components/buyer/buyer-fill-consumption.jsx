@@ -430,7 +430,6 @@ export class FillConsumption extends Component {
                 } else {
 
                     if (res.result === 'success') {
-
                         this.setState({ text: "Save successful!" });
                         setTimeout(() => {
                             window.location.href = "/buyer/consumptions/" + this.state.consumption_id + "/edit";
