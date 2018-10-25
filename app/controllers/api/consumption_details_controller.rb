@@ -421,7 +421,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
     # end
 
     if detail['account_number'].blank? ||
-        (!detail['account_number'].blank? && account_numbers.any? { |v| v.downcase == detail['account_number'].downcase })
+        (!detail['account_number'].blank? && account_numbers.any? { |v| v.strip.downcase == detail['account_number'].strip.downcase })
       error_details.push({ 'error_field_name': 'account_number',
                            'error_value': detail['account_number']})
     end
@@ -430,7 +430,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
         detail['postal_code'].blank? ||
         (!detail['unit_number'].blank? &&
             !detail['postal_code'].blank? &&
-            premise_addresses.any? { |v| v['unit_number'].downcase == detail['unit_number'].downcase && v['postal_code'].downcase == detail['postal_code'].downcase })
+            premise_addresses.any? { |v| v['unit_number'].strip.downcase == detail['unit_number'].strip.downcase && v['postal_code'].strip.downcase == detail['postal_code'].strip.downcase })
       error_details.push({ 'error_field_name': 'premise_addresses',
                            'error_value': { unit_number: detail['unit_number'],
                                             postal_code: detail['postal_code']}})
