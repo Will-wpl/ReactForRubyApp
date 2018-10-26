@@ -231,7 +231,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
   def validate_single
     detail = params[:detail]
     current_consumption = Consumption.find(params[:consumption_id]) #@consumption
-    is_new = params[:is_new]
+    is_new = params[:is_new].to_i
     if is_new == 0
       error_details = validate_consumption_detail(detail, current_consumption)
     else
