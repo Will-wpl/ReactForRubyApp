@@ -48,9 +48,9 @@ class PdfRankChart < PdfChart
       PdfUtils.draw_axis(param)
       (1..ranking).each do |i|
         pdf.horizontal_line number_x[0], number_x[0] + 5, :at => 20 + (200.0 / ranking) * i
-        pdf.font_size(9) {pdf.text_box number_y[i], :at => [base_x - 60, 20 + (200 / ranking) * i + 3], :width => 55, :height => 10, :align => :right}
+        pdf.font_size(9) {pdf.text_box number_y[i], :at => [base_x - 60, 20 + (200.0 / ranking) * i + 3], :width => 55, :height => 10, :align => :right}
       end
-      pdf.font_size(9) {pdf.text_box number_y[0], :at => [base_x - 60, 26], :width => 55, :height => 10, :align => :right}
+      pdf.font_size(9) {pdf.text_box number_y[0], :at => [base_x - 60, 24], :width => 55, :height => 10, :align => :right}
     end
   end
 
