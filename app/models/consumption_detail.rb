@@ -124,9 +124,9 @@ class ConsumptionDetail < ApplicationRecord
                                         SELECT
                                           c.id                         AS consumption_id,
                                           a.contract_period_start_date AS contract_pariod_start_date,
-                                          CASE WHEN c.contract_duration IS NULL
+                                          CASE WHEN c.contract_duration IS NULL Or c.contract_duration = ''
                                             THEN a.contract_period_end_date
-                                          ELSE CASE WHEN ac.contract_duration IS NULL
+                                          ELSE CASE WHEN ac.contract_duration IS NULL Or ac.contract_duration = ''
                                             THEN a.contract_period_start_date + (c.contract_duration || ' month')::interval --INTERVAL ':Contract_duration M'
                                                ELSE ac.contract_period_end_date
                                                END
