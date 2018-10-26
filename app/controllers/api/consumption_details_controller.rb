@@ -345,15 +345,16 @@ class Api::ConsumptionDetailsController < Api::BaseController
   def validate_duplicated_consumption_detail(detail)
     error_details = []
     validated_detail = detail_validate_form(detail)
+    detail_id = validated_detail['id'] == '' ? nil : validated_detail['id'].to_i
     duplicated_account_details = ConsumptionDetail.find_duplicated_account_number(validated_detail['account_number'],
-                                                                                  validated_detail['id'])
+                                                                                  detail_id)
     unless duplicated_account_details.blank?
       error_details.push({ 'error_field_name': 'account_number', 'error_value': validated_detail['account_number']})
     end
 
     duplicated_address_details = ConsumptionDetail.find_duplicated_address(validated_detail['unit_number'],
-                                                                            validated_detail['postal_code'],
-                                                                            validated_detail['id'])
+                                                                           validated_detail['postal_code'],
+                                                                           detail_id)
     unless duplicated_address_details.blank?
       error_details.push({ 'error_field_name': 'premise_addresses',
                            'error_value': { unit_number: validated_detail['unit_number'],
