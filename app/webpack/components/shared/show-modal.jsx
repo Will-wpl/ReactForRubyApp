@@ -7,8 +7,7 @@ import { validateConsumptionDetailRepeat } from './../../javascripts/componentSe
 import { formatPower, validateInteger, validateLess100, removeDecimal, removeAsInteger, removeAsIntegerPercent, replaceSymbol, trim, validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validateTwoDecimal, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum, removePostCode, validatePostCode } from '../../javascripts/componentService/util';
 //共通弹出框组件
 import { UploadFile } from '../shared/upload';
-import E from 'wangeditor'
-import { isForStatement } from 'typescript';
+import E from 'wangeditor';
 
 export class Modal extends React.Component {
     constructor(props) {
