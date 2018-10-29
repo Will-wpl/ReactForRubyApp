@@ -101,7 +101,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
 
   def validate_all_details
     error_all = []
-    details = JSON.parse(params[:details])
+    # details = JSON.parse(params[:details])
     details_yesterday = JSON.parse(params[:details_yesterday])
     details_before_yesterday = JSON.parse(params[:details_before_yesterday])
 
@@ -130,15 +130,15 @@ class Api::ConsumptionDetailsController < Api::BaseController
     end
 
     # New
-    unless details.blank?
-      errors_new = []
-      details.each_index do |index|
-        consumption_detail = detail_validate_form(details.at(index))
-        error = validate_consumption_detail(consumption_detail, consumption)
-        errors_new.push(consumption_detail_include_index(index,consumption_detail)) unless error.blank?
-      end
-      error_all.push({type:'new', error_details: errors_new}) unless errors_new.blank?
-    end
+    # unless details.blank?
+    #   errors_new = []
+    #   details.each_index do |index|
+    #     consumption_detail = detail_validate_form(details.at(index))
+    #     error = validate_consumption_detail(consumption_detail, consumption)
+    #     errors_new.push(consumption_detail_include_index(index,consumption_detail)) unless error.blank?
+    #   end
+    #   error_all.push({type:'new', error_details: errors_new}) unless errors_new.blank?
+    # end
     error_all
   end
 
@@ -231,8 +231,13 @@ class Api::ConsumptionDetailsController < Api::BaseController
   def validate_single
     detail = params[:detail]
     current_consumption = Consumption.find(params[:consumption_id]) #@consumption
+    is_new = params[:is_new].to_i
+    if is_new == 0
+      error_details = validate_consumption_detail(detail, current_consumption)
+    else
+      error_details = validate_duplicated_consumption_detail(detail)
+    end
 
-    error_details = validate_consumption_detail(detail, current_consumption)
     return_json = { validate_result: error_details.blank?, error_details: error_details }
     render json: return_json, status: 200
   end
@@ -337,6 +342,36 @@ class Api::ConsumptionDetailsController < Api::BaseController
 
   private
 
+  def validate_duplicated_consumption_detail(detail)
+    error_details = []
+    validated_detail = detail_validate_form(detail)
+    detail_id = validated_detail['id'] == '' ? nil : validated_detail['id'].to_i
+    if detail_id.nil?
+      duplicated_account_details = ConsumptionDetail.find_duplicated_account_number(validated_detail['account_number'])
+    else
+      duplicated_account_details = ConsumptionDetail.find_duplicated_account_number_except_id(validated_detail['account_number'], detail_id)
+    end
+
+    unless duplicated_account_details.blank?
+      error_details.push({ 'error_field_name': 'account_number', 'error_value': validated_detail['account_number']})
+    end
+
+    if detail_id.nil?
+      duplicated_address_details = ConsumptionDetail.find_duplicated_address(validated_detail['unit_number'], validated_detail['postal_code'])
+    else
+      duplicated_address_details = ConsumptionDetail.find_duplicated_address_except_id(validated_detail['unit_number'],
+                                                                             validated_detail['postal_code'],
+                                                                             detail_id)
+    end
+
+    unless duplicated_address_details.blank?
+      error_details.push({ 'error_field_name': 'premise_addresses',
+                           'error_value': { unit_number: validated_detail['unit_number'],
+                                            postal_code: validated_detail['postal_code']}})
+    end
+    error_details
+  end
+
   def validate_consumption_detail(detail,current_consumption)
     error_details = []
     # consumptions = Consumption.all #mine(current_user.id)
@@ -386,7 +421,7 @@ class Api::ConsumptionDetailsController < Api::BaseController
     # end
 
     if detail['account_number'].blank? ||
-        (!detail['account_number'].blank? && account_numbers.any? { |v| v.downcase == detail['account_number'].downcase })
+        (!detail['account_number'].blank? && account_numbers.any? { |v| v.strip.downcase == detail['account_number'].strip.downcase })
       error_details.push({ 'error_field_name': 'account_number',
                            'error_value': detail['account_number']})
     end
@@ -395,18 +430,18 @@ class Api::ConsumptionDetailsController < Api::BaseController
         detail['postal_code'].blank? ||
         (!detail['unit_number'].blank? &&
             !detail['postal_code'].blank? &&
-            premise_addresses.any? { |v| v['unit_number'].downcase == detail['unit_number'].downcase && v['postal_code'].downcase == detail['postal_code'].downcase })
+            premise_addresses.any? { |v| v['unit_number'].strip.downcase == detail['unit_number'].strip.downcase && v['postal_code'].strip.downcase == detail['postal_code'].strip.downcase })
       error_details.push({ 'error_field_name': 'premise_addresses',
                            'error_value': { unit_number: detail['unit_number'],
                                             postal_code: detail['postal_code']}})
     end
 
     # contract expiry date > RA's contract start date.
-    if !detail['contract_expiry'].blank? &&
-        Time.parse(detail['contract_expiry']) <= auction.contract_period_start_date
-      error_details.push({ 'error_field_name': 'contract_expiry',
-                           'error_value': detail['contract_expiry']})
-    end
+    # if !detail['contract_expiry'].blank? &&
+    #     Time.parse(detail['contract_expiry']) <= auction.contract_period_start_date
+    #   error_details.push({ 'error_field_name': 'contract_expiry',
+    #                        'error_value': detail['contract_expiry']})
+    # end
     error_details
   end
 

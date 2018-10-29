@@ -20,6 +20,14 @@ class ConsumptionDetail < ApplicationRecord
   # Scopes
   scope :find_by_consumption_id, ->(consumption_id) { where('consumption_id = ?', consumption_id) }
   scope :find_account_less_than_contract_start_date_last, ->(search_date, account_num) { joins(:company_buyer_entity, consumption: [:auction, :user]).where('contract_expiry < ? and account_number = ?', search_date, account_num).order(:contract_expiry).last }
+  scope :find_duplicated_account_number_except_id, ->(account_number, id) {
+    where('trim(account_number) = trim(?) and id <> ?', account_number, id)
+  }
+  scope :find_duplicated_account_number, ->(account_number) { where('trim(account_number) = trim(?)', account_number) }
+  scope :find_duplicated_address_except_id, ->(unit_number, postal_code, id) {
+    where('trim(unit_number) = trim(?) and trim(postal_code) = trim(?) and id <> ?', unit_number, postal_code, id)
+  }
+  scope :find_duplicated_address, ->(unit_number, postal_code) { where('trim(unit_number) = trim(?) and trim(postal_code) = trim(?)', unit_number, postal_code) }
   # Callbacks
 
   # Delegates
@@ -118,10 +126,10 @@ class ConsumptionDetail < ApplicationRecord
                                         SELECT
                                           c.id                         AS consumption_id,
                                           a.contract_period_start_date AS contract_pariod_start_date,
-                                          CASE WHEN c.contract_duration IS NULL
+                                          CASE WHEN c.contract_duration IS NULL Or c.contract_duration = ''
                                             THEN a.contract_period_end_date
-                                          ELSE CASE WHEN ac.contract_duration IS NULL
-                                            THEN a.contract_period_start_date + INTERVAL ':Contract_duration M'
+                                          ELSE CASE WHEN ac.contract_duration IS NULL Or ac.contract_duration = ''
+                                            THEN a.contract_period_start_date + (c.contract_duration || ' month')::interval --INTERVAL ':Contract_duration M'
                                                ELSE ac.contract_period_end_date
                                                END
                                           END                          AS contract_period_end_date,
@@ -131,7 +139,7 @@ class ConsumptionDetail < ApplicationRecord
                                           c.accept_status
                                         FROM consumptions c
                                           INNER JOIN auctions a ON c.auction_id = a.id
-                                          LEFT JOIN auction_contracts ac ON ac.auction_id = a.id
+                                          LEFT JOIN auction_contracts ac ON ac.auction_id = c.auction_id and ac.contract_duration = c.contract_duration
                                         WHERE (c.participation_status != '0' OR c.participation_status IS NULL)
                                               AND (c.accept_status != '0' OR c.accept_status IS NULL)
                                         and c.id <> :Current_consumption_id
