@@ -1,7 +1,5 @@
 class PdfUtils
-
   HEAD_STRING_HASH = {"LT" => 'LT', 'HTS' => 'HTS', 'HTL' => 'HTL', 'EHT' => 'EHT'}.freeze
-
 
   def self.number_helper
     ActiveSupport::NumberHelper
@@ -10,7 +8,6 @@ class PdfUtils
   def self.number_format(number, precision = 0, unit = '')
     PdfUtils.number_helper.number_to_currency(number, precision: precision, unit: unit)
   end
-
 
   def self.to_array(str)
     str.to_s.split(',').map! {|item| item = item.to_i} unless str.nil?
@@ -110,7 +107,6 @@ class PdfUtils
     temp_hash2.each {|key, list|
       user_hash[key] = list unless user_hash.has_key?(key)
     }
-
     #color = ["28FF28","9F35FF", "FF359A", "2828FF", "EAC100", "FF5809"]
     color = ['22ad38', 'ffff00', 'f53d0b', '8ff830', 'f13de8',
              '37b8ff', 'ffffff', 'ffc000', '3366ff', '9933ff',
@@ -137,5 +133,4 @@ class PdfUtils
                         user_color_hash
                       end
   end
-
 end
