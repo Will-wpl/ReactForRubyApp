@@ -70,7 +70,7 @@ export class AdminDashboard extends Component {
             getHistories({ auction_id: sessionStorage.auction_id}).then(res => {
                 let histories;
                 if(res.duration_6 || res.duration_12 || res.duration_24){
-                    console.log(this.state.livetype);
+                    // console.log(this.state.livetype);
                     switch (this.state.livetype){
                         case '6' : histories = res.duration_6;
                             break;
@@ -135,8 +135,8 @@ export class AdminDashboard extends Component {
             if (data.action === 'set_bid') {
                 if (data.data.length > 0) {
                     let histories = [];
-                    console.log('websocket set_bid-----------------');
-                    console.log(data);
+                    // console.log('websocket set_bid-----------------');
+                    // console.log(data);
                     data.data.forEach((element, index) => {
                         histories.push({id: element.user_id, data:[].concat(element)})
                     })

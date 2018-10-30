@@ -142,10 +142,10 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
     describe 'Validate consumption detail' do
       before { sign_in company_buyer }
 
-      context '(Validate-Single)Account number do not unique' do
+      context '(Validate-Single)Original consumption detail - Account number do not unique' do
         def do_request
           detail = {id: 0, account_number: '000001',consumption_id: consumption.id, intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 1', postal_code: '4001'}
-          post :validate_single, params: { consumption_id: consumption1.id, detail: detail }
+          post :validate_single, params: { consumption_id: consumption1.id, detail: detail, is_new: 0 }
         end
 
         before { do_request }
@@ -158,10 +158,10 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
         end
       end
 
-      context '(Validate-Single) Premise Address do not unique' do
+      context '(Validate-Single)Original consumption detail - Premise Address do not unique' do
         def do_request
           detail = {id: 0, account_number: '000002', intake_level: 'LT', consumption_id: consumption1.id , peak: 100, off_peak: 100, unit_number: 'UN 1', postal_code: '4001'}
-          put :validate_single, params: { consumption_id: consumption2.id, detail: detail }
+          put :validate_single, params: { consumption_id: consumption2.id, detail: detail, is_new: 0 }
         end
 
         before { do_request }
@@ -174,10 +174,58 @@ RSpec.describe Api::Buyer::ConsumptionDetailsController, type: :controller do
         end
       end
 
-      context '(Validate-Single) Success' do
+      context '(Validate-Single)Original consumption detail - Success' do
         def do_request
           detail = {id: 0, account_number: '000002', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN 2', postal_code: '4001'}
-          put :validate_single, params: { consumption_id: consumption.id, detail: detail }
+          put :validate_single, params: { consumption_id: consumption1.id, detail: detail, is_new: 0 }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash_body = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+          expect(hash_body).to have_content('validate_result')
+          expect(hash_body).to have_content('error_details')
+          expect(hash_body['validate_result']).to eq(true)
+        end
+      end
+
+      context '(Validate-Single)New consumption detail - Account number do not unique' do
+        def do_request
+          detail = {id: 0, account_number: '000001',consumption_id: consumption.id, intake_level: 'LT', peak: 100, off_peak: 100, unit_number: 'UN 1', postal_code: '4001'}
+          post :validate_single, params: { consumption_id: consumption1.id, detail: detail, is_new: 1 }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash_body = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+          expect(hash_body).to have_content('validate_result')
+          expect(hash_body).to have_content('error_details')
+          expect(hash_body['validate_result']).to eq(false)
+        end
+      end
+
+      context '(Validate-Single)New consumption detail - Premise Address do not unique' do
+        def do_request
+          detail = {id: 0, account_number: '000002', intake_level: 'LT', consumption_id: consumption1.id , peak: 100, off_peak: 100, unit_number: 'UN 1', postal_code: '4001'}
+          put :validate_single, params: { consumption_id: consumption2.id, detail: detail, is_new: 1 }
+        end
+
+        before { do_request }
+        it 'Success' do
+          hash_body = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+          expect(hash_body).to have_content('validate_result')
+          expect(hash_body).to have_content('error_details')
+          expect(hash_body['validate_result']).to eq(false)
+        end
+      end
+
+      context '(Validate-Single)New consumption detail - Success' do
+        def do_request
+          detail = {id: 0, account_number: '0000AB', intake_level: 'LT' , peak: 100, off_peak: 100, unit_number: 'UN AB', postal_code: 'PC AB'}
+          put :validate_single, params: { consumption_id: consumption1.id, detail: detail, is_new: 1 }
         end
 
         before { do_request }

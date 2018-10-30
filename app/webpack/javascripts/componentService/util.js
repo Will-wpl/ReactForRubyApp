@@ -23,9 +23,12 @@ export const findUpLimitZero = (curValue) => {
     }
 }
 
-const defaultColors = ['#22ad38', '#ff26ff', '#f53d0b', '#8ff830', '#f13de8', '#37b8ff', '#001a66', '#ffc000'
-    , '#3366ff', '#9933ff', '#868686', '#0ba55c', '#fa9106', '#ffafff', '#c00000', '#46f0f0', '#49702e', '#ffff99'
-    , '#993300', '#8e8cf4']
+const defaultColors = ['#056b07', '#3384e0', '#f53d0b', '#48ddc0', '#e5e5e5', '#ffe65b', '#ec0033', '#241594'
+    , '#168694', '#7c1212', '#ff9c5a', '#dc52e5', '#fc5098', '#32e333', '#6850d8', '#bfc8cf', '#891592', '#b50c83'
+    , '#2b8a2c', '#3b2e7d'];
+    //['#22ad38', '#ff26ff', '#f53d0b', '#8ff830', '#f13de8', '#37b8ff', '#001a66', '#ffc000'
+    //, '#3366ff', '#9933ff', '#868686', '#0ba55c', '#fa9106', '#ffafff', '#c00000', '#46f0f0', '#49702e', '#ffff99'
+    //, '#993300', '#8e8cf4']
 export const getRandomColor = (intNum, limit = 100, totallyRandom = false) => {
     // return '#' + ('00000' + (intNum * 0x1000000 << 0).toString(16)).slice(-6);
     // return `#${(`00000${((Math.random() + intNum) * 0x1000000 << 0).toString(16)}`).slice(-6)}`;

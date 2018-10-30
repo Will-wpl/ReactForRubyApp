@@ -7,8 +7,7 @@ import { validateConsumptionDetailRepeat } from './../../javascripts/componentSe
 import { formatPower, validateInteger, validateLess100, removeDecimal, removeAsInteger, removeAsIntegerPercent, replaceSymbol, trim, validateNum, validateNum4, validateNum10, validateDecimal, validateEmail, validateTwoDecimal, validator_Object, validator_Array, setValidationFaild, setValidationPass, changeValidate, removeNanNum, removePostCode, validatePostCode } from '../../javascripts/componentService/util';
 //共通弹出框组件
 import { UploadFile } from '../shared/upload';
-import E from 'wangeditor'
-import { isForStatement } from 'typescript';
+import E from 'wangeditor';
 
 export class Modal extends React.Component {
     constructor(props) {
@@ -572,7 +571,8 @@ export class Modal extends React.Component {
 
         let param = {
             detail: validateItem,
-            consumption_id: this.state.consumption_id
+            consumption_id: this.state.consumption_id,
+            is_new: this.state.cate_type === 'current' ? 1 : 0
         }
 
         validateConsumptionDetailRepeat(param).then(res => {
@@ -589,15 +589,23 @@ export class Modal extends React.Component {
                 if (res.error_details) {
 
                     res.error_details.map(item => {
+                        if (this.state.cate_type === 'current') {
+                            if (item.error_field_name === "account_number") {
+                                $("#account_number_taken_message").removeClass("isPassValidate").addClass('errormessage');
+                                $("#account_number").focus();
+                            }
+                        }
+                        else {
+                            if (item.error_field_name === "account_number") {
+                                $("#account_number_taken_already_message").removeClass("isPassValidate").addClass('errormessage');
+                                $("#account_number").focus();
+                            }
+                        }
                         if (item.error_field_name === "premise_addresses") {
                             $("#permise_address_taken_message").removeClass("isPassValidate").addClass('errormessage');
                             $("#unit_number").focus();
                         }
-                        
-                        if (item.error_field_name === "account_number") {
-                            $("#account_number_taken_already_message").removeClass("isPassValidate").addClass('errormessage');
-                            $("#account_number").focus();
-                        }
+
                     })
                 }
             }

@@ -15,7 +15,7 @@ export default class CheckboxList extends Component {
         this.list = list;
         this.type = type;
         this.setState({list:list})
-        console.log(list);
+        // console.log(list);
     }
 
     selectAll() {

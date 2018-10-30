@@ -6,7 +6,7 @@ import marketImg from '../../images/marketinsights.png'
 import { getBuyerParticipate, setBuyerParticipate } from '../../javascripts/componentService/common/service';
 import moment from 'moment';
 import { formatPower } from './../../javascripts/componentService/util'
-
+import loadingPic from '../../images/loading.gif'
 export class FillConsumption extends Component {
     constructor(props) {
         super(props);
@@ -341,6 +341,8 @@ export class FillConsumption extends Component {
     }
 
     doSave(type) {
+        $("#bg").show();
+        $("#show").show();
         let makeData = {},
             buyerlist = [], yesterday = [], beforeYesterda = [];
         this.state.site_list.map((item, index) => {
@@ -418,8 +420,10 @@ export class FillConsumption extends Component {
             details_before_yesterday: JSON.stringify(beforeYesterda),
             contract_duration: $("#selDuration").val()
         }
-         
+
         setBuyerParticipate(makeData, '/api/buyer/consumption_details/save').then((res) => {
+            $("#bg").hide();
+            $("#show").hide();
             if (type != "participate") {
                 if (type == "delete") {
                     this.setState({ text: "Delete successful!" });
@@ -455,11 +459,15 @@ export class FillConsumption extends Component {
                     }
 
                 }, (error) => {
+                    $("#bg").hide();
+                    $("#show").hide();
                     this.refs.Modal.showModal();
                     this.setState({ text: "Interface failed" });
                 })
             }
         }, (error) => {
+            $("#bg").hide();
+            $("#show").hide();
             this.refs.Modal.showModal();
             this.setState({ text: "Interface failed" });
         })
@@ -501,13 +509,19 @@ export class FillConsumption extends Component {
 
     doAccept() {
         if (this.state.submit_type === "Reject") { //do Reject
+            $("#bg").show();
+            $("#show").show();
             setBuyerParticipate({ consumption_id: this.state.consumption_id }, '/api/buyer/consumption_details/reject').then((res) => {
+                $("#bg").hide();
+                $("#show").hide();
                 this.refs.Modal.showModal();
                 this.setState({ text: "Thank you for the confirmation. You have rejected this auction." });
                 setTimeout(() => {
                     window.location.href = "/buyer/auctions";
                 }, 3000)
             }, (error) => {
+                $("#bg").hide();
+                $("#show").hide();
                 this.refs.Modal.showModal();
                 this.setState({ text: "Interface failed" });
             })
@@ -1062,7 +1076,7 @@ export class FillConsumption extends Component {
                                         <h4 className="lm--formItem lm--formItem--inline string chkBuyer" >
                                             <input type="checkbox" id="chkBuyer" id="chk_Warning" required /><span className="warning" style={{ "color:": "red" }}>Warning: [{this.state.dateIssuecount}] account(s) detected to have expiry date on  or after new contract start date. Please tick the checkbox
                                              to confirm that you aware and would like to proceed with including such account(s) in this auction.</span> </h4> : <div></div>
-                                }
+                                } 
                             </div>
                             <div>
                                 <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
@@ -1086,6 +1100,10 @@ export class FillConsumption extends Component {
                 <Modal formSize="big" text={this.state.text} acceptFunction={this.doAddAccountAction.bind(this)} siteList={this.state.totalList} consumptionAccountItem={this.state.account_detail} listdetailtype='consumption_detail' ref="consumption" />
                 <Modal formSize="middle" text={this.state.text} advisory={this.state.advisory} listdetailtype='market-insight' ref="market" />
                 <Modal listdetailtype="accountTaken" text={this.state.text} takenList={this.state.takenList} ref="accountTaken" />
+                <div id="bg"></div>
+                <div id="show">
+                    <img src={loadingPic} id="isLoading" />
+                </div>
             </div>
         )
     }
