@@ -1,7 +1,9 @@
 pipeline {
     agent any
     triggers {
-      GenericTrigger causeString: 'Generic Cause', printPostContent: true, regexpFilterExpression: '', regexpFilterText: '', token: 'raweb'
+      GenericTrigger(
+          causeString: 'Generic Cause', printPostContent: true, regexpFilterExpression: '', regexpFilterText: '', token: 'raweb'
+      )
     }
     parameters {
         choice(name: 'CHOICE', choices: ['normal', 'command'], description: 'normal:git pull->build image->test->push image->command->deploy. \n command: execute command')
