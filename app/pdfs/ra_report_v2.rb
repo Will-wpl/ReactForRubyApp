@@ -17,14 +17,12 @@ class RAReportV2 < RAReport
     PdfTitleV2.new(param).title
   end
 
-
   def pdf_draw_left_info(param)
     pdf = param[:pdf]
     pdf.grid([0, 0], [22, 17]).bounding_box do
       pdf.move_down 650
       PdfReservePriceTable.new(param.merge({:pdf => pdf, :visibilities => @visibilities})).table
     end
-
   end
 
   def pdf_draw_right_info(param)
@@ -36,7 +34,6 @@ class RAReportV2 < RAReport
     pdf.move_down 5; PdfAggregateConsumption.new({:pdf => pdf, :auction_contract => param[:auction_contract]}).aggregate
     pdf.move_down 5; PdfTotalAwardSumV2.new({:pdf => pdf, :auction => param[:auction], :auction_result => param[:auction_result]}).info
     pdf.move_down 55; PdfRankingTable.new({:pdf => pdf, :histories_achieved => param[:histories_achieved]}).table
-
   end
 
   def get_price_table_data(param, visibility = false, price_data = false)
