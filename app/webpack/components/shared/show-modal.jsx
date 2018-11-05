@@ -1461,7 +1461,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td><abbr title="required">
                                         <span className={this.state.intake_level_selected === "LT" ? "isHide" : "isDisplay"}>*</span>
-                                    </abbr>Contract Capacity</td>
+                                    </abbr>Contracted Capacity</td>
                                     <td>
                                         <input type="text" disabled={this.state.contracted_capacity_disabled} value={this.state.contracted_capacity} onChange={this.changeConsumption.bind(this, "contracted_capacity")} id="contracted_capacity" name="contracted_capacity" onKeyUp={this.removeInputNanNum.bind(this)} required aria-required="true" maxLength="20" />
                                         <div id="contracted_capacity_message" className="isPassValidate">This filed is required!</div>
