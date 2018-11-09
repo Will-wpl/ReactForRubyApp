@@ -1,5 +1,5 @@
 ARG IMAGE_NAME=ruby
-ARG IMAGE_TAG=2.5-alpine
+ARG IMAGE_TAG=2.5.3
 
 FROM ${IMAGE_NAME}:${IMAGE_TAG} as builder
 
