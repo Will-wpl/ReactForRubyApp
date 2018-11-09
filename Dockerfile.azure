@@ -1,10 +1,8 @@
-ARG IMAGE_NAME=ruby
-ARG IMAGE_TAG=2.5.3
-
-FROM ${IMAGE_NAME}:${IMAGE_TAG} as builder
+FROM ruby:2.5.3
+WORKDIR /app
 
 ENV RAILS_ENV production
-ENV SECRET_KEY_BASE something
+#ENV SECRET_KEY_BASE something
 ENV RAILS_SERVE_STATIC_FILES=1
 ENV NODE_ENV production
 
@@ -14,8 +12,7 @@ ARG no_proxy=127.0.0.1,localhost
 #ARG npm_config_registry=[some repos uril]
 ARG npm_config_strict_ssl=false
 
-RUN apt-get --no-cache add \
-        build-base \
+RUN apt-get install -y build-base \
         git \
         libxml2-dev \
         libxslt-dev \
@@ -26,15 +23,18 @@ RUN apt-get --no-cache add \
         postgresql-client \
         tzdata
 
-WORKDIR /app
 
 COPY Gemfile Gemfile
 COPY Gemfile.lock Gemfile.lock
+COPY vendor ./vendor
 RUN bundle install \
         --clean \
         --jobs=4 \
         --no-cache \
         --without=development test
+
+
+
 
 COPY package.json package.json
 COPY yarn.lock yarn.lock
@@ -43,9 +43,7 @@ RUN yarn install
 COPY . .
 RUN bundle exec rails assets:precompile
 RUN rm -rf node_modules
-
-
-FROM ${IMAGE_NAME}:${IMAGE_TAG}
+FROM ruby:2.5.3
 
 ENV RAILS_ENV production
 ENV RAILS_SERVE_STATIC_FILES=1
@@ -53,14 +51,14 @@ ENV RAILS_SERVE_STATIC_FILES=1
 #ARG http_proxy=[our env uses proxy, e.g. http://proxy.something:8080]
 #ARG https_proxy=[our env uses proxy, e.g. http://proxy.something:8080]
 
-RUN apk --no-cache add \
-        nodejs \
+
+RUN apt-get install -y nodejs \
         postgresql-client \
         tzdata
 
 WORKDIR /app
 
-COPY --from=builder /app .
-COPY --from=builder /usr/local/bundle /usr/local/bundle
+COPY --from=0 /app .
+COPY --from=0 /usr/local/bundle /usr/local/bundle
 
 CMD ["bundle", "exec", "rails", "server"]
