@@ -11,8 +11,8 @@ ARG DATABASE_USERNAME
 ARG DATABASE_PASSWORD
 COPY . .
 
-#RUN bundle install -j4 && \
-#    yarn install
+RUN bundle install -j4 && \
+    yarn install
 
 RUN chmod -R +x bin
 RUN rake db:create
