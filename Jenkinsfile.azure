@@ -6,7 +6,7 @@ pipeline {
       )
     }
     parameters {
-        choice(name: 'CHOICE', choices: ['normal', 'command'], description: 'normal:git pull->build image->test->push image->command->deploy. \n command: execute command')
+        choice(name: 'CHOICE', choices: ['normal', 'command', 'base_image'], description: 'normal:git pull->build image->test->push image->command->deploy. \n command: execute command. \n base_image: build base image.')
 		text(name: 'COMMAND', defaultValue: '', description: 'Enter command')
     }
 	
@@ -45,7 +45,7 @@ pipeline {
 							/*checkout scm*/
 							def registry_url = "https://${env.DOCKER_REGISTRY_IP_PORT}"
                             docker.withRegistry(registry_url, 'ra-docker-registry') {
-                                def customImage = docker.build("${env.DOCKER_REGISTRY_IP_PORT}/${env.IMAGE_NAME}:${env.BUILD_ID}", "--build-arg REDISTOGO_URL=${env.REDISTOGO_URL} --build-arg DATABASE_HOST=${env.DATABASE_HOST} --build-arg DATABASE_PORT=${env.DATABASE_PORT} --build-arg DATABASE_USERNAME=${env.DATABASE_USERNAME} --build-arg DATABASE_PASSWORD=${env.DATABASE_PASSWORD} --target rails_base -f Dockerfile.azure .")
+                                def customImage = docker.build("${env.DOCKER_REGISTRY_IP_PORT}/${env.IMAGE_NAME}:${env.BUILD_ID}", "--build-arg REDISTOGO_URL=${env.REDISTOGO_URL} --build-arg DATABASE_HOST=${env.DATABASE_HOST} --build-arg DATABASE_PORT=${env.DATABASE_PORT} --build-arg DATABASE_USERNAME=${env.DATABASE_USERNAME} --build-arg DATABASE_PASSWORD=${env.DATABASE_PASSWORD} -f Dockerfile.azure .")
                             }
 
 						}
@@ -198,5 +198,33 @@ pipeline {
 				}
 			}
 		}
+
+		stage('base_image') {
+            when { expression { return params.CHOICE =='base_image' } }
+            stages {
+                stage('build image') {
+                    steps {
+                        slackSend message: 'build start'
+                        script {
+                            /*checkout scm*/
+                            def registry_url = "https://${env.DOCKER_REGISTRY_IP_PORT}"
+                            docker.withRegistry(registry_url, 'ra-docker-registry') {
+                                def customImage = docker.build("${env.DOCKER_REGISTRY_IP_PORT}/rails_base:latest", "-f Dockerfile.azure.base .")
+                                customImage.push()
+                            }
+
+                        }
+                    }
+                }
+            }
+            post {
+                success {
+                    slackSend message: 'build success'
+                }
+                failure {
+                    slackSend message: 'build failure'
+                }
+            }
+        }
     }
 }
