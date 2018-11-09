@@ -14,7 +14,7 @@ ARG no_proxy=127.0.0.1,localhost
 #ARG npm_config_registry=[some repos uril]
 ARG npm_config_strict_ssl=false
 
-RUN apk --no-cache add \
+RUN apt --no-cache add \
         build-base \
         git \
         libxml2-dev \
