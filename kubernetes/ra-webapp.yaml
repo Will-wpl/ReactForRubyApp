@@ -18,10 +18,6 @@ spec:
         - name: ra-web-queue-image
           image: ${DOCKER_REGISTRY_IP_PORT}/${IMAGE_NAME}:${BUILD_ID}
           command: [ "bundle", "exec", "sidekiq", "-t", "25", "-C", "config/sidekiq.yml" ]
-          #lifecycle:
-          #  postStart:
-          #    exec:
-          #      command: ["/bin/sh", "start.sh"]
           env:
             - name: DATABASE_HOST
               value: ${DATABASE_HOST}
@@ -45,8 +41,6 @@ spec:
               value: "${AZURE_STORAGE_ACCESS_KEY}"
             - name: AZURE_CONTAINER
               value: "${AZURE_CONTAINER}"
-          ports:
-            - containerPort: 3000
 
 
 ---
@@ -70,10 +64,6 @@ spec:
       containers:
         - name: ra-web-image
           image: ${DOCKER_REGISTRY_IP_PORT}/${IMAGE_NAME}:${BUILD_ID}
-          #lifecycle:
-          #  postStart:
-          #    exec:
-          #      command: ["/bin/sh", "-c", "./start.sh"]
           env:
             - name: RAKE_TYPE
               value: ${RAKE_TYPE}
@@ -113,10 +103,7 @@ apiVersion: v1
 metadata:
   name: ra-web-service
 spec:
-  #type: LoadBalancer
-  #type: NodePort 
   selector:
     app: ra-web
   ports:
   - port: 3000
-  #  nodePort: 30006
