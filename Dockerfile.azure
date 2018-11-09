@@ -1,4 +1,4 @@
-FROM ruby:2.5.3
+FROM ruby:2.4.1
 ENV RAILS_ENV production
 ENV RAILS_SERVE_STATIC_FILES=1
 ENV NODE_ENV production
@@ -34,7 +34,7 @@ RUN export NODE_OPTIONS=--max-old-space-size=3096 && \
     rails assets:precompile
 RUN rm -rf node_modules
 
-FROM ruby:2.5.3
+FROM ruby:2.4.1
 WORKDIR /app
 ENV RAILS_ENV production
 ENV RAILS_SERVE_STATIC_FILES=true
