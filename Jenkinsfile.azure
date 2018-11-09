@@ -45,7 +45,7 @@ pipeline {
 							/*checkout scm*/
 							def registry_url = "https://${env.DOCKER_REGISTRY_IP_PORT}"
                             docker.withRegistry(registry_url, 'ra-docker-registry') {
-                                def customImage = docker.build("${env.DOCKER_REGISTRY_IP_PORT}/${env.IMAGE_NAME}:${env.BUILD_ID}", "--build-arg REDISTOGO_URL=${env.REDISTOGO_URL} --build-arg DATABASE_HOST=${env.DATABASE_HOST} --build-arg DATABASE_PORT=${env.DATABASE_PORT} --build-arg DATABASE_USERNAME=${env.DATABASE_USERNAME} --build-arg DATABASE_PASSWORD=${env.DATABASE_PASSWORD} --target ${env.DOCKER_REGISTRY_IP_PORT}/${env.IMAGE_NAME}:${env.BUILD_ID} -f Dockerfile.azure .")
+                                def customImage = docker.build("${env.DOCKER_REGISTRY_IP_PORT}/${env.IMAGE_NAME}:${env.BUILD_ID}", "--build-arg REDISTOGO_URL=${env.REDISTOGO_URL} --build-arg DATABASE_HOST=${env.DATABASE_HOST} --build-arg DATABASE_PORT=${env.DATABASE_PORT} --build-arg DATABASE_USERNAME=${env.DATABASE_USERNAME} --build-arg DATABASE_PASSWORD=${env.DATABASE_PASSWORD} --target rails_base -f Dockerfile.azure .")
                             }
 
 						}
