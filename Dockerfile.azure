@@ -1,64 +1,42 @@
 FROM ruby:2.5.3
-WORKDIR /app
-
 ENV RAILS_ENV production
-#ENV SECRET_KEY_BASE something
 ENV RAILS_SERVE_STATIC_FILES=1
 ENV NODE_ENV production
 
-#ARG http_proxy=[our env uses proxy, e.g. http://proxy.something:8080]
-#ARG https_proxy=[our env uses proxy, e.g. http://proxy.something:8080]
-ARG no_proxy=127.0.0.1,localhost
-#ARG npm_config_registry=[some repos uril]
-ARG npm_config_strict_ssl=false
-
-RUN apt-get install -y build-base \
-        git \
-        libxml2-dev \
-        libxslt-dev \
-        postgresql-dev \
-        python2 \
-        yarn \
-        nodejs \
-        postgresql-client \
-        tzdata
-
-
+ARG REDISTOGO_URL
+ARG DATABASE_HOST
+ARG DATABASE_PORT
+ARG DATABASE_USERNAME
+ARG DATABASE_PASSWORD
+WORKDIR /app
 COPY Gemfile Gemfile
 COPY Gemfile.lock Gemfile.lock
 COPY vendor ./vendor
-RUN bundle install \
+COPY package.json package.json
+COPY yarn.lock yarn.lock
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
+    apt-get install -y nodejs && \
+    apt-get update -qq && apt-get install -y build-essential libpq-dev && rm -rf /var/lib/apt/lists/* && \
+    npm install --global yarn && \
+    npm install webpack -g && \
+    gem install bundler --pre && \
+    bundle install \
         --clean \
         --jobs=4 \
         --no-cache \
-        --without=development test
-
-
-
-
-COPY package.json package.json
-COPY yarn.lock yarn.lock
-RUN yarn install
-
+        --without=development test && \
+    yarn install
 COPY . .
-RUN bundle exec rails assets:precompile
+RUN export NODE_OPTIONS=--max-old-space-size=3096 && \
+    rails assets:precompile
 RUN rm -rf node_modules
+
 FROM ruby:2.5.3
-
-ENV RAILS_ENV production
-ENV RAILS_SERVE_STATIC_FILES=1
-
-#ARG http_proxy=[our env uses proxy, e.g. http://proxy.something:8080]
-#ARG https_proxy=[our env uses proxy, e.g. http://proxy.something:8080]
-
-
-RUN apt-get install -y nodejs \
-        postgresql-client \
-        tzdata
-
 WORKDIR /app
+ENV RAILS_ENV production
+ENV RAILS_SERVE_STATIC_FILES=true
 
 COPY --from=0 /app .
 COPY --from=0 /usr/local/bundle /usr/local/bundle
 
-CMD ["bundle", "exec", "rails", "server"]
+CMD ["rails", "server", "-b", "0.0.0.0", "-e", "production"]
