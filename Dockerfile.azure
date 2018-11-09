@@ -1,21 +1,66 @@
-FROM rawebappregistry.azurecr.io/rails_base:latest
-ENV INSTALL_PATH /app
-WORKDIR $INSTALL_PATH
+ARG IMAGE_NAME=ruby
+ARG IMAGE_TAG=2.5.0-alpine
+
+FROM ${IMAGE_NAME}:${IMAGE_TAG} as builder
 
 ENV RAILS_ENV production
-ENV RAILS_SERVE_STATIC_FILES=true    
-ARG REDISTOGO_URL
-ARG DATABASE_HOST
-ARG DATABASE_PORT
-ARG DATABASE_USERNAME
-ARG DATABASE_PASSWORD
+ENV SECRET_KEY_BASE something
+ENV RAILS_SERVE_STATIC_FILES=1
+ENV NODE_ENV production
+
+#ARG http_proxy=[our env uses proxy, e.g. http://proxy.something:8080]
+#ARG https_proxy=[our env uses proxy, e.g. http://proxy.something:8080]
+ARG no_proxy=127.0.0.1,localhost
+#ARG npm_config_registry=[some repos uril]
+ARG npm_config_strict_ssl=false
+
+RUN apk --no-cache add \
+        build-base \
+        git \
+        libxml2-dev \
+        libxslt-dev \
+        postgresql-dev \
+        python2 \
+        yarn \
+        nodejs \
+        postgresql-client \
+        tzdata
+
+WORKDIR /app
+
+COPY Gemfile Gemfile
+COPY Gemfile.lock Gemfile.lock
+RUN bundle install \
+        --clean \
+        --jobs=4 \
+        --no-cache \
+        --without=development test
+
+COPY package.json package.json
+COPY yarn.lock yarn.lock
+RUN yarn install
+
 COPY . .
+RUN bundle exec rails assets:precompile
+RUN rm -rf node_modules
 
-RUN bundle install -j4 && \
-    yarn install
 
-RUN chmod -R +x bin
-RUN rake db:create
-RUN export NODE_OPTIONS=--max-old-space-size=3096 && \
-    rails assets:precompile
-CMD ["rails", "server", "-b", "0.0.0.0", "-e", "production"]
+FROM ${IMAGE_NAME}:${IMAGE_TAG}
+
+ENV RAILS_ENV production
+ENV RAILS_SERVE_STATIC_FILES=1
+
+#ARG http_proxy=[our env uses proxy, e.g. http://proxy.something:8080]
+#ARG https_proxy=[our env uses proxy, e.g. http://proxy.something:8080]
+
+RUN apk --no-cache add \
+        nodejs \
+        postgresql-client \
+        tzdata
+
+WORKDIR /app
+
+COPY --from=builder /app .
+COPY --from=builder /usr/local/bundle /usr/local/bundle
+
+CMD ["bundle", "exec", "rails", "server"]
