@@ -23,8 +23,7 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
     bundle install \
         --clean \
         --jobs=4 \
-        --no-cache \
-        --without=development test && \
+        --no-cache && \
     yarn install
 COPY . .
 RUN export NODE_OPTIONS=--max-old-space-size=3096 && \
