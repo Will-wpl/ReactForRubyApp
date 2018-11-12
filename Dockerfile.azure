@@ -18,7 +18,10 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
     npm install --global yarn && \
     npm install webpack -g && \
     gem install bundler --pre && \
-    bundle install -j4 && \
+    bundle install \
+           --clean \
+           --jobs=4 \
+           --no-cache && \
     yarn install
 
 COPY . .
