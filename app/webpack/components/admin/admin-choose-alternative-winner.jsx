@@ -72,14 +72,14 @@ export default class ChooseAlternativeWinner extends React.Component{
             })
             let e={
                 data:{
-                    user_id:data.histories[0].user_id,
+                    user_id:data.histories.length>0?data.histories[0].user_id:null,
                     status:'win'
                 },
                 id:data.histories[0].auction_id,
                 index:0
             };
             //console.log(e);
-            this.setState({winnerData:data.histories,selectedWinner:e,userid:data.histories[0].user_id})
+            this.setState({winnerData:data.histories,selectedWinner:e,userid:data.histories.length>0?data.histories[0].user_id:null})
         })
     }
     liveTab(index){
@@ -247,7 +247,7 @@ export default class ChooseAlternativeWinner extends React.Component{
                 <div className='lm--card alternative-winner'>
                     <h2>Retailer Ranking</h2>
                     <div style={{marginBottom:'10px',marginTop:'-10px',fontSize:'16px'}}>{this.renderWinner()}</div>
-                    <table className="retailer_fill w_100">
+                    {winnerData.length>0?<table className="retailer_fill w_100">
                         <thead>
                         <tr>
                             <th>Rank</th>
@@ -276,7 +276,8 @@ export default class ChooseAlternativeWinner extends React.Component{
                             )})
                         }
                         </tbody>
-                    </table>
+                    </table>:<div>No Data</div>}
+
 
                     <div className="retailor_justification">
                         <h2><abbr id='badge'>*</abbr>Justification</h2>
@@ -288,10 +289,9 @@ export default class ChooseAlternativeWinner extends React.Component{
                             onClick={this.submit.bind(this,'void')}
                             className="lm--button lm--button--primary u-mt2"
                         >Void Reverse Auction</button>
-                        <button disabled={this.state.disabled}
-                            onClick={this.submit.bind(this,'win')}
-                            className="lm--button lm--button--primary u-mt2"
-                        >Confirm Winner</button>
+                        {winnerData.length>0?<button disabled={this.state.disabled}
+                                                     onClick={this.submit.bind(this,'win')}
+                                                     className="lm--button lm--button--primary u-mt2">Confirm Winner</button>:''}
                     </div>
                     <Modal
                         text={this.state.text}
