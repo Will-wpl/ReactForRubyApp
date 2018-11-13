@@ -766,7 +766,7 @@ body.choose{
         width: 100%; height: 100%; background: #fff; position: relative;
         &.current{box-shadow: 0px 0px 10px #00d900 !important;}
         &.step1{background:#fff url("../images/images_for_white/sign_confidentiality_undertaking.png") no-repeat center; background-size: 90%; box-shadow: 0px 0px 10px #ccc;}
-        &#old_step1{background:#00afb1 url("../images/images_for_white/sign_confidentiality_undertaking2.png") no-repeat center; background-size: 100%;}
+        &#old_step1{background:#fff url("../images/images_for_white/sign_confidentiality_undertaking2.png") no-repeat center; background-size: 100%;}
         &.step2{background:#fff url("../images/images_for_white/ender_documents.png") no-repeat center; background-size: 90%; box-shadow: 0px 0px 10px #ccc;}
         &.step3{background:#fff url("../images/images_for_white/deviations.png") no-repeat center; background-size: 90%; box-shadow: 0px 0px 10px #ccc;}
         &.step4{background:#fff url("../images/images_for_white/submit_form_of_tender.png") no-repeat center; background-size: 90%; box-shadow: 0px 0px 10px #ccc;}
