@@ -5,11 +5,8 @@ pipeline {
           causeString: 'Generic Cause', printPostContent: true, regexpFilterExpression: '', regexpFilterText: '', token: 'raweb'
       )
     }
-    parameters {
-        choice(name: 'CHOICE', choices: ['normal', 'command', 'base_image'], description: 'normal:git pull->build image->test->push image->command->deploy. \n command: execute command. \n base_image: build base image.')
-		text(name: 'COMMAND', defaultValue: '', description: 'Enter command')
-    }
-	
+
+
 	environment {
 		IMAGE_NAME = 'ra_webapp'
         REDISTOGO_URL = credentials('ra-redis-url')
@@ -30,201 +27,103 @@ pipeline {
     }
 	
     stages {
-		stage('normal') {
-		    when { expression { return params.CHOICE =='normal' } }
-            stages {
-			    stage('Start') {
-					steps {
-						slackSend message: 'CI/CD start'
-					}
-				}
+        stage('Start') {
+            steps {
+                slackSend message: 'CI/CD start'
+            }
+        }
 
-				stage('Build') {
-					steps {
-						script {
-							/*checkout scm*/
-							def registry_url = "https://${env.DOCKER_REGISTRY_IP_PORT}"
-                            docker.withRegistry(registry_url, 'ra-docker-registry') {
-                                def customImage = docker.build("${env.DOCKER_REGISTRY_IP_PORT}/${env.IMAGE_NAME}:${env.BUILD_ID}", "--build-arg REDISTOGO_URL=${env.REDISTOGO_URL} --build-arg DATABASE_HOST=${env.DATABASE_HOST} --build-arg DATABASE_PORT=${env.DATABASE_PORT} --build-arg DATABASE_USERNAME=${env.DATABASE_USERNAME} --build-arg DATABASE_PASSWORD=${env.DATABASE_PASSWORD} -f Dockerfile.azure .")
-                            }
-
-						}
-					}
-					post {
-						failure {
-							slackSend message: 'build failure'
-						}
-					}
-				}
-        
-				stage('Tests') {
-					environment { 
-						DATABASE_HOST = 'db'
-						DATABASE_PASSWORD='123456'
-						DATABASE_USERNAME='postgres'
-						REDISTOGO_URL='redis://redis:6379/0'
-						REDISTOGO_PASSWORD=''
-					}
-					steps {
-						script {
-							docker.image('postgres:9.6').withRun('-e "POSTGRES_PASSWORD=123456"') { db ->
-								docker.image('redis').withRun() { redis ->
-	                                docker.image("${env.DOCKER_REGISTRY_IP_PORT}/${env.IMAGE_NAME}:${env.BUILD_ID}").inside("-u root --link ${db.id}:db --link ${redis.id}:redis") {
-										sh 'RAILS_ENV=test bundle install'
-										sh 'RAILS_ENV=test bundle exec rake db:create'
-										sh 'RAILS_ENV=test bundle exec rake db:migrate'
-										sh 'chmod -R a+x bin && RAILS_ENV=test bundle exec rspec'
-									}
-								}
-							}
-						}
-						
-					}
-					post {
-						success {
-							slackSend message: 'tests success'
-						}
-						failure {
-							slackSend message: 'tests failure'
-						}
-					}
-				}
-
-				stage('Push') {
-					steps {
-						script {
-							def registry_url = "https://${env.DOCKER_REGISTRY_IP_PORT}"
-							docker.withRegistry(registry_url, 'ra-docker-registry') {
-								def customImage = docker.image("${env.DOCKER_REGISTRY_IP_PORT}/${env.IMAGE_NAME}:${env.BUILD_ID}")
-								customImage.push()
-							}
-						}
-						writeFile file: '../raweb_build_tag', text: "${env.DOCKER_REGISTRY_IP_PORT}/${env.IMAGE_NAME}:${env.BUILD_ID}"
-					}
-					post {
-						failure {
-							slackSend message: 'push failure'
-						}
-					}
-				}
-				
-				stage('Command') {
-					steps {
-						script {
-							if(COMMAND != ''){
-								String[] items = COMMAND.split('\n')
-								docker.image("${env.DOCKER_REGISTRY_IP_PORT}/${env.IMAGE_NAME}:${env.BUILD_ID}").inside("-u root") {
-									/*sh 'bundle exec rake db:migrate'
-									sh 'bundle exec rake db:seed'*/
-									for( String cmd : items )
-										sh "${cmd}"
-								}
-							}
-						}
-					}
-					post {
-						success {
-							slackSend message: 'command success'
-						}
-						failure {
-							slackSend message: 'command failure'
-						}
-					}
-				}
-				
-				stage('Deploy') {
-					steps {
-						script {
-							def container_service = "${env.KUBERNETES_CONTAINER_SERVICE}"
-							def resource_groupname = "${env.KUBERNETES_RESOURCE_GROUP}"
-							def azure_credentials_id = "${env.KUBERNETES_AZURE_CREDENTIALS_ID}"
-							acsDeploy azureCredentialsId: azure_credentials_id, configFilePaths: 'kubernetes/ra-webapp.yaml', containerService: container_service, dcosDockerCredentialsPath: '', enableConfigSubstitution: true, resourceGroupName: resource_groupname, secretName: '', sshCredentialsId: 'slave_ssh_key'
-						}
-					}
-					post {
-						success {
-							slackSend message: 'deploy success'
-						}
-						failure {
-							slackSend message: 'deploy failure'
-						}
-					}
-				}
-			}
-			post {
-				always {
-					sh "docker rmi -f ${env.DOCKER_REGISTRY_IP_PORT}/${env.IMAGE_NAME}:${env.BUILD_ID}"
-				}
-			}
-		}
-
-		stage('command') {
-		    when { expression { return params.CHOICE =='command' } }
-			stages {
-				stage('Command') {
-					steps {
-						slackSend message: 'command start'
-						script {
-							def raweb_ver = readFile('../raweb_build_tag')
-							if(COMMAND != ''){
-								String[] items = COMMAND.split('\n')
-								def registry_url = "https://${env.DOCKER_REGISTRY_IP_PORT}"
-							    docker.withRegistry(registry_url, 'ra-docker-registry') {
-									docker.image(raweb_ver).inside("-u root") {
-										/*sh 'bundle exec rake db:migrate'
-										sh 'bundle exec rake db:seed'*/
-										for( String cmd : items )
-											sh "${cmd}"
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			post {
-				always {
-				    script {
-						def raweb_ver = readFile('../raweb_build_tag')
-						sh "docker rmi -f ${raweb_ver}"
-					}		
-					
-				}
-				success {
-					slackSend message: 'command success'
-				}
-				failure {
-					slackSend message: 'command failure'
-				}
-			}
-		}
-
-		stage('base_image') {
-            when { expression { return params.CHOICE =='base_image' } }
-            stages {
-                stage('build image') {
-                    steps {
-                        slackSend message: 'build start'
-                        script {
-                            /*checkout scm*/
-                            def registry_url = "https://${env.DOCKER_REGISTRY_IP_PORT}"
-                            docker.withRegistry(registry_url, 'ra-docker-registry') {
-                                def customImage = docker.build("${env.DOCKER_REGISTRY_IP_PORT}/rails_base:latest", "-f Dockerfile.azure.base .")
-                                customImage.push()
-                            }
-
-                        }
+        stage('Build') {
+            steps {
+                script {
+                    /*checkout scm*/
+                    def registry_url = "https://${env.DOCKER_REGISTRY_IP_PORT}"
+                    docker.withRegistry(registry_url, 'ra-docker-registry') {
+                        def customImage = docker.build("${env.DOCKER_REGISTRY_IP_PORT}/${env.IMAGE_NAME}:${env.BUILD_ID}", "--build-arg REDISTOGO_URL=${env.REDISTOGO_URL} --build-arg DATABASE_HOST=${env.DATABASE_HOST} --build-arg DATABASE_PORT=${env.DATABASE_PORT} --build-arg DATABASE_USERNAME=${env.DATABASE_USERNAME} --build-arg DATABASE_PASSWORD=${env.DATABASE_PASSWORD} -f Dockerfile.azure .")
                     }
+
                 }
             }
             post {
-                success {
-                    slackSend message: 'build success'
-                }
                 failure {
                     slackSend message: 'build failure'
                 }
             }
+        }
+
+        stage('Tests') {
+            environment {
+                DATABASE_HOST = 'db'
+                DATABASE_PASSWORD='123456'
+                DATABASE_USERNAME='postgres'
+                REDISTOGO_URL='redis://redis:6379/0'
+                REDISTOGO_PASSWORD=''
+            }
+            steps {
+                script {
+                    docker.image('postgres:9.6').withRun('-e "POSTGRES_PASSWORD=123456"') { db ->
+                        docker.image('redis').withRun() { redis ->
+                            docker.image("${env.DOCKER_REGISTRY_IP_PORT}/${env.IMAGE_NAME}:${env.BUILD_ID}").inside("-u root --link ${db.id}:db --link ${redis.id}:redis") {
+                                sh 'RAILS_ENV=test bundle install'
+                                sh 'RAILS_ENV=test bundle exec rake db:create'
+                                sh 'RAILS_ENV=test bundle exec rake db:migrate'
+                                sh 'chmod -R a+x bin && RAILS_ENV=test bundle exec rspec'
+                            }
+                        }
+                    }
+                }
+
+            }
+            post {
+                success {
+                    slackSend message: 'tests success'
+                }
+                failure {
+                    slackSend message: 'tests failure'
+                }
+            }
+        }
+
+        stage('Push') {
+            steps {
+                script {
+                    def registry_url = "https://${env.DOCKER_REGISTRY_IP_PORT}"
+                    docker.withRegistry(registry_url, 'ra-docker-registry') {
+                        def customImage = docker.image("${env.DOCKER_REGISTRY_IP_PORT}/${env.IMAGE_NAME}:${env.BUILD_ID}")
+                        customImage.push()
+                    }
+                }
+                writeFile file: '../raweb_build_tag', text: "${env.DOCKER_REGISTRY_IP_PORT}/${env.IMAGE_NAME}:${env.BUILD_ID}"
+            }
+            post {
+                failure {
+                    slackSend message: 'push failure'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    def container_service = "${env.KUBERNETES_CONTAINER_SERVICE}"
+                    def resource_groupname = "${env.KUBERNETES_RESOURCE_GROUP}"
+                    def azure_credentials_id = "${env.KUBERNETES_AZURE_CREDENTIALS_ID}"
+                    acsDeploy azureCredentialsId: azure_credentials_id, configFilePaths: 'kubernetes/ra-webapp.yaml', containerService: container_service, dcosDockerCredentialsPath: '', enableConfigSubstitution: true, resourceGroupName: resource_groupname, secretName: '', sshCredentialsId: 'slave_ssh_key'
+                }
+            }
+            post {
+                success {
+                    slackSend message: 'deploy success'
+                }
+                failure {
+                    slackSend message: 'deploy failure'
+                }
+            }
+        }
+    }
+    post {
+        always {
+            sh "docker rmi -f ${env.DOCKER_REGISTRY_IP_PORT}/${env.IMAGE_NAME}:${env.BUILD_ID}"
         }
     }
 }
