@@ -107,12 +107,12 @@ export class RetailerTCUploadApprove extends Component {
                     <div className="title">The <span className={this.state.epaIsExist ? "displayline" : "isHide"}><a href={this.state.epaUrl} target="_blank">[Electricity Procurement Agreement]</a></span><span className={(this.state.bptIsExist && this.state.epaIsExist) ? "displayline" : "isHide"}>, </span><span className={this.state.bptIsExist ? "displayline" : "isHide"}><a href={this.state.bptUrl} target="_blank">[Seller Platform Terms of Use]</a></span><span className={(this.state.epaIsExist && this.state.bptIsExist) ? "displayline" : "isHide"}> have</span><span className={(this.state.epaIsExist && this.state.bptIsExist) ? "isHide" : "displayline"}> has</span> changed. Please confirm:</div>
                     {this.state.epaIsExist ? <div>
                         <h4 className="lm--formItem lm--formItem--inline string checkBuyer"><input type="checkbox" id="chkEPA" name="epa" onChange={this.Change.bind(this, 'chkEPA')} required /><span>Check here to indicate that you have read and agree to the Electricity Procurement Agreement. </span></h4>
-                        <h4>Changes to Electricity Procurement Agreement will not apply to RA that have already been invited to participate in / RA in progress / RA that had been concluded.</h4>
+                        <h5>Changes to Electricity Procurement Agreement will not apply to RA that have already been invited to participate in / RA in progress / RA that had been concluded.</h5>
                         <div id="chkEPA_message" className="isPassValidate" style={{ marginLeft: "33px" }}>Please check this box if you want to proceed.</div>
                     </div> : <div></div>}
                     {this.state.bptIsExist ? <div>
                         <h4 className="lm--formItem lm--formItem--inline string checkBuyer"><input type="checkbox" id="chkBPT" name="bpt" onChange={this.Change.bind(this, 'chkBPT')} required /><span>Check here to indicate that you have read and agree to the Seller Platform Terms of Use. </span></h4>
-                        <h4>Changes to Seller Platform Terms of Use will not apply to RA that have already been invited to participate in / RA in progress / RA that had been concluded.</h4>
+                        <h5>Changes to Seller Platform Terms of Use will not apply to RA that have already been invited to participate in / RA in progress / RA that had been concluded.</h5>
                         <div id="chkBPT_message" className="isPassValidate" style={{ marginLeft: "33px" }}> Please check this box if you want to proceed.</div>
                     </div> : <div></div>}
                 </div>
