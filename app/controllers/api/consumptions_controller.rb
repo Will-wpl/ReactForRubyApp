@@ -89,6 +89,7 @@ class Api::ConsumptionsController < Api::BaseController
       if Consumption.find_by_auction_and_user(params[:auction_id], params[:user_id]).exists?
         render json: { message: 'consumption exist' }, status: 200
       else
+        auction = Auction.find(params[:auction_id])
         if auction.buyer_type == Auction::SingleBuyerType
           auction.consumptions.find_by_user_consumer_type(User::ConsumerTypeCompany).destroy_all
         end
