@@ -104,13 +104,13 @@ export default class RetailerLetterOfAward extends React.Component{
             data.map((e,i)=>{
                 return(
                     <li key={i} className="u-grid center ">
-                        <span className="col-sm-4 white">{e.name}</span>
-                        <span className="col-sm-4 line15">
+                        <span className="col-sm-6 white">{e.name}</span>
+                        <span className="col-sm-6 line15">
                             {e.entities?e.entities.map((it,k)=>{
                                 return <div key={k} className="downLoadIcon" onClick={this.download.bind(this,e,it.company_buyer_entity_id)}></div>
                             }):<div className="downLoadIcon" onClick={this.download.bind(this,e,null)}></div>}
                         </span>
-                        <span className="col-sm-4 ">
+                        {/* <span className="col-sm-4 ">
                             <button style={{"color":"#fff"}}
                                 disabled={e.disabled}
                                 className="lm--button lm--button--primary"
@@ -118,7 +118,7 @@ export default class RetailerLetterOfAward extends React.Component{
                             >
                                 Acknowledge
                             </button>
-                        </span>
+                        </span> */}
                     </li>
                 )
             })
@@ -133,7 +133,7 @@ export default class RetailerLetterOfAward extends React.Component{
                         {this.renderAwardList(this.state.letterOfAward)}
                     </ul>
                 </div>
-                <div className="all">
+                {/* <div className="all">
                     <button
                         disabled={this.state.acknowledgeAllBtn}
                         className="lm--button lm--button--primary"
@@ -141,7 +141,7 @@ export default class RetailerLetterOfAward extends React.Component{
                     >
                         Acknowledge All
                     </button>
-                </div>
+                </div> */}
                 <div className="createRaMain u-grid">
                     <a className="lm--button lm--button--primary u-mt3" href="/retailer/auction_results">Back</a>
                 </div>
