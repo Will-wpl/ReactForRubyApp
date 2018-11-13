@@ -1129,7 +1129,7 @@ body.choose{
 .live_modal_approve_attachment{
   text-align:left;
   min-width:800px;margin: 60px auto;
-  height:250px;;
+  min-height:250px;
   border-radius:5px;overflow: hidden;    font-size:16px;
   background: #fff;
   .title{  width: 100%;  padding:20px 10px 20px 10px; text-align: left;
@@ -1138,10 +1138,10 @@ body.choose{
     }
   }
   .attachment{
-    height: 180px;
+    min-height: 180px;
   }
   .btnProceed{
-    margin: 150 10px 20px 10 ;
+    margin-bottom:10px;
     // padding-bottom: 130px;
     // position:relative;
     // margin-bottom: "50px"
