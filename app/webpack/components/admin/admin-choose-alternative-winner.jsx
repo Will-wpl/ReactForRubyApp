@@ -203,7 +203,7 @@ export default class ChooseAlternativeWinner extends React.Component{
             return item.result == null;
         })
         if(!turly){
-            window.location.href = `/admin/auctions_results`;///admin/auctions/${thisId}/result
+            window.location.href = `/admin/auction_results`;///admin/auctions/${thisId}/result
         }
     }
     renderWinner(){
