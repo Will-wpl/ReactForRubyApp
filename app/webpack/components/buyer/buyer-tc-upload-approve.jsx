@@ -107,13 +107,12 @@ export class BuyerTCUploadApprove extends Component {
                     <div className="attachment">
                         <div className="title">The <span className={this.state.epaIsExist ? "displayline" : "isHide"}><a href={this.state.epaUrl} target="_blank">[Electricity Procurement Agreement]</a></span><span className={(this.state.bptIsExist && this.state.epaIsExist) ? "displayline" : "isHide"}>, </span><span className={this.state.bptIsExist ? "displayline" : "isHide"}><a href={this.state.bptUrl} target="_blank">[Buyer Platform Terms of Use]</a></span><span className={(this.state.epaIsExist && this.state.bptIsExist) ? "displayline" : "isHide"}> have</span><span className={(this.state.epaIsExist && this.state.bptIsExist) ? "isHide" : "displayline"}> has</span> changed. Please confirm:</div>
                         {this.state.epaIsExist ? <div><h4 className="lm--formItem lm--formItem--inline string checkBuyer"><input type="checkbox" id="chkEPA" onChange={this.Change.bind(this, 'chkEPA')} required /><span>Check here to indicate that you have read and agree to the Electricity Procurement Agreement. </span></h4>
-                            <h4>Changes to Electricity Procurement Agreement will not apply to RA that have already been invited to participate in / RA in progress / RA that had been concluded.</h4>
                             <div id="chkEPA_message" className="isPassValidate" style={{ marginLeft: "33px" }}>Please check this box if you want to proceed.</div>
                         </div> : <div></div>}
                         {this.state.bptIsExist ? <div><h4 className="lm--formItem lm--formItem--inline string checkBuyer"><input type="checkbox" id="chkBPT" onChange={this.Change.bind(this, 'chkBPT')} required /><span>Check here to indicate that you have read and agree to the Buyer Platform Terms of Use. </span></h4>
-                            <h4>Changes to Buyer Platform Terms of Use will not apply to RA that have already been invited to participate in / RA in progress / RA that had been concluded.</h4>
                             <div id="chkBPT_message" className="isPassValidate" style={{ marginLeft: "33px" }}> Please check this box if you want to proceed.</div>
                         </div> : <div></div>}
+                        <h4>*Note: The Changes will not apply to RA that have already been invited to participate in / RA in progress / RA that had been concluded.</h4>
                     </div>
                     <div className="col-sm-12 col-md-12 u-grid btnProceed">
                         <div className="col-md-10 u-cell">
