@@ -112,7 +112,8 @@ export class BuyerTCUploadApprove extends Component {
                         {this.state.bptIsExist ? <div><h4 className="lm--formItem lm--formItem--inline string checkBuyer"><input type="checkbox" id="chkBPT" onChange={this.Change.bind(this, 'chkBPT')} required /><span>Check here to indicate that you have read and agree to the Buyer Platform Terms of Use. </span></h4>
                             <div id="chkBPT_message" className="isPassValidate" style={{ marginLeft: "33px" }}> Please check this box if you want to proceed.</div>
                         </div> : <div></div>}
-                        <h4>*Note: The Changes will not apply to RA that have already been invited to participate in / RA in progress / RA that had been concluded.</h4>
+                        <br/>
+                        <h4>*Note: The changes will not apply to RA that have already been invited to participate in / RA in progress / RA that had been concluded.</h4>
                     </div>
                     <div className="col-sm-12 col-md-12 u-grid btnProceed">
                         <div className="col-md-10 u-cell">
