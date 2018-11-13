@@ -51,7 +51,7 @@ pipeline {
             }
         }
 
-        stage('Tests') {
+        /*stage('Tests') {
             environment {
                 DATABASE_HOST = 'db'
                 DATABASE_PASSWORD='123456'
@@ -82,7 +82,7 @@ pipeline {
                     slackSend message: 'tests failure'
                 }
             }
-        }
+        }*/
 
         stage('Push') {
             steps {
