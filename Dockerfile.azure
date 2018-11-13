@@ -42,11 +42,16 @@ WORKDIR /app
 ENV RAILS_ENV production
 ENV RAILS_SERVE_STATIC_FILES=true    
 RUN apk --no-cache add \
+        build-base \
         git \
+        libxml2-dev \
+        libxslt-dev \
+        postgresql-dev \
+        python2 \
+        yarn \
         nodejs \
         postgresql-client \
         tzdata
 COPY --from=0 /app .
 COPY --from=0 /usr/local/bundle /usr/local/bundle
-RUN chmod -R +x bin
 CMD ["rails", "server", "-b", "0.0.0.0", "-e", "production"]
