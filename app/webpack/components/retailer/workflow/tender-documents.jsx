@@ -73,7 +73,7 @@ export class Tenderdocuments extends React.Component {
                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                         {this.state.aggregate.map((item, index) => {
                             return <div className="col-sm-12" key={index}>
-                                {this.props.single != 5 ? <h4 className={'u-mt1 u-mb1'}>{item.contract_duration} Months&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Number of Buyers: {item.consumption_count}</h4> : ''}
+                                {this.props.single != 5 ? <h4 className={'u-mt1 u-mb1'}>{item.contract_duration} Months&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total number of buyers: {item.consumption_count}</h4> : ''}
                                 <table className="retailer_fill w_100" cellPadding="0" cellSpacing="0">
                                     <thead>
                                         <tr>
