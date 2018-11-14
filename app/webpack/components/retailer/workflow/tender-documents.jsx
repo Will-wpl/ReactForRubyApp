@@ -61,7 +61,7 @@ export class Tenderdocuments extends React.Component {
             this.props.page();
         }, error => {
 
-        }) 
+        })
     }
     render() {
         return (
@@ -108,7 +108,7 @@ export class Tenderdocuments extends React.Component {
                                         </tr>
                                     </tbody>
                                 </table>
-                                {this.props.single != 5 ? <a href={`/retailer/auctions/${this.props.auction.id}/consumption?type=2&contract_duration=${item.contract_duration}`} className="col-sm-4 lm--button lm--button--primary u-mt1 a_center">View Details</a> : ''}
+                                {/*{this.props.single != 5 ? <a href={`/retailer/auctions/${this.props.auction.id}/consumption?type=2&contract_duration=${item.contract_duration}`} className="col-sm-4 lm--button lm--button--primary u-mt1 a_center">View Details</a> : ''}*/}
                             </div>
                         })}
 
