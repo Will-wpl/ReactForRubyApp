@@ -80,6 +80,7 @@ export default class ChooseAlternativeWinner extends React.Component{
                 index:0
             };
             //console.log(e);
+            this.setState({winner:null});
             this.setState({winnerData:data.histories,selectedWinner:e,userid:data.histories.length>0?data.histories[0].user_id:null})
         })
     }
