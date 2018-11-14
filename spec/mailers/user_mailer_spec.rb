@@ -211,4 +211,13 @@ RSpec.describe UserMailer, type: :mail do
     end
   end
 
+  context 'buyer winner confirmation mail' do
+    before :each do
+      @template = create(:email_template, subject: 'Auction Results Notification', body: 'Dear #buyer_company_name,<br/><br/>Congratulations, #retailer_company_name has been awarded as your new electricity retailer for the #months months contract commencing on #contract_start_date (ID: #ra_id).<br/><br/>Please proceed to view the electricity purchase report at <a href="http://revv.sg">revv.sg</a>.', template_type: '29')
+      UserMailer.buyer_winner_confirmation(company_buyer, { :retailer_company_name => 'company_name', :ra_id => 'ra_id', :months => '6', :contract_start_date => 'contract_start_date'}).deliver_now
+    end
+    it 'be_delivered_to', mail: true do
+      expect(open_last_email).to be_delivered_to company_buyer.email
+    end
+  end
 end
