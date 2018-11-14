@@ -1,22 +1,17 @@
-FROM ruby:2.5-alpine
+FROM ruby:2.4.1
 WORKDIR /app
 ENV RAILS_ENV production
 ENV RAILS_SERVE_STATIC_FILES=true
-RUN apk --no-cache add \
-        build-base \
-        git \
-        libxml2-dev \
-        libxslt-dev \
-        postgresql-dev \
-        python2 \
-        yarn \
-        nodejs \
-        postgresql-client \
-        tzdata
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
+    apt-get install -y nodejs && \
+    apt-get update -qq && apt-get install -y build-essential libpq-dev && rm -rf /var/lib/apt/lists/*
 COPY Gemfile Gemfile
 COPY Gemfile.lock Gemfile.lock
 COPY vendor ./vendor
-RUN bundle install \
+RUN npm install --global yarn && \
+    npm install webpack -g && \
+    gem install bundler --pre && \
+    bundle install \
            --clean \
            --jobs=4 \
            --no-cache
@@ -37,21 +32,13 @@ RUN export NODE_OPTIONS=--max-old-space-size=3096 && \
     rails assets:precompile
 RUN rm -rf node_modules
 
-FROM ruby:2.5-alpine
+FROM ruby:2.4.1
 WORKDIR /app
 ENV RAILS_ENV production
-ENV RAILS_SERVE_STATIC_FILES=true    
-RUN apk --no-cache add \
-        build-base \
-        git \
-        libxml2-dev \
-        libxslt-dev \
-        postgresql-dev \
-        python2 \
-        yarn \
-        nodejs \
-        postgresql-client \
-        tzdata
+ENV RAILS_SERVE_STATIC_FILES=true
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
+    apt-get install -y nodejs && \
+    apt-get update -qq && apt-get install -y build-essential libpq-dev && rm -rf /var/lib/apt/lists/*
 COPY --from=0 /app .
 COPY --from=0 /usr/local/bundle /usr/local/bundle
 CMD ["rails", "server", "-b", "0.0.0.0", "-e", "production"]
