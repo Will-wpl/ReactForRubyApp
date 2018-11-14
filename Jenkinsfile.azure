@@ -6,7 +6,6 @@ pipeline {
       )
     }
 
-
 	environment {
 		IMAGE_NAME = 'ra_webapp'
         REDISTOGO_URL = credentials('ra-redis-url')
@@ -93,7 +92,6 @@ pipeline {
                         customImage.push()
                     }
                 }
-                writeFile file: '../raweb_build_tag', text: "${env.DOCKER_REGISTRY_IP_PORT}/${env.IMAGE_NAME}:${env.BUILD_ID}"
             }
             post {
                 failure {
