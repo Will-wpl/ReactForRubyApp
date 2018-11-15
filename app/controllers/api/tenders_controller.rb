@@ -12,7 +12,7 @@ class Api::TendersController < Api::TendersBaseController
       attachments = AuctionAttachment.belong_auction(@arrangement.auction_id)
                         .where(file_type: 'retailer_confidentiality_undertaking_upload').order(:created_at)
     else
-      if auction.tc_attch_info.blank?
+      if auction.tc_attach_info.blank?
         attachments = [UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_REVV_TC), UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)]
       else
         sbtc_id = Auction.get_tc_attach_info_id(auction.tc_attach_info, UserAttachment::FileType_Seller_Buyer_TC)
@@ -42,7 +42,7 @@ class Api::TendersController < Api::TendersBaseController
                         .where(file_type: 'tender_documents_upload').order(:created_at)
     else
       aggregate_consumptions = get_lived_auction_contracts(auction, false)
-      if auction.tc_attch_info.blank?
+      if auction.tc_attach_info.blank?
         attachments = [UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)]
       else
         sbtc_id = Auction.get_tc_attach_info_id(auction.tc_attach_info, UserAttachment::FileType_Seller_Buyer_TC)
