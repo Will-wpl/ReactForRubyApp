@@ -347,6 +347,17 @@ class Api::AuctionsController < Api::BaseController
       Arrangement.find_by_auction_id(auction_id).is_not_notify.update_all(action_status: '1')
       retailer_send_mails user_ids
     elsif role_name == 'buyer'
+      auction = Auction.find(auction_id)
+      if auction.tc_attach_info.blank?
+        auction = Auction.find(params[:auction_id])
+        tc_attach_info = {}
+        tc_attach_info[:SELLER_BUYER_TC] = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC).id
+        tc_attach_info[:SELLER_REVV_TC] = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_REVV_TC).id
+        tc_attach_info[:BUYER_REVV_TC] = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC).id
+
+        auction.tc_attach_info = tc_attach_info.to_json
+        auction.save
+      end
       user_ids = Consumption.find_by_auction_id(auction_id).is_not_notify.pluck(:user_id)
       Consumption.find_by_auction_id(auction_id).is_not_notify.update_all(action_status: '1')
       buyer_send_mails user_ids

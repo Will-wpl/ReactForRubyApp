@@ -89,14 +89,6 @@ class Api::ConsumptionsController < Api::BaseController
       if Consumption.find_by_auction_and_user(params[:auction_id], params[:user_id]).exists?
         render json: { message: 'consumption exist' }, status: 200
       else
-        auction = Auction.find(params[:auction_id])
-        tc_attach_info = {}
-        tc_attach_info[:SELLER_BUYER_TC] = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC).id
-        tc_attach_info[:SELLER_REVV_TC] = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_REVV_TC).id
-        tc_attach_info[:BUYER_REVV_TC] = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC).id
-
-        auction.tc_attach_info = tc_attach_info.to_json
-        auction.save
         if auction.buyer_type == Auction::SingleBuyerType
           auction.consumptions.find_by_user_consumer_type(User::ConsumerTypeCompany).destroy_all
         end
