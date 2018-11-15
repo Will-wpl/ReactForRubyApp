@@ -57,3 +57,8 @@ function clearStorage(){
     sessionStorage.removeItem("arrangement_id");
     sessionStorage.removeItem("isAuctionId");
 }
+
+function gologin(){
+    $("#pageShow").hide();
+    $("#GoLogin").fadeIn(500);
+}
