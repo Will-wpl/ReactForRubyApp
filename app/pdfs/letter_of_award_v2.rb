@@ -90,6 +90,11 @@ class LetterOfAwardV2 < LetterOfAward
     return '#' if param[:auction].tc_attach_info.nil?
     tc_id = Auction.get_tc_attach_info_id(param[:auction].tc_attach_info, type)
     attachment = UserAttachment.find_by_id(tc_id)
-    attachment.nil? '#':attachment.file_path
+    file_path = if attachment.nil?
+                  '#'
+                else
+                  attachment.file_path
+                end
+    file_path
   end
 end
