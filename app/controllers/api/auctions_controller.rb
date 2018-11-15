@@ -349,7 +349,6 @@ class Api::AuctionsController < Api::BaseController
     elsif role_name == 'buyer'
       auction = Auction.find(auction_id)
       if auction.tc_attach_info.blank?
-        auction = Auction.find(params[:auction_id])
         tc_attach_info = {}
         tc_attach_info[:SELLER_BUYER_TC] = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC).id
         tc_attach_info[:SELLER_REVV_TC] = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_REVV_TC).id
