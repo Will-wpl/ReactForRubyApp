@@ -19,9 +19,9 @@ class Api::ConsumptionDetailsController < Api::BaseController
           seller_buyer_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)
           buyer_revv_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
         else
-          sbtc_id = Auction.find_by_tc_attach_info(auction.tc_attach_info, UserAttachment::FileType_Seller_Buyer_TC)
+          sbtc_id = Auction.get_tc_attach_info_id(auction.tc_attach_info, UserAttachment::FileType_Seller_Buyer_TC)
           seller_buyer_tc_attachment = UserAttachment.find_by_id(sbtc_id)
-          brtc_id = Auction.find_by_tc_attach_info(auction.tc_attach_info, UserAttachment::FileType_Buyer_REVV_TC)
+          brtc_id = Auction.get_tc_attach_info_id(auction.tc_attach_info, UserAttachment::FileType_Buyer_REVV_TC)
           buyer_revv_tc_attachment = UserAttachment.find_by_id(brtc_id)
         end
 
