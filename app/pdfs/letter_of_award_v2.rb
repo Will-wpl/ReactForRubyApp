@@ -80,7 +80,7 @@ class LetterOfAwardV2 < LetterOfAward
   def get_content_gsub(param, page_content)
     page_content = super(param, page_content)
     page_content = page_content.gsub(/#procurement_agreement/, get_tc_attach_path(param,UserAttachment::FileType_Seller_Buyer_TC))
-    page_content = page_content.gsub(/#seller_platform_terms_of_use/, get_tc_attach_path(param,UserAttachment::FileType_Seller_REVV_TC))
+    page_content = page_content.gsub(/#retailer_platform_terms_of_use/, get_tc_attach_path(param,UserAttachment::FileType_Seller_REVV_TC))
     page_content.gsub(/#buyer_platform_terms_of_use/, get_tc_attach_path(param,UserAttachment::FileType_Buyer_REVV_TC))
   end
 
