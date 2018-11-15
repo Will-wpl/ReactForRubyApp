@@ -19,7 +19,7 @@ class Api::TendersController < Api::TendersBaseController
         seller_buyer_tc_attachment = UserAttachment.find_by_id(sbtc_id)
         srtc_id = Auction.get_tc_attach_info_id(auction.tc_attach_info, UserAttachment::FileType_Seller_REVV_TC)
         seller_revv_tc_attachment = UserAttachment.find_by_id(srtc_id)
-        attachments = [seller_buyer_tc_attachment, seller_revv_tc_attachment]
+        attachments = [seller_revv_tc_attachment, seller_buyer_tc_attachment]
       end
 
     end
