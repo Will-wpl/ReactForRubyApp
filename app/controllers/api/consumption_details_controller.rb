@@ -15,12 +15,16 @@ class Api::ConsumptionDetailsController < Api::BaseController
         buyer_revv_tc_attachment = AuctionAttachment.find_by(auction_id: consumption.auction_id, file_type: 'buyer_tc_upload')
         seller_buyer_tc_attachment = nil
       else
-        # tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
-        # tc_attachment = UserAttachment.find_by_type_user(UserAttachment::FileType_Buyer_REVV_TC, consumption.user_id)
-        # get seller-buyer-t&c document
-        seller_buyer_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)
-        # get buyer-revv-t&c document
-        buyer_revv_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
+        if auction.tc_attach_info.blank?
+          seller_buyer_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)
+          buyer_revv_tc_attachment = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
+        else
+          sbtc_id = Auction.find_by_tc_attach_info(auction.tc_attach_info, UserAttachment::FileType_Seller_Buyer_TC)
+          seller_buyer_tc_attachment = UserAttachment.find_by_id(sbtc_id)
+          brtc_id = Auction.find_by_tc_attach_info(auction.tc_attach_info, UserAttachment::FileType_Buyer_REVV_TC)
+          buyer_revv_tc_attachment = UserAttachment.find_by_id(brtc_id)
+        end
+
       end
       consumption_details_all = []
       consumption_details_new.each do |consumption_detail|

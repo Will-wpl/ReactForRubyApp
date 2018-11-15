@@ -12,7 +12,16 @@ class Api::TendersController < Api::TendersBaseController
       attachments = AuctionAttachment.belong_auction(@arrangement.auction_id)
                         .where(file_type: 'retailer_confidentiality_undertaking_upload').order(:created_at)
     else
-      attachments = [UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_REVV_TC), UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)]
+      if auction.tc_attch_info.blank?
+        attachments = [UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_REVV_TC), UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)]
+      else
+        sbtc_id = Auction.find_by_tc_attach_info(auction.tc_attch_info, UserAttachment::FileType_Seller_Buyer_TC)
+        seller_buyer_tc_attachment = UserAttachment.find_by_id(sbtc_id)
+        srtc_id = Auction.find_by_tc_attach_info(auction.tc_attch_info, UserAttachment::FileType_Seller_REVV_TC)
+        seller_revv_tc_attachment = UserAttachment.find_by_id(srtc_id)
+        attachments = [seller_buyer_tc_attachment, seller_revv_tc_attachment]
+      end
+
     end
 
     render json: attachments, status: 200

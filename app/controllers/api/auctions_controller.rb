@@ -350,12 +350,16 @@ class Api::AuctionsController < Api::BaseController
       auction = Auction.find(auction_id)
       if auction.tc_attach_info.blank?
         tc_attach_info = {}
-        tc_attach_info[:SELLER_BUYER_TC] = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC).id
-        tc_attach_info[:SELLER_REVV_TC] = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_REVV_TC).id
-        tc_attach_info[:BUYER_REVV_TC] = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC).id
-
-        auction.tc_attach_info = tc_attach_info.to_json
-        auction.save
+        sbtc = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)
+        srtc = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_REVV_TC)
+        brtc = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
+        unless sbtc.blank? && srtc.blank? && brtc.blank?
+          tc_attach_info[:SELLER_BUYER_TC] = sbtc.id
+          tc_attach_info[:SELLER_REVV_TC] = srtc.id
+          tc_attach_info[:BUYER_REVV_TC] = brtc.id
+          auction.tc_attach_info = tc_attach_info.to_json
+          auction.save
+        end
       end
       user_ids = Consumption.find_by_auction_id(auction_id).is_not_notify.pluck(:user_id)
       Consumption.find_by_auction_id(auction_id).is_not_notify.update_all(action_status: '1')

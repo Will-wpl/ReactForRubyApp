@@ -41,6 +41,11 @@ NotAllowDeviation = '0'.freeze
 
   # Methods (class methods before instance methods)
 
+  def self.get_tc_attach_info_id(tc_attach_info_json, type)
+    tc_attach_info = JSON.parse(tc_attach_info_json)
+    tc_attach_info[type]
+  end
+
   def self.set_total_volume(*values)
     values.inject(BigDecimal.new('0')) { |sum, n| sum + BigDecimal.new(n.nil? ? 0 : n) }
   end
