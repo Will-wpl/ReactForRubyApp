@@ -45,7 +45,7 @@ export class Tenderdocuments extends React.Component {
             this.refs.Modal.showModal("comfirm");
             this.setState({
                 // text: "Are you sure you want to participate in the auction? By clicking 'Yes', you confirm your participation in the auction and are bounded by the Retailer Platform Terms of Use. Please be reminded that you will not be allowed to withdraw your participation."
-                text:"Are you sure you want to participate in the auction? <br><br>By clicking 'Yes', you confirm your participation in the auction and will not be allowed to withdraw your participation."
+                text:"Note: To be provided <br>Are you sure you want to participate in the auction? <br><br>By clicking 'Yes', you confirm your participation in the auction and will not be allowed to withdraw your participation."
             });
         }
     }
@@ -121,6 +121,9 @@ export class Tenderdocuments extends React.Component {
 
                     </div>
                 </div>
+                <div className="lm--formItem lm--formItem--inline string u-mt1">
+                    Note: Please click ‘Participate’ to confirm your participation in this Reverse Auction.
+                </div>
                 {this.props.single==4?<div className="lm--formItem lm--formItem--inline string u-mt1">
                     <label className=" lm--formItem-label ">
                         Click on 'Accept & Proceed' if you do not wish to propose deviations to the <a target="_blank"  style={{"cursor": "pointer"}} disabled={this.props.propsdisabled} download={this.state.attachments.length>0?this.state.attachments[0].file_name:''} href={this.state.attachments.length>0?this.state.attachments[0].file_path:'#'}>Electricity Procurement Agreement.</a>
@@ -149,9 +152,9 @@ export class Tenderdocuments extends React.Component {
                             <button disabled={this.props.propsdisabled ? true : (!this.props.current.actions.node2_retailer_accept_all)} onClick={this.showConfirm.bind(this, 'Accept_All')} className="lm--button lm--button--primary">Accept All</button>
                         </div> : <div></div>) : (this.props.single === 4 ? <div className="workflow_btn u-mt3">
                             <button disabled={this.props.propsdisabled ? true : (!this.props.current.actions.node2_retailer_propose_deviations)} onClick={this.showConfirm.bind(this, 'Propose_Deviations')} className="lm--button lm--button--primary">Propose Deviations</button>
-                            <button disabled={this.props.propsdisabled ? true : (!this.props.current.actions.node2_retailer_accept_all)} onClick={this.showConfirm.bind(this, 'Accept_All')} className="lm--button lm--button--primary">Accept & Proceed</button>
+                            <button disabled={this.props.propsdisabled ? true : (!this.props.current.actions.node2_retailer_accept_all)} onClick={this.showConfirm.bind(this, 'Accept_All')} className="lm--button lm--button--primary">Accept & Participate</button>
                         </div> : <div className="workflow_btn u-mt3">
-                                <button disabled={this.props.propsdisabled ? true : (!this.props.current.actions.node2_retailer_accept_all)} onClick={this.showConfirm.bind(this, 'Accept_All')} className="lm--button lm--button--primary">Proceed</button>
+                                <button disabled={this.props.propsdisabled ? true : (!this.props.current.actions.node2_retailer_accept_all)} onClick={this.showConfirm.bind(this, 'Accept_All')} className="lm--button lm--button--primary">Participate</button>
                             </div>)}
                     <Modal text={this.state.text} acceptFunction={this.state.buttonType === 'Propose_Deviations' ? this.propose_deviations.bind(this) : this.accept_all.bind(this)} ref="Modal" />
                 </div>

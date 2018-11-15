@@ -1172,6 +1172,7 @@ export class Modal extends React.Component {
                     <li>5) A copy of the Authorised Representative's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
                     <li>All supporting documents submitted should be in English only.</li> */}
                     <li>Please upload the following documentations:</li>
+                    <li>1.Duly signed Declaration Form (note: different form for Retailer and Buyer) </li>
                     <li>1a) Your company's Accounting & Corporate Regulatory Authority (ACRA) Business Profile.</li>
                     <li>or</li>
                     <li>1b) Your company's Certificate of Incorporation if you are not registered with Accounting & Corporate Regulatory Authority (ACRA).</li>
