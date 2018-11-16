@@ -142,8 +142,7 @@ export default class AdminBuyerListDetail extends Component {
                     <div className="lm--formItem lm--formItem--inline string">
                         {/* <div className="lm--formItem-left lm--formItem-label string required">Comment:</div> */}
                         <label className="lm--formItem-left lm--formItem-label-comment string required">
-                            Comment:
-                                    </label>
+                            Comments: &nbsp;</label>
                         <div className="lm--formItem-right lm--formItem-control">
                             <textarea name="comment" value={this.state.comment} onChange={this.Change.bind(this, 'comment')} ref="comment" aria-required="true" disabled={this.state.past}></textarea>
                             <div className='isPassValidate' id='comment_message' >This field is required!</div>
