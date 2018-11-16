@@ -1219,7 +1219,7 @@ export class BuyerUserEntityRegister extends Component {
                     </div>
                     <div className="col-sm-12" style={{ "backgroundColor": "#fff", "marginTop": "-20px" }}>
                         <div className="col-sm-12 col-md-8 push-md-3 validate_message margin-t buyer_list_select">
-                            <div className="lm--formItem lm--formItem--inline string">
+                            <div className="lm--formItem lm--formItem--inline string" style={{"display":"none"}}>
                                 <label className="lm--formItem-left lm--formItem-label string required">
                                     <abbr title="required">*</abbr> Tenant Management Service Required :
                                     </label>
