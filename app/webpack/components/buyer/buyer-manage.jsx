@@ -701,7 +701,7 @@ export class BuyerUserManage extends Component {
                                                     <div id="showMessage" className="isPassValidate">This field is required!</div>
                                                 </div>
                                             </div>
-                                            <div className="lm--formItem lm--formItem--inline string">
+                                            <div className="lm--formItem lm--formItem--inline string"  style={{"display":"none"}}>
                                                 <label className="lm--formItem-left lm--formItem-label string required">
                                                     <abbr title="required">*</abbr> Tenant Management Service Required :
                                                  </label>
