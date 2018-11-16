@@ -2,7 +2,7 @@ pipeline {
     agent any
     triggers {
       GenericTrigger(
-          causeString: 'Generic Cause', printPostContent: true, regexpFilterExpression: '', regexpFilterText: '', token: 'raweb'
+          causeString: 'Generic Cause', genericVariables: [[defaultValue: '', key: 'ref', regexpFilter: '', value: '$.ref']], printPostContent: true, regexpFilterExpression: '^(refs/heads/azure-test)$', regexpFilterText: '$ref', token: 'raweb'
       )
     }
 
