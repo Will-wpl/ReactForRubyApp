@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: raweb-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+  - hosts:
+    - raweb.79534ded9f40402aba1d.japaneast.aksapp.io
+    secretName: tlssecret
+  rules:
+  - host: raweb.79534ded9f40402aba1d.japaneast.aksapp.io
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: ra-web-service
+          servicePort: 3000
