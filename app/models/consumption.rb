@@ -38,6 +38,7 @@ class Consumption < ApplicationRecord
   scope :join_buyer_auction, -> { includes(:auction).where.not(auctions: { publish_status: nil }) }
   scope :find_buyer_result_auction, -> { includes(auction: :auction_result).where(auction_results: { status: nil }).where.not(auctions: { publish_status: nil })}
   scope :find_by_user_consumer_type, ->(consumer_type) { includes(:user).where(users: { consumer_type: consumer_type, approval_status: ['1','2'] }) }
+  scope :find_by_user_consumer_type_contract_duration, ->(consumer_type, contract_duration) { includes(:user).where(contract_duration: contract_duration, users: { consumer_type: consumer_type, approval_status: ['1','2'] }) }
   scope :is_participation, -> { where(participation_status: ParticipationStatusParticipate) }
   scope :is_accpet, -> { where( accept_status: Consumption::AcceptStatusApproved)}
   scope :find_by_user, ->(user_id) { where('user_id =?', user_id) }

@@ -1012,5 +1012,11 @@ class Api::AuctionsController < Api::BaseController
     ra_id = auction.published_gid
     months = ["#{contract_duration} months"]
     UserMailer.winner_confirmation(user,{ :date_of_ra => date_of_ra, :ra_id => ra_id, :months => months }).deliver_later
+
+    contract_start_date = (auction.contract_period_start_date).strftime("%-d %b %Y")
+    consumptions = Consumption.find_by_auction_id(params[:id])
+    consumptions.find_by_user_consumer_type_contract_duration('2', contract_duration).order(:participation_status).each do |consumption|
+      UserMailer.buyer_winner_confirmation(consumption.user,{ :retailer_company_name => user.company_name, :ra_id => ra_id, :months => contract_duration.to_s, :contract_start_date => contract_start_date }).deliver_later
+    end
   end
 end

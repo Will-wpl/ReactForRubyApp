@@ -75,7 +75,7 @@ export default class ChooseAlternativeWinner extends React.Component{
                     user_id:data.histories.length>0?data.histories[0].user_id:null,
                     status:'win'
                 },
-                id:data.auction_id,
+                id:data.auction.id,
                 index:0
             };
             //console.log(e);
