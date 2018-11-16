@@ -35,7 +35,7 @@ class LetterOfAward < Pdf
     table2_head_string, table2_tr0_string, table2_tr1_string, table2_tr2_string =
         get_table_string({:table2_head => table2_head, :table2_tr => table2_tr, :table2_tr1 => table2_tr1, :table2_tr2 => table2_tr2, :head_bool => head_bool, :row0_string => row0_string, :row1_string => row1_string, :row2_string => row2_string, :head => head, :row0 => row0, :row1 => row1, :row2 => row2})
 
-    page_content = get_content_gsub(param, page.to_s)
+    page_content = get_content_gsub(param, page)
     page_content[tr_string] = tr_text
     page_content[table2_head.to_s] = table2_head_string
     page_content[table2_tr.to_s] = table2_tr0_string
@@ -46,7 +46,8 @@ class LetterOfAward < Pdf
 
   private
 
-  def get_content_gsub(param, page_content)
+  def get_content_gsub(param, page)
+    page_content = page.to_s
     page_content = page_content.gsub(/#retailer_user_company_name/, get_retailer_user_company_name(param))
     page_content = page_content.gsub(/#auction_start_datetime/, get_auction_start_datetime(param))
     page_content = page_content.gsub(/#retailer_company_address/, get_retailer_company_address(param))
