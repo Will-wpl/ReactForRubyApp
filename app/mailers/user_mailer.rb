@@ -105,7 +105,7 @@ class UserMailer < ApplicationMailer
   def buyer_winner_confirmation(user, param)
     mail_template = get_template('29')
     email_subject = mail_template.subject
-    email_body = mail_template.body.gsub(/#buyer_company_name/, user.email).gsub(/#retailer_company_name/, param[:retailer_company_name].to_s).gsub(/#ra_id/, param[:ra_id]).gsub(/#months/, param[:months]).gsub(/#contract_start_date/, param[:contract_start_date])
+    email_body = mail_template.body.gsub(/#buyer_company_name/, user.company_name).gsub(/#retailer_company_name/, param[:retailer_company_name].to_s).gsub(/#ra_id/, param[:ra_id]).gsub(/#months/, param[:months]).gsub(/#contract_start_date/, param[:contract_start_date])
     send_email(user.email, email_body, email_subject)
   end
 
