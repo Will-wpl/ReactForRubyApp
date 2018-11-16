@@ -99,11 +99,12 @@
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
             b *
-            attr Consumer Type (Choose Company or Individual):
+            attr Consumer Type:
           .lm--formItem-right.lm--formItem-control
             select onchange="registration.change_buyer_type(this)"
-              option value="2" selected="selected" Company
-              option value="3" Individual
+              option value="2" selected="selected" Business
+            /  option value="2" selected="selected" Company
+            /  option value="3" Individual
         .lm--formItem.lm--formItem--inline.string.optional
           .lm--formItem-left.lm--formItem-label
             b *
