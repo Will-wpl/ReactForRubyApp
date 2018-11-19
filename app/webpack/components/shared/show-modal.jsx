@@ -1162,7 +1162,7 @@ export class Modal extends React.Component {
         else {
             if (this.props.listdetailtype === 'Documents Message') {
                 showDetail = <ul className="showdetail">
-                    <li>Please upload the following documentations:</li>
+                    {/* <li>Please upload the following documentations:</li>
                     <li>1) A print-out of this <a href={(this.state.attatchment_file_path != "" && this.state.attatchment_file_path !== null) ? this.state.attatchment_file_path : "javascript:void(0)"} download={this.state.attatchment_file_name} className="urlStyleUnderline" target="_blank">Letter of Authorisation</a>, together with the Applicant's signature and Company Stamp.</li>
                     <li>2a) Your company's Accounting & Corporate Regulatory Authority (ACRA) Business Profile.</li>
                     <li>or</li>
@@ -1170,6 +1170,13 @@ export class Modal extends React.Component {
                     <li>3) Directors' Resolution authorising the Authorised Representative to transact for and on behalf of the Company in this platform.</li>
                     <li>4) A copy of the Applicant's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
                     <li>5) A copy of the Authorised Representative's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
+                    <li>All supporting documents submitted should be in English only.</li> */}
+                    <li>Please upload the following documentations:</li>
+                    <li>1a) Your company's Accounting & Corporate Regulatory Authority (ACRA) Business Profile.</li>
+                    <li>or</li>
+                    <li>1b) Your company's Certificate of Incorporation if you are not registered with Accounting & Corporate Regulatory Authority (ACRA).</li>
+                    <li>2) Directors' Resolution authorising the Authorised Representative to transact for and on behalf of the Company in this platform.</li>
+                    <li>3) A copy of the Authorised Representative's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
                     <li>All supporting documents submitted should be in English only.</li>
                 </ul>
             }
@@ -1461,7 +1468,7 @@ export class Modal extends React.Component {
                                 <tr>
                                     <td><abbr title="required">
                                         <span className={this.state.intake_level_selected === "LT" ? "isHide" : "isDisplay"}>*</span>
-                                    </abbr>Contract Capacity</td>
+                                    </abbr>Contracted Capacity</td>
                                     <td>
                                         <input type="text" disabled={this.state.contracted_capacity_disabled} value={this.state.contracted_capacity} onChange={this.changeConsumption.bind(this, "contracted_capacity")} id="contracted_capacity" name="contracted_capacity" onKeyUp={this.removeInputNanNum.bind(this)} required aria-required="true" maxLength="20" />
                                         <div id="contracted_capacity_message" className="isPassValidate">This filed is required!</div>

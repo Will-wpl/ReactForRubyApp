@@ -347,6 +347,20 @@ class Api::AuctionsController < Api::BaseController
       Arrangement.find_by_auction_id(auction_id).is_not_notify.update_all(action_status: '1')
       retailer_send_mails user_ids
     elsif role_name == 'buyer'
+      auction = Auction.find(auction_id)
+      if auction.tc_attach_info.blank?
+        tc_attach_info = {}
+        sbtc = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)
+        srtc = UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_REVV_TC)
+        brtc = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
+        unless sbtc.blank? && srtc.blank? && brtc.blank?
+          tc_attach_info[:SELLER_BUYER_TC] = sbtc.id
+          tc_attach_info[:SELLER_REVV_TC] = srtc.id
+          tc_attach_info[:BUYER_REVV_TC] = brtc.id
+          auction.tc_attach_info = tc_attach_info.to_json
+          auction.save
+        end
+      end
       user_ids = Consumption.find_by_auction_id(auction_id).is_not_notify.pluck(:user_id)
       Consumption.find_by_auction_id(auction_id).is_not_notify.update_all(action_status: '1')
       buyer_send_mails user_ids
@@ -906,7 +920,21 @@ class Api::AuctionsController < Api::BaseController
     auction_result.contract_period_start_date = @auction.contract_period_start_date
     if auction_result.save!
       auction_result_contract = auction_result_contract if auction_result.auction_result_contracts.where('contract_duration = ?', params[:contract_duration])
-      history = AuctionHistory.select('auction_histories.* ,users.company_name').joins(:user).where('auction_id = ? and user_id = ? and is_bidder = true and contract_duration = ?', params[:id], params[:user_id], params[:contract_duration]).order(actual_bid_time: :desc).first
+      unless params[:user_id].blank?
+        history = AuctionHistory.select('auction_histories.* ,users.company_name').joins(:user).where('auction_id = ? and user_id = ? and is_bidder = true and contract_duration = ?', params[:id], params[:user_id], params[:contract_duration]).order(actual_bid_time: :desc).first
+        auction_result_contract.lowest_average_price = history.average_price
+        auction_result_contract.lowest_price_bidder = history.company_name
+        auction_result_contract.total_award_sum = history.total_award_sum
+        auction_result_contract.lt_peak = history.lt_peak
+        auction_result_contract.lt_off_peak = history.lt_off_peak
+        auction_result_contract.hts_peak = history.hts_peak
+        auction_result_contract.hts_off_peak = history.hts_off_peak
+        auction_result_contract.htl_peak = history.htl_peak
+        auction_result_contract.htl_off_peak = history.htl_off_peak
+        auction_result_contract.eht_peak = history.eht_peak
+        auction_result_contract.eht_off_peak = history.eht_off_peak
+        auction_result_contract.user_id = params[:user_id]
+      end
       auction_result_contract.reserve_price_lt_peak = auction_contract.reserve_price_lt_peak
       auction_result_contract.reserve_price_lt_off_peak = auction_contract.reserve_price_lt_off_peak
       auction_result_contract.reserve_price_hts_peak = auction_contract.reserve_price_hts_peak
@@ -918,18 +946,7 @@ class Api::AuctionsController < Api::BaseController
       auction_result_contract.status = params[:status]
       auction_result_contract.contract_period_end_date = auction_contract.contract_period_end_date
       auction_result_contract.total_volume = auction_contract.total_volume
-      auction_result_contract.lowest_average_price = history.average_price
-      auction_result_contract.lowest_price_bidder = history.company_name
-      auction_result_contract.total_award_sum = history.total_award_sum
-      auction_result_contract.lt_peak = history.lt_peak
-      auction_result_contract.lt_off_peak = history.lt_off_peak
-      auction_result_contract.hts_peak = history.hts_peak
-      auction_result_contract.hts_off_peak = history.hts_off_peak
-      auction_result_contract.htl_peak = history.htl_peak
-      auction_result_contract.htl_off_peak = history.htl_off_peak
-      auction_result_contract.eht_peak = history.eht_peak
-      auction_result_contract.eht_off_peak = history.eht_off_peak
-      auction_result_contract.user_id = params[:user_id]
+
       auction_result_contract.justification = params[:justification]
       auction_result_contract.auction_id = params[:id].to_i
       auction_result_contract.auction_result = auction_result
@@ -995,5 +1012,11 @@ class Api::AuctionsController < Api::BaseController
     ra_id = auction.published_gid
     months = ["#{contract_duration} months"]
     UserMailer.winner_confirmation(user,{ :date_of_ra => date_of_ra, :ra_id => ra_id, :months => months }).deliver_later
+
+    contract_start_date = (auction.contract_period_start_date).strftime("%-d %b %Y")
+    consumptions = Consumption.find_by_auction_id(params[:id])
+    consumptions.find_by_user_consumer_type_contract_duration('2', contract_duration).order(:participation_status).each do |consumption|
+      UserMailer.buyer_winner_confirmation(consumption.user,{ :retailer_company_name => user.company_name, :ra_id => ra_id, :months => contract_duration.to_s, :contract_start_date => contract_start_date }).deliver_later
+    end
   end
 end

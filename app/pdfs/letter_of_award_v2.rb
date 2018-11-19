@@ -77,4 +77,29 @@ class LetterOfAwardV2 < LetterOfAward
     Nokogiri::HTML(pdf_template.content, nil, 'UTF-8')
   end
 
+  def get_content_gsub(param, page)
+    page_content = super(param, page)
+    contract_html = html_parse(page, '#contract')
+    visibility, file_path = get_tc_attach_path(param,UserAttachment::FileType_Seller_Buyer_TC)
+    if visibility
+      page_content = page_content.gsub(/#procurement_agreement/, file_path)
+    else
+      page_content[contract_html.to_s] = ''
+    end
+    page_content
+  end
+
+  private
+
+  def get_tc_attach_path(param, type)
+    return false, nil if param[:auction].tc_attach_info.nil?
+    tc_id = Auction.get_tc_attach_info_id(param[:auction].tc_attach_info, type)
+    attachment = UserAttachment.find_by_id(tc_id)
+    file_path = if attachment.nil?
+                  '#'
+                else
+                  attachment.file_path
+                end
+    return true, file_path
+  end
 end
