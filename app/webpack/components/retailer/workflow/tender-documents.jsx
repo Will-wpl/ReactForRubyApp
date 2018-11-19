@@ -107,7 +107,7 @@ export class Tenderdocuments extends React.Component {
                                             {item.has_eht?<td className="eht">{item.total_eht_off_peak ? formatPower(parseInt(Number(item.total_eht_off_peak)+Number(item.total_eht_peak)), 0, '') : 0}</td>:<td style={{display:'none'}}></td>}
                                         </tr>
                                         <tr>
-                                            <td><span style={{"wordWrap": "keep-all" }}>Total number of electricity accounts</span></td>
+                                            <td><div style={{"wordBreak": "keep-all" }}>Total number of electricity accounts</div></td>
                                             {item.has_lt?<td className="lt">{item.lt_count}</td>:<td style={{display:'none'}}></td>}
                                             {item.has_hts?<td className="hts">{item.hts_count}</td>:<td style={{display:'none'}}></td>}
                                             {item.has_htl?<td className="htl">{item.htl_count}</td>:<td style={{display:'none'}}></td>}
