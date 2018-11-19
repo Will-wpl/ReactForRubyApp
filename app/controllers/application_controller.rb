@@ -36,6 +36,26 @@ class ApplicationController < ActionController::Base
     auction_contracts
   end
 
+  def get_consumptions_by_contracts(auction, contract_duration)
+    consumptions = Consumption.find_by_user_consumer_type('2').find_by_auction_id(auction.id).is_participation.is_accpet
+    consumptions = consumptions.where('contract_duration = ?', contract_duration)
+    total_info = { consumption_count: 0, account_count: 0, lt_count: 0, hts_count: 0, htl_count: 0, eht_count:0 }
+    consumptions.each do |consumption|
+      next if consumption.accept_status != Consumption::AcceptStatusApproved
+      details = ConsumptionDetail.find_by_consumption_id(consumption.id).order(account_number: :asc)
+      details.each do |consumption_detail|
+        total_info[:lt_count] += consumption_detail.intake_level == 'LT' ? 1 : 0
+        total_info[:hts_count] += consumption_detail.intake_level == 'HTS' ? 1 : 0
+        total_info[:htl_count] += consumption_detail.intake_level == 'HTL' ? 1 : 0
+        total_info[:eht_count] += consumption_detail.intake_level == 'EHT' ? 1 : 0
+      end
+      count = details.count
+      total_info[:consumption_count] += 1
+      total_info[:account_count] += count
+    end
+    total_info
+  end
+
   def get_lived_auction_contracts(auction, is_admin)
     contracts = auction.auction_contracts.sort_by {|contract| contract.contract_duration.to_i}
     auction_contracts = []
@@ -74,6 +94,8 @@ class ApplicationController < ActionController::Base
             reserve_price_eht_peak:contract.reserve_price_eht_peak,
             reserve_price_eht_off_peak:contract.reserve_price_eht_off_peak
         }
+        total_info = get_consumptions_by_contracts(auction , contract.contract_duration)
+        base_contract = base_contract.merge(total_info)
         auction_contract_result = AuctionResultContract.where(auction_id: auction.id, contract_duration: contract.contract_duration).take
         unless auction_contract_result.blank?
           contract_result = {
