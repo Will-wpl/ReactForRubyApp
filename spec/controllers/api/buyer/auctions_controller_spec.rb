@@ -258,7 +258,15 @@ RSpec.describe Api::Buyer::AuctionsController, type: :controller do
         @user_entity1 = create(:company_buyer_entity, company_name:'name1',	company_uen:'uen0001',	company_address:'addr111',	billing_address:'bill addr111',	bill_attention_to:'dsfsd',	contact_name:'ccca',	contact_email:'sfsfs@dsfds.com',	contact_mobile_no:'44444444',	contact_office_no:'44444444',	created_at:'2018-07-19T01:36:13.732276',	updated_at:'2018-07-19T01:36:13.732276',	user:@user5,	is_default:0)
         @user_entity2 = create(:company_buyer_entity, company_name:'name12',	company_uen:'uen0002',	company_address:'addr1112',	billing_address:'bill addr1112',	bill_attention_to:'dsfsd2',	contact_name:'ccca2',	contact_email:'sfsfs2@dsfds.com',	contact_mobile_no:'44444433',	contact_office_no:'44444433',	created_at:'2018-07-19T01:36:13.732276',	updated_at:'2018-07-19T01:36:13.732276',	user:@user5,	is_default:1)
 
-        @auction_test2 = create(:auction, name:'Test20180710',start_datetime:'2018-07-19T02:13:00',contract_period_start_date:'2018-07-25',duration:3,created_at:'2018-07-19T01:44:36.476743',updated_at:'2018-07-19T02:16:27.65381',actual_begin_time:'2018-07-19T02:13:00',actual_end_time:'2018-07-19T02:24:00',total_volume:0,publish_status:1,published_gid:'RA20180046',total_lt_peak:0,total_lt_off_peak:0,total_hts_peak:0,total_hts_off_peak:0,total_htl_peak:0,total_htl_off_peak:0,hold_status:false,time_extension:0,average_price:0,retailer_mode:0,total_eht_peak:0,total_eht_off_peak:0, starting_price_time:1, buyer_type:1, allow_deviation:1)
+        @user_attachment1 = create(:user_attachment, file_path:'file_path1', file_name: 'file_name1')
+        @user_attachment2 = create(:user_attachment, file_path:'file_path2', file_name: 'file_name2')
+        @user_attachment3 = create(:user_attachment, file_path:'file_path3', file_name: 'file_name3')
+
+        tc_attach_info = {}
+        tc_attach_info[:SELLER_BUYER_TC] = @user_attachment1.id
+        tc_attach_info[:SELLER_REVV_TC] = @user_attachment2.id
+        tc_attach_info[:BUYER_REVV_TC] = @user_attachment3.id
+        @auction_test2 = create(:auction, tc_attach_info:tc_attach_info.to_json, name:'Test20180710',start_datetime:'2018-07-19T02:13:00',contract_period_start_date:'2018-07-25',duration:3,created_at:'2018-07-19T01:44:36.476743',updated_at:'2018-07-19T02:16:27.65381',actual_begin_time:'2018-07-19T02:13:00',actual_end_time:'2018-07-19T02:24:00',total_volume:0,publish_status:1,published_gid:'RA20180046',total_lt_peak:0,total_lt_off_peak:0,total_hts_peak:0,total_hts_off_peak:0,total_htl_peak:0,total_htl_off_peak:0,hold_status:false,time_extension:0,average_price:0,retailer_mode:0,total_eht_peak:0,total_eht_off_peak:0, starting_price_time:1, buyer_type:1, allow_deviation:1)
         @auction2_contract = create(:auction_contract, auction: @auction_test2, contract_duration:12,	contract_period_end_date:'2019-07-24',	total_volume:57600.000000000000000065,	total_lt_peak:420,	total_lt_off_peak:980,	total_hts_peak:640,	total_hts_off_peak:960,	total_htl_peak:1260,	total_htl_off_peak:540,	total_eht_peak:0,	total_eht_off_peak:0,	starting_price_lt_peak:0.7222,	starting_price_lt_off_peak:0.7222,	starting_price_hts_peak:0.7222,	starting_price_hts_off_peak:0.7222,		starting_price_htl_peak:0.7222,		starting_price_htl_off_peak:0.7222,		starting_price_eht_peak:0.7222,		starting_price_eht_off_peak:0.7222,	reserve_price_lt_peak:0.1222,	reserve_price_lt_off_peak:0.1222,	reserve_price_hts_peak:0.1222,	reserve_price_hts_off_peak:0.1222,	reserve_price_htl_peak:0.1222,	reserve_price_htl_off_peak:0.1222,	reserve_price_eht_peak:0.1222,	reserve_price_eht_off_peak:0.1222,	created_at:'2018-07-19T01:44:36.533477',	updated_at:'2018-07-19T02:08:36.801233')
         @auction2_contract2 = create(:auction_contract, auction: @auction_test2, contract_duration:6,	contract_period_end_date:'2019-01-24',	total_volume:34178.6301369863013698,	total_lt_peak:60,	total_lt_off_peak:90,	total_hts_peak:600,	total_hts_off_peak:1400,	total_htl_peak:800,	total_htl_off_peak:1200,	total_eht_peak:900,	total_eht_off_peak:600,	starting_price_lt_peak:0.7666,	starting_price_lt_off_peak:0.7666,	starting_price_hts_peak:0.7666,	starting_price_hts_off_peak:0.7666,		starting_price_htl_peak:0.7666,		starting_price_htl_off_peak:0.7666,		starting_price_eht_peak:0.7666,		starting_price_eht_off_peak:0.7666,	reserve_price_lt_peak:0.6666,	reserve_price_lt_off_peak:0.6666,	reserve_price_hts_peak:0.6666,	reserve_price_hts_off_peak:0.6666,	reserve_price_htl_peak:0.6666,	reserve_price_htl_off_peak:0.6666,	reserve_price_eht_peak:0.6666,	reserve_price_eht_off_peak:0.6666,	created_at:'2018-07-19T01:44:36.525796',	updated_at:'2018-07-19T01:57:05.166021')
         @auction2_result_test = create(:auction_result, contract_period_start_date:'2018-07-25',auction: @auction_test2,created_at:'2018-07-07T07:07:05.951654',updated_at:'2018-07-07T07:07:05.951654')
@@ -289,6 +297,12 @@ RSpec.describe Api::Buyer::AuctionsController, type: :controller do
       it 'buyer entity letter of award report pdf', pdf2: true do
         expect(get: "/api/buyer/auctions/#{@auction_test2.id.to_s}/letter_of_award_pdf").to be_routable
 
+        get :letter_of_award_pdf, params: {id: @auction_test2.id, contract_duration:6, entity_id:@user_entity2.id}
+        expect(response.headers['Content-Type']).to have_content 'application/pdf'
+      end
+
+      it 'buyer letter of award report(Contract) pdf', pdf2: true do
+        expect(get: "/api/buyer/auctions/#{@auction_test2.id.to_s}/letter_of_award_pdf").to be_routable
         get :letter_of_award_pdf, params: {id: @auction_test2.id, contract_duration:6, entity_id:@user_entity2.id}
         expect(response.headers['Content-Type']).to have_content 'application/pdf'
       end

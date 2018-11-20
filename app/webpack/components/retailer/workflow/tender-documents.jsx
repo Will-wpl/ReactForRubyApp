@@ -73,7 +73,7 @@ export class Tenderdocuments extends React.Component {
                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                         {this.state.aggregate.map((item, index) => {
                             return <div className="col-sm-12" key={index}>
-                                {this.props.single != 5 ? <h4 className={'u-mt1 u-mb1'}>{item.contract_duration} Months</h4> : ''}
+                                {this.props.single != 5 ? <h4 className={'u-mt1 u-mb1'}>{item.contract_duration} Months&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total number of buyers: {item.consumption_count}</h4> : ''}
                                 <table className="retailer_fill w_100" cellPadding="0" cellSpacing="0">
                                     <thead>
                                         <tr>
@@ -105,6 +105,13 @@ export class Tenderdocuments extends React.Component {
                                             {item.has_hts?<td className="hts">{item.total_hts_off_peak ? formatPower(parseInt(Number(item.total_hts_off_peak)+Number(item.total_hts_peak)), 0, '') : 0}</td>:<td style={{display:'none'}}></td>}
                                             {item.has_htl?<td className="htl">{item.total_htl_off_peak ? formatPower(parseInt(Number(item.total_htl_off_peak)+Number(item.total_htl_peak)), 0, '') : 0}</td>:<td style={{display:'none'}}></td>}
                                             {item.has_eht?<td className="eht">{item.total_eht_off_peak ? formatPower(parseInt(Number(item.total_eht_off_peak)+Number(item.total_eht_peak)), 0, '') : 0}</td>:<td style={{display:'none'}}></td>}
+                                        </tr>
+                                        <tr>
+                                            <td><div style={{"wordBreak": "keep-all" }}>Total number of electricity accounts</div></td>
+                                            {item.has_lt?<td className="lt">{item.lt_count}</td>:<td style={{display:'none'}}></td>}
+                                            {item.has_hts?<td className="hts">{item.hts_count}</td>:<td style={{display:'none'}}></td>}
+                                            {item.has_htl?<td className="htl">{item.htl_count}</td>:<td style={{display:'none'}}></td>}
+                                            {item.has_eht?<td className="eht">{item.eht_count}</td>:<td style={{display:'none'}}></td>}
                                         </tr>
                                     </tbody>
                                 </table>
