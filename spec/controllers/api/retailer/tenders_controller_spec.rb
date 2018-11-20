@@ -11,7 +11,6 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
     let!(:btu) { create(:auction_attachment, :btu, auction: auction)}
     let!(:tdus) { create_list(:auction_attachment, 5, :tdu, auction: auction) }
     let!(:retailer_tdus) { create_list(:auction_attachment, 7, :tdu, auction: auction, user_id: retailer_user.id) }
-
     before { sign_in retailer_user }
 
     context 'node1' do
@@ -65,17 +64,46 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
       end
 
       describe 'GET node1_retailer' do
+
         context 'get details' do
           def do_request
             post :node1_retailer, params: { id: arrangement.id }
           end
-          before { do_request }
+          before {
+            do_request
+          }
           it 'Success' do
             hash_body = JSON.parse(response.body)
             expect(response).to have_http_status(:ok)
             expect(hash_body[0]['file_type']).to eq('retailer_confidentiality_undertaking_upload')
           end
         end
+
+
+        context 'get details, has tc_attach_info' do
+          let!(:six_month_contract) { create(:auction_contract, auction: auction, contract_duration: '6', contract_period_end_date: DateTime.current) }
+          let!(:twelve_month_contract) { create(:auction_contract, auction: auction, contract_duration: '12', contract_period_end_date: DateTime.current) }
+          let!(:twenty_four_month_contract) { create(:auction_contract, auction: auction, contract_duration: '24', contract_period_end_date: DateTime.current) }
+          let!(:tc1) { create(:user_attachment, file_name: 'SELLER_BUYER_TC', file_path: 'test', file_type: 'SELLER_BUYER_TC')}
+          let!(:tc2) { create(:user_attachment, file_name: 'SELLER_REVV_TC', file_path: 'test', file_type: 'SELLER_REVV_TC')}
+          let!(:tc3) { create(:user_attachment, file_name: 'BUYER_REVV_TC', file_path: 'test', file_type: 'BUYER_REVV_TC')}
+          def do_request
+            post :node1_retailer, params: { id: arrangement.id }
+          end
+          before {
+            tc_attach_info = {}
+            tc_attach_info[:SELLER_BUYER_TC] = tc1.id
+            tc_attach_info[:SELLER_REVV_TC] = tc2.id
+            tc_attach_info[:BUYER_REVV_TC] = tc3.id
+            auction.tc_attach_info = tc_attach_info.to_json
+            auction.save
+            do_request
+          }
+          it 'Success' do
+            expect(response).to have_http_status(:ok)
+          end
+        end
+
       end
     end
 
@@ -127,6 +155,32 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
             expect(hash_body['attachments'].size).to eq(5)
           end
         end
+
+        context 'get details, has auction contracts' do
+          let!(:six_month_contract) { create(:auction_contract, auction: auction, contract_duration: '6', contract_period_end_date: DateTime.current) }
+          let!(:twelve_month_contract) { create(:auction_contract, auction: auction, contract_duration: '12', contract_period_end_date: DateTime.current) }
+          let!(:twenty_four_month_contract) { create(:auction_contract, auction: auction, contract_duration: '24', contract_period_end_date: DateTime.current) }
+          let!(:tc1) { create(:user_attachment, file_name: 'SELLER_BUYER_TC', file_path: 'test', file_type: 'SELLER_BUYER_TC')}
+          let!(:tc2) { create(:user_attachment, file_name: 'SELLER_REVV_TC', file_path: 'test', file_type: 'SELLER_REVV_TC')}
+          let!(:tc3) { create(:user_attachment, file_name: 'BUYER_REVV_TC', file_path: 'test', file_type: 'BUYER_REVV_TC')}
+          def do_request
+            post :node2_retailer, params: { id: arrangement.id }
+          end
+          before {
+            tc_attach_info = {}
+            tc_attach_info[:SELLER_BUYER_TC] = tc1.id
+            tc_attach_info[:SELLER_REVV_TC] = tc2.id
+            tc_attach_info[:BUYER_REVV_TC] = tc3.id
+            auction.tc_attach_info = tc_attach_info.to_json
+            auction.save
+            do_request
+          }
+          it 'Success' do
+            hash_body = JSON.parse(response.body)
+            expect(response).to have_http_status(:ok)
+          end
+        end
+
       end
     end
 

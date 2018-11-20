@@ -99,7 +99,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       context 'Create RA,buyer id is 0' do
         def do_request
           buyer_ids = [buyer_a.id]
-          post :create, params: { date: '2020-01-01' , buyer_ids: buyer_ids.to_json }
+          post :create, params: { date: '2020-01-01' , buyer_ids: [].to_json }
         end
         before { do_request }
         it 'success' do
@@ -111,7 +111,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       context 'Create RA,buyer id >1' do
         def do_request
           buyer_ids = [buyer_a.id, buyer_b.id]
-          post :create, params: { date: '2020-01-01' , buyer_ids: [].to_json }
+          post :create, params: { date: '2020-01-01' , buyer_ids: buyer_ids.to_json }
         end
         before { do_request }
         it 'success' do
