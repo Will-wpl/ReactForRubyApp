@@ -26,8 +26,8 @@ default: &default
 
 development:
   <<: *default
-  database: development # reverse_auction_development
-  port: 6632
+  database: reverse_auction_development
+  # port: 6632
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
