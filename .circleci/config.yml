@@ -44,6 +44,9 @@ jobs:
 
   yarn_dependencies:
     docker:
+      - image: circleci/node:8.12.0-browsers
+        environment:
+          NODE_ENV: test
       - image: circleci/ruby:2.4.1-node-browsers
         environment:
           RAILS_ENV: test
