@@ -129,21 +129,18 @@ class Api::RegistrationsController < Api::BaseController
   end
 
   def validate_user_field(field_name, field_value, except_ids, role = nil)
-    if role.blank?
-      check_result = User.where(field_name + ' = \'' + field_value + '\'').where(' id not in (?)', except_ids).blank?
-    elsif role == 'Buyer'
-      check_result = User.includes(:roles).where(roles: { name: 'buyer' })
-                         .where(field_name + ' = \'' + field_value + '\'')
-                         .where(' users.id not in (?)', except_ids).blank?
-    elsif role == 'Retailer'
-      check_result = User.includes(:roles).where(roles: { name: 'retailer' })
-                         .where(field_name + ' = \'' + field_value + '\'')
-                         .where(' users.id not in (?)', except_ids).blank?
-    else
-      check_result = User.where(field_name + ' = \'' + field_value + '\'').where(' id not in (?)', except_ids).blank?
-    end
+    users = User.where(field_name.to_s => field_value)
+                .where.not(id: except_ids)
 
-    check_result
+    users = if role == 'Buyer'
+              users.includes(:roles).where(roles: { name: 'buyer' })
+            elsif role == 'Retailer'
+              users.includes(:roles).where(roles: { name: 'retailer' })
+            else
+              users
+            end
+
+    users.empty?
   end
 
   # Remove password & password_confirm if update existed user

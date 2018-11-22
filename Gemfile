@@ -89,6 +89,7 @@ group :development do
 
   gem 'rails-erd'
   gem 'letter_opener_web', '~> 1.0'
+  gem 'brakeman'
 end
 
 group :test do
