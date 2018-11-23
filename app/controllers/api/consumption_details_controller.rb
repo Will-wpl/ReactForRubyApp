@@ -449,24 +449,24 @@ class Api::ConsumptionDetailsController < Api::BaseController
     error_details
   end
 
-  def get_auction_period(consumption)
-    auction = Auction.find(consumption.auction_id)
-    raise ActiveRecord::RecordNotFound if auction.nil?
-    period_start_date = auction.contract_period_start_date
-    if consumption.contract_duration.blank?
-      period_end_date = auction.contract_period_end_date
-    else
-      auction_contract = AuctionContract.find_by auction_id: consumption.auction_id, contract_duration: consumption.contract_duration
-      if auction_contract.nil?
-        months = consumption.contract_duration.to_i
-        period_end_date = period_start_date + months.months
-      else
-        period_end_date = auction_contract.contract_period_end_date
-      end
-      # period_end_date = auction_contract.nil? ? auction.contract_period_end_date: auction_contract.contract_period_end_date
-    end
-    [period_start_date ,period_end_date]
-  end
+  # def get_auction_period(consumption)
+  #   auction = Auction.find(consumption.auction_id)
+  #   raise ActiveRecord::RecordNotFound if auction.nil?
+  #   period_start_date = auction.contract_period_start_date
+  #   if consumption.contract_duration.blank?
+  #     period_end_date = auction.contract_period_end_date
+  #   else
+  #     auction_contract = AuctionContract.find_by auction_id: consumption.auction_id, contract_duration: consumption.contract_duration
+  #     if auction_contract.nil?
+  #       months = consumption.contract_duration.to_i
+  #       period_end_date = period_start_date + months.months
+  #     else
+  #       period_end_date = auction_contract.contract_period_end_date
+  #     end
+  #     # period_end_date = auction_contract.nil? ? auction.contract_period_end_date: auction_contract.contract_period_end_date
+  #   end
+  #   [period_start_date ,period_end_date]
+  # end
 
   def consumption_details_before_yesterday(consumption_details_before_yesterday, auction, consumption, only_read_records = false)
     consumption_details_all_before_yesterday = []
