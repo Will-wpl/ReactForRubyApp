@@ -91,6 +91,10 @@ class BaseTenderWorkflow < Workflow
     sm.current_node == 3 && sm.current_role = 1
   end
 
+  def node3_buyer?(sm)
+    sm.current_node == 3 && sm.current_role = 3
+  end
+
   def node4_retailer?(sm)
     sm.current_node == 4 && sm.current_role = 2
   end
