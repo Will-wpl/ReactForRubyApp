@@ -94,7 +94,7 @@ render() {
                 </div>
                 <div className="lm--formItem lm--formItem--inline string">
                     <label className="lm--formItem-left lm--formItem-label string required">
-                        <abbr title="required">*</abbr>Electricity Procurement Agreement :
+                        <abbr title="required">*</abbr>Electricity Purchase Contract :
                     </label>
                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                         <UploadFile type="SELLER_BUYER_TC" calbackFn={this.refresh.bind(this)} required="required" validate={this.state.validate} col_width="10" showList="1" showWay="0" fileData={this.state.fileData.SELLER_BUYER_TC} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
@@ -105,7 +105,7 @@ render() {
                 </div>
                 <div className="lm--formItem lm--formItem--inline string">
                     <label className="lm--formItem-left lm--formItem-label string required">
-                        <abbr title="required">*</abbr>Seller Platform Terms of Use :
+                        <abbr title="required">*</abbr>Terms & Conditions of Use (Retailer) :
                     </label>
                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                         <UploadFile type="SELLER_REVV_TC" calbackFn={this.refresh.bind(this)} required="required" validate={this.state.validate} showList="1" col_width="10"  showWay="0" fileData={this.state.fileData.SELLER_REVV_TC} propsdisabled={false}  uploadUrl={this.state.uploadUrl}/>
@@ -116,7 +116,7 @@ render() {
                 </div>
                 <div className="lm--formItem lm--formItem--inline string">
                     <label className="lm--formItem-left lm--formItem-label string required">
-                        <abbr title="required">*</abbr>Buyer Platform Terms of Use :
+                        <abbr title="required">*</abbr>Terms & Conditions of Use (Buyer) :
                     </label>
                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                         <UploadFile type="BUYER_REVV_TC" calbackFn={this.refresh.bind(this)} required="required" validate={this.state.validate} showList="1" col_width="10"  showWay="0" fileData={this.state.fileData.BUYER_REVV_TC} propsdisabled={false}  uploadUrl={this.state.uploadUrl}/>
