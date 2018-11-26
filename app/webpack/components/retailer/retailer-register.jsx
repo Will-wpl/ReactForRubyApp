@@ -770,7 +770,7 @@ export class RetailerRegister extends Component {
                                     </div>
                                 </div>
 
-                                <h4 className="lm--formItem lm--formItem--inline string chkBuyer"><input id="chkBuyer" type="checkbox" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /><span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.sellerTCurl} className="urlStyleUnderline">Terms & Conditions of Use(Retailer)</a></span></h4>
+                                <h4 className="lm--formItem lm--formItem--inline string chkBuyer"><input id="chkBuyer" type="checkbox" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /><span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.sellerTCurl} className="urlStyleUnderline">Terms & Conditions of Use (Retailer)</a></span></h4>
                                 <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                                 <h4 className="lm--formItem lm--formItem--inline string chkBuyer"><input id="chkRevv" type="checkbox" onChange={this.Change.bind(this, 'chkRevv')} name={"seller_revv_tc"} disabled={this.state.disabled} /><span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.revvTCurl} className="urlStyleUnderline">Electricity Purchase Contract</a></span></h4>
                                 <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
