@@ -65,7 +65,7 @@ export class Signconfidentialityundertaking extends React.Component {
                 {this.props.auction.step === 3 ?
                     <p>Note: You are bounded by the  <a className="download_ico cursor_link" target="_blank" download={this.state.file.length > 0 && this.state.file[0]? this.state.file[0].file_name : ""} href={this.state.file.length > 0  && this.state.file[0] ? this.state.file[0].file_path : "#"}>Terms & Conditions of Use (Retailer)</a> and <a className="download_ico cursor_link" target="_blank" download={this.state.file.length > 0  && this.state.file[1] ? this.state.file[1].file_name : ""} href={this.state.file.length > 0  && this.state.file[1] ? this.state.file[1].file_path : "#"}>Electricity Purchase Contract.</a></p>
                     :<p>Note: You are bounded by the confidentiality clauses in the <a className="download_ico cursor_link" target="_blank" download={this.state.file.length > 0 && this.state.file[0] ? this.state.file[0].file_name : ''} href={this.state.file.length > 0  && this.state.file[0] ? this.state.file[0].file_path : '#'}>Terms & Conditions of Use (Retailer)</a>.</p>}
-                <p>Please click 'Proceed' to continue.</p>
+                <p>Please click ‘Proceed’ to view tender details. </p>
                 {/*<p>*Note: can click on '<a className="download_ico" target="_blank" download={this.state.file_name} href={this.state.file_path}>Retailer Platform Terms of Use</a>' to download the PDF document.</p>*/}
                 {/*<div className="u-mt3 u-mb3 download">*/}
                 {/*<span>Click to Download : </span>*/}
