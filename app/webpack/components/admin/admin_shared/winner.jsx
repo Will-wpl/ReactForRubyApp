@@ -50,26 +50,26 @@ export default class WinnerPrice extends Component {
                         <thead>
                             <tr>
                                 <th></th>
-                                <th className={this.props.isLtVisible ? '' : "live_hide"}>LT</th>
-                                <th className={this.props.isHtsVisible ? '' : "live_hide"}>HTS</th>
-                                <th className={this.props.isHtlVisible ? '' : "live_hide"}>HTL</th>
-                                <th className={this.props.isEhtVisible ? '' : "live_hide"}>EHT</th>
+                                <th className={this.props.isLtVisible ? '' : "live_hide"}>LT<br />($/kWh)</th>
+                                <th className={this.props.isHtsVisible ? '' : "live_hide"}>HTS <br />($/kWh)</th>
+                                <th className={this.props.isHtlVisible ? '' : "live_hide"}>HTL<br />($/kWh)</th>
+                                <th className={this.props.isEhtVisible ? '' : "live_hide"}>EHT<br />($/kWh)</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>Peak<br />(7am-7pm)</td>
-                                <td className={this.props.isLtVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.lt_peak, 4)}/kWh</td>
-                                <td className={this.props.isHtsVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.hts_peak, 4)}/kWh</td>
-                                <td className={this.props.isHtlVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.htl_peak, 4)}/kWh</td>
-                                <td className={this.props.isEhtVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.eht_peak, 4)}/kWh</td>
+                                <td className={this.props.isLtVisible ? '' : "live_hide"}> {this.padZero(this.props.winner.data.lt_peak, 4)}</td>
+                                <td className={this.props.isHtsVisible ? '' : "live_hide"}> {this.padZero(this.props.winner.data.hts_peak, 4)}</td>
+                                <td className={this.props.isHtlVisible ? '' : "live_hide"}> {this.padZero(this.props.winner.data.htl_peak, 4)}</td>
+                                <td className={this.props.isEhtVisible ? '' : "live_hide"}> {this.padZero(this.props.winner.data.eht_peak, 4)}</td>
                             </tr>
                             <tr>
                                 <td>Off-Peak<br />(7pm-7am)</td>
-                                <td className={this.props.isLtVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.lt_off_peak, 4)}/kWh</td>
-                                <td className={this.props.isHtsVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.hts_off_peak, 4)}/kWh</td>
-                                <td className={this.props.isHtlVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.htl_off_peak, 4)}/kWh</td>
-                                <td className={this.props.isEhtVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.eht_off_peak, 4)}/kWh</td>
+                                <td className={this.props.isLtVisible ? '' : "live_hide"}> {this.padZero(this.props.winner.data.lt_off_peak, 4)}</td>
+                                <td className={this.props.isHtsVisible ? '' : "live_hide"}> {this.padZero(this.props.winner.data.hts_off_peak, 4)}</td>
+                                <td className={this.props.isHtlVisible ? '' : "live_hide"}> {this.padZero(this.props.winner.data.htl_off_peak, 4)}</td>
+                                <td className={this.props.isEhtVisible ? '' : "live_hide"}>  {this.padZero(this.props.winner.data.eht_off_peak, 4)}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -82,33 +82,33 @@ export default class WinnerPrice extends Component {
                                 <thead>
                                     <tr>
                                         <th></th>
-                                        {this.props.consumption.has_lt ? <th style={{"text-align":"center"}}>LT</th> : <th className={'live_hide'}></th>}
-                                        {this.props.consumption.has_hts ? <th style={{"text-align":"center"}}>HTS</th> : <th className={'live_hide'}></th>}
-                                        {this.props.consumption.has_htl ? <th style={{"text-align":"center"}}>HTL</th> : <th className={'live_hide'}></th>}
-                                        {this.props.consumption.has_eht ? <th style={{"text-align":"center"}}>EHT</th> : <th className={'live_hide'}></th>}
+                                        {this.props.consumption.has_lt ? <th style={{ "text-align": "center" }}>LT<br />(kWh)</th> : <th className={'live_hide'}></th>}
+                                        {this.props.consumption.has_hts ? <th style={{ "text-align": "center" }}>HTS<br />(kWh)</th> : <th className={'live_hide'}></th>}
+                                        {this.props.consumption.has_htl ? <th style={{ "text-align": "center" }}>HTL<br />(kWh)</th> : <th className={'live_hide'}></th>}
+                                        {this.props.consumption.has_eht ? <th style={{ "text-align": "center" }}>EHT<br />(kWh)</th> : <th className={'live_hide'}></th>}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td>Peak<br />(7am-7pm)</td>
-                                        {this.props.consumption.has_lt ? <td >{formatPower(this.props.consumption.total_lt_peak,0,'')} kWh</td> : <td className={'live_hide'}></td>}
-                                        {this.props.consumption.has_hts ? <td >{formatPower(this.props.consumption.total_hts_peak,0,'')} kWh</td> : <td className={'live_hide'}></td>}
-                                        {this.props.consumption.has_htl ? <td >{formatPower(this.props.consumption.total_htl_peak,0,'')} kWh</td> : <td className={'live_hide'}></td>}
-                                        {this.props.consumption.has_eht ? <td >{formatPower(this.props.consumption.total_eht_peak,0,'')} kWh</td> : <td className={'live_hide'}></td>}
+                                        {this.props.consumption.has_lt ? <td >{formatPower(this.props.consumption.total_lt_peak, 0, '')} </td> : <td className={'live_hide'}></td>}
+                                        {this.props.consumption.has_hts ? <td >{formatPower(this.props.consumption.total_hts_peak, 0, '')} </td> : <td className={'live_hide'}></td>}
+                                        {this.props.consumption.has_htl ? <td >{formatPower(this.props.consumption.total_htl_peak, 0, '')} </td> : <td className={'live_hide'}></td>}
+                                        {this.props.consumption.has_eht ? <td >{formatPower(this.props.consumption.total_eht_peak, 0, '')} </td> : <td className={'live_hide'}></td>}
                                     </tr>
                                     <tr>
                                         <td>Off-Peak<br />(7pm-7am)</td>
-                                        {this.props.consumption.has_lt ? <td >{formatPower(this.props.consumption.total_lt_off_peak,0,'')} kWh</td> : <td className={'live_hide'}></td>}
-                                        {this.props.consumption.has_hts ? <td >{formatPower(this.props.consumption.total_hts_off_peak,0,'')} kWh</td> : <td className={'live_hide'}></td>}
-                                        {this.props.consumption.has_htl ? <td >{formatPower(this.props.consumption.total_htl_off_peak,0,'')} kWh</td> : <td className={'live_hide'}></td>}
-                                        {this.props.consumption.has_eht ? <td >{formatPower(this.props.consumption.total_eht_off_peak,0,'')} kWh</td> : <td className={'live_hide'}></td>}
+                                        {this.props.consumption.has_lt ? <td >{formatPower(this.props.consumption.total_lt_off_peak, 0, '')} </td> : <td className={'live_hide'}></td>}
+                                        {this.props.consumption.has_hts ? <td >{formatPower(this.props.consumption.total_hts_off_peak, 0, '')} </td> : <td className={'live_hide'}></td>}
+                                        {this.props.consumption.has_htl ? <td >{formatPower(this.props.consumption.total_htl_off_peak, 0, '')} </td> : <td className={'live_hide'}></td>}
+                                        {this.props.consumption.has_eht ? <td >{formatPower(this.props.consumption.total_eht_off_peak, 0, '')} </td> : <td className={'live_hide'}></td>}
                                     </tr>
                                     <tr>
                                         <td>Total</td>
-                                        {this.props.consumption.has_lt ?  <td >{formatPower(parseInt(Number(this.props.consumption.total_lt_off_peak)+Number(this.props.consumption.total_lt_peak)),0,'')} kWh</td> : <td className={'live_hide'}></td>}
-                                        {this.props.consumption.has_hts ? <td >{formatPower(parseInt(Number(this.props.consumption.total_hts_off_peak)+Number(this.props.consumption.total_hts_peak)),0,'')} kWh</td> : <td className={'live_hide'}></td>}
-                                        {this.props.consumption.has_htl ? <td >{formatPower(parseInt(Number(this.props.consumption.total_htl_off_peak)+Number(this.props.consumption.total_htl_peak)),0,'')} kWh</td> : <td className={'live_hide'}></td>}
-                                        {this.props.consumption.has_eht ? <td >{formatPower(parseInt(Number(this.props.consumption.total_eht_off_peak)+Number(this.props.consumption.total_eht_peak)),0,'')} kWh</td> : <td className={'live_hide'}></td>}
+                                        {this.props.consumption.has_lt ? <td >{formatPower(parseInt(Number(this.props.consumption.total_lt_off_peak) + Number(this.props.consumption.total_lt_peak)), 0, '')} </td> : <td className={'live_hide'}></td>}
+                                        {this.props.consumption.has_hts ? <td >{formatPower(parseInt(Number(this.props.consumption.total_hts_off_peak) + Number(this.props.consumption.total_hts_peak)), 0, '')} </td> : <td className={'live_hide'}></td>}
+                                        {this.props.consumption.has_htl ? <td >{formatPower(parseInt(Number(this.props.consumption.total_htl_off_peak) + Number(this.props.consumption.total_htl_peak)), 0, '')} </td> : <td className={'live_hide'}></td>}
+                                        {this.props.consumption.has_eht ? <td >{formatPower(parseInt(Number(this.props.consumption.total_eht_off_peak) + Number(this.props.consumption.total_eht_peak)), 0, '')}    </td> : <td className={'live_hide'}></td>}
                                     </tr>
                                 </tbody>
                             </table>
@@ -127,25 +127,25 @@ export default class WinnerPrice extends Component {
                         <thead>
                             <tr>
                                 <th></th>
-                                <th className={this.props.isLtVisible ? '' : "live_hide"}>LT</th>
-                                <th className={this.props.isHtsVisible ? '' : "live_hide"}>HTS</th>
-                                <th className={this.props.isHtlVisible ? '' : "live_hide"}>HTL</th>
-                                <th className={this.props.isEhtVisible ? '' : "live_hide"}>EHT</th>
+                                <th className={this.props.isLtVisible ? '' : "live_hide"}>LT<br />($/kWh)</th>
+                                <th className={this.props.isHtsVisible ? '' : "live_hide"}>HTS<br />($/kWh)</th>
+                                <th className={this.props.isHtlVisible ? '' : "live_hide"}>HTL<br />($/kWh)</th>
+                                <th className={this.props.isEhtVisible ? '' : "live_hide"}>EHT<br />($/kWh)</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr><td>Peak<br />(7am-7pm)</td>
-                                <td className={this.props.isLtVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.lt_peak, 4)}/kWh</td>
-                                <td className={this.props.isHtsVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.hts_peak, 4)}/kWh</td>
-                                <td className={this.props.isHtlVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.htl_peak, 4)}/kWh</td>
-                                <td className={this.props.isEhtVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.eht_peak, 4)}/kWh</td>
+                                <td className={this.props.isLtVisible ? '' : "live_hide"}>  {this.padZero(this.props.winner.data.lt_peak, 4)}</td>
+                                <td className={this.props.isHtsVisible ? '' : "live_hide"}>  {this.padZero(this.props.winner.data.hts_peak, 4)}</td>
+                                <td className={this.props.isHtlVisible ? '' : "live_hide"}>  {this.padZero(this.props.winner.data.htl_peak, 4)}</td>
+                                <td className={this.props.isEhtVisible ? '' : "live_hide"}>  {this.padZero(this.props.winner.data.eht_peak, 4)}</td>
                             </tr>
                             <tr>
                                 <td>Off-Peak<br />(7pm-7am)</td>
-                                <td className={this.props.isLtVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.lt_off_peak, 4)}/kWh</td>
-                                <td className={this.props.isHtsVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.hts_off_peak, 4)}/kWh</td>
-                                <td className={this.props.isHtlVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.htl_off_peak, 4)}/kWh</td>
-                                <td className={this.props.isEhtVisible ? '' : "live_hide"}>$ {this.padZero(this.props.winner.data.eht_off_peak, 4)}/kWh </td>
+                                <td className={this.props.isLtVisible ? '' : "live_hide"}>  {this.padZero(this.props.winner.data.lt_off_peak, 4)}</td>
+                                <td className={this.props.isHtsVisible ? '' : "live_hide"}>  {this.padZero(this.props.winner.data.hts_off_peak, 4)}</td>
+                                <td className={this.props.isHtlVisible ? '' : "live_hide"}>  {this.padZero(this.props.winner.data.htl_off_peak, 4)}</td>
+                                <td className={this.props.isEhtVisible ? '' : "live_hide"}>  {this.padZero(this.props.winner.data.eht_off_peak, 4)} </td>
                             </tr>
                         </tbody>
                     </table>
