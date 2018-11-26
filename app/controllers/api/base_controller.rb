@@ -7,18 +7,18 @@ class Api::BaseController < ApplicationController
 
   protected
 
-  def upload_file_url(dest_path)
-    work_space_directories = dest_path.to_s.split("/")
-    finial_file_path = []
-    build_flag = false
-    work_space_directories.each do |directory|
-      if directory == "uploads"
-        build_flag = true
-      end
-      finial_file_path.push(directory) if build_flag
-    end
-    File::join(finial_file_path)
-  end
+  # def upload_file_url(dest_path)
+  #   work_space_directories = dest_path.to_s.split("/")
+  #   finial_file_path = []
+  #   build_flag = false
+  #   work_space_directories.each do |directory|
+  #     if directory == "uploads"
+  #       build_flag = true
+  #     end
+  #     finial_file_path.push(directory) if build_flag
+  #   end
+  #   File::join(finial_file_path)
+  # end
 
   def upload_file_path(dest_path,is_attachment = false)
     work_space_directories = Rails.root.join('public', 'uploads', 'attachments').to_s

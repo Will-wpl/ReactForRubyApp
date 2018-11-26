@@ -14,6 +14,17 @@ FactoryBot.define do
     buyer_type '1'
     reserve_price { BigDecimal.new('0.0841') }
 
+
+    trait :for_current_month do
+      contract_period_start_date { DateTime.now.beginning_of_month }
+      contract_period_end_date { DateTime.now.end_of_month }
+    end
+
+    trait :for_current_month do
+      contract_period_start_date { DateTime.now.beginning_of_month }
+      contract_period_end_date { DateTime.now.end_of_month }
+    end
+
     trait :for_next_month do
       contract_period_start_date { DateTime.now.advance(months: 1).beginning_of_month }
       contract_period_end_date { DateTime.now.advance(months: 1).end_of_month }

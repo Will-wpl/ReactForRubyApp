@@ -55,7 +55,6 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
     ]
     # user = User.find(current_user.id)
     if current_user.consumer_type == '2'
-      headers.push(name: 'Retailer Acknowledgement', field_name: 'acknowledge', table_name: 'consumptions')
       headers.push(name: 'Reverse Auction Report', field_name: 'report', is_sort: false)
       headers.push(name: 'Letter of Award', field_name: 'award', is_sort: false)
     else

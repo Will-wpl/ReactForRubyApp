@@ -23,6 +23,9 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
   let!(:r1_his_init) { create(:auction_history, bid_time: Date.current, user: retailers[0], auction: published_upcoming_auction) }
   let!(:published_living_auction) { create(:auction, :for_next_month, :upcoming, :published, :started) }
   let!(:logs) { create_list(:auction_event, 50, auction: auction, user: retailers[0] ,auction_do: 'confirm' ) }
+  let!(:tc1) { create(:user_attachment, file_name: 'SELLER_BUYER_TC', file_path: 'test', file_type: 'SELLER_BUYER_TC')}
+  let!(:tc2) { create(:user_attachment, file_name: 'SELLER_REVV_TC', file_path: 'test', file_type: 'SELLER_REVV_TC')}
+  let!(:tc3) { create(:user_attachment, file_name: 'BUYER_REVV_TC', file_path: 'test', file_type: 'BUYER_REVV_TC')}
 
   base_url = 'api/admin/auctions'
 
@@ -33,6 +36,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
     describe 'GET filter_date' do
       let!(:six_month_contract) { create(:auction_contract, :six_month, :total, auction: auction ) }
       let! (:buyer_a) { create(:user, :with_buyer, :with_company_buyer ) }
+      let! (:buyer_b) { create(:user, :with_buyer, :with_company_buyer ) }
       let! (:entity1) {create(:company_buyer_entity, user: buyer_a, approval_status: '1')}
       let! (:entity2) {create(:company_buyer_entity, user: buyer_a, approval_status: '1')}
       let! (:consumption_a) { create(:consumption, user: buyer_a, auction: auction, action_status: '1', contract_duration: six_month_contract.contract_duration, accept_status: '1') }
@@ -91,6 +95,31 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
           expect(response).to have_http_status(:ok)
         end
       end
+
+      context 'Create RA,buyer id is 0' do
+        def do_request
+          buyer_ids = [buyer_a.id]
+          post :create, params: { date: '2020-01-01' , buyer_ids: [].to_json }
+        end
+        before { do_request }
+        it 'success' do
+          hash_body = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
+      context 'Create RA,buyer id >1' do
+        def do_request
+          buyer_ids = [buyer_a.id, buyer_a.id]
+          post :create, params: { date: '2020-01-01' , buyer_ids: buyer_ids.to_json }
+        end
+        before { do_request }
+        it 'success' do
+          hash_body = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
     end
 
 
@@ -118,9 +147,22 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
           expect(response).to have_http_status(:ok)
         end
       end
+
+      context 'Has an auction' do
+        def do_request
+          get :obtain, params: { id: auction.id }
+        end
+        before { do_request }
+        it 'success' do
+          hash_body = JSON.parse(response.body)
+          expect(hash_body['id']).to eq(auction.id)
+          expect(response).to have_http_status(:ok)
+        end
+      end
     end
 
     describe 'PUT publish' do
+
       def do_request
         put :publish, params: { id: auction.id, publish_status: '1' }
       end
@@ -130,6 +172,32 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
           expect(auction.publish_status).to eq('0')
           hash_body = JSON.parse(response.body)
           expect(hash_body['published_gid']).to eq("RA#{Time.current.year}" + '0003')
+          expect(hash_body['publish_status']).to eq('1')
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
+
+      context 'has published an auction and datetime is nil and published' do
+        before {
+          auction.published_date_time = nil
+          auction.publish_status = Auction::PublishStatusPublished
+          auction.save
+          do_request
+        }
+        it 'success' do
+          hash_body = JSON.parse(response.body)
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
+      context 'has published an auction and hans published gid' do
+        before {
+          auction.published_gid = 'RAabcd0001'
+          auction.save
+          do_request }
+        it 'success' do
+          hash_body = JSON.parse(response.body)
           expect(hash_body['publish_status']).to eq('1')
           expect(response).to have_http_status(:ok)
         end
@@ -933,6 +1001,7 @@ RSpec.describe Api::Admin::AuctionsController, type: :controller do
       end
 
       context 'Send email for buyer' do
+
         def do_request
           put :send_mails, params: { id: auction.id, role_name: 'buyer'}
         end
