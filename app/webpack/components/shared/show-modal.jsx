@@ -1176,8 +1176,8 @@ export class Modal extends React.Component {
                     <li>2a) Your company's Accounting & Corporate Regulatory Authority (ACRA) Business Profile.</li>
                     <li>or</li>
                     <li>2b) Your company's Certificate of Incorporation if you are not registered with Accounting & Corporate Regulatory Authority (ACRA).</li>
-                    <li>2) Directors' Resolution authorising the Authorised Representative to transact for and on behalf of the Company in this platform.</li>
-                    <li>3) A copy of the Authorised Representative's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
+                    <li>3) Directors' Resolution authorising the Authorised Representative to transact for and on behalf of the Company in this platform.</li>
+                    <li>4) A copy of the Authorised Representative's NRIC/Employment pass (Front Side only) or Passport Particulars Page.</li>
                     <li>All supporting documents submitted should be in English only.</li>
                 </ul>
             }
