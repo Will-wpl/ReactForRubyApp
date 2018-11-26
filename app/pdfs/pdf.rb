@@ -79,8 +79,8 @@ class Pdf
     table_row1 = param[:table_row1]
     if visibility
       table_head.push(title)
-      table_row0.push(PdfUtils.number_helper.number_to_currency(peak, precision: 4, format: '$ %n/kWh'))
-      table_row1.push(PdfUtils.number_helper.number_to_currency(off_peak, precision: 4, format: '$ %n/kWh'))
+      table_row0.push(PdfUtils.number_helper.number_to_currency(peak, precision: 4, format: '%n'))
+      table_row1.push(PdfUtils.number_helper.number_to_currency(off_peak, precision: 4, format: '%n'))
       price_hash[prefix+'peak'] = peak
       price_hash[prefix+'off_peak'] = off_peak
     else
@@ -177,16 +177,16 @@ class Pdf
     visibility_htl = auction_contract.total_htl_peak > 0 || auction_contract.total_htl_off_peak > 0
     visibility_eht = auction_contract.total_eht_peak > 0 || auction_contract.total_eht_off_peak > 0
 
-    lt_param = {:visibility => visibility_lt, :title => '<b>LT</b>', :peak => auction_result.lt_peak.to_f, :off_peak => auction_result.lt_off_peak.to_f,
+    lt_param = {:visibility => visibility_lt, :title => '<b>LT<br/>($/kWh)</b>', :peak => auction_result.lt_peak.to_f, :off_peak => auction_result.lt_off_peak.to_f,
                 :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :prefix => 'LT', :price_hash => price_hash}
     push_data_v2(lt_param)
-    hts_param = {:visibility => visibility_hts, :title => '<b>HTS</b>', :peak => auction_result.hts_peak.to_f, :off_peak => auction_result.hts_off_peak.to_f,
+    hts_param = {:visibility => visibility_hts, :title => '<b>HTS<br/>($/kWh)</b>', :peak => auction_result.hts_peak.to_f, :off_peak => auction_result.hts_off_peak.to_f,
                  :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :prefix => 'HTS', :price_hash => price_hash}
     push_data_v2(hts_param)
-    htl_param = {:visibility => visibility_htl, :title => '<b>HTL</b>', :peak => auction_result.htl_peak.to_f, :off_peak => auction_result.htl_off_peak.to_f,
+    htl_param = {:visibility => visibility_htl, :title => '<b>HTL<br/>($/kWh)</b>', :peak => auction_result.htl_peak.to_f, :off_peak => auction_result.htl_off_peak.to_f,
                  :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :prefix => 'HTL', :price_hash => price_hash}
     push_data_v2(htl_param)
-    eht_param = {:visibility => visibility_eht, :title => '<b>EHT</b>', :peak => auction_result.eht_peak.to_f, :off_peak => auction_result.eht_off_peak.to_f,
+    eht_param = {:visibility => visibility_eht, :title => '<b>EHT<br/>($/kWh)</b>', :peak => auction_result.eht_peak.to_f, :off_peak => auction_result.eht_off_peak.to_f,
                  :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :prefix => 'EHT', :price_hash => price_hash}
     push_data_v2(eht_param)
 

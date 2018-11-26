@@ -254,7 +254,7 @@ export default class ChooseAlternativeWinner extends React.Component{
                         <tr>
                             <th>Rank</th>
                             <th>Retailer</th>
-                            <th>Price</th>
+                            <th>Price<br/>($/kWh)</th>
                             <th> </th>
                         </tr>
                         </thead>
@@ -265,7 +265,7 @@ export default class ChooseAlternativeWinner extends React.Component{
                                     <td>{e.ranking}</td>
                                     <td>{e.company_name}</td>
                                     <td onClick={this.showRetailer.bind(this,e)} style={{cursor:'pointer'}}>
-                                        $ {parseFloat(e.average_price).toFixed(4)}/kWh
+                                         {parseFloat(e.average_price).toFixed(4)}
                                     </td>
                                     <td>
                                         <button
