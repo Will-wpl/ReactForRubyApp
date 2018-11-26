@@ -37,11 +37,11 @@ export default class AdminAward extends Component{
                 let status = e.acknowledge == 1 ? 1 : 2;
                 return(
                     <li key={i} className="u-grid center ">
-                        <span className="col-sm-4 white">{e.name}</span>
-                        <span className="col-sm-4"><abbr className={'color'+status}></abbr></span>
+                        <span className="col-sm-8 white">{e.name}</span>
+                        {/*<span className="col-sm-4"><abbr className={'color'+status}></abbr></span>*/}
                         <span className="col-sm-4 line15">
                             {e.entities?e.entities.map((it,k)=>{
-                                return <div key={k} className="downLoadIcon" title={it.company_name} onClick={this.downLoad.bind(this,e,it.company_buyer_entity_id)}></div>
+                                return <div key={k} className="downLoadIcon downLoadIconL" title={it.company_name} onClick={this.downLoad.bind(this,e,it.company_buyer_entity_id)}>{it.company_name}</div>
                             }):<div className="downLoadIcon" onClick={this.downLoad.bind(this,e,null)}></div>}
 
                         </span>
