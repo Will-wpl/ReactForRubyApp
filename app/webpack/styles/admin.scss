@@ -124,6 +124,9 @@
     background: url("../images/letter_of_award.png") no-repeat;
     background-size: 24px;
 }
+.downLoadIconL{
+  padding-left: 26px; width: auto; display: block; margin-bottom: 5px;
+}
 .line15{line-height: 15px;}
 .list-of-award{
     overflow: hidden;
@@ -163,28 +166,28 @@
 }
 
 
-#bg{ 
-	display: none; 
-	position: absolute; 
-	top: 0%; 
-	left: 0%; 
-	width: 100%; 
-	height: 100%; 
-	background-color:#efefef; 
-	z-index:1001; 
-	-moz-opacity: 0.3; 
-	opacity:.30; 
+#bg{
+	display: none;
+	position: absolute;
+	top: 0%;
+	left: 0%;
+	width: 100%;
+	height: 100%;
+	background-color:#efefef;
+	z-index:1001;
+	-moz-opacity: 0.3;
+	opacity:.30;
 	filter: alpha(opacity=30);
 }
 
-#show{ 
-	display: none; 
-	position: absolute; 
-	top: 40%; 
-	left: 50%; 
-	width: 10%; 
-	height: auto; 
+#show{
+	display: none;
+	position: absolute;
+	top: 40%;
+	left: 50%;
+	width: 10%;
+	height: auto;
 	padding: 8px;
-	z-index:1002; 
+	z-index:1002;
 	overflow: auto;
 }
