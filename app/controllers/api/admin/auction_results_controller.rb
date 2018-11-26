@@ -117,7 +117,7 @@ class Api::Admin::AuctionResultsController < Api::AuctionResultsController
         { name: 'Total Volume', field_name: 'total_volume', table_name: 'auction_results' },
         { name: 'Reverse Auction Report', field_name: 'report', is_sort: false },
         { name: 'Activities Log', field_name: 'log', is_sort: false },
-        { name: 'Letter of Award', field_name: 'award', is_sort: false }
+        { name: 'Closing of Electricity Purchase Contract', field_name: 'award', is_sort: false }
     ]
   end
 
