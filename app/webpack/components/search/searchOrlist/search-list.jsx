@@ -271,7 +271,7 @@ export class SearchList extends Component {
                                                                 return <td key={i}>
                                                                         {item.contracts.map((e,l)=>{
                                                                             if(e.report != "" || e.log != "" || e.award != ""){
-                                                                                return <abbr key={l}>{e[`${it.field_name}`]?<a className={it.field_name} href={e[`${it.field_name}`]?"/"+e[`${it.field_name}`]:"javascript:void(0);"} onClick={this.saveId.bind(this,e[`${it.field_name}`])}></a>:<a>&nbsp;</a>}</abbr>
+                                                                                return <abbr key={l}>{e[`${it.field_name}`]?<a className={it.field_name} href={e[`${it.field_name}`]?"/"+e[`${it.field_name}`]:"javascript:void(0);"} onClick={this.saveId.bind(this,e[`${it.field_name}`])}>{e.company_name}</a>:<a>&nbsp;</a>}</abbr>
                                                                             }
                                                                         })}
                                                                 </td>
@@ -282,7 +282,7 @@ export class SearchList extends Component {
                                                                     if(it.field_name === 'award'){
                                                                         return <td key={i}><abbr>{item[`${it.field_name}`]?
                                                                             item[`${it.field_name}`].map((o,m)=>{
-                                                                                return <a key={m} className={it.field_name} href={item[`${it.field_name}`]?"/"+o:"javascript:void(0);"} onClick={this.saveId.bind(this,item[`${it.field_name}`])}></a>
+                                                                                return <a key={m} className={it.field_name} href={item[`${it.field_name}`]?"/"+o:"javascript:void(0);"} onClick={this.saveId.bind(this,item[`${it.field_name}`])}>{o.company_name}</a>
                                                                             }):<a>&nbsp;</a>}</abbr></td>
                                                                     }else{
                                                                         return <td key={i}><abbr>{item[`${it.field_name}`]?<a className={it.field_name} href={item[`${it.field_name}`]?"/"+item[`${it.field_name}`]:"javascript:void(0);"} onClick={this.saveId.bind(this,item[`${it.field_name}`])}></a>:<a>&nbsp;</a>}</abbr></td>
