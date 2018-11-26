@@ -82,7 +82,7 @@ export default class WinnerPrice extends Component {
                                 <thead>
                                     <tr>
                                         <th></th>
-                                        {this.props.consumption.has_lt ? <th style={{ "text-align": "center" }}>LT<br />(kWh/month)</th> : <th className={'live_hide'}></th>}
+                                        {this.props.consumption.has_lt ? <th style={{ "text-align": "center" }}>LT (kWh/month)</th> : <th className={'live_hide'}></th>}
                                         {this.props.consumption.has_hts ? <th style={{ "text-align": "center" }}>HTS<br />(kWh/month)</th> : <th className={'live_hide'}></th>}
                                         {this.props.consumption.has_htl ? <th style={{ "text-align": "center" }}>HTL<br />(kWh/month)</th> : <th className={'live_hide'}></th>}
                                         {this.props.consumption.has_eht ? <th style={{ "text-align": "center" }}>EHT<br />(kWh/month)</th> : <th className={'live_hide'}></th>}
