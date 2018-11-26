@@ -41,7 +41,7 @@ export default class AdminAward extends Component{
                         <span className="col-sm-4"><abbr className={'color'+status}></abbr></span>
                         <span className="col-sm-4 line15">
                             {e.entities?e.entities.map((it,k)=>{
-                                return <div key={k} className="downLoadIcon" onClick={this.downLoad.bind(this,e,it.company_buyer_entity_id)}></div>
+                                return <div key={k} className="downLoadIcon" title={it.company_name} onClick={this.downLoad.bind(this,e,it.company_buyer_entity_id)}></div>
                             }):<div className="downLoadIcon" onClick={this.downLoad.bind(this,e,null)}></div>}
 
                         </span>
