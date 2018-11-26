@@ -49,7 +49,7 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
 
   def get_headers
     headers = [
-      { name: 'ID', field_name: 'published_gid', table_name: 'auctions'},
+      { name: 'Reference ID', field_name: 'published_gid', table_name: 'auctions'},
       { name: 'Name', field_name: 'name', table_name: 'auctions' },
       { name: 'Date', field_name: 'start_datetime', table_name: 'auctions' }
     ]
