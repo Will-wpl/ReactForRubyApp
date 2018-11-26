@@ -18,7 +18,7 @@ class Api::Retailer::AuctionResultsController < Api::AuctionResultsController
       { name: 'Date', field_name: 'start_datetime', table_name: 'auctions' },
       { name: 'Contract Period', field_name: 'contract_period', is_sort: false },
       { name: 'My Result', field_name: 'my_result', is_sort: false },
-      { name: 'Close of Electricity Purchase Contract', field_name: 'award', is_sort: false }
+      { name: 'Closing of Electricity Purchase Contract', field_name: 'award', is_sort: false }
     ]
     data = []
     results = get_order_list(params, headers, result)
