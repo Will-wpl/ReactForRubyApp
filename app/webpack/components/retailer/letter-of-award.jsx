@@ -108,7 +108,7 @@ export default class RetailerLetterOfAward extends React.Component{
                         <span className="col-sm-6 line15">
                             {e.entities?e.entities.map((it,k)=>{
                                 return <div key={k} className="downLoadIcon downLoadIconL" onClick={this.download.bind(this,e,it.company_buyer_entity_id)}>{it.company_name}</div>
-                            }):<div className="downLoadIcon" onClick={this.download.bind(this,e,null)}>{e.name}</div>}
+                            }):<div className="downLoadIcon" onClick={this.download.bind(this,e,null)}></div>}
                         </span>
                         {/* <span className="col-sm-4 ">
                             <button style={{"color":"#fff"}}
