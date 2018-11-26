@@ -11,11 +11,11 @@ class PdfReservePriceTable
     pdf.fill_color "000000"
     pdf.table [["Reserve Price"]], :cell_style => {:size => 16, :inline_format => true, :width => pdf.bounds.right, :border_width => 0}
     head_row, peak_row, off_peak_row = [''], ['Peak<br/>(7am-7pm)'], ['Off Peak<br/>(7pm-7am)']
-    push_colume_data({:pdf => param[:pdf], :head_row => head_row, :peak_row => peak_row, :off_peak_row => off_peak_row, :title => '<b>LT</b>', :peak => auction_contract.reserve_price_lt_peak, :off_peak => auction_contract.reserve_price_lt_off_peak, :result_peak => auction_result.lt_peak, :result_off_peak => auction_result.lt_off_peak}) if param[:visibilities][:visibility_lt]
-    push_colume_data({:pdf => param[:pdf], :head_row => head_row, :peak_row => peak_row, :off_peak_row => off_peak_row, :title => '<b>HTS</b>', :peak => auction_contract.reserve_price_hts_peak, :off_peak => auction_contract.reserve_price_hts_off_peak, :result_peak => auction_result.hts_peak, :result_off_peak => auction_result.hts_off_peak}) if param[:visibilities][:visibility_hts]
+    push_colume_data({:pdf => param[:pdf], :head_row => head_row, :peak_row => peak_row, :off_peak_row => off_peak_row, :title => '<b>LT<br/>($/kWh)</b>', :peak => auction_contract.reserve_price_lt_peak, :off_peak => auction_contract.reserve_price_lt_off_peak, :result_peak => auction_result.lt_peak, :result_off_peak => auction_result.lt_off_peak}) if param[:visibilities][:visibility_lt]
+    push_colume_data({:pdf => param[:pdf], :head_row => head_row, :peak_row => peak_row, :off_peak_row => off_peak_row, :title => '<b>HTS<br/>($/kWh)</b>', :peak => auction_contract.reserve_price_hts_peak, :off_peak => auction_contract.reserve_price_hts_off_peak, :result_peak => auction_result.hts_peak, :result_off_peak => auction_result.hts_off_peak}) if param[:visibilities][:visibility_hts]
 
-    push_colume_data({:pdf => param[:pdf], :head_row => head_row, :peak_row => peak_row, :off_peak_row => off_peak_row, :title => '<b>HTL</b>', :peak => auction_contract.reserve_price_htl_peak, :off_peak => auction_contract.reserve_price_htl_off_peak, :result_peak => auction_result.htl_peak, :result_off_peak => auction_result.htl_off_peak}) if param[:visibilities][:visibility_htl]
-    push_colume_data({:pdf => param[:pdf], :head_row => head_row, :peak_row => peak_row, :off_peak_row => off_peak_row, :title => '<b>EHT</b>', :peak => auction_contract.reserve_price_eht_peak, :off_peak => auction_contract.reserve_price_eht_off_peak, :result_peak => auction_result.eht_peak, :result_off_peak => auction_result.eht_off_peak}) if param[:visibilities][:visibility_eht]
+    push_colume_data({:pdf => param[:pdf], :head_row => head_row, :peak_row => peak_row, :off_peak_row => off_peak_row, :title => '<b>HTL<br/>($/kWh)</b>', :peak => auction_contract.reserve_price_htl_peak, :off_peak => auction_contract.reserve_price_htl_off_peak, :result_peak => auction_result.htl_peak, :result_off_peak => auction_result.htl_off_peak}) if param[:visibilities][:visibility_htl]
+    push_colume_data({:pdf => param[:pdf], :head_row => head_row, :peak_row => peak_row, :off_peak_row => off_peak_row, :title => '<b>EHT<br/>($/kWh)</b>', :peak => auction_contract.reserve_price_eht_peak, :off_peak => auction_contract.reserve_price_eht_off_peak, :result_peak => auction_result.eht_peak, :result_off_peak => auction_result.eht_off_peak}) if param[:visibilities][:visibility_eht]
 
 #
     pdf.table([head_row, peak_row, off_peak_row], :header => true, :cell_style => {:width => pdf.bounds.right / head_row.size, :size => 9, :align => :center, :valign => :center, :padding => [8, 6, 14], :inline_format => true, :border_width => 0.01, :border_color => "dddddd"}) do
@@ -25,7 +25,7 @@ class PdfReservePriceTable
   end
 
   def number_format(num)
-    PdfUtils.number_helper.number_to_currency(num, precision: 4, format: '$ %n/kWh')
+    PdfUtils.number_helper.number_to_currency(num, precision: 4, format: '%n')
   end
 
   def push_colume_data(param)
