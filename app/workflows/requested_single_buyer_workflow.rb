@@ -15,5 +15,5 @@ class RequestedSingleBuyerWorkflow < SingleBuyerWorkflow
                       send_response: Event.new(:send_response, :node3, 2, 3, '2'))
     super(node3: @node3)
   end
-
+  
 end

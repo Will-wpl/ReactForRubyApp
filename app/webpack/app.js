@@ -24,7 +24,9 @@ import "components/buyer/buyer-register-entity";
 import "components/admin/admin-comsumption";
 import "components/buyer/buyer-tc-upload-approve";
 import "components/retailer/retailer-tc-upload-approve";
-
+import "components/buyer/buyer-request-entity-list";
+import "components/buyer/buyer-request-list"
+import "components/buyer/buyer-request-new"
 
 // ActionCable = require('actioncable')
 
