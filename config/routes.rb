@@ -229,6 +229,7 @@ Rails.application.routes.draw do
         member do
           get 'pdf'
           get 'letter_of_award_pdf'
+          get 'retailer_dashboard'
         end
         collection do
           get 'obtain'

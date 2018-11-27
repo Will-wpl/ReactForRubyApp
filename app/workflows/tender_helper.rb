@@ -6,7 +6,11 @@ class TenderHelper
                else
                  if auction.buyer_type == Auction::SingleBuyerType
                    if auction.allow_deviation == Auction::AllowDeviation
-                     SingleBuyerWorkflow.new.get_arrangement_state_machine(arrangement_id)
+                     if auction.request_owner_id.blank?
+                       SingleBuyerWorkflow.new.get_arrangement_state_machine(arrangement_id)
+                     else
+                       RequestedSingleBuyerWorkflow.new.get_current_action_status(arrangement_id)
+                     end
                    else
                      MultBuyerTenderWorkflow.new.get_arrangement_state_machine(arrangement_id)
                    end
@@ -24,7 +28,11 @@ class TenderHelper
                else
                  if auction.buyer_type == Auction::SingleBuyerType
                    if auction.allow_deviation == Auction::AllowDeviation
-                     SingleBuyerWorkflow.new.execute(node_name, event_name, arrangement_id)
+                     if auction.request_owner_id.blank?
+                       SingleBuyerWorkflow.new.execute(node_name, event_name, arrangement_id)
+                     else
+                       RequestedSingleBuyerWorkflow.new.execute(node_name, event_name, arrangement_id)
+                     end
                    else
                      MultBuyerTenderWorkflow.new.execute(node_name, event_name, arrangement_id)
                    end
