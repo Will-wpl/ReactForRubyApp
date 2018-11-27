@@ -67,7 +67,7 @@ export default class AdminBuyerRequestManage extends Component {
                     allow_deviation: res.request_auction.allow_deviation,
                     comment: res.request_auction.comment ? res.request_auction.comment : "",
                     status: res.request_auction.accept_status,
-                    status_name: getStatus(res.request_auction.accept_status)
+                    status_name: getStatus(res.request_auction.accept_status,res.request_auction.accept_date_time === null ? res.request_auction.created_at : res.request_auction.accept_date_time)
                 })
 
                 if (res.last_attachment) {
@@ -223,7 +223,7 @@ export default class AdminBuyerRequestManage extends Component {
                                                     <abbr title="required"></abbr> Status  :
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control" style={{ marginTop: "12px" }}>
-                                                    {this.state.status_name}
+                                                    {this.state.status_name} 
                                                 </div>
                                             </div>
                                             <div className="lm--formItem lm--formItem--inline string">

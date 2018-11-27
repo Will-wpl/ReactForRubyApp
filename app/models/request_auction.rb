@@ -22,7 +22,7 @@ class RequestAuction < ApplicationRecord
   # Validations
 
   # Scopes
-  scope :mine, ->(user_id) { where(user_id: user_id).order(:updated_at) }
+  scope :mine, ->(user_id) { where(user_id: user_id) }
   scope :find_pending, -> { where(accept_status: RequestAuction::AcceptStatusPending).order(:updated_at) }
 
   # Search
@@ -45,7 +45,7 @@ class RequestAuction < ApplicationRecord
                                       AND c.contract_duration = ac.contract_duration
                                       AND e.user_id = :Buyer_id
                                     ) as cdf
-                              WHERE cdf.contract_expiry > current_date ORDER BY #{sort_by}
+                              WHERE cdf.contract_period_end_date > current_date ORDER BY #{sort_by}
                              ", {:Buyer_id => buyer_id}]
   end
 

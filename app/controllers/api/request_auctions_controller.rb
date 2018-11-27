@@ -47,6 +47,7 @@ class Api::RequestAuctionsController < Api::BaseController
       comment = params[:comment]
       request_auction.accept_status = accept_status
       request_auction.comment = comment
+      request_auction.accept_date_time = DateTime.current
       if request_auction.save! && accept_status == RequestAuction::AcceptStatusApproved
         if request_auction.buyer_type == RequestAuction::SingleBuyerType
           # establish new auction if it is accepted.
@@ -122,16 +123,16 @@ class Api::RequestAuctionsController < Api::BaseController
 
   protected
 
-  def get_request_auction_headers
-    [
-        { name: 'Name', field_name: 'name', table_name: 'request_auctions' },
-        # { name: 'Contract Duration', field_name: 'duration', table_name: 'request_auctions' },
-        { name: 'Start Date', field_name: 'contract_period_start_date', table_name: 'request_auctions' }
-        # { name: 'Type', field_name: 'buyer_type', table_name: 'request_auctions' },
-        # { name: 'All Deviation', field_name: 'allow_deviation', table_name: 'request_auctions' },
-        # { name: 'Total Volume', field_name: 'total_volume', table_name: 'request_auctions' }
-    ]
-  end
+  # def get_request_auction_headers
+  #   [
+  #       { name: 'Name', field_name: 'name', table_name: 'request_auctions' },
+  #       # { name: 'Contract Duration', field_name: 'duration', table_name: 'request_auctions' },
+  #       { name: 'Start Date', field_name: 'contract_period_start_date', table_name: 'request_auctions' }
+  #       # { name: 'Type', field_name: 'buyer_type', table_name: 'request_auctions' },
+  #       # { name: 'All Deviation', field_name: 'allow_deviation', table_name: 'request_auctions' },
+  #       # { name: 'Total Volume', field_name: 'total_volume', table_name: 'request_auctions' }
+  #   ]
+  # end
 
   # def get_buyer_entity_contract_headers
   #   [
