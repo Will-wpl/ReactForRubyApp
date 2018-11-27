@@ -90,7 +90,7 @@ class Api::TendersController < Api::TendersBaseController
     attachments = AuctionAttachment.user_auction(@arrangement.auction_id, @arrangement.user_id).order(:created_at)
     chats = set_node3_chats(params[:id])
     comments = @arrangement.comments
-    pre_state_machine = TenderStateMachine.find_by_arrangement_id(params[:id]).where(previous_node: 4, current_node: 4, turn_to_role: 2, current_role: 1).last
+    pre_state_machine = TenderStateMachine.where(arrangement_id: params[:id], previous_node: 4, current_node: 4, turn_to_role: 2, current_role: 1).last
     render json: { chats: chats, attachments: attachments, comments: comments, pre_state_machine: pre_state_machine }, status: 200
   end
 

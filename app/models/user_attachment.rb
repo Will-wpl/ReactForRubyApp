@@ -27,7 +27,6 @@ class UserAttachment < ApplicationRecord
   # Scopes
   # scope :belong_auction, ->(auction_id) { where('auction_id = ? and user_id is null', auction_id) }
   scope :find_by_user, ->(user_id) { where('user_id = ?', user_id) }
-  scope :find_by_id, ->(id) { where(id: id).take }
   scope :find_by_ids, ->(ids) { where(' id in (?)',ids) }
   scope :find_by_type, ->(file_type) { where('file_type = ?', file_type) }
   scope :find_by_type_user, ->(file_type, user_id) { where('file_type = ? and user_id = ?', file_type, user_id) }

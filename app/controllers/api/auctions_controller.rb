@@ -65,7 +65,7 @@ class Api::AuctionsController < Api::BaseController
     else
       auction = Auction.find(params[:id])
       if auction.published_date_time.nil? && auction.publish_status == Auction::PublishStatusPublished
-        auction.published_date_time = AuctionEvent.find_by_auction_id(auction.id).where(auction_do: 'publish').take.updated_at
+        auction.published_date_time = AuctionEvent.find_by_auction_with_user(auction.id).where(auction_do: 'publish').take.updated_at
       end
       if auction.auction_contracts.blank?
         render json: auction, status: 200
@@ -140,7 +140,7 @@ class Api::AuctionsController < Api::BaseController
 
   # POST confirm
   def confirm
-    auction_result = AuctionResult.find_by_auction_id(params[:id])
+    auction_result = AuctionResult.find_by(auction_id: params[:id])
     if params[:contract_duration].blank?
       auction_result = set_old_confirm(params, auction_result)
     else
@@ -178,7 +178,7 @@ class Api::AuctionsController < Api::BaseController
            end
     auctions = []
     data.each do |auction|
-      consumptions = Consumption.find_by_auction_id(auction.id).is_participation
+      consumptions = Consumption.where(auction_id: auction.id).is_participation
       consumptions_all_count = consumptions.count
       consumptions_accept_count = consumptions.where(accept_status: Consumption::AcceptStatusApproved).count
       all_accept = consumptions_all_count == consumptions_accept_count ? true : false
@@ -234,7 +234,7 @@ class Api::AuctionsController < Api::BaseController
       users_search_params = select_params(params, %w[company_name])
       search_where_array = set_search_params(users_search_params)
       users = User.retailers.retailer_approved.where(search_where_array)
-      arrangements = Arrangement.find_by_auction_id(params[:id])
+      arrangements = Arrangement.where(auction_id: params[:id])
       ids = get_user_ids(arrangements)
       users = get_retailer_users(params, users, ids)
       users = users.page(params[:page_index]).per(params[:page_size])
@@ -276,7 +276,7 @@ class Api::AuctionsController < Api::BaseController
                             end
       search_where_array = set_search_params(users_search_params)
       users = User.buyers.buyer_approved.where(search_where_array)
-      consumptions = Consumption.find_by_auction_id(params[:id])
+      consumptions = Consumption.where(auction_id: params[:id])
       ids = get_user_ids(consumptions)
       users = get_buyer_users(params, users, ids)
       users = users.page(params[:page_index]).per(params[:page_size])
@@ -332,9 +332,9 @@ class Api::AuctionsController < Api::BaseController
   end
 
   def selects
-    retailers = Arrangement.find_by_auction_id(params[:id]).find_by_approvaled_user.group(:action_status).count
-    company_buyers = Consumption.find_by_auction_id(params[:id]).find_by_user_consumer_type('2').group(:action_status).count
-    individual_buyers = Consumption.find_by_auction_id(params[:id]).find_by_user_consumer_type('3').group(:action_status).count
+    retailers = Arrangement.where(auction_id: params[:id]).find_by_approvaled_user.group(:action_status).count
+    company_buyers = Consumption.where(auction_id: params[:id]).find_by_user_consumer_type('2').group(:action_status).count
+    individual_buyers = Consumption.where(auction_id: params[:id]).find_by_user_consumer_type('3').group(:action_status).count
 
     render json: { retailers: retailers, company_buyers: company_buyers, individual_buyers: individual_buyers }, status: 200
   end
@@ -343,8 +343,8 @@ class Api::AuctionsController < Api::BaseController
     auction_id = params[:id]
     role_name = params[:role_name]
     if role_name == 'retailer'
-      user_ids = Arrangement.find_by_auction_id(auction_id).is_not_notify.pluck(:user_id)
-      Arrangement.find_by_auction_id(auction_id).is_not_notify.update_all(action_status: '1')
+      user_ids = Arrangement.where(auction_id: auction_id).is_not_notify.pluck(:user_id)
+      Arrangement.where(auction_id: auction_id).is_not_notify.update_all(action_status: '1')
       retailer_send_mails user_ids
     elsif role_name == 'buyer'
       auction = Auction.find(auction_id)
@@ -361,8 +361,8 @@ class Api::AuctionsController < Api::BaseController
           auction.save
         end
       end
-      user_ids = Consumption.find_by_auction_id(auction_id).is_not_notify.pluck(:user_id)
-      Consumption.find_by_auction_id(auction_id).is_not_notify.update_all(action_status: '1')
+      user_ids = Consumption.where(auction_id: auction_id).is_not_notify.pluck(:user_id)
+      Consumption.where(auction_id: auction_id).is_not_notify.update_all(action_status: '1')
       buyer_send_mails user_ids
     end
     render json: nil, status: 200
@@ -389,7 +389,7 @@ class Api::AuctionsController < Api::BaseController
 
   def buyer_dashboard
     consumptions_company = []
-    consumptions = Consumption.find_by_auction_id(params[:id])
+    consumptions = Consumption.where(auction_id: params[:id])
     consumptions.find_by_user_consumer_type('2').order(:participation_status).each do |consumption|
       consumptions_company.push(id: consumption.id, name: consumption.user.company_name, participation_status: consumption.participation_status, accept_status: consumption.accept_status, user_status:consumption.user.approval_status )
     end
@@ -408,7 +408,7 @@ class Api::AuctionsController < Api::BaseController
       contract_duration = params[:contract_duration]
       search_params = reject_params(params, %w[controller action sort_by contract_duration])
       search_where_array = set_search_params(search_params)
-      result = AuctionEvent.find_by_auction_id(params[:id]).where(search_where_array)
+      result = AuctionEvent.find_by_auction_with_user(params[:id]).where(search_where_array)
       unless contract_duration.blank?
         set_bid = "set bid #{params[:contract_duration]} months"
         auction_do = ['update', 'confirm', 'extend_time', 'hold', 'publish', set_bid]
@@ -563,7 +563,7 @@ class Api::AuctionsController < Api::BaseController
                          .limit 1
 
     consumption_id = consumption[0].id unless consumption.empty?
-    consumption_details = ConsumptionDetail.find_by_consumption_id(consumption_id)
+    consumption_details = ConsumptionDetail.where(consumption_id: consumption_id)
     return consumption, auction_result, consumption_details, nil, nil
   end
 
@@ -888,7 +888,7 @@ class Api::AuctionsController < Api::BaseController
     end
     auction_json[:contract_end_list] = get_contract_end_list(auction)
     auction_json[:auction_contracts] = Auction.find(auction.id).auction_contracts.sort_by {|contract| contract.contract_duration.to_i}
-    auction_json[:buyer_notify] = Consumption.find_by_auction_id(auction.id).find_notify_buyer.blank? ? false : true
+    auction_json[:buyer_notify] = Consumption.where(auction_id: auction.id).find_notify_buyer.blank? ? false : true
     auction_json[:live_auction_contracts] = live_auction_contracts
     auction_json[:contract_end_list] = get_contract_end_list(auction)
     auction_json
@@ -915,7 +915,7 @@ class Api::AuctionsController < Api::BaseController
   def set_contract_duration_confirm(params, auction_result)
     auction_result_contract = AuctionResultContract.new
     auction_result = AuctionResult.new if auction_result.nil?
-    auction_contract = @auction.auction_contracts.where('contract_duration = ?', params[:contract_duration]).first
+    auction_contract = @auction.auction_contracts.where(contract_duration: params[:contract_duration]).first
     auction_result.auction_id = params[:id].to_i
     auction_result.contract_period_start_date = @auction.contract_period_start_date
     if auction_result.save!
@@ -1014,7 +1014,7 @@ class Api::AuctionsController < Api::BaseController
     UserMailer.winner_confirmation(user,{ :date_of_ra => date_of_ra, :ra_id => ra_id, :months => months }).deliver_later
 
     contract_start_date = (auction.contract_period_start_date).strftime("%-d %b %Y")
-    consumptions = Consumption.find_by_auction_id(params[:id])
+    consumptions = Consumption.where(auction_id: params[:id])
     consumptions.find_by_user_consumer_type_contract_duration('2', contract_duration).order(:participation_status).each do |consumption|
       UserMailer.buyer_winner_confirmation(consumption.user,{ :retailer_company_name => user.company_name, :ra_id => ra_id, :months => contract_duration.to_s, :contract_start_date => contract_start_date }).deliver_later
     end

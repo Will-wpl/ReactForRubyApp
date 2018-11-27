@@ -2,7 +2,7 @@ class Api::ConsumptionsController < Api::BaseController
   before_action :set_consumption, only: %i[show update_status destroy acknowledge]
 
   def index
-    consumptions = Consumption.find_by_user_consumer_type(params[:consumer_type]).find_by_auction_id(params[:id]).is_participation.is_accpet
+    consumptions = Consumption.find_by_user_consumer_type(params[:consumer_type]).where(auction_id: params[:id]).is_participation.is_accpet
     unless params[:contract_duration].blank?
       consumptions = consumptions.where('contract_duration = ?', params[:contract_duration])
     end
@@ -15,7 +15,7 @@ class Api::ConsumptionsController < Api::BaseController
                    hts_peak: 0, hts_off_peak: 0, htl_peak: 0, htl_off_peak: 0, eht_peak: 0, eht_off_peak: 0 }
     consumptions.each do |consumption|
       next if current_user&.has_role?(:admin) && consumption.accept_status != Consumption::AcceptStatusApproved
-      details = ConsumptionDetail.find_by_consumption_id(consumption.id).order(account_number: :asc)
+      details = ConsumptionDetail.where(consumption_id: consumption.id).order(account_number: :asc)
       details_array = consumption_details(details)
       count = details.count
       entities = CompanyBuyerEntity.find_by_user(consumption.user_id)
@@ -51,7 +51,7 @@ class Api::ConsumptionsController < Api::BaseController
 
   def show
     consumption = @consumption
-    details = ConsumptionDetail.find_by_consumption_id(params[:id]).order(id: :asc)
+    details = ConsumptionDetail.where(consumption_id: params[:id]).order(id: :asc)
     details_array = consumption_details(details)
     auction = consumption.auction
     auction_contract = auction.auction_contracts.where(contract_duration: consumption.contract_duration).take

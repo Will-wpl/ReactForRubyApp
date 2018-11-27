@@ -17,7 +17,7 @@ class MultBuyerTenderWorkflow < BaseTenderWorkflow
   end
 
   def get_current_action_status(arrangement_id)
-    sm = TenderStateMachine.find_by_arrangement_id(arrangement_id).last
+    sm = TenderStateMachine.where(arrangement_id: arrangement_id).last
     if node1?(sm)
       { node1_retailer_accept: true }
     elsif node2?(sm)

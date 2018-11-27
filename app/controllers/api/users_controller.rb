@@ -367,8 +367,8 @@ class Api::UsersController < Api::BaseController
               x.contract_period_end_date > DateTime.current && x.status == 'win' }
             validate_result = 2
           end
-          # auction_contracts = AuctionContract.find_by_auction_id(temp_arrangement.auction_id)
-          # auction_results = AuctionResultContract.find_by_auction_id(temp_arrangement.auction_id)
+          # auction_contracts = AuctionContract.where(auction_id: temp_arrangement.auction_id)
+          # auction_results = AuctionResultContract.where(auction_id: temp_arrangement.auction_id)
           # if auction_results.blank? #!AuctionResultContract.any? { |x| x.auction_id == temp_arrangement.auction_id }
           #   validate_result = 2
           # elsif !auction_contracts.blank? && auction_contracts.count != auction_results.count

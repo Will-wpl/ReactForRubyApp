@@ -14,19 +14,19 @@ class BaseTenderWorkflow < Workflow
   end
 
   def get_arrangement_state_machine(arrangement_id)
-    flows = TenderStateMachine.find_by_arrangement_id(arrangement_id).where.not(current_node: nil).select(:previous_node).distinct
+    flows = TenderStateMachine.where(arrangement_id: arrangement_id).where.not(current_node: nil).select(:previous_node).distinct
     flow_array = []
     flows.each do |flow|
       flow_array.push(flow.previous_node) unless flow.previous_node.nil?
     end
-    current = TenderStateMachine.find_by_arrangement_id(arrangement_id).last
+    current = TenderStateMachine.where(arrangement_id: arrangement_id).last
     actions = get_current_action_status(arrangement_id)
     { flows: flow_array.sort_by! { |p| p }, current: current, actions: actions }
   end
 
   def get_action_state_machine_only_approval_pending(auction_id)
     arrangements = []
-    Arrangement.find_by_auction_id(auction_id).joins(:user).order('users.company_name asc').each do |arrangement|
+    Arrangement.where(auction_id: auction_id).joins(:user).order('users.company_name asc').each do |arrangement|
       next unless arrangement.user.approval_status == User::ApprovalStatusApproved || arrangement.user.approval_status == User::ApprovalStatusPending
       arrangements.push(company_name: arrangement.user.company_name, arrangement_id: arrangement.id, status: arrangement.user.approval_status, detail: get_arrangement_state_machine(arrangement.id))
     end
@@ -35,7 +35,7 @@ class BaseTenderWorkflow < Workflow
 
   def get_action_state_machine(auction_id)
     arrangements = []
-    Arrangement.find_by_auction_id(auction_id).joins(:user).order('users.company_name asc').each do |arrangement|
+    Arrangement.where(auction_id: auction_id).joins(:user).order('users.company_name asc').each do |arrangement|
       arrangements.push(company_name: arrangement.user.company_name, arrangement_id: arrangement.id, status: arrangement.user.approval_status, detail: get_arrangement_state_machine(arrangement.id))
     end
     arrangements
@@ -83,7 +83,7 @@ class BaseTenderWorkflow < Workflow
 
   def node3_retailer_has_submit?(sm)
     arrangement_id = sm.arrangement_id
-    count = TenderStateMachine.find_by_arrangement_id(arrangement_id).where(current_node: 3, current_status: 2, turn_to_role: 1, current_role: 2).count
+    count = TenderStateMachine.where(arrangement_id: arrangement_id).where(current_node: 3, current_status: 2, turn_to_role: 1, current_role: 2).count
     count != 0
   end
 

@@ -96,7 +96,7 @@ class Api::RegistrationsController < Api::BaseController
         user_entity_id: buyer_entity.user_entity_id,
         created_at: buyer_entity.created_at,
         updated_at: buyer_entity.updated_at,
-        entity_logs: CompanyBuyerEntitiesUpdatedLog.find_by_entity_id(buyer_entity.id)
+        entity_logs: CompanyBuyerEntitiesUpdatedLog.where(entity_id: buyer_entity.id).order(created_at: :desc)
     }
   end
   def get_retailer_by_id(user_id)

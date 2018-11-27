@@ -98,7 +98,7 @@ class Api::Admin::AuctionsController < Api::AuctionsController
     end_time2 = param[:end_time2]
     uid2 = param[:uid2]
     auction_id = auction.id
-    auction_result = AuctionResult.find_by_auction_id(auction_id)
+    auction_result = AuctionResult.find_by(auction_id: auction_id)
     histories_achieved = AuctionHistory
                              .find_by_sql ['select auction_histories.* ,users.company_name from auction_histories LEFT OUTER JOIN users ON users.id = auction_histories.user_id where flag = (select flag from auction_histories where auction_id = ? and is_bidder = true order by bid_time desc LIMIT 1) order by ranking asc, actual_bid_time asc ', auction_id]
     achieved = histories_achieved[0].average_price <= auction.reserve_price if !histories_achieved.empty?

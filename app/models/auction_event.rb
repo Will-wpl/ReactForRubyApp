@@ -11,7 +11,7 @@ class AuctionEvent < ApplicationRecord
   # Validations
 
   # Scopes
-  scope :find_by_auction_id, ->(auction_id) { left_outer_joins(:user).where('auction_id = ? and user_id is not null', auction_id) }
+  scope :find_by_auction_with_user, ->(auction_id) { left_outer_joins(:user).where('auction_id = ? and user_id is not null', auction_id) }
   # Callbacks
 
   # Delegates

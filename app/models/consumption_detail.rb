@@ -18,7 +18,6 @@ class ConsumptionDetail < ApplicationRecord
   # Validations
 
   # Scopes
-  scope :find_by_consumption_id, ->(consumption_id) { where('consumption_id = ?', consumption_id) }
   scope :find_account_less_than_contract_start_date_last, ->(search_date, account_num) { joins(:company_buyer_entity, consumption: [:auction, :user]).where('contract_expiry < ? and account_number = ?', search_date, account_num).order(:contract_expiry).last }
   scope :find_duplicated_account_number_except_id, ->(account_number, id) {
     where('trim(account_number) = trim(?) and id <> ?', account_number, id)

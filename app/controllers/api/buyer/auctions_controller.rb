@@ -57,7 +57,7 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
     else
       current_user_consumption = Consumption.find_by auction_id: auction.id, user_id: current_user.id
       if current_user_consumption.contract_duration.nil?
-        auction_result = AuctionResult.find_by_auction_id(auction_id)
+        auction_result = AuctionResult.find_by(auction_id: auction_id)
 
         pdf_filename, output_filename = BuyerReport.new({
                                                             :auction => auction,

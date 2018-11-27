@@ -68,10 +68,8 @@ class Api::ArrangementsController < Api::BaseController
 
   def destroy
     @arrangement.destroy
-    tender = TenderStateMachine.find_by_arrangement_id(@arrangement.id)
-    if tender.exists?
-      tender.destroy
-    end
+    tenders = TenderStateMachine.where(arrangement_id: @arrangement.id)
+    tenders.destroy_all if tenders.exists?
 
     render json: nil, status: 200
   end

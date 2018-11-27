@@ -93,7 +93,7 @@ class Api::Admin::UsersController < Api::UsersController
     elsif approval_status == CompanyBuyerEntity::ApprovalStatusReject
       # Remove entity users
       unless company_buyer_entity.user_entity_id.blank?
-        if CompanyBuyerEntity.find_by_user_entity_id(company_buyer_entity.user_entity_id).count <= 1 && company_buyer_entity.user_id != company_buyer_entity.user_entity_id
+        if CompanyBuyerEntity.where(user_entity_id: company_buyer_entity.user_entity_id).count <= 1 && company_buyer_entity.user_id != company_buyer_entity.user_entity_id
           User.find(company_buyer_entity.user_entity_id).destroy #unless company_buyer_entity.user_entity_id.blank?
         end
       end

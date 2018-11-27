@@ -10,7 +10,6 @@ class TenderStateMachine < ApplicationRecord
   # Validations
 
   # Scopes
-  scope :find_by_arrangement_id, ->(arrangement_id) { where('arrangement_id = ?', arrangement_id) }
   # Callbacks
 
   # Delegates

@@ -33,7 +33,6 @@ class Api::Admin::ConsumptionsController < Api::ConsumptionsController
                                 participation_status: participate_status,
                                 approval_date_time: Time.current,
                                 comments: comment,
-                                participation_status: '2',
                                 lt_peak: 0,
                                 lt_off_peak: 0,
                                 hts_peak: 0,
