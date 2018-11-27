@@ -17,7 +17,8 @@ class Api::AuctionResultsController < Api::BaseController
                  end
       entities = []
       entity_ids.each do |entity|
-        entities.push(CompanyBuyerEntity.find(entity[:company_buyer_entity_id]))
+        cb_entity = CompanyBuyerEntity.find(entity[:company_buyer_entity_id])
+        entities.push(cb_entity.merge!({company_buyer_entity_id: entity[:company_buyer_entity_id]}))
       end
       data.push(id: consumption.id, name: consumption.user.company_name, acknowledge: consumption.acknowledge, download_url: nil,
                 auction_id: consumption.auction_id, user_id: consumption.user_id, entities: entities)
