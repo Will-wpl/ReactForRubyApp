@@ -132,4 +132,11 @@ export const searchTypeData = {
             { title: "Name:", type: "name", species: "input", operator: 'like', table: 'auctions' },
         ]
     },
+    "Buyer Request List": {//connect back end OK
+        list_url: "/api/admin/request_auctions",
+        list_data: [
+            { title: "Name:", type: "name", species: "input", operator: 'like', table: 'auctions' },
+        ]
+    },
+    
 }

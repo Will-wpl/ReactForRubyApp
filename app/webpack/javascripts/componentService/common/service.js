@@ -56,6 +56,14 @@ export const getBuyerRequestDetail = (params) => {
 export const saveBuyerRequest = (params) => {
     return put('./', params)
 }
+export const approveBuyerRequest = (params) => {
+    return get('./', params)
+}
+
+export const createRA_byRequest = (params) => {
+    return put('./', params)
+}
+
 export const ACTION_COMMANDS = {
     SET_BID: 'set_bid',
     MAKE_UNIQUE: 'limit_user'
