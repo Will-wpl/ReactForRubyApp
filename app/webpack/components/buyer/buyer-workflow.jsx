@@ -30,9 +30,6 @@ export class Buyerworkflow extends Component {
             }else{
                 this.setState({current:res,page:res.current.current_node,readOnly:!type});
             }
-            getBuyerRetailerList(sessionStorage.auction_id).then(res=>{
-                this.setState({readOnly:res.user_info.readOnly});
-            })
             if(window.location.href.indexOf("past")>0){
                 this.setState({readOnly:true});
             }
