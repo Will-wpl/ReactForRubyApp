@@ -173,7 +173,7 @@ export class Showhistory extends React.Component{
                                     </dd>:''}
                                     {item.sp_response!=null?
                                     <dt>
-                                        <dfn><bdo></bdo>SP Group</dfn>
+                                        <dfn><bdo></bdo>{this.props.name?this.props.name:"SP Group"}</dfn>
                                         {item.response_status == "0"?
                                             <aside className={item.sp_response===""?"short":""}><b>Rejected : </b>{item.sp_response===""?"":<div className={"sp_text_"+index}>{item.sp_response}</div>}</aside>:
                                             <aside className={item.sp_response===""?"short":""}><b>Accepted : </b>{item.sp_response===""?"":<div className={"sp_text_"+index}>{item.sp_response}</div>}</aside>}
