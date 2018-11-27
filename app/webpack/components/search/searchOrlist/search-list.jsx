@@ -374,7 +374,7 @@ export class SearchList extends Component {
                                                                             return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>View{item.incomplete?incompleteHtml:''}</a>
                                                                         }else if(item['status'] === 'Upcoming' && ik.name === 'Manage'){
                                                                             return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>Manage{item.incomplete?incompleteHtml:''}</a>
-                                                                        }else if(ik.name === "Retailer Dashboard"){
+                                                                        }else if(ik.name === "Retailer Dashboard" && window.location.href.indexOf("admin")<0){
                                                                             if(item.dashdoard_id){
                                                                                 return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>{ik.name}</a>
                                                                             }
