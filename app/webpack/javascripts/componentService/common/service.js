@@ -49,6 +49,11 @@ export const validateConsumptionDetailRepeat = (params) => {
     return put('/api/buyer/consumption_details/validate_single', params)
 }
 
+
+export const getBuyerRequestEnttiy=(params)=>{
+    return get('/api/buyer/request_auctions/buyer_entity_contracts',params)
+}
+
 export const getBuyerRequestDetail = (params) => {
     return get('./', params)
 }
