@@ -98,7 +98,7 @@ class Api::RequestAuctionsController < Api::BaseController
   end
 
   def buyer_entity_contracts
-    unless params[:sort_by].nil?
+    unless params[:sort_by].blank?
       sort_by = JSON.parse(params[:sort_by])
       sort_by = "cdf.#{sort_by[0]} #{sort_by[1]}"
     end
