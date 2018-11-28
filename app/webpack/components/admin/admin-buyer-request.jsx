@@ -271,7 +271,7 @@ export default class AdminBuyerRequestManage extends Component {
                                             {this.state.buyer_type == "0" ?
                                                 <div className="lm--formItem lm--formItem--inline string">
                                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                                        <abbr title="required"></abbr> Upload T&C  :
+                                                        <abbr title="required"></abbr> Electricity Purchase Contract :
                                                 </label>
                                                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                                         <UploadFile type="TC" required="required" validate="true" showList="1" col_width="10" showWay="0" fileData={this.state.fileData.TC} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />

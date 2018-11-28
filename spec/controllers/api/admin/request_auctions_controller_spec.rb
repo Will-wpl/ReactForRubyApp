@@ -23,7 +23,7 @@ RSpec.describe Api::Admin::RequestAuctionsController, type: :controller do
 
       context 'all request auctions(Paging)' do
         def do_request
-          sort_by = ['name', 'desc', '']
+          sort_by = ['company_name', 'desc', 'users']
           get :index, params: { sort_by: sort_by, page_size: '10', page_index: '1' }
         end
 
