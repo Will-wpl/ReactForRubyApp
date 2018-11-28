@@ -54,13 +54,31 @@ class Api::RequestAuctionsController < Api::BaseController
     else
       request_auction = RequestAuction.find(params[:id])
       accept_status = params[:accepted].blank? ? RequestAuction::AcceptStatusReject : RequestAuction::AcceptStatusApproved
-      # comment = params[:comment]
+      comment = params[:comment]
       request_auction.accept_status = accept_status
-      # request_auction.comment = comment
-      # request_auction.approval_date_time = DateTime.current
+      request_auction.comment = comment
       request_auction.save!
 
-      render json: { result: 'success', request_auction: request_auction }, status: 200
+      # establish new auction if it is accepted.
+      auction = Auction.new
+      auction.name = request_auction.name
+      auction.contract_period_start_date = request_auction.contract_period_start_date
+      auction.buyer_type = request_auction.buyer_type
+      auction.duration = request_auction.duration
+      auction.allow_deviation = request_auction.allow_deviation
+      auction.publish_status = '0'
+      auction.total_lt_peak = 0
+      auction.total_lt_off_peak = 0
+      auction.total_hts_peak = 0
+      auction.total_hts_off_peak = 0
+      auction.total_htl_peak = 0
+      auction.total_htl_off_peak = 0
+      auction.total_eht_peak = 0
+      auction.total_eht_off_peak = 0
+      auction.total_volume = 0
+      auction.save!
+
+      render json: { result: 'success', request_auction: request_auction, new_auction_id: auction.id }, status: 200
     end
   end
 
