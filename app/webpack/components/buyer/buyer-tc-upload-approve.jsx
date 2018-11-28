@@ -113,7 +113,7 @@ export class BuyerTCUploadApprove extends Component {
                             <div id="chkBPT_message" className="isPassValidate" style={{ marginLeft: "33px" }}> Please check this box if you want to proceed.</div>
                         </div> : <div></div>}
                         <br/>
-                        <h4>The amended {this.state.epaIsExist?"Electricity Purchase Contract":""} {this.state.bptIsExist && this.state.epaIsExist?", ":""} {this.state.bptIsExist?"Terms & Conditions of Use (Buyer)":""} will not be applicable to (i) upcoming Reverse Auctions that you have already been invited to participate in, (ii) Reverse Auctions that are in progress, and (iii) Reverse Auctions that had already been completed.</h4>
+                        <h4>The amended {this.state.epaIsExist?"Electricity Purchase Contract":""} {this.state.bptIsExist && this.state.epaIsExist?" and ":""} {this.state.bptIsExist?"Terms & Conditions of Use (Buyer)":""} will not be applicable to (i) upcoming Reverse Auctions that you have already been invited to participate in, (ii) Reverse Auctions that are in progress, and (iii) Reverse Auctions that had already been completed.</h4>
                             {/*Note: The changes to the terms & conditions will not be applicable  to (I) upcoming auctions that you have already been invited to participate in, (ii) auctions that are in progress, and (iii) auctions that had already been completed.*/}
                         <br/>
                     </div>

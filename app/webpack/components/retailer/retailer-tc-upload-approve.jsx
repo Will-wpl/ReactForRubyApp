@@ -113,9 +113,9 @@ export class RetailerTCUploadApprove extends Component {
                         <h4 className="lm--formItem lm--formItem--inline string checkBuyer"><input type="checkbox" id="chkBPT" name="bpt" onChange={this.Change.bind(this, 'chkBPT')} required /><span>Check here to indicate that you have read and agree to the latest Terms & Conditions of Use (Retailer). </span></h4>
                         <div id="chkBPT_message" className="isPassValidate" style={{ marginLeft: "33px" }}> Please check this box if you want to proceed.</div>
                     </div> : <div></div>}
-                    <br/>
-                    <h4>The amended {this.state.epaIsExist?"Electricity Purchase Contract":""} {this.state.bptIsExist && this.state.epaIsExist?", ":""} {this.state.bptIsExist?"Terms & Conditions of Use (Retailer)":""} will not be applicable to (i) upcoming auctions that you have already been invited to participate in, (ii) auctions that are in progress, and (iii) auctions that had already been completed.</h4>
-                    <br/>
+                    <br />
+                    <h4>The amended {this.state.epaIsExist ? 'Electricity Purchase Contract' : ''} {this.state.bptIsExist && this.state.epaIsExist ? ' and ' : ''} {this.state.bptIsExist ? 'Terms & Conditions of Use (Retailer)' : ''} will not be applicable to (i) upcoming auctions that you have already been invited to participate in, (ii) auctions that are in progress, and (iii) auctions that had already been completed.</h4>
+                    <br />
                 </div>
                 <div className="col-sm-12 col-md-12 u-grid  btnProceed">
                     <div className="col-md-10 u-cell">
