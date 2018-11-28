@@ -317,7 +317,7 @@ export class BuyerKeppelproposedeviations extends Component {
                                                 <td >{item.clause}</td>
                                                 <td><button onClick={this.showpropose.bind(this,"Propose Deviation",item.propose_deviation,'',true,false)}>Details</button></td>
                                                 <td><button onClick={this.showpropose.bind(this,"Retailer Comments",item.retailer_response,'',true,false)} >Details</button></td>
-                                                <td><button onClick={this.showpropose.bind(this,"SP Response",item.sp_response,'',true,item.response_status)} >Details</button></td>
+                                                <td><button onClick={this.showpropose.bind(this,`${this.props.name} Response`,item.sp_response,'',true,item.response_status)} >Details</button></td>
                                                 <td>{item.sp_response_status === "1"?"Accepted":"Withdrawn"}</td>
                                                 <td>
                                                     <button id={"sp_reject_"+index} disabled>Reject</button>
@@ -333,7 +333,7 @@ export class BuyerKeppelproposedeviations extends Component {
                                             <td><button onClick={this.showpropose.bind(this,"Propose Deviation",item.propose_deviation,'',true,false)}>Details</button></td>
                                             <td><button onClick={this.showpropose.bind(this,"Retailer Comments",item.retailer_response,'',true,false)} >Details</button></td>
                                             <td>
-                                            <button id={"spResponse_"+index} onClick={this.showpropose.bind(this,"SP Response",item.sp_response!=null?item.sp_response:'',"spResponse_"+index,this.props.readOnly,item.response_status)} >Details</button>
+                                            <button id={"spResponse_"+index} onClick={this.showpropose.bind(this,`${this.props.name} Response`,item.sp_response!=null?item.sp_response:'',"spResponse_"+index,this.props.readOnly,item.response_status)} >Details</button>
                                             {/* <textarea id={"spResponse_"+index} defaultValue={item.sp_response?decodeURI(item.sp_response).split(": ")[1]:''} />*/}
                                             </td>
                                             <td>{item.sp_response_status === "1"?"Accepted":(item.sp_response_status === "0" || item.sp_response_status === "3"?(item.response_status[1]=='0'?"Rejected":''):(item.sp_response_status === "4"?"Withdrawn":""))}</td>
