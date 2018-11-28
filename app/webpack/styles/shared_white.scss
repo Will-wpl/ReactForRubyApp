@@ -712,7 +712,8 @@ body.choose{
     .upload_file_btn{
       position: relative; width: 100%; display:inline-block; min-height:40px; margin-bottom: 0px;
       border:1px solid #ddd;
-      input{ position: absolute; width: 100%; opacity: 0; top:0px; left:0px; margin: 0; height: 100%; z-index: 10;}
+      input{ position: absolute; width: 100%; opacity: 0; top:0px; left:0px; margin: 0; height: 100%; z-index: 10;
+        }
       dfn{float: left; padding: 0.70rem 1rem 0.70rem; line-height: 1.176470588; color:#333;}
       b{ display: block; position: absolute; right:0px; top:0px; z-index: 3; text-align: center; line-height: 1.176470588; padding: 0.70rem 1rem 0.70rem; background: #666; color: #fff; }
       .required_error{top:40px; left:0px; }
@@ -732,6 +733,9 @@ body.choose{
         span.remove_file{background:url("../images/images_for_white/remove.png") no-repeat center; cursor: pointer; width: 26px; height: 26px; float: right;}
       }
     }
+  }
+  input{
+    &.date_ico{background:url("../images/images_for_white/date.png") no-repeat right;}
   }
 }
 
@@ -1449,11 +1453,11 @@ body.choose{
 }
 
 
-.datePic{
-  input{
-   width: 100%;  display: inline-block; border:1px solid #ced5dc; background: none;
-    &.date_ico{background:url("../images/images_for_white/date.png") no-repeat right;}
-    &.time_ico{background:url("../images/images_for_white/time.png") no-repeat right;}
-    &.checkbox{ display: inline-block; width: auto;}
-  }
-}
+// .datePic{
+//   input{
+//    width: 500%;  display: inline-block; border:1px solid #ced5dc; background: none;
+//     &.date_ico{background:url("../images/images_for_white/date.png") no-repeat right;}
+//     &.time_ico{background:url("../images/images_for_white/time.png") no-repeat right;}
+//     &.checkbox{ display: inline-block; width: auto;}
+//   }
+// }
