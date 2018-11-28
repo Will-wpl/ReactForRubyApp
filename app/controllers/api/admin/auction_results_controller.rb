@@ -107,7 +107,7 @@ class Api::Admin::AuctionResultsController < Api::AuctionResultsController
 
   def get_headers
     [
-        { name: 'ID', field_name: 'published_gid', table_name: 'auctions'},
+        { name: 'Reference ID', field_name: 'published_gid', table_name: 'auctions'},
         { name: 'Name', field_name: 'name', table_name: 'auctions'},
         { name: 'Date', field_name: 'start_datetime', table_name: 'auctions'},
         { name: 'Contract Period', field_name: 'contract_period', is_sort: false },
