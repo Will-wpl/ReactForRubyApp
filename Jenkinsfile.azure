@@ -1,6 +1,9 @@
 properties([pipelineTriggers([githubPush()])])
 pipeline {
     agent any
+    options {
+        disableConcurrentBuilds()
+    }
     environment {
         IMAGE_NAME = 'ra_webapp'
         REDISTOGO_URL = credentials('ra-redis-url')
@@ -20,7 +23,6 @@ pipeline {
         TARGET_BRANCH_NAME = 'azure-test'
         CODECOV_TOKEN = credentials('codecov_token')
     }
-
     stages {
         stage('check') {
            when { changeRequest target: "${env.TARGET_BRANCH_NAME}" }
