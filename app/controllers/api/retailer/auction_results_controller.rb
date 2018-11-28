@@ -13,8 +13,8 @@ class Api::Retailer::AuctionResultsController < Api::AuctionResultsController
       total = result.count
     end
     headers = [
-      { name: 'ID', field_name: 'published_gid', table_name: 'auctions' },
-      { name: 'Reference ID', field_name: 'name', table_name: 'auctions' },
+      { name: 'Reference ID', field_name: 'published_gid', table_name: 'auctions' },
+      { name: 'Name', field_name: 'name', table_name: 'auctions' },
       { name: 'Date', field_name: 'start_datetime', table_name: 'auctions' },
       { name: 'Contract Period', field_name: 'contract_period', is_sort: false },
       { name: 'My Result', field_name: 'my_result', is_sort: false },
