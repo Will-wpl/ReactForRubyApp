@@ -5,6 +5,11 @@ class RequestAuction < ApplicationRecord
   AcceptStatusApproved = '1'.freeze
   AcceptStatusPending = '2'.freeze
 
+  SingleBuyerType = '0'.freeze
+  MultipleBuyerType = '1'.freeze
+  AllowDeviation = '1'.freeze
+  NotAllowDeviation = '0'.freeze
+
   # Includes
 
   # Associations
@@ -22,12 +27,10 @@ class RequestAuction < ApplicationRecord
 
   # Search
   def self.find_buyer_entity_contract_info(buyer_id, sort_by)
-    default_sort = "cdf.contract_period_end_date DESC"
+    default_sort = "cdf.contract_expiry DESC"
     sort_by = default_sort if sort_by.nil?
     Consumption.find_by_sql ["SELECT cdf.*
-                              FROM (SELECT cda.*, row_number()
-                                    OVER (PARTITION BY cda.account_number ORDER BY cda.contract_period_end_date DESC ) as n
-                                    FROM (SELECT cd.*, a.id as auction_id, a.name as auction_name, a.published_gid as ra_id, e.user_id as buyer_id, e.company_name as entity_name, e.id as entity_id , ac.contract_period_end_date, retailer.name as retailer_name FROM consumption_details cd
+                              FROM (SELECT cd.*, a.id as auction_id, a.name as auction_name, a.published_gid as ra_id, e.user_id as buyer_id, e.company_name as entity_name, e.id as entity_id , ac.contract_period_end_date, retailer.name as retailer_name FROM consumption_details cd
                                       JOIN company_buyer_entities e ON cd.company_buyer_entity_id = e.id
                                       JOIN users u ON e.user_id = u.id
                                       JOIN consumptions c ON cd.consumption_id = c.id
@@ -41,9 +44,8 @@ class RequestAuction < ApplicationRecord
                                       AND c.accept_status = '1'
                                       AND c.contract_duration = ac.contract_duration
                                       AND e.user_id = :Buyer_id
-                                          ) as cda
                                     ) as cdf
-                              WHERE cdf.n <= 1 ORDER BY #{sort_by}
+                              WHERE cdf.contract_expiry > current_date ORDER BY #{sort_by}
                              ", {:Buyer_id => buyer_id}]
   end
 
