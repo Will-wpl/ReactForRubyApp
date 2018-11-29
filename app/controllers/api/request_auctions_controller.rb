@@ -26,8 +26,8 @@ class Api::RequestAuctionsController < Api::BaseController
     end
 
     actions = [
-        {url: '/admin/auctions/:id/retailer_dashboard?past', name: 'Edit', icon: 'edit', interface_type: 'request_auction'},
-        {url: '/admin/auctions/:id/buyer_dashboard?past', name: 'View', icon: 'view', interface_type: 'request_auction'}
+        {url: '/buyer/request_auctions/:id', name: 'Manage', icon: 'edit', interface_type: 'request_auction'}
+        # {url: '/buyer/request_auctions/:id', name: 'View', icon: 'view', interface_type: 'request_auction'}
     ]
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
@@ -173,11 +173,11 @@ class Api::RequestAuctionsController < Api::BaseController
   def get_request_auction_headers
     [
         { name: 'Name', field_name: 'name', table_name: 'request_auctions' },
-        { name: 'Contract Duration', field_name: 'duration', table_name: 'request_auctions' },
-        { name: 'Start Date', field_name: 'contract_period_start_date', table_name: 'request_auctions' },
-        { name: 'Type', field_name: 'buyer_type', table_name: 'request_auctions' },
-        { name: 'All Deviation', field_name: 'allow_deviation', table_name: 'request_auctions' },
-        { name: 'Total Volume', field_name: 'total_volume', table_name: 'request_auctions' }
+        # { name: 'Contract Duration', field_name: 'duration', table_name: 'request_auctions' },
+        { name: 'Start Date', field_name: 'contract_period_start_date', table_name: 'request_auctions' }
+        # { name: 'Type', field_name: 'buyer_type', table_name: 'request_auctions' },
+        # { name: 'All Deviation', field_name: 'allow_deviation', table_name: 'request_auctions' },
+        # { name: 'Total Volume', field_name: 'total_volume', table_name: 'request_auctions' }
     ]
   end
 
