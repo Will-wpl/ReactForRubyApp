@@ -54,8 +54,10 @@ class Api::RequestAuctionsController < Api::BaseController
       auction.name = request_auction.name
       auction.contract_period_start_date = request_auction.contract_period_start_date
       auction.buyer_type = request_auction.buyer_type
-      auction.duration = request_auction.duration
+      # auction.duration = request_auction.duration
       auction.allow_deviation = request_auction.allow_deviation
+      auction.request_auction_id = request_auction.id
+      auction.request_owner_id = request_auction.user_id
       auction.publish_status = '0'
       auction.total_lt_peak = 0
       auction.total_lt_off_peak = 0
@@ -72,7 +74,13 @@ class Api::RequestAuctionsController < Api::BaseController
         consumption.user_id = request_auction.user_id
         consumption.action_status = Consumption::ActionStatusPending
         consumption.participation_status = Consumption::ParticipationStatusPending
-        consumption.save
+        if consumption.save!
+          month = request_auction.duration
+          contract = AuctionContract.new
+          contract.contract_period_end_date = auction.contract_period_start_date.advance(months: month).advance(days: -1)
+          contract.auction_id = auction.id
+          contract.save
+        end
       end
       render json: { result: 'success', request_auction: request_auction, new_auction_id: auction.id }, status: 200
     end
