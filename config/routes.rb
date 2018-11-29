@@ -290,9 +290,6 @@ Rails.application.routes.draw do
         end
       end
       resources :request_attachments, only: %i[create] do
-        member do
-          put 'create'
-        end
       end
     end
   end
