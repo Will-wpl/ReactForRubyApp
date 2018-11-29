@@ -38,7 +38,7 @@ RSpec.describe Api::Admin::RequestAuctionsController, type: :controller do
     describe 'approval_request_auction' do
       context 'approval request auction (success)' do
         def do_request
-          put :approval_request_auction, params: { id: request_auction.id, accepted:1}
+          put :approval_request_auction, params: { id: request_auction.id, accepted: 1 }
         end
 
         before { do_request }
