@@ -18,13 +18,14 @@ export class BuyerNewRequestManage extends Component {
         this.state = {
             id: "0",
             name: "",
-            startDate: moment(),
-            single_multiple: "1",
+            contract_period_start_date: moment(),
+            buyer_type: "1",
             allow_deviation: "1",
-            contract_duration: '6',
+            duration: '6',
             comment: "",
             text: "",
             total_volume: '',
+            attachment_id: '',
             fileData: {
                 "TC": [
                     { buttonName: "none", files: [] }
@@ -33,7 +34,7 @@ export class BuyerNewRequestManage extends Component {
             status: 2,
             user_type: "buyer",
             operation_type: "create",
-            uploadUrl: "/api/buyer/user_attachments?file_type=",
+            uploadUrl: "/api/buyer/request_attachments?file_type=",
         }
         this.request = {};
         this.starttimeChange = this.starttimeChange.bind(this);
@@ -44,9 +45,7 @@ export class BuyerNewRequestManage extends Component {
         this.validatorEntity_single = {
             name: { cate: 'required' }
         }
-        this.validatorEntity_reject = {
-            comment: { cate: 'required' }
-        }
+
     }
 
     componentWillMount() {
@@ -60,6 +59,7 @@ export class BuyerNewRequestManage extends Component {
             //user_type: parseInt(requestId) === 0 ? "buyer" : "admin",
             id: requestId
         });
+
     }
 
     componentDidMount() {
@@ -88,29 +88,40 @@ export class BuyerNewRequestManage extends Component {
 
 
     bindDetails() {
-
         getBuyerRequestDetail(this.state.id).then(res => {
             if (res.result === "success") {
-                console.log(res.request_auction)
                 this.setState({
                     name: res.request_auction.name,
-                    // single_multiple:"1",
-                    // startDate: moment(res.request_auction.startDate).format(),
-                    // contract_duration:res.request_auction.contract_duration,
-                    //total_volume:res.request_auction.total_volume,
-                    status:res.request_auction.accept_status
+                    buyer_type: res.request_auction.buyer_type,
+                    contract_period_start_date: moment(res.request_auction.contract_period_start_date),
+                    duration: res.request_auction.duration,
+                    total_volume: res.request_auction.total_volume,
+                    allow_deviation: res.request_auction.allow_deviation,
+                    status: res.request_auction.accept_status
+
                 })
+
+                if (res.last_attachment) {
+                    let attachment = {
+                        id: res.last_attachment.id,
+                        file_name: res.last_attachment.file_name,
+                        file_path: res.last_attachment.file_path
+                    }
+                    let fileObj = this.state.fileData;
+                    fileObj['TC'][0].files = [];
+                    fileObj['TC'][0].files.push(attachment)
+                    this.setState({
+                        fileData: fileObj
+                    })
+                }
             }
         })
     }
 
 
-    checkSuccess() {
-
-    }
     starttimeChange(data) {
         this.setState({
-            startDate: data
+            contract_period_start_date: data
         })
     }
     noPermitInput(event) {
@@ -136,9 +147,9 @@ export class BuyerNewRequestManage extends Component {
                     setValidationPass('total_volume', 1)
                 }
                 break;
-            case "single_multiple":
+            case "buyer_type":
                 this.setState({
-                    single_multiple: val
+                    buyer_type: val
                 });
                 $('.validate_message').find('div').each(function () {
                     let className = $(this).attr('class');
@@ -150,7 +161,7 @@ export class BuyerNewRequestManage extends Component {
                 break;
             case "contract_duration":
                 this.setState({
-                    contract_duration: val
+                    duration: val
                 });
                 break;
             case "allow_deviation":
@@ -176,6 +187,9 @@ export class BuyerNewRequestManage extends Component {
         if (type === 'create') {
             window.location.href = '/buyer/request_auctions';
         }
+        else if (type === 'goback') {
+            window.location.href = '/buyer/request_auctions';
+        }
         else {
             this.setState({
                 disabled: true
@@ -192,7 +206,7 @@ export class BuyerNewRequestManage extends Component {
             }
         })
         let flag = true, hasDoc = true;
-        if (this.state.single_multiple === "1") {
+        if (this.state.buyer_type === "1") {
             let arr = validator_Object(this.state, this.validatorEntity_multiple);
 
             if (arr.length > 0) {
@@ -253,49 +267,35 @@ export class BuyerNewRequestManage extends Component {
 
             this.request = {
                 name: this.state.name,
-                single_multiple: this.state.single_multiple,
-                startDate: moment(this.state.startDate).format(),
-                contract_duration: this.state.contract_duration,
+                buyer_type: this.state.buyer_type,
+                contract_period_start_date: moment(this.state.contract_period_start_date).format(),
+                duration: this.state.duration
             }
-            if (this.state.operation_type === "create") {
-                this.request.id = null;
+            if (this.state.buyer_type === '1') {
                 this.request.total_volume = this.state.total_volume;
+                this.request.attachment_id = '';
+                this.request.allow_deviation = '1';
             }
             else {
-                this.request.id = null;
-                this.request.total_volume = this.state.contract_duration;
+                this.request.total_volume = "";
+                this.request.attachment_id = this.state.fileData.TC[0].files.length > 0 ? this.state.fileData.TC[0].files[0].id : "";
                 this.request.allow_deviation = this.state.allow_deviation;
             }
+
+            if (this.state.operation_type === "create") {
+                this.request.id = null;
+            }
+            else {
+                this.request.id = this.state.id;
+            }
             saveBuyerRequest(this.request).then(res => {
-                console.log(res)
                 if (res.request_auction) {
                     window.location.href = "/buyer/request_auctions"
                 }
-                else {
-                }
             })
         }
     }
-    commentValidation() {
-        let flag = true;
-        let arr = validator_Object(this.state, this.validatorEntity_reject);
-        if (arr) {
-            arr.map((item, index) => {
-                let column = item.column;
-                let cate = item.cate;
-                setValidationFaild(column, cate)
-            })
-        }
 
-        $('.validate_message').find('div').each(function () {
-            let className = $(this).attr('class');
-            if (className === 'errormessage') {
-                flag = false;
-                return flag;
-            }
-        })
-        return flag;
-    }
     doApproveAction(type) {
         if (type === "Reject") {
             if (this.commentValidation()) {
@@ -320,26 +320,15 @@ export class BuyerNewRequestManage extends Component {
         }
 
     }
-    doAction(obj) {
-        let params = {
-            id: this.state.id,
-            stat: obj.action === "approve" ? 1 : 0
-        }
-        if (obj.action === "approve") {
-            approveBuyerRequest(params).then(res => {
-                sessionStorage.auction_id = res.auction.id;
-                setTimeout(() => { window.location.href = "/admin/auctions/new" }, 100);
-            })
-        }
-    }
+
     render() {
         let btn_html;
         if (this.state.user_type === 'buyer') {
             if (this.state.operation_type === "edit") {
-                if (this.state.status === 1) {
+                if (parseInt(this.state.status) === 1) {
                     btn_html =
                         <div>
-                            <button id="save_form" className="lm--button lm--button--primary" onClick={this.doCancel.bind(this, "save")}>Cancel</button>
+                            <button id="save_form" className="lm--button lm--button--primary" onClick={this.doCancel.bind(this, "goback")}>Cancel</button>
                         </div>
                 }
                 else {
@@ -390,7 +379,7 @@ export class BuyerNewRequestManage extends Component {
                                                 <abbr title="required">*</abbr> Single / Multiple Buyer(s)  :
                                                 </label>
                                             <div className="lm--formItem-right lm--formItem-control">
-                                                <select ref="single_multiple" id="single_multiple" onChange={this.doValue.bind(this, 'single_multiple')} value={this.state.single_multiple} disabled={this.state.disabled}>
+                                                <select ref="buyer_type" id="buyer_type" onChange={this.doValue.bind(this, 'buyer_type')} value={this.state.buyer_type} disabled={this.state.disabled}>
                                                     <option value="0">Single</option>
                                                     <option value="1">Multiple</option>
                                                 </select>
@@ -402,7 +391,7 @@ export class BuyerNewRequestManage extends Component {
                                                 <abbr title="required">*</abbr> Contract Start Date  :
                                                 </label>
                                             <div className="lm--formItem-right lm--formItem-control">
-                                                <DatePicker minDate={moment()} disabled={this.state.disabled} shouldCloseOnSelect={true} onKeyDown={this.noPermitInput.bind(this)} required aria-required="true" ref="contract_period_start_date" name="contract_period_start_date" className="date_ico" dateFormat="DD-MM-YYYY" selected={this.state.startDate} selectsStart startDate={this.state.startDate} endDate={this.state.endDate} onChange={this.starttimeChange} />
+                                                <DatePicker minDate={moment()} disabled={this.state.disabled} shouldCloseOnSelect={true} onKeyDown={this.noPermitInput.bind(this)} required aria-required="true" ref="contract_period_start_date" name="contract_period_start_date" className="date_ico" dateFormat="DD-MM-YYYY" selected={this.state.contract_period_start_date} selectsStart startDate={this.state.contract_period_start_date} onChange={this.starttimeChange} />
                                             </div>
                                         </div>
                                         <div className="lm--formItem lm--formItem--inline string">
@@ -410,14 +399,14 @@ export class BuyerNewRequestManage extends Component {
                                                 <abbr title="required">*</abbr> Contract Duration  :
                                                 </label>
                                             <div className="lm--formItem-right lm--formItem-control">
-                                                <select ref="contract_duration" id="contract_duration" name="contract_duration" onChange={this.doValue.bind(this, 'contract_duration')} disabled={this.state.disabled}>
+                                                <select ref="contract_duration" id="contract_duration" name="contract_duration" onChange={this.doValue.bind(this, 'contract_duration')} value={this.state.duration} disabled={this.state.disabled}>
                                                     <option value="6">6 months</option>
                                                     <option value="12">12 months</option>
                                                     <option value="24">24 months</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        {this.state.single_multiple == "0" ?
+                                        {this.state.buyer_type == "0" ?
                                             <div className="lm--formItem lm--formItem--inline string">
                                                 <label className="lm--formItem-left lm--formItem-label string required">
                                                     <abbr title="required">*</abbr> Upload T&C  :
@@ -430,7 +419,7 @@ export class BuyerNewRequestManage extends Component {
                                                 </div>
                                             </div> : ''
                                         }
-                                        {this.state.single_multiple == "0" ?
+                                        {this.state.buyer_type == "0" ?
                                             <div className="lm--formItem lm--formItem--inline string">
                                                 <label className="lm--formItem-left lm--formItem-label string required">
                                                     <abbr title="required">*</abbr> Allow Deviations  :
@@ -444,7 +433,7 @@ export class BuyerNewRequestManage extends Component {
                                             </div> : ''
                                         }
 
-                                        {this.state.single_multiple == "1" ?
+                                        {this.state.buyer_type == "1" ?
                                             <div className="lm--formItem lm--formItem--inline string">
                                                 <label className="lm--formItem-left lm--formItem-label string required">
                                                     <abbr title="required">*</abbr> Total Volume(kwh/month) :
@@ -455,19 +444,6 @@ export class BuyerNewRequestManage extends Component {
                                                 </div>
                                             </div> : ''
                                         }
-                                        {
-                                            this.state.user_type !== 'buyer' ?
-                                                <div className="lm--formItem lm--formItem--inline string optional ">
-                                                    <label className="lm--formItem-left lm--formItem-label string required">
-                                                        <abbr title="required">*</abbr> Admin Comments  :
-                                                </label>
-                                                    <div className="lm--formItem-right lm--formItem-control">
-                                                        <textarea type="text" name="comment" value={this.state.comment} onChange={this.doValue.bind(this, 'comment')} disabled={this.state.disabled} ref="request_name" required aria-required="true" title="Please fill out this field" placeholder="" />
-                                                        <div className='isPassValidate' id='comment_message' >This field is required!</div>
-                                                    </div>
-                                                </div> : ''
-                                        }
-
 
                                     </div>
                                 </div>
@@ -478,7 +454,7 @@ export class BuyerNewRequestManage extends Component {
                         </div>
                     </div>
                 </div>
-                <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
+
             </div >
         )
     }

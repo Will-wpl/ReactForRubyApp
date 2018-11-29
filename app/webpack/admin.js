@@ -26,6 +26,7 @@ import "components/admin/admin-common-template";
 import "components/buyer/buyer-manage";
 import "components/retailer/retailer-register";
 import "components/admin/admin-expiry";
+import "components/admin/admin-buyer-request";
 // import "./javascripts/ajax-test.js";
 //console.log("Admin Webpacker");
 
