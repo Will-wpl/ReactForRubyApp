@@ -24,15 +24,14 @@ export class BuyerRequestEntityListManage extends Component {
         let obj = {
             sort_by: sort instanceof Array ? sort : null
         }
+     
         getBuyerRequestEnttiy(obj).then(res => {
             $(".u-contain").css("padding","0px");
             $(".lm--header").css("margin-bottom","0px");
             $(".createRaMain a,.lm--footer div").css("margin-left","24px");
-            console.log(res)
-            // this.setState({
-            //     expiry_list: res.accounts ? res.accounts : [],
-            //     buyer_ids: res.buyer_ids ? res.buyer_ids : []
-            // })
+             this.setState({
+                entity_list: res.buyer_entity_contracts ? res.buyer_entity_contracts : [],
+            })
         })
     }
     goCreate() {
@@ -54,12 +53,12 @@ export class BuyerRequestEntityListManage extends Component {
                                 <thead>
                                     <tr>
                                         <th>Purchasing Entity
-                            <div><dfn className={"search_list_asc company_name"} onClick={this.dosort.bind(this, 'company_name', 'asc')}></dfn>
-                                                <dfn className={"search_list_desc company_name"} onClick={this.dosort.bind(this, 'company_name', 'desc')}></dfn></div>
-                                        </th>
-                                        <th> Existing Retailer
                             <div><dfn className={"search_list_asc entity_name"} onClick={this.dosort.bind(this, 'entity_name', 'asc')}></dfn>
                                                 <dfn className={"search_list_desc entity_name"} onClick={this.dosort.bind(this, 'entity_name', 'desc')}></dfn></div>
+                                        </th>
+                                        <th> Existing Retailer
+                            <div><dfn className={"search_list_asc retailer_name"} onClick={this.dosort.bind(this, 'retailer_name', 'asc')}></dfn>
+                                                <dfn className={"search_list_desc retailer_name"} onClick={this.dosort.bind(this, 'retailer_name', 'desc')}></dfn></div>
                                         </th>
                                         <th>Contract Expiry
                             <div><dfn className={"search_list_asc contract_expiry"} onClick={this.dosort.bind(this, 'contract_expiry', 'asc')}></dfn>
@@ -76,8 +75,6 @@ export class BuyerRequestEntityListManage extends Component {
                                 })}
                                 </tbody>
                             </table>
-
-
                         </div>
                     </div>
                 </div>
