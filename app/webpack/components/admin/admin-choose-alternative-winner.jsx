@@ -62,14 +62,15 @@ export default class ChooseAlternativeWinner extends React.Component{
             }else{
                 this.setState({disabled:false,voidStatus:false});
             }
-            data.histories.map((item,index)=>{
-                if(index==0){
-                    item.disabled=true;
-
-                }else{
-                    item.disabled=false
-                }
-            })
+            if(data.histories.length>0){
+                data.histories.map((item,index)=>{
+                    if(index==0){
+                        item.disabled=true;
+                    }else{
+                        item.disabled=false
+                    }
+                })
+            }
             let e={
                 data:{
                     user_id:data.histories.length>0?data.histories[0].user_id:null,
@@ -79,6 +80,7 @@ export default class ChooseAlternativeWinner extends React.Component{
                 index:0
             };
             //console.log(e);
+            this.setState({winner:null});
             this.setState({winnerData:data.histories,selectedWinner:e,userid:data.histories.length>0?data.histories[0].user_id:null})
         })
     }
@@ -252,7 +254,7 @@ export default class ChooseAlternativeWinner extends React.Component{
                         <tr>
                             <th>Rank</th>
                             <th>Retailer</th>
-                            <th>Price</th>
+                            <th>Price<br/>($/kWh)</th>
                             <th> </th>
                         </tr>
                         </thead>
@@ -263,7 +265,7 @@ export default class ChooseAlternativeWinner extends React.Component{
                                     <td>{e.ranking}</td>
                                     <td>{e.company_name}</td>
                                     <td onClick={this.showRetailer.bind(this,e)} style={{cursor:'pointer'}}>
-                                        $ {parseFloat(e.average_price).toFixed(4)}/kWh
+                                         {parseFloat(e.average_price).toFixed(4)}
                                     </td>
                                     <td>
                                         <button

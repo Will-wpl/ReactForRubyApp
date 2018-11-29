@@ -607,9 +607,9 @@ dfn.manage_label{
           display: block; padding:10px 0px; font-style: normal; word-break: break-word;
         }
         a{
-          margin: 0px auto; display: block; width: 100%; cursor: pointer;
-          &.report{background: url("../images/images_for_white/Reverse_Auction_Report.png") no-repeat left; background-size:19px; height: 20px;}
-          &.log,&.award{background: url("../images/images_for_white/Activity_Log.png") no-repeat left; background-size:19px; height: 20px;}
+          margin: 5px auto; display: block; width: 100%; cursor: pointer;
+          &.report{background: url("../images/images_for_white/Reverse_Auction_Report.png") no-repeat left; background-size:19px; height: 20px; padding-left: 25px;}
+          &.log,&.award{background: url("../images/images_for_white/Activity_Log.png") no-repeat left; background-size:19px; height: 20px; padding-left: 25px;}
         }
         &.search_list_btn{word-wrap: break-word;
           a{
@@ -1411,3 +1411,36 @@ body.choose{
 	z-index:1002;
 	overflow: auto;
 }
+
+#pageShow{ margin-left: -16px; margin-right: -16px; background: #fff; padding-bottom: 60px;}
+#pageShow .pageShowHeader{ width: 100%; height:394px; overflow: hidden; background: url("../images/images_for_white/Rectangle.png") repeat-x;}
+#pageShow .pageShowHeader_h4{width:90%; margin: 30px auto 170px auto; overflow: hidden;}
+#pageShow .pageShowHeader_h4 a{float: left; width: 131px; height: 47px; background:url("../images/images_for_white/logo-spdigital-rgb-03-landscape-02B-bw-dark.svg") no-repeat;}
+#pageShow .pageShowHeader_h4 span{float: right; margin-top: 12px; cursor: pointer; color:#fff; font-size: 14px; padding: 4px 15px; background: rgba(255,255,255,0.2); border-radius: 10px;}
+#pageShow .pageShowHeader h3{ width: 100%; font-size: 36px; text-align: center; margin: 15px auto 30px auto;}
+#pageShow .pageShowHeader h5{ width: 100%; font-size: 24px; text-align: center; font-weight: normal; margin: 15px auto;}
+#pageShow .pageShowHeader h5 font{color:#FF9D5A}
+.pageShowComent{ width: 100%; margin: 50px auto 80px auto;}
+.pageShowComent .img1{background: url("../images/images_for_white/image 8.png") no-repeat center; width: 100%; height: 142px;}
+.pageShowComent .img2{background: url("../images/images_for_white/image 11.png") no-repeat center; width: 100%; height: 142px;}
+.pageShowComent .img3{background: url("../images/images_for_white/image 7.png") no-repeat center; width: 100%; height: 142px;}
+.pageShowComent .arrowL{background: url("../images/images_for_white/arrowL.png") no-repeat center; width:100%; height: 142px;}
+.pageShowComent .arrowR{background: url("../images/images_for_white/arrowR.png") no-repeat center; width:100%; height: 142px;}
+.pageShowComent h4,pageShowComent p{ width: 100%; text-align: center; margin: 10px auto; font-size: 20px;}
+.pageShowComent p{font-size: 16px; text-align: center;}
+.w_0_5{width: 4.15151515%;}
+
+.pageShowFooter{text-align: left; width: 90%; margin:20px auto 80px auto;}
+.pageShowFooter h1{ font-size: 32px; font-weight: bold; margin-bottom: 20px;}
+.pageShowFooter p{font-size: 16px; line-height:28px;
+      a{color:#00B0B2; text-decoration: none;}
+}
+.pageShowFooter h4{ margin-top: 55px; font-weight: bold; font-size: 20px;}
+.pageShowFooter ul{ width: 100%; margin: 15px auto;}
+.pageShowFooter ul li{line-height: 30px; font-size: 16px; list-style: none; margin-bottom: 10px;}
+.pageShowFooter ul li span{ display: inline-block; width: 30px; height: 30px; margin-right: 5px; text-align: center; line-height: 30px; border-radius: 100%; background: #4F5A60; color: #fff;}
+.pageShowBottom{ width: 100%; text-align: center; font-size: 13px;}
+@media screen and (min-width: 768px){
+  #pageShow{margin-left: -24px; margin-right: -24px;}
+}
+#GoLogin{ display: none;}

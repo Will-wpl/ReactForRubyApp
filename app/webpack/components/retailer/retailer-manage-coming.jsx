@@ -61,8 +61,8 @@ export class RetailerManage extends Component {
                     })
                 }
             }
-            
-            
+
+
         }, error => {
             console.log(error);
         })
@@ -120,21 +120,21 @@ export class RetailerManage extends Component {
                     alternative_mobile_number:res.alternative_mobile_number?res.alternative_mobile_number:'',
                     alternative_office_number:res.alternative_office_number?res.alternative_office_number:''
                 })
-    
+
             }
-            
+
         }, error => {
             console.log(error);
         })
     }
-    padZero(num, n) { 
-        let len = num.toString().split('.')[1].length; 
-        while(len < n) { 
-        num = num+"0"; 
-        len++; 
-        } 
-        return num; 
-    } 
+    padZero(num, n) {
+        let len = num.toString().split('.')[1].length;
+        while(len < n) {
+        num = num+"0";
+        len++;
+        }
+        return num;
+    }
     btnStatus(){
         this.setState({
             btn_status:true,
@@ -175,7 +175,7 @@ export class RetailerManage extends Component {
                 this.refs.Modal.showModal();
             }
                 this.setState({
-                    text:"Your details have been successfully submitted. You may click on 'Start Bidding' in the published auction list to standby for the live reverse auction."
+                    text:"Your details have been successfully submitted. You may click on 'Start Bidding' in the published auction list to standby for the live Reverse Auction."
                 });
                 setTimeout(()=>{
                     window.location.href='/retailer/auctions'
@@ -227,12 +227,12 @@ export class RetailerManage extends Component {
     }
     render () {
         let btn_html ='';
-        !this.state.havedata ? btn_html = <button id="submit_form" className="lm--button lm--button--primary" >Submit</button> 
+        !this.state.havedata ? btn_html = <button id="submit_form" className="lm--button lm--button--primary" >Submit</button>
         : btn_html = !this.state.btn_status ? (window.location.href.indexOf("past")>0?<button className="lm--button lm--button--primary" disabled>Edit</button>:<a className="lm--button lm--button--primary" onClick={this.btnStatus.bind(this)}>Edit</a> )
                        :<div>
                         <a className="lm--button lm--button--primary" onClick={this.cancel.bind(this)}>Cancel</a>
                         <button id="submit_form" className="lm--button lm--button--primary" >Submit</button>
-                        </div>;       
+                        </div>;
         return (
             <div className="retailer_manage_coming">
             <div id="live_modal" className={this.state.live_modal}>
@@ -260,8 +260,8 @@ export class RetailerManage extends Component {
                             </div>
                         </div>
                     </div>:''}
-                    <h3 className="u-mt3 u-mb1">Contact Person Details for Actual Day of Reverse Auction</h3>
-                    <h4 className="lm--formItem lm--formItem--inline string">Main Contact Person on Actual Bidding Day:</h4>
+                    <h3 className="u-mt3 u-mb1">Contact person details for actual day of bidding</h3>
+                    <h4 className="lm--formItem lm--formItem--inline string">Main contact person:</h4>
                     <div className="lm--formItem lm--formItem--inline string">
                         <label className="lm--formItem-left lm--formItem-label string required">
                         <abbr title="required">*</abbr> Name:
@@ -294,7 +294,7 @@ export class RetailerManage extends Component {
                             <input type="text" name="main_office_number" maxLength="8" value={this.state.main_office_number} onChange={this.Change.bind(this,'main_office_number')} disabled={this.state.disabled} ref="main_office_number"  required aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
                         </div>
                     </div>
-                    <h4 className="lm--formItem lm--formItem--inline string">Alternative Contact Person on Actual Bidding Day:</h4>
+                    <h4 className="lm--formItem lm--formItem--inline string">Alternative contact person:</h4>
                     <div className="lm--formItem lm--formItem--inline string">
                         <label className="lm--formItem-left lm--formItem-label string required">
                         Name:
@@ -329,7 +329,7 @@ export class RetailerManage extends Component {
                     </div>
                     <div className="retailer_btn">
                         {!this.state.allbtnStatus ? <div className="mask"></div> : ''}
-                        {/* <button className="lm--button lm--button--primary">Reject Participation</button> */}                       
+                        {/* <button className="lm--button lm--button--primary">Reject Participation</button> */}
                         {btn_html}
                     </div>
                 </div>

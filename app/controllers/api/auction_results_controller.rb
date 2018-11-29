@@ -10,12 +10,16 @@ class Api::AuctionResultsController < Api::BaseController
     end
     data = []
     consumptions.each do |consumption|
-
-      entities = if params[:contract_duration].blank?
+      entity_ids = if params[:contract_duration].blank?
                    nil
                  else
                    consumption.consumption_details.select(:company_buyer_entity_id).distinct
                  end
+      entities = []
+      entity_ids.each do |entity|
+        cb_entity = CompanyBuyerEntity.find(entity[:company_buyer_entity_id]).attributes.dup
+        entities.push({company_buyer_entity_id: entity[:company_buyer_entity_id]}.merge!(cb_entity))
+      end
       data.push(id: consumption.id, name: consumption.user.company_name, acknowledge: consumption.acknowledge, download_url: nil,
                 auction_id: consumption.auction_id, user_id: consumption.user_id, entities: entities)
     end

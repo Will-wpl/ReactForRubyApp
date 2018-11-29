@@ -100,12 +100,12 @@ export const searchTypeData = {
     "Retailer Past Reverse Auction": {//connect back end OK
         list_url: "/api/retailer/auction_results",
         list_data: [
-            { title: "ID:", type: "published_gid", species: "input", operator: 'like', table: 'auctions' },
+            { title: "Reference ID:", type: "published_gid", species: "input", operator: 'like', table: 'auctions' },
             { title: "Name:", type: "name", species: "input", operator: 'like', table: 'auctions' },
             { title: "Date:", type: "start_datetime", species: "datePacker", operator: 'date_between', table: 'auctions' }
         ]
     },
-    "Buyer Past Reverse Auction": {//connect back end OK
+    "Buyer Purchase Order Records": {//connect back end OK
         list_url: "/api/buyer/auction_results",
         list_data: [
             { title: "ID:", type: "published_gid", species: "input", operator: 'like', table: 'auctions' },

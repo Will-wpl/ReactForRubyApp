@@ -1,20 +1,62 @@
-div.u-grid.u-mb3.u-mt3
-  .u-text-center
-  = image_tag 'logo-horizontal-white.png', alt: 'railsbase-logo'
-.u-text-center.u-mb3
-  = image_tag 'logo-railsbase.png', alt: 'railsbase-logo', class: 'devise-logo',width:'360'
+div id="pageShow"
+  div class="pageShowHeader"
+    h4 class="pageShowHeader_h4"
+      a
+      span.gologin onclick="gologin()" CUSTOMER LOGIN
+    h3 REVV - Electricity Purchase Platform
+    h5 Singapore’s first <font>aggregated</font> electricity purchase platform. Harness the <font>power of volume</font> <br> <font>aggregation</font> to help all businesses - no matter big or small, to achieve the best prices.
+  div class="pageShowComent u-grid"
+    .col-sm-1.w_0_5
+    .col-sm-3
+      div class="img1"
+      h4 Businesses
+      p Indicate purchase requirements to<br> secure the best price through volume <br> aggregation and live bidding.
+    .col-sm-1
+      div class="arrowR"
+    .col-sm-3
+      div class="img2"
+      h4 REVV Platform
+      p Aggregate electricity purchase volumes<br> from consumers and run live bidding with<br> retailers.
+    .col-sm-1
+      div class="arrowL"
+    .col-sm-3
+      div class="img3"
+      h4 Electricity Retailer
+      p Participate in live bidding to win electricity supply contracts with consumers.
+  div class="pageShowFooter u-grid"
+    div class="col-sm-6"
+      h1 Cost savings through aggregation <br>& competitive bidding
+      p Achieve the best rates through the power of volume aggregation, from a wide pool of electricity retailers. Platform is open to businesses big or small, all are welcome. Also, it’s free! <br><br>If you’re an electricity retailer, REVV is a channel to reach more customers. Demand from multiple customers are aggregated for you through the platform.<br><br>Whether you are a business or an electricity retailer, <a href="/users/choose">click here</a> to sign up for an account. <br><br>For further information, please contact us at <a>revv@spgroup.com.sg</a>.
+    div class="col-sm-2"
+    div class="col-sm-4"
+      h4 Businesses
+      ul
+        li <span>1</span> Indicate purchase requirements
+        li <span>2</span> Enjoy cost savings
+      h4 Electricity Retailers
+      ul
+        li <span>1</span> Participate in Live Bidding
+        li <span>2</span> Secure new customers
+  div class="pageShowBottom" © 2018 SP Digital. All Rights Reserved.
 
-.u-grid
-  .col-sm-12.col-md-4.u-mha
-  
-    = simple_form_for(resource, as: resource_name, url: session_path(resource_name),
-      wrapper: :vertical_form, defaults: { label: false }) do |f|
+div id="GoLogin"
+  div.u-grid.u-mb3.u-mt3
+    .u-text-center
+    = image_tag 'logo-horizontal-white.png', alt: 'railsbase-logo'
+  .u-text-center.u-mb3
+    = image_tag 'logo-railsbase.png', alt: 'railsbase-logo', class: 'devise-logo',width:'360'
 
-      = f.input :email, autofocus: true
-      = f.input :password
-      //= f.input :remember_me, as: :boolean, label: 'Remember me', wrapper: :vertical_boolean if devise_mapping.rememberable?
+  .u-grid
+      .col-sm-12.col-md-4.u-mha
 
-      .lm--formItem
-        = f.button :submit, 'Login', class: 'lm--button--primary u-block', data: { disable_with: t('views.disable_with') }
-      .lm--formItem.u-text-center.link_hand
-        | #{link_to 'Sign Up', users_choose_path} or #{link_to 'Forgot Password', new_password_path(resource_name)}
+        = simple_form_for(resource, as: resource_name, url: session_path(resource_name),
+          wrapper: :vertical_form, defaults: { label: false }) do |f|
+
+          = f.input :email, autofocus: true
+          = f.input :password
+          //= f.input :remember_me, as: :boolean, label: 'Remember me', wrapper: :vertical_boolean if devise_mapping.rememberable?
+
+          .lm--formItem
+            = f.button :submit, 'Login', class: 'lm--button--primary u-block', data: { disable_with: t('views.disable_with') }
+          .lm--formItem.u-text-center.link_hand
+            | #{link_to 'Sign Up', users_choose_path} or #{link_to 'Forgot Password', new_password_path(resource_name)}

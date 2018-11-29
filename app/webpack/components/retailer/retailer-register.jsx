@@ -231,7 +231,7 @@ export class RetailerRegister extends Component {
                 $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
             }
         })
-        //validate form 
+        //validate form
         let arr = validator_Object(this.state, this.validatorItem);
         if (arr) {
             arr.map((item, index) => {
@@ -261,7 +261,7 @@ export class RetailerRegister extends Component {
                 }
             }
         })
-        //validate upload form 
+        //validate upload form
 
         if (this.state.fileData['RETAILER_DOCUMENTS'][0].files.length > 0) {
             hasDoc = true;
@@ -770,9 +770,9 @@ export class RetailerRegister extends Component {
                                     </div>
                                 </div>
 
-                                <h4 className="lm--formItem lm--formItem--inline string chkBuyer"><input id="chkBuyer" type="checkbox" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /><span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.sellerTCurl} className="urlStyleUnderline">Seller Platform Terms of Use</a></span></h4>
+                                <h4 className="lm--formItem lm--formItem--inline string chkBuyer"><input id="chkBuyer" type="checkbox" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} /><span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.sellerTCurl} className="urlStyleUnderline">Terms & Conditions of Use (Retailer)</a></span></h4>
                                 <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
-                                <h4 className="lm--formItem lm--formItem--inline string chkBuyer"><input id="chkRevv" type="checkbox" onChange={this.Change.bind(this, 'chkRevv')} name={"seller_revv_tc"} disabled={this.state.disabled} /><span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.revvTCurl} className="urlStyleUnderline">Electricity Procurement Agreement</a></span></h4>
+                                <h4 className="lm--formItem lm--formItem--inline string chkBuyer"><input id="chkRevv" type="checkbox" onChange={this.Change.bind(this, 'chkRevv')} name={"seller_revv_tc"} disabled={this.state.disabled} /><span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.revvTCurl} className="urlStyleUnderline">Electricity Purchase Contract</a></span></h4>
                                 <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                                 <div className={this.state.use_type === 'admin_approve' ? 'isDisplay' : 'isHide'}>
                                     <div className="dividerline"></div>

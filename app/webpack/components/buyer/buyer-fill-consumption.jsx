@@ -449,7 +449,7 @@ export class FillConsumption extends Component {
                             checked: true,
                         })
                         this.refs.Modal.showModal();
-                        this.setState({ text: "Congratulations, your participation in this auction has been confirmed." });
+                        this.setState({ text: "Your Purchase Order has been submitted to Admin for verification. Once verified, you will receive a notification to confirm your participation in this Reverse Auction." });
                         setTimeout(() => {
                             window.location.href = "/buyer/auctions";
                         }, 3000)
@@ -783,7 +783,7 @@ export class FillConsumption extends Component {
                             </td>
                         </tr>
                         <tr>
-                            <td><h4 className="col-sm-12 u-mb2">Contract Start Date: {moment(this.state.contact_start_date).format('D MMM YYYY')}</h4></td>
+                            <td><h4 className="col-sm-12 u-mb2">Electricity Purchase Contract Start Date: {moment(this.state.contact_start_date).format('D MMM YYYY')}</h4></td>
                         </tr>
                         <tr>
                             <td>
@@ -798,7 +798,7 @@ export class FillConsumption extends Component {
                         </tr>
                         <tr>
                             <td>
-                                <h4 className="col-sm-12 u-mb2" style={{ "paddingTop": "15px" }}>Last Status of Participation : {this.status}</h4>
+                                <h4 className="col-sm-12 u-mb2" style={{ "paddingTop": "15px" }}>Status of Participation : {this.status}</h4>
                             </td>
                         </tr>
                     </tbody>
@@ -1082,7 +1082,7 @@ export class FillConsumption extends Component {
                                 <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
                                     <input name="agree_declare" type="checkbox" id="chkAgree_declare" disabled={this.state.disabled} required />
                                     {/* <span>I declare that all data submited is true and shall be used for the auction, and that i am bounded by <a target="_blank" href={this.state.link} className="urlStyle">Buyer T&C.</a></span> */}
-                                    <span>I declare that all data submitted is true and shall be used for the auction, and that I am bounded by the <a target="_blank" href={this.state.buyer_link} className="urlStyleUnderline">Buyer Platform Terms of Use</a> and <a target="_blank" href={this.state.seller_link} className="urlStyleUnderline">Electricity Procurement Agreement</a>. </span>
+                                    <span>I declare that all data submitted is true and shall be used for the auction, and that I am bounded by the <a target="_blank" href={this.state.buyer_link} className="urlStyleUnderline">Terms & Conditions of Use (Buyer)</a> and <a target="_blank" href={this.state.seller_link} className="urlStyleUnderline">Electricity Purchase Contract</a>. </span>
                                 </h4>
                             </div>
                             <div className="buyer_btn">

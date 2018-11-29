@@ -246,7 +246,7 @@ export class BuyerUserManage extends Component {
         }
     }
 
-    checkRejectAction() { //when admin reject the request 
+    checkRejectAction() { //when admin reject the request
         let flag = true;
         let arr = validator_Object(this.state, this.validatorComment);
         if (arr) {
@@ -440,7 +440,7 @@ export class BuyerUserManage extends Component {
 
         let list = this.state.entity_list;
         list[index].approval_status = "0";
- 
+
         list[index].isApproved = false;
         this.setState({
             entity_list: list,
@@ -716,12 +716,12 @@ export class BuyerUserManage extends Component {
                                             <div className="col-sm-12 col-md-10 push-md-3  margin-t" >
                                                 <h4 className="lm--formItem lm--formItem--inline string chk">
                                                     <input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} />
-                                                    <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerTCurl} className="urlStyleUnderline">Buyer Platform Terms of Use</a></span>
+                                                    <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerTCurl} className="urlStyleUnderline">Terms & Conditions of Use (Buyer)</a></span>
                                                 </h4>
                                                 <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                                                 <h4 className="lm--formItem lm--formItem--inline string chk">
                                                     <input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} />
-                                                    <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyleUnderline">Electricity Procurement Agreement</a></span>
+                                                    <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyleUnderline">Electricity Purchase Contract</a></span>
                                                 </h4>
                                                 <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                                             </div>
@@ -733,7 +733,7 @@ export class BuyerUserManage extends Component {
                                                 <div className="lm--formItem-right lm--formItem-control">
                                                     <textarea name="comment" value={this.state.comment} onChange={this.Change.bind(this, 'comment')} ref="comment" aria-required="true"></textarea>
                                                     {/* <div id="commmentError" className={this.state.commmentError ? "isDispaly" : "isHide"} >
-                                                      
+
                                                     </div> */}
                                                     <div id="comment_message" className="isPassValidate">This field is required!</div>
                                                 </div>

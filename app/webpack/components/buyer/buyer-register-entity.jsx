@@ -951,7 +951,7 @@ export class BuyerUserEntityRegister extends Component {
                     }
                 }
                 let row = item.entity_index;
-                
+
             });
             let errList = {
                 nameError: name,
@@ -1234,12 +1234,12 @@ export class BuyerUserEntityRegister extends Component {
                         <div className="col-sm-12 col-md-8 push-md-3 validate_message margin-t" >
                             <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
                                 <input type="checkbox" id="chkBuyer" onChange={this.Change.bind(this, 'chkBuyer')} name={"seller_buyer_tc"} disabled={this.state.disabled} />
-                                <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerTCurl} className="urlStyleUnderline">Buyer Platform Terms of Use</a></span>
+                                <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerTCurl} className="urlStyleUnderline">Terms & Conditions of Use (Buyer)</a></span>
                             </h4>
                             <div id="chkBuyer_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                             <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
                                 <input type="checkbox" id="chkRevv" name={"seller_revv_tc"} onChange={this.Change.bind(this, 'chkRevv')} disabled={this.state.disabled} />
-                                <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyleUnderline">Electricity Procurement Agreement</a></span>
+                                <span>Check here to indicate that you have read and agree to the <a target="_blank" href={this.state.buyerRevvTCurl} className="urlStyleUnderline">Electricity Purchase Contract</a></span>
                             </h4>
                             <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                             <Modal text={this.state.text} acceptFunction={this.refreshForm.bind(this)} ref="Modal" />
