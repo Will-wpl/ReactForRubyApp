@@ -10,7 +10,7 @@ RSpec.describe Api::Buyer::RequestAttachmentsController, type: :controller do
       context 'success' do
         def do_request
           file = fixture_file_upload('files/test.jpg', 'image/jpg')
-          put :create, params: { file: file, file_type: 'Request T&C' }
+          post :create, params: { file: file, file_type: 'Request T&C' }
         end
         before { do_request }
         it 'success' do
