@@ -102,8 +102,14 @@ class Api::RequestAuctionsController < Api::BaseController
       auction.total_eht_peak = 0
       auction.total_eht_off_peak = 0
       auction.total_volume = 0
-      auction.save!
-
+      if auction.save!
+        consumption = Consumption.new
+        consumption.auction_id = auction.id
+        consumption.user_id = request_auction.user_id
+        consumption.action_status = Consumption::ActionStatusPending
+        consumption.participation_status = Consumption::ParticipationStatusPending
+        consumption.save
+      end
       render json: { result: 'success', request_auction: request_auction, new_auction_id: auction.id }, status: 200
     end
   end
