@@ -6,17 +6,31 @@ RSpec.describe Api::Admin::RequestAuctionsController, type: :controller do
   context 'admin user' do
     before { sign_in create(:user, :with_admin) }
 
-    describe 'request_auctions_pending' do
-      context 'all pending request auctions' do
+    describe 'all_request_auction' do
+      context 'all request auctions' do
         def do_request
-          get :request_auctions_pending
+          get :all_request_auction
         end
 
         before { do_request }
         it 'Success' do
           expect(response).to have_http_status(:ok)
           hash_body = JSON.parse(response.body)
-          expect(hash_body.length).to eq(1)
+          expect(hash_body.length).to eq(3)
+        end
+      end
+
+      context 'all request auctions(Paging)' do
+        def do_request
+          sort_by = ['name', 'desc', '']
+          get :all_request_auction, params: { sort_by: sort_by, page_size: '10', page_index: '1' }
+        end
+
+        before { do_request }
+        it 'Success' do
+          expect(response).to have_http_status(:ok)
+          hash_body = JSON.parse(response.body)
+          expect(hash_body.length).to eq(3)
         end
       end
     end

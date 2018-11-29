@@ -103,7 +103,7 @@ RSpec.describe Api::Buyer::RequestAuctionsController, type: :controller do
       context 'request auctions witch page' do
         def do_request
           sort_by = ['name', 'desc', '']
-          get :index, params: { sort_by: sort_by, page_size: '10', page_index: '1'}
+          get :index, params: { sort_by: sort_by, page_size: '10', page_index: '1' }
         end
 
         before { do_request }

@@ -131,13 +131,13 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :request_auctions, only: %i[show request_auctions_pending approval_request_auction] do
+      resources :request_auctions, only: %i[show all_request_auction approval_request_auction] do
         member do
           put 'show'
           put 'approval_request_auction'
         end
         collection do
-          get 'request_auctions_pending'
+          get 'all_request_auction'
         end
       end
     end
