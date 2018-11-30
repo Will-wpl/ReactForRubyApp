@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181130071441) do
+ActiveRecord::Schema.define(version: 20181130072303) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -237,6 +237,7 @@ ActiveRecord::Schema.define(version: 20181130071441) do
     t.text "tc_attach_info"
     t.bigint "request_auction_id"
     t.string "accept_status"
+    t.bigint "request_owner_id"
     t.index ["request_auction_id"], name: "index_auctions_on_request_auction_id"
   end
 
