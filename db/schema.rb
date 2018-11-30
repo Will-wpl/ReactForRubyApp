@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181115022033) do
+ActiveRecord::Schema.define(version: 20181130030420) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -235,6 +235,9 @@ ActiveRecord::Schema.define(version: 20181115022033) do
     t.string "allow_deviation"
     t.datetime "published_date_time"
     t.text "tc_attach_info"
+    t.bigint "is_saved"
+    t.bigint "request_auction_id"
+    t.index ["request_auction_id"], name: "index_auctions_on_request_auction_id"
   end
 
   create_table "company_buyer_entities", force: :cascade do |t|
@@ -334,6 +337,28 @@ ActiveRecord::Schema.define(version: 20181115022033) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
+  end
+
+  create_table "request_attachments", force: :cascade do |t|
+    t.string "file_type"
+    t.string "file_name"
+    t.string "file_path"
+    t.bigint "request_auction_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["request_auction_id"], name: "index_request_attachments_on_request_auction_id"
+  end
+
+  create_table "request_auctions", force: :cascade do |t|
+    t.string "name"
+    t.date "contract_period_start_date"
+    t.integer "duration"
+    t.string "buyer_type"
+    t.string "allow_deviation"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_request_auctions_on_user_id"
   end
 
   create_table "rich_templates", force: :cascade do |t|
@@ -507,5 +532,7 @@ ActiveRecord::Schema.define(version: 20181115022033) do
   add_foreign_key "consumption_details", "user_attachments"
   add_foreign_key "consumptions", "auctions"
   add_foreign_key "consumptions", "users"
+  add_foreign_key "request_attachments", "request_auctions"
+  add_foreign_key "request_auctions", "users"
   add_foreign_key "user_extensions", "users"
 end

@@ -23,6 +23,7 @@ NotAllowDeviation = '0'.freeze
   has_many :users, through: :consumptions
   has_many :auction_contracts, dependent: :destroy
   has_one :auction_result, dependent: :destroy
+  has_one :request_auction
   # accepts_nested_attributes
 
   # Validations
