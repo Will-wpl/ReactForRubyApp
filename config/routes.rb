@@ -319,6 +319,7 @@ Rails.application.routes.draw do
     resources :contract, only: %i[index]
     resources :templates, only: %i[index]
     resources :common_templates, only: %i[index]
+    resources :request_auctions, only: %i[index show]
   end
 
   namespace :retailer do
@@ -363,6 +364,7 @@ Rails.application.routes.draw do
     end
     resources :consumptions,only: %i[edit]
     resources :register, only: [:index]
+    resources :request_auctions, only: %i[index show entity_list]
   end
 
   require 'sidekiq/web'
