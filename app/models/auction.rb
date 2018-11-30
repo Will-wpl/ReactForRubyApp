@@ -42,6 +42,14 @@ NotAllowDeviation = '0'.freeze
 
   # Methods (class methods before instance methods)
 
+  def self.has_request(auction_id)
+    if Auction.find(auction_id).request_auction.nil?
+      false
+    else
+      true
+    end
+  end
+
   def self.get_tc_attach_info_id(tc_attach_info_json, type)
     tc_attach_info = JSON.parse(tc_attach_info_json)
     tc_attach_info[type]

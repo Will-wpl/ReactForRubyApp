@@ -369,6 +369,15 @@ class Api::AuctionsController < Api::BaseController
   end
 
   def retailer_dashboard
+    user_info= {}
+    user_info[:current_user] = current_user
+    if current_user&.has_role?(:admin)
+      user_info[:role] = 'admin'
+      user_info[:readonly] = Auction.has_request(params[:id]) ? true: false
+    elsif current_user&.has_role?(:buyer)
+      user_info[:role] = 'buyer'
+      user_info[:readonly] = Auction.has_request(params[:id]) ? false: true
+    end
     tenders = TenderWorkflow.new.get_action_state_machine_only_approval_pending(params[:id]) #get_action_state_machine
     step_counts = [0, 0, 0, 0, 0, 0, 0]
     tenders.each do |tender|
@@ -384,7 +393,7 @@ class Api::AuctionsController < Api::BaseController
 
     end
 
-    render json: { tenders: tenders, step_counts: step_counts }, status: 200
+    render json: { tenders: tenders, step_counts: step_counts, user_info: user_info }, status: 200
   end
 
   def buyer_dashboard
