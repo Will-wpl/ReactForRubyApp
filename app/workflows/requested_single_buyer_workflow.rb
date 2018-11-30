@@ -16,4 +16,32 @@ class RequestedSingleBuyerWorkflow < SingleBuyerWorkflow
     super(node3: @node3)
   end
 
+  def get_current_action_status(arrangement_id)
+    sm = TenderStateMachine.where(arrangement_id: arrangement_id).last
+    if node1?(sm)
+      { node1_retailer_accept: true }
+    elsif node2?(sm)
+      { node2_retailer_accept_all: true, node2_retailer_propose_deviations: true }
+    elsif node3_retailer?(sm)
+      if node3_retailer_next?(sm)
+        { node3_retailer_next: true}
+      else
+        back = node3_retailer_has_submit?(sm) ? {node3_retailer_back: false} : {node3_retailer_back: true}
+        if node3_retailer_has_chats?(sm)
+          back.merge!({ node3_retailer_withdraw_all_deviations: true, node3_retailer_submit_deviations: true, node3_retailer_save: true })
+        else
+          back.merge!({ node3_retailer_submit_deviations: true, node3_retailer_save: true })
+        end
+      end
+    elsif node3_admin?(sm)
+      { node3_send_response: false }
+    elsif node3_buyer?(sm)
+      { node3_send_response: true }
+    elsif node5?(sm)
+      { node5_retailer_submit: true }
+    else
+      {}
+    end
+  end
+
 end
