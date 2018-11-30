@@ -364,7 +364,12 @@ Rails.application.routes.draw do
     end
     resources :consumptions,only: %i[edit]
     resources :register, only: [:index]
-    resources :request_auctions, only: %i[index show entity_list]
+    resources :request_auctions, only: %i[index show] do
+      collection do
+        get 'entity_list'
+      end
+    end
+
   end
 
   require 'sidekiq/web'
