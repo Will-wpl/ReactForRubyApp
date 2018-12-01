@@ -155,8 +155,16 @@ export default class AdminBuyerRequestManage extends Component {
         approveBuyerRequest(params).then(res => {
             if (res.result === 'success') {
                 if (obj.action === "approve") {
-                    sessionStorage.auction_id = res.new_auction_id;
-                    setTimeout(() => { window.location.href = "/admin/auctions/new" }, 100);
+                    if(this.state.buyer_type==='1')
+                    {
+                        setTimeout(() => { window.location.href = "/admin/request_auctions" }, 100);
+                    }
+                    else
+                    {
+                        sessionStorage.auction_id = res.new_auction_id;
+                        setTimeout(() => { window.location.href = "/admin/auctions/new" }, 100);
+                    }
+
                 }
                 else {
                     setTimeout(() => { window.location.href = "/admin/request_auctions" }, 100);
