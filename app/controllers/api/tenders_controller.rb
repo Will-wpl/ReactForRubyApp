@@ -1,7 +1,7 @@
 class Api::TendersController < Api::TendersBaseController
 
   def current
-    workflow = TenderHelper.current(params[:id])
+    workflow = TenderHelper.current(params[:id], current_user)
     # workflow = TenderWorkflow.get_arrangement_state_machine(params[:id])
     render json: workflow, status: 200
   end

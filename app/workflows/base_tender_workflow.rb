@@ -13,7 +13,7 @@ class BaseTenderWorkflow < Workflow
     get_arrangement_state_machine(arrangement_id)
   end
 
-  def get_arrangement_state_machine(arrangement_id)
+  def get_arrangement_state_machine(arrangement_id, current_user)
     flows = TenderStateMachine.where(arrangement_id: arrangement_id).where.not(current_node: nil).select(:previous_node).distinct
     flow_array = []
     flows.each do |flow|
@@ -21,7 +21,17 @@ class BaseTenderWorkflow < Workflow
     end
     current = TenderStateMachine.where(arrangement_id: arrangement_id).last
     actions = get_current_action_status(arrangement_id)
-    { flows: flow_array.sort_by! { |p| p }, current: current, actions: actions }
+    auction_id = Arrangement.find(arrangement_id).auction.id
+    user_info= {}
+    user_info[:current_user] = current_user
+    if current_user&.has_role?(:admin)
+      user_info[:role] = 'admin'
+      user_info[:readonly] = Auction.has_request(auction_id) ? true: false
+    elsif current_user&.has_role?(:buyer)
+      user_info[:role] = 'buyer'
+      user_info[:readonly] = Auction.has_request(auction_id) ? false: true
+    end
+    { flows: flow_array.sort_by! { |p| p }, current: current, actions: actions, user_info: user_info }
   end
 
   def get_action_state_machine_only_approval_pending(auction_id)

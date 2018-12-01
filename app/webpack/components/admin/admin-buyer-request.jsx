@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import { UploadFile } from '../shared/upload';
-import { changeValidate, validator_Object, setValidationFaild, setValidationPass } from './../../javascripts/componentService/util';
+import { changeValidate, validator_Object, setValidationFaild, setValidationPass, getStatus } from './../../javascripts/componentService/util';
 import { getBuyerRequestDetail_Admin, approveBuyerRequest } from './../../javascripts/componentService/admin/service';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -27,6 +27,8 @@ export default class AdminBuyerRequestManage extends Component {
                 ]
             },
             status: 2,
+            status_name: "",
+            action_type: "approve",
             disabled: true,
             user_type: "buyer",
             operation_type: "create",
@@ -64,8 +66,8 @@ export default class AdminBuyerRequestManage extends Component {
                     total_volume: res.request_auction.total_volume,
                     allow_deviation: res.request_auction.allow_deviation,
                     comment: res.request_auction.comment ? res.request_auction.comment : "",
-                    status: res.request_auction.accept_status
-
+                    status: res.request_auction.accept_status,
+                    status_name: getStatus(res.request_auction.accept_status)
                 })
 
                 if (res.last_attachment) {
@@ -157,13 +159,16 @@ export default class AdminBuyerRequestManage extends Component {
                     setTimeout(() => { window.location.href = "/admin/auctions/new" }, 100);
                 }
                 else {
-                    setTimeout(() => { window.location.href = "admin/request_auctions" }, 100);
+                    setTimeout(() => { window.location.href = "/admin/request_auctions" }, 100);
                 }
             }
         })
     }
     doApproveAction(type) {
         if (type === "Reject") {
+            this.setState({
+                action_type: "reject"
+            })
             if (this.commentValidation()) {
                 this.setState({
                     text: "Are you sure you want to reject this request?"
@@ -189,8 +194,8 @@ export default class AdminBuyerRequestManage extends Component {
     render() {
         let btn_html;
         btn_html = <div style={{ marginRight: "10px" }}>
-            <button id="save_form" className="lm--button lm--button--primary" disabled={parseInt(this.state.status) === 1} onClick={this.doApproveAction.bind(this, "Reject")}>Reject</button>
-            <button id="submit_form" className="lm--button lm--button--primary" disabled={parseInt(this.state.status) === 1} onClick={this.doApproveAction.bind(this, 'Approve')}>Approve</button>
+            <button id="save_form" className="lm--button lm--button--primary" disabled={parseInt(this.state.status) === 1 || parseInt(this.state.status) === 0} onClick={this.doApproveAction.bind(this, "Reject")}>Reject</button>
+            <button id="submit_form" className="lm--button lm--button--primary" disabled={parseInt(this.state.status) === 1 || parseInt(this.state.status) === 0} onClick={this.doApproveAction.bind(this, 'Approve')}>Approve</button>
         </div>;
         return (
             <div>
@@ -201,8 +206,18 @@ export default class AdminBuyerRequestManage extends Component {
                             <div className="retailer_manage_coming">
                                 <div id="buyer_form" >
                                     <div className="u-grid admin_invitation ">
+
                                         <div className="col-sm-12 col-md-8 push-md-2 validate_message ">
                                             <div className="top"></div>
+
+                                            <div className="lm--formItem lm--formItem--inline string">
+                                                <label className="lm--formItem-left lm--formItem-label string required">
+                                                    <abbr title="required"></abbr> Status  :
+                                                </label>
+                                                <div className="lm--formItem-right lm--formItem-control" style={{ marginTop: "12px" }}>
+                                                    {this.state.status_name}
+                                                </div>
+                                            </div>
                                             <div className="lm--formItem lm--formItem--inline string">
                                                 <label className="lm--formItem-left lm--formItem-label string required">
                                                     <abbr title="required">*</abbr> Name of Reverse Auction  :
@@ -286,10 +301,10 @@ export default class AdminBuyerRequestManage extends Component {
 
                                             <div className="lm--formItem lm--formItem--inline string optional ">
                                                 <label className="lm--formItem-left lm--formItem-label string required">
-                                                    <abbr title="required">*</abbr> Admin Comments  :
+                                                    <abbr title="required" className={this.state.action_type === "reject" ? "isDisplayInLine" : "isHide"}  >*</abbr> Admin Comments  :
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control">
-                                                    <textarea type="text" name="comment" value={this.state.comment} onChange={this.doValue.bind(this, 'comment')} ref="request_name" required aria-required="true" title="Please fill out this field" placeholder="" />
+                                                    <textarea type="text" name="comment" disabled={parseInt(this.state.status) === 1 || parseInt(this.state.status) === 0} value={this.state.comment} onChange={this.doValue.bind(this, 'comment')} ref="request_name" required aria-required="true" title="Please fill out this field" placeholder="" />
                                                     <div className='isPassValidate' id='comment_message' >This field is required!</div>
                                                 </div>
                                             </div>

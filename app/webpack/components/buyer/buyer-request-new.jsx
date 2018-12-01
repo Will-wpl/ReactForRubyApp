@@ -6,7 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { UploadFile } from '../shared/upload';
 import { Modal } from '../shared/show-modal';
 import moment from 'moment';
-import { changeValidate, removeAsInteger, validateInteger, setValidationFaild, setValidationPass, validator_Object } from './../../javascripts/componentService/util';
+import { changeValidate, removeAsInteger, validateInteger, setValidationFaild, setValidationPass, validator_Object, getStatus } from './../../javascripts/componentService/util';
 import { getBuyerRequestDetail, saveBuyerRequest, approveBuyerRequest } from './../../javascripts/componentService/common/service';
 
 
@@ -32,6 +32,7 @@ export class BuyerNewRequestManage extends Component {
                 ]
             },
             status: 2,
+            status_name: "",
             user_type: "buyer",
             operation_type: "create",
             uploadUrl: "/api/buyer/request_attachments?file_type=",
@@ -97,7 +98,8 @@ export class BuyerNewRequestManage extends Component {
                     duration: res.request_auction.duration,
                     total_volume: res.request_auction.total_volume,
                     allow_deviation: res.request_auction.allow_deviation,
-                    status: res.request_auction.accept_status
+                    status: res.request_auction.accept_status,
+                    status_name: getStatus(res.request_auction.accept_status)
 
                 })
 
@@ -185,7 +187,7 @@ export class BuyerNewRequestManage extends Component {
     }
     doCancel(type) {
         if (type === 'create') {
-            window.location.href = '/buyer/request_auctions';
+            window.location.href = '/buyer/request_auctions/entity_list';
         }
         else if (type === 'goback') {
             window.location.href = '/buyer/request_auctions';
@@ -205,7 +207,7 @@ export class BuyerNewRequestManage extends Component {
                 $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
             }
         })
-        let flag = true, hasDoc = true;
+        let flag = true;
         if (this.state.buyer_type === "1") {
             let arr = validator_Object(this.state, this.validatorEntity_multiple);
 
@@ -231,18 +233,9 @@ export class BuyerNewRequestManage extends Component {
                 flag = false;
             }
 
-
-            if (this.state.fileData.TC[0].files.length > 0) {
-                hasDoc = true;
-                $("#showMessage").removeClass("errormessage").addClass("isPassValidate");
-            }
-            else {
-                hasDoc = false;
-                $("#showMessage").removeClass("isPassValidate").addClass("errormessage");
-            }
         }
 
-        return flag && hasDoc;
+        return flag;
     }
 
     refresh() {
@@ -296,30 +289,7 @@ export class BuyerNewRequestManage extends Component {
         }
     }
 
-    doApproveAction(type) {
-        if (type === "Reject") {
-            if (this.commentValidation()) {
-                this.setState({
-                    text: "Are you sure you want to reject this request?"
-                })
-                this.refs.Modal_Option.showModal('comfirm', { action: 'reject' }, '');
-            }
-        }
-        else {
-            $('.validate_message').find('div').each(function () {
-                let className = $(this).attr('class');
-                if (className === 'errormessage') {
-                    let divid = $(this).attr("id");
-                    $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
-                }
-            })
-            this.setState({
-                text: "Are you sure you want to approve this request?"
-            })
-            this.refs.Modal_Option.showModal('comfirm', { action: 'approve' }, '');
-        }
 
-    }
 
     render() {
         let btn_html;
@@ -344,16 +314,11 @@ export class BuyerNewRequestManage extends Component {
             else {
                 btn_html = <div>
                     <button id="save_form" className="lm--button lm--button--primary" onClick={this.doCancel.bind(this, 'create')}>Cancel</button>
-                    <button id="submit_form" className="lm--button lm--button--primary" onClick={this.doSave.bind(this, 'create')}>Create</button>
+                    <button id="submit_form" className="lm--button lm--button--primary" onClick={this.doSave.bind(this, 'create')}>Submit</button>
                 </div>
             }
         }
-        else {
-            btn_html = <div style={{ marginRight: "10px" }}>
-                <button id="save_form" className="lm--button lm--button--primary" onClick={this.doApproveAction.bind(this, "Reject")}>Reject</button>
-                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.doApproveAction.bind(this, 'Approve')}>Approve</button>
-            </div>;
-        }
+
         return (
             <div className="u-grid mg0 div-center" >
                 <h2 className="u-mt3 u-mb3"></h2>
@@ -364,6 +329,15 @@ export class BuyerNewRequestManage extends Component {
                                 <div className="u-grid admin_invitation ">
                                     <div className="col-sm-12 col-md-8 push-md-2 validate_message ">
                                         <div className="top"></div>
+                                        <div className="lm--formItem lm--formItem--inline string">
+                                            <label className="lm--formItem-left lm--formItem-label string required">
+                                                <abbr title="required"></abbr> Status  :
+                                                </label>
+                                            <div className="lm--formItem-right lm--formItem-control" style={{ marginTop: "12px" }}>
+                                                {this.state.status_name}
+                                            </div>
+                                        </div>
+
                                         <div className="lm--formItem lm--formItem--inline string">
                                             <label className="lm--formItem-left lm--formItem-label string required">
                                                 <abbr title="required">*</abbr> Name of Reverse Auction  :
@@ -409,13 +383,11 @@ export class BuyerNewRequestManage extends Component {
                                         {this.state.buyer_type == "0" ?
                                             <div className="lm--formItem lm--formItem--inline string">
                                                 <label className="lm--formItem-left lm--formItem-label string required">
-                                                    <abbr title="required">*</abbr> Upload T&C  :
+                                                    <abbr title="required"></abbr> Upload T&C  :
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                                     <UploadFile type="TC" required="required" calbackFn={this.refresh.bind(this)} validate="true" showList="1" col_width="10" showWay="0" fileData={this.state.fileData.TC} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
-                                                    <div className="col-sm-1 col-md-1 u-cell">
-                                                    </div>
-                                                    <div id="showMessage" className="isPassValidate">This field is required!</div>
+
                                                 </div>
                                             </div> : ''
                                         }

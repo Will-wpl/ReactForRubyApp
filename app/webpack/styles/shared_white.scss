@@ -8,7 +8,7 @@ html{
 .cursor_link{cursor: pointer !important;}
 .a_center{text-align: center; display: inline-block;}
 a{cursor: pointer;}
-button[disabled=''],input[disabled=''],select[disabled='']{background: #999 !important; color:#ddd !important; cursor: default !important;}
+button[disabled=''],input[disabled=''],textarea[disabled=''],select[disabled='']{background: #999 !important; color:#ddd !important; cursor: default !important;}
 textarea{resize: none;}
 ul, menu, dir {
   display: block;

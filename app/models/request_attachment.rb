@@ -22,7 +22,8 @@ class RequestAttachment < ApplicationRecord
   # Methods (class methods before instance methods)
 
   def self.has_attachment(file_type, auction_id)
-    request = Auction.find(auction_id).request_auction
+    request_id = Auction.find(auction_id).request_auction_id
+    request = RequestAuction.find(request_id)
     if request.nil?
       false
     else
@@ -36,7 +37,7 @@ class RequestAttachment < ApplicationRecord
   end
 
   def self.find_last_by_type_request(file_type, request_id)
-    request = Auction.find(auction_id).request_auction
+    request = RequestAuction.find(request_id)
     unless request.nil?
       RequestAttachment.find_by_type_request(file_type, request.id).order(updated_at: :desc).first
     end
