@@ -57,18 +57,18 @@ class Api::UserAttachmentsController < Api::BaseController
     attachment.consumption_detail_id = params[:consumption_detail_id] unless params[:consumption_detail_id].blank?
 
     attachment.save!
-    if params[:file_type].eql?(UserAttachment::FileType_Letter_Authorisation)
-      zip_file = upload_letter_authorisation
-      unless UserAttachment.any?{ |x| x.file_name == zip_file.filename }
-        zip_attachment = UserAttachment.new
-        zip_attachment.file_name = zip_file.filename
-        zip_attachment.file_type = params[:file_type]
-        zip_attachment.file_path = zip_file.url
-        zip_attachment.user_id = current_user.id unless current_user&.has_role?(:admin)
-        zip_attachment.consumption_detail_id = params[:consumption_detail_id] unless params[:consumption_detail_id].blank?
-        zip_attachment.save!
-      end
-    end
+    # if params[:file_type].eql?(UserAttachment::FileType_Letter_Authorisation)
+    #   zip_file = upload_letter_authorisation
+    #   unless UserAttachment.any?{ |x| x.file_name == zip_file.filename }
+    #     zip_attachment = UserAttachment.new
+    #     zip_attachment.file_name = zip_file.filename
+    #     zip_attachment.file_type = params[:file_type]
+    #     zip_attachment.file_path = zip_file.url
+    #     zip_attachment.user_id = current_user.id unless current_user&.has_role?(:admin)
+    #     zip_attachment.consumption_detail_id = params[:consumption_detail_id] unless params[:consumption_detail_id].blank?
+    #     zip_attachment.save!
+    #   end
+    # end
 
     if attachment.file_type.eql?(UserAttachment::FileType_Seller_Buyer_TC)
       # User.update_attachment_update_flag(User.buyers,UserAttachment::FileFlag_Seller_Buyer_TC)
@@ -92,26 +92,26 @@ class Api::UserAttachmentsController < Api::BaseController
 
   def destroy
     attachment = UserAttachment.find_by_id(params[:id])
-    file_type = attachment.file_type
-    file_name = attachment.file_name
+    # file_type = attachment.file_type
+    # file_name = attachment.file_name
     attachment.destroy
-    if file_type.eql?(UserAttachment::FileType_Letter_Authorisation)
-      zip_file_name = 'letter_authorisation.zip'
-      destination_file_path = upload_file_path(zip_file_name)
-      download_letter_authorisatoin(destination_file_path)
-      reset_letter_authorisatoin(destination_file_path)
-      zip_attachments_remove(destination_file_path,[file_name])
-      if UserAttachment.find_by_type(UserAttachment::FileType_Letter_Authorisation).count <= 1
-        UserAttachment.where(' file_name = ? ',zip_file_name).destroy_all
-      end
-
-      #upload file
-      mounted_as = []
-      uploader = AvatarUploader.new(UserAttachment, mounted_as)
-      file = File.open(destination_file_path)
-      uploader.store!(file)
-
-    end
+    # if file_type.eql?(UserAttachment::FileType_Letter_Authorisation)
+    #   zip_file_name = 'letter_authorisation.zip'
+    #   destination_file_path = upload_file_path(zip_file_name)
+    #   download_letter_authorisatoin(destination_file_path)
+    #   reset_letter_authorisatoin(destination_file_path)
+    #   zip_attachments_remove(destination_file_path,[file_name])
+    #   if UserAttachment.find_by_type(UserAttachment::FileType_Letter_Authorisation).count <= 1
+    #     UserAttachment.where(' file_name = ? ',zip_file_name).destroy_all
+    #   end
+    #
+    #   #upload file
+    #   mounted_as = []
+    #   uploader = AvatarUploader.new(UserAttachment, mounted_as)
+    #   file = File.open(destination_file_path)
+    #   uploader.store!(file)
+    #
+    # end
     render json: {result:'success'}, status: 200
   end
 
@@ -129,43 +129,43 @@ class Api::UserAttachmentsController < Api::BaseController
     uploader
   end
 
-  def upload_letter_authorisation
-    file = params[:file]
-    zip_file_name = 'letter_authorisation.zip'
-    destination_file_path = upload_file_path(zip_file_name)
-    download_letter_authorisatoin(destination_file_path)
-    reset_letter_authorisatoin(destination_file_path)
-    zip_attachments(destination_file_path, [file])
-    mounted_as = []
-    # mounted_as.push('')
-    uploader = AvatarUploader.new(UserAttachment, mounted_as)
-    # uploader = AvatarUploader.new(destination_file_path)
-    file1 = File.open(destination_file_path)
-    uploader.store!(file1)
-    uploader
-    # { url: '/' + uploader.store_path(zip_file_name), filename: zip_file_name }
-  end
+  # def upload_letter_authorisation
+  #   file = params[:file]
+  #   zip_file_name = 'letter_authorisation.zip'
+  #   destination_file_path = upload_file_path(zip_file_name)
+  #   download_letter_authorisatoin(destination_file_path)
+  #   reset_letter_authorisatoin(destination_file_path)
+  #   zip_attachments(destination_file_path, [file])
+  #   mounted_as = []
+  #   # mounted_as.push('')
+  #   uploader = AvatarUploader.new(UserAttachment, mounted_as)
+  #   # uploader = AvatarUploader.new(destination_file_path)
+  #   file1 = File.open(destination_file_path)
+  #   uploader.store!(file1)
+  #   uploader
+  #   # { url: '/' + uploader.store_path(zip_file_name), filename: zip_file_name }
+  # end
 
-  def reset_letter_authorisatoin(zip_file_local_path)
-    letter_authorisatoin_files = UserAttachment.find_by_type(UserAttachment::FileType_Letter_Authorisation)
-    unless letter_authorisatoin_files.blank?
-      letter_authorisatoin_filenames = []
-      letter_authorisatoin_files.each do |file|
-        letter_authorisatoin_filenames.push(file.file_name)
-      end
-      zip_attachments_remove(zip_file_local_path,letter_authorisatoin_filenames,true)
-    end
-  end
+  # def reset_letter_authorisatoin(zip_file_local_path)
+  #   letter_authorisatoin_files = UserAttachment.find_by_type(UserAttachment::FileType_Letter_Authorisation)
+  #   unless letter_authorisatoin_files.blank?
+  #     letter_authorisatoin_filenames = []
+  #     letter_authorisatoin_files.each do |file|
+  #       letter_authorisatoin_filenames.push(file.file_name)
+  #     end
+  #     zip_attachments_remove(zip_file_local_path,letter_authorisatoin_filenames,true)
+  #   end
+  # end
 
-  def download_letter_authorisatoin(file)
-    require 'open-uri'
-
-    attachments = UserAttachment.find_list_by_type(UserAttachment::FileType_Letter_Authorisation).where("file_path like '%.zip'")
-    unless attachments.blank?
-      url = attachments.first.file_path
-      open(file, 'wb') do |f|
-        f << open(url).read
-      end
-    end
-  end
+  # def download_letter_authorisatoin(file)
+  #   require 'open-uri'
+  #
+  #   attachments = UserAttachment.find_list_by_type(UserAttachment::FileType_Letter_Authorisation).where("file_path like '%.zip'")
+  #   unless attachments.blank?
+  #     url = attachments.first.file_path
+  #     open(file, 'wb') do |f|
+  #       f << open(url).read
+  #     end
+  #   end
+  # end
 end
