@@ -1444,3 +1444,16 @@ body.choose{
   #pageShow{margin-left: -24px; margin-right: -24px;}
 }
 #GoLogin{ display: none;}
+.top{
+  margin-top: 20px;
+}
+
+
+.datePic{
+  input{
+   width: 100%;  display: inline-block; border:1px solid #ced5dc; background: none;
+    &.date_ico{background:url("../images/images_for_white/date.png") no-repeat right;}
+    &.time_ico{background:url("../images/images_for_white/time.png") no-repeat right;}
+    &.checkbox{ display: inline-block; width: auto;}
+  }
+}
