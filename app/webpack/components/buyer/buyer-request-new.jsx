@@ -7,7 +7,7 @@ import { UploadFile } from '../shared/upload';
 import { Modal } from '../shared/show-modal';
 import moment from 'moment';
 import { changeValidate, removeAsInteger, validateInteger, setValidationFaild, setValidationPass, validator_Object } from './../../javascripts/componentService/util';
-
+import { getBuyerRequestDetail, saveBuyerRequest } from './../../javascripts/componentService/common/service';
 
 
 export class BuyerNewRequestManage extends Component {
@@ -66,8 +66,46 @@ export class BuyerNewRequestManage extends Component {
     }
 
     componentDidMount() {
-
+        if (parseInt(this.state.id) !== 0) {
+            this.bindDetails();
+        }
+        window.addEventListener('scroll', this.handleScroll.bind(this)) //监听滚动
+        window.addEventListener('resize', this.handleResize.bind(this))
+        let wid = $('#input_name').width();
+        $('.date_ico').width(wid);
     }
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.handleScroll.bind(this))
+        window.removeEventListener('resize', this.handleResize.bind(this))
+    }
+
+    handleScroll = e => {
+        let wid = $('#input_name').width();
+        $('.date_ico').width(wid);
+    }
+
+    handleResize = e => {
+        let wid = $('#input_name').width();
+        $('.date_ico').width(wid);
+    }
+
+
+    bindDetails() {
+        let params = {
+            id: this.state.id
+        }
+        getBuyerRequestDetail(params).then(res => {
+            if (res) {
+                this.setState({
+
+
+
+
+                })
+            }
+        })
+    }
+
 
     checkSuccess() {
 
@@ -130,10 +168,16 @@ export class BuyerNewRequestManage extends Component {
             disabled: false
         })
     }
-    doCancel() {
-        this.setState({
-            disabled: true
-        })
+    doCancel(type) {
+        if (type === 'create') {
+            window.location.href = '/buyer/request_auctions';
+        }
+        else {
+            this.setState({
+                disabled: true
+            })
+        }
+
     }
     passValidation() {
         $('.validate_message').find('div').each(function () {
@@ -202,33 +246,35 @@ export class BuyerNewRequestManage extends Component {
 
     doSave(type) {
         if (this.passValidation()) {
+
+            this.request = {
+                name: this.state.name,
+                single_multiple: this.state.single_multiple,
+                startDate: this.state.startDate,
+                contract_duration: this.state.contract_duration,
+            }
             if (this.state.operation_type === "create") {
                 this.request = {
                     id: null,
-                    name: this.state.name,
-                    single_multiple: this.state.single_multiple,
-                    startDate: this.state.startDate,
-                    contract_duration:this.state.contract_duration,
-                    total_volume:this.state.contract_duration
+                    total_volume: this.state.contract_duration
                 }
             }
             else {
                 this.request = {
                     id: this.state.id,
-                    name: this.state.name,
-                    single_multiple: this.state.single_multiple,
-                    startDate: this.state.startDate,
-                    contract_duration:this.state.contract_duration,
-                    total_volume:this.state.contract_duration,
-                    
-                    allow_deviation:this.state.allow_deviation
+                    attachment_id: this.state.fileData.TC[0].files[0].id,
+                    allow_deviation: this.state.allow_deviation
                 }
             }
+            saveBuyerRequest(this.request).then(res => {
+
+
+            })
 
         }
     }
 
-    doApproveAction() {
+    doApproveAction(type) {
 
     }
     render() {
@@ -238,13 +284,13 @@ export class BuyerNewRequestManage extends Component {
                 btn_html = this.state.disabled ?
                     <div style={{ paddingRight: "10px" }}><button id="save_edit" className="lm--button lm--button--primary" onClick={this.doEditAction.bind(this)}>Edit</button></div>
                     : <div>
-                        <button id="save_form" className="lm--button lm--button--primary" onClick={this.doCancel.bind(this)}>Cancel</button>
+                        <button id="save_form" className="lm--button lm--button--primary" onClick={this.doCancel.bind(this, "save")}>Cancel</button>
                         <button id="submit_form" className="lm--button lm--button--primary" onClick={this.doSave.bind(this, 'save')}>Save</button>
                     </div>;
             }
             else {
                 btn_html = <div>
-                    <button id="save_form" className="lm--button lm--button--primary" onClick={this.doCancel.bind(this)}>Cancel</button>
+                    <button id="save_form" className="lm--button lm--button--primary" onClick={this.doCancel.bind(this, 'create')}>Cancel</button>
                     <button id="submit_form" className="lm--button lm--button--primary" onClick={this.doSave.bind(this, 'create')}>Create</button>
                 </div>
             }
@@ -263,14 +309,14 @@ export class BuyerNewRequestManage extends Component {
                         <div className="retailer_manage_coming">
                             <div id="buyer_form" >
                                 <div className="u-grid admin_invitation ">
-                                    <div className="col-sm-12 col-md-8 push-md-2 validate_message datePic">
+                                    <div className="col-sm-12 col-md-8 push-md-2 validate_message ">
                                         <div className="top"></div>
                                         <div className="lm--formItem lm--formItem--inline string">
                                             <label className="lm--formItem-left lm--formItem-label string required">
                                                 <abbr title="required">*</abbr> Name of Reverse Auction  :
                                                 </label>
                                             <div className="lm--formItem-right lm--formItem-control">
-                                                <input type="text" name="name" value={this.state.name} onChange={this.doValue.bind(this, 'name')} disabled={this.state.disabled} ref="request_name" required aria-required="true" title="Please fill out this field" placeholder="" />
+                                                <input type="text" id="input_name" name="name" value={this.state.name} onChange={this.doValue.bind(this, 'name')} disabled={this.state.disabled} ref="request_name" required aria-required="true" title="Please fill out this field" placeholder="" />
                                                 <div className='isPassValidate' id='name_message' >This field is required!</div>
                                             </div>
                                         </div>
@@ -291,7 +337,7 @@ export class BuyerNewRequestManage extends Component {
                                             <label className="lm--formItem-left lm--formItem-label string required">
                                                 <abbr title="required">*</abbr> Contract Start Date  :
                                                 </label>
-                                            <div className="lm--formItem-right lm--formItem-control ">
+                                            <div className="lm--formItem-right lm--formItem-control">
                                                 <DatePicker minDate={moment()} disabled={this.state.disabled} shouldCloseOnSelect={true} onKeyDown={this.noPermitInput.bind(this)} required aria-required="true" ref="contract_period_start_date" name="contract_period_start_date" className="date_ico" dateFormat="DD-MM-YYYY" selected={this.state.startDate} selectsStart startDate={this.state.startDate} endDate={this.state.endDate} onChange={this.starttimeChange} />
                                             </div>
                                         </div>
@@ -345,6 +391,7 @@ export class BuyerNewRequestManage extends Component {
                                                 </div>
                                             </div> : ''
                                         }
+
 
                                     </div>
                                 </div>

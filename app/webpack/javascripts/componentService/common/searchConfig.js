@@ -124,5 +124,12 @@ export const searchTypeData = {
         list_data: [
             { title: "Company Name:", type: "company_name", species: "input", operator: 'like' },
         ]
-    }
+    },
+
+    "Buyer Request Manage": {//connect back end OK
+        list_url: "/api/buyer/request_auctions",
+        list_data: [
+            { title: "Name:", type: "name", species: "input", operator: 'like', table: 'auctions' },
+        ]
+    },
 }
