@@ -101,7 +101,8 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
       if result.participation_status == '1'
         consumption = Consumption.find_by_auction_and_user(result.auction_id, current_user.id).first
         consumption.consumption_details.select(:company_buyer_entity_id).distinct.each do |detail|
-          awards.push("api/buyer/auctions/#{result.auction_id}/letter_of_award_pdf?entity_id=#{detail.company_buyer_entity_id}&contract_duration=#{consumption.contract_duration}")
+          cb_entity = CompanyBuyerEntity.find(detail.company_buyer_entity_id).attributes.dup
+          awards.push({url: "api/buyer/auctions/#{result.auction_id}/letter_of_award_pdf?entity_id=#{detail.company_buyer_entity_id}&contract_duration=#{consumption.contract_duration}"}.merge!(cb_entity))
         end
       end
     end
