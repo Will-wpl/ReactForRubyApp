@@ -130,6 +130,16 @@ Rails.application.routes.draw do
           get 'buyer_info'
         end
       end
+
+      resources :request_auctions, only: %i[show request_auctions_pending approval_request_auction] do
+        member do
+          put 'show'
+          put 'approval_request_auction'
+        end
+        collection do
+          get 'request_auctions_pending'
+        end
+      end
     end
   end
 
@@ -251,6 +261,16 @@ Rails.application.routes.draw do
       resources :user_attachments, only: %i[create destroy patch_update_consumption_detail_id] do
         collection do
           put 'patch_update_consumption_detail_id'
+        end
+      end
+      resources :request_auctions, only: %i[index show save_update delete_request_auction buyer_entity_contracts] do
+        member do
+          put 'delete_request_auction'
+          put 'show'
+        end
+        collection do
+          post 'save_update'
+          get 'buyer_entity_contracts'
         end
       end
     end
