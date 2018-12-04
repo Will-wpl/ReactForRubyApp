@@ -18,8 +18,9 @@ class Api::Admin::RequestAuctionsController < Api::RequestAuctionsController
       results = get_order_list(result, params, headers)
       results.each do |result|
         data.push(id: result.id, name: result.name, duration: result.duration,
+                  buyer_name: result.user.name,
                   contract_period_start_date: result.contract_period_start_date,
-                  buyer_type: (result.buyer_type == RequestAuction::SingleBuyerType)? 'Single':'MultipleBuyerType',
+                  buyer_type: (result.buyer_type == RequestAuction::SingleBuyerType)? 'Single':'Multiple',
                   allow_deviation: (result.allow_deviation == RequestAuction::AllowDeviation)? 'Yes':'No',
                   total_volume: result.total_volume
         )
@@ -32,4 +33,18 @@ class Api::Admin::RequestAuctionsController < Api::RequestAuctionsController
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
   end
+end
+
+private
+
+def get_request_auction_headers
+  [
+      { name: 'Name', field_name: 'name', table_name: 'request_auctions' },
+      { name: 'Buyer Name', field_name: 'buyer_name', table_name: 'users' },
+      # { name: 'Contract Duration', field_name: 'duration', table_name: 'request_auctions' },
+      { name: 'Start Date', field_name: 'contract_period_start_date', table_name: 'request_auctions' },
+      { name: 'Type', field_name: 'buyer_type', table_name: 'request_auctions' }
+  # { name: 'All Deviation', field_name: 'allow_deviation', table_name: 'request_auctions' },
+  # { name: 'Total Volume', field_name: 'total_volume', table_name: 'request_auctions' }
+  ]
 end
