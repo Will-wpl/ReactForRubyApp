@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181130072303) do
+ActiveRecord::Schema.define(version: 20181130072307) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -347,7 +347,6 @@ ActiveRecord::Schema.define(version: 20181130072303) do
     t.bigint "request_auction_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["request_auction_id"], name: "index_request_attachments_on_request_auction_id"
   end
 
   create_table "request_auctions", force: :cascade do |t|
@@ -360,6 +359,9 @@ ActiveRecord::Schema.define(version: 20181130072303) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "accept_status"
+    t.string "comment"
+    t.bigint "total_volume"
+    t.bigint "auction_id"
     t.index ["user_id"], name: "index_request_auctions_on_user_id"
   end
 
@@ -534,7 +536,6 @@ ActiveRecord::Schema.define(version: 20181130072303) do
   add_foreign_key "consumption_details", "user_attachments"
   add_foreign_key "consumptions", "auctions"
   add_foreign_key "consumptions", "users"
-  add_foreign_key "request_attachments", "request_auctions"
   add_foreign_key "request_auctions", "users"
   add_foreign_key "user_extensions", "users"
 end

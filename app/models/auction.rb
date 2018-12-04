@@ -43,7 +43,7 @@ NotAllowDeviation = '0'.freeze
   # Methods (class methods before instance methods)
 
   def self.has_request(auction_id)
-    if Auction.find(auction_id).request_auction.nil?
+    if Auction.find(auction_id).request_auction_id.nil?
       false
     else
       true

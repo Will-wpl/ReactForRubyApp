@@ -5,7 +5,7 @@ class RequestAttachment < ApplicationRecord
   # Includes
 
   # Associations
-  belongs_to :request_auction
+  # belongs_to :request_auction
 
   # accepts_nested_attributes
 
