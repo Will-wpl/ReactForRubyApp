@@ -45,7 +45,7 @@ class RequestAuction < ApplicationRecord
                                       AND c.contract_duration = ac.contract_duration
                                       AND e.user_id = :Buyer_id
                                     ) as cdf
-                              WHERE cdf.contract_expiry > current_date ORDER BY #{sort_by}
+                              WHERE cdf.contract_period_end_date > current_date ORDER BY #{sort_by}
                              ", {:Buyer_id => buyer_id}]
   end
 
