@@ -294,7 +294,7 @@ export class BuyerKeppelproposedeviations extends Component {
     render (){
         return (
             <div className="col-sm-12">
-                <h2 className="u-mt3 u-mb3">{this.props.current.name} Propose Deviations</h2>
+                <h2 className="u-mt3 u-mb3">{this.props.name?this.props.name:"Buyer"} Propose Deviations</h2>
                 <div className="col-sm-12 col-md-12 propose_deviations">
                 <table className="retailer_fill w_100" cellPadding="0" cellSpacing="0">
                     <thead>
@@ -303,7 +303,7 @@ export class BuyerKeppelproposedeviations extends Component {
                             <th>Clause</th>
                             <th>Propose Deviation</th>
                             <th>Retailer Comments</th>
-                            <th>{this.props.current.name} Response</th>
+                            <th>{this.props.name?this.props.name:"Buyer"} Response</th>
                             <th>Deviation Status</th>
                             <th></th>
                             </tr>
@@ -361,7 +361,7 @@ export class BuyerKeppelproposedeviations extends Component {
                     <button className="lm--button lm--button--primary" disabled={this.props.readOnly} onClick={this.showConfirm.bind(this,'Send_Response')}>Send Response</button>
                 </div>
             </div>
-            <Showhistory name={this.props.current.name} ref="history" status={this.state.status} textdisabled={this.state.textdisabled} type={this.state.detailType} title={this.state.title} detail={this.state.detail} detail_id={this.state.detail_id} editDetail={this.editDetail.bind(this)} />
+            <Showhistory name={this.props.name} ref="history" status={this.state.status} textdisabled={this.state.textdisabled} type={this.state.detailType} title={this.state.title} detail={this.state.detail} detail_id={this.state.detail_id} editDetail={this.editDetail.bind(this)} />
             <Modal text={this.state.text} acceptFunction={this.state.buttonType === "Send_Response" ? this.send_response.bind(this) : this.do_remove.bind(this)} ref="Modal" />
             </div>
         )}
