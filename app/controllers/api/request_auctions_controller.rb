@@ -47,6 +47,7 @@ class Api::RequestAuctionsController < Api::BaseController
       comment = params[:comment]
       request_auction.accept_status = accept_status
       request_auction.comment = comment
+      request_auction.accept_date_time = DateTime.current
       if request_auction.save! && accept_status == RequestAuction::AcceptStatusApproved
         if request_auction.buyer_type == RequestAuction::SingleBuyerType
           # establish new auction if it is accepted.

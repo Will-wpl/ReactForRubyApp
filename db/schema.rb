@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181130072308) do
+ActiveRecord::Schema.define(version: 20181204052829) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -362,6 +362,7 @@ ActiveRecord::Schema.define(version: 20181130072308) do
     t.string "comment"
     t.bigint "total_volume"
     t.bigint "auction_id"
+    t.datetime "accept_date_time"
     t.index ["user_id"], name: "index_request_auctions_on_user_id"
   end
 
