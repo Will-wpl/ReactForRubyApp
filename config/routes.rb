@@ -402,6 +402,7 @@ Rails.application.routes.draw do
       member do
         get 'report' # auction report page
         get 'award' # auction activity log page
+        get 'retailer_dashboard'
       end
     end
     resources :consumptions,only: %i[edit]
