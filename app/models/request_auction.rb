@@ -22,7 +22,7 @@ class RequestAuction < ApplicationRecord
   # Validations
 
   # Scopes
-  scope :mine, ->(user_id) { where(user_id: user_id).order(:updated_at) }
+  scope :mine, ->(user_id) { where(user_id: user_id) }
   scope :find_pending, -> { where(accept_status: RequestAuction::AcceptStatusPending).order(:updated_at) }
 
   # Search
