@@ -24,7 +24,6 @@ RSpec.describe Api::Buyer::RequestAuctionsController, type: :controller do
 
       context 'create new request auction (have an attachment)' do
         def do_request
-          file = fixture_file_upload('files/test.jpg', 'image/jpg')
           put :save_update, params: { name: 'new_request_file', contract_period_start_date: DateTime.now, duration: 6,
                                       buyer_type: 'single', allow_deviation: 'yes', attachment_id: tc.id }
         end
@@ -97,7 +96,21 @@ RSpec.describe Api::Buyer::RequestAuctionsController, type: :controller do
         it 'Success' do
           expect(response).to have_http_status(:ok)
           hash_body = JSON.parse(response.body)
-          expect(hash_body.length).to eq(1)
+          expect(hash_body.length).to eq(3)
+        end
+      end
+
+      context 'request auctions witch page' do
+        def do_request
+          sort_by = ['name', 'desc', '']
+          get :index, params: { sort_by: sort_by, page_size: '10', page_index: '1'}
+        end
+
+        before { do_request }
+        it 'Success' do
+          expect(response).to have_http_status(:ok)
+          hash_body = JSON.parse(response.body)
+          expect(hash_body.length).to eq(3)
         end
       end
     end

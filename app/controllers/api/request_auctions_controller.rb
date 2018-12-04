@@ -1,8 +1,33 @@
 class Api::RequestAuctionsController < Api::BaseController
 
   def index
-    my_request_auctions = RequestAuction.mine(current_user.id)
-    render json: { request_auctions: my_request_auctions }, status: 200
+    if params.key?(:page_size) && params.key?(:page_index)
+      search_params = reject_params(params, %w[controller action sort_by])
+      search_where_array = set_search_params(search_params)
+      result = RequestAuction.mine(current_user.id).where(search_where_array)
+      total = result.count
+    else
+      result = RequestAuction.mine(current_user.id)
+      total = result.count
+    end
+    result = result.page(params[:page_index]).per(params[:page_size])
+    headers = get_request_auction_headers
+    data = []
+    unless result.blank?
+      results = get_order_list(result, params, headers)
+      results.each do |result|
+        data.push(name: result.name, duration: result.duration,
+                  contract_period_start_date: result.contract_period_start_date,
+                  buyer_type: (result.buyer_type == RequestAuction::SingleBuyerType)? 'Single':'MultipleBuyerType',
+                  allow_deviation: (result.allow_deviation == RequestAuction::AllowDeviation)? 'Yes':'No',
+                  total_volume: result.total_volume
+                  )
+      end
+    end
+
+    actions = []
+    bodies = { data: data, total: total }
+    render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
   end
 
   def request_auctions_pending
@@ -32,6 +57,7 @@ class Api::RequestAuctionsController < Api::BaseController
     request_auction.duration = params[:duration] unless params[:duration].blank?
     request_auction.buyer_type = params[:buyer_type] unless params[:buyer_type].blank?
     request_auction.allow_deviation = params[:allow_deviation] unless params[:allow_deviation].blank?
+    request_auction.total_volume = params[:total_volume] unless params[:total_volume].blank?
     request_auction.user_id = current_user.id
     request_auction.accept_status = RequestAuction::AcceptStatusPending
     # save request auction
@@ -107,4 +133,48 @@ class Api::RequestAuctionsController < Api::BaseController
     render json: { buyer_entity_contracts: buyer_entity_contracts }, status: 200
   end
 
+  private
+
+  def get_request_auction_headers
+    [
+        { name: 'Name', field_name: 'name', table_name: 'request_auctions' },
+        { name: 'Contract Duration', field_name: 'duration', table_name: 'request_auctions' },
+        { name: 'Start Date', field_name: 'contract_period_start_date', table_name: 'request_auctions' },
+        { name: 'Type', field_name: 'buyer_type', table_name: 'request_auctions' },
+        { name: 'All Deviation', field_name: 'allow_deviation', table_name: 'request_auctions' },
+        { name: 'Total Volume', field_name: 'total_volume', table_name: 'request_auctions' }
+    ]
+  end
+
+  # def get_buyer_entity_contract_headers
+  #   [
+  #       { name: 'Purchasing Entity', field_name: 'entity_name', table_name: 'auctions'},
+  #       { name: 'Existing Retailer', field_name: 'retailer_name', table_name: 'auctions'},
+  #       { name: 'Contract Expiry', field_name: 'contract_expiry', table_name: 'auctions'}
+  #   ]
+  # end
+
+  def get_order_list(result, params, headers)
+    if params.key?(:sort_by)
+      order_by_string = get_order_by_obj_str(params[:sort_by], headers)
+      result.order(order_by_string)
+    else
+      result
+    end
+  end
+
+  def get_order_by_obj_str(sort_by, headers)
+    field_name = sort_by[0]
+    order = sort_by[1]
+    sort_header = headers.select do |header|
+      header[:field_name] == field_name
+    end
+    unless sort_header.nil?
+      order_by_string = sort_header[0][:table_name].nil? ?
+                            sort_header[0][:field_name] :
+                            "#{sort_header[0][:table_name]}.#{sort_header[0][:field_name]}"
+      order_by_string += (order == 'asc') ? ' ASC' : ' DESC'
+    end
+    order_by_string
+  end
 end
