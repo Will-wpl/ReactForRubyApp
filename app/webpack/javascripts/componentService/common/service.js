@@ -86,4 +86,21 @@ export const getTenderhistory = (type, id) => {
     return get('/api/' + type + '/tenders/history', { chat_id: id });
 }
 
+export const getBuyerRetailerList = (params) => {
+    return get('/api/buyer/auctions/' + params + '/retailer_dashboard');
+}
+export const buyerarrangementDetail = (params) => {
+    return get('/api/buyer/arrangements/' + params);
+}
+
+export const buyerSendResponse = (params, data) => {
+    return create('/api/buyer/tenders/' + params + '/node3_send_response', { chats: data });
+}
+
+export const getbuyerDeviations = (params) => {
+    return get('/api/buyer/tenders/' + params + '/node3_admin');
+}
+export const removebuyerFile = (params) => {
+    return Ddelete('/api/buyer/auction_attachments/' + params);
+}
 
