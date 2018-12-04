@@ -7,7 +7,8 @@ import { UploadFile } from '../shared/upload';
 import { Modal } from '../shared/show-modal';
 import moment from 'moment';
 import { changeValidate, removeAsInteger, validateInteger, setValidationFaild, setValidationPass, validator_Object } from './../../javascripts/componentService/util';
-import { getBuyerRequestDetail, saveBuyerRequest } from './../../javascripts/componentService/common/service';
+import { getBuyerRequestDetail, saveBuyerRequest, approveBuyerRequest } from './../../javascripts/componentService/common/service';
+
 
 
 export class BuyerNewRequestManage extends Component {
@@ -17,16 +18,11 @@ export class BuyerNewRequestManage extends Component {
         this.state = {
             id: "0",
             name: "",
-
-            start_datetime: "",
             startDate: moment(),
-            endDate: "",
-            duration: "",
             single_multiple: "1",
             allow_deviation: "1",
             contract_duration: '6',
-            single_truely: false,
-            published_date_time: '',
+            comment: "",
             text: "",
             total_volume: '',
             fileData: {
@@ -34,7 +30,8 @@ export class BuyerNewRequestManage extends Component {
                     { buttonName: "none", files: [] }
                 ]
             },
-            user_type: "buyer",
+            status: 0,
+            user_type: "admin",
             operation_type: "create",
             uploadUrl: "/api/buyer/user_attachments?file_type=",
         }
@@ -48,7 +45,7 @@ export class BuyerNewRequestManage extends Component {
             name: { cate: 'required' }
         }
         this.validatorEntity_reject = {
-            common: { cate: 'required' }
+            comment: { cate: 'required' }
         }
     }
 
@@ -60,7 +57,7 @@ export class BuyerNewRequestManage extends Component {
         this.setState({
             disabled: parseInt(requestId) === 0 ? false : true,
             operation_type: parseInt(requestId) === 0 ? "create" : "edit",
-            user_type: parseInt(requestId) === 0 ? "buyer" : "admin",
+            //user_type: parseInt(requestId) === 0 ? "buyer" : "admin",
             id: requestId
         });
     }
@@ -159,6 +156,12 @@ export class BuyerNewRequestManage extends Component {
                 this.setState({
                     allow_deviation: val
                 });
+                break;
+            case "comment":
+                this.setState({
+                    comment: val
+                })
+                changeValidate('comment', val);
                 break;
         }
     }
@@ -273,9 +276,61 @@ export class BuyerNewRequestManage extends Component {
 
         }
     }
+    commentValidation() {
+        let flag = true;
+        let arr = validator_Object(this.state, this.validatorEntity_reject);
+        if (arr) {
+            arr.map((item, index) => {
+                let column = item.column;
+                let cate = item.cate;
+                setValidationFaild(column, cate)
+            })
+        }
 
+        $('.validate_message').find('div').each(function () {
+            let className = $(this).attr('class');
+            if (className === 'errormessage') {
+                flag = false;
+                return flag;
+            }
+        })
+        return flag;
+    }
     doApproveAction(type) {
+        if (type === "Reject") {
+            if (this.commentValidation()) {
+                this.setState({
+                    text: "Are you sure you want to reject this request?"
+                })
+                this.refs.Modal_Option.showModal('comfirm', { action: 'reject' }, '');
+            }
+        }
+        else {
+            $('.validate_message').find('div').each(function () {
+                let className = $(this).attr('class');
+                if (className === 'errormessage') {
+                    let divid = $(this).attr("id");
+                    $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
+                }
+            })
+            this.setState({
+                text: "Are you sure you want to approve this request?"
+            })
+            this.refs.Modal_Option.showModal('comfirm', { action: 'approve' }, '');
+        }
 
+    }
+    doAction(obj) {
+        let params = {
+            id: this.state.id,
+            stat: obj.action === "approve" ? 1 : 0
+        }
+        if (obj.action === "approve") {
+            approveBuyerRequest(params).then(res => {
+                sessionStorage.auction_id = res.auction.id;
+                setTimeout(() => { window.location.href = "/admin/auctions/new" }, 100);
+            })
+        }
     }
     render() {
         let btn_html;
@@ -391,7 +446,15 @@ export class BuyerNewRequestManage extends Component {
                                                 </div>
                                             </div> : ''
                                         }
-
+                                        <div className="lm--formItem lm--formItem--inline string optional ">
+                                            <label className="lm--formItem-left lm--formItem-label string required">
+                                                <abbr title="required">*</abbr> Admin Comments  :
+                                                </label>
+                                            <div className="lm--formItem-right lm--formItem-control">
+                                                <textarea type="text" name="comment" value={this.state.comment} onChange={this.doValue.bind(this, 'comment')} disabled={this.state.disabled} ref="request_name" required aria-required="true" title="Please fill out this field" placeholder="" />
+                                                <div className='isPassValidate' id='comment_message' >This field is required!</div>
+                                            </div>
+                                        </div>
 
                                     </div>
                                 </div>
@@ -402,6 +465,7 @@ export class BuyerNewRequestManage extends Component {
                         </div>
                     </div>
                 </div>
+                <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
             </div >
         )
     }
