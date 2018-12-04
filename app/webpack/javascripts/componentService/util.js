@@ -613,14 +613,15 @@ export const getUserApprovalStatus = (status) => {
     return approvalStatus;
 }
 
-export const getStatus = (type) => {
+export const getStatus = (type, dt) => {
     let status = "Pending";
+    let approvalDateTime = '(' + moment(dt).format('DD MMM YYYY hh:mm a') + ')';
     switch (parseInt(type)) {
         case 0:
-            status = "Rejected"
+            status = "Rejected" + approvalDateTime;
             break;
         case 1:
-            status = "Approved"
+            status = "Approved" + approvalDateTime;
             break;
         default:
             status = "Pending"
