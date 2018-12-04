@@ -226,6 +226,19 @@ Rails.application.routes.draw do
           put 'update_attachment_status'
         end
       end
+      resources :tenders, only: %i[] do
+        member do
+          get 'current'
+          get 'node3_admin'
+          get 'node4_admin'
+          post 'node3_send_response'
+          post 'node4_admin_accept'
+          post 'node4_admin_reject'
+        end
+        collection do
+          get 'history'
+        end
+      end
       resources :consumption_details, only: %i[index update participate reject validate validate_single] do
         collection do
           post 'participate'
