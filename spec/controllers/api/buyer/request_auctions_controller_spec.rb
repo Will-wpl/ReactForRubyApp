@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Api::Buyer::RequestAuctionsController, type: :controller do
   let!(:company_buyer) { create(:user, :with_buyer, :with_company_buyer) }
-  let!(:request_auction){ create( :request_auction, contract_period_start_date: DateTime.now, user_id: company_buyer.id) }
+  let!(:request_auction) { create(:request_auction, contract_period_start_date: DateTime.now, user_id: company_buyer.id) }
+  let!(:tc) { create(:request_attachment, file_name: 'test', file_path: 'test') }
   context 'buy user' do
     before { sign_in company_buyer }
     describe 'save_update' do
@@ -25,7 +26,7 @@ RSpec.describe Api::Buyer::RequestAuctionsController, type: :controller do
         def do_request
           file = fixture_file_upload('files/test.jpg', 'image/jpg')
           put :save_update, params: { name: 'new_request_file', contract_period_start_date: DateTime.now, duration: 6,
-                                      buyer_type: 'single', allow_deviation: 'yes', file: file }
+                                      buyer_type: 'single', allow_deviation: 'yes', attachment_id: tc.id }
         end
 
         before { do_request }

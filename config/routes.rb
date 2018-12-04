@@ -286,6 +286,11 @@ Rails.application.routes.draw do
           get 'buyer_entity_contracts'
         end
       end
+      resources :request_attachments, only: %i[create] do
+        member do
+          put 'create'
+        end
+      end
     end
   end
 
