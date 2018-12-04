@@ -34,6 +34,9 @@ RSpec.describe Api::Admin::AuctionHistoriesController, type: :controller do
           list_body = JSON.parse(response.body)
           expect(list_body.size).to eq(3)
           expect(list_body[0].size).to eq(2)
+          expect(list_body[0]['id']).to be_present
+          expect(list_body[0]['data'][0]['name']).to be_present
+          expect(list_body[0]['data'][0]['company_name']).to be_present
         end
       end
 
@@ -100,6 +103,7 @@ RSpec.describe Api::Admin::AuctionHistoriesController, type: :controller do
           expect(response).to be_success
           list_body = JSON.parse(response.body)
           expect(list_body.key?('duration_6')).to eq(true)
+          expect(list_body['duration_6']).to be_an(Array)
         end
       end
     end

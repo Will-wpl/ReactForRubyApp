@@ -35,7 +35,7 @@ class Api::AuctionHistoriesController < Api::BaseController
       auction.auction_contracts.each do |contract|
         if has_live_contract(contract)
           duration = contract.contract_duration
-          hash.merge!({ "duration_#{duration}": list_logic(params[:auction_id], contract.contract_duration)})
+          hash.merge!({ "duration_#{duration}": list_logic(params[:auction_id], duration)})
         end
       end
 
@@ -119,31 +119,18 @@ class Api::AuctionHistoriesController < Api::BaseController
 
 
   def list_logic(auction_id, contract_duration)
-    if contract_duration.blank?
-      @histories = AuctionHistory.select('users.name, users.company_name, auction_histories.*').joins(:user).where('auction_id = ?', auction_id).order(bid_time: :asc)
-    else
-      @histories = AuctionHistory.select('users.name, users.company_name, auction_histories.*').joins(:user).where('auction_id = ? and contract_duration = ?', auction_id, contract_duration).order(bid_time: :asc)
+    @histories = AuctionHistory.joins("INNER JOIN arrangements ON (arrangements.user_id = auction_histories.user_id AND arrangements.auction_id = auction_histories.auction_id)").
+      where("auction_histories.auction_id = ? AND arrangements.accept_status = '1'", auction_id).
+      joins(:user).select("users.name, users.company_name, auction_histories.*").order(:bid_time)
+    if contract_duration.present?
+      @histories = @histories.where("auction_histories.contract_duration = ?", contract_duration)
     end
 
-    # @users = Auction.find(params[:auction_id]).users
-    @arrangements = Arrangement.where("auction_id = ? and accept_status = '1'", auction_id)
-    hash = {}
-    list = []
-    @arrangements.each do |arrangement|
-      hash[arrangement.user_id] = []
+    @histories.to_a.group_by(&:user_id).map do |user_id, histories|
+      history = HistoriesDto.new
+      history.id = user_id
+      history.data = histories
+      history
     end
-    if !@arrangements.empty? && !@histories.empty?
-      @histories.each do |history|
-        hash[history.user_id].push(history)
-      end
-
-      hash.each do |key, value|
-        history = HistoriesDto.new
-        history.id = key
-        history.data = value
-        list.push(history)
-      end
-    end
-    list
   end
 end
