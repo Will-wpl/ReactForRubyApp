@@ -8,4 +8,6 @@ class Buyer::AuctionsController < Buyer::BaseController
 
   # GET letter of award page
   def award; end
+
+  def retailer_dashboard; end
 end
