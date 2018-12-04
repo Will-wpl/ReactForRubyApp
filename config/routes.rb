@@ -239,6 +239,8 @@ Rails.application.routes.draw do
           get 'history'
         end
       end
+      resources :arrangements, only: %i[index] do
+      end
       resources :consumption_details, only: %i[index update participate reject validate validate_single] do
         collection do
           post 'participate'
@@ -260,7 +262,8 @@ Rails.application.routes.draw do
         end
       end
       resources :auction_results, only: %i[index] do
-
+      end
+      resources :auction_attachments, only: %i[index create destroy] do
       end
       resources :registrations, only: %i[index update sign_up validate_buyer_entity validate] do
         member do
