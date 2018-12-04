@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
+import {getBuyerRequestEnttiy} from './../../javascripts/componentService/common/service';
 
 export class BuyerRequestEntityListManage extends Component {
 
@@ -10,10 +11,9 @@ export class BuyerRequestEntityListManage extends Component {
             entity_list:[]
         }
     }
-
+    // /api/buyer/request_auctions/buyer_entity_contracts
     componentDidMount() {
-
-
+        this.goSearch();
     }
     dosort(field_name, sort) {
         $(".lm--table th dfn").removeClass("selected");
@@ -21,7 +21,19 @@ export class BuyerRequestEntityListManage extends Component {
         this.goSearch([field_name, sort]);
     }
     goSearch(sort) {
-
+        let obj = {
+            sort_by: sort instanceof Array ? sort : null
+        }
+        getBuyerRequestEnttiy(obj).then(res => {
+            $(".u-contain").css("padding","0px");
+            $(".lm--header").css("margin-bottom","0px");
+            $(".createRaMain a,.lm--footer div").css("margin-left","24px");
+            console.log(res)
+            // this.setState({
+            //     expiry_list: res.accounts ? res.accounts : [],
+            //     buyer_ids: res.buyer_ids ? res.buyer_ids : []
+            // })
+        })
     }
     goCreate() {
         window.location.href = "/buyer/request_auctions/0";

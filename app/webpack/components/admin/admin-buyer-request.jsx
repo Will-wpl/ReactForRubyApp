@@ -3,10 +3,9 @@ import ReactDom from 'react-dom';
 
 export default class AdminBuyerRequestManage extends Component {
     constructor(props) {
+        super(props);
         this.state = {
-            requestList: [],
-
-
+            requestList: []
         }
     }
     render() {
