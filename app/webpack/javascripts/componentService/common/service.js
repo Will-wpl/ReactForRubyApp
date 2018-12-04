@@ -53,13 +53,17 @@ export const validateConsumptionDetailRepeat = (params) => {
 export const getBuyerRequestEnttiy=(params)=>{
     return get('/api/buyer/request_auctions/buyer_entity_contracts',params)
 }
+// export const getBuyerRequest=(params)=>{
+//     return get('/api/buyer/request_auctions/buyer_entity_contracts',params)
+// }
 
-export const getBuyerRequestDetail = (params) => {
-    return get('./', params)
+export const getBuyerRequestDetail = (id) => {
+    return put('/api/buyer/request_auctions/'+id+'/show');
+    
 }
 
 export const saveBuyerRequest = (params) => {
-    return put('./', params)
+    return create('/api/buyer/request_auctions/save_update', params)
 }
 export const approveBuyerRequest = (params) => {
     return get('./', params)

@@ -30,8 +30,8 @@ export class BuyerNewRequestManage extends Component {
                     { buttonName: "none", files: [] }
                 ]
             },
-            status: 0,
-            user_type: "admin",
+            status: 2,
+            user_type: "buyer",
             operation_type: "create",
             uploadUrl: "/api/buyer/user_attachments?file_type=",
         }
@@ -88,16 +88,17 @@ export class BuyerNewRequestManage extends Component {
 
 
     bindDetails() {
-        let params = {
-            id: this.state.id
-        }
-        getBuyerRequestDetail(params).then(res => {
-            if (res) {
+
+        getBuyerRequestDetail(this.state.id).then(res => {
+            if (res.result === "success") {
+                console.log(res.request_auction)
                 this.setState({
-
-
-
-
+                    name: res.request_auction.name,
+                    // single_multiple:"1",
+                    // startDate: moment(res.request_auction.startDate).format(),
+                    // contract_duration:res.request_auction.contract_duration,
+                    //total_volume:res.request_auction.total_volume,
+                    status:res.request_auction.accept_status
                 })
             }
         })
@@ -253,27 +254,26 @@ export class BuyerNewRequestManage extends Component {
             this.request = {
                 name: this.state.name,
                 single_multiple: this.state.single_multiple,
-                startDate: this.state.startDate,
+                startDate: moment(this.state.startDate).format(),
                 contract_duration: this.state.contract_duration,
             }
             if (this.state.operation_type === "create") {
-                this.request = {
-                    id: null,
-                    total_volume: this.state.contract_duration
-                }
+                this.request.id = null;
+                this.request.total_volume = this.state.total_volume;
             }
             else {
-                this.request = {
-                    id: this.state.id,
-                    attachment_id: this.state.fileData.TC[0].files[0].id,
-                    allow_deviation: this.state.allow_deviation
-                }
+                this.request.id = null;
+                this.request.total_volume = this.state.contract_duration;
+                this.request.allow_deviation = this.state.allow_deviation;
             }
             saveBuyerRequest(this.request).then(res => {
-
-
+                console.log(res)
+                if (res.request_auction) {
+                    window.location.href = "/buyer/request_auctions"
+                }
+                else {
+                }
             })
-
         }
     }
     commentValidation() {
@@ -336,12 +336,21 @@ export class BuyerNewRequestManage extends Component {
         let btn_html;
         if (this.state.user_type === 'buyer') {
             if (this.state.operation_type === "edit") {
-                btn_html = this.state.disabled ?
-                    <div style={{ paddingRight: "10px" }}><button id="save_edit" className="lm--button lm--button--primary" onClick={this.doEditAction.bind(this)}>Edit</button></div>
-                    : <div>
-                        <button id="save_form" className="lm--button lm--button--primary" onClick={this.doCancel.bind(this, "save")}>Cancel</button>
-                        <button id="submit_form" className="lm--button lm--button--primary" onClick={this.doSave.bind(this, 'save')}>Save</button>
-                    </div>;
+                if (this.state.status === 1) {
+                    btn_html =
+                        <div>
+                            <button id="save_form" className="lm--button lm--button--primary" onClick={this.doCancel.bind(this, "save")}>Cancel</button>
+                        </div>
+                }
+                else {
+                    btn_html = this.state.disabled ?
+                        <div style={{ paddingRight: "10px" }}><button id="save_edit" className="lm--button lm--button--primary" onClick={this.doEditAction.bind(this)}>Edit</button></div>
+                        : <div>
+                            <button id="save_form" className="lm--button lm--button--primary" onClick={this.doCancel.bind(this, "save")}>Cancel</button>
+                            <button id="submit_form" className="lm--button lm--button--primary" onClick={this.doSave.bind(this, 'save')}>Save</button>
+                        </div>;
+                }
+
             }
             else {
                 btn_html = <div>
@@ -446,15 +455,19 @@ export class BuyerNewRequestManage extends Component {
                                                 </div>
                                             </div> : ''
                                         }
-                                        <div className="lm--formItem lm--formItem--inline string optional ">
-                                            <label className="lm--formItem-left lm--formItem-label string required">
-                                                <abbr title="required">*</abbr> Admin Comments  :
+                                        {
+                                            this.state.user_type !== 'buyer' ?
+                                                <div className="lm--formItem lm--formItem--inline string optional ">
+                                                    <label className="lm--formItem-left lm--formItem-label string required">
+                                                        <abbr title="required">*</abbr> Admin Comments  :
                                                 </label>
-                                            <div className="lm--formItem-right lm--formItem-control">
-                                                <textarea type="text" name="comment" value={this.state.comment} onChange={this.doValue.bind(this, 'comment')} disabled={this.state.disabled} ref="request_name" required aria-required="true" title="Please fill out this field" placeholder="" />
-                                                <div className='isPassValidate' id='comment_message' >This field is required!</div>
-                                            </div>
-                                        </div>
+                                                    <div className="lm--formItem-right lm--formItem-control">
+                                                        <textarea type="text" name="comment" value={this.state.comment} onChange={this.doValue.bind(this, 'comment')} disabled={this.state.disabled} ref="request_name" required aria-required="true" title="Please fill out this field" placeholder="" />
+                                                        <div className='isPassValidate' id='comment_message' >This field is required!</div>
+                                                    </div>
+                                                </div> : ''
+                                        }
+
 
                                     </div>
                                 </div>
