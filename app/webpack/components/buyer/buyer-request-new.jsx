@@ -34,7 +34,7 @@ export class BuyerNewRequestManage extends Component {
             status: 2,
             user_type: "buyer",
             operation_type: "create",
-            uploadUrl: "/api/buyer/user_attachments?file_type=",
+            uploadUrl: "/api/buyer/request_attachments?file_type=",
         }
         this.request = {};
         this.starttimeChange = this.starttimeChange.bind(this);
@@ -61,6 +61,7 @@ export class BuyerNewRequestManage extends Component {
             //user_type: parseInt(requestId) === 0 ? "buyer" : "admin",
             id: requestId
         });
+
     }
 
     componentDidMount() {
@@ -89,18 +90,33 @@ export class BuyerNewRequestManage extends Component {
 
 
     bindDetails() {
-
         getBuyerRequestDetail(this.state.id).then(res => {
             if (res.result === "success") {
-                console.log(res.request_auction)
                 this.setState({
                     name: res.request_auction.name,
-                    // buyer_type:"1",
-                    // contract_period_start_Date: moment(res.request_auction.contract_period_start_date).format(),
-                    // duration:res.request_auction.duration,
-                    //total_volume:res.request_auction.total_volume,
+                    buyer_type: res.request_auction.buyer_type,
+                    contract_period_start_date: moment(res.request_auction.contract_period_start_date),
+                    duration: res.request_auction.duration,
+                    total_volume: res.request_auction.total_volume,
+                    allow_deviation:res.request_auction.allow_deviation,
                     status: res.request_auction.accept_status
+
                 })
+
+                if (res.last_attachment) {
+                    let attachment = {
+                        id: res.last_attachment.id,
+                        file_name: res.last_attachment.file_name,
+                        file_path: res.last_attachment.file_path
+                    }
+                    let fileObj = this.state.fileData;
+                    fileObj['TC'][0].files = [];
+                    fileObj['TC'][0].files.push(attachment)
+                    this.setState({
+                        fileData: fileObj
+                    })
+                }
+                console.log(this.state.fileData)
             }
         })
     }
@@ -151,7 +167,7 @@ export class BuyerNewRequestManage extends Component {
                 break;
             case "contract_duration":
                 this.setState({
-                    contract_duration: val
+                    duration: val
                 });
                 break;
             case "allow_deviation":
@@ -275,6 +291,8 @@ export class BuyerNewRequestManage extends Component {
             else {
                 this.request.id = this.state.id;
             }
+            console.log(this.request)
+            console.log(this.state.operation_type)
             saveBuyerRequest(this.request).then(res => {
                 if (res.request_auction) {
                     window.location.href = "/buyer/request_auctions"
@@ -416,7 +434,7 @@ export class BuyerNewRequestManage extends Component {
                                                 <abbr title="required">*</abbr> Contract Duration  :
                                                 </label>
                                             <div className="lm--formItem-right lm--formItem-control">
-                                                <select ref="contract_duration" id="contract_duration" name="contract_duration" onChange={this.doValue.bind(this, 'contract_duration')} disabled={this.state.disabled}>
+                                                <select ref="contract_duration" id="contract_duration" name="contract_duration" onChange={this.doValue.bind(this, 'contract_duration')} value={this.state.duration} disabled={this.state.disabled}>
                                                     <option value="6">6 months</option>
                                                     <option value="12">12 months</option>
                                                     <option value="24">24 months</option>
