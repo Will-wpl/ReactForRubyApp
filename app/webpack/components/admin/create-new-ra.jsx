@@ -7,6 +7,7 @@ import { createRa, raPublish, checkBuyerType, deleteSelectedBuyer } from '../../
 import { getAuction } from '../../javascripts/componentService/common/service';
 import { Modal } from '../shared/show-modal';
 import { findUpLimitZero } from '../../javascripts/componentService/util';
+import { Any } from 'tcomb';
 
 export class CreateNewRA extends Component {
     constructor(props, context) {
@@ -27,7 +28,8 @@ export class CreateNewRA extends Component {
             required: false, check_required: true, single_multiple: "1", allow_deviation: "1",
             contract_6: '0', contract_12: '0', contract_24: '0', single_truely: false, published_date_time: '',
             reverse_auction_end: '',
-            live_auction_contracts: null, submit_btn: true
+            live_auction_contracts: null, submit_btn: true,
+            tc_name: "", tc_path: ""
         }
 
         this.auction = {};
@@ -69,6 +71,7 @@ export class CreateNewRA extends Component {
         }
         getAuction('admin', sessionStorage.auction_id).then(res => {
             this.auction = res;
+            console.log(res)
             if (type == "create") {
                 if (this.auction.publish_status == 1) {
                     this.setState({
@@ -105,7 +108,9 @@ export class CreateNewRA extends Component {
                     allow_deviation: res.allow_deviation,
                     single_multiple: res.buyer_type,
                     published_date_time: res.published_date_time,
-                    reverse_auction_end: res.contract_period_start_date == null ? '' : moment(res.contract_period_start_date)
+                    reverse_auction_end: res.contract_period_start_date == null ? '' : moment(res.contract_period_start_date),
+                    tc_name: res.tc_attach_info === null ? "" : res.tc_attach_info.file_name,
+                    tc_path: res.tc_attach_info === null ? "" : res.tc_attach_info.file_path,
                 });
                 // this.setState({
                 //     reverse_auction_end:moment(data)
@@ -388,7 +393,7 @@ export class CreateNewRA extends Component {
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Peak<br/>(7am-7pm)</td>
+                            <td>Peak<br />(7am-7pm)</td>
                             <td className={has_lt ? '' : 'isHide'} id={'lt_peak_' + mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"starting_price_lt_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} /><br />
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"reserve_price_lt_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} />
@@ -411,7 +416,7 @@ export class CreateNewRA extends Component {
                             </td>
                         </tr>
                         <tr>
-                            <td>Off Peak<br/>(7pm-7am)</td>
+                            <td>Off Peak<br />(7pm-7am)</td>
                             <td className={has_lt ? '' : 'isHide'} id={'lt_off_peak_' + mouth}>
                                 Starting:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"starting_price_lt_off_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} /><br />
                                 Reserve:<input type="text" maxLength="6" onBlur={this.blurNoNum.bind(this)} onKeyUp={this.clearNoNum.bind(this)} aria-required="true" pattern="^\d+(\.\d{4})$" title="Starting Price must be a number with 4 decimal places, e.g. $0.0891." id={"reserve_price_lt_off_peak_" + mouth} required={this.state.required} disabled={this.state.disabled} />
@@ -887,7 +892,7 @@ export class CreateNewRA extends Component {
                                 }
                                 <h3 className={"middleFont u-mb2"}>Reverse Auction Parameters</h3>
                                 {/*<dd className="lm--formItem lm--formItem--inline string optional">*/}
-                                    {/*<span className="lm--formItem-left lm--formItem-label string optional middleFont">Reverse Auction Parameters</span>*/}
+                                {/*<span className="lm--formItem-left lm--formItem-label string optional middleFont">Reverse Auction Parameters</span>*/}
                                 {/*</dd>*/}
                                 <dd className="lm--formItem lm--formItem--inline string optional">
                                     <span className="lm--formItem-left lm--formItem-label string optional"><abbr title="required">*</abbr>Date/Time of Reverse Auction :</span>
@@ -962,6 +967,16 @@ export class CreateNewRA extends Component {
                                         <div>hours before auction start time</div>
                                     </label>
                                 </dd>
+                                {
+                                    this.state.tc_name.length ? <dd className="lm--formItem lm--formItem--inline string optional">
+                                        <span className="lm--formItem-left lm--formItem-label string optional">
+                                            <abbr title="required">*</abbr>T&C :</span>
+                                        <label className="lm--formItem-right lm--formItem-control" style={{marginTop:"10px",paddingLeft:"-25px"}}>
+                                            <a href={this.state.tc_path} download={this.state.tc_path}>{this.state.tc_name}</a>
+                                        </label>
+                                    </dd> : ""
+                                }
+
                                 {this.state.checkArray.map((item) => {
                                     return this.mouthsHtml(item);
                                 })}
