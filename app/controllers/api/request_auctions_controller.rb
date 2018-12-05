@@ -26,7 +26,7 @@ class Api::RequestAuctionsController < Api::BaseController
     end
 
     actions = [
-        {url: '/buyer/request_auctions/:id', name: 'Manage', icon: 'edit', interface_type: 'request_auction'}
+        {url: '/buyer/request_auctions/' + current_user.id, name: 'Manage', icon: 'edit', interface_type: 'request_auction'}
         # {url: '/buyer/request_auctions/:id', name: 'View', icon: 'view', interface_type: 'request_auction'}
     ]
     bodies = { data: data, total: total }
