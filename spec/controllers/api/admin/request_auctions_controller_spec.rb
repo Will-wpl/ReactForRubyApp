@@ -6,10 +6,10 @@ RSpec.describe Api::Admin::RequestAuctionsController, type: :controller do
   context 'admin user' do
     before { sign_in create(:user, :with_admin) }
 
-    describe 'all_request_auction' do
+    describe 'index' do
       context 'all request auctions' do
         def do_request
-          get :all_request_auction
+          get :index
         end
 
         before { do_request }
@@ -23,7 +23,7 @@ RSpec.describe Api::Admin::RequestAuctionsController, type: :controller do
       context 'all request auctions(Paging)' do
         def do_request
           sort_by = ['name', 'desc', '']
-          get :all_request_auction, params: { sort_by: sort_by, page_size: '10', page_index: '1' }
+          get :index, params: { sort_by: sort_by, page_size: '10', page_index: '1' }
         end
 
         before { do_request }
