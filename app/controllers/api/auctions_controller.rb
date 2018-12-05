@@ -900,6 +900,8 @@ class Api::AuctionsController < Api::BaseController
     auction_json[:buyer_notify] = Consumption.where(auction_id: auction.id).find_notify_buyer.blank? ? false : true
     auction_json[:live_auction_contracts] = live_auction_contracts
     auction_json[:contract_end_list] = get_contract_end_list(auction)
+    tc_file = RequestAttachment.find_last_by_type_request('TC', auction.request_auction_id)
+    auction_json[:tc_file] = tc_file.blank? ? nil : tc_file
     auction_json
   end
 
