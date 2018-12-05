@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181204052829) do
+ActiveRecord::Schema.define(version: 20181205062331) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -351,7 +351,7 @@ ActiveRecord::Schema.define(version: 20181204052829) do
 
   create_table "request_auctions", force: :cascade do |t|
     t.string "name"
-    t.datetime "contract_period_start_date"
+    t.date "contract_period_start_date"
     t.integer "duration"
     t.string "buyer_type"
     t.string "allow_deviation"
