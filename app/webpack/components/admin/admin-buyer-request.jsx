@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import ReactDom from 'react-dom';
+import { UploadFile } from '../shared/upload';
+import { changeValidate } from './../../javascripts/componentService/util';
+import { approveBuyerRequest } from './../../javascripts/componentService/common/service';
 
 export default class AdminBuyerRequestManage extends Component {
     constructor(props) {
@@ -8,6 +11,14 @@ export default class AdminBuyerRequestManage extends Component {
             requestList: []
         }
     }
+    componentWillMount() {
+
+    }
+    componentDidMount() {
+        alert(11);
+    }
+
+
     render() {
         return (
             <div>
@@ -18,7 +29,7 @@ export default class AdminBuyerRequestManage extends Component {
 }
 
 function run() {
-    const domNode = document.getElementById('admin_buyer_request');
+    const domNode = document.getElementById('divManageRequest');
     if (domNode !== null) {
         ReactDOM.render(
             React.createElement(AdminBuyerRequestManage),
