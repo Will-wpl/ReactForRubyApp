@@ -45,9 +45,7 @@ export class BuyerNewRequestManage extends Component {
         this.validatorEntity_single = {
             name: { cate: 'required' }
         }
-        this.validatorEntity_reject = {
-            comment: { cate: 'required' }
-        }
+
     }
 
     componentWillMount() {
@@ -98,7 +96,7 @@ export class BuyerNewRequestManage extends Component {
                     contract_period_start_date: moment(res.request_auction.contract_period_start_date),
                     duration: res.request_auction.duration,
                     total_volume: res.request_auction.total_volume,
-                    allow_deviation:res.request_auction.allow_deviation,
+                    allow_deviation: res.request_auction.allow_deviation,
                     status: res.request_auction.accept_status
 
                 })
@@ -116,15 +114,11 @@ export class BuyerNewRequestManage extends Component {
                         fileData: fileObj
                     })
                 }
-                console.log(this.state.fileData)
             }
         })
     }
 
 
-    checkSuccess() {
-
-    }
     starttimeChange(data) {
         this.setState({
             contract_period_start_date: data
@@ -191,6 +185,9 @@ export class BuyerNewRequestManage extends Component {
     }
     doCancel(type) {
         if (type === 'create') {
+            window.location.href = '/buyer/request_auctions';
+        }
+        else if (type === 'goback') {
             window.location.href = '/buyer/request_auctions';
         }
         else {
@@ -291,8 +288,6 @@ export class BuyerNewRequestManage extends Component {
             else {
                 this.request.id = this.state.id;
             }
-            console.log(this.request)
-            console.log(this.state.operation_type)
             saveBuyerRequest(this.request).then(res => {
                 if (res.request_auction) {
                     window.location.href = "/buyer/request_auctions"
@@ -300,26 +295,7 @@ export class BuyerNewRequestManage extends Component {
             })
         }
     }
-    commentValidation() {
-        let flag = true;
-        let arr = validator_Object(this.state, this.validatorEntity_reject);
-        if (arr) {
-            arr.map((item, index) => {
-                let column = item.column;
-                let cate = item.cate;
-                setValidationFaild(column, cate)
-            })
-        }
 
-        $('.validate_message').find('div').each(function () {
-            let className = $(this).attr('class');
-            if (className === 'errormessage') {
-                flag = false;
-                return flag;
-            }
-        })
-        return flag;
-    }
     doApproveAction(type) {
         if (type === "Reject") {
             if (this.commentValidation()) {
@@ -344,26 +320,15 @@ export class BuyerNewRequestManage extends Component {
         }
 
     }
-    doAction(obj) {
-        let params = {
-            id: this.state.id,
-            stat: obj.action === "approve" ? 1 : 0
-        }
-        if (obj.action === "approve") {
-            approveBuyerRequest(params).then(res => {
-                sessionStorage.auction_id = res.auction.id;
-                setTimeout(() => { window.location.href = "/admin/auctions/new" }, 100);
-            })
-        }
-    }
+
     render() {
         let btn_html;
         if (this.state.user_type === 'buyer') {
             if (this.state.operation_type === "edit") {
-                if (this.state.status === 1) {
+                if (parseInt(this.state.status) === 1) {
                     btn_html =
                         <div>
-                            <button id="save_form" className="lm--button lm--button--primary" onClick={this.doCancel.bind(this, "save")}>Cancel</button>
+                            <button id="save_form" className="lm--button lm--button--primary" onClick={this.doCancel.bind(this, "goback")}>Cancel</button>
                         </div>
                 }
                 else {
@@ -479,19 +444,6 @@ export class BuyerNewRequestManage extends Component {
                                                 </div>
                                             </div> : ''
                                         }
-                                        {
-                                            this.state.user_type !== 'buyer' ?
-                                                <div className="lm--formItem lm--formItem--inline string optional ">
-                                                    <label className="lm--formItem-left lm--formItem-label string required">
-                                                        <abbr title="required">*</abbr> Admin Comments  :
-                                                </label>
-                                                    <div className="lm--formItem-right lm--formItem-control">
-                                                        <textarea type="text" name="comment" value={this.state.comment} onChange={this.doValue.bind(this, 'comment')} disabled={this.state.disabled} ref="request_name" required aria-required="true" title="Please fill out this field" placeholder="" />
-                                                        <div className='isPassValidate' id='comment_message' >This field is required!</div>
-                                                    </div>
-                                                </div> : ''
-                                        }
-
 
                                     </div>
                                 </div>
@@ -502,7 +454,7 @@ export class BuyerNewRequestManage extends Component {
                         </div>
                     </div>
                 </div>
-                <Modal acceptFunction={this.doAction.bind(this)} text={this.state.text} type={"comfirm"} ref="Modal_Option" />
+
             </div >
         )
     }
