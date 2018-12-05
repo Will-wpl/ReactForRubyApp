@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import {getBuyerRequestEnttiy} from './../../javascripts/componentService/common/service';
-
+import moment from 'moment';
 export class BuyerRequestEntityListManage extends Component {
 
 
@@ -70,7 +70,7 @@ export class BuyerRequestEntityListManage extends Component {
                                     return <tr key={index}>
                                         <td>{item.entity_name}</td>
                                         <td>{item.retailer_name}</td>
-                                        <td>{item.contract_period_end_date}</td>
+                                        <td>{moment(item.contract_period_end_date).format('D MMM YYYY')}</td>
                                     </tr>
                                 })}
                                 </tbody>
