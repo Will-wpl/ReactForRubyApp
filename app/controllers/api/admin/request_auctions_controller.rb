@@ -17,7 +17,7 @@ class Api::Admin::RequestAuctionsController < Api::RequestAuctionsController
     unless result.blank?
       results = get_order_list(result, params, headers)
       results.each do |result|
-        data.push(name: result.name, duration: result.duration,
+        data.push(id: result.id, name: result.name, duration: result.duration,
                   contract_period_start_date: result.contract_period_start_date,
                   buyer_type: (result.buyer_type == RequestAuction::SingleBuyerType)? 'Single':'MultipleBuyerType',
                   allow_deviation: (result.allow_deviation == RequestAuction::AllowDeviation)? 'Yes':'No',
@@ -27,7 +27,7 @@ class Api::Admin::RequestAuctionsController < Api::RequestAuctionsController
     end
 
     actions = [
-        {url: '/admin/auctions/:id/buyer_dashboard?past', name: 'View', icon: 'view', interface_type: 'request_auction'}
+        {url: '/admin/request_auctions/:id', name: 'Show', icon: 'edit', interface_type: 'request_auction'}
     ]
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
