@@ -23,6 +23,7 @@ class Api::RequestAuctionsController < Api::BaseController
     request_auction.allow_deviation = params[:allow_deviation] unless params[:allow_deviation].blank?
     request_auction.total_volume = params[:total_volume] unless params[:total_volume].blank?
     request_auction.user_id = current_user.id
+    request_auction.comment = "" if request_auction.accept_status == RequestAuction::AcceptStatusReject
     request_auction.accept_status = RequestAuction::AcceptStatusPending
     # save request auction
     if request_auction.save!
