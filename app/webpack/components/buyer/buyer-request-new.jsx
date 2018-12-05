@@ -281,6 +281,7 @@ export class BuyerNewRequestManage extends Component {
             else {
                 this.request.id = this.state.id;
             }
+
             saveBuyerRequest(this.request).then(res => {
                 if (res.request_auction) {
                     window.location.href = "/buyer/request_auctions"
