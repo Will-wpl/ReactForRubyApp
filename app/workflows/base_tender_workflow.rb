@@ -4,13 +4,13 @@ require 'engine/event'
 
 class BaseTenderWorkflow < Workflow
 
-  def execute(node_name, event_name, arrangement_id)
+  def execute(node_name, event_name, arrangement_id, current_user)
     node = find_node_by_name(node_name)
     event = node.find_event_by_name(event_name)
     state_machine = set_state_machine_by_rule(node, event)
     TenderStateMachine.add_state_machine(arrangement_id, state_machine)
     yield if block_given?
-    get_arrangement_state_machine(arrangement_id)
+    get_arrangement_state_machine(arrangement_id, current_user)
   end
 
   def get_arrangement_state_machine(arrangement_id, current_user)

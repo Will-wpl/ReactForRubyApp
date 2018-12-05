@@ -108,23 +108,23 @@ class Api::TendersController < Api::TendersBaseController
 
   # work flow function
   def node1_retailer_accept
-    workflow = TenderHelper.execute(:node1, :accept, params[:id])
+    workflow = TenderHelper.execute(:node1, :accept, params[:id], current_user)
 
     render json: workflow, status: 200
   end
 
   def node1_retailer_reject
-    workflow = TenderHelper.execute(:node1, :reject, params[:id])
+    workflow = TenderHelper.execute(:node1, :reject, params[:id], current_user)
     render json: workflow, status: 200
   end
 
   def node2_retailer_accept_all
-    workflow = TenderHelper.execute(:node2, :accept_all, params[:id])
+    workflow = TenderHelper.execute(:node2, :accept_all, params[:id], current_user)
     render json: workflow, status: 200
   end
 
   def node2_retailer_propose_deviations
-    workflow = TenderHelper.execute(:node2, :propose_deviations, params[:id])
+    workflow = TenderHelper.execute(:node2, :propose_deviations, params[:id], current_user)
     render json: workflow, status: 200
   end
 
@@ -133,7 +133,7 @@ class Api::TendersController < Api::TendersBaseController
     chats = JSON.parse(params[:chats])
     ActiveRecord::Base.transaction do
       node3_retailer_withdraw_all_deviations_biz(chats, params)
-      workflow = TenderHelper.execute(:node3, :withdraw_all_deviations, params[:id])
+      workflow = TenderHelper.execute(:node3, :withdraw_all_deviations, params[:id], current_user)
     end
 
     render json: workflow, status: 200
@@ -144,19 +144,19 @@ class Api::TendersController < Api::TendersBaseController
     chats = JSON.parse(params[:chats])
     ActiveRecord::Base.transaction do
       node3_retailer_submit_deviations_biz(chats, params)
-      workflow = TenderHelper.execute(:node3, :submit_deviations, params[:id])
+      workflow = TenderHelper.execute(:node3, :submit_deviations, params[:id], current_user)
     end
     render json: workflow, status: 200
   end
 
   def node3_retailer_next
-    workflow = TenderHelper.execute(:node3, :next, params[:id])
+    workflow = TenderHelper.execute(:node3, :next, params[:id], current_user)
     render json: workflow, status: 200
   end
 
   def node3_retailer_back
     node3_retailer_back_biz(params[:id])
-    workflow = TenderHelper.execute(:node3, :back, params[:id])
+    workflow = TenderHelper.execute(:node3, :back, params[:id], current_user)
     render json: workflow, status: 200
   end
 
@@ -173,39 +173,39 @@ class Api::TendersController < Api::TendersBaseController
           TenderChatDetail.chat_save(tender_chat, chat_info)
         end
       end
-      workflow = TenderHelper.execute(:node3, :send_response, params[:id])
+      workflow = TenderHelper.execute(:node3, :send_response, params[:id], current_user)
     end
     admin_response_mail(params[:id])
     render json: workflow, status: 200
   end
 
   def node4_retailer_submit
-    workflow = TenderHelper.execute(:node4, :submit, params[:id])
+    workflow = TenderHelper.execute(:node4, :submit, params[:id], current_user)
     retailer_submit_mail params[:id]
     render json: workflow, status: 200
   end
 
   def node4_retailer_next
-    workflow = TenderHelper.execute(:node4, :next, params[:id])
+    workflow = TenderHelper.execute(:node4, :next, params[:id], current_user)
     render json: workflow, status: 200
   end
 
   def node4_admin_accept
-    workflow = TenderHelper.execute(:node4, :accept, params[:id])
+    workflow = TenderHelper.execute(:node4, :accept, params[:id], current_user)
     @arrangement.update(comments: params[:comments])
     admin_accept_mail params[:id]
     render json: workflow, status: 200
   end
 
   def node4_admin_reject
-    workflow = TenderHelper.execute(:node4, :reject, params[:id])
+    workflow = TenderHelper.execute(:node4, :reject, params[:id], current_user)
     @arrangement.update(comments: params[:comments])
     admin_reject_mail params[:id], params[:comments]
     render json: workflow, status: 200
   end
 
   def node5_retailer_submit
-    workflow = TenderHelper.execute(:node5, :submit, params[:id])
+    workflow = TenderHelper.execute(:node5, :submit, params[:id], current_user)
     render json: workflow, status: 200
   end
 

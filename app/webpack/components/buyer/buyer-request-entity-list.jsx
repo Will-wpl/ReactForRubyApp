@@ -43,7 +43,7 @@ export class BuyerRequestEntityListManage extends Component {
                 <div className="col-sm-12 col-md-12">
                     <div className="search_type padLR24 bgwhite">
                         <dl className="lm--formItem string optional">
-                            <button onClick={this.goCreate.bind(this)} style={{marginBottom:"10px"}} className="lm--button lm--button--primary create_btn u-pull-right">Request</button>
+                            <button onClick={this.goCreate.bind(this)} style={{marginBottom:"10px"}} className="lm--button lm--button--primary create_btn u-pull-right">Request New RA </button>
                         </dl>
 
                     </div>
