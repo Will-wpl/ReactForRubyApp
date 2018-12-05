@@ -618,10 +618,10 @@ export const getStatus = (type, dt) => {
     let approvalDateTime = '(' + moment(dt).format('DD MMM YYYY hh:mm a') + ')';
     switch (parseInt(type)) {
         case 0:
-            status = "Rejected" + approvalDateTime;
+            status = "Rejected " + approvalDateTime;
             break;
         case 1:
-            status = "Approved" + approvalDateTime;
+            status = "Approved " + approvalDateTime;
             break;
         default:
             status = "Pending"
