@@ -205,7 +205,7 @@ export class BuyerNewRequestManage extends Component {
                 $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
             }
         })
-        let flag = true, hasDoc = true;
+        let flag = true;
         if (this.state.buyer_type === "1") {
             let arr = validator_Object(this.state, this.validatorEntity_multiple);
 
@@ -231,18 +231,9 @@ export class BuyerNewRequestManage extends Component {
                 flag = false;
             }
 
-
-            if (this.state.fileData.TC[0].files.length > 0) {
-                hasDoc = true;
-                $("#showMessage").removeClass("errormessage").addClass("isPassValidate");
-            }
-            else {
-                hasDoc = false;
-                $("#showMessage").removeClass("isPassValidate").addClass("errormessage");
-            }
         }
 
-        return flag && hasDoc;
+        return flag ;
     }
 
     refresh() {
@@ -409,13 +400,11 @@ export class BuyerNewRequestManage extends Component {
                                         {this.state.buyer_type == "0" ?
                                             <div className="lm--formItem lm--formItem--inline string">
                                                 <label className="lm--formItem-left lm--formItem-label string required">
-                                                    <abbr title="required">*</abbr> Upload T&C  :
+                                                    <abbr title="required"></abbr> Upload T&C  :
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                                     <UploadFile type="TC" required="required" calbackFn={this.refresh.bind(this)} validate="true" showList="1" col_width="10" showWay="0" fileData={this.state.fileData.TC} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
-                                                    <div className="col-sm-1 col-md-1 u-cell">
-                                                    </div>
-                                                    <div id="showMessage" className="isPassValidate">This field is required!</div>
+                                                     
                                                 </div>
                                             </div> : ''
                                         }
