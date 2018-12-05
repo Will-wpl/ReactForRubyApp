@@ -185,7 +185,7 @@ export class BuyerNewRequestManage extends Component {
     }
     doCancel(type) {
         if (type === 'create') {
-            window.location.href = '/buyer/request_auctions';
+            window.location.href = '/buyer/request_auctions/entity_list';
         }
         else if (type === 'goback') {
             window.location.href = '/buyer/request_auctions';
@@ -287,30 +287,7 @@ export class BuyerNewRequestManage extends Component {
         }
     }
 
-    doApproveAction(type) {
-        if (type === "Reject") {
-            if (this.commentValidation()) {
-                this.setState({
-                    text: "Are you sure you want to reject this request?"
-                })
-                this.refs.Modal_Option.showModal('comfirm', { action: 'reject' }, '');
-            }
-        }
-        else {
-            $('.validate_message').find('div').each(function () {
-                let className = $(this).attr('class');
-                if (className === 'errormessage') {
-                    let divid = $(this).attr("id");
-                    $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
-                }
-            })
-            this.setState({
-                text: "Are you sure you want to approve this request?"
-            })
-            this.refs.Modal_Option.showModal('comfirm', { action: 'approve' }, '');
-        }
-
-    }
+     
 
     render() {
         let btn_html;
@@ -335,16 +312,11 @@ export class BuyerNewRequestManage extends Component {
             else {
                 btn_html = <div>
                     <button id="save_form" className="lm--button lm--button--primary" onClick={this.doCancel.bind(this, 'create')}>Cancel</button>
-                    <button id="submit_form" className="lm--button lm--button--primary" onClick={this.doSave.bind(this, 'create')}>Create</button>
+                    <button id="submit_form" className="lm--button lm--button--primary" onClick={this.doSave.bind(this, 'create')}>Submit</button>
                 </div>
             }
         }
-        else {
-            btn_html = <div style={{ marginRight: "10px" }}>
-                <button id="save_form" className="lm--button lm--button--primary" onClick={this.doApproveAction.bind(this, "Reject")}>Reject</button>
-                <button id="submit_form" className="lm--button lm--button--primary" onClick={this.doApproveAction.bind(this, 'Approve')}>Approve</button>
-            </div>;
-        }
+         
         return (
             <div className="u-grid mg0 div-center" >
                 <h2 className="u-mt3 u-mb3"></h2>

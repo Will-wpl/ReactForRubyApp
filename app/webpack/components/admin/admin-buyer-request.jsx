@@ -27,6 +27,7 @@ export default class AdminBuyerRequestManage extends Component {
                 ]
             },
             status: 2,
+            status_name: "",
             disabled: true,
             user_type: "buyer",
             operation_type: "create",
@@ -64,8 +65,8 @@ export default class AdminBuyerRequestManage extends Component {
                     total_volume: res.request_auction.total_volume,
                     allow_deviation: res.request_auction.allow_deviation,
                     comment: res.request_auction.comment ? res.request_auction.comment : "",
-                    status: res.request_auction.accept_status
-
+                    status: res.request_auction.accept_status,
+                    status_name: this.getStatus(res.request_auction.accept_status)
                 })
 
                 if (res.last_attachment) {
@@ -85,6 +86,21 @@ export default class AdminBuyerRequestManage extends Component {
         })
     }
 
+    getStatus(type) {
+        let status = "Pending";
+        switch (parseInt(type)) {
+            case 0:
+                status = "Rejected"
+                break;
+            case 1:
+                status = "Approved"
+                break;
+            default:
+                status = "Pending"
+                break;
+        }
+        return status;
+    }
 
     starttimeChange(data) {
         this.setState({
@@ -201,8 +217,18 @@ export default class AdminBuyerRequestManage extends Component {
                             <div className="retailer_manage_coming">
                                 <div id="buyer_form" >
                                     <div className="u-grid admin_invitation ">
+
                                         <div className="col-sm-12 col-md-8 push-md-2 validate_message ">
                                             <div className="top"></div>
+
+                                            <div className="lm--formItem lm--formItem--inline string">
+                                                <label className="lm--formItem-left lm--formItem-label string required">
+                                                    <abbr title="required"></abbr> Status  :
+                                                </label>
+                                                <div className="lm--formItem-right lm--formItem-control" style={{ marginTop: "12px" }}>
+                                                    {this.state.status_name}
+                                                </div>
+                                            </div>
                                             <div className="lm--formItem lm--formItem--inline string">
                                                 <label className="lm--formItem-left lm--formItem-label string required">
                                                     <abbr title="required">*</abbr> Name of Reverse Auction  :
@@ -289,7 +315,7 @@ export default class AdminBuyerRequestManage extends Component {
                                                     <abbr title="required">*</abbr> Admin Comments  :
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control">
-                                                    <textarea type="text" name="comment" value={this.state.comment} onChange={this.doValue.bind(this, 'comment')} ref="request_name" required aria-required="true" title="Please fill out this field" placeholder="" />
+                                                    <textarea type="text" name="comment" disabled={parseInt(this.state.status) === 1} value={this.state.comment} onChange={this.doValue.bind(this, 'comment')} ref="request_name" required aria-required="true" title="Please fill out this field" placeholder="" />
                                                     <div className='isPassValidate' id='comment_message' >This field is required!</div>
                                                 </div>
                                             </div>
