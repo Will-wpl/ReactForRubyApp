@@ -109,8 +109,8 @@ export class CreateNewRA extends Component {
                     single_multiple: res.buyer_type,
                     published_date_time: res.published_date_time,
                     reverse_auction_end: res.contract_period_start_date == null ? '' : moment(res.contract_period_start_date),
-                    tc_name: res.tc_attach_info === null ? "" : res.tc_attach_info.file_name,
-                    tc_path: res.tc_attach_info === null ? "" : res.tc_attach_info.file_path,
+                    tc_name: res.tc_file === null ? "" : res.tc_file.file_name,
+                    tc_path: res.tc_file === null ? "" : res.tc_file.file_path,
                 });
                 // this.setState({
                 //     reverse_auction_end:moment(data)
