@@ -322,7 +322,7 @@ export default class AdminBuyerRequestManage extends Component {
                                                     <abbr title="required" className={this.state.action_type === "reject" ? "isDisplayInLine" : "isHide"}  >*</abbr> Admin Comments  :
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control">
-                                                    <textarea type="text" name="comment" disabled={parseInt(this.state.status) === 1 || parseInt(this.state.status) === 0} value={this.state.comment} onChange={this.doValue.bind(this, 'comment')} ref="request_name" required aria-required="true" title="Please fill out this field" placeholder="" />
+                                                    <textarea type="text" name="comment" disabled={parseInt(this.state.status) === 1 || parseInt(this.state.status) === 0} value={this.state.comment} onChange={this.doValue.bind(this, 'comment')} ref="request_name"  aria-required="true" title="Please fill out this field" placeholder="" />
                                                     <div className='isPassValidate' id='comment_message' >This field is required!</div>
                                                 </div>
                                             </div>
