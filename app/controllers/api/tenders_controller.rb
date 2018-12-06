@@ -45,8 +45,8 @@ class Api::TendersController < Api::TendersBaseController
       if auction.tc_attach_info.blank?
         attachments = [UserAttachment.find_last_by_type(UserAttachment::FileType_Seller_Buyer_TC)]
       else
-        if RequestAttachment.has_attachment(UserAttachment::FileType_Seller_Buyer_TC, auction.id)
-          attachments = [RequestAttachment.find_last_by_type_request( UserAttachment::FileType_Seller_Buyer_TC, auction.id)]
+        if RequestAttachment.has_attachment(RequestAttachment::FileType_TC, auction.id)
+          attachments = [RequestAttachment.find_last_by_type_request( RequestAttachment::FileType_TC, auction.id)]
         else
           sbtc_id = Auction.get_tc_attach_info_id(auction.tc_attach_info, UserAttachment::FileType_Seller_Buyer_TC)
           attachments = [UserAttachment.find_by_id(sbtc_id)]
