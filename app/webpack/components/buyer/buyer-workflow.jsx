@@ -18,7 +18,7 @@ export class Buyerworkflow extends Component {
         }
         getBuyerRetailerList(sessionStorage.auction_id).then(res=>{
             //console.log(res);
-            this.setState({retailer_list:res.tenders,step_counts:res.step_counts,readOnly:res.user_info.readOnly,role_name:res.user_info.company_name});
+            this.setState({retailer_list:res.tenders,step_counts:res.step_counts,readOnly:res.user_info.readOnly,role_name:res.user_info.current_user.company_name});
         })
     }
     getPageindex(arrangement_id,name,type,index){

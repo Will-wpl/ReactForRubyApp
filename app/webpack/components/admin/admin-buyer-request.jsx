@@ -238,7 +238,7 @@ export default class AdminBuyerRequestManage extends Component {
 
                                             <div className="lm--formItem lm--formItem--inline string">
                                                 <label className="lm--formItem-left lm--formItem-label string required">
-                                                    <abbr title="required">*</abbr> Single / Multiple Buyer (s)  :
+                                                    <abbr title="required">*</abbr> Single / Multiple Buyer(s)  :
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control">
                                                     <select ref="buyer_type" id="buyer_type" onChange={this.doValue.bind(this, 'buyer_type')} value={this.state.buyer_type} disabled={this.state.disabled}>
@@ -271,7 +271,7 @@ export default class AdminBuyerRequestManage extends Component {
                                             {this.state.buyer_type == "0" ?
                                                 <div className="lm--formItem lm--formItem--inline string">
                                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                                        <abbr title="required"></abbr> Upload T&C  :
+                                                        <abbr title="required"></abbr> Electricity Purchase Contract :
                                                 </label>
                                                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                                         <UploadFile type="TC" required="required" validate="true" showList="1" col_width="10" showWay="0" fileData={this.state.fileData.TC} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
@@ -298,8 +298,7 @@ export default class AdminBuyerRequestManage extends Component {
 
                                             <div className="lm--formItem lm--formItem--inline string">
                                                 <label className="lm--formItem-left lm--formItem-label string required">
-                                                    <div style={{ fontSize: "0.875rem" }} className={this.state.buyer_type === '1' ? "isDisplay " : "isHide"}><abbr title="required">*</abbr>Total Volume (kwh/month) :</div>
-                                                    <div style={{ fontSize: "0.875rem" }} className={this.state.buyer_type === '1' ? "isHide" : "isDisplay"}><abbr title="required">*</abbr>Estimated(aggregate) monthly consumption :</div>
+                                                    <abbr title="required">*</abbr> Estimated (aggregate) monthly consumption (kwh/month) :
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control">
                                                     <input type="text" name="total_volume" value={this.state.total_volume} onChange={this.doValue.bind(this, 'total_volume')} disabled={this.state.disabled} ref="total_volume" required aria-required="true" title="Please fill out this field" placeholder="" />
@@ -308,7 +307,7 @@ export default class AdminBuyerRequestManage extends Component {
                                             </div>
                                             <div className="lm--formItem lm--formItem--inline string">
                                                 <label className="lm--formItem-left lm--formItem-label string required">
-                                                    <abbr title="required">*</abbr> Flexible on Contract Start Date? :
+                                                    <abbr title="required">*</abbr> Flexible on Contract Start Date? 
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control">
                                                     <select ref="allow_deviation" id="allow_deviation" onChange={this.doValue.bind(this, 'flexible')} value={this.state.flexible} disabled={this.state.disabled}>

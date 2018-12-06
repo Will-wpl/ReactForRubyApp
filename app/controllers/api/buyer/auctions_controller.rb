@@ -37,7 +37,7 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
     ]
     actions = [{ url: '/buyer/consumptions/:id/edit', name: 'Manage', icon: 'manage', check: 'docheck' },
                { url: '/buyer/consumptions/:id/edit', name: 'View', icon: 'view', check: 'docheck' },
-               { url: '/buyer/auctions/:id/retailer_dashboard?past', name: 'Retailer Dashboard', icon: 'edit', interface_type: 'auction'}]
+               { url: '/buyer/auctions/:id/retailer_dashboard', name: 'Retailer Dashboard', icon: 'edit', interface_type: 'auction'}]
     data = []
     consumptions = get_order_list(params, headers, consumption)
     consumptions.each do |consumption|

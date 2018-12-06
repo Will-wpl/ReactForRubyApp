@@ -361,7 +361,7 @@ export class SearchList extends Component {
                                                                         if(item['auction_status'] === 'In Progress' && ik.name === 'View'){
                                                                         }else{
                                                                             return <a key={k} className={this.props.table_data.actions[item["actions"]].icon}
-                                                                                onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,this.props.table_data.actions[item["actions"]].url,this.props.table_data.actions[item["actions"]].name,this.props.table_data.actions[item["actions"]].interface_type ? this.props.table_data.actions[item["actions"]].interface_type : "",item.name ? item.name : '',null)}>
+                                                                                onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,this.props.table_data.actions[item["actions"]].url,this.props.table_data.actions[item["actions"]].name,this.props.table_data.actions[item["actions"]].interface_type ? this.props.table_data.actions[item["actions"]].interface_type : "",item.name ? item.name : '',window.location.href.indexOf("retailer")>0?item.auction_id:null)}>
                                                                                 {this.props.table_data.actions[item["actions"]].name}</a>
                                                                         }
 
