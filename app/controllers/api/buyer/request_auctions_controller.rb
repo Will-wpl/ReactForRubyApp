@@ -38,7 +38,7 @@ end
 private
 def get_request_auction_headers
   [
-      { name: 'Name', field_name: 'name', table_name: 'request_auctions' },
+      { name: 'Name of Reverse Auction', field_name: 'name', table_name: 'request_auctions' },
       # { name: 'Buyer Name', field_name: 'buyer_name', table_name: 'users' },
       # { name: 'Contract Duration', field_name: 'duration', table_name: 'request_auctions' },
       { name: 'Start Date', field_name: 'contract_period_start_date', table_name: 'request_auctions' },
