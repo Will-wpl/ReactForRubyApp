@@ -30,7 +30,7 @@ spec:
             - name: REDISTOGO_URL
               value: "${REDISTOGO_URL}"
             - name: REDISTOGO_PASSWORD
-              value: ${REDISTOGO_PASSWORD}  
+              value: ${REDISTOGO_PASSWORD}
             - name: SECRET_KEY_BASE
               value: ${SECRET_KEY_BASE}
             - name: CARRIERWAVE_STORAGE
@@ -82,7 +82,7 @@ spec:
             - name: REDISTOGO_URL
               value: ${REDISTOGO_URL}
             - name: REDISTOGO_PASSWORD
-              value: ${REDISTOGO_PASSWORD}  
+              value: ${REDISTOGO_PASSWORD}
             - name: SECRET_KEY_BASE
               value: ${SECRET_KEY_BASE}
             - name: CARRIERWAVE_STORAGE
@@ -95,7 +95,7 @@ spec:
               value: ${AZURE_CONTAINER}
           ports:
             - containerPort: 3000
-        
+
 ---
 
 kind: Service

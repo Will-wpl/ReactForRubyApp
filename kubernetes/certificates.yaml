@@ -1,0 +1,17 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: my-new-tls-secret
+spec:
+  secretName: my-new-tls-secret
+  dnsNames:
+  - test-reverse-auction.southeastasia.cloudapp.azure.com
+  acme:
+    config:
+    - http01:
+        ingressClass: nginx
+      domains:
+      - test-reverse-auction.southeastasia.cloudapp.azure.com
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer

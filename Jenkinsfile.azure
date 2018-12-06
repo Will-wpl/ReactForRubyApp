@@ -20,7 +20,7 @@ pipeline {
         AZURE_CONTAINER = credentials('ra-azure-container')
         AZURE_STORAGE_ACCESS_KEY = credentials('ra-azure-storage-access-key')
         AZURE_STORAGE_ACCOUNT_NAME = credentials('ra-azure-storage-account-name')
-        TARGET_BRANCH_NAME = 'azure-test'
+        TARGET_BRANCH_NAME = 'PR_azure_test'
         CODECOV_TOKEN = credentials('codecov_token')
     }
     stages {
@@ -29,7 +29,6 @@ pipeline {
            stages {
                stage('Start') {
                    steps {
-                       slackSend message: 'jenkins:test start'
                        setBuildStatus('jenkins:test', 'testing', 'PENDING')
                    }
                }
@@ -59,11 +58,9 @@ pipeline {
                    }
                    post {
                         success {
-                            slackSend message: 'jenkins:test success'
                             setBuildStatus('jenkins:test', 'tested', 'SUCCESS')
                         }
                         failure {
-                            slackSend message: 'jenkins:test failure'
                             setBuildStatus('jenkins:test', 'tested', 'FAILURE')
                         }
                    }
@@ -75,7 +72,6 @@ pipeline {
            stages {
                stage('Start') {
                     steps {
-                        slackSend message: 'jenkins:deploy start'
                         setBuildStatus('jenkins:build', 'building', 'PENDING')
                         setBuildStatus('jenkins:push', 'pushing', 'PENDING')
                         setBuildStatus('jenkins:deploy', 'deploying', 'PENDING')
@@ -98,7 +94,6 @@ pipeline {
                             setBuildStatus('jenkins:build', 'built', 'SUCCESS')
                         }
                         failure {
-                            slackSend message: 'jenkins:build failure'
                             setBuildStatus('jenkins:build', 'built', 'FAILURE')
                         }
                     }
@@ -116,11 +111,9 @@ pipeline {
                     }
                     post {
                         success {
-                            slackSend message: 'jenkins:push success'
                             setBuildStatus('jenkins:push', 'pushed', 'SUCCESS')
                         }
                         failure {
-                            slackSend message: 'jenkins:push failure'
                             setBuildStatus('jenkins:push', 'pushed', 'FAILURE')
                         }
                     }
@@ -137,11 +130,9 @@ pipeline {
                     }
                     post {
                         success {
-                            slackSend message: 'jenkins:deploy success'
                             setBuildStatus('jenkins:deploy', 'deployed', 'SUCCESS')
                         }
                         failure {
-                            slackSend message: 'jenkins:deploy failure'
                             setBuildStatus('jenkins:deploy', 'deployed', 'FAILURE')
                         }
                     }
@@ -176,4 +167,3 @@ void setBuildStatus(String context, String message, String state) {
       statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
   ]);
 }
-

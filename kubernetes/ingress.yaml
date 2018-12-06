@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: raweb-ingress
+  name: new-new-new-raweb-ingress
   annotations:
     kubernetes.io/ingress.class: nginx
     certmanager.k8s.io/cluster-issuer: letsencrypt-prod
@@ -9,10 +9,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - raweb.79534ded9f40402aba1d.japaneast.aksapp.io
-    secretName: tlssecret
+    - test-reverse-auction.southeastasia.cloudapp.azure.com
+    secretName: my-new-tls-secret
   rules:
-  - host: raweb.79534ded9f40402aba1d.japaneast.aksapp.io
+  - host: test-reverse-auction.southeastasia.cloudapp.azure.com
     http:
       paths:
       - path: /
