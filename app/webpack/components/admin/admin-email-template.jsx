@@ -21,6 +21,16 @@ export default class EmailTemplates extends Component {
                 "LETTER_OF_AUTHORISATION": [
                     { buttonName: "none", files: [] }
                 ]
+            },
+            fileDataBuyer: {
+                "LETTER_OF_AUTHORISATION_BUYER": [
+                    { buttonName: "none", files: [] }
+                ]
+            },
+            fileDataRetailer: {
+                "LETTER_OF_AUTHORISATION_RETAILER": [
+                    { buttonName: "none", files: [] }
+                ]
             }
         }
     }
@@ -128,6 +138,45 @@ export default class EmailTemplates extends Component {
             currentTab: type
         })
     }
+
+    refresh(type) {
+        if(type==="buyer")
+        {
+            let total = this.state.fileDataBuyer.LETTER_OF_AUTHORISATION_BUYER[0].files.length;
+            if (total === 2) {
+                let attachment = {
+                    id: this.state.fileDataBuyer.LETTER_OF_AUTHORISATION_BUYER[0].files[1].id,
+                    file_name: this.state.fileDataBuyer.LETTER_OF_AUTHORISATION_BUYER[0].files[1].file_name,
+                    file_path: this.state.fileDataBuyer.LETTER_OF_AUTHORISATION_BUYER[0].files[1].file_path
+                }
+                let fileObj = this.state.fileDataBuyer;
+                fileObj['LETTER_OF_AUTHORISATION_BUYER'][0].files = [];
+                fileObj['LETTER_OF_AUTHORISATION_BUYER'][0].files.push(attachment)
+                this.setState({
+                    fileDataBuyer: fileObj
+                })
+            }
+        }
+        else
+        {
+            let total = this.state.fileDataRetailer.LETTER_OF_AUTHORISATION_BUYER[0].files.length;
+            if (total === 2) {
+                let attachment = {
+                    id: this.state.fileDataRetailer.LETTER_OF_AUTHORISATION_BUYER[0].files[1].id,
+                    file_name: this.state.fileDataRetailer.LETTER_OF_AUTHORISATION_BUYER[0].files[1].file_name,
+                    file_path: this.state.fileDataRetailer.LETTER_OF_AUTHORISATION_BUYER[0].files[1].file_path
+                }
+                let fileObj = this.state.fileDataRetailer;
+                fileObj['LETTER_OF_AUTHORISATION_BUYER'][0].files = [];
+                fileObj['LETTER_OF_AUTHORISATION_BUYER'][0].files.push(attachment)
+                this.setState({
+                    fileDataRetailer: fileObj
+                })
+            }
+        }
+       
+    }
+    
     render() {
         //console.log('ranking', this.props.ranking)
         return (
@@ -150,12 +199,28 @@ export default class EmailTemplates extends Component {
                             <TemplatesList type={"la"} email_list={this.state.la_list} showEmail={this.showEmail.bind(this)} />
                         </div>
                         <div className="col-sm-12 buyer_list" id="template_registration">
-                            <div className="admin_invitation lm--formItem lm--formItem--inline string u-mt2 u-mb2">
+                            {/* <div className="admin_invitation lm--formItem lm--formItem--inline string u-mt2 u-mb2">
                                 <label className="lm--formItem-left lm--formItem-label string required" >
                                     <abbr title="required">*</abbr> Letter Of Authorisation :
                                 </label>
                                 <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                     <UploadFile loading="true" type="LETTER_OF_AUTHORISATION" required="required" deleteType="userAttach" showList="1" col_width="8" showWay="1" fileData={this.state.fileData.LETTER_OF_AUTHORISATION} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
+                                </div>
+                            </div> */}
+                            <div className="admin_invitation lm--formItem lm--formItem--inline string u-mt2 u-mb2">
+                                <label className="lm--formItem-left lm--formItem-label string required" >
+                                    <abbr title="required">*</abbr> Letter Of Authorisation  for Buyer:
+                                </label>
+                                <div className="lm--formItem-right lm--formItem-control u-grid mg0">
+                                    <UploadFile loading="true" type="AUTHORISATION_BUYER" calbackFn={this.refresh.bind(this,"buyer")} required="required" showList="1" col_width="8" showWay="0" fileData={this.state.fileDataBuyer.LETTER_OF_AUTHORISATION_BUYER} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
+                                </div>
+                            </div>
+                            <div className="admin_invitation lm--formItem lm--formItem--inline string u-mt2 u-mb2">
+                                <label className="lm--formItem-left lm--formItem-label string required" >
+                                    <abbr title="required">*</abbr> Letter Of Authorisation for Retailer :
+                                </label>
+                                <div className="lm--formItem-right lm--formItem-control u-grid mg0">
+                                    <UploadFile loading="true" type="AUTHORISATION_RETAILER" calbackFn={this.refresh.bind(this,'retailer')} required="required" showList="1" col_width="8" showWay="0" fileData={this.state.fileDataRetailer.LETTER_OF_AUTHORISATION_RETAILER} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
                                 </div>
                             </div>
                         </div>
