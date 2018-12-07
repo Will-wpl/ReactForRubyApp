@@ -51,5 +51,5 @@ class RequestedSingleBuyerWorkflow < BaseTenderWorkflow
       {}
     end
   end
-  
+
 end

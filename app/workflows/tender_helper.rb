@@ -9,7 +9,7 @@ class TenderHelper
                      if auction.request_owner_id.blank?
                        SingleBuyerWorkflow.new.get_arrangement_state_machine(arrangement_id)
                      else
-                       RequestedSingleBuyerWorkflow.new.get_current_action_status(arrangement_id)
+                       RequestedSingleBuyerWorkflow.new.get_arrangement_state_machine(arrangement_id)
                      end
                    else
                      MultBuyerTenderWorkflow.new.get_arrangement_state_machine(arrangement_id)
