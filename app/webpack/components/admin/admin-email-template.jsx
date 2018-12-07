@@ -77,11 +77,18 @@ export default class EmailTemplates extends Component {
         }, error => {
 
         })
-        getEmailFile('LETTER_OF_AUTHORISATION').then(res => {
-            let file = this.state.fileData;
-            file.LETTER_OF_AUTHORISATION[0].files = res;
+        getEmailFile('AUTHORISATION_BUYER').then(res => {
+            let file = this.state.fileDataBuyer;
+            file.LETTER_OF_AUTHORISATION_BUYER[0].files = res;
             this.setState({
-                fileData: file
+                fileDataBuyer: file
+            })
+        })
+        getEmailFile('AUTHORISATION_RETAILER').then(res => {
+            let file = this.state.fileDataRetailer;
+            file.LETTER_OF_AUTHORISATION_RETAILER[0].files = res;
+            this.setState({
+                fileDataRetailer: file
             })
         })
     }
@@ -140,8 +147,7 @@ export default class EmailTemplates extends Component {
     }
 
     refresh(type) {
-        if(type==="buyer")
-        {
+        if (type === "buyer") {
             let total = this.state.fileDataBuyer.LETTER_OF_AUTHORISATION_BUYER[0].files.length;
             if (total === 2) {
                 let attachment = {
@@ -157,26 +163,25 @@ export default class EmailTemplates extends Component {
                 })
             }
         }
-        else
-        {
-            let total = this.state.fileDataRetailer.LETTER_OF_AUTHORISATION_BUYER[0].files.length;
+        else {
+            let total = this.state.fileDataRetailer.LETTER_OF_AUTHORISATION_RETAILER[0].files.length;
             if (total === 2) {
                 let attachment = {
-                    id: this.state.fileDataRetailer.LETTER_OF_AUTHORISATION_BUYER[0].files[1].id,
-                    file_name: this.state.fileDataRetailer.LETTER_OF_AUTHORISATION_BUYER[0].files[1].file_name,
-                    file_path: this.state.fileDataRetailer.LETTER_OF_AUTHORISATION_BUYER[0].files[1].file_path
+                    id: this.state.fileDataRetailer.LETTER_OF_AUTHORISATION_RETAILER[0].files[1].id,
+                    file_name: this.state.fileDataRetailer.LETTER_OF_AUTHORISATION_RETAILER[0].files[1].file_name,
+                    file_path: this.state.fileDataRetailer.LETTER_OF_AUTHORISATION_RETAILER[0].files[1].file_path
                 }
                 let fileObj = this.state.fileDataRetailer;
-                fileObj['LETTER_OF_AUTHORISATION_BUYER'][0].files = [];
-                fileObj['LETTER_OF_AUTHORISATION_BUYER'][0].files.push(attachment)
+                fileObj['LETTER_OF_AUTHORISATION_RETAILER'][0].files = [];
+                fileObj['LETTER_OF_AUTHORISATION_RETAILER'][0].files.push(attachment)
                 this.setState({
                     fileDataRetailer: fileObj
                 })
             }
         }
-       
+
     }
-    
+
     render() {
         //console.log('ranking', this.props.ranking)
         return (
@@ -212,7 +217,7 @@ export default class EmailTemplates extends Component {
                                     <abbr title="required">*</abbr> Letter Of Authorisation  for Buyer:
                                 </label>
                                 <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                                    <UploadFile loading="true" type="AUTHORISATION_BUYER" calbackFn={this.refresh.bind(this,"buyer")} required="required" showList="1" col_width="8" showWay="0" fileData={this.state.fileDataBuyer.LETTER_OF_AUTHORISATION_BUYER} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
+                                    <UploadFile loading="true" type="AUTHORISATION_BUYER" calbackFn={this.refresh.bind(this, "buyer")} required="required" showList="1" col_width="8" showWay="0" fileData={this.state.fileDataBuyer.LETTER_OF_AUTHORISATION_BUYER} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
                                 </div>
                             </div>
                             <div className="admin_invitation lm--formItem lm--formItem--inline string u-mt2 u-mb2">
@@ -220,7 +225,7 @@ export default class EmailTemplates extends Component {
                                     <abbr title="required">*</abbr> Letter Of Authorisation for Retailer :
                                 </label>
                                 <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                                    <UploadFile loading="true" type="AUTHORISATION_RETAILER" calbackFn={this.refresh.bind(this,'retailer')} required="required" showList="1" col_width="8" showWay="0" fileData={this.state.fileDataRetailer.LETTER_OF_AUTHORISATION_RETAILER} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
+                                    <UploadFile loading="true" type="AUTHORISATION_RETAILER" calbackFn={this.refresh.bind(this, 'retailer')} required="required" showList="1" col_width="8" showWay="0" fileData={this.state.fileDataRetailer.LETTER_OF_AUTHORISATION_RETAILER} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
                                 </div>
                             </div>
                         </div>
