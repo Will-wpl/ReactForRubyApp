@@ -21,6 +21,7 @@ export class BuyerKeppelproposedeviations extends Component {
         }
     }
     componentDidMount(){
+        console.log(this.props.readOnly);
         getbuyerDeviations(this.props.current.current.arrangement_id).then(res=>{
             //console.log(res);
             if(res.chats.length > 0){
