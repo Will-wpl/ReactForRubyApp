@@ -8,6 +8,8 @@ class UserAttachment < ApplicationRecord
   FileType_Buyer_Doc = 'BUYER_DOCUMENTS'.freeze
   FileType_Consumption_Detail_Doc = 'CONSUMPTION_DOCUMENTS'.freeze
   FileType_Letter_Authorisation = 'LETTER_OF_AUTHORISATION'.freeze
+  FileType_Letter_Authorisation_Buyer = 'LETTER_OF_AUTHORISATION_BUYER'.freeze
+  FileType_Letter_Authorisation_Retailer = 'LETTER_OF_AUTHORISATION_RETAILER'.freeze
   FileType_Common = 'COMMON'.freeze
 
   FileFlag_Seller_Buyer_TC = 1.freeze
