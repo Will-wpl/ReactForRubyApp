@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import { UploadFile } from '../shared/upload';
-import { changeValidate, validator_Object, setValidationFaild, setValidationPass } from './../../javascripts/componentService/util';
+import { changeValidate, validator_Object, setValidationFaild, setValidationPass, getStatus } from './../../javascripts/componentService/util';
 import { getBuyerRequestDetail_Admin, approveBuyerRequest } from './../../javascripts/componentService/admin/service';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -67,7 +67,7 @@ export default class AdminBuyerRequestManage extends Component {
                     allow_deviation: res.request_auction.allow_deviation,
                     comment: res.request_auction.comment ? res.request_auction.comment : "",
                     status: res.request_auction.accept_status,
-                    status_name: this.getStatus(res.request_auction.accept_status)
+                    status_name: getStatus(res.request_auction.accept_status)
                 })
 
                 if (res.last_attachment) {
@@ -87,21 +87,6 @@ export default class AdminBuyerRequestManage extends Component {
         })
     }
 
-    getStatus(type) {
-        let status = "Pending";
-        switch (parseInt(type)) {
-            case 0:
-                status = "Rejected"
-                break;
-            case 1:
-                status = "Approved"
-                break;
-            default:
-                status = "Pending"
-                break;
-        }
-        return status;
-    }
 
     starttimeChange(data) {
         this.setState({
@@ -319,7 +304,7 @@ export default class AdminBuyerRequestManage extends Component {
                                                     <abbr title="required" className={this.state.action_type === "reject" ? "isDisplayInLine" : "isHide"}  >*</abbr> Admin Comments  :
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control">
-                                                    <textarea type="text" name="comment" disabled={parseInt(this.state.status) === 1|| parseInt(this.state.status) === 0} value={this.state.comment} onChange={this.doValue.bind(this, 'comment')} ref="request_name" required aria-required="true" title="Please fill out this field" placeholder="" />
+                                                    <textarea type="text" name="comment" disabled={parseInt(this.state.status) === 1 || parseInt(this.state.status) === 0} value={this.state.comment} onChange={this.doValue.bind(this, 'comment')} ref="request_name" required aria-required="true" title="Please fill out this field" placeholder="" />
                                                     <div className='isPassValidate' id='comment_message' >This field is required!</div>
                                                 </div>
                                             </div>

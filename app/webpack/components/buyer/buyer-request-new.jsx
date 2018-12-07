@@ -6,7 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { UploadFile } from '../shared/upload';
 import { Modal } from '../shared/show-modal';
 import moment from 'moment';
-import { changeValidate, removeAsInteger, validateInteger, setValidationFaild, setValidationPass, validator_Object } from './../../javascripts/componentService/util';
+import { changeValidate, removeAsInteger, validateInteger, setValidationFaild, setValidationPass, validator_Object, getStatus } from './../../javascripts/componentService/util';
 import { getBuyerRequestDetail, saveBuyerRequest, approveBuyerRequest } from './../../javascripts/componentService/common/service';
 
 
@@ -32,6 +32,7 @@ export class BuyerNewRequestManage extends Component {
                 ]
             },
             status: 2,
+            status_name: "",
             user_type: "buyer",
             operation_type: "create",
             uploadUrl: "/api/buyer/request_attachments?file_type=",
@@ -97,7 +98,8 @@ export class BuyerNewRequestManage extends Component {
                     duration: res.request_auction.duration,
                     total_volume: res.request_auction.total_volume,
                     allow_deviation: res.request_auction.allow_deviation,
-                    status: res.request_auction.accept_status
+                    status: res.request_auction.accept_status,
+                    status_name: getStatus(res.request_auction.accept_status)
 
                 })
 
@@ -233,7 +235,7 @@ export class BuyerNewRequestManage extends Component {
 
         }
 
-        return flag ;
+        return flag;
     }
 
     refresh() {
@@ -287,7 +289,7 @@ export class BuyerNewRequestManage extends Component {
         }
     }
 
-     
+
 
     render() {
         let btn_html;
@@ -316,7 +318,7 @@ export class BuyerNewRequestManage extends Component {
                 </div>
             }
         }
-         
+
         return (
             <div className="u-grid mg0 div-center" >
                 <h2 className="u-mt3 u-mb3"></h2>
@@ -327,6 +329,15 @@ export class BuyerNewRequestManage extends Component {
                                 <div className="u-grid admin_invitation ">
                                     <div className="col-sm-12 col-md-8 push-md-2 validate_message ">
                                         <div className="top"></div>
+                                        <div className="lm--formItem lm--formItem--inline string">
+                                            <label className="lm--formItem-left lm--formItem-label string required">
+                                                <abbr title="required"></abbr> Status  :
+                                                </label>
+                                            <div className="lm--formItem-right lm--formItem-control" style={{ marginTop: "12px" }}>
+                                                {this.state.status_name}
+                                            </div>
+                                        </div>
+
                                         <div className="lm--formItem lm--formItem--inline string">
                                             <label className="lm--formItem-left lm--formItem-label string required">
                                                 <abbr title="required">*</abbr> Name of Reverse Auction  :
@@ -376,7 +387,7 @@ export class BuyerNewRequestManage extends Component {
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                                     <UploadFile type="TC" required="required" calbackFn={this.refresh.bind(this)} validate="true" showList="1" col_width="10" showWay="0" fileData={this.state.fileData.TC} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
-                                                     
+
                                                 </div>
                                             </div> : ''
                                         }

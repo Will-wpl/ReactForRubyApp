@@ -613,3 +613,18 @@ export const getUserApprovalStatus = (status) => {
     return approvalStatus;
 }
 
+export const getStatus = (type) => {
+    let status = "Pending";
+    switch (parseInt(type)) {
+        case 0:
+            status = "Rejected"
+            break;
+        case 1:
+            status = "Approved"
+            break;
+        default:
+            status = "Pending"
+            break;
+    }
+    return status;
+}
