@@ -99,7 +99,7 @@ export class BuyerNewRequestManage extends Component {
                     total_volume: res.request_auction.total_volume,
                     allow_deviation: res.request_auction.allow_deviation,
                     status: res.request_auction.accept_status,
-                    status_name: getStatus(res.request_auction.accept_status)
+                    status_name: getStatus(res.request_auction.accept_status,res.request_auction.accept_date_time === null ? res.request_auction.created_at : res.request_auction.accept_date_time)
 
                 })
 

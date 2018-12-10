@@ -61,16 +61,16 @@ export class BuyerRequestEntityListManage extends Component {
                                                 <dfn className={"search_list_desc retailer_name"} onClick={this.dosort.bind(this, 'retailer_name', 'desc')}></dfn></div>
                                         </th>
                                         <th>Contract Expiry
-                            <div><dfn className={"search_list_asc contract_expiry"} onClick={this.dosort.bind(this, 'contract_expiry', 'asc')}></dfn>
-                                                <dfn className={"search_list_desc contract_expiry"} onClick={this.dosort.bind(this, 'contract_expiry', 'desc')}></dfn></div>
+                            <div><dfn className={"search_list_asc contract_period_end_date"} onClick={this.dosort.bind(this, 'contract_period_end_date', 'asc')}></dfn>
+                                                <dfn className={"search_list_desc contract_period_end_date"} onClick={this.dosort.bind(this, 'contract_period_end_date', 'desc')}></dfn></div>
                                         </th>
                                     </tr></thead>
                                 <tbody>
                                 {this.state.entity_list.map((item, index) => {
                                     return <tr key={index}>
-                                        <td>{item.company_name}</td>
                                         <td>{item.entity_name}</td>
-                                        <td>{item.contract_expiry}</td>
+                                        <td>{item.retailer_name}</td>
+                                        <td>{item.contract_period_end_date}</td>
                                     </tr>
                                 })}
                                 </tbody>
