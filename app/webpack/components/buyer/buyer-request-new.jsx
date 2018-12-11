@@ -270,15 +270,14 @@ export class BuyerNewRequestManage extends Component {
                 buyer_type: this.state.buyer_type,
                 contract_period_start_date: moment(this.state.contract_period_start_date).format(),
                 duration: this.state.duration,
-                flexible: this.state.flexible
+                flexible: this.state.flexible,
+                total_volume = this.state.total_volume
             }
             if (this.state.buyer_type === '1') {
-                this.request.total_volume = this.state.total_volume;
                 this.request.attachment_id = '';
                 this.request.allow_deviation = '1';
             }
             else {
-                this.request.total_volume = "";
                 this.request.attachment_id = this.state.fileData.TC[0].files.length > 0 ? this.state.fileData.TC[0].files[0].id : "";
                 this.request.allow_deviation = this.state.allow_deviation;
             }
