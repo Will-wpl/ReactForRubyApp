@@ -12,7 +12,7 @@ class Api::Admin::RequestAuctionsController < Api::RequestAuctionsController
       total = result.count
     end
     result = result.page(params[:page_index]).per(params[:page_size])
-    headers = get_request_auction_headers
+    headers = get_request_auction_headers1
     data = []
     unless result.blank?
       results = get_order_list(result, params, headers)
@@ -37,7 +37,7 @@ end
 
 private
 
-def get_request_auction_headers
+def get_request_auction_headers1
   [
       { name: 'Name', field_name: 'name', table_name: 'request_auctions' },
       { name: 'Buyer Name', field_name: 'buyer_name', table_name: 'users' },
