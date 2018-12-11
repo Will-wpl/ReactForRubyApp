@@ -307,7 +307,7 @@ export default class AdminBuyerRequestManage extends Component {
                                             </div>
                                             <div className="lm--formItem lm--formItem--inline string">
                                                 <label className="lm--formItem-left lm--formItem-label string required">
-                                                    <abbr title="required">*</abbr> Flexible on Contract Start Date? :
+                                                    <abbr title="required">*</abbr> Flexible on Contract Start Date? 
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control">
                                                     <select ref="allow_deviation" id="allow_deviation" onChange={this.doValue.bind(this, 'flexible')} value={this.state.flexible} disabled={this.state.disabled}>
