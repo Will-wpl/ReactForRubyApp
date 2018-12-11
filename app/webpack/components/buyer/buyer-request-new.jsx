@@ -304,7 +304,7 @@ export class BuyerNewRequestManage extends Component {
                 }
                 else {
                     btn_html = this.state.disabled ?
-                        <div style={{ paddingRight: "10px" }}><button id="save_edit" disabled={parseInt(this.state.status) === 2 && (this.state.accept_date_time !== "" && this.state.accept_date_time !== null)} className="lm--button lm--button--primary" onClick={this.doEditAction.bind(this)}>Edit</button></div>
+                        <div style={{ paddingRight: "10px" }}><button id="save_edit" disabled={parseInt(this.state.status) === 2} className="lm--button lm--button--primary" onClick={this.doEditAction.bind(this)}>Edit</button></div>
                         : <div>
                             <button id="save_form" className="lm--button lm--button--primary" onClick={this.doCancel.bind(this, "save")}>Cancel</button>
                             <button id="submit_form" className="lm--button lm--button--primary" onClick={this.doSave.bind(this, 'save')}>Save</button>
