@@ -378,7 +378,7 @@ class Api::AuctionsController < Api::BaseController
       user_info[:role] = 'buyer'
       user_info[:readonly] = Auction.has_request(params[:id]) ? false: true
     end
-    tenders = TenderWorkflow.new.get_action_state_machine_only_approval_pending(params[:id]) #get_action_state_machine
+    tenders = TenderWorkflow.new.get_action_state_machine_only_approval_pending(params[:id], current_user) #get_action_state_machine
     step_counts = [0, 0, 0, 0, 0, 0, 0]
     tenders.each do |tender|
 
