@@ -22,15 +22,15 @@ class RequestAuction < ApplicationRecord
   # Validations
 
   # Scopes
-  scope :mine, ->(user_id) { where(user_id: user_id).order(:updated_at) }
+  scope :mine, ->(user_id) { where(user_id: user_id) }
   scope :find_pending, -> { where(accept_status: RequestAuction::AcceptStatusPending).order(:updated_at) }
 
   # Search
   def self.find_buyer_entity_contract_info(buyer_id, sort_by)
-    default_sort = "cdf.contract_expiry DESC"
+    default_sort = "cdf.contract_period_end_date DESC"
     sort_by = default_sort if sort_by.nil?
-    Consumption.find_by_sql ["SELECT cdf.*
-                              FROM (SELECT cd.*, a.id as auction_id, a.name as auction_name, a.published_gid as ra_id, e.user_id as buyer_id, e.company_name as entity_name, e.id as entity_id , ac.contract_period_end_date, retailer.name as retailer_name FROM consumption_details cd
+    Consumption.find_by_sql ["SELECT distinct cdf.*
+                              FROM (SELECT a.id as auction_id, a.name as auction_name, a.published_gid as ra_id, e.user_id as buyer_id, e.company_name as entity_name, e.id as entity_id , ac.contract_period_end_date, retailer.company_name as retailer_name FROM consumption_details cd
                                       JOIN company_buyer_entities e ON cd.company_buyer_entity_id = e.id
                                       JOIN users u ON e.user_id = u.id
                                       JOIN consumptions c ON cd.consumption_id = c.id
@@ -45,7 +45,7 @@ class RequestAuction < ApplicationRecord
                                       AND c.contract_duration = ac.contract_duration
                                       AND e.user_id = :Buyer_id
                                     ) as cdf
-                              WHERE cdf.contract_expiry > current_date ORDER BY #{sort_by}
+                              WHERE cdf.contract_period_end_date > current_date ORDER BY #{sort_by}
                              ", {:Buyer_id => buyer_id}]
   end
 

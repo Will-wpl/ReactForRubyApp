@@ -31,7 +31,7 @@ export class Modal extends React.Component {
             modalSize: this.props.modalSize, approval_status: 2,
             entityid: '', is_default: '', user_id: "", main_id: "", user_entity_id: "",
             entity_company_name: '', entity_company_uen: '', entity_company_address: '', entity_billing_address: '', entity_bill_attention_to: '', entity_contact_name: '',
-            entity_contact_email: '', entity_contact_mobile_no: '', entity_contact_office_no: '', entitList: [], entityErrorList: [], loglist: [], attatchment: [],
+            entity_contact_email: '', entity_contact_mobile_no: '', entity_contact_office_no: '', entitList: [], entityErrorList: [], loglist: [], attatchment: [], operatinType: '',
             attatchment_file_name: "", attatchment_file_path: "",
             advisory: ""
         }
@@ -119,13 +119,11 @@ export class Modal extends React.Component {
 
 
         if (next.attatchment) {
+            this.setState({
+                attatchment_file_name: next.attatchment.file_name,
+                attatchment_file_path: next.attatchment.file_path
+            })
 
-            if (next.attatchment[0]) {
-                this.setState({
-                    attatchment_file_name: next.attatchment[0].file_name,
-                    attatchment_file_path: next.attatchment[0].file_path
-                })
-            }
         }
         if (next.advisory) {
             this.setState({

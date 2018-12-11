@@ -23,6 +23,7 @@ class Api::RequestAuctionsController < Api::BaseController
     request_auction.allow_deviation = params[:allow_deviation] unless params[:allow_deviation].blank?
     request_auction.total_volume = params[:total_volume] unless params[:total_volume].blank?
     request_auction.user_id = current_user.id
+    request_auction.comment = "" if request_auction.accept_status == RequestAuction::AcceptStatusReject
     request_auction.accept_status = RequestAuction::AcceptStatusPending
     # save request auction
     if request_auction.save!
@@ -47,43 +48,48 @@ class Api::RequestAuctionsController < Api::BaseController
       comment = params[:comment]
       request_auction.accept_status = accept_status
       request_auction.comment = comment
+      request_auction.accept_date_time = DateTime.current
       if request_auction.save! && accept_status == RequestAuction::AcceptStatusApproved
-        # establish new auction if it is accepted.
-        auction = Auction.new
-        auction.name = request_auction.name
-        auction.contract_period_start_date = request_auction.contract_period_start_date
-        auction.buyer_type = request_auction.buyer_type
-        # auction.duration = request_auction.duration
-        auction.allow_deviation = request_auction.allow_deviation
-        auction.request_auction_id = request_auction.id
-        auction.request_owner_id = request_auction.user_id
-        auction.accept_status = accept_status
-        auction.publish_status = '0'
-        auction.total_lt_peak = 0
-        auction.total_lt_off_peak = 0
-        auction.total_hts_peak = 0
-        auction.total_hts_off_peak = 0
-        auction.total_htl_peak = 0
-        auction.total_htl_off_peak = 0
-        auction.total_eht_peak = 0
-        auction.total_eht_off_peak = 0
-        auction.total_volume = 0
-        if auction.save!
-          consumption = Consumption.new
-          consumption.auction_id = auction.id
-          consumption.user_id = request_auction.user_id
-          consumption.action_status = Consumption::ActionStatusPending
-          consumption.participation_status = Consumption::ParticipationStatusPending
-          if consumption.save!
-            month = request_auction.duration
-            contract = AuctionContract.new
-            contract.contract_period_end_date = auction.contract_period_start_date.advance(months: month).advance(days: -1)
-            contract.contract_duration = month
-            contract.auction_id = auction.id
-            contract.save
+        if request_auction.buyer_type == RequestAuction::SingleBuyerType
+          # establish new auction if it is accepted.
+          auction = Auction.new
+          auction.name = request_auction.name
+          auction.contract_period_start_date = request_auction.contract_period_start_date
+          auction.buyer_type = request_auction.buyer_type
+          # auction.duration = request_auction.duration
+          auction.allow_deviation = request_auction.allow_deviation
+          auction.request_auction_id = request_auction.id
+          auction.request_owner_id = request_auction.user_id
+          auction.accept_status = accept_status
+          auction.publish_status = '0'
+          auction.total_lt_peak = 0
+          auction.total_lt_off_peak = 0
+          auction.total_hts_peak = 0
+          auction.total_hts_off_peak = 0
+          auction.total_htl_peak = 0
+          auction.total_htl_off_peak = 0
+          auction.total_eht_peak = 0
+          auction.total_eht_off_peak = 0
+          auction.total_volume = 0
+          if auction.save!
+            consumption = Consumption.new
+            consumption.auction_id = auction.id
+            consumption.user_id = request_auction.user_id
+            consumption.action_status = Consumption::ActionStatusPending
+            consumption.participation_status = Consumption::ParticipationStatusPending
+            if consumption.save!
+              month = request_auction.duration
+              contract = AuctionContract.new
+              contract.contract_period_end_date = auction.contract_period_start_date.advance(months: month).advance(days: -1)
+              contract.contract_duration = month
+              contract.auction_id = auction.id
+              contract.save
+            end
           end
+          render json: { result: 'success', request_auction: request_auction, is_single:true, new_auction_id: auction.id }, status: 200
+        else
+          render json: { result: 'success', request_auction: request_auction, is_single:false }, status: 200
         end
-        render json: { result: 'success', request_auction: request_auction, new_auction_id: auction.id }, status: 200
       else
         render json: { result: 'success', request_auction: request_auction }, status: 200
       end
@@ -118,16 +124,16 @@ class Api::RequestAuctionsController < Api::BaseController
 
   protected
 
-  def get_request_auction_headers
-    [
-        { name: 'Name', field_name: 'name', table_name: 'request_auctions' },
-        # { name: 'Contract Duration', field_name: 'duration', table_name: 'request_auctions' },
-        { name: 'Start Date', field_name: 'contract_period_start_date', table_name: 'request_auctions' }
-        # { name: 'Type', field_name: 'buyer_type', table_name: 'request_auctions' },
-        # { name: 'All Deviation', field_name: 'allow_deviation', table_name: 'request_auctions' },
-        # { name: 'Total Volume', field_name: 'total_volume', table_name: 'request_auctions' }
-    ]
-  end
+  # def get_request_auction_headers
+  #   [
+  #       { name: 'Name', field_name: 'name', table_name: 'request_auctions' },
+  #       # { name: 'Contract Duration', field_name: 'duration', table_name: 'request_auctions' },
+  #       { name: 'Start Date', field_name: 'contract_period_start_date', table_name: 'request_auctions' }
+  #       # { name: 'Type', field_name: 'buyer_type', table_name: 'request_auctions' },
+  #       # { name: 'All Deviation', field_name: 'allow_deviation', table_name: 'request_auctions' },
+  #       # { name: 'Total Volume', field_name: 'total_volume', table_name: 'request_auctions' }
+  #   ]
+  # end
 
   # def get_buyer_entity_contract_headers
   #   [

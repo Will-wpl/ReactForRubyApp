@@ -67,7 +67,7 @@ export default class AdminBuyerRequestManage extends Component {
                     allow_deviation: res.request_auction.allow_deviation,
                     comment: res.request_auction.comment ? res.request_auction.comment : "",
                     status: res.request_auction.accept_status,
-                    status_name: getStatus(res.request_auction.accept_status)
+                    status_name: getStatus(res.request_auction.accept_status,res.request_auction.accept_date_time === null ? res.request_auction.created_at : res.request_auction.accept_date_time)
                 })
 
                 if (res.last_attachment) {
@@ -223,7 +223,7 @@ export default class AdminBuyerRequestManage extends Component {
                                                     <abbr title="required"></abbr> Status  :
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control" style={{ marginTop: "12px" }}>
-                                                    {this.state.status_name}
+                                                    {this.state.status_name} 
                                                 </div>
                                             </div>
                                             <div className="lm--formItem lm--formItem--inline string">
@@ -238,7 +238,7 @@ export default class AdminBuyerRequestManage extends Component {
 
                                             <div className="lm--formItem lm--formItem--inline string">
                                                 <label className="lm--formItem-left lm--formItem-label string required">
-                                                    <abbr title="required">*</abbr> Single / Multiple Buyer(s)  :
+                                                    <abbr title="required">*</abbr> Single / Multiple Buyer (s)  :
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control">
                                                     <select ref="buyer_type" id="buyer_type" onChange={this.doValue.bind(this, 'buyer_type')} value={this.state.buyer_type} disabled={this.state.disabled}>
@@ -271,7 +271,7 @@ export default class AdminBuyerRequestManage extends Component {
                                             {this.state.buyer_type == "0" ?
                                                 <div className="lm--formItem lm--formItem--inline string">
                                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                                        <abbr title="required">*</abbr> Upload T&C  :
+                                                        <abbr title="required"></abbr> Upload T&C  :
                                                 </label>
                                                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                                         <UploadFile type="TC" required="required" validate="true" showList="1" col_width="10" showWay="0" fileData={this.state.fileData.TC} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
@@ -298,7 +298,7 @@ export default class AdminBuyerRequestManage extends Component {
                                             {this.state.buyer_type == "1" ?
                                                 <div className="lm--formItem lm--formItem--inline string">
                                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                                        <abbr title="required">*</abbr> Total Volume(kwh/month) :
+                                                        <abbr title="required">*</abbr> Total Volume (kwh/month) :
                                                 </label>
                                                     <div className="lm--formItem-right lm--formItem-control">
                                                         <input type="text" name="total_volume" value={this.state.total_volume} onChange={this.doValue.bind(this, 'total_volume')} disabled={this.state.disabled} ref="total_volume" required aria-required="true" title="Please fill out this field" placeholder="" />

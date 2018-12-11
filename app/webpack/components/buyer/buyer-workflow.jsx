@@ -14,11 +14,11 @@ export class Buyerworkflow extends Component {
             auction:{},
             disabled:false,current:{},page:1,
             allbtnStatus:true,retailer_list:[],readOnly:false,
-            step_counts:[]
+            step_counts:[],role_name:""
         }
         getBuyerRetailerList(sessionStorage.auction_id).then(res=>{
             //console.log(res);
-            this.setState({retailer_list:res.tenders,step_counts:res.step_counts,readOnly:res.user_info.readOnly});
+            this.setState({retailer_list:res.tenders,step_counts:res.step_counts,readOnly:res.user_info.readOnly,role_name:res.user_info.company_name});
         })
     }
     getPageindex(arrangement_id,name,type,index){
@@ -30,9 +30,6 @@ export class Buyerworkflow extends Component {
             }else{
                 this.setState({current:res,page:res.current.current_node,readOnly:!type});
             }
-            getBuyerRetailerList(sessionStorage.auction_id).then(res=>{
-                this.setState({readOnly:res.user_info.readOnly});
-            })
             if(window.location.href.indexOf("past")>0){
                 this.setState({readOnly:true});
             }
@@ -45,7 +42,7 @@ export class Buyerworkflow extends Component {
             break
             case 1 : pageDom = <Buyerretailerdashboard step_counts={this.state.step_counts} retailer_list={this.state.retailer_list} page={this.getPageindex.bind(this)} title="Retailer Dashboard" />
             break
-            case 3 : pageDom = <BuyerKeppelproposedeviations current={this.state.current} readOnly={this.state.readOnly} page={this.getPageindex.bind(this)} title="keppel Propose Deviations" />
+            case 3 : pageDom = <BuyerKeppelproposedeviations name={this.state.role_name} current={this.state.current} readOnly={this.state.readOnly} page={this.getPageindex.bind(this)} title="keppel Propose Deviations" />
             break
             // case 4 : pageDom = <Keppelformtender current={this.state.current} readOnly={this.state.readOnly} page={this.getPageindex.bind(this)}/>
             // break

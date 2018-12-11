@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import {getBuyerRequestEnttiy} from './../../javascripts/componentService/common/service';
-
+import moment from 'moment';
 export class BuyerRequestEntityListManage extends Component {
 
 
@@ -43,7 +43,7 @@ export class BuyerRequestEntityListManage extends Component {
                 <div className="col-sm-12 col-md-12">
                     <div className="search_type padLR24 bgwhite">
                         <dl className="lm--formItem string optional">
-                            <button onClick={this.goCreate.bind(this)} style={{marginBottom:"10px"}} className="lm--button lm--button--primary create_btn u-pull-right">Request</button>
+                            <button onClick={this.goCreate.bind(this)} style={{marginBottom:"10px"}} className="lm--button lm--button--primary create_btn u-pull-right">Request New RA </button>
                         </dl>
 
                     </div>
@@ -61,16 +61,16 @@ export class BuyerRequestEntityListManage extends Component {
                                                 <dfn className={"search_list_desc retailer_name"} onClick={this.dosort.bind(this, 'retailer_name', 'desc')}></dfn></div>
                                         </th>
                                         <th>Contract Expiry
-                            <div><dfn className={"search_list_asc contract_expiry"} onClick={this.dosort.bind(this, 'contract_expiry', 'asc')}></dfn>
-                                                <dfn className={"search_list_desc contract_expiry"} onClick={this.dosort.bind(this, 'contract_expiry', 'desc')}></dfn></div>
+                            <div><dfn className={"search_list_asc contract_period_end_date"} onClick={this.dosort.bind(this, 'contract_period_end_date', 'asc')}></dfn>
+                                                <dfn className={"search_list_desc contract_period_end_date"} onClick={this.dosort.bind(this, 'contract_period_end_date', 'desc')}></dfn></div>
                                         </th>
                                     </tr></thead>
                                 <tbody>
                                 {this.state.entity_list.map((item, index) => {
                                     return <tr key={index}>
-                                        <td>{item.company_name}</td>
                                         <td>{item.entity_name}</td>
-                                        <td>{item.contract_expiry}</td>
+                                        <td>{item.retailer_name}</td>
+                                        <td>{moment(item.contract_period_end_date).format('D MMM YYYY')}</td>
                                     </tr>
                                 })}
                                 </tbody>

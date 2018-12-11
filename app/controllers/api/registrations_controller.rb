@@ -63,10 +63,10 @@ class Api::RegistrationsController < Api::BaseController
     # letter_of_authorisation_attachment = UserAttachment.find_list_by_type(UserAttachment::FileType_Letter_Authorisation).where("file_path like '%.zip'")
 
     # get letter-of-authorisation (buyer) document
-    letter_of_authorisation_attachment_buyer = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
+    letter_of_authorisation_attachment_buyer = UserAttachment.find_last_by_type(UserAttachment::FileType_Letter_Authorisation_Buyer)
 
     # get letter-of-authorisation (retailer) document
-    letter_of_authorisation_attachment_retailer = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
+    letter_of_authorisation_attachment_retailer = UserAttachment.find_last_by_type(UserAttachment::FileType_Letter_Authorisation_Retailer)
     # get logs
     user_logs = UserUpdatedLog.find_by_user_id(user.id)
     # return json
@@ -121,10 +121,10 @@ class Api::RegistrationsController < Api::BaseController
     # letter_of_authorisation_attachment = UserAttachment.find_list_by_type(UserAttachment::FileType_Letter_Authorisation).where("file_path like '%.zip'")
 
     # get letter-of-authorisation (buyer) document
-    letter_of_authorisation_attachment_buyer = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
+    letter_of_authorisation_attachment_buyer = UserAttachment.find_last_by_type(UserAttachment::FileType_Letter_Authorisation_Buyer)
 
     # get letter-of-authorisation (retailer) document
-    letter_of_authorisation_attachment_retailer = UserAttachment.find_last_by_type(UserAttachment::FileType_Buyer_REVV_TC)
+    letter_of_authorisation_attachment_retailer = UserAttachment.find_last_by_type(UserAttachment::FileType_Letter_Authorisation_Retailer)
     # get logs
     user_logs = UserUpdatedLog.find_by_user_id(user_id)
     # get user info

@@ -344,8 +344,8 @@ export class SearchList extends Component {
                                                                             </abbr>
                                                                         }
                                                                     })
-                                                                    :<abbr>{(it.field_name === "actual_begin_time" || it.field_name === "start_datetime" || it.field_name ==="logged_in_last_time" ||it.field_name ==="ws_connected_last_time" || it.field_name === "ws_send_message_last_time"|| it.field_name === "auction_when"||it.field_name==="contract_period_start_date")
-                                                                    ? moment(item[`${it.field_name}`]).format('D MMM YYYY hh:mm A'):(item[`${it.field_name}`]?(item[`${it.field_name}`].indexOf("!")>0?<bdo>{item[`${it.field_name}`].split("!")[0]} <b title="Purchasing Entity Pending" style={{"color":"red"}}>!</b></bdo>:item[`${it.field_name}`]):null)}</abbr>
+                                                                    :<abbr>{(it.field_name === "actual_begin_time" || it.field_name === "start_datetime" || it.field_name ==="logged_in_last_time" ||it.field_name ==="ws_connected_last_time" || it.field_name === "ws_send_message_last_time"|| it.field_name === "auction_when")
+                                                                    ? moment(item[`${it.field_name}`]).format('D MMM YYYY hh:mm A'):((it.field_name==="contract_period_start_date")?moment(item[`${it.field_name}`]).format('D MMM YYYY '):(item[`${it.field_name}`]?(item[`${it.field_name}`].indexOf("!")>0?<bdo>{item[`${it.field_name}`].split("!")[0]} <b title="Purchasing Entity Pending" style={{"color":"red"}}>!</b></bdo>:item[`${it.field_name}`]):null))}</abbr>
                                                                 }
                                                                 </td>
                                                         }
@@ -361,7 +361,7 @@ export class SearchList extends Component {
                                                                         if(item['auction_status'] === 'In Progress' && ik.name === 'View'){
                                                                         }else{
                                                                             return <a key={k} className={this.props.table_data.actions[item["actions"]].icon}
-                                                                                onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,this.props.table_data.actions[item["actions"]].url,this.props.table_data.actions[item["actions"]].name,this.props.table_data.actions[item["actions"]].interface_type ? this.props.table_data.actions[item["actions"]].interface_type : "",item.name ? item.name : '',item.auction_id)}>
+                                                                                onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,this.props.table_data.actions[item["actions"]].url,this.props.table_data.actions[item["actions"]].name,this.props.table_data.actions[item["actions"]].interface_type ? this.props.table_data.actions[item["actions"]].interface_type : "",item.name ? item.name : '',null)}>
                                                                                 {this.props.table_data.actions[item["actions"]].name}</a>
                                                                         }
 
