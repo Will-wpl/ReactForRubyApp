@@ -360,7 +360,7 @@ export class BuyerNewRequestManage extends Component {
 
                                         <div className="lm--formItem lm--formItem--inline string">
                                             <label className="lm--formItem-left lm--formItem-label string required">
-                                                <abbr title="required">*</abbr> Single / Multiple Buyer (s)  :
+                                                <abbr title="required">*</abbr> Single / Multiple Buyer(s)  :
                                                 </label>
                                             <div className="lm--formItem-right lm--formItem-control">
                                                 <select ref="buyer_type" id="buyer_type" onChange={this.doValue.bind(this, 'buyer_type')} value={this.state.buyer_type} disabled={this.state.disabled}>
