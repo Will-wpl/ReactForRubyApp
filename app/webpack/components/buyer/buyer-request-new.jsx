@@ -262,7 +262,8 @@ export class BuyerNewRequestManage extends Component {
                 name: this.state.name,
                 buyer_type: this.state.buyer_type,
                 contract_period_start_date: moment(this.state.contract_period_start_date).format(),
-                duration: this.state.duration
+                duration: this.state.duration,
+                comment:""
             }
             if (this.state.buyer_type === '1') {
                 this.request.total_volume = this.state.total_volume;
@@ -281,6 +282,7 @@ export class BuyerNewRequestManage extends Component {
             else {
                 this.request.id = this.state.id;
             }
+
             saveBuyerRequest(this.request).then(res => {
                 if (res.request_auction) {
                     window.location.href = "/buyer/request_auctions"
