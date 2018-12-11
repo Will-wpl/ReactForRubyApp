@@ -10,6 +10,8 @@ class RequestAuction < ApplicationRecord
   AllowDeviation = '1'.freeze
   NotAllowDeviation = '0'.freeze
 
+  FexibleContractStartDateYes = '1'.freeze
+  FexibleContractStartDateNo = '0'.freeze
   # Includes
 
   # Associations

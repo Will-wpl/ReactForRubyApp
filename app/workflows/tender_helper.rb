@@ -21,23 +21,23 @@ class TenderHelper
     workflow
   end
 
-  def self.execute(node_name, event_name, arrangement_id)
+  def self.execute(node_name, event_name, arrangement_id, current_user)
     auction = get_auction(arrangement_id)
     workflow = if auction.auction_contracts.blank?
-                 TenderWorkflow.new.execute(node_name, event_name, arrangement_id)
+                 TenderWorkflow.new.execute(node_name, event_name, arrangement_id, current_user)
                else
                  if auction.buyer_type == Auction::SingleBuyerType
                    if auction.allow_deviation == Auction::AllowDeviation
                      if auction.request_owner_id.blank?
-                       SingleBuyerWorkflow.new.execute(node_name, event_name, arrangement_id)
+                       SingleBuyerWorkflow.new.execute(node_name, event_name, arrangement_id, current_user)
                      else
-                       RequestedSingleBuyerWorkflow.new.execute(node_name, event_name, arrangement_id)
+                       RequestedSingleBuyerWorkflow.new.execute(node_name, event_name, arrangement_id, current_user)
                      end
                    else
-                     MultBuyerTenderWorkflow.new.execute(node_name, event_name, arrangement_id)
+                     MultBuyerTenderWorkflow.new.execute(node_name, event_name, arrangement_id, current_user)
                    end
                  else
-                   MultBuyerTenderWorkflow.new.execute(node_name, event_name, arrangement_id)
+                   MultBuyerTenderWorkflow.new.execute(node_name, event_name, arrangement_id, current_user)
                  end
                end
     workflow
