@@ -262,8 +262,7 @@ export class BuyerNewRequestManage extends Component {
                 name: this.state.name,
                 buyer_type: this.state.buyer_type,
                 contract_period_start_date: moment(this.state.contract_period_start_date).format(),
-                duration: this.state.duration,
-                comment:""
+                duration: this.state.duration
             }
             if (this.state.buyer_type === '1') {
                 this.request.total_volume = this.state.total_volume;
