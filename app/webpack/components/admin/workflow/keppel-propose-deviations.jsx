@@ -21,6 +21,7 @@ export class Keppelproposedeviations extends Component {
         }
     }
     componentDidMount(){
+        console.log(this.props.role_name);
         getAdminDeviations(this.props.current.current.arrangement_id).then(res=>{
             //console.log(res);
             if(res.chats.length > 0){
@@ -302,7 +303,7 @@ export class Keppelproposedeviations extends Component {
                             <th>Clause</th>
                             <th>Propose Deviation</th>
                             <th>Retailer Comments</th>
-                            <th>SP Response</th>
+                            <th>{this.props.role_name?this.props.role_name:"SP"} Response</th>
                             <th>Deviation Status</th>
                             <th></th>
                             </tr>
@@ -316,7 +317,7 @@ export class Keppelproposedeviations extends Component {
                                                 <td >{item.clause}</td>
                                                 <td><button onClick={this.showpropose.bind(this,"Propose Deviation",item.propose_deviation,'',true,false)}>Details</button></td>
                                                 <td><button onClick={this.showpropose.bind(this,"Retailer Comments",item.retailer_response,'',true,false)} >Details</button></td>
-                                                <td><button onClick={this.showpropose.bind(this,"SP Response",item.sp_response,'',true,item.response_status)} >Details</button></td>
+                                                <td><button onClick={this.showpropose.bind(this,`${this.props.role_name?this.props.role_name:"SP"} Response`,item.sp_response,'',true,item.response_status)} >Details</button></td>
                                                 <td>{item.sp_response_status === "1"?"Accepted":"Withdrawn"}</td>
                                                 <td>
                                                     <button id={"sp_reject_"+index} disabled>Reject</button>
@@ -332,7 +333,7 @@ export class Keppelproposedeviations extends Component {
                                             <td><button onClick={this.showpropose.bind(this,"Propose Deviation",item.propose_deviation,'',true,false)}>Details</button></td>
                                             <td><button onClick={this.showpropose.bind(this,"Retailer Comments",item.retailer_response,'',true,false)} >Details</button></td>
                                             <td>
-                                            <button id={"spResponse_"+index} onClick={this.showpropose.bind(this,"SP Response",item.sp_response!=null?item.sp_response:'',"spResponse_"+index,this.props.readOnly,item.response_status)} >Details</button>
+                                            <button id={"spResponse_"+index} onClick={this.showpropose.bind(this,`${this.props.role_name?this.props.role_name:"SP"} Response`,item.sp_response!=null?item.sp_response:'',"spResponse_"+index,this.props.readOnly,item.response_status)} >Details</button>
                                             {/* <textarea id={"spResponse_"+index} defaultValue={item.sp_response?decodeURI(item.sp_response).split(": ")[1]:''} />*/}
                                             </td>
                                             <td>{item.sp_response_status === "1"?"Accepted":(item.sp_response_status === "0" || item.sp_response_status === "3"?(item.response_status[1]=='0'?"Rejected":''):(item.sp_response_status === "4"?"Withdrawn":""))}</td>
@@ -360,7 +361,7 @@ export class Keppelproposedeviations extends Component {
                     <button className="lm--button lm--button--primary" disabled={this.props.readOnly} onClick={this.showConfirm.bind(this,'Send_Response')}>Send Response</button>
                 </div>
             </div>
-            <Showhistory ref="history" status={this.state.status} textdisabled={this.state.textdisabled} type={this.state.detailType} title={this.state.title} detail={this.state.detail} detail_id={this.state.detail_id} editDetail={this.editDetail.bind(this)} />
+            <Showhistory ref="history" name={this.props.role_name} status={this.state.status} textdisabled={this.state.textdisabled} type={this.state.detailType} title={this.state.title} detail={this.state.detail} detail_id={this.state.detail_id} editDetail={this.editDetail.bind(this)} />
             <Modal text={this.state.text} acceptFunction={this.state.buttonType === "Send_Response" ? this.send_response.bind(this) : this.do_remove.bind(this)} ref="Modal" />
             </div>
         )}

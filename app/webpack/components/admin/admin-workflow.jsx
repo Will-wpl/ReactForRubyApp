@@ -15,7 +15,7 @@ export class Adminworkflow extends Component {
             auction:{},
             disabled:false,current:{},page:1,
             allbtnStatus:true,retailer_list:[],readOnly:false,
-            step_counts:[]
+            step_counts:[],role_name:""
         }
         getRetailerList(sessionStorage.auction_id).then(res=>{
             //console.log(res);
@@ -27,9 +27,9 @@ export class Adminworkflow extends Component {
             //console.log(res);
             res.name=name;
             if(index==3||index==4){
-                this.setState({current:res,page:index,readOnly:!type});
+                this.setState({current:res,page:index,readOnly:!type,role_name:res.user_info.name});
             }else{
-                this.setState({current:res,page:res.current.current_node,readOnly:!type});
+                this.setState({current:res,page:res.current.current_node,readOnly:!type,role_name:res.user_info.name});
             }
             getRetailerList(sessionStorage.auction_id).then(re=>{
                 this.setState({readOnly:re.user_info.readonly});
@@ -46,7 +46,7 @@ export class Adminworkflow extends Component {
             break
             case 1 : pageDom = <Adminretailerdashboard step_counts={this.state.step_counts} retailer_list={this.state.retailer_list} page={this.getPageindex.bind(this)} title="Retailer Dashboard" />
             break
-            case 3 : pageDom = <Keppelproposedeviations current={this.state.current} readOnly={this.state.readOnly} page={this.getPageindex.bind(this)} title="keppel Propose Deviations" />
+            case 3 : pageDom = <Keppelproposedeviations current={this.state.current} role_name={this.state.role_name} readOnly={this.state.readOnly} page={this.getPageindex.bind(this)} title="keppel Propose Deviations" />
             break
             // case 4 : pageDom = <Keppelformtender current={this.state.current} readOnly={this.state.readOnly} page={this.getPageindex.bind(this)}/>
             // break
