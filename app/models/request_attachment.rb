@@ -37,7 +37,7 @@ class RequestAttachment < ApplicationRecord
   end
 
   def self.find_last_by_type_request(file_type, request_id)
-    request = RequestAuction.find(request_id)
+    request = RequestAuction.find_by id: request_id
     unless request.nil?
       RequestAttachment.find_by_type_request(file_type, request.id).order(updated_at: :desc).first
     end
