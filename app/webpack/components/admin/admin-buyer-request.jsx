@@ -298,7 +298,7 @@ export default class AdminBuyerRequestManage extends Component {
 
                                             <div className="lm--formItem lm--formItem--inline string">
                                                 <label className="lm--formItem-left lm--formItem-label string required">
-                                                    <abbr title="required">*</abbr> Estimated(aggregate) monthly consumption (kwh/month) :
+                                                    <abbr title="required">*</abbr> Estimated (aggregate) monthly consumption (kwh/month) :
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control">
                                                     <input type="text" name="total_volume" value={this.state.total_volume} onChange={this.doValue.bind(this, 'total_volume')} disabled={this.state.disabled} ref="total_volume" required aria-required="true" title="Please fill out this field" placeholder="" />
