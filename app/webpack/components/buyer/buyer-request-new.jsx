@@ -271,7 +271,7 @@ export class BuyerNewRequestManage extends Component {
                 contract_period_start_date: moment(this.state.contract_period_start_date).format(),
                 duration: this.state.duration,
                 flexible: this.state.flexible,
-                total_volume = this.state.total_volume
+                total_volume : this.state.total_volume
             }
             if (this.state.buyer_type === '1') {
                 this.request.attachment_id = '';
