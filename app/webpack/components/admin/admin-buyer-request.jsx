@@ -16,6 +16,7 @@ export default class AdminBuyerRequestManage extends Component {
             contract_period_start_date: "",
             buyer_type: "1",
             allow_deviation: "1",
+            flexible: '1',
             duration: '6',
             comment: "",
             text: "",
@@ -67,7 +68,8 @@ export default class AdminBuyerRequestManage extends Component {
                     allow_deviation: res.request_auction.allow_deviation,
                     comment: res.request_auction.comment ? res.request_auction.comment : "",
                     status: res.request_auction.accept_status,
-                    status_name: getStatus(res.request_auction.accept_status,res.request_auction.accept_date_time === null ? res.request_auction.created_at : res.request_auction.accept_date_time)
+                    status_name: getStatus(res.request_auction.accept_status, res.request_auction.accept_date_time === null ? res.request_auction.created_at : res.request_auction.accept_date_time),
+                    flexible: res.request_auction.flexible
                 })
 
                 if (res.last_attachment) {
@@ -155,12 +157,10 @@ export default class AdminBuyerRequestManage extends Component {
         approveBuyerRequest(params).then(res => {
             if (res.result === 'success') {
                 if (obj.action === "approve") {
-                    if(this.state.buyer_type==='1')
-                    {
+                    if (this.state.buyer_type === '1') {
                         setTimeout(() => { window.location.href = "/admin/request_auctions" }, 100);
                     }
-                    else
-                    {
+                    else {
                         sessionStorage.auction_id = res.new_auction_id;
                         setTimeout(() => { window.location.href = "/admin/auctions/new" }, 100);
                     }
@@ -223,7 +223,7 @@ export default class AdminBuyerRequestManage extends Component {
                                                     <abbr title="required"></abbr> Status  :
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control" style={{ marginTop: "12px" }}>
-                                                    {this.state.status_name} 
+                                                    {this.state.status_name}
                                                 </div>
                                             </div>
                                             <div className="lm--formItem lm--formItem--inline string">
@@ -295,17 +295,28 @@ export default class AdminBuyerRequestManage extends Component {
                                                 </div> : ''
                                             }
 
-                                            {this.state.buyer_type == "1" ?
-                                                <div className="lm--formItem lm--formItem--inline string">
-                                                    <label className="lm--formItem-left lm--formItem-label string required">
-                                                        <abbr title="required">*</abbr> Total Volume (kwh/month) :
+
+                                            <div className="lm--formItem lm--formItem--inline string">
+                                                <label className="lm--formItem-left lm--formItem-label string required">
+                                                    <div style={{ fontSize: "0.875rem" }} className={this.state.buyer_type === '1' ? "isDisplay " : "isHide"}><abbr title="required">*</abbr>Total Volume (kwh/month) :</div>
+                                                    <div style={{ fontSize: "0.875rem" }} className={this.state.buyer_type === '1' ? "isHide" : "isDisplay"}><abbr title="required">*</abbr>Estimated(aggregate) monthly consumption :</div>
                                                 </label>
-                                                    <div className="lm--formItem-right lm--formItem-control">
-                                                        <input type="text" name="total_volume" value={this.state.total_volume} onChange={this.doValue.bind(this, 'total_volume')} disabled={this.state.disabled} ref="total_volume" required aria-required="true" title="Please fill out this field" placeholder="" />
-                                                        <div className='isPassValidate' id='total_volume_message' >This field is required!</div>
-                                                    </div>
-                                                </div> : ''
-                                            }
+                                                <div className="lm--formItem-right lm--formItem-control">
+                                                    <input type="text" name="total_volume" value={this.state.total_volume} onChange={this.doValue.bind(this, 'total_volume')} disabled={this.state.disabled} ref="total_volume" required aria-required="true" title="Please fill out this field" placeholder="" />
+                                                    <div className='isPassValidate' id='total_volume_message' >This field is required!</div>
+                                                </div>
+                                            </div>
+                                            <div className="lm--formItem lm--formItem--inline string">
+                                                <label className="lm--formItem-left lm--formItem-label string required">
+                                                    <abbr title="required">*</abbr> Flexible on Contract Start Date? :
+                                                </label>
+                                                <div className="lm--formItem-right lm--formItem-control">
+                                                    <select ref="allow_deviation" id="allow_deviation" onChange={this.doValue.bind(this, 'flexible')} value={this.state.flexible} disabled={this.state.disabled}>
+                                                        <option value="1">Yes</option>
+                                                        <option value="0">No</option>
+                                                    </select>
+                                                </div>
+                                            </div>
 
                                             <div className="lm--formItem lm--formItem--inline string optional ">
                                                 <label className="lm--formItem-left lm--formItem-label string required">
