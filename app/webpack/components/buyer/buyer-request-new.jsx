@@ -257,7 +257,6 @@ export class BuyerNewRequestManage extends Component {
 
     doSave(type) {
         if (this.passValidation()) {
-
             this.request = {
                 name: this.state.name,
                 buyer_type: this.state.buyer_type,
