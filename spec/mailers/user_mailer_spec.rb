@@ -220,4 +220,14 @@ RSpec.describe UserMailer, type: :mail do
       expect(open_last_email).to be_delivered_to company_buyer.email
     end
   end
+
+  context 'contract notification mail' do
+    before :each do
+      @template = create(:email_template, subject: 'contract notification mail', body: 'Dear Admin,<br/><br/>#body.<br/><br/>Please proceed to view the electricity purchase report at <a href="http://revv.sg">revv.sg</a>.', template_type: '30')
+      UserMailer.contract_notification(@admin_user, [ {'id':111, 'name':'name', 'contract_period_end_date': 'end date'}]).deliver_now
+    end
+    it 'be_delivered_to', mail: true do
+      expect(open_last_email).to be_delivered_to @admin_user.email
+    end
+  end
 end
