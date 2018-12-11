@@ -27,6 +27,7 @@ export class BuyerNewRequestManage extends Component {
             total_volume: '',
             attachment_id: '',
             accept_date_time: '',
+            flexible: '1',
             fileData: {
                 "TC": [
                     { buttonName: "none", files: [] }
@@ -97,13 +98,14 @@ export class BuyerNewRequestManage extends Component {
                     buyer_type: res.request_auction.buyer_type,
                     contract_period_start_date: moment(res.request_auction.contract_period_start_date),
                     duration: res.request_auction.duration,
+
                     total_volume: res.request_auction.total_volume,
                     allow_deviation: res.request_auction.allow_deviation,
                     status: res.request_auction.accept_status,
                     status_name: getStatus(res.request_auction.accept_status, res.request_auction.accept_date_time === null ? res.request_auction.created_at : res.request_auction.accept_date_time),
-                    accept_date_time: res.request_auction.accept_date_time
+                    accept_date_time: res.request_auction.accept_date_time,
+                    flexible: res.request_auction.flexible
                 })
-                console.log(this.state.status + "_" + this.state.accept_date_time)
                 if (res.last_attachment) {
                     let attachment = {
                         id: res.last_attachment.id,
@@ -177,6 +179,11 @@ export class BuyerNewRequestManage extends Component {
                     comment: val
                 })
                 changeValidate('comment', val);
+                break;
+            case "flexible":
+                this.setState({
+                    flexible: val
+                })
                 break;
         }
     }
@@ -262,7 +269,8 @@ export class BuyerNewRequestManage extends Component {
                 name: this.state.name,
                 buyer_type: this.state.buyer_type,
                 contract_period_start_date: moment(this.state.contract_period_start_date).format(),
-                duration: this.state.duration
+                duration: this.state.duration,
+                flexible: this.state.flexible
             }
             if (this.state.buyer_type === '1') {
                 this.request.total_volume = this.state.total_volume;
@@ -406,18 +414,28 @@ export class BuyerNewRequestManage extends Component {
                                                 </div>
                                             </div> : ''
                                         }
+                                        <div className="lm--formItem lm--formItem--inline string">
+                                            <label className="lm--formItem-left lm--formItem-label string required">
+                                                <div style={{fontSize:"0.875rem"}} className={this.state.buyer_type === '1' ? "isDisplay " : "isHide"}><abbr title="required">*</abbr>Total Volume (kwh/month) :</div>
+                                                <div style={{fontSize:"0.875rem"}} className={this.state.buyer_type === '1' ? "isHide" : "isDisplay"}><abbr title="required">*</abbr>Estimated(aggregate) monthly consumption :</div>
+                                            </label>
+                                            <div className="lm--formItem-right lm--formItem-control">
+                                                <input type="text" name="total_volume" value={this.state.total_volume} onChange={this.doValue.bind(this, 'total_volume')} disabled={this.state.disabled} ref="total_volume" required aria-required="true" title="Please fill out this field" placeholder="" />
+                                                <div className='isPassValidate' id='total_volume_message' >This field is required!</div>
+                                            </div>
+                                        </div>
 
-                                        {this.state.buyer_type == "1" ?
-                                            <div className="lm--formItem lm--formItem--inline string">
-                                                <label className="lm--formItem-left lm--formItem-label string required">
-                                                    <abbr title="required">*</abbr> Total Volume (kwh/month) :
+                                        <div className="lm--formItem lm--formItem--inline string">
+                                            <label className="lm--formItem-left lm--formItem-label string required">
+                                                <abbr title="required">*</abbr> Flexible on Contract Start Date? :
                                                 </label>
-                                                <div className="lm--formItem-right lm--formItem-control">
-                                                    <input type="text" name="total_volume" value={this.state.total_volume} onChange={this.doValue.bind(this, 'total_volume')} disabled={this.state.disabled} ref="total_volume" required aria-required="true" title="Please fill out this field" placeholder="" />
-                                                    <div className='isPassValidate' id='total_volume_message' >This field is required!</div>
-                                                </div>
-                                            </div> : ''
-                                        }
+                                            <div className="lm--formItem-right lm--formItem-control">
+                                                <select ref="allow_deviation" id="allow_deviation" onChange={this.doValue.bind(this, 'flexible')} value={this.state.flexible} disabled={this.state.disabled}>
+                                                    <option value="1">Yes</option>
+                                                    <option value="0">No</option>
+                                                </select>
+                                            </div>
+                                        </div>
 
                                     </div>
                                 </div>
