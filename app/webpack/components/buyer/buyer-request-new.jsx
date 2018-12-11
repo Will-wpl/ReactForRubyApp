@@ -26,6 +26,7 @@ export class BuyerNewRequestManage extends Component {
             text: "",
             total_volume: '',
             attachment_id: '',
+            accept_date_time: '',
             fileData: {
                 "TC": [
                     { buttonName: "none", files: [] }
@@ -99,10 +100,10 @@ export class BuyerNewRequestManage extends Component {
                     total_volume: res.request_auction.total_volume,
                     allow_deviation: res.request_auction.allow_deviation,
                     status: res.request_auction.accept_status,
-                    status_name: getStatus(res.request_auction.accept_status,res.request_auction.accept_date_time === null ? res.request_auction.created_at : res.request_auction.accept_date_time)
-
+                    status_name: getStatus(res.request_auction.accept_status, res.request_auction.accept_date_time === null ? res.request_auction.created_at : res.request_auction.accept_date_time),
+                    accept_date_time: res.request_auction.accept_date_time
                 })
-
+                console.log(this.state.status + "_" + this.state.accept_date_time)
                 if (res.last_attachment) {
                     let attachment = {
                         id: res.last_attachment.id,
@@ -298,12 +299,12 @@ export class BuyerNewRequestManage extends Component {
                 if (parseInt(this.state.status) === 1) {
                     btn_html =
                         <div>
-                            <button id="save_form" className="lm--button lm--button--primary" onClick={this.doCancel.bind(this, "goback")}>Cancel</button>
+                            <button id="save_form" className="lm--button lm--button--primary" disabled="true" onClick={this.doCancel.bind(this, "goback")}>Edit</button>
                         </div>
                 }
                 else {
                     btn_html = this.state.disabled ?
-                        <div style={{ paddingRight: "10px" }}><button id="save_edit" className="lm--button lm--button--primary" onClick={this.doEditAction.bind(this)}>Edit</button></div>
+                        <div style={{ paddingRight: "10px" }}><button id="save_edit" disabled={parseInt(this.state.status) === 2 && (this.state.accept_date_time !== "" && this.state.accept_date_time !== null)} className="lm--button lm--button--primary" onClick={this.doEditAction.bind(this)}>Edit</button></div>
                         : <div>
                             <button id="save_form" className="lm--button lm--button--primary" onClick={this.doCancel.bind(this, "save")}>Cancel</button>
                             <button id="submit_form" className="lm--button lm--button--primary" onClick={this.doSave.bind(this, 'save')}>Save</button>
@@ -329,15 +330,16 @@ export class BuyerNewRequestManage extends Component {
                                 <div className="u-grid admin_invitation ">
                                     <div className="col-sm-12 col-md-8 push-md-2 validate_message ">
                                         <div className="top"></div>
-                                        <div className="lm--formItem lm--formItem--inline string">
-                                            <label className="lm--formItem-left lm--formItem-label string required">
-                                                <abbr title="required"></abbr> Status  :
+                                        {
+                                            this.state.operation_type === "edit" ? <div className="lm--formItem lm--formItem--inline string">
+                                                <label className="lm--formItem-left lm--formItem-label string required">
+                                                    <abbr title="required"></abbr> Status  :
                                                 </label>
-                                            <div className="lm--formItem-right lm--formItem-control" style={{ marginTop: "12px" }}>
-                                                {this.state.status_name}
-                                            </div>
-                                        </div>
-
+                                                <div className="lm--formItem-right lm--formItem-control" style={{ marginTop: "12px" }}>
+                                                    {this.state.status_name}
+                                                </div>
+                                            </div> : ""
+                                        }
                                         <div className="lm--formItem lm--formItem--inline string">
                                             <label className="lm--formItem-left lm--formItem-label string required">
                                                 <abbr title="required">*</abbr> Name of Reverse Auction  :
