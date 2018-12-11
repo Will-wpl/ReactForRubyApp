@@ -70,7 +70,7 @@ export class BuyerRequestEntityListManage extends Component {
                                     return <tr key={index}>
                                         <td>{item.entity_name}</td>
                                         <td>{item.retailer_name}</td>
-                                        <td>{item.contract_period_end_date}</td>
+                                        <td>{moment(item[`${item.contract_period_end_date}`]).format('D MMM YYYY hh:mm A')}</td>
                                     </tr>
                                 })}
                                 </tbody>
