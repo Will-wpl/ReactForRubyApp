@@ -238,7 +238,7 @@ export default class AdminBuyerRequestManage extends Component {
 
                                             <div className="lm--formItem lm--formItem--inline string">
                                                 <label className="lm--formItem-left lm--formItem-label string required">
-                                                    <abbr title="required">*</abbr> Single / Multiple Buyer(s)  :
+                                                    <abbr title="required">*</abbr> Single / Multiple Buyer (s)  :
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control">
                                                     <select ref="buyer_type" id="buyer_type" onChange={this.doValue.bind(this, 'buyer_type')} value={this.state.buyer_type} disabled={this.state.disabled}>
@@ -298,7 +298,7 @@ export default class AdminBuyerRequestManage extends Component {
                                             {this.state.buyer_type == "1" ?
                                                 <div className="lm--formItem lm--formItem--inline string">
                                                     <label className="lm--formItem-left lm--formItem-label string required">
-                                                        <abbr title="required">*</abbr> Total Volume(kwh/month) :
+                                                        <abbr title="required">*</abbr> Total Volume (kwh/month) :
                                                 </label>
                                                     <div className="lm--formItem-right lm--formItem-control">
                                                         <input type="text" name="total_volume" value={this.state.total_volume} onChange={this.doValue.bind(this, 'total_volume')} disabled={this.state.disabled} ref="total_volume" required aria-required="true" title="Please fill out this field" placeholder="" />
