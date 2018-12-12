@@ -137,13 +137,16 @@ export class Tenderdocuments extends React.Component {
                     <label className=" lm--formItem-label ">
                         Click on 'Accept & Proceed' if you do not wish to propose deviations to the <a target="_blank"  style={{"cursor": "pointer"}} disabled={this.props.propsdisabled} download={this.state.attachments.length>0?this.state.attachments[0].file_name:''} href={this.state.attachments.length>0?this.state.attachments[0].file_path:'#'}>Electricity Procurement Agreement.</a>
                     </label>
-                </div>:<div className="lm--formItem lm--formItem--inline string u-mt1">
-                    Note: Please click ‘Participate’ to confirm your participation in this Reverse Auction.
-                    <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
-                        <input name="agree_declare" type="checkbox" id="chkAgree_declare" disabled={this.props.propsdisabled} required />
-                        <span>By clicking on the “Participate” button, we acknowledge and agree that per the Terms & Conditions of Use (Retailer), upon Auto-Closing and the Closing Condition being met after the Reverse Auction, our submitted bid will constitute as an acceptance to the Buyer’s Purchase Order and that an agreement for sale and purchase of electricity between us and the Buyer shall be formed accordingly based on the terms and conditions set out in Electricity Purchase Contract and be legally binding on us and the Buyer.</span>
-                    </h4>
-                </div>}
+                </div>:<div>
+                    <div className="lm--formItem lm--formItem--inline string u-mt1">
+                        <h4 className="lm--formItem lm--formItem--inline string chkBuyer" style={{"width":"100%"}}>Please click ‘Participate’ to confirm your participation in this Reverse Auction.</h4>
+                    </div>
+                    <div className="lm--formItem--inline string">
+                        <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
+                            <input name="agree_declare" type="checkbox" id="chkAgree_declare" disabled={this.props.propsdisabled} required />
+                            <span>By clicking on the “Participate” button, we acknowledge and agree that per the Terms & Conditions of Use (Retailer), upon Auto-Closing and the Closing Condition being met after the Reverse Auction, our submitted bid will constitute as an acceptance to the Buyer’s Purchase Order and that an agreement for sale and purchase of electricity between us and the Buyer shall be formed accordingly based on the terms and conditions set out in Electricity Purchase Contract and be legally binding on us and the Buyer.</span>
+                        </h4>
+                </div></div>}
                 {/*<div className="lm--formItem lm--formItem--inline string u-mt3 role_select">*/}
                     {/*<label className="lm--formItem-left lm--formItem-label string required">*/}
                         {/*Electricity Procurement Agreement:*/}
