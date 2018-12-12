@@ -348,7 +348,7 @@ export class SearchList extends Component {
                                                                     ? moment(item[`${it.field_name}`]).format('D MMM YYYY hh:mm A'):((it.field_name==="contract_period_start_date")?moment(item[`${it.field_name}`]).format('D MMM YYYY '):(item[`${it.field_name}`]?(item[`${it.field_name}`].indexOf("!")>0?<bdo>{item[`${it.field_name}`].split("!")[0]} <b title="Purchasing Entity Pending" style={{"color":"red"}}>!</b></bdo>:item[`${it.field_name}`]):null))}</abbr>
                                                                 }
                                                                 </td>
-                                                        }
+                                                        } 
 
                                                     })
                                                 }
@@ -407,7 +407,7 @@ export class SearchList extends Component {
                         }
                         <span onClick={this.gotopage.bind(this,'next')}>{">"}</span>
                     </ol>
-                </div>
+                </div>   
                 </div>
             )
         }else{
