@@ -37,7 +37,7 @@ export default class BuyerConsumptionListDetail extends Component {
             entity_id: entity_id
         }
         console.log(params)
-        getBuyerListDetails(params).then(res => {
+        getBuyerListDetails(id, entity_id).then(res => {
             this.setState({
                 consumption_id: id,
                 comsumption_list: [res],
