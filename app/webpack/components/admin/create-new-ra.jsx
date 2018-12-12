@@ -7,7 +7,7 @@ import { createRa, raPublish, checkBuyerType, deleteSelectedBuyer } from '../../
 import { getAuction } from '../../javascripts/componentService/common/service';
 import { Modal } from '../shared/show-modal';
 import { findUpLimitZero } from '../../javascripts/componentService/util';
-import { Any } from 'tcomb';
+
 
 export class CreateNewRA extends Component {
     constructor(props, context) {
@@ -971,8 +971,8 @@ export class CreateNewRA extends Component {
                                     this.state.tc_name.length ? <dd className="lm--formItem lm--formItem--inline string optional">
                                         <span className="lm--formItem-left lm--formItem-label string optional">
                                             <abbr title="required"></abbr>Electricity Purchase Contract :</span>
-                                        <label className="lm--formItem-right lm--formItem-control" style={{ marginTop: "10px", paddingLeft: "-125px" }}>
-                                            <div> <a href={this.state.tc_path} download={this.state.tc_path}>{this.state.tc_name}</a></div>
+                                        <label className="lm--formItem-right lm--formItem-control" style={{ marginTop: "10px" }}>
+                                            <div>  <a href={this.state.tc_path} download={this.state.tc_path} style={{"background":"none","marginLeft":"-15px"}} >{this.state.tc_name}</a></div>
                                         </label>
                                     </dd> : ""
                                 }

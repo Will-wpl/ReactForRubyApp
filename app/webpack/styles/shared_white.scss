@@ -80,6 +80,11 @@ button[disabled='']{background: #666 !important; color:#999 !important; cursor: 
           margin-left: 10px;
         }
         &.checkbox_div{margin:12px 10px;}
+        // &.tc{
+        //   font-size: 12px;
+        //   padding: 4px 0px;
+        //   margin-left: 0px;
+        // }
       }
       b{
         font-weight: normal; font-size: 18px; line-height: 44px; text-align:center; display: block;
@@ -1451,13 +1456,3 @@ body.choose{
 .top{
   margin-top: 20px;
 }
-
-
-// .datePic{
-//   input{
-//    width: 500%;  display: inline-block; border:1px solid #ced5dc; background: none;
-//     &.date_ico{background:url("../images/images_for_white/date.png") no-repeat right;}
-//     &.time_ico{background:url("../images/images_for_white/time.png") no-repeat right;}
-//     &.checkbox{ display: inline-block; width: auto;}
-//   }
-// }
