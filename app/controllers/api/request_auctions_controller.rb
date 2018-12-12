@@ -57,7 +57,8 @@ class Api::RequestAuctionsController < Api::BaseController
       request_auction.accept_date_time = DateTime.current
       if request_auction.save!
         creater = User.find(request_auction.user_id)
-        UserMailer.request_responded(creater).deliver_later
+        respond_boolean = (accept_status == RequestAuction::AcceptStatusApproved)
+        UserMailer.request_responded(creater,respond_boolean).deliver_later
         if accept_status == RequestAuction::AcceptStatusApproved
           if request_auction.buyer_type == RequestAuction::SingleBuyerType
             # establish new auction if it is accepted.
