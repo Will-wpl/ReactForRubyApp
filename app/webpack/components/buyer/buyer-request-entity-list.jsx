@@ -29,6 +29,7 @@ export class BuyerRequestEntityListManage extends Component {
             $(".u-contain").css("padding", "0px");
             $(".lm--header").css("margin-bottom", "0px");
             $(".createRaMain a,.lm--footer div").css("margin-left", "24px");
+            console.log(res)
             this.setState({
                 entity_list: res.buyer_entity_contracts ? res.buyer_entity_contracts : [],
             })
@@ -44,7 +45,7 @@ export class BuyerRequestEntityListManage extends Component {
         let consumption_id = item.consumption_id;
         let auction_id = item.auction_id;
         let entity_id = item.entity_id;
-        window.location.href = '/buyer/consumptions/'+consumption_id+'&entity_id='+entity_id+'';
+        window.location.href = '/buyer/consumptions/' + consumption_id + '&entity_id=' + entity_id + '';
     }
     render() {
         return (
@@ -86,9 +87,13 @@ export class BuyerRequestEntityListManage extends Component {
                                         return <tr key={index}>
                                             <td>{item.entity_name}</td>
                                             <td>{item.retailer_name}</td>
-                                            <td>{item.contract_period_start_date}</td>
+                                            <td>{moment(item.contract_period_start_date).format('D MMM YYYY')}</td>
                                             <td>{moment(item.contract_period_end_date).format('D MMM YYYY')}</td>
-                                            <td><a href="#" onClick={this.goDetails.bind(this, item)}>Details</a></td>
+                                            <td className="entityDetail">
+                                                <span onClick={this.goDetails.bind(this, item)}>
+                                                    Details
+                                                </span>
+                                            </td>
                                         </tr>
                                     })}
                                 </tbody>
