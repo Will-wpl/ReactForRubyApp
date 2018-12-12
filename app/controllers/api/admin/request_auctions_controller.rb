@@ -43,7 +43,7 @@ def get_request_auction_headers1
       { name: 'Name of Reverse Auction', field_name: 'name', table_name: 'request_auctions' },
       { name: 'Buyer Name', field_name: 'company_name', table_name: 'users' },
       # { name: 'Contract Duration', field_name: 'duration', table_name: 'request_auctions' },
-      { name: 'Start Date', field_name: 'contract_period_start_date', table_name: 'request_auctions' },
+      { name: 'Contract Start Date', field_name: 'contract_period_start_date', table_name: 'request_auctions' },
       { name: 'Single / Multiple Buyer[s]', field_name: 'buyer_type', table_name: 'request_auctions' },
       { name: 'Date / Time', field_name: 'submit_date', table_name: 'request_auctions' }
   # { name: 'All Deviation', field_name: 'allow_deviation', table_name: 'request_auctions' },
