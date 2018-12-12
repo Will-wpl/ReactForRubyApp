@@ -129,13 +129,13 @@ export const searchTypeData = {
     "Manage Buyer Request": {//connect back end OK
         list_url: "/api/buyer/request_auctions",
         list_data: [
-            { title: "Name:", type: "name", species: "input", operator: 'like', table: 'request_auctions' },
+            { title: "Name of Reverse Auction:", type: "name", species: "input", operator: 'like', table: 'request_auctions' },
         ]
     },
     "Buyer Request List": {//connect back end OK
         list_url: "/api/admin/request_auctions",
         list_data: [
-            { title: "Name:", type: "name", species: "input", operator: 'like', table: 'request_auctions' },
+            { title: "Name of Reverse Auction:", type: "name", species: "input", operator: 'like', table: 'request_auctions' },
         ]
     },
     
