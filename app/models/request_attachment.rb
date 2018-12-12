@@ -1,7 +1,7 @@
 class RequestAttachment < ApplicationRecord
 
   # Extends
-
+  FileType_TC = 'TC'.freeze
   # Includes
 
   # Associations
