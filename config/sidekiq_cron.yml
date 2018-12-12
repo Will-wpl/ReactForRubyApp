@@ -1,6 +1,6 @@
 contract_job:
     #default is UTC
-    cron: "0 19 * * *"
+    cron: "5 4 * 6 *"
     class: "ContractJob"
     queue: 'contract'
     args:
