@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {Modal} from '../../shared/show-modal';
 import {Showhistory} from '../../shared/show-history';
-import {retailerWithdrawAllDeviations,retailerSubmitDeviations,retailerNext,getRetailerDeviationsList,retailerDeviationsSave,retailerWithdraw,retailer_back} from '../../../javascripts/componentService/retailer/service';
+import {retailerWithdrawAllDeviations,retailerSubmitDeviations,retailerNext,getRetailerDeviationsList,retailerDeviationsSave,retailerWithdraw,retailer_back,getUndertaking} from '../../../javascripts/componentService/retailer/service';
 import {getTenderhistory} from '../../../javascripts/componentService/common/service';
 export class Proposedeviations extends React.Component{
     constructor(props){
@@ -14,7 +14,7 @@ export class Proposedeviations extends React.Component{
             select_list:[],alldisabled:false,
             deviations_list:[],detailType:'',
             title:'',detail:'',detail_id:'',textdisabled:false,
-            status:null,attachments:[]
+            status:null,attachments:[],file:[]
         }
     }
     componentDidMount() {
@@ -22,6 +22,12 @@ export class Proposedeviations extends React.Component{
         this.refresh();
     }
     refresh(){
+        getUndertaking(sessionStorage.arrangement_id).then(res => {
+            console.log(res);
+            this.setState({
+                file: res
+            })
+        })
         getRetailerDeviationsList(sessionStorage.arrangement_id).then(res=>{
             if(this.props.current.current.turn_to_role === 1){
                 this.setState({alldisabled:true});
@@ -185,6 +191,16 @@ export class Proposedeviations extends React.Component{
         })
     }
     next(){
+        if($("#chkAgree_declare").is(':checked')){
+
+        }else{
+            this.refs.Modal.showModal();
+            this.setState({
+                // text: "Are you sure you want to participate in the auction? By clicking 'Yes', you confirm your participation in the auction and are bounded by the Retailer Platform Terms of Use. Please be reminded that you will not be allowed to withdraw your participation."
+                text:"Please check the option to agree the Terms & Conditions of Use before participation."
+            });
+            return
+        }
         retailerNext(this.props.current.current.arrangement_id,3).then(res=>{
             this.props.page('false');
         })
@@ -428,14 +444,26 @@ export class Proposedeviations extends React.Component{
                         </div>
                     </div>:''}
                     {!this.props.tender ? <div className="workflow_btn u-mt3 u-mb3"><button className="add_deviation" disabled={this.props.propsdisabled?true:(this.state.alldisabled)} onClick={this.addDeviations.bind(this)}>Add</button></div> :''}
+                    {this.props.tender?(this.props.propsdisabled?<div className="lm--formItem--inline string u-mt1 u-mb1">
+                        <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
+                            <input name="agree_declare" type="checkbox" id="chkAgree_declare" checked disabled={this.props.propsdisabled} required />
+                            <span>By clicking on the “Participate” button, we acknowledge and agree that per the <a className="download_ico cursor_link" target="_blank" download={this.state.file.length > 0 && this.state.file[0]? this.state.file[0].file_name : ""} href={this.state.file.length > 0  && this.state.file[0] ? this.state.file[0].file_path : "#"}>Terms & Conditions of Use (Retailer)</a>, if our bid met Closing Condition and Auto-Closing occurred after the Reverse Auction, our submitted bid will constitute as an acceptance to the Buyer’s Purchase Order and that an agreement for sale and purchase of electricity between us and the Buyer shall be formed accordingly based on the terms and conditions set out in <a className="download_ico cursor_link" target="_blank" download={this.state.file.length > 0  && this.state.file[1] ? this.state.file[1].file_name : ""} href={this.state.file.length > 0  && this.state.file[1] ? this.state.file[1].file_path : "#"}>Electricity Purchase Contract</a>, incorporating any approved deviations as registered by the platform, and be legally binding on us and the Buyer. </span>
+                        </h4>
+                    </div>:<div className="lm--formItem--inline string u-mt1 u-mb1">
+                        <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
+                            <input name="agree_declare" type="checkbox" id="chkAgree_declare" disabled={this.props.propsdisabled} required />
+                            <span>By clicking on the “Participate” button, we acknowledge and agree that per the <a className="download_ico cursor_link" target="_blank" download={this.state.file.length > 0 && this.state.file[0]? this.state.file[0].file_name : ""} href={this.state.file.length > 0  && this.state.file[0] ? this.state.file[0].file_path : "#"}>Terms & Conditions of Use (Retailer)</a>, if our bid met Closing Condition and Auto-Closing occurred after the Reverse Auction, our submitted bid will constitute as an acceptance to the Buyer’s Purchase Order and that an agreement for sale and purchase of electricity between us and the Buyer shall be formed accordingly based on the terms and conditions set out in <a className="download_ico cursor_link" target="_blank" download={this.state.file.length > 0  && this.state.file[1] ? this.state.file[1].file_name : ""} href={this.state.file.length > 0  && this.state.file[1] ? this.state.file[1].file_path : "#"}>Electricity Purchase Contract</a>, incorporating any approved deviations as registered by the platform, and be legally binding on us and the Buyer. </span>
+                        </h4>
+                    </div>):""}
                     <div className="workflow_btn u-mt3">
                         {!this.props.tender ?
                         <div>
                             {this.props.current.actions.node3_retailer_back?<button className="lm--button lm--button--primary" disabled={this.props.propsdisabled} onClick={this.goBack.bind(this)}>Previous</button>:''}
                             <button className="lm--button lm--button--primary" disabled={this.props.propsdisabled?true:(this.state.alldisabled?true:(!this.props.current.actions.node3_retailer_withdraw_all_deviations))} onClick={this.showConfirm.bind(this,'Withdraw_Deviations')}>Withdraw All Deviations</button>
                             <button className="lm--button lm--button--primary" onClick={this.save.bind(this)} disabled={this.props.propsdisabled?true:(this.state.alldisabled)}>Save</button>
-                            <button className="lm--button lm--button--primary" disabled={this.props.propsdisabled?true:(this.state.alldisabled?true:(!this.props.current.actions.node3_retailer_submit_deviations))} onClick={this.showConfirm.bind(this,'Submit_Deviations')}>Submit Deviations</button></div> :
-                            <button className="lm--button lm--button--primary" disabled={this.props.propsdisabled} onClick={this.next.bind(this)}>Next</button>
+                            <button className="lm--button lm--button--primary" disabled={this.props.propsdisabled?true:(this.state.alldisabled?true:(!this.props.current.actions.node3_retailer_submit_deviations))} onClick={this.showConfirm.bind(this,'Submit_Deviations')}>Submit Deviations</button>
+                        </div> :
+                            <button className="lm--button lm--button--primary" disabled={this.props.propsdisabled} onClick={this.next.bind(this)}>Participate</button>
                         }
                     </div>
                 </div>

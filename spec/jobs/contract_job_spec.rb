@@ -13,13 +13,13 @@ RSpec.describe ContractJob, :type => :job do
     end
     it "have been enqueued", cjob: true do
       ActiveJob::Base.queue_adapter = :test
-      ContractJob.perform_later(JSON.parse('{"expiration_days": 0}'))
+      ContractJob.perform_later(JSON.parse('{"expiration_days": 30}'))
       expect(ContractJob).to have_been_enqueued.at(:no_wait)
     end
 
     it "should do job", cjob: true do
       ActiveJob::Base.queue_adapter = :test
-      ContractJob.perform_now(JSON.parse('{"expiration_days": 0}'))
+      ContractJob.perform_now(JSON.parse('{"expiration_days": 30}'))
     end
   end
 end
