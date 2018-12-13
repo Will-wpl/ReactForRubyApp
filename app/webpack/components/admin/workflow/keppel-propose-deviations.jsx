@@ -149,14 +149,14 @@ export class Keppelproposedeviations extends Component {
                                             {/* accept="application/pdf,application/msword" */}
                                             {required === "required" ?
                                             <div>
-                                                <input type="file" required="required" ref={type+index}  onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.props.propsdisabled?true:(window.location.href.indexOf("past")>0?true:this.state.disabled)} />
+                                                <input type="file" required="required" ref={type+index}  onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.props.propsdisabled?true:(window.location.href.indexOf("past")>0 || this.props.current.user_info.readonly?true:this.state.disabled)} />
                                                 <b>Browse..</b>
                                                 <div className="required_error">
                                                     Please select file.
                                                 </div>
                                             </div>
                                             :<div>
-                                                <input type="file" ref={type+index} onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.props.propsdisabled?true:(window.location.href.indexOf("past")>0?true:this.state.disabled)} />
+                                                <input type="file" ref={type+index} onChange={this.changefileval.bind(this, type+index)} id={type+index} name="file" disabled={this.props.propsdisabled?true:(window.location.href.indexOf("past")>0  || this.props.current.user_info.readonly?true:this.state.disabled)} />
                                                 <b>Browse..</b>
                                             </div>}
                                         </a>
@@ -167,7 +167,7 @@ export class Keppelproposedeviations extends Component {
                                             <ul>
                                                 {
                                                     item.files.map((it,i)=>{
-                                                        return <li key={i}><a target="_blank" download={it.file_name} href={it.file_path}>{it.file_name}</a>{this.props.propsdisabled?'':(this.state.disabled?'':(window.location.href.indexOf("past")>0?'':<span className="remove_file" onClick={this.remove_file.bind(this,type,index,i,it.id)}></span>))}</li>
+                                                        return <li key={i}><a target="_blank" download={it.file_name} href={it.file_path}>{it.file_name}</a>{this.props.propsdisabled?'':(this.state.disabled?'':(window.location.href.indexOf("past")>0 || this.props.current.user_info.readonly?'':<span className="remove_file" onClick={this.remove_file.bind(this,type,index,i,it.id)}></span>))}</li>
                                                     })
                                                 }
                                             </ul>
@@ -176,7 +176,7 @@ export class Keppelproposedeviations extends Component {
                                     <div className="col-sm-12 col-md-2 u-cell">
                                         {
                                             this.props.propsdisabled?<button className="lm--button lm--button--primary" disabled>Upload</button>:(this.state.disabled?<button className="lm--button lm--button--primary" disabled>Upload</button>
-                                            :(window.location.href.indexOf("past")>0?<button className="lm--button lm--button--primary" disabled>Upload</button>:<a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>))
+                                            :(window.location.href.indexOf("past")>0 || this.props.current.user_info.readonly?<button className="lm--button lm--button--primary" disabled>Upload</button>:<a className="lm--button lm--button--primary" onClick={this.upload.bind(this, type, index)}>Upload</a>))
                                         }
                                     </div>
                                     {/* <div className="col-sm-12 col-md-2 u-cell">

@@ -8,7 +8,7 @@ html{
 .cursor_link{cursor: pointer !important;}
 .a_center{text-align: center; display: inline-block;}
 a{cursor: pointer;}
-button[disabled=''],input[disabled=''],select[disabled='']{background: #999 !important; color:#ddd !important; cursor: default !important;}
+button[disabled=''],input[disabled=''],textarea[disabled=''],select[disabled='']{background: #999 !important; color:#ddd !important; cursor: default !important;}
 textarea{resize: none;}
 ul, menu, dir {
   display: block;
@@ -80,6 +80,11 @@ button[disabled='']{background: #666 !important; color:#999 !important; cursor: 
           margin-left: 10px;
         }
         &.checkbox_div{margin:12px 10px;}
+        // &.tc{
+        //   font-size: 12px;
+        //   padding: 4px 0px;
+        //   margin-left: 0px;
+        // }
       }
       b{
         font-weight: normal; font-size: 18px; line-height: 44px; text-align:center; display: block;
@@ -712,7 +717,8 @@ body.choose{
     .upload_file_btn{
       position: relative; width: 100%; display:inline-block; min-height:40px; margin-bottom: 0px;
       border:1px solid #ddd;
-      input{ position: absolute; width: 100%; opacity: 0; top:0px; left:0px; margin: 0; height: 100%; z-index: 10;}
+      input{ position: absolute; width: 100%; opacity: 0; top:0px; left:0px; margin: 0; height: 100%; z-index: 10;
+        }
       dfn{float: left; padding: 0.70rem 1rem 0.70rem; line-height: 1.176470588; color:#333;}
       b{ display: block; position: absolute; right:0px; top:0px; z-index: 3; text-align: center; line-height: 1.176470588; padding: 0.70rem 1rem 0.70rem; background: #666; color: #fff; }
       .required_error{top:40px; left:0px; }
@@ -732,6 +738,9 @@ body.choose{
         span.remove_file{background:url("../images/images_for_white/remove.png") no-repeat center; cursor: pointer; width: 26px; height: 26px; float: right;}
       }
     }
+  }
+  input{
+    &.date_ico{background:url("../images/images_for_white/date.png") no-repeat right;}
   }
 }
 
@@ -1444,3 +1453,6 @@ body.choose{
   #pageShow{margin-left: -24px; margin-right: -24px;}
 }
 #GoLogin{ display: none;}
+.top{
+  margin-top: 20px;
+}

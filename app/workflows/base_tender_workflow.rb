@@ -4,16 +4,16 @@ require 'engine/event'
 
 class BaseTenderWorkflow < Workflow
 
-  def execute(node_name, event_name, arrangement_id)
+  def execute(node_name, event_name, arrangement_id, current_user)
     node = find_node_by_name(node_name)
     event = node.find_event_by_name(event_name)
     state_machine = set_state_machine_by_rule(node, event)
     TenderStateMachine.add_state_machine(arrangement_id, state_machine)
     yield if block_given?
-    get_arrangement_state_machine(arrangement_id)
+    get_arrangement_state_machine(arrangement_id, current_user)
   end
 
-  def get_arrangement_state_machine(arrangement_id)
+  def get_arrangement_state_machine(arrangement_id, current_user)
     flows = TenderStateMachine.where(arrangement_id: arrangement_id).where.not(current_node: nil).select(:previous_node).distinct
     flow_array = []
     flows.each do |flow|
@@ -21,22 +21,32 @@ class BaseTenderWorkflow < Workflow
     end
     current = TenderStateMachine.where(arrangement_id: arrangement_id).last
     actions = get_current_action_status(arrangement_id)
-    { flows: flow_array.sort_by! { |p| p }, current: current, actions: actions }
+    auction_id = Arrangement.find(arrangement_id).auction.id
+    user_info= {}
+    user_info[:current_user] = current_user
+    if current_user&.has_role?(:admin)
+      user_info[:role] = 'admin'
+      user_info[:readonly] = Auction.has_request(auction_id) ? true: false
+    elsif current_user&.has_role?(:buyer)
+      user_info[:role] = 'buyer'
+      user_info[:readonly] = Auction.has_request(auction_id) ? false: true
+    end
+    { flows: flow_array.sort_by! { |p| p }, current: current, actions: actions, user_info: user_info }
   end
 
-  def get_action_state_machine_only_approval_pending(auction_id)
+  def get_action_state_machine_only_approval_pending(auction_id, current_user)
     arrangements = []
     Arrangement.where(auction_id: auction_id).joins(:user).order('users.company_name asc').each do |arrangement|
       next unless arrangement.user.approval_status == User::ApprovalStatusApproved || arrangement.user.approval_status == User::ApprovalStatusPending
-      arrangements.push(company_name: arrangement.user.company_name, arrangement_id: arrangement.id, status: arrangement.user.approval_status, detail: get_arrangement_state_machine(arrangement.id))
+      arrangements.push(company_name: arrangement.user.company_name, arrangement_id: arrangement.id, status: arrangement.user.approval_status, detail: get_arrangement_state_machine(arrangement.id, current_user))
     end
     arrangements
   end
 
-  def get_action_state_machine(auction_id)
+  def get_action_state_machine(auction_id, current_user)
     arrangements = []
     Arrangement.where(auction_id: auction_id).joins(:user).order('users.company_name asc').each do |arrangement|
-      arrangements.push(company_name: arrangement.user.company_name, arrangement_id: arrangement.id, status: arrangement.user.approval_status, detail: get_arrangement_state_machine(arrangement.id))
+      arrangements.push(company_name: arrangement.user.company_name, arrangement_id: arrangement.id, status: arrangement.user.approval_status, detail: get_arrangement_state_machine(arrangement.id, current_user))
     end
     arrangements
   end
@@ -89,6 +99,10 @@ class BaseTenderWorkflow < Workflow
 
   def node3_admin?(sm)
     sm.current_node == 3 && sm.current_role = 1
+  end
+
+  def node3_buyer?(sm)
+    sm.current_node == 3 && sm.current_role = 3
   end
 
   def node4_retailer?(sm)

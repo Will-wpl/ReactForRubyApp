@@ -23,6 +23,7 @@ NotAllowDeviation = '0'.freeze
   has_many :users, through: :consumptions
   has_many :auction_contracts, dependent: :destroy
   has_one :auction_result, dependent: :destroy
+  has_one :request_auction
   # accepts_nested_attributes
 
   # Validations
@@ -40,6 +41,14 @@ NotAllowDeviation = '0'.freeze
   # Custom
 
   # Methods (class methods before instance methods)
+
+  def self.has_request(auction_id)
+    if Auction.find(auction_id).request_auction_id.nil?
+      false
+    else
+      true
+    end
+  end
 
   def self.get_tc_attach_info_id(tc_attach_info_json, type)
     tc_attach_info = JSON.parse(tc_attach_info_json)

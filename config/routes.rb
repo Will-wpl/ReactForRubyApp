@@ -130,6 +130,13 @@ Rails.application.routes.draw do
           get 'buyer_info'
         end
       end
+
+      resources :request_auctions, only: %i[index show approval_request_auction] do
+        member do
+          put 'show'
+          put 'approval_request_auction'
+        end
+      end
     end
   end
 
@@ -216,6 +223,21 @@ Rails.application.routes.draw do
           put 'update_attachment_status'
         end
       end
+      resources :tenders, only: %i[] do
+        member do
+          get 'current'
+          get 'node3_admin'
+          get 'node4_admin'
+          post 'node3_send_response'
+          post 'node4_admin_accept'
+          post 'node4_admin_reject'
+        end
+        collection do
+          get 'history'
+        end
+      end
+      resources :arrangements, only: %i[index] do
+      end
       resources :consumption_details, only: %i[index update participate reject validate validate_single] do
         collection do
           post 'participate'
@@ -229,6 +251,7 @@ Rails.application.routes.draw do
         member do
           get 'pdf'
           get 'letter_of_award_pdf'
+          get 'retailer_dashboard'
         end
         collection do
           get 'obtain'
@@ -236,7 +259,8 @@ Rails.application.routes.draw do
         end
       end
       resources :auction_results, only: %i[index] do
-
+      end
+      resources :auction_attachments, only: %i[index create destroy] do
       end
       resources :registrations, only: %i[index update sign_up validate_buyer_entity validate] do
         member do
@@ -251,6 +275,18 @@ Rails.application.routes.draw do
         collection do
           put 'patch_update_consumption_detail_id'
         end
+      end
+      resources :request_auctions, only: %i[index show save_update delete_request_auction buyer_entity_contracts] do
+        member do
+          put 'delete_request_auction'
+          put 'show'
+        end
+        collection do
+          post 'save_update'
+          get 'buyer_entity_contracts'
+        end
+      end
+      resources :request_attachments, only: %i[create] do
       end
     end
   end
@@ -319,6 +355,7 @@ Rails.application.routes.draw do
     resources :contract, only: %i[index]
     resources :templates, only: %i[index]
     resources :common_templates, only: %i[index]
+    resources :request_auctions, only: %i[index show]
   end
 
   namespace :retailer do
@@ -359,10 +396,17 @@ Rails.application.routes.draw do
       member do
         get 'report' # auction report page
         get 'award' # auction activity log page
+        get 'retailer_dashboard'
       end
     end
     resources :consumptions,only: %i[edit]
     resources :register, only: [:index]
+    resources :request_auctions, only: %i[index show] do
+      collection do
+        get 'entity_list'
+      end
+    end
+
   end
 
   require 'sidekiq/web'

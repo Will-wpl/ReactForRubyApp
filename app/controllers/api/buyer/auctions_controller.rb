@@ -8,6 +8,8 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
       auction = Auction.find(params[:id])
       if Arrangement.auction_of_current_user(auction.id, current_user.id).exists?
         render json: { id: auction.id, publish_status: auction.publish_status }, status: 200
+      elsif current_user.id == auction.request_owner_id
+        render json: { id: auction.id, publish_status: auction.publish_status }, status: 200
       else
         render json: { message: 'you can not get the auction information.' }, status: 400
       end
@@ -34,7 +36,8 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
       { name: nil, field_name: 'actions', is_sort: false }
     ]
     actions = [{ url: '/buyer/consumptions/:id/edit', name: 'Manage', icon: 'manage', check: 'docheck' },
-               { url: '/buyer/consumptions/:id/edit', name: 'View', icon: 'view', check: 'docheck' }]
+               { url: '/buyer/consumptions/:id/edit', name: 'View', icon: 'view', check: 'docheck' },
+               { url: '/buyer/auctions/:id/retailer_dashboard', name: 'Retailer Dashboard', icon: 'edit', interface_type: 'auction'}]
     data = []
     consumptions = get_order_list(params, headers, consumption)
     consumptions.each do |consumption|
@@ -42,7 +45,7 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
       data.push(id: consumption.id, name: consumption.auction.name, actual_begin_time: consumption.auction.actual_begin_time,
                 publish_status: consumption.auction.publish_status, participation_status: consumption.participation_status,
                 accept_status: get_accept_status(consumption.accept_status),
-                actions: action)
+                actions: action, dashdoard_id: consumption.auction.request_auction_id, auction_id: consumption.auction.id)
     end
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200

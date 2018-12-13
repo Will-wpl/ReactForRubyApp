@@ -282,7 +282,7 @@ export class SearchList extends Component {
                                                                     if(it.field_name === 'award'){
                                                                         return <td key={i}><abbr>{item[`${it.field_name}`]?
                                                                             item[`${it.field_name}`].map((o,m)=>{
-                                                                                return <a key={m} className={it.field_name} href={item[`${it.field_name}`]?"/"+o:"javascript:void(0);"} onClick={this.saveId.bind(this,item[`${it.field_name}`])}>{o.company_name}</a>
+                                                                                return <a key={m} className={it.field_name} href={item[`${it.field_name}`]?"/"+o.url:"javascript:void(0);"} onClick={this.saveId.bind(this,item[`${it.field_name}`])}>{o.company_name}</a>
                                                                             }):<a>&nbsp;</a>}</abbr></td>
                                                                     }else{
                                                                         return <td key={i}><abbr>{item[`${it.field_name}`]?<a className={it.field_name} href={item[`${it.field_name}`]?"/"+item[`${it.field_name}`]:"javascript:void(0);"} onClick={this.saveId.bind(this,item[`${it.field_name}`])}></a>:<a>&nbsp;</a>}</abbr></td>
@@ -345,7 +345,7 @@ export class SearchList extends Component {
                                                                         }
                                                                     })
                                                                     :<abbr>{(it.field_name === "actual_begin_time" || it.field_name === "start_datetime" || it.field_name ==="logged_in_last_time" ||it.field_name ==="ws_connected_last_time" || it.field_name === "ws_send_message_last_time"|| it.field_name === "auction_when")
-                                                                    ? moment(item[`${it.field_name}`]).format('D MMM YYYY hh:mm A'):(item[`${it.field_name}`]?(item[`${it.field_name}`].indexOf("!")>0?<bdo>{item[`${it.field_name}`].split("!")[0]} <b title="Purchasing Entity Pending" style={{"color":"red"}}>!</b></bdo>:item[`${it.field_name}`]):null)}</abbr>
+                                                                    ? moment(item[`${it.field_name}`]).format('D MMM YYYY hh:mm A'):((it.field_name==="contract_period_start_date")?moment(item[`${it.field_name}`]).format('D MMM YYYY '):(item[`${it.field_name}`]?(item[`${it.field_name}`].indexOf("!")>0?<bdo>{item[`${it.field_name}`].split("!")[0]} <b title="Purchasing Entity Pending" style={{"color":"red"}}>!</b></bdo>:item[`${it.field_name}`]):null))}</abbr>
                                                                 }
                                                                 </td>
                                                         }
@@ -361,7 +361,7 @@ export class SearchList extends Component {
                                                                         if(item['auction_status'] === 'In Progress' && ik.name === 'View'){
                                                                         }else{
                                                                             return <a key={k} className={this.props.table_data.actions[item["actions"]].icon}
-                                                                                onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,this.props.table_data.actions[item["actions"]].url,this.props.table_data.actions[item["actions"]].name,this.props.table_data.actions[item["actions"]].interface_type ? this.props.table_data.actions[item["actions"]].interface_type : "",item.name ? item.name : '',item.auction_id)}>
+                                                                                onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,this.props.table_data.actions[item["actions"]].url,this.props.table_data.actions[item["actions"]].name,this.props.table_data.actions[item["actions"]].interface_type ? this.props.table_data.actions[item["actions"]].interface_type : "",item.name ? item.name : '',window.location.href.indexOf("retailer")>0?item.auction_id:null)}>
                                                                                 {this.props.table_data.actions[item["actions"]].name}</a>
                                                                         }
 
@@ -374,6 +374,10 @@ export class SearchList extends Component {
                                                                             return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>View{item.incomplete?incompleteHtml:''}</a>
                                                                         }else if(item['status'] === 'Upcoming' && ik.name === 'Manage'){
                                                                             return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>Manage{item.incomplete?incompleteHtml:''}</a>
+                                                                        }else if(ik.name === "Retailer Dashboard" && window.location.href.indexOf("admin")<0){
+                                                                            if(item.dashdoard_id){
+                                                                                return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>{ik.name}</a>
+                                                                            }
                                                                         }else{
                                                                             return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this,item.id ? item.id : item.user_id,ik.url,ik.name,ik.interface_type ? ik.interface_type : "",item.name ? item.name : '',item.auction_id)}>{ik.name}{(ik.name=="Buyer Dashboard" || ik.name=="Buyer List" || ik.name=="Retailer List") && item.all_accept==false?<span title={"There is outstanding Buyer Participation details pending for approval."} className={"font_arial"} style={{"color":"red"}}>!</span>:''}</a>
                                                                         }

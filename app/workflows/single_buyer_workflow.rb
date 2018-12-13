@@ -43,6 +43,8 @@ class SingleBuyerWorkflow < BaseTenderWorkflow
       end
     elsif node3_admin?(sm)
       { node3_send_response: true }
+    elsif node3_buyer?(sm)
+      { node3_send_response: true }
     elsif node5?(sm)
       { node5_retailer_submit: true }
     else

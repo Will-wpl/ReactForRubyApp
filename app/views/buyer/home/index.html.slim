@@ -1,5 +1,7 @@
 - if @current_user.approval_status == '1' &&  (@current_user.agree_seller_buyer=='1' && @current_user.agree_buyer_revv=='1')
   div.col-sm-12.col-md-6.push-md-3.admin_btn
+    a.lm--button.lm--button--primary.col-sm-12.col-md-12 href= "/buyer/request_auctions/entity_list" Request New RA
+    a.lm--button.lm--button--primary.col-sm-12.col-md-12 href= "/buyer/request_auctions" Manage Request
     a.lm--button.lm--button--primary.col-sm-12.col-md-12 href= "/buyer/auctions" Manage Upcoming Reverse Auction
     a.lm--button.lm--button--primary.col-sm-12.col-md-12 href= "/buyer/auction_results" View Past Reverse Auction
   div id='checkNetwork'

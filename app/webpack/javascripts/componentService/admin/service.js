@@ -232,3 +232,13 @@ export const validate_delete_reject_user = (params) => {
     return put('/api/admin/users/validate_for_delete', params);
 }
 
+export const getBuyerRequestDetail_Admin = (id) => {
+    return put('/api/admin/request_auctions/'+id+'/show');
+    
+}
+
+
+export const approveBuyerRequest = (params) => {
+    return put('/api/admin/request_auctions/'+params.id+'/approval_request_auction', params)
+}
+

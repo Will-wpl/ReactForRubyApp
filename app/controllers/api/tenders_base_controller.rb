@@ -5,6 +5,8 @@ class Api::TendersBaseController < Api::BaseController
   def set_arrangement
     @arrangement = if current_user.has_role?('admin')
                      Arrangement.admin_find_by_id(params[:id])
+                   elsif current_user.has_role?('buyer') && Arrangement.find(params[:id]).auction.request_owner_id == current_user.id
+                     Arrangement.admin_find_by_id(params[:id])
                    else
                      current_user.arrangements.find(params[:id])
                    end

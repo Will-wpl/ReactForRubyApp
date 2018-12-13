@@ -163,6 +163,9 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
           let!(:tc1) { create(:user_attachment, file_name: 'SELLER_BUYER_TC', file_path: 'test', file_type: 'SELLER_BUYER_TC')}
           let!(:tc2) { create(:user_attachment, file_name: 'SELLER_REVV_TC', file_path: 'test', file_type: 'SELLER_REVV_TC')}
           let!(:tc3) { create(:user_attachment, file_name: 'BUYER_REVV_TC', file_path: 'test', file_type: 'BUYER_REVV_TC')}
+          let!(:company_buyer) { create(:user, :with_buyer, :with_company_buyer) }
+          let!(:request_auction) { create(:request_auction, contract_period_start_date: DateTime.now, user_id: company_buyer.id) }
+          let!(:tc4) { create(:request_attachment, file_name: 'TC', file_path: 'test_TC', file_type: 'TC', request_auction_id: request_auction.id)}
           def do_request
             post :node2_retailer, params: { id: arrangement.id }
           end
@@ -172,6 +175,9 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
             tc_attach_info[:SELLER_REVV_TC] = tc2.id
             tc_attach_info[:BUYER_REVV_TC] = tc3.id
             auction.tc_attach_info = tc_attach_info.to_json
+            auction.request_auction_id = request_auction.id
+            auction.accept_status = '1'
+            auction.request_owner_id = company_buyer.id
             auction.save
             do_request
           }

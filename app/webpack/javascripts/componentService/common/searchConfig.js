@@ -108,7 +108,7 @@ export const searchTypeData = {
     "Buyer Purchase Order Records": {//connect back end OK
         list_url: "/api/buyer/auction_results",
         list_data: [
-            { title: "ID:", type: "published_gid", species: "input", operator: 'like', table: 'auctions' },
+            { title: "Reference ID:", type: "published_gid", species: "input", operator: 'like', table: 'auctions' },
             { title: "Name:", type: "name", species: "input", operator: 'like', table: 'auctions' },
             { title: "Date:", type: "start_datetime", species: "datePacker", operator: 'date_between', table: 'auctions' }
         ]
@@ -124,5 +124,19 @@ export const searchTypeData = {
         list_data: [
             { title: "Company Name:", type: "company_name", species: "input", operator: 'like' },
         ]
-    }
+    },
+
+    "Manage Buyer Request": {//connect back end OK
+        list_url: "/api/buyer/request_auctions",
+        list_data: [
+            { title: "Name of Reverse Auction:", type: "name", species: "input", operator: 'like', table: 'request_auctions' },
+        ]
+    },
+    "Buyer Request List": {//connect back end OK
+        list_url: "/api/admin/request_auctions",
+        list_data: [
+            { title: "Name of Reverse Auction:", type: "name", species: "input", operator: 'like', table: 'request_auctions' },
+        ]
+    },
+    
 }

@@ -202,9 +202,9 @@ export class BuyerUserEntityRegister extends Component {
                 fileData: fileObj
             })
         }
-        if (param.letter_of_authorisation_attachment) {
+        if (param.letter_of_authorisation_attachment_buyer) {
             this.setState({
-                messageAttachmentUrlArr: param.letter_of_authorisation_attachment
+                messageAttachmentUrlArr: param.letter_of_authorisation_attachment_buyer
             })
         }
         if (param.buyer_revv_tc_attachment) {
@@ -1243,7 +1243,7 @@ export class BuyerUserEntityRegister extends Component {
                             </h4>
                             <div id="chkRevv_message" className='isPassValidate'>Please check this box if you want to proceed.</div>
                             <Modal text={this.state.text} acceptFunction={this.refreshForm.bind(this)} ref="Modal" />
-                            <Modal listdetailtype="Documents Message" ref="Modal_upload" attatchment={this.state.messageAttachmentUrlArr} />
+                            <Modal listdetailtype="Documents Message" operatinType="buyer" ref="Modal_upload" attatchment={this.state.messageAttachmentUrlArr} />
                             <Modal formSize="big" listdetailtype="entity_detail" text={this.state.text} acceptFunction={this.acceptAddEntity.bind(this)} entitList={this.state.entity_list} disabled={this.state.ismain} entityDetailItem={this.state.entityItemInfo} ref="Modal_Entity" />
                             <Modal listdetailtype="entity_error" text={this.state.text} entityErrorList={this.state.validateErrList} ref="Modal_EntityErr" />
                         </div>

@@ -19,7 +19,7 @@ export class Adminworkflow extends Component {
         }
         getRetailerList(sessionStorage.auction_id).then(res=>{
             //console.log(res);
-            this.setState({retailer_list:res.tenders,step_counts:res.step_counts});
+            this.setState({retailer_list:res.tenders,step_counts:res.step_counts,readOnly:res.user_info.readonly});
         })
     }
     getPageindex(arrangement_id,name,type,index){
@@ -31,6 +31,9 @@ export class Adminworkflow extends Component {
             }else{
                 this.setState({current:res,page:res.current.current_node,readOnly:!type});
             }
+            getRetailerList(sessionStorage.auction_id).then(re=>{
+                this.setState({readOnly:re.user_info.readonly});
+            })
             if(window.location.href.indexOf("past")>0){
                 this.setState({readOnly:true});
             }
@@ -77,7 +80,7 @@ export class Adminworkflow extends Component {
             );
         }
     }
-    
+
     const loadedStates = [
         'complete',
         'loaded',
