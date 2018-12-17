@@ -44,7 +44,7 @@ export class BuyerRequestEntityListManage extends Component {
         let consumption_id = item.consumption_id;
         let auction_id = item.auction_id;
         let entity_id = item.entity_id;
-        window.location.href = '/buyer/consumptions/567&auctions=106'
+        window.location.href = '/buyer/consumptions/'+consumption_id+'&entity_id='+entity_id+'';
     }
     render() {
         return (
