@@ -168,7 +168,7 @@ export class Tenderdocuments extends React.Component {
                         </h4>
                     </div>:<div className="lm--formItem--inline string">
                         <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
-                            <input name="agree_declare" type="checkbox" id="chkAgree_declare" checked={true} disabled={this.props.propsdisabled} required />
+                            <input name="agree_declare" type="checkbox" id="chkAgree_declare" checked disabled={this.props.propsdisabled} required />
                             <span>By clicking on the “Participate” button, we acknowledge and agree that per the Terms & <a className="download_ico cursor_link" target="_blank" download={this.state.file.length > 0 && this.state.file[0]? this.state.file[0].file_name : ""} href={this.state.file.length > 0  && this.state.file[0] ? this.state.file[0].file_path : "#"}>Conditions of Use (Retailer)</a>, if our bid met Closing Condition and Auto-Closing occurred after the Reverse Auction, our submitted bid will constitute as an acceptance to the Buyer’s Purchase Order and that an agreement for sale and purchase of electricity between us and the Buyer shall be formed accordingly based on the terms and conditions set out in <a className="download_ico cursor_link" target="_blank" download={this.state.file.length > 0  && this.state.file[1] ? this.state.file[1].file_name : ""} href={this.state.file.length > 0  && this.state.file[1] ? this.state.file[1].file_path : "#"}>Electricity Purchase Contract</a> and be legally binding on us and the Buyer. </span>
                         </h4>
                     </div>}</div>}
