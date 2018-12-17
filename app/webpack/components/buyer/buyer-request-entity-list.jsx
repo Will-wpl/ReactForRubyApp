@@ -40,12 +40,17 @@ export class BuyerRequestEntityListManage extends Component {
     goManage() {
         window.location.href = '/buyer/request_auctions';
     }
+    goDetails(item)
+    {
+        console.log(item)
+        window.location.href='/admin/consumptions/567&auctions=106'
+    }
     render() {
         return (
             <div className="admin_expiry" id={"users_search_list"}>
                 <div className="col-sm-12 col-md-12">
                     <div className="search_type padLR24 bgwhite">
-                        <dl className="lm--formItem string optional">                                                                   
+                        <dl className="lm--formItem string optional">
                             <button onClick={this.goCreate.bind(this)} style={{ marginBottom: "10px" }} className="lm--button lm--button--primary create_btn u-pull-right">Request New RA </button>
                             <button onClick={this.goManage.bind(this)} style={{ marginBottom: "10px" }} className="lm--button lm--button--primary create_btn u-pull-right">Manage Request </button>
                         </dl>
@@ -60,21 +65,29 @@ export class BuyerRequestEntityListManage extends Component {
                             <div><dfn className={"search_list_asc entity_name"} onClick={this.dosort.bind(this, 'entity_name', 'asc')}></dfn>
                                                 <dfn className={"search_list_desc entity_name"} onClick={this.dosort.bind(this, 'entity_name', 'desc')}></dfn></div>
                                         </th>
+
                                         <th> Existing Retailer
                             <div><dfn className={"search_list_asc retailer_name"} onClick={this.dosort.bind(this, 'retailer_name', 'asc')}></dfn>
                                                 <dfn className={"search_list_desc retailer_name"} onClick={this.dosort.bind(this, 'retailer_name', 'desc')}></dfn></div>
+                                        </th>
+                                        <th> Contract Start
+                            <div><dfn className={"search_list_asc contract_period_start_date"} onClick={this.dosort.bind(this, 'contract_period_start_date', 'asc')}></dfn>
+                                                <dfn className={"search_list_desc contract_period_start_date"} onClick={this.dosort.bind(this, 'contract_period_start_date', 'desc')}></dfn></div>
                                         </th>
                                         <th>Contract Expiry
                             <div><dfn className={"search_list_asc contract_period_end_date"} onClick={this.dosort.bind(this, 'contract_period_end_date', 'asc')}></dfn>
                                                 <dfn className={"search_list_desc contract_period_end_date"} onClick={this.dosort.bind(this, 'contract_period_end_date', 'desc')}></dfn></div>
                                         </th>
+                                        <th></th>
                                     </tr></thead>
                                 <tbody>
                                     {this.state.entity_list.map((item, index) => {
                                         return <tr key={index}>
                                             <td>{item.entity_name}</td>
                                             <td>{item.retailer_name}</td>
+                                            <td>{item.contract_period_start_date}</td>
                                             <td>{moment(item.contract_period_end_date).format('D MMM YYYY')}</td>
+                                            <td><a href="#"  onClick={this.goDetails.bind(this,item)}>Details</a></td>
                                         </tr>
                                     })}
                                 </tbody>
