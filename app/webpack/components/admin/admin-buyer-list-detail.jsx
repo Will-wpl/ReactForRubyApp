@@ -28,7 +28,8 @@ export default class AdminBuyerListDetail extends Component {
             dataVersion: "",
             past: false,
             auctionId: "",
-            approvedStatus: ""
+            approvedStatus: "",
+            isEntityVisit: false
 
         }
         this.type = sessionStorage.getItem('comsumptiontype');
@@ -41,12 +42,35 @@ export default class AdminBuyerListDetail extends Component {
     }
 
     componentDidMount() {
-        let id = window.location.href.split("consumptions/")[1].split('&auctions=')[0];
-        let auctionId = window.location.href.split("consumptions/")[1].split('&auctions=')[1];
+        let id, auctionId, entity_id;
+
+        if (window.location.href.indexOf('entity_id') === -1) {
+            id = window.location.href.split("consumptions/")[1].split('&auctions=')[0];
+            auctionId = window.location.href.split("consumptions/")[1].split('&auctions=')[1];
+            this.setState({
+                isEntityVisit: false
+            })
+        }
+        else {
+
+            id = window.location.href.split("consumptions/")[1].split('&auctions=')[0];
+            auctionId = window.location.href.split("consumptions/")[1].split('&auctions=')[1].split("&entity_id=")[0];
+            entity_id = window.location.href.split("consumptions/")[1].split('&auctions=')[1].split("&entity_id=")[1];
+            this.setState({
+                isEntityVisit: true
+            })
+        }
+
+
         this.setState({
             auctionId: auctionId
         });
-        getAdminBuyerListDetails(id).then(res => {
+
+        let params = {
+            id: id,
+            entity_id: entity_id
+        }
+        getAdminBuyerListDetails(params).then(res => {
             this.setState({
                 consumption_id: id,
                 comsumption_list: [res],
@@ -136,11 +160,11 @@ export default class AdminBuyerListDetail extends Component {
                 <h2 className="u-mt2 u-mb2">View Consumption Details</h2>
                 <div className="col-sm-12 u-mb3">
                     Status: {this.state.approvedStatus}
-                    <AdminComsumptionList visible="visible" dataVersion={this.state.dataVersion} comsumption_list={this.state.comsumption_list} detail={this.show_detail.bind(this)} type={this.type} />
+                    <AdminComsumptionList visible="visible"  dataVersion={this.state.dataVersion} comsumption_list={this.state.comsumption_list} detail={this.show_detail.bind(this)} type={this.type} />
                 </div>
+            
                 <div className={this.state.dataVersion === "1" ? "col-sm-12 u-mb3" : "isHide"}>
                     <div className="lm--formItem lm--formItem--inline string">
-                        {/* <div className="lm--formItem-left lm--formItem-label string required">Comment:</div> */}
                         <label className="lm--formItem-left lm--formItem-label-comment string required">
                             Comments: &nbsp;</label>
                         <div className="lm--formItem-right lm--formItem-control">
@@ -148,12 +172,12 @@ export default class AdminBuyerListDetail extends Component {
                             <div className='isPassValidate' id='comment_message' >This field is required!</div>
                         </div>
                     </div>
-
                 </div>
                 <div className={this.state.dataVersion === "1" ? "retailer_btn" : "isHide"}>
                     <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'reject')} disabled={this.state.past} >Reject</button>
                     <button id="submit_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'approve')} disabled={this.state.past}>Approve</button>
                 </div>
+
                 <div className="createRaMain u-grid">
                     <a className="lm--button lm--button--primary u-mt3" href="javascript:javascript:self.location=document.referrer;" >Back</a>
                 </div>

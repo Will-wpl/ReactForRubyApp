@@ -71,6 +71,7 @@ export const getBuyerDetails = (params) => {
 }
 
 export const getAdminBuyerListDetails = (params) => {
+
     return get('/api/admin/consumptions/' + params);
 }
 
