@@ -223,8 +223,8 @@ RSpec.describe UserMailer, type: :mail do
 
   context 'contract notification mail' do
     before :each do
-      @template = create(:email_template, subject: 'contract notification mail', body: 'Dear Admin,<br/><br/>#body.<br/><br/>Please proceed to view the electricity purchase report at <a href="http://revv.sg">revv.sg</a>.', template_type: '30')
-      UserMailer.contract_notification(@admin_user, [ {'id':111, 'name':'name', 'contract_period_end_date': 'end date'}]).deliver_now
+      @template = create(:email_template, subject: 'contract notification mail', body: 'Dear Admin,<br/><br/>test #days.<br/><br/>buyer_company_name_list<br/><br/>Please proceed to view the electricity purchase report at <a href="http://revv.sg">revv.sg</a>.', template_type: '30')
+      UserMailer.contract_notification(@admin_user, {:days => '30', :buyer_company_name_list => ["company_name_list"]}).deliver_now
     end
     it 'be_delivered_to', mail: true do
       expect(open_last_email).to be_delivered_to @admin_user.email
@@ -241,10 +241,20 @@ RSpec.describe UserMailer, type: :mail do
     end
   end
 
-  context 'request responded mail' do
+  context 'request responded approved mail' do
     before :each do
-      @template = create(:email_template, subject: 'Request for initiation of reverse auction responded by Admin', body: 'Dear #buyer_company_name,<br/><br/>Admin has noted your request for initiation of reverse auction and will get in touch with you shortly.<br/><br/>Thank you.', template_type: '32')
-      UserMailer.request_responded(company_buyer).deliver_now
+      @template = create(:email_template, subject: 'Request for initiation of reverse auction responded by Admin', body: 'Dear #buyer_company_name,<br/><br/>Admin has #respond your request for initiation of reverse auction. You will be contacted on the next steps.<br/><br/>Thank you.', template_type: '32')
+      UserMailer.request_responded(company_buyer,true).deliver_now
+    end
+    it 'be_delivered_to', mail: true do
+      expect(open_last_email).to be_delivered_to company_buyer.email
+    end
+  end
+
+  context 'request responded rejected mail' do
+    before :each do
+      @template = create(:email_template, subject: 'Request for initiation of reverse auction responded by Admin', body: 'Dear #buyer_company_name,<br/><br/>Admin has #respond your request for initiation of reverse auction. You will be contacted on the next steps.<br/><br/>Thank you.', template_type: '32')
+      UserMailer.request_responded(company_buyer,false ).deliver_now
     end
     it 'be_delivered_to', mail: true do
       expect(open_last_email).to be_delivered_to company_buyer.email
