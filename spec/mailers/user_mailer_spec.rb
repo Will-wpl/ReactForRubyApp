@@ -230,4 +230,24 @@ RSpec.describe UserMailer, type: :mail do
       expect(open_last_email).to be_delivered_to @admin_user.email
     end
   end
+
+  context 'request submitted mail' do
+    before :each do
+      @template = create(:email_template, subject: 'Request for initiation of reverse auction', body: 'Dear Admin,<br/><br/>#buyer_company_name has submitted a request for initiation of reverse auction.<br/><br/>Please proceed to manage the request at <a href="http://revv.sg">revv.sg</a>.', template_type: '31')
+      UserMailer.request_submitted(@admin_user, { :buyer_company_name => 'company_name'}).deliver_now
+    end
+    it 'be_delivered_to', mail: true do
+      expect(open_last_email).to be_delivered_to @admin_user.email
+    end
+  end
+
+  context 'request responded mail' do
+    before :each do
+      @template = create(:email_template, subject: 'Request for initiation of reverse auction responded by Admin', body: 'Dear #buyer_company_name,<br/><br/>Admin has noted your request for initiation of reverse auction and will get in touch with you shortly.<br/><br/>Thank you.', template_type: '32')
+      UserMailer.request_responded(company_buyer).deliver_now
+    end
+    it 'be_delivered_to', mail: true do
+      expect(open_last_email).to be_delivered_to company_buyer.email
+    end
+  end
 end
