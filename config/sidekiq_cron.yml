@@ -1,7 +1,7 @@
 contract_job:
     #default is UTC
-    cron: "5 4 * 6 *"
+    cron: "30 0 * * *"
     class: "ContractJob"
     queue: 'contract'
     args:
-        expiration_days: 90
+        expiration_days: 66
