@@ -29,33 +29,14 @@ export default class BuyerConsumptionListDetail extends Component {
     }
 
     componentDidMount() {
-        let id, auctionId, entity_id;
-        if (window.location.href.indexOf('entity_id') === -1) {
-            id = window.location.href.split("consumptions/")[1].split('&auctions=')[0];
-            auctionId = window.location.href.split("consumptions/")[1].split('&auctions=')[1];
-            this.setState({
-                isEntityVisit: false
-            })
+        let id, entity_id;
+        id = window.location.href.split("consumptions/")[1].split('&entity_id=')[0];
+        entity_id = window.location.href.split("consumptions/")[1].split('&entity_id=')[1];
+        let params = {
+            id: id,
+            entity_id: entity_id
         }
-        else {
-
-            id = window.location.href.split("consumptions/")[1].split('&auctions=')[0];
-            auctionId = window.location.href.split("consumptions/")[1].split('&auctions=')[1].split("&entity_id=")[0];
-            entity_id = window.location.href.split("consumptions/")[1].split('&auctions=')[1].split("&entity_id=")[1];
-            this.setState({
-                isEntityVisit: true
-            })
-        }
-
-
-        this.setState({
-            auctionId: auctionId
-        });
-
-        let params={
-            id:id,
-            entity_id:entity_id
-        }
+        console.log(params)
         getBuyerListDetails(params).then(res => {
             this.setState({
                 consumption_id: id,
@@ -78,7 +59,7 @@ export default class BuyerConsumptionListDetail extends Component {
             obj.slideDown(300);
         }
     }
-    
+
     render() {
         return (
             <div className="u-grid mg0 validate_message">
