@@ -51,14 +51,22 @@ class Api::ConsumptionsController < Api::BaseController
 
   def show
     consumption = @consumption
-    details = ConsumptionDetail.where(consumption_id: params[:id]).order(id: :asc)
+    if params[:entity_id].blank?
+      details = ConsumptionDetail.where(consumption_id: params[:id]).order(id: :asc)
+    else
+      details = ConsumptionDetail.where(consumption_id: params[:id], company_buyer_entity_id: params[:entity_id]).order(id: :asc)
+    end
     details_array = consumption_details(details)
     auction = consumption.auction
     auction_contract = auction.auction_contracts.where(contract_duration: consumption.contract_duration).take
     auction_finished = !auction.auction_result.blank?
     auction_published = auction.publish_status
     count = details.count
-    entities = CompanyBuyerEntity.find_by_user(consumption.user_id)
+    if params[:entity_id].blank?
+      entities = CompanyBuyerEntity.find_by_user(consumption.user_id)
+    else
+      entities = CompanyBuyerEntity.where(id: params[:entity_id])
+    end
     cons = { auction_id: consumption.auction_id,
              user_id: consumption.user_id,
              company_name: consumption.user.company_name,

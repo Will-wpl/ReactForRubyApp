@@ -129,6 +129,20 @@ class UserMailer < ApplicationMailer
     send_email(admin_user.email, email_body, email_subject)
   end
 
+  def request_submitted(admin_user, param)
+    mail_template = get_template('31')
+    email_subject = mail_template.subject
+    email_body = mail_template.body.gsub(/#buyer_company_name/, param[:buyer_company_name])
+    send_email(admin_user.email, email_body, email_subject)
+  end
+
+  def request_responded(user)
+    mail_template = get_template('32')
+    email_subject = mail_template.subject
+    email_body = mail_template.body.gsub(/#buyer_company_name/, user.company_name)
+    send_email(user.email, email_body, email_subject)
+  end
+
   private
 
   def send_email(email, body, subject)
