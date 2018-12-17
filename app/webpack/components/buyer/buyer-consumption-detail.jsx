@@ -87,7 +87,6 @@ export default class BuyerConsumptionListDetail extends Component {
                     <AdminComsumptionList visible="visible" dataVersion={this.state.dataVersion} comsumption_list={this.state.comsumption_list} detail={this.show_detail.bind(this)} type={this.type} />
                 </div>
             </div>
-
         )
     }
 }
