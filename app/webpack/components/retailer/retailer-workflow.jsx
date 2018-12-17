@@ -14,7 +14,7 @@ export class Retailerworkflow extends React.Component{
         this.state={
             auction:{},text:'',disabled:false,
             selected:[],current:{},page:0,tender_status:false,tab_page:0,
-            update:true,single:5
+            update:true,single:5,role_name:""
         }
         this.submittender = false;
         this.hiddentimeCount = true;
@@ -37,7 +37,7 @@ export class Retailerworkflow extends React.Component{
         }
         getTendersCurrent('retailer',sessionStorage.arrangement_id).then(res=>{
             //console.log(res);
-            this.setState({current:res,tab_page:res.current.current_node?res.current.current_node:1,page:res.current.current_node?res.current.current_node:1,selected:res.flows});
+            this.setState({current:res,tab_page:res.current.current_node?res.current.current_node:1,page:res.current.current_node?res.current.current_node:1,selected:res.flows,role_name:res.user_info.name});
             if(window.location.href.indexOf("past")>0){
                 this.setState({disabled:true});
             }
@@ -66,7 +66,7 @@ export class Retailerworkflow extends React.Component{
                     break
                 case 2 : pageDom = <Tenderdocuments single={this.state.single} propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} />
                     break
-                case 3 : pageDom = <Proposedeviations update={this.state.update} propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} current={this.state.current} tenderFn={()=>{this.setState({tender_status:true})}} auction={this.state.auction} tender={this.state.tender_status} />
+                case 3 : pageDom = <Proposedeviations role_name={this.state.role_name} update={this.state.update} propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} current={this.state.current} tenderFn={()=>{this.setState({tender_status:true})}} auction={this.state.auction} tender={this.state.tender_status} />
                     break
                 case 5 : pageDom = <RetailerManage propsdisabled={this.state.disabled} page={this.getPageindex.bind(this)} current={this.state.current} auction={this.state.auction} hiddentimeCount={this.hiddentimeCount} node={true}/>
                     break
