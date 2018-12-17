@@ -5,7 +5,7 @@ import AdminComsumptionList from './../admin/admin_shared/admin-comsumption-list
 import AdminComsumptionPrice from './../admin/admin_shared/admin-comsumption-price';
 import { getBuyerListDetails } from '../../javascripts/componentService/common/service';
 
-export default class BuyerListDetail extends Component {
+export default class BuyerConsumptionListDetail extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -93,10 +93,10 @@ export default class BuyerListDetail extends Component {
 }
 
 function run() {
-    const domNode = document.getElementById('admin_buyer_list_detail');
+    const domNode = document.getElementById('buyer_list_detail');
     if (domNode !== null) {
         ReactDOM.render(
-            React.createElement(AdminBuyerListDetail),
+            React.createElement(BuyerConsumptionListDetail),
             domNode
         );
     }
