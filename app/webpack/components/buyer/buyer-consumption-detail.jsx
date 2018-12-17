@@ -24,7 +24,7 @@ export default class BuyerConsumptionListDetail extends Component {
             isEntityVisit: false
         }
         this.datail_type = '3';
-        this.type = 'View Consumption Details'
+        this.type = 'View Company Consumption Details'
 
     }
 
@@ -33,6 +33,7 @@ export default class BuyerConsumptionListDetail extends Component {
         id = window.location.href.split("consumptions/")[1].split('&entity_id=')[0];
         entity_id = window.location.href.split("consumptions/")[1].split('&entity_id=')[1];
         getBuyerListDetails(id, entity_id).then(res => {
+            console.log(res)
             this.setState({
                 consumption_id: id,
                 comsumption_list: [res],
