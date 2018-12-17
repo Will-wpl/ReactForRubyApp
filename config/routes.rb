@@ -247,6 +247,8 @@ Rails.application.routes.draw do
           put 'validate_single'
         end
       end
+      resources :consumptions, only: %i[show] do
+      end
       resources :auctions, only: %i[obtain published] do
         member do
           get 'pdf'
