@@ -43,34 +43,13 @@ export default class AdminBuyerListDetail extends Component {
 
     componentDidMount() {
         let id, auctionId, entity_id;
-
-        if (window.location.href.indexOf('entity_id') === -1) {
-            id = window.location.href.split("consumptions/")[1].split('&auctions=')[0];
-            auctionId = window.location.href.split("consumptions/")[1].split('&auctions=')[1];
-            this.setState({
-                isEntityVisit: false
-            })
-        }
-        else {
-
-            id = window.location.href.split("consumptions/")[1].split('&auctions=')[0];
-            auctionId = window.location.href.split("consumptions/")[1].split('&auctions=')[1].split("&entity_id=")[0];
-            entity_id = window.location.href.split("consumptions/")[1].split('&auctions=')[1].split("&entity_id=")[1];
-            this.setState({
-                isEntityVisit: true
-            })
-        }
-
-
+        id = window.location.href.split("consumptions/")[1].split('&auctions=')[0];
+        auctionId = window.location.href.split("consumptions/")[1].split('&auctions=')[1];
         this.setState({
             auctionId: auctionId
         });
 
-        let params = {
-            id: id,
-            entity_id: entity_id
-        }
-        getAdminBuyerListDetails(params).then(res => {
+        getAdminBuyerListDetails(id).then(res => {
             this.setState({
                 consumption_id: id,
                 comsumption_list: [res],
@@ -80,7 +59,6 @@ export default class AdminBuyerListDetail extends Component {
                 approvedStatus: setApprovalStatus(res.accept_status, res.approval_date_time)
             })
         }, error => {
-
         })
     }
     show_detail(index, consumption_id) {
@@ -160,9 +138,9 @@ export default class AdminBuyerListDetail extends Component {
                 <h2 className="u-mt2 u-mb2">View Consumption Details</h2>
                 <div className="col-sm-12 u-mb3">
                     Status: {this.state.approvedStatus}
-                    <AdminComsumptionList visible="visible"  dataVersion={this.state.dataVersion} comsumption_list={this.state.comsumption_list} detail={this.show_detail.bind(this)} type={this.type} />
+                    <AdminComsumptionList visible="visible" dataVersion={this.state.dataVersion} comsumption_list={this.state.comsumption_list} detail={this.show_detail.bind(this)} type={this.type} />
                 </div>
-            
+
                 <div className={this.state.dataVersion === "1" ? "col-sm-12 u-mb3" : "isHide"}>
                     <div className="lm--formItem lm--formItem--inline string">
                         <label className="lm--formItem-left lm--formItem-label-comment string required">
