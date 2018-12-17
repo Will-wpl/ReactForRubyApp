@@ -38,7 +38,7 @@ class Api::RequestAuctionsController < Api::BaseController
     end
 
     User.admins.each do |admin_user|
-      UserMailer.request_submitted(admin_user, {buyer_company_name: current_user.company_name})
+      UserMailer.request_submitted(admin_user, {buyer_company_name: current_user.company_name}).deliver_later
     end
 
     render json: {request_auction: request_auction}, status: 200
@@ -97,7 +97,7 @@ class Api::RequestAuctionsController < Api::BaseController
           render json: { result: 'success', request_auction: request_auction, is_single:false }, status: 200
         end
         creater = User.find(request_auction.user_id)
-        UserMailer.request_responded(creater)
+        UserMailer.request_responded(creater).deliver_later
       else
         render json: { result: 'success', request_auction: request_auction }, status: 200
       end
