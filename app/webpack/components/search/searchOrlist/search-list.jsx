@@ -61,6 +61,10 @@ export class SearchList extends Component {
     clickRequestDetals(id) {
         window.location.href = "/buyer/request_auctions/" + id;
     }
+    clickRequestDetals_admin(id)
+    {
+        window.location.href = "/admin/request_auctions/" + id;
+    }
 
     clickFunction(id, url, name, type, list_name, auction_id) {
         if (type == "auction") {
@@ -388,12 +392,21 @@ export class SearchList extends Component {
                                                                 }
                                                             }
                                                             else if (ik.check === "request_buyer") {
-                                                            
+
                                                                 if (item['accept_status'] === '0') {
                                                                     return <a key={k} className="edit" onClick={this.clickRequestDetals.bind(this, item.id)}>Manage</a>
                                                                 }
                                                                 else {
                                                                     return <a key={k} className="view" onClick={this.clickRequestDetals.bind(this, item.id)}>View</a>
+                                                                }
+                                                            }
+                                                            else if (ik.check === "admin_request_buyer") {
+
+                                                                if (item['accept_status'] === '2') {
+                                                                    return <a key={k} className="edit" onClick={this.clickRequestDetals_admin.bind(this, item.id)}>Manage</a>
+                                                                }
+                                                                else {
+                                                                    return <a key={k} className="view" onClick={this.clickRequestDetals_admin.bind(this, item.id)}>View</a>
                                                                 }
                                                             }
 
