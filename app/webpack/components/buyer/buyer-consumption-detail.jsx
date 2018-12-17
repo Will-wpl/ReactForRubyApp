@@ -29,41 +29,15 @@ export default class BuyerConsumptionListDetail extends Component {
     }
 
     componentDidMount() {
-        let id, auctionId, entity_id;
-        if (window.location.href.indexOf('entity_id') === -1) {
-            id = window.location.href.split("consumptions/")[1].split('&auctions=')[0];
-            auctionId = window.location.href.split("consumptions/")[1].split('&auctions=')[1];
-            this.setState({
-                isEntityVisit: false
-            })
-        }
-        else {
-
-            id = window.location.href.split("consumptions/")[1].split('&auctions=')[0];
-            auctionId = window.location.href.split("consumptions/")[1].split('&auctions=')[1].split("&entity_id=")[0];
-            entity_id = window.location.href.split("consumptions/")[1].split('&auctions=')[1].split("&entity_id=")[1];
-            this.setState({
-                isEntityVisit: true
-            })
-        }
-
-
-        this.setState({
-            auctionId: auctionId
-        });
-
-        let params={
-            id:id,
-            entity_id:entity_id
-        }
-        getBuyerListDetails(params).then(res => {
+        let id, entity_id;
+        id = window.location.href.split("consumptions/")[1].split('&entity_id=')[0];
+        entity_id = window.location.href.split("consumptions/")[1].split('&entity_id=')[1];
+        getBuyerListDetails(id, entity_id).then(res => {
             this.setState({
                 consumption_id: id,
                 comsumption_list: [res],
                 dataVersion: res.consumption.contract_duration ? "1" : "",
                 past: (res.consumption.accept_status === "0" || res.consumption.accept_status === "1" || res.auction_published == true) ? true : false,
-                comment: res.consumption.comments ? res.consumption.comments : "",
-                approvedStatus: setApprovalStatus(res.accept_status, res.approval_date_time)
             })
         }, error => {
         })
@@ -78,7 +52,7 @@ export default class BuyerConsumptionListDetail extends Component {
             obj.slideDown(300);
         }
     }
-    
+
     render() {
         return (
             <div className="u-grid mg0 validate_message">
@@ -87,7 +61,6 @@ export default class BuyerConsumptionListDetail extends Component {
                     <AdminComsumptionList visible="visible" dataVersion={this.state.dataVersion} comsumption_list={this.state.comsumption_list} detail={this.show_detail.bind(this)} type={this.type} />
                 </div>
             </div>
-
         )
     }
 }

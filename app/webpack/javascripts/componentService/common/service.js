@@ -109,6 +109,6 @@ export const removebuyerFile = (params) => {
     return Ddelete('/api/buyer/auction_attachments/' + params);
 }
 
-export const getBuyerListDetails = (params) => {
-    return get('/api/buyer/consumptions/' + params);
+export const getBuyerListDetails = (id, entity_id) => {
+    return get('/api/buyer/consumptions/' + id + '&entity_id=' + entity_id);
 }

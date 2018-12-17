@@ -40,10 +40,11 @@ export class BuyerRequestEntityListManage extends Component {
     goManage() {
         window.location.href = '/buyer/request_auctions';
     }
-    goDetails(item)
-    {
-        console.log(item)
-        window.location.href='/admin/consumptions/567&auctions=106'
+    goDetails(item) {
+        let consumption_id = item.consumption_id;
+        let auction_id = item.auction_id;
+        let entity_id = item.entity_id;
+        window.location.href = '/buyer/consumptions/'+consumption_id+'&entity_id='+entity_id+'';
     }
     render() {
         return (
@@ -87,7 +88,7 @@ export class BuyerRequestEntityListManage extends Component {
                                             <td>{item.retailer_name}</td>
                                             <td>{item.contract_period_start_date}</td>
                                             <td>{moment(item.contract_period_end_date).format('D MMM YYYY')}</td>
-                                            <td><a href="#"  onClick={this.goDetails.bind(this,item)}>Details</a></td>
+                                            <td><a href="#" onClick={this.goDetails.bind(this, item)}>Details</a></td>
                                         </tr>
                                     })}
                                 </tbody>
