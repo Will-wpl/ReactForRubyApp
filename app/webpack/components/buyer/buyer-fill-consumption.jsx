@@ -721,7 +721,7 @@ export class FillConsumption extends Component {
                 return false;
             }
             else {
-                this.setState({ text: "Are you sure you want to participate in this auction?" });
+                this.setState({ text: "Are you sure you want to proceed? Please note that this step cannot be reversed." });
                 this.refs.Modal.showModal("comfirm");
             }
         } else if (this.state.submit_type === "save") {
