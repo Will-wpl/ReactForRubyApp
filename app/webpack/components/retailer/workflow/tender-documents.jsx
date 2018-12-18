@@ -45,7 +45,7 @@ export class Tenderdocuments extends React.Component {
             this.refs.Modal.showModal("comfirm");
             this.setState({
                 // text: "Are you sure you want to participate in the auction? By clicking 'Yes', you confirm your participation in the auction and are bounded by the Retailer Platform Terms of Use. Please be reminded that you will not be allowed to withdraw your participation."
-                text:"Are you sure you want to participate in the auction? <br><br>By clicking 'Yes', you confirm your participation in the auction and will not be allowed to withdraw your participation."
+                text:"Are you sure you want to proceed? Please note that this step cannot be reversed."
             });
         }
     }
@@ -127,6 +127,10 @@ export class Tenderdocuments extends React.Component {
                     </label>
                 </div>:<div className="lm--formItem lm--formItem--inline string u-mt1">
                     Note: Please click ‘Participate’ to confirm your participation in this Reverse Auction.
+                    <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
+                        <input name="agree_declare" type="checkbox" id="chkAgree_declare" disabled={this.props.propsdisabled} required />
+                        <span>By clicking on the “Participate” button, we acknowledge and agree that per the Terms & Conditions of Use (Retailer), upon Auto-Closing and the Closing Condition being met after the Reverse Auction, our submitted bid will constitute as an acceptance to the Buyer’s Purchase Order and that an agreement for sale and purchase of electricity between us and the Buyer shall be formed accordingly based on the terms and conditions set out in Electricity Purchase Contract and be legally binding on us and the Buyer.</span>
+                    </h4>
                 </div>}
                 {/*<div className="lm--formItem lm--formItem--inline string u-mt3 role_select">*/}
                     {/*<label className="lm--formItem-left lm--formItem-label string required">*/}
