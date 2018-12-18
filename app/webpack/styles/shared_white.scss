@@ -903,6 +903,7 @@ body.choose{
       &:last-child{ border: none !important;}
       span{
         border-right:1px solid #ccc !important; color:#333;
+        &:last-child{border:none !important;}
       }
     }
   }
