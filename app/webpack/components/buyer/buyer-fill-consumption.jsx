@@ -475,9 +475,9 @@ export class FillConsumption extends Component {
         })
     }
     jumpPage(){
-        setTimeout(() => {
+        //setTimeout(() => {
             window.location.href = "/buyer/auctions";
-        }, 3000)
+        //}, 3000)
     }
     validateTaken(res) {
         let account_list = [];
