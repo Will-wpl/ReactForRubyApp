@@ -87,7 +87,7 @@ class Api::Admin::AuctionResultsController < Api::AuctionResultsController
     if contract_duration.blank?
       company_user_count != 0 && result.status != 'void' ? "admin/auctions/#{result.auction_id}/award" : ''
     else
-      company_user_count != 0 && result.status != 'void' ? "admin/auctions/#{result.auction_id}/award?contract_duration=#{contract_duration}" : ''
+      company_user_count != 0 && result.status != 'void' ? "admin/auctions/#{result.auction_id}/award?contract_duration=#{contract_duration}&is_retailer=true&retailer_name=#{result.lowest_price_bidder}" : ''
     end
 
   end
