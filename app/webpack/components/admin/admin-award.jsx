@@ -63,9 +63,9 @@ export default class AdminAward extends Component{
             <div className="u-grid bidderStatus " >
                 <ul className="bidders_list " style={{width:'45%'}}>
                     <li className="u-grid center ">
-                        <span className="col-sm-4 line15">Buyer</span>
-                        <span className="col-sm-4 line15">Entity</span>
-                        <span className="col-sm-4 line15">Retailer</span>
+                        <span className="col-sm-4 line15" style={{"text-align":"center"}}>Buyer</span>
+                        <span className="col-sm-4 line15" style={{"text-align":"center"}}>Entity</span>
+                        <span className="col-sm-4 line15" style={{"text-align":"center"}}>Retailer</span>
                     </li>
                     {this.renderAwardList(this.state.awardList)}
                 </ul>
