@@ -197,7 +197,7 @@ export class Proposedeviations extends React.Component{
             $(".check_error").fadeIn(300).text("Please check this box if you want to proceed");
             setTimeout(()=>{
                 $(".check_error").fadeOut(100);
-            },3000);
+            },5000);
             return;
         }
         retailerNext(this.props.current.current.arrangement_id,3).then(res=>{
