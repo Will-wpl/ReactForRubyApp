@@ -124,10 +124,15 @@ class UserMailer < ApplicationMailer
     send_email(admin_user.email, email_body, email_subject)
   end
 
-  def request_responded(user)
+  def request_responded(user, respond_boolean)
+    respond_text = if respond_boolean
+                     'approved'
+                   else
+                     'rejected'
+                   end
     mail_template = get_template('32')
     email_subject = mail_template.subject
-    email_body = mail_template.body.gsub(/#buyer_company_name/, user.company_name)
+    email_body = mail_template.body.gsub(/#buyer_company_name/, user.company_name).gsub(/#respond/, respond_text.to_s)
     send_email(user.email, email_body, email_subject)
   end
 
