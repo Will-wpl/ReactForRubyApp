@@ -44,7 +44,12 @@ class Api::TendersBaseController < Api::BaseController
   def admin_response_mail(arrangement_id)
     user = get_arrangement_user(arrangement_id)
     return if user.nil?
-    UserMailer.workflow_admin_response_mail(user).deliver_later
+    name = if current_user&.has_role?(:admin)
+             'Admin'
+           else
+             "Buyer #{current_user.company_name}"
+           end
+    UserMailer.workflow_admin_response_mail(user, name).deliver_later
   end
   
   def set_tender_chat(chat, arrangement_id)
