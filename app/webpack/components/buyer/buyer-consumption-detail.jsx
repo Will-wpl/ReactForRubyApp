@@ -32,12 +32,7 @@ export default class BuyerConsumptionListDetail extends Component {
         let id, entity_id;
         id = window.location.href.split("consumptions/")[1].split('&entity_id=')[0];
         entity_id = window.location.href.split("consumptions/")[1].split('&entity_id=')[1];
-        // let params = {
-        //     id: id,
-        //     entity_id: entity_id
-        // }
-        // console.log(params)
-        getBuyerListDetails(id).then(res => {
+        getBuyerListDetails(id, entity_id).then(res => {
             this.setState({
                 consumption_id: id,
                 comsumption_list: [res],
