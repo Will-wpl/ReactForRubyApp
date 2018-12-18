@@ -113,7 +113,7 @@ class UserMailer < ApplicationMailer
     mail_template = get_template('30')
     email_subject = mail_template.subject
 
-    email_body = mail_template.body.gsub(/#date_of_contract_expiry/, param[:date_of_contract_expiry]).gsub(/#buyer_company_name_list/, param[:buyer_company_name_list].collect! { |item| "<li>#{item}" }.join(''))
+    email_body = mail_template.body.gsub(/#days/, param[:days].to_s).gsub(/#buyer_company_name_list/, param[:buyer_company_name_list].collect! { |item| "<li>#{item}" }.join(''))
     send_email(admin_user.email, email_body, email_subject)
   end
 
