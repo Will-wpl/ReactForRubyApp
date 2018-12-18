@@ -4,4 +4,4 @@ contract_job:
     class: "ContractJob"
     queue: 'contract'
     args:
-        expiration_days: 0
+        expiration_days: 30
