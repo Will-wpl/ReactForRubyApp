@@ -21,8 +21,8 @@
     .bidders_list{
          margin: 10px auto; overflow-y: auto; font-size: 12px;
         li{ width: 100%; min-height: 32px; line-height: 32px;
-            margin-bottom: 5px;
             background: #183243; overflow: hidden;
+            &.line{border-bottom: 1px solid #ddd;}
             span{
                  color:#00afb2; overflow: hidden; white-space:nowrap; text-overflow: ellipsis; border-right: 1px solid #485A68;
                 abbr{
