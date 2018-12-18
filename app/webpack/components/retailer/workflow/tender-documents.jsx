@@ -140,7 +140,7 @@ export class Tenderdocuments extends React.Component {
                 </div>
                 {this.props.single==4?
                     <div>
-                        <h4 className="lm--formItem lm--formItem--inline string">
+                        <h4 className="lm--formItem lm--formItem--inline string u-mt1">
                             Option 1: Check the box below and click on 'Accept & Participate' if you do not wish to propose deviation(s) to the Electricity Purchase Contract.<br/>
                             Option 2: Click on 'Propose Deviations' if you wish to propose deviation(s) to the Electricity Purchase Contract.
                         </h4>
