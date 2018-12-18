@@ -109,7 +109,7 @@ class Api::Admin::AuctionResultsController < Api::AuctionResultsController
     [
         { name: 'Reference ID', field_name: 'published_gid', table_name: 'auctions'},
         { name: 'Name', field_name: 'name', table_name: 'auctions'},
-        { name: 'Date', field_name: 'start_datetime', table_name: 'auctions'},
+        { name: 'Auction Date/Time', field_name: 'start_datetime', table_name: 'auctions'},
         { name: 'Contract Period', field_name: 'contract_period', is_sort: false },
         { name: 'Status', field_name: 'status', table_name: 'auction_results' },
         { name: 'Winning Bidder', field_name: 'lowest_price_bidder', table_name: 'auction_results' },
