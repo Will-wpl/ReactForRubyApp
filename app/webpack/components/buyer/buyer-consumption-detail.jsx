@@ -32,19 +32,17 @@ export default class BuyerConsumptionListDetail extends Component {
         let id, entity_id;
         id = window.location.href.split("consumptions/")[1].split('&entity_id=')[0];
         entity_id = window.location.href.split("consumptions/")[1].split('&entity_id=')[1];
-        let params = {
-            id: id,
-            entity_id: entity_id
-        }
-        console.log(params)
-        getBuyerListDetails(params).then(res => {
+        // let params = {
+        //     id: id,
+        //     entity_id: entity_id
+        // }
+        // console.log(params)
+        getBuyerListDetails(id).then(res => {
             this.setState({
                 consumption_id: id,
                 comsumption_list: [res],
                 dataVersion: res.consumption.contract_duration ? "1" : "",
                 past: (res.consumption.accept_status === "0" || res.consumption.accept_status === "1" || res.auction_published == true) ? true : false,
-                comment: res.consumption.comments ? res.consumption.comments : "",
-                approvedStatus: setApprovalStatus(res.accept_status, res.approval_date_time)
             })
         }, error => {
         })
