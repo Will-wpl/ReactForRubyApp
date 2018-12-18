@@ -24,6 +24,12 @@ class RequestedSingleBuyerWorkflow < BaseTenderWorkflow
     super(node1: @node1, node2: @node2, node3: @node3, node5: @node5)
   end
 
+  def node3_retailer_has_submit?(sm)
+    arrangement_id = sm.arrangement_id
+    count = TenderStateMachine.where(arrangement_id: arrangement_id).where(current_node: 3, current_status: 2, turn_to_role: 3, current_role: 2).count
+    count != 0
+  end
+
   def get_current_action_status(arrangement_id)
     sm = TenderStateMachine.where(arrangement_id: arrangement_id).last
     if node1?(sm)
