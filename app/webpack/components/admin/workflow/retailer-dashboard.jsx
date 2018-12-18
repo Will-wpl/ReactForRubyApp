@@ -96,7 +96,7 @@ export class Adminretailerdashboard extends Component {
                                 }
                             </tbody>
                     </table>
-                    :<h3 className="u-mt2 u-mb2"></h3>
+                    :<h3 className="u-mt2 u-mb2">Please invite retailers.</h3>
                     }
                 </div>
                 <Modal showdetail={this.state.showDetail} ref="Modal" />
