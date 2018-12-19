@@ -33,7 +33,7 @@ class BaseTenderWorkflow < Workflow
     end
     buyer_id = Arrangement.find(arrangement_id).auction.request_owner_id
     if buyer_id.blank?
-      user_info[:name] = User.find(1).company_name
+      user_info[:name] = User.admins.first.company_name
     else
       user_info[:name] = User.find(buyer_id).company_name
     end
