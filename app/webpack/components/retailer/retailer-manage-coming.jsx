@@ -219,9 +219,15 @@ export class RetailerManage extends Component {
             break
             case 'alternative_email_address': this.setState({alternative_email_address:value})
             break
-            case 'alternative_mobile_number': this.setState({alternative_mobile_number:value})
+            case 'alternative_mobile_number':
+                if(value.match(/^[0-9]*$/)){
+                    this.setState({alternative_mobile_number:value})
+                }
             break
-            case 'alternative_office_number': this.setState({alternative_office_number:value})
+            case 'alternative_office_number':
+                if(value.match(/^[0-9]*$/)) {
+                    this.setState({alternative_office_number: value})
+                }
             break
         }
     }
