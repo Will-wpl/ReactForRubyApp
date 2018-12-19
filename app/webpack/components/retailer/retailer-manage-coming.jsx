@@ -316,7 +316,7 @@ export class RetailerManage extends Component {
                         Mobile Number: (+65)
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="alternative_mobile_number" value={this.state.alternative_mobile_number} onChange={this.Change.bind(this,'alternative_mobile_number')} disabled={this.state.disabled} ref="alternative_mobile_number" maxLength="50" aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
+                            <input type="text" name="alternative_mobile_number" value={this.state.alternative_mobile_number} onChange={this.Change.bind(this,'alternative_mobile_number')} disabled={this.state.disabled} ref="alternative_mobile_number" maxLength="8" aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -324,7 +324,7 @@ export class RetailerManage extends Component {
                         Office Number: (+65)
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="alternative_office_number" value={this.state.alternative_office_number} onChange={this.Change.bind(this,'alternative_office_number')} disabled={this.state.disabled} ref="alternative_office_number" maxLength="50" aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
+                            <input type="text" name="alternative_office_number" value={this.state.alternative_office_number} onChange={this.Change.bind(this,'alternative_office_number')} disabled={this.state.disabled} ref="alternative_office_number" maxLength="8" aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
                         </div>
                     </div>
                     <div className="retailer_btn">
