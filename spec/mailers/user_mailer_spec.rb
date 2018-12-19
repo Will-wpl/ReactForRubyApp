@@ -193,7 +193,7 @@ RSpec.describe UserMailer, type: :mail do
   context 'buyer_participate rejected mail' do
     before :each do
       @template = create(:email_template, subject: '#name_of_ra on #date_time has been rejected', body: 'Dear #buyer_company_name,<br/><br/>Your purchase details for participation in the upcoming auction (#name_of_ra on #date_time) has been rejected.<br/><br/>Please log in to your account at <a href="http://revv.sg">revv.sg</a> for further actions.', template_type: '28')
-      UserMailer.buyer_participate_rejected(company_buyer, {:name_of_ra => 'name_of_ra', :date_time => 'date_time'}).deliver_now
+      UserMailer.buyer_participate_rejected(company_buyer, {:name_of_ra => 'name_of_ra', :date_time => 'date_time', :comment => 'comment'}).deliver_now
     end
     it 'be_delivered_to', mail: true do
       expect(open_last_email).to be_delivered_to company_buyer.email
@@ -263,8 +263,8 @@ RSpec.describe UserMailer, type: :mail do
 
   context 'request responded rejected mail' do
     before :each do
-      @template = create(:email_template, subject: 'Request for initiation of reverse auction responded by Admin', body: 'Dear #buyer_company_name,<br/><br/>Admin has #respond your request for initiation of reverse auction. You will be contacted on the next steps.<br/><br/>Thank you.', template_type: '32')
-      UserMailer.request_responded(company_buyer,false ).deliver_now
+      @template = create(:email_template, subject: 'Request for initiation of reverse auction responded by Admin', body: 'Dear #buyer_company_name,<br/><br/>Admin has #respond your request for initiation of reverse auction. You will be contacted on the next steps.<br/>#comment<br/><br/>Thank you.', template_type: '32')
+      UserMailer.request_responded(company_buyer,false, 'comment' ).deliver_now
     end
     it 'be_delivered_to', mail: true do
       expect(open_last_email).to be_delivered_to company_buyer.email

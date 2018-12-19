@@ -44,7 +44,8 @@ class Api::Admin::ConsumptionsController < Api::ConsumptionsController
       # Change -- [Update Action once approved consumption] - End
       UserMailer.buyer_participate_rejected(target_consumption.user,
                                             { :name_of_ra => auction_name,
-                                              :date_time => auction_start_datetime
+                                              :date_time => auction_start_datetime,
+                                              :comment => comment
                                             }).deliver_later
     end
     render json: { consumption_info: target_consumption }, status:200
