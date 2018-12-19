@@ -147,7 +147,6 @@ export class Proposedeviations extends React.Component{
         }
     }
     submitDeviations(){
-        //console.log(this.editData(3));
         retailerDeviationsSave(this.props.current.current.arrangement_id,this.editData('2')).then(a=>{
             getRetailerDeviationsList(sessionStorage.arrangement_id).then(b=>{
                 this.setState({deviations_list:b.chats});
@@ -348,7 +347,7 @@ export class Proposedeviations extends React.Component{
             <div className="propose_deviations u-mt3">
                 <h2 className="u-mt3 u-mb2">Propose Deviations</h2>
                 <h4 className="u-mb2">Submit only deviations for the Electricity Procurement Agreement. Deviations for Retailer Platform Term of Use will not be accepted.</h4>
-                {!this.props.tender ? (this.props.current.current.turn_to_role === 1?<h4 className="u-mb3 pending_review">Status : Deviations pending administrator's review</h4>:''):''}
+                {!this.props.tender ? (this.props.current.current.turn_to_role === 1 || this.props.current.current.turn_to_role === 3?<h4 className="u-mb3 pending_review">Status : Deviations pending administrator's review</h4>:''):''}
                 <div className="col-sm-12 col-md-10 push-md-1">
                     <table className="retailer_fill w_100" cellPadding="0" cellSpacing="0">
                         <thead>
