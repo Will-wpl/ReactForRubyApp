@@ -412,7 +412,7 @@ export class BuyerNewRequestManage extends Component {
                                                 <abbr title="required">*</abbr> Single / Multiple Buyer(s)  :
                                                 </label>
                                             <div className="lm--formItem-right lm--formItem-control ">
-                                                <select ref="buyer_type" id="buyer_type" className="col-md-11" style={{ marginLeft: "10px" }} onChange={this.doValue.bind(this, 'buyer_type')} defaultValue={this.state.buyer_type} disabled={this.state.disabled}>
+                                                <select ref="buyer_type" id="buyer_type" className="col-md-11" style={{ marginLeft: "10px" }} onChange={this.doValue.bind(this, 'buyer_type')} value={this.state.buyer_type} disabled={this.state.disabled}>
                                                     <option value="0">Single</option>
                                                     <option value="1">Multiple</option>
                                                 </select>
@@ -435,7 +435,7 @@ export class BuyerNewRequestManage extends Component {
                                                 <abbr title="required">*</abbr> Contract Duration  :
                                                 </label>
                                             <div className="lm--formItem-right lm--formItem-control">
-                                                <select ref="contract_duration" id="contract_duration" name="contract_duration" onChange={this.doValue.bind(this, 'contract_duration')} defaultValue={this.state.duration} disabled={this.state.disabled}>
+                                                <select ref="contract_duration" id="contract_duration" name="contract_duration" onChange={this.doValue.bind(this, 'contract_duration')} value={this.state.duration} disabled={this.state.disabled}>
                                                     <option value="6">6 months</option>
                                                     <option value="12">12 months</option>
                                                     <option value="24">24 months</option>
@@ -482,7 +482,7 @@ export class BuyerNewRequestManage extends Component {
                                                     <abbr title="required">*</abbr> Allow Deviations  :
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control">
-                                                    <select ref="allow_deviation" id="allow_deviation" className="col-md-11" style={{ marginLeft: "10px" }} onChange={this.doValue.bind(this, 'allow_deviation')} defaultValue={this.state.allow_deviation} disabled={this.state.disabled}>
+                                                    <select ref="allow_deviation" id="allow_deviation" className="col-md-11" style={{ marginLeft: "10px" }} onChange={this.doValue.bind(this, 'allow_deviation')} value={this.state.allow_deviation} disabled={this.state.disabled}>
                                                         <option value="1">Yes</option>
                                                         <option value="0">No</option>
                                                     </select>
@@ -508,7 +508,7 @@ export class BuyerNewRequestManage extends Component {
                                                 <abbr title="required">*</abbr> Flexible on Contract Start Date?
                                                 </label>
                                             <div className="lm--formItem-right lm--formItem-control">
-                                                <select ref="allow_deviation" id="allow_deviation" onChange={this.doValue.bind(this, 'flexible')}  defaultValue={this.state.flexible} disabled={this.state.disabled}>
+                                                <select ref="allow_deviation" id="allow_deviation" onChange={this.doValue.bind(this, 'flexible')}  value={this.state.flexible} disabled={this.state.disabled}>
                                                     <option value="1">Yes</option>
                                                     <option value="0">No</option>
                                                 </select>
