@@ -109,24 +109,31 @@ class UserMailer < ApplicationMailer
     send_email(user.email, email_body, email_subject)
   end
 
-  def contract_notification(admin_user, auction_contracts)
+  def contract_notification(admin_user, param)
     mail_template = get_template('30')
     email_subject = mail_template.subject
-    body_content = '<table border="1" cellspacing="0" cellpadding="3">
-                        <tr>
-                        <th>auction name</th>
-                        <th>contract duration</th>
-                        <th>contract period end date</th>
-                        </tr>'
-    auction_contracts.each do |item|
-      name = item[:name]
-      contract_duration = item[:contract_duration]
-      contract_period_end_date = item[:contract_period_end_date]
-      body_content+="<tr><td>#{name}</td><td>#{contract_duration}</td><td>#{contract_period_end_date}</td></tr>"
-    end
-    body_content+='</table>'
-    email_body = mail_template.body.gsub(/#table/, body_content)
+
+    email_body = mail_template.body.gsub(/#days/, param[:days].to_s).gsub(/#buyer_company_name_list/, param[:buyer_company_name_list].collect! { |item| "<li>#{item}" }.join(''))
     send_email(admin_user.email, email_body, email_subject)
+  end
+
+  def request_submitted(admin_user, param)
+    mail_template = get_template('31')
+    email_subject = mail_template.subject
+    email_body = mail_template.body.gsub(/#buyer_company_name/, param[:buyer_company_name])
+    send_email(admin_user.email, email_body, email_subject)
+  end
+
+  def request_responded(user, respond_boolean)
+    respond_text = if respond_boolean
+                     'approved'
+                   else
+                     'rejected'
+                   end
+    mail_template = get_template('32')
+    email_subject = mail_template.subject
+    email_body = mail_template.body.gsub(/#buyer_company_name/, user.company_name).gsub(/#respond/, respond_text.to_s)
+    send_email(user.email, email_body, email_subject)
   end
 
   private

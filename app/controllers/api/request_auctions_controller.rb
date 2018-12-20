@@ -36,6 +36,11 @@ class Api::RequestAuctionsController < Api::BaseController
         attachment.save!
       end
     end
+
+    User.admins.each do |admin_user|
+      UserMailer.request_submitted(admin_user, {buyer_company_name: current_user.company_name}).deliver_later
+    end
+
     render json: {request_auction: request_auction}, status: 200
   end
 
@@ -50,51 +55,55 @@ class Api::RequestAuctionsController < Api::BaseController
       request_auction.accept_status = accept_status
       request_auction.comment = comment
       request_auction.accept_date_time = DateTime.current
-      if request_auction.save! && accept_status == RequestAuction::AcceptStatusApproved
-        if request_auction.buyer_type == RequestAuction::SingleBuyerType
-          # establish new auction if it is accepted.
-          auction = Auction.new
-          auction.name = request_auction.name
-          auction.contract_period_start_date = request_auction.contract_period_start_date
-          auction.buyer_type = request_auction.buyer_type
-          # auction.duration = request_auction.duration
-          auction.allow_deviation = request_auction.allow_deviation
-          auction.request_auction_id = request_auction.id
-          auction.request_owner_id = request_auction.user_id
-          auction.accept_status = accept_status
-          auction.publish_status = '0'
-          auction.total_lt_peak = 0
-          auction.total_lt_off_peak = 0
-          auction.total_hts_peak = 0
-          auction.total_hts_off_peak = 0
-          auction.total_htl_peak = 0
-          auction.total_htl_off_peak = 0
-          auction.total_eht_peak = 0
-          auction.total_eht_off_peak = 0
-          auction.total_volume = 0
-          if auction.save!
-            consumption = Consumption.new
-            consumption.auction_id = auction.id
-            consumption.user_id = request_auction.user_id
-            consumption.action_status = Consumption::ActionStatusPending
-            consumption.participation_status = Consumption::ParticipationStatusPending
-            if consumption.save!
-              month = request_auction.duration
-              contract = AuctionContract.new
-              contract.contract_period_end_date = auction.contract_period_start_date.advance(months: month).advance(days: -1)
-              contract.contract_duration = month
-              contract.auction_id = auction.id
-              contract.save
+      if request_auction.save!
+        creater = User.find(request_auction.user_id)
+        respond_boolean = (accept_status == RequestAuction::AcceptStatusApproved)
+        UserMailer.request_responded(creater,respond_boolean).deliver_later
+        if accept_status == RequestAuction::AcceptStatusApproved
+          if request_auction.buyer_type == RequestAuction::SingleBuyerType
+            # establish new auction if it is accepted.
+            auction = Auction.new
+            auction.name = request_auction.name
+            auction.contract_period_start_date = request_auction.contract_period_start_date
+            auction.buyer_type = request_auction.buyer_type
+            # auction.duration = request_auction.duration
+            auction.allow_deviation = request_auction.allow_deviation
+            auction.request_auction_id = request_auction.id
+            auction.request_owner_id = request_auction.user_id
+            auction.accept_status = accept_status
+            auction.publish_status = '0'
+            auction.total_lt_peak = 0
+            auction.total_lt_off_peak = 0
+            auction.total_hts_peak = 0
+            auction.total_hts_off_peak = 0
+            auction.total_htl_peak = 0
+            auction.total_htl_off_peak = 0
+            auction.total_eht_peak = 0
+            auction.total_eht_off_peak = 0
+            auction.total_volume = 0
+            if auction.save!
+              consumption = Consumption.new
+              consumption.auction_id = auction.id
+              consumption.user_id = request_auction.user_id
+              consumption.action_status = Consumption::ActionStatusPending
+              consumption.participation_status = Consumption::ParticipationStatusPending
+              if consumption.save!
+                month = request_auction.duration
+                contract = AuctionContract.new
+                contract.contract_period_end_date = auction.contract_period_start_date.advance(months: month).advance(days: -1)
+                contract.contract_duration = month
+                contract.auction_id = auction.id
+                contract.save
+              end
             end
+            render json: { result: 'success', request_auction: request_auction, is_single:true, new_auction_id: auction.id }, status: 200
+          else
+            render json: { result: 'success', request_auction: request_auction, is_single:false }, status: 200
           end
-          render json: { result: 'success', request_auction: request_auction, is_single:true, new_auction_id: auction.id }, status: 200
         else
-          render json: { result: 'success', request_auction: request_auction, is_single:false }, status: 200
+          render json: { result: 'success', request_auction: request_auction }, status: 200
         end
-      else
-        render json: { result: 'success', request_auction: request_auction }, status: 200
       end
-
     end
   end
 

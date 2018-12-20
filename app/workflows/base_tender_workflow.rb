@@ -31,6 +31,14 @@ class BaseTenderWorkflow < Workflow
       user_info[:role] = 'buyer'
       user_info[:readonly] = Auction.has_request(auction_id) ? false: true
     end
+    buyer_id = Arrangement.find(arrangement_id).auction.request_owner_id
+    if buyer_id.blank?
+      admin_user = User.admins.first
+      user_info[:name] = admin_user.blank? ? nil: admin_user.company_name
+    else
+      user_info[:name] = User.find(buyer_id).company_name
+    end
+
     { flows: flow_array.sort_by! { |p| p }, current: current, actions: actions, user_info: user_info }
   end
 

@@ -24,7 +24,10 @@ class Api::ConsumptionDetailsController < Api::BaseController
           brtc_id = Auction.get_tc_attach_info_id(auction.tc_attach_info, UserAttachment::FileType_Buyer_REVV_TC)
           buyer_revv_tc_attachment = UserAttachment.find_by_id(brtc_id)
         end
-
+      end
+      unless auction.request_auction_id.blank?
+        temp_tc_attachment = RequestAttachment.find_last_by_type_request( RequestAttachment::FileType_TC, auction.request_auction_id)
+        seller_buyer_tc_attachment = temp_tc_attachment unless temp_tc_attachment.blank?
       end
       consumption_details_all = []
       consumption_details_new.each do |consumption_detail|

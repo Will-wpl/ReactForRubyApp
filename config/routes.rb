@@ -247,6 +247,8 @@ Rails.application.routes.draw do
           put 'validate_single'
         end
       end
+      resources :consumptions, only: %i[show] do
+      end
       resources :auctions, only: %i[obtain published] do
         member do
           get 'pdf'
@@ -399,7 +401,7 @@ Rails.application.routes.draw do
         get 'retailer_dashboard'
       end
     end
-    resources :consumptions,only: %i[edit]
+    resources :consumptions,only: %i[edit show]
     resources :register, only: [:index]
     resources :request_auctions, only: %i[index show] do
       collection do

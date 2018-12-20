@@ -1,14 +1,14 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
-import {getBuyerRequestEnttiy} from './../../javascripts/componentService/common/service';
+import { getBuyerRequestEnttiy } from './../../javascripts/componentService/common/service';
 import moment from 'moment';
 export class BuyerRequestEntityListManage extends Component {
 
 
     constructor(props) {
         super(props)
-        this.state={
-            entity_list:[]
+        this.state = {
+            entity_list: []
         }
     }
     // /api/buyer/request_auctions/buyer_entity_contracts
@@ -24,12 +24,13 @@ export class BuyerRequestEntityListManage extends Component {
         let obj = {
             sort_by: sort instanceof Array ? sort : null
         }
-     
+
         getBuyerRequestEnttiy(obj).then(res => {
-            $(".u-contain").css("padding","0px");
-            $(".lm--header").css("margin-bottom","0px");
-            $(".createRaMain a,.lm--footer div").css("margin-left","24px");
-             this.setState({
+            $(".u-contain").css("padding", "0px");
+            $(".lm--header").css("margin-bottom", "0px");
+            $(".createRaMain a,.lm--footer div").css("margin-left", "24px");
+            console.log(res)
+            this.setState({
                 entity_list: res.buyer_entity_contracts ? res.buyer_entity_contracts : [],
             })
         })
@@ -37,13 +38,23 @@ export class BuyerRequestEntityListManage extends Component {
     goCreate() {
         window.location.href = "/buyer/request_auctions/0";
     }
+    goManage() {
+        window.location.href = '/buyer/request_auctions';
+    }
+    goDetails(item) {
+        let consumption_id = item.consumption_id;
+        let auction_id = item.auction_id;
+        let entity_id = item.entity_id;
+        window.location.href = '/buyer/consumptions/' + consumption_id + '&entity_id=' + entity_id + '';
+    }
     render() {
         return (
             <div className="admin_expiry" id={"users_search_list"}>
                 <div className="col-sm-12 col-md-12">
                     <div className="search_type padLR24 bgwhite">
                         <dl className="lm--formItem string optional">
-                            <button onClick={this.goCreate.bind(this)} style={{marginBottom:"10px"}} className="lm--button lm--button--primary create_btn u-pull-right">Request New RA </button>
+                            <button onClick={this.goCreate.bind(this)} style={{ marginBottom: "10px" }} className="lm--button lm--button--primary create_btn u-pull-right">Request New RA </button>
+                            <button onClick={this.goManage.bind(this)} style={{ marginBottom: "10px" }} className="lm--button lm--button--primary create_btn u-pull-right">Manage Request </button>
                         </dl>
 
                     </div>
@@ -60,19 +71,30 @@ export class BuyerRequestEntityListManage extends Component {
                             <div><dfn className={"search_list_asc retailer_name"} onClick={this.dosort.bind(this, 'retailer_name', 'asc')}></dfn>
                                                 <dfn className={"search_list_desc retailer_name"} onClick={this.dosort.bind(this, 'retailer_name', 'desc')}></dfn></div>
                                         </th>
+                                        <th> Contract Start
+                            <div><dfn className={"search_list_asc contract_period_start_date"} onClick={this.dosort.bind(this, 'contract_period_start_date', 'asc')}></dfn>
+                                                <dfn className={"search_list_desc contract_period_start_date"} onClick={this.dosort.bind(this, 'contract_period_start_date', 'desc')}></dfn></div>
+                                        </th>
                                         <th>Contract Expiry
                             <div><dfn className={"search_list_asc contract_period_end_date"} onClick={this.dosort.bind(this, 'contract_period_end_date', 'asc')}></dfn>
                                                 <dfn className={"search_list_desc contract_period_end_date"} onClick={this.dosort.bind(this, 'contract_period_end_date', 'desc')}></dfn></div>
                                         </th>
+                                        <th></th>
                                     </tr></thead>
                                 <tbody>
-                                {this.state.entity_list.map((item, index) => {
-                                    return <tr key={index}>
-                                        <td>{item.entity_name}</td>
-                                        <td>{item.retailer_name}</td>
-                                        <td>{moment(item.contract_period_end_date).format('D MMM YYYY')}</td>
-                                    </tr>
-                                })}
+                                    {this.state.entity_list.map((item, index) => {
+                                        return <tr key={index}>
+                                            <td>{item.entity_name}</td>
+                                            <td>{item.retailer_name}</td>
+                                            <td>{moment(item.contract_period_start_date).format('D MMM YYYY')}</td>
+                                            <td>{moment(item.contract_period_end_date).format('D MMM YYYY')}</td>
+                                            <td className="entityDetail">
+                                                <span onClick={this.goDetails.bind(this, item)}>
+                                                    Details
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    })}
                                 </tbody>
                             </table>
                         </div>

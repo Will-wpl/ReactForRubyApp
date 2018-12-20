@@ -721,7 +721,7 @@ export class FillConsumption extends Component {
                 return false;
             }
             else {
-                this.setState({ text: "Are you sure you want to participate in this auction?" });
+                this.setState({ text: "Are you sure you want to proceed? Please note that this step cannot be reversed." });
                 this.refs.Modal.showModal("comfirm");
             }
         } else if (this.state.submit_type === "save") {
@@ -1076,19 +1076,21 @@ export class FillConsumption extends Component {
                                         <h4 className="lm--formItem lm--formItem--inline string chkBuyer" >
                                             <input type="checkbox" id="chkBuyer" id="chk_Warning" required /><span className="warning" style={{ "color:": "red" }}>Warning: [{this.state.dateIssuecount}] account(s) detected to have expiry date on  or after new contract start date. Please tick the checkbox
                                              to confirm that you aware and would like to proceed with including such account(s) in this auction.</span> </h4> : <div></div>
-                                } 
+                                }
                             </div>
                             <div>
                                 <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
                                     <input name="agree_declare" type="checkbox" id="chkAgree_declare" disabled={this.state.disabled} required />
                                     {/* <span>I declare that all data submited is true and shall be used for the auction, and that i am bounded by <a target="_blank" href={this.state.link} className="urlStyle">Buyer T&C.</a></span> */}
-                                    <span>I declare that all data submitted is true and shall be used for the auction, and that I am bounded by the <a target="_blank" href={this.state.buyer_link} className="urlStyleUnderline">Terms & Conditions of Use (Buyer)</a> and <a target="_blank" href={this.state.seller_link} className="urlStyleUnderline">Electricity Purchase Contract</a>. </span>
+                                    <span>We declare that we have full right to submit the data and that the data submitted is true and shall be used for the Reverse Auction.<br/>
+                                        By clicking on the “Purchase” button, we acknowledge and agree that per the <a target="_blank" href={this.state.buyer_link} className="urlStyleUnderline">Terms & Conditions of Use (Buyer)</a>, such Purchase Order placed by us will constitute as an offer to purchase the electricity and that upon Auto-Closing and the Closing Condition being met after the Reverse Auction, an agreement for sale and purchase of electricity between us and the Winning Retailer shall be formed accordingly based on the terms and conditions set out in <a target="_blank" href={this.state.seller_link} className="urlStyleUnderline">Electricity Purchase Contract</a> and be legally binding on us and the Winning Retailer.
+                                    </span>
                                 </h4>
                             </div>
                             <div className="buyer_btn">
                                 <button className={"lm--button lm--button--primary " + this.state.disabled} disabled={this.state.disabled} onClick={this.doSubmit.bind(this, 'save')}>Save</button>
                                 <a className={"lm--button lm--button--primary " + this.state.disabled} onClick={this.state.disabled === "disabled" ? this.doSubmit.bind(this, 'return') : this.doSubmit.bind(this, 'Reject')}>Reject</a>
-                                <button className={"lm--button lm--button--primary " + this.state.disabled} disabled={this.state.disabled} onClick={this.doSubmit.bind(this, 'Participate')}>Participate</button>
+                                <button className={"lm--button lm--button--primary " + this.state.disabled} disabled={this.state.disabled} onClick={this.doSubmit.bind(this, 'Participate')}>Purchase</button>
                             </div>
                         </div>
                     </div>

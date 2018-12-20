@@ -28,7 +28,8 @@ export default class AdminBuyerListDetail extends Component {
             dataVersion: "",
             past: false,
             auctionId: "",
-            approvedStatus: ""
+            approvedStatus: "",
+            isEntityVisit: false
 
         }
         this.type = sessionStorage.getItem('comsumptiontype');
@@ -41,11 +42,13 @@ export default class AdminBuyerListDetail extends Component {
     }
 
     componentDidMount() {
-        let id = window.location.href.split("consumptions/")[1].split('&auctions=')[0];
-        let auctionId = window.location.href.split("consumptions/")[1].split('&auctions=')[1];
+        let id, auctionId, entity_id;
+        id = window.location.href.split("consumptions/")[1].split('&auctions=')[0];
+        auctionId = window.location.href.split("consumptions/")[1].split('&auctions=')[1];
         this.setState({
             auctionId: auctionId
         });
+
         getAdminBuyerListDetails(id).then(res => {
             this.setState({
                 consumption_id: id,
@@ -56,7 +59,6 @@ export default class AdminBuyerListDetail extends Component {
                 approvedStatus: setApprovalStatus(res.accept_status, res.approval_date_time)
             })
         }, error => {
-
         })
     }
     show_detail(index, consumption_id) {
@@ -138,9 +140,9 @@ export default class AdminBuyerListDetail extends Component {
                     Status: {this.state.approvedStatus}
                     <AdminComsumptionList visible="visible" dataVersion={this.state.dataVersion} comsumption_list={this.state.comsumption_list} detail={this.show_detail.bind(this)} type={this.type} />
                 </div>
+
                 <div className={this.state.dataVersion === "1" ? "col-sm-12 u-mb3" : "isHide"}>
                     <div className="lm--formItem lm--formItem--inline string">
-                        {/* <div className="lm--formItem-left lm--formItem-label string required">Comment:</div> */}
                         <label className="lm--formItem-left lm--formItem-label-comment string required">
                             Comments: &nbsp;</label>
                         <div className="lm--formItem-right lm--formItem-control">
@@ -148,12 +150,12 @@ export default class AdminBuyerListDetail extends Component {
                             <div className='isPassValidate' id='comment_message' >This field is required!</div>
                         </div>
                     </div>
-
                 </div>
                 <div className={this.state.dataVersion === "1" ? "retailer_btn" : "isHide"}>
                     <button id="save_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'reject')} disabled={this.state.past} >Reject</button>
                     <button id="submit_form" className="lm--button lm--button--primary" onClick={this.judgeAction.bind(this, 'approve')} disabled={this.state.past}>Approve</button>
                 </div>
+
                 <div className="createRaMain u-grid">
                     <a className="lm--button lm--button--primary u-mt3" href="javascript:javascript:self.location=document.referrer;" >Back</a>
                 </div>

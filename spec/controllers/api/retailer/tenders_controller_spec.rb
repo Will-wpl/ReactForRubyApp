@@ -4,6 +4,7 @@ RSpec.describe Api::Retailer::TendersController, type: :controller do
 
   context 'retailer user' do
     let!(:auction) { create(:auction, :for_next_month, :upcoming, :published) }
+    let!(:admin_user) { create(:user, :with_admin) }
     let!(:retailer_user){ create(:user, :with_retailer) }
     let!(:arrangement) { create(:arrangement, user: retailer_user, auction: auction) }
     let!(:tender) { create(:tender_state_machine, arrangement: arrangement, current_node: 1) }

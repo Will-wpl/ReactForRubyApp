@@ -36,7 +36,9 @@ namespace :email_template do
         {name: "TEN12: Tenant - Buyer's acceptance of new tenant accounts Submitted to Admin", subject:'Buyer accept new added tenant accounts', body:'Dear Admin,<br/><br/>#buyer_company_name has accepted the new tenant account details.<br/><br/>Comments: #comments<br/><br/>Please log in to your account at <a href="http://revv.sg">revv.sg</a> to view the updated tenant details.', template_type: '24'},
         {name: "TEN13: Tenant - Buyer's rejection of new tenant accounts Submitted to Admin", subject:'Buyer reject new added tenant accounts', body:'Dear Admin,<br/><br/>#buyer_company_name has rejected the new tenant account details.<br/><br/>Comments: #comments<br/><br/>Please log in to your account at <a href="http://revv.sg">revv.sg</a> for further actions.', template_type: '25'},
 
-
+        {name: 'REQ01: Request – Buyer Initiation Request submitted to Admin', subject:'Request for initiation of reverse auction', body:'Dear Admin,<br/><br/>#buyer_company_name has submitted a request for initiation of reverse auction.<br/><br/>Please proceed to manage the request at <a href="http://revv.sg">revv.sg</a>.', template_type: '31'},
+        {name: 'REQ02: Request – Buyer Initiation Request responded by Admin', subject:'Request for initiation of reverse auction #respond by Admin', body:'Dear #buyer_company_name,<br/><br/>Admin has #respond your request for initiation of reverse auction. You will be contacted on the next steps.<br/><br/>Thank you.', template_type: '32'},
+        {name: 'REQ03: Request – Buyer contract expiry notified to Admin', subject:'Notification of expiring contracts', body:'Dear Admin,<br/><br/>Please be reminded that electricity purchase contracts for the following buyer(s) will be expiring within #days days.<br/><br/>#buyer_company_name_list<br/><br/>Please proceed to manage the expiring contracts at <a href="http://revv.sg">revv.sg</a>.', template_type: '30'},
     ]
 
     email_templates.each do |template|
