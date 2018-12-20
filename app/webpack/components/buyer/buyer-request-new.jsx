@@ -516,7 +516,7 @@ export class BuyerNewRequestManage extends Component {
                                         </div>
                                         {this.state.comment!=""?<div className="lm--formItem lm--formItem--inline string">
                                             <label className="lm--formItem-left lm--formItem-label string required">
-                                                Comments
+                                                Admin Comments
                                             </label>
                                             <div className="lm--formItem-right lm--formItem-control">
                                                 <input type="text" id="input_comment" name="comment" value={this.state.comment} disabled={this.state.disabled} />
