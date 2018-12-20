@@ -98,7 +98,7 @@ export class BuyerUserManage extends Component {
                 agree_seller_buyer: item.agree_seller_buyer ? item.agree_seller_buyer : '0',
                 agree_buyer_revv: item.agree_buyer_revv ? item.agree_buyer_revv : '0',
                 has_tenants: item.has_tenants ? item.has_tenants : '1',
-
+                comment:item.comment,
                 user_company_name: item.company_name ? item.company_name : '',
                 user_company_uen: item.company_unique_entity_number ? item.company_unique_entity_number : '',
                 user_company_address: item.company_address ? item.company_address : '',
