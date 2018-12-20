@@ -519,7 +519,7 @@ export class BuyerNewRequestManage extends Component {
                                                 Admin Comments
                                             </label>
                                             <div className="lm--formItem-right lm--formItem-control">
-                                                <input type="text" id="input_comment" name="comment" value={this.state.comment} disabled={true} />
+                                                <textarea id="input_comment" name="comment" value={this.state.comment} disabled={true} />
                                             </div>
                                         </div>:""}
                                     </div>

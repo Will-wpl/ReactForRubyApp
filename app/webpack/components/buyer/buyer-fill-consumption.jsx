@@ -815,7 +815,7 @@ export class FillConsumption extends Component {
                         </tr>
                         {this.state.comments?<tr>
                             <td>
-                                <h4 className="col-sm-12 u-mb2" style={{ "paddingTop": "15px" }}>{this.state.comments}</h4>
+                                <h4 className="col-sm-12 u-mb2" style={{ "paddingTop": "15px" }}>Admin Comments : {this.state.comments}</h4>
                             </td>
                         </tr>:<tr></tr>}
                     </tbody>
