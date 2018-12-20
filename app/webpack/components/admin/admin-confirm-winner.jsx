@@ -174,12 +174,14 @@ export default class AdminConfirmWinner extends Component {
                     </div> : ''}
                 <div className="u-grid u-mt2">
                     <div className="col-sm-12 col-md-6 u-cell">
-                        <div className="col-sm-12 col-md-10 push-md-1"><RetailerRanking ranking={this.state.realtimeRanking} /></div>
+                        <div className="col-sm-12 col-md-10 push-md-1">
+                            <RetailerRanking ranking={this.state.realtimeRanking} />
+                            <ReservePriceCompare contracts={this.state.live_auction_contracts} compare={this.state.compare} />
+                        </div>
                     </div>
                     <div className="col-sm-12 col-md-6 u-cell">
                         <div className="col-sm-12 col-md-10 push-md-1">
                             <ReservePrice auction={this.auction} price={this.startPrice} realtimePrice={this.state.currentPrice} />
-                            <ReservePriceCompare contracts={this.state.live_auction_contracts} compare={this.state.compare} />
                             <WinnerPrice showOrhide="hide" winner={this.state.winner} isLtVisible={visibility_lt} isHtsVisible={visibility_hts} isHtlVisible={visibility_htl} isEhtVisible={visibility_eht} />
                         </div>
                     </div>
