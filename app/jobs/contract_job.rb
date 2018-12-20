@@ -14,7 +14,8 @@ class ContractJob < ApplicationJob
                                 consumptions css,
                                 users
                               WHERE
-                                acs.contract_period_end_date <= ( CURRENT_DATE + ? )
+                                acs.contract_period_end_date >=  CURRENT_DATE
+                                AND acs.contract_period_end_date <= ( CURRENT_DATE + ? )
                                 AND ( acs.auction_id, acs.contract_duration ) = ( ars.auction_id, ars.contract_duration )
                                 AND ars.status = 'win'
                                 AND ( css.auction_id, css.contract_duration ) = ( acs.auction_id, acs.contract_duration )
