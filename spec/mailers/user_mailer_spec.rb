@@ -221,6 +221,16 @@ RSpec.describe UserMailer, type: :mail do
     end
   end
 
+  context 'buyer registered email mail' do
+    before :each do
+      @template = create(:email_template, subject: 'buyer registered email', body: 'Dear Admin,<br/><br/>#buyer_company_name has registered for a REVV account.<br/><br/>Please proceed to manage the registration at <a href="http://revv.sg">revv.sg</a>.', template_type: '11')
+      UserMailer.buyer_registered_email(@admin_user, company_buyer).deliver_now
+    end
+    it 'be_delivered_to', mail: true do
+      expect(open_last_email).to be_delivered_to @admin_user.email
+    end
+  end
+
   context 'contract notification mail' do
     before :each do
       @template = create(:email_template, subject: 'contract notification mail', body: 'Dear Admin,<br/><br/>test #days.<br/><br/>buyer_company_name_list<br/><br/>Please proceed to view the electricity purchase report at <a href="http://revv.sg">revv.sg</a>.', template_type: '30')
