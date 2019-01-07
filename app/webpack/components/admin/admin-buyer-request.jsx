@@ -64,7 +64,7 @@ export default class AdminBuyerRequestManage extends Component {
                     buyer_type: res.request_auction.buyer_type,
                     contract_period_start_date: moment(res.request_auction.contract_period_start_date),
                     duration: res.request_auction.duration,
-                    total_volume: res.request_auction.total_volume,
+                    total_volume: res.request_auction.total_volume ? res.request_auction.total_volume : "",
                     allow_deviation: res.request_auction.allow_deviation,
                     comment: res.request_auction.comment ? res.request_auction.comment : "",
                     status: res.request_auction.accept_status,
@@ -307,7 +307,7 @@ export default class AdminBuyerRequestManage extends Component {
                                             </div>
                                             <div className="lm--formItem lm--formItem--inline string">
                                                 <label className="lm--formItem-left lm--formItem-label string required">
-                                                    <abbr title="required">*</abbr> Flexible on Contract Start Date? 
+                                                    <abbr title="required">*</abbr> Flexible on Contract Start Date?
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control">
                                                     <select ref="allow_deviation" id="allow_deviation" onChange={this.doValue.bind(this, 'flexible')} value={this.state.flexible} disabled={this.state.disabled}>
@@ -322,7 +322,7 @@ export default class AdminBuyerRequestManage extends Component {
                                                     <abbr title="required" className={this.state.action_type === "reject" ? "isDisplayInLine" : "isHide"}  >*</abbr> Admin Comments  :
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control">
-                                                    <textarea type="text" name="comment" disabled={parseInt(this.state.status) === 1 || parseInt(this.state.status) === 0} value={this.state.comment} onChange={this.doValue.bind(this, 'comment')} ref="request_name"  aria-required="true" title="Please fill out this field" placeholder="" />
+                                                    <textarea type="text" name="comment" disabled={parseInt(this.state.status) === 1 || parseInt(this.state.status) === 0} value={this.state.comment} onChange={this.doValue.bind(this, 'comment')} ref="request_name" aria-required="true" title="Please fill out this field" placeholder="" />
                                                     <div className='isPassValidate' id='comment_message' >This field is required!</div>
                                                 </div>
                                             </div>

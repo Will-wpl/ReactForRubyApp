@@ -41,11 +41,16 @@ export class BuyerNewRequestManage extends Component {
         }
         this.request = {};
         this.starttimeChange = this.starttimeChange.bind(this);
-        this.validatorEntity_multiple = {
+        // this.validatorEntity_multiple = {
+        //     total_volume: { cate: 'integer' },
+        //     name: { cate: 'required' }
+        // }
+        // this.validatorEntity_single = {
+        //     total_volume: { cate: 'integer' },
+        //     name: { cate: 'required' }
+        // }
+        this.validatorEntity = {
             total_volume: { cate: 'integer' },
-            name: { cate: 'required' }
-        }
-        this.validatorEntity_single = {
             name: { cate: 'required' }
         }
 
@@ -99,7 +104,7 @@ export class BuyerNewRequestManage extends Component {
                     contract_period_start_date: moment(res.request_auction.contract_period_start_date),
                     duration: res.request_auction.duration,
 
-                    total_volume: res.request_auction.total_volume,
+                    total_volume: res.request_auction.total_volume ? res.request_auction.total_volume : "",
                     allow_deviation: res.request_auction.allow_deviation,
                     status: res.request_auction.accept_status,
                     status_name: getStatus(res.request_auction.accept_status, res.request_auction.accept_date_time === null ? res.request_auction.created_at : res.request_auction.accept_date_time),
@@ -216,31 +221,42 @@ export class BuyerNewRequestManage extends Component {
             }
         })
         let flag = true;
-        if (this.state.buyer_type === "1") {
-            let arr = validator_Object(this.state, this.validatorEntity_multiple);
+        // if (this.state.buyer_type === "1") {
+        //     let arr = validator_Object(this.state, this.validatorEntity_multiple);
 
-            if (arr.length > 0) {
-                arr.map((item, index) => {
-                    let column = item.column;
-                    let cate = item.cate;
-                    setValidationFaild(column, cate)
-                })
+        //     if (arr.length > 0) {
+        //         arr.map((item, index) => {
+        //             let column = item.column;
+        //             let cate = item.cate;
+        //             setValidationFaild(column, cate)
+        //         })
 
-                flag = false;
-            }
+        //         flag = false;
+        //     }
 
-        }
-        else {
-            let arr = validator_Object(this.state, this.validatorEntity_single);
-            if (arr.length > 0) {
-                arr.map((item, index) => {
-                    let column = item.column;
-                    let cate = item.cate;
-                    setValidationFaild(column, cate)
-                })
-                flag = false;
-            }
+        // }
+        // else {
+        //     let arr = validator_Object(this.state, this.validatorEntity_single);
+        //     if (arr.length > 0) {
+        //         arr.map((item, index) => {
+        //             let column = item.column;
+        //             let cate = item.cate;
+        //             setValidationFaild(column, cate)
+        //         })
+        //         flag = false;
+        //     }
 
+        // }
+
+        let arr = validator_Object(this.state, this.validatorEntity);
+        console.log(arr)
+        if (arr.length > 0) {
+            arr.map((item, index) => {
+                let column = item.column;
+                let cate = item.cate;
+                setValidationFaild(column, cate)
+            })
+            flag = false;
         }
 
         return flag;
@@ -271,7 +287,7 @@ export class BuyerNewRequestManage extends Component {
                 contract_period_start_date: moment(this.state.contract_period_start_date).format(),
                 duration: this.state.duration,
                 flexible: this.state.flexible,
-                total_volume : this.state.total_volume
+                total_volume: this.state.total_volume
             }
             if (this.state.buyer_type === '1') {
                 this.request.attachment_id = '';
@@ -419,13 +435,14 @@ export class BuyerNewRequestManage extends Component {
                                             </label>
                                             <div className="lm--formItem-right lm--formItem-control">
                                                 <input type="text" name="total_volume" value={this.state.total_volume} onChange={this.doValue.bind(this, 'total_volume')} disabled={this.state.disabled} ref="total_volume" required aria-required="true" title="Please fill out this field" placeholder="" />
-                                                <div className='isPassValidate' id='total_volume_message' >This field is required!</div>
+                                                <div className='isPassValidate' id='total_volume_message' >This field is required and please input an integer greater than 0 !</div>
+                                                <div className='isPassValidate' id='total_volume_format' >This field is required and please input an integer greater than 0 !</div>
                                             </div>
                                         </div>
 
                                         <div className="lm--formItem lm--formItem--inline string">
                                             <label className="lm--formItem-left lm--formItem-label string required">
-                                                <abbr title="required">*</abbr> Flexible on Contract Start Date? 
+                                                <abbr title="required">*</abbr> Flexible on Contract Start Date?
                                                 </label>
                                             <div className="lm--formItem-right lm--formItem-control">
                                                 <select ref="allow_deviation" id="allow_deviation" onChange={this.doValue.bind(this, 'flexible')} value={this.state.flexible} disabled={this.state.disabled}>
