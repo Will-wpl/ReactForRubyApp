@@ -436,8 +436,8 @@ export class BuyerNewRequestManage extends Component {
                                             </label>
                                             <div className="lm--formItem-right lm--formItem-control">
                                                 <input type="text" name="total_volume" value={this.state.total_volume} onChange={this.doValue.bind(this, 'total_volume')} disabled={this.state.disabled} ref="total_volume" required aria-required="true" title="Please fill out this field" placeholder="" />
-                                                <div className='isPassValidate' id='total_volume_message' >This field is required!</div>
-                                                <div className='isPassValidate' id='total_volume_format' >Please input an integer greater than 0 !</div>
+                                                <div className='isPassValidate' id='total_volume_message' > Please input an integer greater than 0!</div>
+                                                <div className='isPassValidate' id='total_volume_format' >Please input an integer greater than 0!</div>
                                             </div>
                                         </div>
 
