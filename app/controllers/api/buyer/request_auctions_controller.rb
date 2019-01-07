@@ -23,14 +23,15 @@ class Api::Buyer::RequestAuctionsController < Api::RequestAuctionsController
                   allow_deviation: (result.allow_deviation == RequestAuction::AllowDeviation)? 'Yes':'No',
                   total_volume: result.total_volume,
                   submit_date: result.updated_at,
-                  accept_status: (result.accept_status == RequestAuction::AcceptStatusReject)?'Rejected':(result.accept_status == RequestAuction::AcceptStatusApproved ? 'Accepted':'Pending')
+                  accept_status: result.accept_status, #(result.accept_status == RequestAuction::AcceptStatusReject)?'Rejected':(result.accept_status == RequestAuction::AcceptStatusApproved ? 'Accepted':'Pending'),
+
         )
       end
     end
 
     actions = [
-        {url: '/buyer/request_auctions/:id', name: 'Manage', icon: 'edit', interface_type: 'request_auction'}
-    # {url: '/buyer/request_auctions/:id', name: 'View', icon: 'view', interface_type: 'request_auction'}
+        # {url: '/buyer/request_auctions/:id', name: 'Manage', icon: 'edit', interface_type: 'request_auction'}
+      {url: '/buyer/request_auctions/:id', name: 'View', icon: 'view', interface_type: 'request_auction', check: 'request_buyer' }
     ]
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
