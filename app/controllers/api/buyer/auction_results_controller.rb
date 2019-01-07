@@ -104,9 +104,10 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
         logger.debug(consumption.to_json)
         logger.debug(consumption.consumption_details.to_json)
         consumption.consumption_details.select(:company_buyer_entity_id).distinct.each do |detail|
-          logger.debug(detail.to_json)
-          cb_entity = CompanyBuyerEntity.find(detail.company_buyer_entity_id).attributes.dup
-          awards.push({url: "api/buyer/auctions/#{result.auction_id}/letter_of_award_pdf?entity_id=#{detail.company_buyer_entity_id}&contract_duration=#{consumption.contract_duration}"}.merge!(cb_entity))
+          unless result.company_buyer_entity_id.nil?
+            cb_entity = CompanyBuyerEntity.find(detail.company_buyer_entity_id).attributes.dup
+            awards.push({url: "api/buyer/auctions/#{result.auction_id}/letter_of_award_pdf?entity_id=#{detail.company_buyer_entity_id}&contract_duration=#{consumption.contract_duration}"}.merge!(cb_entity))
+          end
         end
       end
     end
