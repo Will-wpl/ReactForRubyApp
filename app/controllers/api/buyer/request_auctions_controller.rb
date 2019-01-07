@@ -17,12 +17,13 @@ class Api::Buyer::RequestAuctionsController < Api::RequestAuctionsController
     unless result.blank?
       results = get_order_list(result, params, headers)
       results.each do |result|
-        data.push(id: result.id, name: result.name, duration: result.duration,
+        data.push(id: result.id, name: result.name, duration: result.duration.to_s + ' Months',
                   contract_period_start_date: result.contract_period_start_date,
                   buyer_type: (result.buyer_type == RequestAuction::SingleBuyerType)? 'Single':'Multiple',
                   allow_deviation: (result.allow_deviation == RequestAuction::AllowDeviation)? 'Yes':'No',
                   total_volume: result.total_volume,
-                  submit_date: result.updated_at
+                  submit_date: result.updated_at,
+                  accept_status: (result.accept_status == RequestAuction::AcceptStatusReject)?'Rejected':(result.accept_status == RequestAuction::AcceptStatusApproved ? 'Accepted':'Pending')
         )
       end
     end
@@ -41,10 +42,11 @@ def get_request_auction_headers
   [
       { name: 'Name of Reverse Auction', field_name: 'name', table_name: 'request_auctions' },
       # { name: 'Buyer Name', field_name: 'buyer_name', table_name: 'users' },
-      # { name: 'Contract Duration', field_name: 'duration', table_name: 'request_auctions' },
+      { name: 'Contract Duration', field_name: 'duration', table_name: 'request_auctions' },
       { name: 'Contract Start Date', field_name: 'contract_period_start_date', table_name: 'request_auctions' },
       { name: 'Single / Multiple Buyer[s]', field_name: 'buyer_type', table_name: 'request_auctions' },
-      { name: 'Date / Time', field_name: 'submit_date', table_name: 'request_auctions' }
+      { name: 'Date / Time', field_name: 'submit_date', table_name: 'request_auctions' },
+      { name: 'Status', field_name: 'accept_status', table_name: 'request_auctions' }
   # { name: 'All Deviation', field_name: 'allow_deviation', table_name: 'request_auctions' },
   # { name: 'Total Volume', field_name: 'total_volume', table_name: 'request_auctions' }
   ]
