@@ -101,6 +101,8 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
     if show_award?(contract_result, current_user) then
       if result.participation_status == '1'
         consumption = Consumption.find_by_auction_and_user(result.auction_id, current_user.id).first
+        logger.debug(consumption.to_json)
+        logger.debug(consumption.consumption_details.to_json)
         consumption.consumption_details.select(:company_buyer_entity_id).distinct.each do |detail|
           logger.debug(detail.to_json)
           cb_entity = CompanyBuyerEntity.find(detail.company_buyer_entity_id).attributes.dup
