@@ -442,23 +442,29 @@ export const removeDecimal = (value) => {
     return value;
 }
 export const removeAsInteger = (value) => {
-    // value.target.value = value.target.value.replace(/[^\d.]/g, "");
-    // value.target.value = value.target.value.replace(/\.{2,}/g, ".");
-    // value.target.value = value.target.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
-    // if (value.target.value.indexOf('.') > -1) {
-    //     if (value.target.value > 0) {
-    //         value.target.value = value.target.value.substr(0, value.target.value.length - 1)
-    //     }
-    // }
-
-    // return value;
-
     value = value.replace(/[^\d.]/g, "");
     value = value.replace(/\.{2,}/g, ".");
     value = value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
     if (value.indexOf('.') > -1) {
         if (value > 0) {
             value = value.substr(0, value.length - 1)
+        }
+    }
+
+    return value;
+}
+export const removeAsInteger2 = (value) => {
+    value = value.replace(/[^\d.]/g, "");
+    value = value.replace(/\.{2,}/g, ".");
+    value = value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+    if (value.indexOf('.') > -1) {
+        if (value > 0) {
+            value = value.substr(0, value.length - 1)
+        }
+    }
+    else {
+        if (parseInt(value) === 0) {
+            value = '';
         }
     }
 
