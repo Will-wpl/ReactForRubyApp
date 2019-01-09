@@ -99,14 +99,6 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
 
   private
 
-  def get_show_dashboard(auction)
-    if auction.buyer_type == 
-      
-    else
-      
-    end
-  end
-
   def get_accept_status(accept_status)
     case accept_status
       when "0"
