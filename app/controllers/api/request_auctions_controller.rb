@@ -23,6 +23,7 @@ class Api::RequestAuctionsController < Api::BaseController
     request_auction.allow_deviation = params[:allow_deviation] unless params[:allow_deviation].blank?
     request_auction.total_volume = params[:total_volume] unless params[:total_volume].blank?
     request_auction.flexible = params[:flexible] unless params[:flexible].blank?
+    request_auction.contract_type = params[:contract_type] unless params[:contract_type].blank?
     request_auction.user_id = current_user.id
     request_auction.comment = "" if request_auction.accept_status == RequestAuction::AcceptStatusReject
     request_auction.accept_status = RequestAuction::AcceptStatusPending
