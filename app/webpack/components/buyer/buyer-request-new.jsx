@@ -420,12 +420,12 @@ export class BuyerNewRequestManage extends Component {
                                                 <div className="lm--formItem-right lm--formItem-control u-grid mg0 ">
                                                     <div style={{ width: "100%" }}>
                                                         <h4 className="lm--formItem lm--formItem--inline string radioLabel">
-                                                            <input type="radio" name="isPurchase" value="1" checked={this.state.isPurchaseContract === 1} onChange={this.bindRadioChange.bind(this, 1)} disabled={this.state.disabled}></input><span >Standard Electricity Purchase Contract</span>
+                                                            <input type="radio" name="isPurchase" value="1" checked={this.state.isPurchaseContract === 1} onChange={this.bindRadioChange.bind(this, 1)} disabled={this.state.disabled}></input><span > Standard Electricity Purchase Contract</span>
                                                         </h4>
                                                     </div>
                                                     <div style={{ width: "100%" }}>
                                                         <h4 className="lm--formItem lm--formItem--inline string radioLabel">
-                                                            <input type="radio" name="isPurchase" value="2" checked={this.state.isPurchaseContract === 2} onChange={this.bindRadioChange.bind(this, 2)} disabled={this.state.disabled}></input><span >Customised Electricity Purchase Contract</span>
+                                                            <input type="radio" name="isPurchase" value="2" checked={this.state.isPurchaseContract === 2} onChange={this.bindRadioChange.bind(this, 2)} disabled={this.state.disabled}></input><span > Customised Electricity Purchase Contract</span>
                                                         </h4>
                                                     </div>
                                                 </div>
