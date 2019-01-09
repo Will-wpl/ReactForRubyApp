@@ -448,11 +448,11 @@ export class FillConsumption extends Component {
                             disabled: 'disabled',
                             checked: true,
                         })
-                        this.refs.Modal.showModal();
+                        this.refs.Modal.showModal('defaultCallBack');
                         this.setState({ text: "Your Purchase Order has been submitted to Admin for verification. Once verified, you will receive a notification to confirm your participation in this Reverse Auction." });
-                        setTimeout(() => {
-                            window.location.href = "/buyer/auctions";
-                        }, 3000)
+                        // setTimeout(() => {
+                        //     window.location.href = "/buyer/auctions";
+                        // }, 3000)
                     }
                     else {
                         this.validateTaken(res);
@@ -472,7 +472,11 @@ export class FillConsumption extends Component {
             this.setState({ text: "Interface failed" });
         })
     }
-
+    jumpPage(){
+        setTimeout(() => {
+            window.location.href = "/buyer/auctions";
+        }, 3000)
+    }
     validateTaken(res) {
         let account_list = [];
         if (res.errors.length > 0) {
@@ -1101,7 +1105,7 @@ export class FillConsumption extends Component {
                 </form>
                 <Modal formSize="big" text={this.state.text} acceptFunction={this.doAddAccountAction.bind(this)} siteList={this.state.totalList} consumptionAccountItem={this.state.account_detail} listdetailtype='consumption_detail' ref="consumption" />
                 <Modal formSize="middle" text={this.state.text} advisory={this.state.advisory} listdetailtype='market-insight' ref="market" />
-                <Modal listdetailtype="accountTaken" text={this.state.text} takenList={this.state.takenList} ref="accountTaken" />
+                <Modal listdetailtype="accountTaken" text={this.state.text} takenList={this.state.takenList} ref="accountTaken" acceptFunction={this.jumpPage.bind(this)} />
                 <div id="bg"></div>
                 <div id="show">
                     <img src={loadingPic} id="isLoading" />

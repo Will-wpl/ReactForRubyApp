@@ -45,7 +45,9 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
       data.push(id: consumption.id, name: consumption.auction.name, actual_begin_time: consumption.auction.actual_begin_time,
                 publish_status: consumption.auction.publish_status, participation_status: consumption.participation_status,
                 accept_status: get_accept_status(consumption.accept_status),
-                actions: action, dashdoard_id: consumption.auction.request_auction_id, auction_id: consumption.auction.id)
+                actions: action, dashdoard_id: consumption.auction.request_auction_id, auction_id: consumption.auction.id,
+                show_dashboard: consumption.auction.buyer_type == Auction::SingleBuyerType && consumption.auction.allow_deviation == Auction::NotAllowDeviation ? false : true
+                )
     end
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
