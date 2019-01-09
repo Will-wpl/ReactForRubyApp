@@ -145,6 +145,12 @@ export class Tenderdocuments extends React.Component {
                             <label className=" lm--formItem-label ">
                                 Click on 'Accept & Proceed' if you do not wish to propose deviations to the <a target="_blank"  style={{"cursor": "pointer"}} disabled={this.props.propsdisabled} download={this.state.attachments.length>0?this.state.attachments[0].file_name:''} href={this.state.attachments.length>0?this.state.attachments[0].file_path:'#'}>Electricity Purchase Contract.</a>
                             </label>
+                            <label className=" lm--formItem-label ">
+                                Option 1: Check the box below and click on 'Accept & Participate' if you do not wish to propose deviation(s) to the Electricity Purchase Contract.
+                            </label>
+                            <label className=" lm--formItem-label ">
+                                Option 2: Click on 'Propose Deviations' if you wish to propose deviation(s) to the Electricity Purchase Contract.
+                            </label>
                         </div>
                     {!this.props.propsdisabled?<div className="lm--formItem--inline string">
                         <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
