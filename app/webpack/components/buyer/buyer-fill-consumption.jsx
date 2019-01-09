@@ -38,7 +38,8 @@ export class FillConsumption extends Component {
             consumption_id: 0,
             advisory: "",
             isValidate: false,
-            takenList: []
+            takenList: [],
+            callback:false
         }
 
         this.accountItem = {
@@ -447,6 +448,7 @@ export class FillConsumption extends Component {
                         this.setState({
                             disabled: 'disabled',
                             checked: true,
+                            callback:true
                         })
                         this.refs.Modal.showModal('defaultCallBack');
                         this.setState({ text: "Your Purchase Order has been submitted to Admin for verification. Once verified, you will receive a notification to confirm your participation in this Reverse Auction." });
@@ -473,9 +475,9 @@ export class FillConsumption extends Component {
         })
     }
     jumpPage(){
-        setTimeout(() => {
+        //setTimeout(() => {
             window.location.href = "/buyer/auctions";
-        }, 3000)
+        //}, 3000)
     }
     validateTaken(res) {
         let account_list = [];
@@ -1101,11 +1103,11 @@ export class FillConsumption extends Component {
                     <div className="createRaMain u-grid">
                         <a className="lm--button lm--button--primary u-mt3" href="/buyer/auctions" >Back</a>
                     </div>
-                    <Modal text={this.state.text} acceptFunction={this.doAccept.bind(this)} ref="Modal" />
+                    <Modal text={this.state.text} acceptFunction={this.state.callback==true?this.jumpPage.bind(this):this.doAccept.bind(this)} ref="Modal" />
                 </form>
                 <Modal formSize="big" text={this.state.text} acceptFunction={this.doAddAccountAction.bind(this)} siteList={this.state.totalList} consumptionAccountItem={this.state.account_detail} listdetailtype='consumption_detail' ref="consumption" />
                 <Modal formSize="middle" text={this.state.text} advisory={this.state.advisory} listdetailtype='market-insight' ref="market" />
-                <Modal listdetailtype="accountTaken" text={this.state.text} takenList={this.state.takenList} ref="accountTaken" acceptFunction={this.jumpPage.bind(this)} />
+                <Modal listdetailtype="accountTaken" text={this.state.text} takenList={this.state.takenList} ref="accountTaken" />
                 <div id="bg"></div>
                 <div id="show">
                     <img src={loadingPic} id="isLoading" />
