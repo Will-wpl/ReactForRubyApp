@@ -30,7 +30,7 @@ class Api::Admin::RequestAuctionsController < Api::RequestAuctionsController
     end
 
     actions = [
-        {url: '/admin/request_auctions/:id', name: 'Manage', icon: 'edit', interface_type: 'request_auction', check: 'request_buyer'}
+        {url: '/admin/request_auctions/:id', name: 'Manage', icon: 'edit', interface_type: 'request_auction', check: 'admin_request_buyer'}
     ]
     bodies = { data: data, total: total }
     render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
