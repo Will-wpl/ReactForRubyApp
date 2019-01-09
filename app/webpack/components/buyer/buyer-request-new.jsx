@@ -425,12 +425,12 @@ export class BuyerNewRequestManage extends Component {
                                             <div className="lm--formItem lm--formItem--inline string">
                                                 <label className="lm--formItem-left lm--formItem-label string required">Electricity Purchase Contract</label>
                                                 <div className="lm--formItem-right lm--formItem-control u-grid mg0 ">
-                                                    <div>
+                                                    <div style={{width:"100%"}}>
                                                         <h4 className="lm--formItem lm--formItem--inline string radioLabel">
                                                             <input type="radio" name="isPurchase" value="1" checked={this.state.isPurchaseContract === 1} onChange={this.bindRadioChange.bind(this, 1)}></input><span >Standard Electricity Purchase Contract</span>
                                                         </h4>
                                                     </div>
-                                                    <div>
+                                                    <div style={{width:"100%"}}>
                                                         <h4 className="lm--formItem lm--formItem--inline string radioLabel">
                                                             <input type="radio" name="isPurchase" value="2" checked={this.state.isPurchaseContract === 2} onChange={this.bindRadioChange.bind(this, 2)}></input><span >Customised Electricity Purchase Contract</span>
                                                         </h4>
