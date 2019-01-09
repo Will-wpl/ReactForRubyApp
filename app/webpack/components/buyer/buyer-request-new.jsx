@@ -90,7 +90,6 @@ export class BuyerNewRequestManage extends Component {
     bindDetails() {
         getBuyerRequestDetail(this.state.id).then(res => {
             if (res.result === "success") {
-                console.log(res)
                 this.setState({
                     name: res.request_auction.name,
                     buyer_type: res.request_auction.buyer_type,
@@ -103,7 +102,7 @@ export class BuyerNewRequestManage extends Component {
                     status_name: getStatus(res.request_auction.accept_status, res.request_auction.accept_date_time === null ? res.request_auction.created_at : res.request_auction.accept_date_time),
                     accept_date_time: res.request_auction.accept_date_time,
                     flexible: res.request_auction.flexible,
-                    isPurchaseContract: parseInt(res.request_auction.contract_type)
+                    isPurchaseContract: res.request_auction.contract_type ? parseInt(res.request_auction.contract_type) : 1
                 })
                 if (res.last_attachment) {
                     let attachment = {

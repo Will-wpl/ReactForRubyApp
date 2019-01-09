@@ -71,7 +71,7 @@ export default class AdminBuyerRequestManage extends Component {
                     status: res.request_auction.accept_status,
                     status_name: getStatus(res.request_auction.accept_status, res.request_auction.accept_date_time === null ? res.request_auction.created_at : res.request_auction.accept_date_time),
                     flexible: res.request_auction.flexible,
-                    isPurchaseContract:parseInt(res.request_auction.contract_type)
+                    isPurchaseContract: res.request_auction.contract_type ? parseInt(res.request_auction.contract_type) : 1
                 })
 
                 if (res.last_attachment) {
