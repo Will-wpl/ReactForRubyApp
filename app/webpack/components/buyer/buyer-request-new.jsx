@@ -27,6 +27,7 @@ export class BuyerNewRequestManage extends Component {
             total_volume: '',
             attachment_id: '',
             accept_date_time: '',
+            isPurchaseContract: 1,
             flexible: '1',
             fileData: {
                 "TC": [
@@ -221,7 +222,7 @@ export class BuyerNewRequestManage extends Component {
                 $("#" + divid).removeClass("errormessage").addClass("isPassValidate");
             }
         })
-        let flag = true;
+        let flag = true, hasDoc = true;
         // if (this.state.buyer_type === "1") {
         //     let arr = validator_Object(this.state, this.validatorEntity_multiple);
 
@@ -239,9 +240,9 @@ export class BuyerNewRequestManage extends Component {
         // else {
         //     let arr = validator_Object(this.state, this.validatorEntity_single);
         //     if (arr.length > 0) {
-        //         arr.map((item, index) => {
+        //         arr.map((item, index) => {thisthsdaklfj
         //             let column = item.column;
-        //             let cate = item.cate;
+        //             let cate = item.cate;;
         //             setValidationFaild(column, cate)
         //         })
         //         flag = false;
@@ -250,7 +251,6 @@ export class BuyerNewRequestManage extends Component {
         // }
 
         let arr = validator_Object(this.state, this.validatorEntity);
-        console.log(arr)
         if (arr.length > 0) {
             arr.map((item, index) => {
                 let column = item.column;
@@ -259,8 +259,19 @@ export class BuyerNewRequestManage extends Component {
             })
             flag = false;
         }
+        if (this.state.isPurchaseContract === 2) {
+            if (this.state.fileData['TC'][0].files.length > 0) {
+                hasDoc = true;
+                $("#showMessage").removeClass("errormessage").addClass("isPassValidate");
+            }
+            else {
+                hasDoc = false;
+                $("#showMessage").removeClass("isPassValidate").addClass("errormessage");
+            }
 
-        return flag;
+        }
+
+        return flag && hasDoc;
     }
 
     refresh() {
@@ -313,7 +324,11 @@ export class BuyerNewRequestManage extends Component {
             })
         }
     }
-
+    bindRadioChange(type) {
+        this.setState({
+            isPurchaseContract: type
+        })
+    }
 
 
     render() {
@@ -408,13 +423,32 @@ export class BuyerNewRequestManage extends Component {
                                         </div>
                                         {this.state.buyer_type == "0" ?
                                             <div className="lm--formItem lm--formItem--inline string">
+                                                <label className="lm--formItem-left lm--formItem-label string required">Electricity Purchase Contract</label>
+                                                <div className="lm--formItem-right lm--formItem-control u-grid mg0 ">
+                                                    <div>
+                                                        <h4 className="lm--formItem lm--formItem--inline string radioLabel">
+                                                            <input type="radio" name="isPurchase" value="1" checked={this.state.isPurchaseContract === 1} onChange={this.bindRadioChange.bind(this, 1)}></input><span >Standard Electricity Purchase Contract</span>
+                                                        </h4>
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="lm--formItem lm--formItem--inline string radioLabel">
+                                                            <input type="radio" name="isPurchase" value="2" checked={this.state.isPurchaseContract === 2} onChange={this.bindRadioChange.bind(this, 2)}></input><span >Customised Electricity Purchase Contract</span>
+                                                        </h4>
+                                                    </div>
+                                                </div>
+                                            </div> : ''}
+
+
+                                        {(this.state.buyer_type == "0" && this.state.isPurchaseContract === 2) ?
+                                            <div className="lm--formItem lm--formItem--inline string">
                                                 <label className="lm--formItem-left lm--formItem-label string required">
-                                                    <abbr title="required"></abbr> Electricity Purchase Contract :
+                                                    <abbr title="required">*</abbr> Electricity Purchase Contract :
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                                     <UploadFile type="TC" required="required" calbackFn={this.refresh.bind(this)} validate="true" showList="1" col_width="10" showWay="0" fileData={this.state.fileData.TC} propsdisabled={this.state.disabled} uploadUrl={this.state.uploadUrl} />
-
+                                                    <br></br><div id="showMessage" className="isPassValidate" style={{ width: "100%" }}>This field is required!</div>
                                                 </div>
+
                                             </div> : ''
                                         }
                                         {this.state.buyer_type == "0" ?
