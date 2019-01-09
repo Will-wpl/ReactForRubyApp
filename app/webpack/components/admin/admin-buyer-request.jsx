@@ -22,6 +22,7 @@ export default class AdminBuyerRequestManage extends Component {
             text: "",
             total_volume: '',
             attachment_id: '',
+            isPurchaseContract:1,
             fileData: {
                 "TC": [
                     { buttonName: "none", files: [] }
@@ -69,7 +70,8 @@ export default class AdminBuyerRequestManage extends Component {
                     comment: res.request_auction.comment ? res.request_auction.comment : "",
                     status: res.request_auction.accept_status,
                     status_name: getStatus(res.request_auction.accept_status, res.request_auction.accept_date_time === null ? res.request_auction.created_at : res.request_auction.accept_date_time),
-                    flexible: res.request_auction.flexible
+                    flexible: res.request_auction.flexible,
+                    isPurchaseContract: res.request_auction.contract_type ? parseInt(res.request_auction.contract_type) : 1
                 })
 
                 if (res.last_attachment) {
@@ -269,6 +271,23 @@ export default class AdminBuyerRequestManage extends Component {
                                                 </div>
                                             </div>
                                             {this.state.buyer_type == "0" ?
+                                            <div className="lm--formItem lm--formItem--inline string">
+                                                <label className="lm--formItem-left lm--formItem-label string required">Electricity Purchase Contract</label>
+                                                <div className="lm--formItem-right lm--formItem-control u-grid mg0 ">
+                                                    <div style={{ width: "100%" }}>
+                                                        <h4 className="lm--formItem lm--formItem--inline string radioLabel">
+                                                            <input type="radio" name="isPurchase" value="1" checked={this.state.isPurchaseContract === 1}   disabled={this.state.disabled}></input><span > Standard Electricity Purchase Contract</span>
+                                                        </h4>
+                                                    </div>
+                                                    <div style={{ width: "100%" }}>
+                                                        <h4 className="lm--formItem lm--formItem--inline string radioLabel">
+                                                            <input type="radio" name="isPurchase" value="2" checked={this.state.isPurchaseContract === 2}   disabled={this.state.disabled}></input><span > Customised Electricity Purchase Contract</span>
+                                                        </h4>
+                                                    </div>
+                                                </div>
+                                            </div> : ''}
+
+                                            {(this.state.buyer_type == "0" && this.state.isPurchaseContract === 2)?
                                                 <div className="lm--formItem lm--formItem--inline string">
                                                     <label className="lm--formItem-left lm--formItem-label string required">
                                                         <abbr title="required"></abbr> Electricity Purchase Contract :

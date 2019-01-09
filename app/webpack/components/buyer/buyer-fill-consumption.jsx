@@ -38,7 +38,8 @@ export class FillConsumption extends Component {
             consumption_id: 0,
             advisory: "",
             isValidate: false,
-            takenList: []
+            takenList: [],
+            callback:false
         }
 
         this.accountItem = {
@@ -447,12 +448,13 @@ export class FillConsumption extends Component {
                         this.setState({
                             disabled: 'disabled',
                             checked: true,
+                            callback:true
                         })
-                        this.refs.Modal.showModal();
+                        this.refs.Modal.showModal('defaultCallBack');
                         this.setState({ text: "Your Purchase Order has been submitted to Admin for verification. Once verified, you will receive a notification to confirm your participation in this Reverse Auction." });
-                        setTimeout(() => {
-                            window.location.href = "/buyer/auctions";
-                        }, 3000)
+                        // setTimeout(() => {
+                        //     window.location.href = "/buyer/auctions";
+                        // }, 3000)
                     }
                     else {
                         this.validateTaken(res);
@@ -472,7 +474,11 @@ export class FillConsumption extends Component {
             this.setState({ text: "Interface failed" });
         })
     }
-
+    jumpPage(){
+        //setTimeout(() => {
+            window.location.href = "/buyer/auctions";
+        //}, 3000)
+    }
     validateTaken(res) {
         let account_list = [];
         if (res.errors.length > 0) {
@@ -1075,7 +1081,7 @@ export class FillConsumption extends Component {
                                     this.state.dateIssuecount > 0 ?
                                         <h4 className="lm--formItem lm--formItem--inline string chkBuyer" >
                                             <input type="checkbox" id="chkBuyer" id="chk_Warning" required /><span className="warning" style={{ "color:": "red" }}>Warning: [{this.state.dateIssuecount}] account(s) detected to have expiry date on  or after new contract start date. Please tick the checkbox
-                                             to confirm that you aware and would like to proceed with including such account(s) in this auction.</span> </h4> : <div></div>
+                                             to confirm that you are aware and would like to proceed with including such account(s) in this auction.</span> </h4> : <div></div>
                                 }
                             </div>
                             <div>
@@ -1097,7 +1103,7 @@ export class FillConsumption extends Component {
                     <div className="createRaMain u-grid">
                         <a className="lm--button lm--button--primary u-mt3" href="/buyer/auctions" >Back</a>
                     </div>
-                    <Modal text={this.state.text} acceptFunction={this.doAccept.bind(this)} ref="Modal" />
+                    <Modal text={this.state.text} acceptFunction={this.state.callback==true?this.jumpPage.bind(this):this.doAccept.bind(this)} ref="Modal" />
                 </form>
                 <Modal formSize="big" text={this.state.text} acceptFunction={this.doAddAccountAction.bind(this)} siteList={this.state.totalList} consumptionAccountItem={this.state.account_detail} listdetailtype='consumption_detail' ref="consumption" />
                 <Modal formSize="middle" text={this.state.text} advisory={this.state.advisory} listdetailtype='market-insight' ref="market" />

@@ -42,14 +42,6 @@ export class BuyerNewRequestManage extends Component {
         }
         this.request = {};
         this.starttimeChange = this.starttimeChange.bind(this);
-        // this.validatorEntity_multiple = {
-        //     total_volume: { cate: 'integer' },
-        //     name: { cate: 'required' }
-        // }
-        // this.validatorEntity_single = {
-        //     total_volume: { cate: 'integer' },
-        //     name: { cate: 'required' }
-        // }
         this.validatorEntity = {
             total_volume: { cate: 'integer' },
             name: { cate: 'required' }
@@ -65,7 +57,6 @@ export class BuyerNewRequestManage extends Component {
         this.setState({
             disabled: parseInt(requestId) === 0 ? false : true,
             operation_type: parseInt(requestId) === 0 ? "create" : "edit",
-            //user_type: parseInt(requestId) === 0 ? "buyer" : "admin",
             id: requestId
         });
 
@@ -110,7 +101,8 @@ export class BuyerNewRequestManage extends Component {
                     status: res.request_auction.accept_status,
                     status_name: getStatus(res.request_auction.accept_status, res.request_auction.accept_date_time === null ? res.request_auction.created_at : res.request_auction.accept_date_time),
                     accept_date_time: res.request_auction.accept_date_time,
-                    flexible: res.request_auction.flexible
+                    flexible: res.request_auction.flexible,
+                    isPurchaseContract: res.request_auction.contract_type ? parseInt(res.request_auction.contract_type) : 1
                 })
                 if (res.last_attachment) {
                     let attachment = {
@@ -149,7 +141,6 @@ export class BuyerNewRequestManage extends Component {
                 break;
             case "total_volume":
                 val = removeAsInteger2(val);
-                console.log(val)
                 this.setState({
                     total_volume: val
                 });
@@ -306,6 +297,7 @@ export class BuyerNewRequestManage extends Component {
                 this.request.allow_deviation = '1';
             }
             else {
+                this.request.contract_type = this.state.isPurchaseContract;
                 this.request.attachment_id = this.state.fileData.TC[0].files.length > 0 ? this.state.fileData.TC[0].files[0].id : "";
                 this.request.allow_deviation = this.state.allow_deviation;
             }
@@ -425,14 +417,14 @@ export class BuyerNewRequestManage extends Component {
                                             <div className="lm--formItem lm--formItem--inline string">
                                                 <label className="lm--formItem-left lm--formItem-label string required">Electricity Purchase Contract</label>
                                                 <div className="lm--formItem-right lm--formItem-control u-grid mg0 ">
-                                                    <div style={{width:"100%"}}>
+                                                    <div style={{ width: "100%" }}>
                                                         <h4 className="lm--formItem lm--formItem--inline string radioLabel">
-                                                            <input type="radio" name="isPurchase" value="1" checked={this.state.isPurchaseContract === 1} onChange={this.bindRadioChange.bind(this, 1)}></input><span >Standard Electricity Purchase Contract</span>
+                                                            <input type="radio" name="isPurchase" value="1" checked={this.state.isPurchaseContract === 1} onChange={this.bindRadioChange.bind(this, 1)} disabled={this.state.disabled}></input><span > Standard Electricity Purchase Contract</span>
                                                         </h4>
                                                     </div>
-                                                    <div style={{width:"100%"}}>
+                                                    <div style={{ width: "100%" }}>
                                                         <h4 className="lm--formItem lm--formItem--inline string radioLabel">
-                                                            <input type="radio" name="isPurchase" value="2" checked={this.state.isPurchaseContract === 2} onChange={this.bindRadioChange.bind(this, 2)}></input><span >Customised Electricity Purchase Contract</span>
+                                                            <input type="radio" name="isPurchase" value="2" checked={this.state.isPurchaseContract === 2} onChange={this.bindRadioChange.bind(this, 2)} disabled={this.state.disabled}></input><span > Customised Electricity Purchase Contract</span>
                                                         </h4>
                                                     </div>
                                                 </div>
