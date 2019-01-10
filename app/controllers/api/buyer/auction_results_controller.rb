@@ -30,14 +30,19 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
         data.push(published_gid: result.auction.published_gid,
                   name: result.auction.name,
                   start_datetime: result.auction.start_datetime,
+                  id: Consumption.find_by_auction_and_user(result.auction_id, result.user_id).id,
+                  auction_id: result.auction_id,
                   acknowledge: get_new_acknowledge(result, contract_result) ,
                   report: get_new_report(result, contract_result) ,
                   award: get_new_awrd(result, contract_result))
+
+        actions = [{ url: '/buyer/consumptions/:id/edit', name: 'View', icon: 'view', check: 'docheck' },
+                   { url: '/buyer/auctions/:id/retailer_dashboard', name: 'Retailer Dashboard', icon: 'edit', interface_type: 'auction'}]
       end
 
     end
     bodies = { data: data, total: total }
-    render json: { headers: headers, bodies: bodies, actions: nil }, status: 200
+    render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
   end
 
   private
