@@ -22,7 +22,7 @@ class Api::Buyer::RequestAuctionsController < Api::RequestAuctionsController
                   buyer_type: (result.buyer_type == RequestAuction::SingleBuyerType)? 'Single':'Multiple',
                   allow_deviation: (result.allow_deviation == RequestAuction::AllowDeviation)? 'Yes':'No',
                   total_volume: result.total_volume,
-                  submit_date: result.updated_at,
+                  updated_at: result.updated_at,
                   accept_status: result.accept_status, #(result.accept_status == RequestAuction::AcceptStatusReject)?'Rejected':(result.accept_status == RequestAuction::AcceptStatusApproved ? 'Accepted':'Pending'),
 
         )
@@ -46,7 +46,7 @@ def get_request_auction_headers
       { name: 'Contract Start Date', field_name: 'contract_period_start_date', table_name: 'request_auctions' },
       { name: 'Contract Duration', field_name: 'duration', table_name: 'request_auctions' },
       { name: 'Single / Multiple Buyer[s]', field_name: 'buyer_type', table_name: 'request_auctions' },
-      { name: 'Date / Time', field_name: 'submit_date', table_name: 'request_auctions' },
+      { name: 'Date / Time', field_name: 'updated_at', table_name: 'request_auctions' },
       { name: 'Status', field_name: 'accept_status', table_name: 'request_auctions' }
   # { name: 'All Deviation', field_name: 'allow_deviation', table_name: 'request_auctions' },
   # { name: 'Total Volume', field_name: 'total_volume', table_name: 'request_auctions' }
