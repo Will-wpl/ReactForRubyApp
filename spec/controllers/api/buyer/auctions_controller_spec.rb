@@ -198,14 +198,14 @@ RSpec.describe Api::Buyer::AuctionsController, type: :controller do
     end
 
 
-    context 'GET /api/buyer/auctions/:id/letter_of_award_pdf' do
-      it 'buyer letter of award pdf', pdf: true do
-        expect(get: "/api/buyer/auctions/#{@auction_test.id.to_s}/letter_of_award_pdf").to be_routable
-
-        get :letter_of_award_pdf, params: {id: @auction_test.id}
-        expect(response.headers['Content-Type']).to have_content 'application/pdf'
-      end
-    end
+    # context 'GET /api/buyer/auctions/:id/letter_of_award_pdf' do
+    #   it 'buyer letter of award pdf', pdf: true do
+    #     expect(get: "/api/buyer/auctions/#{@auction_test.id.to_s}/letter_of_award_pdf").to be_routable
+    #
+    #     get :letter_of_award_pdf, params: {id: @auction_test.id}
+    #     expect(response.headers['Content-Type']).to have_content 'application/pdf'
+    #   end
+    # end
 
     context 'GET /api/buyer/auctions/:id/pdf' do
       it 'buyer ra report pdf', pdf: true do
