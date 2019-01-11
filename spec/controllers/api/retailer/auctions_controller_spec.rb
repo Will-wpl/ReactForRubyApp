@@ -218,14 +218,14 @@ RSpec.describe Api::Retailer::AuctionsController, type: :controller do
       create(:consumption_detail,account_number:444,intake_level:'EHT',peak:10000.0,off_peak:10000.0,consumption:@consumption_test,created_at: '2018-02-07T06:51:07.544786' ,updated_at: '2018-02-07T06:51:07.544786')
     end
 
-    # context 'GET /api/retailer/auctions/letter_of_award_pdf' do
-    #   it 'retailer letter of award pdf', pdf: true do
-    #     create(:user, :with_retailer)
-    #     expect(get: "/api/retailer/auctions/letter_of_award_pdf?auction_id=#{@auction_test.id.to_s}&user_id=#{@user4.id.to_s}").to be_routable
-    #
-    #     get :letter_of_award_pdf, params: {auction_id: @auction_test.id, user_id: @user4.id}
-    #     expect(response.headers['Content-Type']).to have_content 'application/pdf'
-    #   end
-    # end
+    context 'GET /api/retailer/auctions/letter_of_award_pdf' do
+      it 'retailer letter of award pdf', pdf: true do
+        create(:user, :with_retailer)
+        expect(get: "/api/retailer/auctions/letter_of_award_pdf?auction_id=#{@auction_test.id.to_s}&user_id=#{@user4.id.to_s}").to be_routable
+
+        get :letter_of_award_pdf, params: {auction_id: @auction_test.id, user_id: @user4.id}
+        expect(response.headers['Content-Type']).to have_content 'application/pdf'
+      end
+    end
   end
 end
