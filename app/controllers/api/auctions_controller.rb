@@ -460,7 +460,8 @@ class Api::AuctionsController < Api::BaseController
         :consumption => consumption,
         :tender_state => tender_state,
         :consumption_details => consumption_details,
-        :auction_contract => auction_contract
+        :auction_contract => auction_contract,
+        :current_user => current_user,
     }
     if auction_result.nil?
       pdf, output_filename =  PdfUtils.get_wicked_pdf_data('no data', 'NO_DATA_LETTER_OF_AWARD.pdf')
@@ -581,12 +582,13 @@ class Api::AuctionsController < Api::BaseController
     consumption = Consumption.find_by_sql ["SELECT
                                     cns.*,
                                     coalesce(entity.company_name,'') company_name,
+                                    coalesce(entity.company_address,'') company_address,
                                     coalesce(entity.company_uen,'') company_unique_entity_number,
                                     coalesce(users.company_name,'') parent_company_name
                                   FROM
                                     consumptions cns
                                   LEFT JOIN users ON cns.user_id = users.\"id\",
-                                    ( SELECT ent.company_name, ent.company_uen FROM company_buyer_entities ent WHERE ent.user_id = ? AND \"id\" = ? LIMIT 1 ) entity
+                                    ( SELECT ent.company_name, ent.company_uen, ent.company_address FROM company_buyer_entities ent WHERE ent.user_id = ? AND \"id\" = ? LIMIT 1 ) entity
                                   WHERE
                                     cns.user_id = ? AND auction_id = ? AND contract_duration = ?",
                                            user_id, entity_id, user_id, auction_id, contract_duration]

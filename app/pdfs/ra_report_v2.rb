@@ -41,7 +41,7 @@ class RAReportV2 < RAReport
 
   def get_price_table_data(param, visibility = false, price_data = false)
     auction_contract, auction_result = param[:auction_contract], param[:auction_result]
-    price_table_data, visibilities, price_hash = get_contract_duration_price(auction_contract, auction_result)
+    price_table_data, visibilities, price_hash, price_data = get_contract_duration_price(auction_contract, auction_result)
     @visibilities = visibilities
     price_table_data
   end

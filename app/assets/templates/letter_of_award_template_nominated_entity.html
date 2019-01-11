@@ -6,6 +6,7 @@
         {
             color: #000000;
         }
+
         table.table_data2
         {
             border:1px;
@@ -45,93 +46,89 @@
 </head>
 <body style="font-size:12px;">
 <p style="text-align:center;">
-    <strong><span style="font-size:14px;">LETTER OF AWARD (ELECTRICITY PROCUREMENT)</span></strong>
+    <strong><span style="font-size:14px;">CLOSING OF ELECTRICITY PURCHASE CONTRACT</span></strong>
 </p>
 <table style="width:100%;" cellpadding="2" cellspacing="0" border="0" bordercolor="#000000">
     <tbody style="font-size:12px;">
     <tr>
         <td>
-            #retailer_user_company_name
-        </td>
-        <td style="text-align:right;">
-            #auction_start_datetime
+            Closing Date: #auction_start_datetime
         </td>
     </tr>
     <tr>
         <td>
-            #retailer_company_address
+            REVV Reference ID: #auctions_published_gid
         </td>
+    </tr>
+    <tr>
         <td>
-
+            Name of Winning Retailer: #retailer_user_company_name
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Address of Winning Retailer: #retailer_company_address
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Name of Buyer: #buyer_user_company_name
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Address of Buyer: #buyer_user_company_address
         </td>
     </tr>
     </tbody>
 </table>
 
 <ul style="padding-left: 0px;font-size:12px;;margin-bottom:0px">
+
     <li style="line-height:20px;list-style:none;">
-        Dear Sirs,
-    </li>
-    <li style="line-height:20px;list-style:none;;margin-bottom:18px">
-        REVV Reference: #auctions_published_gid
-    </li>
-    <li style="line-height:20px;list-style:none;">
-        <b>CONTRACT DESCRIPTION: Electricity Procurement</b>
+        <b>CONTRACT DESCRIPTION: Electricity Purchase Contract with respect to Sale and Purchase of Electricity via Reverse Auction on SP REVV Platform </b>
     </li>
     <li style="line-height:20px;list-style:none;">
         <ol style="padding-left: 18px;">
             <li style="padding-left: 4px;line-height:20px;margin-bottom:18px">
-                We, #buyer_user_company_name, hereby accept your Tender dated #admin_accept_date, which includes the Schedule of Prices per locked in via bidding exercise dated #auction_start_datetime, for the supply of electricity as set out in Appendix 1 and based on the prices set out in the Schedule of Prices set out therein. <br />
-                <br />
-                In view of the above, the entity defined as "Company" in Appendix 1 to the Conditions of Contract shall be deleted and replaced with #buyer_user_company_name.
+                #retailer_user_company_name and #buyer_user_company_name hereby agree to the sale and purchase of electricity closed on #auctions_contract_period_end_date via Reverse Auction on SP REVV Platform, based on the specifications and price set out in attached Appendix 1 and the terms and conditions set out in the <a href="#electricity_purchase_contract">Electricity Purchase Contract</a>. #retailer_user_company_name and #buyer_user_company_name may respectively print copy of the Electricity Purchase Contract for its own record.
             </li>
             <li style="padding-left: 4px;line-height:20px;margin-bottom:18px">
-                This Letter of Award together with the Tender Documents shall constitute a legally binding and enforceable Contract between us.
+                This closing letter together with the Electricity Purchase Contract shall constitute a legally binding and enforceable contract between #retailer_user_company_name and #buyer_user_company_name
             </li>
             <li style="padding-left: 4px;line-height:20px;margin-bottom:18px">
-                The Commencement Date of Supply shall be #auctions_contract_period_start_date.
+                The commencement date of supply of the electricity shall be #auctions_contract_period_start_date
             </li>
             <li style="padding-left: 4px;line-height:20px;margin-bottom:18px">
-                Unless otherwise defined, all capitalised terms in this Letter of Award shall have the meaning given to them in the Conditions of Tendering and Conditions of Contract.
+                Unless otherwise defined, all capitalised terms in this closing letter shall have the meaning given to them in the <a id="terms_and_conditions_of_use" href="#terms_and_conditions_of_use">Terms and Conditions of Use</a><span id="terms_and_conditions_of_use_admin"><a href="#terms_and_conditions_of_use_buyer">Terms and Conditions of Use(Buyer)</a>, the <a href="#terms_and_conditions_of_use_retailer">Terms and Conditions of Use(Retailer)</a></span> and the Electricity Purchase Contract.
             </li>
+            <li style="padding-left: 4px;line-height:20px;margin-bottom:18px">
+                This closing letter is governed by the laws of Singapore.
+            </li>
+
             <li style="padding-left: 4px;line-height:20px;">
-                This Letter of Award is sent to you in electronic copy. For the purposes of our records, please acknowledge receipt of this Letter of Award by clicking on the 'Acknowledge' button in portal, within one (1) Business Day of the date hereof.
+                This closing letter is sent to #retailer_user_company_name and #buyer_user_company_name respectively in electronic copy.
             </li>
         </ol>
     </li>
 </ul>
 <br />
-<ul style="padding-left: 0px;font-size:12px;margin-top: 6px;">
-    <li style="line-height:20px;list-style:none;margin-bottom:6px">
-        Yours faithfully,
-    </li>
-    <li style="line-height:20px;list-style:none;margin-bottom:6px">
-        #buyer_user_company_name
-    </li>
-    <li style="line-height:20px;list-style:none;;margin-bottom:18px">
-        Company Registration No. #buyer_uen_number
-    </li>
-</ul>
-<br/>
+<table style="width:100%;" cellpadding="2" cellspacing="0" border="0" bordercolor="#000000">
+    <tbody style="font-size:12px;">
+    <tr>
+        <td width="50%">
+            #retailer_user_company_name
+        </td>
+        <td width="50%">
+            #buyer_user_company_name
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br/><br/><br/><br/><br/>
 <hr style="border:none;border-top:1px solid #000000;" />
 <br/>
 <ul style="padding-left: 0px;font-size:12px;">
-    <li style="line-height:20px;list-style:none;">
-        <b>ACKNOWLEDMENT OF RECEIPT BY #retailer_user_company_name:</b>
-    </li>
-    <li style="line-height:20px;list-style:none;">
-        We, #retailer_user_company_name, company registration no. #retailer_uen_number hereby acknowledge receipt of this Letter of Award.
-    </li>
-    <li style="line-height:20px;list-style:none;">
-        &nbsp;
-    </li>
-    <li style="line-height:20px;list-style:none;">
-        <b>Status of Retailer Acknowledgement: #acknowledge</b>
-    </li>
-    <li style="line-height:20px;list-style:none;">
-        <!--b>APPENDIX 1</b-->
-    </li>
-
     <li style="line-height:20px;list-style:none;">
         <table class="table_data">
             <colgroup>
@@ -144,7 +141,7 @@
             </colgroup>
             <thead>
             <tr>
-                <td class="table_th" colspan=6 style="background-color:#ffffff; text-align: left; border-left-color: #ffffff; border-top-color: #ffffff;border-right-color: #ffffff;">APPENDIX 1</td>
+                <td class="table_th" colspan=6 style="background-color:#ffffff; text-align: left; border-left-color: #ffffff; border-top-color: #ffffff;border-right-color: #ffffff;">APPENDIX 1 – Specifications and Price</td>
             </tr>
             <tr>
                 <td class="table_th">Account Number</td>
@@ -196,23 +193,18 @@
                 <col width="300" />
             </colgroup>
             <thead style="margin-bottom:30px">
-            <tr>
-                <td class="table_th" colspan=10 style="background-color:#ffffff; text-align: left; border-left-color: #ffffff; border-top-color: #ffffff;border-right-color: #ffffff;">
-                    Summary of Monthly Consumption Forecast:
-                </td>
-            </tr>
-            <tr id="appendix_table2_head">
+            <tr id="appendix_table3_head">
                 <td class="table_th">&nbsp;</td>
-                <td class="table_th" id="lt_head_id">LT</td>
-                <td class="table_th" id="hts_head_id">HTS</td>
-                <td class="table_th" id="htl_head_id">HTL</td>
-                <td class="table_th" id="eht_head_id">EHT</td>
+                <td class="table_th" id="lt_head_id">LT<br/>($/kWh)</td>
+                <td class="table_th" id="hts_head_id">HTS<br/>($/kWh)</td>
+                <td class="table_th" id="htl_head_id">HTL<br/>($/kWh)</td>
+                <td class="table_th" id="eht_head_id">EHT<br/>($/kWh)</td>
             </tr>
             </thead>
             <tbody >
-            <tr id="appendix_table2_peak">
+            <tr id="appendix_table3_peak">
                 <td>
-                    Peak (kWh/month) <br/>7AM – 7PM
+                    Peak<br/>7AM – 7PM
                 </td>
                 <td id="lt_peak_id">
                     #lt_peak
@@ -227,9 +219,9 @@
                     #eht_peak
                 </td>
             </tr>
-            <tr id="appendix_table2_off_peak">
+            <tr id="appendix_table3_off_peak">
                 <td>
-                    Off-Peak (kWh/month) <br/>7PM – 7AM
+                    Off-Peak<br/>7PM – 7AM
                 </td>
                 <td id="lt_off_peak_id">
                     #lt_off_peak
@@ -244,9 +236,77 @@
                     #eht_off_peak
                 </td>
             </tr>
-            <tr id="appendix_table2_total">
+
+            </tbody>
+        </table>
+    </li>
+
+    <li style="line-height:25px;list-style:none; padding: 18px 0px 0px 0px">
+        Contract Period: #auctions_contract_period_start_date to #auctions_contract_period_end_date
+    </li>
+    <li style="line-height:25px;list-style:none;">
+        Total Volume: #total_volume kWh (forecasted)
+    </li>
+    <li style="line-height:20px;list-style:none;">
+        <table class="table_data">
+            <colgroup>
+                <col width="17%" />
+                <col width="17%" />
+                <col width="17%" />
+                <col width="17%" />
+                <col width="17%" />
+                <col width="17%" />
+            </colgroup>
+            <thead>
+            <tr>
+                <td height="25px" class="table_th" colspan=10 style="background-color:#ffffff; text-align: left; border-left-color: #ffffff; border-top-color: #ffffff;border-right-color: #ffffff;">Aggregate Consumption</td>
+            </tr>
+            <tr id="appendix_table4_head">
+                <td class="table_th">&nbsp;</td>
+                <td class="table_th" id="lt_head_id">LT<br/>(kWh/month)</td>
+                <td class="table_th" id="hts_head_id">HTS<br/>(kWh/month)</td>
+                <td class="table_th" id="htl_head_id">HTL<br/>(kWh/month)</td>
+                <td class="table_th" id="eht_head_id">EHT<br/>(kWh/month)</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr id="appendix_table4_peak">
                 <td>
-                    Total (kWh/month)
+                    Peak<br/>(7AM-7PM)
+                </td>
+                <td id="lt_peak_id">
+                    #lt_peak
+                </td>
+                <td id="hts_peak_id">
+                    #hts_peak
+                </td>
+                <td id="htl_peak_id">
+                    #htl_peak
+                </td>
+                <td id="eht_peak_id">
+                    #eht_peak
+                </td>
+            </tr>
+            <tr id="appendix_table4_off_peak">
+                <td>
+                    Off-Peak<br/>(7PM-7AM)
+                </td>
+                <td id="lt_off_peak_id">
+                    #lt_off_peak
+                </td>
+                <td id="hts_off_peak_id">
+                    #hts_off_peak
+                </td>
+                <td id="htl_off_peak_id">
+                    #htl_off_peak
+                </td>
+                <td id="eht_off_peak_id">
+                    #eht_off_peak
+                </td>
+            </tr>
+            <tr id="appendix_table4_total">
+                <td>
+                    Total
                 </td>
                 <td id="lt_total_id">
                     #lt_total
@@ -261,21 +321,6 @@
                     #eht_total
                 </td>
             </tr>
-            </tbody>
-        </table>
-    </li>
-    <li style="line-height:20px;list-style:none;">
-        &nbsp;
-    </li>
-    <li style="line-height:20px;list-style:none;" id="contract">
-        <table class="table_data2">
-            <thead>
-            <tr class="table_th2"><td>Contract:</td>
-            </tr>
-            </thead>
-            <tbody>
-            <tr><td><a href="#procurement_agreement">Electricity Procurement Agreement </a>
-            </td></tr>
             </tbody>
         </table>
     </li>

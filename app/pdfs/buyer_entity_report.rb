@@ -7,7 +7,7 @@ class BuyerEntityReport < BuyerReport
     if auction_result.nil?
       return PdfUtils.get_no_data_pdf("LETTER", :portrait, 'NO_DATA_BUYER_REPORT.pdf')
     end
-    price_table_data, visibilities, price_hash = get_contract_duration_price(auction_contract, auction_result)
+    price_table_data, visibilities, price_hash, price_data = get_contract_duration_price(auction_contract, auction_result)
     entities = param[:entities_detail]
     total_consumption = get_consumption_forecast(entities)
     hash = get_entities_date_list(entities)
