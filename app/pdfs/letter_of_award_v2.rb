@@ -144,8 +144,10 @@ class LetterOfAwardV2 < LetterOfAward
   end
 
   def get_electricity_purchase_contract
-    return "#" if param[:auction].request_auction_id.nil?
-    request_attachment = RequestAttachment.find_by request_auction_id: param[:auction].request_auction_id
+    request_attachment = nil
+    unless param[:auction].request_auction_id.nil?
+      request_attachment = RequestAttachment.find_by request_auction_id: param[:auction].request_auction_id
+    end
     if request_attachment.nil?
       visibility, file_path = get_tc_attach_path(param, UserAttachment::FileType_Seller_Buyer_TC)
       file_path
