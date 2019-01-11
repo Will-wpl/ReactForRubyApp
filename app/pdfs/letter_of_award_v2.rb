@@ -2,10 +2,12 @@ class LetterOfAwardV2 < LetterOfAward
 
   def get_price_table_data(param, visibility = false, price_data_bool = false)
     auction_result, auction_contract =  param[:auction_result], param[:auction_contract]
-    price_table_data, visibilities, price_data = get_contract_duration_price(auction_contract, auction_result)
+    price_table_data, visibilities, price_hash, price_data = get_contract_duration_price(auction_contract, auction_result)
 
+    @visibilities_price = visibilities
+    @price_data = price_data
     visibilities = {visibility_lt: is_visibility('LT', param), visibility_hts: is_visibility('HTS', param), visibility_htl: is_visibility('HTL', param), visibility_eht: is_visibility('EHT', param)}
-    return price_table_data, visibilities, price_data
+    return price_table_data, visibilities, price_hash, price_data
   end
 
   def is_visibility(intake_level, param)
@@ -77,22 +79,85 @@ class LetterOfAwardV2 < LetterOfAward
     Nokogiri::HTML(pdf_template.content, nil, 'UTF-8')
   end
 
-  def get_content_gsub(param, page)
-    page_content = super(param, page)
-    contract_html = html_parse(page, '#contract')
-    visibility, file_path = get_tc_attach_path(param,UserAttachment::FileType_Seller_Buyer_TC)
-    if visibility
-      page_content = page_content.gsub(/#procurement_agreement/, file_path)
-    else
-      page_content[contract_html.to_s] = ''
-    end
-    page_content
+  def get_content_gsub(param, page_content, page)
+    page_content = super(param, page_content, page)
+    page_content = page_content.gsub(/#electricity_purchase_contract/, get_electricity_purchase_contract)
+
+  end
+
+
+  def parse_extends(page, page_content)
+    page_content = parse_table(page, @visibilities_price, @price_data, page_content, '#appendix_table3', 4)
+    page_content = parse_table(page, @visibilities_price, get_aggregate_consumption_data, page_content, '#appendix_table4')
+    terms_and_conditions_of_use(page, page_content)
   end
 
   private
 
+  def terms_and_conditions_of_use(page, page_content)
+    if param[:current_user]&.has_role?(:admin)
+      contract_html = html_parse(page, '#terms_and_conditions_of_use')
+      page_content[contract_html.to_s] = ''
+      visibility, buyer_file_path = get_tc_attach_path(param, UserAttachment::FileType_Buyer_REVV_TC)
+      visibility2, retailer_file_path = get_tc_attach_path(param, UserAttachment::FileType_Seller_REVV_TC)
+      page_content = page_content.gsub(/#terms_and_conditions_of_use_retailer/, retailer_file_path).gsub(/#terms_and_conditions_of_use_buyer/, buyer_file_path)
+      page_content
+    elsif param[:current_user]&.has_role?(:buyer)
+      visibility, file_path = get_tc_attach_path(param, UserAttachment::FileType_Buyer_REVV_TC)
+      parse_terms_and_conditions(page, page_content, file_path)
+    elsif param[:current_user]&.has_role?(:retailer)
+      visibility, file_path = get_tc_attach_path(param, UserAttachment::FileType_Seller_REVV_TC)
+      parse_terms_and_conditions(page, page_content, file_path)
+    end
+  end
+
+  def parse_terms_and_conditions(page, page_content, file_path)
+    admin_tc = html_parse(page, '#terms_and_conditions_of_use_admin')
+    page_content[admin_tc.to_s] = ''
+    file_path = if file_path.nil?
+                  '#'
+                else
+                  file_path
+                end
+    page_content.gsub(/#terms_and_conditions_of_use/, file_path)
+  end
+
+  def get_aggregate_consumption_data
+    auction_contract = param[:auction_contract]
+    peak_row, off_peak_row = [], []
+    push_aggregate_data({:peak => auction_contract.total_lt_peak, :off_peak => auction_contract.total_lt_off_peak, :peak_row => peak_row, :off_peak_row => off_peak_row})
+    push_aggregate_data({:peak => auction_contract.total_hts_peak, :off_peak => auction_contract.total_hts_off_peak, :peak_row => peak_row, :off_peak_row => off_peak_row})
+    push_aggregate_data({:peak => auction_contract.total_htl_peak, :off_peak => auction_contract.total_htl_off_peak, :peak_row => peak_row, :off_peak_row => off_peak_row})
+    push_aggregate_data({:peak => auction_contract.total_eht_peak, :off_peak => auction_contract.total_eht_off_peak, :peak_row => peak_row, :off_peak_row => off_peak_row})
+    [peak_row, off_peak_row]
+  end
+
+  def push_aggregate_data(param)
+    peak, off_peak = param[:peak], param[:off_peak]
+    peak_row, off_peak_row = param[:peak_row], param[:off_peak_row]
+    is_zero = false
+    is_zero = true if (peak == 0 || peak.blank?) && (off_peak == 0 || off_peak.blank?)
+    unless is_zero
+      peak_row.push(peak)
+      off_peak_row.push(off_peak)
+    end
+  end
+
+  def get_electricity_purchase_contract
+    request_attachment = nil
+    unless param[:auction].request_auction_id.nil?
+      request_attachment = RequestAttachment.find_by request_auction_id: param[:auction].request_auction_id
+    end
+    if request_attachment.nil?
+      visibility, file_path = get_tc_attach_path(param, UserAttachment::FileType_Seller_Buyer_TC)
+      file_path
+    else
+      request_attachment.file_path
+    end
+  end
+
   def get_tc_attach_path(param, type)
-    return false, nil if param[:auction].tc_attach_info.nil?
+    return false, '#' if param[:auction].tc_attach_info.nil?
     tc_id = Auction.get_tc_attach_info_id(param[:auction].tc_attach_info, type)
     attachment = UserAttachment.find_by_id(tc_id)
     file_path = if attachment.nil?

@@ -350,7 +350,9 @@ export class CreateNewRA extends Component {
         }
     }
     blurNoNum(obj) {
-        obj.target.value = findUpLimitZero(obj.target.value);
+        if(obj.target.value != ""){
+            obj.target.value = findUpLimitZero(obj.target.value);
+        }
     }
 
     mouthsHtml(mouth) {

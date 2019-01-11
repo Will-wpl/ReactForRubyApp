@@ -61,6 +61,10 @@ export class SearchList extends Component {
     clickRequestDetals(id) {
         window.location.href = "/buyer/request_auctions/" + id;
     }
+    clickRequestDetals_admin(id)
+    {
+        window.location.href = "/admin/request_auctions/" + id;
+    }
 
     clickFunction(id, url, name, type, list_name, auction_id) {
         if (type == "auction") {
@@ -388,12 +392,21 @@ export class SearchList extends Component {
                                                                 }
                                                             }
                                                             else if (ik.check === "request_buyer") {
-                                                            
+
                                                                 if (item['accept_status'] === '0') {
                                                                     return <a key={k} className="edit" onClick={this.clickRequestDetals.bind(this, item.id)}>Manage</a>
                                                                 }
                                                                 else {
                                                                     return <a key={k} className="view" onClick={this.clickRequestDetals.bind(this, item.id)}>View</a>
+                                                                }
+                                                            }
+                                                            else if (ik.check === "admin_request_buyer") {
+
+                                                                if (item['accept_status'] === '2') {
+                                                                    return <a key={k} className="edit" onClick={this.clickRequestDetals_admin.bind(this, item.id)}>Manage</a>
+                                                                }
+                                                                else {
+                                                                    return <a key={k} className="view" onClick={this.clickRequestDetals_admin.bind(this, item.id)}>View</a>
                                                                 }
                                                             }
 
@@ -406,8 +419,12 @@ export class SearchList extends Component {
                                                                     } else if (item['status'] === 'Upcoming' && ik.name === 'Manage') {
                                                                         return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this, item.id ? item.id : item.user_id, ik.url, ik.name, ik.interface_type ? ik.interface_type : "", item.name ? item.name : '', item.auction_id)}>Manage{item.incomplete ? incompleteHtml : ''}</a>
                                                                     } else if (ik.name === "Retailer Dashboard" && window.location.href.indexOf("admin") < 0) {
-                                                                        if (item.dashdoard_id) {
-                                                                            return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this, item.id ? item.id : item.user_id, ik.url, ik.name, ik.interface_type ? ik.interface_type : "", item.name ? item.name : '', item.auction_id)}>{ik.name}</a>
+                                                                        if(item.show_dashboard){
+                                                                            if (item.dashdoard_id) {
+                                                                                //if(item.show_dashdoard==true){
+                                                                                    return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this, item.id ? item.id : item.user_id, ik.url, ik.name, ik.interface_type ? ik.interface_type : "", item.name ? item.name : '', item.auction_id)}>{ik.name}</a>
+                                                                                //}
+                                                                            }
                                                                         }
                                                                     } else {
                                                                         return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this, item.id ? item.id : item.user_id, ik.url, ik.name, ik.interface_type ? ik.interface_type : "", item.name ? item.name : '', item.auction_id)}>{ik.name}{(ik.name == "Buyer Dashboard" || ik.name == "Buyer List" || ik.name == "Retailer List") && item.all_accept == false ? <span title={"There is outstanding Buyer Participation details pending for approval."} className={"font_arial"} style={{ "color": "red" }}>!</span> : ''}</a>
