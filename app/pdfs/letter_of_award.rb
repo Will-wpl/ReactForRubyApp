@@ -21,7 +21,7 @@ class LetterOfAward < Pdf
     page_content = get_content_gsub(param, page_content, page)
     page_content = parse_table1(page, page_content)
 
-    price_table_data, visibilities, price_hash, price_data = get_price_table_data(param.merge({:auction => param[:auction], :auction_result => param[:auction_result][0]}), true, true)
+    price_table_data, visibilities, price_data = get_price_table_data(param.merge({:auction => param[:auction], :auction_result => param[:auction_result][0]}), true, true)
     consumption_table_data, table_data = get_consumption_table_data(param.merge({:auction => param[:auction], :visibilities => visibilities, :price_data => price_data, :user_id => param[:user_id], :table_data => true}))
 
     page_content = parse_table(page, visibilities, table_data, page_content, '#appendix_table2', 0)

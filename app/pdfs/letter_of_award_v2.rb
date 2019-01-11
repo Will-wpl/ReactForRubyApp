@@ -2,11 +2,12 @@ class LetterOfAwardV2 < LetterOfAward
 
   def get_price_table_data(param, visibility = false, price_data_bool = false)
     auction_result, auction_contract =  param[:auction_result], param[:auction_contract]
-    price_table_data, visibilities, price_hash, price_data = get_contract_duration_price(auction_contract, auction_result)
 
-    @visibilities_price = visibilities
-    @price_data = price_data
     visibilities = {visibility_lt: is_visibility('LT', param), visibility_hts: is_visibility('HTS', param), visibility_htl: is_visibility('HTL', param), visibility_eht: is_visibility('EHT', param)}
+    price_table_data, visibilities, price_hash, price_data = get_contract_duration_price(auction_contract, auction_result, visibilities)
+
+    @price_data = price_data
+    @visibilities_price = visibilities
     return price_table_data, visibilities, price_hash, price_data
   end
 
@@ -125,14 +126,15 @@ class LetterOfAwardV2 < LetterOfAward
   def get_aggregate_consumption_data
     auction_contract = param[:auction_contract]
     peak_row, off_peak_row = [], []
-    push_aggregate_data({:peak => auction_contract.total_lt_peak, :off_peak => auction_contract.total_lt_off_peak, :peak_row => peak_row, :off_peak_row => off_peak_row})
-    push_aggregate_data({:peak => auction_contract.total_hts_peak, :off_peak => auction_contract.total_hts_off_peak, :peak_row => peak_row, :off_peak_row => off_peak_row})
-    push_aggregate_data({:peak => auction_contract.total_htl_peak, :off_peak => auction_contract.total_htl_off_peak, :peak_row => peak_row, :off_peak_row => off_peak_row})
-    push_aggregate_data({:peak => auction_contract.total_eht_peak, :off_peak => auction_contract.total_eht_off_peak, :peak_row => peak_row, :off_peak_row => off_peak_row})
+    push_aggregate_data({:peak => auction_contract.total_lt_peak, :off_peak => auction_contract.total_lt_off_peak, :peak_row => peak_row, :off_peak_row => off_peak_row}, @visibilities_price[:visibility_lt])
+    push_aggregate_data({:peak => auction_contract.total_hts_peak, :off_peak => auction_contract.total_hts_off_peak, :peak_row => peak_row, :off_peak_row => off_peak_row}, @visibilities_price[:visibility_hts])
+    push_aggregate_data({:peak => auction_contract.total_htl_peak, :off_peak => auction_contract.total_htl_off_peak, :peak_row => peak_row, :off_peak_row => off_peak_row}, @visibilities_price[:visibility_htl])
+    push_aggregate_data({:peak => auction_contract.total_eht_peak, :off_peak => auction_contract.total_eht_off_peak, :peak_row => peak_row, :off_peak_row => off_peak_row}, @visibilities_price[:visibility_eht])
     [peak_row, off_peak_row]
   end
 
-  def push_aggregate_data(param)
+  def push_aggregate_data(param, visibility)
+    return unless visibility
     peak, off_peak = param[:peak], param[:off_peak]
     peak_row, off_peak_row = param[:peak_row], param[:off_peak_row]
     is_zero = false

@@ -174,12 +174,21 @@ class Pdf
   end
 
 
-  def get_contract_duration_price(auction_contract, auction_result)
+  def get_contract_duration_price(auction_contract, auction_result, visibilities = nil)
     table_head, table_row0, table_row1, price_hash, row0_data, row1_data = [''], ['Peak<br/>(7am-7pm)'], ['Off-Peak<br/>(7pm-7am)'], {},[],[]
-    visibility_lt = auction_contract.total_lt_peak > 0 || auction_contract.total_lt_off_peak > 0
-    visibility_hts = auction_contract.total_hts_peak > 0 || auction_contract.total_hts_off_peak > 0
-    visibility_htl = auction_contract.total_htl_peak > 0 || auction_contract.total_htl_off_peak > 0
-    visibility_eht = auction_contract.total_eht_peak > 0 || auction_contract.total_eht_off_peak > 0
+    visibility_lt, visibility_hts, visibility_htl, visibility_eht = nil, nil, nil, nil
+    if visibilities.nil?
+      visibility_lt = auction_contract.total_lt_peak > 0 || auction_contract.total_lt_off_peak > 0
+      visibility_hts = auction_contract.total_hts_peak > 0 || auction_contract.total_hts_off_peak > 0
+      visibility_htl = auction_contract.total_htl_peak > 0 || auction_contract.total_htl_off_peak > 0
+      visibility_eht = auction_contract.total_eht_peak > 0 || auction_contract.total_eht_off_peak > 0
+    else
+      visibility_lt = visibilities[:visibility_lt]
+      visibility_hts = visibilities[:visibility_hts]
+      visibility_htl = visibilities[:visibility_htl]
+      visibility_eht = visibilities[:visibility_eht]
+    end
+
 
     lt_param = {:visibility => visibility_lt, :title => '<b>LT<br/>($/kWh)</b>', :peak => auction_result.lt_peak.to_f, :off_peak => auction_result.lt_off_peak.to_f,
                 :table_head => table_head, :table_row0 => table_row0, :table_row1 => table_row1, :prefix => 'LT', :price_hash => price_hash, :row0_data => row0_data, :row1_data => row1_data}
