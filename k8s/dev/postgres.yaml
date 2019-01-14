@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reverse-auction-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reverse-auction-postgres
+  template:
+    metadata:
+      labels:
+        app: reverse-auction-postgres
+    spec:
+      containers:
+      - name: reverse-auction-postgres
+        image: postgres:9.5-alpine
+        ports:
+        - containerPort: 5432
+        imagePullPolicy: Always
+        readinessProbe:
+          tcpSocket:
+            port: 5432
+          initialDelaySeconds: 30
+          timeoutSeconds: 30
+          periodSeconds: 60
+        livenessProbe:
+          tcpSocket:
+            port: 5432
+          initialDelaySeconds: 30
+          timeoutSeconds: 30
+          periodSeconds: 60
+        env:
+        - name: POSTGRES_USER
+          value: reverseauction
+        - name: POSTGRES_DB
+          value: reverseauction
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: reverse-auction-postgres
+  name: reverse-auction-postgres
+spec:
+  ports:
+  - port: 5432
+    protocol: TCP
+    targetPort: 5432
+  selector:
+    app: reverse-auction-postgres
+  type: ClusterIP

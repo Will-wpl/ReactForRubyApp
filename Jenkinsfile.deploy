@@ -1,0 +1,251 @@
+pipeline {
+	agent { node { label 'rails_base' } }
+
+	options {
+    skipStagesAfterUnstable()
+    disableConcurrentBuilds()
+    buildDiscarder(logRotator(numToKeepStr: '30'))
+    timestamps()
+  }
+
+	parameters {
+    string(name: 'BRANCH_NAME_HYPHEN', defaultValue:  "", description: "Feature branch name")
+    string(name: 'GIT_BRANCH', defaultValue:  "", description: "Git branch to checkout")
+    string(name: 'VAULT_APP_ADDR', defaultValue:  "", description: "Vault URL")
+    string(name: 'VAULT_APP_BASE_PATH', defaultValue:  "", description: "Vault APP base path")
+    string(name: 'VAULT_APP_TOKEN_PATH', defaultValue:  "", description: "Where to get APP config vault token")
+    string(name: 'VAULT_KUBECONFIG_ADDR', defaultValue:  "", description: "Vault URL for kubeconfig secrets")
+    string(name: 'VAULT_KUBECONFIG_TOKEN_PATH', defaultValue:  "", description: "Where to get kubeconfig vault token")
+    string(name: 'VAULT_KUBECONFIG_PATH', defaultValue:  "", description: "Which path to get the kubeconfig")
+    string(name: 'VAULT_KUBECONFIG_FIELD', defaultValue:  "", , description: "What vault field to use to get the kubeconfig")
+    string(name: 'DOCKER_REG', defaultValue:  "", description: "Docker registry address")
+    string(name: 'DOCKER_CREDS_ID', defaultValue:  "", description: "Docker Credentials ID used in Jenkins")
+    string(name: 'APP_TAG', defaultValue:  "", description: "Docker tag to use")
+    string(name: 'MIGRATE_TAG', defaultValue:  "", description: "DB Migrate tag to use")
+    choice(name: 'KUBE_YAML_PATH', choices: ["dev", "qa", "prod"], description: "Which folder to get the k8s yaml files")
+    string(name: 'VAULT_KUBESECRETS_PATH', defaultValue: "", description: "Which sub path of VAULT_APP_BASE_PATH to get the k8s yaml files")
+    string(name: 'KUBE_NAMESPACE', defaultValue:  "", description: "If feature branch, the kube namespace to use")
+    string(name: 'MAKE_DEPLOY_TARGET', defaultValue:  "", description: "The make target to use for deployment")
+  }
+
+	environment {
+    // APP Name
+    APP_NAME                    = "reverse-auction"
+    // Branch
+    BRANCH_NAME_HYPHEN          = "${params.BRANCH_NAME_HYPHEN}"
+    GIT_BRANCH                  = "${params.GIT_BRANCH}"
+
+    // Slack
+    SLACK_TOKEN                 = credentials("reverse-auction-slack")
+    SLACK_TEAM_DOMAIN           = "sp-digital"
+    SLACK_CHANNEL               = "rev-auction-git"
+
+    // Vault
+    VAULT_APP_ADDR              = "${params.VAULT_APP_ADDR}"
+    VAULT_APP_BASE_PATH         = "${params.VAULT_APP_BASE_PATH}"
+    VAULT_APP_TOKEN_PATH        = "${params.VAULT_APP_TOKEN_PATH}"
+    VAULT_KUBECONFIG_ADDR       = "${params.VAULT_KUBECONFIG_ADDR}"
+    VAULT_KUBECONFIG_TOKEN_PATH = "${params.VAULT_KUBECONFIG_TOKEN_PATH}"
+    VAULT_KUBECONFIG_PATH       = "${params.VAULT_KUBECONFIG_PATH}"
+    VAULT_KUBECONFIG_FIELD      = "${params.VAULT_KUBECONFIG_FIELD}"
+
+    // Docker
+    DOCKER_REG                  = "${params.DOCKER_REG}"
+    DOCKER_CREDS_ID             = "${params.DOCKER_CREDS_ID}"
+    APP_TAG                     = "${params.APP_TAG}"
+    MIGRATE_TAG                 = "${params.MIGRATE_TAG}"
+
+    // Kubernetes
+    KUBE_YAML_PATH              = "${params.KUBE_YAML_PATH}"
+    VAULT_KUBESECRETS_PATH      = "${params.VAULT_KUBESECRETS_PATH}"
+    KUBE_NAMESPACE              = "${params.KUBE_NAMESPACE}"
+
+    // Makefile
+    MAKE_DEPLOY_TARGET          = "${params.MAKE_DEPLOY_TARGET}"
+  }
+
+	stages {
+		stage("Initialize") {
+			steps {
+        echo "Initialize - default variables"
+        script {
+          // QA branch
+          QA_BRANCH                   = "master"
+          // Production branch
+          PRODUCTION_BRANCH           = ~/^release\-([\S]+)/
+        }
+        echo "Start deployment to kubernetes for branch ${BRANCH_NAME_HYPHEN} with kubeconfig ${VAULT_KUBECONFIG_PATH}"
+      }
+			post {
+        always {
+          echo "Variables:"
+          echo "GIT_BRANCH                    = ${GIT_BRANCH}"
+          echo "VAULT_APP_ADDR                = ${VAULT_APP_ADDR}"
+          echo "VAULT_APP_BASE_PATH           = ${VAULT_APP_BASE_PATH}"
+          echo "VAULT_APP_TOKEN_PATH          = ${VAULT_APP_TOKEN_PATH}"
+          echo "VAULT_KUBECONFIG_ADDR         = ${VAULT_KUBECONFIG_ADDR}"
+          echo "VAULT_KUBECONFIG_TOKEN_PATH   = ${VAULT_KUBECONFIG_TOKEN_PATH}"
+          echo "VAULT_KUBECONFIG_PATH         = ${VAULT_KUBECONFIG_PATH}"
+          echo "VAULT_KUBECONFIG_FIELD        = ${VAULT_KUBECONFIG_FIELD}"
+          echo "DOCKER_REG                    = ${DOCKER_REG}"
+          echo "DOCKER_CREDS_ID               = ${DOCKER_CREDS_ID}"
+          echo "APP_TAG                       = ${APP_TAG}"
+          echo "MIGRATE_TAG                   = ${MIGRATE_TAG}"
+          echo "KUBE_YAML_PATH                = ${KUBE_YAML_PATH}"
+          echo "VAULT_KUBESECRETS_PATH        = ${VAULT_KUBESECRETS_PATH}"
+          echo "KUBE_NAMESPACE                = ${KUBE_NAMESPACE}"
+          echo "MAKE_DEPLOY_TARGET            = ${MAKE_DEPLOY_TARGET}"
+        }
+      }
+		}
+
+		stage("Kubeconfig") {
+      environment {
+        VAULT_ADDR = "${VAULT_KUBECONFIG_ADDR}"
+      }
+      steps {
+        vaultEnv(VAULT_KUBECONFIG_TOKEN_PATH) {
+          sh "make -f k8s/Makefile k8s-kubeconfig"
+        }
+      }
+    }
+
+    // Deploy to feature branches
+    stage("Deploy FEATURE") {
+      when {
+        not {
+          expression { BRANCH_NAME_HYPHEN ==~ PRODUCTION_BRANCH || BRANCH_NAME_HYPHEN == QA_BRANCH }
+        }
+      }
+      environment {
+        VAULT_ADDR = "${VAULT_APP_ADDR}"
+      }
+      steps {
+        // Change to correct docker credentials id for qa
+        deploy("${DOCKER_REG}", "${DOCKER_CREDS_ID}") {
+					sh "chmod +x ./generate_k8s_secrets.sh"
+          sh "make -f k8s/Makefile ${MAKE_DEPLOY_TARGET}"
+        }
+      }
+      post {
+        success {
+          script {
+            currentBuild.result = 'SUCCESS'
+            ENDPOINT_URL = "https://revv-${BRANCH_NAME_HYPHEN}.dev.energy.spdigital.sg"
+          }
+        }
+        failure {
+          sh "make -f k8s/Makefile k8s-fail-logs"
+        }
+      }
+    }
+
+    // Deploy to QA clusters
+    stage("Deploy QA") {
+      when {
+        expression { BRANCH_NAME_HYPHEN == QA_BRANCH }
+      }
+      environment {
+        VAULT_ADDR = "${VAULT_APP_ADDR}"
+      }
+      steps {
+        // Change to correct docker credentials id for QA
+        deploy("${DOCKER_REG}", "${DOCKER_CREDS_ID}") {
+          sh "make -f k8s/Makefile ${MAKE_DEPLOY_TARGET}"
+        }
+      }
+      post {
+        success {
+          script {
+            currentBuild.result = 'SUCCESS'
+            ENDPOINT_URL = "https://revv.qa.energy.spdigital.sg"
+          }
+        }
+        failure {
+          sh "make -f k8s/Makefile k8s-fail-logs"
+        }
+      }
+    }
+
+		// Deploy to production clusters
+    stage("Deploy PRODUCTION") {
+      when {
+        expression { BRANCH_NAME_HYPHEN ==~ PRODUCTION_BRANCH }
+      }
+      environment {
+        VAULT_ADDR = "${VAULT_APP_ADDR}"
+      }
+      steps {
+        // Change to correct docker credentials id for production
+        deploy("${DOCKER_REG}", "${DOCKER_CREDS_ID}") {
+          sh "make -f k8s/Makefile ${MAKE_DEPLOY_TARGET}"
+        }
+      }
+      post {
+        success {
+          script {
+            currentBuild.result = 'SUCCESS'
+            ENDPOINT_URL = "https://revv.energy.spdigital.sg"
+          }
+        }
+        failure {
+          sh "make -f k8s/Makefile k8s-fail-logs"
+        }
+      }
+		}
+	}
+
+	post {
+    unstable {
+      notifySlack("Deployment to kubernetes for branch ${BRANCH_NAME_HYPHEN}", "UNSTABLE")
+    }
+    failure {
+      notifySlack("Deployment to kubernetes for branch ${BRANCH_NAME_HYPHEN}", "FAILURE")
+    }
+    aborted {
+      notifySlack("Deployment to kubernetes for branch ${BRANCH_NAME_HYPHEN}", "REJECTED")
+    }
+    success {
+      notifySlack("Deployment success, URL: ${ENDPOINT_URL}", "SUCCESS")
+    }
+    changed {
+      script {
+        if(currentBuild.result == 'SUCCESS') {
+          notifySlack("Deployment to kubernetes for branch ${BRANCH_NAME_HYPHEN}", "SUCCESS")
+        }
+      }
+    }
+  }
+}
+
+// def requireApproval(String message, String approvers, String mentions, int timeOutInSec) {
+//   try {
+//       sendSlackApproval(mentions)
+//       timeout(time: timeOutInSec, unit: 'SECONDS') {
+//         input(submitter: approvers, message: message)
+//       }
+//   } catch (err) {
+//       currentBuild.result = 'ABORTED'
+//       throw err
+//   }
+// }
+
+// def sendSlackApproval(String slackMentions) {
+//   DECODED_JOB_NAME = java.net.URLDecoder.decode("${env.JOB_NAME}", "UTF-8");
+//   channel = (slackMentions == null ? "${env.SLACK_CHANNEL}" : "${env.SLACK_CHANNEL}," + slackMentions)
+//   slackSend([
+//     channel: channel,
+//     color: '#FFA500',
+//     message: "${DECODED_JOB_NAME} [${env.BUILD_DISPLAY_NAME}] - ${env.BRANCH_NAME} \nAPPROVAL - (<${env.BUILD_URL}/input|Click here to approve/reject>)",
+//     teamDomain: env.SLACK_TEAM_DOMAIN,
+//     token: env.SLACK_TOKEN
+//   ])
+// }
+
+def deploy(String dockerReg, String dockerCredsId, Closure body) {
+  dockerEnv(dockerReg, dockerCredsId) {
+    vaultEnv(VAULT_APP_TOKEN_PATH) {
+      body()
+    }
+  }
+}

@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reverse-auction
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: reverse-auction
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: "10%"
+      maxSurge: "100%"
+  template:
+    metadata:
+      labels:
+        app: reverse-auction
+        run: reverse-auction
+    spec:
+      containers:
+      - name: reverse-auction
+        image: reverse-auction.azurecr.io/reverse-auction
+        ports:
+        - containerPort: 3000
+        imagePullPolicy: Always
+        # readinessProbe:
+        #   httpGet:
+        #     path: /status
+        #     port: 3000
+        #   initialDelaySeconds: 20
+        #   timeoutSeconds: 10
+        # livenessProbe:
+        #   httpGet:
+        #     path: /status
+        #     port: 3000
+        #   initialDelaySeconds: 30
+        #   timeoutSeconds: 10
+        resources:
+          requests:
+            memory: "16Mi"
+            cpu: "100m"
+          limits:
+            memory: "64Mi"
+            cpu: "200m"
+        envFrom:
+        - configMapRef:
+            name: reverse-auction-configmap
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: reverse-auction-secrets
+              key: DATABASE_URL
+        - name: JENKINS_BUILD
+          value: "{jenkins-build}"
+        - name: GIT_COMMIT
+          value: "{git-commit}"
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: reverse-auction
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1beta1
+    kind: Deployment
+    name: reverse-auction
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: 70
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: reverse-auction
+  name: reverse-auction
+spec:
+  type: ClusterIP
+  ports:
+  - name: reverse-auction
+    targetPort: 3000
+    port: 3000
+  selector:
+    app: reverse-auction
