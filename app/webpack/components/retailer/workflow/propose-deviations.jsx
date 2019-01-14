@@ -154,7 +154,7 @@ export class Proposedeviations extends React.Component{
                 retailerSubmitDeviations(this.props.current.current.arrangement_id,this.editData('3')).then(c=>{
                     this.refs.Modal.showModal();
                     this.setState({
-                        text:"Deviations pending administrator's review.",
+                        text:"Deviations pending review.",
                         alldisabled:true
                     });
                     this.refresh();
