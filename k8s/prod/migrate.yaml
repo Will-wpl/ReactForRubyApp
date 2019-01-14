@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: reverse-auction-migrate
+spec:
+  template:
+    metadata:
+      labels:
+        app: reverse-auction-migrate
+        run: reverse-auction-migrate
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: reverse-auction-migrate
+        image: reverse-auction.azurecr.io/reverse-auction
+        imagePullPolicy: Always
+        command: ["bundle"]
+        args: ["exec", "rails", "db:migrate", "db:seed"]
+        envFrom:
+        - configMapRef:
+            name: reverse-auction-configmap
+        env:
+        - name: DISABLE_DATABASE_ENVIRONMENT_CHECK
+          value: "1"
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: reverse-auction-secrets
+              key: DATABASE_URL
+      imagePullSecrets:
+        - name: docker-registry-key
