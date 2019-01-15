@@ -47,7 +47,7 @@ class Api::TendersBaseController < Api::BaseController
     name = if current_user&.has_role?(:admin)
              'Admin'
            else
-             current_user.company_name
+             "Buyer #{current_user.company_name}"
            end
     UserMailer.workflow_admin_response_mail(user, name).deliver_later
   end
