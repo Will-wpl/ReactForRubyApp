@@ -449,7 +449,7 @@ class Api::AuctionsController < Api::BaseController
     user_id = params[:user_id]
     contract_duration = params[:contract_duration]
     entity_id = params[:entity_id]
-
+    is_retailer= params[:is_retailer]
     auction = Auction.find_by id: auction_id
 
     auction_result, consumption, tender_state, consumption_details, auction_contract, is_parent = get_letter_of_award_pdf_data(auction_id, user_id, contract_duration, entity_id)
@@ -462,6 +462,7 @@ class Api::AuctionsController < Api::BaseController
         :consumption_details => consumption_details,
         :auction_contract => auction_contract,
         :current_user => current_user,
+        :is_retailer => is_retailer,
     }
     if auction_result.nil?
       pdf, output_filename =  PdfUtils.get_wicked_pdf_data('no data', 'NO_DATA_LETTER_OF_AWARD.pdf')
