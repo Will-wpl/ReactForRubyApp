@@ -410,13 +410,15 @@ export class BuyerNewRequestManage extends Component {
                                             <label className="lm--formItem-left lm--formItem-label string required">
                                                 <abbr title="required">*</abbr> Single / Multiple Buyer(s)  :
                                                 </label>
-                                            <div className="lm--formItem-right lm--formItem-control">
-                                                <select ref="buyer_type" id="buyer_type" onChange={this.doValue.bind(this, 'buyer_type')} value={this.state.buyer_type} disabled={this.state.disabled}>
+                                            <div className="lm--formItem-right lm--formItem-control ">
+                                                <select ref="buyer_type" id="buyer_type" className="col-md-11" style={{ marginLeft: "10px" }} onChange={this.doValue.bind(this, 'buyer_type')} value={this.state.buyer_type} disabled={this.state.disabled}>
                                                     <option value="0">Single</option>
                                                     <option value="1">Multiple</option>
                                                 </select>
                                             </div>
-                                            <button className={this.state.disabled ? "lm--button lm--button--primary buttonDisabled" : "lm--button lm--button--primary"} disabled={this.state.disabled} onClick={this.showView.bind(this, 1)}>?</button>
+                                            <div>
+                                                <button className={this.state.disabled ? "lm--button lm--button--primary buttonDisabled" : "lm--button lm--button--primary"} disabled={this.state.disabled} onClick={this.showView.bind(this, 1)}>*</button>
+                                            </div>
                                         </div>
 
                                         <div className="lm--formItem lm--formItem--inline string optional ">
@@ -477,12 +479,14 @@ export class BuyerNewRequestManage extends Component {
                                                     <abbr title="required">*</abbr> Allow Deviations  :
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control">
-                                                    <select ref="allow_deviation" id="allow_deviation" onChange={this.doValue.bind(this, 'allow_deviation')} value={this.state.allow_deviation} disabled={this.state.disabled}>
+                                                    <select ref="allow_deviation" id="allow_deviation" className="col-md-11" style={{ marginLeft: "10px" }} onChange={this.doValue.bind(this, 'allow_deviation')} value={this.state.allow_deviation} disabled={this.state.disabled}>
                                                         <option value="1">Yes</option>
                                                         <option value="0">No</option>
                                                     </select>
                                                 </div>
-                                                <button className={this.state.disabled ? "lm--button lm--button--primary buttonDisabled" : "lm--button lm--button--primary"} disabled={this.state.disabled} onClick={this.showView.bind(this, 4)}>?</button>
+                                                <div>
+                                                    <button className={this.state.disabled ? "lm--button lm--button--primary buttonDisabled" : "lm--button lm--button--primary"} disabled={this.state.disabled} onClick={this.showView.bind(this, 4)}>?</button>
+                                                </div>
                                             </div> : ''
                                         }
                                         <div className="lm--formItem lm--formItem--inline string">
