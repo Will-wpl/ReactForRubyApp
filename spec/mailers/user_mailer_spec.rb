@@ -162,7 +162,7 @@ RSpec.describe UserMailer, type: :mail do
       expect(open_last_email).to be_delivered_to retailer.email
     end
     it 'have_subject', mail: true do
-      expect(open_last_email).to have_subject @template.subject
+      expect(open_last_email).to have_subject @template.subject.gsub(/#name/, 'name')
     end
     it 'have_body_text', mail: true do
       email_body = @template.body.gsub(/#user.company_name/, retailer.company_name).gsub(/#name/, 'name')
