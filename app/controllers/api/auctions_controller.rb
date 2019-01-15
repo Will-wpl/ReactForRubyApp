@@ -163,7 +163,7 @@ class Api::AuctionsController < Api::BaseController
     end
     headers = [
         { name: 'Name', field_name: 'name' },
-        { name: 'Date/Time', field_name: 'actual_begin_time' }
+        { name: 'Auction Date/Time', field_name: 'actual_begin_time' }
     ]
     actions = [
         { url: '/admin/auctions/:id/buyer_dashboard?unpublished', name: 'Buyer Dashboard', icon: 'view', interface_type: 'auction' },
@@ -202,7 +202,7 @@ class Api::AuctionsController < Api::BaseController
     headers = [
         { name: 'ID', field_name: 'published_gid' },
         { name: 'Name', field_name: 'name' },
-        { name: 'Date/Time', field_name: 'actual_begin_time' },
+        { name: 'Auction Date/Time', field_name: 'actual_begin_time' },
         { name: 'Status', field_name: 'status', is_sort: false }
     ]
     actions = [
