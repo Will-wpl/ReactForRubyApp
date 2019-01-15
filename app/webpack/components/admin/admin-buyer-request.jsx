@@ -91,26 +91,7 @@ export default class AdminBuyerRequestManage extends Component {
         })
     }
 
-    showView(type) {
-        let text = "";
-        switch (type) {
-            case 1:
-                text = "Select 'Multiple' if you wish to aggregate your purchase volume with other buyer(s) to achieve the lowest price possible through volume consolidation. Select 'Single' if you do not wish to aggregate your purchase volume with any other buyer(s).";
-                break;
-            case 2:
-                text = "Select this option if you wish to procure electricity using the standard Electricity Purchase Contract which you can find under 'Manage Accounts'.";
-                break;
-            case 3:
-                text = "Select this option if you wish to procure electricity using your own Electricity Purchase Contract.";
-                break;
-            case 4:
-                text = "Select 'No' if you do not allow retailers to propose deviations on the Electricity Purchase Contract.";
-                break;
-            default:
-                text = "";
-                break;
-        }
-    }
+
 
     starttimeChange(data) {
         this.setState({
@@ -263,13 +244,10 @@ export default class AdminBuyerRequestManage extends Component {
                                                     <abbr title="required">*</abbr> Single / Multiple Buyer(s)  :
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control">
-                                                    <select ref="buyer_type" id="buyer_type" className="col-md-11" style={{ marginLeft: "10px" }} onChange={this.doValue.bind(this, 'buyer_type')} value={this.state.buyer_type} disabled={this.state.disabled}>
+                                                    <select ref="buyer_type" id="buyer_type"   onChange={this.doValue.bind(this, 'buyer_type')} value={this.state.buyer_type} disabled={this.state.disabled}>
                                                         <option value="0">Single</option>
                                                         <option value="1">Multiple</option>
                                                     </select>
-                                                </div>
-                                                <div>
-                                                    <button className={this.state.disabled ? "lm--button lm--button--primary buttonDisabled" : "lm--button lm--button--primary"} disabled={this.state.disabled} onClick={this.showView.bind(this, 1)}>?</button>
                                                 </div>
                                             </div>
 
@@ -300,13 +278,11 @@ export default class AdminBuyerRequestManage extends Component {
                                                         <div style={{ width: "100%" }}>
                                                             <h4 className="lm--formItem lm--formItem--inline string radioLabel">
                                                                 <input type="radio" name="isPurchase" value="1" checked={this.state.isPurchaseContract === 1} disabled={this.state.disabled}></input><span > Standard Electricity Purchase Contract</span>
-                                                                &nbsp;&nbsp; <button className={this.state.disabled ? "lm--button--small lm--button--primary buttonDisabled" : "lm--button--small lm--button--primary buttonRadius"} disabled={this.state.disabled} onClick={this.showView.bind(this, 2)}>?</button>
                                                             </h4>
                                                         </div>
                                                         <div style={{ width: "100%" }}>
                                                             <h4 className="lm--formItem lm--formItem--inline string radioLabel">
                                                                 <input type="radio" name="isPurchase" value="2" checked={this.state.isPurchaseContract === 2} disabled={this.state.disabled}></input><span > Customised Electricity Purchase Contract</span>
-                                                                &nbsp;&nbsp; <button className={this.state.disabled ? "lm--button--small lm--button--primary buttonDisabled " : "lm--button--small lm--button--primary buttonRadius"} disabled={this.state.disabled} onClick={this.showView.bind(this, 3)}>?</button>
                                                             </h4>
                                                         </div>
                                                     </div>
@@ -331,14 +307,12 @@ export default class AdminBuyerRequestManage extends Component {
                                                         <abbr title="required">*</abbr> Allow Deviations  :
                                                 </label>
                                                     <div className="lm--formItem-right lm--formItem-control">
-                                                        <select ref="allow_deviation" id="allow_deviation" className="col-md-11" style={{ marginLeft: "10px" }} onChange={this.doValue.bind(this, 'allow_deviation')} value={this.state.allow_deviation} disabled={this.state.disabled}>
+                                                        <select ref="allow_deviation" id="allow_deviation"  onChange={this.doValue.bind(this, 'allow_deviation')} value={this.state.allow_deviation} disabled={this.state.disabled}>
                                                             <option value="1">Yes</option>
                                                             <option value="0">No</option>
                                                         </select>
                                                     </div>
-                                                    <div>
-                                                        <button className={this.state.disabled ? "lm--button lm--button--primary buttonDisabled" : "lm--button lm--button--primary"} disabled={this.state.disabled} onClick={this.showView.bind(this, 4)}>?</button>
-                                                    </div>
+                                                    
                                                 </div> : ''
                                             }
 
