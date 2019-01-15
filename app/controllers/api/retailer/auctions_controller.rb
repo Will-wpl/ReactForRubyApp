@@ -24,7 +24,7 @@ class Api::Retailer::AuctionsController < Api::AuctionsController
     headers = [
       { name: 'ID', field_name: 'published_gid', table_name:'auctions' },
       { name: 'Name', field_name: 'name', table_name:'auctions' },
-      { name: 'Date/Time', field_name: 'actual_begin_time', table_name:'auctions' },
+      { name: 'Auction Date/Time', field_name: 'actual_begin_time', table_name:'auctions' },
       { name: 'Auction Status', field_name: 'auction_status', is_sort: false },
       { name: 'My Status', field_name: 'accept_status', table_name: 'arrangements' },
       { name: nil, field_name: 'actions', is_sort: false }

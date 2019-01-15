@@ -97,12 +97,15 @@ class LetterOfAwardV2 < LetterOfAward
 
   def terms_and_conditions_of_use(page, page_content)
     if param[:current_user]&.has_role?(:admin)
-      contract_html = html_parse(page, '#terms_and_conditions_of_use')
-      page_content[contract_html.to_s] = ''
-      visibility, buyer_file_path = get_tc_attach_path(param, UserAttachment::FileType_Buyer_REVV_TC)
-      visibility2, retailer_file_path = get_tc_attach_path(param, UserAttachment::FileType_Seller_REVV_TC)
-      page_content = page_content.gsub(/#terms_and_conditions_of_use_retailer/, retailer_file_path).gsub(/#terms_and_conditions_of_use_buyer/, buyer_file_path)
-      page_content
+
+      file_path = if param[:is_retailer]
+                      visibility2, retailer_file_path = get_tc_attach_path(param, UserAttachment::FileType_Seller_REVV_TC)
+                      retailer_file_path
+                    else
+                      visibility, buyer_file_path = get_tc_attach_path(param, UserAttachment::FileType_Buyer_REVV_TC)
+                      buyer_file_path
+                    end
+      parse_terms_and_conditions(page, page_content, file_path)
     elsif param[:current_user]&.has_role?(:buyer)
       visibility, file_path = get_tc_attach_path(param, UserAttachment::FileType_Buyer_REVV_TC)
       parse_terms_and_conditions(page, page_content, file_path)
@@ -113,8 +116,6 @@ class LetterOfAwardV2 < LetterOfAward
   end
 
   def parse_terms_and_conditions(page, page_content, file_path)
-    admin_tc = html_parse(page, '#terms_and_conditions_of_use_admin')
-    page_content[admin_tc.to_s] = ''
     file_path = if file_path.nil?
                   '#'
                 else
