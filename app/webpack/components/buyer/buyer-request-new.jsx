@@ -447,13 +447,15 @@ export class BuyerNewRequestManage extends Component {
                                                 <div className="lm--formItem-right lm--formItem-control u-grid mg0 ">
                                                     <div style={{ width: "100%" }}>
                                                         <h4 className="lm--formItem lm--formItem--inline string radioLabel">
-                                                            <input type="radio" name="isPurchase" value="1" checked={this.state.isPurchaseContract === 1} onChange={this.bindRadioChange.bind(this, 1)} disabled={this.state.disabled}></input><span > Standard Electricity Purchase Contract</span>
+                                                            <input type="radio" name="isPurchase" value="1" checked={this.state.isPurchaseContract === 1} onChange={this.bindRadioChange.bind(this, 1)} disabled={this.state.disabled}></input>
+                                                            <span> Standard Electricity Purchase Contract</span>
                                                             &nbsp;&nbsp; <button className={this.state.disabled ? "lm--button--small lm--button--primary buttonDisabled" : "lm--button--small lm--button--primary buttonRadius"} disabled={this.state.disabled} onClick={this.showView.bind(this, 2)}>?</button>
                                                         </h4>
                                                     </div>
                                                     <div style={{ width: "100%" }}>
                                                         <h4 className="lm--formItem lm--formItem--inline string radioLabel">
-                                                            <input type="radio" name="isPurchase" value="2" checked={this.state.isPurchaseContract === 2} onChange={this.bindRadioChange.bind(this, 2)} disabled={this.state.disabled}></input><span > Customised Electricity Purchase Contract</span>
+                                                            <input type="radio" name="isPurchase" value="2" checked={this.state.isPurchaseContract === 2} onChange={this.bindRadioChange.bind(this, 2)} disabled={this.state.disabled}></input>
+                                                            <span> Customised Electricity Purchase Contract</span>
                                                             &nbsp;&nbsp; <button className={this.state.disabled ? "lm--button--small lm--button--primary buttonDisabled " : "lm--button--small lm--button--primary buttonRadius"} disabled={this.state.disabled} onClick={this.showView.bind(this, 3)}>?</button>
                                                         </h4>
                                                     </div>
