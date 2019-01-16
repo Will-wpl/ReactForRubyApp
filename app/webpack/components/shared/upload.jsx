@@ -128,7 +128,7 @@ export class UploadFile extends React.Component {
                 })
             }
             else {
-                 
+
                 removeUserAttachFile(fileid).then(res => {
                     fileObj = this.state.fileData;
                     fileObj[typeindex].files.splice(fileindex, 1);
@@ -167,7 +167,6 @@ export class UploadFile extends React.Component {
 
     }
     upload(type, index) {
-
         let time = null;
         if ($("#" + type + index).val() === "") {
             $("#" + type + index).next().next().fadeIn(300);
@@ -177,6 +176,7 @@ export class UploadFile extends React.Component {
             }, 2000)
             return;
         }
+        $(`${this.props.maskId?"#"+this.props.maskId:".upload_mask"}`).show();
         const barObj = $('#' + type + index).parents("a").next();
         $.ajax({
             url: this.state.uploadUrl + type,
@@ -206,6 +206,7 @@ export class UploadFile extends React.Component {
             success: (res) => {
                 let fileObj;
                 barObj.find(".progress-bar").text('Upload Successful!');
+                $(`${this.props.maskId?"#"+this.props.maskId:".upload_mask"}`).fadeOut(200);;
                 $("#showMessage").removeClass("errormessage").addClass("isPassValidate");
                 setTimeout(() => {
                     barObj.fadeOut(500);
@@ -244,6 +245,18 @@ export class UploadFile extends React.Component {
             <div className={this.props.col_main ? `col-sm-12 col-md-${this.props.col_main}` : `col-sm-12 col-md-10`}>
                 <div className="file_box">
                     {this.addinputfile(this.props.type, this.props.required)}
+                </div>
+                <div className={"upload_mask"} id={this.props.maskId?this.props.maskId:''}>
+                    <div id="loading-center-absolute">
+                        <div class="object" id="object_one"></div>
+                        <div class="object" id="object_two"></div>
+                        <div class="object" id="object_three"></div>
+                        <div class="object" id="object_four"></div>
+                        <div class="object" id="object_five"></div>
+                        <div class="object" id="object_six"></div>
+                        <div class="object" id="object_seven"></div>
+                        <div class="object" id="object_eight"></div>
+                    </div>
                 </div>
             </div>
         )

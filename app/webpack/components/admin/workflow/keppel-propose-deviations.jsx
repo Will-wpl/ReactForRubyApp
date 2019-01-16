@@ -203,6 +203,7 @@ export class Keppelproposedeviations extends Component {
             },2000)
             return;
         }
+        $(".upload_mask").show();
         const barObj = $('#'+type+index).parents("a").next();
         $.ajax({
             url: '/api/admin/auction_attachments?auction_id='+sessionStorage.auction_id+'&file_type='+type+'&user_id='+this.state.user_id,
@@ -232,6 +233,7 @@ export class Keppelproposedeviations extends Component {
             success:(res) => {
                 let fileObj;
                 barObj.find(".progress-bar").text('Upload Successful!');
+                $(".upload_mask").fadeOut(200);
                 setTimeout(()=>{
                     barObj.fadeOut(500);
                     $('.dfn').html('Please select file.')
@@ -354,6 +356,18 @@ export class Keppelproposedeviations extends Component {
                         </label>
                         <div className="lm--formItem-right lm--formItem-control u-grid mg0 w_35">
                             {this.addinputfile("attachment_deviation", "required")}
+                        </div>
+                        <div className={"upload_mask"}>
+                            <div id="loading-center-absolute">
+                                <div class="object" id="object_one"></div>
+                                <div class="object" id="object_two"></div>
+                                <div class="object" id="object_three"></div>
+                                <div class="object" id="object_four"></div>
+                                <div class="object" id="object_five"></div>
+                                <div class="object" id="object_six"></div>
+                                <div class="object" id="object_seven"></div>
+                                <div class="object" id="object_eight"></div>
+                            </div>
                         </div>
                     </div>
                 </div>

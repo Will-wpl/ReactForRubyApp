@@ -101,6 +101,7 @@ export default class AdminInvitation extends Component {
             }, 2000)
             return;
         }
+        $(".upload_mask").show();
         if (type === "buyer_tc_upload" || type === "retailer_confidentiality_undertaking_upload") {
             if (this.state.fileData[type][index].files.length > 0) {
                 this.setState({ text: 'This field can only upload one file !' });
@@ -138,6 +139,7 @@ export default class AdminInvitation extends Component {
                 let fileObj;
                 $("#" + type + index).next().next().hide();
                 barObj.find(".progress-bar").text('Upload Successful!');
+                $(".upload_mask").fadeOut(200);
                 setTimeout(() => {
                     barObj.fadeOut(500);
                     $('.dfn').html('Please select file.');
@@ -643,6 +645,18 @@ export default class AdminInvitation extends Component {
                                 </label>
                                 <div className="lm--formItem-right lm--formItem-control u-grid mg0">
                                     {this.addinputfile("birefing_pack_upload", "required")}
+                                </div>
+                                <div className={"upload_mask"}>
+                                    <div id="loading-center-absolute">
+                                        <div class="object" id="object_one"></div>
+                                        <div class="object" id="object_two"></div>
+                                        <div class="object" id="object_three"></div>
+                                        <div class="object" id="object_four"></div>
+                                        <div class="object" id="object_five"></div>
+                                        <div class="object" id="object_six"></div>
+                                        <div class="object" id="object_seven"></div>
+                                        <div class="object" id="object_eight"></div>
+                                    </div>
                                 </div>
                             </div>
                             <div className="retailer_btn">
