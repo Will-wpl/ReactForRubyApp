@@ -22,7 +22,7 @@ export default class AdminBuyerRequestManage extends Component {
             text: "",
             total_volume: '',
             attachment_id: '',
-            isPurchaseContract:1,
+            isPurchaseContract: 1,
             fileData: {
                 "TC": [
                     { buttonName: "none", files: [] }
@@ -243,7 +243,7 @@ export default class AdminBuyerRequestManage extends Component {
                                                     <abbr title="required">*</abbr> Single / Multiple Buyer(s)  :
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control">
-                                                    <select ref="buyer_type" id="buyer_type" onChange={this.doValue.bind(this, 'buyer_type')} value={this.state.buyer_type} disabled={this.state.disabled}>
+                                                    <select ref="buyer_type" id="buyer_type"   onChange={this.doValue.bind(this, 'buyer_type')} value={this.state.buyer_type} disabled={this.state.disabled}>
                                                         <option value="0">Single</option>
                                                         <option value="1">Multiple</option>
                                                     </select>
@@ -271,23 +271,23 @@ export default class AdminBuyerRequestManage extends Component {
                                                 </div>
                                             </div>
                                             {this.state.buyer_type == "0" ?
-                                            <div className="lm--formItem lm--formItem--inline string">
-                                                <label className="lm--formItem-left lm--formItem-label string required">Electricity Purchase Contract</label>
-                                                <div className="lm--formItem-right lm--formItem-control u-grid mg0 ">
-                                                    <div style={{ width: "100%" }}>
-                                                        <h4 className="lm--formItem lm--formItem--inline string radioLabel">
-                                                            <input type="radio" name="isPurchase" value="1" checked={this.state.isPurchaseContract === 1}   disabled={this.state.disabled}></input><span > Standard Electricity Purchase Contract</span>
-                                                        </h4>
+                                                <div className="lm--formItem lm--formItem--inline string">
+                                                    <label className="lm--formItem-left lm--formItem-label string required">Electricity Purchase Contract</label>
+                                                    <div className="lm--formItem-right lm--formItem-control u-grid mg0 ">
+                                                        <div style={{ width: "100%" }}>
+                                                            <h4 className="lm--formItem lm--formItem--inline string radioLabel">
+                                                                <input type="radio" name="isPurchase" value="1" checked={this.state.isPurchaseContract === 1} disabled={this.state.disabled}></input><span > Standard Electricity Purchase Contract</span>
+                                                            </h4>
+                                                        </div>
+                                                        <div style={{ width: "100%" }}>
+                                                            <h4 className="lm--formItem lm--formItem--inline string radioLabel">
+                                                                <input type="radio" name="isPurchase" value="2" checked={this.state.isPurchaseContract === 2} disabled={this.state.disabled}></input><span > Customised Electricity Purchase Contract</span>
+                                                            </h4>
+                                                        </div>
                                                     </div>
-                                                    <div style={{ width: "100%" }}>
-                                                        <h4 className="lm--formItem lm--formItem--inline string radioLabel">
-                                                            <input type="radio" name="isPurchase" value="2" checked={this.state.isPurchaseContract === 2}   disabled={this.state.disabled}></input><span > Customised Electricity Purchase Contract</span>
-                                                        </h4>
-                                                    </div>
-                                                </div>
-                                            </div> : ''}
+                                                </div> : ''}
 
-                                            {(this.state.buyer_type == "0" && this.state.isPurchaseContract === 2)?
+                                            {(this.state.buyer_type == "0" && this.state.isPurchaseContract === 2) ?
                                                 <div className="lm--formItem lm--formItem--inline string">
                                                     <label className="lm--formItem-left lm--formItem-label string required">
                                                         <abbr title="required"></abbr> Electricity Purchase Contract :
@@ -306,11 +306,12 @@ export default class AdminBuyerRequestManage extends Component {
                                                         <abbr title="required">*</abbr> Allow Deviations  :
                                                 </label>
                                                     <div className="lm--formItem-right lm--formItem-control">
-                                                        <select ref="allow_deviation" id="allow_deviation" onChange={this.doValue.bind(this, 'allow_deviation')} value={this.state.allow_deviation} disabled={this.state.disabled}>
+                                                        <select ref="allow_deviation" id="allow_deviation"  onChange={this.doValue.bind(this, 'allow_deviation')} value={this.state.allow_deviation} disabled={this.state.disabled}>
                                                             <option value="1">Yes</option>
                                                             <option value="0">No</option>
                                                         </select>
                                                     </div>
+                                                    
                                                 </div> : ''
                                             }
 

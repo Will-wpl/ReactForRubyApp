@@ -21,10 +21,15 @@ export default class AdminAward extends Component{
         })
     }
 
-    downLoad(data,entity_id){
+    downLoad(data,entity_id,retailer){
         //console.log(data);
         if(entity_id){
-            window.open(`/api/admin/auctions/letter_of_award_pdf?auction_id=${data.auction_id}&user_id=${data.user_id}&contract_duration=${this.state.contract_duration}&entity_id=${entity_id}`);
+            if(retailer){
+                window.open(`/api/admin/auctions/letter_of_award_pdf?auction_id=${data.auction_id}&user_id=${data.user_id}&contract_duration=${this.state.contract_duration}&entity_id=${entity_id}&is_retailer=true`);
+            }else{
+                window.open(`/api/admin/auctions/letter_of_award_pdf?auction_id=${data.auction_id}&user_id=${data.user_id}&contract_duration=${this.state.contract_duration}&entity_id=${entity_id}`);
+            }
+
         }else{
             window.open(`/api/admin/auctions/letter_of_award_pdf?auction_id=${data.auction_id}&user_id=${data.user_id}`);
         }
@@ -37,14 +42,16 @@ export default class AdminAward extends Component{
                 let status = e.acknowledge == 1 ? 1 : 2;
                 return(
                     <li key={i} className="u-grid center ">
-                        <span className="col-sm-6 white">{e.name}</span>
+                        <span className="col-sm-4 white">{e.name}</span>
                         {/*<span className="col-sm-4"><abbr className={'color'+status}></abbr></span>*/}
-                        <span className="col-sm-6 line15">
+                        <span className="col-sm-4 line15">
                             {e.entities?e.entities.map((it,k)=>{
                                 return <div key={k} className="downLoadIcon downLoadIconL" title={it.company_name} onClick={this.downLoad.bind(this,e,it.company_buyer_entity_id)}>{it.company_name}</div>
                             }):<div className="downLoadIcon" onClick={this.downLoad.bind(this,e,null)}></div>}
-
                         </span>
+                        <span className="col-sm-4 line15">{e.entities?e.entities.map((it,k)=>{
+                            return <div key={k} className="downLoadIcon downLoadIconL" title={it.company_name} onClick={this.downLoad.bind(this,e,it.company_buyer_entity_id,window.location.href.indexOf("is_retailer=true")>0?true:false)}>{decodeURI(window.location.href.split("retailer_name=")[1])}</div>
+                        }):<div className="downLoadIcon" onClick={this.downLoad.bind(this,e,null)}></div>}</span>
                     </li>
                 )
             })
@@ -55,6 +62,11 @@ export default class AdminAward extends Component{
         return(
             <div className="u-grid bidderStatus " >
                 <ul className="bidders_list " style={{width:'45%'}}>
+                    <li className="u-grid center line">
+                        <span className="col-sm-4 line15" style={{"textAlign":"center"}}>Buyer</span>
+                        <span className="col-sm-4 line15" style={{"textAlign":"center"}}>Entity</span>
+                        <span className="col-sm-4 line15" style={{"textAlign":"center"}}>Retailer</span>
+                    </li>
                     {this.renderAwardList(this.state.awardList)}
                 </ul>
                 {/*<div className="color_show">*/}

@@ -130,7 +130,7 @@ class Api::UsersController < Api::BaseController
       all_count = CompanyBuyerEntity.find_by_user(user.id).where(approval_status: [CompanyBuyerEntity::ApprovalStatusApproved, CompanyBuyerEntity::ApprovalStatusPending]).count()
       approval_count = CompanyBuyerEntity.find_by_user(user.id).where(approval_status: CompanyBuyerEntity::ApprovalStatusApproved).count()
       unless all_count == approval_count
-        user.approval_status += "!"
+        user.approval_status += "$e_x@c%l^m&a*r!k$"
       end
     end
     bodies = { data: data, total: total }

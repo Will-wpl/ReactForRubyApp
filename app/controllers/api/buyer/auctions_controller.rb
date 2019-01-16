@@ -29,7 +29,7 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
     end
     headers = [
       { name: 'Name', field_name: 'name', table_name: 'auctions' },
-      { name: 'Date/Time', field_name: 'actual_begin_time', table_name: 'auctions' },
+      { name: 'Auction Date/Time', field_name: 'actual_begin_time', table_name: 'auctions' },
       { name: 'Auction Status', field_name: 'publish_status', table_name: 'auctions' },
       { name: 'Status of Participation', field_name: 'participation_status', table_name: 'consumptions' },
       { name: 'Status of Approval', field_name: 'accept_status', table_name: 'consumptions' },
