@@ -1476,20 +1476,6 @@ body.choose{
 .buttonRadius{
   border-radius: 3px;
 }
-<<<<<<< HEAD
-.spanDecoration{
-  text-decoration:underline;
-  font-size: 1rem;
-  font-weight: 300;
-  line-height: 1.5;
-  display: inline;
-}
-
-.spanDecorationNone{
-  font-size: 1rem;
-  font-weight: 300;
-  line-height: 1.5;
-=======
 #loading-center-absolute {
   position: absolute;
   left: 50%;
@@ -1591,5 +1577,14 @@ body.choose{
     transform: scale(1,1);
   }
 
->>>>>>> 7fad1b8a809e3ea9a245c7c8596054f3dfcb0819
+}
+
+.spanDecoration
+{
+  text-decoration:underline;
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.5;
+  width: 60px;
+  display: inline;
 }
