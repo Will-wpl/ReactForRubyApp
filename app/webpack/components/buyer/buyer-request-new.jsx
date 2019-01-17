@@ -325,7 +325,7 @@ export class BuyerNewRequestManage extends Component {
         let text = "";
         switch (type) {
             case 1:
-                text = "Select 'Multiple' if you wish to aggregate your purchase volume with other buyer(s) to achieve the lowest price possible through volume consolidation. Select 'Single' if you do not wish to aggregate your purchase volume with any other buyer(s).";
+                text = "Select 'Multiple' if you wish to aggregate your purchase volume with other buyer(s) to achieve the lowest price possible through volume consolidation.   <br> Select 'Single' if you do not wish to aggregate your purchase volume with any other buyer(s).";
                 break;
             case 2:
                 text = "Select this option if you wish to procure electricity using the standard Electricity Purchase Contract which you can find under 'Manage Accounts'.";

@@ -141,8 +141,8 @@ export class Tenderdocuments extends React.Component {
                 {this.props.single == 4 ?
                     <div>
                         <br></br>
-                        <h4 className="lm--formItem lm--formItem--inline string u-mt1">
-                            Option 1: Check the box below and click on 'Accept & Participate' if you do not wish to propose deviation(s) to the Electricity Purchase Contract.<br />
+                        <h4 className="u-mt1">
+                            <dd className="spanDecoration">Option 1: </dd> Check the box below and click on 'Accept & Participate' if you do not wish to propose deviation(s) to the Electricity Purchase Contract.
                         </h4>
                         {!this.props.propsdisabled ? <div className="lm--formItem--inline string">
                             <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
@@ -157,9 +157,9 @@ export class Tenderdocuments extends React.Component {
                                     <div className="check_error">Please fill in this field</div>
                                 </h4>
                             </div>}
-                         
-                        <h4>
-                            Option 2: Click on 'Propose Deviations' if you wish to propose deviation(s) to the Electricity Purchase Contract.
+
+                        <h4 className="u-mt1">
+                            <span className="spanDecoration">Option 2:</span> Click on 'Propose Deviations' if you wish to propose deviation(s) to the Electricity Purchase Contract.
                         </h4>
                     </div> : <div>
                         <div className="lm--formItem lm--formItem--inline string u-mt1">
@@ -180,7 +180,7 @@ export class Tenderdocuments extends React.Component {
                             </div>}</div>}
                 {/*<div className="lm--formItem lm--formItem--inline string u-mt3 role_select">*/}
                 {/*<label className="lm--formItem-left lm--formItem-label string required">*/}
-                {/*Electricity Procurement Agreement:*/}
+                {/*Electricity Purchase Contract:*/}
                 {/*</label>*/}
                 {/*<div className="lm--formItem-right lm--formItem-control">*/}
                 {/*<ul className="tender_list">*/}
@@ -192,7 +192,7 @@ export class Tenderdocuments extends React.Component {
                 {/*</div>*/}
                 {/*<div className="lm--formItem lm--formItem--inline string u-mt3 role_select">*/}
                 {/*<label className=" lm--formItem-label ">*/}
-                {/*{(this.props.single != 5 && this.props.single != 4) ? "You are bounded by the Electricity Procurement Agreement. Please click 'Proceed' to continue." : ""}*/}
+                {/*{(this.props.single != 5 && this.props.single != 4) ? "You are bounded by the Electricity Purchase Contract. Please click 'Proceed' to continue." : ""}*/}
                 {/*</label>*/}
                 {/*</div>*/}
                 {this.props.single === 5 ? (this.props.current.actions ?

@@ -1474,3 +1474,16 @@ body.choose{
 .buttonRadius{
   border-radius: 3px;
 }
+.spanDecoration{
+  text-decoration:underline;
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.5;
+  display: inline;
+}
+
+.spanDecorationNone{
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.5;
+}
