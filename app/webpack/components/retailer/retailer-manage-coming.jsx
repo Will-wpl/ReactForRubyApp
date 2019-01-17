@@ -211,17 +211,29 @@ export class RetailerManage extends Component {
             break
             case 'main_email_address': this.setState({main_email_address:value})
             break
-            case 'main_mobile_number': this.setState({main_mobile_number:value})
+            case 'main_mobile_number':
+                if(value.match(/^[0-9]*$/)) {
+                    this.setState({main_mobile_number: value})
+                }
             break
-            case 'main_office_number': this.setState({main_office_number:value})
+            case 'main_office_number':
+                if(value.match(/^[0-9]*$/)){
+                    this.setState({main_office_number:value})
+                }
             break
             case 'alternative_name': this.setState({alternative_name:value})
             break
             case 'alternative_email_address': this.setState({alternative_email_address:value})
             break
-            case 'alternative_mobile_number': this.setState({alternative_mobile_number:value})
+            case 'alternative_mobile_number':
+                if(value.match(/^[0-9]*$/)){
+                    this.setState({alternative_mobile_number:value})
+                }
             break
-            case 'alternative_office_number': this.setState({alternative_office_number:value})
+            case 'alternative_office_number':
+                if(value.match(/^[0-9]*$/)) {
+                    this.setState({alternative_office_number: value})
+                }
             break
         }
     }
@@ -316,7 +328,7 @@ export class RetailerManage extends Component {
                         Mobile Number: (+65)
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="alternative_mobile_number" value={this.state.alternative_mobile_number} onChange={this.Change.bind(this,'alternative_mobile_number')} disabled={this.state.disabled} ref="alternative_mobile_number" maxLength="50" aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
+                            <input type="text" name="alternative_mobile_number" value={this.state.alternative_mobile_number} onChange={this.Change.bind(this,'alternative_mobile_number')} disabled={this.state.disabled} ref="alternative_mobile_number" maxLength="8" aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
                         </div>
                     </div>
                     <div className="lm--formItem lm--formItem--inline string">
@@ -324,7 +336,7 @@ export class RetailerManage extends Component {
                         Office Number: (+65)
                         </label>
                         <div className="lm--formItem-right lm--formItem-control">
-                            <input type="text" name="alternative_office_number" value={this.state.alternative_office_number} onChange={this.Change.bind(this,'alternative_office_number')} disabled={this.state.disabled} ref="alternative_office_number" maxLength="50" aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
+                            <input type="text" name="alternative_office_number" value={this.state.alternative_office_number} onChange={this.Change.bind(this,'alternative_office_number')} disabled={this.state.disabled} ref="alternative_office_number" maxLength="8" aria-required="true" pattern="^(\d{8})$" title="Contact Number should contain 8 integers."></input>
                         </div>
                     </div>
                     <div className="retailer_btn">

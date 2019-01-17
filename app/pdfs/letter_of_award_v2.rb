@@ -93,57 +93,6 @@ class LetterOfAwardV2 < LetterOfAward
     terms_and_conditions_of_use(page, page_content)
   end
 
-  def terms_and_conditions_of_use(page, page_content)
-    if param[:current_user]&.has_role?(:admin)
-
-      file_path = if param[:is_retailer]
-                      visibility2, retailer_file_path = get_tc_attach_path(param, UserAttachment::FileType_Seller_REVV_TC)
-                      retailer_file_path
-                    else
-                      visibility, buyer_file_path = get_tc_attach_path(param, UserAttachment::FileType_Buyer_REVV_TC)
-                      buyer_file_path
-                    end
-      parse_terms_and_conditions(page, page_content, file_path)
-    elsif param[:current_user]&.has_role?(:buyer)
-      visibility, file_path = get_tc_attach_path(param, UserAttachment::FileType_Buyer_REVV_TC)
-      parse_terms_and_conditions(page, page_content, file_path)
-    elsif param[:current_user]&.has_role?(:retailer)
-      visibility, file_path = get_tc_attach_path(param, UserAttachment::FileType_Seller_REVV_TC)
-      parse_terms_and_conditions(page, page_content, file_path)
-    end
-  end
-
-  def parse_terms_and_conditions(page, page_content, file_path)
-    file_path = if file_path.nil?
-                  '#'
-                else
-                  file_path
-                end
-    page_content.gsub(/#terms_and_conditions_of_use/, file_path)
-  end
-
-  def get_aggregate_consumption_data
-    auction_contract = param[:auction_contract]
-    peak_row, off_peak_row = [], []
-    push_aggregate_data({:peak => auction_contract.total_lt_peak, :off_peak => auction_contract.total_lt_off_peak, :peak_row => peak_row, :off_peak_row => off_peak_row}, @visibilities_price[:visibility_lt])
-    push_aggregate_data({:peak => auction_contract.total_hts_peak, :off_peak => auction_contract.total_hts_off_peak, :peak_row => peak_row, :off_peak_row => off_peak_row}, @visibilities_price[:visibility_hts])
-    push_aggregate_data({:peak => auction_contract.total_htl_peak, :off_peak => auction_contract.total_htl_off_peak, :peak_row => peak_row, :off_peak_row => off_peak_row}, @visibilities_price[:visibility_htl])
-    push_aggregate_data({:peak => auction_contract.total_eht_peak, :off_peak => auction_contract.total_eht_off_peak, :peak_row => peak_row, :off_peak_row => off_peak_row}, @visibilities_price[:visibility_eht])
-    [peak_row, off_peak_row]
-  end
-
-  def push_aggregate_data(param, visibility)
-    return unless visibility
-    peak, off_peak = param[:peak], param[:off_peak]
-    peak_row, off_peak_row = param[:peak_row], param[:off_peak_row]
-    is_zero = false
-    is_zero = true if (peak == 0 || peak.blank?) && (off_peak == 0 || off_peak.blank?)
-    unless is_zero
-      peak_row.push(peak)
-      off_peak_row.push(off_peak)
-    end
-  end
-
   def get_electricity_purchase_contract
     request_attachment = nil
     unless param[:auction].request_auction_id.nil?

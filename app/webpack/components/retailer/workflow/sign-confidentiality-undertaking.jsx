@@ -41,7 +41,7 @@ export class Signconfidentialityundertaking extends React.Component {
     }
     do_reject() {
         retailerReject(this.props.current.current.arrangement_id).then(res => {
-            this.popUp("Thank you for the confirmation. You have rejected the Confidentiality Undertaking.");
+            this.popUp("Thank you for the confirmation. You have rejected the Participation for the auction.");
             setTimeout(() => {
                 window.location.href = "/retailer/auctions";
             }, 3000)
@@ -61,7 +61,7 @@ export class Signconfidentialityundertaking extends React.Component {
                 {/*{this.props.current.current.current_status ?*/}
                 {/*<h4>You have {this.props.current.current.current_status === 'reject' ? 'rejected' : 'accepted'} the Confidentiality Undertaking.</h4>*/}
                 {/*:''}*/}
-                {/* You are bounded by the confidentiality clauses in the <a className="download_ico" target="_blank" download={this.state.file.length>0?this.state.file[0].file_name:''} href={this.state.file.length>0?this.state.file[0].file_path:'#'}>Retailer Platform Terms of Use</a> and <a className="download_ico" target="_blank" download={this.state.file.length>0?this.state.file[1].file_name:''} href={this.state.file.length>0?this.state.file[1].file_path:'#'}>Electricity Procurement Agreement.</a> */}
+                {/* You are bounded by the confidentiality clauses in the <a className="download_ico" target="_blank" download={this.state.file.length>0?this.state.file[0].file_name:''} href={this.state.file.length>0?this.state.file[0].file_path:'#'}>Retailer Platform Terms of Use</a> and <a className="download_ico" target="_blank" download={this.state.file.length>0?this.state.file[1].file_name:''} href={this.state.file.length>0?this.state.file[1].file_path:'#'}>Electricity Purchase Contract.</a> */}
                 {/*{this.props.auction.step === 3 ?*/}
                     {/*<p>Note: You are bounded by the  <a className="download_ico cursor_link" target="_blank" download={this.state.file.length > 0 && this.state.file[0]? this.state.file[0].file_name : ""} href={this.state.file.length > 0  && this.state.file[0] ? this.state.file[0].file_path : "#"}>Terms & Conditions of Use (Retailer)</a> and <a className="download_ico cursor_link" target="_blank" download={this.state.file.length > 0  && this.state.file[1] ? this.state.file[1].file_name : ""} href={this.state.file.length > 0  && this.state.file[1] ? this.state.file[1].file_path : "#"}>Electricity Purchase Contract.</a></p>*/}
                     {/*:<p>Note: You are bounded by the confidentiality clauses in the <a className="download_ico cursor_link" target="_blank" download={this.state.file.length > 0 && this.state.file[0] ? this.state.file[0].file_name : ''} href={this.state.file.length > 0  && this.state.file[0] ? this.state.file[0].file_path : '#'}>Terms & Conditions of Use (Retailer)</a>.</p>}*/}

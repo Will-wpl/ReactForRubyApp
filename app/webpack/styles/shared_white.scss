@@ -569,6 +569,9 @@ dfn.manage_label{
     .search_btn{
       background:#00b0b2 url("../images/images_for_white/search.png") no-repeat 5px center; background-size: 18px;
     }
+    .create_btn{
+      background:#00b0b2 url("../images/create_ico.png") no-repeat 5px center; background-size: 18px;
+    }
     .reset_btn{
       background:#00b0b2 url("../images/images_for_white/reset.png") no-repeat 5px center; background-size: 18px;
     }
@@ -1577,4 +1580,14 @@ body.choose{
     transform: scale(1,1);
   }
 
+}
+
+.spanDecoration
+{
+  text-decoration:underline;
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.5;
+  width: 60px;
+  display: inline;
 }

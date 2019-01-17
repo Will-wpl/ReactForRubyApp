@@ -39,7 +39,7 @@ export class FillConsumption extends Component {
             advisory: "",
             isValidate: false,
             takenList: [],
-            callback:false
+            callback: false
         }
 
         this.accountItem = {
@@ -448,7 +448,7 @@ export class FillConsumption extends Component {
                         this.setState({
                             disabled: 'disabled',
                             checked: true,
-                            callback:true
+                            callback: true
                         })
                         this.refs.Modal.showModal('defaultCallBack');
                         this.setState({ text: "Your Purchase Order has been submitted to Admin for verification. Once verified, you will receive a notification to confirm your participation in this Reverse Auction." });
@@ -474,9 +474,9 @@ export class FillConsumption extends Component {
             this.setState({ text: "Interface failed" });
         })
     }
-    jumpPage(){
+    jumpPage() {
         //setTimeout(() => {
-            window.location.href = "/buyer/auctions";
+        window.location.href = "/buyer/auctions";
         //}, 3000)
     }
     validateTaken(res) {
@@ -629,10 +629,15 @@ export class FillConsumption extends Component {
         if (type === "return") {
             return false;
         }
+
         this.setState({ submit_type: type });
         if (type === "Reject") {
             this.refs.Modal.showModal("comfirm");
             this.setState({ text: "Are you sure you want to reject this auction?" });
+        }
+        if (type === 'save') {
+            console.log(11);
+            this.doSave();
         }
     }
 
@@ -709,7 +714,6 @@ export class FillConsumption extends Component {
                 flag_current = false;
             }
         })
-
         return flag_current && flag_yesterday && flag_before_yesterday;
     }
 
@@ -1088,13 +1092,14 @@ export class FillConsumption extends Component {
                                 <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
                                     <input name="agree_declare" type="checkbox" id="chkAgree_declare" disabled={this.state.disabled} required />
                                     {/* <span>I declare that all data submited is true and shall be used for the auction, and that i am bounded by <a target="_blank" href={this.state.link} className="urlStyle">Buyer T&C.</a></span> */}
-                                    <span>We declare that we have full right to submit the data and that the data submitted is true and shall be used for the Reverse Auction.<br/>
+                                    <span>We declare that we have full right to submit the data and that the data submitted is true and shall be used for the Reverse Auction.<br />
                                         By clicking on the “Purchase” button, we acknowledge and agree that per the <a target="_blank" href={this.state.buyer_link} className="urlStyleUnderline">Terms & Conditions of Use (Buyer)</a>, such Purchase Order placed by us will constitute as an offer to purchase the electricity and that upon Auto-Closing and the Closing Condition being met after the Reverse Auction, an agreement for sale and purchase of electricity between us and the Winning Retailer shall be formed accordingly based on the terms and conditions set out in <a target="_blank" href={this.state.seller_link} className="urlStyleUnderline">Electricity Purchase Contract</a> and be legally binding on us and the Winning Retailer.
                                     </span>
                                 </h4>
                             </div>
                             <div className="buyer_btn">
-                                <button className={"lm--button lm--button--primary " + this.state.disabled} disabled={this.state.disabled} onClick={this.doSubmit.bind(this, 'save')}>Save</button>
+                                {/* <button className={"lm--button lm--button--primary " + this.state.disabled} disabled={this.state.disabled} onClick={this.doSubmit.bind(this, 'save')}>Save</button> */}
+                                <a className={"lm--button lm--button--primary " + this.state.disabled} style={{ marginRight: "10px" }} onClick={this.doSubmit.bind(this, 'save')}>Save</a>
                                 <a className={"lm--button lm--button--primary " + this.state.disabled} onClick={this.state.disabled === "disabled" ? this.doSubmit.bind(this, 'return') : this.doSubmit.bind(this, 'Reject')}>Reject</a>
                                 <button className={"lm--button lm--button--primary " + this.state.disabled} disabled={this.state.disabled} onClick={this.doSubmit.bind(this, 'Participate')}>Purchase</button>
                             </div>
@@ -1103,7 +1108,7 @@ export class FillConsumption extends Component {
                     <div className="createRaMain u-grid">
                         <a className="lm--button lm--button--primary u-mt3" href="/buyer/auctions" >Back</a>
                     </div>
-                    <Modal text={this.state.text} acceptFunction={this.state.callback==true?this.jumpPage.bind(this):this.doAccept.bind(this)} ref="Modal" />
+                    <Modal text={this.state.text} acceptFunction={this.state.callback == true ? this.jumpPage.bind(this) : this.doAccept.bind(this)} ref="Modal" />
                 </form>
                 <Modal formSize="big" text={this.state.text} acceptFunction={this.doAddAccountAction.bind(this)} siteList={this.state.totalList} consumptionAccountItem={this.state.account_detail} listdetailtype='consumption_detail' ref="consumption" />
                 <Modal formSize="middle" text={this.state.text} advisory={this.state.advisory} listdetailtype='market-insight' ref="market" />
