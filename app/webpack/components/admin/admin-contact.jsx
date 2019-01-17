@@ -97,7 +97,7 @@ render() {
                         <abbr title="required">*</abbr>Electricity Purchase Contract :
                     </label>
                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                        <UploadFile type="SELLER_BUYER_TC" calbackFn={this.refresh.bind(this)} required="required" validate={this.state.validate} col_width="10" showList="1" showWay="0" fileData={this.state.fileData.SELLER_BUYER_TC} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
+                        <UploadFile maskId="SELLER_BUYER_TC" type="SELLER_BUYER_TC" calbackFn={this.refresh.bind(this)} required="required" validate={this.state.validate} col_width="10" showList="1" showWay="0" fileData={this.state.fileData.SELLER_BUYER_TC} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
                         <div className="col-sm-12 col-md-2 u-cell">
                             <button className="lm--button lm--button--primary" onClick={this.show_history.bind(this,'SELLER_BUYER_TC')} >History</button>
                         </div>
@@ -108,7 +108,7 @@ render() {
                         <abbr title="required">*</abbr>Terms & Conditions of Use (Retailer) :
                     </label>
                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                        <UploadFile type="SELLER_REVV_TC" calbackFn={this.refresh.bind(this)} required="required" validate={this.state.validate} showList="1" col_width="10"  showWay="0" fileData={this.state.fileData.SELLER_REVV_TC} propsdisabled={false}  uploadUrl={this.state.uploadUrl}/>
+                        <UploadFile maskId="SELLER_REVV_TC" type="SELLER_REVV_TC" calbackFn={this.refresh.bind(this)} required="required" validate={this.state.validate} showList="1" col_width="10"  showWay="0" fileData={this.state.fileData.SELLER_REVV_TC} propsdisabled={false}  uploadUrl={this.state.uploadUrl}/>
                         <div className="col-sm-12 col-md-2 u-cell">
                             <button className="lm--button lm--button--primary" onClick={this.show_history.bind(this,'SELLER_REVV_TC')} >History</button>
                         </div>
@@ -119,7 +119,7 @@ render() {
                         <abbr title="required">*</abbr>Terms & Conditions of Use (Buyer) :
                     </label>
                     <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                        <UploadFile type="BUYER_REVV_TC" calbackFn={this.refresh.bind(this)} required="required" validate={this.state.validate} showList="1" col_width="10"  showWay="0" fileData={this.state.fileData.BUYER_REVV_TC} propsdisabled={false}  uploadUrl={this.state.uploadUrl}/>
+                        <UploadFile maskId="BUYER_REVV_TC" type="BUYER_REVV_TC" calbackFn={this.refresh.bind(this)} required="required" validate={this.state.validate} showList="1" col_width="10"  showWay="0" fileData={this.state.fileData.BUYER_REVV_TC} propsdisabled={false}  uploadUrl={this.state.uploadUrl}/>
                         <div className="col-sm-12 col-md-2 u-cell">
                             <button className="lm--button lm--button--primary" onClick={this.show_history.bind(this,'BUYER_REVV_TC')} >History</button>
                         </div>

@@ -50,7 +50,7 @@ export class Buyerretailerdashboard extends Component {
                             <thead>
                             <tr>
                                 <th>Name</th>
-                                <th>Confidentiality Undertaking<br/>({this.props.step_counts[1]})</th>
+                                <th>Auction Participation<br/>({this.props.step_counts[1]})</th>
                                 <th>Tender Documents<br/>({this.props.step_counts[2]})</th>
                                 <th>Deviations (if any)<br/>({this.props.step_counts[3]})</th>
                                 {/*<th>Submit Form of Tender</th>*/}

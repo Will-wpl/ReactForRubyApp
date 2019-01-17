@@ -217,7 +217,7 @@ export default class EmailTemplates extends Component {
                                     <abbr title="required">*</abbr> Duly signed Declaration Form(Buyer) :
                                 </label>
                                 <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                                    <UploadFile loading="true" type="LETTER_OF_AUTHORISATION_BUYER" calbackFn={this.refresh.bind(this, "buyer")} required="required" showList="1" col_width="8" showWay="0" fileData={this.state.fileDataBuyer.LETTER_OF_AUTHORISATION_BUYER} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
+                                    <UploadFile loading="true" maskId={"LETTER_OF_AUTHORISATION_BUYER"} type="LETTER_OF_AUTHORISATION_BUYER" calbackFn={this.refresh.bind(this, "buyer")} required="required" showList="1" col_width="8" showWay="0" fileData={this.state.fileDataBuyer.LETTER_OF_AUTHORISATION_BUYER} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
                                 </div>
                             </div>
                             <div className="admin_invitation lm--formItem lm--formItem--inline string u-mt2 u-mb2">
@@ -225,7 +225,7 @@ export default class EmailTemplates extends Component {
                                     <abbr title="required">*</abbr> Duly signed Declaration Form(Retailer) :
                                 </label>
                                 <div className="lm--formItem-right lm--formItem-control u-grid mg0">
-                                    <UploadFile loading="true" type="LETTER_OF_AUTHORISATION_RETAILER" calbackFn={this.refresh.bind(this, 'retailer')} required="required" showList="1" col_width="8" showWay="0" fileData={this.state.fileDataRetailer.LETTER_OF_AUTHORISATION_RETAILER} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
+                                    <UploadFile loading="true" maskId={"LETTER_OF_AUTHORISATION_RETAILER"} type="LETTER_OF_AUTHORISATION_RETAILER" calbackFn={this.refresh.bind(this, 'retailer')} required="required" showList="1" col_width="8" showWay="0" fileData={this.state.fileDataRetailer.LETTER_OF_AUTHORISATION_RETAILER} propsdisabled={false} uploadUrl={this.state.uploadUrl} />
                                 </div>
                             </div>
                         </div>

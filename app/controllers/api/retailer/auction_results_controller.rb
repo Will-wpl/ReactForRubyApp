@@ -15,7 +15,7 @@ class Api::Retailer::AuctionResultsController < Api::AuctionResultsController
     headers = [
       { name: 'Reference ID', field_name: 'published_gid', table_name: 'auctions' },
       { name: 'Name', field_name: 'name', table_name: 'auctions' },
-      { name: 'Date', field_name: 'start_datetime', table_name: 'auctions' },
+      { name: 'Auction Date/Time', field_name: 'start_datetime', table_name: 'auctions' },
       { name: 'Contract Period', field_name: 'contract_period', is_sort: false },
       { name: 'My Result', field_name: 'my_result', is_sort: false },
       { name: 'Closing of Electricity Purchase Contract', field_name: 'award', is_sort: false }
