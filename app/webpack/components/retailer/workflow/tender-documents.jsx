@@ -142,7 +142,7 @@ export class Tenderdocuments extends React.Component {
                     <div>
                         <br></br>
                         <h4 className="u-mt1">
-                            <dd className="spanDecoration">Option 1: </dd> Check the box below and click on 'Accept & Participate' if you do not wish to propose deviation(s) to the Electricity Purchase Contract.
+                            <dd className="spanDecoration">Option 1</dd>: Check the box below and click on 'Accept & Participate' if you do not wish to propose deviation(s) to the Electricity Purchase Contract.
                         </h4>
                         {!this.props.propsdisabled ? <div className="lm--formItem--inline string">
                             <h4 className="lm--formItem lm--formItem--inline string chkBuyer">
@@ -159,7 +159,7 @@ export class Tenderdocuments extends React.Component {
                             </div>}
 
                         <h4 className="u-mt1">
-                            <span className="spanDecoration">Option 2:</span> Click on 'Propose Deviations' if you wish to propose deviation(s) to the Electricity Purchase Contract.
+                            <span className="spanDecoration">Option 2</span>: Click on 'Propose Deviations' if you wish to propose deviation(s) to the Electricity Purchase Contract.
                         </h4>
                     </div> : <div>
                         <div className="lm--formItem lm--formItem--inline string u-mt1">
