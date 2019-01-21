@@ -41,7 +41,7 @@ export class Signconfidentialityundertaking extends React.Component {
     }
     do_reject() {
         retailerReject(this.props.current.current.arrangement_id).then(res => {
-            this.popUp("Thank you for the confirmation. You have rejected the Participation for the auction.");
+            this.popUp("Thank you for the confirmation. You have rejected participation for the auction.");
             setTimeout(() => {
                 window.location.href = "/retailer/auctions";
             }, 3000)
