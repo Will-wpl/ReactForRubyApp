@@ -64,7 +64,7 @@ export default class AdminAward extends Component{
                 <ul className="bidders_list " style={{width:'45%'}}>
                     <li className="u-grid center line">
                         <span className="col-sm-4 line15" style={{"textAlign":"center"}}>Buyer</span>
-                        <span className="col-sm-4 line15" style={{"textAlign":"center"}}>Entity</span>
+                        <span className="col-sm-4 line15" style={{"textAlign":"center"}}>Purchasing Entity</span>
                         <span className="col-sm-4 line15" style={{"textAlign":"center"}}>Retailer</span>
                     </li>
                     {this.renderAwardList(this.state.awardList)}
