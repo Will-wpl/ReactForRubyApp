@@ -11,15 +11,20 @@ services:
     ports:
       - "3000:3000"
       - "8080:8080"
+    environment:
+      - REDISTOGO_URL=redis://localhost:6379/0
+      - DATABASE_HOST=rails_base_database_server
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgres
   rails_base_database_server:
-    image: postgres:9.3
+    image: postgres:9.4
     volumes:
       - rails_base_db_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=postgres_user
-      - POSTGRES_PASSWORD=sibeisecret
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
   chrome_driver_selenium:
     image: selenium/standalone-chrome:3.4
     container_name: chrome-browser

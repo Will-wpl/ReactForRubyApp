@@ -2,9 +2,6 @@
   "name": "dragonite",
   "description": "a really cool app",
   "version": "1.0.0",
-  "engines": {
-    "node": "8.12.0"
-  },
   "dependencies": {
     "atlas": "file:./vendor/atlas",
     "autoprefixer": "^7.1.1",

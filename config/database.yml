@@ -85,4 +85,3 @@ test:
 production:
   <<: *default
   database: reverse_auction_production
-  username: reverse_auction
