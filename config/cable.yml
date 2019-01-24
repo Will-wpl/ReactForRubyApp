@@ -1,11 +1,11 @@
 development:
   adapter: redis
-  url: <%= ENV["REDISTOGO_URL"] %>
+  url: <%= ENV["REDIS_URL"] %>
 
 test:
   adapter: redis
-  url: <%= ENV["REDISTOGO_URL"] %>
+  url: <%= ENV["REDIS_URL"] %>
 
 production:
   adapter: redis
-  url: <%= ENV["REDISTOGO_URL"] %>
+  url: <%= ENV["REDIS_URL"] %>

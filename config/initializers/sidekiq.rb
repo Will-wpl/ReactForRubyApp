@@ -1,5 +1,5 @@
 Sidekiq.configure_server do |config|
-  config.redis = { url: ENV["REDISTOGO_URL"], password: ENV["REDISTOGO_PASSWORD"] }
+  config.redis = { url: ENV["REDIS_URL"] }
   sidekiq_cron_file = "config/sidekiq_cron.yml"
 
   if File.exist?(sidekiq_cron_file) && Sidekiq.server?
@@ -9,5 +9,5 @@ Sidekiq.configure_server do |config|
 end
 
 Sidekiq.configure_client do |config|
-  config.redis = { url: ENV["REDISTOGO_URL"], password: ENV["REDISTOGO_PASSWORD"]}
+  config.redis = { url: ENV["REDIS_URL"] }
 end

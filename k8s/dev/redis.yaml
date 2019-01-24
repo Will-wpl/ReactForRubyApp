@@ -1,0 +1,42 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: redis
+  labels:
+    name: redis
+    app: reverse-auction-redis
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: redis
+        app: reverse-auction-redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:3.2.11
+        ports:
+        - containerPort: 6379
+        resources:
+          limits:
+            cpu: 50m
+            memory: 64Mi
+          requests:
+            cpu: 50m
+            memory: 64Mi
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  labels:
+    name: redis
+    app: reverse-auction-redis
+spec:
+  type: ClusterIP
+  ports:
+  - port: 6379
+    name: redis
+  selector:
+    name: redis
+    app: reverse-auction-redis

@@ -12,7 +12,7 @@ services:
       - "3000:3000"
       - "8080:8080"
     environment:
-      - REDISTOGO_URL=redis://localhost:6379/0
+      - REDIS_URL=redis://localhost:6379/0
       - DATABASE_HOST=rails_base_database_server
       - DATABASE_USERNAME=postgres
       - DATABASE_PASSWORD=postgres

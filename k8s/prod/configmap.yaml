@@ -6,8 +6,10 @@ data:
   HTTPSTUB_MAX_TIMEOUT: 90s
   HTTPSTUB_RETRIES: "2"
   LOG_LEVEL: DEBUG
-  SMTP_ADDRESS: some_smtp_address
-  SMTP_PORT: some_smtp_port
+  HOSTNAME: something
+  SENDGRID_USERNAME: something
+  SENDGRID_PASSWORD: something
+  MAILER_DEFAULT_FROM: something
   SECRET_KEY_BASE: something
 kind: ConfigMap
 metadata:
