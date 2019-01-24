@@ -208,6 +208,7 @@ class BuyerEntityReport < BuyerReport
     info_data.push(["<b>Contract Period: </b>", "#{contract_period_start_date} to #{contract_period_end_date}<br/>(#{auction_result.contract_duration} months)"])
     entity_list_table = pdf.make_table(get_entities_list(entities), :cell_style => { :size => 14, :align => :left, :valign => :center, :padding => [0, 2, 0], :inline_format => true, :border_width => 0.0})
     info_data.push(["<b>Purchasing Entities:</b>", entity_list_table])
+    info_data.push(["",""])
     info_data.push(["<b>Total Volume: </b>", total_volume + " kWh (forecasted)"])
     info_data.push(["<b>Total Award Sum: </b>", total_award_sum + " (forecasted)"])
 
@@ -258,7 +259,7 @@ class BuyerEntityReport < BuyerReport
 
   def pdf_draw_price(pdf, price_table_data)
     pdf.move_down 18
-    pdf.text "Price:"
+    pdf.text "<b>Price:</b>"
     pdf.move_down 8
     pdf.table(price_table_data,
               :cell_style => {:size => 12,
@@ -275,7 +276,7 @@ class BuyerEntityReport < BuyerReport
 
   def pdf_draw_consumption_forecast(pdf, total_consumption)
     pdf.move_down 18
-    pdf.text "Total Consumption Forecast:"
+    pdf.text "<b>Total Consumption Forecast:</b>"
     pdf.move_down 8
 
     table_head, table_row0, table_row1 = [''], ['Peak<br/>(7am-7pm)'], ['Off-Peak<br/>(7pm-7am)']
