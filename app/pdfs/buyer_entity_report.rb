@@ -259,7 +259,7 @@ class BuyerEntityReport < BuyerReport
 
   def pdf_draw_price(pdf, price_table_data)
     pdf.move_down 18
-    pdf.text "<b>Price:</b>"
+    pdf.text "Price:"
     pdf.move_down 8
     pdf.table(price_table_data,
               :cell_style => {:size => 12,
@@ -276,7 +276,7 @@ class BuyerEntityReport < BuyerReport
 
   def pdf_draw_consumption_forecast(pdf, total_consumption)
     pdf.move_down 18
-    pdf.text "<b>Total Consumption Forecast:</b>"
+    pdf.text "Total Consumption Forecast:"
     pdf.move_down 8
 
     table_head, table_row0, table_row1 = [''], ['Peak<br/>(7am-7pm)'], ['Off-Peak<br/>(7pm-7am)']

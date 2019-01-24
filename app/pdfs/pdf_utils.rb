@@ -1,6 +1,6 @@
 class PdfUtils
 
-  HEAD_STRING_HASH = {"LT" => 'LT<br/>(kWh)', 'HTS' => 'HTS<br/>(kWh)', 'HTL' => 'HTL<br/>(kWh)', 'EHT' => 'EHT<br/>(kWh)'}.freeze
+  HEAD_STRING_HASH = {"LT" => '<b>LT<br/>(kWh)</b>', 'HTS' => '<b>HTS<br/>(kWh)</b>', 'HTL' => '<b>HTL<br/>(kWh)</b>', 'EHT' => '<b>EHT<br/>(kWh)</b>'}.freeze
 
 
   def self.number_helper
