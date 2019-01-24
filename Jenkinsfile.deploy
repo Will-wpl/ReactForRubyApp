@@ -1,14 +1,14 @@
 pipeline {
-	agent { node { label 'rails_base' } }
+  agent { node { label 'rails_base' } }
 
-	options {
+  options {
     skipStagesAfterUnstable()
     disableConcurrentBuilds()
     buildDiscarder(logRotator(numToKeepStr: '30'))
     timestamps()
   }
 
-	parameters {
+  parameters {
     string(name: 'BRANCH_NAME_HYPHEN', defaultValue:  "", description: "Feature branch name")
     string(name: 'GIT_BRANCH', defaultValue:  "", description: "Git branch to checkout")
     string(name: 'VAULT_APP_ADDR', defaultValue:  "", description: "Vault URL")
@@ -28,7 +28,7 @@ pipeline {
     string(name: 'MAKE_DEPLOY_TARGET', defaultValue:  "", description: "The make target to use for deployment")
   }
 
-	environment {
+  environment {
     // APP Name
     APP_NAME                    = "reverse-auction"
     // Branch
@@ -64,9 +64,9 @@ pipeline {
     MAKE_DEPLOY_TARGET          = "${params.MAKE_DEPLOY_TARGET}"
   }
 
-	stages {
-		stage("Initialize") {
-			steps {
+  stages {
+    stage("Initialize") {
+      steps {
         echo "Initialize - default variables"
         script {
           // QA branch
@@ -76,7 +76,7 @@ pipeline {
         }
         echo "Start deployment to kubernetes for branch ${BRANCH_NAME_HYPHEN} with kubeconfig ${VAULT_KUBECONFIG_PATH}"
       }
-			post {
+      post {
         always {
           echo "Variables:"
           echo "GIT_BRANCH                    = ${GIT_BRANCH}"
@@ -97,9 +97,9 @@ pipeline {
           echo "MAKE_DEPLOY_TARGET            = ${MAKE_DEPLOY_TARGET}"
         }
       }
-		}
+    }
 
-		stage("Kubeconfig") {
+    stage("Kubeconfig") {
       environment {
         VAULT_ADDR = "${VAULT_KUBECONFIG_ADDR}"
       }
@@ -123,7 +123,7 @@ pipeline {
       steps {
         // Change to correct docker credentials id for qa
         deploy("${DOCKER_REG}", "${DOCKER_CREDS_ID}") {
-					sh "chmod +x ./generate_k8s_secrets.sh"
+          sh "chmod +x ./generate_k8s_secrets.sh"
           sh "make -f k8s/Makefile ${MAKE_DEPLOY_TARGET}"
         }
       }
@@ -167,7 +167,7 @@ pipeline {
       }
     }
 
-		// Deploy to production clusters
+    // Deploy to production clusters
     stage("Deploy PRODUCTION") {
       when {
         expression { BRANCH_NAME_HYPHEN ==~ PRODUCTION_BRANCH }
@@ -192,10 +192,10 @@ pipeline {
           sh "make -f k8s/Makefile k8s-fail-logs"
         }
       }
-		}
-	}
+    }
+  }
 
-	post {
+  post {
     unstable {
       notifySlack("Deployment to kubernetes for branch ${BRANCH_NAME_HYPHEN}", "UNSTABLE")
     }

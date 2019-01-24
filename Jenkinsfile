@@ -1,79 +1,79 @@
 pipeline {
-	agent { node { label 'rails_base' } }
+  agent { node { label 'rails_base' } }
 
-	options {
+  options {
     skipStagesAfterUnstable()
     buildDiscarder(logRotator(numToKeepStr: '5'))
     timestamps()
   }
 
-	environment {
-		PATH                               = "${env.HOME}/.rbenv/bin:${env.HOME}/.rbenv/shims:$PATH"
+  environment {
+    PATH                               = "${env.HOME}/.rbenv/bin:${env.HOME}/.rbenv/shims:$PATH"
 
-		// Slack
-		SLACK_CHANNEL                      = "rev-auction-git"
-		SLACK_TEAM_DOMAIN                  = "sp-digital"
-		SLACK_TOKEN                        = credentials("reverse-auction-slack")
+    // Slack
+    SLACK_CHANNEL                      = "rev-auction-git"
+    SLACK_TEAM_DOMAIN                  = "sp-digital"
+    SLACK_TOKEN                        = credentials("reverse-auction-slack")
 
-		// Github
-		DANGER_GITHUB_API_TOKEN            = credentials('jenkins-bot-git-token')
-		DANGER_GITHUB_HOST                 = "code.in.spdigital.sg"
-		DANGER_GITHUB_API_BASE_URL         = "https://code.in.spdigital.sg/api/v3/"
-		DANGER_OCTOKIT_VERIFY_SSL          = false
+    // Github
+    DANGER_GITHUB_API_TOKEN            = credentials('jenkins-bot-git-token')
+    DANGER_GITHUB_HOST                 = "code.in.spdigital.sg"
+    DANGER_GITHUB_API_BASE_URL         = "https://code.in.spdigital.sg/api/v3/"
+    DANGER_OCTOKIT_VERIFY_SSL          = false
 
-		// Cache
-		CACHE_BUILDER                      = credentials("CACHE_BUILDER")
-		BUILD_CACHES_PATH                  = "https://nexus.in.spdigital.sg/repository/raw-internal/caches/reverse-auction"
-		BUILD_CACHE_FOLDERS                = "./vendor/bundle ./node_modules"
-	}
+    // Cache
+    CACHE_BUILDER                      = credentials("CACHE_BUILDER")
+    BUILD_CACHES_PATH                  = "https://nexus.in.spdigital.sg/repository/raw-internal/caches/reverse-auction"
+    BUILD_CACHE_FOLDERS                = "./vendor/bundle ./node_modules"
+  }
 
-	stages {
-		stage("Initialize") {
-			steps {
-				echo "Initialize - default variables"
-				script {
-					// APP Name
-					APP_NAME 										= "reverse-auction"
+  stages {
+    stage("Initialize") {
+      steps {
+        echo "Initialize - default variables"
+        script {
+          // APP Name
+          APP_NAME 										= "reverse-auction"
 
-					// Project package path
+          // Project package path
           PROJECT_PACKAGE_PATH        = "code.in.spdigital.sg/sp-digital/${APP_NAME}"
 
-					// Vault
+          // Vault
           VAULT_APP_BASE_PATH         = "secret/reverse-auction/${APP_NAME}"
 
-					// QA branch
+          // QA branch
           QA_BRANCH                   = "master"
 
           // Production branch
           PRODUCTION_BRANCH           = ~/^release\-([\S]+)/
 
-					// Deployment Job Path
+          // Deployment Job Path
           DEPLOY_JOB                  = "ReverseAuction/${APP_NAME}-deploy-k8s"
 
-					// BRANCH_NAME_HYPHEN replaces all not alphanumeric to hyphen and to lower case
+          // BRANCH_NAME_HYPHEN replaces all not alphanumeric to hyphen and to lower case
           // i.e fIx/bRanCh_a-1 ==> fix-branch-a-1
           echo "Initialize - variables from branch name"
           BRANCH_NAME_HYPHEN          = BRANCH_NAME.replaceAll(/\W|_/, "-").toLowerCase()
 
-					// Default values
+          // Default values
           // Set Docker container suffix for uniqueness
           CONTAINER_SUFFIX 						= "${BRANCH_NAME_HYPHEN}-${BUILD_NUMBER}"
 
-					// Set docker registry
+          // Set docker registry
           DOCKER_REG                  = "reverse-auction.azurecr.io"
           DOCKER_CREDS_ID             = "reverse-auction-docker-registry"
 
-					// Set Docker tag
+          // Set Docker tag
           APP_TAG                     = "${DOCKER_REG}/${APP_NAME}:${BRANCH_NAME_HYPHEN}"
           MIGRATE_TAG                 = "${DOCKER_REG}/${APP_NAME}-migrate:${BRANCH_NAME_HYPHEN}"
 
-					// Vault
+          // Vault
           VAULT_APP_ADDR              = "https://vault-qa.in.spdigital.sg"
           VAULT_APP_TOKEN_PATH        = "jenkinsdontsupportv2/apptokens/qa/reverse-auction"
           VAULT_KUBECONFIG_ADDR       = "https://vault-qa.in.spdigital.sg"
           VAULT_KUBECONFIG_TOKEN_PATH = "${VAULT_APP_TOKEN_PATH}"
 
-					switch (BRANCH_NAME_HYPHEN) {
+          switch (BRANCH_NAME_HYPHEN) {
             // QA branch
             case QA_BRANCH:
               VAULT_APP_ADDR              = "https://vault-qa.in.spdigital.sg"
@@ -104,9 +104,9 @@ pipeline {
               // Use defaults
               break
           }
-				}
+        }
 
-				echo "Initialize - EXPORT env"
+        echo "Initialize - EXPORT env"
         script {
           // Used by ./Makefile build target
           env.APP_TAG              = APP_TAG
@@ -119,15 +119,15 @@ pipeline {
           env.COMPOSE_HTTP_TIMEOUT = 180
         }
 
-				// echo "Initialize - Approval stage"
+        // echo "Initialize - Approval stage"
         // script {
         //   APPROVAL_USER_ID     = "darrenmlc@spgroup.com.sg,yongchongye@spgroup.com.sg,hanscca@spgroup.com.sg"
         //   APPROVAL_MENTIONS    = "@darren.mok,@chongye,@hanschristianang"
         //   APPROVAL_MESSAGE     = "Approve to deploy ${BRANCH_NAME}"
         //   APPROVAL_TIMEOUT     = 300
         // }
-			}
-			post {
+      }
+      post {
         always {
           echo "Variables:"
           echo "BRANCH_NAME                 = ${BRANCH_NAME}"
@@ -144,72 +144,72 @@ pipeline {
           echo "MIGRATE_TAG                 = ${MIGRATE_TAG}"
         }
       }
-		}
+    }
 
-		stage("Checkout") {
-			steps { timestamps {
-				checkout scm
-			}}
-		}
+    stage("Checkout") {
+      steps { timestamps {
+        checkout scm
+      }}
+    }
 
-		stage("Prepare Ruby ENV") {
-			steps {
-				sh "bundle install --path vendor/bundle"
-			}
-			post {
-				failure {
-					notifySlack("Prepare Ruby ENV", "FAILURE")
-				}
-			}
-		}
+    stage("Prepare Ruby ENV") {
+      steps {
+        sh "bundle install --path vendor/bundle"
+      }
+      post {
+        failure {
+          notifySlack("Prepare Ruby ENV", "FAILURE")
+        }
+      }
+    }
 
-		stage("Prepare Node ENV") {
-			steps {
-				sh "yarn install"
-			}
-			post {
-				failure {
-					notifySlack("Prepare Node ENV", "FAILURE")
-				}
-			}
-		}
+    stage("Prepare Node ENV") {
+      steps {
+        sh "yarn install"
+      }
+      post {
+        failure {
+          notifySlack("Prepare Node ENV", "FAILURE")
+        }
+      }
+    }
 
-		stage("Pre-compile assets for test") {
-			steps {
-				sh 'RAILS_ENV=test bundle exec rails webpacker:compile'
-			}
-			post {
-				failure {
-					notifySlack("Pre-compile assets", "FAILURE")
-				}
-			}
-		}
+    stage("Pre-compile assets for test") {
+      steps {
+        sh 'RAILS_ENV=test bundle exec rails webpacker:compile'
+      }
+      post {
+        failure {
+          notifySlack("Pre-compile assets", "FAILURE")
+        }
+      }
+    }
 
-		stage("Run all test files") {
-			steps {
-				sh 'RAILS_ENV=test bundle exec rails db:create db:test:prepare'
-				sh 'bundle exec rspec spec'
-				sh "OCTOKIT_PROXY= bundle exec danger"
-			}
-			post {
-				failure {
-					notifySlack("Run all test files", "FAILURE")
-				}
-			}
-		}
+    stage("Run all test files") {
+      steps {
+        sh 'RAILS_ENV=test bundle exec rails db:create db:test:prepare'
+        sh 'bundle exec rspec spec'
+        sh "OCTOKIT_PROXY= bundle exec danger"
+      }
+      post {
+        failure {
+          notifySlack("Run all test files", "FAILURE")
+        }
+      }
+    }
 
-		stage("Upload cached folders tar.gz") {
-			steps {
-				sh '''
-					if [ -d "./vendor/bundle" ]; then
-						tar -zcf cached_folders.tar.gz ${BUILD_CACHE_FOLDERS} && \
-							curl -k --silent --user "${CACHE_BUILDER_USR}:${CACHE_BUILDER_PSW}" --upload-file cached_folders.tar.gz ${BUILD_CACHES_PATH}/cached_folders.tar.gz
-					fi
-				'''
-			}
-		}
+    stage("Upload cached folders tar.gz") {
+      steps {
+        sh '''
+          if [ -d "./vendor/bundle" ]; then
+            tar -zcf cached_folders.tar.gz ${BUILD_CACHE_FOLDERS} && \
+              curl -k --silent --user "${CACHE_BUILDER_USR}:${CACHE_BUILDER_PSW}" --upload-file cached_folders.tar.gz ${BUILD_CACHES_PATH}/cached_folders.tar.gz
+          fi
+        '''
+      }
+    }
 
-	stage("Docker Build") {
+  stage("Docker Build") {
       parallel {
         stage("app") {
           steps {
@@ -245,7 +245,7 @@ pipeline {
       }
     }
 
-		// stage("Approval"){
+    // stage("Approval"){
     //   when {
     //     expression {BRANCH_NAME_HYPHEN == PRODUCTION_BRANCH }
     //   }
@@ -254,69 +254,69 @@ pipeline {
     //   }
     // }
 
-		stage("Deploy") {
-			when {
-				expression {
-					!(BRANCH_NAME_HYPHEN ==~ /pr-.*/)
-				}
-			}
-			steps {
-				script {
-					switch (BRANCH_NAME_HYPHEN) {
-						case QA_BRANCH:
-							// K8S deployment variables
-							KUBE_YAML_PATH              = "qa"
-							VAULT_KUBESECRETS_PATH      = "${VAULT_APP_BASE_PATH}/kubesecrets/qa/"
-							KUBE_NAMESPACE              = "${APP_NAME}"
+    stage("Deploy") {
+      when {
+        expression {
+          !(BRANCH_NAME_HYPHEN ==~ /pr-.*/)
+        }
+      }
+      steps {
+        script {
+          switch (BRANCH_NAME_HYPHEN) {
+            case QA_BRANCH:
+              // K8S deployment variables
+              KUBE_YAML_PATH              = "qa"
+              VAULT_KUBESECRETS_PATH      = "${VAULT_APP_BASE_PATH}/kubesecrets/qa/"
+              KUBE_NAMESPACE              = "${APP_NAME}"
 
-							// Cluster 1
-							// deployToK8s("secret/kubeconfig/${APP_NAME}.spdaqaaks2", "config", "k8s-deploy-qa-or-prod-cluster1")
+              // Cluster 1
+              // deployToK8s("secret/kubeconfig/${APP_NAME}.spdaqaaks2", "config", "k8s-deploy-qa-or-prod-cluster1")
 
-							break;
+              break;
 
-						case PRODUCTION_BRANCH:
-							// K8S deployment variables
-							KUBE_YAML_PATH              = "prod"
-							VAULT_KUBESECRETS_PATH      = "${VAULT_APP_BASE_PATH}/kubesecrets/prod/"
-							KUBE_NAMESPACE              = "${APP_NAME}"
+            case PRODUCTION_BRANCH:
+              // K8S deployment variables
+              KUBE_YAML_PATH              = "prod"
+              VAULT_KUBESECRETS_PATH      = "${VAULT_APP_BASE_PATH}/kubesecrets/prod/"
+              KUBE_NAMESPACE              = "${APP_NAME}"
 
-							// Cluster 1
-							// deployToK8s("secret/kubeconfig/${APP_NAME}.spdaprodaks2", "config", "k8s-deploy-qa-or-prod-cluster1")
+              // Cluster 1
+              // deployToK8s("secret/kubeconfig/${APP_NAME}.spdaprodaks2", "config", "k8s-deploy-qa-or-prod-cluster1")
 
-							break;
+              break;
 
-						default:
-							// K8S deployment variables
-							KUBE_YAML_PATH              = "dev"
-							VAULT_KUBESECRETS_PATH      = "${VAULT_APP_BASE_PATH}/kubesecrets/dev/"
-							KUBE_NAMESPACE              = "${APP_NAME}-${BRANCH_NAME_HYPHEN}"
+            default:
+              // K8S deployment variables
+              KUBE_YAML_PATH              = "dev"
+              VAULT_KUBESECRETS_PATH      = "${VAULT_APP_BASE_PATH}/kubesecrets/dev/"
+              KUBE_NAMESPACE              = "${APP_NAME}-${BRANCH_NAME_HYPHEN}"
 
-							deployToK8s("secret/reverse-auction/kubeconfig", "dev", "k8s-deploy-feature")
+              deployToK8s("secret/reverse-auction/kubeconfig", "dev", "k8s-deploy-feature")
 
-							break;
-					}
-				}
-			}
-			post {
-				always {
-					echo "KUBE_YAML_PATH              = ${KUBE_YAML_PATH}"
-					echo "VAULT_KUBESECRETS_PATH      = ${VAULT_KUBESECRETS_PATH}"
-					echo "KUBE_NAMESPACE              = ${KUBE_NAMESPACE}"
-				}
-				success {
-					script {
-						// Set build status for `changed` post task
-						currentBuild.result = 'SUCCESS'
-					}
-				}
-				failure {
-					script {
-						currentBuild.result = 'FAILURE'
-					}
-				}
-			}
-		}
-	}
+              break;
+          }
+        }
+      }
+      post {
+        always {
+          echo "KUBE_YAML_PATH              = ${KUBE_YAML_PATH}"
+          echo "VAULT_KUBESECRETS_PATH      = ${VAULT_KUBESECRETS_PATH}"
+          echo "KUBE_NAMESPACE              = ${KUBE_NAMESPACE}"
+        }
+        success {
+          script {
+            // Set build status for `changed` post task
+            currentBuild.result = 'SUCCESS'
+          }
+        }
+        failure {
+          script {
+            currentBuild.result = 'FAILURE'
+          }
+        }
+      }
+    }
+  }
 }
 
 // def requireApproval(String message, String approvers, String mentions, int timeOutInSec){
