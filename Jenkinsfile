@@ -33,10 +33,7 @@ pipeline {
         echo "Initialize - default variables"
         script {
           // APP Name
-          APP_NAME 										= "reverse-auction"
-
-          // Project package path
-          PROJECT_PACKAGE_PATH        = "code.in.spdigital.sg/sp-digital/${APP_NAME}"
+          APP_NAME                    = "reverse-auction"
 
           // Vault
           VAULT_APP_BASE_PATH         = "secret/reverse-auction/${APP_NAME}"
@@ -57,7 +54,7 @@ pipeline {
 
           // Default values
           // Set Docker container suffix for uniqueness
-          CONTAINER_SUFFIX 						= "${BRANCH_NAME_HYPHEN}-${BUILD_NUMBER}"
+          CONTAINER_SUFFIX            = "${BRANCH_NAME_HYPHEN}-${BUILD_NUMBER}"
 
           // Set docker registry
           DOCKER_REG                  = "reverse-auction.azurecr.io"
@@ -146,12 +143,6 @@ pipeline {
       }
     }
 
-    stage("Checkout") {
-      steps { timestamps {
-        checkout scm
-      }}
-    }
-
     stage("Prepare Ruby ENV") {
       steps {
         sh "bundle install --path vendor/bundle"
@@ -216,11 +207,6 @@ pipeline {
             sh "make docker.build.all -j 4"
           }
         }
-        // stage("migrate") {
-        //   steps {
-        //     sh "make docker-build-migrate"
-        //   }
-        // }
       }
     }
 
@@ -237,11 +223,6 @@ pipeline {
             sh "make docker.push.all"
           }
         }
-        // stage("migrate") {
-        //   steps{
-        //     sh "make docker-push-migrate"
-        //   }
-        // }
       }
     }
 
