@@ -2,8 +2,8 @@ FactoryBot.define do
   factory :user do
     name { Faker::Name.name }
     sequence(:email) { |n| "user#{n}@example.com" }
-    password 'password'
-    password_confirmation 'password'
+    password { 'password' }
+    password_confirmation { 'password' }
 
     trait :with_admin do
       company_name { 'SP Group' }
@@ -13,8 +13,8 @@ FactoryBot.define do
     end
 
     trait :with_retailer do
-      approval_status '1'
-      consumer_type '1'
+      approval_status { '1' }
+      consumer_type { '1' }
       company_name { Faker::Company.name }
       company_address { Faker::Address.full_address }
       company_unique_entity_number { Faker::Code.asin }
@@ -33,8 +33,8 @@ FactoryBot.define do
     end
 
     trait :with_company_buyer do
-      approval_status '1'
-      consumer_type '2'
+      approval_status { '1' }
+      consumer_type { '2' }
       company_name { Faker::Company.name }
       company_address { Faker::Address.full_address }
       company_unique_entity_number { Faker::Code.asin }
@@ -44,8 +44,8 @@ FactoryBot.define do
     end
 
     trait :with_individual_buyer do
-      approval_status '1'
-      consumer_type '3'
+      approval_status { '1' }
+      consumer_type { '3' }
       name { Faker::Name.name }
       account_fin { Faker::Code.imei }
       account_housing_type { '1' }
@@ -56,7 +56,7 @@ FactoryBot.define do
 
     trait :with_admin_id_1 do
       company_name { 'SP Group' }
-      id 1
+      id { 1 }
       after(:create) do |user|
         user.add_role(:admin)
       end
