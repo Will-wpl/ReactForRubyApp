@@ -2,15 +2,20 @@ apiVersion: v1
 data:
   APPENV: qa
   APPNAME: reverse-auction
+  AZURE_STORAGE_ACCOUNT_NAME: spdareverseauctionqa
+  AZURE_STORAGE_ACCESS_KEY: something
+  AZURE_CONTAINER: reverse-auction-uploads
+  CARRIERWAVE_STORAGE: azure
+  HOSTNAME: revv.qa.energy.spdigital.sg
   HTTPSTUB_CONN_TIMEOUT: 30s
   HTTPSTUB_MAX_TIMEOUT: 90s
   HTTPSTUB_RETRIES: "2"
   LOG_LEVEL: DEBUG
-  HOSTNAME: something
-  SENDGRID_USERNAME: something
-  SENDGRID_PASSWORD: something
   MAILER_DEFAULT_FROM: something
+  REDIS_URL: something
   SECRET_KEY_BASE: something
+  SENDGRID_PASSWORD: something
+  SENDGRID_USERNAME: something
 kind: ConfigMap
 metadata:
   name: reverse-auction-configmap
