@@ -93,18 +93,7 @@ class LetterOfAwardV2 < LetterOfAward
     terms_and_conditions_of_use(page, page_content)
   end
 
-  def get_electricity_purchase_contract
-    request_attachment = nil
-    unless param[:auction].request_auction_id.nil?
-      request_attachment = RequestAttachment.find_by request_auction_id: param[:auction].request_auction_id
-    end
-    if request_attachment.nil?
-      visibility, file_path = get_tc_attach_path(param, UserAttachment::FileType_Seller_Buyer_TC)
-      file_path
-    else
-      request_attachment.file_path
-    end
-  end
+  private
 
   def terms_and_conditions_of_use(page, page_content)
     if param[:current_user]&.has_role?(:admin)
