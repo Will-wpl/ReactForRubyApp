@@ -127,6 +127,7 @@ class UserMailer < ApplicationMailer
   def request_responded(user, respond_boolean, comment = '')
     comment_text = ''
     respond_text = if respond_boolean
+                     comment_text = "Comments: #{comment}" unless comment.blank?
                      'approved'
                    else
                      comment_text = "Comments: #{comment}"
