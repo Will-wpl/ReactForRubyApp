@@ -82,7 +82,7 @@ class UserMailer < ApplicationMailer
                    else
                      "Comments: #{param[:comment]}"
                    end
-    email_body = mail_template.body.gsub(/#buyer_company_name/, user.company_name).gsub(/#name_of_ra/, param[:name_of_ra].to_s).gsub(/#date_time/, param[:date_time]).gsub(/#comment/, nl2br(CGI.unescape(param[:comment].to_s)))
+    email_body = mail_template.body.gsub(/#buyer_company_name/, user.company_name).gsub(/#name_of_ra/, param[:name_of_ra].to_s).gsub(/#date_time/, param[:date_time]).gsub(/#comment/, nl2br(CGI.unescape(comment_text.to_s)))
     send_email(user.email, email_body, email_subject)
   end
 
