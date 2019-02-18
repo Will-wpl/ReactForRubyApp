@@ -84,7 +84,7 @@ class UserMailer < ApplicationMailer
   def buyer_participate_rejected(user, param)
     mail_template = get_template('28')
     email_subject = mail_template.subject.gsub(/#name_of_ra/, param[:name_of_ra].to_s).gsub(/#date_time/, param[:date_time])
-    email_body = mail_template.body.gsub(/#buyer_company_name/, user.company_name).gsub(/#name_of_ra/, param[:name_of_ra].to_s).gsub(/#date_time/, param[:date_time])
+    email_body = mail_template.body.gsub(/#buyer_company_name/, user.company_name).gsub(/#name_of_ra/, param[:name_of_ra].to_s).gsub(/#date_time/, param[:date_time]).gsub(/#comment/, param[:comment].to_s)
     send_email(user.email, email_body, email_subject)
   end
 
@@ -124,15 +124,17 @@ class UserMailer < ApplicationMailer
     send_email(admin_user.email, email_body, email_subject)
   end
 
-  def request_responded(user, respond_boolean)
+  def request_responded(user, respond_boolean, comment = '')
+    comment_text = ''
     respond_text = if respond_boolean
                      'approved'
                    else
+                     comment_text = "Comments: #{comment}"
                      'rejected'
                    end
     mail_template = get_template('32')
     email_subject = mail_template.subject
-    email_body = mail_template.body.gsub(/#buyer_company_name/, user.company_name).gsub(/#respond/, respond_text.to_s)
+    email_body = mail_template.body.gsub(/#buyer_company_name/, user.company_name).gsub(/#respond/, respond_text.to_s).gsub(/#comment/, comment_text.to_s)
     send_email(user.email, email_body, email_subject)
   end
 
