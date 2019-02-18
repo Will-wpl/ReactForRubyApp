@@ -25,7 +25,8 @@ class Api::Admin::ConsumptionsController < Api::ConsumptionsController
       # Change -- [Update Action once approved consumption] - End
       UserMailer.buyer_participate_approved(target_consumption.user,
                                             { :name_of_ra => auction_name,
-                                              :date_time => auction_start_datetime
+                                              :date_time => auction_start_datetime,
+                                              :comment => comment
                                             }).deliver_later
     elsif approval_status == Consumption::AcceptStatusReject
       # Change -- [Update Action once approved consumption] - Start

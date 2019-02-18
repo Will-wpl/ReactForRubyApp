@@ -77,7 +77,12 @@ class UserMailer < ApplicationMailer
   def buyer_participate_approved(user, param)
     mail_template = get_template('27')
     email_subject = mail_template.subject.gsub(/#name_of_ra/, param[:name_of_ra].to_s).gsub(/#date_time/, param[:date_time])
-    email_body = mail_template.body.gsub(/#buyer_company_name/, user.company_name).gsub(/#name_of_ra/, param[:name_of_ra].to_s).gsub(/#date_time/, param[:date_time])
+    comment_text = if param[:comment].blank?
+                     ''
+                   else
+                     "Comments: #{param[:comment]}"
+                   end
+    email_body = mail_template.body.gsub(/#buyer_company_name/, user.company_name).gsub(/#name_of_ra/, param[:name_of_ra].to_s).gsub(/#date_time/, param[:date_time]).gsub(/#comment/, nl2br(CGI.unescape(param[:comment].to_s)))
     send_email(user.email, email_body, email_subject)
   end
 
