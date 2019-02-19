@@ -128,7 +128,8 @@ export class RetailerRegister extends Component {
                 agree_seller_revv: item.agree_seller_revv ? item.agree_seller_revv : '0',
                 status: setApprovalStatus(item.approval_status, item.approval_status === "5" ? item.deleted_at : item.approval_date_time === null ? item.created_at : item.approval_date_time),
                 approveStatus: (item.approval_status === "3" || item.approval_status === "5") ? true : false,
-                retailerApproveStatus: item.approval_status
+                retailerApproveStatus: item.approval_status,
+                comment:item.comment
             })
             if (this.state.agree_seller_buyer === '1') {
                 $('#chkRevv').attr("checked", true);

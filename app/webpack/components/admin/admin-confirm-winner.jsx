@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom';
 import RetailerRanking from './admin_shared/ranking';
 import ReservePrice from './admin_shared/reserveprice';
 import WinnerPrice from './admin_shared/winner';
-import { getHistoriesLast, auctionConfirm } from '../../javascripts/componentService/admin/service';
+import { getHistoriesLast, auctionConfirm} from '../../javascripts/componentService/admin/service';
 import { getAuction } from '../../javascripts/componentService/common/service';
 import { Modal } from '../shared/show-modal';
+import ReservePriceCompare from './admin_shared/reserveprice-compare';
 import moment from 'moment';
 export default class AdminConfirmWinner extends Component {
     constructor(props) {
@@ -17,6 +18,7 @@ export default class AdminConfirmWinner extends Component {
                 statusColor: "green",
                 realtimeRanking: [], currentPrice: '0.0000',
             },
+            compare:{},
             fnStatus: false,
             text: "",
             winner: {
@@ -78,6 +80,7 @@ export default class AdminConfirmWinner extends Component {
                     data: histories.histories[0],
                     auction: histories.auction
                 },
+                compare:histories.histories[0],
                 realtimeRanking: histories.histories, currentPrice: histories.histories.length > 0 ? histories.histories[0].average_price : this.state.currentPrice
             });
         })
@@ -171,7 +174,10 @@ export default class AdminConfirmWinner extends Component {
                     </div> : ''}
                 <div className="u-grid u-mt2">
                     <div className="col-sm-12 col-md-6 u-cell">
-                        <div className="col-sm-12 col-md-10 push-md-1"><RetailerRanking ranking={this.state.realtimeRanking} /></div>
+                        <div className="col-sm-12 col-md-10 push-md-1">
+                            <RetailerRanking ranking={this.state.realtimeRanking} />
+                            <ReservePriceCompare contracts={this.state.live_auction_contracts} compare={this.state.compare} />
+                        </div>
                     </div>
                     <div className="col-sm-12 col-md-6 u-cell">
                         <div className="col-sm-12 col-md-10 push-md-1">
@@ -181,7 +187,7 @@ export default class AdminConfirmWinner extends Component {
                     </div>
                 </div>
                 <Modal ref="Modal" text={this.state.text} acceptFunction={!this.state.fnStatus ? this.void_auction.bind(this) : this.confirm_winner.bind(this)} />
-                <div className="col-sm-12 col-md-12"> 
+                <div className="col-sm-12 col-md-12">
                     <div className="createRaMain createRaMainMiddle u-grid winner_btn" >
                         <a className="lm--button lm--button--primary u-mt3" onClick={this.showDetail.bind(this, 'win')} >Click to Select Winner</a>
                     </div>

@@ -635,3 +635,17 @@ export const getStatus = (type, dt) => {
     }
     return status;
 }
+
+export const toThousands = (k) =>{
+    let num = k.toString(), result = '', node = '';
+    if (num.indexOf('.') > 0) {
+        node = '.' + num.split('.')[1];
+        num = num.split('.')[0];
+    }
+    while (num.length > 3) {
+        result = ',' + num.slice(-3) + result;
+        num = num.slice(0, num.length - 3);
+    }
+    if (num) { result = num + result; }
+    return result + node;
+}

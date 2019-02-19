@@ -44,3 +44,4 @@ WickedPdf.config = {
     # (but can be overridden in `render :pdf` calls)
     # layout: 'pdf.html',
 }
+

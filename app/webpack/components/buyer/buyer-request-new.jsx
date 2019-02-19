@@ -6,7 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { UploadFile } from '../shared/upload';
 import { Modal } from '../shared/show-modal';
 import moment from 'moment';
-import { changeValidate, removeAsInteger2, validateInteger, setValidationFaild, setValidationPass, validator_Object, getStatus } from './../../javascripts/componentService/util';
+import { changeValidate, removeAsInteger2, validateInteger, setValidationFaild, setValidationPass, validator_Object, getStatus ,toThousands} from './../../javascripts/componentService/util';
 import { getBuyerRequestDetail, saveBuyerRequest, approveBuyerRequest } from './../../javascripts/componentService/common/service';
 
 
@@ -90,12 +90,13 @@ export class BuyerNewRequestManage extends Component {
     bindDetails() {
         getBuyerRequestDetail(this.state.id).then(res => {
             if (res.result === "success") {
+                console.log(res);
                 this.setState({
                     name: res.request_auction.name,
                     buyer_type: res.request_auction.buyer_type,
                     contract_period_start_date: moment(res.request_auction.contract_period_start_date),
                     duration: res.request_auction.duration,
-
+                    comment:res.request_auction.comment,
                     total_volume: res.request_auction.total_volume ? res.request_auction.total_volume : "",
                     allow_deviation: res.request_auction.allow_deviation,
                     status: res.request_auction.accept_status,
@@ -496,7 +497,7 @@ export class BuyerNewRequestManage extends Component {
                                                 <abbr title="required">*</abbr> Estimated (aggregate) monthly consumption (kwh/month) :
                                             </label>
                                             <div className="lm--formItem-right lm--formItem-control">
-                                                <input type="text" name="total_volume" value={this.state.total_volume} onChange={this.doValue.bind(this, 'total_volume')} disabled={this.state.disabled} ref="total_volume" required aria-required="true" title="Please fill out this field" placeholder="" />
+                                                <input type="text" name="total_volume" value={toThousands(Math.round(Number(this.state.total_volume)))} onChange={this.doValue.bind(this, 'total_volume')} disabled={this.state.disabled} ref="total_volume" required aria-required="true" title="Please fill out this field" placeholder="" />
                                                 <div className='isPassValidate' id='total_volume_message' > Please input an integer greater than 0!</div>
                                                 <div className='isPassValidate' id='total_volume_format' >Please input an integer greater than 0!</div>
                                             </div>
@@ -507,13 +508,20 @@ export class BuyerNewRequestManage extends Component {
                                                 <abbr title="required">*</abbr> Flexible on Contract Start Date?
                                                 </label>
                                             <div className="lm--formItem-right lm--formItem-control">
-                                                <select ref="allow_deviation" id="allow_deviation" onChange={this.doValue.bind(this, 'flexible')} value={this.state.flexible} disabled={this.state.disabled}>
+                                                <select ref="allow_deviation" id="allow_deviation" onChange={this.doValue.bind(this, 'flexible')}  value={this.state.flexible} disabled={this.state.disabled}>
                                                     <option value="1">Yes</option>
                                                     <option value="0">No</option>
                                                 </select>
                                             </div>
                                         </div>
-
+                                        {this.state.comment!=""?<div className="lm--formItem lm--formItem--inline string">
+                                            <label className="lm--formItem-left lm--formItem-label string required">
+                                                Admin Comments
+                                            </label>
+                                            <div className="lm--formItem-right lm--formItem-control">
+                                                <textarea id="input_comment" name="comment" value={this.state.comment} disabled={true} />
+                                            </div>
+                                        </div>:""}
                                     </div>
                                 </div>
                                 <div className="retailer_btn" >

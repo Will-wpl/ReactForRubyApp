@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import { UploadFile } from '../shared/upload';
-import { changeValidate, validator_Object, setValidationFaild, setValidationPass, getStatus } from './../../javascripts/componentService/util';
+import { changeValidate, validator_Object, setValidationFaild, setValidationPass, getStatus ,toThousands} from './../../javascripts/componentService/util';
 import { getBuyerRequestDetail_Admin, approveBuyerRequest } from './../../javascripts/componentService/admin/service';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -90,7 +90,6 @@ export default class AdminBuyerRequestManage extends Component {
             }
         })
     }
-
 
     starttimeChange(data) {
         this.setState({
@@ -311,7 +310,6 @@ export default class AdminBuyerRequestManage extends Component {
                                                             <option value="0">No</option>
                                                         </select>
                                                     </div>
-                                                    
                                                 </div> : ''
                                             }
 
@@ -321,12 +319,8 @@ export default class AdminBuyerRequestManage extends Component {
                                                     <abbr title="required">*</abbr> Estimated (aggregate) monthly consumption (kwh/month) :
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control">
-                                                    <input type="text" name="total_volume" value={this.state.total_volume} onChange={this.doValue.bind(this, 'total_volume')} disabled={this.state.disabled} ref="total_volume" required aria-required="true" title="Please fill out this field" placeholder="" />
-                                                    <div className='isPassValidate' id='total_volume_message' >This field is required!</div>
-                                                </div>
-                                            </div>
+                                                    <input type="text" name="total_volume" value={toThousands(Math.round(Number(this.state.total_volume)))} onChange={this.doValue.bind(this, 'total_volume')} disabled={this.state.disabled} ref="total_volume" required aria-required="true" title="Please fill out this field" placeholder="" />
                                             <div className="lm--formItem lm--formItem--inline string">
-                                                <label className="lm--formItem-left lm--formItem-label string required">
                                                     <abbr title="required">*</abbr> Flexible on Contract Start Date?
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control">
