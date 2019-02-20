@@ -397,6 +397,15 @@ export class BuyerNewRequestManage extends Component {
                                                 </div>
                                             </div> : ""
                                         }
+                                        {this.state.comment!=""?<div className="lm--formItem lm--formItem--inline string">
+                                            <label className="lm--formItem-left lm--formItem-label string required">
+                                                Admin Comments
+                                            </label>
+                                            <div className="lm--formItem-right lm--formItem-label">
+                                                {this.state.comment}
+                                                {/*<textarea id="input_comment" name="comment" value={this.state.comment} disabled={true} />*/}
+                                            </div>
+                                        </div>:""}
                                         <div className="lm--formItem lm--formItem--inline string">
                                             <label className="lm--formItem-left lm--formItem-label string required">
                                                 <abbr title="required">*</abbr> Name of Reverse Auction  :
@@ -514,14 +523,6 @@ export class BuyerNewRequestManage extends Component {
                                                 </select>
                                             </div>
                                         </div>
-                                        {this.state.comment!=""?<div className="lm--formItem lm--formItem--inline string">
-                                            <label className="lm--formItem-left lm--formItem-label string required">
-                                                Admin Comments
-                                            </label>
-                                            <div className="lm--formItem-right lm--formItem-control">
-                                                <textarea id="input_comment" name="comment" value={this.state.comment} disabled={true} />
-                                            </div>
-                                        </div>:""}
                                     </div>
                                 </div>
                                 <div className="retailer_btn" >
