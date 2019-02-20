@@ -8,8 +8,13 @@ class UserMailer < ApplicationMailer
 
   def approval_email(user)
     mail_template = get_template('2')
+    comment_text = if user.comment.blank?
+                     ''
+                   else
+                     "Comments: #{user.comment}"
+                   end
     email_subject = mail_template.subject
-    email_body = mail_template.body.gsub(/#user.company_name/, user.company_name)
+    email_body = mail_template.body.gsub(/#user.company_name/, user.company_name).gsub(/#comment/, nl2br(CGI.unescape(comment_text.to_s)))
     send_email(user.email, email_body, email_subject)
   end
 
