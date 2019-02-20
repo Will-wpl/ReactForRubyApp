@@ -49,7 +49,7 @@ export default class AdminConfirmWinner extends Component {
             this.setState({ auctions: auction });
             if (auction.live_auction_contracts) {
                 this.setState({
-                    live_auction_contracts:auction.live_auction_contracts,
+                    live_auction_contracts: auction.live_auction_contracts,
                     livetype: auction.live_auction_contracts[0].contract_duration
                 });
             }
