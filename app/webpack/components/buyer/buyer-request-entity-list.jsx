@@ -67,7 +67,6 @@ export class BuyerRequestEntityListManage extends Component {
                             <div><dfn className={"search_list_asc entity_name"} onClick={this.dosort.bind(this, 'entity_name', 'asc')}></dfn>
                                                 <dfn className={"search_list_desc entity_name"} onClick={this.dosort.bind(this, 'entity_name', 'desc')}></dfn></div>
                                         </th>
-
                                         <th> Existing Retailer
                             <div><dfn className={"search_list_asc retailer_name"} onClick={this.dosort.bind(this, 'retailer_name', 'asc')}></dfn>
                                                 <dfn className={"search_list_desc retailer_name"} onClick={this.dosort.bind(this, 'retailer_name', 'desc')}></dfn></div>

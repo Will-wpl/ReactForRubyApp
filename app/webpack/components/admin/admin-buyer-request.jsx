@@ -91,8 +91,6 @@ export default class AdminBuyerRequestManage extends Component {
         })
     }
 
-
-
     starttimeChange(data) {
         this.setState({
             contract_period_start_date: data
@@ -312,7 +310,6 @@ export default class AdminBuyerRequestManage extends Component {
                                                             <option value="0">No</option>
                                                         </select>
                                                     </div>
-
                                                 </div> : ''
                                             }
 
