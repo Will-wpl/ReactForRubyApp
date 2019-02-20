@@ -320,7 +320,11 @@ export default class AdminBuyerRequestManage extends Component {
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control">
                                                     <input type="text" name="total_volume" value={toThousands(Math.round(Number(this.state.total_volume)))} onChange={this.doValue.bind(this, 'total_volume')} disabled={this.state.disabled} ref="total_volume" required aria-required="true" title="Please fill out this field" placeholder="" />
+                                                    <div className='isPassValidate' id='total_volume_message' >This field is required!</div>
+                                                </div>
+                                            </div>
                                             <div className="lm--formItem lm--formItem--inline string">
+                                                <label className="lm--formItem-left lm--formItem-label string required">
                                                     <abbr title="required">*</abbr> Flexible on Contract Start Date?
                                                 </label>
                                                 <div className="lm--formItem-right lm--formItem-control">
