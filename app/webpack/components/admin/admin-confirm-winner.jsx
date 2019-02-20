@@ -63,7 +63,6 @@ export default class AdminConfirmWinner extends Component {
         getHistoriesLast({ auction_id: this.state.auctions.id ? this.state.auctions.id : 1 }).then(data => {
             let histories;
             if (data.duration_6 || data.duration_12 || data.duration_24) {
-                ;
                 switch (this.state.livetype) {
                     case '6': histories = data.duration_6;
                         break;
@@ -176,7 +175,7 @@ export default class AdminConfirmWinner extends Component {
                     <div className="col-sm-12 col-md-6 u-cell">
                         <div className="col-sm-12 col-md-10 push-md-1">
                             <RetailerRanking ranking={this.state.realtimeRanking} />
-                            <ReservePriceCompare contracts={this.state.live_auction_contracts} compare={this.state.compare} />
+                            <ReservePriceCompare livetype={this.state.livetype} contracts={this.state.live_auction_contracts} compare={this.state.compare} />
                         </div>
                     </div>
                     <div className="col-sm-12 col-md-6 u-cell">
