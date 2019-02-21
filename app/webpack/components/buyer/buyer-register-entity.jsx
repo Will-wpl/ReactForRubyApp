@@ -14,7 +14,7 @@ export class BuyerUserEntityRegister extends Component {
         this.state = {
             id: "", userid: "", text: "", btn_status: false, disabled: false, havedata: false, allbtnStatus: true, validate: true, use_type: "",
             email_address: "", company_name: "", unique_entity_number: "", company_address: "", billing_address: "", contact_name: "",
-            mobile_number: "", office_number: "", entityStatus: "", approveStatus: false, status: '', main_id: '',
+            mobile_number: "", office_number: "", entityStatus: "", approveStatus: false, status: '', main_id: '', comment: '',
 
             buyerTCurl: "", buyerTCname: "", agree_seller_buyer: "0", approval_status: 2, tabSelected: "base",
             buyerRevvTCurl: "", buyerRevvTCname: "", agree_buyer_revv: "0", has_tenants: "1", entity_list: [], entityItemInfo: this.entityItem,
@@ -165,7 +165,7 @@ export class BuyerUserEntityRegister extends Component {
                 agree_buyer_revv: item.agree_buyer_revv ? item.agree_buyer_revv : '0',
                 has_tenants: item.has_tenants ? item.has_tenants : '1',
                 approveStatus: item.approval_status === "3" ? true : false,
-
+                comment: item.comment ? item.comment : '',
                 status: setApprovalStatus(item.approval_status, item.approval_date_time === null ? item.created_at : item.approval_date_time)
             })
             this.company_name_back = item.company_name;
@@ -927,8 +927,8 @@ export class BuyerUserEntityRegister extends Component {
                     name.push(item.detail.error_value)
                     column = 0;
                     if (item.indexs.length > 0) {
-                        item.indexs.map(i=>{
-                            this.setRedRece(i,column);
+                        item.indexs.map(i => {
+                            this.setRedRece(i, column);
                         })
                     }
                 }
@@ -936,8 +936,8 @@ export class BuyerUserEntityRegister extends Component {
                     uen.push(item.detail.error_value);
                     column = 1;
                     if (item.indexs.length > 0) {
-                        item.indexs.map(i=>{
-                            this.setRedRece(i,column);
+                        item.indexs.map(i => {
+                            this.setRedRece(i, column);
                         })
                     }
                 }
@@ -945,8 +945,8 @@ export class BuyerUserEntityRegister extends Component {
                     email.push(item.detail.error_value)
                     column = 6;
                     if (item.indexs.length > 0) {
-                        item.indexs.map(i=>{
-                            this.setRedRece(i,column);
+                        item.indexs.map(i => {
+                            this.setRedRece(i, column);
                         })
                     }
                 }
@@ -970,8 +970,7 @@ export class BuyerUserEntityRegister extends Component {
             return;
         }
     }
-    setRedRece(row,column)
-    {
+    setRedRece(row, column) {
         $("#tabEntity tr:eq(" + row + ") td:eq(" + column + ")").find("div").css({ 'color': 'red', "border": "1px red solid" })
     }
 
@@ -1032,6 +1031,17 @@ export class BuyerUserEntityRegister extends Component {
                                                     {this.state.status}
                                                 </div>
                                             </div>
+                                            {
+                                                (this.state.comment && this.state.comment.length > 0) ? <div className="lm--formItem lm--formItem--inline string">
+                                                    <label className="lm--formItem-left lm--formItem-label string required">
+                                                        Admin Comments :
+                                                </label>
+                                                    <div className="lm--formItem-right lm--formItem-control lm--formItem-label">
+                                                        {this.state.comment}
+                                                    </div>
+                                                </div> : ''
+                                            }
+
                                             <div className="lm--formItem lm--formItem--inline string">
                                                 <label className="lm--formItem-left lm--formItem-label string required">
                                                     <abbr title="required">*</abbr> Email :
@@ -1219,7 +1229,7 @@ export class BuyerUserEntityRegister extends Component {
                     </div>
                     <div className="col-sm-12" style={{ "backgroundColor": "#fff", "marginTop": "-20px" }}>
                         <div className="col-sm-12 col-md-8 push-md-3 validate_message margin-t buyer_list_select">
-                            <div className="lm--formItem lm--formItem--inline string" style={{"display":"none"}}>
+                            <div className="lm--formItem lm--formItem--inline string" style={{ "display": "none" }}>
                                 <label className="lm--formItem-left lm--formItem-label string required">
                                     <abbr title="required">*</abbr> Tenant Management Service Required :
                                     </label>

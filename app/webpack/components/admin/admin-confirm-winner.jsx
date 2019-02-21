@@ -53,7 +53,6 @@ export default class AdminConfirmWinner extends Component {
                     livetype: auction.live_auction_contracts[0].contract_duration
                 });
             }
-            //console.log(auction);
             this.auction = auction;
             this.startPrice = auction ? parseFloat(auction.reserve_price).toFixed(4) : '0.0000';
             this.refresh();
@@ -63,7 +62,6 @@ export default class AdminConfirmWinner extends Component {
         getHistoriesLast({ auction_id: this.state.auctions.id ? this.state.auctions.id : 1 }).then(data => {
             let histories;
             if (data.duration_6 || data.duration_12 || data.duration_24) {
-                ;
                 switch (this.state.livetype) {
                     case '6': histories = data.duration_6;
                         break;
@@ -74,6 +72,12 @@ export default class AdminConfirmWinner extends Component {
                 }
             } else {
                 histories = data;
+            }
+            if(this.state.auctions.live_auction_contracts){
+                let live = this.state.auctions.live_auction_contracts.filter(item=>{
+                    return this.state.livetype === item.contract_duration
+                })
+                this.setState({contracts:live});
             }
             this.setState({
                 winner: {
@@ -176,7 +180,7 @@ export default class AdminConfirmWinner extends Component {
                     <div className="col-sm-12 col-md-6 u-cell">
                         <div className="col-sm-12 col-md-10 push-md-1">
                             <RetailerRanking ranking={this.state.realtimeRanking} />
-                            <ReservePriceCompare contracts={this.state.live_auction_contracts} compare={this.state.compare} />
+                            {this.state.live_auction_contracts.length>0?<ReservePriceCompare contracts={this.state.contracts} compare={this.state.compare} />:''}
                         </div>
                     </div>
                     <div className="col-sm-12 col-md-6 u-cell">
