@@ -14,7 +14,7 @@ export class Adminworkflow extends Component {
         this.state={
             auction:{},
             disabled:false,current:{},page:1,
-            allbtnStatus:true,retailer_list:[],readOnly:false,
+            allbtnStatus:true,retailer_list:[],readOnly:true,
             step_counts:[],role_name:""
         }
         getRetailerList(sessionStorage.auction_id).then(res=>{
@@ -27,12 +27,12 @@ export class Adminworkflow extends Component {
             //console.log(res);
             res.name=name;
             if(index==3||index==4){
-                this.setState({current:res,page:index,readOnly:!type,role_name:res.user_info.name});
+                this.setState({current:res,page:index,readOnly:true,role_name:res.user_info.name});//!type
             }else{
-                this.setState({current:res,page:res.current.current_node,readOnly:!type,role_name:res.user_info.name});
+                this.setState({current:res,page:res.current.current_node,readOnly:true,role_name:res.user_info.name});//!type
             }
             getRetailerList(sessionStorage.auction_id).then(re=>{
-                this.setState({readOnly:re.user_info.readonly});
+                this.setState({readOnly:true});//re.user_info.readonly
             })
             if(window.location.href.indexOf("past")>0){
                 this.setState({readOnly:true});
