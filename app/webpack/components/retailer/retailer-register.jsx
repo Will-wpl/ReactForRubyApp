@@ -129,7 +129,7 @@ export class RetailerRegister extends Component {
                 status: setApprovalStatus(item.approval_status, item.approval_status === "5" ? item.deleted_at : item.approval_date_time === null ? item.created_at : item.approval_date_time),
                 approveStatus: (item.approval_status === "3" || item.approval_status === "5") ? true : false,
                 retailerApproveStatus: item.approval_status,
-                comment:item.comment
+                comment: item.comment
             })
             if (this.state.agree_seller_buyer === '1') {
                 $('#chkRevv').attr("checked", true);
@@ -663,6 +663,16 @@ export class RetailerRegister extends Component {
                                         {this.state.status}
                                     </div>
                                 </div>
+                                {
+                                    this.state.comment.length > 0 ? <div className="lm--formItem lm--formItem--inline string">
+                                        <label className="lm--formItem-left lm--formItem-label string required">
+                                            Admin Comments :
+                                </label>
+                                        <div className="lm--formItem-right lm--formItem-control lm--formItem-label">
+                                            {this.state.comment}
+                                        </div>
+                                    </div> : ''
+                                }
                                 <div className="lm--formItem lm--formItem--inline string">
                                     <label className="lm--formItem-left lm--formItem-label string required">
                                         <abbr title="required">*</abbr> Email :
