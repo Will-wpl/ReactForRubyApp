@@ -419,7 +419,7 @@ export class SearchList extends Component {
                                                                     } else if (item['status'] === 'Upcoming' && ik.name === 'Manage') {
                                                                         return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this, item.id ? item.id : item.user_id, ik.url, ik.name, ik.interface_type ? ik.interface_type : "", item.name ? item.name : '', item.auction_id)}>Manage{item.incomplete ? incompleteHtml : ''}</a>
                                                                     } else if (ik.name === "Retailer Dashboard" && window.location.href.indexOf("admin") < 0) {
-                                                                        if(item.show_dashboard){
+                                                                        if(item.dashdoard_id){
                                                                             //if (item.dashdoard_id) {
                                                                                 //if(item.show_dashdoard==true){
                                                                                     return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this, item.id ? item.id : item.user_id, ik.url, ik.name, ik.interface_type ? ik.interface_type : "", item.name ? item.name : '', item.auction_id)}>{ik.name}</a>
