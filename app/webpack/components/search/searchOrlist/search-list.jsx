@@ -94,7 +94,7 @@ export class SearchList extends Component {
             this.auction_id = id;
             this.showDelete(list_name);
         } else {
-            if (auction_id) {
+            if (auction_id && type == "auction") {
                 window.location.href = `${url.replace(":id", auction_id)}`;
             } else {
                 window.location.href = `${url.replace(":id", id)}`;
@@ -425,6 +425,8 @@ export class SearchList extends Component {
                                                                                     return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this, item.id ? item.id : item.user_id, ik.url, ik.name, ik.interface_type ? ik.interface_type : "", item.name ? item.name : '', item.auction_id)}>{ik.name}</a>
                                                                                 //}
                                                                             }
+                                                                        }else{
+                                                                            return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this, item.id ? item.id : item.user_id, ik.url, ik.name, ik.interface_type ? ik.interface_type : "", item.name ? item.name : '', item.auction_id)}>{ik.name}</a>
                                                                         }
                                                                     } else {
                                                                         return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this, item.id ? item.id : item.user_id, ik.url, ik.name, ik.interface_type ? ik.interface_type : "", item.name ? item.name : '', item.auction_id)}>{ik.name}{(ik.name == "Buyer Dashboard" || ik.name == "Buyer List" || ik.name == "Retailer List") && item.all_accept == false ? <span title={"There is outstanding Buyer Participation details pending for approval."} className={"font_arial"} style={{ "color": "red" }}>!</span> : ''}</a>
