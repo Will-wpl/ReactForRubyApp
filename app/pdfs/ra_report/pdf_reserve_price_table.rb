@@ -36,21 +36,20 @@ class PdfReservePriceTable
 
     head_row.push(title)
     is_yes, img = get_achieved_img(result_peak,  peak)
-    if is_yes
-      img_table = get_img_table(pdf, img, peak)
-      peak_row.push(img_table)
-    else
-      peak_row.push(number_format(peak))
-    end
+    # if is_yes
+    img_table = get_img_table(pdf, img, peak)
+    peak_row.push(img_table)
+    # else
+    #   peak_row.push(number_format(peak))
+    # end
 
     is_yes, img = get_achieved_img(result_off_peak,  off_peak)
-    if is_yes
-      img_table = get_img_table(pdf, img, off_peak)
-      off_peak_row.push(img_table)
-    else
-      off_peak_row.push(number_format(off_peak))
-
-    end
+    # if is_yes
+    img_table = get_img_table(pdf, img, off_peak)
+    off_peak_row.push(img_table)
+    # else
+    #   off_peak_row.push(number_format(off_peak))
+    # end
 
   end
 
@@ -64,7 +63,7 @@ class PdfReservePriceTable
     if achieved
       return true, Rails.root.join("app", "assets", "pdf", "yes.png")
     else
-      return false, nil
+      return true, Rails.root.join("app", "assets", "pdf", "no.png")
     end
   end
 end
