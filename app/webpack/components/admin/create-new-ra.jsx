@@ -974,7 +974,7 @@ export class CreateNewRA extends Component {
                                         <span className="lm--formItem-left lm--formItem-label string optional">
                                             <abbr title="required"></abbr>Electricity Purchase Contract :</span>
                                         <label className="lm--formItem-right lm--formItem-control" style={{ marginTop: "10px" }}>
-                                            <div>  <a href={this.state.tc_path} download={this.state.tc_path} style={{"background":"none","marginLeft":"-15px"}} >{this.state.tc_name}</a></div>
+                                            <div>  <a href={this.state.tc_path} download={this.state.tc_path} style={{"background":"none","marginLeft":"-15px"}} download={this.state.tc_name} >{this.state.tc_name}</a></div>
                                         </label>
                                     </dd> : ""
                                 }
