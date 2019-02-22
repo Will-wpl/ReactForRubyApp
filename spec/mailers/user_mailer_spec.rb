@@ -172,7 +172,7 @@ RSpec.describe UserMailer, type: :mail do
 
   context 'buyer_participate mail' do
     before :each do
-      @template = create(:email_template, subject: 'Buyer clicks Participate', body: 'Dear Admin,<br/><br/>#buyer_company_name has submitted purchase details for participation in an upcoming auction: #name_of_ra on #date_time.<br/><br/>Please proceed to approve/reject the submission at <a href="http://revv.sg">revv.sg</a>', template_type: '26')
+      @template = create(:email_template, subject: 'Buyer clicks Participate', body: 'Dear Admin,<br/><br/>#buyer_company_name has submitted purchase details for participation in an upcoming auction: #name_of_ra on #date_time.<br/><br/>Please proceed to approve/reject the submission at <a href="https://revv.sg">revv.sg</a>', template_type: '26')
       UserMailer.buyer_participate(@admin_user, {:buyer_company_name => 'buyer_company_name', :name_of_ra => 'name_of_ra', :date_time => 'date_time'}).deliver_now
     end
     it 'be_delivered_to', mail: true do
@@ -182,7 +182,7 @@ RSpec.describe UserMailer, type: :mail do
 
   context 'buyer_participate approved mail' do
     before :each do
-      @template = create(:email_template, subject: '#name_of_ra on #date_time has been approved', body: 'Dear #buyer_company_name,<br/><br/>Your purchase details for participation in the upcoming auction (#name_of_ra on #date_time) has been approved.<br/><br/>You may view your approved participation details at <a href="http://revv.sg">revv.sg</a>.', template_type: '27')
+      @template = create(:email_template, subject: '#name_of_ra on #date_time has been approved', body: 'Dear #buyer_company_name,<br/><br/>Your purchase details for participation in the upcoming auction (#name_of_ra on #date_time) has been approved.<br/><br/>You may view your approved participation details at <a href="https://revv.sg">revv.sg</a>.', template_type: '27')
       UserMailer.buyer_participate_approved(company_buyer, {:name_of_ra => 'name_of_ra', :date_time => 'date_time'}).deliver_now
     end
     it 'be_delivered_to', mail: true do
@@ -192,7 +192,7 @@ RSpec.describe UserMailer, type: :mail do
 
   context 'buyer_participate rejected mail' do
     before :each do
-      @template = create(:email_template, subject: '#name_of_ra on #date_time has been rejected', body: 'Dear #buyer_company_name,<br/><br/>Your purchase details for participation in the upcoming auction (#name_of_ra on #date_time) has been rejected.<br/><br/>Please log in to your account at <a href="http://revv.sg">revv.sg</a> for further actions.', template_type: '28')
+      @template = create(:email_template, subject: '#name_of_ra on #date_time has been rejected', body: 'Dear #buyer_company_name,<br/><br/>Your purchase details for participation in the upcoming auction (#name_of_ra on #date_time) has been rejected.<br/><br/>Please log in to your account at <a href="https://revv.sg">revv.sg</a> for further actions.', template_type: '28')
       UserMailer.buyer_participate_rejected(company_buyer, {:name_of_ra => 'name_of_ra', :date_time => 'date_time', :comment => 'comment'}).deliver_now
     end
     it 'be_delivered_to', mail: true do
@@ -203,7 +203,7 @@ RSpec.describe UserMailer, type: :mail do
 
   context 'winner confirmation mail' do
     before :each do
-      @template = create(:email_template, subject: 'Winner confirmation', body: 'Dear #retailer_company_name,<br/><br/>Congratulations, #retailer_company_name has been awarded the tender for #months electricity purchase category under the reverse auction conducted on #date_of_ra] (ID: #ra_id).<br/><br/>Please proceed to acknowledge the Letter(s) of Award at <a href="http://revv.sg">revv.sg</a>.', template_type: '10')
+      @template = create(:email_template, subject: 'Winner confirmation', body: 'Dear #retailer_company_name,<br/><br/>Congratulations, #retailer_company_name has been awarded the tender for #months electricity purchase category under the reverse auction conducted on #date_of_ra] (ID: #ra_id).<br/><br/>Please proceed to acknowledge the Letter(s) of Award at <a href="https://revv.sg">revv.sg</a>.', template_type: '10')
       UserMailer.winner_confirmation(retailer, {:date_of_ra => 'date_of_ra', :ra_id => 'ra gid', :months => ['6 months']}).deliver_now
     end
     it 'be_delivered_to', mail: true do
@@ -213,7 +213,7 @@ RSpec.describe UserMailer, type: :mail do
 
   context 'buyer winner confirmation mail' do
     before :each do
-      @template = create(:email_template, subject: 'Auction Results Notification', body: 'Dear #buyer_company_name,<br/><br/>Congratulations, #retailer_company_name has been awarded as your new electricity retailer for the #months months contract commencing on #contract_start_date (ID: #ra_id).<br/><br/>Please proceed to view the electricity purchase report at <a href="http://revv.sg">revv.sg</a>.', template_type: '29')
+      @template = create(:email_template, subject: 'Auction Results Notification', body: 'Dear #buyer_company_name,<br/><br/>Congratulations, #retailer_company_name has been awarded as your new electricity retailer for the #months months contract commencing on #contract_start_date (ID: #ra_id).<br/><br/>Please proceed to view the electricity purchase report at <a href="https://revv.sg">revv.sg</a>.', template_type: '29')
       UserMailer.buyer_winner_confirmation(company_buyer, { :retailer_company_name => 'company_name', :ra_id => 'ra_id', :months => '6', :contract_start_date => 'contract_start_date'}).deliver_now
     end
     it 'be_delivered_to', mail: true do
@@ -223,7 +223,7 @@ RSpec.describe UserMailer, type: :mail do
 
   context 'buyer registered email mail' do
     before :each do
-      @template = create(:email_template, subject: 'buyer registered email', body: 'Dear Admin,<br/><br/>#buyer_company_name has registered for a REVV account.<br/><br/>Please proceed to manage the registration at <a href="http://revv.sg">revv.sg</a>.', template_type: '11')
+      @template = create(:email_template, subject: 'buyer registered email', body: 'Dear Admin,<br/><br/>#buyer_company_name has registered for a REVV account.<br/><br/>Please proceed to manage the registration at <a href="https://revv.sg">revv.sg</a>.', template_type: '11')
       UserMailer.buyer_registered_email(@admin_user, company_buyer).deliver_now
     end
     it 'be_delivered_to', mail: true do
@@ -233,7 +233,7 @@ RSpec.describe UserMailer, type: :mail do
 
   context 'contract notification mail' do
     before :each do
-      @template = create(:email_template, subject: 'contract notification mail', body: 'Dear Admin,<br/><br/>test #days.<br/><br/>buyer_company_name_list<br/><br/>Please proceed to view the electricity purchase report at <a href="http://revv.sg">revv.sg</a>.', template_type: '30')
+      @template = create(:email_template, subject: 'contract notification mail', body: 'Dear Admin,<br/><br/>test #days.<br/><br/>buyer_company_name_list<br/><br/>Please proceed to view the electricity purchase report at <a href="https://revv.sg">revv.sg</a>.', template_type: '30')
       UserMailer.contract_notification(@admin_user, {:days => '30', :buyer_company_name_list => ["company_name_list"]}).deliver_now
     end
     it 'be_delivered_to', mail: true do
@@ -243,7 +243,7 @@ RSpec.describe UserMailer, type: :mail do
 
   context 'request submitted mail' do
     before :each do
-      @template = create(:email_template, subject: 'Request for initiation of reverse auction', body: 'Dear Admin,<br/><br/>#buyer_company_name has submitted a request for initiation of reverse auction.<br/><br/>Please proceed to manage the request at <a href="http://revv.sg">revv.sg</a>.', template_type: '31')
+      @template = create(:email_template, subject: 'Request for initiation of reverse auction', body: 'Dear Admin,<br/><br/>#buyer_company_name has submitted a request for initiation of reverse auction.<br/><br/>Please proceed to manage the request at <a href="https://revv.sg">revv.sg</a>.', template_type: '31')
       UserMailer.request_submitted(@admin_user, { :buyer_company_name => 'company_name'}).deliver_now
     end
     it 'be_delivered_to', mail: true do
