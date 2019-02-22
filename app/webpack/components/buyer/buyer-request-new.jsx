@@ -397,9 +397,9 @@ export class BuyerNewRequestManage extends Component {
                                                 </div>
                                             </div> : ""
                                         }
-                                        {this.state.comment!="" || this.state.comment!=null?<div className="lm--formItem lm--formItem--inline string">
+                                        {this.state.comment!="" && this.state.comment!=null?<div className="lm--formItem lm--formItem--inline string">
                                             <label className="lm--formItem-left lm--formItem-label string required">
-                                                Admin Comments
+                                                Admin Comments :
                                             </label>
                                             <div className="lm--formItem-right lm--formItem-label">
                                                 {this.state.comment}
