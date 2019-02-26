@@ -419,14 +419,14 @@ export class SearchList extends Component {
                                                                     } else if (item['status'] === 'Upcoming' && ik.name === 'Manage') {
                                                                         return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this, item.id ? item.id : item.user_id, ik.url, ik.name, ik.interface_type ? ik.interface_type : "", item.name ? item.name : '', item.auction_id)}>Manage{item.incomplete ? incompleteHtml : ''}</a>
                                                                     } else if (ik.name === "Retailer Dashboard" && window.location.href.indexOf("admin") < 0) {
-                                                                        if(item.show_dashdoard){
-                                                                            //if (item.dashdoard_id) {
-                                                                                //if(item.show_dashdoard==true){
+                                                                        if(item.show_dashboard==true){
+                                                                            //if (item.dashboard_id) {
+                                                                                //if(item.show_dashboard==true){
                                                                                     return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this, item.id ? item.id : item.user_id, ik.url, ik.name, ik.interface_type ? ik.interface_type : "", item.name ? item.name : '', item.auction_id)}>{ik.name}</a>
                                                                                 //}
                                                                             //}
                                                                         }else{
-                                                                            //return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this, item.id ? item.id : item.user_id, ik.url, ik.name, ik.interface_type ? ik.interface_type : "", item.name ? item.name : '', item.auction_id)}>{ik.name}</a>
+                                                                            return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this, item.id ? item.id : item.user_id, ik.url, ik.name, ik.interface_type ? ik.interface_type : "", item.name ? item.name : '', item.auction_id)}>{ik.name}</a>
                                                                         }
                                                                     } else {
                                                                         return <a key={k} className={ik.icon} onClick={this.clickFunction.bind(this, item.id ? item.id : item.user_id, ik.url, ik.name, ik.interface_type ? ik.interface_type : "", item.name ? item.name : '', item.auction_id)}>{ik.name}{(ik.name == "Buyer Dashboard" || ik.name == "Buyer List" || ik.name == "Retailer List") && item.all_accept == false ? <span title={"There is outstanding Buyer Participation details pending for approval."} className={"font_arial"} style={{ "color": "red" }}>!</span> : ''}</a>
