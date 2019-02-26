@@ -67,6 +67,7 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
     else
       headers.push(name: 'Reverse Auction Report', field_name: 'report', is_sort: false)
     end
+    headers.push(name: nil, field_name: 'actions', is_sort: false)
   end
 
   def get_order_list(params, headers, result)
