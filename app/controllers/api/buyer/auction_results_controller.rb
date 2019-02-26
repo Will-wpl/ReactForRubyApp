@@ -30,7 +30,7 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
         data.push(published_gid: result.auction.published_gid,
                   name: result.auction.name,
                   start_datetime: result.auction.start_datetime,
-                  id: Consumption.find_by_auction_and_user(result.auction_id, result.user_id).id,
+                  id: consumption.id,
                   auction_id: result.auction_id,
                   acknowledge: get_new_acknowledge(result, contract_result) ,
                   report: get_new_report(result, contract_result) ,
