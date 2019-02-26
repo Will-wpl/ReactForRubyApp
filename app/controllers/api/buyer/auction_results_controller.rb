@@ -36,8 +36,8 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
                   report: get_new_report(result, contract_result) ,
                   award: get_new_awrd(result, contract_result))
 
-        actions = [{ url: '/buyer/consumptions/:id/edit', name: 'View', icon: 'view', check: 'docheck' },
-                   { url: '/buyer/auctions/:id/retailer_dashboard', name: 'Retailer Dashboard', icon: 'edit', interface_type: 'auction'}]
+        actions = [{ url: '/buyer/consumptions/:id/edit?past', name: 'View', icon: 'view', check: 'docheck' },
+                   { url: '/buyer/auctions/:id/retailer_dashboard?past', name: 'Retailer Dashboard', icon: 'edit', interface_type: 'auction'}]
       end
 
     end
