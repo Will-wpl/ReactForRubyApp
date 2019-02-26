@@ -15,6 +15,7 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
     end
     headers = get_headers
     data = []
+    actions = []
     results = get_order_list(params, headers, result)
     results.each do |result|
       if result.auction_result_contracts.blank?
