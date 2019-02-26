@@ -356,7 +356,8 @@ export class Proposedeviations extends React.Component{
                                 <th>Clause</th>
                                 <th>Propose Deviation</th>
                                 <th>Retailer Comments</th>
-                                <th>{this.props.role_name?this.props.role_name:"SP"} Response</th>
+                                <th>Buyer Response</th>
+                                {/*{this.props.role_name?this.props.role_name:"SP"}*/}
                                 <th>Deviation Status</th>
                                 <th></th>
                                 </tr>
