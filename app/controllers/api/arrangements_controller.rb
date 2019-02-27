@@ -77,7 +77,7 @@ class Api::ArrangementsController < Api::BaseController
   private
 
   def set_arrangement
-    if current_user.has_role?('admin')
+    if current_user.has_role?('admin') || current_user.has_role?('buyer')
       @arrangement = Arrangement.admin_find_by_id(params[:id]) unless params[:id] == '0'
     else
       @arrangement = current_user_arrangement

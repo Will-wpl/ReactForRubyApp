@@ -296,7 +296,7 @@ export class BuyerKeppelproposedeviations extends Component {
     render (){
         return (
             <div className="col-sm-12">
-                <h2 className="u-mt3 u-mb3">{this.props.name?this.props.name:"Buyer"} Propose Deviations</h2>
+                <h2 className="u-mt3 u-mb3">Deviations Management</h2>
                 <div className="col-sm-12 col-md-12 propose_deviations">
                 <table className="retailer_fill w_100" cellPadding="0" cellSpacing="0">
                     <thead>

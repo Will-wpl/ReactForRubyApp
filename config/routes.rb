@@ -236,7 +236,7 @@ Rails.application.routes.draw do
           get 'history'
         end
       end
-      resources :arrangements, only: %i[index] do
+      resources :arrangements, only: %i[index show] do
       end
       resources :consumption_details, only: %i[index update participate reject validate validate_single] do
         collection do
