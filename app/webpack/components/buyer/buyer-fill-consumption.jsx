@@ -644,7 +644,11 @@ export class FillConsumption extends Component {
             this.setState({ text: "Are you sure you want to reject this auction?" });
         }
         if (type === 'save') {
-            this.doSave();
+            if(!this.state.disabled)
+            {
+                this.doSave();
+            }
+            
         }
     }
 
