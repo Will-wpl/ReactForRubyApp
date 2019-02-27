@@ -17,14 +17,7 @@ class BaseTenderWorkflow < Workflow
     flows = TenderStateMachine.where(arrangement_id: arrangement_id).where.not(current_node: nil).select(:previous_node).distinct
     flow_array = []
     flows.each do |flow|
-            # flow_array.push(flow.previous_node) unless flow.previous_node.nil?
-            unless flow.previous_node.nil?
-              if flow.previous_node > flow.current_node
-                flow_array.push(flow.current_node)
-              else
-                flow_array.push(flow.previous_node)
-              end
-            end
+      flow_array.push(flow.previous_node) unless flow.previous_node.nil?
     end
     current = TenderStateMachine.where(arrangement_id: arrangement_id).last
     actions = get_current_action_status(arrangement_id)
