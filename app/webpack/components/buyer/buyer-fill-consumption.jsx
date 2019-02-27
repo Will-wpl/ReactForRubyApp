@@ -814,7 +814,7 @@ export class FillConsumption extends Component {
                         </tr>
                         <tr>
                             <td>
-                                Purchase Duration : <select id="selDuration" style={{ width: '200px', marginLeft: "5px", display: "inline-block" }} onChange={this.durationChange.bind(this)} value={this.state.contract_duration}>
+                                <span className="purchase">Purchase Duration :</span> <select id="selDuration" style={{ width: '200px', marginLeft: "5px", display: "inline-block" }} onChange={this.durationChange.bind(this)} value={this.state.contract_duration}>
                                     {
                                         this.state.durationList.map(item => {
                                             return <option key={item.contract_duration} value={item.contract_duration}>{item.contract_duration + " months"}</option>
@@ -1133,7 +1133,7 @@ export class FillConsumption extends Component {
                     <Modal text={this.state.text} acceptFunction={this.state.callback == true ? this.jumpPage.bind(this) : this.doAccept.bind(this)} ref="Modal" />
                 </form>
                 <Modal formSize="big" text={this.state.text} acceptFunction={this.doAddAccountAction.bind(this)} siteList={this.state.totalList} consumptionAccountItem={this.state.account_detail} listdetailtype='consumption_detail' ref="consumption" />
-                <Modal formSize="middle" text={this.state.text} advisory={this.state.advisory} listdetailtype='market-insight' ref="market" />
+                <Modal formSize="resize" text={this.state.text} advisory={this.state.advisory} listdetailtype='market-insight' ref="market" />
                 <Modal listdetailtype="accountTaken" text={this.state.text} takenList={this.state.takenList} ref="accountTaken" />
                 <div id="bg"></div>
                 <div id="show">
