@@ -19,12 +19,9 @@ class BaseTenderWorkflow < Workflow
     flows.each do |flow|
       unless flow.previous_node.nil?
         unless flow_array.include?(flow.previous_node)
-          flow_array.push(flow.previous_node)
-          # if flow.previous_node > flow.current_node
-          #   flow_array.push(flow.current_node)
-          # else
-          #   flow_array.push(flow.previous_node)
-          # end
+          unless flow.previous_node > flow.current_node
+            flow_array.push(flow.previous_node)
+          end
         end
       end
     end
