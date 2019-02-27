@@ -1592,3 +1592,25 @@ body.choose{
   width: 60px;
   display: inline;
 }
+
+.purchase{
+  font-size: 1rem;
+  color: #333;
+  font-weight: 300;
+  line-height: 1.5;
+  // color:red
+  // display: inline;
+}
+
+
+.window_box{
+  // width:40%; min-width: 300px;  overflow: hidden; background: #fff; margin:8% auto 0;
+   width: "50%";
+   min-width: 300px; 
+   height: 310px; 
+   top: 40%
+  }
+
+  .showbigWindow{ width: 96%; margin: 2% auto;
+    textarea.detail_show,.history_nr{ height: 420px;}
+  }
