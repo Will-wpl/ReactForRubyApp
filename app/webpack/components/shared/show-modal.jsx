@@ -33,7 +33,8 @@ export class Modal extends React.Component {
             entity_company_name: '', entity_company_uen: '', entity_company_address: '', entity_billing_address: '', entity_bill_attention_to: '', entity_contact_name: '',
             entity_contact_email: '', entity_contact_mobile_no: '', entity_contact_office_no: '', entitList: [], entityErrorList: [], loglist: [], attatchment: [], operatinType: '',
             attatchment_file_name: "", attatchment_file_path: "",
-            advisory: ""
+            advisory: "",
+            showbigWindow: false
         }
     }
 
@@ -932,7 +933,8 @@ export class Modal extends React.Component {
                 this.props.acceptFunction(data);
                 this.setState({
                     modalSize: "small",
-                    modalshowhide: "modal_hide"
+                    modalshowhide: "modal_hide",
+                    showbigWindow: false
                 })
             }
 
@@ -957,6 +959,53 @@ export class Modal extends React.Component {
             })
         }
     }
+
+    closeModal_resize() {
+        $("div[name='resizeModal']").css("width", "50%");
+        $("div[name='resizeModal']").css("height", "310px");
+        $("#modelContent").css("overflow-y", "auto");
+        $("#modelContent").css("height", "220px");
+        $("div[name='resizeModal']").css("top", "40%");
+        $("div[name='resizeModal']").css("marginLeft", "-25%");
+        // $("div[name='resizeModal']").css("height", "310px");
+
+        this.setState({
+            modalSize: "small",
+            modalshowhide: "modal_hide",
+            showbigWindow: false
+        })
+    }
+
+    showWindow() {
+        this.setState({
+            showbigWindow: !this.state.showbigWindow
+        })
+        setTimeout(() => {
+            if (this.state.showbigWindow) {
+                $("div[name='resizeModal']").css("width", "96%");
+                $("div[name='resizeModal']").css("height", "85%");
+                $("#modelContent").css("height", "440px")
+                $("div[name='resizeModal']").css("top", "20%");
+                $("div[name='resizeModal']").css("marginLeft", "-48%");
+                this.setState({
+                    showbigWindow: true
+                })
+            }
+            else {
+                $("div[name='resizeModal']").css("width", "50%");
+                $("div[name='resizeModal']").css("height", "310px");
+                $("#modelContent").css("overflow-y", "auto");
+                $("#modelContent").css("height", "220px");
+                $("div[name='resizeModal']").css("top", "40%");
+                $("div[name='resizeModal']").css("marginLeft", "-25%");
+                $("div[name='resizeModal']").css("height", "310px");
+
+            }
+        }, 200);
+
+
+    }
+
 
     bigModal(type) {
         if (this.state.modalSize === "big") {//height:"300px", top: "40%", left: "40%"
@@ -1552,8 +1601,17 @@ export class Modal extends React.Component {
             }
         }
         let btn_html = '';
+
+
         if (this.state.type == "default") {
-            btn_html = <div className="modal_btn"><a onClick={this.closeModal.bind(this)}>OK</a></div>;
+
+            if (this.props.listdetailtype === 'market-insight') {
+                btn_html = <div className="modal_btn"><a onClick={this.closeModal_resize.bind(this)}>OK</a></div>;
+            }
+            else {
+                btn_html = <div className="modal_btn"><a onClick={this.closeModal.bind(this)}>OK</a></div>;
+            }
+
         }
         else if
         (this.state.type == "custom") {
@@ -1601,14 +1659,22 @@ export class Modal extends React.Component {
                             {btn_html}
                         </div>
                         :
-                        <div id="modal_main" className={this.state.modalshowhide} >
-                            <h4><a onClick={this.closeModal.bind(this, 0)}>X</a></h4>
-                            <div className="modal_detail">
-                                <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
+                        this.props.formSize === 'resize' ?
+                            <div id="modal_main" name="resizeModal" style={{ width: "50%", height: "310px", top: "40%", marginLeft: "-25%" }} className={this.state.modalshowhide} >
+                                <h4><a onClick={this.closeModal_resize.bind(this, 1)}>X</a><a onClick={this.showWindow.bind(this)}>口</a></h4>
+                                <div id="modelContent" className="modal_detail model_detail_formHeight">
+                                    <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
+                                </div>
+                                {btn_html}
                             </div>
-                            {btn_html}
-                            {/* <base target="download"></base> */}
-                        </div>
+                            :
+                            <div id="modal_main" className={this.state.modalshowhide} >
+                                <h4><a onClick={this.closeModal.bind(this, 0)}>X</a></h4>
+                                <div className="modal_detail">
+                                    <div className="modal_detail_nr">{this.props.text ? this.do_text(this.props.text) : ''}</div>{showDetail}
+                                </div>
+                                {btn_html}
+                            </div>
         )
     }
 }

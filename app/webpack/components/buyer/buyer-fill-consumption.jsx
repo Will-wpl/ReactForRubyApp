@@ -40,7 +40,8 @@ export class FillConsumption extends Component {
             isValidate: false,
             takenList: [],
             callback: false,
-            comments:null
+            comments: null,
+            form: ''
         }
 
         this.accountItem = {
@@ -77,6 +78,12 @@ export class FillConsumption extends Component {
     }
 
     componentWillMount() {
+        let param = (window.location.href.split("consumptions/")[1]).split("/edit")[1];
+        if (param === '?past') {
+            this.setState({
+                form: 'past'
+            })
+        }
         this.setState({
             consumption_id: (window.location.href.split("consumptions/")[1]).split("/edit")[0]
         })
@@ -100,7 +107,7 @@ export class FillConsumption extends Component {
                 buyer_link: res.buyer_revv_tc_attachment ? res.buyer_revv_tc_attachment.file_path : "",
                 seller_link: res.seller_buyer_tc_attachment ? res.seller_buyer_tc_attachment.file_path : "",
                 advisory: res.advisory.content,
-                comments:res.consumption.comments
+                comments: res.consumption.comments
             })
             if (res.consumption.participation_status === '1' || res.auction.publish_status === "1") {
                 $("input[type='checkbox']").attr("checked", true);
@@ -179,7 +186,7 @@ export class FillConsumption extends Component {
             let className = $(this).attr('class');
             if (className === 'errormessage') {
                 let divid = $(this).attr("id");
-                $("#" + divid).removeClass("errormessage").attr("className","isPassValidate");
+                $("#" + divid).removeClass("errormessage").attr("className", "isPassValidate");
             }
         })
         this.accountItem.id = "";
@@ -637,7 +644,6 @@ export class FillConsumption extends Component {
             this.setState({ text: "Are you sure you want to reject this auction?" });
         }
         if (type === 'save') {
-            console.log(11);
             this.doSave();
         }
     }
@@ -781,6 +787,16 @@ export class FillConsumption extends Component {
         })
         this.refs.market.showModal()
     }
+    goBack() {
+        if (this.state.form === 'past') {
+            window.location.href = '/buyer/auction_results';
+        }
+        else {
+            window.location.href = '/buyer/auctions';
+        }
+    }
+
+
     render() {
         return (
             <div>
@@ -798,7 +814,7 @@ export class FillConsumption extends Component {
                         </tr>
                         <tr>
                             <td>
-                                Purchase Duration : <select id="selDuration" style={{ width: '200px', marginLeft: "5px", display: "inline-block" }} onChange={this.durationChange.bind(this)} value={this.state.contract_duration}>
+                                <span className="purchase">Purchase Duration :</span> <select id="selDuration" style={{ width: '200px', marginLeft: "5px", display: "inline-block" }} onChange={this.durationChange.bind(this)} value={this.state.contract_duration}>
                                     {
                                         this.state.durationList.map(item => {
                                             return <option key={item.contract_duration} value={item.contract_duration}>{item.contract_duration + " months"}</option>
@@ -812,11 +828,11 @@ export class FillConsumption extends Component {
                                 <h4 className="col-sm-12 u-mb2" style={{ "paddingTop": "15px" }}>Status of Participation : {this.status}</h4>
                             </td>
                         </tr>
-                        {this.state.comments?<tr>
+                        {this.state.comments ? <tr>
                             <td>
                                 <h4 className="col-sm-12 u-mb2" style={{ "paddingTop": "15px" }}>Admin Comments : {this.state.comments}</h4>
                             </td>
-                        </tr>:<tr></tr>}
+                        </tr> : <tr></tr>}
                     </tbody>
                 </table>
                 <form name="buyer_form" method="post" onSubmit={this.checkSuccess.bind(this)}>
@@ -1112,12 +1128,12 @@ export class FillConsumption extends Component {
                         </div>
                     </div>
                     <div className="createRaMain u-grid">
-                        <a className="lm--button lm--button--primary u-mt3" href="/buyer/auctions" >Back</a>
+                        <a className="lm--button lm--button--primary u-mt3" onClick={this.goBack.bind(this)} >Back</a>
                     </div>
                     <Modal text={this.state.text} acceptFunction={this.state.callback == true ? this.jumpPage.bind(this) : this.doAccept.bind(this)} ref="Modal" />
                 </form>
                 <Modal formSize="big" text={this.state.text} acceptFunction={this.doAddAccountAction.bind(this)} siteList={this.state.totalList} consumptionAccountItem={this.state.account_detail} listdetailtype='consumption_detail' ref="consumption" />
-                <Modal formSize="middle" text={this.state.text} advisory={this.state.advisory} listdetailtype='market-insight' ref="market" />
+                <Modal formSize="resize" text={this.state.text} advisory={this.state.advisory} listdetailtype='market-insight' ref="market" />
                 <Modal listdetailtype="accountTaken" text={this.state.text} takenList={this.state.takenList} ref="accountTaken" />
                 <div id="bg"></div>
                 <div id="show">

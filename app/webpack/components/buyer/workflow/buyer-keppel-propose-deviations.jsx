@@ -305,7 +305,7 @@ export class BuyerKeppelproposedeviations extends Component {
                             <th>Clause</th>
                             <th>Propose Deviation</th>
                             <th>Retailer Comments</th>
-                            <th>{this.props.name?this.props.name:"Buyer"} Response</th>
+                            <th>Buyer Response</th>
                             <th>Deviation Status</th>
                             <th></th>
                             </tr>

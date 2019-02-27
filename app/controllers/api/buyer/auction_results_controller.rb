@@ -15,6 +15,7 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
     end
     headers = get_headers
     data = []
+    actions = []
     results = get_order_list(params, headers, result)
     results.each do |result|
       if result.auction_result_contracts.blank?
@@ -30,14 +31,20 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
         data.push(published_gid: result.auction.published_gid,
                   name: result.auction.name,
                   start_datetime: result.auction.start_datetime,
+                  id: consumption.id,
+                  auction_id: result.auction_id,
+                  show_dashboard: (consumption.auction.buyer_type == Auction::SingleBuyerType) && (consumption.auction.allow_deviation == Auction::NotAllowDeviation ? false : true),
                   acknowledge: get_new_acknowledge(result, contract_result) ,
                   report: get_new_report(result, contract_result) ,
                   award: get_new_awrd(result, contract_result))
+
+        actions = [{ url: '/buyer/consumptions/:id/edit?past', name: 'View', icon: 'view' },
+                   { url: '/buyer/auctions/:id/retailer_dashboard?past', name: 'Retailer Dashboard', icon: 'edit', interface_type: 'auction'}]
       end
 
     end
     bodies = { data: data, total: total }
-    render json: { headers: headers, bodies: bodies, actions: nil }, status: 200
+    render json: { headers: headers, bodies: bodies, actions: actions }, status: 200
   end
 
   private
@@ -61,6 +68,7 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
     else
       headers.push(name: 'Reverse Auction Report', field_name: 'report', is_sort: false)
     end
+    headers.push(name: nil, field_name: 'actions', is_sort: false)
   end
 
   def get_order_list(params, headers, result)

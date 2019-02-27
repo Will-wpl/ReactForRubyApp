@@ -10,6 +10,8 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
         render json: { id: auction.id, publish_status: auction.publish_status }, status: 200
       elsif current_user.id == auction.request_owner_id
         render json: { id: auction.id, publish_status: auction.publish_status, name: auction.name }, status: 200
+      elsif Consumption.find_by_auction_and_user(auction.id, current_user.id).exists?
+        render json: { id: auction.id, publish_status: auction.publish_status, name: auction.name  }, status: 200
       else
         render json: { message: 'you can not get the auction information.' }, status: 400
       end
@@ -46,7 +48,7 @@ class Api::Buyer::AuctionsController < Api::AuctionsController
                 publish_status: consumption.auction.publish_status, participation_status: consumption.participation_status,
                 accept_status: get_accept_status(consumption.accept_status),
                 actions: action, dashdoard_id: consumption.auction.request_auction_id, auction_id: consumption.auction.id,
-                show_dashboard: consumption.auction.buyer_type == Auction::SingleBuyerType && consumption.auction.allow_deviation == Auction::NotAllowDeviation ? false : true
+                show_dashboard: (consumption.auction.buyer_type == Auction::SingleBuyerType) && (consumption.auction.allow_deviation == Auction::NotAllowDeviation ? false : true),
                 )
     end
     bodies = { data: data, total: total }
