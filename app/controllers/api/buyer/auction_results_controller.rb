@@ -33,6 +33,7 @@ class Api::Buyer::AuctionResultsController < Api::BaseController
                   start_datetime: result.auction.start_datetime,
                   id: consumption.id,
                   auction_id: result.auction_id,
+                  show_dashboard: consumption.auction.buyer_type == Auction::SingleBuyerType && consumption.auction.allow_deviation == Auction::NotAllowDeviation ? false : true,
                   acknowledge: get_new_acknowledge(result, contract_result) ,
                   report: get_new_report(result, contract_result) ,
                   award: get_new_awrd(result, contract_result))
