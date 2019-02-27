@@ -61,7 +61,7 @@ export class Tenderdocuments extends React.Component {
             //}
             this.refs.Modal.showModal("comfirm");
             this.setState({
-                // text: "Are you sure you want to participate in the auction? By clicking 'Yes', you confirm your participation in the auction and are bounded by the Terms & Conditions of Use(Retailer). Please be reminded that you will not be allowed to withdraw your participation."
+                // text: "Are you sure you want to participate in the auction? By clicking 'Yes', you confirm your participation in the auction and are bounded by the Terms & Conditions of Use (Retailer). Please be reminded that you will not be allowed to withdraw your participation."
                 text: "Are you sure you want to proceed? Please note that this step cannot be reversed."
             });
         }
