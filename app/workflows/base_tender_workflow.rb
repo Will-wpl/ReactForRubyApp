@@ -14,10 +14,16 @@ class BaseTenderWorkflow < Workflow
   end
 
   def get_arrangement_state_machine(arrangement_id, current_user)
-    flows = TenderStateMachine.where(arrangement_id: arrangement_id).where.not(current_node: nil).select(:previous_node).distinct
+    flows = TenderStateMachine.where(arrangement_id: arrangement_id).where.not(current_node: nil).select(:previous_node, :current_node)
     flow_array = []
     flows.each do |flow|
-      flow_array.push(flow.previous_node) unless flow.previous_node.nil?
+      unless flow.previous_node.nil?
+        unless flow_array.include?(flow.previous_node)
+          unless flow.previous_node > flow.current_node
+            flow_array.push(flow.previous_node)
+          end
+        end
+      end
     end
     current = TenderStateMachine.where(arrangement_id: arrangement_id).last
     actions = get_current_action_status(arrangement_id)
