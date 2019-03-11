@@ -9,4 +9,9 @@ class Admin::BaseController < ApplicationController
   def admin_required
     head :unauthorized unless current_user&.has_role?(:admin)
   end
+
+  def super_admin_required
+    head :unauthorized unless current_user&.has_role?(:super_admin)
+  end
+
 end

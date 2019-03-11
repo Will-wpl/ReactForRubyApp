@@ -13,10 +13,11 @@
 
 dl.lm--dl--inline
   - @user.attributes.each do |name, value|
-    dt.attribute-label.col-sm-2
-      = t("labels.user.#{name}", default: name.titleize)
-    dd.attribute-data.push-sm-2
-      = value
+    - if ['Name', 'Email', 'Company Name'].include?(name.titleize)
+      dt.attribute-label.col-sm-2
+        = t("labels.user.#{name}", default: name.titleize)
+      dd.attribute-data.push-sm-2
+        = value
 
   dt.attribute-label.col-sm-2
     = t("labels.user.roles", default: 'Roles')

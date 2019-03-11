@@ -74,6 +74,7 @@ class User < ApplicationRecord
   scope :exclude, ->(ids) { where('users.id not in (?)', ids) }
   scope :admins, -> { includes(:roles).where(roles: { name: 'admin' }) }
   scope :buyer_entities_by_email, ->(email) { includes(:roles).where('users.email = ? ', email) }
+
   # Callbacks
 
   # Delegates

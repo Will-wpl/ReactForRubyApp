@@ -8,8 +8,9 @@
     = f.input :name
     = f.input :email
     = f.input :company_name
-    = f.input :password
-    = f.input :password_confirmation
+    - if f.object.new_record?
+      = f.input :password
+      = f.input :password_confirmation
     / = f.association :roles, disabled: f.object == current_user
 
     .form-action.u-mt3

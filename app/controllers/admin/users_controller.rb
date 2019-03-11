@@ -1,4 +1,5 @@
 class Admin::UsersController < Admin::BaseController
+  before_action :super_admin_required, only: %i[index new create show edit update destroy]
   before_action :set_user, only: %i[show edit update destroy manage]
 
   before_action :set_users_breadcrumbs
@@ -6,7 +7,7 @@ class Admin::UsersController < Admin::BaseController
 
   def index
     # @users = User.admins.exclude(1).order(created_at: :desc).page(params[:page])
-    @users = User.admins.exclude(1).order(created_at: :desc).page(params[:page])
+    @users = User.admins.where.not(email: 'revv@spgroup.com.sg').order(created_at: :desc).page(params[:page])
   end
 
   def new
